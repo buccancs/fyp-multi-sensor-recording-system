@@ -292,28 +292,40 @@ class PreviewStreamer @Inject constructor(
     }
     
     /**
-     * Convert thermal data to JPEG (placeholder implementation)
-     * TODO: Implement actual thermal data visualization
+     * Convert thermal data to JPEG with proper thermal colorization
+     * Enhanced implementation with iron color palette for better thermal visualization
      */
     private fun convertThermalToJpeg(thermalData: ByteArray, width: Int, height: Int): ByteArray? {
         return try {
-            // Create a simple grayscale representation of thermal data
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            
-            // Convert thermal data to grayscale pixels
             val pixels = IntArray(width * height)
+            
+            // Find min and max temperature values for normalization
+            var minTemp = Int.MAX_VALUE
+            var maxTemp = Int.MIN_VALUE
+            
+            val tempValues = IntArray(width * height)
             for (i in thermalData.indices step 2) {
-                if (i + 1 < thermalData.size) {
-                    // Combine two bytes to form temperature value
-                    val temp = ((thermalData[i].toInt() and 0xFF) shl 8) or (thermalData[i + 1].toInt() and 0xFF)
+                if (i + 1 < thermalData.size && i / 2 < tempValues.size) {
+                    // Combine two bytes to form temperature value (little-endian)
+                    val temp = ((thermalData[i + 1].toInt() and 0xFF) shl 8) or (thermalData[i].toInt() and 0xFF)
+                    tempValues[i / 2] = temp
+                    minTemp = minOf(minTemp, temp)
+                    maxTemp = maxOf(maxTemp, temp)
+                }
+            }
+            
+            // Avoid division by zero
+            val tempRange = if (maxTemp > minTemp) maxTemp - minTemp else 1
+            
+            // Convert temperature values to iron color palette
+            for (i in tempValues.indices) {
+                if (i < pixels.size) {
+                    // Normalize temperature to 0-255 range
+                    val normalizedTemp = ((tempValues[i] - minTemp) * 255 / tempRange).coerceIn(0, 255)
                     
-                    // Map temperature to grayscale (0-255)
-                    val gray = ((temp % 256).coerceIn(0, 255))
-                    val pixel = (0xFF shl 24) or (gray shl 16) or (gray shl 8) or gray
-                    
-                    if (i / 2 < pixels.size) {
-                        pixels[i / 2] = pixel
-                    }
+                    // Apply iron color palette
+                    pixels[i] = applyIronColorPalette(normalizedTemp)
                 }
             }
             
@@ -333,6 +345,47 @@ class PreviewStreamer @Inject constructor(
             logger.error("Failed to convert thermal data to JPEG", e)
             null
         }
+    }
+    
+    /**
+     * Apply iron color palette to normalized temperature value (0-255)
+     * Iron palette: black -> red -> orange -> yellow -> white (hot)
+     */
+    private fun applyIronColorPalette(normalizedTemp: Int): Int {
+        val temp = normalizedTemp.coerceIn(0, 255)
+        
+        val r: Int
+        val g: Int
+        val b: Int
+        
+        when {
+            temp < 64 -> {
+                // Black to dark red
+                r = (temp * 4).coerceIn(0, 255)
+                g = 0
+                b = 0
+            }
+            temp < 128 -> {
+                // Dark red to bright red
+                r = 255
+                g = ((temp - 64) * 4).coerceIn(0, 255)
+                b = 0
+            }
+            temp < 192 -> {
+                // Bright red to yellow
+                r = 255
+                g = 255
+                b = ((temp - 128) * 4).coerceIn(0, 255)
+            }
+            else -> {
+                // Yellow to white
+                r = 255
+                g = 255
+                b = 255
+            }
+        }
+        
+        return (0xFF shl 24) or (r shl 16) or (g shl 8) or b
     }
     
     /**

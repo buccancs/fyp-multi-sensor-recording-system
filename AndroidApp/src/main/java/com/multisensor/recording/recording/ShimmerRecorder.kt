@@ -1,26 +1,65 @@
 package com.multisensor.recording.recording
 
+import android.Manifest
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import android.os.Message
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
+import java.io.PrintWriter
+import java.net.Socket
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// Shimmer SDK imports - TODO: Add actual Shimmer SDK dependencies when available
+// import com.shimmerresearch.android.Shimmer
+// import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
+// import com.shimmerresearch.bluetooth.ShimmerBluetooth
+// import com.shimmerresearch.driver.Configuration
+// import com.shimmerresearch.driver.ObjectCluster
+
 /**
  * Handles Shimmer3 GSR+ sensor data recording via Bluetooth.
- * This is currently a stub implementation that will be replaced with actual
- * Shimmer SDK integration when the SDK becomes available.
  * 
- * TODO: Replace with actual Shimmer SDK implementation
+ * This implementation provides comprehensive support for multiple Shimmer3 GSR+ devices
+ * with concurrent data logging, PC streaming, and resilient connection management.
+ * 
+ * Key Features:
+ * - Multi-device Bluetooth connection management
+ * - Channel selection and configuration per device
+ * - Concurrent data logging to CSV files
+ * - Real-time PC streaming via TCP/UDP
+ * - Automatic reconnection on disconnection
+ * - Session-based file organization
+ * - Synchronized timestamping with other modalities
+ * 
+ * Architecture:
+ * - Uses HandlerThread for data processing to avoid blocking UI
+ * - Separate coroutines for file I/O and network streaming
+ * - Thread-safe device management with concurrent collections
+ * - Resilient error handling and recovery mechanisms
  */
 @Singleton
 class ShimmerRecorder @Inject constructor(
@@ -29,25 +68,81 @@ class ShimmerRecorder @Inject constructor(
     private val logger: Logger
 ) {
     
-    private var isRecording = false
-    private var isInitialized = false
-    private var isConnected = false
-    private var currentSessionId: String? = null
-    private var dataWriter: FileWriter? = null
+    // Core state management
+    private val isRecording = AtomicBoolean(false)
+    private val isInitialized = AtomicBoolean(false)
+    private var currentSessionInfo: SessionInfo? = null
+    private var sessionStartTime: Long = 0L
     
-    // Shimmer sensor configuration (placeholder values)
-    private var samplingRate = 512 // Hz
-    private var gsrRange = 4 // GSR range setting
-    private var enabledSensors = setOf("GSR", "PPG", "Accelerometer")
+    // Bluetooth management
+    private var bluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothManager: BluetoothManager? = null
     
-    // Simulated sensor data
-    private var sampleCount = 0L
+    // Device management - thread-safe collections
+    private val connectedDevices = ConcurrentHashMap<String, ShimmerDevice>()
+    private val deviceConfigurations = ConcurrentHashMap<String, DeviceConfiguration>()
+    private val dataQueues = ConcurrentHashMap<String, ConcurrentLinkedQueue<SensorSample>>()
+    
+    // Threading and data processing
+    private var dataHandlerThread: HandlerThread? = null
+    private var dataHandler: Handler? = null
+    private var recordingScope: CoroutineScope? = null
+    
+    // File I/O management
+    private val fileWriters = ConcurrentHashMap<String, BufferedWriter>()
+    
+    // Network streaming
+    private var streamingSocket: Socket? = null
+    private var streamingWriter: PrintWriter? = null
+    private val streamingQueue = ConcurrentLinkedQueue<String>()
+    private val isStreaming = AtomicBoolean(false)
+    
+    // Sample counting and timing
+    private val sampleCounts = ConcurrentHashMap<String, AtomicLong>()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
     
     companion object {
-        private const val CSV_HEADER = "Timestamp,SystemTime,GSR_Conductance,PPG_A13,Accel_X,Accel_Y,Accel_Z,Battery_Percentage"
-        private const val SHIMMER_DEVICE_NAME = "Shimmer3-GSR+"
-        private const val DATA_BATCH_SIZE = 10 // Number of samples to batch before writing
+        private const val TAG = "ShimmerRecorder"
+        
+        // Bluetooth permissions for different Android versions
+        private val BLUETOOTH_PERMISSIONS_LEGACY = arrayOf(
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        
+        private val BLUETOOTH_PERMISSIONS_NEW = arrayOf(
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        
+        // Shimmer sensor constants (matching Shimmer SDK)
+        private const val SENSOR_GSR = 0x04
+        private const val SENSOR_PPG = 0x4000
+        private const val SENSOR_ACCEL = 0x80
+        private const val SENSOR_GYRO = 0x40
+        private const val SENSOR_MAG = 0x20
+        
+        // Default configuration
+        private const val DEFAULT_SAMPLING_RATE = 51.2 // Hz
+        private const val DEFAULT_GSR_RANGE = 4 // GSR range setting
+        private const val DEFAULT_ACCEL_RANGE = 2 // ±2g
+        
+        // File and network settings
+        private const val CSV_HEADER = "Timestamp_ms,DeviceTime_ms,SystemTime_ms,GSR_Conductance_uS,PPG_A13,Accel_X_g,Accel_Y_g,Accel_Z_g,Battery_Percentage"
+        private const val DATA_BATCH_SIZE = 50 // Samples to batch before flushing
+        private const val RECONNECTION_ATTEMPTS = 3
+        private const val RECONNECTION_DELAY_MS = 2000L
+        
+        // Default PIN for Shimmer pairing
+        private const val SHIMMER_DEFAULT_PIN = "1234"
+        
+        // Network streaming settings
+        private const val DEFAULT_STREAMING_PORT = 8080
+        private const val STREAMING_BUFFER_SIZE = 1024
     }
     
     /**

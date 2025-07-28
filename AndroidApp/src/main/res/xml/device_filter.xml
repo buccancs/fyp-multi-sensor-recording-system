@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- USB Device Filter for Topdon Thermal Camera -->
+    <!-- USB Device Filter for Topdon Thermal Cameras -->
     <!-- This filter allows the app to automatically handle USB device attachment -->
-    <!-- for Topdon thermal cameras. Vendor ID and Product ID should be updated -->
-    <!-- with actual values from the Topdon SDK documentation -->
-    <usb-device 
-        vendor-id="1234" 
-        product-id="5678" />
+    <!-- for supported Topdon thermal camera models (TC001, TC001 Plus, etc.) -->
     
-    <!-- Alternative: Generic USB camera filter if specific IDs are unknown -->
+    <!-- Topdon TC001 series cameras - Product ID: 0x3901 -->
+    <usb-device 
+        vendor-id="0x0BDA" 
+        product-id="0x3901" />
+    
+    <!-- Topdon TC001 Plus - Product ID: 0x5840 -->
+    <usb-device 
+        vendor-id="0x0BDA" 
+        product-id="0x5840" />
+    
+    <!-- Topdon TC001 variant - Product ID: 0x5830 -->
+    <usb-device 
+        vendor-id="0x0BDA" 
+        product-id="0x5830" />
+    
+    <!-- Topdon TC001 variant - Product ID: 0x5838 -->
+    <usb-device 
+        vendor-id="0x0BDA" 
+        product-id="0x5838" />
+    
+    <!-- Alternative: Generic USB UVC camera filter as fallback -->
     <!-- <usb-device class="14" subclass="1" protocol="0" /> -->
     
-    <!-- Note: Replace vendor-id and product-id with actual Topdon device values -->
-    <!-- These can be found in the Topdon SDK documentation or by using -->
-    <!-- 'lsusb' command when the device is connected -->
+    <!-- Note: Vendor ID 0x0BDA matches IRCamera library implementation -->
+    <!-- Product IDs match those defined in ThermalRecorder.kt -->
+    <!-- These values are based on working IRCamera configuration and Topdon SDK -->
 </resources>

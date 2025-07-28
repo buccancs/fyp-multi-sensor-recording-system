@@ -109,6 +109,18 @@ This document tracks remaining tasks, future work items, and improvements for th
 - [x] **Test 1-4**: Baseline Preview, Video-only Recording, RAW-only Capture, and Concurrent Video + RAW testing
 - [x] **Build Verification**: Successful compilation and dependency validation for all test components
 
+### Comprehensive Camera Access Test Suite ✅ COMPLETED (2025-07-28)
+- [x] **ComprehensiveCameraAccessTest**: Extended camera testing framework with 6 comprehensive test scenarios
+  - [x] **Permission Verification**: Tests all camera-related permissions (CAMERA, RECORD_AUDIO, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE)
+  - [x] **RGB Camera Testing**: Complete RGB camera initialization, preview, and recording functionality
+  - [x] **IR Camera Recognition**: Thermal camera detection, USB device enumeration, and Topdon camera support
+  - [x] **File Writing Verification**: Tests file creation and writing for both RGB and IR camera recordings
+  - [x] **Concurrent Camera Access**: Tests simultaneous RGB and IR camera operation
+  - [x] **Device Hardware Verification**: Validates Samsung device capabilities and storage functionality
+- [x] **Samsung Device Testing**: All tests passing on Samsung device with real hardware validation
+- [x] **Integration with Existing Tests**: Complements CameraRecorderManualTest and ThermalRecorderHardwareTest
+- [x] **Debug Logging**: Comprehensive [DEBUG_LOG] prefixed logging for test verification and troubleshooting
+
 ## Integration Enhancement: MainViewModel and MainActivity ✅ COMPLETED (2025-07-28)
 
 ### MainViewModel Enhancement ✅ COMPLETED

@@ -6,4 +6,5 @@ if stub or placeholder is created, comment it with todo
 move future ideas to backlog.md
 keep cognitive complexity under 15
 minimal commenting
+do not declare something as "done" if it is not tested extensively
 build and run app on samsung device after each change

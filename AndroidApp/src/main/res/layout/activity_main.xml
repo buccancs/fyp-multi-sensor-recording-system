@@ -129,6 +129,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/requestPermissionsButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Request Permissions"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_orange_dark"
+        android:layout_marginTop="12dp"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/calibrationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/statusText"
         android:layout_width="0dp"
@@ -140,7 +154,7 @@
         android:padding="16dp"
         android:background="@android:color/black"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/calibrationButton"
+        app:layout_constraintTop_toBottomOf="@id/requestPermissionsButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
