@@ -6,13 +6,29 @@ python {
     // Use system Python (default). Optionally specify path:
     // pythonPath = "C:/Python39/python.exe"
     
-    // List required pip packages with exact versions for reproducible builds
+    // Production dependencies with exact versions for reproducible builds
     pip 'pyqt5:5.15.7'
     pip 'opencv-python:4.8.0.74'
     pip 'numpy:1.24.3'
     pip 'requests:2.31.0'
     pip 'websockets:11.0.3'
     pip 'pillow:10.0.0'
+    pip 'matplotlib:3.7.2'
+    pip 'scipy:1.11.1'
+    
+    // Testing dependencies
+    pip 'pytest:7.4.0'
+    pip 'pytest-cov:4.1.0'
+    pip 'pytest-mock:3.11.1'
+    pip 'pytest-asyncio:0.21.1'
+    pip 'pytest-qt:4.2.0'
+    pip 'mock:5.1.0'
+    pip 'coverage:7.2.7'
+    
+    // Development dependencies
+    pip 'flake8:6.0.0'
+    pip 'black:23.7.0'
+    pip 'mypy:1.5.1'
 }
 
 import ru.vyarus.gradle.plugin.python.task.PythonTask
@@ -39,5 +55,50 @@ task testPythonSetup(type: PythonTask) {
     command = "-c"
     args = ["import sys; import PyQt5; import cv2; import numpy; print('Python environment setup successful!')"]
     description = "Test that all Python dependencies are properly installed"
+    group = "verification"
+}
+
+// Task to run Python unit tests
+task runPythonTests(type: PythonTask) {
+    dependsOn pipInstall
+    command = "-m"
+    args = ["pytest", "tests/", "-v", "--tb=short"]
+    description = "Run Python unit tests with pytest"
+    group = "verification"
+}
+
+// Task to run Python tests with coverage
+task runPythonTestsWithCoverage(type: PythonTask) {
+    dependsOn pipInstall
+    command = "-m"
+    args = ["pytest", "tests/", "--cov=src", "--cov-report=html", "--cov-report=term", "-v"]
+    description = "Run Python tests with coverage reporting"
+    group = "verification"
+}
+
+// Task to run Python code quality checks
+task runPythonLinting(type: PythonTask) {
+    dependsOn pipInstall
+    command = "-m"
+    args = ["flake8", "src/", "--max-line-length=88", "--extend-ignore=E203,W503"]
+    description = "Run Python code quality checks with flake8"
+    group = "verification"
+}
+
+// Task to format Python code
+task formatPythonCode(type: PythonTask) {
+    dependsOn pipInstall
+    command = "-m"
+    args = ["black", "src/", "tests/"]
+    description = "Format Python code with black"
+    group = "formatting"
+}
+
+// Task to run type checking
+task runPythonTypeCheck(type: PythonTask) {
+    dependsOn pipInstall
+    command = "-m"
+    args = ["mypy", "src/", "--ignore-missing-imports"]
+    description = "Run Python type checking with mypy"
     group = "verification"
 }

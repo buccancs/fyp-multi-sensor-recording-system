@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- USB Device Filter for Topdon Thermal Camera -->
+    <!-- This filter allows the app to automatically handle USB device attachment -->
+    <!-- for Topdon thermal cameras. Vendor ID and Product ID should be updated -->
+    <!-- with actual values from the Topdon SDK documentation -->
+    <usb-device 
+        vendor-id="1234" 
+        product-id="5678" />
+    
+    <!-- Alternative: Generic USB camera filter if specific IDs are unknown -->
+    <!-- <usb-device class="14" subclass="1" protocol="0" /> -->
+    
+    <!-- Note: Replace vendor-id and product-id with actual Topdon device values -->
+    <!-- These can be found in the Topdon SDK documentation or by using -->
+    <!-- 'lsusb' command when the device is connected -->
+</resources>

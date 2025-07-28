@@ -41,12 +41,35 @@ project-root/
 
 ### Prerequisites
 
-1. **Android Studio** (Arctic Fox or later)
+1. **Java 17 or Java 21** (recommended for best compatibility)
+   - ⚠️ **Important**: Java 24 may cause compatibility issues with Gradle 8.4
+   - Download from [Eclipse Temurin](https://adoptium.net/) or [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
+
 2. **Python 3.8+** installed and available in PATH
-3. **Java 8+** (usually included with Android Studio)
+   - Download from [python.org](https://www.python.org/downloads/)
+   - Ensure `python` command is available in terminal
+
+3. **Android Studio** (Arctic Fox or later)
+   - Download from [developer.android.com](https://developer.android.com/studio)
+   - Ensure Android SDK is properly configured
+
 4. **Git** for version control
 
-### Setup Instructions
+### Automated Setup
+
+**Option 1: Enhanced Setup Script (Recommended)**
+```powershell
+# Run enhanced setup with validation
+.\setup.ps1
+
+# Run setup with comprehensive tests
+.\setup.ps1 -RunTests
+
+# Skip validation for faster setup
+.\setup.ps1 -SkipValidation
+```
+
+**Option 2: Manual Setup**
 
 1. **Clone the repository:**
    ```bash
@@ -54,58 +77,287 @@ project-root/
    cd MultiSensorRecordingSystem
    ```
 
-2. **Open in Android Studio:**
+2. **Verify environment:**
+   ```powershell
+   # Run build validation
+   .\scripts\validate-build.ps1
+   
+   # Quick environment check
+   java -version
+   python --version
+   ```
+
+3. **Open in Android Studio:**
    - Launch Android Studio
    - Choose "Open an existing project"
    - Select the project root directory
    - Wait for Gradle sync to complete
 
-3. **Install Python Plugin (if not already installed):**
-   - Go to `File > Settings > Plugins > Marketplace`
-   - Search for "Python" and install "Python Community Edition"
-   - Restart Android Studio if prompted
+4. **Install Python dependencies:**
+   ```bash
+   .\gradlew PythonApp:pipInstall
+   ```
 
-4. **Verify Setup:**
-   - The project should sync successfully
-   - You should see both `AndroidApp` and `PythonApp` modules in the project view
+### Build Validation
+
+After setup, validate your build environment:
+
+```powershell
+# Full validation with tests
+.\scripts\validate-build.ps1
+
+# Quick validation without tests
+.\scripts\validate-build.ps1 -SkipTests
+
+# Verbose output for debugging
+.\scripts\validate-build.ps1 -Verbose
+```
 
 ## 🔧 Development Workflow
 
-### Building the Android App
+### Build Commands
 
+**Complete Project Build:**
+```bash
+# Build entire project (Android + Python)
+.\gradlew build
+
+# Clean and rebuild
+.\gradlew clean build
+```
+
+**Android App Development:**
 ```bash
 # Build debug APK
-./gradlew :AndroidApp:assembleDebug
+.\gradlew AndroidApp:assembleDebug
+
+# Build release APK
+.\gradlew AndroidApp:assembleRelease
 
 # Install on connected device
-./gradlew :AndroidApp:installDebug
+.\gradlew AndroidApp:installDebug
+
+# Build all variants
+.\gradlew AndroidApp:assemble
 ```
 
-### Running the Python Desktop App
-
+**Python Desktop App:**
 ```bash
-# Install Python dependencies and run the app
-./gradlew :PythonApp:runDesktopApp
+# Install Python dependencies
+.\gradlew PythonApp:pipInstall
 
-# Test Python environment setup
-./gradlew :PythonApp:testPythonSetup
+# Run desktop controller app
+.\gradlew PythonApp:runDesktopApp
 
 # Run calibration routines
-./gradlew :PythonApp:runCalibration
+.\gradlew PythonApp:runCalibration
+
+# Test Python environment
+.\gradlew PythonApp:testPythonSetup
 ```
 
-### Available Gradle Tasks
+### Testing Commands
 
-- **Android Module:**
-  - `assembleDebug` - Build debug APK
-  - `assembleRelease` - Build release APK
-  - `installDebug` - Install debug APK on connected device
+**Android Testing:**
+```bash
+# Run unit tests
+.\gradlew AndroidApp:testDebugUnitTest
 
-- **Python Module:**
-  - `pipInstall` - Install Python dependencies
-  - `runDesktopApp` - Launch PyQt5 desktop controller
-  - `runCalibration` - Run camera calibration routines
-  - `testPythonSetup` - Verify Python environment
+# Run integration tests (requires emulator/device)
+.\gradlew AndroidApp:connectedDebugAndroidTest
+
+# Run lint checks
+.\gradlew AndroidApp:lintDebug
+
+# Generate test coverage report
+.\gradlew AndroidApp:testDebugUnitTestCoverage
+```
+
+**Python Testing:**
+```bash
+# Run Python unit tests
+.\gradlew PythonApp:runPythonTests
+
+# Run tests with coverage
+.\gradlew PythonApp:runPythonTestsWithCoverage
+
+# Run code quality checks
+.\gradlew PythonApp:runPythonLinting
+
+# Run type checking
+.\gradlew PythonApp:runPythonTypeCheck
+
+# Format code
+.\gradlew PythonApp:formatPythonCode
+```
+
+### Build Variants & Flavors
+
+The Android app supports multiple build configurations:
+
+**Build Types:**
+- `debug` - Development build with debugging enabled
+- `release` - Production build with optimizations
+- `staging` - Pre-production build for testing
+
+**Product Flavors:**
+- `dev` - Development environment configuration
+- `prod` - Production environment configuration
+
+**Example Commands:**
+```bash
+# Build specific variant
+.\gradlew AndroidApp:assembleDevDebug
+.\gradlew AndroidApp:assembleProdRelease
+
+# Test specific variant
+.\gradlew AndroidApp:testDevDebugUnitTest
+```
+
+### CI/CD Pipeline
+
+The project includes a comprehensive GitHub Actions pipeline:
+
+**Automated Workflows:**
+- **Android Build & Test** - Builds APK and runs unit tests
+- **Android Integration Tests** - Runs UI tests on emulator
+- **Python Cross-Platform Tests** - Tests on Windows, macOS, Linux
+- **Build Validation** - Comprehensive environment validation
+- **Security Scanning** - Vulnerability detection
+- **Automated Releases** - Creates releases on main branch
+
+**Pipeline Configuration:** `.github/workflows/ci-cd.yml`
+
+**Local Pipeline Testing:**
+```bash
+# Run same validations as CI
+.\scripts\validate-build.ps1
+
+# Test specific components
+.\scripts\validate-build.ps1 -SkipTests
+```
+
+## 🔧 Troubleshooting Guide
+
+### Common Issues and Solutions
+
+#### Java Version Issues
+
+**Problem:** Build fails with "Unsupported class file major version" error
+```
+Solution: Use Java 17 or Java 21 instead of Java 24
+1. Download Java 17 from Eclipse Temurin
+2. Set JAVA_HOME environment variable
+3. Update PATH to point to correct Java version
+4. Verify: java -version
+```
+
+**Problem:** Gradle daemon issues with Java version
+```
+Solution: Stop Gradle daemon and restart
+.\gradlew --stop
+.\gradlew build
+```
+
+#### Python Environment Issues
+
+**Problem:** Python dependencies installation fails
+```
+Solution: Check Python version and pip
+1. Verify Python 3.8+: python --version
+2. Update pip: python -m pip install --upgrade pip
+3. Clear pip cache: pip cache purge
+4. Retry: .\gradlew PythonApp:pipInstall
+```
+
+**Problem:** PyQt5 installation fails on Windows
+```
+Solution: Install Visual C++ redistributables
+1. Download Microsoft Visual C++ Redistributable
+2. Install and restart
+3. Retry PyQt5 installation
+```
+
+#### Android Build Issues
+
+**Problem:** Android SDK not found
+```
+Solution: Set Android SDK environment variables
+1. Install Android Studio
+2. Set ANDROID_HOME or ANDROID_SDK_ROOT
+3. Add SDK tools to PATH
+4. Verify: .\scripts\validate-build.ps1
+```
+
+**Problem:** Gradle sync fails in Android Studio
+```
+Solution: Clear caches and restart
+1. File > Invalidate Caches and Restart
+2. Delete .gradle folder in project root
+3. Restart Android Studio
+4. Sync project
+```
+
+#### Build Validation Failures
+
+**Problem:** Build validation script fails
+```
+Solution: Run with verbose output for debugging
+.\scripts\validate-build.ps1 -Verbose
+Check build-validation.log for detailed errors
+```
+
+**Problem:** Tests fail during validation
+```
+Solution: Run tests individually to isolate issues
+.\gradlew AndroidApp:testDebugUnitTest --info
+.\gradlew PythonApp:runPythonTests --stacktrace
+```
+
+### Performance Optimization
+
+#### Gradle Build Performance
+```bash
+# Enable parallel builds
+echo "org.gradle.parallel=true" >> gradle.properties
+
+# Increase memory allocation
+echo "org.gradle.jvmargs=-Xmx4g" >> gradle.properties
+
+# Enable build cache
+echo "org.gradle.caching=true" >> gradle.properties
+```
+
+#### Android Studio Performance
+```
+1. Increase IDE memory: Help > Edit Custom VM Options
+   -Xmx4g
+2. Enable offline mode: File > Settings > Build > Gradle
+3. Disable unnecessary plugins
+```
+
+### Environment Verification Commands
+
+```bash
+# Quick environment check
+java -version
+python --version
+.\gradlew --version
+
+# Comprehensive validation
+.\scripts\validate-build.ps1
+
+# Test specific components
+.\gradlew AndroidApp:assembleDebug --dry-run
+.\gradlew PythonApp:testPythonSetup
+```
+
+### Getting Help
+
+1. **Check build logs:** Look for detailed error messages in console output
+2. **Run validation:** Use `.\scripts\validate-build.ps1 -Verbose` for detailed diagnostics
+3. **Check documentation:** Review `docs/` folder for architecture details
+4. **GitHub Issues:** Report bugs with full error logs and environment details
 
 ## 🛠️ Technology Stack
 
