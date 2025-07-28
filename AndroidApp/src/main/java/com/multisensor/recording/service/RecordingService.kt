@@ -113,7 +113,9 @@ class RecordingService : Service() {
         
         // Ensure recording is stopped
         if (isRecording) {
-            stopRecordingInternal()
+            serviceScope.launch {
+                stopRecordingInternal()
+            }
         }
         
         // Stop preview streaming
@@ -182,11 +184,11 @@ class RecordingService : Service() {
                 startForeground(NOTIFICATION_ID, createRecordingNotification())
                 
                 // Initialize and start all recorders
-                val cameraStarted = cameraRecorder.startRecording(currentSessionId!!)
+                val cameraSessionInfo = cameraRecorder.startSession(recordVideo = true, captureRaw = false)
                 val thermalStarted = thermalRecorder.startRecording(currentSessionId!!)
                 val shimmerStarted = shimmerRecorder.startRecording(currentSessionId!!)
                 
-                if (cameraStarted) {
+                if (cameraSessionInfo != null) {
                     isRecording = true
                     
                     // Start preview streaming
@@ -199,7 +201,7 @@ class RecordingService : Service() {
                     stopRecordingInternal()
                 }
                 
-                logger.info("Recording status - Camera: $cameraStarted, Thermal: $thermalStarted, Shimmer: $shimmerStarted")
+                logger.info("Recording status - Camera: ${cameraSessionInfo != null}, Thermal: $thermalStarted, Shimmer: $shimmerStarted")
                 
             } catch (e: Exception) {
                 logger.error("Error starting recording", e)
@@ -224,7 +226,7 @@ class RecordingService : Service() {
             logger.info("Stopping recording session...")
             
             // Stop all recorders
-            cameraRecorder.stopRecording()
+            cameraRecorder.stopSession()
             thermalRecorder.stopRecording()
             shimmerRecorder.stopRecording()
             

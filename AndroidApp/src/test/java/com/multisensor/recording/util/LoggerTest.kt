@@ -10,12 +10,22 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 import java.io.File
 
 /**
  * Unit tests for Logger component using MockK and Robolectric
+ * 
+ * @Config(manifest=Config.NONE) suppresses AndroidManifest.xml warning
+ * 
+ * NOTE: These tests currently fail on Windows with Java 21 due to Robolectric
+ * compatibility issues with POSIX permissions. This is a known limitation.
+ * The main application functionality is tested via instrumented tests.
+ * 
+ * TODO: Resolve Robolectric Windows/Java 21 compatibility or migrate to alternative testing framework
  */
 @RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
 class LoggerTest {
 
     private lateinit var context: Context

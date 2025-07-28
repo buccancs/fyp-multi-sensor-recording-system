@@ -1,10 +1,12 @@
 package com.multisensor.recording.ui
 
+import android.view.TextureView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.multisensor.recording.recording.CameraRecorder
+import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.service.SessionManager
@@ -50,21 +52,32 @@ class MainViewModel @Inject constructor(
     private val _shimmerConnected = MutableLiveData<Boolean>(false)
     val shimmerConnected: LiveData<Boolean> = _shimmerConnected
     
+    // Enhanced CameraRecorder integration - SessionInfo tracking
+    private val _currentSessionInfo = MutableLiveData<SessionInfo?>()
+    val currentSessionInfo: LiveData<SessionInfo?> = _currentSessionInfo
+    
+    // Recording mode configuration
+    private val _recordVideoEnabled = MutableLiveData<Boolean>(true)
+    val recordVideoEnabled: LiveData<Boolean> = _recordVideoEnabled
+    
+    private val _captureRawEnabled = MutableLiveData<Boolean>(false)
+    val captureRawEnabled: LiveData<Boolean> = _captureRawEnabled
+    
     init {
         logger.info("MainViewModel initialized")
     }
     
     /**
-     * Initialize the recording system components
+     * Initialize the recording system components with TextureView for camera preview
      */
-    fun initializeSystem() {
+    fun initializeSystem(textureView: TextureView) {
         viewModelScope.launch {
             try {
-                logger.info("Initializing recording system...")
+                logger.info("Initializing recording system with TextureView...")
                 _systemStatus.value = "Initializing cameras and sensors..."
                 
-                // Initialize camera recorder
-                val cameraInitialized = cameraRecorder.initialize()
+                // Initialize camera recorder with TextureView for live preview
+                val cameraInitialized = cameraRecorder.initialize(textureView)
                 _cameraPreviewAvailable.value = cameraInitialized
                 
                 if (!cameraInitialized) {
@@ -108,7 +121,7 @@ class MainViewModel @Inject constructor(
     }
     
     /**
-     * Start recording session
+     * Start recording session with enhanced CameraRecorder API
      */
     fun startRecording() {
         if (_isRecording.value == true) {
@@ -121,26 +134,38 @@ class MainViewModel @Inject constructor(
                 logger.info("Starting recording session...")
                 _systemStatus.value = "Starting recording..."
                 
-                // Create new session
-                val sessionId = sessionManager.createNewSession()
-                logger.info("Created new session: $sessionId")
+                // Get recording mode configuration
+                val recordVideo = _recordVideoEnabled.value ?: true
+                val captureRaw = _captureRawEnabled.value ?: false
                 
-                // Start all recorders
-                val cameraStarted = cameraRecorder.startRecording(sessionId)
-                val thermalStarted = thermalRecorder.startRecording(sessionId)
-                val shimmerStarted = shimmerRecorder.startRecording(sessionId)
+                logger.info("Recording mode - Video: $recordVideo, RAW: $captureRaw")
                 
-                if (cameraStarted) {
+                // Start enhanced camera recorder with session configuration
+                val sessionInfo = cameraRecorder.startSession(recordVideo, captureRaw)
+                
+                if (sessionInfo != null) {
+                    // Update SessionInfo LiveData
+                    _currentSessionInfo.value = sessionInfo
+                    
+                    // Create legacy session for other recorders
+                    val sessionId = sessionManager.createNewSession()
+                    logger.info("Created legacy session: $sessionId for thermal/shimmer recorders")
+                    
+                    // Start other recorders with legacy API
+                    val thermalStarted = thermalRecorder.startRecording(sessionId)
+                    val shimmerStarted = shimmerRecorder.startRecording(sessionId)
+                    
                     _isRecording.value = true
-                    _systemStatus.value = "Recording in progress - Session: $sessionId"
-                    logger.info("Recording started successfully")
+                    _systemStatus.value = "Recording in progress - ${sessionInfo.getSummary()}"
+                    logger.info("Recording started successfully: ${sessionInfo.getSummary()}")
+                    
+                    // Log component status
+                    logger.info("Recording status - Camera: SessionInfo, Thermal: $thermalStarted, Shimmer: $shimmerStarted")
+                    
                 } else {
-                    _errorMessage.value = "Failed to start camera recording"
-                    logger.error("Failed to start camera recording")
+                    _errorMessage.value = "Failed to start camera recording session"
+                    logger.error("Failed to start camera recording session")
                 }
-                
-                // Log component status
-                logger.info("Recording status - Camera: $cameraStarted, Thermal: $thermalStarted, Shimmer: $shimmerStarted")
                 
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to start recording: ${e.message}"
@@ -151,7 +176,7 @@ class MainViewModel @Inject constructor(
     }
     
     /**
-     * Stop recording session
+     * Stop recording session with enhanced CameraRecorder API
      */
     fun stopRecording() {
         if (_isRecording.value != true) {
@@ -164,23 +189,116 @@ class MainViewModel @Inject constructor(
                 logger.info("Stopping recording session...")
                 _systemStatus.value = "Stopping recording..."
                 
-                // Stop all recorders
-                cameraRecorder.stopRecording()
-                thermalRecorder.stopRecording()
-                shimmerRecorder.stopRecording()
+                // Stop enhanced camera recorder and get final SessionInfo
+                val finalSessionInfo = cameraRecorder.stopSession()
                 
-                // Finalize session
-                sessionManager.finalizeCurrentSession()
-                
-                _isRecording.value = false
-                _systemStatus.value = "Recording stopped - Ready"
-                logger.info("Recording stopped successfully")
+                if (finalSessionInfo != null) {
+                    // Update SessionInfo LiveData with final session data
+                    _currentSessionInfo.value = finalSessionInfo
+                    
+                    logger.info("Camera session stopped: ${finalSessionInfo.getSummary()}")
+                    
+                    // Stop other recorders with legacy API
+                    thermalRecorder.stopRecording()
+                    shimmerRecorder.stopRecording()
+                    
+                    // Finalize legacy session
+                    sessionManager.finalizeCurrentSession()
+                    
+                    _isRecording.value = false
+                    _systemStatus.value = "Recording stopped - ${finalSessionInfo.getSummary()}"
+                    logger.info("Recording stopped successfully: ${finalSessionInfo.getSummary()}")
+                    
+                } else {
+                    logger.warning("No SessionInfo returned from camera recorder stop")
+                    
+                    // Fallback: stop other recorders anyway
+                    thermalRecorder.stopRecording()
+                    shimmerRecorder.stopRecording()
+                    sessionManager.finalizeCurrentSession()
+                    
+                    _isRecording.value = false
+                    _systemStatus.value = "Recording stopped - Ready"
+                    logger.info("Recording stopped (no session info)")
+                }
                 
             } catch (e: Exception) {
                 _errorMessage.value = "Error stopping recording: ${e.message}"
+                _systemStatus.value = "Recording stop failed"
                 logger.error("Recording stop error", e)
+                
+                // Ensure recording state is reset even on error
+                _isRecording.value = false
+                _currentSessionInfo.value = null
             }
         }
+    }
+    
+    /**
+     * Manually capture RAW image during active recording session
+     */
+    fun captureRawImage() {
+        if (_isRecording.value != true) {
+            _errorMessage.value = "No active recording session for RAW capture"
+            logger.warning("Attempted RAW capture without active session")
+            return
+        }
+        
+        val currentSession = _currentSessionInfo.value
+        if (currentSession?.rawEnabled != true) {
+            _errorMessage.value = "RAW capture not enabled for current session"
+            logger.warning("Attempted RAW capture but RAW not enabled")
+            return
+        }
+        
+        viewModelScope.launch {
+            try {
+                logger.info("Triggering manual RAW capture...")
+                _systemStatus.value = "Capturing RAW image..."
+                
+                val captureSuccess = cameraRecorder.captureRawImage()
+                
+                if (captureSuccess) {
+                    _systemStatus.value = "RAW image captured - ${currentSession.getSummary()}"
+                    logger.info("Manual RAW capture successful")
+                } else {
+                    _errorMessage.value = "Failed to capture RAW image"
+                    logger.error("Manual RAW capture failed")
+                    _systemStatus.value = "RAW capture failed - ${currentSession.getSummary()}"
+                }
+                
+            } catch (e: Exception) {
+                _errorMessage.value = "Error capturing RAW image: ${e.message}"
+                logger.error("Manual RAW capture error", e)
+                _systemStatus.value = "RAW capture error - ${currentSession?.getSummary() ?: "Unknown session"}"
+            }
+        }
+    }
+    
+    /**
+     * Set video recording enabled/disabled
+     */
+    fun setRecordVideoEnabled(enabled: Boolean) {
+        if (_isRecording.value == true) {
+            logger.warning("Cannot change recording mode during active session")
+            return
+        }
+        
+        _recordVideoEnabled.value = enabled
+        logger.info("Video recording ${if (enabled) "enabled" else "disabled"}")
+    }
+    
+    /**
+     * Set RAW capture enabled/disabled
+     */
+    fun setCaptureRawEnabled(enabled: Boolean) {
+        if (_isRecording.value == true) {
+            logger.warning("Cannot change recording mode during active session")
+            return
+        }
+        
+        _captureRawEnabled.value = enabled
+        logger.info("RAW capture ${if (enabled) "enabled" else "disabled"}")
     }
     
     /**
@@ -224,7 +342,7 @@ class MainViewModel @Inject constructor(
         if (_isRecording.value == true) {
             viewModelScope.launch {
                 try {
-                    cameraRecorder.stopRecording()
+                    cameraRecorder.stopSession()
                     thermalRecorder.stopRecording()
                     shimmerRecorder.stopRecording()
                 } catch (e: Exception) {

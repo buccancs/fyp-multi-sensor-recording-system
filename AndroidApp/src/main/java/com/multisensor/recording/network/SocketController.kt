@@ -190,10 +190,12 @@ class SocketController @Inject constructor(
      */
     private suspend fun startCommandListener() {
         try {
-            var line: String?
-            while (isConnected && shouldReconnect && reader?.readLine().also { line = it } != null) {
-                line?.let { command ->
-                    processCommand(command.trim())
+            while (isConnected && shouldReconnect) {
+                val line = reader?.readLine()
+                if (line != null) {
+                    processCommand(line.trim())
+                } else {
+                    break
                 }
             }
         } catch (e: Exception) {

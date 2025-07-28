@@ -5,7 +5,7 @@ plugins {
 python {
     // Use system Python (default). Optionally specify path:
     // pythonPath = "C:/Python39/python.exe"
-    
+
     // Production dependencies with exact versions for reproducible builds
     pip 'pyqt5:5.15.7'
     pip 'opencv-python:4.8.0.74'
@@ -15,7 +15,7 @@ python {
     pip 'pillow:10.0.0'
     pip 'matplotlib:3.7.2'
     pip 'scipy:1.11.1'
-    
+
     // Testing dependencies
     pip 'pytest:7.4.0'
     pip 'pytest-cov:4.1.0'
@@ -24,7 +24,7 @@ python {
     pip 'pytest-qt:4.2.0'
     pip 'mock:5.1.0'
     pip 'coverage:7.2.7'
-    
+
     // Development dependencies
     pip 'flake8:6.0.0'
     pip 'black:23.7.0'
@@ -36,7 +36,7 @@ import ru.vyarus.gradle.plugin.python.task.PythonTask
 // Task to run the desktop controller application
 task runDesktopApp(type: PythonTask) {
     dependsOn pipInstall       // ensure dependencies are installed
-    command = "src/main.py"    // path to the main PyQt Python script
+    command = ["src/main.py"]    // path to the main PyQt Python script
     description = "Run the PyQt5 desktop controller application"
     group = "application"
 }
@@ -44,7 +44,7 @@ task runDesktopApp(type: PythonTask) {
 // Task to run calibration routines
 task runCalibration(type: PythonTask) {
     dependsOn pipInstall
-    command = "src/calibration.py"
+    command = ["src/calibration.py"]
     description = "Run camera calibration routines"
     group = "application"
 }
@@ -52,8 +52,7 @@ task runCalibration(type: PythonTask) {
 // Task to test Python environment setup
 task testPythonSetup(type: PythonTask) {
     dependsOn pipInstall
-    command = "-c"
-    args = ["import sys; import PyQt5; import cv2; import numpy; print('Python environment setup successful!')"]
+    command = ["-c", "import sys; import PyQt5; import cv2; import numpy; print('Python environment setup successful!')"]
     description = "Test that all Python dependencies are properly installed"
     group = "verification"
 }
@@ -61,8 +60,7 @@ task testPythonSetup(type: PythonTask) {
 // Task to run Python unit tests
 task runPythonTests(type: PythonTask) {
     dependsOn pipInstall
-    command = "-m"
-    args = ["pytest", "tests/", "-v", "--tb=short"]
+    command = ["-m", "pytest", "tests/", "-v", "--tb=short"]
     description = "Run Python unit tests with pytest"
     group = "verification"
 }
@@ -70,8 +68,7 @@ task runPythonTests(type: PythonTask) {
 // Task to run Python tests with coverage
 task runPythonTestsWithCoverage(type: PythonTask) {
     dependsOn pipInstall
-    command = "-m"
-    args = ["pytest", "tests/", "--cov=src", "--cov-report=html", "--cov-report=term", "-v"]
+    command = ["-m", "pytest", "tests/", "--cov=src", "--cov-report=html", "--cov-report=term", "-v"]
     description = "Run Python tests with coverage reporting"
     group = "verification"
 }
@@ -79,8 +76,7 @@ task runPythonTestsWithCoverage(type: PythonTask) {
 // Task to run Python code quality checks
 task runPythonLinting(type: PythonTask) {
     dependsOn pipInstall
-    command = "-m"
-    args = ["flake8", "src/", "--max-line-length=88", "--extend-ignore=E203,W503"]
+    command = ["-m", "flake8", "src/", "--max-line-length=88", "--extend-ignore=E203,W503"]
     description = "Run Python code quality checks with flake8"
     group = "verification"
 }
@@ -88,8 +84,7 @@ task runPythonLinting(type: PythonTask) {
 // Task to format Python code
 task formatPythonCode(type: PythonTask) {
     dependsOn pipInstall
-    command = "-m"
-    args = ["black", "src/", "tests/"]
+    command = ["-m", "black", "src/", "tests/"]
     description = "Format Python code with black"
     group = "formatting"
 }
@@ -97,8 +92,7 @@ task formatPythonCode(type: PythonTask) {
 // Task to run type checking
 task runPythonTypeCheck(type: PythonTask) {
     dependsOn pipInstall
-    command = "-m"
-    args = ["mypy", "src/", "--ignore-missing-imports"]
+    command = ["-m", "mypy", "src/", "--ignore-missing-imports"]
     description = "Run Python type checking with mypy"
     group = "verification"
 }

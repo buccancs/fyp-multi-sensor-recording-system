@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.multisensor.recording.databinding.ActivityMainBinding
+import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,6 +105,20 @@ class MainActivity : AppCompatActivity() {
                 viewModel.clearError()
             }
         }
+        
+        // Observe SessionInfo for enhanced CameraRecorder integration
+        viewModel.currentSessionInfo.observe(this) { sessionInfo ->
+            updateSessionInfoDisplay(sessionInfo)
+        }
+        
+        // Observe recording mode configuration
+        viewModel.recordVideoEnabled.observe(this) { enabled ->
+            // TODO: Update video recording checkbox when UI is added
+        }
+        
+        viewModel.captureRawEnabled.observe(this) { enabled ->
+            // TODO: Update RAW capture checkbox when UI is added
+        }
     }
     
     private fun checkPermissions() {
@@ -119,7 +134,11 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun initializeRecordingSystem() {
-        viewModel.initializeSystem()
+        // Get TextureView from layout for camera preview
+        val textureView = binding.texturePreview
+        
+        // Initialize system with TextureView for enhanced CameraRecorder integration
+        viewModel.initializeSystem(textureView)
         binding.statusText.text = "System initialized - Ready to record"
     }
     
@@ -136,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, RecordingService::class.java).apply {
             action = RecordingService.ACTION_START_RECORDING
         }
-        startForegroundService(intent)
+        ContextCompat.startForegroundService(this, intent)
         viewModel.startRecording()
     }
     
@@ -169,6 +188,37 @@ class MainActivity : AppCompatActivity() {
             )
             if (binding.statusText.text.contains("Recording")) {
                 binding.statusText.text = "Recording stopped - Ready"
+            }
+        }
+    }
+    
+    /**
+     * Update UI with SessionInfo data from enhanced CameraRecorder
+     */
+    private fun updateSessionInfoDisplay(sessionInfo: SessionInfo?) {
+        if (sessionInfo != null) {
+            // Update status text with session summary
+            val sessionSummary = sessionInfo.getSummary()
+            
+            // For now, display session info in the existing status text
+            // TODO: Add dedicated SessionInfo display components to layout
+            if (sessionInfo.isActive()) {
+                binding.statusText.text = "Active: $sessionSummary"
+            } else {
+                binding.statusText.text = "Completed: $sessionSummary"
+            }
+            
+            // Log detailed session information
+            android.util.Log.d("MainActivity", "SessionInfo updated: $sessionSummary")
+            
+            if (sessionInfo.errorOccurred) {
+                Toast.makeText(this, "Session error: ${sessionInfo.errorMessage}", Toast.LENGTH_LONG).show()
+            }
+            
+        } else {
+            // No active session
+            if (!viewModel.isRecording.value!!) {
+                binding.statusText.text = "Ready to record"
             }
         }
     }
