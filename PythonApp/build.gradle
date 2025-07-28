@@ -1,0 +1,43 @@
+plugins {
+    id 'ru.vyarus.use-python' version '3.0.0'
+}
+
+python {
+    // Use system Python (default). Optionally specify path:
+    // pythonPath = "C:/Python39/python.exe"
+    
+    // List required pip packages with exact versions for reproducible builds
+    pip 'pyqt5:5.15.7'
+    pip 'opencv-python:4.8.0.74'
+    pip 'numpy:1.24.3'
+    pip 'requests:2.31.0'
+    pip 'websockets:11.0.3'
+    pip 'pillow:10.0.0'
+}
+
+import ru.vyarus.gradle.plugin.python.task.PythonTask
+
+// Task to run the desktop controller application
+task runDesktopApp(type: PythonTask) {
+    dependsOn pipInstall       // ensure dependencies are installed
+    command = "src/main.py"    // path to the main PyQt Python script
+    description = "Run the PyQt5 desktop controller application"
+    group = "application"
+}
+
+// Task to run calibration routines
+task runCalibration(type: PythonTask) {
+    dependsOn pipInstall
+    command = "src/calibration.py"
+    description = "Run camera calibration routines"
+    group = "application"
+}
+
+// Task to test Python environment setup
+task testPythonSetup(type: PythonTask) {
+    dependsOn pipInstall
+    command = "-c"
+    args = ["import sys; import PyQt5; import cv2; import numpy; print('Python environment setup successful!')"]
+    description = "Test that all Python dependencies are properly installed"
+    group = "verification"
+}
