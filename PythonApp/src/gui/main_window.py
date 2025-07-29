@@ -30,6 +30,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from .device_panel import DeviceStatusPanel
 from .preview_panel import PreviewPanel
 from .stimulus_panel import StimulusControlPanel
+from .calibration_dialog import CalibrationDialog
 
 # Import network server
 from network.device_server import JsonSocketServer, create_command_message
@@ -154,9 +155,9 @@ class MainWindow(QMainWindow):
         
         toolbar.addSeparator()
         
-        # Capture Calibration action
-        calib_action = QAction("Capture Calibration", self)
-        calib_action.triggered.connect(self.handle_capture_calibration)
+        # Calibration Dialog action
+        calib_action = QAction("Open Calibration Dialog", self)
+        calib_action.triggered.connect(self.open_calibration_dialog)
         toolbar.addAction(calib_action)
     
     def create_central_widget(self):
@@ -542,15 +543,54 @@ class MainWindow(QMainWindow):
         else:
             self.statusBar().showMessage("Server not running - cannot stop recording")
     
-    def handle_capture_calibration(self):
-        """Handle capture calibration button press - send calibration command."""
-        if self.server_running:
-            command = create_command_message('capture_calibration')
-            count = self.json_server.broadcast_command(command)
-            self.log_message(f"Calibration capture command sent to {count} devices")
-            self.statusBar().showMessage(f"Calibration capture initiated on {count} devices")
-        else:
-            self.statusBar().showMessage("Server not running - cannot capture calibration")
+    def open_calibration_dialog(self):
+        """Open the comprehensive calibration dialog."""
+        try:
+            if not self.server_running:
+                QMessageBox.warning(self, "Server Not Running", 
+                                  "Please start the server before opening calibration dialog.")
+                return
+                
+            # Create and show calibration dialog
+            dialog = CalibrationDialog(self.json_server, self)
+            
+            # Connect signals for overlay functionality
+            dialog.overlay_toggled.connect(self.handle_overlay_toggle)
+            dialog.calibration_completed.connect(self.handle_calibration_completed)
+            
+            # Show dialog
+            result = dialog.exec_()
+            
+            if result == dialog.Accepted:
+                self.log_message("Calibration dialog completed successfully")
+                self.statusBar().showMessage("Calibration completed")
+            else:
+                self.log_message("Calibration dialog cancelled")
+                self.statusBar().showMessage("Calibration cancelled")
+                
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to open calibration dialog: {str(e)}")
+            self.log_message(f"Error opening calibration dialog: {str(e)}")
+            
+    def handle_overlay_toggle(self, device_id: str, enabled: bool):
+        """Handle thermal overlay toggle from calibration dialog."""
+        try:
+            self.log_message(f"Thermal overlay {'enabled' if enabled else 'disabled'} for {device_id}")
+            # TODO: Implement overlay functionality in preview panel
+            # This would integrate with the preview panel to show/hide thermal overlay
+            
+        except Exception as e:
+            self.log_message(f"Error toggling overlay: {str(e)}")
+            
+    def handle_calibration_completed(self, device_id: str, result):
+        """Handle calibration completion from dialog."""
+        try:
+            self.log_message(f"Calibration completed for {device_id}")
+            # TODO: Store calibration results for use in main application
+            # This could be integrated with session management
+            
+        except Exception as e:
+            self.log_message(f"Error handling calibration completion: {str(e)}")
     
     def closeEvent(self, event):
         """Handle application close event."""
