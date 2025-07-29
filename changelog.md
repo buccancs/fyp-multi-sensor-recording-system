@@ -7,6 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Milestone 3.1: PyQt GUI Scaffolding and Application Framework ✅ COMPLETED (2025-07-29)
+- **Complete PyQt GUI Application Framework**: Comprehensive desktop controller application with professional UI structure
+  - **MainWindow Implementation**: 276-line main window class with proper QMainWindow architecture and component organization
+  - **Menu Bar System**: Complete File, Tools, View, Help menu structure with Exit, Settings, Show/Hide Log, and About functionality
+  - **Toolbar Integration**: Professional toolbar with Connect, Disconnect, Start Session, Stop, and Capture Calibration buttons
+  - **Status Bar**: Real-time status message display with user feedback for all interactive operations
+  - **Two-Column Layout**: Proper device status panel (left) and preview area (right) with responsive design
+- **Optional Modularization Enhancement**: Advanced code organization with separate UI component modules
+  - **DeviceStatusPanel Module**: 96-line standalone device_panel.py with comprehensive device management functionality
+  - **PreviewPanel Module**: 162-line standalone preview_panel.py with tabbed video feed interface and advanced control methods
+  - **StimulusControlPanel Module**: 233-line standalone stimulus_panel.py with PyQt signals and comprehensive media controls
+  - **Modular Architecture**: Clean separation of concerns with individual classes for each UI component
+  - **Enhanced Maintainability**: Improved code organization for easier development and testing
+- **Optional Logging System Enhancement**: Advanced debugging and monitoring capabilities
+  - **QDockWidget Log Panel**: Dockable log window with dark theme styling and monospace font
+  - **View Menu Integration**: Show/Hide Log functionality with checkable menu action and dynamic text updates
+  - **Timestamped Logging**: Comprehensive log_message() method with automatic timestamping and auto-scrolling
+  - **Integrated UI Logging**: All toolbar actions, menu actions, and UI interactions logged with detailed messages
+  - **Professional Styling**: Dark-themed log panel with console-style appearance and proper sizing constraints
+- **Placeholder Network/Calibration Modules**: Future-ready stub modules with comprehensive TODO documentation
+  - **DeviceClient Module**: 233-line network/device_client.py with QThread-based architecture and PyQt signals
+  - **CalibrationManager Module**: 395-line calibration/calibration.py with comprehensive camera calibration framework
+  - **LoggerManager Module**: 452-line utils/logger.py with advanced logging utilities and structured logging support
+  - **Comprehensive TODO Documentation**: Detailed implementation plans for all future functionality
+  - **Professional Architecture**: Proper class structure and method signatures ready for future implementation
+- **Device Status Panel**: Left-column device management interface with connection status tracking
+  - **Device List Widget**: QListWidget implementation for displaying connected devices with real-time status updates
+  - **Connection Status Simulation**: Interactive Connect/Disconnect functionality with visual status indicators
+  - **Responsive Design**: Fixed maximum width (250px) to maintain proper layout proportions
+  - **Enhanced Methods**: Additional device management methods (add_device, remove_device, clear_devices)
+- **Preview Area with Tabbed Interface**: Right-column video feed display system with multi-device support
+  - **QTabWidget Implementation**: Professional tabbed interface for Device 1 and Device 2 video feeds
+  - **Dual-Feed Support**: RGB and thermal camera feed placeholders for each device with proper labeling
+  - **Advanced Control Methods**: Comprehensive API for updating feeds, clearing displays, and managing tabs
+  - **Responsive Layout**: Minimum size constraints (320x240) with proper stretch and alignment
+  - **Future-Ready Architecture**: Designed for easy integration with actual video streaming functionality
+- **Stimulus Control Panel**: Bottom-panel media playback control system with comprehensive functionality
+  - **PyQt Signals Integration**: Professional signal-slot architecture for parent-child communication
+  - **File Selection System**: QFileDialog integration for video file selection with proper file filtering
+  - **Play/Pause Controls**: Interactive media control buttons with enable/disable state management
+  - **Timeline Slider**: QSlider implementation for video timeline control with percentage-based seeking
+  - **Output Screen Selector**: QComboBox for multi-monitor support with automatic screen detection
+  - **Advanced Control Methods**: Comprehensive API for programmatic control and state management
+- **Application Architecture**: Clean modular structure following PyQt best practices
+  - **main.py**: 47-line application entry point with proper QApplication setup and high-DPI scaling support
+  - **Modular GUI Package**: Organized GUI module structure with separate files for each component
+  - **Import Management**: Proper PyQt5 import organization and path management for modular architecture
+  - **High-DPI Support**: Correct implementation of high-DPI scaling attributes before QApplication creation
+- **Interactive Functionality**: Complete placeholder functionality for all UI components
+  - **Menu Actions**: Working File→Exit, Tools→Settings (placeholder), View→Show/Hide Log, Help→About with proper dialogs
+  - **Toolbar Actions**: All buttons functional with status bar feedback, device list state changes, and logging integration
+  - **Stimulus Controls**: File dialog, play/pause simulation, timeline seeking, and screen selection with signal emission
+  - **Comprehensive Logging**: All user interactions logged with timestamped messages and detailed operation descriptions
+- **Testing and Validation**: Successful GUI scaffold testing with full functionality verification
+  - **Application Launch**: Successful PyQt application startup without errors or warnings
+  - **Modular Component Testing**: All separated UI components functional with proper integration
+  - **Logging System Testing**: Log panel show/hide functionality and message logging working correctly
+  - **Interaction Testing**: Menu actions, toolbar buttons, device list, tabs, and stimulus controls all working
+  - **Layout Validation**: Proper two-column layout with bottom panel, dockable log, and responsive window resizing
+
 ### Added - Milestone 2.9: Advanced Calibration System ⚠️ IN PROGRESS (2025-07-29)
 - **Enhanced NTP-Style Synchronization**: Advanced clock synchronization with ±10ms accuracy
   - **NTP-Style Round-Trip Compensation**: Multiple measurement algorithm with statistical analysis

@@ -72,6 +72,52 @@ This document tracks remaining tasks, future work items, and improvements for th
 - [ ] Address any issues found during hardware validation
 - [ ] Create final validation report with Samsung device compatibility notes
 
+## Milestone 3.1: PyQt GUI Scaffolding and Application Framework ✅ COMPLETED WITH ENHANCEMENTS (2025-07-29)
+
+### Complete GUI Application Framework ✅ COMPLETED
+- [x] **MainWindow Implementation**: 276-line main window class with proper QMainWindow architecture and enhanced logging
+- [x] **Menu Bar System**: Complete File, Tools, View, Help menu structure with Show/Hide Log functionality
+- [x] **Toolbar Integration**: Professional toolbar with Connect, Disconnect, Start Session, Stop, Capture Calibration buttons
+- [x] **Status Bar**: Real-time status message display with user feedback for all operations
+- [x] **Two-Column Layout**: Proper device status panel (left) and preview area (right) with responsive design
+
+### Optional Modularization Enhancement ✅ COMPLETED
+- [x] **DeviceStatusPanel Module**: 96-line standalone device_panel.py with comprehensive device management
+- [x] **PreviewPanel Module**: 162-line standalone preview_panel.py with tabbed interface and advanced controls
+- [x] **StimulusControlPanel Module**: 233-line standalone stimulus_panel.py with PyQt signals integration
+- [x] **Modular Architecture**: Clean separation of concerns with individual classes for each UI component
+- [x] **Enhanced Maintainability**: Improved code organization for easier development and testing
+
+### Optional Logging System Enhancement ✅ COMPLETED
+- [x] **QDockWidget Log Panel**: Dockable log window with dark theme styling and monospace font
+- [x] **View Menu Integration**: Show/Hide Log functionality with checkable menu action
+- [x] **Timestamped Logging**: Comprehensive log_message() method with automatic timestamping
+- [x] **Integrated UI Logging**: All toolbar actions, menu actions, and UI interactions logged
+- [x] **Professional Styling**: Dark-themed log panel with console-style appearance
+
+### Placeholder Network/Calibration Modules ✅ COMPLETED
+- [x] **DeviceClient Module**: 233-line network/device_client.py with QThread architecture and PyQt signals
+- [x] **CalibrationManager Module**: 395-line calibration/calibration.py with comprehensive camera calibration framework
+- [x] **LoggerManager Module**: 452-line utils/logger.py with advanced logging utilities and structured logging
+- [x] **Comprehensive TODO Documentation**: Detailed implementation plans for all future functionality
+- [x] **Professional Architecture**: Proper class structure and method signatures ready for implementation
+
+### Enhanced Component Features ✅ COMPLETED
+- [x] **Device Status Panel**: Enhanced with additional methods (add_device, remove_device, clear_devices)
+- [x] **Preview Area**: Advanced control methods for updating feeds, clearing displays, managing tabs
+- [x] **Stimulus Control Panel**: PyQt signals integration and comprehensive API for programmatic control
+- [x] **Application Testing**: Successful testing of all modular components and logging system
+
+### Next Steps for Integration
+- [ ] **Backend Integration**: Connect GUI with existing socket servers from main_backup.py
+- [ ] **Video Stream Integration**: Replace placeholder labels with actual video feed display using modular API
+- [ ] **Device Communication**: Integrate DeviceClient placeholder with Android app communication
+- [ ] **Stimulus Player**: Implement actual video playback functionality using StimulusControlPanel signals
+- [ ] **Calibration Integration**: Connect CalibrationManager placeholder with existing calibration system
+- [ ] **Network Configuration**: Add settings dialog for configuring device IPs and ports
+- [ ] **Advanced Logging**: Implement LoggerManager for file-based logging and structured logging
+- [ ] **Real-time Updates**: Implement signals/slots for thread-safe GUI updates using modular architecture
+
 ## Milestone 2.9: Advanced Calibration System ⚠️ IN PROGRESS (2025-07-29)
 
 ### Enhanced NTP-Style Synchronization ✅ COMPLETED
