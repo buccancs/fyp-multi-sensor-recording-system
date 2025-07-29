@@ -30,9 +30,14 @@ class PreviewPanel(QTabWidget):
         self.device2_widget = self.create_device_tab("Device 2")
         self.addTab(self.device2_widget, "Device 2")
         
+        # Create PC Webcam tab
+        self.webcam_widget = self.create_webcam_tab("PC Webcam")
+        self.addTab(self.webcam_widget, "PC Webcam")
+        
         # Store references to labels for easy access
         self.rgb_labels = [self.device1_widget.rgb_label, self.device2_widget.rgb_label]
         self.thermal_labels = [self.device1_widget.thermal_label, self.device2_widget.thermal_label]
+        self.webcam_label = self.webcam_widget.webcam_label
     
     def create_device_tab(self, device_name):
         """
@@ -70,6 +75,34 @@ class PreviewPanel(QTabWidget):
         
         return device_widget
     
+    def create_webcam_tab(self, device_name):
+        """
+        Create a tab widget for PC webcam feed display.
+        
+        Args:
+            device_name (str): Name of the webcam for labeling
+            
+        Returns:
+            QWidget: The webcam tab widget
+        """
+        webcam_widget = QWidget()
+        webcam_layout = QVBoxLayout(webcam_widget)
+        
+        # Webcam feed label
+        webcam_label = QLabel("PC Webcam Feed")
+        webcam_label.setMinimumSize(640, 480)  # Larger size for webcam
+        webcam_label.setStyleSheet("background-color: black; color: white; border: 1px solid gray;")
+        webcam_label.setAlignment(Qt.AlignCenter)
+        webcam_layout.addWidget(webcam_label)
+        
+        # Add stretch to push label to top
+        webcam_layout.addStretch(1)
+        
+        # Store label reference in the widget for easy access
+        webcam_widget.webcam_label = webcam_label
+        
+        return webcam_widget
+    
     def update_rgb_feed(self, device_index, pixmap):
         """
         Update the RGB camera feed for a specific device.
@@ -92,6 +125,22 @@ class PreviewPanel(QTabWidget):
         if 0 <= device_index < len(self.thermal_labels):
             self.thermal_labels[device_index].setPixmap(pixmap)
     
+    def update_webcam_feed(self, pixmap):
+        """
+        Update the PC webcam feed.
+        
+        Args:
+            pixmap (QPixmap): The image to display
+        """
+        if hasattr(self, 'webcam_label') and self.webcam_label:
+            self.webcam_label.setPixmap(pixmap)
+    
+    def clear_webcam_feed(self):
+        """Clear the PC webcam feed display."""
+        if hasattr(self, 'webcam_label') and self.webcam_label:
+            self.webcam_label.clear()
+            self.webcam_label.setText("PC Webcam Feed")
+    
     def clear_feed(self, device_index, feed_type="both"):
         """
         Clear the video feed display for a specific device.
@@ -110,9 +159,10 @@ class PreviewPanel(QTabWidget):
                 self.thermal_labels[device_index].setText("Thermal Camera Feed")
     
     def clear_all_feeds(self):
-        """Clear all video feeds from all devices."""
+        """Clear all video feeds from all devices and webcam."""
         for i in range(len(self.rgb_labels)):
             self.clear_feed(i, "both")
+        self.clear_webcam_feed()
     
     def set_device_tab_active(self, device_index):
         """

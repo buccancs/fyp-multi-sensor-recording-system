@@ -1,0 +1,46 @@
+{
+  "session_id": "test_session_20250729_202559",
+  "session_name": "test_session",
+  "folder_path": "test_recordings\\test_session_20250729_202559",
+  "start_time": "2025-07-29T20:25:59.998206",
+  "end_time": "2025-07-29T20:26:00.001463",
+  "duration": 0.003257,
+  "devices": {
+    "pc_webcam": {
+      "device_type": "pc_webcam",
+      "capabilities": [
+        "video_recording"
+      ],
+      "added_time": "2025-07-29T20:25:59.999454",
+      "status": "connected"
+    },
+    "phone_1": {
+      "device_type": "android_phone",
+      "capabilities": [
+        "rgb_video",
+        "thermal_video"
+      ],
+      "added_time": "2025-07-29T20:25:59.999454",
+      "status": "connected"
+    }
+  },
+  "files": {
+    "pc_webcam": [
+      {
+        "file_type": "webcam_video",
+        "file_path": "webcam_test.mp4",
+        "file_size": 1024000,
+        "created_time": "2025-07-29T20:26:00.000463"
+      }
+    ],
+    "phone_1": [
+      {
+        "file_type": "rgb_video",
+        "file_path": "phone1_rgb.mp4",
+        "file_size": 2048000,
+        "created_time": "2025-07-29T20:26:00.000463"
+      }
+    ]
+  },
+  "status": "completed"
+}

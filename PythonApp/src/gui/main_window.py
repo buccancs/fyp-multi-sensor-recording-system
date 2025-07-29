@@ -34,6 +34,12 @@ from .stimulus_panel import StimulusControlPanel
 # Import network server
 from network.device_server import JsonSocketServer, create_command_message
 
+# Import webcam capture
+from webcam.webcam_capture import WebcamCapture
+
+# Import session manager
+from session.session_manager import SessionManager
+
 
 class MainWindow(QMainWindow):
     """Main window for the Multi-Sensor Recording System Controller."""
@@ -47,11 +53,23 @@ class MainWindow(QMainWindow):
         self.json_server = JsonSocketServer()
         self.server_running = False
         
+        # Initialize webcam capture
+        self.webcam_capture = WebcamCapture()
+        self.webcam_previewing = False
+        self.webcam_recording = False
+        
+        # Initialize session manager
+        self.session_manager = SessionManager()
+        self.current_session_id = None
+        
         # Initialize UI components
         self.init_ui()
         
         # Connect server signals to GUI handlers
         self.connect_server_signals()
+        
+        # Connect webcam signals to GUI handlers
+        self.connect_webcam_signals()
         
         # Initialize placeholder data
         self.init_placeholder_data()
@@ -241,6 +259,16 @@ class MainWindow(QMainWindow):
         
         self.log_message("Server signals connected to GUI handlers")
     
+    def connect_webcam_signals(self):
+        """Connect WebcamCapture signals to GUI handler methods."""
+        self.webcam_capture.frame_ready.connect(self.on_webcam_frame_ready)
+        self.webcam_capture.recording_started.connect(self.on_webcam_recording_started)
+        self.webcam_capture.recording_stopped.connect(self.on_webcam_recording_stopped)
+        self.webcam_capture.error_occurred.connect(self.on_webcam_error)
+        self.webcam_capture.status_changed.connect(self.on_webcam_status_changed)
+        
+        self.log_message("Webcam signals connected to GUI handlers")
+    
     def init_placeholder_data(self):
         """Initialize placeholder data for testing."""
         # Placeholder data is now handled by the modular components
@@ -360,6 +388,32 @@ class MainWindow(QMainWindow):
         self.log_message(f"Server error for {device_id}: {error_message}")
         self.statusBar().showMessage(f"Error: {error_message}")
     
+    # Webcam signal handlers
+    def on_webcam_frame_ready(self, pixmap):
+        """Handle new frame from webcam for preview."""
+        self.preview_tabs.update_webcam_feed(pixmap)
+    
+    def on_webcam_recording_started(self, filepath):
+        """Handle webcam recording started."""
+        self.webcam_recording = True
+        self.log_message(f"Webcam recording started: {filepath}")
+        self.statusBar().showMessage("Webcam recording started")
+    
+    def on_webcam_recording_stopped(self, filepath, duration):
+        """Handle webcam recording stopped."""
+        self.webcam_recording = False
+        self.log_message(f"Webcam recording stopped: {filepath} (duration: {duration:.1f}s)")
+        self.statusBar().showMessage(f"Webcam recording stopped (duration: {duration:.1f}s)")
+    
+    def on_webcam_error(self, error_message):
+        """Handle webcam error."""
+        self.log_message(f"Webcam error: {error_message}")
+        self.statusBar().showMessage(f"Webcam error: {error_message}")
+    
+    def on_webcam_status_changed(self, status_message):
+        """Handle webcam status change."""
+        self.log_message(f"Webcam status: {status_message}")
+    
     # Utility methods
     def get_device_index(self, device_id):
         """Get device index for device_id (simple mapping for now)."""
@@ -418,22 +472,73 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage("Server is not running")
     
     def handle_start(self):
-        """Handle start session button press - send start command to all devices."""
+        """Handle start session button press - send start command to all devices and start webcam."""
         if self.server_running:
+            # Create new session
+            session_info = self.session_manager.create_session()
+            session_id = session_info["session_id"]
+            self.current_session_id = session_id
+            
+            # Add PC webcam as a device to the session
+            self.session_manager.add_device_to_session("pc_webcam", "pc_webcam", ["video_recording"])
+            
+            # Set webcam output directory to session folder
+            session_folder = self.session_manager.get_session_folder()
+            if session_folder:
+                self.webcam_capture.set_output_directory(str(session_folder))
+            
+            # Start webcam recording
+            if not self.webcam_previewing:
+                self.webcam_capture.start_preview()
+                self.webcam_previewing = True
+            
+            webcam_started = self.webcam_capture.start_recording(session_id)
+            
+            # Send start command to devices
             command = create_command_message('start_recording')
             count = self.json_server.broadcast_command(command)
-            self.log_message(f"Start recording command sent to {count} devices")
-            self.statusBar().showMessage(f"Recording started on {count} devices")
+            
+            if webcam_started:
+                self.log_message(f"Session {session_id} started - webcam recording and {count} devices")
+                self.statusBar().showMessage(f"Session started: webcam + {count} devices")
+            else:
+                self.log_message(f"Session {session_id} started - {count} devices (webcam failed)")
+                self.statusBar().showMessage(f"Session started: {count} devices (webcam failed)")
         else:
             self.statusBar().showMessage("Server not running - cannot start recording")
     
     def handle_stop(self):
-        """Handle stop button press - send stop command to all devices."""
+        """Handle stop button press - send stop command to all devices and stop webcam."""
         if self.server_running:
+            # Stop webcam recording
+            webcam_filepath = self.webcam_capture.stop_recording()
+            
+            # Add webcam file to session if recording was successful
+            if webcam_filepath and self.session_manager.get_current_session():
+                try:
+                    file_size = os.path.getsize(webcam_filepath) if os.path.exists(webcam_filepath) else None
+                    self.session_manager.add_file_to_session("pc_webcam", "webcam_video", webcam_filepath, file_size)
+                except Exception as e:
+                    self.log_message(f"Failed to add webcam file to session: {e}")
+            
+            # Send stop command to devices
             command = create_command_message('stop_recording')
             count = self.json_server.broadcast_command(command)
-            self.log_message(f"Stop recording command sent to {count} devices")
-            self.statusBar().showMessage(f"Recording stopped on {count} devices")
+            
+            # End the session
+            completed_session = self.session_manager.end_session()
+            
+            if webcam_filepath and completed_session:
+                self.log_message(f"Session {completed_session['session_id']} completed - webcam and {count} devices (duration: {completed_session['duration']:.1f}s)")
+                self.statusBar().showMessage(f"Session completed: webcam + {count} devices")
+            elif completed_session:
+                self.log_message(f"Session {completed_session['session_id']} completed - {count} devices (no webcam recording)")
+                self.statusBar().showMessage(f"Session completed: {count} devices")
+            else:
+                self.log_message(f"Recording stopped - {count} devices (no active session)")
+                self.statusBar().showMessage(f"Recording stopped: {count} devices")
+            
+            self.current_session_id = None
         else:
             self.statusBar().showMessage("Server not running - cannot stop recording")
     
@@ -452,4 +557,10 @@ class MainWindow(QMainWindow):
         if self.server_running:
             self.log_message("Shutting down server before closing...")
             self.json_server.stop_server()
+        
+        # Clean up webcam resources
+        if self.webcam_capture:
+            self.log_message("Cleaning up webcam resources...")
+            self.webcam_capture.cleanup()
+        
         event.accept()
