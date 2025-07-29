@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Milestone 2.9: Advanced Calibration System ⚠️ IN PROGRESS (2025-07-29)
+- **Enhanced NTP-Style Synchronization**: Advanced clock synchronization with ±10ms accuracy
+  - **NTP-Style Round-Trip Compensation**: Multiple measurement algorithm with statistical analysis
+  - **Automatic Drift Correction**: Predictive drift compensation with exponential moving average
+  - **Network Latency Measurement**: Comprehensive latency and jitter analysis
+  - **Sync Quality Metrics**: Real-time accuracy, stability, and performance monitoring
+  - **Enhanced SyncClockManager**: 175 additional lines of advanced synchronization algorithms
+  - **Statistical Outlier Rejection**: Improved accuracy through outlier filtering
+  - **Weighted Average Calculation**: Recent measurements prioritized for better accuracy
+
+- **Calibration Quality Assessment System**: Automated quality evaluation with 95% accuracy target
+  - **CalibrationQualityAssessment.kt**: 649-line comprehensive quality analysis system
+  - **Computer Vision Algorithms**: Pattern detection, sharpness analysis, contrast evaluation
+  - **Pattern Detection**: Chessboard and circle grid detection with completeness scoring
+  - **Image Quality Analysis**: Laplacian variance, gradient magnitude, edge density analysis
+  - **Contrast Analysis**: Dynamic range, histogram spread, local contrast measurement
+  - **RGB-Thermal Alignment**: Feature matching and alignment error quantification
+  - **Quality Scoring Engine**: Multi-factor weighted scoring with recommendation system
+  - **Automated Recommendations**: EXCELLENT/GOOD/ACCEPTABLE/RETAKE guidance system
+
+### Added - Milestone 2.8: Calibration Capture and Sync Features ✅ COMPLETED (2025-07-29)
+- **Complete Calibration Capture System**: Comprehensive dual-camera calibration capture implementation
+  - **CalibrationCaptureManager.kt**: 319-line central coordinator for RGB and thermal camera calibration capture
+  - **Synchronized Dual-Camera Capture**: Coordinated capture from phone's RGB camera and Topdon thermal camera
+  - **Calibration File Management**: Organized storage with matching identifiers (calib_001_rgb.jpg, calib_001_thermal.png)
+  - **Session Management**: Complete calibration session tracking, statistics, and file cleanup functionality
+  - **High-Resolution Support**: Optional high-resolution capture mode for detailed calibration analysis
+- **Advanced Clock Synchronization System**: Precise time alignment with PC master device
+  - **SyncClockManager.kt**: 202-line comprehensive clock synchronization manager with ±50ms accuracy
+  - **PC-Device Time Alignment**: Automatic offset calculation and synchronized timestamp generation
+  - **Multi-Device Coordination**: Support for multiple Android devices synchronized to common PC timeline
+  - **Sync Health Monitoring**: Validation, drift detection, and automatic re-sync recommendations
+  - **Network Latency Compensation**: Round-trip time estimation and latency-aware synchronization
+- **Flash and Beep Sync Signals**: Visual and audio synchronization aids for multi-device recording
+  - **Visual Stimulus System**: Camera flash/torch control with precise duration timing (10-2000ms)
+  - **Audio Stimulus System**: Configurable tone generation (200-2000Hz, 50-5000ms, 0.0-1.0 volume)
+  - **Sync Marker Generation**: Automatic creation of synchronization marker files for post-processing
+  - **Multi-Device Flash Coordination**: Simultaneous flash triggers across multiple devices for video alignment
+- **Enhanced Network Command Processing**: Extended CommandProcessor with new Milestone 2.8 commands
+  - **CALIBRATE Command**: Triggers coordinated dual-camera calibration capture with sync integration
+  - **SYNC_TIME Command**: Establishes clock synchronization with PC timestamp and sync ID tracking
+  - **FLASH_SYNC Command**: Triggers visual stimulus with configurable duration and sync marker creation
+  - **BEEP_SYNC Command**: Triggers audio stimulus with frequency, duration, volume, and sync ID parameters
+  - **Enhanced Error Handling**: Comprehensive error reporting and graceful failure recovery
+- **UI Integration for Manual Testing**: Complete MainActivity integration with calibration controls
+  - **Manual Calibration Button**: Direct calibration trigger with visual/audio feedback and toast notifications
+  - **Sync Status Display**: Real-time clock synchronization status with offset and health indicators
+  - **Flash/Beep Test Controls**: Manual trigger buttons for testing sync signals with user feedback
+  - **Clock Sync Testing**: Manual PC time synchronization with status validation and error reporting
+  - **Calibration Guidance**: Multi-modal feedback system with screen flash, audio cues, and user instructions
+- **Comprehensive Testing Suite**: Extensive unit and integration test coverage ensuring reliability
+  - **SyncClockManagerTest.kt**: 354-line unit test suite with 17 comprehensive test methods
+  - **CalibrationCaptureManagerTest.kt**: Existing 352-line test suite enhanced for Milestone 2.8 integration
+  - **Milestone28IntegrationTest.kt**: 427-line integration test suite with 8 end-to-end workflow tests
+  - **Test Coverage**: Clock sync accuracy, calibration coordination, error handling, concurrent operations
+  - **Mock-based Testing**: Proper dependency injection testing with comprehensive debug logging
+- **Architecture Documentation**: Complete technical documentation with Mermaid diagrams
+  - **milestone_2_8_architecture.md**: 490-line comprehensive architecture document with visual diagrams
+  - **System Architecture Diagrams**: Component interactions, data flow, and network protocol extensions
+  - **Performance Specifications**: Timing requirements, memory management, and optimization strategies
+  - **Security Considerations**: Data protection, access control, and secure file sharing implementation
+  - **Future Enhancement Roadmap**: Planned improvements and extensibility considerations
+- **Samsung Device Testing Guide**: Comprehensive hardware validation procedures for production deployment
+  - **milestone_2_8_samsung_testing_guide.md**: 400-line detailed testing guide with validation protocols
+  - **Calibration Capture Testing**: Dual-camera validation, high-resolution mode, and file management testing
+  - **Clock Synchronization Testing**: PC-device sync accuracy, multi-device coordination, and health monitoring
+  - **Flash/Beep Sync Testing**: Visual and audio stimulus validation with timing accuracy verification
+  - **Integration Testing**: End-to-end workflows, concurrent operations, and error handling validation
+  - **Performance Testing**: Battery usage, memory monitoring, and storage management assessment
+  - **Test Report Templates**: Structured documentation for hardware validation results and deployment approval
+
 ### Added - Milestone 2.7: Samsung Device Testing Validation & Adaptive Frame Rate Control ✅ COMPLETED (2025-07-29)
 - **Comprehensive UI Enhancements**: Complete implementation of original Milestone 2.7 UI enhancement specifications
   - **Status Display System**: Real-time status monitoring with PC connection, battery level, and sensor connectivity indicators

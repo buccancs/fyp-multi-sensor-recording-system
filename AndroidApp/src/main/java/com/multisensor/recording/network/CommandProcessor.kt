@@ -813,4 +813,154 @@ class CommandProcessor @Inject constructor(
      * Get stimulus time
      */
     fun getStimulusTime(): Long? = stimulusTime
+    
+    /**
+     * Trigger visual stimulus (screen flash) with specified duration - Milestone 2.8
+     */
+    private suspend fun triggerVisualStimulusWithDuration(durationMs: Int) {
+        try {
+            logger.info("[DEBUG_LOG] Triggering visual stimulus for ${durationMs}ms")
+            
+            // Use camera flash if available
+            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val cameraIds = cameraManager.cameraIdList
+            
+            // Find back camera with flash
+            var flashCameraId: String? = null
+            for (cameraId in cameraIds) {
+                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+                val hasFlash = characteristics.get(android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+                val lensFacing = characteristics.get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
+                
+                if (hasFlash && lensFacing == android.hardware.camera2.CameraCharacteristics.LENS_FACING_BACK) {
+                    flashCameraId = cameraId
+                    break
+                }
+            }
+            
+            if (flashCameraId != null) {
+                // Turn on torch
+                cameraManager.setTorchMode(flashCameraId, true)
+                logger.debug("[DEBUG_LOG] Camera flash turned ON")
+                
+                // Wait for specified duration
+                delay(durationMs.toLong())
+                
+                // Turn off torch
+                cameraManager.setTorchMode(flashCameraId, false)
+                logger.debug("[DEBUG_LOG] Camera flash turned OFF")
+                
+            } else {
+                logger.warning("No camera flash available - visual stimulus not triggered")
+            }
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger visual stimulus", e)
+            throw e
+        }
+    }
+    
+    /**
+     * Trigger audio stimulus (beep) with specified parameters - Milestone 2.8
+     */
+    private suspend fun triggerAudioStimulusWithParameters(
+        frequencyHz: Int,
+        durationMs: Int,
+        volume: Float
+    ) {
+        try {
+            logger.info("[DEBUG_LOG] Triggering audio stimulus: ${frequencyHz}Hz, ${durationMs}ms, vol=$volume")
+            
+            // Create tone generator
+            val toneGenerator = ToneGenerator(
+                AudioManager.STREAM_MUSIC,
+                (volume * 100).toInt().coerceIn(0, 100)
+            )
+            
+            // Generate tone for specified duration
+            // Note: ToneGenerator doesn't support custom frequencies directly
+            // Using predefined tones based on frequency ranges
+            val toneType = when (frequencyHz) {
+                in 800..1200 -> ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD
+                in 400..800 -> ToneGenerator.TONE_CDMA_EMERGENCY_RINGBACK
+                in 200..400 -> ToneGenerator.TONE_CDMA_HIGH_L
+                else -> ToneGenerator.TONE_CDMA_MED_L
+            }
+            
+            toneGenerator.startTone(toneType, durationMs)
+            logger.debug("[DEBUG_LOG] Audio tone started")
+            
+            // Wait for tone duration
+            delay(durationMs.toLong())
+            
+            // Stop tone and release resources
+            toneGenerator.stopTone()
+            toneGenerator.release()
+            logger.debug("[DEBUG_LOG] Audio tone completed and resources released")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger audio stimulus", e)
+            throw e
+        }
+    }
+    
+    /**
+     * Create flash sync marker file for multi-device coordination - Milestone 2.8
+     */
+    private fun createFlashSyncMarker(syncId: String, durationMs: Int) {
+        try {
+            val syncDir = File(context.getExternalFilesDir(null), "sync_markers")
+            syncDir.mkdirs()
+            
+            val syncFile = File(syncDir, "flash_sync_${syncId}_${System.currentTimeMillis()}.txt")
+            val currentTime = System.currentTimeMillis()
+            val syncedTime = syncClockManager.getSyncedTimestamp(currentTime)
+            
+            syncFile.writeText(
+                "FLASH_SYNC_MARKER\n" +
+                "sync_id=$syncId\n" +
+                "duration_ms=$durationMs\n" +
+                "device_time=$currentTime\n" +
+                "synced_time=$syncedTime\n" +
+                "session_id=$currentSessionId\n" +
+                "recording_active=$isRecording\n"
+            )
+            
+            logger.debug("[DEBUG_LOG] Created flash sync marker: ${syncFile.absolutePath}")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to create flash sync marker", e)
+        }
+    }
+    
+    /**
+     * Create beep sync marker file for multi-device coordination - Milestone 2.8
+     */
+    private fun createBeepSyncMarker(syncId: String, frequencyHz: Int, durationMs: Int, volume: Float) {
+        try {
+            val syncDir = File(context.getExternalFilesDir(null), "sync_markers")
+            syncDir.mkdirs()
+            
+            val syncFile = File(syncDir, "beep_sync_${syncId}_${System.currentTimeMillis()}.txt")
+            val currentTime = System.currentTimeMillis()
+            val syncedTime = syncClockManager.getSyncedTimestamp(currentTime)
+            
+            syncFile.writeText(
+                "BEEP_SYNC_MARKER\n" +
+                "sync_id=$syncId\n" +
+                "frequency_hz=$frequencyHz\n" +
+                "duration_ms=$durationMs\n" +
+                "volume=$volume\n" +
+                "device_time=$currentTime\n" +
+                "synced_time=$syncedTime\n" +
+                "session_id=$currentSessionId\n" +
+                "recording_active=$isRecording\n"
+            )
+            
+            logger.debug("[DEBUG_LOG] Created beep sync marker: ${syncFile.absolutePath}")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to create beep sync marker", e)
+        }
+    }
 }

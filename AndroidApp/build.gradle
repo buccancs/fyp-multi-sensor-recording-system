@@ -114,65 +114,35 @@ android {
         unitTests {
             includeAndroidResources = true
             all {
-                // JVM args and system properties are now configured in gradle.properties
-                // for better environment portability
+                // Enhanced Windows compatibility configuration
+                // JVM arguments for module access and headless operation
                 jvmArgs '-Djava.awt.headless=true',
-                        '--add-opens=java.base/java.lang=ALL-UNNAMED',
-                        '--add-opens=java.base/java.util=ALL-UNNAMED',
-                        '--add-opens=java.base/java.io=ALL-UNNAMED',
-                        '--add-opens=java.base/java.nio.file=ALL-UNNAMED',
-                        '-Djava.awt.headless=true',
                         '-Dfile.encoding=UTF-8',
                         '-Duser.timezone=UTC',
+                        '-Djava.security.manager=allow',
                         '--add-opens=java.base/java.lang=ALL-UNNAMED',
                         '--add-opens=java.base/java.util=ALL-UNNAMED',
                         '--add-opens=java.base/java.io=ALL-UNNAMED',
                         '--add-opens=java.base/java.nio.file=ALL-UNNAMED',
                         '--add-opens=java.base/java.nio.file.attribute=ALL-UNNAMED',
+                        '--add-opens=java.base/java.nio.file.spi=ALL-UNNAMED',
                         '--add-opens=java.base/sun.nio.fs=ALL-UNNAMED'
 
-                // Explicitly set the temporary directory for Robolectric to use
-                // This helps avoid the POSIX permissions issue on Windows.
+                // Robolectric configuration for Windows compatibility
                 systemProperty 'java.io.tmpdir', System.getProperty('java.io.tmpdir')
                 systemProperty 'robolectric.logging.enabled', 'true'
-
-                // (Optional but Recommended) Ensure Robolectric can download dependencies
-                // if it's running in an offline or misconfigured environment.
+                systemProperty 'robolectric.offline', 'false'
                 systemProperty 'robolectric.dependency.repo.url', 'https://repo1.maven.org/maven2'
                 systemProperty 'robolectric.dependency.repo.id', 'central'
-
-                systemProperty 'robolectric.logging.enabled', 'true'
-
-                // Additional Windows-specific Robolectric configuration
-                systemProperty 'java.io.tmpdir', System.getProperty('java.io.tmpdir')
-
-                // Configure Robolectric for online dependency resolution
-                // Remove offline mode to allow automatic dependency downloads from Maven Central
-                systemProperty 'robolectric.dependency.repo.url', 'https://repo1.maven.org/maven2'
-                systemProperty 'robolectric.dependency.repo.id', 'central'
+                systemProperty 'robolectric.useWindowsCompatibleTempDir', 'true'
 
                 // Windows POSIX permissions compatibility
                 // These properties help resolve the Google Guava Files.createTempDir() POSIX permissions issue
+                systemProperty 'java.nio.file.spi.DefaultFileSystemProvider', 'sun.nio.fs.WindowsFileSystemProvider'
                 systemProperty 'java.nio.file.spi.FileSystemProvider.installedProviders', 'sun.nio.fs.WindowsFileSystemProvider'
                 systemProperty 'sun.nio.fs.useCanonicalPrefixCache', 'false'
                 systemProperty 'sun.nio.fs.useCanonicalCache', 'false'
-                systemProperty 'robolectric.useWindowsCompatibleTempDir', 'true'
-
-                // Windows file system compatibility
-                jvmArgs '-Djava.awt.headless=true'
-                jvmArgs '-Dfile.encoding=UTF-8'
-                jvmArgs '-Duser.timezone=UTC'
-                jvmArgs '--add-opens=java.base/java.lang=ALL-UNNAMED'
-                jvmArgs '--add-opens=java.base/java.util=ALL-UNNAMED'
-                jvmArgs '--add-opens=java.base/java.io=ALL-UNNAMED'
-                jvmArgs '--add-opens=java.base/java.nio.file=ALL-UNNAMED'
-                jvmArgs '--add-opens=java.base/java.nio.file.attribute=ALL-UNNAMED'
-                jvmArgs '--add-opens=java.base/sun.nio.fs=ALL-UNNAMED'
-                
-                // Additional JVM arguments for Google Guava compatibility on Windows
-                jvmArgs '--add-opens=java.base/java.nio.file.spi=ALL-UNNAMED'
-                jvmArgs '--add-opens=java.base/sun.nio.fs=ALL-UNNAMED'
-                jvmArgs '-Djava.security.manager=allow'
+                systemProperty 'com.google.common.io.Files.createTempDir.avoidPosix', 'true'
             }
         }
     }

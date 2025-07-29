@@ -9,7 +9,41 @@ This backlog contains future enhancements, advanced features, and improvement id
 
 ## High Priority Features
 
-### 1. Adaptive Frame Rate Control
+### 1. Milestone 2.8 Calibration System Enhancements
+**Epic:** Advanced Calibration and Synchronization  
+**Story:** As a researcher, I want enhanced calibration and synchronization features to improve multi-device coordination and data quality.
+
+#### 1.1 Advanced Sync Algorithms
+**Story:** As a system operator, I want NTP-style round-trip time compensation so that clock synchronization accuracy improves beyond ±50ms to ±10ms.
+
+**Acceptance Criteria:**
+- Implement round-trip time measurement for network latency compensation
+- Achieve ±10ms synchronization accuracy across multiple devices
+- Add automatic drift correction with periodic re-sync
+- Provide detailed sync quality metrics and monitoring
+- Support high-precision timestamp generation for research applications
+
+**Technical Notes:**
+- Enhance SyncClockManager with NTP-style algorithms
+- Add network latency measurement and compensation
+- Estimated effort: 2-3 sprints
+
+#### 1.2 Calibration Quality Assessment
+**Story:** As a researcher, I want automatic quality assessment of calibration images so that I can ensure calibration data meets analysis requirements.
+
+**Acceptance Criteria:**
+- Automatic detection of calibration pattern quality
+- Image sharpness and contrast analysis
+- Alignment verification between RGB and thermal images
+- Quality scoring and recommendations for re-capture
+- Integration with calibration workflow for automatic validation
+
+**Technical Notes:**
+- Implement computer vision algorithms for pattern detection
+- Add image quality metrics calculation
+- Estimated effort: 3-4 sprints
+
+### 2. Adaptive Frame Rate Control
 **Epic:** Live Preview Optimization  
 **Story:** As an operator, I want the preview streaming to automatically adjust frame rate based on network conditions so that I get the best possible preview quality without network congestion.
 
@@ -59,7 +93,55 @@ This backlog contains future enhancements, advanced features, and improvement id
 
 ## Medium Priority Features
 
-### 4. Preview Recording and Playback
+### 4. Milestone 2.8 Extended Calibration Features
+**Epic:** Advanced Calibration and Synchronization (Continued)
+
+#### 4.1 Multi-Camera Support
+**Story:** As a researcher, I want to support multiple RGB cameras per device so that I can capture calibration data from different angles simultaneously.
+
+**Acceptance Criteria:**
+- Support for multiple RGB cameras on single Android device
+- Coordinated capture across all available cameras
+- Individual camera configuration and control
+- Synchronized timing across all cameras within ±20ms
+- Calibration data organization by camera identifier
+
+**Technical Notes:**
+- Extend CalibrationCaptureManager for multi-camera coordination
+- Update Camera2 API usage for multiple camera instances
+- Estimated effort: 3-4 sprints
+
+#### 4.2 Real-time Calibration Preview
+**Story:** As an operator, I want live preview during calibration capture so that I can ensure proper positioning and image quality before capture.
+
+**Acceptance Criteria:**
+- Live preview from both RGB and thermal cameras during calibration setup
+- Overlay guides for optimal calibration target positioning
+- Real-time image quality indicators (focus, exposure, alignment)
+- Preview freeze during actual capture for stability
+- Integration with existing preview streaming system
+
+**Technical Notes:**
+- Enhance preview system with calibration-specific overlays
+- Add real-time image analysis for quality feedback
+- Estimated effort: 2-3 sprints
+
+#### 4.3 Batch Calibration Operations
+**Story:** As a researcher, I want to perform multiple calibration captures in sequence so that I can collect comprehensive calibration datasets efficiently.
+
+**Acceptance Criteria:**
+- Automated sequence of multiple calibration captures
+- Configurable intervals between captures (1-60 seconds)
+- Progress tracking and status display
+- Automatic file organization by batch identifier
+- Pause/resume functionality for batch operations
+
+**Technical Notes:**
+- Extend CalibrationCaptureManager with batch processing
+- Add batch operation UI controls and progress indicators
+- Estimated effort: 2-3 sprints
+
+### 5. Preview Recording and Playback
 **Epic:** Data Analysis Tools  
 **Story:** As a researcher, I want to record preview streams for later analysis so that I can review session quality and identify issues post-recording.
 
