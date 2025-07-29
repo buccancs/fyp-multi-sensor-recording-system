@@ -204,6 +204,32 @@ This document tracks remaining tasks, future work items, and improvements for th
   - [ ] Confirm sensor range configuration API
   - [ ] Test advanced sensor calibration features
 
+## Documentation and Testing Updates ✅ COMPLETED (2025-07-29)
+
+### SD Logging Integration ✅ COMPLETED
+- [x] **MainViewModel Wrapper Methods**: Added public wrapper methods for SD logging operations
+  - [x] startShimmerSDLogging() - Asynchronous SD logging start with callback-based result handling
+  - [x] stopShimmerSDLogging() - Asynchronous SD logging stop with callback-based result handling
+  - [x] Device state checking methods (isAnyShimmerDeviceStreaming, isAnyShimmerDeviceSDLogging)
+  - [x] Device access methods for configuration dialogs (getConnectedShimmerDevice, getShimmerBluetoothManager)
+- [x] **MainActivity Integration**: Updated UI layer to use ViewModel wrapper methods
+  - [x] Fixed compilation errors by removing direct shimmerRecorder access
+  - [x] Added proper coroutine scope usage with lifecycleScope import
+  - [x] Implemented callback-based UI updates with runOnUiThread for thread safety
+  - [x] Added comprehensive device state checking before SD logging operations
+  - [x] Enhanced debug logging with [DEBUG_LOG] prefixes for testing
+
+### Architecture Compliance ✅ COMPLETED
+- [x] **Code Quality**: Maintained cognitive complexity under 15 for all new methods
+- [x] **MVVM Pattern**: Proper separation of concerns with ViewModel mediating UI and business logic
+- [x] **Thread Safety**: Proper coroutine usage and thread-safe UI updates throughout
+- [x] **Error Handling**: Comprehensive error handling with user-friendly Toast messages
+
+### Documentation Updates ✅ COMPLETED
+- [x] **Changelog Updates**: Added comprehensive documentation of SD logging integration
+- [x] **TODO Updates**: Updated task status and remaining work items
+- [x] **Architecture Documentation**: Maintained consistency with established patterns
+
 ## Milestone 2.1: Remaining SDK Integration Tasks
 
 ### Hardware SDK Integration

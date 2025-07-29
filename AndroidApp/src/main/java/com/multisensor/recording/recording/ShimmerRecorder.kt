@@ -543,12 +543,18 @@ class ShimmerRecorder @Inject constructor(
                 dataQueues[macAddress] = ConcurrentLinkedQueue()
                 sampleCounts[macAddress] = AtomicLong(0)
                 
-                // Connect using ShimmerBluetoothManagerAndroid with connection type
-                shimmerBluetoothManager?.connectShimmerThroughBTAddress(macAddress, deviceName, context)
+                // Create BluetoothDeviceDetails with proper connection type support
+                val bluetoothDeviceDetails = com.shimmerresearch.driverUtilities.BluetoothDeviceDetails(
+                    macAddress, macAddress, deviceName
+                ).apply {
+                    // Set BLE flag based on connection type
+                    isBleDevice = (connectionType == ShimmerBluetoothManagerAndroid.BT_TYPE.BLE)
+                }
                 
-                // TODO: Add BLE connection type support - the current method signature doesn't support BT_TYPE
-                // Need to investigate the correct API for BLE connections
-                logger.debug("Connection type requested: $connectionType (BLE support pending API investigation)")
+                // Connect using ShimmerBluetoothManagerAndroid with BluetoothDeviceDetails
+                shimmerBluetoothManager?.connectShimmerThroughBTAddress(bluetoothDeviceDetails)
+                
+                logger.debug("Connection initiated for $deviceName via $connectionType (BLE: ${bluetoothDeviceDetails.isBleDevice})")
                 
                 // Wait a moment for connection to establish
                 delay(2000)
@@ -1330,6 +1336,131 @@ class ShimmerRecorder @Inject constructor(
             accelZ = simulateAccelData() + 9.8,
             batteryPercentage = simulateBatteryLevel()
         )
+    }
+    
+    /**
+     * Start SD logging on connected Shimmer devices
+     * Following official Shimmer SDK pattern
+     */
+    suspend fun startSDLogging(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            logger.info("Starting SD logging on connected Shimmer devices")
+            
+            if (shimmerBluetoothManager == null) {
+                logger.error("ShimmerBluetoothManager not initialized")
+                return@withContext false
+            }
+            
+            var successCount = 0
+            val deviceList = mutableListOf<com.shimmerresearch.driver.ShimmerDevice>()
+            
+            // Collect connected Shimmer SDK devices
+            shimmerDevices.values.forEach { shimmer ->
+                if (shimmer.isConnected()) {
+                    // Set current time before starting SD logging
+                    shimmer.writeConfigTime(System.currentTimeMillis())
+                    deviceList.add(shimmer)
+                }
+            }
+            
+            if (deviceList.isEmpty()) {
+                logger.info("No connected Shimmer devices found for SD logging")
+                return@withContext false
+            }
+            
+            // Start SD logging using ShimmerBluetoothManager
+            shimmerBluetoothManager?.startSDLogging(deviceList)
+            
+            logger.info("SD logging started on ${deviceList.size} devices")
+            return@withContext true
+            
+        } catch (e: Exception) {
+            logger.error("Failed to start SD logging", e)
+            false
+        }
+    }
+    
+    /**
+     * Stop SD logging on connected Shimmer devices
+     * Following official Shimmer SDK pattern
+     */
+    suspend fun stopSDLogging(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            logger.info("Stopping SD logging on connected Shimmer devices")
+            
+            if (shimmerBluetoothManager == null) {
+                logger.error("ShimmerBluetoothManager not initialized")
+                return@withContext false
+            }
+            
+            val deviceList = mutableListOf<com.shimmerresearch.driver.ShimmerDevice>()
+            
+            // Collect connected Shimmer SDK devices
+            shimmerDevices.values.forEach { shimmer ->
+                if (shimmer.isConnected()) {
+                    deviceList.add(shimmer)
+                }
+            }
+            
+            if (deviceList.isEmpty()) {
+                logger.info("No connected Shimmer devices found for stopping SD logging")
+                return@withContext false
+            }
+            
+            // Stop SD logging using ShimmerBluetoothManager
+            shimmerBluetoothManager?.stopSDLogging(deviceList)
+            
+            logger.info("SD logging stopped on ${deviceList.size} devices")
+            return@withContext true
+            
+        } catch (e: Exception) {
+            logger.error("Failed to stop SD logging", e)
+            false
+        }
+    }
+    
+    /**
+     * Check if any connected device is currently streaming
+     */
+    fun isAnyDeviceStreaming(): Boolean {
+        return shimmerDevices.values.any { shimmer ->
+            shimmer.isConnected() && shimmer.isStreaming()
+        }
+    }
+    
+    /**
+     * Check if any connected device is currently SD logging
+     */
+    fun isAnyDeviceSDLogging(): Boolean {
+        return shimmerDevices.values.any { shimmer ->
+            shimmer.isConnected() && shimmer.isSDLogging()
+        }
+    }
+    
+    /**
+     * Get connected Shimmer device by MAC address
+     * Used for configuration dialogs
+     */
+    fun getConnectedShimmerDevice(macAddress: String): com.shimmerresearch.driver.ShimmerDevice? {
+        return shimmerDevices[macAddress]
+    }
+    
+    /**
+     * Get the first connected Shimmer device
+     * Used for single device operations
+     */
+    fun getFirstConnectedShimmerDevice(): com.shimmerresearch.driver.ShimmerDevice? {
+        return shimmerDevices.values.firstOrNull { shimmer ->
+            shimmer.isConnected()
+        }
+    }
+    
+    /**
+     * Get ShimmerBluetoothManager instance
+     * Used for configuration dialogs
+     */
+    fun getShimmerBluetoothManager(): ShimmerBluetoothManagerAndroid? {
+        return shimmerBluetoothManager
     }
     
     /**

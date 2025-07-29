@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.multisensor.recording.databinding.ActivityMainBinding
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.service.RecordingService
@@ -662,35 +663,57 @@ class MainActivity : AppCompatActivity() {
      * Start SD logging on connected Shimmer device
      */
     fun startShimmerSDLogging() {
-        // TODO: Get connected shimmer device from ViewModel
-        // val shimmerDevice = viewModel.getConnectedShimmerDevice()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting Shimmer SD logging")
         
-        // if (shimmerDevice != null) {
-        //     ((ShimmerBluetooth)shimmerDevice).writeConfigTime(System.currentTimeMillis())
-        //     shimmerDevice.startSDLogging()
-        //     Toast.makeText(this, "SD logging started", Toast.LENGTH_SHORT).show()
-        // } else {
-        //     Toast.makeText(this, "No Shimmer device connected", Toast.LENGTH_SHORT).show()
-        // }
+        // Check if any device is currently streaming or logging
+        if (viewModel.isAnyShimmerDeviceStreaming()) {
+            Toast.makeText(this, "Cannot start SD logging - device is streaming", Toast.LENGTH_SHORT).show()
+            return
+        }
         
-        Toast.makeText(this, "Shimmer SD logging - Coming soon", Toast.LENGTH_SHORT).show()
+        if (viewModel.isAnyShimmerDeviceSDLogging()) {
+            Toast.makeText(this, "SD logging is already active", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // Start SD logging via ViewModel wrapper method
+        viewModel.startShimmerSDLogging { success ->
+            runOnUiThread {
+                if (success) {
+                    Toast.makeText(this@MainActivity, "SD logging started", Toast.LENGTH_SHORT).show()
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] SD logging started successfully")
+                } else {
+                    Toast.makeText(this@MainActivity, "Failed to start SD logging", Toast.LENGTH_SHORT).show()
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to start SD logging")
+                }
+            }
+        }
     }
     
     /**
      * Stop SD logging on connected Shimmer device
      */
     fun stopShimmerSDLogging() {
-        // TODO: Get connected shimmer device from ViewModel
-        // val shimmerDevice = viewModel.getConnectedShimmerDevice()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Stopping Shimmer SD logging")
         
-        // if (shimmerDevice != null) {
-        //     shimmerDevice.stopSDLogging()
-        //     Toast.makeText(this, "SD logging stopped", Toast.LENGTH_SHORT).show()
-        // } else {
-        //     Toast.makeText(this, "No Shimmer device connected", Toast.LENGTH_SHORT).show()
-        // }
+        // Check if any device is currently SD logging
+        if (!viewModel.isAnyShimmerDeviceSDLogging()) {
+            Toast.makeText(this, "No SD logging is currently active", Toast.LENGTH_SHORT).show()
+            return
+        }
         
-        Toast.makeText(this, "Shimmer SD logging - Coming soon", Toast.LENGTH_SHORT).show()
+        // Stop SD logging via ViewModel wrapper method
+        viewModel.stopShimmerSDLogging { success ->
+            runOnUiThread {
+                if (success) {
+                    Toast.makeText(this@MainActivity, "SD logging stopped", Toast.LENGTH_SHORT).show()
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] SD logging stopped successfully")
+                } else {
+                    Toast.makeText(this@MainActivity, "Failed to stop SD logging", Toast.LENGTH_SHORT).show()
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to stop SD logging")
+                }
+            }
+        }
     }
     
     override fun onDestroy() {

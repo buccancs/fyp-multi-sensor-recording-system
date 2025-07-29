@@ -334,6 +334,71 @@ class MainViewModel @Inject constructor(
         _errorMessage.value = null
     }
     
+    /**
+     * Start SD logging on connected Shimmer devices
+     */
+    fun startShimmerSDLogging(callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val success = shimmerRecorder.startSDLogging()
+                callback(success)
+            } catch (e: Exception) {
+                logger.error("Error starting SD logging", e)
+                callback(false)
+            }
+        }
+    }
+    
+    /**
+     * Stop SD logging on connected Shimmer devices
+     */
+    fun stopShimmerSDLogging(callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val success = shimmerRecorder.stopSDLogging()
+                callback(success)
+            } catch (e: Exception) {
+                logger.error("Error stopping SD logging", e)
+                callback(false)
+            }
+        }
+    }
+    
+    /**
+     * Check if any connected device is currently streaming
+     */
+    fun isAnyShimmerDeviceStreaming(): Boolean {
+        return shimmerRecorder.isAnyDeviceStreaming()
+    }
+    
+    /**
+     * Check if any connected device is currently SD logging
+     */
+    fun isAnyShimmerDeviceSDLogging(): Boolean {
+        return shimmerRecorder.isAnyDeviceSDLogging()
+    }
+    
+    /**
+     * Get connected Shimmer device for configuration dialogs
+     */
+    fun getConnectedShimmerDevice(macAddress: String): com.shimmerresearch.driver.ShimmerDevice? {
+        return shimmerRecorder.getConnectedShimmerDevice(macAddress)
+    }
+    
+    /**
+     * Get the first connected Shimmer device
+     */
+    fun getFirstConnectedShimmerDevice(): com.shimmerresearch.driver.ShimmerDevice? {
+        return shimmerRecorder.getFirstConnectedShimmerDevice()
+    }
+    
+    /**
+     * Get ShimmerBluetoothManager instance for configuration dialogs
+     */
+    fun getShimmerBluetoothManager(): com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid? {
+        return shimmerRecorder.getShimmerBluetoothManager()
+    }
+    
     override fun onCleared() {
         super.onCleared()
         logger.info("MainViewModel cleared")

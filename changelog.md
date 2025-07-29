@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Documentation and Testing Updates ✅ COMPLETED (2025-07-29)
+- **SD Logging Integration**: Completed implementation of SD logging functionality with proper UI integration
+  - **MainViewModel Wrapper Methods**: Added public wrapper methods for SD logging operations
+    - startShimmerSDLogging() - Asynchronous SD logging start with callback-based result handling
+    - stopShimmerSDLogging() - Asynchronous SD logging stop with callback-based result handling
+    - isAnyShimmerDeviceStreaming() - Device state checking for streaming operations
+    - isAnyShimmerDeviceSDLogging() - Device state checking for SD logging operations
+    - getConnectedShimmerDevice() - Device access for configuration dialogs
+    - getFirstConnectedShimmerDevice() - Single device operations support
+    - getShimmerBluetoothManager() - Bluetooth manager access for UI components
+  - **MainActivity Integration**: Updated UI layer to use ViewModel wrapper methods
+    - Fixed compilation errors by removing direct shimmerRecorder access
+    - Added proper coroutine scope usage with lifecycleScope import
+    - Implemented callback-based UI updates with runOnUiThread for thread safety
+    - Added comprehensive device state checking before SD logging operations
+    - Enhanced debug logging with [DEBUG_LOG] prefixes for testing
+  - **Error Handling**: Comprehensive error handling with user-friendly Toast messages
+    - State validation prevents conflicting operations (streaming vs SD logging)
+    - Graceful error reporting with detailed logging for troubleshooting
+    - Thread-safe UI updates ensuring proper main thread execution
+- **Architecture Compliance**: All implementations follow established patterns and guidelines
+  - **Cognitive Complexity**: Maintained under 15 for all new methods
+  - **Minimal Commenting**: Clean, self-documenting code with essential comments only
+  - **MVVM Pattern**: Proper separation of concerns with ViewModel mediating UI and business logic
+  - **Thread Safety**: Proper coroutine usage and thread-safe UI updates throughout
+
 ### Added - Milestone 2.4 Shimmer SDK Integration Implementation ✅ COMPLETED
 
 ### Fixed - Critical Shimmer SDK Integration Issues ✅ COMPLETED (2025-07-29)
