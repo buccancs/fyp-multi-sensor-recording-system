@@ -24,6 +24,7 @@ import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.util.AllAndroidPermissions
 import com.multisensor.recording.util.PermissionTool
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 // Shimmer UI Components imports
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
@@ -37,9 +38,10 @@ import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    
     
     // Shimmer UI state management
     private var selectedShimmerAddress: String? = null
@@ -499,6 +501,9 @@ class MainActivity : AppCompatActivity() {
                 binding.statusText.text = "Recording stopped - Ready"
             }
         }
+        
+        // Update streaming UI indicators
+        updateStreamingUI(isRecording)
     }
     
     /**
@@ -529,6 +534,51 @@ class MainActivity : AppCompatActivity() {
             if (!viewModel.isRecording.value!!) {
                 binding.statusText.text = "Ready to record"
             }
+        }
+    }
+    
+    // ========== Preview Streaming UI Methods ==========
+    
+    /**
+     * Show streaming status indicator when preview streaming is active
+     */
+    private fun showStreamingIndicator() {
+        binding.streamingIndicator.setBackgroundColor(
+            ContextCompat.getColor(this, android.R.color.holo_green_light)
+        )
+        binding.streamingLabel.visibility = android.view.View.VISIBLE
+    }
+    
+    /**
+     * Hide streaming status indicator when preview streaming is stopped
+     */
+    private fun hideStreamingIndicator() {
+        binding.streamingIndicator.setBackgroundColor(
+            ContextCompat.getColor(this, android.R.color.darker_gray)
+        )
+        binding.streamingLabel.visibility = android.view.View.GONE
+    }
+    
+    /**
+     * Update debug overlay with streaming information
+     */
+    private fun updateStreamingDebugOverlay() {
+        // Display static streaming information (dynamic stats handled by RecordingService)
+        val debugText = "Streaming: 2fps (640x480) - Live Preview Active"
+        binding.streamingDebugOverlay.text = debugText
+        binding.streamingDebugOverlay.visibility = android.view.View.VISIBLE
+    }
+    
+    /**
+     * Update streaming UI based on recording state
+     */
+    private fun updateStreamingUI(isRecording: Boolean) {
+        if (isRecording) {
+            showStreamingIndicator()
+            updateStreamingDebugOverlay()
+        } else {
+            hideStreamingIndicator()
+            binding.streamingDebugOverlay.visibility = android.view.View.GONE
         }
     }
     

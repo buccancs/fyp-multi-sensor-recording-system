@@ -82,6 +82,9 @@ class RecordingService : Service() {
         // Start socket connection
         socketController.startListening()
         
+        // Inject PreviewStreamer into CameraRecorder (method injection for scoping compatibility)
+        cameraRecorder.setPreviewStreamer(previewStreamer)
+        
         logger.info("RecordingService initialization complete")
     }
     

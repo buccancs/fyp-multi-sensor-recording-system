@@ -16,6 +16,7 @@ import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import com.multisensor.recording.service.SessionManager
+import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
@@ -54,11 +55,24 @@ class CameraRecorder @Inject constructor(
     // Camera2 API components
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
+    
+    // Preview streaming (injected via method call from RecordingService)
+    private var previewStreamer: PreviewStreamer? = null
+    
+    /**
+     * Set the PreviewStreamer instance for live streaming functionality.
+     * Called by RecordingService to inject the service-scoped PreviewStreamer.
+     */
+    fun setPreviewStreamer(streamer: PreviewStreamer) {
+        previewStreamer = streamer
+        logger.info("PreviewStreamer injected into CameraRecorder")
+    }
     private var cameraCharacteristics: CameraCharacteristics? = null
     
     // Output components
     private var mediaRecorder: MediaRecorder? = null
     private var rawImageReader: ImageReader? = null
+    private var previewImageReader: ImageReader? = null
     private var textureView: TextureView? = null
     private var previewSurface: Surface? = null
     
@@ -220,6 +234,10 @@ class CameraRecorder @Inject constructor(
                     mediaRecorder?.surface?.let { surfaces.add(it) }
                 }
                 
+                // Setup Preview ImageReader for streaming (always enabled)
+                setupPreviewImageReader()
+                previewImageReader?.surface?.let { surfaces.add(it) }
+                
                 // Setup RAW ImageReader if RAW capture enabled
                 if (captureRaw) {
                     setupRawImageReader(sessionInfo)
@@ -343,6 +361,14 @@ class CameraRecorder @Inject constructor(
                     logger.debug("RAW ImageReader closed")
                 } catch (e: Exception) {
                     logger.warning("Error closing RAW ImageReader", e)
+                }
+                
+                try {
+                    previewImageReader?.close()
+                    previewImageReader = null
+                    logger.debug("Preview ImageReader closed")
+                } catch (e: Exception) {
+                    logger.warning("Error closing Preview ImageReader", e)
                 }
                 
                 // Release preview surface
@@ -899,6 +925,61 @@ class CameraRecorder @Inject constructor(
     }
     
     /**
+     * Setup Preview ImageReader for live streaming to PC.
+     * Uses JPEG format with lower resolution for network efficiency.
+     */
+    private fun setupPreviewImageReader() {
+        try {
+            logger.info("Setting up Preview ImageReader for streaming...")
+            
+            // Use smaller resolution for streaming (640x480 default from PreviewStreamer)
+            val streamWidth = 640
+            val streamHeight = 480
+            
+            logger.info("Preview streaming resolution: ${streamWidth}x${streamHeight}")
+            
+            // Create ImageReader for JPEG format with capacity for 2 images
+            previewImageReader = ImageReader.newInstance(
+                streamWidth, streamHeight,
+                ImageFormat.JPEG, 2
+            ).apply {
+                setOnImageAvailableListener({ reader ->
+                    handlePreviewImageAvailable(reader)
+                }, backgroundHandler)
+            }
+            
+            logger.info("Preview ImageReader configured successfully")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to setup Preview ImageReader", e)
+            throw e
+        }
+    }
+    
+    /**
+     * Handle Preview image available callback for streaming.
+     * Passes RGB frames to PreviewStreamer for network transmission.
+     */
+    private fun handlePreviewImageAvailable(reader: ImageReader) {
+        var image: Image? = null
+        try {
+            image = reader.acquireLatestImage() // Use latest to avoid backlog
+            if (image == null) {
+                logger.debug("No preview image available")
+                return
+            }
+            
+            // Pass image to PreviewStreamer for processing and transmission (if available)
+            previewStreamer?.onRgbFrameAvailable(image)
+            
+        } catch (e: Exception) {
+            logger.error("Error handling preview image", e)
+            image?.close()
+        }
+        // Note: PreviewStreamer is responsible for closing the image
+    }
+
+    /**
      * Setup RAW ImageReader with DngCreator for professional RAW processing.
      * Handles RAW_SENSOR format with full metadata embedding.
      */
@@ -1122,6 +1203,10 @@ class CameraRecorder @Inject constructor(
                         surface == previewSurface -> {
                             addTarget(surface)
                             logger.debug("Added preview surface to repeating request")
+                        }
+                        surface == previewImageReader?.surface -> {
+                            addTarget(surface)
+                            logger.debug("Added preview streaming surface to repeating request")
                         }
                         surface == mediaRecorder?.surface && sessionInfo.videoEnabled -> {
                             addTarget(surface)
