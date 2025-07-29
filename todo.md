@@ -72,6 +72,77 @@ This document tracks remaining tasks, future work items, and improvements for th
 - [ ] Address any issues found during hardware validation
 - [ ] Create final validation report with Samsung device compatibility notes
 
+## Milestone 3.2: Device Connection Manager and Socket Server ✅ COMPLETED (2025-07-29)
+
+### Complete Device Connection Manager Integration ✅ COMPLETED
+- [x] **JsonSocketServer Implementation**: 436-line enhanced server extracted from main_backup.py with comprehensive functionality
+- [x] **TCP Server on Port 9000**: Multi-threaded server listening for Android device connections with proper socket management
+- [x] **Length-Prefixed JSON Protocol**: Robust message framing with 4-byte big-endian length headers for reliable communication
+- [x] **Multi-Device Support**: Concurrent handling of multiple Android devices with individual client threads
+- [x] **Thread-Safe GUI Integration**: PyQt signals for safe communication between network threads and GUI components
+
+### Comprehensive Message Processing System ✅ COMPLETED
+- [x] **Device Registration**: 'hello' message processing with device_id and capabilities registration
+- [x] **Status Updates**: 'status' message handling for battery, storage, temperature, and recording state
+- [x] **Video Frame Processing**: 'preview_frame' message support for RGB and thermal camera streams with base64 decoding
+- [x] **Sensor Data Handling**: 'sensor_data' message processing for GSR, PPG, accelerometer, gyroscope, magnetometer data
+- [x] **Command Acknowledgments**: 'ack' message processing for command success/failure feedback
+- [x] **Device Notifications**: 'notification' message handling for device events and status changes
+- [x] **Error Handling**: Comprehensive error processing with detailed logging and user feedback
+
+### Real-Time GUI Integration ✅ COMPLETED
+- [x] **MainWindow Server Management**: JsonSocketServer initialization, start/stop functionality, and lifecycle management
+- [x] **Signal-Slot Architecture**: 8 PyQt signals connected to GUI handlers for thread-safe device event processing
+- [x] **DeviceStatusPanel Integration**: Real device connection/disconnection events updating device list with status information
+- [x] **PreviewPanel Video Display**: Base64 image decoding and QPixmap conversion for RGB and thermal video frame display
+- [x] **Toolbar Action Integration**: Connect/Disconnect buttons control server start/stop, recording commands sent to devices
+- [x] **Status Bar Updates**: Real-time feedback for all device events, command acknowledgments, and error conditions
+
+### Advanced Command System ✅ COMPLETED
+- [x] **Individual Device Commands**: send_command() method for targeted device communication with error handling
+- [x] **Broadcast Commands**: broadcast_command() method for simultaneous commands to all connected devices
+- [x] **Recording Control**: Start/stop recording commands integrated with toolbar actions and device acknowledgments
+- [x] **Calibration Commands**: Capture calibration command support for coordinated calibration across devices
+- [x] **Command Acknowledgment**: Complete ACK/NACK handling with success/failure feedback and error reporting
+
+### Video Frame Display System ✅ COMPLETED
+- [x] **Base64 Image Decoding**: Robust decoding with data URL prefix handling and error recovery
+- [x] **QPixmap Conversion**: Efficient conversion from decoded image data to Qt display format
+- [x] **Dual-Feed Support**: Separate handling for RGB and thermal camera streams with proper device mapping
+- [x] **Device Index Mapping**: Smart device ID to GUI tab mapping for proper video feed routing
+- [x] **Frame Display Integration**: Real-time video frame updates in PreviewPanel tabs with error handling
+
+### Testing and Validation ✅ COMPLETED
+- [x] **Application Launch**: Successful PyQt application startup with integrated JsonSocketServer
+- [x] **Server Functionality**: TCP server start/stop, device connection handling, and message processing
+- [x] **GUI Integration**: All signal-slot connections functional with proper thread-safe communication
+- [x] **Command Processing**: Device command sending, acknowledgment handling, and error reporting
+- [x] **Video Display**: Base64 decoding and video frame display working correctly
+
+### Implementation Gaps Completion ✅ COMPLETED
+- [x] **Testing Infrastructure**: Created comprehensive device simulator test scripts and automated test suite
+  - [x] **Device Simulator Scripts**: test_device_simulator.py with all message types (hello, status, preview_frame, sensor_data, ack, notification)
+  - [x] **Automated Test Suite**: test_json_socket_server.py with comprehensive JsonSocketServer testing
+  - [x] **Multi-Device Testing**: test_multi_device_simulator.py for concurrent device connection testing
+- [x] **RemoteDevice Data Structure**: Enhanced device state management replacing simple socket mapping
+  - [x] **Comprehensive State Management**: Device capabilities, status, connection statistics, and activity tracking
+  - [x] **Connection Duration Tracking**: Real-time connection monitoring and device health assessment
+  - [x] **Message Statistics**: Sent/received message counting and activity timestamps
+- [x] **Enhanced Device Management Features**: UI improvements and device capability display
+  - [x] **Device Capability Indicators**: Emoji-based capability display (📷 camera, 🌡️ thermal, 📱 IMU, ⚡ GSR)
+  - [x] **Enhanced Status Display**: Rich device information with battery, recording state, and capabilities
+- [x] **Protocol Validation Enhancement**: Added newline-delimited JSON protocol option
+  - [x] **Dual Protocol Support**: Length-prefixed (default) and newline-delimited JSON protocols
+  - [x] **Protocol Selection**: Configurable protocol choice via constructor parameter
+
+### Next Steps for Advanced Features
+- [ ] **Performance Optimization**: Optimize video frame processing and display for high frame rates
+- [ ] **Advanced Error Recovery**: Implement automatic reconnection and error recovery mechanisms
+- [ ] **Multi-Monitor Stimulus Display**: Integrate stimulus display with device recording synchronization
+- [ ] **Sensor Data Visualization**: Add real-time sensor data charts and graphs
+- [ ] **Recording Session Management**: Advanced session control with file management and metadata
+- [ ] **Device Configuration**: Settings dialog for device IP configuration and connection parameters
+
 ## Milestone 3.1: PyQt GUI Scaffolding and Application Framework ✅ COMPLETED WITH ENHANCEMENTS (2025-07-29)
 
 ### Complete GUI Application Framework ✅ COMPLETED
