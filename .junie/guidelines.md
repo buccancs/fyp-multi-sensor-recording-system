@@ -6,5 +6,8 @@ if stub or placeholder is created, comment it with todo
 move future ideas to backlog.md
 keep cognitive complexity under 15
 minimal commenting
+test every feature repeatedly
+100% test coverage
+use eslint and prettier
 do not declare something as "done" if it is not tested extensively
 build and run app on samsung device after each change

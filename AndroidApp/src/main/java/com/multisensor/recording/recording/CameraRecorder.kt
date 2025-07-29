@@ -482,6 +482,105 @@ class CameraRecorder @Inject constructor(
     }
     
     /**
+     * Capture calibration image for device synchronization and alignment.
+     * Creates a high-quality JPEG image suitable for calibration purposes.
+     */
+    suspend fun captureCalibrationImage(outputPath: String): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            logger.info("Starting calibration image capture to: $outputPath")
+            
+            // Verify camera is ready
+            val camera = cameraDevice
+            val session = captureSession
+            if (camera == null || session == null) {
+                logger.error("Camera not ready for calibration capture")
+                return@withContext false
+            }
+            
+            // Create ImageReader for calibration capture (high quality JPEG)
+            val calibrationImageReader = ImageReader.newInstance(
+                videoSize?.width ?: 1920,
+                videoSize?.height ?: 1080,
+                ImageFormat.JPEG,
+                1
+            )
+            
+            var captureSuccess = false
+            val captureSemaphore = Semaphore(0)
+            
+            calibrationImageReader.setOnImageAvailableListener({ reader ->
+                try {
+                    val image = reader.acquireLatestImage()
+                    if (image != null) {
+                        val buffer = image.planes[0].buffer
+                        val bytes = ByteArray(buffer.remaining())
+                        buffer.get(bytes)
+                        
+                        // Save to file
+                        val outputFile = File(outputPath)
+                        outputFile.parentFile?.mkdirs()
+                        FileOutputStream(outputFile).use { it.write(bytes) }
+                        
+                        logger.info("Calibration image saved successfully: $outputPath")
+                        captureSuccess = true
+                        image.close()
+                    }
+                } catch (e: Exception) {
+                    logger.error("Error saving calibration image", e)
+                } finally {
+                    captureSemaphore.release()
+                }
+            }, backgroundHandler)
+            
+            // Create capture request for calibration
+            val calibrationRequest = camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE).apply {
+                addTarget(calibrationImageReader.surface)
+                
+                // Set high quality capture parameters
+                set(CaptureRequest.JPEG_QUALITY, 95.toByte())
+                set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+                set(CaptureRequest.CONTROL_AF_MODE, CameraMetadata.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON)
+            }
+            
+            // Capture the calibration image
+            session.capture(calibrationRequest.build(), object : CameraCaptureSession.CaptureCallback() {
+                override fun onCaptureCompleted(
+                    session: CameraCaptureSession,
+                    request: CaptureRequest,
+                    result: TotalCaptureResult
+                ) {
+                    logger.debug("Calibration capture completed")
+                }
+                
+                override fun onCaptureFailed(
+                    session: CameraCaptureSession,
+                    request: CaptureRequest,
+                    failure: CaptureFailure
+                ) {
+                    logger.error("Calibration capture failed: ${failure.reason}")
+                    captureSemaphore.release()
+                }
+            }, backgroundHandler)
+            
+            // Wait for capture completion (timeout after 5 seconds)
+            val acquired = captureSemaphore.tryAcquire(5, TimeUnit.SECONDS)
+            calibrationImageReader.close()
+            
+            if (!acquired) {
+                logger.error("Calibration capture timeout")
+                return@withContext false
+            }
+            
+            captureSuccess
+            
+        } catch (e: Exception) {
+            logger.error("Failed to capture calibration image", e)
+            false
+        }
+    }
+    
+    /**
      * Setup TextureView surface for live preview with proper lifecycle management.
      * Handles SurfaceTextureListener callbacks and configures preview surface.
      */

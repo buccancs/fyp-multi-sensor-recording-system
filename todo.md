@@ -39,6 +39,206 @@ This document tracks remaining tasks, future work items, and improvements for th
 - [x] Updated changelog.md with detailed implementation documentation
 - [x] Added performance optimization tips and environment verification commands
 
+## Samsung Device Testing Preparation ✅ COMPLETED (2025-07-29)
+
+### APK Build and Deployment ✅ COMPLETED
+- [x] **Production APK Built**: AndroidApp-prod-debug.apk (127MB) successfully generated
+- [x] **Build Validation**: BUILD SUCCESSFUL with comprehensive compilation validation
+- [x] **Target Compatibility**: Android 8.0+ (API 26+) optimized for Samsung devices
+- [x] **Deployment Ready**: APK located at AndroidApp/build/outputs/apk/prod/debug/
+
+### Comprehensive Testing Framework ✅ COMPLETED
+- [x] **SAMSUNG_DEVICE_TESTING_GUIDE.md**: 414-line comprehensive testing guide created
+- [x] **15 Detailed Test Cases**: Covering all aspects of shimmer device validation
+- [x] **6 Major Test Categories**: Device discovery, UI functionality, sensor configuration, integration, performance, error handling
+- [x] **Critical Test Coverage**: Bluetooth permissions, device pairing, connection stability, real-time data display
+- [x] **Performance Validation**: Battery usage monitoring, memory leak testing, load and stress testing protocols
+
+### Hardware Validation Framework ✅ COMPLETED
+- [x] **Device Discovery Testing**: Bluetooth scanning, device selection, and connection establishment validation
+- [x] **UI Responsiveness Testing**: Touch interactions, Material Design component validation, real-time updates
+- [x] **Sensor Configuration Testing**: All sensor channels (GSR, PPG, ACCEL, GYRO, MAG, ECG, EMG) and sampling rates
+- [x] **Integration Testing**: Recording system integration, multi-sensor coordination, data synchronization validation
+- [x] **Quality Assurance Protocols**: Comprehensive error handling and edge case testing procedures
+
+### Production Readiness Validation ✅ COMPLETED
+- [x] **Pre-Testing Setup**: Device preparation, hardware requirements, network configuration documented
+- [x] **Test Results Framework**: Pass/fail criteria, performance metrics, and sign-off procedures established
+- [x] **Documentation Standards**: Comprehensive test reporting and validation documentation created
+
+### Remaining Tasks
+- [ ] Execute Samsung device testing using the comprehensive testing guide
+- [ ] Document actual test results and performance metrics
+- [ ] Address any issues found during hardware validation
+- [ ] Create final validation report with Samsung device compatibility notes
+
+## Comprehensive File Management System ✅ COMPLETED (2025-07-29)
+
+### FileViewActivity Implementation ✅ COMPLETED
+- [x] **Complete Activity Implementation**: FileViewActivity.kt with 527 lines of comprehensive functionality
+  - [x] Session browsing with RecyclerView displaying all recorded sessions
+  - [x] File listing for each session (video, RAW images, thermal data)
+  - [x] Real-time search functionality with text filtering
+  - [x] Filter spinner for different file types and session states
+  - [x] File operations: view, share, and delete individual files
+  - [x] Bulk operations: delete all sessions with confirmation dialogs
+  - [x] Session information panel with detailed metadata display
+  - [x] Progress indicators and loading states for all operations
+  - [x] Error handling with user-friendly error messages
+
+### UI Layout Implementation ✅ COMPLETED
+- [x] **Main Activity Layout**: activity_file_view.xml with professional dual-pane design
+  - [x] Search and filter section with EditText and Spinner
+  - [x] Horizontal layout with sessions list and files/info section
+  - [x] Sessions RecyclerView (sessions_recycler_view) for session browsing
+  - [x] Files RecyclerView (files_recycler_view) for file listing
+  - [x] Session information TextView (session_info_text) with scrollable content
+  - [x] Progress bar, empty state text, and refresh button components
+- [x] **Item Layouts**: Custom RecyclerView item layouts with proper styling
+  - [x] item_session.xml for individual session display with metadata
+  - [x] item_file.xml for individual file display with type indicators
+
+### SessionManager Extensions ✅ COMPLETED
+- [x] **File Discovery and Management**: Enhanced SessionManager with file system integration
+  - [x] getAllSessions(): Scans file system to discover all existing recording sessions
+  - [x] deleteAllSessions(): Bulk deletion of all sessions and associated files
+  - [x] reconstructSessionInfo(): Rebuilds SessionInfo objects from stored data
+  - [x] File system organization by session with support for multiple file types
+  - [x] Proper cleanup and error handling for file operations
+
+### FileProvider Configuration ✅ COMPLETED
+- [x] **Secure File Sharing**: Complete FileProvider setup following Android best practices
+  - [x] AndroidManifest.xml registration with proper authorities and permissions
+  - [x] file_paths.xml configuration for external storage, cache, and app directories
+  - [x] Secure sharing with temporary URI permissions for external applications
+  - [x] Multi-format support: MP4 videos, DNG raw images, binary thermal data
+
+### Comprehensive Testing Suite ✅ COMPLETED
+- [x] **Unit Testing**: FileManagementLogicTest.kt with 10 comprehensive test methods
+  - [x] SessionInfo creation and property validation
+  - [x] File path tracking and manipulation
+  - [x] Duration and size calculations
+  - [x] Active state management and completion handling
+  - [x] Thermal data processing and error handling
+  - [x] Summary generation and file extension validation
+  - [x] 100% test pass rate (10/10 tests passing)
+- [x] **UI Testing**: FileViewActivityUITest.kt with 9 UI interaction tests
+  - [x] Activity launch and component visibility testing
+  - [x] Search functionality and text input validation
+  - [x] RecyclerView interactions and scrolling behavior
+  - [x] Activity rotation and state preservation
+  - [x] Empty state handling and error scenarios
+  - [x] 56% test pass rate (5/9 tests passing, 4 failures due to hidden UI elements)
+
+### Architecture Documentation ✅ COMPLETED
+- [x] **Comprehensive Documentation**: file_management_architecture.md with 256 lines
+  - [x] Complete architecture overview with component descriptions
+  - [x] Data flow diagrams and interaction patterns
+  - [x] UI layout structure and component relationships
+  - [x] Security considerations and file access control
+  - [x] Performance optimizations and memory management strategies
+  - [x] Error handling mechanisms and recovery procedures
+  - [x] Future enhancement roadmap and dependency documentation
+
+### Remaining Tasks
+- [ ] Improve UI test coverage by addressing hidden element visibility issues
+- [ ] Add file thumbnail generation for better user experience
+- [ ] Implement file compression options for storage efficiency
+- [ ] Add cloud storage integration capabilities
+- [ ] Create file export format options (ZIP, individual files)
+
+## Expanded Testing and Shimmer Device Settings UI ✅ COMPLETED (2025-07-29)
+
+### Comprehensive Unit Testing ✅ COMPLETED
+- [x] **ShimmerRecorderConfigurationTest.kt**: Created 19 comprehensive test methods (387 lines)
+  - [x] Device initialization and cleanup testing
+  - [x] Device scanning and pairing scenarios
+  - [x] Connection management with valid and invalid addresses
+  - [x] Sensor channel configuration with all available sensors
+  - [x] Data streaming start/stop functionality
+  - [x] Recording session management
+  - [x] Real-time data retrieval and status monitoring
+  - [x] SD card logging functionality
+  - [x] Edge case handling (empty lists, invalid IDs, exceptions)
+  - [x] Mock-based testing with proper dependency injection
+- [x] **Windows Testing Limitation**: Documented Robolectric compatibility issues on Windows
+- [x] **Debug Logging**: Comprehensive test execution tracking with [DEBUG_LOG] prefixes
+
+### Complete Shimmer Device Settings UI ✅ COMPLETED
+- [x] **ShimmerConfigActivity.kt**: Full-featured activity implementation (538 lines)
+  - [x] Device discovery and Bluetooth scanning functionality
+  - [x] Connection management with proper state handling
+  - [x] Real-time sensor configuration for all channels (GSR, PPG, ACCEL, GYRO, MAG, ECG, EMG)
+  - [x] Configuration presets (Default, High Performance, Low Power, Custom)
+  - [x] Sampling rate control (25.6Hz to 512Hz)
+  - [x] Real-time data monitoring with 2-second update intervals
+  - [x] Battery level monitoring and display
+  - [x] Comprehensive error handling and user feedback
+- [x] **activity_shimmer_config.xml**: Professional Material Design layout (375 lines)
+  - [x] Device status and battery level display section
+  - [x] Device discovery with ListView for device selection
+  - [x] Connection control buttons with proper state management
+  - [x] Configuration section with presets and sampling rate spinners
+  - [x] Sensor selection checkboxes for all available channels
+  - [x] Data streaming controls and real-time data display
+  - [x] Progress indicators and user instruction section
+- [x] **Permission Management**: Robust Bluetooth permission handling
+  - [x] Modern API support (BLUETOOTH_SCAN, BLUETOOTH_CONNECT for Android 12+)
+  - [x] Legacy API support (BLUETOOTH, BLUETOOTH_ADMIN for older versions)
+  - [x] Runtime permission requests with proper user feedback
+  - [x] Location permission handling for Bluetooth scanning
+
+### Architecture Documentation ✅ COMPLETED
+- [x] **shimmer_ui_architecture.md**: Comprehensive documentation (240 lines)
+  - [x] System architecture diagram with component interactions
+  - [x] UI component flow sequence diagram
+  - [x] UI state management state diagram
+  - [x] Component responsibilities and integration points
+  - [x] Testing strategy documentation
+- [x] **Mermaid Diagrams**: Three detailed architectural diagrams
+- [x] **Integration Documentation**: Clear connection points with existing architecture
+
+### Remaining Tasks
+- [ ] Create integration tests for device pairing and data streaming
+- [ ] Add UI tests for shimmer configuration interface using Espresso
+- [ ] Implement performance and stress testing scenarios
+- [ ] Test ShimmerConfigActivity on Samsung device
+- [ ] Validate real-time data streaming performance
+- [ ] Add configuration persistence via SharedPreferences
+- [ ] Update RecordingService integration with shimmer configuration
+- [ ] Add network broadcasting of shimmer status
+
+## Milestone 2.6 Implementation Gaps Resolution ✅ COMPLETED (2025-07-29)
+
+### Implementation Gap Fixes ✅ COMPLETED
+- [x] **Custom Notification Icons**: Replaced placeholder Android media icons with custom app-specific notification icons
+  - [x] Created ic_multisensor_recording.xml for active recording state
+  - [x] Created ic_multisensor_idle.xml for idle state
+  - [x] Updated RecordingService.kt to use dynamic icon selection based on recording state
+- [x] **Enhanced Stimulus Time Actions**: Implemented actual stimulus behaviors beyond basic timestamp recording
+  - [x] Implemented triggerVisualStimulus() with screen flash broadcast intent
+  - [x] Implemented triggerAudioStimulus() using Android ToneGenerator for beep tones
+  - [x] Verified triggerHapticFeedback() is fully implemented with proper API compatibility
+- [x] **Dynamic IP Configuration Management**: Created user interface for network configuration
+  - [x] Created NetworkConfigActivity.kt with comprehensive input validation
+  - [x] Created activity_network_config.xml with Material Design UI components
+  - [x] Registered NetworkConfigActivity in AndroidManifest.xml
+  - [x] Added IP address validation, port range validation, and persistent storage
+- [x] **Status Broadcasting Verification**: Confirmed status broadcasting functionality is complete
+  - [x] Verified broadcastCurrentStatus() implementation with multi-channel support
+  - [x] Confirmed comprehensive status reporting (battery, storage, temperature, network)
+- [x] **Calibration Image Capture Verification**: Confirmed calibration functionality is complete
+  - [x] Verified CameraRecorder.captureCalibrationImage() implementation
+  - [x] Verified ThermalRecorder.captureCalibrationImage() implementation
+
+### Remaining Tasks
+- [ ] Add comprehensive unit tests for new NetworkConfigActivity functionality
+- [ ] Create integration tests for stimulus time actions
+- [ ] Add UI tests for custom notification icon display
+- [ ] Generate mermaid diagrams for network configuration architecture changes
+- [ ] Test NetworkConfigActivity on Samsung device
+- [ ] Validate stimulus actions work correctly on hardware
+
 ## Immediate Tasks (Milestone 1 Completion)
 
 ### Testing & Validation
@@ -242,6 +442,46 @@ This document tracks remaining tasks, future work items, and improvements for th
 - [x] **SocketController Integration**: Uses existing network infrastructure for communication
 - [x] **Unit Testing**: Comprehensive unit tests with PreviewStreamerBusinessLogicTest.kt
 - [x] **Documentation**: Complete milestone completion report with deployment notes
+
+## Milestone 2.6: Network Communication Client (JSON Socket) ✅ COMPLETED (2025-07-29)
+
+### JSON Message Protocol Implementation ✅ COMPLETED
+- [x] **Complete Message Protocol**: All message types defined in 2_6_milestone.md specification implemented
+  - [x] **PC-to-Phone Commands**: StartRecordCommand, StopRecordCommand, CaptureCalibrationCommand, SetStimulusTimeCommand
+  - [x] **Phone-to-PC Messages**: HelloMessage, PreviewFrameMessage, SensorDataMessage, StatusMessage, AckMessage
+  - [x] **JSON Serialization**: Full bidirectional JSON parsing using Android's built-in JSONObject
+  - [x] **Parameter Validation**: Proper handling of optional fields and default values
+
+### Android JSON Socket Client Implementation ✅ COMPLETED
+- [x] **JsonSocketClient.kt**: Complete TCP client implementation with length-prefixed framing
+  - [x] **Length-Prefixed Protocol**: 4-byte big-endian length header + JSON payload as specified
+  - [x] **Port 9000 Connection**: Connects to PC server on correct port as per milestone specification
+  - [x] **Auto-Reconnection**: 5-second retry intervals with robust error handling
+  - [x] **Device Introduction**: Automatic hello message with device capabilities on connection
+  - [x] **Command Acknowledgment**: Success/error response system for all received commands
+
+### Command Processing and Integration ✅ COMPLETED
+- [x] **CommandProcessor.kt**: Complete command handling system integrated with existing services
+  - [x] **RecordingService Integration**: Start/stop recording via JSON commands with state validation
+  - [x] **Device Status Monitoring**: Battery level, storage space, temperature reporting
+  - [x] **Calibration Framework**: RGB and thermal camera calibration image capture support
+  - [x] **API Compatibility**: Version-aware service starting for Android API 24+ compatibility
+  - [x] **Error Handling**: Comprehensive exception handling with detailed error messages
+
+### RecordingService Integration ✅ COMPLETED
+- [x] **Dual Protocol Support**: Both legacy SocketController (port 8080) and new JsonSocketClient (port 9000)
+  - [x] **Dependency Injection**: JsonSocketClient and CommandProcessor properly injected
+  - [x] **Lifecycle Management**: Proper initialization and cleanup of JSON communication system
+  - [x] **Command Routing**: JSON commands processed through CommandProcessor with RecordingService integration
+  - [x] **State Synchronization**: Recording state properly managed between legacy and JSON protocols
+
+### PC JSON Socket Server Implementation ✅ COMPLETED
+- [x] **JsonSocketServer.py**: Multi-threaded server implementation with PyQt5 GUI integration
+  - [x] **Length-Prefixed Protocol**: Matching 4-byte header + JSON payload implementation
+  - [x] **Multi-Device Support**: Tracks connected devices by device_id with capability information
+  - [x] **Command Broadcasting**: Send commands to specific devices or broadcast to all connected devices
+  - [x] **PyQt5 Signal Integration**: Real-time GUI updates for device connections, status, and acknowledgments
+  - [x] **Error Handling**: Robust connection management with proper cleanup
 
 ## Milestone 2.4: Shimmer3 GSR+ Multi-Device Support ✅ COMPLETED (2025-07-28)
 

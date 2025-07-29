@@ -132,12 +132,44 @@
                 android:resource="@xml/device_filter" />
         </activity>
 
+        <!-- Network Configuration Activity -->
+        <activity
+            android:name=".ui.NetworkConfigActivity"
+            android:exported="false"
+            android:label="Network Configuration"
+            android:theme="@style/Theme.AppCompat.DayNight" />
+
+        <!-- File View Activity -->
+        <activity
+            android:name=".ui.FileViewActivity"
+            android:exported="false"
+            android:label="File Browser"
+            android:theme="@style/Theme.AppCompat.DayNight" />
+
+        <!-- Shimmer Configuration Activity -->
+        <activity
+            android:name=".ui.ShimmerConfigActivity"
+            android:exported="false"
+            android:label="Shimmer Configuration"
+            android:theme="@style/Theme.AppCompat.DayNight" />
+
         <!-- Recording Service for foreground multi-sensor recording -->
         <service
             android:name=".service.RecordingService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="camera|microphone" />
+
+        <!-- FileProvider for sharing files -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

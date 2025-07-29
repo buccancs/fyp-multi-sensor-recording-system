@@ -16,12 +16,19 @@ import org.junit.Test
 class SocketControllerBusinessLogicTest {
 
     private lateinit var mockLogger: Logger
+    private lateinit var mockNetworkConfiguration: NetworkConfiguration
     private lateinit var socketController: SocketController
 
     @Before
     fun setup() {
         mockLogger = mockk(relaxed = true)
-        socketController = SocketController(mockLogger)
+        mockNetworkConfiguration = mockk(relaxed = true)
+        
+        // Setup default mock behavior
+        every { mockNetworkConfiguration.getServerIp() } returns "192.168.1.100"
+        every { mockNetworkConfiguration.getLegacyPort() } returns 8080
+        
+        socketController = SocketController(mockNetworkConfiguration, mockLogger)
     }
 
     @After

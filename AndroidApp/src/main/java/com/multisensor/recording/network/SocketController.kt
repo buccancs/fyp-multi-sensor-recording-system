@@ -22,6 +22,7 @@ import javax.inject.Inject
  */
 @ServiceScoped
 class SocketController @Inject constructor(
+    private val networkConfiguration: NetworkConfiguration,
     private val logger: Logger
 ) {
     
@@ -35,9 +36,9 @@ class SocketController @Inject constructor(
     // Callback for service commands
     private var serviceCallback: ((String) -> Unit)? = null
     
-    // Connection configuration
-    private var serverIp: String = "192.168.1.100" // TODO: Make configurable
-    private var serverPort: Int = 8080
+    // Connection configuration (using NetworkConfiguration)
+    private var serverIp: String = networkConfiguration.getServerIp()
+    private var serverPort: Int = networkConfiguration.getLegacyPort()
     
     companion object {
         private const val RECONNECT_DELAY_MS = 5000L

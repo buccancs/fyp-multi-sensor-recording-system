@@ -13,6 +13,7 @@ import socket
 import threading
 import base64
 import json
+import struct
 from io import BytesIO
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, 
                              QWidget, QPushButton, QLabel, QTextEdit, QGroupBox,
@@ -146,6 +147,208 @@ class SocketServer(QThread):
         if self.server_socket:
             self.server_socket.close()
         logger.info("Socket server stopped")
+
+
+class JsonSocketServer(QThread):
+    """JSON Socket Server for Milestone 2.6 Network Communication.
+    
+    Implements length-prefixed JSON message protocol for bidirectional communication
+    with Android devices on port 9000.
+    """
+    
+    # Signals for JSON message updates
+    device_connected = pyqtSignal(str, list)  # device_id, capabilities
+    device_disconnected = pyqtSignal(str)
+    status_received = pyqtSignal(str, dict)  # device_id, status_data
+    ack_received = pyqtSignal(str, str, bool, str)  # device_id, cmd, success, message
+    
+    def __init__(self, host='0.0.0.0', port=9000):
+        super().__init__()
+        self.host = host
+        self.port = port
+        self.server_socket = None
+        self.running = False
+        self.clients = {}  # device_id -> client_socket mapping
+        
+    def run(self):
+        """Main JSON server loop."""
+        try:
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_socket.bind((self.host, self.port))
+            self.server_socket.listen(5)
+            self.running = True
+            
+            logger.info(f"JSON Socket server started on {self.host}:{self.port}")
+            
+            while self.running:
+                try:
+                    client_socket, address = self.server_socket.accept()
+                    client_thread = threading.Thread(
+                        target=self.handle_json_client,
+                        args=(client_socket, address)
+                    )
+                    client_thread.daemon = True
+                    client_thread.start()
+                    
+                except socket.error as e:
+                    if self.running:
+                        logger.error(f"JSON socket accept error: {e}")
+                        
+        except Exception as e:
+            logger.error(f"JSON socket server error: {e}")
+        finally:
+            self.cleanup()
+    
+    def handle_json_client(self, client_socket, address):
+        """Handle individual JSON client connections with length-prefixed framing."""
+        client_addr = f"{address[0]}:{address[1]}"
+        device_id = None
+        
+        logger.info(f"JSON client connected: {client_addr}")
+        
+        try:
+            while self.running:
+                # Read 4-byte length header
+                length_data = self.recv_exact(client_socket, 4)
+                if not length_data:
+                    break
+                
+                # Parse message length (big-endian)
+                message_length = struct.unpack('>I', length_data)[0]
+                
+                if message_length <= 0 or message_length > 1024 * 1024:  # Max 1MB
+                    logger.error(f"Invalid message length: {message_length}")
+                    break
+                
+                # Read JSON payload
+                json_data = self.recv_exact(client_socket, message_length)
+                if not json_data:
+                    break
+                
+                # Process JSON message
+                try:
+                    message = json.loads(json_data.decode('utf-8'))
+                    device_id = self.process_json_message(client_socket, client_addr, message)
+                    
+                except json.JSONDecodeError as e:
+                    logger.error(f"JSON decode error from {client_addr}: {e}")
+                    
+        except Exception as e:
+            logger.error(f"JSON client handling error for {client_addr}: {e}")
+        finally:
+            if device_id and device_id in self.clients:
+                del self.clients[device_id]
+                self.device_disconnected.emit(device_id)
+            client_socket.close()
+            logger.info(f"JSON client disconnected: {client_addr}")
+    
+    def recv_exact(self, sock, length):
+        """Receive exactly 'length' bytes from socket."""
+        data = b''
+        while len(data) < length:
+            chunk = sock.recv(length - len(data))
+            if not chunk:
+                return None
+            data += chunk
+        return data
+    
+    def process_json_message(self, client_socket, client_addr, message):
+        """Process incoming JSON message and return device_id if available."""
+        message_type = message.get('type', 'unknown')
+        logger.debug(f"Received JSON message from {client_addr}: {message_type}")
+        
+        if message_type == 'hello':
+            device_id = message.get('device_id', client_addr)
+            capabilities = message.get('capabilities', [])
+            
+            # Store client mapping
+            self.clients[device_id] = client_socket
+            
+            # Emit device connected signal
+            self.device_connected.emit(device_id, capabilities)
+            
+            logger.info(f"Device registered: {device_id} with capabilities: {capabilities}")
+            return device_id
+            
+        elif message_type == 'status':
+            device_id = self.find_device_id(client_socket)
+            if device_id:
+                status_data = {
+                    'battery': message.get('battery'),
+                    'storage': message.get('storage'),
+                    'temperature': message.get('temperature'),
+                    'recording': message.get('recording', False),
+                    'connected': message.get('connected', True)
+                }
+                self.status_received.emit(device_id, status_data)
+            
+        elif message_type == 'ack':
+            device_id = self.find_device_id(client_socket)
+            if device_id:
+                cmd = message.get('cmd', '')
+                status = message.get('status', 'unknown')
+                success = status == 'ok'
+                error_message = message.get('message', '')
+                self.ack_received.emit(device_id, cmd, success, error_message)
+        
+        return self.find_device_id(client_socket)
+    
+    def find_device_id(self, client_socket):
+        """Find device_id for a given client socket."""
+        for device_id, sock in self.clients.items():
+            if sock == client_socket:
+                return device_id
+        return None
+    
+    def send_command(self, device_id, command_dict):
+        """Send JSON command to specific device using length-prefixed framing."""
+        if device_id not in self.clients:
+            logger.warning(f"Device {device_id} not connected")
+            return False
+        
+        try:
+            client_socket = self.clients[device_id]
+            json_data = json.dumps(command_dict).encode('utf-8')
+            
+            # Send length header (4 bytes, big-endian) followed by JSON data
+            length_header = struct.pack('>I', len(json_data))
+            client_socket.send(length_header + json_data)
+            
+            logger.debug(f"Sent command to {device_id}: {command_dict.get('type', 'unknown')}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error sending command to {device_id}: {e}")
+            return False
+    
+    def broadcast_command(self, command_dict):
+        """Send JSON command to all connected devices."""
+        success_count = 0
+        for device_id in list(self.clients.keys()):
+            if self.send_command(device_id, command_dict):
+                success_count += 1
+        return success_count
+    
+    def stop_server(self):
+        """Stop the JSON socket server."""
+        self.running = False
+        if self.server_socket:
+            self.server_socket.close()
+        
+        # Close all client connections
+        for client_socket in self.clients.values():
+            try:
+                client_socket.close()
+            except:
+                pass
+        self.clients.clear()
+    
+    def cleanup(self):
+        """Clean up server resources."""
+        if self.server_socket:
+            self.server_socket.close()
+        logger.info("JSON Socket server stopped")
 
 
 class MultiSensorController(QMainWindow):

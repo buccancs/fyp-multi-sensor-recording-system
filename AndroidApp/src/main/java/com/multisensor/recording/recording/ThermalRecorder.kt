@@ -558,6 +558,52 @@ class ThermalRecorder @Inject constructor(
     }
 
     /**
+     * Capture thermal calibration image for device synchronization and alignment.
+     * Uses the current thermal frame data to create a high-quality calibration image.
+     */
+    suspend fun captureCalibrationImage(outputPath: String): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            logger.info("Starting thermal calibration image capture to: $outputPath")
+            
+            // Check if thermal camera is available and active
+            if (uvcCamera == null || !isPreviewActive.get()) {
+                logger.error("Thermal camera not ready for calibration capture")
+                return@withContext false
+            }
+            
+            // Check if we have current frame data
+            if (imageSrc.isEmpty()) {
+                logger.error("No thermal frame data available for calibration")
+                return@withContext false
+            }
+            
+            // Create output file
+            val outputFile = File(outputPath)
+            outputFile.parentFile?.mkdirs()
+            
+            // Convert current thermal data to bitmap
+            val thermalBitmap = convertThermalToARGB(imageSrc.copyOf())
+            
+            if (thermalBitmap != null) {
+                // Save bitmap as high-quality JPEG
+                FileOutputStream(outputFile).use { fos ->
+                    thermalBitmap.compress(Bitmap.CompressFormat.JPEG, 95, fos)
+                }
+                
+                logger.info("Thermal calibration image saved successfully: $outputPath")
+                true
+            } else {
+                logger.error("Failed to convert thermal data to bitmap for calibration")
+                false
+            }
+            
+        } catch (e: Exception) {
+            logger.error("Failed to capture thermal calibration image", e)
+            false
+        }
+    }
+
+    /**
      * Update preview surface with thermal bitmap
      */
     private fun updatePreviewSurface(bitmap: Bitmap) {
