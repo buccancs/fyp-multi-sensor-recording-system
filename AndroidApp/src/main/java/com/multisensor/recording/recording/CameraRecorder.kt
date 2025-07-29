@@ -1365,6 +1365,125 @@ class CameraRecorder @Inject constructor(
     }
     
     /**
+     * Trigger LED flash sync signal - Milestone 2.8
+     * Uses camera flashlight for multi-device synchronization
+     */
+    suspend fun triggerFlashSync(durationMs: Long = 200): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            logger.info("[DEBUG_LOG] Triggering LED flash sync signal (${durationMs}ms)")
+            
+            // Check if camera and session are available
+            val camera = cameraDevice
+            val session = captureSession
+            if (camera == null || session == null) {
+                logger.error("Camera not ready for flash sync")
+                return@withContext false
+            }
+            
+            // Check if flash is available
+            val currentCameraId = cameraId
+            if (currentCameraId == null) {
+                logger.error("Camera ID not available for flash sync")
+                return@withContext false
+            }
+            
+            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val characteristics = cameraManager.getCameraCharacteristics(currentCameraId)
+            val flashAvailable = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) ?: false
+            if (!flashAvailable) {
+                logger.warning("Flash not available on this device")
+                return@withContext false
+            }
+            
+            // Turn on flash
+            val flashOnSuccess = setFlashMode(true)
+            if (!flashOnSuccess) {
+                logger.error("Failed to turn on flash")
+                return@withContext false
+            }
+            
+            // Keep flash on for specified duration
+            delay(durationMs)
+            
+            // Turn off flash
+            val flashOffSuccess = setFlashMode(false)
+            if (!flashOffSuccess) {
+                logger.warning("Failed to turn off flash - may remain on")
+            }
+            
+            logger.info("[DEBUG_LOG] LED flash sync completed successfully")
+            true
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger flash sync", e)
+            // Ensure flash is turned off in case of error
+            try {
+                setFlashMode(false)
+            } catch (cleanupException: Exception) {
+                logger.debug("Error during flash cleanup", cleanupException)
+            }
+            false
+        }
+    }
+    
+    /**
+     * Set camera flash mode on/off - Milestone 2.8
+     */
+    private suspend fun setFlashMode(flashOn: Boolean): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val camera = cameraDevice
+            val session = captureSession
+            if (camera == null || session == null) {
+                return@withContext false
+            }
+            
+            // Create capture request with flash mode
+            val requestBuilder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW).apply {
+                // Add preview surface if available
+                previewSurface?.let { addTarget(it) }
+                
+                // Set flash mode
+                if (flashOn) {
+                    set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
+                    set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH)
+                } else {
+                    set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
+                    set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF)
+                }
+            }
+            
+            // Apply flash setting
+            session.setRepeatingRequest(requestBuilder.build(), null, backgroundHandler)
+            
+            logger.debug("Flash mode set to: ${if (flashOn) "ON" else "OFF"}")
+            true
+            
+        } catch (e: Exception) {
+            logger.error("Failed to set flash mode", e)
+            false
+        }
+    }
+    
+    /**
+     * Check if camera flash is available - Milestone 2.8
+     */
+    fun isFlashAvailable(): Boolean {
+        return try {
+            val currentCameraId = cameraId
+            if (currentCameraId == null) {
+                return false
+            }
+            
+            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val characteristics = cameraManager.getCameraCharacteristics(currentCameraId)
+            characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) ?: false
+        } catch (e: Exception) {
+            logger.debug("Error checking flash availability", e)
+            false
+        }
+    }
+    
+    /**
      * Cleanup resources
      */
     private fun cleanup() {

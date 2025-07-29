@@ -4,25 +4,36 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
+import android.media.MediaActionSound
+import android.os.BatteryManager
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityMainBinding
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.util.AllAndroidPermissions
 import com.multisensor.recording.util.PermissionTool
+import com.multisensor.recording.calibration.CalibrationCaptureManager
+import com.multisensor.recording.calibration.SyncClockManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,6 +53,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     
+    @Inject
+    lateinit var calibrationCaptureManager: CalibrationCaptureManager
+    
+    @Inject
+    lateinit var syncClockManager: SyncClockManager
     
     // Shimmer UI state management
     private var selectedShimmerAddress: String? = null
@@ -239,6 +255,30 @@ class MainActivity : AppCompatActivity() {
     private var permissionRetryCount = 0
     private val maxPermissionRetries = 5 // Prevent infinite loops while being persistent
     
+    // Status Display System - Milestone 2.7 UI Enhancements
+    private var currentBatteryLevel = -1
+    private var isPcConnected = false
+    private var isShimmerConnected = false
+    private var isThermalConnected = false
+    private var isManualControlEnabled = true
+    private lateinit var statusUpdateHandler: Handler
+    private lateinit var mediaActionSound: MediaActionSound
+    
+    // Battery monitoring receiver
+    private val batteryReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_BATTERY_CHANGED) {
+                val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+                val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+                
+                if (level != -1 && scale != -1) {
+                    currentBatteryLevel = (level * 100) / scale
+                    updateBatteryDisplay()
+                }
+            }
+        }
+    }
+    
     override fun onResume() {
         super.onResume()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onResume() called")
@@ -296,6 +336,193 @@ class MainActivity : AppCompatActivity() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] === End Permission States ===")
     }
     
+    // Status Display System Methods - Milestone 2.7 UI Enhancements
+    
+    /**
+     * Updates the battery level display with current percentage
+     */
+    private fun updateBatteryDisplay() {
+        runOnUiThread {
+            if (currentBatteryLevel >= 0) {
+                binding.batteryLevelText.text = "Battery: ${currentBatteryLevel}%"
+                
+                // Change text color based on battery level
+                val textColor = when {
+                    currentBatteryLevel > 50 -> Color.GREEN
+                    currentBatteryLevel > 20 -> Color.YELLOW
+                    else -> Color.RED
+                }
+                binding.batteryLevelText.setTextColor(textColor)
+            } else {
+                binding.batteryLevelText.text = "Battery: ---%"
+                binding.batteryLevelText.setTextColor(Color.WHITE)
+            }
+        }
+    }
+    
+    /**
+     * Updates PC connection status display
+     */
+    private fun updatePcConnectionStatus(connected: Boolean) {
+        isPcConnected = connected
+        runOnUiThread {
+            if (connected) {
+                binding.pcConnectionStatus.text = "PC: Connected"
+                binding.pcConnectionIndicator.setBackgroundColor(Color.GREEN)
+            } else {
+                binding.pcConnectionStatus.text = "PC: Waiting for PC..."
+                binding.pcConnectionIndicator.setBackgroundColor(Color.RED)
+            }
+            updateManualControlsVisibility()
+        }
+    }
+    
+    /**
+     * Updates sensor connectivity status displays
+     */
+    private fun updateSensorConnectionStatus(shimmerConnected: Boolean, thermalConnected: Boolean) {
+        isShimmerConnected = shimmerConnected
+        isThermalConnected = thermalConnected
+        
+        runOnUiThread {
+            // Update Shimmer status
+            if (shimmerConnected) {
+                binding.shimmerConnectionStatus.text = "Shimmer: Connected"
+                binding.shimmerConnectionIndicator.setBackgroundColor(Color.GREEN)
+            } else {
+                binding.shimmerConnectionStatus.text = "Shimmer: Disconnected"
+                binding.shimmerConnectionIndicator.setBackgroundColor(Color.RED)
+            }
+            
+            // Update Thermal status
+            if (thermalConnected) {
+                binding.thermalConnectionStatus.text = "Thermal: Connected"
+                binding.thermalConnectionIndicator.setBackgroundColor(Color.GREEN)
+            } else {
+                binding.thermalConnectionStatus.text = "Thermal: Disconnected"
+                binding.thermalConnectionIndicator.setBackgroundColor(Color.RED)
+            }
+        }
+    }
+    
+    /**
+     * Updates manual recording controls visibility based on PC connection state
+     */
+    private fun updateManualControlsVisibility() {
+        runOnUiThread {
+            if (isPcConnected) {
+                // Hide manual controls when PC is controlling
+                binding.manualControlsSection.visibility = View.GONE
+            } else {
+                // Show manual controls when PC is not connected (standalone mode)
+                binding.manualControlsSection.visibility = View.VISIBLE
+            }
+        }
+    }
+    
+    /**
+     * Handles manual start recording button click
+     */
+    private fun onManualStartRecording() {
+        if (!isPcConnected && isManualControlEnabled) {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual start recording initiated")
+            
+            // Start recording via ViewModel
+            viewModel.startRecording()
+            
+            // Update manual control buttons
+            binding.manualStartButton.isEnabled = false
+            binding.manualStopButton.isEnabled = true
+            
+            Toast.makeText(this, "Recording started manually", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    /**
+     * Handles manual stop recording button click
+     */
+    private fun onManualStopRecording() {
+        if (!isPcConnected && isManualControlEnabled) {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual stop recording initiated")
+            
+            // Stop recording via ViewModel
+            viewModel.stopRecording()
+            
+            // Update manual control buttons
+            binding.manualStartButton.isEnabled = true
+            binding.manualStopButton.isEnabled = false
+            
+            Toast.makeText(this, "Recording stopped manually", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    /**
+     * Initializes status monitoring system
+     */
+    private fun initializeStatusMonitoring() {
+        // Initialize status update handler
+        statusUpdateHandler = Handler(Looper.getMainLooper())
+        
+        // Initialize MediaActionSound for calibration feedback
+        mediaActionSound = MediaActionSound()
+        mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
+        
+        // Register battery receiver
+        val batteryFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        registerReceiver(batteryReceiver, batteryFilter)
+        
+        // Get initial battery level
+        val batteryIntent = registerReceiver(null, batteryFilter)
+        batteryIntent?.let { intent ->
+            val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            if (level != -1 && scale != -1) {
+                currentBatteryLevel = (level * 100) / scale
+                updateBatteryDisplay()
+            }
+        }
+        
+        // Initialize status displays
+        updatePcConnectionStatus(false) // Start with PC disconnected
+        updateSensorConnectionStatus(false, false) // Start with sensors disconnected
+        
+        // Start periodic status updates
+        startPeriodicStatusUpdates()
+    }
+    
+    /**
+     * Starts periodic status updates every 5 seconds
+     */
+    private fun startPeriodicStatusUpdates() {
+        val updateRunnable = object : Runnable {
+            override fun run() {
+                // Update sensor connection status based on current state
+                // Note: Connection status will be updated by other components when they change
+                // This periodic update mainly ensures UI consistency
+                
+                // Schedule next update
+                statusUpdateHandler.postDelayed(this, 5000) // 5 seconds
+            }
+        }
+        statusUpdateHandler.post(updateRunnable)
+    }
+    
+    /**
+     * Updates sensor connection status from external components
+     */
+    fun updateShimmerConnectionStatus(connected: Boolean) {
+        isShimmerConnected = connected
+        updateSensorConnectionStatus(isShimmerConnected, isThermalConnected)
+    }
+    
+    /**
+     * Updates thermal connection status from external components
+     */
+    fun updateThermalConnectionStatus(connected: Boolean) {
+        isThermalConnected = connected
+        updateSensorConnectionStatus(isShimmerConnected, isThermalConnected)
+    }
+    
     private fun setupUI() {
         // Setup recording control buttons
         binding.startRecordingButton.setOnClickListener {
@@ -315,8 +542,21 @@ class MainActivity : AppCompatActivity() {
             requestPermissionsManually()
         }
         
-        // Initially disable stop button
+        // Setup manual recording control buttons - Milestone 2.7 UI Enhancements
+        binding.manualStartButton.setOnClickListener {
+            onManualStartRecording()
+        }
+        
+        binding.manualStopButton.setOnClickListener {
+            onManualStopRecording()
+        }
+        
+        // Initially disable stop buttons
         binding.stopRecordingButton.isEnabled = false
+        binding.manualStopButton.isEnabled = false
+        
+        // Initialize status monitoring system
+        initializeStatusMonitoring()
     }
     
     private fun observeViewModel() {
@@ -479,8 +719,235 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun runCalibration() {
-        viewModel.runCalibration()
-        Toast.makeText(this, "Starting calibration process...", Toast.LENGTH_SHORT).show()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting enhanced calibration capture with CalibrationCaptureManager")
+        
+        // Show initial calibration start message
+        Toast.makeText(this, "Starting calibration capture...", Toast.LENGTH_SHORT).show()
+        
+        // Use actual CalibrationCaptureManager for Milestone 2.8
+        lifecycleScope.launch {
+            try {
+                val result = calibrationCaptureManager.captureCalibrationImages(
+                    calibrationId = null, // Auto-generate ID
+                    captureRgb = true,
+                    captureThermal = true,
+                    highResolution = true
+                )
+                
+                if (result.success) {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}")
+                    
+                    // Trigger enhanced feedback for successful capture
+                    runOnUiThread {
+                        triggerCalibrationCaptureSuccess(result.calibrationId)
+                    }
+                } else {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}")
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, "Calibration capture failed: ${result.errorMessage}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "[DEBUG_LOG] Error during calibration capture", e)
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Calibration error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+    
+    /**
+     * Triggers comprehensive calibration capture feedback - Enhanced for Milestone 2.8
+     */
+    private fun triggerCalibrationCaptureSuccess(calibrationId: String = "unknown") {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Calibration photo captured - triggering feedback for ID: $calibrationId")
+        
+        // 1. Toast notification
+        showCalibrationCaptureToast()
+        
+        // 2. Screen flash visual feedback
+        triggerScreenFlash()
+        
+        // 3. Audio feedback (camera shutter sound)
+        triggerCalibrationAudioFeedback()
+        
+        // 4. Visual cue for multi-angle calibration
+        showCalibrationGuidance()
+    }
+    
+    /**
+     * Shows toast message for calibration photo capture
+     */
+    private fun showCalibrationCaptureToast() {
+        Toast.makeText(this, "📸 Calibration photo captured!", Toast.LENGTH_SHORT).show()
+    }
+    
+    /**
+     * Triggers screen flash visual feedback
+     */
+    private fun triggerScreenFlash() {
+        // Create a white overlay view for screen flash effect
+        val flashOverlay = View(this).apply {
+            setBackgroundColor(Color.WHITE)
+            alpha = 0.8f
+        }
+        
+        // Add overlay to the root view
+        val rootView = findViewById<android.view.ViewGroup>(android.R.id.content)
+        rootView.addView(flashOverlay, android.view.ViewGroup.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT
+        ))
+        
+        // Animate flash effect
+        flashOverlay.animate()
+            .alpha(0f)
+            .setDuration(200) // 200ms flash duration
+            .withEndAction {
+                // Remove overlay after animation
+                rootView.removeView(flashOverlay)
+            }
+            .start()
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Screen flash visual feedback triggered")
+    }
+    
+    /**
+     * Triggers audio feedback using MediaActionSound
+     */
+    private fun triggerCalibrationAudioFeedback() {
+        try {
+            if (::mediaActionSound.isInitialized) {
+                mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Camera shutter sound played for calibration")
+            } else {
+                android.util.Log.w("MainActivity", "[DEBUG_LOG] MediaActionSound not initialized, skipping audio feedback")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Error playing calibration audio feedback", e)
+        }
+    }
+    
+    /**
+     * Shows visual cues for multi-angle calibration guidance
+     */
+    private fun showCalibrationGuidance() {
+        // Show guidance message for multi-angle calibration
+        val guidanceMessage = "✅ Photo captured! Move to next position for multi-angle calibration."
+        
+        // Update status text with guidance
+        binding.statusText.text = guidanceMessage
+        
+        // Show additional toast with guidance
+        Handler(Looper.getMainLooper()).postDelayed({
+            Toast.makeText(this, "📐 Position device at different angle and capture again", Toast.LENGTH_LONG).show()
+        }, 1000) // 1 second delay after initial feedback
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Multi-angle calibration guidance displayed")
+    }
+    
+    // ========== Milestone 2.8 Sync Signal Testing Methods ==========
+    
+    /**
+     * Test flash sync signal - Milestone 2.8
+     */
+    private fun testFlashSync() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing flash sync signal")
+        
+        lifecycleScope.launch {
+            try {
+                // Trigger screen flash for sync testing
+                runOnUiThread {
+                    triggerScreenFlash()
+                    Toast.makeText(this@MainActivity, "🔆 Flash sync signal triggered!", Toast.LENGTH_SHORT).show()
+                }
+                
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Flash sync test completed successfully")
+                
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "[DEBUG_LOG] Error during flash sync test", e)
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Flash sync test failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+    
+    /**
+     * Test beep sync signal - Milestone 2.8
+     */
+    private fun testBeepSync() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing beep sync signal")
+        
+        try {
+            // Trigger audio beep for sync testing
+            triggerCalibrationAudioFeedback()
+            Toast.makeText(this, "🔊 Beep sync signal triggered!", Toast.LENGTH_SHORT).show()
+            
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Beep sync test completed successfully")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Error during beep sync test", e)
+            Toast.makeText(this, "Beep sync test failed: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+    
+    /**
+     * Test clock synchronization - Milestone 2.8
+     */
+    private fun testClockSync() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing clock synchronization")
+        
+        lifecycleScope.launch {
+            try {
+                // Simulate PC timestamp for testing
+                val simulatedPcTimestamp = System.currentTimeMillis() + 1000 // 1 second ahead
+                val syncId = "test_sync_${System.currentTimeMillis()}"
+                
+                val success = syncClockManager.synchronizeWithPc(simulatedPcTimestamp, syncId)
+                
+                runOnUiThread {
+                    if (success) {
+                        val syncStatus = syncClockManager.getSyncStatus()
+                        val statusMessage = "✅ Clock sync successful!\nOffset: ${syncStatus.clockOffsetMs}ms\nSync ID: $syncId"
+                        Toast.makeText(this@MainActivity, statusMessage, Toast.LENGTH_LONG).show()
+                        
+                        // Update status text with sync info
+                        binding.statusText.text = "Clock synchronized - Offset: ${syncStatus.clockOffsetMs}ms"
+                        
+                        android.util.Log.d("MainActivity", "[DEBUG_LOG] Clock sync test successful: offset=${syncStatus.clockOffsetMs}ms")
+                    } else {
+                        Toast.makeText(this@MainActivity, "❌ Clock sync test failed", Toast.LENGTH_LONG).show()
+                        android.util.Log.e("MainActivity", "[DEBUG_LOG] Clock sync test failed")
+                    }
+                }
+                
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "[DEBUG_LOG] Error during clock sync test", e)
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Clock sync test error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+    
+    /**
+     * Display current sync status - Milestone 2.8
+     */
+    private fun showSyncStatus() {
+        val syncStatus = syncClockManager.getSyncStatus()
+        val statistics = syncClockManager.getSyncStatistics()
+        
+        val statusMessage = buildString {
+            appendLine("🕐 Clock Synchronization Status")
+            appendLine("Synchronized: ${if (syncStatus.isSynchronized) "✅ Yes" else "❌ No"}")
+            appendLine("Offset: ${syncStatus.clockOffsetMs}ms")
+            appendLine("Last Sync: ${if (syncStatus.syncAge >= 0) "${syncStatus.syncAge}ms ago" else "Never"}")
+            appendLine("Valid: ${if (syncClockManager.isSyncValid()) "✅ Yes" else "❌ No"}")
+        }
+        
+        Toast.makeText(this, statusMessage, Toast.LENGTH_LONG).show()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Sync status displayed: $statistics")
     }
     
     private fun updateRecordingUI(isRecording: Boolean) {
@@ -766,11 +1233,138 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
+    // Menu Handling - Milestone 2.7 UI Enhancement
+    
+    /**
+     * Creates the options menu for MainActivity
+     */
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+    
+    /**
+     * Handles options menu item selections
+     */
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                // Launch Settings Activity
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Settings")
+                val intent = Intent(this, com.multisensor.recording.ui.SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_network_config -> {
+                // Launch Network Configuration Activity
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Network Configuration")
+                val intent = Intent(this, com.multisensor.recording.ui.NetworkConfigActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_file_browser -> {
+                // Launch File Browser Activity
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening File Browser")
+                val intent = Intent(this, com.multisensor.recording.ui.FileViewActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_shimmer_config -> {
+                // Launch Shimmer Configuration Activity
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Shimmer Configuration")
+                val intent = Intent(this, com.multisensor.recording.ui.ShimmerConfigActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_test_flash_sync -> {
+                // Test Flash Sync Signal - Milestone 2.8
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Flash Sync")
+                testFlashSync()
+                true
+            }
+            R.id.action_test_beep_sync -> {
+                // Test Beep Sync Signal - Milestone 2.8
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Beep Sync")
+                testBeepSync()
+                true
+            }
+            R.id.action_test_clock_sync -> {
+                // Test Clock Synchronization - Milestone 2.8
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Clock Sync")
+                testClockSync()
+                true
+            }
+            R.id.action_sync_status -> {
+                // Show Sync Status - Milestone 2.8
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing Sync Status")
+                showSyncStatus()
+                true
+            }
+            R.id.action_about -> {
+                // Show About Dialog
+                showAboutDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+    
+    /**
+     * Shows About dialog with app information
+     */
+    private fun showAboutDialog() {
+        val aboutMessage = """
+            Multi-Sensor Recording System
+            
+            Version: 1.0.0
+            Build: Milestone 2.7 Complete
+            
+            Features:
+            • Real-time status monitoring
+            • Manual recording controls
+            • Calibration capture feedback
+            • Comprehensive settings interface
+            • Adaptive frame rate control
+            
+            Developed with ❤️ for multi-sensor data collection
+        """.trimIndent()
+        
+        AlertDialog.Builder(this)
+            .setTitle("About Multi-Sensor Recording")
+            .setMessage(aboutMessage)
+            .setIcon(R.drawable.ic_multisensor_idle)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] About dialog displayed")
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
+        
         // Ensure recording service is stopped when activity is destroyed
         if (viewModel.isRecording.value == true) {
             stopRecording()
         }
+        
+        // Cleanup Status Display System - Milestone 2.7 UI Enhancements
+        try {
+            // Unregister battery receiver
+            unregisterReceiver(batteryReceiver)
+        } catch (e: Exception) {
+            android.util.Log.w("MainActivity", "[DEBUG_LOG] Battery receiver was not registered or already unregistered")
+        }
+        
+        // Cleanup MediaActionSound
+        if (::mediaActionSound.isInitialized) {
+            mediaActionSound.release()
+        }
+        
+        // Remove all Handler callbacks to prevent memory leaks
+        if (::statusUpdateHandler.isInitialized) {
+            statusUpdateHandler.removeCallbacksAndMessages(null)
+        }
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring system cleaned up")
     }
 }

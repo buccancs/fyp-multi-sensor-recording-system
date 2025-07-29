@@ -2,9 +2,17 @@ package com.multisensor.recording.network
 
 import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraManager
+import android.media.ToneGenerator
+import android.media.AudioManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.StatFs
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import com.multisensor.recording.calibration.CalibrationCaptureManager
+import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.service.RecordingService
@@ -15,19 +23,20 @@ import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
 /**
- * Command Processor for Milestone 2.6 Network Communication.
+ * Command Processor for Milestone 2.6 & 2.8 Network Communication.
  * Processes incoming JSON commands from PC and executes corresponding actions.
  * 
- * Based on 2_6_milestone.md specifications:
- * - Handles start_record, stop_record, capture_calibration, set_stimulus_time commands
- * - Integrates with existing RecordingService for session management
- * - Sends acknowledgments and status updates back to PC
- * - Manages device state and validates command sequences
+ * Enhanced for Milestone 2.8 with:
+ * - Calibration capture coordination with CalibrationCaptureManager
+ * - Clock synchronization with SyncClockManager
+ * - Sync signal support (flash, beep) for multi-device coordination
+ * - Enhanced calibration capture with matching identifiers
  */
 @ServiceScoped
 class CommandProcessor @Inject constructor(
@@ -35,6 +44,8 @@ class CommandProcessor @Inject constructor(
     private val sessionManager: SessionManager,
     private val cameraRecorder: CameraRecorder,
     private val thermalRecorder: ThermalRecorder,
+    private val calibrationCaptureManager: CalibrationCaptureManager,
+    private val syncClockManager: SyncClockManager,
     private val logger: Logger
 ) {
     
@@ -63,6 +74,9 @@ class CommandProcessor @Inject constructor(
                     is StopRecordCommand -> handleStopRecord(message)
                     is CaptureCalibrationCommand -> handleCaptureCalibration(message)
                     is SetStimulusTimeCommand -> handleSetStimulusTime(message)
+                    is FlashSyncCommand -> handleFlashSync(message)
+                    is BeepSyncCommand -> handleBeepSync(message)
+                    is SyncTimeCommand -> handleSyncTime(message)
                     else -> {
                         logger.warning("Received unsupported command: ${message.type}")
                     }
@@ -162,42 +176,38 @@ class CommandProcessor @Inject constructor(
     }
     
     /**
-     * Handle capture_calibration command from PC
+     * Handle capture_calibration command from PC - Enhanced for Milestone 2.8
      */
     private suspend fun handleCaptureCalibration(command: CaptureCalibrationCommand) {
-        logger.info("Processing capture_calibration command")
+        logger.info("[DEBUG_LOG] Processing enhanced capture_calibration command")
+        logger.info("[DEBUG_LOG] Calibration ID: ${command.calibration_id}")
+        logger.info("[DEBUG_LOG] Capture RGB: ${command.capture_rgb}, Thermal: ${command.capture_thermal}, High-res: ${command.high_resolution}")
         
         try {
-            // Capture calibration images from both RGB and thermal cameras
-            val calibrationResults = mutableListOf<String>()
+            // Use CalibrationCaptureManager for coordinated capture
+            val result = calibrationCaptureManager.captureCalibrationImages(
+                calibrationId = command.calibration_id,
+                captureRgb = command.capture_rgb,
+                captureThermal = command.capture_thermal,
+                highResolution = command.high_resolution
+            )
             
-            // Capture RGB calibration image
-            try {
-                val rgbCalibrationPath = captureRgbCalibrationImage()
-                if (rgbCalibrationPath != null) {
-                    calibrationResults.add("RGB calibration captured: $rgbCalibrationPath")
+            if (result.success) {
+                val resultMessage = buildString {
+                    append("Calibration capture successful: ${result.calibrationId}")
+                    result.rgbFilePath?.let { append(", RGB: $it") }
+                    result.thermalFilePath?.let { append(", Thermal: $it") }
+                    append(", Synced timestamp: ${result.syncedTimestamp}")
                 }
-            } catch (e: Exception) {
-                logger.error("Failed to capture RGB calibration", e)
-                calibrationResults.add("RGB calibration failed: ${e.message}")
+                
+                jsonSocketClient?.sendAck("capture_calibration", true, resultMessage)
+                logger.info("[DEBUG_LOG] $resultMessage")
+                
+            } else {
+                val errorMessage = result.errorMessage ?: "Unknown calibration capture error"
+                jsonSocketClient?.sendAck("capture_calibration", false, "Calibration capture failed: $errorMessage")
+                logger.error("Calibration capture failed: $errorMessage")
             }
-            
-            // Capture thermal calibration image
-            try {
-                val thermalCalibrationPath = captureThermalCalibrationImage()
-                if (thermalCalibrationPath != null) {
-                    calibrationResults.add("Thermal calibration captured: $thermalCalibrationPath")
-                }
-            } catch (e: Exception) {
-                logger.error("Failed to capture thermal calibration", e)
-                calibrationResults.add("Thermal calibration failed: ${e.message}")
-            }
-            
-            // Send acknowledgment with results
-            val resultMessage = calibrationResults.joinToString("; ")
-            jsonSocketClient?.sendAck("capture_calibration", true, resultMessage)
-            
-            logger.info("Calibration capture completed: $resultMessage")
             
         } catch (e: Exception) {
             logger.error("Failed to capture calibration", e)
@@ -418,6 +428,112 @@ class CommandProcessor @Inject constructor(
     }
     
     /**
+     * Trigger visual stimulus with specified duration - Milestone 2.8
+     */
+    private fun triggerVisualStimulusWithDuration(durationMs: Long) {
+        try {
+            // Create a visual stimulus by manipulating screen brightness
+            val intent = Intent("com.multisensor.recording.VISUAL_STIMULUS").apply {
+                putExtra("stimulus_type", "screen_flash")
+                putExtra("duration_ms", durationMs)
+                putExtra("timestamp", System.currentTimeMillis())
+            }
+            
+            // Send broadcast to trigger visual stimulus in UI
+            context.sendBroadcast(intent)
+            
+            logger.debug("Visual stimulus triggered - screen flash broadcast sent (${durationMs}ms)")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger visual stimulus", e)
+        }
+    }
+    
+    /**
+     * Trigger audio stimulus with specified parameters - Milestone 2.8
+     */
+    private fun triggerAudioStimulusWithParameters(frequencyHz: Int, durationMs: Long, volume: Float) {
+        try {
+            // Generate audio stimulus using ToneGenerator with specified parameters
+            val volumePercent = (volume * 100).toInt().coerceIn(0, 100)
+            val toneGenerator = android.media.ToneGenerator(
+                android.media.AudioManager.STREAM_NOTIFICATION,
+                volumePercent
+            )
+            
+            // Play tone with specified frequency and duration
+            toneGenerator.startTone(android.media.ToneGenerator.TONE_PROP_BEEP, durationMs.toInt())
+            
+            // Schedule cleanup
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                kotlinx.coroutines.delay(durationMs + 100) // Wait for tone to finish plus buffer
+                try {
+                    toneGenerator.release()
+                } catch (e: Exception) {
+                    logger.debug("ToneGenerator already released", e)
+                }
+            }
+            
+            logger.debug("Audio stimulus triggered - tone generated (${frequencyHz}Hz, ${durationMs}ms, vol=${volume})")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger audio stimulus", e)
+        }
+    }
+    
+    /**
+     * Create flash sync marker for multi-device coordination - Milestone 2.8
+     */
+    private fun createFlashSyncMarker(syncId: String, durationMs: Long) {
+        try {
+            val syncDir = File(context.getExternalFilesDir(null), "synchronization")
+            syncDir.mkdirs()
+            
+            val syncFile = File(syncDir, "flash_sync_${syncId}_${System.currentTimeMillis()}.txt")
+            syncFile.writeText(
+                "FLASH_SYNC_MARKER\n" +
+                "sync_id=$syncId\n" +
+                "duration_ms=$durationMs\n" +
+                "device_time=${System.currentTimeMillis()}\n" +
+                "session_id=$currentSessionId\n" +
+                "recording_active=$isRecording\n"
+            )
+            
+            logger.debug("Created flash sync marker: ${syncFile.absolutePath}")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to create flash sync marker", e)
+        }
+    }
+    
+    /**
+     * Create beep sync marker for multi-device coordination - Milestone 2.8
+     */
+    private fun createBeepSyncMarker(syncId: String, frequencyHz: Int, durationMs: Long, volume: Float) {
+        try {
+            val syncDir = File(context.getExternalFilesDir(null), "synchronization")
+            syncDir.mkdirs()
+            
+            val syncFile = File(syncDir, "beep_sync_${syncId}_${System.currentTimeMillis()}.txt")
+            syncFile.writeText(
+                "BEEP_SYNC_MARKER\n" +
+                "sync_id=$syncId\n" +
+                "frequency_hz=$frequencyHz\n" +
+                "duration_ms=$durationMs\n" +
+                "volume=$volume\n" +
+                "device_time=${System.currentTimeMillis()}\n" +
+                "session_id=$currentSessionId\n" +
+                "recording_active=$isRecording\n"
+            )
+            
+            logger.debug("Created beep sync marker: ${syncFile.absolutePath}")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to create beep sync marker", e)
+        }
+    }
+    
+    /**
      * Update recording metadata with stimulus information
      */
     private fun updateRecordingMetadata(stimulusTime: Long) {
@@ -453,6 +569,104 @@ class CommandProcessor @Inject constructor(
             
         } catch (e: Exception) {
             logger.error("Failed to create synchronization marker", e)
+        }
+    }
+    
+    /**
+     * Handle flash_sync command from PC - Milestone 2.8
+     */
+    private suspend fun handleFlashSync(command: FlashSyncCommand) {
+        logger.info("[DEBUG_LOG] Processing flash_sync command")
+        logger.info("[DEBUG_LOG] Duration: ${command.duration_ms}ms, Sync ID: ${command.sync_id}")
+        
+        try {
+            // Trigger visual stimulus (screen flash) with specified duration
+            triggerVisualStimulusWithDuration(command.duration_ms)
+            
+            // Create sync marker for multi-device coordination
+            command.sync_id?.let { syncId ->
+                createFlashSyncMarker(syncId, command.duration_ms)
+            }
+            
+            // Send acknowledgment
+            val resultMessage = "Flash sync triggered (${command.duration_ms}ms)"
+            jsonSocketClient?.sendAck("flash_sync", true, resultMessage)
+            
+            logger.info("[DEBUG_LOG] Flash sync completed: $resultMessage")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger flash sync", e)
+            jsonSocketClient?.sendAck("flash_sync", false, "Flash sync failed: ${e.message}")
+        }
+    }
+    
+    /**
+     * Handle beep_sync command from PC - Milestone 2.8
+     */
+    private suspend fun handleBeepSync(command: BeepSyncCommand) {
+        logger.info("[DEBUG_LOG] Processing beep_sync command")
+        logger.info("[DEBUG_LOG] Frequency: ${command.frequency_hz}Hz, Duration: ${command.duration_ms}ms, Volume: ${command.volume}, Sync ID: ${command.sync_id}")
+        
+        try {
+            // Trigger audio stimulus (beep) with specified parameters
+            triggerAudioStimulusWithParameters(
+                frequencyHz = command.frequency_hz,
+                durationMs = command.duration_ms,
+                volume = command.volume
+            )
+            
+            // Create sync marker for multi-device coordination
+            command.sync_id?.let { syncId ->
+                createBeepSyncMarker(syncId, command.frequency_hz, command.duration_ms, command.volume)
+            }
+            
+            // Send acknowledgment
+            val resultMessage = "Beep sync triggered (${command.frequency_hz}Hz, ${command.duration_ms}ms, vol=${command.volume})"
+            jsonSocketClient?.sendAck("beep_sync", true, resultMessage)
+            
+            logger.info("[DEBUG_LOG] Beep sync completed: $resultMessage")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to trigger beep sync", e)
+            jsonSocketClient?.sendAck("beep_sync", false, "Beep sync failed: ${e.message}")
+        }
+    }
+    
+    /**
+     * Handle sync_time command from PC - Milestone 2.8
+     */
+    private suspend fun handleSyncTime(command: SyncTimeCommand) {
+        logger.info("[DEBUG_LOG] Processing sync_time command")
+        logger.info("[DEBUG_LOG] PC timestamp: ${command.pc_timestamp}, Sync ID: ${command.sync_id}")
+        
+        try {
+            // Use SyncClockManager for clock synchronization
+            val success = syncClockManager.synchronizeWithPc(
+                pcTimestamp = command.pc_timestamp,
+                syncId = command.sync_id
+            )
+            
+            if (success) {
+                // Get sync status for detailed information
+                val syncStatus = syncClockManager.getSyncStatus()
+                val resultMessage = buildString {
+                    append("Clock sync successful: offset=${syncStatus.clockOffsetMs}ms")
+                    command.sync_id?.let { syncId -> append(", sync_id=$syncId") }
+                    append(", age=${syncStatus.syncAge}ms")
+                }
+                
+                jsonSocketClient?.sendAck("sync_time", true, resultMessage)
+                logger.info("[DEBUG_LOG] $resultMessage")
+                
+            } else {
+                val errorMessage = "Clock synchronization failed - invalid PC timestamp or sync error"
+                jsonSocketClient?.sendAck("sync_time", false, "Clock sync failed: $errorMessage")
+                logger.error("Clock sync failed: $errorMessage")
+            }
+            
+        } catch (e: Exception) {
+            logger.error("Failed to sync time", e)
+            jsonSocketClient?.sendAck("sync_time", false, "Clock sync failed: ${e.message}")
         }
     }
     

@@ -43,7 +43,7 @@ class PreviewStreamer @Inject constructor(
     
     // Frame rate control
     private var lastFrameTime = 0L
-    private val frameIntervalMs = 1000L / targetFps
+    private var frameIntervalMs = 1000L / targetFps
     
     companion object {
         private const val PREVIEW_RGB_TAG = "PREVIEW_RGB"
@@ -58,8 +58,41 @@ class PreviewStreamer @Inject constructor(
         jpegQuality = quality
         maxFrameWidth = maxWidth
         maxFrameHeight = maxHeight
+        updateFrameInterval()
         
         logger.info("PreviewStreamer configured: ${fps}fps, quality=$quality, size=${maxWidth}x${maxHeight}")
+    }
+    
+    /**
+     * Update frame rate dynamically during streaming (for adaptive frame rate control)
+     */
+    fun updateFrameRate(newFps: Float) {
+        if (newFps <= 0) {
+            logger.warning("Invalid frame rate: $newFps, ignoring update")
+            return
+        }
+        
+        val previousFps = targetFps
+        targetFps = newFps.toInt()
+        updateFrameInterval()
+        
+        logger.info("[DEBUG_LOG] PreviewStreamer frame rate updated from ${previousFps}fps to ${targetFps}fps")
+    }
+    
+    /**
+     * Get current frame rate
+     */
+    fun getCurrentFrameRate(): Float = targetFps.toFloat()
+    
+    /**
+     * Update frame interval based on current target FPS
+     */
+    private fun updateFrameInterval() {
+        frameIntervalMs = if (targetFps > 0) {
+            (1000L / targetFps).coerceAtLeast(1L) // Minimum 1ms interval
+        } else {
+            1000L // Default to 1fps if invalid
+        }
     }
     
     /**

@@ -153,6 +153,18 @@
             android:label="Shimmer Configuration"
             android:theme="@style/Theme.AppCompat.DayNight" />
 
+        <!-- Settings Activity - Milestone 2.7 UI Enhancement -->
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:label="Settings"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
         <!-- Recording Service for foreground multi-sensor recording -->
         <service
             android:name=".service.RecordingService"

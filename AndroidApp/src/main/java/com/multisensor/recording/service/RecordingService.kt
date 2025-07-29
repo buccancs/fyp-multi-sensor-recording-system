@@ -16,9 +16,11 @@ import com.multisensor.recording.network.SocketController
 import com.multisensor.recording.network.JsonSocketClient
 import com.multisensor.recording.network.CommandProcessor
 import com.multisensor.recording.network.NetworkConfiguration
+import com.multisensor.recording.network.NetworkQualityMonitor
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder
+import com.multisensor.recording.recording.AdaptiveFrameRateController
 import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +65,12 @@ class RecordingService : Service() {
     
     @Inject
     lateinit var networkConfiguration: NetworkConfiguration
+    
+    @Inject
+    lateinit var networkQualityMonitor: NetworkQualityMonitor
+    
+    @Inject
+    lateinit var adaptiveFrameRateController: AdaptiveFrameRateController
     
     @Inject
     lateinit var logger: Logger
@@ -143,7 +151,45 @@ class RecordingService : Service() {
         // Inject PreviewStreamer into CameraRecorder (method injection for scoping compatibility)
         cameraRecorder.setPreviewStreamer(previewStreamer)
         
+        // Initialize Milestone 2.7 Adaptive Frame Rate Control
+        initializeAdaptiveFrameRateControl()
+        
         logger.info("RecordingService initialization complete")
+    }
+    
+    /**
+     * Initialize adaptive frame rate control system for Milestone 2.7
+     */
+    private fun initializeAdaptiveFrameRateControl() {
+        try {
+            logger.info("[DEBUG_LOG] Initializing adaptive frame rate control system")
+            
+            // Get network configuration for monitoring
+            val serverConfig = networkConfiguration.getServerConfiguration()
+            
+            // Start network quality monitoring
+            networkQualityMonitor.startMonitoring(serverConfig.serverIp, serverConfig.legacyPort)
+            
+            // Set up adaptive frame rate controller with PreviewStreamer integration
+            adaptiveFrameRateController.addListener(object : AdaptiveFrameRateController.FrameRateChangeListener {
+                override fun onFrameRateChanged(newFrameRate: Float, reason: String) {
+                    logger.info("[DEBUG_LOG] Adaptive frame rate changed to ${newFrameRate}fps - $reason")
+                    previewStreamer.updateFrameRate(newFrameRate)
+                }
+                
+                override fun onAdaptationModeChanged(isAdaptive: Boolean) {
+                    logger.info("[DEBUG_LOG] Adaptive mode changed: $isAdaptive")
+                }
+            })
+            
+            // Start the adaptive frame rate controller
+            adaptiveFrameRateController.start()
+            
+            logger.info("[DEBUG_LOG] Adaptive frame rate control system initialized successfully")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to initialize adaptive frame rate control system", e)
+        }
     }
     
     /**
@@ -206,6 +252,15 @@ class RecordingService : Service() {
         
         // Stop preview streaming
         previewStreamer.stopStreaming()
+        
+        // Stop adaptive frame rate control system (Milestone 2.7)
+        try {
+            adaptiveFrameRateController.stop()
+            networkQualityMonitor.stopMonitoring()
+            logger.info("[DEBUG_LOG] Adaptive frame rate control system stopped")
+        } catch (e: Exception) {
+            logger.error("Error stopping adaptive frame rate control system", e)
+        }
         
         // Stop legacy socket connection (port 8080)
         socketController.stop()

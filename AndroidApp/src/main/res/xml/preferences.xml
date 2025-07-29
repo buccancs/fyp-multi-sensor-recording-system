@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Device Configuration Category -->
+    <PreferenceCategory
+        android:title="Device Configuration"
+        android:icon="@android:drawable/ic_menu_preferences">
+
+        <!-- Shimmer MAC Address Configuration -->
+        <EditTextPreference
+            android:key="shimmer_mac_address"
+            android:title="Shimmer MAC Address"
+            android:summary="Configure Shimmer device MAC address"
+            android:dialogTitle="Enter Shimmer MAC Address"
+            android:dialogMessage="Enter the MAC address of your Shimmer device (format: XX:XX:XX:XX:XX:XX)"
+            android:defaultValue="00:00:00:00:00:00"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Shimmer Device Name -->
+        <EditTextPreference
+            android:key="shimmer_device_name"
+            android:title="Shimmer Device Name"
+            android:summary="Custom name for Shimmer device"
+            android:dialogTitle="Enter Device Name"
+            android:defaultValue="Shimmer3 GSR+"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <!-- Recording Parameters Category -->
+    <PreferenceCategory
+        android:title="Recording Parameters"
+        android:icon="@android:drawable/ic_menu_camera">
+
+        <!-- Video Resolution -->
+        <ListPreference
+            android:key="video_resolution"
+            android:title="Video Resolution"
+            android:summary="Select video recording resolution"
+            android:dialogTitle="Choose Video Resolution"
+            android:entries="@array/video_resolution_entries"
+            android:entryValues="@array/video_resolution_values"
+            android:defaultValue="1920x1080"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Frame Rate -->
+        <ListPreference
+            android:key="frame_rate"
+            android:title="Frame Rate"
+            android:summary="Select video recording frame rate"
+            android:dialogTitle="Choose Frame Rate"
+            android:entries="@array/frame_rate_entries"
+            android:entryValues="@array/frame_rate_values"
+            android:defaultValue="30"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Video Quality -->
+        <ListPreference
+            android:key="video_quality"
+            android:title="Video Quality"
+            android:summary="Select video encoding quality"
+            android:dialogTitle="Choose Video Quality"
+            android:entries="@array/video_quality_entries"
+            android:entryValues="@array/video_quality_values"
+            android:defaultValue="high"
+            app:useSimpleSummaryProvider="true" />
+
+        <!-- Enable RAW Capture -->
+        <SwitchPreferenceCompat
+            android:key="enable_raw_capture"
+            android:title="Enable RAW Capture"
+            android:summary="Capture RAW images during recording"
+            android:defaultValue="true" />
+
+        <!-- Enable Thermal Recording -->
+        <SwitchPreferenceCompat
+            android:key="enable_thermal_recording"
+            android:title="Enable Thermal Recording"
+            android:summary="Record thermal camera data"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <!-- Network Configuration Category -->
+    <PreferenceCategory
+        android:title="Network Configuration"
+        android:icon="@android:drawable/ic_menu_manage">
+
+        <!-- Server IP Address -->
+        <EditTextPreference
+            android:key="server_ip"
+            android:title="Server IP Address"
+            android:summary="PC server IP address for communication"
+            android:dialogTitle="Enter Server IP Address"
+            android:dialogMessage="Enter the IP address of the PC server"
+            android:defaultValue="192.168.1.100"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Server Port -->
+        <EditTextPreference
+            android:key="server_port"
+            android:title="Server Port"
+            android:summary="PC server port for communication"
+            android:dialogTitle="Enter Server Port"
+            android:dialogMessage="Enter the port number (1024-65535)"
+            android:defaultValue="8080"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- JSON Server Port -->
+        <EditTextPreference
+            android:key="json_server_port"
+            android:title="JSON Server Port"
+            android:summary="PC JSON server port for advanced communication"
+            android:dialogTitle="Enter JSON Server Port"
+            android:dialogMessage="Enter the JSON server port number (1024-65535)"
+            android:defaultValue="9000"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Auto-Connect to Server -->
+        <SwitchPreferenceCompat
+            android:key="auto_connect_server"
+            android:title="Auto-Connect to Server"
+            android:summary="Automatically connect to PC server on startup"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <!-- System Preferences Category -->
+    <PreferenceCategory
+        android:title="System Preferences"
+        android:icon="@android:drawable/ic_menu_manage">
+
+        <!-- Enable Debug Logging -->
+        <SwitchPreferenceCompat
+            android:key="enable_debug_logging"
+            android:title="Enable Debug Logging"
+            android:summary="Enable detailed debug logging for troubleshooting"
+            android:defaultValue="false" />
+
+        <!-- Keep Screen On -->
+        <SwitchPreferenceCompat
+            android:key="keep_screen_on"
+            android:title="Keep Screen On"
+            android:summary="Prevent screen from turning off during recording"
+            android:defaultValue="true" />
+
+        <!-- Battery Optimization -->
+        <SwitchPreferenceCompat
+            android:key="battery_optimization"
+            android:title="Battery Optimization"
+            android:summary="Enable battery optimization features"
+            android:defaultValue="false" />
+
+        <!-- Calibration Feedback -->
+        <SwitchPreferenceCompat
+            android:key="calibration_feedback"
+            android:title="Calibration Feedback"
+            android:summary="Enable audio and visual feedback during calibration"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <!-- Advanced Settings Category -->
+    <PreferenceCategory
+        android:title="Advanced Settings"
+        android:icon="@android:drawable/ic_menu_preferences">
+
+        <!-- Storage Location -->
+        <ListPreference
+            android:key="storage_location"
+            android:title="Storage Location"
+            android:summary="Choose where to save recordings"
+            android:dialogTitle="Choose Storage Location"
+            android:entries="@array/storage_location_entries"
+            android:entryValues="@array/storage_location_values"
+            android:defaultValue="internal"
+            app:useSimpleSummaryProvider="true" />
+
+        <!-- Max Recording Duration -->
+        <ListPreference
+            android:key="max_recording_duration"
+            android:title="Max Recording Duration"
+            android:summary="Maximum duration for single recording session"
+            android:dialogTitle="Choose Max Duration"
+            android:entries="@array/max_duration_entries"
+            android:entryValues="@array/max_duration_values"
+            android:defaultValue="3600"
+            app:useSimpleSummaryProvider="true" />
+
+        <!-- Reset Settings -->
+        <Preference
+            android:key="reset_settings"
+            android:title="Reset to Defaults"
+            android:summary="Reset all settings to default values"
+            android:icon="@android:drawable/ic_menu_revert" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

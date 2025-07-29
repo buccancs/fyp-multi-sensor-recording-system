@@ -181,6 +181,9 @@ android {
 dependencies {
     // Core & UI Components
     implementation libs.bundles.core.ui
+    
+    // Settings and Preferences - Milestone 2.7 UI Enhancement
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
     // Architecture - Lifecycle, Coroutines, Permissions
     implementation libs.bundles.lifecycle

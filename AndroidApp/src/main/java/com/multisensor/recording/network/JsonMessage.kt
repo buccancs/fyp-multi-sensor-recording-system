@@ -31,6 +31,9 @@ abstract class JsonMessage {
                     "stop_record" -> StopRecordCommand.fromJson(jsonObject)
                     "capture_calibration" -> CaptureCalibrationCommand.fromJson(jsonObject)
                     "set_stimulus_time" -> SetStimulusTimeCommand.fromJson(jsonObject)
+                    "flash_sync" -> FlashSyncCommand.fromJson(jsonObject)
+                    "beep_sync" -> BeepSyncCommand.fromJson(jsonObject)
+                    "sync_time" -> SyncTimeCommand.fromJson(jsonObject)
                     "hello" -> HelloMessage.fromJson(jsonObject)
                     "preview_frame" -> PreviewFrameMessage.fromJson(jsonObject)
                     "sensor_data" -> SensorDataMessage.fromJson(jsonObject)
@@ -113,21 +116,34 @@ data class StopRecordCommand(
 }
 
 /**
- * Command to capture calibration images
+ * Command to capture calibration images - Enhanced for Milestone 2.8
  */
 data class CaptureCalibrationCommand(
-    override val type: String = "capture_calibration"
+    override val type: String = "capture_calibration",
+    val calibration_id: String? = null,
+    val capture_rgb: Boolean = true,
+    val capture_thermal: Boolean = true,
+    val high_resolution: Boolean = true
 ) : JsonMessage() {
     
     override fun toJsonObject(): JSONObject {
         return JSONObject().apply {
             put("type", type)
+            calibration_id?.let { put("calibration_id", it) }
+            put("capture_rgb", capture_rgb)
+            put("capture_thermal", capture_thermal)
+            put("high_resolution", high_resolution)
         }
     }
     
     companion object {
         fun fromJson(json: JSONObject): CaptureCalibrationCommand {
-            return CaptureCalibrationCommand()
+            return CaptureCalibrationCommand(
+                calibration_id = if (json.has("calibration_id")) json.getString("calibration_id") else null,
+                capture_rgb = json.optBoolean("capture_rgb", true),
+                capture_thermal = json.optBoolean("capture_thermal", true),
+                high_resolution = json.optBoolean("high_resolution", true)
+            )
         }
     }
 }
@@ -151,6 +167,93 @@ data class SetStimulusTimeCommand(
         fun fromJson(json: JSONObject): SetStimulusTimeCommand {
             return SetStimulusTimeCommand(
                 time = json.getLong("time")
+            )
+        }
+    }
+}
+
+/**
+ * Command to trigger LED flash sync signal - Milestone 2.8
+ */
+data class FlashSyncCommand(
+    override val type: String = "flash_sync",
+    val duration_ms: Long = 200,
+    val sync_id: String? = null
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("duration_ms", duration_ms)
+            sync_id?.let { put("sync_id", it) }
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): FlashSyncCommand {
+            return FlashSyncCommand(
+                duration_ms = json.optLong("duration_ms", 200),
+                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null
+            )
+        }
+    }
+}
+
+/**
+ * Command to trigger audio beep sync signal - Milestone 2.8
+ */
+data class BeepSyncCommand(
+    override val type: String = "beep_sync",
+    val frequency_hz: Int = 1000,
+    val duration_ms: Long = 200,
+    val volume: Float = 0.8f,
+    val sync_id: String? = null
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("frequency_hz", frequency_hz)
+            put("duration_ms", duration_ms)
+            put("volume", volume.toDouble())
+            sync_id?.let { put("sync_id", it) }
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): BeepSyncCommand {
+            return BeepSyncCommand(
+                frequency_hz = json.optInt("frequency_hz", 1000),
+                duration_ms = json.optLong("duration_ms", 200),
+                volume = json.optDouble("volume", 0.8).toFloat(),
+                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null
+            )
+        }
+    }
+}
+
+/**
+ * Command to synchronize device clock with PC reference time - Milestone 2.8
+ */
+data class SyncTimeCommand(
+    override val type: String = "sync_time",
+    val pc_timestamp: Long,
+    val sync_id: String? = null
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("pc_timestamp", pc_timestamp)
+            sync_id?.let { put("sync_id", it) }
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): SyncTimeCommand {
+            return SyncTimeCommand(
+                pc_timestamp = json.getLong("pc_timestamp"),
+                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null
             )
         }
     }
