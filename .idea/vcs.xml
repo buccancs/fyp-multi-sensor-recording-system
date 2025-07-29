@@ -3,5 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/AndroidApp/libs/IRCamera" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AndroidApp/libs/Shimmer-Java-Android-API" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AndroidApp/libs/ShimmerAndroidAPI" vcs="Git" />
   </component>
 </project>
