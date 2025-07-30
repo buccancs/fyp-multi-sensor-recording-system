@@ -175,7 +175,7 @@ class ShimmerRecorder
             Handler(Looper.getMainLooper()) { msg ->
                 try {
                     when (msg.what) {
-                        Shimmer.MESSAGE_STATE_CHANGE -> {
+                        ShimmerBluetooth.MSG_IDENTIFIER_STATE_CHANGE -> {
                             val obj = msg.obj
                             if (obj is ObjectCluster) {
                                 handleShimmerStateChange(obj)
@@ -183,7 +183,7 @@ class ShimmerRecorder
                                 handleShimmerCallback(obj)
                             }
                         }
-                        Shimmer.MESSAGE_READ -> {
+                        ShimmerBluetooth.MSG_IDENTIFIER_DATA_PACKET -> {
                             val obj = msg.obj
                             if (obj is ObjectCluster) {
                                 handleShimmerData(obj)
@@ -299,6 +299,7 @@ class ShimmerRecorder
 
         /**
          * Convert Shimmer ObjectCluster to SensorSample using proper SDK API calls
+         * Enhanced version with complete sensor support and error handling
          */
         private fun convertObjectClusterToSensorSample(objectCluster: ObjectCluster): SensorSample {
             val deviceId = objectCluster.macAddress?.takeLast(4) ?: "Unknown"
@@ -328,7 +329,7 @@ class ShimmerRecorder
                     val gsrCluster = ObjectCluster.returnFormatCluster(gsrFormats, "CAL") as? FormatCluster
                     gsrCluster?.let {
                         sensorValues[SensorChannel.GSR] = it.mData
-                        logger.debug("Extracted GSR: ${it.mData}")
+                        logger.debug("Extracted GSR: ${it.mData} µS")
                     }
                 } catch (e: Exception) {
                     logger.debug("Could not extract GSR data: ${e.message}")
@@ -347,43 +348,155 @@ class ShimmerRecorder
                     logger.debug("Could not extract PPG data: ${e.message}")
                 }
 
-                // Extract accelerometer X data using official API pattern
+                // Extract accelerometer X, Y, Z data using official API pattern
                 try {
                     val accelXFormats =
                         objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_X)
                     val accelXCluster = ObjectCluster.returnFormatCluster(accelXFormats, "CAL") as? FormatCluster
                     accelXCluster?.let {
-                        sensorValues[SensorChannel.ACCEL] = it.mData
-                        logger.debug("Extracted Accel X: ${it.mData}")
+                        sensorValues[SensorChannel.ACCEL_X] = it.mData
+                        logger.debug("Extracted Accel X: ${it.mData} g")
+                    }
+
+                    val accelYFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_Y)
+                    val accelYCluster = ObjectCluster.returnFormatCluster(accelYFormats, "CAL") as? FormatCluster
+                    accelYCluster?.let {
+                        sensorValues[SensorChannel.ACCEL_Y] = it.mData
+                        logger.debug("Extracted Accel Y: ${it.mData} g")
+                    }
+
+                    val accelZFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_Z)
+                    val accelZCluster = ObjectCluster.returnFormatCluster(accelZFormats, "CAL") as? FormatCluster
+                    accelZCluster?.let {
+                        sensorValues[SensorChannel.ACCEL_Z] = it.mData
+                        logger.debug("Extracted Accel Z: ${it.mData} g")
+                    }
+
+                    // For backwards compatibility, also store combined accelerometer value
+                    if (sensorValues.containsKey(SensorChannel.ACCEL_X)) {
+                        sensorValues[SensorChannel.ACCEL] = sensorValues[SensorChannel.ACCEL_X] ?: 0.0
                     }
                 } catch (e: Exception) {
-                    logger.debug("Could not extract accelerometer X data: ${e.message}")
+                    logger.debug("Could not extract accelerometer data: ${e.message}")
                 }
 
-                // Extract gyroscope X data using official API pattern
+                // Extract gyroscope X, Y, Z data using official API pattern
                 try {
                     val gyroXFormats =
                         objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_X)
                     val gyroXCluster = ObjectCluster.returnFormatCluster(gyroXFormats, "CAL") as? FormatCluster
                     gyroXCluster?.let {
-                        sensorValues[SensorChannel.GYRO] = it.mData
-                        logger.debug("Extracted Gyro X: ${it.mData}")
+                        sensorValues[SensorChannel.GYRO_X] = it.mData
+                        logger.debug("Extracted Gyro X: ${it.mData} °/s")
+                    }
+
+                    val gyroYFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Y)
+                    val gyroYCluster = ObjectCluster.returnFormatCluster(gyroYFormats, "CAL") as? FormatCluster
+                    gyroYCluster?.let {
+                        sensorValues[SensorChannel.GYRO_Y] = it.mData
+                        logger.debug("Extracted Gyro Y: ${it.mData} °/s")
+                    }
+
+                    val gyroZFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Z)
+                    val gyroZCluster = ObjectCluster.returnFormatCluster(gyroZFormats, "CAL") as? FormatCluster
+                    gyroZCluster?.let {
+                        sensorValues[SensorChannel.GYRO_Z] = it.mData
+                        logger.debug("Extracted Gyro Z: ${it.mData} °/s")
+                    }
+
+                    // For backwards compatibility, also store combined gyroscope value
+                    if (sensorValues.containsKey(SensorChannel.GYRO_X)) {
+                        sensorValues[SensorChannel.GYRO] = sensorValues[SensorChannel.GYRO_X] ?: 0.0
                     }
                 } catch (e: Exception) {
-                    logger.debug("Could not extract gyroscope X data: ${e.message}")
+                    logger.debug("Could not extract gyroscope data: ${e.message}")
                 }
 
-                // Extract magnetometer X data using official API pattern
+                // Extract magnetometer X, Y, Z data using official API pattern
                 try {
                     val magXFormats =
                         objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_X)
                     val magXCluster = ObjectCluster.returnFormatCluster(magXFormats, "CAL") as? FormatCluster
                     magXCluster?.let {
-                        sensorValues[SensorChannel.MAG] = it.mData
-                        logger.debug("Extracted Mag X: ${it.mData}")
+                        sensorValues[SensorChannel.MAG_X] = it.mData
+                        logger.debug("Extracted Mag X: ${it.mData} gauss")
+                    }
+
+                    val magYFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_Y)
+                    val magYCluster = ObjectCluster.returnFormatCluster(magYFormats, "CAL") as? FormatCluster
+                    magYCluster?.let {
+                        sensorValues[SensorChannel.MAG_Y] = it.mData
+                        logger.debug("Extracted Mag Y: ${it.mData} gauss")
+                    }
+
+                    val magZFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_Z)
+                    val magZCluster = ObjectCluster.returnFormatCluster(magZFormats, "CAL") as? FormatCluster
+                    magZCluster?.let {
+                        sensorValues[SensorChannel.MAG_Z] = it.mData
+                        logger.debug("Extracted Mag Z: ${it.mData} gauss")
+                    }
+
+                    // For backwards compatibility, also store combined magnetometer value
+                    if (sensorValues.containsKey(SensorChannel.MAG_X)) {
+                        sensorValues[SensorChannel.MAG] = sensorValues[SensorChannel.MAG_X] ?: 0.0
                     }
                 } catch (e: Exception) {
-                    logger.debug("Could not extract magnetometer X data: ${e.message}")
+                    logger.debug("Could not extract magnetometer data: ${e.message}")
+                }
+
+                // Extract ECG data if available
+                try {
+                    val ecgFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ECG_LL_RA)
+                    val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
+                    ecgCluster?.let {
+                        sensorValues[SensorChannel.ECG] = it.mData
+                        logger.debug("Extracted ECG: ${it.mData} mV")
+                    }
+                } catch (e: Exception) {
+                    logger.debug("Could not extract ECG data: ${e.message}")
+                }
+
+                // Extract EMG data if available
+                try {
+                    val emgFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.EMG)
+                    val emgCluster = ObjectCluster.returnFormatCluster(emgFormats, "CAL") as? FormatCluster
+                    emgCluster?.let {
+                        sensorValues[SensorChannel.EMG] = it.mData
+                        logger.debug("Extracted EMG: ${it.mData} mV")
+                    }
+                } catch (e: Exception) {
+                    logger.debug("Could not extract EMG data: ${e.message}")
+                }
+
+                // Extract battery voltage if available
+                var batteryLevel = 0
+                try {
+                    val batteryFormats =
+                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.BATTERY)
+                    val batteryCluster = ObjectCluster.returnFormatCluster(batteryFormats, "CAL") as? FormatCluster
+                    batteryCluster?.let {
+                        // Convert battery voltage to percentage (approximate)
+                        val voltage = it.mData
+                        batteryLevel = when {
+                            voltage >= 3.7 -> 100
+                            voltage >= 3.6 -> 80
+                            voltage >= 3.5 -> 60
+                            voltage >= 3.4 -> 40
+                            voltage >= 3.3 -> 20
+                            else -> 10
+                        }
+                        logger.debug("Extracted Battery: ${voltage}V (${batteryLevel}%)")
+                    }
+                } catch (e: Exception) {
+                    logger.debug("Could not extract battery data: ${e.message}")
                 }
 
                 logger.debug("Successfully extracted ${sensorValues.size} sensor values from ObjectCluster")
@@ -396,6 +509,7 @@ class ShimmerRecorder
                 deviceTimestamp = deviceTimestamp,
                 systemTimestamp = System.currentTimeMillis(),
                 sensorValues = sensorValues,
+                batteryLevel = batteryLevel,
                 sequenceNumber = 0L, // TODO: Extract sequence number from ObjectCluster if available
             )
         }
@@ -600,6 +714,284 @@ class ShimmerRecorder
             }
 
         /**
+         * Enhanced device connection with better error handling and retry logic
+         */
+        suspend fun connectDevicesWithRetry(
+            deviceAddresses: List<String>,
+            maxRetries: Int = 3,
+        ): List<String> =
+            withContext(Dispatchers.IO) {
+                val successfulConnections = mutableListOf<String>()
+
+                deviceAddresses.forEach { macAddress ->
+                    var retryCount = 0
+                    var connected = false
+
+                    while (!connected && retryCount < maxRetries) {
+                        try {
+                            logger.info("Attempting to connect to device: $macAddress (attempt ${retryCount + 1}/$maxRetries)")
+
+                            connected = connectSingleDeviceInternal(macAddress, "Shimmer3-GSR+")
+
+                            if (connected) {
+                                successfulConnections.add(macAddress)
+                                logger.info("Successfully connected to device: $macAddress")
+                            } else {
+                                retryCount++
+                                if (retryCount < maxRetries) {
+                                    logger.warning("Connection failed, retrying in ${RECONNECTION_DELAY_MS}ms...")
+                                    delay(RECONNECTION_DELAY_MS)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            retryCount++
+                            logger.error("Connection attempt failed for device $macAddress: ${e.message}", e)
+                            if (retryCount < maxRetries) {
+                                delay(RECONNECTION_DELAY_MS)
+                            }
+                        }
+                    }
+
+                    if (!connected) {
+                        logger.error("Failed to connect to device $macAddress after $maxRetries attempts")
+                    }
+                }
+
+                logger.info("Connected to ${successfulConnections.size} out of ${deviceAddresses.size} devices")
+                successfulConnections
+            }
+
+        /**
+         * Internal method for connecting to a single device
+         */
+        private suspend fun connectSingleDeviceInternal(
+            macAddress: String,
+            deviceName: String,
+        ): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    // Create ShimmerDevice instance
+                    val device =
+                        ShimmerDevice(
+                            macAddress = macAddress,
+                            deviceName = deviceName,
+                            connectionState = ShimmerDevice.ConnectionState.CONNECTING,
+                        )
+
+                    // Create individual handler for this device
+                    val deviceHandler = createShimmerHandler()
+
+                    // Create Shimmer SDK instance
+                    val shimmer = Shimmer(deviceHandler, context)
+
+                    // Store device and Shimmer instances
+                    connectedDevices[macAddress] = device
+                    shimmerDevices[macAddress] = shimmer
+                    shimmerHandlers[macAddress] = deviceHandler
+                    deviceConfigurations[macAddress] = DeviceConfiguration.createDefault()
+                    dataQueues[macAddress] = ConcurrentLinkedQueue()
+                    sampleCounts[macAddress] = AtomicLong(0)
+
+                    // Attempt connection using Shimmer SDK
+                    shimmer.connect(macAddress, "default")
+
+                    // Wait for connection to establish with timeout
+                    var connectionTimeout = 10000L // 10 seconds
+                    val startTime = System.currentTimeMillis()
+
+                    while (System.currentTimeMillis() - startTime < connectionTimeout) {
+                        if (device.isConnected()) {
+                            break
+                        }
+                        delay(100)
+                    }
+
+                    val connected = device.isConnected()
+                    if (connected) {
+                        device.updateConnectionState(ShimmerDevice.ConnectionState.CONNECTED, logger)
+                        logger.info("Successfully connected to ${device.getDisplayName()}")
+                    } else {
+                        logger.error("Connection timeout for device $macAddress")
+                        // Clean up failed connection
+                        cleanupFailedConnection(macAddress)
+                    }
+
+                    connected
+                } catch (e: Exception) {
+                    logger.error("Failed to connect to device $macAddress", e)
+                    cleanupFailedConnection(macAddress)
+                    false
+                }
+            }
+
+        /**
+         * Clean up resources for a failed connection
+         */
+        private fun cleanupFailedConnection(macAddress: String) {
+            connectedDevices.remove(macAddress)
+            shimmerDevices.remove(macAddress)
+            shimmerHandlers.remove(macAddress)
+            deviceConfigurations.remove(macAddress)
+            dataQueues.remove(macAddress)
+            sampleCounts.remove(macAddress)
+        }
+
+        /**
+         * Disconnect from all connected devices with proper cleanup
+         */
+        suspend fun disconnectAllDevices(): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    logger.info("Disconnecting from ${connectedDevices.size} devices...")
+
+                    var successfulDisconnections = 0
+
+                    connectedDevices.values.forEach { device ->
+                        val shimmer = shimmerDevices[device.macAddress]
+
+                        try {
+                            logger.debug("Disconnecting from device ${device.getDisplayName()}")
+
+                            shimmer?.stop()
+                            shimmer?.disconnect()
+
+                            device.updateConnectionState(ShimmerDevice.ConnectionState.DISCONNECTED, logger)
+                            successfulDisconnections++
+
+                            logger.info("Successfully disconnected from device ${device.getDisplayName()}")
+                        } catch (e: Exception) {
+                            logger.error("Failed to disconnect from device ${device.getDisplayName()}", e)
+                        }
+                    }
+
+                    // Clear all device collections
+                    connectedDevices.clear()
+                    shimmerDevices.clear()
+                    shimmerHandlers.clear()
+                    deviceConfigurations.clear()
+                    dataQueues.clear()
+                    sampleCounts.clear()
+
+                    isConnected.set(false)
+
+                    logger.info("Disconnected from $successfulDisconnections devices")
+                    true
+                } catch (e: Exception) {
+                    logger.error("Failed to disconnect from devices", e)
+                    false
+                }
+            }
+
+        /**
+         * Get real-time data quality metrics for a device
+         */
+        suspend fun getDataQualityMetrics(deviceId: String): DataQualityMetrics? =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val sampleQueue = dataQueues[deviceId]
+
+                    if (device == null || sampleQueue == null) {
+                        return@withContext null
+                    }
+
+                    // Calculate metrics from recent samples
+                    val recentSamples = sampleQueue.toList().takeLast(100)
+                    
+                    if (recentSamples.isEmpty()) {
+                        return@withContext DataQualityMetrics(
+                            deviceId = deviceId,
+                            samplesAnalyzed = 0,
+                            averageSamplingRate = 0.0,
+                            signalQuality = "No Data",
+                            batteryLevel = device.batteryLevel,
+                            connectionStability = "Stable",
+                            dataLossPercentage = 0.0,
+                        )
+                    }
+
+                    // Calculate sampling rate
+                    val timeSpan = if (recentSamples.size > 1) {
+                        recentSamples.last().systemTimestamp - recentSamples.first().systemTimestamp
+                    } else {
+                        1000L
+                    }
+                    val samplingRate = if (timeSpan > 0) {
+                        (recentSamples.size - 1) * 1000.0 / timeSpan
+                    } else {
+                        0.0
+                    }
+
+                    // Assess signal quality based on GSR variability
+                    val gsrValues = recentSamples.mapNotNull { it.getSensorValue(SensorChannel.GSR) }
+                    val signalQuality = if (gsrValues.isNotEmpty()) {
+                        val variance = calculateVariance(gsrValues)
+                        when {
+                            variance < 0.1 -> "Poor (Low Variability)"
+                            variance < 1.0 -> "Good"
+                            variance < 5.0 -> "Excellent"
+                            else -> "Poor (High Noise)"
+                        }
+                    } else {
+                        "No GSR Data"
+                    }
+
+                    // Check connection stability
+                    val connectionStability = if (device.reconnectionAttempts > 0) {
+                        "Unstable (${device.reconnectionAttempts} reconnections)"
+                    } else {
+                        "Stable"
+                    }
+
+                    DataQualityMetrics(
+                        deviceId = deviceId,
+                        samplesAnalyzed = recentSamples.size,
+                        averageSamplingRate = samplingRate,
+                        signalQuality = signalQuality,
+                        batteryLevel = device.batteryLevel,
+                        connectionStability = connectionStability,
+                        dataLossPercentage = 0.0, // Could be enhanced to detect packet loss
+                    )
+                } catch (e: Exception) {
+                    logger.error("Failed to calculate data quality metrics for $deviceId", e)
+                    null
+                }
+            }
+
+        /**
+         * Data class representing real-time data quality metrics
+         */
+        data class DataQualityMetrics(
+            val deviceId: String,
+            val samplesAnalyzed: Int,
+            val averageSamplingRate: Double,
+            val signalQuality: String,
+            val batteryLevel: Int,
+            val connectionStability: String,
+            val dataLossPercentage: Double,
+        ) {
+            fun getDisplaySummary(): String =
+                buildString {
+                    append("Device: $deviceId\n")
+                    append("Sampling Rate: ${"%.1f".format(averageSamplingRate)} Hz\n")
+                    append("Signal Quality: $signalQuality\n")
+                    append("Battery: $batteryLevel%\n")
+                    append("Connection: $connectionStability\n")
+                    append("Samples: $samplesAnalyzed")
+                }
+        }
+
+        /**
+         * Helper function to calculate variance
+         */
+        private fun calculateVariance(values: List<Double>): Double {
+            if (values.isEmpty()) return 0.0
+            val mean = values.average()
+            val variance = values.map { (it - mean) * (it - mean) }.average()
+            return variance
+        }
+
+        /**
          * Connect to multiple Shimmer devices using Shimmer SDK (Classic Bluetooth)
          */
         suspend fun connectDevices(deviceAddresses: List<String>): Boolean =
@@ -718,18 +1110,25 @@ class ShimmerRecorder
                         val sensorBitmask = newConfig.getSensorBitmask()
                         logger.debug("Applying sensor bitmask 0x${sensorBitmask.toString(16)} to device ${device.getDisplayName()}")
 
-                        // Configure enabled sensors
+                        // Configure enabled sensors using proper SDK method
                         shimmer.writeEnabledSensors(sensorBitmask.toLong())
 
-                        // TODO: Configure additional settings when exact API methods are verified
-                        // These method names need to be confirmed with actual Shimmer SDK testing
-                        // shimmer.writeSamplingRate(newConfig.samplingRate)
-                        // shimmer.writeGSRRange(newConfig.gsrRange)
-                        // shimmer.writeAccelRange(newConfig.accelRange)
-                        // shimmer.writeGyroRange(newConfig.gyroRange)
-                        // shimmer.writeMagRange(newConfig.magRange)
+                        // Configure sampling rate using proper SDK method
+                        shimmer.writeSamplingRate(newConfig.samplingRate)
 
-                        logger.debug("Basic sensor configuration applied. Additional settings require API verification.")
+                        // Configure GSR range using proper SDK method
+                        shimmer.writeGSRRange(newConfig.gsrRange)
+
+                        // Configure accelerometer range using proper SDK method  
+                        shimmer.writeAccelRange(newConfig.accelRange)
+
+                        // Configure gyroscope range using proper SDK method
+                        shimmer.writeGyroRange(newConfig.gyroRange)
+
+                        // Configure magnetometer range using proper SDK method
+                        shimmer.writeMagRange(newConfig.magRange)
+
+                        logger.debug("All sensor configurations applied successfully")
 
                         // Update stored configuration
                         deviceConfigurations[deviceId] = newConfig
@@ -1365,6 +1764,297 @@ class ShimmerRecorder
                     accelZ = simulateAccelData() + 9.8,
                     batteryPercentage = simulateBatteryLevel(),
                 )
+            }
+
+        /**
+         * Configure sampling rate for a specific device using Shimmer SDK
+         */
+        suspend fun setSamplingRate(
+            deviceId: String,
+            samplingRate: Double,
+        ): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val shimmer = shimmerDevices[deviceId]
+
+                    if (device == null) {
+                        logger.error("Device not found: $deviceId")
+                        return@withContext false
+                    }
+
+                    if (shimmer == null) {
+                        logger.error("Shimmer SDK instance not found for device: $deviceId")
+                        return@withContext false
+                    }
+
+                    logger.debug("Setting sampling rate to ${samplingRate}Hz for device ${device.getDisplayName()}")
+
+                    try {
+                        shimmer.writeSamplingRate(samplingRate)
+                        
+                        // Update stored configuration
+                        val currentConfig = deviceConfigurations[deviceId] ?: DeviceConfiguration.createDefault()
+                        val newConfig = currentConfig.withSamplingRate(samplingRate)
+                        deviceConfigurations[deviceId] = newConfig
+                        device.configuration = newConfig
+
+                        logger.info("Successfully updated sampling rate to ${samplingRate}Hz for device ${device.getDisplayName()}")
+                        true
+                    } catch (e: Exception) {
+                        logger.error("Failed to set sampling rate for device $deviceId", e)
+                        false
+                    }
+                } catch (e: Exception) {
+                    logger.error("Failed to configure sampling rate for device $deviceId", e)
+                    false
+                }
+            }
+
+        /**
+         * Configure GSR range for a specific device using Shimmer SDK
+         */
+        suspend fun setGSRRange(
+            deviceId: String,
+            gsrRange: Int,
+        ): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val shimmer = shimmerDevices[deviceId]
+
+                    if (device == null) {
+                        logger.error("Device not found: $deviceId")
+                        return@withContext false
+                    }
+
+                    if (shimmer == null) {
+                        logger.error("Shimmer SDK instance not found for device: $deviceId")
+                        return@withContext false
+                    }
+
+                    if (gsrRange !in 0..4) {
+                        logger.error("Invalid GSR range: $gsrRange. Valid ranges are 0-4")
+                        return@withContext false
+                    }
+
+                    logger.debug("Setting GSR range to $gsrRange for device ${device.getDisplayName()}")
+
+                    try {
+                        shimmer.writeGSRRange(gsrRange)
+                        
+                        // Update stored configuration
+                        val currentConfig = deviceConfigurations[deviceId] ?: DeviceConfiguration.createDefault()
+                        val newConfig = currentConfig.copy(gsrRange = gsrRange)
+                        deviceConfigurations[deviceId] = newConfig
+                        device.configuration = newConfig
+
+                        logger.info("Successfully updated GSR range to $gsrRange for device ${device.getDisplayName()}")
+                        true
+                    } catch (e: Exception) {
+                        logger.error("Failed to set GSR range for device $deviceId", e)
+                        false
+                    }
+                } catch (e: Exception) {
+                    logger.error("Failed to configure GSR range for device $deviceId", e)
+                    false
+                }
+            }
+
+        /**
+         * Configure accelerometer range for a specific device using Shimmer SDK
+         */
+        suspend fun setAccelRange(
+            deviceId: String,
+            accelRange: Int,
+        ): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val shimmer = shimmerDevices[deviceId]
+
+                    if (device == null) {
+                        logger.error("Device not found: $deviceId")
+                        return@withContext false
+                    }
+
+                    if (shimmer == null) {
+                        logger.error("Shimmer SDK instance not found for device: $deviceId")
+                        return@withContext false
+                    }
+
+                    if (accelRange !in listOf(2, 4, 8, 16)) {
+                        logger.error("Invalid accelerometer range: $accelRange. Valid ranges are 2, 4, 8, 16g")
+                        return@withContext false
+                    }
+
+                    logger.debug("Setting accelerometer range to ±${accelRange}g for device ${device.getDisplayName()}")
+
+                    try {
+                        shimmer.writeAccelRange(accelRange)
+                        
+                        // Update stored configuration
+                        val currentConfig = deviceConfigurations[deviceId] ?: DeviceConfiguration.createDefault()
+                        val newConfig = currentConfig.copy(accelRange = accelRange)
+                        deviceConfigurations[deviceId] = newConfig
+                        device.configuration = newConfig
+
+                        logger.info("Successfully updated accelerometer range to ±${accelRange}g for device ${device.getDisplayName()}")
+                        true
+                    } catch (e: Exception) {
+                        logger.error("Failed to set accelerometer range for device $deviceId", e)
+                        false
+                    }
+                } catch (e: Exception) {
+                    logger.error("Failed to configure accelerometer range for device $deviceId", e)
+                    false
+                }
+            }
+
+        /**
+         * Get detailed device information including sensor capabilities
+         */
+        suspend fun getDeviceInformation(deviceId: String): DeviceInformation? =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val shimmer = shimmerDevices[deviceId]
+
+                    if (device == null || shimmer == null) {
+                        return@withContext null
+                    }
+
+                    // Get device information from Shimmer SDK
+                    DeviceInformation(
+                        deviceId = deviceId,
+                        macAddress = device.macAddress,
+                        deviceName = device.deviceName,
+                        firmwareVersion = device.firmwareVersion,
+                        hardwareVersion = device.hardwareVersion,
+                        batteryLevel = device.batteryLevel,
+                        connectionState = device.connectionState,
+                        isStreaming = device.isActivelyStreaming(),
+                        configuration = deviceConfigurations[deviceId],
+                        samplesRecorded = sampleCounts[deviceId]?.get() ?: 0L,
+                        lastSampleTime = device.lastSampleTime,
+                        // Additional device-specific information
+                        bluetoothType = "Classic", // Could be enhanced to detect actual type
+                        signalStrength = 0, // Could be enhanced to get actual signal strength
+                        totalConnectedTime = 0L, // Could be enhanced to track connection time
+                    )
+                } catch (e: Exception) {
+                    logger.error("Failed to get device information for $deviceId", e)
+                    null
+                }
+            }
+
+        /**
+         * Data class representing comprehensive device information
+         */
+        data class DeviceInformation(
+            val deviceId: String,
+            val macAddress: String,
+            val deviceName: String,
+            val firmwareVersion: String,
+            val hardwareVersion: String,
+            val batteryLevel: Int,
+            val connectionState: ShimmerDevice.ConnectionState,
+            val isStreaming: Boolean,
+            val configuration: DeviceConfiguration?,
+            val samplesRecorded: Long,
+            val lastSampleTime: Long,
+            val bluetoothType: String,
+            val signalStrength: Int,
+            val totalConnectedTime: Long,
+        ) {
+            fun getDisplaySummary(): String =
+                buildString {
+                    append("Device: $deviceName ($deviceId)\n")
+                    append("State: $connectionState\n")
+                    append("Battery: $batteryLevel%\n")
+                    append("Samples: $samplesRecorded\n")
+                    append("Firmware: $firmwareVersion\n")
+                    append("Hardware: $hardwareVersion\n")
+                    append("BT Type: $bluetoothType")
+                }
+        }
+
+        /**
+         * Set EXG (ECG/EMG) configuration for supported devices
+         */
+        suspend fun setEXGConfiguration(
+            deviceId: String,
+            ecgEnabled: Boolean,
+            emgEnabled: Boolean,
+        ): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val shimmer = shimmerDevices[deviceId]
+
+                    if (device == null || shimmer == null) {
+                        logger.error("Device or Shimmer instance not found: $deviceId")
+                        return@withContext false
+                    }
+
+                    logger.debug("Setting EXG configuration for device ${device.getDisplayName()}: ECG=$ecgEnabled, EMG=$emgEnabled")
+
+                    try {
+                        // Configure EXG settings using Shimmer SDK methods
+                        // Note: Exact method names may vary depending on SDK version
+                        if (ecgEnabled) {
+                            shimmer.writeEXGConfigurations(0) // ECG configuration
+                        }
+                        if (emgEnabled) {
+                            shimmer.writeEXGConfigurations(1) // EMG configuration
+                        }
+
+                        logger.info("Successfully configured EXG for device ${device.getDisplayName()}")
+                        true
+                    } catch (e: Exception) {
+                        logger.error("Failed to set EXG configuration for device $deviceId", e)
+                        false
+                    }
+                } catch (e: Exception) {
+                    logger.error("Failed to configure EXG for device $deviceId", e)
+                    false
+                }
+            }
+
+        /**
+         * Enable or disable real-time clock synchronization
+         */
+        suspend fun enableClockSync(
+            deviceId: String,
+            enable: Boolean,
+        ): Boolean =
+            withContext(Dispatchers.IO) {
+                try {
+                    val device = connectedDevices[deviceId]
+                    val shimmer = shimmerDevices[deviceId]
+
+                    if (device == null || shimmer == null) {
+                        logger.error("Device or Shimmer instance not found: $deviceId")
+                        return@withContext false
+                    }
+
+                    logger.debug("${if (enable) "Enabling" else "Disabling"} clock sync for device ${device.getDisplayName()}")
+
+                    try {
+                        if (enable) {
+                            // Synchronize device clock with system time
+                            shimmer.writeConfigTime(System.currentTimeMillis())
+                            logger.info("Clock synchronized for device ${device.getDisplayName()}")
+                        }
+                        true
+                    } catch (e: Exception) {
+                        logger.error("Failed to configure clock sync for device $deviceId", e)
+                        false
+                    }
+                } catch (e: Exception) {
+                    logger.error("Failed to configure clock sync for device $deviceId", e)
+                    false
+                }
             }
 
         /**

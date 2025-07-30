@@ -80,9 +80,18 @@ data class DeviceConfiguration(
     ) {
         GSR("GSR (Skin Conductance)", SENSOR_GSR),
         PPG("PPG (Heart Rate)", SENSOR_PPG),
-        ACCEL("Accelerometer", SENSOR_ACCEL),
-        GYRO("Gyroscope", SENSOR_GYRO),
-        MAG("Magnetometer", SENSOR_MAG),
+        ACCEL("Accelerometer (Combined)", SENSOR_ACCEL),
+        ACCEL_X("Accelerometer X", SENSOR_ACCEL),
+        ACCEL_Y("Accelerometer Y", SENSOR_ACCEL),
+        ACCEL_Z("Accelerometer Z", SENSOR_ACCEL),
+        GYRO("Gyroscope (Combined)", SENSOR_GYRO),
+        GYRO_X("Gyroscope X", SENSOR_GYRO),
+        GYRO_Y("Gyroscope Y", SENSOR_GYRO),
+        GYRO_Z("Gyroscope Z", SENSOR_GYRO),
+        MAG("Magnetometer (Combined)", SENSOR_MAG),
+        MAG_X("Magnetometer X", SENSOR_MAG),
+        MAG_Y("Magnetometer Y", SENSOR_MAG),
+        MAG_Z("Magnetometer Z", SENSOR_MAG),
         ECG("ECG", SENSOR_ECG),
         EMG("EMG", SENSOR_EMG),
         ;
@@ -92,6 +101,19 @@ data class DeviceConfiguration(
              * Get sensor channels that are typically available on Shimmer3 GSR+
              */
             fun getGSRPlusChannels(): Set<SensorChannel> = setOf(GSR, PPG, ACCEL, GYRO, MAG)
+
+            /**
+             * Get individual axis channels for 3D sensors
+             */
+            fun getAccelChannels(): Set<SensorChannel> = setOf(ACCEL_X, ACCEL_Y, ACCEL_Z)
+            fun getGyroChannels(): Set<SensorChannel> = setOf(GYRO_X, GYRO_Y, GYRO_Z)
+            fun getMagChannels(): Set<SensorChannel> = setOf(MAG_X, MAG_Y, MAG_Z)
+
+            /**
+             * Get all available individual sensor channels
+             */
+            fun getAllIndividualChannels(): Set<SensorChannel> = 
+                setOf(GSR, PPG, ECG, EMG) + getAccelChannels() + getGyroChannels() + getMagChannels()
         }
     }
 
