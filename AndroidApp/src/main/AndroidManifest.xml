@@ -113,7 +113,7 @@
         android:name=".MultiSensorApplication"
         android:label="MultiSensor Recording"
         android:allowBackup="true"
-        android:theme="@style/Theme.AppCompat.DayNight"
+        android:theme="@style/Theme.MultiSensorRecording"
         tools:replace="android:label">
         
         <activity

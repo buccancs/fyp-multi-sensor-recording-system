@@ -149,6 +149,7 @@
 
         <!-- Configuration Section -->
         <LinearLayout
+            android:id="@+id/configuration_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -265,6 +266,7 @@
 
         <!-- Data Streaming Section -->
         <LinearLayout
+            android:id="@+id/streaming_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

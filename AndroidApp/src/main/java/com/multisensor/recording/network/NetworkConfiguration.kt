@@ -43,10 +43,10 @@ class NetworkConfiguration
          * Set server IP address
          */
         fun setServerIp(ip: String) {
-            sharedPreferences
-                .edit {
-                    putString(KEY_SERVER_IP, ip)
-                }
+            sharedPreferences.edit().apply {
+                putString(KEY_SERVER_IP, ip)
+                apply()
+            }
         }
 
         /**
@@ -58,10 +58,10 @@ class NetworkConfiguration
          * Set legacy socket port
          */
         fun setLegacyPort(port: Int) {
-            sharedPreferences
-                .edit {
-                    putInt(KEY_LEGACY_PORT, port)
-                }
+            sharedPreferences.edit().apply {
+                putInt(KEY_LEGACY_PORT, port)
+                apply()
+            }
         }
 
         /**
@@ -73,10 +73,10 @@ class NetworkConfiguration
          * Set JSON socket port
          */
         fun setJsonPort(port: Int) {
-            sharedPreferences
-                .edit {
-                    putInt(KEY_JSON_PORT, port)
-                }
+            sharedPreferences.edit().apply {
+                putInt(KEY_JSON_PORT, port)
+                apply()
+            }
         }
 
         /**
@@ -93,24 +93,24 @@ class NetworkConfiguration
          * Update complete server configuration
          */
         fun updateServerConfiguration(config: ServerConfiguration) {
-            sharedPreferences
-                .edit {
-                    putString(KEY_SERVER_IP, config.serverIp)
-                        .putInt(KEY_LEGACY_PORT, config.legacyPort)
-                        .putInt(KEY_JSON_PORT, config.jsonPort)
-                }
+            sharedPreferences.edit().apply {
+                putString(KEY_SERVER_IP, config.serverIp)
+                putInt(KEY_LEGACY_PORT, config.legacyPort)
+                putInt(KEY_JSON_PORT, config.jsonPort)
+                apply()
+            }
         }
 
         /**
          * Reset to default configuration
          */
         fun resetToDefaults() {
-            sharedPreferences
-                .edit {
-                    putString(KEY_SERVER_IP, DEFAULT_SERVER_IP)
-                        .putInt(KEY_LEGACY_PORT, DEFAULT_LEGACY_PORT)
-                        .putInt(KEY_JSON_PORT, DEFAULT_JSON_PORT)
-                }
+            sharedPreferences.edit().apply {
+                putString(KEY_SERVER_IP, DEFAULT_SERVER_IP)
+                putInt(KEY_LEGACY_PORT, DEFAULT_LEGACY_PORT)
+                putInt(KEY_JSON_PORT, DEFAULT_JSON_PORT)
+                apply()
+            }
         }
 
         /**

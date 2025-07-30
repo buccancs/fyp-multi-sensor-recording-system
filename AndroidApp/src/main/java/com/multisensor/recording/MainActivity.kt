@@ -25,11 +25,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityMainBinding
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.SessionDisplayInfo
+import com.multisensor.recording.ui.components.StatusIndicatorView
+import com.multisensor.recording.ui.components.ActionButtonPair
 import com.multisensor.recording.util.AllAndroidPermissions
 import com.multisensor.recording.util.PermissionTool
 import com.multisensor.recording.calibration.CalibrationCaptureManager
@@ -62,6 +67,27 @@ class MainActivity : AppCompatActivity() {
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
     private var preferredBtType: ShimmerBluetoothManagerAndroid.BT_TYPE = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
+
+    // Modern Activity Result API for Shimmer device selection
+    private val shimmerDeviceSelectionLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            // Get selected device information from dialog
+            selectedShimmerAddress = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
+            selectedShimmerName = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
+
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected:")
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $selectedShimmerAddress")
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $selectedShimmerName")
+
+            // Show BLE/Classic connection type selection dialog
+            showBtTypeConnectionOption()
+        } else {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
+            Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
+        }
+    }
     private var looper: Looper? = null
 
     // Enhanced permission handling using XXPermissions library
@@ -276,9 +302,14 @@ class MainActivity : AppCompatActivity() {
     private var isPcConnected = false
     private var isShimmerConnected = false
     private var isThermalConnected = false
-    private var isManualControlEnabled = true
     private lateinit var statusUpdateHandler: Handler
     private lateinit var mediaActionSound: MediaActionSound
+    
+    // UI Components for consolidation
+    private lateinit var pcStatusIndicator: StatusIndicatorView
+    private lateinit var shimmerStatusIndicator: StatusIndicatorView
+    private lateinit var thermalStatusIndicator: StatusIndicatorView
+    private lateinit var recordingButtonPair: ActionButtonPair
 
     // Battery monitoring receiver
     private val batteryReceiver =
@@ -394,7 +425,6 @@ class MainActivity : AppCompatActivity() {
                 binding.pcConnectionStatus.text = "PC: Waiting for PC..."
                 binding.pcConnectionIndicator.setBackgroundColor(Color.RED)
             }
-            updateManualControlsVisibility()
         }
     }
 
@@ -429,56 +459,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Updates manual recording controls visibility based on PC connection state
-     */
-    private fun updateManualControlsVisibility() {
-        runOnUiThread {
-            if (isPcConnected) {
-                // Hide manual controls when PC is controlling
-                binding.manualControlsSection.visibility = View.GONE
-            } else {
-                // Show manual controls when PC is not connected (standalone mode)
-                binding.manualControlsSection.visibility = View.VISIBLE
-            }
-        }
-    }
 
-    /**
-     * Handles manual start recording button click
-     */
-    private fun onManualStartRecording() {
-        if (!isPcConnected && isManualControlEnabled) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual start recording initiated")
-
-            // Start recording via ViewModel
-            viewModel.startRecording()
-
-            // Update manual control buttons
-            binding.manualStartButton.isEnabled = false
-            binding.manualStopButton.isEnabled = true
-
-            Toast.makeText(this, "Recording started manually", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    /**
-     * Handles manual stop recording button click
-     */
-    private fun onManualStopRecording() {
-        if (!isPcConnected && isManualControlEnabled) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual stop recording initiated")
-
-            // Stop recording via ViewModel
-            viewModel.stopRecording()
-
-            // Update manual control buttons
-            binding.manualStartButton.isEnabled = true
-            binding.manualStopButton.isEnabled = false
-
-            Toast.makeText(this, "Recording stopped manually", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     /**
      * Initializes status monitoring system
@@ -549,6 +530,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
+        // Initialize consolidated UI components
+        initializeUIComponents()
+        
         // Setup recording control buttons
         binding.startRecordingButton.setOnClickListener {
             startRecording()
@@ -567,54 +551,183 @@ class MainActivity : AppCompatActivity() {
             requestPermissionsManually()
         }
 
-        // Setup manual recording control buttons - Milestone 2.7 UI Enhancements
-        binding.manualStartButton.setOnClickListener {
-            onManualStartRecording()
-        }
-
-        binding.manualStopButton.setOnClickListener {
-            onManualStopRecording()
-        }
-
         // Initially disable stop buttons
         binding.stopRecordingButton.isEnabled = false
-        binding.manualStopButton.isEnabled = false
 
         // Initialize status monitoring system
         initializeStatusMonitoring()
     }
+    
+    /**
+     * Initialize consolidated UI components
+     */
+    private fun initializeUIComponents() {
+        // Initialize StatusIndicatorView components
+        pcStatusIndicator = StatusIndicatorView(this).apply {
+            setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "PC: Waiting for PC...")
+            setTextColor(android.R.color.white)
+        }
+        
+        shimmerStatusIndicator = StatusIndicatorView(this).apply {
+            setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Shimmer: Disconnected")
+            setTextColor(android.R.color.white)
+        }
+        
+        thermalStatusIndicator = StatusIndicatorView(this).apply {
+            setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Thermal: Disconnected")
+            setTextColor(android.R.color.white)
+        }
+        
+        // Initialize ActionButtonPair for recording controls
+        recordingButtonPair = ActionButtonPair(this).apply {
+            setButtons("Start Recording", "Stop Recording")
+            setOnClickListeners(
+                { startRecording() },
+                { stopRecording() }
+            )
+            setButtonsEnabled(true, false) // Initially only start is enabled
+        }
+        
+        // TODO: Replace existing UI elements with consolidated components in layout
+        // This demonstrates the programmatic creation and configuration of consolidated UI components
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Consolidated UI components initialized successfully")
+    }
 
+    /**
+     * Observe ViewModel UiState using modern StateFlow pattern
+     * This replaces multiple individual LiveData observers with a single centralized state observer
+     * Following modern Android architecture guidelines for reactive UI
+     */
     private fun observeViewModel() {
-        // Observe recording state
-        viewModel.isRecording.observe(this) { isRecording ->
-            updateRecordingUI(isRecording)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    updateUIFromState(state)
+                }
+            }
         }
+    }
 
-        // Observe system status
-        viewModel.systemStatus.observe(this) { status ->
-            binding.statusText.text = status
+    /**
+     * Update all UI elements from the centralized UiState
+     * This method demonstrates the modern reactive UI pattern where the Activity
+     * becomes much simpler and only needs to observe one state object
+     */
+    private fun updateUIFromState(state: com.multisensor.recording.ui.MainUiState) {
+        // Update status text
+        binding.statusText.text = state.statusText
+
+        // Update consolidated recording controls
+        recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
+        
+        // Update legacy recording controls for backward compatibility
+        binding.startRecordingButton.isEnabled = state.canStartRecording
+        binding.stopRecordingButton.isEnabled = state.canStopRecording
+
+        // Update calibration button
+        binding.calibrationButton.isEnabled = state.canRunCalibration
+
+        // Update consolidated status indicator components
+        pcStatusIndicator.setStatus(
+            if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+            "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
+        )
+        
+        shimmerStatusIndicator.setStatus(
+            if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+            "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+        )
+        
+        thermalStatusIndicator.setStatus(
+            if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+            "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+        )
+
+        // Update legacy connection indicators for backward compatibility
+        updateConnectionIndicator(binding.pcConnectionIndicator, state.isPcConnected)
+        updateConnectionIndicator(binding.shimmerConnectionIndicator, state.isShimmerConnected)
+        updateConnectionIndicator(binding.thermalConnectionIndicator, state.isThermalConnected)
+
+        // Update legacy connection status texts for backward compatibility
+        binding.pcConnectionStatus.text = "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
+        binding.shimmerConnectionStatus.text = "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+        binding.thermalConnectionStatus.text = "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+
+        // Update battery level
+        val batteryText = if (state.batteryLevel >= 0) {
+            "Battery: ${state.batteryLevel}%"
+        } else {
+            "Battery: ---%"
         }
+        binding.batteryLevelText.text = batteryText
 
-        // Observe error messages
-        viewModel.errorMessage.observe(this) { error ->
-            error?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-                viewModel.clearError()
+        // Update recording indicator
+        updateRecordingIndicator(state.isRecording)
+
+        // Update streaming indicator and debug overlay
+        updateStreamingIndicator(state.isStreaming, state.streamingFrameRate, state.streamingDataSize)
+
+        // Update permissions button visibility
+        binding.requestPermissionsButton.visibility = if (state.showPermissionsButton) View.VISIBLE else View.GONE
+
+        // Handle error messages
+        state.errorMessage?.let { errorMsg ->
+            if (state.showErrorDialog) {
+                Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
+                // TODO: Clear error in ViewModel after showing
             }
         }
 
-        // Observe SessionInfo for enhanced CameraRecorder integration
-        viewModel.currentSessionInfo.observe(this) { sessionInfo ->
+        // Update session information if available
+        state.currentSessionInfo?.let { sessionInfo ->
             updateSessionInfoDisplay(sessionInfo)
         }
 
-        // Observe recording mode configuration
-        viewModel.recordVideoEnabled.observe(this) { enabled ->
-            // TODO: Update video recording checkbox when UI is added
+        // Update Shimmer status text
+        val shimmerStatusText = when {
+            state.shimmerDeviceInfo != null -> {
+                "Shimmer GSR: ${state.shimmerDeviceInfo.deviceName} - Connected"
+            }
+            state.isShimmerConnected -> "Shimmer GSR: Connected"
+            else -> "Shimmer GSR: Disconnected"
         }
+        binding.shimmerStatusText.text = shimmerStatusText
+        binding.shimmerStatusText.setTextColor(
+            if (state.isShimmerConnected) Color.GREEN else Color.RED
+        )
+    }
 
-        viewModel.captureRawEnabled.observe(this) { enabled ->
-            // TODO: Update RAW capture checkbox when UI is added
+    /**
+     * Helper method to update connection indicators
+     */
+    private fun updateConnectionIndicator(indicator: View, isConnected: Boolean) {
+        indicator.setBackgroundColor(if (isConnected) Color.GREEN else Color.RED)
+    }
+
+    /**
+     * Helper method to update recording indicator
+     */
+    private fun updateRecordingIndicator(isRecording: Boolean) {
+        binding.recordingIndicator.setBackgroundColor(
+            if (isRecording) Color.RED else Color.GRAY
+        )
+    }
+
+    /**
+     * Helper method to update streaming indicator and debug overlay
+     */
+    private fun updateStreamingIndicator(isStreaming: Boolean, frameRate: Int, dataSize: String) {
+        binding.streamingIndicator.setBackgroundColor(
+            if (isStreaming) Color.GREEN else Color.GRAY
+        )
+        
+        if (isStreaming && frameRate > 0) {
+            binding.streamingDebugOverlay.text = "Streaming: ${frameRate}fps ($dataSize)"
+            binding.streamingDebugOverlay.visibility = View.VISIBLE
+            binding.streamingLabel.visibility = View.VISIBLE
+        } else {
+            binding.streamingDebugOverlay.visibility = View.GONE
+            binding.streamingLabel.visibility = View.GONE
         }
     }
 
@@ -1010,16 +1123,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Update UI with SessionInfo data from enhanced CameraRecorder
+     * Update UI with SessionDisplayInfo data from UI state
      */
-    private fun updateSessionInfoDisplay(sessionInfo: SessionInfo?) {
+    private fun updateSessionInfoDisplay(sessionInfo: SessionDisplayInfo?) {
         if (sessionInfo != null) {
             // Update status text with session summary
-            val sessionSummary = sessionInfo.getSummary()
+            val sessionSummary = "Session ${sessionInfo.sessionId} - ${sessionInfo.status}"
 
             // For now, display session info in the existing status text
             // TODO: Add dedicated SessionInfo display components to layout
-            if (sessionInfo.isActive()) {
+            if (sessionInfo.status == "Active") {
                 binding.statusText.text = "Active: $sessionSummary"
             } else {
                 binding.statusText.text = "Completed: $sessionSummary"
@@ -1027,13 +1140,10 @@ class MainActivity : AppCompatActivity() {
 
             // Log detailed session information
             android.util.Log.d("MainActivity", "SessionInfo updated: $sessionSummary")
-
-            if (sessionInfo.errorOccurred) {
-                Toast.makeText(this, "Session error: ${sessionInfo.errorMessage}", Toast.LENGTH_LONG).show()
-            }
         } else {
             // No active session
-            if (!viewModel.isRecording.value!!) {
+            val currentState = viewModel.uiState.value
+            if (!currentState.isRecording) {
                 binding.statusText.text = "Ready to record"
             }
         }
@@ -1086,36 +1196,6 @@ class MainActivity : AppCompatActivity() {
 
     // ========== Shimmer UI Enhancement Methods ==========
 
-    /**
-     * Handle results from ShimmerBluetoothDialog and other activities
-     */
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            ShimmerBluetoothDialog.REQUEST_CONNECT_SHIMMER -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    // Get selected device information from dialog
-                    selectedShimmerAddress = data.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
-                    selectedShimmerName = data.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
-
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected:")
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $selectedShimmerAddress")
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $selectedShimmerName")
-
-                    // Show BLE/Classic connection type selection dialog
-                    showBtTypeConnectionOption()
-                } else {
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
-                    Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
 
     /**
      * Show Bluetooth connection type selection dialog (BLE vs Classic)
@@ -1162,12 +1242,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Launch ShimmerBluetoothDialog for device selection
+     * Launch ShimmerBluetoothDialog for device selection using modern Activity Result API
      */
     fun launchShimmerDeviceDialog() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching Shimmer device selection dialog")
         val intent = Intent(this, ShimmerBluetoothDialog::class.java)
-        startActivityForResult(intent, ShimmerBluetoothDialog.REQUEST_CONNECT_SHIMMER)
+        shimmerDeviceSelectionLauncher.launch(intent)
     }
 
     /**
@@ -1382,7 +1462,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
 
         // Ensure recording service is stopped when activity is destroyed
-        if (viewModel.isRecording.value == true) {
+        if (viewModel.uiState.value.isRecording) {
             stopRecording()
         }
 

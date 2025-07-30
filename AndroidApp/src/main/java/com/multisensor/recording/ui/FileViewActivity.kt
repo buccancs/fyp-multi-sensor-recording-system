@@ -527,24 +527,3 @@ class FileViewActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
-
-/**
- * Data class representing a file item in the browser
- */
-data class FileItem(
-    val file: File,
-    val type: FileType,
-    val sessionId: String,
-    val metadata: String = "",
-)
-
-/**
- * Enum representing different file types
- */
-enum class FileType(
-    val displayName: String,
-) {
-    VIDEO("Video"),
-    RAW_IMAGE("RAW Image"),
-    THERMAL_DATA("Thermal Data"),
-}

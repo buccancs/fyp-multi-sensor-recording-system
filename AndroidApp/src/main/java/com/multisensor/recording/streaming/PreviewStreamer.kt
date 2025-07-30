@@ -6,7 +6,8 @@ import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
 import android.media.Image
-import com.multisensor.recording.network.SocketController
+import com.multisensor.recording.network.JsonSocketClient
+import com.multisensor.recording.network.PreviewFrameMessage
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +30,7 @@ import javax.inject.Inject
 class PreviewStreamer
     @Inject
     constructor(
-        private val socketController: SocketController,
+        private val jsonSocketClient: JsonSocketClient,
         private val logger: Logger,
     ) {
         private var streamingScope: CoroutineScope? = null
@@ -313,7 +314,7 @@ class PreviewStreamer
                         Pair((maxFrameHeight * aspectRatio).toInt(), maxFrameHeight)
                     }
 
-                val resizedBitmap = bitmap.scale(newWidth, newHeight)
+                val resizedBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
                 bitmap.recycle()
 
                 val outputStream = ByteArrayOutputStream()
@@ -341,7 +342,7 @@ class PreviewStreamer
             height: Int,
         ): ByteArray? =
             try {
-                val bitmap = createBitmap(width, height)
+                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                 val pixels = IntArray(width * height)
 
                 // Find min and max temperature values for normalization
@@ -431,18 +432,22 @@ class PreviewStreamer
         }
 
         /**
-         * Send preview frame to PC via SocketController
+         * Send preview frame to PC via JsonSocketClient
          */
         private fun sendPreviewFrame(
             tag: String,
             jpegBytes: ByteArray,
         ) {
             try {
-                // Create message with tag and base64 encoded image
+                // Create JSON message with base64 encoded image
                 val base64Image = android.util.Base64.encodeToString(jpegBytes, android.util.Base64.NO_WRAP)
-                val message = "$tag:$base64Image"
+                val previewMessage = PreviewFrameMessage(
+                    cam = tag,
+                    timestamp = System.currentTimeMillis(),
+                    image = base64Image
+                )
 
-                socketController.sendMessage(message)
+                jsonSocketClient.sendMessage(previewMessage)
 
                 logger.debug("Sent $tag frame (${jpegBytes.size} bytes)")
             } catch (e: Exception) {

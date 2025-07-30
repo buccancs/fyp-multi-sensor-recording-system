@@ -16,7 +16,6 @@ import com.multisensor.recording.network.CommandProcessor
 import com.multisensor.recording.network.JsonSocketClient
 import com.multisensor.recording.network.NetworkConfiguration
 import com.multisensor.recording.network.NetworkQualityMonitor
-import com.multisensor.recording.network.SocketController
 import com.multisensor.recording.recording.AdaptiveFrameRateController
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
@@ -50,8 +49,6 @@ class RecordingService : Service() {
     @Inject
     lateinit var sessionManager: SessionManager
 
-    @Inject
-    lateinit var socketController: SocketController
 
     @Inject
     lateinit var jsonSocketClient: JsonSocketClient
@@ -135,13 +132,6 @@ class RecordingService : Service() {
         logger.info("RecordingService created")
         createNotificationChannel()
 
-        // Initialize legacy SocketController with callback (for Milestone 2.5 compatibility)
-        socketController.setServiceCallback { command ->
-            handleSocketCommand(command)
-        }
-
-        // Start legacy socket connection (port 8080)
-        socketController.startListening()
 
         // Initialize Milestone 2.6 JSON Socket Client and Command Processor
         initializeJsonCommunication()
@@ -267,8 +257,6 @@ class RecordingService : Service() {
             logger.error("Error stopping adaptive frame rate control system", e)
         }
 
-        // Stop legacy socket connection (port 8080)
-        socketController.stop()
 
         // Stop JSON socket connection (port 9000)
         jsonSocketClient.disconnect()
@@ -290,8 +278,6 @@ class RecordingService : Service() {
                 // Gather comprehensive status information
                 val statusInfo = gatherStatusInformation()
 
-                // Broadcast via legacy socket connection (Milestone 2.5 compatibility)
-                broadcastStatusViaLegacySocket(statusInfo)
 
                 // Broadcast via JSON socket connection (Milestone 2.6)
                 broadcastStatusViaJsonSocket(statusInfo)
@@ -338,19 +324,6 @@ class RecordingService : Service() {
             DeviceStatusInfo.createErrorStatus(e.message ?: "Unknown error")
         }
 
-    /**
-     * Broadcast status via legacy socket connection
-     */
-    private fun broadcastStatusViaLegacySocket(statusInfo: DeviceStatusInfo) {
-        try {
-            val statusMessage = formatLegacyStatusMessage(statusInfo)
-            // Note: SocketController doesn't have a direct broadcast method
-            // Status will be sent when PC requests it via socket commands
-            logger.debug("Legacy status prepared: $statusMessage")
-        } catch (e: Exception) {
-            logger.error("Failed to broadcast status via legacy socket", e)
-        }
-    }
 
     /**
      * Broadcast status via JSON socket connection
@@ -393,16 +366,6 @@ class RecordingService : Service() {
         }
     }
 
-    /**
-     * Format status message for legacy socket protocol
-     */
-    private fun formatLegacyStatusMessage(statusInfo: DeviceStatusInfo): String =
-        "STATUS:recording=${statusInfo.isRecording}," +
-            "session=${statusInfo.currentSessionId ?: "none"}," +
-            "battery=${statusInfo.batteryLevel ?: "unknown"}," +
-            "storage=${statusInfo.availableStorage ?: "unknown"}," +
-            "streaming=${statusInfo.previewStreamingActive}," +
-            "timestamp=${statusInfo.timestamp}"
 
     /**
      * Get camera recording status
@@ -488,53 +451,12 @@ class RecordingService : Service() {
      */
     private fun getConnectionStatus(): String =
         try {
-            val legacyConnected = socketController.isConnected()
             val jsonConnected = jsonSocketClient.isConnected()
-
-            when {
-                legacyConnected && jsonConnected -> "fully_connected"
-                legacyConnected || jsonConnected -> "partially_connected"
-                else -> "disconnected"
-            }
+            if (jsonConnected) "connected" else "disconnected"
         } catch (e: Exception) {
             "error"
         }
 
-    /**
-     * Handle commands received from PC via SocketController
-     */
-    private fun handleSocketCommand(command: String) {
-        logger.info("Processing socket command: $command")
-
-        when (command.uppercase()) {
-            "START" -> {
-                if (!isRecording) {
-                    startRecording()
-                } else {
-                    logger.warning("Recording already in progress - ignoring START command")
-                }
-            }
-
-            "STOP" -> {
-                if (isRecording) {
-                    serviceScope.launch {
-                        stopRecordingInternal()
-                    }
-                } else {
-                    logger.warning("No recording in progress - ignoring STOP command")
-                }
-            }
-
-            "CALIBRATE" -> {
-                // TODO: Implement calibration trigger
-                logger.info("Calibration command received - not yet implemented")
-            }
-
-            else -> {
-                logger.warning("Unknown socket command: $command")
-            }
-        }
-    }
 
     private fun startRecording() {
         if (isRecording) {

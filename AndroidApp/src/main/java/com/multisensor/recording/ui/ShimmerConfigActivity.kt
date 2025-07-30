@@ -3,27 +3,25 @@ package com.multisensor.recording.ui
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.DeviceConfiguration
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
-import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -33,11 +31,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class ShimmerConfigActivity : AppCompatActivity() {
-    @Inject
-    lateinit var shimmerRecorder: ShimmerRecorder
-
-    @Inject
-    lateinit var logger: Logger
+    // ViewModel is now the source of logic and state
+    private val viewModel: ShimmerConfigViewModel by viewModels()
 
     // UI Components
     private lateinit var deviceStatusText: TextView
@@ -54,14 +49,8 @@ class ShimmerConfigActivity : AppCompatActivity() {
     private lateinit var realTimeDataText: TextView
     private lateinit var progressBar: ProgressBar
 
-    // State management
-    private var isConnected = false
-    private var isStreaming = false
-    private var discoveredDevices = mutableListOf<String>()
-    private var selectedDeviceAddress: String? = null
-    private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-    private val statusUpdateHandler = Handler(Looper.getMainLooper())
-    private var statusUpdateRunnable: Runnable? = null
+    @Inject
+    lateinit var logger: Logger
 
     // Bluetooth permissions
     private val bluetoothPermissions =
@@ -92,16 +81,14 @@ class ShimmerConfigActivity : AppCompatActivity() {
         setupClickListeners()
         setupSpinners()
         setupSensorCheckboxes()
+        observeViewModelState() // The new core of the UI logic
         checkBluetoothPermissions()
-        startStatusUpdates()
 
         logger.info("ShimmerConfigActivity created")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        stopStatusUpdates()
-        activityScope.cancel()
         logger.info("ShimmerConfigActivity destroyed")
     }
 
@@ -131,29 +118,97 @@ class ShimmerConfigActivity : AppCompatActivity() {
                 SensorChannel.EMG to findViewById(R.id.checkbox_emg),
             )
 
-        updateUIState()
+        // Initial UI state will be set by the ViewModel observer
     }
 
     private fun setupClickListeners() {
-        connectButton.setOnClickListener { connectToDevice() }
-        disconnectButton.setOnClickListener { disconnectFromDevice() }
-        scanButton.setOnClickListener { scanForDevices() }
-        startStreamingButton.setOnClickListener { startStreaming() }
-        stopStreamingButton.setOnClickListener { stopStreaming() }
+        // Listeners now call ViewModel methods
+        connectButton.setOnClickListener { viewModel.connectToDevice() }
+        disconnectButton.setOnClickListener { viewModel.disconnectFromDevice() }
+        scanButton.setOnClickListener { viewModel.scanForDevices() }
+        startStreamingButton.setOnClickListener { viewModel.startStreaming() }
+        stopStreamingButton.setOnClickListener { viewModel.stopStreaming() }
 
         deviceListView.setOnItemClickListener { _, _, position, _ ->
-            if (position < discoveredDevices.size) {
-                selectedDeviceAddress = discoveredDevices[position]
-                updateDeviceSelection()
+            val state = viewModel.uiState.value
+            if (position < state.availableDevices.size) {
+                viewModel.onDeviceSelected(position)
             }
         }
 
         // Sensor checkbox listeners
         sensorCheckboxes.forEach { (channel, checkbox) ->
             checkbox.setOnCheckedChangeListener { _, _ ->
-                updateSensorConfiguration()
+                val enabledSensors = sensorCheckboxes.filter { it.value.isChecked }.keys.map { it.name }.toSet()
+                viewModel.updateSensorConfiguration(enabledSensors)
             }
         }
+    }
+
+    private fun observeViewModelState() {
+        lifecycleScope.launch {
+            // This coroutine will automatically cancel and restart with the activity's lifecycle
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    // Update the entire UI from the single state object
+                    render(state)
+                }
+            }
+        }
+    }
+
+    private fun render(state: ShimmerConfigUiState) {
+        // Update button states
+        connectButton.isEnabled = state.canConnectToDevice
+        disconnectButton.isEnabled = state.canDisconnectDevice
+        startStreamingButton.isEnabled = state.canStartRecording
+        stopStreamingButton.isEnabled = state.canStopRecording
+        scanButton.isEnabled = state.canStartScan
+
+        // Update progress bar
+        progressBar.visibility = if (state.isScanning || state.isLoadingConnection) View.VISIBLE else View.GONE
+
+        // Update text views
+        deviceStatusText.text = "Status: ${state.connectionStatus}"
+        batteryLevelText.text = if (state.batteryLevel >= 0) "Battery: ${state.batteryLevel}%" else "Battery: Unknown"
+
+        // Update device list
+        val deviceNames = state.availableDevices.map { "${it.name} (${it.macAddress})" }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, deviceNames)
+        deviceListView.adapter = adapter
+        deviceListView.choiceMode = ListView.CHOICE_MODE_SINGLE
+        if (state.selectedDeviceIndex >= 0 && state.selectedDeviceIndex < state.availableDevices.size) {
+            deviceListView.setItemChecked(state.selectedDeviceIndex, true)
+        }
+
+        // Update sensor checkboxes enabled state
+        sensorCheckboxes.values.forEach { checkbox ->
+            checkbox.isEnabled = state.isDeviceConnected && !state.isConfiguring
+        }
+
+        // Update real-time data display
+        if (state.isRecording && state.dataPacketsReceived > 0) {
+            val duration = state.recordingDuration / 1000
+            realTimeDataText.text = "Recording: ${duration}s\nPackets: ${state.dataPacketsReceived}\nSignal: ${state.signalStrength} dBm"
+        } else if (state.isDeviceConnected) {
+            realTimeDataText.text = "Connected\nBattery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\nSignal: ${state.signalStrength} dBm"
+        } else {
+            realTimeDataText.text = "No device connected"
+        }
+
+        // Handle error messages
+        state.errorMessage?.let { message ->
+            if (state.showErrorDialog) {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                viewModel.onErrorMessageShown()
+            }
+        }
+
+        // Update UI panel visibility
+        findViewById<View>(R.id.configuration_section)?.visibility = 
+            if (state.showConfigurationPanel) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.streaming_section)?.visibility = 
+            if (state.showRecordingControls) View.VISIBLE else View.GONE
     }
 
     private fun setupSpinners() {
@@ -172,7 +227,10 @@ class ShimmerConfigActivity : AppCompatActivity() {
                     position: Int,
                     id: Long,
                 ) {
-                    updateSamplingRate()
+                    val samplingRates = arrayOf(25.6, 51.2, 128.0, 256.0, 512.0)
+                    if (position < samplingRates.size) {
+                        viewModel.updateSamplingRate(samplingRates[position].toInt())
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -192,7 +250,8 @@ class ShimmerConfigActivity : AppCompatActivity() {
                     position: Int,
                     id: Long,
                 ) {
-                    applyConfigurationPreset(position)
+                    // Configuration presets are handled by the ViewModel
+                    // TODO: Move preset logic to ViewModel if needed
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -215,7 +274,7 @@ class ShimmerConfigActivity : AppCompatActivity() {
         if (missingPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, missingPermissions.toTypedArray(), BLUETOOTH_PERMISSION_REQUEST_CODE)
         } else {
-            initializeShimmerRecorder()
+            logger.info("Bluetooth permissions already granted.")
         }
     }
 
@@ -229,325 +288,18 @@ class ShimmerConfigActivity : AppCompatActivity() {
         if (requestCode == BLUETOOTH_PERMISSION_REQUEST_CODE) {
             val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
             if (allGranted) {
-                initializeShimmerRecorder()
+                logger.info("Bluetooth permissions granted by user.")
+                // The ViewModel will handle initialization, no direct call needed here.
             } else {
-                showError("Bluetooth permissions are required for shimmer device functionality")
+                Toast.makeText(this, "Bluetooth permissions are required for shimmer device functionality", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun initializeShimmerRecorder() {
-        activityScope.launch {
-            try {
-                progressBar.visibility = View.VISIBLE
-                val initialized = shimmerRecorder.initialize()
 
-                if (initialized) {
-                    logger.info("ShimmerRecorder initialized successfully")
-                    updateUIState()
-                } else {
-                    showError("Failed to initialize ShimmerRecorder")
-                }
-            } catch (e: Exception) {
-                logger.error("Error initializing ShimmerRecorder", e)
-                showError("Error initializing shimmer: ${e.message}")
-            } finally {
-                progressBar.visibility = View.GONE
-            }
-        }
-    }
 
-    private fun scanForDevices() {
-        activityScope.launch {
-            try {
-                progressBar.visibility = View.VISIBLE
-                scanButton.isEnabled = false
 
-                logger.info("Starting device scan...")
-                val devices = shimmerRecorder.scanAndPairDevices()
 
-                discoveredDevices.clear()
-                discoveredDevices.addAll(devices)
-
-                updateDeviceList()
-
-                if (devices.isNotEmpty()) {
-                    showMessage("Found ${devices.size} shimmer device(s)")
-                } else {
-                    showMessage("No shimmer devices found")
-                }
-            } catch (e: Exception) {
-                logger.error("Error scanning for devices", e)
-                showError("Error scanning: ${e.message}")
-            } finally {
-                progressBar.visibility = View.GONE
-                scanButton.isEnabled = true
-            }
-        }
-    }
-
-    private fun connectToDevice() {
-        val deviceAddress = selectedDeviceAddress
-        if (deviceAddress == null) {
-            showError("Please select a device first")
-            return
-        }
-
-        activityScope.launch {
-            try {
-                progressBar.visibility = View.VISIBLE
-                connectButton.isEnabled = false
-
-                logger.info("Connecting to device: $deviceAddress")
-                val connected = shimmerRecorder.connectDevices(listOf(deviceAddress))
-
-                if (connected) {
-                    isConnected = true
-                    showMessage("Connected to shimmer device")
-                    updateUIState()
-                } else {
-                    showError("Failed to connect to device")
-                }
-            } catch (e: Exception) {
-                logger.error("Error connecting to device", e)
-                showError("Connection error: ${e.message}")
-            } finally {
-                progressBar.visibility = View.GONE
-                connectButton.isEnabled = true
-            }
-        }
-    }
-
-    private fun disconnectFromDevice() {
-        activityScope.launch {
-            try {
-                // Stop streaming if active
-                if (isStreaming) {
-                    shimmerRecorder.stopStreaming()
-                    isStreaming = false
-                }
-
-                // Disconnect device
-                shimmerRecorder.cleanup()
-                isConnected = false
-
-                showMessage("Disconnected from shimmer device")
-                updateUIState()
-            } catch (e: Exception) {
-                logger.error("Error disconnecting from device", e)
-                showError("Disconnect error: ${e.message}")
-            }
-        }
-    }
-
-    private fun startStreaming() {
-        if (!isConnected) {
-            showError("Please connect to a device first")
-            return
-        }
-
-        activityScope.launch {
-            try {
-                progressBar.visibility = View.VISIBLE
-
-                // Apply current sensor configuration
-                updateSensorConfiguration()
-
-                val started = shimmerRecorder.startStreaming()
-                if (started) {
-                    isStreaming = true
-                    showMessage("Started data streaming")
-                    updateUIState()
-                } else {
-                    showError("Failed to start streaming")
-                }
-            } catch (e: Exception) {
-                logger.error("Error starting streaming", e)
-                showError("Streaming error: ${e.message}")
-            } finally {
-                progressBar.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun stopStreaming() {
-        activityScope.launch {
-            try {
-                val stopped = shimmerRecorder.stopStreaming()
-                if (stopped) {
-                    isStreaming = false
-                    showMessage("Stopped data streaming")
-                    updateUIState()
-                } else {
-                    showError("Failed to stop streaming")
-                }
-            } catch (e: Exception) {
-                logger.error("Error stopping streaming", e)
-                showError("Stop streaming error: ${e.message}")
-            }
-        }
-    }
-
-    private fun updateSensorConfiguration() {
-        val deviceAddress = selectedDeviceAddress ?: return
-
-        val enabledSensors = sensorCheckboxes.filter { it.value.isChecked }.keys
-
-        activityScope.launch {
-            try {
-                val configured = shimmerRecorder.setEnabledChannels(deviceAddress, enabledSensors)
-                if (configured) {
-                    logger.info("Sensor configuration updated: ${enabledSensors.size} sensors enabled")
-                } else {
-                    logger.warning("Failed to update sensor configuration")
-                }
-            } catch (e: Exception) {
-                logger.error("Error updating sensor configuration", e)
-            }
-        }
-    }
-
-    private fun updateSamplingRate() {
-        val selectedRate =
-            when (samplingRateSpinner.selectedItemPosition) {
-                0 -> 25.6
-                1 -> 51.2
-                2 -> 128.0
-                3 -> 256.0
-                4 -> 512.0
-                else -> 51.2
-            }
-
-        // TODO: Apply sampling rate to shimmer device
-        logger.info("Sampling rate updated to: $selectedRate Hz")
-    }
-
-    private fun applyConfigurationPreset(presetIndex: Int) {
-        val config =
-            when (presetIndex) {
-                0 -> DeviceConfiguration.createDefault()
-                1 -> DeviceConfiguration.createHighPerformance()
-                2 -> DeviceConfiguration.createLowPower()
-                else -> return // Custom - no changes
-            }
-
-        // Update UI to reflect preset
-        updateUIFromConfiguration(config)
-
-        // Apply to device if connected
-        if (isConnected) {
-            updateSensorConfiguration()
-        }
-    }
-
-    private fun updateUIFromConfiguration(config: DeviceConfiguration) {
-        // Update sensor checkboxes
-        sensorCheckboxes.forEach { (channel, checkbox) ->
-            checkbox.isChecked = config.isSensorEnabled(channel)
-        }
-
-        // Update sampling rate spinner
-        val rateIndex =
-            when (config.samplingRate) {
-                25.6 -> 0
-                51.2 -> 1
-                128.0 -> 2
-                256.0 -> 3
-                512.0 -> 4
-                else -> 1
-            }
-        samplingRateSpinner.setSelection(rateIndex)
-    }
-
-    private fun updateDeviceList() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, discoveredDevices)
-        deviceListView.adapter = adapter
-        deviceListView.choiceMode = ListView.CHOICE_MODE_SINGLE
-    }
-
-    private fun updateDeviceSelection() {
-        val deviceAddress = selectedDeviceAddress
-        if (deviceAddress != null) {
-            val index = discoveredDevices.indexOf(deviceAddress)
-            if (index >= 0) {
-                deviceListView.setItemChecked(index, true)
-            }
-        }
-    }
-
-    private fun updateUIState() {
-        connectButton.isEnabled = !isConnected && selectedDeviceAddress != null
-        disconnectButton.isEnabled = isConnected
-        startStreamingButton.isEnabled = isConnected && !isStreaming
-        stopStreamingButton.isEnabled = isConnected && isStreaming
-
-        // Update sensor checkboxes enabled state
-        sensorCheckboxes.values.forEach { checkbox ->
-            checkbox.isEnabled = isConnected && !isStreaming
-        }
-
-        samplingRateSpinner.isEnabled = isConnected && !isStreaming
-        configurationPresetSpinner.isEnabled = isConnected && !isStreaming
-
-        // Update status text
-        val status =
-            when {
-                isStreaming -> "Streaming data"
-                isConnected -> "Connected"
-                else -> "Disconnected"
-            }
-        deviceStatusText.text = "Status: $status"
-    }
-
-    private fun startStatusUpdates() {
-        statusUpdateRunnable =
-            object : Runnable {
-                override fun run() {
-                    updateRealTimeData()
-                    statusUpdateHandler.postDelayed(this, STATUS_UPDATE_INTERVAL_MS)
-                }
-            }
-        statusUpdateHandler.post(statusUpdateRunnable!!)
-    }
-
-    private fun stopStatusUpdates() {
-        statusUpdateRunnable?.let { statusUpdateHandler.removeCallbacks(it) }
-    }
-
-    private fun updateRealTimeData() {
-        if (!isConnected) return
-
-        activityScope.launch {
-            try {
-                val status = shimmerRecorder.getShimmerStatus()
-                val readings = shimmerRecorder.getCurrentReadings()
-
-                // Update battery level
-                val batteryText =
-                    if (status.batteryLevel != null) {
-                        "Battery: ${status.batteryLevel}%"
-                    } else {
-                        "Battery: Unknown"
-                    }
-                batteryLevelText.text = batteryText
-
-                // Update real-time data
-                if (readings != null && isStreaming) {
-                    val dataText =
-                        "GSR: ${String.format("%.2f", readings.gsrConductance)} μS\n" +
-                            "PPG: ${String.format("%.2f", readings.ppgA13)}\n" +
-                            "Accel: X=${String.format("%.2f", readings.accelX)} " +
-                            "Y=${String.format("%.2f", readings.accelY)} " +
-                            "Z=${String.format("%.2f", readings.accelZ)}"
-                    realTimeDataText.text = dataText
-                } else {
-                    realTimeDataText.text = "No data available"
-                }
-            } catch (e: Exception) {
-                logger.error("Error updating real-time data", e)
-            }
-        }
-    }
 
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

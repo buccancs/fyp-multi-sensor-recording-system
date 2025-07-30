@@ -2,7 +2,6 @@ package com.multisensor.recording.network
 
 import android.content.Context
 import android.content.Intent
-import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.BatteryManager
@@ -432,27 +431,6 @@ class CommandProcessor
             }
         }
 
-        /**
-         * Trigger visual stimulus with specified duration - Milestone 2.8
-         */
-        private fun triggerVisualStimulusWithDuration(durationMs: Long) {
-            try {
-                // Create a visual stimulus by manipulating screen brightness
-                val intent =
-                    Intent("com.multisensor.recording.VISUAL_STIMULUS").apply {
-                        putExtra("stimulus_type", "screen_flash")
-                        putExtra("duration_ms", durationMs)
-                        putExtra("timestamp", System.currentTimeMillis())
-                    }
-
-                // Send broadcast to trigger visual stimulus in UI
-                context.sendBroadcast(intent)
-
-                logger.debug("Visual stimulus triggered - screen flash broadcast sent (${durationMs}ms)")
-            } catch (e: Exception) {
-                logger.error("Failed to trigger visual stimulus", e)
-            }
-        }
 
         /**
          * Trigger audio stimulus with specified parameters - Milestone 2.8
@@ -837,46 +815,16 @@ class CommandProcessor
         fun getStimulusTime(): Long? = stimulusTime
 
         /**
-         * Trigger visual stimulus (screen flash) with specified duration - Milestone 2.8
+         * Trigger visual stimulus with specified duration - Milestone 2.8
          */
-        private suspend fun triggerVisualStimulusWithDuration(durationMs: Int) {
-            try {
-                logger.info("[DEBUG_LOG] Triggering visual stimulus for ${durationMs}ms")
-
-                // Use camera flash if available
-                val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-                val cameraIds = cameraManager.cameraIdList
-
-                // Find back camera with flash
-                var flashCameraId: String? = null
-                for (cameraId in cameraIds) {
-                    val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-                    val hasFlash = characteristics.get(android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-                    val lensFacing = characteristics.get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
-
-                    if (hasFlash && lensFacing == android.hardware.camera2.CameraCharacteristics.LENS_FACING_BACK) {
-                        flashCameraId = cameraId
-                        break
-                    }
+        private suspend fun triggerVisualStimulusWithDuration(durationMs: Long) {
+            // Delegate flash control to the CameraRecorder, which owns the camera device.
+            // This prevents CAMERA_IN_USE errors.
+            processingScope.launch {
+                val success = cameraRecorder.triggerFlashSync(durationMs)
+                if (!success) {
+                    logger.warning("Visual stimulus (flash) could not be triggered.")
                 }
-
-                if (flashCameraId != null) {
-                    // Turn on torch
-                    cameraManager.setTorchMode(flashCameraId, true)
-                    logger.debug("[DEBUG_LOG] Camera flash turned ON")
-
-                    // Wait for specified duration
-                    delay(durationMs.toLong())
-
-                    // Turn off torch
-                    cameraManager.setTorchMode(flashCameraId, false)
-                    logger.debug("[DEBUG_LOG] Camera flash turned OFF")
-                } else {
-                    logger.warning("No camera flash available - visual stimulus not triggered")
-                }
-            } catch (e: Exception) {
-                logger.error("Failed to trigger visual stimulus", e)
-                throw e
             }
         }
 

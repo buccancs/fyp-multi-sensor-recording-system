@@ -224,6 +224,14 @@ dependencies {
     
     // Settings and Preferences - Milestone 2.7 UI Enhancement
     implementation 'androidx.preference:preference-ktx:1.2.1'
+    
+    // Material Design Components - UI Modernization
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    
+    // Jetpack Navigation Component - Modern Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
 
     // Architecture - Lifecycle, Coroutines, Permissions
     implementation libs.bundles.lifecycle

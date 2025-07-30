@@ -508,7 +508,7 @@ class ThermalRecorder
          */
         private fun convertThermalToARGB(thermalData: ByteArray): Bitmap? =
             try {
-                val bitmap = createBitmap(THERMAL_WIDTH, THERMAL_HEIGHT)
+                val bitmap = Bitmap.createBitmap(THERMAL_WIDTH, THERMAL_HEIGHT, Bitmap.Config.ARGB_8888)
                 val pixels = IntArray(THERMAL_WIDTH * THERMAL_HEIGHT)
 
                 // Find min and max temperature values for normalization
