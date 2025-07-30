@@ -21,6 +21,18 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QHBoxLayout
 from PyQt5.QtCore import QTimer, pyqtSignal, QThread, pyqtSlot
 from PyQt5.QtGui import QFont, QPixmap
 
+# Import ShimmerManager for sensor integration
+from shimmer_manager import ShimmerManager, ShimmerStatus, ShimmerSample
+
+# Import NTP time server for device synchronization
+from ntp_time_server import TimeServerManager, TimeServerStatus
+
+# Import StimulusManager for advanced stimulus presentation
+from stimulus_manager import StimulusManager, StimulusConfig, StimulusEvent
+
+# Import PerformanceManager for system optimization
+from performance_optimizer import PerformanceManager, OptimizationConfig
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -370,6 +382,30 @@ class MultiSensorController(QMainWindow):
         self.socket_server.client_connected.connect(self.on_client_connected)
         self.socket_server.client_disconnected.connect(self.on_client_disconnected)
         
+        # Initialize ShimmerManager for sensor integration
+        self.shimmer_manager = ShimmerManager(logger=logger)
+        self.shimmer_manager.add_data_callback(self._on_shimmer_data)
+        self.shimmer_manager.add_status_callback(self._on_shimmer_status)
+        
+        # Initialize NTP time server for device synchronization
+        self.time_server_manager = TimeServerManager(logger=logger)
+        self.time_server_manager.initialize(port=8889)
+        
+        # Initialize StimulusManager for advanced stimulus presentation
+        self.stimulus_manager = StimulusManager(logger=logger)
+        self.stimulus_manager.add_event_callback(self._on_stimulus_event)
+        
+        # Initialize PerformanceManager for system optimization
+        self.performance_manager = PerformanceManager(logger=logger)
+        performance_config = OptimizationConfig(
+            max_memory_mb=2048,  # 2GB memory limit
+            max_cpu_percent=75,  # 75% CPU limit
+            monitoring_interval_seconds=2.0,
+            enable_automatic_cleanup=True,
+            enable_adaptive_quality=True
+        )
+        self.performance_manager.initialize(performance_config)
+        
         # Initialize UI components
         self.init_ui()
         
@@ -380,6 +416,31 @@ class MultiSensorController(QMainWindow):
         
         # Start socket server
         self.socket_server.start()
+        
+        # Initialize ShimmerManager
+        if self.shimmer_manager.initialize():
+            self.log_message("ShimmerManager initialized successfully")
+        else:
+            self.log_message("Warning: ShimmerManager initialization failed")
+        
+        # Start NTP time server
+        if self.time_server_manager.start():
+            self.log_message("NTP time server started successfully on port 8889")
+        else:
+            self.log_message("Warning: NTP time server failed to start")
+        
+        # Initialize StimulusManager
+        if self.stimulus_manager.initialize():
+            monitor_count = self.stimulus_manager.get_monitor_count()
+            self.log_message(f"StimulusManager initialized successfully with {monitor_count} monitors")
+        else:
+            self.log_message("Warning: StimulusManager initialization failed")
+        
+        # Start performance monitoring
+        if self.performance_manager.start():
+            self.log_message("Performance monitoring started successfully")
+        else:
+            self.log_message("Warning: Performance monitoring failed to start")
         
         logger.info("Multi-Sensor Controller initialized")
     
@@ -527,11 +588,44 @@ class MultiSensorController(QMainWindow):
         logger.info("Starting recording session")
         self.log_message("Starting recording session...")
         
-        # TODO: Implement actual recording start logic
-        # - Send start commands to Android phones
-        # - Start USB webcam recording
-        # - Begin Shimmer sensor data collection
-        # - Start stimulus presentation if configured
+        # Generate session ID
+        from datetime import datetime
+        session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        
+        # Start Shimmer sensor data collection
+        try:
+            # Scan for Shimmer devices
+            self.log_message("Scanning for Shimmer devices...")
+            devices = self.shimmer_manager.scan_and_pair_devices()
+            
+            if devices:
+                self.log_message(f"Found {len(devices)} Shimmer device(s)")
+                
+                # Connect to devices
+                if self.shimmer_manager.connect_devices(devices):
+                    self.log_message("Connected to Shimmer devices")
+                    
+                    # Configure channels for each device
+                    channels = {"GSR", "PPG_A13", "Accel_X", "Accel_Y", "Accel_Z"}
+                    for device_id in self.shimmer_manager.device_status:
+                        self.shimmer_manager.set_enabled_channels(device_id, channels)
+                    
+                    # Start recording
+                    if self.shimmer_manager.start_recording(session_id):
+                        self.log_message("Shimmer recording started successfully")
+                    else:
+                        self.log_message("Warning: Failed to start Shimmer recording")
+                else:
+                    self.log_message("Warning: Failed to connect to Shimmer devices")
+            else:
+                self.log_message("No Shimmer devices found - continuing without sensor data")
+        except Exception as e:
+            self.log_message(f"Error with Shimmer integration: {e}")
+            logger.error(f"Shimmer integration error: {e}")
+        
+        # TODO: Send start commands to Android phones
+        # TODO: Start USB webcam recording  
+        # TODO: Start stimulus presentation if configured
         
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
@@ -545,11 +639,25 @@ class MultiSensorController(QMainWindow):
         logger.info("Stopping recording session")
         self.log_message("Stopping recording session...")
         
-        # TODO: Implement actual recording stop logic
-        # - Send stop commands to Android phones
-        # - Stop USB webcam recording
-        # - Stop Shimmer sensor data collection
-        # - Save and organize recorded data
+        # Stop Shimmer sensor data collection
+        try:
+            if self.shimmer_manager.stop_recording():
+                self.log_message("Shimmer recording stopped successfully")
+                
+                # Get final statistics
+                status = self.shimmer_manager.get_shimmer_status()
+                for device_id, device_status in status.items():
+                    if device_status.samples_recorded > 0:
+                        self.log_message(f"Device {device_id}: {device_status.samples_recorded} samples recorded")
+            else:
+                self.log_message("Warning: Failed to stop Shimmer recording properly")
+        except Exception as e:
+            self.log_message(f"Error stopping Shimmer recording: {e}")
+            logger.error(f"Shimmer stop error: {e}")
+        
+        # TODO: Send stop commands to Android phones
+        # TODO: Stop USB webcam recording
+        # TODO: Save and organize recorded data
         
         self.start_button.setEnabled(True)
         self.stop_button.setEnabled(False)
@@ -572,12 +680,90 @@ class MultiSensorController(QMainWindow):
     
     def update_status(self):
         """Update device status indicators."""
-        # TODO: Implement actual device status checking
-        # For now, this is a placeholder that could be expanded to:
-        # - Check network connectivity to Android phones
-        # - Verify USB webcam availability
-        # - Monitor Shimmer sensor connections
-        pass
+        # Monitor Shimmer sensor connections
+        try:
+            shimmer_status = self.shimmer_manager.get_shimmer_status()
+            connected_count = sum(1 for status in shimmer_status.values() if status.is_connected)
+            streaming_count = sum(1 for status in shimmer_status.values() if status.is_streaming)
+            recording_count = sum(1 for status in shimmer_status.values() if status.is_recording)
+            
+            # Update status display (could be expanded to show in UI)
+            if connected_count > 0:
+                status_msg = f"Shimmer: {connected_count} connected"
+                if streaming_count > 0:
+                    status_msg += f", {streaming_count} streaming"
+                if recording_count > 0:
+                    status_msg += f", {recording_count} recording"
+            else:
+                status_msg = "Shimmer: No devices connected"
+                
+        except Exception as e:
+            logger.error(f"Error updating Shimmer status: {e}")
+        
+        # Monitor NTP time server status
+        try:
+            time_server_status = self.time_server_manager.get_status()
+            if time_server_status:
+                if time_server_status.is_running:
+                    sync_status = "synchronized" if time_server_status.is_synchronized else "not synchronized"
+                    accuracy = f"{time_server_status.time_accuracy_ms:.1f}ms"
+                    clients = time_server_status.client_count
+                    requests = time_server_status.requests_served
+                    
+                    # Log status periodically (every 30 seconds)
+                    if not hasattr(self, '_last_ntp_status_log'):
+                        self._last_ntp_status_log = 0
+                    
+                    import time
+                    current_time = time.time()
+                    if current_time - self._last_ntp_status_log > 30.0:
+                        self.log_message(f"NTP Server: {sync_status}, accuracy: {accuracy}, "
+                                       f"clients: {clients}, requests: {requests}")
+                        self._last_ntp_status_log = current_time
+                else:
+                    # Log if server is not running
+                    if not hasattr(self, '_ntp_server_down_logged'):
+                        self.log_message("Warning: NTP time server is not running")
+                        self._ntp_server_down_logged = True
+        except Exception as e:
+            logger.error(f"Error updating NTP server status: {e}")
+        
+        # Monitor performance status
+        try:
+            performance_status = self.performance_manager.get_status()
+            if performance_status:
+                current_metrics = performance_status.get('current_metrics', {})
+                if current_metrics:
+                    cpu_percent = current_metrics.get('cpu_percent', 0)
+                    memory_mb = current_metrics.get('memory_mb', 0)
+                    
+                    # Log performance status periodically (every 60 seconds)
+                    if not hasattr(self, '_last_performance_status_log'):
+                        self._last_performance_status_log = 0
+                    
+                    import time
+                    current_time = time.time()
+                    if current_time - self._last_performance_status_log > 60.0:
+                        self.log_message(f"Performance: CPU {cpu_percent:.1f}%, Memory {memory_mb:.1f}MB")
+                        
+                        # Check for optimization recommendations
+                        recommendations = performance_status.get('optimization_recommendations', [])
+                        if recommendations:
+                            self.log_message(f"Performance recommendations: {len(recommendations)} items")
+                        
+                        self._last_performance_status_log = current_time
+                        
+                    # Trigger optimization if needed
+                    violation_counts = performance_status.get('violation_counts', {})
+                    if any(count > 0 for count in violation_counts.values()):
+                        # Performance violations detected - optimization will be triggered automatically
+                        pass
+                        
+        except Exception as e:
+            logger.error(f"Error updating performance status: {e}")
+        
+        # TODO: Check network connectivity to Android phones
+        # TODO: Verify USB webcam availability
     
     def log_message(self, message):
         """Add a message to the log display."""
@@ -650,9 +836,86 @@ class MultiSensorController(QMainWindow):
             self.phone2_status.setText("Disconnected")
             self.phone2_status.setStyleSheet("color: red;")
     
+    def _on_shimmer_data(self, sample: ShimmerSample) -> None:
+        """Handle incoming Shimmer sensor data."""
+        try:
+            # Log sample data (could be expanded to show in UI)
+            if hasattr(self, 'log_text'):  # Check if UI is initialized
+                # Only log occasionally to avoid flooding the UI
+                import time
+                if not hasattr(self, '_last_shimmer_log_time'):
+                    self._last_shimmer_log_time = 0
+                
+                current_time = time.time()
+                if current_time - self._last_shimmer_log_time > 5.0:  # Log every 5 seconds
+                    self.log_message(f"Shimmer data: {sample.device_id} - GSR: {sample.gsr_conductance:.2f}μS")
+                    self._last_shimmer_log_time = current_time
+                    
+        except Exception as e:
+            logger.error(f"Error handling Shimmer data: {e}")
+
+    def _on_shimmer_status(self, device_id: str, status: ShimmerStatus) -> None:
+        """Handle Shimmer device status updates."""
+        try:
+            # Log significant status changes
+            if hasattr(self, 'log_text'):  # Check if UI is initialized
+                if status.is_connected:
+                    self.log_message(f"Shimmer {device_id}: Connected (Battery: {status.battery_level}%)")
+                else:
+                    self.log_message(f"Shimmer {device_id}: Disconnected")
+                    
+        except Exception as e:
+            logger.error(f"Error handling Shimmer status: {e}")
+
+    def _on_stimulus_event(self, event: StimulusEvent) -> None:
+        """Handle stimulus presentation events."""
+        try:
+            # Log stimulus events
+            if hasattr(self, 'log_text'):  # Check if UI is initialized
+                if event.event_type == "stimulus_start":
+                    self.log_message(f"Stimulus started on monitor {event.monitor_id}: {event.stimulus_config.stimulus_type}")
+                elif event.event_type == "stimulus_stop":
+                    duration = event.duration_actual_ms or 0
+                    self.log_message(f"Stimulus stopped on monitor {event.monitor_id} (duration: {duration:.1f}ms)")
+                elif event.event_type == "synchronized_stimulus_start":
+                    self.log_message(f"Synchronized stimulus started on monitor {event.monitor_id}")
+                    
+        except Exception as e:
+            logger.error(f"Error handling stimulus event: {e}")
+
     def closeEvent(self, event):
         """Handle application close event."""
         logger.info("Shutting down Multi-Sensor Controller")
+        
+        # Clean up ShimmerManager
+        try:
+            self.shimmer_manager.cleanup()
+            logger.info("ShimmerManager cleanup completed")
+        except Exception as e:
+            logger.error(f"Error during ShimmerManager cleanup: {e}")
+        
+        # Clean up NTP time server
+        try:
+            self.time_server_manager.stop()
+            logger.info("NTP time server stopped")
+        except Exception as e:
+            logger.error(f"Error stopping NTP time server: {e}")
+        
+        # Clean up StimulusManager
+        try:
+            self.stimulus_manager.cleanup()
+            logger.info("StimulusManager cleanup completed")
+        except Exception as e:
+            logger.error(f"Error during StimulusManager cleanup: {e}")
+        
+        # Clean up PerformanceManager
+        try:
+            self.performance_manager.stop()
+            logger.info("Performance monitoring stopped")
+        except Exception as e:
+            logger.error(f"Error stopping performance monitoring: {e}")
+        
+        # Clean up socket server
         self.socket_server.stop_server()
         self.socket_server.wait()  # Wait for thread to finish
         event.accept()
