@@ -39,6 +39,9 @@ import com.multisensor.recording.util.AllAndroidPermissions
 import com.multisensor.recording.util.PermissionTool
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.calibration.SyncClockManager
+import com.multisensor.recording.managers.PermissionManager
+import com.multisensor.recording.managers.ShimmerManager
+import com.multisensor.recording.managers.UsbDeviceManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -53,7 +56,11 @@ import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
  * viewing camera previews, and monitoring system status.
  */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+    PermissionManager.PermissionCallback,
+    ShimmerManager.ShimmerCallback,
+    UsbDeviceManager.UsbDeviceCallback {
+    
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
 
@@ -62,6 +69,15 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var syncClockManager: SyncClockManager
+
+    @Inject
+    lateinit var permissionManager: PermissionManager
+
+    @Inject
+    lateinit var shimmerManager: ShimmerManager
+
+    @Inject
+    lateinit var usbDeviceManager: UsbDeviceManager
 
     // Shimmer UI state management
     private var selectedShimmerAddress: String? = null
@@ -90,72 +106,6 @@ class MainActivity : AppCompatActivity() {
     }
     private var looper: Looper? = null
 
-    // Enhanced permission handling using XXPermissions library
-    private val permissionCallback =
-        object : PermissionTool.PermissionCallback {
-            override fun onAllGranted() {
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via XXPermissions")
-                permissionRetryCount = 0 // Reset retry counter on success
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Reset permission retry counter to 0")
-                initializeRecordingSystem()
-                binding.statusText.text = "All permissions granted - System ready"
-                updatePermissionButtonVisibility()
-            }
-
-            override fun onTemporarilyDenied(deniedPermissions: List<String>) {
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.size}")
-
-                // Automatically retry temporarily denied permissions - keep showing dialogs until accepted
-                if (deniedPermissions.isNotEmpty()) {
-                    android.util.Log.d(
-                        "MainActivity",
-                        "[DEBUG_LOG] Automatically retrying ${deniedPermissions.size} temporarily denied permissions",
-                    )
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Current retry count: $permissionRetryCount / $maxPermissionRetries")
-
-                    if (permissionRetryCount < maxPermissionRetries) {
-                        permissionRetryCount++
-                        android.util.Log.d("MainActivity", "[DEBUG_LOG] Incrementing retry count to: $permissionRetryCount")
-
-                        // Add a small delay to prevent immediate re-popup (better UX)
-                        binding.root.postDelayed({
-                            android.util.Log.d(
-                                "MainActivity",
-                                "[DEBUG_LOG] Launching persistent retry #$permissionRetryCount for temporarily denied permissions",
-                            )
-                            binding.statusText.text =
-                                "Requesting remaining permissions... (Attempt $permissionRetryCount/$maxPermissionRetries)"
-
-                            // Retry with XXPermissions
-                            PermissionTool.requestAllDangerousPermissions(this@MainActivity, this)
-                        }, 1500) // 1.5 second delay for better user experience
-                    } else {
-                        android.util.Log.w(
-                            "MainActivity",
-                            "[DEBUG_LOG] Maximum retry attempts ($maxPermissionRetries) reached, falling back to manual request",
-                        )
-                        binding.statusText.text = "Maximum retry attempts reached - Please use the button to grant permissions"
-                        showTemporaryDenialMessage(deniedPermissions, 0, deniedPermissions.size)
-                    }
-                }
-                updatePermissionButtonVisibility()
-            }
-
-            override fun onPermanentlyDeniedWithSettingsOpened(deniedPermissions: List<String>) {
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Permanently denied permissions, Settings opened: ${deniedPermissions.size}")
-                binding.statusText.text = "Please enable permissions in Settings and return to the app"
-                updatePermissionButtonVisibility()
-            }
-
-            override fun onPermanentlyDeniedWithoutSettings(deniedPermissions: List<String>) {
-                android.util.Log.d(
-                    "MainActivity",
-                    "[DEBUG_LOG] Permanently denied permissions, Settings not opened: ${deniedPermissions.size}",
-                )
-                binding.statusText.text = "Permissions required - Please enable in Settings or use the button to try again"
-                updatePermissionButtonVisibility()
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -737,21 +687,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPermissions() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting enhanced permission check with XXPermissions...")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting permission check via PermissionManager...")
 
-        if (PermissionTool.areAllDangerousPermissionsGranted(this)) {
+        if (permissionManager.areAllPermissionsGranted(this)) {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions already granted, initializing system")
             initializeRecordingSystem()
         } else {
-            val missingPermissions = PermissionTool.getMissingDangerousPermissions(this)
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Missing permissions count: ${missingPermissions.size}")
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Missing permissions: $missingPermissions")
-
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Requesting permissions via XXPermissions...")
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Requesting permissions via PermissionManager...")
             binding.statusText.text = "Requesting permissions..."
 
-            // Use enhanced permission system
-            PermissionTool.requestAllDangerousPermissions(this, permissionCallback)
+            // Use PermissionManager for permission requests
+            permissionManager.requestPermissions(this, this)
         }
 
         // Update permission button visibility based on current permission status
@@ -795,19 +741,9 @@ class MainActivity : AppCompatActivity() {
         android.util.Log.w("MainActivity", "Permanently denied permissions: ${permanentlyDenied.joinToString(", ")}")
     }
 
-    private fun getPermissionDisplayName(permission: String): String =
-        when (permission) {
-            Manifest.permission.CAMERA -> "Camera"
-            Manifest.permission.RECORD_AUDIO -> "Microphone"
-            Manifest.permission.ACCESS_FINE_LOCATION -> "Fine Location"
-            Manifest.permission.ACCESS_COARSE_LOCATION -> "Coarse Location"
-            Manifest.permission.READ_EXTERNAL_STORAGE -> "Read Storage"
-            Manifest.permission.WRITE_EXTERNAL_STORAGE -> "Write Storage"
-            Manifest.permission.READ_PHONE_STATE -> "Phone State"
-            Manifest.permission.READ_CONTACTS -> "Contacts"
-            Manifest.permission.SEND_SMS -> "Send SMS"
-            else -> permission.substringAfterLast(".")
-        }
+    private fun getPermissionDisplayName(permission: String): String {
+        return permissionManager.getPermissionDisplayName(permission)
+    }
 
     private fun requestPermissionsManually() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request initiated by user")
@@ -828,13 +764,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updatePermissionButtonVisibility() {
-        val missingPermissions = PermissionTool.getMissingDangerousPermissions(this)
+        val allPermissionsGranted = permissionManager.areAllPermissionsGranted(this)
 
-        if (missingPermissions.isNotEmpty()) {
-            android.util.Log.d(
-                "MainActivity",
-                "[DEBUG_LOG] Showing permission request button - ${missingPermissions.size} permissions missing",
-            )
+        if (!allPermissionsGranted) {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing permission request button - permissions missing")
             binding.requestPermissionsButton.visibility = android.view.View.VISIBLE
         } else {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] Hiding permission request button - all permissions granted")
@@ -1490,5 +1423,100 @@ class MainActivity : AppCompatActivity() {
         }
 
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring system cleaned up")
+    }
+
+    // ========== PermissionManager.PermissionCallback Implementation ==========
+    
+    override fun onAllPermissionsGranted() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionManager")
+        initializeRecordingSystem()
+        binding.statusText.text = "All permissions granted - System ready"
+        updatePermissionButtonVisibility()
+    }
+
+    override fun onPermissionsTemporarilyDenied(deniedPermissions: List<String>, grantedCount: Int, totalCount: Int) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.size}")
+        showTemporaryDenialMessage(deniedPermissions, grantedCount, totalCount)
+        updatePermissionButtonVisibility()
+    }
+
+    override fun onPermissionsPermanentlyDenied(deniedPermissions: List<String>) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions permanently denied: ${deniedPermissions.size}")
+        showPermanentlyDeniedMessage(deniedPermissions)
+        updatePermissionButtonVisibility()
+    }
+
+    // ========== ShimmerManager.ShimmerCallback Implementation ==========
+    
+    override fun onDeviceSelected(address: String, name: String) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected via ShimmerManager:")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $address")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $name")
+        
+        selectedShimmerAddress = address
+        selectedShimmerName = name
+        
+        // Update UI to reflect device selection
+        binding.statusText.text = "Shimmer device selected: $name"
+        updateSensorConnectionStatus(true, false) // Shimmer connected, thermal not connected
+    }
+
+    override fun onDeviceSelectionCancelled() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
+        Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onConnectionStatusChanged(connected: Boolean) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer connection status changed: $connected")
+        updateShimmerConnectionStatus(connected)
+        
+        val statusMessage = if (connected) "Shimmer device connected" else "Shimmer device disconnected"
+        binding.statusText.text = statusMessage
+        Toast.makeText(this, statusMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onConfigurationComplete() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
+        binding.statusText.text = "Shimmer configuration completed"
+        Toast.makeText(this, "Shimmer configuration completed", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] Manager error: $message")
+        binding.statusText.text = "Error: $message"
+        Toast.makeText(this, "Error: $message", Toast.LENGTH_LONG).show()
+    }
+
+    // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========
+    
+    override fun onSupportedDeviceAttached(device: UsbDevice) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbDeviceManager")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device: ${device.deviceName}")
+        
+        val deviceInfo = usbDeviceManager.getDeviceInfoString(device)
+        binding.statusText.text = "Supported TOPDON device connected"
+        
+        // Update thermal connection status
+        updateThermalConnectionStatus(true)
+        
+        Toast.makeText(this, "TOPDON device connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onUnsupportedDeviceAttached(device: UsbDevice) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Unsupported USB device attached")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device: ${device.deviceName}")
+        
+        Toast.makeText(this, "Unsupported USB device: ${device.deviceName}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDeviceDetached(device: UsbDevice) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] USB device detached")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device: ${device.deviceName}")
+        
+        // Update thermal connection status
+        updateThermalConnectionStatus(false)
+        
+        binding.statusText.text = "USB device disconnected"
+        Toast.makeText(this, "USB device disconnected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 }

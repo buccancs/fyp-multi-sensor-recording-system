@@ -4,23 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.multisensor.recording.R
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * RecyclerView adapter for displaying recording sessions in the file browser
+ * RecyclerView adapter for displaying recording sessions in the file browser.
+ * Refactored to use ListAdapter for better performance and automatic animations.
  */
 class SessionsAdapter(
-    private var sessions: List<SessionItem>,
     private val onSessionClick: (SessionItem) -> Unit,
-) : RecyclerView.Adapter<SessionsAdapter.SessionViewHolder>() {
-    
-    fun updateSessions(newSessions: List<SessionItem>) {
-        sessions = newSessions
-        notifyDataSetChanged()
-    }
+) : ListAdapter<SessionItem, SessionsAdapter.SessionViewHolder>(SessionItemDiffCallback()) {
     private val dateFormatter = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
 
     override fun onCreateViewHolder(
@@ -38,11 +35,9 @@ class SessionsAdapter(
         holder: SessionViewHolder,
         position: Int,
     ) {
-        val session = sessions[position]
+        val session = getItem(position)
         holder.bind(session)
     }
-
-    override fun getItemCount(): Int = sessions.size
 
     inner class SessionViewHolder(
         itemView: View,
@@ -87,5 +82,18 @@ class SessionsAdapter(
                 },
             )
         }
+    }
+}
+
+/**
+ * DiffUtil.ItemCallback for efficiently calculating list differences.
+ */
+class SessionItemDiffCallback : DiffUtil.ItemCallback<SessionItem>() {
+    override fun areItemsTheSame(oldItem: SessionItem, newItem: SessionItem): Boolean {
+        return oldItem.sessionId == newItem.sessionId
+    }
+
+    override fun areContentsTheSame(oldItem: SessionItem, newItem: SessionItem): Boolean {
+        return oldItem == newItem
     }
 }

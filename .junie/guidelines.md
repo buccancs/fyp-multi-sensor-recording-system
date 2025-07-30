@@ -10,4 +10,4 @@ test every feature repeatedly
 100% test coverage
 use eslint and prettier
 do not declare something as "done" if it is not tested extensively
-build and run app on samsung device after each change
+build and run app on a samsung device after each change

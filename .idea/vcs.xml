@@ -2,10 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/AndroidApp/libs/IRCamera" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/AndroidApp/libs/Shimmer-Java-Android-API" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/AndroidApp/libs/ShimmerAndroidAPI" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/AndroidApp/libs/psychopy" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/AndroidApp/libs/pyshimmer" vcs="Git" />
   </component>
 </project>

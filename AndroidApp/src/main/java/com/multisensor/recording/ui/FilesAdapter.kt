@@ -5,23 +5,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.multisensor.recording.R
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * RecyclerView adapter for displaying files within a recording session
+ * RecyclerView adapter for displaying files within a recording session.
+ * Refactored to use ListAdapter for better performance and automatic animations.
  */
 class FilesAdapter(
-    private var files: List<FileItem>,
     private val onFileClick: (FileItem) -> Unit,
-) : RecyclerView.Adapter<FilesAdapter.FileViewHolder>() {
-    
-    fun updateFiles(newFiles: List<FileItem>) {
-        files = newFiles
-        notifyDataSetChanged()
-    }
+) : ListAdapter<FileItem, FilesAdapter.FileViewHolder>(FileItemDiffCallback()) {
     private val dateFormatter = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
 
     override fun onCreateViewHolder(
@@ -39,11 +36,9 @@ class FilesAdapter(
         holder: FileViewHolder,
         position: Int,
     ) {
-        val fileItem = files[position]
+        val fileItem = getItem(position)
         holder.bind(fileItem)
     }
-
-    override fun getItemCount(): Int = files.size
 
     inner class FileViewHolder(
         itemView: View,
@@ -107,5 +102,18 @@ class FilesAdapter(
                 bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
                 else -> "$bytes B"
             }
+    }
+}
+
+/**
+ * DiffUtil.ItemCallback for efficiently calculating list differences.
+ */
+class FileItemDiffCallback : DiffUtil.ItemCallback<FileItem>() {
+    override fun areItemsTheSame(oldItem: FileItem, newItem: FileItem): Boolean {
+        return oldItem.file.absolutePath == newItem.file.absolutePath
+    }
+
+    override fun areContentsTheSame(oldItem: FileItem, newItem: FileItem): Boolean {
+        return oldItem == newItem
     }
 }

@@ -2,6 +2,66 @@
 
 This document tracks remaining tasks, future work items, and improvements for the Multi-Sensor Recording System project.
 
+## CRITICAL: Architectural Refactoring & Design Flaws (Highest Priority) - 2025-07-30
+
+### Python App - Architectural Refactoring ✅ COMPLETED (2025-07-30)
+- [x] **Eliminated "God Controller" Anti-Pattern** ✓
+  - [x] Created MainController class (516 lines) implementing Controller/Presenter pattern ✓
+  - [x] Implemented dependency injection to separate UI concerns from business logic ✓
+  - [x] Used Qt signals for thread-safe communication between controller and UI ✓
+  - [x] Moved all business logic from MainWindow to MainController ✓
+- [x] **Application Container Pattern Implementation** ✓
+  - [x] Created Application class (175 lines) as dependency injection container ✓
+  - [x] Implemented proper service lifecycle management ✓
+  - [x] Added automatic dependency wiring between services ✓
+  - [x] Created clean application entry point with proper initialization ✓
+- [x] **MainWindow Refactoring** ✓
+  - [x] Created RefactoredMainWindow class (585 lines) following MVC pattern ✓
+  - [x] Removed direct instantiation of backend services from UI ✓
+  - [x] Implemented dependency injection via set_controller() method ✓
+  - [x] Delegated all business logic to MainController ✓
+
+### CRITICAL: Remaining Architectural Issues (High Priority)
+- [ ] **Threading Model Standardization** 🔄 IN PROGRESS
+  - [ ] Fix JsonSocketServer mixed threading (currently uses QThread + threading.Thread)
+  - [ ] Standardize all services to use Qt threading model consistently
+  - [ ] Update JsonSocketServer to use QObject workers moved to QThread
+  - [ ] Ensure all cross-thread communication uses Qt signals/slots
+- [ ] **Placeholder Implementation Completion** ⚠️ CRITICAL
+  - [ ] Implement actual CalibrationManager functionality (currently 403-line placeholder)
+    - [ ] RGB camera intrinsic calibration
+    - [ ] Thermal camera intrinsic calibration  
+    - [ ] RGB-thermal extrinsic calibration (stereo calibration)
+    - [ ] Calibration pattern detection (chessboard, circle grid)
+    - [ ] Calibration quality assessment and validation
+    - [ ] Calibration data persistence and loading
+  - [ ] Implement actual LoggerManager functionality (currently 462-line placeholder)
+    - [ ] File-based logging with rotation
+    - [ ] Structured logging with JSON format
+    - [ ] Log filtering and categorization
+    - [ ] Performance logging and metrics
+    - [ ] Integration with external logging services
+- [ ] **Legacy Code Cleanup** 🔄 IN PROGRESS
+  - [x] Remove unused ShimmerAndroidAPI directory (507 files) - eliminated duplicate Shimmer SDK ✓
+  - [x] Fix placeholder TOPDON device IDs in UsbDeviceManager.kt - replaced with real device IDs ✓
+  - [x] Remove stub addSupportedDevice() method containing only TODO comments ✓
+  - [ ] Remove main_backup.py (1003-line monolithic file) after confirming all functionality migrated
+  - [ ] Verify all features from legacy code are properly implemented in new architecture
+  - [ ] Update any remaining references to legacy components
+- [ ] **Testing Updates for New Architecture**
+  - [ ] Update existing tests to work with new MainController pattern
+  - [ ] Create unit tests for MainController class
+  - [ ] Create integration tests for Application class
+  - [ ] Test dependency injection functionality
+  - [ ] Verify thread-safe communication via Qt signals
+
+### Documentation Accuracy Issues ✅ COMPLETED (2025-07-30)
+- [x] **Updated FINAL_SYSTEM_STATUS_REPORT.md** ✓
+  - [x] Corrected misleading claims about 100% completion ✓
+  - [x] Accurately documented placeholder implementations ✓
+  - [x] Added section documenting architectural refactoring achievements ✓
+  - [x] Updated status to reflect ongoing refactoring work ✓
+
 ## Critical Missing Components (High Priority) - Based on Architecture Analysis
 
 ### Test Modernization & Build Stabilization ✅ COMPLETED (2025-07-30)

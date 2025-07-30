@@ -131,7 +131,7 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun setupRecyclerViews() {
         // Sessions RecyclerView
-        sessionsAdapter = SessionsAdapter(emptyList()) { session ->
+        sessionsAdapter = SessionsAdapter { session ->
             viewModel.selectSession(session)
         }
         sessionsRecyclerView.apply {
@@ -140,7 +140,7 @@ class FileViewActivity : AppCompatActivity() {
         }
 
         // Files RecyclerView
-        filesAdapter = FilesAdapter(emptyList()) { fileItem ->
+        filesAdapter = FilesAdapter { fileItem ->
             handleFileClick(fileItem)
         }
         filesRecyclerView.apply {
@@ -202,10 +202,10 @@ class FileViewActivity : AppCompatActivity() {
         emptyStateText.visibility = if (state.showEmptyState) View.VISIBLE else View.GONE
         
         // Update sessions list
-        sessionsAdapter.updateSessions(state.sessions)
+        sessionsAdapter.submitList(state.sessions)
         
         // Update files list
-        filesAdapter.updateFiles(state.sessionFiles)
+        filesAdapter.submitList(state.sessionFiles)
         
         // Update session info
         state.selectedSession?.let { session ->

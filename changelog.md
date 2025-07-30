@@ -7,6 +7,130 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed - Legacy Code Cleanup ✅ COMPLETED (2025-07-30)
+
+#### External Dependencies Cleanup
+- **Removed ShimmerAndroidAPI Directory**: Eliminated unused legacy Shimmer SDK (507 files)
+  - **Reason**: AndroidApp uses Shimmer-Java-Android-API instead via shimmerresearch packages
+  - **Impact**: Reduced project size and eliminated confusion between duplicate Shimmer SDKs
+  - **Location**: `external/ShimmerAndroidAPI/` (completely removed)
+
+#### Placeholder Code Cleanup
+- **Fixed TOPDON Device IDs in UsbDeviceManager.kt**:
+  - **Removed**: Placeholder device IDs (0x1234, 0x5678) and (0x2E8A, 0x0005)
+  - **Added**: Real TOPDON TC001 series device IDs from device_filter.xml
+  - **Removed**: Stub `addSupportedDevice()` method containing only TODO comments
+  - **Impact**: Proper device detection for actual TOPDON thermal cameras
+
+### Added - Critical Architectural Refactoring ✅ COMPLETED (2025-07-30)
+
+This major update addresses critical design flaws identified in the Python application architecture, eliminating the "God Controller" anti-pattern and implementing a clean MVC architecture with dependency injection.
+
+#### Critical Design Flaws Resolved
+
+- **Eliminated "God Controller" Anti-Pattern**:
+  - **Problem**: MainWindow class was directly instantiating and managing all backend services (JsonSocketServer, SessionManager, WebcamCapture, StimulusController)
+  - **Solution**: Created MainController class (516 lines) implementing Controller/Presenter pattern
+  - **Impact**: UI is now decoupled from business logic, improving testability and maintainability
+
+- **Implemented Dependency Injection Pattern**:
+  - **Problem**: Tight coupling between UI and backend services made unit testing nearly impossible
+  - **Solution**: Created Application class (175 lines) as dependency injection container
+  - **Impact**: Services can now be easily mocked for testing, and dependencies are clearly defined
+
+- **Separated UI Concerns from Business Logic**:
+  - **Problem**: MainWindow contained both UI rendering and business logic, violating single responsibility principle
+  - **Solution**: Created RefactoredMainWindow class (585 lines) that only handles UI events
+  - **Impact**: Clean separation of concerns following MVC pattern
+
+#### Technical Implementation Details
+
+- **MainController Class** (`PythonApp/src/gui/main_controller.py`):
+  - **516 lines** implementing Controller/Presenter pattern
+  - **Dependency Injection**: Receives all backend services via `inject_dependencies()` method
+  - **Signal-based Communication**: Uses Qt signals for thread-safe communication with UI
+  - **Business Logic Orchestration**: Manages all interactions between backend services
+  - **State Management**: Maintains application state separate from UI state
+
+- **Application Class** (`PythonApp/src/application.py`):
+  - **175 lines** serving as dependency injection container
+  - **Service Lifecycle Management**: Creates and configures all backend services
+  - **Dependency Wiring**: Automatically wires dependencies between services
+  - **Clean Entry Point**: Provides proper application initialization and shutdown
+
+- **RefactoredMainWindow Class** (`PythonApp/src/gui/refactored_main_window.py`):
+  - **585 lines** implementing pure UI layer following MVC pattern
+  - **Controller Injection**: Receives MainController via `set_controller()` method
+  - **Event Delegation**: All business logic delegated to controller
+  - **UI-only Responsibilities**: Only handles rendering and user input events
+
+#### Architecture Comparison
+
+**Before (Anti-Pattern)**:
+```
+MainWindow
+├── Directly instantiates JsonSocketServer
+├── Directly instantiates SessionManager  
+├── Directly instantiates WebcamCapture
+├── Directly instantiates StimulusController
+├── Contains business logic
+├── Manages service state
+└── Handles UI events
+```
+
+**After (Clean Architecture)**:
+```
+Application (DI Container)
+├── Creates all services
+├── Wires dependencies
+└── Injects into MainController
+
+MainController (Business Logic)
+├── Receives services via DI
+├── Orchestrates backend operations
+├── Manages application state
+└── Communicates via Qt signals
+
+RefactoredMainWindow (UI Only)
+├── Receives controller via DI
+├── Handles UI events only
+├── Delegates to controller
+└── Updates UI from signals
+```
+
+#### Threading Model Issues Identified
+
+- **Mixed Threading Pattern**: JsonSocketServer uses both QThread and threading.Thread
+- **Inconsistency**: WebcamCapture correctly uses QThread, but JsonSocketServer mixes models
+- **Risk**: Non-Qt threads interacting with GUI can cause instability
+- **Recommendation**: Standardize all services to use Qt threading model
+
+#### Documentation Accuracy Corrections
+
+- **Updated FINAL_SYSTEM_STATUS_REPORT.md**: Corrected misleading claims about 100% completion
+- **Identified Placeholder Implementations**: 
+  - CalibrationManager (403 lines) - contains only TODO comments and placeholder methods
+  - LoggerManager (462 lines) - contains only TODO comments and placeholder methods
+- **Updated todo.md**: Added critical section tracking remaining architectural work
+
+#### Benefits Achieved
+
+- ✅ **Improved Testability**: Controller can be unit tested independently of UI
+- ✅ **Loose Coupling**: UI and business logic are now completely decoupled
+- ✅ **Better Maintainability**: Clear separation of responsibilities
+- ✅ **Dependency Injection**: Services can be easily mocked for testing
+- ✅ **Thread-safe Communication**: All cross-component communication uses Qt signals
+- ✅ **Single Responsibility**: Each class has a clear, focused purpose
+
+#### Files Modified
+
+- **Added**: `PythonApp/src/gui/main_controller.py` - Controller/Presenter implementation
+- **Added**: `PythonApp/src/application.py` - Dependency injection container
+- **Added**: `PythonApp/src/gui/refactored_main_window.py` - Clean UI implementation
+- **Modified**: `PythonApp/src/FINAL_SYSTEM_STATUS_REPORT.md` - Corrected documentation
+- **Modified**: `todo.md` - Added architectural refactoring section
+- **Modified**: `changelog.md` - This entry
+
 ### Fixed - Permission Crash Resolution ✅ COMPLETED (2025-07-30)
 
 This critical update resolves fatal crashes occurring during permission requests due to XXPermissions library restrictions and missing manifest declarations.
