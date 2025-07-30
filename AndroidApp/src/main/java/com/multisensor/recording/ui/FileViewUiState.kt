@@ -14,110 +14,106 @@ data class FileViewUiState(
     val sessions: List<SessionItem> = emptyList(),
     val selectedSessionIndex: Int = -1,
     val sessionFiles: List<FileItem> = emptyList(),
+    val selectedFileIndices: Set<Int> = emptySet(),
     
     // Search and Filter State
     val searchQuery: String = "",
-    val selectedFilter: FileFilter = FileFilter.ALL,
     val filteredSessions: List<SessionItem> = emptyList(),
     
-    // UI Display State
-    val showEmptyState: Boolean = false,
-    val showSessionInfo: Boolean = false,
-    val showFilesList: Boolean = false,
-    
-    // Loading States
-    val isLoadingSessions: Boolean = false,
-    val isLoadingFiles: Boolean = false,
-    val isRefreshing: Boolean = false,
-    
-    // Selection and Actions
-    val selectedFileIndices: Set<Int> = emptySet(),
-    val showFileActions: Boolean = false,
-    val showDeleteConfirmation: Boolean = false,
-    
-    // Error Handling
-    val errorMessage: String? = null,
-    val showErrorDialog: Boolean = false,
-    
-    // Storage Information
+    // Storage Management
     val totalStorageUsed: Long = 0L,
     val availableStorage: Long = 0L,
     val storageWarningThreshold: Float = 0.8f,
     
-    // Sort Options
-    val sortBy: SortOption = SortOption.DATE_DESC,
-    val showSortMenu: Boolean = false
-) {
+    // UI Display State
+    val showEmptyState: Boolean = false,
     
+    // Loading States
+    val isLoadingSessions: Boolean = false,
+    val isLoadingFiles: Boolean = false,
+    
+    // Error Handling
+    val errorMessage: String? = null,
+    val successMessage: String? = null
+) {
     /**
-     * Computed property for the currently selected session
+     * Get the currently selected session, or null if none selected
      */
     val selectedSession: SessionItem?
         get() = if (selectedSessionIndex >= 0 && selectedSessionIndex < sessions.size) {
             sessions[selectedSessionIndex]
         } else null
-    
+
     /**
-     * Computed property to determine if files can be deleted
+     * Check if files can be deleted (files selected and not loading)
      */
     val canDeleteFiles: Boolean
         get() = selectedFileIndices.isNotEmpty() && !isLoadingFiles
-    
+
     /**
-     * Computed property to determine if session can be deleted
+     * Check if session can be deleted (session selected and not loading)
      */
     val canDeleteSession: Boolean
         get() = selectedSession != null && !isLoadingSessions
-    
+
     /**
-     * Computed property to determine if files can be shared
+     * Check if files can be shared (files selected and not loading)
      */
     val canShareFiles: Boolean
         get() = selectedFileIndices.isNotEmpty() && !isLoadingFiles
-    
+
     /**
-     * Computed property for storage usage percentage
+     * Calculate storage usage percentage
      */
     val storageUsagePercentage: Float
-        get() = if (totalStorageUsed + availableStorage > 0) {
-            totalStorageUsed.toFloat() / (totalStorageUsed + availableStorage)
-        } else 0f
-    
+        get() {
+            val totalStorage = totalStorageUsed + availableStorage
+            return if (totalStorage > 0) {
+                totalStorageUsed.toFloat() / totalStorage.toFloat()
+            } else 0f
+        }
+
     /**
-     * Computed property to determine if storage warning should be shown
+     * Check if storage warning should be shown
      */
     val showStorageWarning: Boolean
         get() = storageUsagePercentage > storageWarningThreshold
-    
+
     /**
-     * Computed property for total file count across all sessions
+     * Get total file count across all sessions
      */
     val totalFileCount: Int
         get() = sessions.sumOf { it.fileCount }
-    
+
     /**
-     * Computed property for selected files count
+     * Get count of selected files
      */
     val selectedFilesCount: Int
         get() = selectedFileIndices.size
-    
+
     /**
-     * Get selected files from the current session
+     * Get list of selected files
      */
     val selectedFiles: List<FileItem>
         get() = selectedFileIndices.mapNotNull { index ->
-            if (index < sessionFiles.size) sessionFiles[index] else null
+            if (index >= 0 && index < sessionFiles.size) {
+                sessionFiles[index]
+            } else null
         }
-    
+
     /**
-     * Computed property for search results count
+     * Get search results count
      */
     val searchResultsCount: Int
-        get() = if (searchQuery.isNotEmpty()) filteredSessions.size else sessions.size
+        get() = if (searchQuery.isBlank()) {
+            sessions.size
+        } else {
+            filteredSessions.size
+        }
 }
 
 /**
- * Represents a recording session
+ * Data class representing a session item in the browser.
  */
 data class SessionItem(
     val sessionId: String,
@@ -128,44 +124,27 @@ data class SessionItem(
     val fileCount: Int,
     val totalSize: Long,
     val deviceTypes: List<String>,
-    val status: SessionStatus,
-    val thumbnailPath: String? = null
+    val status: SessionStatus
 ) {
     /**
-     * Computed property for human-readable duration
+     * Get formatted duration string
      */
     val formattedDuration: String
         get() {
-            val hours = duration / 3600000
-            val minutes = (duration % 3600000) / 60000
-            val seconds = (duration % 60000) / 1000
+            val seconds = duration / 1000
+            val minutes = seconds / 60
+            val hours = minutes / 60
+
             return when {
-                hours > 0 -> "${hours}h ${minutes}m ${seconds}s"
-                minutes > 0 -> "${minutes}m ${seconds}s"
+                hours > 0 -> "${hours}h ${minutes % 60}m ${seconds % 60}s"
+                minutes > 0 -> "${minutes}m ${seconds % 60}s"
                 else -> "${seconds}s"
             }
         }
-    
-    /**
-     * Computed property for human-readable file size
-     */
-    val formattedSize: String
-        get() = formatFileSize(totalSize)
 }
 
 /**
- * Data class representing a file item in the browser.
- * This is the single source of truth, moved from FileViewActivity.
- */
-data class FileItem(
-    val file: File,
-    val type: FileType,
-    val sessionId: String,
-    val metadata: String = "",
-)
-
-/**
- * Session status enumeration
+ * Enum representing session status.
  */
 enum class SessionStatus {
     COMPLETED,
@@ -175,56 +154,34 @@ enum class SessionStatus {
 }
 
 /**
+ * Data class representing a file item in the browser.
+ */
+data class FileItem(
+    val file: File,
+    val type: FileType,
+    val sessionId: String,
+    val metadata: String = ""
+)
+
+/**
  * Enum representing different file types.
- * This is the single source of truth, moved from FileViewActivity.
  */
 enum class FileType(
-    val displayName: String,
+    val displayName: String
 ) {
     VIDEO("Video"),
     RAW_IMAGE("RAW Image"),
-    THERMAL_DATA("Thermal Data"),
+    THERMAL_DATA("Thermal Data")
 }
 
 /**
- * File filter options
+ * Extension property for File to get file extension
  */
-enum class FileFilter(val displayName: String) {
-    ALL("All Files"),
-    VIDEO("Video Files"),
-    AUDIO("Audio Files"),
-    SENSOR_DATA("Sensor Data"),
-    THERMAL("Thermal Data"),
-    RECENT("Recent"),
-    LARGE_FILES("Large Files")
-}
-
-/**
- * Sort options for sessions and files
- */
-enum class SortOption(val displayName: String) {
-    DATE_DESC("Newest First"),
-    DATE_ASC("Oldest First"),
-    NAME_ASC("Name A-Z"),
-    NAME_DESC("Name Z-A"),
-    SIZE_DESC("Largest First"),
-    SIZE_ASC("Smallest First"),
-    DURATION_DESC("Longest First"),
-    DURATION_ASC("Shortest First")
-}
-
-/**
- * Helper function to format file sizes
- */
-private fun formatFileSize(bytes: Long): String {
-    val units = arrayOf("B", "KB", "MB", "GB", "TB")
-    var size = bytes.toDouble()
-    var unitIndex = 0
-    
-    while (size >= 1024 && unitIndex < units.size - 1) {
-        size /= 1024
-        unitIndex++
+val File.extension: String
+    get() {
+        val name = this.name
+        val lastDot = name.lastIndexOf('.')
+        return if (lastDot >= 0 && lastDot < name.length - 1) {
+            name.substring(lastDot + 1)
+        } else ""
     }
-    
-    return "%.1f %s".format(size, units[unitIndex])
-}

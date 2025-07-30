@@ -2,7 +2,7 @@ package com.multisensor.recording.integration
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.multisensor.recording.protocol.ConfigManager
+import com.multisensor.recording.config.CommonConstants
 import com.multisensor.recording.protocol.SchemaManager
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -26,14 +26,12 @@ import kotlin.concurrent.thread
 @RunWith(AndroidJUnit4::class)
 class ProtocolIntegrationTest {
     private lateinit var schemaManager: SchemaManager
-    private lateinit var configManager: ConfigManager
     private lateinit var mockConnectionManager: MockConnectionManager
 
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         schemaManager = SchemaManager.getInstance(context)
-        configManager = ConfigManager.getInstance(context)
         mockConnectionManager = MockConnectionManager()
     }
 
@@ -65,17 +63,20 @@ class ProtocolIntegrationTest {
     }
 
     @Test
-    fun testConfigManagerLoading() {
-        // Test that config manager loads successfully
-        assertTrue("Config should be loaded", configManager.isConfigLoaded)
-
-        // Test basic configuration access
-        val host = configManager.host
-        val port = configManager.port
+    fun testCommonConstantsAccess() {
+        // Test that CommonConstants provides expected configuration values
+        val host = CommonConstants.Network.HOST
+        val port = CommonConstants.Network.PORT
 
         assertNotNull("Host should not be null", host)
+        assertTrue("Host should not be empty", host.isNotEmpty())
         assertTrue("Port should be positive", port > 0)
         assertTrue("Port should be valid", port <= 65535)
+        
+        // Test other constants are accessible
+        assertTrue("Protocol version should be positive", CommonConstants.PROTOCOL_VERSION > 0)
+        assertNotNull("App version should not be null", CommonConstants.APP_VERSION)
+        assertTrue("Frame rate should be positive", CommonConstants.Devices.FRAME_RATE > 0)
     }
 
     @Test
@@ -285,16 +286,14 @@ class ProtocolIntegrationTest {
 
     @Test
     fun testConfigSchemaConsistency() {
-        // Test that calibration config matches schema expectations
-        val calibrationConfig = configManager.calibrationConfig
+        // Test that calibration constants match schema expectations
+        val patternRows = CommonConstants.Calibration.PATTERN_ROWS
+        val patternCols = CommonConstants.Calibration.PATTERN_COLS
 
-        val patternRows = calibrationConfig.optInt("pattern_rows", 7)
-        val patternCols = calibrationConfig.optInt("pattern_cols", 6)
-
-        // Create calibration message using config values
+        // Create calibration message using constants values
         val calibrationMessage =
             schemaManager.createMessage("calibration_start").apply {
-                put("pattern_type", calibrationConfig.optString("pattern_type", "chessboard"))
+                put("pattern_type", CommonConstants.Calibration.PATTERN_TYPE)
                 put(
                     "pattern_size",
                     JSONObject().apply {

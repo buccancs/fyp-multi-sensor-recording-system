@@ -3,41 +3,45 @@ package com.multisensor.recording.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.SessionInfo
-import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 /**
- * File View Activity - Comprehensive file browser for multi-sensor recording sessions
- *
- * Features:
- * - Browse recorded sessions and their files
- * - Display file metadata and session information
- * - File management operations (delete, share, export)
- * - Search and filter functionality
- * - Integration with SessionInfo and SessionManager
+ * File View Activity - MVVM-based file browser for multi-sensor recording sessions
+ * 
+ * Refactored to follow proper MVVM architecture:
+ * - Activity is a passive observer of ViewModel state
+ * - All business logic moved to FileViewViewModel
+ * - Uses StateFlow for reactive UI updates
+ * - Forwards user events to ViewModel
  */
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
-    @Inject
-    lateinit var sessionManager: SessionManager
-
+    
+    private val viewModel: FileViewViewModel by viewModels()
+    
     @Inject
     lateinit var logger: Logger
 
@@ -51,15 +55,9 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var emptyStateText: TextView
     private lateinit var refreshButton: Button
 
-    // Adapters and Data
+    // Adapters
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
-    private val sessions = mutableListOf<SessionInfo>()
-    private val currentFiles = mutableListOf<FileItem>()
-    private var selectedSession: SessionInfo? = null
-
-    // Coroutine scope
-    private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     // Date formatter
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -75,16 +73,14 @@ class FileViewActivity : AppCompatActivity() {
         setupActionBar()
         initializeViews()
         setupRecyclerViews()
-        setupClickListeners()
-        setupSearch()
-        loadSessions()
+        setupEventListeners()
+        observeUiState()
 
-        logger.info("FileViewActivity created")
+        logger.info("FileViewActivity created with MVVM architecture")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        activityScope.cancel()
         logger.info("FileViewActivity destroyed")
     }
 
@@ -96,7 +92,7 @@ class FileViewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.action_refresh -> {
-                refreshSessions()
+                viewModel.refreshSessions()
                 true
             }
             R.id.action_delete_all -> {
@@ -104,7 +100,7 @@ class FileViewActivity : AppCompatActivity() {
                 true
             }
             R.id.action_export_all -> {
-                exportAllSessions()
+                showMessage("Export functionality coming soon")
                 true
             }
             android.R.id.home -> {
@@ -135,242 +131,139 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun setupRecyclerViews() {
         // Sessions RecyclerView
-        sessionsAdapter =
-            SessionsAdapter(sessions) { session ->
-                selectSession(session)
-            }
+        sessionsAdapter = SessionsAdapter(emptyList()) { session ->
+            viewModel.selectSession(session)
+        }
         sessionsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@FileViewActivity)
             adapter = sessionsAdapter
         }
 
         // Files RecyclerView
-        filesAdapter =
-            FilesAdapter(currentFiles) { fileItem ->
-                handleFileClick(fileItem)
-            }
+        filesAdapter = FilesAdapter(emptyList()) { fileItem ->
+            handleFileClick(fileItem)
+        }
         filesRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@FileViewActivity)
             adapter = filesAdapter
         }
     }
 
-    private fun setupClickListeners() {
-        refreshButton.setOnClickListener {
-            refreshSessions()
-        }
-    }
-
-    private fun setupSearch() {
-        // Search functionality using TextWatcher for EditText
-        searchEditText.addTextChangedListener(
-            object : android.text.TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int,
-                ) {}
-
-                override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int,
-                ) {
-                    filterSessions(s?.toString())
-                }
-
-                override fun afterTextChanged(s: android.text.Editable?) {}
-            },
-        )
+    private fun setupEventListeners() {
+        // Search functionality
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onSearchQueryChanged(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         // Filter spinner
         val filterOptions = arrayOf("All Files", "Video Files", "RAW Images", "Thermal Data", "Recent Sessions")
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filterOptions)
         filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterSpinner.adapter = filterAdapter
-
-        filterSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long,
-                ) {
-                    applyFilter(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+        
+        filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                viewModel.applyFilter(position)
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Refresh button
+        refreshButton.setOnClickListener {
+            viewModel.refreshSessions()
+        }
     }
 
-    private fun loadSessions() {
-        activityScope.launch {
-            try {
-                progressBar.visibility = View.VISIBLE
-                emptyStateText.visibility = View.GONE
-
-                // Load sessions from SessionManager
-                val loadedSessions =
-                    withContext(Dispatchers.IO) {
-                        sessionManager.getAllSessions()
-                    }
-
-                sessions.clear()
-                sessions.addAll(loadedSessions)
-                sessionsAdapter.notifyDataSetChanged()
-
-                updateEmptyState()
-
-                logger.info("Loaded ${sessions.size} sessions")
-            } catch (e: Exception) {
-                logger.error("Failed to load sessions", e)
-                showError("Failed to load sessions: ${e.message}")
-            } finally {
-                progressBar.visibility = View.GONE
+    /**
+     * Observe ViewModel UiState using modern StateFlow pattern
+     */
+    private fun observeUiState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    render(state)
+                }
             }
         }
     }
 
-    private fun refreshSessions() {
-        logger.info("Refreshing sessions...")
-        loadSessions()
+    /**
+     * Single function to render the entire UI based on the state
+     */
+    private fun render(state: FileViewUiState) {
+        // Loading states
+        progressBar.visibility = if (state.isLoadingSessions || state.isLoadingFiles) View.VISIBLE else View.GONE
+        
+        // Empty state
+        emptyStateText.visibility = if (state.showEmptyState) View.VISIBLE else View.GONE
+        
+        // Update sessions list
+        sessionsAdapter.updateSessions(state.sessions)
+        
+        // Update files list
+        filesAdapter.updateFiles(state.sessionFiles)
+        
+        // Update session info
+        state.selectedSession?.let { session ->
+            updateSessionInfo(session)
+        } ?: run {
+            sessionInfoText.text = "No session selected"
+        }
+        
+        // Handle error messages
+        state.errorMessage?.let { error ->
+            showError(error)
+            viewModel.clearError()
+        }
     }
 
-    private fun selectSession(session: SessionInfo) {
-        selectedSession = session
-        updateSessionInfo(session)
-        loadSessionFiles(session)
-
-        logger.info("Selected session: ${session.sessionId}")
-    }
-
-    private fun updateSessionInfo(session: SessionInfo) {
-        val info =
-            buildString {
-                append("Session: ${session.sessionId}\n")
-                append("Duration: ${formatDuration(session.getDurationMs())}\n")
-                append("Started: ${dateFormatter.format(Date(session.startTime))}\n")
-                if (session.endTime > 0) {
-                    append("Ended: ${dateFormatter.format(Date(session.endTime))}\n")
-                }
-                append("Video: ${if (session.videoEnabled) "Enabled" else "Disabled"}\n")
-                append("RAW Images: ${session.getRawImageCount()} files\n")
-                append("Thermal: ${if (session.thermalEnabled) "Enabled (${session.thermalFrameCount} frames)" else "Disabled"}\n")
-                if (session.errorOccurred) {
-                    append("Error: ${session.errorMessage}\n")
-                }
+    private fun updateSessionInfo(session: SessionItem) {
+        val info = buildString {
+            append("Session: ${session.sessionId}\n")
+            append("Name: ${session.name}\n")
+            append("Start: ${dateFormatter.format(Date(session.startTime))}\n")
+            if (session.endTime > 0) {
+                append("End: ${dateFormatter.format(Date(session.endTime))}\n")
+                append("Duration: ${session.formattedDuration}\n")
+            } else {
+                append("Status: ${session.status}\n")
             }
-
+            append("Files: ${session.fileCount}\n")
+            append("Size: ${formatFileSize(session.totalSize)}\n")
+            append("Devices: ${session.deviceTypes.joinToString(", ")}")
+        }
         sessionInfoText.text = info
     }
 
-    private fun loadSessionFiles(session: SessionInfo) {
-        activityScope.launch {
-            try {
-                val files =
-                    withContext(Dispatchers.IO) {
-                        buildList {
-                            // Add video file
-                            session.videoFilePath?.let { path ->
-                                val file = File(path)
-                                if (file.exists()) {
-                                    add(
-                                        FileItem(
-                                            file = file,
-                                            type = FileType.VIDEO,
-                                            sessionId = session.sessionId,
-                                            metadata = "Video recording",
-                                        ),
-                                    )
-                                }
-                            }
-
-                            // Add RAW files
-                            session.rawFilePaths.forEach { path ->
-                                val file = File(path)
-                                if (file.exists()) {
-                                    add(
-                                        FileItem(
-                                            file = file,
-                                            type = FileType.RAW_IMAGE,
-                                            sessionId = session.sessionId,
-                                            metadata = "RAW image",
-                                        ),
-                                    )
-                                }
-                            }
-
-                            // Add thermal file
-                            session.thermalFilePath?.let { path ->
-                                val file = File(path)
-                                if (file.exists()) {
-                                    add(
-                                        FileItem(
-                                            file = file,
-                                            type = FileType.THERMAL_DATA,
-                                            sessionId = session.sessionId,
-                                            metadata = "Thermal data (${session.thermalFrameCount} frames)",
-                                        ),
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                currentFiles.clear()
-                currentFiles.addAll(files)
-                filesAdapter.notifyDataSetChanged()
-
-                logger.info("Loaded ${files.size} files for session ${session.sessionId}")
-            } catch (e: Exception) {
-                logger.error("Failed to load session files", e)
-                showError("Failed to load files: ${e.message}")
-            }
-        }
-    }
-
     private fun handleFileClick(fileItem: FileItem) {
-        AlertDialog
-            .Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(fileItem.file.name)
-            .setMessage(
-                buildString {
-                    append("Type: ${fileItem.type.displayName}\n")
-                    append("Size: ${formatFileSize(fileItem.file.length())}\n")
-                    append("Modified: ${dateFormatter.format(Date(fileItem.file.lastModified()))}\n")
-                    append("Path: ${fileItem.file.absolutePath}\n")
-                    if (fileItem.metadata.isNotEmpty()) {
-                        append("Info: ${fileItem.metadata}")
-                    }
-                },
-            ).setPositiveButton("Open") { _, _ ->
+            .setMessage("File size: ${formatFileSize(fileItem.file.length())}\nLast modified: ${dateFormatter.format(Date(fileItem.file.lastModified()))}")
+            .setPositiveButton("Open") { _, _ ->
                 openFile(fileItem)
-            }.setNeutralButton("Share") { _, _ ->
+            }
+            .setNeutralButton("Share") { _, _ ->
                 shareFile(fileItem)
-            }.setNegativeButton("Delete") { _, _ ->
-                deleteFile(fileItem)
-            }.show()
+            }
+            .setNegativeButton("Delete") { _, _ ->
+                confirmDeleteFile(fileItem)
+            }
+            .show()
     }
 
     private fun openFile(fileItem: FileItem) {
         try {
             val uri = FileProvider.getUriForFile(this, AUTHORITY, fileItem.file)
-            val intent =
-                Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(uri, getMimeType(fileItem.type))
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                showError("No app available to open this file type")
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, getMimeType(fileItem.type))
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
+            startActivity(Intent.createChooser(intent, "Open with"))
         } catch (e: Exception) {
-            logger.error("Failed to open file", e)
             showError("Failed to open file: ${e.message}")
         }
     }
@@ -378,125 +271,43 @@ class FileViewActivity : AppCompatActivity() {
     private fun shareFile(fileItem: FileItem) {
         try {
             val uri = FileProvider.getUriForFile(this, AUTHORITY, fileItem.file)
-            val intent =
-                Intent(Intent.ACTION_SEND).apply {
-                    type = getMimeType(fileItem.type)
-                    putExtra(Intent.EXTRA_STREAM, uri)
-                    putExtra(Intent.EXTRA_TEXT, "Shared from Multi-Sensor Recording")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = getMimeType(fileItem.type)
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
             startActivity(Intent.createChooser(intent, "Share file"))
         } catch (e: Exception) {
-            logger.error("Failed to share file", e)
             showError("Failed to share file: ${e.message}")
         }
     }
 
-    private fun deleteFile(fileItem: FileItem) {
-        AlertDialog
-            .Builder(this)
+    private fun confirmDeleteFile(fileItem: FileItem) {
+        AlertDialog.Builder(this)
             .setTitle("Delete File")
             .setMessage("Are you sure you want to delete ${fileItem.file.name}?")
             .setPositiveButton("Delete") { _, _ ->
-                performDeleteFile(fileItem)
-            }.setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun performDeleteFile(fileItem: FileItem) {
-        activityScope.launch {
-            try {
-                val deleted =
-                    withContext(Dispatchers.IO) {
-                        fileItem.file.delete()
-                    }
-
-                if (deleted) {
-                    currentFiles.remove(fileItem)
-                    filesAdapter.notifyDataSetChanged()
-                    showMessage("File deleted successfully")
-                    logger.info("Deleted file: ${fileItem.file.name}")
-                } else {
-                    showError("Failed to delete file")
-                }
-            } catch (e: Exception) {
-                logger.error("Failed to delete file", e)
-                showError("Failed to delete file: ${e.message}")
+                viewModel.deleteFile(fileItem)
             }
-        }
-    }
-
-    private fun filterSessions(query: String?) {
-        // TODO: Implement session filtering based on search query
-        logger.debug("Filtering sessions with query: $query")
-    }
-
-    private fun applyFilter(filterIndex: Int) {
-        // TODO: Implement file filtering based on selected filter
-        logger.debug("Applying filter: $filterIndex")
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun showDeleteAllDialog() {
-        AlertDialog
-            .Builder(this)
+        AlertDialog.Builder(this)
             .setTitle("Delete All Sessions")
-            .setMessage("Are you sure you want to delete all recorded sessions? This action cannot be undone.")
+            .setMessage("Are you sure you want to delete all recording sessions? This action cannot be undone.")
             .setPositiveButton("Delete All") { _, _ ->
-                deleteAllSessions()
-            }.setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun deleteAllSessions() {
-        activityScope.launch {
-            try {
-                progressBar.visibility = View.VISIBLE
-
-                withContext(Dispatchers.IO) {
-                    sessionManager.deleteAllSessions()
-                }
-
-                sessions.clear()
-                currentFiles.clear()
-                sessionsAdapter.notifyDataSetChanged()
-                filesAdapter.notifyDataSetChanged()
-
-                selectedSession = null
-                sessionInfoText.text = "No session selected"
-                updateEmptyState()
-
-                showMessage("All sessions deleted successfully")
-                logger.info("Deleted all sessions")
-            } catch (e: Exception) {
-                logger.error("Failed to delete all sessions", e)
-                showError("Failed to delete sessions: ${e.message}")
-            } finally {
-                progressBar.visibility = View.GONE
+                viewModel.deleteAllSessions()
             }
-        }
-    }
-
-    private fun exportAllSessions() {
-        // TODO: Implement export functionality
-        showMessage("Export functionality coming soon")
-        logger.info("Export all sessions requested")
-    }
-
-    private fun updateEmptyState() {
-        if (sessions.isEmpty()) {
-            emptyStateText.visibility = View.VISIBLE
-            emptyStateText.text = "No recorded sessions found.\nStart recording to see files here."
-        } else {
-            emptyStateText.visibility = View.GONE
-        }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun formatDuration(durationMs: Long): String {
         val seconds = durationMs / 1000
         val minutes = seconds / 60
         val hours = minutes / 60
-
         return when {
             hours > 0 -> String.format("%d:%02d:%02d", hours, minutes % 60, seconds % 60)
             minutes > 0 -> String.format("%d:%02d", minutes, seconds % 60)
@@ -504,20 +315,22 @@ class FileViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun formatFileSize(bytes: Long): String =
-        when {
+    private fun formatFileSize(bytes: Long): String {
+        return when {
             bytes >= 1024 * 1024 * 1024 -> String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0))
             bytes >= 1024 * 1024 -> String.format("%.1f MB", bytes / (1024.0 * 1024.0))
             bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
             else -> "$bytes B"
         }
+    }
 
-    private fun getMimeType(fileType: FileType): String =
-        when (fileType) {
-            FileType.VIDEO -> "video/mp4"
+    private fun getMimeType(fileType: FileType): String {
+        return when (fileType) {
+            FileType.VIDEO -> "video/*"
             FileType.RAW_IMAGE -> "image/*"
-            FileType.THERMAL_DATA -> "application/octet-stream"
+            FileType.THERMAL_DATA -> "text/plain"
         }
+    }
 
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

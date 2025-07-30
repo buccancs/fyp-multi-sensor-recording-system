@@ -14,9 +14,14 @@ import java.util.*
  * RecyclerView adapter for displaying files within a recording session
  */
 class FilesAdapter(
-    private val files: List<FileItem>,
+    private var files: List<FileItem>,
     private val onFileClick: (FileItem) -> Unit,
 ) : RecyclerView.Adapter<FilesAdapter.FileViewHolder>() {
+    
+    fun updateFiles(newFiles: List<FileItem>) {
+        files = newFiles
+        notifyDataSetChanged()
+    }
     private val dateFormatter = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
 
     override fun onCreateViewHolder(

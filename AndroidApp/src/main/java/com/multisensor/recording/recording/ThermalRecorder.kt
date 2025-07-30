@@ -121,7 +121,12 @@ class ThermalRecorder
                     when (intent.action) {
                         USB_PERMISSION_ACTION -> {
                             synchronized(this) {
-                                val device: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                                val device: UsbDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+                                } else {
+                                    @Suppress("DEPRECATION")
+                                    intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                                }
                                 if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                                     device?.let {
                                         logger.debug("USB permission granted for device: ${it.deviceName}")
@@ -133,11 +138,21 @@ class ThermalRecorder
                             }
                         }
                         UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
-                            val device: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                            val device: UsbDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+                            } else {
+                                @Suppress("DEPRECATION")
+                                intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                            }
                             device?.let { handleDeviceAttached(it) }
                         }
                         UsbManager.ACTION_USB_DEVICE_DETACHED -> {
-                            val device: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                            val device: UsbDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+                            } else {
+                                @Suppress("DEPRECATION")
+                                intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                            }
                             device?.let { handleDeviceDetached(it) }
                         }
                     }

@@ -219,7 +219,7 @@ object PermissionTool {
     }
 
     /**
-     * Get all non-location dangerous permissions
+     * Get all non-location dangerous permissions required for sensor recording app
      * These can be requested together without XXPermissions restrictions
      */
     private fun getNonLocationDangerousPermissions(): List<String> {
@@ -228,7 +228,7 @@ object PermissionTool {
         // Storage (version-dependent)
         permissions.addAll(getStoragePermissions())
 
-        // Camera and Audio
+        // Camera and Audio - essential for sensor recording
         permissions.addAll(
             listOf(
                 Permission.CAMERA,
@@ -236,47 +236,7 @@ object PermissionTool {
             ),
         )
 
-        // Phone
-        permissions.addAll(
-            listOf(
-                Permission.READ_PHONE_STATE,
-                Permission.CALL_PHONE,
-                Permission.READ_CALL_LOG,
-                Permission.WRITE_CALL_LOG,
-            ),
-        )
-
-        // SMS
-        permissions.addAll(
-            listOf(
-                Permission.SEND_SMS,
-                Permission.RECEIVE_SMS,
-                Permission.READ_SMS,
-            ),
-        )
-
-        // Contacts
-        permissions.addAll(
-            listOf(
-                Permission.READ_CONTACTS,
-                Permission.WRITE_CONTACTS,
-            ),
-        )
-
-        // Calendar
-        permissions.addAll(
-            listOf(
-                Permission.READ_CALENDAR,
-                Permission.WRITE_CALENDAR,
-            ),
-        )
-
-        // Sensors
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            permissions.add(Permission.BODY_SENSORS)
-        }
-
-        // Notifications (Android 13+)
+        // Notifications (Android 13+) - needed for foreground service notifications
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Permission.POST_NOTIFICATIONS)
         }
@@ -344,18 +304,6 @@ object PermissionTool {
             Permission.READ_MEDIA_IMAGES -> "Read Images"
             Permission.READ_MEDIA_VIDEO -> "Read Videos"
             Permission.READ_MEDIA_AUDIO -> "Read Audio"
-            Permission.READ_PHONE_STATE -> "Phone State"
-            Permission.CALL_PHONE -> "Make Phone Calls"
-            Permission.READ_CALL_LOG -> "Read Call Log"
-            Permission.WRITE_CALL_LOG -> "Write Call Log"
-            Permission.SEND_SMS -> "Send SMS"
-            Permission.RECEIVE_SMS -> "Receive SMS"
-            Permission.READ_SMS -> "Read SMS"
-            Permission.READ_CONTACTS -> "Read Contacts"
-            Permission.WRITE_CONTACTS -> "Write Contacts"
-            Permission.READ_CALENDAR -> "Read Calendar"
-            Permission.WRITE_CALENDAR -> "Write Calendar"
-            Permission.BODY_SENSORS -> "Body Sensors"
             Permission.POST_NOTIFICATIONS -> "Notifications"
             else -> permission.substringAfterLast(".")
         }

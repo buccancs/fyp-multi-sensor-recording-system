@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.multisensor.recording.R
-import com.multisensor.recording.recording.SessionInfo
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,9 +13,14 @@ import java.util.*
  * RecyclerView adapter for displaying recording sessions in the file browser
  */
 class SessionsAdapter(
-    private val sessions: List<SessionInfo>,
-    private val onSessionClick: (SessionInfo) -> Unit,
+    private var sessions: List<SessionItem>,
+    private val onSessionClick: (SessionItem) -> Unit,
 ) : RecyclerView.Adapter<SessionsAdapter.SessionViewHolder>() {
+    
+    fun updateSessions(newSessions: List<SessionItem>) {
+        sessions = newSessions
+        notifyDataSetChanged()
+    }
     private val dateFormatter = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
 
     override fun onCreateViewHolder(
@@ -49,33 +53,23 @@ class SessionsAdapter(
         private val sessionStatusText: TextView = itemView.findViewById(R.id.session_status_text)
         private val sessionFilesText: TextView = itemView.findViewById(R.id.session_files_text)
 
-        fun bind(session: SessionInfo) {
+        fun bind(session: SessionItem) {
             sessionIdText.text = session.sessionId
             sessionDateText.text = dateFormatter.format(Date(session.startTime))
-            sessionDurationText.text = formatDuration(session.getDurationMs())
+            sessionDurationText.text = session.formattedDuration
 
             // Status indicator
-            sessionStatusText.text =
-                when {
-                    session.errorOccurred -> "Error: ${session.errorMessage}"
-                    session.isActive() -> "Recording..."
-                    else -> "Completed"
-                }
+            sessionStatusText.text = session.status.name
 
-            // File count summary
+            // File count and device summary
             val fileCount =
                 buildString {
-                    var count = 0
-                    if (session.videoEnabled && session.videoFilePath != null) count++
-                    count += session.getRawImageCount()
-                    if (session.thermalEnabled && session.thermalFilePath != null) count++
+                    append("${session.fileCount} file")
+                    if (session.fileCount != 1) append("s")
 
-                    append("$count file")
-                    if (count != 1) append("s")
-
-                    if (session.videoEnabled) append(" • Video")
-                    if (session.getRawImageCount() > 0) append(" • ${session.getRawImageCount()} RAW")
-                    if (session.thermalEnabled) append(" • Thermal")
+                    if (session.deviceTypes.isNotEmpty()) {
+                        append(" • ${session.deviceTypes.joinToString(", ")}")
+                    }
                 }
             sessionFilesText.text = fileCount
 
@@ -86,24 +80,12 @@ class SessionsAdapter(
 
             // Visual feedback for selection
             itemView.setBackgroundResource(
-                if (session.errorOccurred) {
+                if (session.status == SessionStatus.CORRUPTED) {
                     R.drawable.session_item_error_background
                 } else {
                     R.drawable.session_item_background
                 },
             )
-        }
-
-        private fun formatDuration(durationMs: Long): String {
-            val seconds = durationMs / 1000
-            val minutes = seconds / 60
-            val hours = minutes / 60
-
-            return when {
-                hours > 0 -> String.format("%d:%02d:%02d", hours, minutes % 60, seconds % 60)
-                minutes > 0 -> String.format("%d:%02d", minutes, seconds % 60)
-                else -> "${seconds}s"
-            }
         }
     }
 }
