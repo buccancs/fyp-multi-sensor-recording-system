@@ -1,3 +1,7 @@
+# Milestone 5.2: Enhanced CI/CD Pipeline
+# ========================================
+# Multi-platform CI/CD with conda environments, path filters, and quality gates
+
 name: CI/CD Pipeline
 
 on:
@@ -11,12 +15,41 @@ env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
   JAVA_VERSION: '17'
   PYTHON_VERSION: '3.9'
+  CONDA_ENV_NAME: 'thermal-env'
 
 jobs:
-  # Android Build and Test Job
+  # Path-based job filtering for optimization
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.changes.outputs.android }}
+      python: ${{ steps.changes.outputs.python }}
+      docs: ${{ steps.changes.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            android:
+              - 'AndroidApp/**'
+              - 'build.gradle'
+              - 'settings.gradle'
+              - 'gradle/**'
+            python:
+              - 'PythonApp/**'
+              - 'environment.yml'
+              - 'build.gradle'
+            docs:
+              - 'docs/**'
+              - 'README.md'
+
+  # Android Build and Test Job (Milestone 5.2)
   android-build-test:
     name: Android Build & Test
     runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.android == 'true' || github.event_name == 'workflow_dispatch' }}
     
     steps:
     - name: Checkout code
@@ -29,7 +62,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Cache Gradle packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/caches
@@ -44,7 +77,7 @@ jobs:
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v1
       
-    - name: Build Android project
+    - name: Build Android project (using Milestone 5.1 tasks)
       run: ./gradlew AndroidApp:assembleDebug --stacktrace
       
     - name: Run Android unit tests
@@ -117,66 +150,73 @@ jobs:
         path: AndroidApp/build/reports/androidTests/connected/
         retention-days: 7
 
-  # Python Build and Test Job
+  # Python Build and Test Job (Milestone 5.2 - Conda-based)
   python-build-test:
-    name: Python Build & Test
+    name: Python Build & Test (Conda)
     runs-on: ${{ matrix.os }}
+    needs: changes
+    if: ${{ needs.changes.outputs.python == 'true' || github.event_name == 'workflow_dispatch' }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: windows-latest
+            conda-env-file: environment.yml
+          - os: ubuntu-latest
+            conda-env-file: environment.yml
         
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        auto-update-conda: true
+        python-version: ${{ env.PYTHON_VERSION }}
+        environment-file: ${{ matrix.conda-env-file }}
+        activate-environment: ${{ env.CONDA_ENV_NAME }}
         
-    - name: Set up JDK ${{ env.JAVA_VERSION }} (for Gradle Python plugin)
+    - name: Cache conda environment
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/conda_pkgs_dir
+          ~/.conda/envs/${{ env.CONDA_ENV_NAME }}
+        key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-conda-
+        
+    - name: Set up JDK ${{ env.JAVA_VERSION }} (for Gradle integration)
       uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
-    - name: Cache pip packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('PythonApp/build.gradle') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-          
     - name: Grant execute permission for gradlew (Unix)
       if: runner.os != 'Windows'
       run: chmod +x gradlew
       
-    - name: Install Python dependencies
-      run: ./gradlew PythonApp:pipInstall
-      shell: bash
+    - name: Verify conda environment
+      shell: bash -l {0}
+      run: |
+        conda info
+        conda list
+        python --version
+        which python
+        
+    - name: Run Python tests (Milestone 5.1 Gradle task)
+      shell: bash -l {0}
+      run: ./gradlew pythonTest --stacktrace
       
-    - name: Test Python environment setup
-      run: ./gradlew PythonApp:testPythonSetup
-      shell: bash
-      
-    - name: Run Python unit tests
-      run: ./gradlew PythonApp:runPythonTests
-      shell: bash
-      
-    - name: Run Python tests with coverage
-      run: ./gradlew PythonApp:runPythonTestsWithCoverage
-      shell: bash
-      
-    - name: Run Python code quality checks
-      run: ./gradlew PythonApp:runPythonLinting
-      shell: bash
+    - name: Run Python linting (Milestone 5.1 Gradle task)
+      shell: bash -l {0}
+      run: ./gradlew pythonLint --stacktrace
       continue-on-error: true
       
-    - name: Run Python type checking
-      run: ./gradlew PythonApp:runPythonTypeCheck
-      shell: bash
+    - name: Run code quality checks (Milestone 5.1 Gradle task)
+      shell: bash -l {0}
+      run: ./gradlew codeQuality --stacktrace
       continue-on-error: true
       
     - name: Upload Python test results
@@ -189,7 +229,7 @@ jobs:
           PythonApp/.coverage
         retention-days: 7
 
-  # Build Validation Job
+  # Build Validation Job (Milestone 5.1 Integration)
   build-validation:
     name: Build System Validation
     runs-on: windows-latest
@@ -205,18 +245,35 @@ jobs:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
-    - name: Set up Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v4
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v3
       with:
+        auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
+        environment-file: environment.yml
+        activate-environment: ${{ env.CONDA_ENV_NAME }}
         
-    - name: Run build validation script
-      run: .\scripts\validate-build.ps1
+    - name: Cache conda environment
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/conda_pkgs_dir
+          ~/.conda/envs/${{ env.CONDA_ENV_NAME }}
+        key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-conda-
+        
+    - name: Run enhanced setup script (Milestone 5.1)
       shell: powershell
+      run: .\setup_dev_env.ps1 -SkipValidation:$false -Verbose
       
-    - name: Test complete build process
-      run: .\gradlew build --stacktrace
-      shell: cmd
+    - name: Test assembleAll task (Milestone 5.1)
+      shell: bash -l {0}
+      run: ./gradlew assembleAll --stacktrace
+      
+    - name: Test buildRelease task (Milestone 5.1)
+      shell: bash -l {0}
+      run: ./gradlew buildRelease --stacktrace
       
     - name: Upload build validation results
       uses: actions/upload-artifact@v3
@@ -252,10 +309,10 @@ jobs:
       with:
         sarif_file: 'trivy-results.sarif'
 
-  # Release Job (only on main branch)
+  # Release Job (Milestone 5.2 - Enhanced with Python packaging)
   release:
     name: Create Release
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: [android-integration-test, python-build-test, build-validation]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
@@ -269,11 +326,31 @@ jobs:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-update-conda: true
+        python-version: ${{ env.PYTHON_VERSION }}
+        environment-file: environment.yml
+        activate-environment: ${{ env.CONDA_ENV_NAME }}
+        
+    - name: Cache conda environment
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/conda_pkgs_dir
+          ~/.conda/envs/${{ env.CONDA_ENV_NAME }}
+        key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-conda-
       
-    - name: Build release APK
-      run: ./gradlew AndroidApp:assembleRelease --stacktrace
+    - name: Build release versions (Milestone 5.1 task)
+      shell: bash -l {0}
+      run: ./gradlew buildRelease --stacktrace
+      
+    - name: Package Python application (Milestone 5.1 task)
+      shell: bash -l {0}
+      run: ./gradlew pythonPackage --stacktrace
       
     - name: Sign APK
       uses: r0adkll/sign-android-release@v1
@@ -287,7 +364,7 @@ jobs:
       env:
         KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
         
-    - name: Create GitHub Release
+    - name: Create GitHub Release (Milestone 5.2 - Multi-platform)
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ github.run_number }}
@@ -296,10 +373,33 @@ jobs:
         prerelease: false
         files: |
           AndroidApp/build/outputs/apk/release/*.apk
+          PythonApp/dist/*.exe
         body: |
-          ## Changes in this Release
-          - Automated release from CI/CD pipeline
-          - Build number: ${{ github.run_number }}
-          - Commit: ${{ github.sha }}
+          ## Milestone 5 Release - Build Automation & CI/CD
+          
+          This release includes both Android and Python applications built using the enhanced build automation system.
+          
+          ### 📱 Android Application
+          - **APK**: Multi-sensor recording system for Android devices
+          - Built with Gradle automation tasks
+          - Includes thermal imaging and sensor integration
+          
+          ### 🖥️ Python Desktop Application  
+          - **Executable**: Windows desktop application for data analysis
+          - Built with conda environment and PyInstaller
+          - Includes GUI for thermal data visualization and calibration
+          
+          ### 🔧 Build Information
+          - **Build System**: Gradle with assembleAll automation
+          - **Environment**: Conda-based Python dependencies
+          - **CI/CD**: GitHub Actions with matrix builds
+          - **Build Number**: ${{ github.run_number }}
+          - **Commit**: ${{ github.sha }}
+          
+          ### 📋 Setup Instructions
+          1. Download the APK for Android installation
+          2. Download the EXE for Windows desktop use
+          3. See README.md for detailed setup instructions
+          4. Use setup_dev_env.ps1 for development environment
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

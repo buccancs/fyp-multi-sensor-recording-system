@@ -175,50 +175,45 @@ public class SchemaManager {
      * @return true if valid, false otherwise
      */
     private boolean validateMessageType(JSONObject message, String messageType) {
-        try {
-            switch (messageType) {
-                case "start_record":
-                    return message.has("session_id");
-                    
-                case "stop_record":
-                    return message.has("session_id");
-                    
-                case "preview_frame":
-                    return message.has("frame_id") && 
-                           message.has("image_data") && 
-                           message.has("width") && 
-                           message.has("height");
-                    
-                case "file_chunk":
-                    return message.has("file_id") && 
-                           message.has("chunk_index") && 
-                           message.has("total_chunks") && 
-                           message.has("chunk_data") && 
-                           message.has("chunk_size") && 
-                           message.has("file_type");
-                    
-                case "device_status":
-                    return message.has("device_id") && 
-                           message.has("status");
-                    
-                case "ack":
-                    return message.has("message_id") && 
-                           message.has("success");
-                    
-                case "calibration_start":
-                    return message.has("pattern_type") && 
-                           message.has("pattern_size");
-                    
-                case "calibration_result":
-                    return message.has("success");
-                    
-                default:
-                    Log.w(TAG, "Unknown message type for validation: " + messageType);
-                    return true; // Allow unknown types
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error in type-specific validation: " + e.getMessage());
-            return false;
+        switch (messageType) {
+            case "start_record":
+                return message.has("session_id");
+                
+            case "stop_record":
+                return message.has("session_id");
+                
+            case "preview_frame":
+                return message.has("frame_id") && 
+                       message.has("image_data") && 
+                       message.has("width") && 
+                       message.has("height");
+                
+            case "file_chunk":
+                return message.has("file_id") && 
+                       message.has("chunk_index") && 
+                       message.has("total_chunks") && 
+                       message.has("chunk_data") && 
+                       message.has("chunk_size") && 
+                       message.has("file_type");
+                
+            case "device_status":
+                return message.has("device_id") && 
+                       message.has("status");
+                
+            case "ack":
+                return message.has("message_id") && 
+                       message.has("success");
+                
+            case "calibration_start":
+                return message.has("pattern_type") && 
+                       message.has("pattern_size");
+                
+            case "calibration_result":
+                return message.has("success");
+                
+            default:
+                Log.w(TAG, "Unknown message type for validation: " + messageType);
+                return true; // Allow unknown types
         }
     }
     

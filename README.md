@@ -37,7 +37,7 @@ project-root/
 └── .gitignore                   # Git ignore file
 ```
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Milestone 5 Enhanced)
 
 ### Prerequisites
 
@@ -45,58 +45,142 @@ project-root/
    - ⚠️ **Important**: Java 24 may cause compatibility issues with Gradle 8.4
    - Download from [Eclipse Temurin](https://adoptium.net/) or [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
 
-2. **Python 3.8+** installed and available in PATH
-   - Download from [python.org](https://www.python.org/downloads/)
-   - Ensure `python` command is available in terminal
-
-3. **Android Studio** (Arctic Fox or later)
+2. **Android Studio** (Arctic Fox or later)
    - Download from [developer.android.com](https://developer.android.com/studio)
    - Ensure Android SDK is properly configured
+   - Set `ANDROID_HOME` environment variable
 
-4. **Git** for version control
+3. **Git** for version control
 
-### Automated Setup
+4. **Internet connection** (for Miniconda and dependency downloads)
 
-**Option 1: Enhanced Setup Script (Recommended)**
+> **Note**: Python installation is **no longer required** - the setup script will install Miniconda automatically!
+
+### 🎯 One-Command Setup (Milestone 5.1)
+
+**Enhanced Environment Bootstrapping Script:**
 ```powershell
-# Run enhanced setup with validation
-.\setup.ps1
+# Complete automated setup (installs Miniconda, creates conda env, configures everything)
+.\setup_dev_env.ps1
 
-# Run setup with comprehensive tests
-.\setup.ps1 -RunTests
+# Force reinstall everything (useful for clean setup)
+.\setup_dev_env.ps1 -ForceReinstall
 
-# Skip validation for faster setup
-.\setup.ps1 -SkipValidation
+# Skip build validation for faster setup
+.\setup_dev_env.ps1 -SkipValidation
+
+# Verbose output for troubleshooting
+.\setup_dev_env.ps1 -Verbose
 ```
 
-**Option 2: Manual Setup**
+This script automatically:
+- ✅ Installs Miniconda (if not present)
+- ✅ Creates conda environment from `environment.yml`
+- ✅ Installs all Python dependencies (PyQt5, OpenCV, etc.)
+- ✅ Configures Android SDK components
+- ✅ Sets up Gradle wrapper
+- ✅ Tests the complete build system
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd MultiSensorRecordingSystem
-   ```
+### 🔧 Build Automation (Milestone 5.1)
 
-2. **Verify environment:**
-   ```powershell
-   # Run build validation
-   .\scripts\validate-build.ps1
-   
-   # Quick environment check
-   java -version
-   python --version
-   ```
+**New Gradle Tasks:**
+```powershell
+# Build everything (Android APK + Python tests)
+.\gradlew assembleAll
 
-3. **Open in Android Studio:**
-   - Launch Android Studio
-   - Choose "Open an existing project"
-   - Select the project root directory
-   - Wait for Gradle sync to complete
+# Setup/update conda environment
+.\gradlew setupPythonEnv
 
-4. **Install Python dependencies:**
-   ```bash
-   .\gradlew PythonApp:pipInstall
-   ```
+# Run code quality checks (Android lint + Python flake8)
+.\gradlew codeQuality
+
+# Build release versions of both apps
+.\gradlew buildRelease
+
+# Package Python app as executable
+.\gradlew pythonPackage
+
+# Run Python tests only
+.\gradlew pythonTest
+
+# Run Python linting only
+.\gradlew pythonLint
+```
+
+### 🐍 Python Environment (Conda-based)
+
+The project now uses **Conda** for Python dependency management:
+
+```powershell
+# Activate the conda environment
+conda activate thermal-env
+
+# Verify environment
+conda list
+
+# Update environment from environment.yml
+conda env update -f environment.yml
+```
+
+### 📱 IDE Setup
+
+**Android Studio:**
+1. Open Android Studio
+2. Choose "Open an existing project"
+3. Select the `AndroidApp` folder
+4. Wait for Gradle sync to complete
+
+**Python IDE (PyCharm/VSCode):**
+1. Open the project root directory
+2. Set Python interpreter to: `%USERPROFILE%\Miniconda3\envs\thermal-env\python.exe`
+3. Mark `PythonApp/src` as Sources Root
+
+## 🔄 CI/CD Pipeline (Milestone 5.2)
+
+The project includes a comprehensive GitHub Actions CI/CD pipeline with:
+
+### ✅ Automated Testing
+- **Path-based job filtering** - Only runs relevant tests when files change
+- **Matrix builds** - Tests across multiple OS and environments
+- **Conda environment setup** - Uses the same environment.yml as development
+- **Quality gates** - Code must pass linting and tests to merge
+
+### 🚀 Build Automation
+- **Android CI**: Build APK, run unit tests, lint checks
+- **Python CI**: Conda environment, pytest, flake8, mypy
+- **Integration testing**: End-to-end build validation
+- **Security scanning**: Trivy vulnerability scanner
+
+### 📦 Release Automation
+- **Automatic releases** on main branch pushes
+- **Multi-platform artifacts**: Android APK + Windows Python executable
+- **Signed APKs** (when keystore secrets are configured)
+- **Release notes** with build information
+
+### 🔧 CI Status Badges
+![CI Status](https://github.com/yourorg/yourrepo/workflows/CI%2FCD%20Pipeline/badge.svg)
+
+## 👥 Team Workflow (Milestone 5.1)
+
+### Branching Strategy
+- **Main branch**: Production-ready code
+- **Develop branch**: Integration branch for features
+- **Feature branches**: `feature/description` for individual tasks
+- **Pull requests**: Required for all changes with code review
+
+### Development Process
+1. Create feature branch from develop
+2. Make changes and test locally with `.\gradlew assembleAll`
+3. Push changes - CI automatically runs tests
+4. Create pull request to develop branch
+5. Code review and CI checks must pass
+6. Merge to develop, then to main for releases
+
+### Code Quality Standards
+- **Android**: Ktlint formatting, Android Lint checks
+- **Python**: Black formatting, flake8 linting, mypy type checking
+- **Pre-commit hooks**: Optional but recommended
+- **Test coverage**: Aim for comprehensive test coverage
 
 ### Build Validation
 
