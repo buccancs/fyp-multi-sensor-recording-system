@@ -46,6 +46,7 @@ class CommandProcessor @Inject constructor(
     private val thermalRecorder: ThermalRecorder,
     private val calibrationCaptureManager: CalibrationCaptureManager,
     private val syncClockManager: SyncClockManager,
+    private val fileTransferHandler: FileTransferHandler,
     private val logger: Logger
 ) {
     
@@ -60,6 +61,7 @@ class CommandProcessor @Inject constructor(
      */
     fun setSocketClient(client: JsonSocketClient) {
         jsonSocketClient = client
+        fileTransferHandler.initialize(client)
         logger.info("CommandProcessor connected to JsonSocketClient")
     }
     
@@ -77,6 +79,7 @@ class CommandProcessor @Inject constructor(
                     is FlashSyncCommand -> handleFlashSync(message)
                     is BeepSyncCommand -> handleBeepSync(message)
                     is SyncTimeCommand -> handleSyncTime(message)
+                    is SendFileCommand -> handleSendFile(message)
                     else -> {
                         logger.warning("Received unsupported command: ${message.type}")
                     }
@@ -629,6 +632,24 @@ class CommandProcessor @Inject constructor(
         } catch (e: Exception) {
             logger.error("Failed to trigger beep sync", e)
             jsonSocketClient?.sendAck("beep_sync", false, "Beep sync failed: ${e.message}")
+        }
+    }
+    
+    /**
+     * Handle send_file command from PC - Milestone 3.6
+     */
+    private suspend fun handleSendFile(command: SendFileCommand) {
+        logger.info("Processing send_file command for: ${command.filepath}")
+        
+        try {
+            // Delegate to FileTransferHandler
+            fileTransferHandler.handleSendFileCommand(command)
+            
+            logger.info("File transfer request delegated to FileTransferHandler")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to handle send_file command", e)
+            jsonSocketClient?.sendAck("send_file", false, "Failed to process file transfer: ${e.message}")
         }
     }
     

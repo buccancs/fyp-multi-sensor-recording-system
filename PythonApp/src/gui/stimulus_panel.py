@@ -27,6 +27,10 @@ class StimulusControlPanel(QGroupBox):
     seek_requested = pyqtSignal(int)  # Emitted when seeking to a position
     screen_changed = pyqtSignal(int)  # Emitted when output screen changes
     
+    # New signals for milestone 3.5
+    start_recording_play_requested = pyqtSignal()  # Emitted when synchronized start is requested
+    mark_event_requested = pyqtSignal()  # Emitted when event marker is requested
+    
     def __init__(self, parent=None):
         super().__init__("Stimulus Controls", parent)
         self.parent_window = parent
@@ -66,6 +70,20 @@ class StimulusControlPanel(QGroupBox):
         self.timeline_slider.setValue(0)
         self.timeline_slider.sliderMoved.connect(self.handle_seek)
         stim_layout.addWidget(self.timeline_slider)
+        
+        # Start Recording & Play button (new for milestone 3.5)
+        self.start_recording_play_btn = QPushButton("Start Recording & Play")
+        self.start_recording_play_btn.setEnabled(False)
+        self.start_recording_play_btn.setStyleSheet("QPushButton { background-color: #4CAF50; color: white; font-weight: bold; }")
+        self.start_recording_play_btn.clicked.connect(self.handle_start_recording_play)
+        stim_layout.addWidget(self.start_recording_play_btn)
+        
+        # Mark Event button (new for milestone 3.5)
+        self.mark_event_btn = QPushButton("Mark Event")
+        self.mark_event_btn.setEnabled(False)
+        self.mark_event_btn.setStyleSheet("QPushButton { background-color: #FF9800; color: white; font-weight: bold; }")
+        self.mark_event_btn.clicked.connect(self.handle_mark_event)
+        stim_layout.addWidget(self.mark_event_btn)
         
         # Output screen selector
         screen_label = QLabel("Output Screen:")
@@ -154,6 +172,18 @@ class StimulusControlPanel(QGroupBox):
         """
         self.screen_changed.emit(index)
     
+    def handle_start_recording_play(self):
+        """Handle Start Recording & Play button press."""
+        self.start_recording_play_requested.emit()
+        if self.parent_window and hasattr(self.parent_window, 'statusBar'):
+            self.parent_window.statusBar().showMessage("Starting synchronized recording and stimulus playback...")
+    
+    def handle_mark_event(self):
+        """Handle Mark Event button press."""
+        self.mark_event_requested.emit()
+        if self.parent_window and hasattr(self.parent_window, 'statusBar'):
+            self.parent_window.statusBar().showMessage("Event marker added")
+    
     def get_current_file(self):
         """
         Get the currently loaded file path.
@@ -212,6 +242,10 @@ class StimulusControlPanel(QGroupBox):
         self.pause_btn.setEnabled(enabled and self.current_file is not None)
         self.timeline_slider.setEnabled(enabled)
         self.screen_combo.setEnabled(enabled)
+        
+        # New buttons for milestone 3.5
+        self.start_recording_play_btn.setEnabled(enabled and self.current_file is not None)
+        self.mark_event_btn.setEnabled(False)  # Only enabled during experiment
     
     def reset_controls(self):
         """Reset all controls to their initial state."""
@@ -222,6 +256,10 @@ class StimulusControlPanel(QGroupBox):
         self.pause_btn.setEnabled(False)
         self.timeline_slider.setValue(0)
         self.populate_screen_combo()  # Refresh screen list
+        
+        # Reset new buttons for milestone 3.5
+        self.start_recording_play_btn.setEnabled(False)
+        self.mark_event_btn.setEnabled(False)
     
     def refresh_screens(self):
         """Refresh the list of available screens."""
@@ -231,3 +269,33 @@ class StimulusControlPanel(QGroupBox):
         # Try to maintain the same selection if possible
         if current_selection < self.screen_combo.count():
             self.screen_combo.setCurrentIndex(current_selection)
+    
+    def set_experiment_active(self, active: bool):
+        """
+        Set experiment active state and update button states accordingly.
+        
+        Args:
+            active (bool): True if experiment is active, False otherwise
+        """
+        if active:
+            # During experiment: disable start button, enable mark event button
+            self.start_recording_play_btn.setEnabled(False)
+            self.mark_event_btn.setEnabled(True)
+            self.browse_btn.setEnabled(False)  # Prevent changing video during experiment
+        else:
+            # Not during experiment: enable start button if file loaded, disable mark event
+            self.start_recording_play_btn.setEnabled(self.current_file is not None)
+            self.mark_event_btn.setEnabled(False)
+            self.browse_btn.setEnabled(True)
+    
+    def update_timeline_from_position(self, position_ms: int, duration_ms: int):
+        """
+        Update timeline slider based on video position.
+        
+        Args:
+            position_ms (int): Current position in milliseconds
+            duration_ms (int): Total duration in milliseconds
+        """
+        if duration_ms > 0:
+            progress = int((position_ms / duration_ms) * 100)
+            self.timeline_slider.setValue(progress)

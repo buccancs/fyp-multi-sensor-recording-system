@@ -19,6 +19,7 @@ import struct
 import logging
 import base64
 import time
+import os
 from typing import Dict, List, Optional, Any
 from PyQt5.QtCore import QThread, pyqtSignal
 
@@ -173,7 +174,7 @@ class JsonSocketServer(QThread):
     notification_received = pyqtSignal(str, str, dict)  # device_id, event_type, event_data
     error_occurred = pyqtSignal(str, str)  # device_id, error_message
     
-    def __init__(self, host: str = '0.0.0.0', port: int = 9000, use_newline_protocol: bool = False):
+    def __init__(self, host: str = '0.0.0.0', port: int = 9000, use_newline_protocol: bool = False, session_manager=None):
         """
         Initialize the JSON Socket Server.
         
@@ -181,11 +182,13 @@ class JsonSocketServer(QThread):
             host (str): Host address to bind to (default: '0.0.0.0' for all interfaces)
             port (int): Port number to listen on (default: 9000)
             use_newline_protocol (bool): Use newline-delimited JSON instead of length-prefixed (default: False)
+            session_manager: SessionManager instance for session directory integration (default: None)
         """
         super().__init__()
         self.host = host
         self.port = port
         self.use_newline_protocol = use_newline_protocol
+        self.session_manager = session_manager
         self.server_socket: Optional[socket.socket] = None
         self.running = False
         self.devices: Dict[str, RemoteDevice] = {}  # device_id -> RemoteDevice mapping
@@ -392,6 +395,115 @@ class JsonSocketServer(QThread):
                 self.ack_received.emit(device_id, cmd, success, error_message)
                 logger.debug(f"ACK from {device_id} for {cmd}: {status}")
         
+        elif message_type == 'file_info':
+            device_id = self.find_device_id(client_socket)
+            if device_id and device_id in self.devices:
+                device = self.devices[device_id]
+                filename = message.get('name', 'unknown')
+                filesize = message.get('size', 0)
+                
+                # Initialize file transfer state
+                device.file_transfer_state = {
+                    'filename': filename,
+                    'expected_size': filesize,
+                    'received_bytes': 0,
+                    'file_handle': None,
+                    'chunks_received': 0
+                }
+                
+                # Create session directory and open file for writing
+                session_dir = self.get_session_directory()
+                if session_dir:
+                    filepath = os.path.join(session_dir, f"{device_id}_{filename}")
+                    try:
+                        device.file_transfer_state['file_handle'] = open(filepath, 'wb')
+                        logger.info(f"Started receiving file {filename} from {device_id} ({filesize} bytes)")
+                    except Exception as e:
+                        logger.error(f"Failed to create file {filepath}: {e}")
+                        device.file_transfer_state = None
+                else:
+                    logger.error(f"No session directory available for file transfer")
+                    device.file_transfer_state = None
+        
+        elif message_type == 'file_chunk':
+            device_id = self.find_device_id(client_socket)
+            if device_id and device_id in self.devices:
+                device = self.devices[device_id]
+                if hasattr(device, 'file_transfer_state') and device.file_transfer_state:
+                    seq = message.get('seq', 0)
+                    base64_data = message.get('data', '')
+                    
+                    try:
+                        # Decode Base64 data
+                        chunk_data = base64.b64decode(base64_data)
+                        
+                        # Write chunk to file
+                        if device.file_transfer_state['file_handle']:
+                            device.file_transfer_state['file_handle'].write(chunk_data)
+                            device.file_transfer_state['received_bytes'] += len(chunk_data)
+                            device.file_transfer_state['chunks_received'] += 1
+                            
+                            # Log progress periodically
+                            if seq % 100 == 0:
+                                progress = (device.file_transfer_state['received_bytes'] * 100.0 / 
+                                          device.file_transfer_state['expected_size'])
+                                logger.debug(f"File transfer progress from {device_id}: {progress:.1f}% "
+                                           f"({device.file_transfer_state['received_bytes']}/{device.file_transfer_state['expected_size']} bytes)")
+                        
+                    except Exception as e:
+                        logger.error(f"Error processing file chunk from {device_id}: {e}")
+                else:
+                    logger.warning(f"Received file chunk from {device_id} without file_info")
+        
+        elif message_type == 'file_end':
+            device_id = self.find_device_id(client_socket)
+            if device_id and device_id in self.devices:
+                device = self.devices[device_id]
+                if hasattr(device, 'file_transfer_state') and device.file_transfer_state:
+                    filename = message.get('name', 'unknown')
+                    
+                    try:
+                        # Close file handle
+                        if device.file_transfer_state['file_handle']:
+                            device.file_transfer_state['file_handle'].close()
+                        
+                        # Verify file size
+                        expected_size = device.file_transfer_state['expected_size']
+                        received_size = device.file_transfer_state['received_bytes']
+                        chunks_received = device.file_transfer_state['chunks_received']
+                        
+                        if received_size == expected_size:
+                            logger.info(f"File transfer completed successfully: {filename} from {device_id} "
+                                      f"({received_size} bytes, {chunks_received} chunks)")
+                            
+                            # Send acknowledgment
+                            ack_message = {
+                                'type': 'file_received',
+                                'name': filename,
+                                'status': 'ok'
+                            }
+                            self.send_command(device_id, ack_message)
+                        else:
+                            logger.error(f"File transfer size mismatch: expected {expected_size}, "
+                                       f"received {received_size} bytes")
+                            
+                            # Send error acknowledgment
+                            ack_message = {
+                                'type': 'file_received',
+                                'name': filename,
+                                'status': 'error'
+                            }
+                            self.send_command(device_id, ack_message)
+                        
+                        # Clean up transfer state
+                        device.file_transfer_state = None
+                        
+                    except Exception as e:
+                        logger.error(f"Error finalizing file transfer from {device_id}: {e}")
+                        device.file_transfer_state = None
+                else:
+                    logger.warning(f"Received file_end from {device_id} without active transfer")
+        
         else:
             device_id = self.find_device_id(client_socket)
             logger.warning(f"Unknown message type '{message_type}' from {device_id or client_addr}")
@@ -517,6 +629,138 @@ class JsonSocketServer(QThread):
         self.clients.clear()
         logger.info("JSON socket server stopped")
     
+    def get_session_directory(self) -> Optional[str]:
+        """
+        Get the current session directory for file storage.
+        Uses SessionManager's session directory if available, otherwise falls back to creating own directory.
+        
+        Returns:
+            Path to session directory or None if not available
+        """
+        try:
+            # Use SessionManager's session directory if available
+            if self.session_manager:
+                session_folder = self.session_manager.get_session_folder()
+                if session_folder:
+                    session_dir = str(session_folder)
+                    logger.debug(f"Using SessionManager session directory: {session_dir}")
+                    return session_dir
+                else:
+                    logger.warning("SessionManager available but no active session found")
+            
+            # Fallback: Create sessions directory if SessionManager is not available
+            base_dir = os.path.join(os.getcwd(), "sessions")
+            os.makedirs(base_dir, exist_ok=True)
+            
+            # Use current timestamp for session directory if no specific session is active
+            import datetime
+            session_name = datetime.datetime.now().strftime("session_%Y%m%d_%H%M%S")
+            session_dir = os.path.join(base_dir, session_name)
+            os.makedirs(session_dir, exist_ok=True)
+            
+            logger.debug(f"Fallback session directory: {session_dir}")
+            return session_dir
+            
+        except Exception as e:
+            logger.error(f"Failed to get session directory: {e}")
+            return None
+    
+    def request_file_from_device(self, device_id: str, filepath: str, filetype: str = None) -> bool:
+        """
+        Request a file from a specific device - Milestone 3.6
+        
+        Args:
+            device_id: Target device identifier
+            filepath: Path to file on device
+            filetype: Optional file type descriptor
+            
+        Returns:
+            True if request sent successfully, False otherwise
+        """
+        if device_id not in self.devices:
+            logger.warning(f"Device {device_id} not connected")
+            return False
+        
+        try:
+            send_file_command = {
+                'type': 'send_file',
+                'filepath': filepath,
+                'filetype': filetype
+            }
+            
+            success = self.send_command(device_id, send_file_command)
+            if success:
+                logger.info(f"Requested file {filepath} from device {device_id}")
+            else:
+                logger.error(f"Failed to request file {filepath} from device {device_id}")
+            
+            return success
+            
+        except Exception as e:
+            logger.error(f"Error requesting file from device {device_id}: {e}")
+            return False
+    
+    def request_all_session_files(self, session_id: str) -> int:
+        """
+        Request all session files from all connected devices - Milestone 3.6
+        
+        Args:
+            session_id: Session identifier
+            
+        Returns:
+            Number of devices that received file requests
+        """
+        success_count = 0
+        
+        for device_id, device in self.devices.items():
+            try:
+                # Determine expected files based on device capabilities
+                expected_files = self.get_expected_files_for_device(device_id, session_id, device.capabilities)
+                
+                # Request each expected file
+                for filepath in expected_files:
+                    if self.request_file_from_device(device_id, filepath):
+                        success_count += 1
+                        # Add small delay between requests to avoid overwhelming the device
+                        import time
+                        time.sleep(0.1)
+                
+            except Exception as e:
+                logger.error(f"Error requesting files from device {device_id}: {e}")
+        
+        logger.info(f"Requested session files from {success_count} device file combinations")
+        return success_count
+    
+    def get_expected_files_for_device(self, device_id: str, session_id: str, capabilities: List[str]) -> List[str]:
+        """
+        Get list of expected files for a device based on its capabilities
+        
+        Args:
+            device_id: Device identifier
+            session_id: Session identifier
+            capabilities: Device capabilities
+            
+        Returns:
+            List of expected file paths
+        """
+        expected_files = []
+        
+        # Base path on device (this should match the Android app's file structure)
+        base_path = f"/storage/emulated/0/MultiSensorRecording/sessions/{session_id}"
+        
+        # Add expected files based on capabilities
+        if 'rgb_video' in capabilities or 'camera' in capabilities:
+            expected_files.append(f"{base_path}/{session_id}_{device_id}_rgb.mp4")
+        
+        if 'thermal' in capabilities:
+            expected_files.append(f"{base_path}/{session_id}_{device_id}_thermal.mp4")
+        
+        if 'shimmer' in capabilities:
+            expected_files.append(f"{base_path}/{session_id}_{device_id}_sensors.csv")
+        
+        logger.debug(f"Expected files for {device_id}: {expected_files}")
+        return expected_files
+
     def cleanup(self):
         """Clean up server resources."""
         if self.server_socket:

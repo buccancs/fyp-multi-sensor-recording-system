@@ -1,0 +1,13 @@
+{
+  "created_at": "2025-07-29 22:25:30",
+  "total_videos": 6,
+  "videos": [
+    "test_videos/quick_test_sd.mp4",
+    "test_videos/quick_test_hd.mp4",
+    "test_videos/quick_test_sd.avi",
+    "test_videos/timing_test.mp4",
+    "test_videos/empty.mp4",
+    "test_videos/corrupted.avi"
+  ],
+  "description": "Quick test videos for stimulus presentation testing"
+}

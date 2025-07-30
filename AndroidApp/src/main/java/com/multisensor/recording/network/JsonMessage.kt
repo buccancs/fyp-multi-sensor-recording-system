@@ -34,11 +34,16 @@ abstract class JsonMessage {
                     "flash_sync" -> FlashSyncCommand.fromJson(jsonObject)
                     "beep_sync" -> BeepSyncCommand.fromJson(jsonObject)
                     "sync_time" -> SyncTimeCommand.fromJson(jsonObject)
+                    "send_file" -> SendFileCommand.fromJson(jsonObject)
+                    "file_received" -> FileReceivedCommand.fromJson(jsonObject)
                     "hello" -> HelloMessage.fromJson(jsonObject)
                     "preview_frame" -> PreviewFrameMessage.fromJson(jsonObject)
                     "sensor_data" -> SensorDataMessage.fromJson(jsonObject)
                     "status" -> StatusMessage.fromJson(jsonObject)
                     "ack" -> AckMessage.fromJson(jsonObject)
+                    "file_info" -> FileInfoMessage.fromJson(jsonObject)
+                    "file_chunk" -> FileChunkMessage.fromJson(jsonObject)
+                    "file_end" -> FileEndMessage.fromJson(jsonObject)
                     else -> null // Unknown message type
                 }
             } catch (e: JSONException) {
@@ -259,6 +264,60 @@ data class SyncTimeCommand(
     }
 }
 
+/**
+ * Command to request file transfer from device - Milestone 3.6
+ */
+data class SendFileCommand(
+    override val type: String = "send_file",
+    val filepath: String,
+    val filetype: String? = null
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("filepath", filepath)
+            filetype?.let { put("filetype", it) }
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): SendFileCommand {
+            return SendFileCommand(
+                filepath = json.getString("filepath"),
+                filetype = if (json.has("filetype")) json.getString("filetype") else null
+            )
+        }
+    }
+}
+
+/**
+ * Command to acknowledge file receipt - Milestone 3.6
+ */
+data class FileReceivedCommand(
+    override val type: String = "file_received",
+    val name: String,
+    val status: String // "ok" or "error"
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("name", name)
+            put("status", status)
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): FileReceivedCommand {
+            return FileReceivedCommand(
+                name = json.getString("name"),
+                status = json.getString("status")
+            )
+        }
+    }
+}
+
 // ========== Phone-to-PC Messages ==========
 
 /**
@@ -422,6 +481,84 @@ data class AckMessage(
                 cmd = json.getString("cmd"),
                 status = json.getString("status"),
                 message = if (json.has("message")) json.getString("message") else null
+            )
+        }
+    }
+}
+
+/**
+ * File information message - Milestone 3.6
+ */
+data class FileInfoMessage(
+    override val type: String = "file_info",
+    val name: String,
+    val size: Long
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("name", name)
+            put("size", size)
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): FileInfoMessage {
+            return FileInfoMessage(
+                name = json.getString("name"),
+                size = json.getLong("size")
+            )
+        }
+    }
+}
+
+/**
+ * File chunk data message - Milestone 3.6
+ */
+data class FileChunkMessage(
+    override val type: String = "file_chunk",
+    val seq: Int,
+    val data: String // Base64 encoded chunk data
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("seq", seq)
+            put("data", data)
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): FileChunkMessage {
+            return FileChunkMessage(
+                seq = json.getInt("seq"),
+                data = json.getString("data")
+            )
+        }
+    }
+}
+
+/**
+ * File transfer end marker message - Milestone 3.6
+ */
+data class FileEndMessage(
+    override val type: String = "file_end",
+    val name: String
+) : JsonMessage() {
+    
+    override fun toJsonObject(): JSONObject {
+        return JSONObject().apply {
+            put("type", type)
+            put("name", name)
+        }
+    }
+    
+    companion object {
+        fun fromJson(json: JSONObject): FileEndMessage {
+            return FileEndMessage(
+                name = json.getString("name")
             )
         }
     }

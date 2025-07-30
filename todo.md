@@ -2,6 +2,261 @@
 
 This document tracks remaining tasks, future work items, and improvements for the Multi-Sensor Recording System project.
 
+## Milestone 3.8: Session Metadata Logging and Review - Missing Components Implementation ✅ COMPLETED (2025-07-30)
+
+### Post-Session Review Dialog ✅ COMPLETED
+- [x] **SessionReviewDialog Class**: Comprehensive post-session review interface implementation
+  - [x] Create tabbed interface with Files, Statistics, Events, and Calibration tabs
+  - [x] Implement file listing with ability to open files using default applications
+  - [x] Add session summary statistics with detailed metrics and breakdowns
+  - [x] Create color-coded event timeline with full event data display
+  - [x] Add calibration results display when calibration data is available
+  - [x] Implement export functionality for comprehensive session summary
+- [x] **Cross-Platform File Opening**: Support for Windows, macOS, and Linux
+  - [x] Integrate with system default applications for file opening
+  - [x] Add session folder access through file explorer
+  - [x] Implement robust error handling for file access operations
+- [x] **MainWindow Integration**: Seamless integration with session completion workflow
+  - [x] Add automatic prompt to review session data after completion
+  - [x] Implement session data retrieval and folder path resolution
+  - [x] Add graceful fallback handling when session data is unavailable
+
+### Mermaid Architecture Diagrams ✅ COMPLETED
+- [x] **Comprehensive Architecture Documentation**: Complete visual documentation system
+  - [x] Create system architecture overview with component relationships
+  - [x] Document SessionLogger component architecture with internal structure
+  - [x] Add data flow architecture with sequence diagrams
+  - [x] Create event type architecture showing all supported events
+  - [x] Document file system architecture and organization
+  - [x] Add Qt signal integration architecture diagrams
+  - [x] Create thread safety architecture documentation
+- [x] **Integration Documentation**: Detailed integration point documentation
+  - [x] Document MainWindow integration points and signal handling
+  - [x] Add device integration documentation for JsonSocketServer and WebcamCapture
+  - [x] Document stimulus integration with StimulusController and event markers
+  - [x] Add file system integration documentation
+
+### Enhanced Testing Coverage ✅ COMPLETED
+- [x] **Advanced Performance Testing**: Comprehensive high-load scenario testing
+  - [x] Implement high-frequency logging test (1000+ events per second validation)
+  - [x] Create large session simulation with multiple devices and extended duration
+  - [x] Add memory usage monitoring during intensive logging operations
+  - [x] Implement concurrent logging test for thread safety validation
+- [x] **Crash Recovery Testing**: Robust error recovery mechanism testing
+  - [x] Create crash simulation tests for data preservation validation
+  - [x] Add file integrity validation ensuring log files remain valid after crashes
+  - [x] Implement recovery verification for automatic session recovery capabilities
+- [x] **Integration Testing**: Cross-component compatibility testing
+  - [x] Add SessionManager integration tests for compatibility verification
+  - [x] Implement UI signal testing with mock-based signal emission verification
+  - [x] Create file system testing with temporary directories and proper cleanup
+
+### Advanced Error Recovery System ✅ COMPLETED
+- [x] **SessionRecoveryManager Module**: Comprehensive error recovery and monitoring
+  - [x] Implement automatic session recovery for incomplete sessions after crashes
+  - [x] Add corrupted file detection with background scanning capabilities
+  - [x] Create disk space monitoring with configurable warning thresholds
+  - [x] Implement automatic cleanup with optional backup to secondary storage
+  - [x] Add system health monitoring with Qt signal alerts
+- [x] **File Recovery Capabilities**: Advanced corruption handling and repair
+  - [x] Implement intelligent JSON repair algorithms for corrupted log files
+  - [x] Add automatic backup creation before repair attempts
+  - [x] Create recovery statistics and monitoring capabilities
+- [x] **Monitoring and Alerting**: Real-time system health monitoring
+  - [x] Integrate Qt signals for real-time disk space and health alerts
+  - [x] Add configurable warning and critical thresholds
+  - [x] Implement comprehensive recovery operation logging
+
+### Comprehensive Documentation ✅ COMPLETED
+- [x] **Session Logging User Manual**: Complete user and developer documentation
+  - [x] Create getting started guide with step-by-step setup instructions
+  - [x] Add detailed session management guide covering lifecycle and organization
+  - [x] Document all event logging types and structures comprehensively
+  - [x] Create post-session review guide covering dialog features and usage
+  - [x] Add error recovery documentation for automatic and manual procedures
+  - [x] Implement comprehensive troubleshooting guide with common issues and solutions
+  - [x] Create complete API reference for all classes, methods, and functions
+  - [x] Add best practices guidelines for optimal usage and performance
+- [x] **Enhanced Backlog Documentation**: Future enhancement planning
+  - [x] Document advanced post-session review features for future implementation
+  - [x] Add advanced error recovery enhancements to backlog
+  - [x] Create performance testing framework specifications
+  - [x] Add technical implementation details with effort estimates
+
+## Milestone 3.8: Session Metadata Logging and Review ✅ COMPLETED (2025-07-30)
+
+### Core SessionLogger Implementation ✅ COMPLETED
+- [x] **SessionLogger Module**: Comprehensive session metadata logging system
+  - [x] Create SessionLogger class with JSON event logging
+  - [x] Implement thread-safe logging operations with proper synchronization
+  - [x] Add real-time disk flushing with fsync for crash recovery
+  - [x] Support all major event types (session, device, stimulus, marker, error, file)
+  - [x] Implement ISO 8601 timestamps with millisecond precision
+- [x] **Global Instance Management**: Singleton pattern for consistent access
+  - [x] Implement get_session_logger() global accessor function
+  - [x] Add reset_session_logger() for testing and cleanup
+  - [x] Create proper session state management and validation
+
+### Enhanced UI Log Viewer ✅ COMPLETED
+- [x] **QPlainTextEdit Integration**: Upgrade from QTextEdit for better performance
+  - [x] Replace QTextEdit with QPlainTextEdit in log dock widget
+  - [x] Add monospace font styling (Consolas/Monaco) for readability
+  - [x] Implement dark theme styling with proper contrast
+  - [x] Add intelligent line wrapping for long log entries
+- [x] **Real-Time Event Display**: Live updating log viewer with formatted messages
+  - [x] Add millisecond precision timestamps matching JSON format
+  - [x] Implement human-readable event formatting for immediate understanding
+  - [x] Add enhanced auto-scrolling to always show latest entries
+  - [x] Create dedicated "Session Log" dock panel with toggle functionality
+
+### Comprehensive Event Integration ✅ COMPLETED
+- [x] **Session Lifecycle Logging**: Complete session start/end tracking
+  - [x] Log session start events with device list and session ID
+  - [x] Log session end events with duration calculation and completion status
+  - [x] Track session metadata including device capabilities and names
+- [x] **Device Event Logging**: Full device interaction tracking
+  - [x] Log device connection/disconnection events with device type and capabilities
+  - [x] Track command acknowledgments with success/failure status
+  - [x] Log device errors including connection failures and timeouts
+- [x] **Stimulus Event Logging**: Complete stimulus presentation tracking
+  - [x] Log stimulus playback start/stop with media file identification
+  - [x] Implement user event markers with custom labels and stimulus timeline correlation
+  - [x] Add precise stimulus time correlation (MM:SS.mmm format) for analysis
+- [x] **File Transfer Logging**: Comprehensive file operation tracking
+  - [x] Log file reception events with filename, size, and completion status
+  - [x] Add file size validation logging for transfer verification
+  - [x] Track transfer errors with detailed error information
+
+### Qt Signal Integration ✅ COMPLETED
+- [x] **Real-Time UI Updates**: Qt signal/slot mechanism for immediate feedback
+  - [x] Implement log_entry_added signal for real-time UI updates
+  - [x] Add session_started/ended signals for lifecycle notifications
+  - [x] Create error_logged signal for immediate error attention
+- [x] **Thread-Safe UI Communication**: Proper signal emission from background threads
+  - [x] Ensure UI updates occur on main GUI thread
+  - [x] Add proper signal/slot connections in MainWindow initialization
+  - [x] Implement cross-thread safety for logging operations
+
+### JSON Log File Management ✅ COMPLETED
+- [x] **Structured JSON Format**: Well-formed JSON logs with hierarchical organization
+  - [x] Create session metadata with ID, timestamps, devices, and status
+  - [x] Implement chronological events array with consistent structure
+  - [x] Add device information tracking and calibration file integration
+- [x] **File Organization**: Proper file structure and naming conventions
+  - [x] Create individual session folders with organized structure
+  - [x] Implement consistent log file naming: {session_id}_log.json
+  - [x] Add UTF-8 encoding support and human-readable JSON formatting
+
+### Error Handling and Robustness ✅ COMPLETED
+- [x] **Crash Recovery**: Robust logging system preserving data during crashes
+  - [x] Implement immediate disk writes with every event logged
+  - [x] Add OS-level fsync calls to ensure data persistence
+  - [x] Maintain valid JSON structure even during unexpected termination
+- [x] **Error Event Logging**: Comprehensive error tracking and categorization
+  - [x] Categorize error types (device_errors, stimulus_errors, file_errors)
+  - [x] Add error context with device identification and messages
+  - [x] Implement proper error signal emission for UI notification
+- [x] **Session State Validation**: Robust session lifecycle management
+  - [x] Prevent logging to inactive sessions with proper warnings
+  - [x] Handle multiple session scenarios with automatic cleanup
+  - [x] Add proper resource cleanup on session end
+
+### Testing and Validation ✅ COMPLETED
+- [x] **Comprehensive Test Suite**: Complete test coverage for SessionLogger functionality
+  - [x] Create unit tests for all major methods and features
+  - [x] Add integration tests with existing SessionManager and UI systems
+  - [x] Implement Qt signal testing with mock objects and verification
+  - [x] Add file system testing with temporary directories and cleanup
+- [x] **Test Categories**: Organized test structure covering all functionality aspects
+  - [x] Session lifecycle tests with proper state management
+  - [x] Event logging tests with JSON structure validation
+  - [x] JSON file tests with creation, format, and content verification
+  - [x] UI signal tests with mock connections and error handling tests
+
+## Milestone 3.5: Stimulus Presentation Controller ✅ COMPLETED (2025-07-29)
+
+### Core StimulusController Implementation ✅ COMPLETED
+- [x] **Create StimulusController Class**: Implement QMediaPlayer-based video playback controller
+  - [x] Add QMediaPlayer and QVideoWidget integration
+  - [x] Implement video loading with support for MP4, AVI, MOV, MKV, WMV formats
+  - [x] Add playback controls (play, pause, stop, seek functionality)
+  - [x] Implement timeline position tracking and slider synchronization
+  - [x] Add video duration detection and display
+- [x] **Full-Screen Display System**: Multi-monitor video presentation capability
+  - [x] Implement QVideoWidget full-screen mode on selected display
+  - [x] Add multi-monitor detection and screen selection
+  - [x] Create separate video window for participant display
+  - [x] Implement window positioning and geometry management
+- [x] **Keyboard Shortcuts**: Essential hotkey functionality for experiment control
+  - [x] Spacebar for play/pause toggle (works in full-screen)
+  - [x] Esc key for full-screen exit
+  - [x] QShortcut integration with proper focus handling
+
+### UI Integration and Enhancement ✅ COMPLETED
+- [x] **Signal Connection System**: Connect existing stimulus panel to QMediaPlayer backend
+  - [x] Connect file_loaded signal to StimulusController.load_video()
+  - [x] Connect play_requested signal to QMediaPlayer.play()
+  - [x] Connect pause_requested signal to QMediaPlayer.pause()
+  - [x] Connect seek_requested signal to QMediaPlayer.setPosition()
+  - [x] Connect screen_changed signal to display selection logic
+- [x] **Additional UI Controls**: Add missing experiment control buttons
+  - [x] "Start Recording & Play" button for synchronized experiment start
+  - [x] "Mark Event" button for timestamped event logging during playback
+  - [x] Status indicators for playback state and recording status
+  - [x] Progress indicators and time display
+- [x] **MainWindow Integration**: Enhance main window with stimulus functionality
+  - [x] Add stimulus signal handlers to MainWindow class
+  - [x] Integrate StimulusController with existing recording system
+  - [x] Add error handling and user feedback for stimulus operations
+
+### Synchronization and Logging System ✅ COMPLETED
+- [x] **Timing Logger Implementation**: PC-based experiment timing and event logging
+  - [x] Create experiment log file with timestamp and session information
+  - [x] Log stimulus start time with precise system timestamp
+  - [x] Log event markers with video position and system time
+  - [x] Log stimulus end time and session completion
+  - [x] Implement local file storage (CSV or JSON format)
+- [x] **Recording Synchronization**: Coordinate stimulus with multi-device recording
+  - [x] Integrate with existing JsonSocketServer for device commands
+  - [x] Implement synchronized start: stimulus playback + device recording + PC webcam
+  - [x] Add recording stop coordination when stimulus ends
+  - [x] Ensure timing accuracy within milliseconds for synchronization
+- [x] **Event Marking System**: Operator-triggered event logging during experiments
+  - [x] Implement marker button functionality with timestamp capture
+  - [x] Log current video position and system time for each marker
+  - [x] Support multiple markers per session with incremental numbering
+  - [x] Add optional marker labeling or notes functionality
+
+### Testing and Validation Framework ✅ COMPLETED
+- [x] **Unit Tests**: Comprehensive testing of stimulus presentation components
+  - [x] StimulusController class testing with mock QMediaPlayer
+  - [x] Video loading and playback control validation
+  - [x] Full-screen display and keyboard shortcut testing
+  - [x] Signal connection and UI integration testing
+- [x] **Integration Tests**: End-to-end stimulus presentation workflow testing
+  - [x] Complete experiment flow: load video → start recording & play → mark events → stop
+  - [x] Multi-device synchronization accuracy testing
+  - [x] Timing logger accuracy and file output validation
+  - [x] Error handling and recovery testing
+- [ ] **Hardware Validation**: Samsung device testing and performance optimization
+  - [ ] Test complete stimulus presentation on Samsung device
+  - [ ] Monitor CPU and memory usage during simultaneous recording and playback
+  - [ ] Validate timing accuracy and synchronization precision
+  - [ ] Test multi-monitor setup and full-screen functionality
+  - [ ] Document performance metrics and optimization recommendations
+
+### Documentation and Architecture ✅ COMPLETED
+- [x] **Create Architectural Diagram**: Mermaid diagram showing stimulus controller integration
+  - [x] Show StimulusController relationship with MainWindow and existing components
+  - [x] Illustrate signal flow between UI panels and media player
+  - [x] Document synchronization flow with recording system
+  - [x] Show data flow for timing logging and event marking
+- [x] **Update Technical Documentation**: Enhance existing documentation
+  - [x] Update architecture.md with stimulus presentation controller details
+  - [x] Add stimulus presentation section to user documentation
+  - [x] Document keyboard shortcuts and experiment workflow
+  - [x] Add troubleshooting guide for video playback issues
+
 ## Build and Test Configuration Implementation ✅ COMPLETED (2025-07-28)
 
 ### Comprehensive Build System ✅ COMPLETED
