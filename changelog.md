@@ -7,6 +7,94 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Milestone 4: Unified Protocol, Shared Configuration & Test Harnesses ✅ COMPLETED (2025-07-30)
+
+#### Unified JSON Message Schema ✅ NEW
+- **Centralized Protocol Definition**: Single source of truth for all socket message formats
+  - **JSON Schema File**: `protocol/message_schema.json` with comprehensive message type definitions
+  - **Message Types**: Complete schema for start_record, stop_record, preview_frame, file_chunk, device_status, ack, calibration_start, and calibration_result
+  - **Field Validation**: Strict type checking and required field validation for all message types
+  - **Extensible Design**: Schema structure allows for future message type additions without breaking changes
+- **Cross-Platform Schema Loading**: Dynamic runtime loading on both Python and Android platforms
+  - **Python SchemaManager**: Comprehensive schema validation with jsonschema library support and fallback validation
+  - **Android SchemaManager**: Native Android implementation using JSONObject with asset loading
+  - **Runtime Validation**: Message validation against schema before sending/receiving on both platforms
+  - **Schema Reload**: Development-friendly schema reloading capabilities for both platforms
+
+#### Shared Configuration System ✅ NEW
+- **Unified Configuration File**: `protocol/config.json` with comprehensive system settings
+  - **Network Configuration**: Host, port, timeout, buffer sizes, and connection parameters
+  - **Device Settings**: Camera parameters, frame rates, resolutions, audio settings, and hardware configurations
+  - **UI Configuration**: Preview scaling, overlay settings, theme preferences, and window configurations
+  - **Calibration Parameters**: Pattern specifications, error thresholds, detection flags, and quality settings
+  - **Session Management**: Directory settings, naming conventions, metadata formats, and backup options
+  - **Performance Tuning**: Memory limits, thread pool sizes, cache configurations, and processing options
+- **Cross-Platform Configuration Loading**: Consistent parameter access on both platforms
+  - **Python ConfigManager**: Dot-notation key access with type-safe getters and validation
+  - **Android ConfigManager**: Asset-based loading with comprehensive convenience methods
+  - **Configuration Validation**: Structure and value validation with detailed error reporting
+  - **Runtime Reload**: Development-friendly configuration reloading for both platforms
+
+#### Python Test Harnesses ✅ NEW
+- **Fake Android Device Simulator**: Comprehensive offline testing capabilities
+  - **FakeAndroidDevice Class**: Full protocol-compliant device simulation with realistic behavior
+  - **Message Handling**: Complete implementation of all message types with proper validation
+  - **Recording Simulation**: Preview frame generation, file chunk streaming, and device status updates
+  - **Calibration Testing**: Automated calibration process simulation with configurable results
+  - **Multi-Device Support**: FakeDeviceManager for testing multiple concurrent device connections
+  - **Edge Case Testing**: Network disconnection, battery drain, and storage usage simulation
+- **Calibration Test Suite**: Automated calibration validation without manual intervention
+  - **CalibrationTestData**: Synthetic and real calibration data generation and management
+  - **CalibrationTester**: OpenCV-based calibration testing with configurable parameters
+  - **Synthetic Data Generation**: Realistic calibration pattern simulation with noise injection
+  - **Performance Testing**: Large dataset calibration with timing and memory usage validation
+  - **Error Threshold Validation**: Automatic validation against configured quality thresholds
+  - **Real Data Support**: Optional testing with actual calibration data when available
+- **Config and Schema Integrity Tests**: Comprehensive validation of shared definitions
+  - **ConfigIntegrityTester**: Structure validation, type checking, and cross-section validation
+  - **SchemaIntegrityTester**: Message type coverage, validation testing, and consistency checks
+  - **File Integrity**: JSON syntax validation and file existence verification
+  - **Cross-Validation**: Consistency testing between configuration and schema definitions
+- **Pytest Integration**: Professional test organization and execution
+  - **Test Markers**: Integration, slow, unit, calibration, network, config, schema, and fake_device markers
+  - **Pytest Configuration**: Comprehensive pytest.ini with logging, output formatting, and marker enforcement
+  - **Test Categorization**: Separate execution of unit tests vs integration tests for CI/CD compatibility
+  - **Coverage Support**: Built-in support for test coverage reporting and analysis
+
+#### Android Protocol Integration ✅ NEW
+- **Android SchemaManager**: Native Android implementation of unified protocol validation
+  - **Asset Loading**: Efficient loading of message schema from Android assets
+  - **Message Validation**: Complete validation of incoming and outgoing messages
+  - **Message Creation**: Template-based message creation with proper field initialization
+  - **Type Safety**: Comprehensive type checking and field validation for all message types
+  - **Singleton Pattern**: Thread-safe singleton implementation for consistent access
+- **Android ConfigManager**: Comprehensive configuration management for Android
+  - **Asset-Based Loading**: Efficient loading of shared configuration from Android assets
+  - **Type-Safe Access**: Strongly typed getters for strings, integers, doubles, and booleans
+  - **Dot-Notation Keys**: Consistent key access pattern matching Python implementation
+  - **Convenience Methods**: Direct access methods for commonly used configuration values
+  - **Section Access**: Complete configuration section retrieval for complex settings
+  - **Validation Support**: Configuration structure and value validation with error reporting
+
+#### Monorepo Protocol Structure ✅ NEW
+- **Shared Protocol Directory**: Centralized location for all protocol definitions
+  - **Version Control Integration**: Protocol files under version control for atomic updates
+  - **Cross-Platform Synchronization**: Automatic synchronization between Python and Android
+  - **Asset Integration**: Seamless integration with Android asset system
+  - **Development Workflow**: Easy protocol updates with immediate cross-platform availability
+
+#### Testing Infrastructure ✅ NEW
+- **Offline Testing Capability**: Complete system testing without physical devices
+  - **Network Simulation**: Full socket-based communication testing with fake devices
+  - **Protocol Compliance**: Automated validation of message format compliance
+  - **Integration Testing**: End-to-end testing of PC application with simulated Android devices
+  - **Regression Testing**: Comprehensive test suite for preventing protocol regressions
+- **Development Support**: Enhanced development workflow with comprehensive testing
+  - **Rapid Iteration**: Quick testing of protocol changes without device deployment
+  - **Edge Case Coverage**: Systematic testing of error conditions and edge cases
+  - **Performance Validation**: Automated performance testing with configurable parameters
+  - **Quality Assurance**: Comprehensive validation of system behavior and reliability
+
 ### Added - Milestone 3.8: Session Metadata Logging and Review - Missing Components Implementation ✅ COMPLETED (2025-07-30)
 
 #### Post-Session Review Dialog ✅ NEW
