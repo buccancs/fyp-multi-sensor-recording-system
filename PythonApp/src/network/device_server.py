@@ -14,7 +14,6 @@ Milestone: 3.2 - Device Connection Manager and Socket Server
 
 import base64
 import json
-import logging
 import os
 import socket
 import struct
@@ -23,8 +22,11 @@ import time
 from PyQt5.QtCore import QThread, pyqtSignal
 from typing import Dict, List, Optional, Any
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
 # Set up logging
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class RemoteDevice:
