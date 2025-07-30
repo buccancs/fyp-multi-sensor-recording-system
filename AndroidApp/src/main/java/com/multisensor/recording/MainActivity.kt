@@ -139,12 +139,12 @@ class MainActivity : AppCompatActivity(),
         handleUsbDeviceIntent(intent)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         android.util.Log.d("MainActivity", "[DEBUG_LOG] onNewIntent() called")
 
         // Handle USB device attachment
-        intent?.let { handleUsbDeviceIntent(it) }
+        handleUsbDeviceIntent(intent)
     }
 
     /**
