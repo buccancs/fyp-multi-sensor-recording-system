@@ -20,6 +20,12 @@ from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class VideoCodec(Enum):
     """Supported video codecs with fallback priority."""

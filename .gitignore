@@ -103,3 +103,10 @@ $RECYCLE.BIN/
 ### Project Specific ###
 external/
 docs/generated_docs
+
+### Application Logs ###
+logs/
+PythonApp/logs/
+*.log
+test_recordings/
+test_calibration/

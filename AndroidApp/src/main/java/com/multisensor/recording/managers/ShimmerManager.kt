@@ -5,6 +5,11 @@ import android.app.AlertDialog
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
 import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
 import javax.inject.Inject
 import javax.inject.Singleton
 

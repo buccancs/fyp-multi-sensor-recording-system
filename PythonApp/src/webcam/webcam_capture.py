@@ -19,6 +19,12 @@ from PyQt5.QtGui import QImage, QPixmap
 from datetime import datetime
 from typing import Optional
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class WebcamCapture(QThread):
     """

@@ -12,6 +12,12 @@ Milestone: 3.1 - PyQt GUI Scaffolding and Application Framework (Optional Modula
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTabWidget, QWidget, QVBoxLayout, QLabel
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class PreviewPanel(QTabWidget):
     """Preview panel widget for displaying video feeds from multiple devices."""

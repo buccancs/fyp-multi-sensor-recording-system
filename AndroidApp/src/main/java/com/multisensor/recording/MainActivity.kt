@@ -50,6 +50,13 @@ import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
 import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 
+// Centralized logging
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
+
 /**
  * Main activity for the Multi-Sensor Recording System.
  * Provides the primary user interface for controlling recording sessions,
@@ -88,19 +95,19 @@ class MainActivity : AppCompatActivity(),
     private val shimmerDeviceSelectionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        AppLogger.logMethodEntry("MainActivity", "shimmerDeviceSelectionLauncher", "resultCode=${result.resultCode}")
+        
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             // Get selected device information from dialog
             selectedShimmerAddress = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
             selectedShimmerName = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
 
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected:")
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $selectedShimmerAddress")
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $selectedShimmerName")
+            logI("Shimmer device selected: Address=$selectedShimmerAddress, Name=$selectedShimmerName")
 
             // Show BLE/Classic connection type selection dialog
             showBtTypeConnectionOption()
         } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
+            logI("Shimmer device selection cancelled")
             Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
         }
     }
@@ -109,8 +116,10 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== APP STARTUP: onCreate() called =====")
+        
+        AppLogger.logLifecycle("MainActivity", "onCreate")
+        logI("=== Multi-Sensor Recording Application Starting ===")
+        AppLogger.logMemoryUsage("MainActivity", "Application Startup")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onCreate() starting")
 
         // Initialize view binding
