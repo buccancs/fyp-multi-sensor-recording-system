@@ -16,3 +16,5 @@ external/doks/
 *.html
 venv/
 env/
+docs/generated/
+test*/
