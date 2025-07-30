@@ -17,6 +17,11 @@ import androidx.core.content.ContextCompat
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.BufferedWriter

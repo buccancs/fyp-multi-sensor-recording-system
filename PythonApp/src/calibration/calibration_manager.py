@@ -101,17 +101,6 @@ class CalibrationManager:
 
         self.current_session = {
             "session_name": session_name,
-
-        # Generate session info
-        timestamp = datetime.now()
-        if session_name is None:
-            session_name = f"calibration_{timestamp.strftime('%Y%m%d_%H%M%S')}"
-
-        session_folder = self.output_dir / session_name
-        session_folder.mkdir(parents=True, exist_ok=True)
-
-        self.current_session = {
-            "session_name": session_name,
             "session_folder": str(session_folder),
             "device_ids": device_ids,
             "start_time": timestamp.isoformat(),

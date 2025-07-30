@@ -21,6 +21,12 @@ from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, Callable, Any, Tuple
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class ErrorSeverity(Enum):
     """Error severity levels."""

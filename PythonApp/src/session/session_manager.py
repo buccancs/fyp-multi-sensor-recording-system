@@ -15,6 +15,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class SessionManager:
     """
@@ -41,9 +47,7 @@ class SessionManager:
         # Ensure base directory exists
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 
-        print(
-            f"[DEBUG_LOG] SessionManager initialized with base directory: {self.base_recordings_dir}"
-        )
+        logger.info(f"SessionManager initialized with base directory: {self.base_recordings_dir}")
 
     def create_session(self, session_name: Optional[str] = None) -> Dict:
         """
@@ -55,6 +59,8 @@ class SessionManager:
         Returns:
             Dict: Session information including session_id, folder_path, start_time
         """
+        logger.info(f"Creating new session with name: {session_name}")
+        
         # Generate session ID and name
         timestamp = datetime.now()
         if session_name is None:
