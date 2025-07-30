@@ -4,11 +4,14 @@ import android.content.Context
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
+import android.hardware.camera2.params.SessionConfiguration
+import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.Image
 import android.media.ImageReader
 import android.media.MediaRecorder
 // import android.media.DngCreator // TODO: Fix DngCreator import issue - API compatibility problem
+import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
@@ -509,8 +512,8 @@ class CameraRecorder
                     // Create ImageReader for calibration capture (high quality JPEG)
                     val calibrationImageReader =
                         ImageReader.newInstance(
-                            videoSize?.width ?: 1920,
-                            videoSize?.height ?: 1080,
+                            videoSize.width,
+                            videoSize.height,
                             ImageFormat.JPEG,
                             1,
                         )
@@ -694,9 +697,14 @@ class CameraRecorder
                 val previewSize = this.previewSize ?: return
 
                 // Get device rotation
-                val rotation =
+                val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    (context as? android.app.Activity)?.display?.rotation
+                        ?: android.view.Surface.ROTATION_0
+                } else {
+                    @Suppress("DEPRECATION")
                     (context as? android.app.Activity)?.windowManager?.defaultDisplay?.rotation
                         ?: android.view.Surface.ROTATION_0
+                }
 
                 val matrix = android.graphics.Matrix()
                 val viewRect = android.graphics.RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
@@ -985,8 +993,12 @@ class CameraRecorder
                 logger.info("Setting up MediaRecorder for 4K video recording...")
                 logger.info("Output file: ${videoFile.absolutePath}")
 
-                mediaRecorder =
-                    MediaRecorder().apply {
+                mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    MediaRecorder(context)
+                } else {
+                    @Suppress("DEPRECATION")
+                    MediaRecorder()
+                }.apply {
                         // Video source from camera surface
                         setVideoSource(MediaRecorder.VideoSource.SURFACE)
 
@@ -1048,9 +1060,12 @@ class CameraRecorder
         private fun getOrientationHint(): Int =
             try {
                 val activity = context as? android.app.Activity
-                val rotation =
-                    activity?.windowManager?.defaultDisplay?.rotation
-                        ?: android.view.Surface.ROTATION_0
+                val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    activity?.display?.rotation ?: android.view.Surface.ROTATION_0
+                } else {
+                    @Suppress("DEPRECATION")
+                    activity?.windowManager?.defaultDisplay?.rotation ?: android.view.Surface.ROTATION_0
+                }
 
                 ORIENTATIONS[rotation] ?: 90 // Default to 90 degrees for portrait
             } catch (e: Exception) {
@@ -1312,7 +1327,19 @@ class CameraRecorder
                         }
 
                     // Create session with provided surfaces
-                    cameraDevice!!.createCaptureSession(surfaces, stateCallback, backgroundHandler)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val outputConfigurations = surfaces.map { OutputConfiguration(it) }
+                        val sessionConfig = SessionConfiguration(
+                            SessionConfiguration.SESSION_REGULAR,
+                            outputConfigurations,
+                            { backgroundHandler!!.post(it) },
+                            stateCallback
+                        )
+                        cameraDevice!!.createCaptureSession(sessionConfig)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        cameraDevice!!.createCaptureSession(surfaces, stateCallback, backgroundHandler)
+                    }
                 } catch (e: Exception) {
                     logger.error("Failed to create capture session", e)
                     currentSessionInfo?.markError("Capture session creation error: ${e.message}")

@@ -227,9 +227,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
                     position: Int,
                     id: Long,
                 ) {
-                    val samplingRates = arrayOf(25.6, 51.2, 128.0, 256.0, 512.0)
-                    if (position < samplingRates.size) {
-                        viewModel.updateSamplingRate(samplingRates[position].toInt())
+                    val samplingRateValues = arrayOf(25.6, 51.2, 128.0, 256.0, 512.0)
+                    if (position < samplingRateValues.size) {
+                        viewModel.updateSamplingRate(samplingRateValues[position].toInt())
                     }
                 }
 

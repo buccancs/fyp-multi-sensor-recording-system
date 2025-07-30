@@ -254,7 +254,7 @@ object AllAndroidPermissions {
     fun getDangerousPermissions(): Array<String> {
         val dangerousPermissions = mutableListOf<String>()
 
-        // Location
+        // Location (foreground only - background location handled separately to avoid XXPermissions restriction)
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -262,9 +262,8 @@ object AllAndroidPermissions {
             ),
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            dangerousPermissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        }
+        // Note: ACCESS_BACKGROUND_LOCATION is excluded to prevent XXPermissions library restriction
+        // Background location permissions are handled separately through PermissionTool's three-phase system
 
         // Storage
         dangerousPermissions.addAll(

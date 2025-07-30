@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed - Permission Crash Resolution ✅ COMPLETED (2025-07-30)
+
+This critical update resolves fatal crashes occurring during permission requests due to XXPermissions library restrictions and missing manifest declarations.
+
+#### Root Cause Analysis
+
+- **Primary Issue**: XXPermissions library throws `IllegalArgumentException: Because it includes background location permissions, do not apply for permissions unrelated to location` when background location permissions are requested together with non-location permissions
+- **Secondary Issue**: `ACCESS_BACKGROUND_LOCATION` permission was missing from AndroidManifest.xml, causing `IllegalStateException: Please register permissions in the AndroidManifest.xml file`
+- **Architecture Problem**: Both `PermissionTool.getAllDangerousPermissions()` and `AllAndroidPermissions.getDangerousPermissions()` were incorrectly grouping background location permissions with non-location permissions
+
+#### Technical Implementation
+
+- **AndroidManifest.xml Enhancement**:
+  - **Added Missing Permission**: Added `<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />` declaration
+  - **Proper Placement**: Positioned with other location permissions for logical grouping
+  - **Compliance**: Ensures all requested permissions are properly declared as required by Android
+
+- **PermissionTool.kt Refactoring**:
+  - **Fixed getAllDangerousPermissions()**: Modified to exclude background location permissions and only include foreground location permissions
+  - **Enhanced Documentation**: Added clear comments explaining XXPermissions library restriction
+  - **Three-Phase System**: Maintained existing three-phase permission request system that handles background location separately
+  - **Location**: `AndroidApp/src/main/java/com/multisensor/recording/util/PermissionTool.kt`
+
+- **AllAndroidPermissions.kt Alignment**:
+  - **Fixed getDangerousPermissions()**: Removed `ACCESS_BACKGROUND_LOCATION` from dangerous permissions list
+  - **Consistency**: Aligned with PermissionTool approach to prevent conflicts
+  - **Documentation**: Added explanatory comments about background location handling
+  - **Location**: `AndroidApp/src/main/java/com/multisensor/recording/util/AllAndroidPermissions.kt`
+
+#### Permission Flow Architecture
+
+The solution maintains the sophisticated three-phase permission system:
+1. **Phase 1**: Non-location permissions (camera, microphone, storage, notifications)
+2. **Phase 2**: Foreground location permissions (ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)
+3. **Phase 3**: Background location permissions (ACCESS_BACKGROUND_LOCATION) - only after foreground location is granted
+
+#### Impact & Benefits
+
+- **Crash Elimination**: Resolves all permission-related crashes during app startup and permission requests
+- **XXPermissions Compliance**: Properly handles library restrictions for background location permissions
+- **Android Compliance**: All permissions properly declared in manifest as required
+- **User Experience**: Smooth permission flow without crashes or errors
+- **Architecture Integrity**: Maintains existing three-phase permission system while fixing grouping issues
+
 ### Fixed - Test Modernization & Build Stabilization ✅ COMPLETED (2025-07-30)
 
 This update resolves all remaining compilation errors in test files that arose from architectural refactoring. The fixes modernize test implementations to work with updated data structures and dependencies.

@@ -214,7 +214,9 @@ object PermissionTool {
     private fun getAllDangerousPermissions(): List<String> {
         val permissions = mutableListOf<String>()
         permissions.addAll(getNonLocationDangerousPermissions())
-        permissions.addAll(getLocationPermissions())
+        permissions.addAll(getForegroundLocationPermissions())
+        // Note: Background location permissions are excluded to prevent XXPermissions library restriction
+        // They are handled separately through the three-phase permission system
         return permissions
     }
 

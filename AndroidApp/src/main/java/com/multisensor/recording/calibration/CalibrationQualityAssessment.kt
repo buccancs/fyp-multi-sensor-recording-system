@@ -241,6 +241,7 @@ class CalibrationQualityAssessment
         private fun detectChessboardPattern(image: Bitmap): PatternDetectionResult {
             // TODO: Implement OpenCV-based chessboard detection
             // This is a placeholder implementation for now
+            logger.debug("[DEBUG_LOG] Analyzing chessboard pattern in image (${image.width}x${image.height})")
 
             val expectedCorners = (CHESSBOARD_ROWS - 1) * (CHESSBOARD_COLS - 1)
 
@@ -267,6 +268,7 @@ class CalibrationQualityAssessment
         private fun detectCircleGridPattern(image: Bitmap): PatternDetectionResult {
             // TODO: Implement OpenCV-based circle grid detection
             // This is a placeholder implementation for now
+            logger.debug("[DEBUG_LOG] Analyzing circle grid pattern in image (${image.width}x${image.height})")
 
             val expectedCircles = CIRCLE_GRID_ROWS * CIRCLE_GRID_COLS
 
@@ -568,7 +570,7 @@ class CalibrationQualityAssessment
             rgbImage: Bitmap,
             thermalImage: Bitmap,
         ): AlignmentMetrics {
-            logger.debug("[DEBUG_LOG] Analyzing RGB-thermal alignment")
+            logger.debug("[DEBUG_LOG] Analyzing RGB-thermal alignment - RGB: ${rgbImage.width}x${rgbImage.height}, Thermal: ${thermalImage.width}x${thermalImage.height}")
 
             // TODO: Implement feature matching between RGB and thermal images
             // This is a placeholder implementation for now
@@ -601,14 +603,15 @@ class CalibrationQualityAssessment
             maxError: Float,
             featureCount: Int,
         ): Float {
-            // Score based on alignment accuracy
+            // Score based on alignment accuracy (using both average and max error)
             val errorScore = (ALIGNMENT_MAX_ERROR / (averageError + 1.0)).coerceIn(0.0, 1.0).toFloat()
+            val maxErrorPenalty = if (maxError > ALIGNMENT_MAX_ERROR * 2) 0.5f else 1.0f
 
             // Score based on feature count (more features = better alignment confidence)
             val featureScore = (featureCount.toFloat() / 50.0f).coerceIn(0.0f, 1.0f)
 
-            // Combined score
-            return (errorScore * 0.7f + featureScore * 0.3f)
+            // Combined score with max error penalty
+            return (errorScore * maxErrorPenalty * 0.7f + featureScore * 0.3f)
         }
 
         /**

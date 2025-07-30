@@ -158,13 +158,13 @@ class CalibrationCaptureManager
                     val fileName = "${calibrationId}${RGB_SUFFIX}"
                     val filePath = File(getCalibrationDirectory(), fileName).absolutePath
 
-                    logger.info("[DEBUG_LOG] Capturing RGB calibration image: $fileName")
+                    logger.info("[DEBUG_LOG] Capturing RGB calibration image: $fileName (highRes: $highResolution, syncTime: $syncedTimestamp)")
 
                     // Use CameraRecorder's calibration capture method
                     val success = cameraRecorder.captureCalibrationImage(filePath)
 
                     if (success) {
-                        logger.info("[DEBUG_LOG] RGB calibration image captured successfully: $filePath")
+                        logger.info("[DEBUG_LOG] RGB calibration image captured successfully: $filePath at timestamp $syncedTimestamp")
                         filePath
                     } else {
                         logger.error("Failed to capture RGB calibration image: $fileName")
@@ -188,13 +188,13 @@ class CalibrationCaptureManager
                     val fileName = "${calibrationId}${THERMAL_SUFFIX}"
                     val filePath = File(getCalibrationDirectory(), fileName).absolutePath
 
-                    logger.info("[DEBUG_LOG] Capturing thermal calibration image: $fileName")
+                    logger.info("[DEBUG_LOG] Capturing thermal calibration image: $fileName (syncTime: $syncedTimestamp)")
 
                     // Use ThermalRecorder's calibration capture method
                     val success = thermalRecorder.captureCalibrationImage(filePath)
 
                     if (success) {
-                        logger.info("[DEBUG_LOG] Thermal calibration image captured successfully: $filePath")
+                        logger.info("[DEBUG_LOG] Thermal calibration image captured successfully: $filePath at timestamp $syncedTimestamp")
                         filePath
                     } else {
                         logger.error("Failed to capture thermal calibration image: $fileName")

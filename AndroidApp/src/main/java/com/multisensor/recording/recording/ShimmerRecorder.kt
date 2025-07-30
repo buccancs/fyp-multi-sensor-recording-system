@@ -420,7 +420,8 @@ class ShimmerRecorder
                     }
 
                     // Get paired Bluetooth devices that are Shimmer devices
-                    val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+                    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+                    val bluetoothAdapter = bluetoothManager.adapter
                     logger.info("Bluetooth adapter available: ${bluetoothAdapter != null}")
                     logger.info("Bluetooth enabled: ${bluetoothAdapter?.isEnabled}")
 

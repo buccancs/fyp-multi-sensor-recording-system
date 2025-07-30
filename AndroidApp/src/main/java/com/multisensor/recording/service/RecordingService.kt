@@ -538,7 +538,12 @@ class RecordingService : Service() {
 
             // Stop foreground service after a delay to show final notification
             kotlinx.coroutines.delay(2000)
-            stopForeground(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+            } else {
+                @Suppress("DEPRECATION")
+                stopForeground(true)
+            }
             stopSelf()
 
             logger.info("Recording stopped successfully")

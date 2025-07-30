@@ -261,8 +261,8 @@ class FileViewViewModel @Inject constructor(
             }
         }
 
-        updateUiState { currentState ->
-            currentState.copy(
+        updateUiState { state ->
+            state.copy(
                 searchQuery = query,
                 filteredSessions = filteredSessions,
                 showEmptyState = filteredSessions.isEmpty()
@@ -282,8 +282,8 @@ class FileViewViewModel @Inject constructor(
             else -> currentState.sessions
         }
 
-        updateUiState { currentState ->
-            currentState.copy(
+        updateUiState { state ->
+            state.copy(
                 filteredSessions = filteredSessions,
                 showEmptyState = filteredSessions.isEmpty()
             )
