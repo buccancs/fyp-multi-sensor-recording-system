@@ -604,6 +604,77 @@ custom message protocol**, plus fallback channels if needed:
   Over TCP, messages should be delimited (e.g., newline) or
   length-prefixed to allow the receiver to parse streams correctly.
 
+#### Schema Synchronization and Version Control (Milestone 6)
+
+To ensure robust communication between the Android and Python applications, 
+**Milestone 6** introduces a comprehensive schema synchronization strategy that 
+eliminates inconsistencies and provides version compatibility checking:
+
+- **Unified Message Schema:** All message types are defined in a single JSON 
+  schema file (`protocol/message_schema.json`) that serves as the authoritative 
+  source for message structure. This schema defines:
+  - Base message structure with required `type` and `timestamp` fields
+  - Specific message types: `handshake`, `handshake_ack`, `start_record`, 
+    `stop_record`, `preview_frame`, `file_chunk`, `device_status`, `ack`, 
+    `calibration_start`, `calibration_result`
+  - Field validation rules, data types, and required/optional fields
+  - Extensible design allowing unknown fields for forward compatibility
+
+- **Initial Handshake Protocol:** When devices connect, they exchange handshake 
+  messages to verify protocol compatibility:
+  ```json
+  {
+    "type": "handshake",
+    "timestamp": 1234567890,
+    "protocol_version": 1,
+    "device_name": "Samsung S22",
+    "app_version": "1.0.0",
+    "device_type": "android"
+  }
+  ```
+  The receiving side responds with a `handshake_ack` indicating compatibility:
+  ```json
+  {
+    "type": "handshake_ack",
+    "timestamp": 1234567890,
+    "protocol_version": 1,
+    "server_name": "Python PC Controller",
+    "server_version": "1.0.0",
+    "compatible": true,
+    "message": "Protocol versions compatible"
+  }
+  ```
+  If protocol versions don't match, a warning is logged and the `compatible` 
+  field is set to `false` with an explanatory message.
+
+- **Shared Constants System:** Both applications use identical constant values 
+  sourced from a single configuration file (`protocol/config.json`):
+  - **Android side:** Gradle build task generates `CommonConstants.kt` from the 
+    JSON config, providing compile-time constants like `PROTOCOL_VERSION`, 
+    network settings, device parameters, and calibration values
+  - **Python side:** `ConfigManager` loads the same JSON file at runtime, 
+    providing access to identical values through a unified API
+  - **Automatic synchronization:** Changes to the shared config automatically 
+    propagate to both sides (Android after rebuild, Python immediately)
+
+- **Schema Validation:** Both sides validate incoming messages against the 
+  unified schema:
+  - **Android:** `SchemaManager` validates JSON messages and provides creation 
+    utilities
+  - **Python:** `SchemaManager` with optional jsonschema library support for 
+    strict validation
+  - Invalid messages are rejected with clear error messages
+  - Unknown message types are logged but allowed for extensibility
+
+- **Version Compatibility:** The system implements exact version matching for 
+  now, but is designed to support backward compatibility rules in the future. 
+  When versions mismatch, detailed logging helps developers identify and resolve 
+  compatibility issues.
+
+This approach ensures that both sides of the system always use identical message 
+formats and constant values, eliminating entire classes of communication bugs 
+and making the system more maintainable as it evolves.
+
 <!-- -->
 
 - **Command Types:**

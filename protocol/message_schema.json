@@ -237,6 +237,69 @@
           "required": ["success"]
         }
       ]
+    },
+    {
+      "title": "Handshake Message",
+      "allOf": [
+        {"$ref": "#/definitions/message_base"},
+        {
+          "properties": {
+            "type": {"const": "handshake"},
+            "protocol_version": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Protocol version number for compatibility checking"
+            },
+            "device_name": {
+              "type": "string",
+              "description": "Name or identifier of the sending device"
+            },
+            "app_version": {
+              "type": "string",
+              "description": "Version of the application sending the handshake"
+            },
+            "device_type": {
+              "type": "string",
+              "enum": ["android", "pc"],
+              "description": "Type of device sending the handshake"
+            }
+          },
+          "required": ["protocol_version", "device_name", "app_version", "device_type"]
+        }
+      ]
+    },
+    {
+      "title": "Handshake Acknowledgment",
+      "allOf": [
+        {"$ref": "#/definitions/message_base"},
+        {
+          "properties": {
+            "type": {"const": "handshake_ack"},
+            "protocol_version": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Protocol version number of the responding device"
+            },
+            "server_name": {
+              "type": "string",
+              "description": "Name or identifier of the responding server"
+            },
+            "server_version": {
+              "type": "string",
+              "description": "Version of the server application"
+            },
+            "compatible": {
+              "type": "boolean",
+              "description": "Whether the protocol versions are compatible"
+            },
+            "message": {
+              "type": "string",
+              "description": "Optional message about compatibility status"
+            }
+          },
+          "required": ["protocol_version", "server_name", "server_version", "compatible"]
+        }
+      ]
     }
   ]
 }

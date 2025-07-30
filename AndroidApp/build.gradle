@@ -148,6 +148,76 @@ android {
     }
 }
 
+// Gradle task to generate Kotlin constants from shared config.json
+import groovy.json.JsonSlurper
+
+def configFile = file("src/main/assets/config.json")
+def outputDir = file("$buildDir/generated/source/config")
+def outputFile = file("$outputDir/com/multisensor/recording/config/CommonConstants.kt")
+
+task generateConstants {
+    inputs.file configFile
+    outputs.file outputFile
+    
+    doLast {
+        def json = new JsonSlurper().parse(configFile)
+        outputDir.mkdirs()
+        
+        def kotlinCode = new StringBuilder()
+        kotlinCode.append("// Auto-generated from config.json. Do not edit manually.\n")
+        kotlinCode.append("package com.multisensor.recording.config\n\n")
+        kotlinCode.append("object CommonConstants {\n")
+        
+        // Protocol version
+        kotlinCode.append("    const val PROTOCOL_VERSION: Int = ${json.protocol_version}\n")
+        kotlinCode.append("    const val APP_VERSION: String = \"${json.version}\"\n\n")
+        
+        // Network constants
+        kotlinCode.append("    object Network {\n")
+        kotlinCode.append("        const val HOST: String = \"${json.network.host}\"\n")
+        kotlinCode.append("        const val PORT: Int = ${json.network.port}\n")
+        kotlinCode.append("        const val TIMEOUT_SECONDS: Int = ${json.network.timeout_seconds}\n")
+        kotlinCode.append("        const val BUFFER_SIZE: Int = ${json.network.buffer_size}\n")
+        kotlinCode.append("        const val MAX_CONNECTIONS: Int = ${json.network.max_connections}\n")
+        kotlinCode.append("        const val HEARTBEAT_INTERVAL: Int = ${json.network.heartbeat_interval}\n")
+        kotlinCode.append("        const val RECONNECT_ATTEMPTS: Int = ${json.network.reconnect_attempts}\n")
+        kotlinCode.append("    }\n\n")
+        
+        // Device constants
+        kotlinCode.append("    object Devices {\n")
+        kotlinCode.append("        const val CAMERA_ID: Int = ${json.devices.camera_id}\n")
+        kotlinCode.append("        const val FRAME_RATE: Int = ${json.devices.frame_rate}\n")
+        kotlinCode.append("        const val RESOLUTION_WIDTH: Int = ${json.devices.resolution.width}\n")
+        kotlinCode.append("        const val RESOLUTION_HEIGHT: Int = ${json.devices.resolution.height}\n")
+        kotlinCode.append("        const val PREVIEW_WIDTH: Int = ${json.devices.preview_resolution.width}\n")
+        kotlinCode.append("        const val PREVIEW_HEIGHT: Int = ${json.devices.preview_resolution.height}\n")
+        kotlinCode.append("        const val MIC_SAMPLE_RATE: Int = ${json.devices.mic_sample_rate}\n")
+        kotlinCode.append("        const val MIC_CHANNELS: Int = ${json.devices.mic_channels}\n")
+        kotlinCode.append("        const val CHUNK_SIZE: Int = ${json.devices.chunk_size}\n")
+        kotlinCode.append("    }\n\n")
+        
+        // Calibration constants
+        kotlinCode.append("    object Calibration {\n")
+        kotlinCode.append("        const val PATTERN_TYPE: String = \"${json.calibration.pattern_type}\"\n")
+        kotlinCode.append("        const val PATTERN_ROWS: Int = ${json.calibration.pattern_rows}\n")
+        kotlinCode.append("        const val PATTERN_COLS: Int = ${json.calibration.pattern_cols}\n")
+        kotlinCode.append("        const val SQUARE_SIZE_M: Double = ${json.calibration.square_size_m}\n")
+        kotlinCode.append("        const val ERROR_THRESHOLD: Double = ${json.calibration.error_threshold}\n")
+        kotlinCode.append("        const val MIN_IMAGES: Int = ${json.calibration.min_images}\n")
+        kotlinCode.append("        const val MAX_IMAGES: Int = ${json.calibration.max_images}\n")
+        kotlinCode.append("    }\n")
+        
+        kotlinCode.append("}\n")
+        
+        outputFile.text = kotlinCode.toString()
+        println("Generated CommonConstants.kt from config.json")
+    }
+}
+
+// Wire the task into the build process
+android.sourceSets.main.java.srcDir outputDir
+preBuild.dependsOn generateConstants
+
 dependencies {
     // Core & UI Components
     implementation libs.bundles.core.ui

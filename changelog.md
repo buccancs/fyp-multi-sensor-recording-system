@@ -7,6 +7,103 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Milestone 6: Shared Constants and Schema Synchronization Strategies ✅ COMPLETED (2025-07-30)
+
+#### 6.1 Unified Message Schema and Protocol Definition ✅ NEW
+- **Enhanced JSON Schema**: Comprehensive message schema with handshake protocol support
+  - **Handshake Messages**: New `handshake` and `handshake_ack` message types for protocol version verification
+  - **Version Compatibility**: Protocol version checking to ensure Android and Python compatibility
+  - **Device Identification**: Device name, app version, and device type fields for connection tracking
+  - **Compatibility Reporting**: Clear success/failure indication with descriptive error messages
+  - **Schema Validation**: Both Android and Python validate all messages against unified schema
+  - **Forward Compatibility**: Unknown message types allowed for extensibility while maintaining validation
+
+#### 6.2 Shared Constants System ✅ NEW
+- **Single Source of Truth**: Unified configuration system eliminating constant duplication
+  - **Shared Config File**: `protocol/config.json` containing all shared constants and configuration
+  - **Protocol Version**: Centralized protocol version management across both applications
+  - **Network Configuration**: Host, port, timeout, buffer size, and connection parameters
+  - **Device Parameters**: Camera settings, resolution, frame rate, audio configuration
+  - **Calibration Constants**: Pattern type, dimensions, error thresholds, and detection parameters
+  - **UI Settings**: Preview scales, update rates, theme configuration, and window dimensions
+  - **Performance Tuning**: Memory limits, thread pool sizes, queue configurations
+- **Android Constants Generation**: Automated Kotlin code generation from shared configuration
+  - **Gradle Build Task**: `generateConstants` task creates `CommonConstants.kt` from JSON config
+  - **Compile-Time Constants**: Type-safe Kotlin constants with proper data types
+  - **Organized Structure**: Nested objects for Network, Devices, Calibration, and other categories
+  - **Build Integration**: Automatic generation before compilation ensures constants are always current
+  - **Source Control**: Generated files excluded from version control, config file is the source
+- **Python Configuration Loading**: Runtime configuration loading with unified API
+  - **ConfigManager Class**: Centralized configuration management with dot-notation access
+  - **Runtime Flexibility**: Configuration changes take effect immediately without rebuild
+  - **Section Access**: Convenient methods for accessing configuration sections
+  - **Default Values**: Graceful handling of missing configuration with sensible defaults
+  - **Path Resolution**: Automatic configuration file discovery across different deployment scenarios
+
+#### 6.3 Initial Handshake Protocol with Version Checking ✅ NEW
+- **Connection Establishment**: Structured handshake process for reliable communication setup
+  - **Android HandshakeManager**: Kotlin implementation for sending and processing handshakes
+  - **Python HandshakeManager**: Python implementation with matching functionality
+  - **Version Verification**: Automatic protocol version comparison on connection
+  - **Device Information Exchange**: Device name, app version, and type identification
+  - **Compatibility Assessment**: Clear success/failure indication with detailed messaging
+  - **Error Handling**: Graceful handling of version mismatches with informative warnings
+- **Protocol Version Management**: Systematic approach to protocol evolution
+  - **Exact Version Matching**: Current implementation requires identical protocol versions
+  - **Future Compatibility**: Architecture designed to support backward compatibility rules
+  - **Version Increment Strategy**: Clear guidelines for when to increment protocol version
+  - **Mismatch Detection**: Early detection of incompatible versions prevents silent failures
+  - **Logging and Debugging**: Comprehensive logging for troubleshooting version issues
+
+#### 6.4 Cross-Platform Schema Validation ✅ NEW
+- **Android Schema Management**: Comprehensive message validation and creation utilities
+  - **SchemaManager Class**: Singleton pattern for efficient schema management
+  - **Message Validation**: JSON message validation against unified schema
+  - **Message Creation**: Utility methods for creating properly formatted messages
+  - **Type Extraction**: Automatic extraction of valid message types from schema
+  - **Error Reporting**: Clear validation error messages for debugging
+  - **Asset Integration**: Schema loaded from Android assets for bundled distribution
+- **Python Schema Utilities**: Matching validation capabilities with optional strict validation
+  - **SchemaManager Class**: Python implementation with jsonschema library support
+  - **Message Validation**: Comprehensive validation with detailed error reporting
+  - **Message Creation**: Utility methods matching Android functionality
+  - **Optional Dependencies**: Graceful degradation when jsonschema library unavailable
+  - **Flexible Loading**: Schema loading from various file system locations
+
+#### 6.5 Comprehensive Testing Infrastructure ✅ NEW
+- **Android Testing Suite**: Comprehensive test coverage for milestone 6 functionality
+  - **Milestone6Test**: Core functionality testing with simple assertions
+  - **Constants Verification**: Tests ensuring generated constants match configuration
+  - **Handshake Testing**: Complete handshake protocol testing including version compatibility
+  - **Schema Validation**: Message creation and validation testing
+  - **Manager Integration**: Testing of SchemaManager and HandshakeManager integration
+  - **Robolectric Integration**: Android unit tests running in JVM environment
+- **Python Testing Suite**: Matching test coverage for Python implementation
+  - **test_milestone6.py**: Comprehensive test suite with 9 test cases
+  - **Configuration Testing**: ConfigManager functionality and constant loading
+  - **Handshake Protocol**: Complete handshake message creation and processing tests
+  - **Version Compatibility**: Version checking logic validation
+  - **Mock Integration**: Proper mocking of dependencies for isolated testing
+  - **Cross-Platform Validation**: Tests ensuring Python constants match Android expectations
+- **Integration Testing**: End-to-end validation of schema synchronization
+  - **Constant Synchronization**: Verification that both sides use identical values
+  - **Message Compatibility**: Round-trip message testing between Android and Python
+  - **Version Mismatch Scenarios**: Testing of version incompatibility handling
+  - **Schema Evolution**: Testing framework for future schema changes
+
+#### 6.6 Documentation and Architecture Updates ✅ NEW
+- **Architecture Documentation**: Comprehensive documentation of schema synchronization approach
+  - **Schema Synchronization Section**: New section in architecture.md documenting milestone 6
+  - **Handshake Protocol**: Detailed explanation of connection establishment process
+  - **Shared Constants**: Documentation of unified configuration system
+  - **Version Control**: Explanation of protocol version management strategy
+  - **Implementation Details**: Technical details for both Android and Python implementations
+- **Code Documentation**: Comprehensive inline documentation and comments
+  - **Kotlin Documentation**: KDoc comments for all public classes and methods
+  - **Python Documentation**: Docstrings following Python conventions
+  - **Usage Examples**: Code examples demonstrating proper usage patterns
+  - **Error Handling**: Documentation of error conditions and recovery strategies
+
 ### Added - Milestone 5: Build Automation, Environment Bootstrapping, and Team Workflow ✅ COMPLETED (2025-07-30)
 
 #### 5.1 Build Automation and Environment Bootstrapping ✅ NEW
