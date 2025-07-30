@@ -10,13 +10,12 @@ import dagger.hilt.android.HiltAndroidApp
  */
 @HiltAndroidApp
 class MultiSensorApplication : Application() {
-    
     override fun onCreate() {
         super.onCreate()
-        
+
         // Initialize application-level components here if needed
         // For example: crash reporting, analytics, etc.
-        
+
         // Log application startup
         android.util.Log.i("MultiSensorApp", "Multi-Sensor Recording Application started")
     }

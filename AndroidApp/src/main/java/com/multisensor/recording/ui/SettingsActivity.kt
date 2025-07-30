@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Settings and Configuration Activity - Milestone 2.7 UI Enhancement
- * 
+ *
  * Provides comprehensive settings interface for:
  * - Shimmer MAC address configuration
  * - Recording parameters (video resolution, frame rate)
@@ -18,18 +18,17 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        
+
         // Setup action bar with back button
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             title = "Settings"
         }
-        
+
         // Load settings fragment
         if (savedInstanceState == null) {
             supportFragmentManager
@@ -38,29 +37,30 @@ class SettingsActivity : AppCompatActivity() {
                 .commit()
         }
     }
-    
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-    
+
     /**
      * Settings Fragment with comprehensive configuration options
      */
     class SettingsFragment : PreferenceFragmentCompat() {
-        
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        override fun onCreatePreferences(
+            savedInstanceState: Bundle?,
+            rootKey: String?,
+        ) {
             setPreferencesFromResource(R.xml.preferences, rootKey)
-            
+
             // Setup preference listeners and validation
             setupPreferenceListeners()
         }
-        
+
         /**
          * Setup preference change listeners and validation
          */
@@ -74,19 +74,20 @@ class SettingsActivity : AppCompatActivity() {
                         true
                     } else {
                         // Show error message
-                        android.widget.Toast.makeText(
-                            context,
-                            "Invalid MAC address format. Use format: XX:XX:XX:XX:XX:XX",
-                            android.widget.Toast.LENGTH_LONG
-                        ).show()
+                        android.widget.Toast
+                            .makeText(
+                                context,
+                                "Invalid MAC address format. Use format: XX:XX:XX:XX:XX:XX",
+                                android.widget.Toast.LENGTH_LONG,
+                            ).show()
                         false
                     }
                 }
-                
+
                 // Set initial summary
                 text?.let { summary = "MAC Address: $it" }
             }
-            
+
             // Video resolution validation
             findPreference<androidx.preference.ListPreference>("video_resolution")?.apply {
                 setOnPreferenceChangeListener { _, newValue ->
@@ -94,11 +95,11 @@ class SettingsActivity : AppCompatActivity() {
                     summary = "Resolution: $resolution"
                     true
                 }
-                
+
                 // Set initial summary
                 value?.let { summary = "Resolution: $it" }
             }
-            
+
             // Frame rate validation
             findPreference<androidx.preference.ListPreference>("frame_rate")?.apply {
                 setOnPreferenceChangeListener { _, newValue ->
@@ -106,11 +107,11 @@ class SettingsActivity : AppCompatActivity() {
                     summary = "Frame Rate: ${frameRate}fps"
                     true
                 }
-                
+
                 // Set initial summary
                 value?.let { summary = "Frame Rate: ${it}fps" }
             }
-            
+
             // Server IP validation
             findPreference<androidx.preference.EditTextPreference>("server_ip")?.apply {
                 setOnPreferenceChangeListener { _, newValue ->
@@ -119,19 +120,20 @@ class SettingsActivity : AppCompatActivity() {
                         summary = "Server IP: $ipAddress"
                         true
                     } else {
-                        android.widget.Toast.makeText(
-                            context,
-                            "Invalid IP address format",
-                            android.widget.Toast.LENGTH_LONG
-                        ).show()
+                        android.widget.Toast
+                            .makeText(
+                                context,
+                                "Invalid IP address format",
+                                android.widget.Toast.LENGTH_LONG,
+                            ).show()
                         false
                     }
                 }
-                
+
                 // Set initial summary
                 text?.let { summary = "Server IP: $it" }
             }
-            
+
             // Server port validation
             findPreference<androidx.preference.EditTextPreference>("server_port")?.apply {
                 setOnPreferenceChangeListener { _, newValue ->
@@ -142,28 +144,30 @@ class SettingsActivity : AppCompatActivity() {
                             summary = "Server Port: $port"
                             true
                         } else {
-                            android.widget.Toast.makeText(
-                                context,
-                                "Port must be between 1024 and 65535",
-                                android.widget.Toast.LENGTH_LONG
-                            ).show()
+                            android.widget.Toast
+                                .makeText(
+                                    context,
+                                    "Port must be between 1024 and 65535",
+                                    android.widget.Toast.LENGTH_LONG,
+                                ).show()
                             false
                         }
                     } catch (e: NumberFormatException) {
-                        android.widget.Toast.makeText(
-                            context,
-                            "Invalid port number",
-                            android.widget.Toast.LENGTH_LONG
-                        ).show()
+                        android.widget.Toast
+                            .makeText(
+                                context,
+                                "Invalid port number",
+                                android.widget.Toast.LENGTH_LONG,
+                            ).show()
                         false
                     }
                 }
-                
+
                 // Set initial summary
                 text?.let { summary = "Server Port: $it" }
             }
         }
-        
+
         /**
          * Validates MAC address format (XX:XX:XX:XX:XX:XX)
          */
@@ -171,14 +175,14 @@ class SettingsActivity : AppCompatActivity() {
             val macPattern = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
             return macAddress.matches(macPattern.toRegex())
         }
-        
+
         /**
          * Validates IP address format
          */
         private fun isValidIpAddress(ipAddress: String): Boolean {
             val parts = ipAddress.split(".")
             if (parts.size != 4) return false
-            
+
             return parts.all { part ->
                 try {
                     val num = part.toInt()

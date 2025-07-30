@@ -18,30 +18,29 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class NetworkConfigActivity : AppCompatActivity() {
-    
     @Inject
     lateinit var networkConfiguration: NetworkConfiguration
-    
+
     @Inject
     lateinit var logger: Logger
-    
+
     private lateinit var serverIpEditText: EditText
     private lateinit var legacyPortEditText: EditText
     private lateinit var jsonPortEditText: EditText
     private lateinit var saveButton: Button
     private lateinit var resetButton: Button
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_network_config)
-        
+
         initializeViews()
         loadCurrentConfiguration()
         setupClickListeners()
-        
+
         logger.info("NetworkConfigActivity created")
     }
-    
+
     private fun initializeViews() {
         serverIpEditText = findViewById(R.id.edit_server_ip)
         legacyPortEditText = findViewById(R.id.edit_legacy_port)
@@ -49,91 +48,89 @@ class NetworkConfigActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.btn_save_config)
         resetButton = findViewById(R.id.btn_reset_config)
     }
-    
+
     private fun loadCurrentConfiguration() {
         val config = networkConfiguration.getServerConfiguration()
-        
+
         serverIpEditText.setText(config.serverIp)
         legacyPortEditText.setText(config.legacyPort.toString())
         jsonPortEditText.setText(config.jsonPort.toString())
-        
+
         logger.debug("Loaded current configuration: ${networkConfiguration.getConfigurationSummary()}")
     }
-    
+
     private fun setupClickListeners() {
         saveButton.setOnClickListener {
             saveConfiguration()
         }
-        
+
         resetButton.setOnClickListener {
             resetToDefaults()
         }
     }
-    
+
     private fun saveConfiguration() {
         try {
             val serverIp = serverIpEditText.text.toString().trim()
             val legacyPortText = legacyPortEditText.text.toString().trim()
             val jsonPortText = jsonPortEditText.text.toString().trim()
-            
+
             // Validate inputs
             if (serverIp.isEmpty()) {
                 showError("Server IP cannot be empty")
                 return
             }
-            
+
             if (!networkConfiguration.isValidIpAddress(serverIp)) {
                 showError("Invalid IP address format")
                 return
             }
-            
+
             val legacyPort = legacyPortText.toIntOrNull()
             if (legacyPort == null || !networkConfiguration.isValidPort(legacyPort)) {
                 showError("Legacy port must be between 1024 and 65535")
                 return
             }
-            
+
             val jsonPort = jsonPortText.toIntOrNull()
             if (jsonPort == null || !networkConfiguration.isValidPort(jsonPort)) {
                 showError("JSON port must be between 1024 and 65535")
                 return
             }
-            
+
             if (legacyPort == jsonPort) {
                 showError("Legacy and JSON ports must be different")
                 return
             }
-            
+
             // Save configuration
             networkConfiguration.setServerIp(serverIp)
             networkConfiguration.setLegacyPort(legacyPort)
             networkConfiguration.setJsonPort(jsonPort)
-            
+
             logger.info("Network configuration saved: ${networkConfiguration.getConfigurationSummary()}")
-            
+
             Toast.makeText(this, "Configuration saved successfully", Toast.LENGTH_SHORT).show()
             finish()
-            
         } catch (e: Exception) {
             logger.error("Failed to save network configuration", e)
             showError("Failed to save configuration: ${e.message}")
         }
     }
-    
+
     private fun resetToDefaults() {
         try {
             networkConfiguration.resetToDefaults()
             loadCurrentConfiguration()
-            
+
             logger.info("Network configuration reset to defaults")
             Toast.makeText(this, "Configuration reset to defaults", Toast.LENGTH_SHORT).show()
-            
         } catch (e: Exception) {
             logger.error("Failed to reset network configuration", e)
             showError("Failed to reset configuration: ${e.message}")
         }
     }
-    
+
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }

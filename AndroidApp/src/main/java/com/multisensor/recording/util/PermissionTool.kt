@@ -14,11 +14,10 @@ import com.hjq.permissions.XXPermissions
 /**
  * Enhanced permission handling utility using XXPermissions library.
  * Provides superior permanent denial detection and recovery compared to standard Android API.
- * 
+ *
  * Based on IRCamera implementation with improvements for permanently denied permissions.
  */
 object PermissionTool {
-
     /**
      * Request all dangerous permissions required by the app
      * Uses three-phase approach to handle XXPermissions library restriction and Android sequential location requirements:
@@ -26,18 +25,29 @@ object PermissionTool {
      * Phase 2: Foreground location permissions (ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)
      * Phase 3: Background location permissions (ACCESS_BACKGROUND_LOCATION) - only after foreground is granted
      */
-    fun requestAllDangerousPermissions(context: Context, callback: PermissionCallback) {
+    fun requestAllDangerousPermissions(
+        context: Context,
+        callback: PermissionCallback,
+    ) {
         // Start with non-location permissions first to avoid XXPermissions library restriction
         val nonLocationPermissions = getNonLocationDangerousPermissions()
         if (nonLocationPermissions.isNotEmpty()) {
-            requestPermissions(context, nonLocationPermissions, "App Permissions", 
-                ThreePhasePermissionCallback(context, callback))
+            requestPermissions(
+                context,
+                nonLocationPermissions,
+                "App Permissions",
+                ThreePhasePermissionCallback(context, callback),
+            )
         } else {
             // No non-location permissions, go directly to foreground location permissions
             val foregroundLocationPermissions = getForegroundLocationPermissions()
             if (foregroundLocationPermissions.isNotEmpty()) {
-                requestPermissions(context, foregroundLocationPermissions, "Foreground Location Permissions", 
-                    ThreePhasePermissionCallback(context, callback, startFromPhase2 = true))
+                requestPermissions(
+                    context,
+                    foregroundLocationPermissions,
+                    "Foreground Location Permissions",
+                    ThreePhasePermissionCallback(context, callback, startFromPhase2 = true),
+                )
             } else {
                 // No foreground location permissions, go directly to background location
                 val backgroundLocationPermissions = getBackgroundLocationPermissions()
@@ -54,21 +64,30 @@ object PermissionTool {
     /**
      * Request camera permission
      */
-    fun requestCamera(context: Context, callback: PermissionCallback) {
+    fun requestCamera(
+        context: Context,
+        callback: PermissionCallback,
+    ) {
         requestPermissions(context, listOf(Permission.CAMERA), "Camera", callback)
     }
 
     /**
      * Request microphone permission
      */
-    fun requestMicrophone(context: Context, callback: PermissionCallback) {
+    fun requestMicrophone(
+        context: Context,
+        callback: PermissionCallback,
+    ) {
         requestPermissions(context, listOf(Permission.RECORD_AUDIO), "Microphone", callback)
     }
 
     /**
      * Request location permissions
      */
-    fun requestLocation(context: Context, callback: PermissionCallback) {
+    fun requestLocation(
+        context: Context,
+        callback: PermissionCallback,
+    ) {
         val permissions = listOf(Permission.ACCESS_FINE_LOCATION, Permission.ACCESS_COARSE_LOCATION)
         requestPermissions(context, permissions, "Location", callback)
     }
@@ -76,7 +95,10 @@ object PermissionTool {
     /**
      * Request storage permissions (handles different Android versions)
      */
-    fun requestStorage(context: Context, callback: PermissionCallback) {
+    fun requestStorage(
+        context: Context,
+        callback: PermissionCallback,
+    ) {
         val permissions = getStoragePermissions()
         requestPermissions(context, permissions, "Storage", callback)
     }
@@ -84,9 +106,7 @@ object PermissionTool {
     /**
      * Check if all dangerous permissions are granted
      */
-    fun areAllDangerousPermissionsGranted(context: Context): Boolean {
-        return XXPermissions.isGranted(context, getAllDangerousPermissions())
-    }
+    fun areAllDangerousPermissionsGranted(context: Context): Boolean = XXPermissions.isGranted(context, getAllDangerousPermissions())
 
     /**
      * Get list of missing dangerous permissions
@@ -97,61 +117,70 @@ object PermissionTool {
     }
 
     private fun requestPermissions(
-        context: Context, 
-        permissions: List<String>, 
+        context: Context,
+        permissions: List<String>,
         permissionType: String,
-        callback: PermissionCallback
+        callback: PermissionCallback,
     ) {
-        XXPermissions.with(context)
+        XXPermissions
+            .with(context)
             .permission(permissions)
-            .request(object : OnPermissionCallback {
-                override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
-                    if (allGranted) {
-                        callback.onAllGranted()
-                    } else {
-                        callback.onPartiallyGranted(permissions.toList())
+            .request(
+                object : OnPermissionCallback {
+                    override fun onGranted(
+                        permissions: MutableList<String>,
+                        allGranted: Boolean,
+                    ) {
+                        if (allGranted) {
+                            callback.onAllGranted()
+                        } else {
+                            callback.onPartiallyGranted(permissions.toList())
+                        }
                     }
-                }
 
-                override fun onDenied(permissions: MutableList<String>, never: Boolean) {
-                    if (never) {
-                        // Permanently denied - show dialog with Settings navigation
-                        showPermanentDenialDialog(context, permissions.toList(), permissionType, callback)
-                    } else {
-                        // Temporarily denied - can be requested again
-                        callback.onTemporarilyDenied(permissions.toList())
+                    override fun onDenied(
+                        permissions: MutableList<String>,
+                        never: Boolean,
+                    ) {
+                        if (never) {
+                            // Permanently denied - show dialog with Settings navigation
+                            showPermanentDenialDialog(context, permissions.toList(), permissionType, callback)
+                        } else {
+                            // Temporarily denied - can be requested again
+                            callback.onTemporarilyDenied(permissions.toList())
+                        }
                     }
-                }
-            })
+                },
+            )
     }
 
     private fun showPermanentDenialDialog(
         context: Context,
         deniedPermissions: List<String>,
         permissionType: String,
-        callback: PermissionCallback
+        callback: PermissionCallback,
     ) {
         val permissionNames = deniedPermissions.map { getPermissionDisplayName(it) }
-        val message = buildString {
-            append("$permissionType permissions have been permanently denied.\n\n")
-            append("To use this app properly, please enable the following permissions in Settings:\n\n")
-            permissionNames.forEach { name ->
-                append("• $name\n")
+        val message =
+            buildString {
+                append("$permissionType permissions have been permanently denied.\n\n")
+                append("To use this app properly, please enable the following permissions in Settings:\n\n")
+                permissionNames.forEach { name ->
+                    append("• $name\n")
+                }
+                append("\nWould you like to open Settings now?")
             }
-            append("\nWould you like to open Settings now?")
-        }
 
-        AlertDialog.Builder(context)
+        AlertDialog
+            .Builder(context)
             .setTitle("Permissions Required")
             .setMessage(message)
             .setPositiveButton("Open Settings") { _, _ ->
                 openAppSettings(context)
                 callback.onPermanentlyDeniedWithSettingsOpened(deniedPermissions)
-            }
-            .setNegativeButton("Cancel") { _, _ ->
+            }.setNegativeButton("Cancel") { _, _ ->
                 callback.onPermanentlyDeniedWithoutSettings(deniedPermissions)
-            }
-            .setCancelable(false)
+            }.setCancelable(false)
             .show()
     }
 
@@ -162,18 +191,22 @@ object PermissionTool {
         } catch (e: Exception) {
             // Fallback to manual Settings intent
             try {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", context.packageName, null)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
+                val intent =
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
                 context.startActivity(intent)
             } catch (e2: Exception) {
                 // Final fallback - show toast with instructions
-                Toast.makeText(
-                    context,
-                    "Please go to Settings > Apps > ${context.applicationInfo.loadLabel(context.packageManager)} > Permissions to enable required permissions",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast
+                    .makeText(
+                        context,
+                        "Please go to Settings > Apps > ${context.applicationInfo.loadLabel(
+                            context.packageManager,
+                        )} > Permissions to enable required permissions",
+                        Toast.LENGTH_LONG,
+                    ).show()
             }
         }
     }
@@ -191,53 +224,63 @@ object PermissionTool {
      */
     private fun getNonLocationDangerousPermissions(): List<String> {
         val permissions = mutableListOf<String>()
-        
+
         // Storage (version-dependent)
         permissions.addAll(getStoragePermissions())
-        
+
         // Camera and Audio
-        permissions.addAll(listOf(
-            Permission.CAMERA,
-            Permission.RECORD_AUDIO
-        ))
-        
+        permissions.addAll(
+            listOf(
+                Permission.CAMERA,
+                Permission.RECORD_AUDIO,
+            ),
+        )
+
         // Phone
-        permissions.addAll(listOf(
-            Permission.READ_PHONE_STATE,
-            Permission.CALL_PHONE,
-            Permission.READ_CALL_LOG,
-            Permission.WRITE_CALL_LOG
-        ))
-        
+        permissions.addAll(
+            listOf(
+                Permission.READ_PHONE_STATE,
+                Permission.CALL_PHONE,
+                Permission.READ_CALL_LOG,
+                Permission.WRITE_CALL_LOG,
+            ),
+        )
+
         // SMS
-        permissions.addAll(listOf(
-            Permission.SEND_SMS,
-            Permission.RECEIVE_SMS,
-            Permission.READ_SMS
-        ))
-        
+        permissions.addAll(
+            listOf(
+                Permission.SEND_SMS,
+                Permission.RECEIVE_SMS,
+                Permission.READ_SMS,
+            ),
+        )
+
         // Contacts
-        permissions.addAll(listOf(
-            Permission.READ_CONTACTS,
-            Permission.WRITE_CONTACTS
-        ))
-        
+        permissions.addAll(
+            listOf(
+                Permission.READ_CONTACTS,
+                Permission.WRITE_CONTACTS,
+            ),
+        )
+
         // Calendar
-        permissions.addAll(listOf(
-            Permission.READ_CALENDAR,
-            Permission.WRITE_CALENDAR
-        ))
-        
+        permissions.addAll(
+            listOf(
+                Permission.READ_CALENDAR,
+                Permission.WRITE_CALENDAR,
+            ),
+        )
+
         // Sensors
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             permissions.add(Permission.BODY_SENSORS)
         }
-        
+
         // Notifications (Android 13+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Permission.POST_NOTIFICATIONS)
         }
-        
+
         return permissions
     }
 
@@ -245,24 +288,22 @@ object PermissionTool {
      * Get foreground location permissions only
      * These must be granted before background location can be requested
      */
-    private fun getForegroundLocationPermissions(): List<String> {
-        return listOf(
+    private fun getForegroundLocationPermissions(): List<String> =
+        listOf(
             Permission.ACCESS_FINE_LOCATION,
-            Permission.ACCESS_COARSE_LOCATION
+            Permission.ACCESS_COARSE_LOCATION,
         )
-    }
 
     /**
      * Get background location permission only
      * This can only be requested after foreground location is granted
      */
-    private fun getBackgroundLocationPermissions(): List<String> {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    private fun getBackgroundLocationPermissions(): List<String> =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             listOf(Permission.ACCESS_BACKGROUND_LOCATION)
         } else {
             emptyList()
         }
-    }
 
     /**
      * Get all location permissions (for compatibility)
@@ -275,25 +316,24 @@ object PermissionTool {
         return permissions
     }
 
-    private fun getStoragePermissions(): List<String> {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    private fun getStoragePermissions(): List<String> =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Android 13+ - Use granular media permissions
             listOf(
                 Permission.READ_MEDIA_IMAGES,
                 Permission.READ_MEDIA_VIDEO,
-                Permission.READ_MEDIA_AUDIO
+                Permission.READ_MEDIA_AUDIO,
             )
         } else {
             // Android 12 and below - Use legacy storage permissions
             listOf(
                 Permission.READ_EXTERNAL_STORAGE,
-                Permission.WRITE_EXTERNAL_STORAGE
+                Permission.WRITE_EXTERNAL_STORAGE,
             )
         }
-    }
 
-    private fun getPermissionDisplayName(permission: String): String {
-        return when (permission) {
+    private fun getPermissionDisplayName(permission: String): String =
+        when (permission) {
             Permission.CAMERA -> "Camera"
             Permission.RECORD_AUDIO -> "Microphone"
             Permission.ACCESS_FINE_LOCATION -> "Fine Location"
@@ -319,7 +359,6 @@ object PermissionTool {
             Permission.POST_NOTIFICATIONS -> "Notifications"
             else -> permission.substringAfterLast(".")
         }
-    }
 
     /**
      * Three-phase permission callback that handles XXPermissions library restriction and Android sequential location requirements
@@ -330,15 +369,14 @@ object PermissionTool {
     private class ThreePhasePermissionCallback(
         private val context: Context,
         private val originalCallback: PermissionCallback,
-        private val startFromPhase2: Boolean = false
+        private val startFromPhase2: Boolean = false,
     ) : PermissionCallback {
-        
         private var phase1Completed = startFromPhase2
         private var phase2Completed = false
         private val phase1DeniedPermissions = mutableListOf<String>()
         private val phase2DeniedPermissions = mutableListOf<String>()
         private val phase3DeniedPermissions = mutableListOf<String>()
-        
+
         override fun onAllGranted() {
             when {
                 !phase1Completed -> {
@@ -369,14 +407,14 @@ object PermissionTool {
                 }
             }
         }
-        
+
         override fun onTemporarilyDenied(deniedPermissions: List<String>) {
             when {
                 !phase1Completed -> {
                     // Phase 1 denied permissions
                     phase1DeniedPermissions.addAll(deniedPermissions)
                     phase1Completed = true
-                    
+
                     // Continue to Phase 2 even if Phase 1 had denials
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
@@ -389,11 +427,11 @@ object PermissionTool {
                     // Phase 2 (foreground location) denied permissions
                     phase2DeniedPermissions.addAll(deniedPermissions)
                     phase2Completed = true
-                    
+
                     // CRITICAL: Do NOT request background location if foreground location is denied
                     // This breaks the retry loop by not requesting background location without foreground location
                     android.util.Log.d("PermissionTool", "[DEBUG_LOG] Foreground location denied, skipping background location request")
-                    
+
                     // Report all denied permissions from all phases
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions
                     if (allDeniedPermissions.isNotEmpty()) {
@@ -405,7 +443,7 @@ object PermissionTool {
                 else -> {
                     // Phase 3 (background location) denied permissions
                     phase3DeniedPermissions.addAll(deniedPermissions)
-                    
+
                     // Combine all denied permissions from all phases
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
                     if (allDeniedPermissions.isNotEmpty()) {
@@ -416,13 +454,13 @@ object PermissionTool {
                 }
             }
         }
-        
+
         override fun onPermanentlyDeniedWithSettingsOpened(deniedPermissions: List<String>) {
             when {
                 !phase1Completed -> {
                     phase1DeniedPermissions.addAll(deniedPermissions)
                     phase1Completed = true
-                    
+
                     // Continue to Phase 2 even if Phase 1 had permanent denials
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
@@ -434,7 +472,7 @@ object PermissionTool {
                 !phase2Completed -> {
                     phase2DeniedPermissions.addAll(deniedPermissions)
                     phase2Completed = true
-                    
+
                     // Do NOT request background location if foreground location is permanently denied
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions
                     originalCallback.onPermanentlyDeniedWithSettingsOpened(allDeniedPermissions)
@@ -446,13 +484,13 @@ object PermissionTool {
                 }
             }
         }
-        
+
         override fun onPermanentlyDeniedWithoutSettings(deniedPermissions: List<String>) {
             when {
                 !phase1Completed -> {
                     phase1DeniedPermissions.addAll(deniedPermissions)
                     phase1Completed = true
-                    
+
                     // Continue to Phase 2 even if Phase 1 had permanent denials
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
@@ -464,7 +502,7 @@ object PermissionTool {
                 !phase2Completed -> {
                     phase2DeniedPermissions.addAll(deniedPermissions)
                     phase2Completed = true
-                    
+
                     // Do NOT request background location if foreground location is permanently denied
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions
                     originalCallback.onPermanentlyDeniedWithoutSettings(allDeniedPermissions)
@@ -476,7 +514,7 @@ object PermissionTool {
                 }
             }
         }
-        
+
         private fun checkBackgroundLocationPermissions() {
             val backgroundLocationPermissions = getBackgroundLocationPermissions()
             if (backgroundLocationPermissions.isNotEmpty()) {

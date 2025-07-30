@@ -10,7 +10,6 @@ import java.io.File
  * Tests core functionality of SessionInfo and file operations.
  */
 class FileManagementLogicTest {
-
     @Test
     fun `SessionInfo should be created with correct properties`() {
         // Given
@@ -18,12 +17,13 @@ class FileManagementLogicTest {
         val startTime = System.currentTimeMillis()
 
         // When
-        val sessionInfo = SessionInfo(sessionId).apply {
-            this.startTime = startTime
-            this.videoEnabled = true
-            this.rawEnabled = true
-            this.thermalEnabled = true
-        }
+        val sessionInfo =
+            SessionInfo(sessionId).apply {
+                this.startTime = startTime
+                this.videoEnabled = true
+                this.rawEnabled = true
+                this.thermalEnabled = true
+            }
 
         // Then
         assertEquals(sessionId, sessionInfo.sessionId)
@@ -173,12 +173,11 @@ class FileManagementLogicTest {
         assertEquals("1 hour should equal 3600000ms", 3600000L, duration1Hour)
     }
 
-    private fun createTestSessionInfo(sessionId: String): SessionInfo {
-        return SessionInfo(sessionId).apply {
+    private fun createTestSessionInfo(sessionId: String): SessionInfo =
+        SessionInfo(sessionId).apply {
             this.startTime = System.currentTimeMillis()
             this.videoEnabled = true
             this.rawEnabled = true
             this.thermalEnabled = true
         }
-    }
 }

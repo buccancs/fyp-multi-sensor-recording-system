@@ -19,7 +19,6 @@ import java.io.File
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class FileViewActivityTest {
-
     private lateinit var mockSessionManager: SessionManager
     private lateinit var mockLogger: Logger
     private lateinit var context: Context
@@ -37,67 +36,73 @@ class FileViewActivityTest {
     }
 
     @Test
-    fun `getAllSessions should return list of sessions`() = runTest {
-        // Given
-        val testSessions = listOf(
-            createTestSessionInfo("session1"),
-            createTestSessionInfo("session2")
-        )
-        coEvery { mockSessionManager.getAllSessions() } returns testSessions
+    fun `getAllSessions should return list of sessions`() =
+        runTest {
+            // Given
+            val testSessions =
+                listOf(
+                    createTestSessionInfo("session1"),
+                    createTestSessionInfo("session2"),
+                )
+            coEvery { mockSessionManager.getAllSessions() } returns testSessions
 
-        // When
-        val result = mockSessionManager.getAllSessions()
+            // When
+            val result = mockSessionManager.getAllSessions()
 
-        // Then
-        assertEquals(2, result.size)
-        assertEquals("session1", result[0].sessionId)
-        assertEquals("session2", result[1].sessionId)
-        verify { mockLogger wasNot Called }
-    }
-
-    @Test
-    fun `deleteAllSessions should return success`() = runTest {
-        // Given
-        coEvery { mockSessionManager.deleteAllSessions() } returns true
-
-        // When
-        val result = mockSessionManager.deleteAllSessions()
-
-        // Then
-        assertTrue("Delete all sessions should succeed", result)
-        coVerify { mockSessionManager.deleteAllSessions() }
-    }
+            // Then
+            assertEquals(2, result.size)
+            assertEquals("session1", result[0].sessionId)
+            assertEquals("session2", result[1].sessionId)
+            verify { mockLogger wasNot Called }
+        }
 
     @Test
-    fun `deleteAllSessions should handle failure`() = runTest {
-        // Given
-        coEvery { mockSessionManager.deleteAllSessions() } returns false
+    fun `deleteAllSessions should return success`() =
+        runTest {
+            // Given
+            coEvery { mockSessionManager.deleteAllSessions() } returns true
 
-        // When
-        val result = mockSessionManager.deleteAllSessions()
+            // When
+            val result = mockSessionManager.deleteAllSessions()
 
-        // Then
-        assertFalse("Delete all sessions should fail", result)
-        coVerify { mockSessionManager.deleteAllSessions() }
-    }
+            // Then
+            assertTrue("Delete all sessions should succeed", result)
+            coVerify { mockSessionManager.deleteAllSessions() }
+        }
 
     @Test
-    fun `SessionManager integration should work correctly`() = runTest {
-        // Given
-        val testSessions = listOf(
-            createTestSessionInfo("session1"),
-            createTestSessionInfo("session2")
-        )
-        coEvery { mockSessionManager.getAllSessions() } returns testSessions
+    fun `deleteAllSessions should handle failure`() =
+        runTest {
+            // Given
+            coEvery { mockSessionManager.deleteAllSessions() } returns false
 
-        // When
-        val sessions = mockSessionManager.getAllSessions()
+            // When
+            val result = mockSessionManager.deleteAllSessions()
 
-        // Then
-        assertEquals(2, sessions.size)
-        assertTrue("Sessions should contain session1", sessions.any { it.sessionId == "session1" })
-        assertTrue("Sessions should contain session2", sessions.any { it.sessionId == "session2" })
-    }
+            // Then
+            assertFalse("Delete all sessions should fail", result)
+            coVerify { mockSessionManager.deleteAllSessions() }
+        }
+
+    @Test
+    fun `SessionManager integration should work correctly`() =
+        runTest {
+            // Given
+            val testSessions =
+                listOf(
+                    createTestSessionInfo("session1"),
+                    createTestSessionInfo("session2"),
+                )
+            coEvery { mockSessionManager.getAllSessions() } returns testSessions
+
+            // When
+            val sessions = mockSessionManager.getAllSessions()
+
+            // Then
+            assertEquals(2, sessions.size)
+            assertTrue("Sessions should contain session1", sessions.any { it.sessionId == "session1" })
+            assertTrue("Sessions should contain session2", sessions.any { it.sessionId == "session2" })
+        }
 
     @Test
     fun `File operations should handle different file types`() {
@@ -119,12 +124,13 @@ class FileViewActivityTest {
         val startTime = System.currentTimeMillis()
 
         // When
-        val sessionInfo = SessionInfo(sessionId).apply {
-            this.startTime = startTime
-            this.videoEnabled = true
-            this.rawEnabled = true
-            this.thermalEnabled = true
-        }
+        val sessionInfo =
+            SessionInfo(sessionId).apply {
+                this.startTime = startTime
+                this.videoEnabled = true
+                this.rawEnabled = true
+                this.thermalEnabled = true
+            }
 
         // Then
         assertEquals(sessionId, sessionInfo.sessionId)
@@ -151,12 +157,11 @@ class FileViewActivityTest {
         assertEquals("/test/thermal.bin", sessionInfo.thermalFilePath)
     }
 
-    private fun createTestSessionInfo(sessionId: String): SessionInfo {
-        return SessionInfo(sessionId).apply {
+    private fun createTestSessionInfo(sessionId: String): SessionInfo =
+        SessionInfo(sessionId).apply {
             this.startTime = System.currentTimeMillis()
             this.videoEnabled = true
             this.rawEnabled = true
             this.thermalEnabled = true
         }
-    }
 }

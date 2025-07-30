@@ -6,7 +6,7 @@ import org.json.JSONObject
 /**
  * JSON message protocol for Milestone 2.6 Network Communication Client.
  * Defines message types and structures for bidirectional communication between Android and PC.
- * 
+ *
  * Based on 2_6_milestone.md specifications for JSON socket communication.
  */
 
@@ -15,16 +15,16 @@ import org.json.JSONObject
  */
 abstract class JsonMessage {
     abstract val type: String
-    
+
     companion object {
         /**
          * Parse incoming JSON message and return appropriate message object
          */
-        fun fromJson(jsonString: String): JsonMessage? {
-            return try {
+        fun fromJson(jsonString: String): JsonMessage? =
+            try {
                 val jsonObject = JSONObject(jsonString)
                 val messageType = jsonObject.getString("type")
-                
+
                 // Parse to specific message type based on type field
                 when (messageType) {
                     "start_record" -> StartRecordCommand.fromJson(jsonObject)
@@ -49,16 +49,13 @@ abstract class JsonMessage {
             } catch (e: JSONException) {
                 null // Invalid JSON
             }
-        }
-        
+
         /**
          * Convert message object to JSON string
          */
-        fun toJson(message: JsonMessage): String {
-            return message.toJsonObject().toString()
-        }
+        fun toJson(message: JsonMessage): String = message.toJsonObject().toString()
     }
-    
+
     /**
      * Convert message to JSONObject - to be implemented by subclasses
      */
@@ -75,28 +72,25 @@ data class StartRecordCommand(
     val session_id: String,
     val record_video: Boolean = true,
     val record_thermal: Boolean = true,
-    val record_shimmer: Boolean = false
+    val record_shimmer: Boolean = false,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("session_id", session_id)
             put("record_video", record_video)
             put("record_thermal", record_thermal)
             put("record_shimmer", record_shimmer)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): StartRecordCommand {
-            return StartRecordCommand(
+        fun fromJson(json: JSONObject): StartRecordCommand =
+            StartRecordCommand(
                 session_id = json.getString("session_id"),
                 record_video = json.optBoolean("record_video", true),
                 record_thermal = json.optBoolean("record_thermal", true),
-                record_shimmer = json.optBoolean("record_shimmer", false)
+                record_shimmer = json.optBoolean("record_shimmer", false),
             )
-        }
     }
 }
 
@@ -104,19 +98,15 @@ data class StartRecordCommand(
  * Command to stop current recording session
  */
 data class StopRecordCommand(
-    override val type: String = "stop_record"
+    override val type: String = "stop_record",
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): StopRecordCommand {
-            return StopRecordCommand()
-        }
+        fun fromJson(json: JSONObject): StopRecordCommand = StopRecordCommand()
     }
 }
 
@@ -128,28 +118,25 @@ data class CaptureCalibrationCommand(
     val calibration_id: String? = null,
     val capture_rgb: Boolean = true,
     val capture_thermal: Boolean = true,
-    val high_resolution: Boolean = true
+    val high_resolution: Boolean = true,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             calibration_id?.let { put("calibration_id", it) }
             put("capture_rgb", capture_rgb)
             put("capture_thermal", capture_thermal)
             put("high_resolution", high_resolution)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): CaptureCalibrationCommand {
-            return CaptureCalibrationCommand(
+        fun fromJson(json: JSONObject): CaptureCalibrationCommand =
+            CaptureCalibrationCommand(
                 calibration_id = if (json.has("calibration_id")) json.getString("calibration_id") else null,
                 capture_rgb = json.optBoolean("capture_rgb", true),
                 capture_thermal = json.optBoolean("capture_thermal", true),
-                high_resolution = json.optBoolean("high_resolution", true)
+                high_resolution = json.optBoolean("high_resolution", true),
             )
-        }
     }
 }
 
@@ -158,22 +145,19 @@ data class CaptureCalibrationCommand(
  */
 data class SetStimulusTimeCommand(
     override val type: String = "set_stimulus_time",
-    val time: Long
+    val time: Long,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("time", time)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): SetStimulusTimeCommand {
-            return SetStimulusTimeCommand(
-                time = json.getLong("time")
+        fun fromJson(json: JSONObject): SetStimulusTimeCommand =
+            SetStimulusTimeCommand(
+                time = json.getLong("time"),
             )
-        }
     }
 }
 
@@ -183,24 +167,21 @@ data class SetStimulusTimeCommand(
 data class FlashSyncCommand(
     override val type: String = "flash_sync",
     val duration_ms: Long = 200,
-    val sync_id: String? = null
+    val sync_id: String? = null,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("duration_ms", duration_ms)
             sync_id?.let { put("sync_id", it) }
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): FlashSyncCommand {
-            return FlashSyncCommand(
+        fun fromJson(json: JSONObject): FlashSyncCommand =
+            FlashSyncCommand(
                 duration_ms = json.optLong("duration_ms", 200),
-                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null
+                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null,
             )
-        }
     }
 }
 
@@ -212,28 +193,25 @@ data class BeepSyncCommand(
     val frequency_hz: Int = 1000,
     val duration_ms: Long = 200,
     val volume: Float = 0.8f,
-    val sync_id: String? = null
+    val sync_id: String? = null,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("frequency_hz", frequency_hz)
             put("duration_ms", duration_ms)
             put("volume", volume.toDouble())
             sync_id?.let { put("sync_id", it) }
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): BeepSyncCommand {
-            return BeepSyncCommand(
+        fun fromJson(json: JSONObject): BeepSyncCommand =
+            BeepSyncCommand(
                 frequency_hz = json.optInt("frequency_hz", 1000),
                 duration_ms = json.optLong("duration_ms", 200),
                 volume = json.optDouble("volume", 0.8).toFloat(),
-                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null
+                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null,
             )
-        }
     }
 }
 
@@ -243,24 +221,21 @@ data class BeepSyncCommand(
 data class SyncTimeCommand(
     override val type: String = "sync_time",
     val pc_timestamp: Long,
-    val sync_id: String? = null
+    val sync_id: String? = null,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("pc_timestamp", pc_timestamp)
             sync_id?.let { put("sync_id", it) }
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): SyncTimeCommand {
-            return SyncTimeCommand(
+        fun fromJson(json: JSONObject): SyncTimeCommand =
+            SyncTimeCommand(
                 pc_timestamp = json.getLong("pc_timestamp"),
-                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null
+                sync_id = if (json.has("sync_id")) json.getString("sync_id") else null,
             )
-        }
     }
 }
 
@@ -270,24 +245,21 @@ data class SyncTimeCommand(
 data class SendFileCommand(
     override val type: String = "send_file",
     val filepath: String,
-    val filetype: String? = null
+    val filetype: String? = null,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("filepath", filepath)
             filetype?.let { put("filetype", it) }
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): SendFileCommand {
-            return SendFileCommand(
+        fun fromJson(json: JSONObject): SendFileCommand =
+            SendFileCommand(
                 filepath = json.getString("filepath"),
-                filetype = if (json.has("filetype")) json.getString("filetype") else null
+                filetype = if (json.has("filetype")) json.getString("filetype") else null,
             )
-        }
     }
 }
 
@@ -297,24 +269,21 @@ data class SendFileCommand(
 data class FileReceivedCommand(
     override val type: String = "file_received",
     val name: String,
-    val status: String // "ok" or "error"
+    val status: String, // "ok" or "error"
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("name", name)
             put("status", status)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): FileReceivedCommand {
-            return FileReceivedCommand(
+        fun fromJson(json: JSONObject): FileReceivedCommand =
+            FileReceivedCommand(
                 name = json.getString("name"),
-                status = json.getString("status")
+                status = json.getString("status"),
             )
-        }
     }
 }
 
@@ -326,17 +295,15 @@ data class FileReceivedCommand(
 data class HelloMessage(
     override val type: String = "hello",
     val device_id: String,
-    val capabilities: List<String>
+    val capabilities: List<String>,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("device_id", device_id)
             put("capabilities", org.json.JSONArray(capabilities))
         }
-    }
-    
+
     companion object {
         fun fromJson(json: JSONObject): HelloMessage {
             val capabilitiesArray = json.getJSONArray("capabilities")
@@ -346,7 +313,7 @@ data class HelloMessage(
             }
             return HelloMessage(
                 device_id = json.getString("device_id"),
-                capabilities = capabilities
+                capabilities = capabilities,
             )
         }
     }
@@ -359,26 +326,23 @@ data class PreviewFrameMessage(
     override val type: String = "preview_frame",
     val cam: String, // "rgb" or "thermal"
     val timestamp: Long,
-    val image: String // base64 encoded image data
+    val image: String, // base64 encoded image data
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("cam", cam)
             put("timestamp", timestamp)
             put("image", image)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): PreviewFrameMessage {
-            return PreviewFrameMessage(
+        fun fromJson(json: JSONObject): PreviewFrameMessage =
+            PreviewFrameMessage(
                 cam = json.getString("cam"),
                 timestamp = json.getLong("timestamp"),
-                image = json.getString("image")
+                image = json.getString("image"),
             )
-        }
     }
 }
 
@@ -388,11 +352,10 @@ data class PreviewFrameMessage(
 data class SensorDataMessage(
     override val type: String = "sensor_data",
     val timestamp: Long,
-    val values: Map<String, Double>
+    val values: Map<String, Double>,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("timestamp", timestamp)
             val valuesJson = JSONObject()
@@ -401,8 +364,7 @@ data class SensorDataMessage(
             }
             put("values", valuesJson)
         }
-    }
-    
+
     companion object {
         fun fromJson(json: JSONObject): SensorDataMessage {
             val valuesJson = json.getJSONObject("values")
@@ -414,7 +376,7 @@ data class SensorDataMessage(
             }
             return SensorDataMessage(
                 timestamp = json.getLong("timestamp"),
-                values = values
+                values = values,
             )
         }
     }
@@ -429,11 +391,10 @@ data class StatusMessage(
     val storage: String? = null,
     val temperature: Double? = null,
     val recording: Boolean = false,
-    val connected: Boolean = true
+    val connected: Boolean = true,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             battery?.let { put("battery", it) }
             storage?.let { put("storage", it) }
@@ -441,18 +402,16 @@ data class StatusMessage(
             put("recording", recording)
             put("connected", connected)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): StatusMessage {
-            return StatusMessage(
+        fun fromJson(json: JSONObject): StatusMessage =
+            StatusMessage(
                 battery = if (json.has("battery")) json.getInt("battery") else null,
                 storage = if (json.has("storage")) json.getString("storage") else null,
                 temperature = if (json.has("temperature")) json.getDouble("temperature") else null,
                 recording = json.optBoolean("recording", false),
-                connected = json.optBoolean("connected", true)
+                connected = json.optBoolean("connected", true),
             )
-        }
     }
 }
 
@@ -463,26 +422,23 @@ data class AckMessage(
     override val type: String = "ack",
     val cmd: String,
     val status: String, // "ok" or "error"
-    val message: String? = null
+    val message: String? = null,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("cmd", cmd)
             put("status", status)
             message?.let { put("message", it) }
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): AckMessage {
-            return AckMessage(
+        fun fromJson(json: JSONObject): AckMessage =
+            AckMessage(
                 cmd = json.getString("cmd"),
                 status = json.getString("status"),
-                message = if (json.has("message")) json.getString("message") else null
+                message = if (json.has("message")) json.getString("message") else null,
             )
-        }
     }
 }
 
@@ -492,24 +448,21 @@ data class AckMessage(
 data class FileInfoMessage(
     override val type: String = "file_info",
     val name: String,
-    val size: Long
+    val size: Long,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("name", name)
             put("size", size)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): FileInfoMessage {
-            return FileInfoMessage(
+        fun fromJson(json: JSONObject): FileInfoMessage =
+            FileInfoMessage(
                 name = json.getString("name"),
-                size = json.getLong("size")
+                size = json.getLong("size"),
             )
-        }
     }
 }
 
@@ -519,24 +472,21 @@ data class FileInfoMessage(
 data class FileChunkMessage(
     override val type: String = "file_chunk",
     val seq: Int,
-    val data: String // Base64 encoded chunk data
+    val data: String, // Base64 encoded chunk data
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("seq", seq)
             put("data", data)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): FileChunkMessage {
-            return FileChunkMessage(
+        fun fromJson(json: JSONObject): FileChunkMessage =
+            FileChunkMessage(
                 seq = json.getInt("seq"),
-                data = json.getString("data")
+                data = json.getString("data"),
             )
-        }
     }
 }
 
@@ -545,21 +495,18 @@ data class FileChunkMessage(
  */
 data class FileEndMessage(
     override val type: String = "file_end",
-    val name: String
+    val name: String,
 ) : JsonMessage() {
-    
-    override fun toJsonObject(): JSONObject {
-        return JSONObject().apply {
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
             put("type", type)
             put("name", name)
         }
-    }
-    
+
     companion object {
-        fun fromJson(json: JSONObject): FileEndMessage {
-            return FileEndMessage(
-                name = json.getString("name")
+        fun fromJson(json: JSONObject): FileEndMessage =
+            FileEndMessage(
+                name = json.getString("name"),
             )
-        }
     }
 }

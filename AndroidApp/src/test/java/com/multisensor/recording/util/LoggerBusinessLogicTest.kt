@@ -9,7 +9,6 @@ import java.io.File
  * Tests LogLevel enum, LogStatistics data class, and core logic without requiring Robolectric
  */
 class LoggerBusinessLogicTest {
-
     @Test
     fun `LogLevel enum should have correct priority values`() {
         // Then
@@ -24,18 +23,19 @@ class LoggerBusinessLogicTest {
     fun `LogLevel enum should have all expected values`() {
         // When
         val logLevels = Logger.LogLevel.values()
-        
+
         // Then
         assertEquals("Should have 5 log levels", 5, logLevels.size)
-        
-        val expectedLevels = setOf(
-            Logger.LogLevel.VERBOSE,
-            Logger.LogLevel.DEBUG,
-            Logger.LogLevel.INFO,
-            Logger.LogLevel.WARNING,
-            Logger.LogLevel.ERROR
-        )
-        
+
+        val expectedLevels =
+            setOf(
+                Logger.LogLevel.VERBOSE,
+                Logger.LogLevel.DEBUG,
+                Logger.LogLevel.INFO,
+                Logger.LogLevel.WARNING,
+                Logger.LogLevel.ERROR,
+            )
+
         assertEquals("Should contain all expected log levels", expectedLevels, logLevels.toSet())
     }
 
@@ -43,11 +43,13 @@ class LoggerBusinessLogicTest {
     fun `LogLevel priorities should be in ascending order`() {
         // When
         val levels = Logger.LogLevel.values()
-        
+
         // Then
         for (i in 0 until levels.size - 1) {
-            assertTrue("Priority should increase: ${levels[i]} < ${levels[i + 1]}", 
-                      levels[i].priority < levels[i + 1].priority)
+            assertTrue(
+                "Priority should increase: ${levels[i]} < ${levels[i + 1]}",
+                levels[i].priority < levels[i + 1].priority,
+            )
         }
     }
 
@@ -63,14 +65,15 @@ class LoggerBusinessLogicTest {
     @Test
     fun `LogStatistics should initialize with correct default values`() {
         // When
-        val stats = Logger.LogStatistics(
-            fileCount = 5,
-            totalSizeBytes = 1024L,
-            oldestLogDate = 1000L,
-            newestLogDate = 2000L,
-            currentLogFile = "current.log"
-        )
-        
+        val stats =
+            Logger.LogStatistics(
+                fileCount = 5,
+                totalSizeBytes = 1024L,
+                oldestLogDate = 1000L,
+                newestLogDate = 2000L,
+                currentLogFile = "current.log",
+            )
+
         // Then
         assertEquals(5, stats.fileCount)
         assertEquals(1024L, stats.totalSizeBytes)
@@ -82,14 +85,15 @@ class LoggerBusinessLogicTest {
     @Test
     fun `LogStatistics should handle null values`() {
         // When
-        val stats = Logger.LogStatistics(
-            fileCount = 0,
-            totalSizeBytes = 0L,
-            oldestLogDate = null,
-            newestLogDate = null,
-            currentLogFile = null
-        )
-        
+        val stats =
+            Logger.LogStatistics(
+                fileCount = 0,
+                totalSizeBytes = 0L,
+                oldestLogDate = null,
+                newestLogDate = null,
+                currentLogFile = null,
+            )
+
         // Then
         assertEquals(0, stats.fileCount)
         assertEquals(0L, stats.totalSizeBytes)
@@ -101,30 +105,33 @@ class LoggerBusinessLogicTest {
     @Test
     fun `LogStatistics should support data class functionality`() {
         // Given
-        val stats1 = Logger.LogStatistics(
-            fileCount = 3,
-            totalSizeBytes = 512L,
-            oldestLogDate = 1000L,
-            newestLogDate = 2000L,
-            currentLogFile = "test.log"
-        )
-        
-        val stats2 = Logger.LogStatistics(
-            fileCount = 3,
-            totalSizeBytes = 512L,
-            oldestLogDate = 1000L,
-            newestLogDate = 2000L,
-            currentLogFile = "test.log"
-        )
-        
-        val stats3 = Logger.LogStatistics(
-            fileCount = 4,
-            totalSizeBytes = 512L,
-            oldestLogDate = 1000L,
-            newestLogDate = 2000L,
-            currentLogFile = "test.log"
-        )
-        
+        val stats1 =
+            Logger.LogStatistics(
+                fileCount = 3,
+                totalSizeBytes = 512L,
+                oldestLogDate = 1000L,
+                newestLogDate = 2000L,
+                currentLogFile = "test.log",
+            )
+
+        val stats2 =
+            Logger.LogStatistics(
+                fileCount = 3,
+                totalSizeBytes = 512L,
+                oldestLogDate = 1000L,
+                newestLogDate = 2000L,
+                currentLogFile = "test.log",
+            )
+
+        val stats3 =
+            Logger.LogStatistics(
+                fileCount = 4,
+                totalSizeBytes = 512L,
+                oldestLogDate = 1000L,
+                newestLogDate = 2000L,
+                currentLogFile = "test.log",
+            )
+
         // Then
         assertEquals("Equal objects should be equal", stats1, stats2)
         assertNotEquals("Different objects should not be equal", stats1, stats3)
@@ -134,17 +141,18 @@ class LoggerBusinessLogicTest {
     @Test
     fun `LogStatistics should have meaningful toString`() {
         // Given
-        val stats = Logger.LogStatistics(
-            fileCount = 2,
-            totalSizeBytes = 1024L,
-            oldestLogDate = 1000L,
-            newestLogDate = 2000L,
-            currentLogFile = "current.log"
-        )
-        
+        val stats =
+            Logger.LogStatistics(
+                fileCount = 2,
+                totalSizeBytes = 1024L,
+                oldestLogDate = 1000L,
+                newestLogDate = 2000L,
+                currentLogFile = "current.log",
+            )
+
         // When
         val toString = stats.toString()
-        
+
         // Then
         assertTrue("Should contain fileCount", toString.contains("2"))
         assertTrue("Should contain totalSizeBytes", toString.contains("1024"))
@@ -155,16 +163,17 @@ class LoggerBusinessLogicTest {
     fun `LogStatistics should handle large file sizes`() {
         // Given
         val largeSize = Long.MAX_VALUE
-        
+
         // When
-        val stats = Logger.LogStatistics(
-            fileCount = 1000,
-            totalSizeBytes = largeSize,
-            oldestLogDate = 1000L,
-            newestLogDate = System.currentTimeMillis(),
-            currentLogFile = "large.log"
-        )
-        
+        val stats =
+            Logger.LogStatistics(
+                fileCount = 1000,
+                totalSizeBytes = largeSize,
+                oldestLogDate = 1000L,
+                newestLogDate = System.currentTimeMillis(),
+                currentLogFile = "large.log",
+            )
+
         // Then
         assertEquals(1000, stats.fileCount)
         assertEquals(largeSize, stats.totalSizeBytes)
@@ -174,14 +183,15 @@ class LoggerBusinessLogicTest {
     @Test
     fun `LogStatistics should handle edge case values`() {
         // When
-        val stats = Logger.LogStatistics(
-            fileCount = 0,
-            totalSizeBytes = 0L,
-            oldestLogDate = 0L,
-            newestLogDate = 0L,
-            currentLogFile = ""
-        )
-        
+        val stats =
+            Logger.LogStatistics(
+                fileCount = 0,
+                totalSizeBytes = 0L,
+                oldestLogDate = 0L,
+                newestLogDate = 0L,
+                currentLogFile = "",
+            )
+
         // Then
         assertEquals(0, stats.fileCount)
         assertEquals(0L, stats.totalSizeBytes)
@@ -193,17 +203,18 @@ class LoggerBusinessLogicTest {
     @Test
     fun `LogStatistics should support copy functionality`() {
         // Given
-        val original = Logger.LogStatistics(
-            fileCount = 5,
-            totalSizeBytes = 2048L,
-            oldestLogDate = 1000L,
-            newestLogDate = 3000L,
-            currentLogFile = "original.log"
-        )
-        
+        val original =
+            Logger.LogStatistics(
+                fileCount = 5,
+                totalSizeBytes = 2048L,
+                oldestLogDate = 1000L,
+                newestLogDate = 3000L,
+                currentLogFile = "original.log",
+            )
+
         // When
         val copied = original.copy(fileCount = 10)
-        
+
         // Then
         assertEquals(10, copied.fileCount)
         assertEquals(2048L, copied.totalSizeBytes) // Should preserve other values
@@ -216,18 +227,28 @@ class LoggerBusinessLogicTest {
     fun `log level filtering should work correctly`() {
         // Given
         val minLevel = Logger.LogLevel.WARNING
-        
+
         // When & Then
-        assertTrue("ERROR should pass WARNING filter", 
-                  Logger.LogLevel.ERROR.priority >= minLevel.priority)
-        assertTrue("WARNING should pass WARNING filter", 
-                  Logger.LogLevel.WARNING.priority >= minLevel.priority)
-        assertFalse("INFO should not pass WARNING filter", 
-                   Logger.LogLevel.INFO.priority >= minLevel.priority)
-        assertFalse("DEBUG should not pass WARNING filter", 
-                   Logger.LogLevel.DEBUG.priority >= minLevel.priority)
-        assertFalse("VERBOSE should not pass WARNING filter", 
-                   Logger.LogLevel.VERBOSE.priority >= minLevel.priority)
+        assertTrue(
+            "ERROR should pass WARNING filter",
+            Logger.LogLevel.ERROR.priority >= minLevel.priority,
+        )
+        assertTrue(
+            "WARNING should pass WARNING filter",
+            Logger.LogLevel.WARNING.priority >= minLevel.priority,
+        )
+        assertFalse(
+            "INFO should not pass WARNING filter",
+            Logger.LogLevel.INFO.priority >= minLevel.priority,
+        )
+        assertFalse(
+            "DEBUG should not pass WARNING filter",
+            Logger.LogLevel.DEBUG.priority >= minLevel.priority,
+        )
+        assertFalse(
+            "VERBOSE should not pass WARNING filter",
+            Logger.LogLevel.VERBOSE.priority >= minLevel.priority,
+        )
     }
 
     @Test
@@ -255,10 +276,10 @@ class LoggerBusinessLogicTest {
         // Given
         val message = "Test message"
         val throwable: Throwable? = null
-        
+
         // When
         val hasThrowable = throwable != null
-        
+
         // Then
         assertFalse("Should handle null throwable", hasThrowable)
         assertNotNull("Message should not be null", message)
@@ -270,11 +291,11 @@ class LoggerBusinessLogicTest {
         // Given
         val message = "Error occurred"
         val throwable = RuntimeException("Test exception")
-        
+
         // When
         val hasThrowable = throwable != null
         val stackTrace = throwable.stackTrace
-        
+
         // Then
         assertTrue("Should detect throwable", hasThrowable)
         assertNotNull("Stack trace should not be null", stackTrace)
@@ -288,12 +309,12 @@ class LoggerBusinessLogicTest {
         val validPath = "logs/app_2023-01-01.log"
         val invalidPath = ""
         val nullPath: String? = null
-        
+
         // When & Then
         assertTrue("Valid path should not be empty", validPath.isNotEmpty())
         assertTrue("Invalid path should be empty", invalidPath.isEmpty())
         assertNull("Null path should be null", nullPath)
-        
+
         // Path should contain expected components
         assertTrue("Should contain logs directory", validPath.contains("logs"))
         assertTrue("Should contain log extension", validPath.endsWith(".log"))
@@ -305,13 +326,15 @@ class LoggerBusinessLogicTest {
         val currentTime = System.currentTimeMillis()
         val pastTime = currentTime - 86400000L // 24 hours ago
         val futureTime = currentTime + 86400000L // 24 hours from now
-        
+
         // When & Then
         assertTrue("Current time should be positive", currentTime > 0)
         assertTrue("Past time should be less than current", pastTime < currentTime)
         assertTrue("Future time should be greater than current", futureTime > currentTime)
-        assertTrue("Time difference should be reasonable", 
-                  (currentTime - pastTime) == 86400000L)
+        assertTrue(
+            "Time difference should be reasonable",
+            (currentTime - pastTime) == 86400000L,
+        )
     }
 
     @Test
@@ -322,21 +345,22 @@ class LoggerBusinessLogicTest {
         val file3Size = 512L
         val totalSize = file1Size + file2Size + file3Size
         val fileCount = 3
-        
+
         // When
-        val stats = Logger.LogStatistics(
-            fileCount = fileCount,
-            totalSizeBytes = totalSize,
-            oldestLogDate = 1000L,
-            newestLogDate = 3000L,
-            currentLogFile = "current.log"
-        )
-        
+        val stats =
+            Logger.LogStatistics(
+                fileCount = fileCount,
+                totalSizeBytes = totalSize,
+                oldestLogDate = 1000L,
+                newestLogDate = 3000L,
+                currentLogFile = "current.log",
+            )
+
         // Then
         assertEquals("File count should be correct", fileCount, stats.fileCount)
         assertEquals("Total size should be sum of all files", totalSize, stats.totalSizeBytes)
         assertEquals("Should be 3584 bytes total", 3584L, stats.totalSizeBytes)
-        
+
         // Average file size calculation
         val averageSize = stats.totalSizeBytes / stats.fileCount
         assertEquals("Average file size should be correct", 1194L, averageSize)

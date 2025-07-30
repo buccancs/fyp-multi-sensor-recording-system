@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Represents a connected Shimmer3 GSR+ device with its state and configuration.
- * 
+ *
  * This data class encapsulates all information needed to manage a single Shimmer device
  * including connection state, device metadata, and runtime statistics.
  */
@@ -21,9 +21,8 @@ data class ShimmerDevice(
     val isStreaming: AtomicBoolean = AtomicBoolean(false),
     var lastSampleTime: Long = 0L,
     var reconnectionAttempts: Int = 0,
-    var configuration: DeviceConfiguration? = null
+    var configuration: DeviceConfiguration? = null,
 ) {
-    
     /**
      * Connection states for Shimmer devices
      */
@@ -33,53 +32,53 @@ data class ShimmerDevice(
         CONNECTED,
         STREAMING,
         RECONNECTING,
-        ERROR
+        ERROR,
     }
-    
+
     /**
      * Get a display-friendly device identifier
      */
-    fun getDisplayName(): String {
-        return if (deviceName.isNotBlank() && deviceName != "Shimmer") {
+    fun getDisplayName(): String =
+        if (deviceName.isNotBlank() && deviceName != "Shimmer") {
             "$deviceName ($deviceId)"
         } else {
             "Shimmer $deviceId"
         }
-    }
-    
+
     /**
      * Check if device is in a connected state
      */
-    fun isConnected(): Boolean {
-        return connectionState in listOf(
-            ConnectionState.CONNECTED,
-            ConnectionState.STREAMING
-        )
-    }
-    
+    fun isConnected(): Boolean =
+        connectionState in
+            listOf(
+                ConnectionState.CONNECTED,
+                ConnectionState.STREAMING,
+            )
+
     /**
      * Check if device is actively streaming data
      */
-    fun isActivelyStreaming(): Boolean {
-        return connectionState == ConnectionState.STREAMING && isStreaming.get()
-    }
-    
+    fun isActivelyStreaming(): Boolean = connectionState == ConnectionState.STREAMING && isStreaming.get()
+
     /**
      * Update connection state with logging
      */
-    fun updateConnectionState(newState: ConnectionState, logger: com.multisensor.recording.util.Logger? = null) {
+    fun updateConnectionState(
+        newState: ConnectionState,
+        logger: com.multisensor.recording.util.Logger? = null,
+    ) {
         val oldState = connectionState
         connectionState = newState
-        
+
         logger?.debug("Device ${getDisplayName()} state changed: $oldState -> $newState")
-        
+
         // Reset streaming flag if disconnected
         if (newState == ConnectionState.DISCONNECTED) {
             isStreaming.set(false)
             reconnectionAttempts = 0
         }
     }
-    
+
     /**
      * Increment sample count and update last sample time
      */
@@ -87,7 +86,7 @@ data class ShimmerDevice(
         sampleCount.incrementAndGet()
         lastSampleTime = System.currentTimeMillis()
     }
-    
+
     /**
      * Get samples per second based on recent activity
      */
@@ -100,7 +99,7 @@ data class ShimmerDevice(
             0.0
         }
     }
-    
+
     /**
      * Reset device statistics
      */
@@ -109,8 +108,7 @@ data class ShimmerDevice(
         lastSampleTime = 0L
         reconnectionAttempts = 0
     }
-    
-    override fun toString(): String {
-        return "ShimmerDevice(${getDisplayName()}, state=$connectionState, samples=${sampleCount.get()}, battery=$batteryLevel%)"
-    }
+
+    override fun toString(): String =
+        "ShimmerDevice(${getDisplayName()}, state=$connectionState, samples=${sampleCount.get()}, battery=$batteryLevel%)"
 }

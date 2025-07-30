@@ -15,25 +15,34 @@ import java.util.*
  */
 class FilesAdapter(
     private val files: List<FileItem>,
-    private val onFileClick: (FileItem) -> Unit
+    private val onFileClick: (FileItem) -> Unit,
 ) : RecyclerView.Adapter<FilesAdapter.FileViewHolder>() {
-
     private val dateFormatter = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_file, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): FileViewHolder {
+        val view =
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.item_file, parent, false)
         return FileViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: FileViewHolder,
+        position: Int,
+    ) {
         val fileItem = files[position]
         holder.bind(fileItem)
     }
 
     override fun getItemCount(): Int = files.size
 
-    inner class FileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class FileViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         private val fileIconImageView: ImageView = itemView.findViewById(R.id.file_icon_image_view)
         private val fileNameText: TextView = itemView.findViewById(R.id.file_name_text)
         private val fileTypeText: TextView = itemView.findViewById(R.id.file_type_text)
@@ -44,17 +53,17 @@ class FilesAdapter(
         fun bind(fileItem: FileItem) {
             // Set file name
             fileNameText.text = fileItem.file.name
-            
+
             // Set file type and icon
             fileTypeText.text = fileItem.type.displayName
             fileIconImageView.setImageResource(getFileTypeIcon(fileItem.type))
-            
+
             // Set file size
             fileSizeText.text = formatFileSize(fileItem.file.length())
-            
+
             // Set modification date
             fileModifiedText.text = dateFormatter.format(Date(fileItem.file.lastModified()))
-            
+
             // Set metadata if available
             if (fileItem.metadata.isNotEmpty()) {
                 fileMetadataText.text = fileItem.metadata
@@ -62,39 +71,36 @@ class FilesAdapter(
             } else {
                 fileMetadataText.visibility = View.GONE
             }
-            
+
             // Set click listener
             itemView.setOnClickListener {
                 onFileClick(fileItem)
             }
-            
+
             // Set background based on file type
             itemView.setBackgroundResource(getFileTypeBackground(fileItem.type))
         }
-        
-        private fun getFileTypeIcon(fileType: FileType): Int {
-            return when (fileType) {
+
+        private fun getFileTypeIcon(fileType: FileType): Int =
+            when (fileType) {
                 FileType.VIDEO -> R.drawable.ic_video_file
                 FileType.RAW_IMAGE -> R.drawable.ic_image_file
                 FileType.THERMAL_DATA -> R.drawable.ic_data_file
             }
-        }
-        
-        private fun getFileTypeBackground(fileType: FileType): Int {
-            return when (fileType) {
+
+        private fun getFileTypeBackground(fileType: FileType): Int =
+            when (fileType) {
                 FileType.VIDEO -> R.drawable.file_item_video_background
                 FileType.RAW_IMAGE -> R.drawable.file_item_image_background
                 FileType.THERMAL_DATA -> R.drawable.file_item_data_background
             }
-        }
-        
-        private fun formatFileSize(bytes: Long): String {
-            return when {
+
+        private fun formatFileSize(bytes: Long): String =
+            when {
                 bytes >= 1024 * 1024 * 1024 -> String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0))
                 bytes >= 1024 * 1024 -> String.format("%.1f MB", bytes / (1024.0 * 1024.0))
                 bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
                 else -> "$bytes B"
             }
-        }
     }
 }

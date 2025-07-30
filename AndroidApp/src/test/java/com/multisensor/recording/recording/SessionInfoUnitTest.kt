@@ -9,7 +9,6 @@ import org.junit.Test
  * Tests all methods, validation logic, and data integrity without Robolectric
  */
 class SessionInfoUnitTest {
-
     private lateinit var sessionInfo: SessionInfo
     private val testSessionId = "test_session_123"
 
@@ -43,7 +42,7 @@ class SessionInfoUnitTest {
     fun `getDurationMs should return zero when times are not set`() {
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(0L, duration)
     }
@@ -55,10 +54,10 @@ class SessionInfoUnitTest {
         val endTime = 5000L
         sessionInfo.startTime = startTime
         sessionInfo.endTime = endTime
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(4000L, duration)
     }
@@ -68,10 +67,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.startTime = 5000L
         sessionInfo.endTime = 1000L
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(0L, duration)
     }
@@ -82,10 +81,10 @@ class SessionInfoUnitTest {
         sessionInfo.addRawFile("/path/to/raw1.dng")
         sessionInfo.addRawFile("/path/to/raw2.dng")
         sessionInfo.addRawFile("/path/to/raw3.dng")
-        
+
         // When
         val count = sessionInfo.getRawImageCount()
-        
+
         // Then
         assertEquals(3, count)
     }
@@ -94,7 +93,7 @@ class SessionInfoUnitTest {
     fun `getRawImageCount should return zero for empty list`() {
         // When
         val count = sessionInfo.getRawImageCount()
-        
+
         // Then
         assertEquals(0, count)
     }
@@ -104,10 +103,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.startTime = System.currentTimeMillis()
         sessionInfo.endTime = 0L
-        
+
         // When
         val isActive = sessionInfo.isActive()
-        
+
         // Then
         assertTrue(isActive)
     }
@@ -117,10 +116,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.startTime = 0L
         sessionInfo.endTime = 0L
-        
+
         // When
         val isActive = sessionInfo.isActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -130,10 +129,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = 2000L
-        
+
         // When
         val isActive = sessionInfo.isActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -144,11 +143,11 @@ class SessionInfoUnitTest {
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = 0L
         val beforeTime = System.currentTimeMillis()
-        
+
         // When
         sessionInfo.markCompleted()
         val afterTime = System.currentTimeMillis()
-        
+
         // Then
         assertTrue(sessionInfo.endTime >= beforeTime)
         assertTrue(sessionInfo.endTime <= afterTime)
@@ -161,10 +160,10 @@ class SessionInfoUnitTest {
         val originalEndTime = 5000L
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = originalEndTime
-        
+
         // When
         sessionInfo.markCompleted()
-        
+
         // Then
         assertEquals(originalEndTime, sessionInfo.endTime)
     }
@@ -174,11 +173,11 @@ class SessionInfoUnitTest {
         // Given
         val filePath1 = "/path/to/raw1.dng"
         val filePath2 = "/path/to/raw2.dng"
-        
+
         // When
         sessionInfo.addRawFile(filePath1)
         sessionInfo.addRawFile(filePath2)
-        
+
         // Then
         assertEquals(2, sessionInfo.rawFilePaths.size)
         assertTrue(sessionInfo.rawFilePaths.contains(filePath1))
@@ -189,10 +188,10 @@ class SessionInfoUnitTest {
     fun `setThermalFile should set thermal file path`() {
         // Given
         val thermalPath = "/path/to/thermal.dat"
-        
+
         // When
         sessionInfo.setThermalFile(thermalPath)
-        
+
         // Then
         assertEquals(thermalPath, sessionInfo.thermalFilePath)
     }
@@ -201,10 +200,10 @@ class SessionInfoUnitTest {
     fun `updateThermalFrameCount should update frame count`() {
         // Given
         val frameCount = 1500L
-        
+
         // When
         sessionInfo.updateThermalFrameCount(frameCount)
-        
+
         // Then
         assertEquals(frameCount, sessionInfo.thermalFrameCount)
     }
@@ -214,10 +213,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.thermalEnabled = true
         sessionInfo.setThermalFile("/path/to/thermal.dat")
-        
+
         // When
         val isActive = sessionInfo.isThermalActive()
-        
+
         // Then
         assertTrue(isActive)
     }
@@ -227,10 +226,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.thermalEnabled = false
         sessionInfo.setThermalFile("/path/to/thermal.dat")
-        
+
         // When
         val isActive = sessionInfo.isThermalActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -240,10 +239,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.thermalEnabled = true
         sessionInfo.thermalFilePath = null
-        
+
         // When
         val isActive = sessionInfo.isThermalActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -253,10 +252,10 @@ class SessionInfoUnitTest {
         // Given
         val frameCount = 1000L
         sessionInfo.updateThermalFrameCount(frameCount)
-        
+
         // When
         val sizeMB = sessionInfo.getThermalDataSizeMB()
-        
+
         // Then
         // Each frame is 256*192*2 + 8 = 98312 bytes
         // 1000 frames = 98,312,000 bytes = ~93.8 MB
@@ -268,10 +267,10 @@ class SessionInfoUnitTest {
     fun `getThermalDataSizeMB should return zero for no frames`() {
         // Given
         sessionInfo.updateThermalFrameCount(0L)
-        
+
         // When
         val sizeMB = sessionInfo.getThermalDataSizeMB()
-        
+
         // Then
         assertEquals(0.0, sizeMB, 0.01)
     }
@@ -280,10 +279,10 @@ class SessionInfoUnitTest {
     fun `markError should set error state`() {
         // Given
         val errorMessage = "Test error occurred"
-        
+
         // When
         sessionInfo.markError(errorMessage)
-        
+
         // Then
         assertTrue(sessionInfo.errorOccurred)
         assertEquals(errorMessage, sessionInfo.errorMessage)
@@ -300,10 +299,10 @@ class SessionInfoUnitTest {
         sessionInfo.addRawFile("/path/to/raw1.dng")
         sessionInfo.addRawFile("/path/to/raw2.dng")
         sessionInfo.updateThermalFrameCount(500L)
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue(summary.contains("id=$testSessionId"))
         assertTrue(summary.contains("duration=5000ms"))
@@ -316,10 +315,10 @@ class SessionInfoUnitTest {
     @Test
     fun `getSummary should show disabled states correctly`() {
         // Given - all features disabled (default state)
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue(summary.contains("video=disabled"))
         assertTrue(summary.contains("raw=disabled"))
@@ -331,10 +330,10 @@ class SessionInfoUnitTest {
         // Given
         val errorMessage = "Test error"
         sessionInfo.markError(errorMessage)
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue(summary.contains("ERROR: $errorMessage"))
     }
@@ -344,10 +343,10 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.startTime = System.currentTimeMillis()
         sessionInfo.endTime = 0L
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue(summary.contains("active=true"))
     }
@@ -357,10 +356,10 @@ class SessionInfoUnitTest {
         // Given
         val largeFrameCount = 100000L // 100k frames
         sessionInfo.updateThermalFrameCount(largeFrameCount)
-        
+
         // When
         val sizeMB = sessionInfo.getThermalDataSizeMB()
-        
+
         // Then
         assertTrue(sizeMB > 0)
         // Should be approximately 9.38 GB for 100k frames
@@ -372,19 +371,19 @@ class SessionInfoUnitTest {
         // Given
         val filePath1 = "/path/to/raw1.dng"
         val filePath2 = "/path/to/raw2.dng"
-        
+
         // When
         sessionInfo.rawFilePaths.add(filePath1)
         sessionInfo.rawFilePaths.add(filePath2)
-        
+
         // Then
         assertEquals(2, sessionInfo.rawFilePaths.size)
         assertTrue(sessionInfo.rawFilePaths.contains(filePath1))
         assertTrue(sessionInfo.rawFilePaths.contains(filePath2))
-        
+
         // When - remove file
         sessionInfo.rawFilePaths.remove(filePath1)
-        
+
         // Then
         assertEquals(1, sessionInfo.rawFilePaths.size)
         assertFalse(sessionInfo.rawFilePaths.contains(filePath1))
@@ -399,7 +398,7 @@ class SessionInfoUnitTest {
         val newVideoResolution = "1920x1080"
         val newRawResolution = "4000x3000"
         val newThermalResolution = "256x192"
-        
+
         // When
         sessionInfo.videoEnabled = true
         sessionInfo.rawEnabled = true
@@ -409,7 +408,7 @@ class SessionInfoUnitTest {
         sessionInfo.videoResolution = newVideoResolution
         sessionInfo.rawResolution = newRawResolution
         sessionInfo.thermalResolution = newThermalResolution
-        
+
         // Then
         assertTrue(sessionInfo.videoEnabled)
         assertTrue(sessionInfo.rawEnabled)
@@ -428,10 +427,10 @@ class SessionInfoUnitTest {
         val endTime = Long.MAX_VALUE - 1000L // Very long duration
         sessionInfo.startTime = startTime
         sessionInfo.endTime = endTime
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(endTime - startTime, duration)
         assertTrue(duration > 0)
@@ -442,10 +441,10 @@ class SessionInfoUnitTest {
         // Given (unusual but possible edge case)
         sessionInfo.startTime = -1000L
         sessionInfo.endTime = 1000L
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(2000L, duration)
     }
@@ -455,11 +454,11 @@ class SessionInfoUnitTest {
         // Given
         sessionInfo.addRawFile("")
         sessionInfo.setThermalFile("")
-        
+
         // When
         val rawCount = sessionInfo.getRawImageCount()
         val thermalPath = sessionInfo.thermalFilePath
-        
+
         // Then
         assertEquals(1, rawCount) // Empty string is still a valid entry
         assertEquals("", thermalPath)

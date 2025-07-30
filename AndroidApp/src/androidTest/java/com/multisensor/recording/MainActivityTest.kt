@@ -21,7 +21,6 @@ import org.junit.runner.RunWith
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
-
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
@@ -29,7 +28,7 @@ class MainActivityTest {
     // The deprecated permissions (WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, BLUETOOTH, BLUETOOTH_ADMIN)
     // cause test failures on modern Android versions. UI tests should focus on UI behavior
     // rather than requiring actual hardware permissions.
-    // 
+    //
     // @get:Rule
     // val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
     //     android.Manifest.permission.CAMERA,

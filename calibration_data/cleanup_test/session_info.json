@@ -1,0 +1,15 @@
+{
+  "session_name": "cleanup_test",
+  "session_folder": "calibration_data\\cleanup_test",
+  "device_ids": [
+    "device_1"
+  ],
+  "start_time": "2025-07-30T05:14:11.135607",
+  "pattern_type": "chessboard",
+  "pattern_size": [
+    9,
+    6
+  ],
+  "square_size": 25.0,
+  "status": "active"
+}

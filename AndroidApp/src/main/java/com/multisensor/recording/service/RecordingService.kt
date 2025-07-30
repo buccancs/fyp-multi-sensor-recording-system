@@ -12,15 +12,15 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.R
-import com.multisensor.recording.network.SocketController
-import com.multisensor.recording.network.JsonSocketClient
 import com.multisensor.recording.network.CommandProcessor
+import com.multisensor.recording.network.JsonSocketClient
 import com.multisensor.recording.network.NetworkConfiguration
 import com.multisensor.recording.network.NetworkQualityMonitor
+import com.multisensor.recording.network.SocketController
+import com.multisensor.recording.recording.AdaptiveFrameRateController
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder
-import com.multisensor.recording.recording.AdaptiveFrameRateController
 import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,57 +38,56 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class RecordingService : Service() {
-    
     @Inject
     lateinit var cameraRecorder: CameraRecorder
-    
+
     @Inject
     lateinit var thermalRecorder: ThermalRecorder
-    
+
     @Inject
     lateinit var shimmerRecorder: ShimmerRecorder
-    
+
     @Inject
     lateinit var sessionManager: SessionManager
-    
+
     @Inject
     lateinit var socketController: SocketController
-    
+
     @Inject
     lateinit var jsonSocketClient: JsonSocketClient
-    
+
     @Inject
     lateinit var commandProcessor: CommandProcessor
-    
+
     @Inject
     lateinit var previewStreamer: PreviewStreamer
-    
+
     @Inject
     lateinit var networkConfiguration: NetworkConfiguration
-    
+
     @Inject
     lateinit var networkQualityMonitor: NetworkQualityMonitor
-    
+
     @Inject
     lateinit var adaptiveFrameRateController: AdaptiveFrameRateController
-    
+
     @Inject
     lateinit var logger: Logger
-    
+
     private val serviceScope = CoroutineScope(Dispatchers.Default + Job())
     private var isRecording = false
     private var currentSessionId: String? = null
-    
+
     companion object {
         const val ACTION_START_RECORDING = "com.multisensor.recording.START_RECORDING"
         const val ACTION_STOP_RECORDING = "com.multisensor.recording.STOP_RECORDING"
         const val ACTION_GET_STATUS = "com.multisensor.recording.GET_STATUS"
-        
+
         private const val NOTIFICATION_ID = 1001
         private const val CHANNEL_ID = "recording_channel"
         private const val CHANNEL_NAME = "Recording Service"
     }
-    
+
     /**
      * Data class representing comprehensive device status information
      */
@@ -107,11 +106,11 @@ class RecordingService : Service() {
         val previewStreamingActive: Boolean,
         val timestamp: Long,
         val deviceModel: String,
-        val androidVersion: String
+        val androidVersion: String,
     ) {
         companion object {
-            fun createErrorStatus(errorMessage: String): DeviceStatusInfo {
-                return DeviceStatusInfo(
+            fun createErrorStatus(errorMessage: String): DeviceStatusInfo =
+                DeviceStatusInfo(
                     isRecording = false,
                     currentSessionId = null,
                     recordingStartTime = null,
@@ -126,72 +125,75 @@ class RecordingService : Service() {
                     previewStreamingActive = false,
                     timestamp = System.currentTimeMillis(),
                     deviceModel = android.os.Build.MODEL,
-                    androidVersion = android.os.Build.VERSION.RELEASE
+                    androidVersion = android.os.Build.VERSION.RELEASE,
                 )
-            }
         }
     }
-    
+
     override fun onCreate() {
         super.onCreate()
         logger.info("RecordingService created")
         createNotificationChannel()
-        
+
         // Initialize legacy SocketController with callback (for Milestone 2.5 compatibility)
         socketController.setServiceCallback { command ->
             handleSocketCommand(command)
         }
-        
+
         // Start legacy socket connection (port 8080)
         socketController.startListening()
-        
+
         // Initialize Milestone 2.6 JSON Socket Client and Command Processor
         initializeJsonCommunication()
-        
+
         // Inject PreviewStreamer into CameraRecorder (method injection for scoping compatibility)
         cameraRecorder.setPreviewStreamer(previewStreamer)
-        
+
         // Initialize Milestone 2.7 Adaptive Frame Rate Control
         initializeAdaptiveFrameRateControl()
-        
+
         logger.info("RecordingService initialization complete")
     }
-    
+
     /**
      * Initialize adaptive frame rate control system for Milestone 2.7
      */
     private fun initializeAdaptiveFrameRateControl() {
         try {
             logger.info("[DEBUG_LOG] Initializing adaptive frame rate control system")
-            
+
             // Get network configuration for monitoring
             val serverConfig = networkConfiguration.getServerConfiguration()
-            
+
             // Start network quality monitoring
             networkQualityMonitor.startMonitoring(serverConfig.serverIp, serverConfig.legacyPort)
-            
+
             // Set up adaptive frame rate controller with PreviewStreamer integration
-            adaptiveFrameRateController.addListener(object : AdaptiveFrameRateController.FrameRateChangeListener {
-                override fun onFrameRateChanged(newFrameRate: Float, reason: String) {
-                    logger.info("[DEBUG_LOG] Adaptive frame rate changed to ${newFrameRate}fps - $reason")
-                    previewStreamer.updateFrameRate(newFrameRate)
-                }
-                
-                override fun onAdaptationModeChanged(isAdaptive: Boolean) {
-                    logger.info("[DEBUG_LOG] Adaptive mode changed: $isAdaptive")
-                }
-            })
-            
+            adaptiveFrameRateController.addListener(
+                object : AdaptiveFrameRateController.FrameRateChangeListener {
+                    override fun onFrameRateChanged(
+                        newFrameRate: Float,
+                        reason: String,
+                    ) {
+                        logger.info("[DEBUG_LOG] Adaptive frame rate changed to ${newFrameRate}fps - $reason")
+                        previewStreamer.updateFrameRate(newFrameRate)
+                    }
+
+                    override fun onAdaptationModeChanged(isAdaptive: Boolean) {
+                        logger.info("[DEBUG_LOG] Adaptive mode changed: $isAdaptive")
+                    }
+                },
+            )
+
             // Start the adaptive frame rate controller
             adaptiveFrameRateController.start()
-            
+
             logger.info("[DEBUG_LOG] Adaptive frame rate control system initialized successfully")
-            
         } catch (e: Exception) {
             logger.error("Failed to initialize adaptive frame rate control system", e)
         }
     }
-    
+
     /**
      * Initialize JSON-based communication system for Milestone 2.6
      */
@@ -199,26 +201,29 @@ class RecordingService : Service() {
         try {
             // Connect CommandProcessor to JsonSocketClient
             commandProcessor.setSocketClient(jsonSocketClient)
-            
+
             // Set command callback for JsonSocketClient
             jsonSocketClient.setCommandCallback { message ->
                 commandProcessor.processCommand(message)
             }
-            
+
             // Configure and start JSON socket connection using NetworkConfiguration
             val serverConfig = networkConfiguration.getServerConfiguration()
             jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
             jsonSocketClient.connect()
-            
+
             logger.info("JSON communication system initialized successfully: ${serverConfig.getJsonAddress()}")
             logger.info("Network configuration: ${networkConfiguration.getConfigurationSummary()}")
-            
         } catch (e: Exception) {
             logger.error("Failed to initialize JSON communication system", e)
         }
     }
-    
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         when (intent?.action) {
             ACTION_START_RECORDING -> {
                 startRecording()
@@ -230,29 +235,29 @@ class RecordingService : Service() {
                 broadcastCurrentStatus()
             }
         }
-        
+
         return START_STICKY // Restart service if killed by system
     }
-    
+
     override fun onBind(intent: Intent?): IBinder? {
         // This service doesn't support binding
         return null
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         logger.info("RecordingService destroyed")
-        
+
         // Ensure recording is stopped
         if (isRecording) {
             serviceScope.launch {
                 stopRecordingInternal()
             }
         }
-        
+
         // Stop preview streaming
         previewStreamer.stopStreaming()
-        
+
         // Stop adaptive frame rate control system (Milestone 2.7)
         try {
             adaptiveFrameRateController.stop()
@@ -261,19 +266,19 @@ class RecordingService : Service() {
         } catch (e: Exception) {
             logger.error("Error stopping adaptive frame rate control system", e)
         }
-        
+
         // Stop legacy socket connection (port 8080)
         socketController.stop()
-        
+
         // Stop JSON socket connection (port 9000)
         jsonSocketClient.disconnect()
-        
+
         // Cancel all coroutines
         serviceScope.cancel()
-        
+
         logger.info("RecordingService cleanup complete")
     }
-    
+
     /**
      * Broadcast current recording status to all connected clients
      */
@@ -281,65 +286,58 @@ class RecordingService : Service() {
         serviceScope.launch {
             try {
                 logger.info("Broadcasting current status - Recording: $isRecording, Session: $currentSessionId")
-                
+
                 // Gather comprehensive status information
                 val statusInfo = gatherStatusInformation()
-                
+
                 // Broadcast via legacy socket connection (Milestone 2.5 compatibility)
                 broadcastStatusViaLegacySocket(statusInfo)
-                
+
                 // Broadcast via JSON socket connection (Milestone 2.6)
                 broadcastStatusViaJsonSocket(statusInfo)
-                
+
                 // Send local broadcast for UI updates
                 sendLocalStatusBroadcast(statusInfo)
-                
+
                 logger.info("Status broadcast completed successfully")
-                
             } catch (e: Exception) {
                 logger.error("Failed to broadcast current status", e)
             }
         }
     }
-    
+
     /**
      * Gather comprehensive status information
      */
-    private suspend fun gatherStatusInformation(): DeviceStatusInfo {
-        return try {
+    private suspend fun gatherStatusInformation(): DeviceStatusInfo =
+        try {
             DeviceStatusInfo(
                 isRecording = isRecording,
                 currentSessionId = currentSessionId,
                 recordingStartTime = if (isRecording) System.currentTimeMillis() else null,
-                
                 // Camera status
                 cameraStatus = getCameraStatus(),
                 thermalStatus = getThermalStatus(),
                 shimmerStatus = getShimmerStatus(),
-                
                 // Device information
                 batteryLevel = getBatteryLevel(),
                 availableStorage = getAvailableStorage(),
                 deviceTemperature = getDeviceTemperature(),
-                
                 // Network status
                 networkConfig = networkConfiguration.getConfigurationSummary(),
                 connectionStatus = getConnectionStatus(),
-                
                 // Preview streaming status
                 previewStreamingActive = previewStreamer.getStreamingStats().isStreaming,
-                
                 // System information
                 timestamp = System.currentTimeMillis(),
                 deviceModel = android.os.Build.MODEL,
-                androidVersion = android.os.Build.VERSION.RELEASE
+                androidVersion = android.os.Build.VERSION.RELEASE,
             )
         } catch (e: Exception) {
             logger.error("Error gathering status information", e)
             DeviceStatusInfo.createErrorStatus(e.message ?: "Unknown error")
         }
-    }
-    
+
     /**
      * Broadcast status via legacy socket connection
      */
@@ -349,12 +347,11 @@ class RecordingService : Service() {
             // Note: SocketController doesn't have a direct broadcast method
             // Status will be sent when PC requests it via socket commands
             logger.debug("Legacy status prepared: $statusMessage")
-            
         } catch (e: Exception) {
             logger.error("Failed to broadcast status via legacy socket", e)
         }
     }
-    
+
     /**
      * Broadcast status via JSON socket connection
      */
@@ -365,135 +362,135 @@ class RecordingService : Service() {
                 battery = statusInfo.batteryLevel,
                 storage = statusInfo.availableStorage,
                 temperature = statusInfo.deviceTemperature,
-                recording = statusInfo.isRecording
+                recording = statusInfo.isRecording,
             )
-            
+
             logger.debug("JSON status broadcast sent successfully")
-            
         } catch (e: Exception) {
             logger.error("Failed to broadcast status via JSON socket", e)
         }
     }
-    
+
     /**
      * Send local broadcast for UI updates
      */
     private fun sendLocalStatusBroadcast(statusInfo: DeviceStatusInfo) {
         try {
-            val intent = Intent("com.multisensor.recording.STATUS_UPDATE").apply {
-                putExtra("is_recording", statusInfo.isRecording)
-                putExtra("session_id", statusInfo.currentSessionId)
-                putExtra("battery_level", statusInfo.batteryLevel)
-                putExtra("available_storage", statusInfo.availableStorage)
-                putExtra("preview_streaming", statusInfo.previewStreamingActive)
-                putExtra("timestamp", statusInfo.timestamp)
-            }
-            
+            val intent =
+                Intent("com.multisensor.recording.STATUS_UPDATE").apply {
+                    putExtra("is_recording", statusInfo.isRecording)
+                    putExtra("session_id", statusInfo.currentSessionId)
+                    putExtra("battery_level", statusInfo.batteryLevel)
+                    putExtra("available_storage", statusInfo.availableStorage)
+                    putExtra("preview_streaming", statusInfo.previewStreamingActive)
+                    putExtra("timestamp", statusInfo.timestamp)
+                }
+
             sendBroadcast(intent)
             logger.debug("Local status broadcast sent")
-            
         } catch (e: Exception) {
             logger.error("Failed to send local status broadcast", e)
         }
     }
-    
+
     /**
      * Format status message for legacy socket protocol
      */
-    private fun formatLegacyStatusMessage(statusInfo: DeviceStatusInfo): String {
-        return "STATUS:recording=${statusInfo.isRecording}," +
-               "session=${statusInfo.currentSessionId ?: "none"}," +
-               "battery=${statusInfo.batteryLevel ?: "unknown"}," +
-               "storage=${statusInfo.availableStorage ?: "unknown"}," +
-               "streaming=${statusInfo.previewStreamingActive}," +
-               "timestamp=${statusInfo.timestamp}"
-    }
-    
+    private fun formatLegacyStatusMessage(statusInfo: DeviceStatusInfo): String =
+        "STATUS:recording=${statusInfo.isRecording}," +
+            "session=${statusInfo.currentSessionId ?: "none"}," +
+            "battery=${statusInfo.batteryLevel ?: "unknown"}," +
+            "storage=${statusInfo.availableStorage ?: "unknown"}," +
+            "streaming=${statusInfo.previewStreamingActive}," +
+            "timestamp=${statusInfo.timestamp}"
+
     /**
      * Get camera recording status
      */
-    private fun getCameraStatus(): String {
-        return try {
+    private fun getCameraStatus(): String =
+        try {
             if (isRecording) "recording" else "ready"
         } catch (e: Exception) {
             "error"
         }
-    }
-    
+
     /**
      * Get thermal camera status
      */
-    private fun getThermalStatus(): String {
-        return try {
+    private fun getThermalStatus(): String =
+        try {
             val status = thermalRecorder.getThermalCameraStatus()
-            if (status.isRecording) "recording" else if (status.isAvailable) "ready" else "unavailable"
+            if (status.isRecording) {
+                "recording"
+            } else if (status.isAvailable) {
+                "ready"
+            } else {
+                "unavailable"
+            }
         } catch (e: Exception) {
             "error"
         }
-    }
-    
+
     /**
      * Get Shimmer sensor status
      */
-    private fun getShimmerStatus(): String {
-        return try {
+    private fun getShimmerStatus(): String =
+        try {
             // TODO: Get actual Shimmer status from ShimmerRecorder
             if (isRecording) "recording" else "ready"
         } catch (e: Exception) {
             "error"
         }
-    }
-    
+
     /**
      * Get device battery level
      */
-    private fun getBatteryLevel(): Int? {
-        return try {
+    private fun getBatteryLevel(): Int? =
+        try {
             val batteryManager = getSystemService(Context.BATTERY_SERVICE) as android.os.BatteryManager
             batteryManager.getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY)
         } catch (e: Exception) {
             null
         }
-    }
-    
+
     /**
      * Get available storage space
      */
-    private fun getAvailableStorage(): String? {
-        return try {
+    private fun getAvailableStorage(): String? =
+        try {
             val externalDir = getExternalFilesDir(null)
             if (externalDir != null) {
                 val stat = android.os.StatFs(externalDir.path)
                 val availableBytes = stat.availableBytes
                 val availableGB = availableBytes / (1024 * 1024 * 1024)
                 "${availableGB}GB"
-            } else null
+            } else {
+                null
+            }
         } catch (e: Exception) {
             null
         }
-    }
-    
+
     /**
      * Get device temperature (if available)
      */
-    private fun getDeviceTemperature(): Double? {
-        return try {
+    private fun getDeviceTemperature(): Double? =
+        try {
             // Android doesn't provide easy access to device temperature
             // This would require thermal management APIs or hardware-specific implementations
             null
         } catch (e: Exception) {
             null
         }
-    }
-    
+
     /**
      * Get network connection status
      */
-    private fun getConnectionStatus(): String {
-        return try {
+    private fun getConnectionStatus(): String =
+        try {
             val legacyConnected = socketController.isConnected()
             val jsonConnected = jsonSocketClient.isConnected()
-            
+
             when {
                 legacyConnected && jsonConnected -> "fully_connected"
                 legacyConnected || jsonConnected -> "partially_connected"
@@ -502,14 +499,13 @@ class RecordingService : Service() {
         } catch (e: Exception) {
             "error"
         }
-    }
 
     /**
      * Handle commands received from PC via SocketController
      */
     private fun handleSocketCommand(command: String) {
         logger.info("Processing socket command: $command")
-        
+
         when (command.uppercase()) {
             "START" -> {
                 if (!isRecording) {
@@ -518,7 +514,7 @@ class RecordingService : Service() {
                     logger.warning("Recording already in progress - ignoring START command")
                 }
             }
-            
+
             "STOP" -> {
                 if (isRecording) {
                     serviceScope.launch {
@@ -528,133 +524,136 @@ class RecordingService : Service() {
                     logger.warning("No recording in progress - ignoring STOP command")
                 }
             }
-            
+
             "CALIBRATE" -> {
                 // TODO: Implement calibration trigger
                 logger.info("Calibration command received - not yet implemented")
             }
-            
+
             else -> {
                 logger.warning("Unknown socket command: $command")
             }
         }
     }
-    
+
     private fun startRecording() {
         if (isRecording) {
             logger.warning("Recording already in progress")
             return
         }
-        
+
         serviceScope.launch {
             try {
                 logger.info("Starting recording session...")
-                
+
                 // Create new session
                 currentSessionId = sessionManager.createNewSession()
                 logger.info("Created session: $currentSessionId")
-                
+
                 // Start foreground service with notification
                 startForeground(NOTIFICATION_ID, createRecordingNotification())
-                
+
                 // Initialize and start all recorders
                 val cameraSessionInfo = cameraRecorder.startSession(recordVideo = true, captureRaw = false)
                 val thermalStarted = thermalRecorder.startRecording(currentSessionId!!)
                 val shimmerStarted = shimmerRecorder.startRecording(currentSessionId!!)
-                
+
                 if (cameraSessionInfo != null) {
                     isRecording = true
-                    
+
                     // Start preview streaming
                     previewStreamer.startStreaming()
-                    
+
                     logger.info("Recording started successfully")
                     updateNotification("Recording in progress - Session: $currentSessionId")
                 } else {
                     logger.error("Failed to start camera recording")
                     stopRecordingInternal()
                 }
-                
+
                 logger.info("Recording status - Camera: ${cameraSessionInfo != null}, Thermal: $thermalStarted, Shimmer: $shimmerStarted")
-                
             } catch (e: Exception) {
                 logger.error("Error starting recording", e)
                 stopRecordingInternal()
             }
         }
     }
-    
+
     private fun stopRecording() {
         if (!isRecording) {
             logger.warning("No recording in progress")
             return
         }
-        
+
         serviceScope.launch {
             stopRecordingInternal()
         }
     }
-    
+
     private suspend fun stopRecordingInternal() {
         try {
             logger.info("Stopping recording session...")
-            
+
             // Stop all recorders
             cameraRecorder.stopSession()
             thermalRecorder.stopRecording()
             shimmerRecorder.stopRecording()
-            
+
             // Stop preview streaming
             previewStreamer.stopStreaming()
-            
+
             // Finalize session
             currentSessionId?.let { sessionId ->
                 sessionManager.finalizeCurrentSession()
                 logger.info("Session finalized: $sessionId")
             }
-            
+
             isRecording = false
             currentSessionId = null
-            
+
             // Update notification
             updateNotification("Recording stopped")
-            
+
             // Stop foreground service after a delay to show final notification
             kotlinx.coroutines.delay(2000)
             stopForeground(true)
             stopSelf()
-            
+
             logger.info("Recording stopped successfully")
-            
         } catch (e: Exception) {
             logger.error("Error stopping recording", e)
         }
     }
-    
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = "Notifications for multi-sensor recording sessions"
-                setShowBadge(false)
-            }
-            
+            val channel =
+                NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_LOW,
+                ).apply {
+                    description = "Notifications for multi-sensor recording sessions"
+                    setShowBadge(false)
+                }
+
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
-    
+
     private fun createRecordingNotification(): Notification {
         val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        
-        return NotificationCompat.Builder(this, CHANNEL_ID)
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+
+        return NotificationCompat
+            .Builder(this, CHANNEL_ID)
             .setContentTitle("Multi-Sensor Recording")
             .setContentText("Preparing to record...")
             .setSmallIcon(R.drawable.ic_multisensor_idle)
@@ -663,23 +662,28 @@ class RecordingService : Service() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
     }
-    
+
     private fun updateNotification(message: String) {
         val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Multi-Sensor Recording")
-            .setContentText(message)
-            .setSmallIcon(if (isRecording) R.drawable.ic_multisensor_recording else R.drawable.ic_multisensor_idle)
-            .setContentIntent(pendingIntent)
-            .setOngoing(isRecording)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .build()
-        
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+
+        val notification =
+            NotificationCompat
+                .Builder(this, CHANNEL_ID)
+                .setContentTitle("Multi-Sensor Recording")
+                .setContentText(message)
+                .setSmallIcon(if (isRecording) R.drawable.ic_multisensor_recording else R.drawable.ic_multisensor_idle)
+                .setContentIntent(pendingIntent)
+                .setOngoing(isRecording)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build()
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, notification)
     }

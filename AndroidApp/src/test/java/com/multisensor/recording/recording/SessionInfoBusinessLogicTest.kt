@@ -9,7 +9,6 @@ import org.junit.Test
  * Tests all properties, methods, and business logic without requiring Robolectric
  */
 class SessionInfoBusinessLogicTest {
-
     private lateinit var sessionInfo: SessionInfo
     private val testSessionId = "test_session_123"
 
@@ -44,7 +43,7 @@ class SessionInfoBusinessLogicTest {
         // Given
         val startTime = System.currentTimeMillis()
         val endTime = startTime + 60000 // 1 minute later
-        
+
         // When
         sessionInfo.videoEnabled = true
         sessionInfo.rawEnabled = true
@@ -58,7 +57,7 @@ class SessionInfoBusinessLogicTest {
         sessionInfo.rawResolution = "4032x3024"
         sessionInfo.thermalResolution = "256x192"
         sessionInfo.thermalFrameCount = 1800L // 30fps * 60s
-        
+
         // Then
         assertTrue(sessionInfo.videoEnabled)
         assertTrue(sessionInfo.rawEnabled)
@@ -81,10 +80,10 @@ class SessionInfoBusinessLogicTest {
         val endTime = 5000L
         sessionInfo.startTime = startTime
         sessionInfo.endTime = endTime
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(4000L, duration)
     }
@@ -94,10 +93,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.startTime = 5000L
         sessionInfo.endTime = 1000L
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(0L, duration)
     }
@@ -107,10 +106,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = 1000L
-        
+
         // When
         val duration = sessionInfo.getDurationMs()
-        
+
         // Then
         assertEquals(0L, duration)
     }
@@ -121,10 +120,10 @@ class SessionInfoBusinessLogicTest {
         sessionInfo.addRawFile("/path/to/raw1.dng")
         sessionInfo.addRawFile("/path/to/raw2.dng")
         sessionInfo.addRawFile("/path/to/raw3.dng")
-        
+
         // When
         val count = sessionInfo.getRawImageCount()
-        
+
         // Then
         assertEquals(3, count)
     }
@@ -133,7 +132,7 @@ class SessionInfoBusinessLogicTest {
     fun `getRawImageCount should return 0 for empty list`() {
         // When
         val count = sessionInfo.getRawImageCount()
-        
+
         // Then
         assertEquals(0, count)
     }
@@ -143,10 +142,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.startTime = System.currentTimeMillis()
         sessionInfo.endTime = 0L
-        
+
         // When
         val isActive = sessionInfo.isActive()
-        
+
         // Then
         assertTrue(isActive)
     }
@@ -156,10 +155,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.startTime = 0L
         sessionInfo.endTime = 0L
-        
+
         // When
         val isActive = sessionInfo.isActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -169,10 +168,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = 2000L
-        
+
         // When
         val isActive = sessionInfo.isActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -183,10 +182,10 @@ class SessionInfoBusinessLogicTest {
         sessionInfo.startTime = System.currentTimeMillis()
         sessionInfo.endTime = 0L
         val timeBefore = System.currentTimeMillis()
-        
+
         // When
         sessionInfo.markCompleted()
-        
+
         // Then
         assertTrue("End time should be set", sessionInfo.endTime > 0L)
         assertTrue("End time should be recent", sessionInfo.endTime >= timeBefore)
@@ -199,10 +198,10 @@ class SessionInfoBusinessLogicTest {
         val originalEndTime = 5000L
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = originalEndTime
-        
+
         // When
         sessionInfo.markCompleted()
-        
+
         // Then
         assertEquals("End time should remain unchanged", originalEndTime, sessionInfo.endTime)
     }
@@ -212,11 +211,11 @@ class SessionInfoBusinessLogicTest {
         // Given
         val filePath1 = "/path/to/raw1.dng"
         val filePath2 = "/path/to/raw2.dng"
-        
+
         // When
         sessionInfo.addRawFile(filePath1)
         sessionInfo.addRawFile(filePath2)
-        
+
         // Then
         assertEquals(2, sessionInfo.rawFilePaths.size)
         assertTrue(sessionInfo.rawFilePaths.contains(filePath1))
@@ -227,10 +226,10 @@ class SessionInfoBusinessLogicTest {
     fun `setThermalFile should set thermal file path`() {
         // Given
         val thermalPath = "/path/to/thermal.bin"
-        
+
         // When
         sessionInfo.setThermalFile(thermalPath)
-        
+
         // Then
         assertEquals(thermalPath, sessionInfo.thermalFilePath)
     }
@@ -239,10 +238,10 @@ class SessionInfoBusinessLogicTest {
     fun `updateThermalFrameCount should update frame count`() {
         // Given
         val frameCount = 1800L
-        
+
         // When
         sessionInfo.updateThermalFrameCount(frameCount)
-        
+
         // Then
         assertEquals(frameCount, sessionInfo.thermalFrameCount)
     }
@@ -252,10 +251,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.thermalEnabled = true
         sessionInfo.setThermalFile("/path/to/thermal.bin")
-        
+
         // When
         val isActive = sessionInfo.isThermalActive()
-        
+
         // Then
         assertTrue(isActive)
     }
@@ -265,10 +264,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.thermalEnabled = false
         sessionInfo.setThermalFile("/path/to/thermal.bin")
-        
+
         // When
         val isActive = sessionInfo.isThermalActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -278,10 +277,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.thermalEnabled = true
         sessionInfo.thermalFilePath = null
-        
+
         // When
         val isActive = sessionInfo.isThermalActive()
-        
+
         // Then
         assertFalse(isActive)
     }
@@ -290,10 +289,10 @@ class SessionInfoBusinessLogicTest {
     fun `getThermalDataSizeMB should calculate correct size`() {
         // Given
         sessionInfo.updateThermalFrameCount(1000L)
-        
+
         // When
         val sizeMB = sessionInfo.getThermalDataSizeMB()
-        
+
         // Then
         // Each frame: 256 * 192 * 2 + 8 = 98,312 bytes
         // 1000 frames = 98,312,000 bytes = ~93.75 MB
@@ -304,10 +303,10 @@ class SessionInfoBusinessLogicTest {
     fun `getThermalDataSizeMB should return 0 for no frames`() {
         // Given
         sessionInfo.updateThermalFrameCount(0L)
-        
+
         // When
         val sizeMB = sessionInfo.getThermalDataSizeMB()
-        
+
         // Then
         assertEquals(0.0, sizeMB, 0.001)
     }
@@ -316,10 +315,10 @@ class SessionInfoBusinessLogicTest {
     fun `markError should set error state`() {
         // Given
         val errorMessage = "Camera initialization failed"
-        
+
         // When
         sessionInfo.markError(errorMessage)
-        
+
         // Then
         assertTrue(sessionInfo.errorOccurred)
         assertEquals(errorMessage, sessionInfo.errorMessage)
@@ -336,10 +335,10 @@ class SessionInfoBusinessLogicTest {
         sessionInfo.addRawFile("/path/to/raw1.dng")
         sessionInfo.addRawFile("/path/to/raw2.dng")
         sessionInfo.updateThermalFrameCount(100L)
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue("Should contain session ID", summary.contains(testSessionId))
         assertTrue("Should contain duration", summary.contains("4000ms"))
@@ -355,10 +354,10 @@ class SessionInfoBusinessLogicTest {
         // Given - all features disabled (default state)
         sessionInfo.startTime = 1000L
         sessionInfo.endTime = 2000L
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue("Should show video disabled", summary.contains("video=disabled"))
         assertTrue("Should show raw disabled", summary.contains("raw=disabled"))
@@ -371,10 +370,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         val errorMessage = "Test error occurred"
         sessionInfo.markError(errorMessage)
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue("Should contain error message", summary.contains("ERROR: $errorMessage"))
     }
@@ -384,10 +383,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.startTime = System.currentTimeMillis()
         sessionInfo.endTime = 0L
-        
+
         // When
         val summary = sessionInfo.getSummary()
-        
+
         // Then
         assertTrue("Should show active=true", summary.contains("active=true"))
     }
@@ -397,10 +396,10 @@ class SessionInfoBusinessLogicTest {
         // Given
         sessionInfo.videoEnabled = true
         sessionInfo.startTime = 1000L
-        
+
         // When
         val copiedSession = sessionInfo.copy(sessionId = "new_session_id")
-        
+
         // Then
         assertEquals("new_session_id", copiedSession.sessionId)
         assertTrue("Should preserve other properties", copiedSession.videoEnabled)
@@ -413,7 +412,7 @@ class SessionInfoBusinessLogicTest {
         val session1 = SessionInfo(sessionId = "test_id")
         val session2 = SessionInfo(sessionId = "test_id")
         val session3 = SessionInfo(sessionId = "different_id")
-        
+
         // Then
         assertEquals("Sessions with same data should be equal", session1, session2)
         assertNotEquals("Sessions with different data should not be equal", session1, session3)

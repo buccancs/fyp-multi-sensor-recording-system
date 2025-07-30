@@ -26,7 +26,6 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class FileViewActivityUITest {
-
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
@@ -41,14 +40,14 @@ class FileViewActivityUITest {
     @Before
     fun setUp() {
         hiltRule.inject()
-        
+
         // Create test session data
         createTestSessions()
-        
+
         // Launch the activity
         val intent = Intent(ApplicationProvider.getApplicationContext(), FileViewActivity::class.java)
         activityScenario = ActivityScenario.launch(intent)
-        
+
         logger.info("[DEBUG_LOG] FileViewActivity UI test setup completed")
     }
 
@@ -70,13 +69,13 @@ class FileViewActivityUITest {
         // Verify that the activity launches and displays the main components
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
-        
+
         onView(withId(R.id.sessions_recycler_view))
             .check(matches(isDisplayed()))
-        
+
         onView(withId(R.id.files_recycler_view))
             .check(matches(isDisplayed()))
-        
+
         logger.info("[DEBUG_LOG] Activity launch test completed successfully")
     }
 
@@ -86,15 +85,15 @@ class FileViewActivityUITest {
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
             .perform(typeText("test"))
-        
+
         // Verify search input is accepted
         onView(withId(R.id.search_edit_text))
             .check(matches(withText("test")))
-        
+
         // Clear search
         onView(withId(R.id.search_edit_text))
             .perform(clearText())
-        
+
         logger.info("[DEBUG_LOG] Search functionality test completed")
     }
 
@@ -104,12 +103,12 @@ class FileViewActivityUITest {
         onView(withId(R.id.filter_spinner))
             .check(matches(isDisplayed()))
             .perform(click())
-        
+
         // The spinner should open (we can't easily test the dropdown items in Espresso)
         // But we can verify the spinner is clickable and responds
         onView(withId(R.id.filter_spinner))
             .check(matches(isClickable()))
-        
+
         logger.info("[DEBUG_LOG] Filter spinner test completed")
     }
 
@@ -118,13 +117,13 @@ class FileViewActivityUITest {
         // Test that session info is displayed
         onView(withId(R.id.session_info_text))
             .check(matches(isDisplayed()))
-        
+
         onView(withId(R.id.progress_bar))
             .check(matches(isDisplayed()))
-        
+
         onView(withId(R.id.empty_state_text))
             .check(matches(isDisplayed()))
-        
+
         logger.info("[DEBUG_LOG] Session info display test completed")
     }
 
@@ -134,20 +133,20 @@ class FileViewActivityUITest {
         kotlinx.coroutines.runBlocking {
             sessionManager.deleteAllSessions()
         }
-        
+
         // Restart activity to see empty state
         activityScenario.close()
         val intent = Intent(ApplicationProvider.getApplicationContext(), FileViewActivity::class.java)
         activityScenario = ActivityScenario.launch(intent)
-        
+
         // Check if empty state is handled properly
         // The RecyclerViews should still be displayed even if empty
         onView(withId(R.id.sessions_recycler_view))
             .check(matches(isDisplayed()))
-        
+
         onView(withId(R.id.files_recycler_view))
             .check(matches(isDisplayed()))
-        
+
         logger.info("[DEBUG_LOG] Empty state handling test completed")
     }
 
@@ -157,11 +156,11 @@ class FileViewActivityUITest {
         onView(withId(R.id.refresh_button))
             .check(matches(isDisplayed()))
             .perform(click())
-        
+
         // Verify refresh action works (activity should still be displayed)
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
-        
+
         logger.info("[DEBUG_LOG] Refresh button test completed")
     }
 
@@ -171,11 +170,11 @@ class FileViewActivityUITest {
         onView(withId(R.id.sessions_recycler_view))
             .check(matches(isDisplayed()))
             .perform(swipeUp())
-        
+
         onView(withId(R.id.files_recycler_view))
             .check(matches(isDisplayed()))
             .perform(swipeUp())
-        
+
         logger.info("[DEBUG_LOG] RecyclerView interactions test completed")
     }
 
@@ -184,17 +183,17 @@ class FileViewActivityUITest {
         // Test that activity handles rotation properly
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
-        
+
         // Simulate rotation by recreating activity
         activityScenario.recreate()
-        
+
         // Verify activity is still functional after rotation
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
-        
+
         onView(withId(R.id.sessions_recycler_view))
             .check(matches(isDisplayed()))
-        
+
         logger.info("[DEBUG_LOG] Activity rotation test completed")
     }
 
@@ -203,15 +202,16 @@ class FileViewActivityUITest {
         // Test back navigation
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
-        
+
         // Press back button (this should close the activity)
-        androidx.test.espresso.Espresso.pressBack()
-        
+        androidx.test.espresso.Espresso
+            .pressBack()
+
         // Activity should be finishing
         activityScenario.onActivity { activity ->
             assert(activity.isFinishing || activity.isDestroyed)
         }
-        
+
         logger.info("[DEBUG_LOG] Back navigation test completed")
     }
 
@@ -221,9 +221,9 @@ class FileViewActivityUITest {
                 // Create a few test sessions
                 val session1Id = sessionManager.createNewSession()
                 val session2Id = sessionManager.createNewSession()
-                
+
                 logger.info("[DEBUG_LOG] Created test sessions: $session1Id, $session2Id")
-                
+
                 // Finalize sessions to make them available for viewing
                 sessionManager.finalizeCurrentSession()
             }

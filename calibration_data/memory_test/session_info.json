@@ -1,0 +1,20 @@
+{
+  "session_name": "memory_test",
+  "session_folder": "calibration_data\\memory_test",
+  "device_ids": [
+    "device_1"
+  ],
+  "start_time": "2025-07-30T05:14:10.717041",
+  "pattern_type": "chessboard",
+  "pattern_size": [
+    9,
+    6
+  ],
+  "square_size": 25.0,
+  "status": "completed",
+  "end_time": "2025-07-30T05:14:11.127606",
+  "total_captures": {
+    "device_1": 0
+  },
+  "calibrated_devices": []
+}
