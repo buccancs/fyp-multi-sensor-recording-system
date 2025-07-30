@@ -9,7 +9,7 @@ import android.view.TextureView
 import androidx.core.content.ContextCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.service.SessionManager
@@ -50,8 +50,6 @@ class ComprehensiveCameraAccessTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
-    var activityRule = ActivityTestRule(MainActivity::class.java)
 
     @get:Rule
     var permissionRule: GrantPermissionRule =
@@ -75,19 +73,25 @@ class ComprehensiveCameraAccessTest {
     private lateinit var textureView: TextureView
     private lateinit var thermalRecorder: ThermalRecorder
     private var currentSession: SessionInfo? = null
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     @Before
     fun setup() {
         hiltRule.inject()
         context = InstrumentationRegistry.getInstrumentation().targetContext
 
+        // Launch activity using ActivityScenario
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+
         // Create ThermalRecorder instance
         thermalRecorder = ThermalRecorder(context, sessionManager, logger)
 
         // Create TextureView on UI thread
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            textureView = TextureView(activityRule.activity)
-            activityRule.activity.setContentView(textureView)
+            activityScenario.onActivity { activity ->
+                textureView = TextureView(activity)
+                activity.setContentView(textureView)
+            }
         }
 
         // Wait for TextureView to be ready
@@ -105,6 +109,12 @@ class ComprehensiveCameraAccessTest {
                 thermalRecorder.cleanup()
 
                 delay(500)
+
+                // Close ActivityScenario
+                if (::activityScenario.isInitialized) {
+                    activityScenario.close()
+                }
+
                 println("[DEBUG_LOG] Comprehensive test cleanup completed")
             } catch (e: Exception) {
                 println("[DEBUG_LOG] Cleanup error: ${e.message}")

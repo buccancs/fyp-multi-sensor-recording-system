@@ -50,26 +50,17 @@ class LoggerManager:
     def setup_logging_directory(self):
         """
         Set up the logging directory structure.
-
-        TODO: Implement directory setup:
-        - Create log directory if it doesn't exist
-        - Set up subdirectories for different log types
-        - Configure directory permissions
-        - Handle directory creation errors
         """
-        print(
-            f"[DEBUG_LOG] Setting up logging directory: {self.log_directory} (placeholder)"
-        )
-
-        # TODO: Implement actual directory setup
-        # try:
-        #     os.makedirs(self.log_directory, exist_ok=True)
-        #     os.makedirs(os.path.join(self.log_directory, "application"), exist_ok=True)
-        #     os.makedirs(os.path.join(self.log_directory, "network"), exist_ok=True)
-        #     os.makedirs(os.path.join(self.log_directory, "calibration"), exist_ok=True)
-        #     os.makedirs(os.path.join(self.log_directory, "performance"), exist_ok=True)
-        # except Exception as e:
-        #     print(f"Error creating log directories: {e}")
+        import os
+        
+        try:
+            os.makedirs(self.log_directory, exist_ok=True)
+            os.makedirs(os.path.join(self.log_directory, "application"), exist_ok=True)
+            os.makedirs(os.path.join(self.log_directory, "network"), exist_ok=True)
+            os.makedirs(os.path.join(self.log_directory, "calibration"), exist_ok=True)
+            os.makedirs(os.path.join(self.log_directory, "performance"), exist_ok=True)
+        except Exception as e:
+            print(f"Error creating log directories: {e}")
 
     def setup_default_loggers(self):
         """
@@ -120,46 +111,50 @@ class LoggerManager:
 
         Returns:
             logging.Logger: Configured logger instance
-
-        TODO: Implement logger creation:
-        - Create logger with specified name and level
-        - Add rotating file handler
-        - Add console handler for development
-        - Set custom formatter
-        - Handle logger creation errors
         """
-        print(f"[DEBUG_LOG] Creating logger '{name}' (placeholder)")
+        import logging
+        import os
+        from logging.handlers import RotatingFileHandler
+        
+        try:
+            # Initialize loggers dict if not exists
+            if not hasattr(self, 'loggers'):
+                self.loggers = {}
+            
+            # Ensure log directory exists
+            self.setup_logging_directory()
+            
+            logger = logging.getLogger(name)
+            logger.setLevel(config['level'])
 
-        # TODO: Implement actual logger creation
-        # logger = logging.getLogger(name)
-        # logger.setLevel(config['level'])
-        #
-        # # Create rotating file handler
-        # log_file = os.path.join(self.log_directory, config['file'])
-        # file_handler = RotatingFileHandler(
-        #     log_file,
-        #     maxBytes=self.max_file_size_mb * 1024 * 1024,
-        #     backupCount=self.backup_count
-        # )
-        # file_handler.setLevel(config['level'])
-        #
-        # # Create console handler for development
-        # console_handler = logging.StreamHandler()
-        # console_handler.setLevel(logging.WARNING)
-        #
-        # # Create formatter
-        # formatter = logging.Formatter(config['format'])
-        # file_handler.setFormatter(formatter)
-        # console_handler.setFormatter(formatter)
-        #
-        # # Add handlers to logger
-        # logger.addHandler(file_handler)
-        # logger.addHandler(console_handler)
-        #
-        # self.loggers[name] = logger
-        # return logger
+            # Create rotating file handler
+            log_file = os.path.join(self.log_directory, config['file'])
+            file_handler = RotatingFileHandler(
+                log_file,
+                maxBytes=self.max_file_size_mb * 1024 * 1024,
+                backupCount=self.backup_count
+            )
+            file_handler.setLevel(config['level'])
 
-        return None  # Placeholder return
+            # Create console handler for development
+            console_handler = logging.StreamHandler()
+            console_handler.setLevel(logging.WARNING)
+
+            # Create formatter
+            formatter = logging.Formatter(config['format'])
+            file_handler.setFormatter(formatter)
+            console_handler.setFormatter(formatter)
+
+            # Add handlers to logger
+            logger.addHandler(file_handler)
+            logger.addHandler(console_handler)
+
+            self.loggers[name] = logger
+            return logger
+            
+        except Exception as e:
+            print(f"Error creating logger '{name}': {e}")
+            return None
 
     def get_logger(self, name):
         """
@@ -170,27 +165,23 @@ class LoggerManager:
 
         Returns:
             logging.Logger: Logger instance
-
-        TODO: Implement logger retrieval:
-        - Return existing logger if available
-        - Create new logger with default config if not found
-        - Handle logger name validation
         """
-        print(f"[DEBUG_LOG] Getting logger '{name}' (placeholder)")
-
-        # TODO: Implement actual logger retrieval
-        # if name in self.loggers:
-        #     return self.loggers[name]
-        # else:
-        #     # Create logger with default configuration
-        #     default_config = {
-        #         'level': logging.INFO,
-        #         'file': f'{name}.log',
-        #         'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        #     }
-        #     return self.create_logger(name, default_config)
-
-        return None  # Placeholder return
+        import logging
+        
+        # Initialize loggers dict if not exists
+        if not hasattr(self, 'loggers'):
+            self.loggers = {}
+        
+        if name in self.loggers:
+            return self.loggers[name]
+        else:
+            # Create logger with default configuration
+            default_config = {
+                'level': logging.INFO,
+                'file': f'{name}.log',
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            }
+            return self.create_logger(name, default_config)
 
     def log_structured(self, logger_name, level, message, **kwargs):
         """
@@ -201,41 +192,37 @@ class LoggerManager:
             level (LogLevel): Log level
             message (str): Log message
             **kwargs: Additional structured data
-
-        TODO: Implement structured logging:
-        - Format message with structured data as JSON
-        - Include timestamp, thread ID, and other metadata
-        - Support custom fields and data types
-        - Handle serialization of complex objects
         """
-        print(
-            f"[DEBUG_LOG] Structured log [{level.value}] {logger_name}: {message} (placeholder)"
-        )
+        import json
+        import threading
+        from datetime import datetime
+        
+        logger = self.get_logger(logger_name)
+        if logger:
+            structured_data = {
+                'timestamp': datetime.utcnow().isoformat(),
+                'level': level.value,
+                'message': message,
+                'thread_id': threading.current_thread().ident,
+                'module': logger_name,
+                **kwargs
+            }
 
-        # TODO: Implement actual structured logging
-        # logger = self.get_logger(logger_name)
-        # if logger:
-        #     structured_data = {
-        #         'timestamp': datetime.utcnow().isoformat(),
-        #         'level': level.value,
-        #         'message': message,
-        #         'thread_id': threading.current_thread().ident,
-        #         'module': logger_name,
-        #         **kwargs
-        #     }
-        #
-        #     json_message = json.dumps(structured_data, default=str)
-        #
-        #     if level == LogLevel.DEBUG:
-        #         logger.debug(json_message)
-        #     elif level == LogLevel.INFO:
-        #         logger.info(json_message)
-        #     elif level == LogLevel.WARNING:
-        #         logger.warning(json_message)
-        #     elif level == LogLevel.ERROR:
-        #         logger.error(json_message)
-        #     elif level == LogLevel.CRITICAL:
-        #         logger.critical(json_message)
+            json_message = json.dumps(structured_data, default=str)
+
+            if level == LogLevel.DEBUG:
+                logger.debug(json_message)
+            elif level == LogLevel.INFO:
+                logger.info(json_message)
+            elif level == LogLevel.WARNING:
+                logger.warning(json_message)
+            elif level == LogLevel.ERROR:
+                logger.error(json_message)
+            elif level == LogLevel.CRITICAL:
+                logger.critical(json_message)
+        else:
+            # Fallback to print if logger not available
+            print(f"[{level.value}] {logger_name}: {message}")
 
     def log_performance(self, operation, duration_ms, **metadata):
         """
@@ -245,28 +232,33 @@ class LoggerManager:
             operation (str): Name of the operation
             duration_ms (float): Operation duration in milliseconds
             **metadata: Additional performance metadata
-
-        TODO: Implement performance logging:
-        - Log operation timing and resource usage
-        - Track memory usage and CPU utilization
-        - Generate performance reports and analytics
-        - Support performance alerting and monitoring
         """
-        print(
-            f"[DEBUG_LOG] Performance log: {operation} took {duration_ms}ms (placeholder)"
-        )
+        from datetime import datetime
+        
+        try:
+            # Try to get system resource info, fallback gracefully if not available
+            try:
+                import psutil
+                memory_usage_mb = psutil.Process().memory_info().rss / 1024 / 1024
+                cpu_percent = psutil.Process().cpu_percent()
+            except ImportError:
+                memory_usage_mb = None
+                cpu_percent = None
+            
+            performance_data = {
+                'operation': operation,
+                'duration_ms': duration_ms,
+                'timestamp': datetime.utcnow().isoformat(),
+                'memory_usage_mb': memory_usage_mb,
+                'cpu_percent': cpu_percent,
+                **metadata
+            }
 
-        # TODO: Implement actual performance logging
-        # performance_data = {
-        #     'operation': operation,
-        #     'duration_ms': duration_ms,
-        #     'timestamp': datetime.utcnow().isoformat(),
-        #     'memory_usage_mb': psutil.Process().memory_info().rss / 1024 / 1024,
-        #     'cpu_percent': psutil.Process().cpu_percent(),
-        #     **metadata
-        # }
-        #
-        # self.log_structured('performance', LogLevel.INFO, f"Operation completed: {operation}", **performance_data)
+            self.log_structured('performance', LogLevel.INFO, f"Operation completed: {operation}", **performance_data)
+            
+        except Exception as e:
+            # Fallback to simple print if structured logging fails
+            print(f"[PERFORMANCE] {operation} took {duration_ms}ms (logging error: {e})")
 
     def log_network_event(self, event_type, device_id, **details):
         """
@@ -276,26 +268,22 @@ class LoggerManager:
             event_type (str): Type of network event
             device_id (str): Device identifier
             **details: Additional event details
-
-        TODO: Implement network event logging:
-        - Log device connections and disconnections
-        - Track data transfer rates and errors
-        - Monitor network latency and reliability
-        - Generate network health reports
         """
-        print(
-            f"[DEBUG_LOG] Network event: {event_type} for device {device_id} (placeholder)"
-        )
+        from datetime import datetime
+        
+        try:
+            network_data = {
+                'event_type': event_type,
+                'device_id': device_id,
+                'timestamp': datetime.utcnow().isoformat(),
+                **details
+            }
 
-        # TODO: Implement actual network event logging
-        # network_data = {
-        #     'event_type': event_type,
-        #     'device_id': device_id,
-        #     'timestamp': datetime.utcnow().isoformat(),
-        #     **details
-        # }
-        #
-        # self.log_structured('network', LogLevel.INFO, f"Network event: {event_type}", **network_data)
+            self.log_structured('network', LogLevel.INFO, f"Network event: {event_type}", **network_data)
+            
+        except Exception as e:
+            # Fallback to simple print if structured logging fails
+            print(f"[NETWORK] {event_type} for device {device_id} (logging error: {e})")
 
     def log_calibration_event(self, event_type, **details):
         """
@@ -304,23 +292,21 @@ class LoggerManager:
         Args:
             event_type (str): Type of calibration event
             **details: Additional event details
-
-        TODO: Implement calibration event logging:
-        - Log calibration capture and processing events
-        - Track calibration quality metrics
-        - Monitor calibration success/failure rates
-        - Generate calibration reports
         """
-        print(f"[DEBUG_LOG] Calibration event: {event_type} (placeholder)")
+        from datetime import datetime
+        
+        try:
+            calibration_data = {
+                'event_type': event_type,
+                'timestamp': datetime.utcnow().isoformat(),
+                **details
+            }
 
-        # TODO: Implement actual calibration event logging
-        # calibration_data = {
-        #     'event_type': event_type,
-        #     'timestamp': datetime.utcnow().isoformat(),
-        #     **details
-        # }
-        #
-        # self.log_structured('calibration', LogLevel.INFO, f"Calibration event: {event_type}", **calibration_data)
+            self.log_structured('calibration', LogLevel.INFO, f"Calibration event: {event_type}", **calibration_data)
+            
+        except Exception as e:
+            # Fallback to simple print if structured logging fails
+            print(f"[CALIBRATION] {event_type} (logging error: {e})")
 
     def export_logs(self, start_date, end_date, output_format="json"):
         """

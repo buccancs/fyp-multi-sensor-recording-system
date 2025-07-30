@@ -19,6 +19,7 @@ The system is designed for research applications, particularly for capturing syn
 project-root/
 ├── settings.gradle              # Gradle settings: includes both modules
 ├── build.gradle                 # Root Gradle build configuration
+├── .gitmodules                  # Git submodules configuration
 ├── gradle/wrapper/              # Gradle Wrapper files
 ├── gradlew & gradlew.bat        # Gradle wrapper scripts
 ├── AndroidApp/                  # Android app module (Kotlin + Camera2, Shimmer, etc.)
@@ -31,10 +32,48 @@ project-root/
 │   ├── build.gradle             # Python module build configuration
 │   ├── src/                     # Python source files
 │   │   └── main.py              # Entry-point script for PyQt5 app
+├── external/                    # External dependencies (Git submodules)
+│   ├── IRCamera/                # Thermal camera library (submodule)
+│   ├── psychopy/                # PsychoPy library (submodule)
+│   ├── pyshimmer/               # Python Shimmer SDK (submodule)
+│   ├── Shimmer-Java-Android-API/ # Android Shimmer SDK (submodule)
+│   ├── topdon-sdk/              # Topdon thermal camera SDK (submodule)
+│   └── TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3/ # Legacy Topdon SDK (local directory)
 ├── docs/                        # Project documentation
 ├── changelog.md                 # Project changelog
 ├── todo.md                      # Task tracking
 └── .gitignore                   # Git ignore file
+```
+
+### Git Submodules
+
+This project uses Git submodules to manage external dependencies from GitHub repositories:
+
+| Submodule | Repository | Description |
+|-----------|------------|-------------|
+| `external/IRCamera` | [CoderCaiSL/IRCamera](https://github.com/CoderCaiSL/IRCamera.git) | Thermal camera library for Android |
+| `external/psychopy` | [psychopy/psychopy](https://github.com/psychopy/psychopy.git) | Psychology experiment framework |
+| `external/pyshimmer` | [seemoo-lab/pyshimmer](https://github.com/seemoo-lab/pyshimmer.git) | Python SDK for Shimmer sensors |
+| `external/Shimmer-Java-Android-API` | [ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API.git) | Official Android SDK for Shimmer sensors |
+| `external/topdon-sdk` | [buccancs/topdon-sdk](https://github.com/buccancs/topdon-sdk.git) | Topdon thermal camera SDK |
+
+**Note**: The `TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3` directory contains legacy proprietary SDK files and remains as a local directory.
+
+#### Working with Submodules
+
+```bash
+# Clone the repository with all submodules
+git clone --recursive https://github.com/your-repo/project.git
+
+# If already cloned, initialize and update submodules
+git submodule init
+git submodule update
+
+# Update all submodules to latest commits
+git submodule update --remote
+
+# Update a specific submodule
+git submodule update --remote external/psychopy
 ```
 
 ## 🚀 Quick Start (Milestone 5 Enhanced)

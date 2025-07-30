@@ -17,7 +17,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.multisensor.recording.CustomTestRunner"
-        
+
         // NDK configuration for 16 KB page size compatibility
         ndk {
             // Ensure native libraries are built with proper alignment for 16 KB page sizes
@@ -36,7 +36,7 @@ android {
             // pickFirsts += "META-INF/NOTICE.md"
             // pickFirsts += "META-INF/DEPENDENCIES"
         }
-        
+
         // 16 KB page size compatibility for native libraries
         jniLibs {
             // Ensure native libraries are properly aligned for 16 KB page sizes
@@ -55,14 +55,14 @@ android {
             enableUnitTestCoverage true
             enableAndroidTestCoverage true
         }
-        
+
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BUILD_TYPE", '"release"'
         }
-        
+
         staging {
             initWith debug
             debuggable false
@@ -71,7 +71,7 @@ android {
             enableAndroidTestCoverage true
         }
     }
-    
+
     flavorDimensions "environment"
     productFlavors {
         dev {
@@ -80,27 +80,27 @@ android {
             versionNameSuffix "-dev"
             buildConfigField "String", "ENVIRONMENT", '"development"'
         }
-        
+
         prod {
             dimension "environment"
             buildConfigField "String", "ENVIRONMENT", '"production"'
         }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    
+
     kotlinOptions {
         jvmTarget = '17'
     }
-    
+
     buildFeatures {
         viewBinding true
         buildConfig true
     }
-    
+
     // Additional build options for 16 KB page size compatibility
     buildTypes.configureEach {
         // Ensure native libraries are built with proper alignment
@@ -158,20 +158,20 @@ def outputFile = file("$outputDir/com/multisensor/recording/config/CommonConstan
 task generateConstants {
     inputs.file configFile
     outputs.file outputFile
-    
+
     doLast {
         def json = new JsonSlurper().parse(configFile)
         outputDir.mkdirs()
-        
+
         def kotlinCode = new StringBuilder()
         kotlinCode.append("// Auto-generated from config.json. Do not edit manually.\n")
         kotlinCode.append("package com.multisensor.recording.config\n\n")
         kotlinCode.append("object CommonConstants {\n")
-        
+
         // Protocol version
         kotlinCode.append("    const val PROTOCOL_VERSION: Int = ${json.protocol_version}\n")
         kotlinCode.append("    const val APP_VERSION: String = \"${json.version}\"\n\n")
-        
+
         // Network constants
         kotlinCode.append("    object Network {\n")
         kotlinCode.append("        const val HOST: String = \"${json.network.host}\"\n")
@@ -182,7 +182,7 @@ task generateConstants {
         kotlinCode.append("        const val HEARTBEAT_INTERVAL: Int = ${json.network.heartbeat_interval}\n")
         kotlinCode.append("        const val RECONNECT_ATTEMPTS: Int = ${json.network.reconnect_attempts}\n")
         kotlinCode.append("    }\n\n")
-        
+
         // Device constants
         kotlinCode.append("    object Devices {\n")
         kotlinCode.append("        const val CAMERA_ID: Int = ${json.devices.camera_id}\n")
@@ -195,7 +195,7 @@ task generateConstants {
         kotlinCode.append("        const val MIC_CHANNELS: Int = ${json.devices.mic_channels}\n")
         kotlinCode.append("        const val CHUNK_SIZE: Int = ${json.devices.chunk_size}\n")
         kotlinCode.append("    }\n\n")
-        
+
         // Calibration constants
         kotlinCode.append("    object Calibration {\n")
         kotlinCode.append("        const val PATTERN_TYPE: String = \"${json.calibration.pattern_type}\"\n")
@@ -206,9 +206,9 @@ task generateConstants {
         kotlinCode.append("        const val MIN_IMAGES: Int = ${json.calibration.min_images}\n")
         kotlinCode.append("        const val MAX_IMAGES: Int = ${json.calibration.max_images}\n")
         kotlinCode.append("    }\n")
-        
+
         kotlinCode.append("}\n")
-        
+
         outputFile.text = kotlinCode.toString()
         println("Generated CommonConstants.kt from config.json")
     }
@@ -221,14 +221,14 @@ preBuild.dependsOn generateConstants
 dependencies {
     // Core & UI Components
     implementation libs.bundles.core.ui
-    
+
     // Settings and Preferences - Milestone 2.7 UI Enhancement
     implementation 'androidx.preference:preference-ktx:1.2.1'
-    
+
     // Material Design Components - UI Modernization
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    
+
     // Jetpack Navigation Component - Modern Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.6'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
@@ -266,14 +266,14 @@ dependencies {
     kspAndroidTest libs.hilt.compiler
 
     // Shimmer SDK dependencies
-    implementation files('libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar')
-    implementation files('libs/shimmerbluetoothmanager-0.11.4_beta.jar')
-    implementation files('libs/shimmerdriver-0.11.4_beta.jar')
-    implementation files('libs/shimmerdriverpc-0.11.4_beta.jar')
-    
+    implementation files('src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar')
+    implementation files('src/main//libs/shimmerbluetoothmanager-0.11.4_beta.jar')
+    implementation files('src/main/libs/shimmerdriver-0.11.4_beta.jar')
+    implementation files('src/main/libs/shimmerdriverpc-0.11.4_beta.jar')
+
     // Topdon thermal camera SDK dependencies
-    implementation files('libs/topdon_1.3.7.aar')
-    implementation files('libs/libusbdualsdk_1.3.4_2406271906_standard.aar')
-    implementation files('libs/opengl_1.3.2_standard.aar')
-    implementation files('libs/suplib-release.aar')
+    implementation files('src/main/libs/topdon_1.3.7.aar')
+    implementation files('src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar')
+    implementation files('src/main/libs/opengl_1.3.2_standard.aar')
+    implementation files('src/main/libs/suplib-release.aar')
 }

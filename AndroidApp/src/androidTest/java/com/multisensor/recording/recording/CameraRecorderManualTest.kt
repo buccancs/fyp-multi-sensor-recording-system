@@ -5,7 +5,7 @@ import android.graphics.SurfaceTexture
 import android.view.TextureView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -34,8 +34,6 @@ class CameraRecorderManualTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
-    var activityRule = ActivityTestRule(MainActivity::class.java)
 
     @get:Rule
     var permissionRule: GrantPermissionRule =
@@ -50,16 +48,22 @@ class CameraRecorderManualTest {
 
     private lateinit var textureView: TextureView
     private var currentSession: SessionInfo? = null
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     @Before
     fun setup() {
         hiltRule.inject()
 
+        // Launch activity using ActivityScenario
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+
         // Create TextureView on UI thread
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            textureView = TextureView(activityRule.activity)
-            // Add to activity layout for proper lifecycle
-            activityRule.activity.setContentView(textureView)
+            activityScenario.onActivity { activity ->
+                textureView = TextureView(activity)
+                // Add to activity layout for proper lifecycle
+                activity.setContentView(textureView)
+            }
         }
 
         // Wait for TextureView to be ready
@@ -75,6 +79,11 @@ class CameraRecorderManualTest {
 
                 // Allow cleanup time
                 delay(500)
+
+                // Close ActivityScenario
+                if (::activityScenario.isInitialized) {
+                    activityScenario.close()
+                }
 
                 println("[DEBUG_LOG] Test cleanup completed. Session: ${currentSession?.getSummary()}")
             } catch (e: Exception) {
@@ -100,7 +109,7 @@ class CameraRecorderManualTest {
             assertTrue("[DEBUG_LOG] Camera initialization failed", initResult)
             println("[DEBUG_LOG] Camera initialized successfully")
 
-            // Step 2: Wait for TextureView surface to become available
+            // Step 2: Wait for the TextureView surface to become available
             val surfaceAvailableLatch = CountDownLatch(1)
             var surfaceWidth = 0
             var surfaceHeight = 0
@@ -129,7 +138,8 @@ class CameraRecorderManualTest {
                                 surface: SurfaceTexture,
                                 width: Int,
                                 height: Int,
-                            ) {}
+                            ) {
+                            }
 
                             override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = true
 
@@ -326,7 +336,7 @@ class CameraRecorderManualTest {
                 // Check for TIFF/DNG magic number (0x4949 or 0x4D4D for little/big endian)
                 val isValidDng =
                     (fileBytes[0] == 0x49.toByte() && fileBytes[1] == 0x49.toByte()) ||
-                        (fileBytes[0] == 0x4D.toByte() && fileBytes[1] == 0x4D.toByte())
+                            (fileBytes[0] == 0x4D.toByte() && fileBytes[1] == 0x4D.toByte())
                 assertTrue("[DEBUG_LOG] Invalid DNG file header: $filePath", isValidDng)
 
                 println("[DEBUG_LOG] DNG file ${index + 1} validated: ${dngFile.length()} bytes")
@@ -428,7 +438,10 @@ class CameraRecorderManualTest {
 
             // Step 11: Verify session duration and timing
             val sessionDuration = stoppedSession.getDurationMs()
-            assertTrue("[DEBUG_LOG] Session duration too short: ${sessionDuration}ms", sessionDuration >= 10000) // At least 10 seconds
+            assertTrue(
+                "[DEBUG_LOG] Session duration too short: ${sessionDuration}ms",
+                sessionDuration >= 10000
+            ) // At least 10 seconds
 
             println("[DEBUG_LOG] Test 4 completed successfully - Concurrent video + RAW capture functional")
             println("[DEBUG_LOG] Video: ${videoFile.length()} bytes, RAW: ${rawFilePaths.size} files")

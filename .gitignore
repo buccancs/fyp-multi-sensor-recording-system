@@ -101,6 +101,5 @@ $RECYCLE.BIN/
 *.msp
 
 ### Project Specific ###
-external
-
-libs/
+external/
+docs/generated_docs

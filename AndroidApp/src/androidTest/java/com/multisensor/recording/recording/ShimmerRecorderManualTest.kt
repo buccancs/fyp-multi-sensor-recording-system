@@ -9,7 +9,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
@@ -61,8 +61,6 @@ class ShimmerRecorderManualTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
-    var activityRule = ActivityTestRule(MainActivity::class.java)
 
     @get:Rule
     var permissionRule: GrantPermissionRule =
