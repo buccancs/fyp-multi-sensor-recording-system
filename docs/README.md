@@ -1,53 +1,90 @@
 # Data Management Documentation
 
-This directory contains comprehensive documentation for the data storage and management system used in the Multi-Sensor Synchronized Recording System.
+Welcome to the comprehensive documentation hub for the data storage and management system used in the Multi-Sensor Synchronized Recording System. This documentation suite has been carefully designed to provide both researchers and developers with clear insights into how their recorded data is organized, stored, and accessed within the system.
+
+The multi-sensor recording system generates substantial amounts of data across various devices and sensors, including RGB and thermal cameras, GSR sensors, motion sensors, and webcam recordings. Understanding how this data is structured and named is crucial for efficient data analysis and research workflows. This documentation provides complete transparency into the data organization system, ensuring that users can quickly locate their recordings and understand the relationships between different data files.
 
 ## 📚 Documentation Files
 
-### For Users
-- **[Data Storage Quick Reference](DATA_STORAGE_QUICK_REFERENCE.md)** - Start here! Quick guide to finding and understanding your data
-- **[Data Structure Documentation](DATA_STRUCTURE_DOCUMENTATION.md)** - Complete technical documentation of file structures and schemas
+The documentation is organized into user-focused and developer-focused sections to serve different audiences and use cases effectively.
 
-### For Developers  
-- **[File Naming Standards](FILE_NAMING_STANDARDS.md)** - Comprehensive naming conventions and organization standards
-- **[JSON Schemas](schemas/)** - Machine-readable schema definitions for validation
+### For Users and Researchers
+The user documentation focuses on practical guidance for finding and working with recorded data without requiring deep technical knowledge of the system internals.
 
-## 🗂️ File Organization Summary
+- **[Data Storage Quick Reference](DATA_STORAGE_QUICK_REFERENCE.md)** - This is your starting point! This guide provides immediate answers to common questions like "Where is my data?" and "How do I find recordings from a specific session?" It includes practical examples and step-by-step instructions for navigating the file system.
 
-The system organizes data in a predictable, hierarchical structure:
+- **[Data Structure Documentation](DATA_STRUCTURE_DOCUMENTATION.md)** - This comprehensive resource explains the complete technical architecture of how data is organized. It covers file hierarchies, data schemas, relationships between files, and provides detailed explanations of each data type and its purpose within the recording system.
+
+### For Developers and Technical Users  
+The developer documentation provides the technical specifications and standards needed for system maintenance, extension, and integration.
+
+- **[File Naming Standards](FILE_NAMING_STANDARDS.md)** - This detailed specification document covers all naming conventions used throughout the system. It explains the rationale behind naming patterns, provides examples for different scenarios, and includes validation guidelines to ensure consistency across all recorded data.
+
+- **[JSON Schemas](schemas/)** - This directory contains machine-readable schema definitions that formally specify the structure and validation rules for all JSON files in the system. These schemas enable automated validation and serve as authoritative references for data format specifications.
+
+## 🗂️ File Organization Overview
+
+The recording system employs a hierarchical file organization strategy that balances accessibility with technical precision. Each recording session creates a self-contained directory structure that includes all related data files, metadata, and processing results. This approach ensures that researchers can easily locate all materials related to a specific experimental session while maintaining clear separation between different recording sessions.
+
+The system organizes data in a predictable, time-based hierarchical structure that makes it easy to locate recordings chronologically and understand the relationships between different data types:
 
 ```
 PythonApp/recordings/
-├── session_20250731_143022/      # Session folder (timestamp-based)
-│   ├── session_metadata.json     # What was recorded
-│   ├── session_20250731_143022_log.json  # When events happened  
-│   ├── devices/                  # Data from phones/sensors
-│   ├── webcam/                   # Computer camera videos
-│   └── processing/               # Analysis results
-└── session_20250731_150445/      # Another session
+├── session_20250731_143022/      # Each session gets its own timestamped folder
+│   ├── session_metadata.json     # Comprehensive overview of what was recorded
+│   ├── session_20250731_143022_log.json  # Detailed chronological log of all events  
+│   ├── devices/                  # Organized storage for all connected device data
+│   ├── webcam/                   # Computer-based camera recordings
+│   └── processing/               # Post-recording analysis and processing results
+└── session_20250731_150445/      # Each additional session follows the same pattern
 ```
+
+This organization strategy ensures that all data related to a single recording session remains grouped together, making it straightforward to archive, share, or analyze complete experimental datasets. The timestamp-based folder naming also provides natural chronological ordering when viewing session directories.
 
 ## 🎯 Quick Start Guide
 
+Getting started with the data organization system is straightforward once you understand the basic navigation principles. The system has been designed to be intuitive for researchers who may not have extensive technical backgrounds while still providing the detailed information that advanced users require.
+
 ### Finding Your Data
 
-1. **Go to recordings folder:** `PythonApp/recordings/`
-2. **Find your session:** Look for `session_YYYYMMDD_HHMMSS/` folders
-3. **Check session info:** Read `session_metadata.json` for overview
-4. **View timeline:** Check `session_*_log.json` for event timeline
+The process of locating your recorded data follows a simple, step-by-step approach that takes advantage of the system's organized structure:
+
+1. **Navigate to the recordings folder:** Begin by opening the `PythonApp/recordings/` directory, which serves as the central repository for all recorded sessions. This folder contains all session directories organized chronologically.
+
+2. **Locate your session:** Session folders are named using a timestamp format `session_YYYYMMDD_HHMMSS/`, making it easy to identify recordings by date and time. If you provided a custom name during recording, it will appear as a prefix like `experiment_A_20250731_143022/`.
+
+3. **Review session information:** Each session folder contains a `session_metadata.json` file that provides a comprehensive overview of what was recorded during that session. This file serves as your guide to understanding all the data files available in that session.
+
+4. **Examine the event timeline:** The session log file `session_*_log.json` contains a detailed chronological record of everything that happened during the recording, including when each device started recording, any issues that occurred, and when the session ended.
 
 ### Understanding File Names
 
-All files follow predictable patterns:
+The system uses consistent, descriptive naming patterns that make it easy to identify file types and their associated recording sessions. All files follow logical patterns that encode important information directly in the filename:
+
+Session folders use timestamps as their primary identifier, ensuring unique names and natural chronological sorting. When you provide a custom session name, it appears as a prefix to maintain both clarity and uniqueness:
 
 ```bash
-# Session folders
-session_20250731_143022/           # Standard session
-experiment_A_20250731_143022/      # Named session
+# Standard session folders with timestamp-based names
+session_20250731_143022/           # Session recorded on July 31, 2025 at 14:30:22
+session_20250731_150445/           # Later session the same day
 
-# Video files  
-phone_1_rgb_20250731_143022.mp4    # Phone RGB video
-webcam_1_20250731_143022.mp4       # Webcam video
+# Named sessions that include descriptive prefixes  
+experiment_A_20250731_143022/      # Custom-named session for easy identification
+calibration_20250731_143022/       # Specialized session type with descriptive name
+```
+
+Video files and sensor data files embed device identifiers, data types, and timestamps to ensure complete traceability and easy identification:
+
+```bash
+# Video files include device ID, camera type, and session timestamp
+phone_1_rgb_20250731_143022.mp4    # RGB camera video from phone 1
+phone_1_thermal_20250731_143022.mp4 # Thermal camera video from the same phone
+webcam_1_20250731_143022.mp4       # Computer webcam recording
+
+# Sensor data files follow similar patterns for consistency
+phone_1_gsr_20250731_143022.csv    # GSR sensor data from phone 1
+phone_1_motion_20250731_143022.csv # Motion sensor data from the same device
+```
 
 # Sensor data
 phone_1_gsr_20250731_143022.csv    # GSR sensor data

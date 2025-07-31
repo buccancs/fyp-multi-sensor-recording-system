@@ -1,53 +1,83 @@
 # Data Storage Quick Reference Guide
 
+Welcome to your essential guide for navigating and understanding the data storage system used in the Multi-Sensor Synchronized Recording System. This reference has been designed to quickly answer the most common questions researchers have about locating and accessing their recorded data. Whether you're looking for a specific recording session, trying to understand file organization, or need to quickly access different types of sensor data, this guide provides practical, step-by-step instructions to help you find what you need.
+
+The recording system automatically organizes all your data into logical, timestamped folders that make it easy to locate recordings from specific sessions. Each recording session creates a comprehensive data package that includes video recordings, sensor data, metadata, and event logs, all organized in a predictable structure that you can navigate with confidence.
+
 ## 🗂️ Where Is My Data?
+
+Understanding where your data is stored is the first step to effective data analysis. The system stores all recordings in a centralized location with a clear organizational hierarchy that separates different sessions while keeping related data grouped together.
 
 ### Quick Access Paths
 
+These command-line examples show you the fastest way to navigate to your data and access key information about your recording sessions:
+
 ```bash
-# Main recordings folder
+# Navigate to the main recordings folder where all session data is stored
 cd PythonApp/recordings/
 
-# List all sessions 
+# List all recorded sessions to see what's available
 ls PythonApp/recordings/
-# Output: session_20250731_143022/ session_20250731_150445/ ...
+# Output shows timestamped session folders: session_20250731_143022/ session_20250731_150445/ ...
 
-# Access a specific session
+# Enter a specific session folder to explore its contents
 cd PythonApp/recordings/session_20250731_143022/
 
-# View session summary
+# Read the session summary to understand what was recorded
 cat session_metadata.json
 
-# See what happened during recording  
+# Review the detailed event log to see the timeline of what happened during recording
 cat session_20250731_143022_log.json
 ```
 
+These paths provide immediate access to the most important information about your recording sessions. The session metadata file gives you a high-level overview of all devices used and files created, while the event log provides a detailed chronological record of the entire recording process.
+
 ### File Locations at a Glance
 
-| Data Type | Location | Example File |
-|-----------|----------|--------------|
-| **Session Info** | `session_metadata.json` | Session overview & file list |
-| **Event Log** | `session_YYYYMMDD_HHMMSS_log.json` | Detailed timeline of events |
-| **Phone Videos** | `devices/phone_1/rgb_videos/` | `phone_1_rgb_20250731_143022.mp4` |
-| **Thermal Videos** | `devices/phone_1/thermal_videos/` | `phone_1_thermal_20250731_143022.mp4` |
-| **Webcam Videos** | `webcam/` | `webcam_1_20250731_143022.mp4` |
-| **Sensor Data** | `devices/phone_1/sensor_data/` | `phone_1_gsr_20250731_143022.csv` |
-| **Hand Analysis** | `processing/hand_segmentation/` | Cropped videos & masks |
+The following table provides a quick reference for locating different types of data within your session folders. Each data type has a designated location and follows consistent naming patterns that make it easy to identify files and understand their purpose:
+
+| Data Type | Location | Example File | Purpose |
+|-----------|----------|--------------|---------|
+| **Session Info** | `session_metadata.json` | Complete session overview | Provides comprehensive metadata about devices used, files created, and recording parameters |
+| **Event Log** | `session_YYYYMMDD_HHMMSS_log.json` | Detailed timeline | Chronicles every event during recording including start/stop times, errors, and device status |
+| **Phone Videos** | `devices/phone_1/rgb_videos/` | `phone_1_rgb_20250731_143022.mp4` | Standard camera recordings from connected mobile devices |
+| **Thermal Videos** | `devices/phone_1/thermal_videos/` | `phone_1_thermal_20250731_143022.mp4` | Heat signature recordings from thermal camera attachments |
+| **Webcam Videos** | `webcam/` | `webcam_1_20250731_143022.mp4` | Computer-based camera recordings for additional perspectives |
+| **Sensor Data** | `devices/phone_1/sensor_data/` | `phone_1_gsr_20250731_143022.csv` | Physiological and motion sensor measurements in CSV format |
+| **Hand Analysis** | `processing/hand_segmentation/` | Various processed files | Computer vision analysis results including cropped videos and segmentation masks |
+
+This organization ensures that related data types are grouped logically while maintaining clear separation between different devices and processing stages. The consistent naming patterns help you quickly identify the specific data you need for your analysis.
 
 ## 📁 Understanding Your Session Folder
 
-Each recording session creates a folder like this:
+Each recording session creates a comprehensive, self-contained folder that includes all data collected during that specific recording period. Understanding the structure of these session folders is essential for efficiently accessing and analyzing your recorded data. The folder organization has been carefully designed to group related files while maintaining clear separation between different data types and processing stages.
+
+Each recording session creates a folder with a structure like this, where all related data is logically organized and easy to navigate:
 
 ```
 session_20250731_143022/
-├── 📄 session_metadata.json          ← START HERE - Overview of everything
-├── 📄 session_20250731_143022_log.json ← Timeline of what happened  
-├── 📁 devices/                       ← Data from phones/sensors
-│   ├── 📁 phone_1/
-│   │   ├── 📁 rgb_videos/            ← Regular camera videos
-│   │   ├── 📁 thermal_videos/        ← Heat camera videos
-│   │   └── 📁 sensor_data/           ← Heart rate, stress data
-│   └── 📁 phone_2/                   ← Second phone (if used)
+├── 📄 session_metadata.json          ← START HERE - Complete overview of the session
+├── 📄 session_20250731_143022_log.json ← Detailed chronological timeline of all events  
+├── 📁 devices/                       ← Data collected from all connected mobile devices
+│   ├── 📁 phone_1/                   ← Data from the first connected phone
+│   │   ├── 📁 rgb_videos/            ← Standard color camera recordings
+│   │   ├── 📁 thermal_videos/        ← Heat signature camera recordings  
+│   │   └── 📁 sensor_data/           ← GSR, heart rate, motion, and other sensor measurements
+│   └── 📁 phone_2/                   ← Data from second phone if multiple devices were used
+│       ├── 📁 rgb_videos/            ← Additional camera perspectives
+│       └── 📁 sensor_data/           ← Additional sensor measurements for comparison
+├── 📁 webcam/                        ← Computer-based camera recordings
+│   ├── webcam_1_20250731_143022.mp4  ← Primary webcam recording
+│   └── webcam_2_20250731_143022.mp4  ← Secondary webcam if available
+├── 📁 processing/                    ← Post-recording analysis and processing results
+│   ├── 📁 hand_segmentation/         ← Computer vision analysis of hand movements
+│   └── 📁 synchronized_data/         ← Time-aligned data from multiple sources
+└── 📁 exports/                       ← Data exported in various formats for analysis
+    ├── 📁 csv/                       ← Spreadsheet-compatible data exports
+    └── 📁 matlab/                    ← MATLAB-compatible data exports
+```
+
+The session metadata file serves as your primary entry point for understanding what data is available. It contains comprehensive information about which devices were connected, what types of data were recorded, file locations, recording parameters, and any issues that occurred during the session. This file acts as a roadmap to all other data in the session folder.
 ├── 📁 webcam/                        ← Computer camera videos
 ├── 📁 processing/                    ← Analysis results (if run)
 └── 📁 exports/                       ← Data exports (CSV, etc.)
