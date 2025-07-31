@@ -43,7 +43,7 @@ class HandSegmentationManager @Inject constructor(
     // Configuration
     var isRealTimeProcessingEnabled = false
         private set
-    var isCroppedDatasetEnabled = true
+    var isCroppedDatasetEnabled = false
         private set
     
     /**
