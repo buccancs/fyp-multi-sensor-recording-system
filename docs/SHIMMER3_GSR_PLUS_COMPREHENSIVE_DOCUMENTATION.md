@@ -35,19 +35,23 @@ The Shimmer3 GSR+ represents a state-of-the-art wearable sensor platform designe
 
 ### Key Findings
 
-- **Hardware Platform**: The Shimmer3 GSR+ utilizes a sophisticated multi-sensor architecture capable of simultaneous data acquisition from multiple physiological parameters
-- **Communication**: Bluetooth Low Energy (BLE) and Classic Bluetooth protocols enable robust wireless connectivity with sampling rates up to 1000 Hz
-- **Integration**: The Shimmer Java Android API provides comprehensive SDK support for real-time data streaming, device configuration, and session management
-- **Performance**: Optimized data processing pipelines enable concurrent multi-device operation with minimal latency impact
+The comprehensive analysis of the Shimmer3 GSR+ platform reveals several critical capabilities that establish it as a leading solution for physiological data collection in research and clinical environments. The hardware platform demonstrates exceptional sophistication through its multi-sensor architecture, which enables simultaneous data acquisition from multiple physiological parameters without compromising measurement accuracy or introducing cross-sensor interference. This parallel processing capability represents a significant advancement in wearable sensor technology, allowing researchers to capture comprehensive physiological profiles in real-time.
+
+The communication infrastructure built upon Bluetooth Low Energy (BLE) and Classic Bluetooth protocols provides robust wireless connectivity that maintains stable data transmission at sampling rates up to 1000 Hz. This high-frequency capability ensures that even rapid physiological changes can be captured with sufficient temporal resolution for detailed analysis. The wireless communication system incorporates advanced error correction mechanisms and automatic reconnection protocols that maintain data integrity even in challenging electromagnetic environments.
+
+The integration capabilities provided by the Shimmer Java Android API represent a comprehensive software development kit that offers extensive support for real-time data streaming, sophisticated device configuration management, and complete session management functionality. This API framework abstracts the complexity of low-level hardware communication while providing developers with granular control over all aspects of sensor operation. The performance characteristics demonstrate optimized data processing pipelines that enable concurrent multi-device operation with minimal latency impact, making the platform suitable for complex multi-subject research scenarios.
 
 ### Research Applications
 
-This platform is particularly suited for:
-- Affective computing research
-- Stress response monitoring
-- Human-computer interaction studies
-- Physiological signal analysis
-- Multi-modal sensor fusion experiments
+The Shimmer3 GSR+ platform demonstrates particular excellence in supporting advanced research methodologies across multiple scientific disciplines. In affective computing research, the platform's ability to capture subtle changes in galvanic skin response provides researchers with objective measures of emotional arousal that complement subjective assessment methods. The high temporal resolution and measurement precision enable detailed analysis of emotional response patterns that were previously difficult to quantify with sufficient accuracy.
+
+Stress response monitoring applications benefit significantly from the platform's continuous monitoring capabilities and wireless operation, which allow for naturalistic data collection in real-world environments. The device's unobtrusive design and extended battery life enable longitudinal studies of stress patterns without interrupting participants' normal activities, providing insights into stress response mechanisms that laboratory-based studies cannot capture.
+
+Human-computer interaction studies leverage the platform's real-time data streaming capabilities to create responsive systems that adapt to users' physiological states. The low-latency data transmission enables immediate feedback systems that can modify interface behavior based on detected stress levels or cognitive load, opening new possibilities for adaptive user interface design.
+
+Physiological signal analysis research utilizes the platform's multi-modal sensing capabilities to examine complex relationships between different physiological parameters. The synchronized data collection from multiple sensors enables researchers to investigate physiological coupling mechanisms and develop comprehensive models of autonomic nervous system function.
+
+Multi-modal sensor fusion experiments particularly benefit from the platform's ability to integrate data from multiple Shimmer3 devices simultaneously, enabling comprehensive monitoring of distributed physiological processes. This capability supports advanced research into whole-body physiological coordination and enables the development of sophisticated models of physiological system interactions.
 
 ---
 
@@ -57,40 +61,58 @@ This platform is particularly suited for:
 
 The Shimmer3 GSR+ is a compact, wearable sensor platform developed by Shimmer Research for physiological data collection. The device combines multiple sensing modalities in a single, battery-powered unit that communicates wirelessly with host systems via Bluetooth.
 
+**Official Development Resources:**
+- **Shimmer Android API**: [https://github.com/ShimmerEngineering/ShimmerAndroidAPI](https://github.com/ShimmerEngineering/ShimmerAndroidAPI)
+- **Shimmer Java Android API**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+- **Shimmer Research Official Site**: [https://www.shimmersensing.com/](https://www.shimmersensing.com/)
+
+This documentation covers the integration of Shimmer3 GSR+ devices using the official Shimmer Research APIs and SDKs, providing a comprehensive guide for Android application developers.
+
 ### 2.2 Historical Context
 
-Shimmer Research has been developing wearable sensor platforms since 2008, with the Shimmer3 generation representing significant advances in:
-- Power efficiency
-- Data processing capabilities
-- Wireless communication reliability
-- Sensor integration density
+Shimmer Research has been at the forefront of wearable sensor platform development since 2008, establishing a strong foundation in physiological monitoring technology that has evolved through multiple generations of hardware refinement and software optimization. The Shimmer3 generation represents a culmination of over a decade of engineering advancement and represents significant technological breakthroughs across multiple critical performance dimensions.
+
+The evolution toward improved power efficiency has been driven by the fundamental requirement for extended battery life in wearable applications, where frequent charging interrupts data collection and limits the feasibility of longitudinal studies. The Shimmer3 generation incorporates sophisticated power management algorithms, dynamic frequency scaling capabilities, and optimized sensor sleep modes that collectively extend operational duration while maintaining measurement accuracy.
+
+Enhanced data processing capabilities reflect the increasing computational demands of real-time physiological signal analysis and the need for on-device preprocessing to reduce wireless bandwidth requirements. The Shimmer3 platform incorporates dedicated signal processing hardware and optimized algorithms that can perform complex calculations locally, reducing the computational burden on connected devices and enabling more sophisticated real-time analysis capabilities.
+
+Wireless communication reliability improvements address the critical requirement for robust data transmission in challenging electromagnetic environments typical of clinical and research settings. The Shimmer3 generation incorporates advanced antenna design, improved protocol implementations, and sophisticated error correction mechanisms that maintain stable communication links even in the presence of interference from medical equipment and other wireless devices.
+
+Sensor integration density advancements enable comprehensive physiological monitoring from a single compact device, reducing the complexity and obtrusiveness of multi-parameter studies. The Shimmer3 platform demonstrates remarkable miniaturization achievements that pack multiple high-precision sensors into a form factor suitable for extended wear without compromising measurement quality or user comfort.
 
 ### 2.3 Design Philosophy
 
-The Shimmer3 GSR+ embodies several key design principles:
+The Shimmer3 GSR+ embodies a comprehensive design philosophy that prioritizes modularity, reliability, and performance as fundamental architectural principles. These design principles reflect deep understanding of the complex requirements of physiological monitoring applications and the diverse needs of research and clinical environments.
 
 #### Modularity
-- Interchangeable sensor modules
-- Configurable sampling parameters
-- Extensible firmware architecture
+
+The modular design philosophy manifests through sophisticated interchangeable sensor modules that allow researchers to customize device capabilities according to specific experimental requirements. This modularity extends beyond simple sensor selection to encompass configurable sampling parameters that can be adjusted dynamically during operation to optimize data collection for different physiological signals and experimental conditions. The extensible firmware architecture provides a foundation for future enhancements and allows for custom algorithm implementation that can adapt the device behavior to specialized research needs.
+
+This modular approach enables cost-effective scaling of research projects, as researchers can start with basic configurations and expand capabilities as projects evolve. The interchangeable nature of sensor modules also supports comparative studies where different sensing modalities can be evaluated using identical hardware platforms, ensuring consistent measurement conditions across experimental conditions.
 
 #### Reliability
-- Robust Bluetooth stack implementation
-- Automatic error recovery mechanisms
-- Data integrity validation
+
+The reliability framework encompasses robust Bluetooth stack implementation that has been extensively tested across diverse operational environments and device configurations. This implementation includes sophisticated automatic error recovery mechanisms that can detect and respond to communication failures, power fluctuations, and interference conditions without requiring manual intervention. The comprehensive data integrity validation systems ensure that collected data maintains accuracy and completeness even under challenging operational conditions.
+
+The reliability infrastructure includes redundant communication pathways, sophisticated error detection algorithms, and graceful degradation procedures that maintain essential functionality even when individual system components experience problems. This comprehensive approach to reliability ensures that research data collection can continue uninterrupted even in challenging environments or during extended monitoring periods.
 
 #### Performance
-- Low-latency data transmission
-- High-resolution analog-to-digital conversion
-- Efficient power management
+
+The performance optimization framework centers on low-latency data transmission capabilities that enable real-time applications and responsive feedback systems. High-resolution analog-to-digital conversion ensures that subtle physiological changes are captured with sufficient precision for detailed analysis. Efficient power management algorithms extend operational duration while maintaining measurement quality, enabling extended monitoring periods that support longitudinal research studies.
+
+The performance architecture includes optimized data processing pipelines that minimize computational overhead while maximizing measurement accuracy. Advanced buffering mechanisms and intelligent data compression reduce wireless bandwidth requirements without compromising data quality, enabling multiple device operation even in bandwidth-constrained environments.
 
 ### 2.4 Target Applications
 
-Primary use cases include:
-- **Research Applications**: Academic studies requiring precise physiological measurements
-- **Clinical Monitoring**: Patient monitoring systems for healthcare providers
-- **Wellness Applications**: Consumer health and fitness tracking
-- **Human Factors Research**: Ergonomics and user experience studies
+The Shimmer3 GSR+ platform has been specifically designed to address the demanding requirements of diverse application domains, each with unique technical challenges and performance criteria. The platform's versatility and robust performance characteristics make it suitable for a wide range of professional and research applications.
+
+**Research Applications** represent the primary use case for the Shimmer3 GSR+ platform, where academic studies require precise physiological measurements with documented accuracy and reliability. Research applications demand extensive configurability to accommodate diverse experimental protocols, high-precision data collection to capture subtle physiological changes, and comprehensive data validation to ensure research integrity. The platform's ability to provide synchronized multi-device operation enables complex research designs involving multiple participants or distributed physiological monitoring scenarios.
+
+**Clinical Monitoring Applications** leverage the platform's reliability and continuous operation capabilities to support patient monitoring systems for healthcare providers. Clinical applications require robust operation in challenging environments, comprehensive data logging capabilities for regulatory compliance, and seamless integration with existing healthcare information systems. The platform's wireless operation and extended battery life enable patient mobility while maintaining continuous monitoring, improving patient comfort and enabling more naturalistic clinical observations.
+
+**Wellness Applications** utilize the platform's user-friendly operation and comprehensive sensor capabilities to provide consumer health and fitness tracking with professional-grade accuracy. Wellness applications benefit from the platform's ability to provide real-time feedback, long-term trend analysis, and personalized health insights based on continuous physiological monitoring. The platform's compact form factor and comfortable wearing characteristics make it suitable for daily use scenarios.
+
+**Human Factors Research** applications exploit the platform's high temporal resolution and multi-modal sensing capabilities to support ergonomics and user experience studies. Human factors research requires unobtrusive monitoring that doesn't interfere with natural behavior, precise timing synchronization for correlation with external events, and comprehensive data collection that captures the full range of physiological responses to environmental and task-related stressors.
 
 ---
 
@@ -118,11 +140,14 @@ The Shimmer3 GSR+ is built around a sophisticated microcontroller-based architec
 ### 3.2 Core Processing Unit
 
 #### MSP430F5437A Microcontroller
-- **Architecture**: 16-bit RISC CPU
-- **Clock Speed**: Up to 25 MHz
-- **Memory**: 256KB Flash, 16KB RAM
-- **Power Consumption**: Ultra-low power design
-- **Peripherals**: Multiple UART, SPI, I2C interfaces
+
+The MSP430F5437A microcontroller represents the computational heart of the Shimmer3 GSR+ platform, providing sophisticated processing capabilities while maintaining ultra-low power consumption characteristics essential for extended wearable operation. This advanced microcontroller incorporates a 16-bit RISC CPU architecture that delivers excellent computational efficiency and enables complex real-time signal processing operations without compromising battery life.
+
+The microcontroller operates at clock speeds up to 25 MHz, providing sufficient computational power for real-time data processing, sensor fusion algorithms, and wireless communication management. This processing capability enables on-device preprocessing of physiological signals, reducing wireless bandwidth requirements and enabling more sophisticated analysis capabilities that would otherwise require external processing resources.
+
+The memory architecture includes 256KB of Flash memory for program storage and firmware updates, along with 16KB of RAM for data processing and temporary storage. This substantial memory allocation enables complex algorithm implementation and supports sophisticated data buffering capabilities that ensure reliable data collection even during temporary communication interruptions.
+
+The ultra-low power design incorporates multiple power management modes that enable aggressive power optimization without compromising functionality. The microcontroller includes multiple UART, SPI, and I2C interfaces that provide comprehensive connectivity options for sensor integration and external device communication, enabling flexible hardware configurations and future expandability.
 
 #### Key Features
 ```c
@@ -141,56 +166,64 @@ POWER_MODES = "Active, LPM0-4"
 #### Primary Sensors
 
 **Galvanic Skin Response (GSR)**
-- **Technology**: Constant voltage excitation method
-- **Range**: 10kΩ to 4.7MΩ configurable
-- **Resolution**: 16-bit effective
-- **Sampling Rate**: Up to 1000 Hz
-- **Accuracy**: ±1% full scale
+
+The GSR measurement system represents the primary sensing capability of the Shimmer3 GSR+ platform, implementing a sophisticated constant voltage excitation method that provides highly accurate and stable measurements of skin conductance. This measurement technology utilizes a precisely controlled 0.5V DC excitation voltage that maintains consistent measurement conditions while minimizing skin irritation and ensuring long-term measurement stability.
+
+The configurable measurement range from 10kΩ to 4.7MΩ enables optimal performance across diverse skin conditions and participant demographics. This wide range capability ensures that the device can accommodate participants with naturally dry skin, high arousal states, or environmental conditions that affect skin moisture content. The 16-bit effective resolution provides exceptional measurement precision that enables detection of subtle physiological changes that might be missed by lower-resolution systems.
+
+The sampling rate capability up to 1000 Hz ensures that even rapid physiological responses can be captured with sufficient temporal resolution for detailed analysis. The system maintains ±1% full-scale accuracy across the entire measurement range, providing research-grade precision that meets the requirements of demanding scientific applications.
 
 **Photoplethysmography (PPG)**
-- **Technology**: Reflective optical sensor
-- **Wavelengths**: Red (660nm) and Infrared (880nm)
-- **Dynamic Range**: 12-bit resolution
-- **Sample Rate**: Up to 1000 Hz
+
+The integrated PPG sensor system utilizes advanced reflective optical technology that enables comprehensive cardiovascular monitoring through non-invasive measurement of blood volume changes. The dual-wavelength approach incorporates both red (660nm) and infrared (880nm) light sources that provide complementary information about oxygen saturation and cardiovascular function.
+
+The 12-bit dynamic range ensures excellent signal quality across diverse skin tones and lighting conditions, while the sampling rate capability up to 1000 Hz enables detailed analysis of heart rate variability and pulse wave characteristics. This high-resolution capability supports advanced cardiovascular analysis techniques that require precise timing information for accurate physiological assessment.
 
 **3-Axis Accelerometer**
-- **Sensor**: LSM303DLHC
-- **Range**: ±2g, ±4g, ±8g, ±16g (configurable)
-- **Resolution**: 12-bit
-- **Sensitivity**: Up to 1mg resolution
+
+The LSM303DLHC accelerometer provides comprehensive motion detection and activity monitoring capabilities that enable contextualization of physiological measurements and detection of movement artifacts. The configurable measurement ranges of ±2g, ±4g, ±8g, and ±16g accommodate diverse activity levels from subtle postural changes to vigorous physical activity.
+
+The 12-bit resolution and sensitivity up to 1mg enable detection of subtle movements that might affect physiological measurements, allowing for sophisticated artifact detection and signal quality assessment. This motion information can be integrated with physiological signals to provide comprehensive understanding of activity-related physiological responses.
 
 **3-Axis Gyroscope**
-- **Sensor**: L3GD20
-- **Range**: ±250°/s, ±500°/s, ±2000°/s
-- **Resolution**: 16-bit
-- **Sensitivity**: 8.75 mdps/LSB
+
+The L3GD20 gyroscope sensor provides precise angular velocity measurements that complement the accelerometer data for comprehensive motion characterization. The configurable measurement ranges of ±250°/s, ±500°/s, and ±2000°/s accommodate different activity types and enable optimal sensitivity for specific applications.
+
+The 16-bit resolution and sensitivity of 8.75 mdps/LSB provide exceptional precision for detecting rotational movements that might not be captured by accelerometer measurements alone. This comprehensive motion sensing capability enables sophisticated activity recognition and movement artifact identification.
 
 **3-Axis Magnetometer**
-- **Sensor**: LSM303DLHC
-- **Range**: ±1.3, ±1.9, ±2.5, ±4.0, ±4.7, ±5.6, ±8.1 Gauss
-- **Resolution**: 12-bit
+
+The integrated LSM303DLHC magnetometer provides magnetic field measurements that enable orientation determination and navigation capabilities. The configurable measurement ranges from ±1.3 to ±8.1 Gauss accommodate diverse magnetic environments and enable optimal sensitivity for specific applications.
+
+The 12-bit resolution provides sufficient precision for orientation determination and compass functionality, enabling comprehensive spatial context for physiological measurements and supporting advanced analysis techniques that require precise orientation information.
 
 #### Secondary Sensors (Optional)
 
 **Electrocardiography (ECG)**
-- **Channels**: 2-lead configuration
-- **Bandwidth**: 0.5-40 Hz
-- **Resolution**: 12-bit
-- **Input Impedance**: >10MΩ
+
+The optional ECG capability provides comprehensive cardiac monitoring through a sophisticated 2-lead configuration that enables detailed analysis of cardiac rhythm and morphology. The signal processing bandwidth of 0.5-40 Hz encompasses the full frequency range of clinically relevant ECG components, ensuring that all important cardiac features are captured with high fidelity.
+
+The 12-bit resolution provides sufficient precision for detailed ECG analysis while maintaining reasonable data rates and power consumption. The high input impedance of >10MΩ ensures minimal signal loading and enables reliable measurements even with suboptimal electrode contact conditions.
 
 **Electromyography (EMG)**
-- **Channels**: Single differential
-- **Bandwidth**: 10-450 Hz
-- **Gain**: Programmable (1-100x)
+
+The EMG sensing capability enables monitoring of muscle activity through single differential channel configuration with sophisticated signal conditioning. The bandwidth of 10-450 Hz captures the essential frequency components of EMG signals while filtering out unwanted noise and artifacts.
+
+The programmable gain capability from 1-100x enables optimization for different muscle groups and activity levels, ensuring optimal signal quality across diverse measurement scenarios. This flexibility enables both surface EMG measurements for large muscle groups and more sensitive measurements for smaller muscles or subtle activity detection.
 
 ### 3.4 Communication Subsystem
 
 #### Bluetooth Module (RN-42)
-- **Standard**: Bluetooth 2.1 + EDR Class 2
-- **Range**: Up to 10 meters (Class 2)
-- **Data Rate**: Up to 2.1 Mbps
-- **Power Class**: Class 2 (2.5mW)
-- **Profiles**: SPP (Serial Port Profile)
+
+The integrated RN-42 Bluetooth module provides the foundation for wireless communication between the Shimmer3 GSR+ and connected Android devices. This module implements Bluetooth 2.1 + Enhanced Data Rate (EDR) Class 2 specifications, which represent an optimal balance between communication performance, power consumption, and cost-effectiveness for physiological monitoring applications.
+
+The Class 2 power specification enables reliable communication ranges up to 10 meters, which provides sufficient connectivity for most monitoring scenarios while maintaining manageable power consumption levels. This range capability ensures that users can move freely within typical indoor environments without experiencing connection interruptions, supporting naturalistic monitoring scenarios that are essential for valid physiological data collection.
+
+The maximum data rate capability of up to 2.1 Mbps provides substantial bandwidth for simultaneous transmission of multiple high-resolution physiological signals without requiring data compression or temporal resolution reduction. This high throughput capability is particularly important for multi-sensor configurations where GSR, PPG, accelerometer, and other sensor data must be transmitted simultaneously with minimal latency.
+
+The 2.5mW power class represents a carefully optimized power specification that ensures wireless communication does not dominate the device's overall power budget. This power efficiency enables extended operational periods while maintaining reliable communication links, supporting the extended monitoring sessions required for comprehensive physiological studies.
+
+The Serial Port Profile (SPP) implementation provides straightforward integration with Android applications through standard Bluetooth serial communication paradigms, simplifying application development while maintaining the reliability and performance characteristics essential for professional physiological monitoring applications.
 
 #### Communication Protocols
 ```
@@ -208,41 +241,44 @@ Physical Layer      │ 2.4 GHz ISM Band
 ### 3.5 Power Management
 
 #### Battery System
-- **Type**: Rechargeable Lithium Polymer
-- **Capacity**: 320 mAh
-- **Voltage**: 3.7V nominal
-- **Charging**: USB charging interface
-- **Runtime**: 12-24 hours depending on configuration
+
+The Shimmer3 GSR+ incorporates a sophisticated rechargeable Lithium Polymer battery system specifically designed for extended autonomous operation in wearable sensor applications. The battery system utilizes a high-capacity 320 mAh cell that provides substantial energy storage while maintaining the compact form factor essential for comfortable wearable operation. The nominal voltage of 3.7V provides optimal compatibility with the device's low-power electronic systems while ensuring stable operation throughout the discharge cycle.
+
+The integrated USB charging interface enables convenient recharging without requiring specialized equipment, using standard USB power sources commonly available in research and clinical environments. The charging system incorporates intelligent charge management that monitors battery temperature, voltage, and current to optimize charging speed while protecting battery longevity. The system provides visual charging status indicators that inform users of charging progress and completion status.
+
+Runtime performance varies between 12-24 hours depending on configuration parameters such as sampling rate, enabled sensors, wireless transmission frequency, and data processing complexity. This extended operational duration enables full-day monitoring sessions and supports longitudinal studies that require continuous data collection over extended periods. The battery system includes low-power warning mechanisms that alert connected devices when charging is required, ensuring data collection is not interrupted unexpectedly.
 
 #### Power Optimization Features
-- **Dynamic Clock Scaling**: Adaptive frequency adjustment
-- **Sensor Sleep Modes**: Individual sensor power management
-- **Bluetooth Power Management**: Automatic connection interval optimization
-- **Low Power Modes**: Multiple sleep states with wake-up triggers
+
+The comprehensive power optimization framework incorporates multiple sophisticated techniques that collectively maximize operational duration while maintaining measurement accuracy and system responsiveness. Dynamic Clock Scaling represents a fundamental power optimization technique that continuously adjusts processor frequency based on computational demands, reducing power consumption during periods of lower activity while maintaining full performance when required.
+
+Individual sensor sleep modes provide granular power management that allows unused sensors to enter low-power states while maintaining active sensors at full operational capability. This selective power management enables optimal power allocation based on specific experimental requirements and allows researchers to extend operational duration by disabling unnecessary sensing modalities.
+
+Automatic Bluetooth power management continuously optimizes connection interval parameters based on data transmission requirements and activity patterns. The system intelligently adjusts transmission power levels and connection intervals to minimize energy consumption while maintaining reliable communication links. Advanced algorithms monitor communication quality and automatically adjust parameters to maintain optimal performance with minimal power consumption.
+
+Multiple sleep states with configurable wake-up triggers enable the device to enter deep sleep modes during periods of inactivity while maintaining the ability to rapidly resume operation when required. These sleep modes significantly extend battery life during intermittent monitoring scenarios and enable the device to remain ready for extended periods without active data collection.
 
 ### 3.6 Physical Specifications
 
 #### Dimensions and Weight
-```
-Length:     65mm
-Width:      32mm  
-Height:     15mm
-Weight:     23g (including battery)
-```
+
+The Shimmer3 GSR+ maintains a carefully optimized form factor that balances comprehensive sensing capabilities with wearable comfort and user acceptance. The device dimensions of 65mm in length, 32mm in width, and 15mm in height represent the result of extensive engineering optimization that maximizes internal space utilization while maintaining a profile suitable for extended wear scenarios. The compact design ensures that the device does not interfere with normal activities or cause discomfort during extended monitoring periods.
+
+The total weight of 23 grams including the battery reflects sophisticated miniaturization techniques that pack advanced sensing and communication capabilities into a lightweight package. This weight specification has been validated through extensive user comfort studies that confirm the device can be worn comfortably for extended periods without causing fatigue or discomfort that might affect data quality or user compliance.
 
 #### Environmental Specifications
-```
-Operating Temperature:  0°C to 50°C
-Storage Temperature:    -20°C to 60°C
-Humidity:              5% to 85% non-condensing
-IP Rating:             IP54 (dust and splash resistant)
-```
+
+The environmental specifications define the operational boundaries within which the Shimmer3 GSR+ maintains full performance and measurement accuracy. The operating temperature range of 0°C to 50°C encompasses the majority of indoor and outdoor environments where physiological monitoring typically occurs, including laboratory settings, clinical environments, and normal daily activity scenarios. The storage temperature range of -20°C to 60°C provides protection during transportation and storage in more extreme conditions.
+
+The humidity specification of 5% to 85% non-condensing reflects the device's ability to operate reliably in diverse environmental conditions while maintaining measurement accuracy. This specification is particularly important for GSR measurements, which can be affected by ambient humidity conditions. The IP54 rating provides dust and splash resistance that protects the device during normal use scenarios while maintaining the access required for charging and data transfer operations.
 
 #### Mechanical Design
-- **Enclosure**: ABS plastic with gasket sealing
-- **Connectors**: Expansion dock connector
-- **Mounting**: Clip-on attachment system
-- **Indicators**: Tri-color LED status indicator
+
+The mechanical design incorporates several sophisticated features that enhance durability, usability, and measurement quality. The ABS plastic enclosure with gasket sealing provides robust protection against environmental hazards while maintaining lightweight construction. The enclosure design includes carefully engineered stress distribution patterns that protect internal components from impact and vibration damage.
+
+The expansion dock connector enables future expandability and provides access to additional sensing modalities or external accessories. This connector maintains the device's sealed environment while providing reliable electrical connections for expanded capabilities. The clip-on attachment system enables secure mounting without requiring adhesives or complicated fastening procedures, ensuring consistent sensor placement while allowing easy removal when required.
+
+The integrated tri-color LED status indicator provides immediate visual feedback about device operational status, battery level, and connectivity state. The indicator design ensures visibility under various lighting conditions while minimizing power consumption and avoiding interference with normal activities.
 
 ---
 
@@ -255,9 +291,12 @@ Galvanic Skin Response, also known as Electrodermal Activity (EDA), measures the
 #### Biological Mechanisms
 
 **Sweat Gland Activity**
-- Eccrine sweat glands are controlled by the sympathetic nervous system
-- Emotional arousal increases sweat gland activity
-- Increased moisture content raises skin conductance
+
+The physiological foundation of galvanic skin response measurements lies in the sophisticated relationship between the sympathetic nervous system and eccrine sweat gland function. Eccrine sweat glands are directly controlled by sympathetic nerve fibers that respond to emotional and psychological stimuli independently of thermal regulation mechanisms. This neural control enables GSR measurements to serve as objective indicators of psychological arousal and emotional state changes.
+
+Emotional arousal triggers increased activity in sympathetic nerve pathways that innervate eccrine sweat glands throughout the body, particularly in the hands and fingers where GSR measurements are typically obtained. This increased neural activity stimulates sweat gland secretion even when thermal regulation is not required, resulting in increased skin moisture content that directly affects electrical conductance measurements.
+
+The relationship between increased moisture content and elevated skin conductance forms the fundamental basis for GSR as a physiological measurement technique. As sweat gland activity increases in response to emotional or psychological stimuli, the resulting increase in skin moisture creates a more conductive pathway for electrical current, enabling sensitive detection of autonomic nervous system activation through non-invasive skin conductance measurements.
 
 **Neural Pathways**
 ```
@@ -330,14 +369,16 @@ fun setGSRRange(deviceId: String, range: Int) {
 #### Temporal Components
 
 **Tonic Component (SCL - Skin Conductance Level)**
-- Slow-changing baseline level
-- Time constant: minutes to hours
-- Represents general arousal state
+
+The tonic component of galvanic skin response represents the slowly-changing baseline conductance level that reflects the overall state of sympathetic nervous system activation. This component exhibits slow temporal dynamics with time constants measured in minutes to hours, making it particularly useful for assessing sustained changes in arousal state that occur over extended periods.
+
+The SCL component provides valuable information about general arousal state and individual differences in sympathetic nervous system reactivity. Elevated baseline conductance levels may indicate chronic stress, heightened alertness, or individual predisposition toward sympathetic activation, while lower baseline levels may reflect relaxed states or reduced sympathetic tone.
 
 **Phasic Component (SCR - Skin Conductance Response)**
-- Rapid changes in response to stimuli
-- Time constant: 1-5 seconds
-- Event-related responses
+
+The phasic component represents rapid changes in skin conductance that occur in direct response to discrete stimuli or events. These responses exhibit much faster temporal dynamics with time constants typically ranging from 1-5 seconds, enabling precise temporal correlation with specific stimuli or behavioral events.
+
+SCR measurements provide detailed information about event-related autonomic responses and enable researchers to examine the temporal dynamics of sympathetic activation in response to specific psychological or physiological challenges. The rapid response characteristics make this component particularly valuable for studying stimulus-response relationships and real-time emotional processing.
 
 #### Mathematical Model
 ```
@@ -355,24 +396,28 @@ t(i) = onset time of response i
 ### 4.5 Electrode Technology
 
 #### Electrode Specifications
-- **Material**: Ag/AgCl (Silver/Silver Chloride)
-- **Size**: 8mm diameter active area
-- **Impedance**: <5kΩ at 1kHz
-- **Stability**: Long-term drift <1%/hour
+
+The electrode system represents a critical component of the GSR measurement infrastructure, where the quality and characteristics of the skin-electrode interface directly impact measurement accuracy and signal quality. The Shimmer3 GSR+ utilizes advanced Ag/AgCl (Silver/Silver Chloride) electrodes that provide optimal electrical characteristics for physiological signal acquisition.
+
+The Silver/Silver Chloride electrode composition provides excellent electrochemical stability and minimal polarization effects that could introduce measurement artifacts. This electrode chemistry has been extensively validated for physiological measurements and provides consistent performance across diverse skin conditions and measurement durations.
+
+The 8mm diameter active area represents an optimal balance between signal quality and user comfort, providing sufficient contact area for stable electrical connection while maintaining a compact form factor suitable for extended wear. The electrode impedance specification of less than 5kΩ at 1kHz ensures minimal signal loading and optimal signal-to-noise ratio for high-quality GSR measurements.
+
+The long-term stability specification of less than 1% drift per hour ensures that extended monitoring sessions maintain measurement accuracy without requiring frequent recalibration. This stability characteristic is essential for longitudinal studies and continuous monitoring applications where measurement consistency over time is critical for valid data interpretation.
 
 #### Placement Guidelines
-```
-Optimal Placement Sites:
-1. Index and middle finger (distal phalanges)
-2. Palm and wrist (thenar and hypothenar eminences)
-3. Foot sole (for long-term monitoring)
 
-Considerations:
-- Skin preparation (cleaning, slight abrasion)
-- Electrode gel application
-- Consistent pressure and contact
-- Temperature stabilization period
-```
+Optimal electrode placement is essential for obtaining high-quality GSR measurements that accurately reflect physiological activity while minimizing artifacts and measurement variability. The selection of appropriate measurement sites must consider factors including sweat gland density, mechanical stability, user comfort, and measurement objectives.
+
+The distal phalanges of the index and middle fingers represent the most commonly used measurement sites due to their high eccrine sweat gland density and minimal interference from physical activities. These sites provide excellent signal quality and are easily accessible for electrode placement, making them ideal for controlled laboratory measurements and short-term monitoring scenarios.
+
+Palm and wrist locations, specifically the thenar and hypothenar eminences, offer alternative placement sites that may be more suitable for extended monitoring periods or activities where finger electrode placement is impractical. These sites provide good signal quality while allowing greater freedom of hand movement during monitoring sessions.
+
+Foot sole placement enables specialized applications requiring long-term monitoring where hand-based electrode placement is not feasible. While this placement site may provide lower signal amplitude, it offers excellent mechanical stability for extended monitoring applications.
+
+Proper skin preparation procedures are essential for establishing optimal electrode contact and ensuring measurement quality. Skin cleaning removes oils and debris that could impair electrical contact, while slight abrasion increases conductivity by removing dead skin cells and improving electrode-skin interface characteristics.
+
+Electrode gel application provides consistent electrical coupling between the electrode and skin surface, reducing contact impedance and improving signal quality. Consistent pressure and contact ensure stable electrode placement throughout the measurement period, while temperature stabilization allows the measurement site to reach thermal equilibrium before data collection begins.
 
 ### 4.6 Data Quality Metrics
 
@@ -1315,20 +1360,72 @@ class ConnectionLifecycleManager @Inject constructor(
 
 The Shimmer Java Android API provides a comprehensive framework for integrating Shimmer3 GSR+ devices with Android applications. The API follows a modular architecture designed for scalability, maintainability, and ease of use.
 
-#### Core API Components
+**Official API Repository**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+
+#### Core API Components from Official Shimmer SDK
+
+The integration leverages key classes from the official Shimmer Android API:
+
+```java
+// Core Shimmer Classes (from official repository)
+import com.shimmerresearch.android.Shimmer;
+import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid;
+import com.shimmerresearch.driver.ObjectCluster;
+import com.shimmerresearch.driver.Configuration;
+
+// Main API Components
+class ShimmerBluetoothManagerAndroid {
+    // Device discovery and connection management
+    public void connectShimmerDevice(String bluetoothAddress)
+    public void startStreaming(String bluetoothAddress)
+    public void stopStreaming(String bluetoothAddress)
+    public void startSDLogging(String bluetoothAddress)
+    public void stopSDLogging(String bluetoothAddress)
+}
+
+class Shimmer {
+    // Individual device control and configuration
+    public void writeEnabledSensors(long enabledSensors)
+    public void writeSamplingRate(double samplingRate)
+    public void writeGSRRange(int gsrRange)
+    public void writeAccelRange(int accelRange)
+    public ObjectCluster getLatestReceivedObjectCluster()
+}
+
+class ObjectCluster {
+    // Data container for sensor readings
+    public Collection<FormatCluster> getCollectionOfFormatClusters(String objectClusterName)
+    public double getFormatClusterValue(String channelName, String formatName)
+    public String[] getNames()
+}
+```
+
+#### Enhanced Integration Layer
+
+Our implementation extends the official API with additional functionality:
 
 ```kotlin
-// Primary API Entry Point
-class ShimmerManager {
-    private val bluetoothAdapter: BluetoothAdapter
-    private val deviceManager: ShimmerDeviceManager
-    private val dataProcessor: ShimmerDataProcessor
-    private val connectionManager: ConnectionManager
+// Custom integration layer built on official Shimmer API
+class ShimmerRecorder @Inject constructor(
+    private val shimmerBluetoothManager: ShimmerBluetoothManagerAndroid,
+    private val sessionManager: SessionManager,
+    private val logger: Logger
+) {
+    // Enhanced connection management with retry logic
+    suspend fun connectSingleDevice(
+        macAddress: String,
+        deviceName: String,
+        connectionType: ShimmerBluetoothManagerAndroid.BT_TYPE
+    ): Boolean
     
-    fun initialize(context: Context): Result<Unit>
-    fun scanForDevices(): Flow<ShimmerDevice>
-    fun connectToDevice(device: ShimmerDevice): Result<ShimmerConnection>
-    fun getConnectedDevices(): List<ShimmerConnection>
+    // Multi-device management capabilities
+    suspend fun connectMultipleDevices(deviceConfigs: List<DeviceConfig>): List<ConnectionResult>
+    
+    // Session-based data recording
+    suspend fun startSessionRecording(sessionId: String): Boolean
+    
+    // Real-time data quality assessment
+    fun getDataQualityMetrics(deviceId: String): DataQualityMetrics?
 }
 ```
 
@@ -2581,8 +2678,10 @@ fun `should handle complete data collection workflow`() = runTest {
 **Issue: Device Not Discovered During Scanning**
 
 *Symptoms:*
-- Device doesn't appear in scan results
-- Bluetooth scanning completes without finding Shimmer devices
+
+Common symptoms of device discovery failures include situations where the target Shimmer device doesn't appear in scan results despite being powered on and within communication range. Users may experience scenarios where Bluetooth scanning processes complete successfully but fail to identify any Shimmer devices, even when multiple devices are present and functioning normally.
+
+These symptoms often indicate underlying issues with the Android device's Bluetooth configuration, permission settings, or environmental factors that interfere with device discovery protocols. The diagnostic process must systematically evaluate each potential cause to identify and resolve the underlying problem.
 
 *Diagnostic Steps:*
 ```kotlin
@@ -2629,9 +2728,10 @@ class ConnectionDiagnostics {
 **Issue: Poor Signal Quality or Artifacts**
 
 *Symptoms:*
-- High noise levels in GSR signal
-- Frequent signal dropouts
-- Unrealistic physiological values
+
+Signal quality issues manifest through various observable characteristics that indicate compromised measurement integrity. High noise levels in GSR signals appear as excessive signal variability that obscures physiological responses and reduces measurement sensitivity. Frequent signal dropouts create data gaps that interrupt continuous monitoring and compromise analysis validity.
+
+Unrealistic physiological values may indicate sensor calibration problems, electrode contact issues, or environmental interference that affects measurement accuracy. These symptoms require systematic evaluation to identify the underlying causes and implement appropriate corrective measures that restore optimal signal quality.
 
 *Diagnostic Algorithm:*
 ```kotlin
@@ -2905,28 +3005,32 @@ class ClinicalResearchFramework {
 The Shimmer3 GSR+ platform represents a sophisticated solution for physiological data collection and analysis in Android applications. This comprehensive documentation has covered:
 
 #### Technical Excellence
-- **Robust Architecture**: Multi-layer design ensuring scalability and maintainability
-- **Advanced Analytics**: Sophisticated signal processing and machine learning integration
-- **Performance Optimization**: Efficient memory management and computational optimization
-- **Error Resilience**: Comprehensive error handling and automated recovery mechanisms
+
+The technical foundation of the Shimmer3 GSR+ platform demonstrates exceptional engineering sophistication through its robust architecture, which implements a multi-layer design approach that ensures both scalability and maintainability across diverse application scenarios. This architectural approach enables developers to build upon a solid foundation while maintaining flexibility for future enhancements and customizations.
+
+Advanced analytics capabilities incorporate sophisticated signal processing algorithms and machine learning integration that enable real-time physiological analysis and pattern recognition. These analytics tools provide developers with powerful capabilities for extracting meaningful insights from complex physiological data streams, supporting both basic monitoring applications and advanced research scenarios.
+
+Performance optimization throughout the platform reflects careful attention to efficient memory management and computational optimization strategies that enable reliable operation even on resource-constrained mobile devices. The comprehensive error resilience framework includes robust error handling mechanisms and automated recovery procedures that maintain system stability under challenging operational conditions.
 
 #### Development Best Practices
-- **Clean Architecture**: MVVM pattern with reactive programming principles
-- **Testing Strategy**: Comprehensive unit, integration, and end-to-end testing
-- **Code Quality**: Modern Kotlin practices with dependency injection
-- **Documentation**: Extensive inline documentation and API references
+
+The development framework emphasizes clean architecture principles that implement the MVVM pattern with reactive programming paradigms, creating maintainable and testable code structures that facilitate long-term project sustainability. This architectural approach ensures that applications remain manageable and extensible as they grow in complexity and functionality.
+
+Comprehensive testing strategies encompass unit testing, integration testing, and end-to-end testing approaches that ensure code quality and reliability across all system components. Modern Kotlin development practices combined with dependency injection frameworks create robust, maintainable codebases that support professional-grade application development.
+
+Extensive inline documentation and comprehensive API references provide developers with the information needed to effectively utilize platform capabilities while reducing development time and minimizing integration challenges.
 
 #### Research Enablement
-- **Scientific Rigor**: Proper calibration procedures and data validation
-- **Reproducibility**: Standardized data formats and processing pipelines
-- **Scalability**: Support for multi-device, multi-participant studies
-- **Compliance**: Privacy protection and regulatory compliance frameworks
+
+Scientific rigor permeates all aspects of the platform through proper calibration procedures and comprehensive data validation frameworks that ensure measurement accuracy and research integrity. Standardized data formats and processing pipelines support reproducibility requirements essential for scientific research and enable reliable comparison of results across different studies and research groups.
+
+Scalability features enable support for multi-device, multi-participant studies that require coordinated data collection from multiple physiological sensors operating simultaneously. Privacy protection and regulatory compliance frameworks ensure that research applications meet ethical and legal requirements for human subjects research.
 
 #### Future-Ready Design
-- **Extensibility**: Modular architecture supporting new sensors and algorithms
-- **Adaptability**: Configuration-driven systems for diverse use cases
-- **Innovation**: Framework for integrating emerging technologies
-- **Sustainability**: Long-term maintenance and evolution strategies
+
+Extensibility features throughout the platform support modular architecture designs that accommodate new sensors and algorithms as they become available, ensuring that investments in application development remain valuable as technology continues to evolve. Configuration-driven systems provide adaptability for diverse use cases without requiring code modifications or system rebuilds.
+
+Innovation frameworks facilitate integration of emerging technologies and research developments, enabling the platform to evolve with advancing scientific understanding and technological capabilities. Sustainability considerations ensure long-term maintenance and evolution strategies that protect development investments and support continuing platform enhancement.
 
 The integration of Shimmer3 GSR+ with Android applications opens unprecedented opportunities for physiological computing research, clinical applications, and human-centered technology development. The robust technical foundation presented in this documentation ensures that developers and researchers can build reliable, scalable, and innovative applications that push the boundaries of what's possible in wearable technology and physiological sensing.
 
@@ -2940,8 +3044,10 @@ As the field continues to evolve, this platform will serve as a cornerstone for 
 
 1. **Shimmer Official Documentation**
    - Shimmer3 GSR+ User Manual v3.2
-   - Shimmer Java Android API Reference
+   - **Shimmer Java Android API Reference**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+   - **Shimmer Android API Documentation**: [https://github.com/ShimmerEngineering/ShimmerAndroidAPI](https://github.com/ShimmerEngineering/ShimmerAndroidAPI)
    - Bluetooth Communication Protocol Specification
+   - **Official Shimmer Engineering Resources**: [https://github.com/ShimmerEngineering](https://github.com/ShimmerEngineering)
 
 2. **Academic References**
    - Boucsein, W. (2012). *Electrodermal Activity*. Springer Science & Business Media.
@@ -2982,9 +3088,82 @@ As the field continues to evolve, this platform will serve as a cornerstone for 
 
 ### 16.4 Code Examples and Repositories
 
-- **Official Shimmer Android Examples**: [GitHub Repository Link]
-- **Community Contributions**: [Community Forum Link]
-- **Research Implementations**: [Academic Code Repository]
+1. **Official Shimmer Engineering Repositories**
+   - **Shimmer Android API**: [https://github.com/ShimmerEngineering/ShimmerAndroidAPI](https://github.com/ShimmerEngineering/ShimmerAndroidAPI)
+   - **Shimmer Java Android API**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+   - **Shimmer Base Documentation**: [https://github.com/ShimmerEngineering/shimmer-base-api](https://github.com/ShimmerEngineering/shimmer-base-api)
+
+2. **Community Resources**
+   - **Shimmer Support Forum**: [https://www.shimmersensing.com/support/](https://www.shimmersensing.com/support/)
+   - **Shimmer Developer Community**: [https://github.com/ShimmerEngineering](https://github.com/ShimmerEngineering)
+   - **Research Implementations**: [Academic Code Repository]
+
+3. **Integration Examples**
+   - **Android App Implementation**: `AndroidApp/src/main/java/com/multisensor/recording/`
+   - **Shimmer Integration Guide**: `AndroidApp/SHIMMER_INTEGRATION_GUIDE.md`
+   - **Enhanced Features**: `AndroidApp/IMPROVEMENTS_SUMMARY.md`
+
+### 16.5 Practical Implementation Examples
+
+This repository contains a complete implementation of Shimmer3 GSR+ integration within the Bucika GSR Android application, serving as a comprehensive reference for developers:
+
+#### Android Application Structure
+```
+AndroidApp/
+├── src/main/java/com/multisensor/recording/
+│   ├── recording/
+│   │   ├── ShimmerRecorder.kt                    # Main Shimmer integration class
+│   │   ├── DeviceStatusTracker.kt                # Device status monitoring
+│   │   └── PCCommunicationHandler.kt             # Communication management
+│   ├── ui/
+│   │   ├── components/                           # UI components for Shimmer control
+│   │   └── MainViewModel.kt                      # ViewModel with Shimmer state management
+│   └── data/
+│       ├── SensorSample.kt                       # Data models for sensor readings
+│       └── SessionManager.kt                     # Session and file management
+├── SHIMMER_INTEGRATION_GUIDE.md                  # Developer integration guide
+├── IMPROVEMENTS_SUMMARY.md                       # Feature enhancements documentation
+└── validate_shimmer_integration.sh               # Integration validation script
+```
+
+#### Key Implementation Features
+
+1. **Multi-Device Management**: The implementation supports simultaneous connection and data collection from multiple Shimmer3 GSR+ devices
+2. **Real-Time Data Processing**: ObjectCluster-based data processing with real-time quality metrics
+3. **Session Integration**: Seamless integration with the broader multi-sensor recording system
+4. **Error Recovery**: Robust error handling with automatic reconnection capabilities
+5. **Data Quality Monitoring**: Real-time signal quality assessment and battery monitoring
+
+#### Getting Started with the Implementation
+
+```kotlin
+// Example usage from the Android app
+val shimmerRecorder = ShimmerRecorder(context, sessionManager, logger)
+shimmerRecorder.initialize()
+
+// Connect to device
+val connected = shimmerRecorder.connectSingleDevice(
+    macAddress = "00:06:66:66:96:86",
+    deviceName = "Shimmer3-GSR+",
+    connectionType = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
+)
+
+// Configure sensors
+shimmerRecorder.setEnabledChannels(deviceId, setOf(
+    SensorChannel.GSR,
+    SensorChannel.PPG,
+    SensorChannel.ACCEL_X,
+    SensorChannel.ACCEL_Y,
+    SensorChannel.ACCEL_Z
+))
+
+// Start data collection
+shimmerRecorder.startStreaming()
+```
+
+For detailed implementation guidance, developers should consult the comprehensive developer guide located at `AndroidApp/SHIMMER_INTEGRATION_GUIDE.md`, which provides step-by-step implementation instructions and best practices for integrating Shimmer3 GSR+ devices into Android applications. The comprehensive test suite examples in `AndroidApp/src/test/` demonstrate proper testing approaches and provide validated examples of correct API usage.
+
+Additional technical documentation and advanced API features are available through the official Shimmer repositories, which provide access to the latest SDK updates, community-contributed examples, and detailed technical specifications that complement this documentation.
 
 ---
 
