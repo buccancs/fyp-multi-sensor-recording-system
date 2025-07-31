@@ -1,0 +1,685 @@
+{
+  "timestamp": "2025-07-31T02:20:14.546795",
+  "scan_duration_seconds": 0.697295,
+  "total_issues": 67,
+  "critical_issues": 0,
+  "high_issues": 8,
+  "medium_issues": 59,
+  "low_issues": 0,
+  "issues": [
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/deployment_automation.py",
+      "line_number": 156,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/deployment_automation.py",
+      "line_number": 223,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/deployment_automation.py",
+      "line_number": 387,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/deployment_automation.py",
+      "line_number": 409,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/deployment_automation.py",
+      "line_number": 421,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of eval() function",
+      "description": "Potentially dangerous pattern found: Use of eval() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": 152,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": 153,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "code_security",
+      "title": "Use of exec() function",
+      "description": "Potentially dangerous pattern found: Use of exec() function",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": 272,
+      "recommendation": "Review usage and implement proper input validation/sanitization",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/application.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/real_time_calibration_feedback.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/shimmer_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/stimulus_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/shimmer_pc_app.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/performance_optimizer.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/ntp_time_server.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/calibration_quality_assessment.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/main_backup.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/tests/test_enhanced_logging.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/tests/test_simple_networking.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/tests/test_enhanced_networking.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/tests/test_main.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/tests/test_json_socket_server.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/tests/test_calibration_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/calibration/calibration_result.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/calibration/calibration_processor.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/calibration/calibration_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/calibration/calibration.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/deployment_automation.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/performance_benchmark.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak hash algorithm MD5",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak hash algorithm SHA1",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm RC4",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/production/security_scanner.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/session/session_logger.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/session/session_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/session/session_recovery.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/protocol/__init__.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/protocol/schema_utils.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/protocol/config_loader.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/protocol/handshake_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/config/configuration_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/config/webcam_config.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/utils/logger.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/utils/logging_config.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/webcam/webcam_capture.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/gui/main_window.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/gui/calibration_dialog.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/gui/stimulus_controller.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/gui/session_review_dialog.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/gui/main_controller.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_stimulus_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/quick_test_videos.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/fake_device.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/comprehensive_video_tests.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_milestone6.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/create_test_videos.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_python_android_integration.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_stimulus_presentation.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_config_schema_integrity.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_calibration.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_enhanced_stimulus_presentation.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/tests/test_hardware_failure_recovery.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/network/__init__.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/network/device_client.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/network/android_device_manager.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/network/pc_server.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "cryptography",
+      "title": "Weak cryptographic algorithm",
+      "description": "Usage of weak algorithm: Weak encryption algorithm DES",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/network/device_server.py",
+      "line_number": null,
+      "recommendation": "Use strong cryptographic algorithms (AES, SHA-256, etc.)",
+      "cve_id": null
+    }
+  ],
+  "scanned_files": 92,
+  "recommendations": [
+    "Use modern cryptographic algorithms and implement proper key management"
+  ]
+}
