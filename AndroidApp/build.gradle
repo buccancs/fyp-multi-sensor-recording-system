@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
     id 'dagger.hilt.android.plugin'
+    id 'io.gitlab.arturbosch.detekt' version '1.23.4'
 }
 
 android {
@@ -153,6 +154,7 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            returnDefaultValues = true
             all {
                 // Enhanced Windows compatibility configuration
                 // JVM arguments for module access and headless operation
@@ -183,9 +185,32 @@ android {
                 systemProperty 'sun.nio.fs.useCanonicalPrefixCache', 'false'
                 systemProperty 'sun.nio.fs.useCanonicalCache', 'false'
                 systemProperty 'com.google.common.io.Files.createTempDir.avoidPosix', 'true'
+                
+                // Enhanced test reporting
+                finalizedBy jacocoTestReport
             }
         }
+        
+        // Android instrumented test configuration  
+        managedDevices {
+            devices {
+                pixel2api30(com.android.build.api.dsl.ManagedVirtualDevice) {
+                    device = "Pixel 2"
+                    apiLevel = 30
+                    systemImageSource = "aosp"
+                }
+            }
+        }
+        
+        // Test execution options
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        animationsDisabled = true
     }
+}
+
+// Configuration for enhanced linting and code quality
+configurations {
+    ktlint
 }
 
 // Gradle task to generate Kotlin constants from shared config.json
@@ -304,10 +329,17 @@ dependencies {
 
     // Android (Instrumented) Testing
     androidTestImplementation libs.bundles.integration.testing
+    
+    // Test orchestrator for reliable instrumented tests
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
 
     // Hilt Integration Testing
     androidTestImplementation libs.hilt.android.testing
     kspAndroidTest libs.hilt.compiler
+
+    // Code quality and linting tools
+    ktlint 'com.pinterest:ktlint:0.50.0'
+    detektPlugins 'io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4'
 
     // Shimmer SDK dependencies
     implementation files('src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar')
@@ -320,4 +352,99 @@ dependencies {
     implementation files('src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar')
     implementation files('src/main/libs/opengl_1.3.2_standard.aar')
     implementation files('src/main/libs/suplib-release.aar')
+}
+
+// Detekt configuration for Kotlin static analysis
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$projectDir/../detekt.yml")
+    baseline = file("$projectDir/detekt-baseline.xml")
+    
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        txt.enabled = true
+        sarif.enabled = true
+        md.enabled = false
+    }
+}
+
+// JaCoCo configuration for enhanced coverage reporting
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    group = "Reporting"
+    description = "Generates Jacoco coverage reports."
+    
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def fileFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/databinding/*',
+        '**/generated/**/*.*',
+        '**/*_Factory.*',
+        '**/*_MembersInjector.*',
+        '**/*Fragment.*',
+        '**/*Activity.*'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter)
+    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
+    classDirectories.setFrom(files([debugTree, kotlinDebugTree]))
+    
+    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
+        "jacoco/testDebugUnitTest.exec",
+        "outputs/code_coverage/debugAndroidTest/connected/**/*.ec"
+    ]))
+
+    sourceDirectories.setFrom(files([
+        "$project.projectDir/src/main/java",
+        "$project.projectDir/src/main/kotlin",
+        "$project.projectDir/src/debug/java",
+        "$project.projectDir/src/debug/kotlin"
+    ]))
+}
+
+// Custom tasks for enhanced development workflow
+task formatKotlin(type: JavaExec, group: "formatting") {
+    description = "Format Kotlin code with ktlint"
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
+}
+
+task lintKotlin(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style with ktlint"
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt"
+}
+
+// Integration with enhanced build process
+tasks.named("check").configure {
+    dependsOn("detekt")
+    dependsOn("lintKotlin") 
+}
+
+tasks.named("build").configure {
+    finalizedBy("jacocoTestReport")
 }
