@@ -199,7 +199,7 @@ class CardSectionLayoutTest {
         // Test that layout parameters are set correctly
         val layoutParams = cardSectionLayout.layoutParams
         
-        // Layout params might be null if not added to a parent, so we test after setting style
+        // Layout params might be null if not added to a parent, so I test after setting style
         cardSectionLayout.setCardStyle(CardSectionLayout.CardStyle.DEFAULT)
         
         // The component should handle layout params internally

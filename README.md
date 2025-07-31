@@ -705,38 +705,66 @@ Run the validation script for comprehensive environment checking:
 - **Kotlin:** 2.1.0
 - **Python Integration:** ru.vyarus.use-python plugin 3.0.0
 
-## 📱 Android App Features
+## 📱 Android Application
 
-### Current Implementation (Milestone 1)
-- ✅ Project structure and build configuration
-- ✅ Essential permissions and manifest setup
-- ✅ Dependency injection setup (Hilt)
-- ✅ Camera2 API dependencies
+The Android application serves as a mobile data collection node, providing comprehensive recording capabilities for video, thermal imaging, and physiological sensor data.
 
-### Planned Features (Milestone 2+)
-- 🔄 4K RGB video recording with RAW image capture
-- 🔄 Thermal camera integration (Topdon SDK)
-- 🔄 Shimmer3 GSR+ sensor Bluetooth communication
-- 🔄 Real-time preview streaming to PC
-- 🔄 Socket-based remote control interface
-- 🔄 Local data storage and session management
+### Core Features
+- **4K Video Recording**: High-quality video capture using Camera2 API with configurable resolution and frame rates
+- **RAW Image Capture**: Simultaneous RAW image capture for advanced image processing and calibration
+- **Thermal Camera Integration**: Real-time thermal imaging using Topdon TC001 cameras via USB-C OTG
+- **Shimmer3 GSR+ Integration**: Bluetooth communication with physiological sensors for galvanic skin response measurement
+- **Real-time Preview Streaming**: Live video preview transmission to PC controller for monitoring
+- **Socket-based Remote Control**: Network-based command interface for synchronized multi-device recording
+- **Local Data Storage**: Comprehensive session management with automatic file organization and metadata generation
+- **Hand Segmentation**: MediaPipe-based hand landmark detection for region-of-interest analysis
 
-## 🖥️ Desktop Controller Features
+### Technical Implementation
+- **Language**: Kotlin with Android Views and ViewBinding
+- **Camera**: Camera2 API for low-level camera control and dual capture modes
+- **Networking**: OkHttp for socket communication with automatic reconnection
+- **Dependency Injection**: Hilt for component management and testing
+- **Concurrency**: Kotlin Coroutines for asynchronous operations
+- **Architecture**: Clean Architecture with Repository pattern and MVVM
 
-### Current Implementation (Milestone 1)
-- ✅ PyQt5 GUI with device status monitoring
-- ✅ Recording control interface (start/stop/calibration)
-- ✅ System logging and status updates
-- ✅ Extensible architecture for sensor integration
+## 🖥️ Desktop Controller
 
-### Planned Features (Milestone 3+)
-- 🔄 Real device communication protocols
-- 🔄 USB webcam capture and recording
-- 🔄 Camera calibration algorithms (intrinsic/extrinsic)
-- 🔄 Stimulus presentation system
-- 🔄 Data synchronization and export tools
+The Python desktop application acts as the central orchestrator, coordinating multiple Android devices and USB cameras for synchronized data collection.
 
-## 🔧 Configuration
+### Core Features
+- **Multi-Device Coordination**: Simultaneous control of multiple Android smartphones and USB webcams
+- **Real-time Monitoring**: Live status monitoring with device health indicators and preview streaming
+- **Recording Session Management**: Centralized start/stop control with automatic session metadata generation
+- **USB Webcam Integration**: DirectShow/V4L2 camera capture for stationary high-quality video recording
+- **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
+- **Stimulus Presentation**: Integrated experimental stimulus controller for research applications
+- **Data Synchronization**: Temporal alignment of multi-modal data streams with microsecond precision
+- **Export and Analysis Tools**: Automated data processing and export for analysis workflows
+
+### Technical Implementation
+- **Language**: Python 3.8+ with modern scientific computing libraries
+- **GUI Framework**: PyQt5 5.15.7 for cross-platform desktop interface
+- **Computer Vision**: OpenCV 4.8.0.74 for camera operations and calibration algorithms
+- **Numerical Computing**: NumPy 1.24.3 for high-performance data processing
+- **Networking**: WebSockets and TCP sockets for device communication
+- **Image Processing**: Pillow for image manipulation and format conversion
+
+## 🔧 Configuration and Setup
+
+### Environment Management
+The project uses Conda for Python environment management and Gradle for overall build coordination. The automated setup scripts handle complete environment configuration:
+
+```bash
+# Complete automated setup (recommended)
+python3 tools/development/setup.py
+
+# Platform-specific setup
+# Windows:
+tools/development/setup_dev_env.ps1
+
+# Linux/macOS:
+tools/development/setup.sh
+```
 
 ### Python Dependencies
 The Python environment is managed automatically by Gradle. Dependencies are specified in `PythonApp/build.gradle`:
@@ -772,7 +800,7 @@ python tools/validate_data_schemas.py --session PythonApp/recordings/session_202
 
 ## Contributing
 
-We welcome contributions to improve the multi-sensor recording system:
+I welcome contributions to improve the multi-sensor recording system:
 
 1. Fork the repository and create a feature branch
 2. Make your changes following the established coding standards

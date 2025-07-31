@@ -312,7 +312,7 @@ class NetworkOptimizer:
         """Get detailed network usage metrics"""
         net_io = psutil.net_io_counters()
 
-        # Calculate bandwidth if we have history
+        # Calculate bandwidth if I have history
         bandwidth_mbps = 0.0
         if self.bandwidth_history:
             last_measurement = self.bandwidth_history[-1]

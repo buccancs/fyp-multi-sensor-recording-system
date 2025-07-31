@@ -664,7 +664,7 @@ class ThermalRecorder
                         return@withContext false
                     }
 
-                    // Check if we have current frame data
+                    // Check if I have current frame data
                     if (imageSrc.isEmpty()) {
                         logger.error("No thermal frame data available for calibration")
                         return@withContext false

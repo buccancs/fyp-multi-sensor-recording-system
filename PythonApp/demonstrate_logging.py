@@ -39,7 +39,7 @@ def demonstrate_enhanced_logging():
     @performance_timer("demonstration_operation")
     @log_function_entry
     def simulate_complex_operation():
-        """Simulate a complex operation that we want to monitor."""
+        """Simulate a complex operation that I want to monitor."""
         logger.info("Performing complex calculation...")
         time.sleep(0.1)  # Simulate work
         

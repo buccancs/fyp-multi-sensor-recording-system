@@ -139,7 +139,7 @@ class EnhancedRemoteDevice:
             return (time.time() - self.last_heartbeat) < self.heartbeat_timeout
 
     def should_send_frame(self) -> bool:
-        """Check if we should send a preview frame based on rate limiting."""
+        """Check if I should send a preview frame based on rate limiting."""
         current_time = time.time()
         frame_interval = 1.0 / self.max_frame_rate
         

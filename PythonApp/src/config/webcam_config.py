@@ -169,7 +169,7 @@ class CameraDetector:
                     error_message="Camera not accessible",
                 )
 
-            # Test if we can actually read frames
+            # Test if I can actually read frames
             ret, frame = cap.read()
             if not ret or frame is None:
                 return CameraInfo(

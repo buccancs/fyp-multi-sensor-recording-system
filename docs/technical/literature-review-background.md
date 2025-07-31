@@ -270,11 +270,11 @@ While contactless monitoring of heart rate, respiration, and blood pressure has 
 
 **Pioneering Work:** Jo et al. (2021) conducted the first systematic study of contactless GSR estimation using near-infrared imaging. Their work recorded participants' faces with an infrared camera while simultaneously measuring finger GSR under visual stress stimuli. They found significant correlations between facial image intensities and GSR sensor output, suggesting that sweat-related changes in facial regions encode GSR information.
 
-**Methodological Limitations:** The Jo et al. study, while groundbreaking, had several limitations that our work addresses:
-- Limited to facial imaging (our work uses hand-based imaging for higher sweat gland density)
-- Single-modality approach (our work combines RGB and thermal)
-- Limited validation (our work includes comprehensive cross-subject validation)
-- No real-time implementation (our work provides real-time prediction capability)
+**Methodological Limitations:** The Jo et al. study, while groundbreaking, had several limitations that my work addresses:
+- Limited to facial imaging (my work uses hand-based imaging for higher sweat gland density)
+- Single-modality approach (my work combines RGB and thermal)
+- Limited validation (my work includes comprehensive cross-subject validation)
+- No real-time implementation (my work provides real-time prediction capability)
 
 **Physiological Rationale:** The limited research in contactless GSR can be attributed to several factors:
 - GSR changes are more subtle than cardiac or respiratory signals

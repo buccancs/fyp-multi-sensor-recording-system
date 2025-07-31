@@ -347,7 +347,7 @@ object PermissionTool {
                     if (backgroundLocationPermissions.isNotEmpty()) {
                         requestPermissions(context, backgroundLocationPermissions, "Background Location Permissions", this)
                     } else {
-                        // No background location permissions needed, we're done
+                        // No background location permissions needed, I'm done
                         originalCallback.onAllGranted()
                     }
                 }

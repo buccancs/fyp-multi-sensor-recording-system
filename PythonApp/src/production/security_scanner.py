@@ -433,7 +433,7 @@ class SecurityScanner:
         """Check Python dependencies for vulnerabilities"""
         try:
             # This would typically use a vulnerability database
-            # For now, we'll check for some known problematic packages
+            # For now, I'll check for some known problematic packages
             content = requirements_file.read_text()
             
             vulnerable_packages = [

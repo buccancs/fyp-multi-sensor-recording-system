@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-# Add the src directory to the path so we can import our modules
+# Add the src directory to the path so I can import my modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from protocol.config_loader import ConfigManager

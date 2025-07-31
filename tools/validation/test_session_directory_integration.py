@@ -149,7 +149,7 @@ def test_main_window_integration():
     print("\nTesting MainWindow Integration...")
     
     try:
-        # This test requires PyQt5, so we'll mock it if not available
+        # This test requires PyQt5, so I'll mock it if not available
         try:
             from PyQt5.QtWidgets import QApplication
             from gui.main_window import MainWindow

@@ -514,7 +514,7 @@ class TestSessionLoggerIntegration(unittest.TestCase):
         print("[DEBUG_LOG] Testing SessionManager integration...")
 
         # This test would verify that SessionLogger works alongside SessionManager
-        # For now, we'll just verify the SessionLogger can be imported and used
+        # For now, I'll just verify the SessionLogger can be imported and used
         logger = get_session_logger()
         self.assertIsNotNone(logger)
 

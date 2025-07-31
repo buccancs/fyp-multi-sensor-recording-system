@@ -110,7 +110,7 @@ class TestEnhancedLogging:
         with open(log_dir / "structured.log", 'r') as f:
             lines = f.readlines()
             
-        # Find our test message
+        # Find my test message
         test_entry = None
         for line in lines:
             try:

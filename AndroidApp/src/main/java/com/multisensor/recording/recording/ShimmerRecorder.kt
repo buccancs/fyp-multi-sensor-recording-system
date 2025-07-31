@@ -561,7 +561,7 @@ class ShimmerRecorder
                             logger.info("  Type: ${device.type}")
                             logger.info("  Bond State: ${device.bondState}")
 
-                            // Check if this device matches our criteria
+                            // Check if this device matches my criteria
                             val nameContainsShimmer = device.name?.contains("Shimmer", ignoreCase = true) == true
                             val nameContainsRN42 = device.name?.contains("RN42", ignoreCase = true) == true
                             val matchesCriteria = nameContainsShimmer || nameContainsRN42
@@ -599,7 +599,7 @@ class ShimmerRecorder
 
                         logger.info("=== END SHIMMER DEVICE DISCOVERY DIAGNOSTIC ===")
 
-                        // For new device discovery, we would need to implement a proper scanning dialog
+                        // For new device discovery, I would need to implement a proper scanning dialog
                         // For now, return the paired devices
                         shimmerDevices
                     } catch (e: SecurityException) {
@@ -1241,7 +1241,7 @@ class ShimmerRecorder
 
                     logger.info("Stopped streaming for $successfulStops out of ${connectedDevices.size} devices")
 
-                    // Always return true since we want to stop local processing even if some SDK calls failed
+                    // Always return true since I want to stop local processing even if some SDK calls failed
                     true
                 } catch (e: Exception) {
                     logger.error("Failed to stop streaming", e)
@@ -1374,7 +1374,7 @@ class ShimmerRecorder
                         logger.warning("Bluetooth is not enabled - some features may not work")
                     }
 
-                    // Check if we have connected devices and start streaming
+                    // Check if I have connected devices and start streaming
                     val hasConnectedDevices = connectedDevices.isNotEmpty()
                     
                     if (hasConnectedDevices) {
@@ -1667,7 +1667,7 @@ class ShimmerRecorder
          */
         private suspend fun startSimulatedDataCollection() {
             // In real implementation, this would set up Shimmer SDK callbacks
-            // For simulation, we'll generate realistic sensor data
+            // For simulation, I'll generate realistic sensor data
 
             logger.info("Started simulated Shimmer data collection at ${samplingRate}Hz")
 

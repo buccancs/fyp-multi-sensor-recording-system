@@ -46,7 +46,7 @@ class MainActivityTest {
         ActivityScenario.launch(MainActivity::class.java).use { scenario ->
             // Just verify the activity launched successfully
             scenario.onActivity { activity ->
-                // Activity launched successfully if we reach this point
+                // Activity launched successfully if I reach this point
                 assert(activity != null)
             }
         }

@@ -182,7 +182,7 @@ class MainViewModelEnhancedTest {
     @Test
     fun `battery monitoring should update battery status`() = testDispatcher.runBlockingTest {
         // This is a complex test that would require mocking Android system services
-        // For now, we'll test that the viewModel is created without errors
+        // For now, I'll test that the viewModel is created without errors
         assertThat(viewModel).isNotNull()
         
         // In a real test environment, you would mock BatteryManager

@@ -242,7 +242,7 @@ class ShimmerRecorderManualTest {
         runBlocking {
             println("[DEBUG_LOG] === Test 3: Multi-Device Connection ===")
 
-            // Ensure we have discovered devices from Test 1
+            // Ensure I have discovered devices from Test 1
             if (discoveredDevices.isEmpty()) {
                 discoveredDevices = shimmerRecorder.scanAndPairDevices()
             }
@@ -265,7 +265,7 @@ class ShimmerRecorderManualTest {
 
             // Step 3: Validate individual device connections
             // Note: This would require access to internal device states
-            // For now, we verify through the overall status
+            // For now, I verify through the overall status
 
             connectedDevices = discoveredDevices // Store for later tests
 
@@ -298,7 +298,7 @@ class ShimmerRecorderManualTest {
 
             println("[DEBUG_LOG] Device A ($deviceA) configured with: ${deviceAChannels.joinToString { it.displayName }}")
 
-            // Step 2: Configure Device B with all available channels (if we have a second device)
+            // Step 2: Configure Device B with all available channels (if I have a second device)
             if (connectedDevices.size >= 2) {
                 val deviceB = connectedDevices[1]
                 val deviceBChannels =
@@ -466,7 +466,7 @@ class ShimmerRecorderManualTest {
 
             // Step 3: Simulate device disconnection
             // Note: In a real test, this would involve physically turning off a device
-            // For automated testing, we simulate the disconnection scenario
+            // For automated testing, I simulate the disconnection scenario
             println("[DEBUG_LOG] Simulating device disconnection scenario...")
             delay(2000)
 

@@ -426,7 +426,7 @@ class SessionRecoveryManager(QObject):
             return not has_session_end
 
         except Exception:
-            return True  # Assume incomplete if we can't read it
+            return True  # Assume incomplete if I can't read it
 
     def recover_session(self, log_file: Path) -> Optional[Dict]:
         """Recover an incomplete session by adding missing end information."""
