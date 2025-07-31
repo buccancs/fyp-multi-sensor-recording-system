@@ -287,7 +287,7 @@ My Phone         # No spaces or capitals
 When adding support for new file types:
 
 1. **Define naming pattern** following existing conventions
-2. **Update schema definitions** in `docs/schemas/`
+2. **Update schema definitions** in `docs/api/`
 3. **Add validation rules** to validation tools
 4. **Document in this file** with examples
 5. **Update SessionManager** to track new file types

@@ -262,7 +262,7 @@ grep -i "error" session_20250731_143022_log.json
 1. **Check the session log** for error messages
 2. **Verify file sizes** aren't 0 bytes  
 3. **Look at session metadata** for device status
-4. **Check the main documentation** at `docs/DATA_STRUCTURE_DOCUMENTATION.md`
+4. **Check the main documentation** at `docs/technical/DATA_STRUCTURE_DOCUMENTATION.md`
 
 ---
 
