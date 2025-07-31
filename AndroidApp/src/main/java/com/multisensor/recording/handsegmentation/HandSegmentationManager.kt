@@ -6,6 +6,10 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.File
@@ -74,23 +78,23 @@ class HandSegmentationManager @Inject constructor(
                     
                     override fun onSegmentationResult(result: HandSegmentationEngine.SegmentationResult) {
                         // Handle segmentation result if needed
-                        android.util.Log.d(TAG, "Processed frame in ${result.processingTimeMs}ms, found ${result.detectedHands.size} hands")
+                        logD("Processed frame in ${result.processingTimeMs}ms, found ${result.detectedHands.size} hands")
                     }
                     
                     override fun onError(error: String) {
-                        android.util.Log.e(TAG, "Hand segmentation error: $error")
+                        logE("Hand segmentation error: $error")
                         listener?.onError(error)
                     }
                 }
             )
             
             if (success) {
-                android.util.Log.i(TAG, "Hand segmentation initialized for session: $sessionId")
+                logI("Hand segmentation initialized for session: $sessionId")
             }
             
             success
         } catch (e: Exception) {
-            android.util.Log.e(TAG, "Failed to initialize hand segmentation", e)
+            logE("Failed to initialize hand segmentation", e)
             false
         }
     }
@@ -104,9 +108,9 @@ class HandSegmentationManager @Inject constructor(
         isEnabled = enabled
         
         if (enabled) {
-            android.util.Log.i(TAG, "Hand segmentation enabled")
+            logI("Hand segmentation enabled")
         } else {
-            android.util.Log.i(TAG, "Hand segmentation disabled")
+            logI("Hand segmentation disabled")
             stopProcessing()
         }
         
@@ -118,7 +122,7 @@ class HandSegmentationManager @Inject constructor(
      */
     fun setRealTimeProcessing(enabled: Boolean) {
         isRealTimeProcessingEnabled = enabled
-        android.util.Log.i(TAG, "Real-time hand segmentation processing: ${if (enabled) "enabled" else "disabled"}")
+        logI("Real-time hand segmentation processing: ${if (enabled) "enabled" else "disabled"}")
     }
     
     /**
@@ -129,7 +133,7 @@ class HandSegmentationManager @Inject constructor(
         if (!enabled) {
             handSegmentationEngine.clearCroppedDataset()
         }
-        android.util.Log.i(TAG, "Cropped dataset creation: ${if (enabled) "enabled" else "disabled"}")
+        logI("Cropped dataset creation: ${if (enabled) "enabled" else "disabled"}")
     }
     
     /**
@@ -145,7 +149,7 @@ class HandSegmentationManager @Inject constructor(
             try {
                 handSegmentationEngine.processFrame(bitmap, timestamp)
             } catch (e: Exception) {
-                android.util.Log.e(TAG, "Error processing frame", e)
+                logE("Error processing frame", e)
             }
         }
     }
@@ -156,7 +160,7 @@ class HandSegmentationManager @Inject constructor(
     fun processRecordedVideo(videoPath: String, callback: (success: Boolean, outputPath: String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                android.util.Log.i(TAG, "Starting post-processing of recorded video: $videoPath")
+                logI("Starting post-processing of recorded video: $videoPath")
                 
                 // This would integrate with video processing logic
                 // For now, I'll create a placeholder that would work with MediaMetadataRetriever
@@ -171,7 +175,7 @@ class HandSegmentationManager @Inject constructor(
                 }
                 
             } catch (e: Exception) {
-                android.util.Log.e(TAG, "Error processing recorded video", e)
+                logE("Error processing recorded video", e)
                 withContext(Dispatchers.Main) {
                     callback(false, null)
                 }
@@ -200,7 +204,7 @@ class HandSegmentationManager @Inject constructor(
                 
                 withContext(Dispatchers.Main) {
                     if (datasetDir != null) {
-                        android.util.Log.i(TAG, "Saved cropped dataset: ${datasetDir.absolutePath}")
+                        logI("Saved cropped dataset: ${datasetDir.absolutePath}")
                         callback(true, datasetDir.absolutePath, totalSamples)
                         listener?.onDatasetSaved(datasetDir.absolutePath, totalSamples)
                     } else {
@@ -210,7 +214,7 @@ class HandSegmentationManager @Inject constructor(
                 }
                 
             } catch (e: Exception) {
-                android.util.Log.e(TAG, "Error saving cropped dataset", e)
+                logE("Error saving cropped dataset", e)
                 withContext(Dispatchers.Main) {
                     callback(false, null, 0)
                     listener?.onError("Error saving dataset: ${e.message}")
@@ -231,7 +235,7 @@ class HandSegmentationManager @Inject constructor(
      */
     fun clearCurrentDataset() {
         handSegmentationEngine.clearCroppedDataset()
-        android.util.Log.i(TAG, "Cleared current hand dataset")
+        logI("Cleared current hand dataset")
         
         val stats = getCurrentDatasetStats()
         listener?.onDatasetProgress(
@@ -257,7 +261,7 @@ class HandSegmentationManager @Inject constructor(
         handSegmentationEngine.cleanup()
         currentSessionId = null
         listener = null
-        android.util.Log.i(TAG, "Hand segmentation manager cleaned up")
+        logI("Hand segmentation manager cleaned up")
     }
     
     /**

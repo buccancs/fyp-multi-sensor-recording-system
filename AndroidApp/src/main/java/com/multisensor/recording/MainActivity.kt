@@ -1617,6 +1617,13 @@ class MainActivity : AppCompatActivity(),
         Toast.makeText(this, "Shimmer configuration completed", Toast.LENGTH_SHORT).show()
     }
 
+    // Disambiguated onError for ShimmerManager
+    fun onShimmerError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Manager error: $message")
+        binding.statusText.text = "Shimmer Error: $message"
+        Toast.makeText(this, "Shimmer Error: $message", Toast.LENGTH_LONG).show()
+    }
+
     // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========
     
     override fun onSupportedDeviceAttached(device: UsbDevice) {
@@ -1648,5 +1655,12 @@ class MainActivity : AppCompatActivity(),
         
         binding.statusText.text = "USB device disconnected"
         Toast.makeText(this, "USB device disconnected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
+    }
+
+    // Disambiguated onError for UsbDeviceManager
+    fun onUsbError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Manager error: $message")
+        binding.statusText.text = "USB Error: $message"
+        Toast.makeText(this, "USB Error: $message", Toast.LENGTH_LONG).show()
     }
 }
