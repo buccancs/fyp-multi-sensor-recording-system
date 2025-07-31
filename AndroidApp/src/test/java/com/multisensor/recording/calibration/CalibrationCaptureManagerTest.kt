@@ -4,6 +4,7 @@ import android.content.Context
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
 import io.mockk.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
@@ -25,6 +26,7 @@ class CalibrationCaptureManagerTest {
     private lateinit var mockCameraRecorder: CameraRecorder
     private lateinit var mockThermalRecorder: ThermalRecorder
     private lateinit var mockSyncClockManager: SyncClockManager
+    private lateinit var mockThermalSettings: ThermalCameraSettings
     private lateinit var mockLogger: Logger
     private lateinit var calibrationCaptureManager: CalibrationCaptureManager
     private lateinit var testDispatcher: TestDispatcher
@@ -35,6 +37,7 @@ class CalibrationCaptureManagerTest {
         mockCameraRecorder = mockk(relaxed = true)
         mockThermalRecorder = mockk(relaxed = true)
         mockSyncClockManager = mockk(relaxed = true)
+        mockThermalSettings = mockk(relaxed = true)
         mockLogger = mockk(relaxed = true)
         testDispatcher = StandardTestDispatcher()
         Dispatchers.setMain(testDispatcher)
@@ -51,6 +54,7 @@ class CalibrationCaptureManagerTest {
                 mockCameraRecorder,
                 mockThermalRecorder,
                 mockSyncClockManager,
+                mockThermalSettings,
                 mockLogger,
             )
 
@@ -76,6 +80,7 @@ class CalibrationCaptureManagerTest {
                 thermalFilePath = "/test/thermal.png",
                 timestamp = System.currentTimeMillis(),
                 syncedTimestamp = System.currentTimeMillis() + 100,
+                thermalConfig = null,
             )
 
         assertTrue("Result should be successful", result.success)
