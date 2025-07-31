@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "session_log_schema.json",
+  "title": "Session Log Schema",
+  "description": "Schema for session event log JSON files in the multi-sensor recording system",
+  "type": "object",
+  "required": [
+    "session",
+    "session_name",
+    "start_time",
+    "devices",
+    "events",
+    "status"
+  ],
+  "properties": {
+    "session": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+_\\d{8}_\\d{6}$",
+      "description": "Session identifier"
+    },
+    "session_name": {
+      "type": "string",
+      "description": "Human-readable session name"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session start timestamp"
+    },
+    "end_time": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Session end timestamp"
+    },
+    "duration": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Session duration in seconds"
+    },
+    "devices": {
+      "type": "array",
+      "description": "List of devices at session start",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Device identifier"
+          },
+          "type": {
+            "type": "string",
+            "description": "Device type"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Device capabilities"
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "description": "Chronological list of session events",
+      "items": {
+        "type": "object",
+        "required": ["event", "time", "timestamp"],
+        "properties": {
+          "event": {
+            "type": "string",
+            "enum": [
+              "session_start",
+              "session_end",
+              "device_connected",
+              "device_disconnected", 
+              "start_record",
+              "stop_record",
+              "device_ack",
+              "stimulus_play",
+              "stimulus_stop",
+              "marker",
+              "file_received",
+              "calibration_capture",
+              "calibration_done",
+              "error"
+            ],
+            "description": "Type of event"
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$",
+            "description": "Time within session (HH:MM:SS.mmm)"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Full ISO 8601 timestamp"
+          }
+        },
+        "additionalProperties": true,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "event": {
+                  "const": "device_connected"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "device": {
+                  "type": "string",
+                  "description": "Device identifier"
+                },
+                "device_type": {
+                  "type": "string",
+                  "description": "Type of device"
+                },
+                "capabilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Device capabilities"
+                }
+              },
+              "required": ["device", "device_type"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "event": {
+                  "const": "device_disconnected"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "device": {
+                  "type": "string",
+                  "description": "Device identifier"
+                },
+                "reason": {
+                  "type": "string",
+                  "description": "Disconnection reason"
+                }
+              },
+              "required": ["device", "reason"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "event": {
+                  "const": "error"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "error_type": {
+                  "type": "string",
+                  "description": "Type of error"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message"
+                },
+                "device": {
+                  "type": "string",
+                  "description": "Device associated with error (optional)"
+                }
+              },
+              "required": ["error_type", "message"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "event": {
+                  "const": "marker"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "Marker label"
+                },
+                "stim_time": {
+                  "type": "string",
+                  "description": "Stimulus time reference (optional)"
+                }
+              },
+              "required": ["label"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "event": {
+                  "const": "file_received"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "device": {
+                  "type": "string",
+                  "description": "Source device"
+                },
+                "filename": {
+                  "type": "string",
+                  "description": "Name of received file"
+                },
+                "size": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "File size in bytes"
+                },
+                "file_type": {
+                  "type": "string",
+                  "description": "Type of file"
+                }
+              },
+              "required": ["device", "filename", "file_type"]
+            }
+          }
+        ]
+      }
+    },
+    "calibration_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of calibration files used in session"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "completed"],
+      "description": "Session status"
+    }
+  }
+}

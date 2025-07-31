@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "calibration_session_schema.json",
+  "title": "Calibration Session Schema",
+  "description": "Schema for calibration session info JSON files",
+  "type": "object",
+  "required": [
+    "session_name",
+    "session_folder", 
+    "device_ids",
+    "start_time",
+    "pattern_type",
+    "pattern_size",
+    "square_size",
+    "status"
+  ],
+  "properties": {
+    "session_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Calibration session name"
+    },
+    "session_folder": {
+      "type": "string",
+      "description": "Path to calibration session folder"
+    },
+    "device_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "List of device IDs being calibrated"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Calibration session start time"
+    },
+    "end_time": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Calibration session end time"
+    },
+    "pattern_type": {
+      "type": "string",
+      "enum": ["chessboard", "circles", "asymmetric_circles"],
+      "description": "Type of calibration pattern used"
+    },
+    "pattern_size": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "Pattern dimensions [width, height] in pattern units"
+    },
+    "square_size": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Physical size of pattern squares in millimeters"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "completed", "failed"],
+      "description": "Calibration session status"
+    },
+    "images_captured": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of calibration images captured"
+    },
+    "target_images": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Target number of calibration images"
+    },
+    "calibration_results": {
+      "type": "object",
+      "description": "Calibration computation results",
+      "properties": {
+        "intrinsic_completed": {
+          "type": "boolean",
+          "description": "Whether intrinsic calibration is completed"
+        },
+        "extrinsic_completed": {
+          "type": "boolean", 
+          "description": "Whether extrinsic calibration is completed"
+        },
+        "reprojection_error": {
+          "type": "number",
+          "minimum": 0,
+          "description": "RMS reprojection error in pixels"
+        },
+        "result_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Paths to calibration result files"
+        }
+      }
+    }
+  }
+}

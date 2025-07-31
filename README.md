@@ -665,10 +665,29 @@ Key Android settings in `AndroidApp/build.gradle`:
 
 ## 📚 Documentation
 
+### Data Management
+- **[Data Storage Guide](docs/DATA_STORAGE_QUICK_REFERENCE.md)** - Quick reference for finding and understanding your recordings
+- **[Data Structure Documentation](docs/DATA_STRUCTURE_DOCUMENTATION.md)** - Complete technical documentation of file organization and schemas
+- **[File Naming Standards](docs/FILE_NAMING_STANDARDS.md)** - Naming conventions and organization guidelines for developers
+- **[Data Management Overview](docs/README.md)** - Complete guide to the data management system
+
+### Architecture & Implementation  
 - **Architecture:** See `docs/markdown/architecture.md`
 - **Milestones:** See `docs/markdown/` for detailed implementation guides
 - **Changelog:** See `changelog.md` for version history
 - **TODO:** See `todo.md` for pending tasks and future work
+
+### Data Validation
+```bash
+# Validate all recorded sessions
+python tools/validate_data_schemas.py --all-sessions
+
+# Validate specific session
+python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
+
+# Check data schemas
+python tools/validate_data_schemas.py --check-schema docs/schemas/session_metadata_schema.json
+```
 
 ## 🤝 Contributing
 
