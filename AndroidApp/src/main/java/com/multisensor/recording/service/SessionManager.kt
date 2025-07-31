@@ -2,6 +2,11 @@ package com.multisensor.recording.service
 
 import android.content.Context
 import android.os.Environment
+import com.multisensor.recording.persistence.CrashRecoveryManager
+import com.multisensor.recording.persistence.DeviceState
+import com.multisensor.recording.persistence.RecordingState
+import com.multisensor.recording.persistence.SessionState
+import com.multisensor.recording.persistence.SessionStateDao
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,6 +30,8 @@ class SessionManager
         @ApplicationContext private val context: Context,
         private val logger: Logger,
         private val thermalSettings: ThermalCameraSettings,
+        private val sessionStateDao: SessionStateDao, // Phase 3: State Persistence
+        private val crashRecoveryManager: CrashRecoveryManager, // Phase 3: Crash Recovery
     ) {
         private var currentSession: RecordingSession? = null
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
@@ -92,6 +99,16 @@ class SessionManager
 
                     currentSession = session
 
+                    // Phase 3: Persist session state to database
+                    val sessionState = SessionState(
+                        sessionId = sessionId,
+                        recordingState = RecordingState.STARTING,
+                        deviceStates = emptyList(), // Will be updated by recording service
+                        timestamp = System.currentTimeMillis(),
+                        startTime = session.startTime
+                    )
+                    sessionStateDao.insertSessionState(sessionState)
+
                     // Write session info file
                     writeSessionInfo(session)
 
@@ -124,6 +141,17 @@ class SessionManager
                         session.endTime = System.currentTimeMillis()
                         session.status = SessionStatus.COMPLETED
 
+                        // Phase 3: Update session state in database
+                        val existingState = sessionStateDao.getSessionState(session.sessionId)
+                        if (existingState != null) {
+                            val updatedState = existingState.copy(
+                                recordingState = RecordingState.COMPLETED,
+                                endTime = session.endTime!!,
+                                timestamp = System.currentTimeMillis()
+                            )
+                            sessionStateDao.updateSessionState(updatedState)
+                        }
+
                         // Update session info file
                         writeSessionInfo(session)
 
@@ -140,6 +168,68 @@ class SessionManager
                     }
                 }
             }
+
+        /**
+         * Phase 3: Initialize crash recovery on app startup
+         */
+        suspend fun initializeCrashRecovery() {
+            try {
+                logger.info("SessionManager: Initializing crash recovery")
+                
+                val needsRecovery = crashRecoveryManager.detectCrashRecovery()
+                if (needsRecovery) {
+                    logger.info("SessionManager: Crash recovery needed - starting recovery process")
+                    crashRecoveryManager.recoverAllActiveSessions()
+                } else {
+                    logger.info("SessionManager: No crash recovery needed")
+                }
+                
+                // Clean up old sessions periodically
+                crashRecoveryManager.cleanupOldSessions(30) // Keep 30 days
+            } catch (e: Exception) {
+                logger.error("SessionManager: Error during crash recovery initialization", e)
+            }
+        }
+
+        /**
+         * Phase 3: Update session state with device information
+         */
+        suspend fun updateSessionDeviceStates(deviceStates: List<DeviceState>) {
+            currentSession?.let { session ->
+                try {
+                    val existingState = sessionStateDao.getSessionState(session.sessionId)
+                    if (existingState != null) {
+                        val updatedState = existingState.copy(
+                            deviceStates = deviceStates,
+                            timestamp = System.currentTimeMillis()
+                        )
+                        sessionStateDao.updateSessionState(updatedState)
+                    }
+                } catch (e: Exception) {
+                    logger.error("SessionManager: Error updating session device states", e)
+                }
+            }
+        }
+
+        /**
+         * Phase 3: Update session recording state
+         */
+        suspend fun updateSessionRecordingState(recordingState: RecordingState) {
+            currentSession?.let { session ->
+                try {
+                    val existingState = sessionStateDao.getSessionState(session.sessionId)
+                    if (existingState != null) {
+                        val updatedState = existingState.copy(
+                            recordingState = recordingState,
+                            timestamp = System.currentTimeMillis()
+                        )
+                        sessionStateDao.updateSessionState(updatedState)
+                    }
+                } catch (e: Exception) {
+                    logger.error("SessionManager: Error updating session recording state", e)
+                }
+            }
+        }
 
         /**
          * Gets file paths for different data types in the current session

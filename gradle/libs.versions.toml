@@ -21,6 +21,9 @@ fragmentKtx = "1.8.2"
 # Dependency Injection
 hilt = "2.48.1"
 
+# Room Database - Phase 3 State Persistence
+room = "2.6.1"
+
 # Networking
 okhttp = "4.12.0"
 moshi = "1.15.0"
@@ -78,6 +81,12 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
+# Room Database Libraries - Phase 3 State Persistence
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+
 # Unit Testing
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTestCore" }
@@ -133,6 +142,12 @@ networking = [
     "okhttp-logging-interceptor",
     "moshi",
     "moshi-kotlin"
+]
+
+# Room Database - Phase 3 State Persistence
+room = [
+    "room-runtime",
+    "room-ktx"
 ]
 
 # Unit Testing
