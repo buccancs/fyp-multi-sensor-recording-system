@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// Shimmer SDK imports
+// shimmer sdk imports
 import com.shimmerresearch.android.Shimmer
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import com.shimmerresearch.driver.ObjectCluster
@@ -48,25 +48,7 @@ import com.shimmerresearch.driver.FormatCluster
 import com.shimmerresearch.bluetooth.ShimmerBluetooth
 
 /**
- * Handles Shimmer3 GSR+ sensor data recording via Bluetooth.
- *
- * This implementation provides comprehensive support for multiple Shimmer3 GSR+ devices
- * with concurrent data logging, PC streaming, and resilient connection management.
- *
- * Key Features:
- * - Multi-device Bluetooth connection management
- * - Channel selection and configuration per device
- * - Concurrent data logging to CSV files
- * - Real-time PC streaming via TCP/UDP
- * - Automatic reconnection on disconnection
- * - Session-based file organization
- * - Synchronized timestamping with other modalities
- *
- * Architecture:
- * - Uses HandlerThread for data processing to avoid blocking UI
- * - Separate coroutines for file I/O and network streaming
- * - Thread-safe device management with concurrent collections
- * - Resilient error handling and recovery mechanisms
+ * shimmer3 gsr+ sensor recorder with bluetooth management
  */
 @Singleton
 class ShimmerRecorder
@@ -76,7 +58,6 @@ class ShimmerRecorder
         private val sessionManager: SessionManager,
         private val logger: Logger,
     ) {
-        // Core state management
         private val isRecording = AtomicBoolean(false)
         private val isInitialized = AtomicBoolean(false)
         private val isConnected = AtomicBoolean(false)
@@ -84,16 +65,13 @@ class ShimmerRecorder
         private var currentSessionId: String? = null
         private var sessionStartTime: Long = 0L
 
-        // Bluetooth management
         private var bluetoothAdapter: BluetoothAdapter? = null
         private var bluetoothManager: BluetoothManager? = null
 
-        // Configuration and state
         private var samplingRate: Double = DEFAULT_SAMPLING_RATE
         private var sampleCount: Long = 0L
         private var dataWriter: FileWriter? = null
 
-        // Device management - thread-safe collections
         private val connectedDevices = ConcurrentHashMap<String, ShimmerDevice>()
         private val deviceConfigurations = ConcurrentHashMap<String, DeviceConfiguration>()
         private val dataQueues = ConcurrentHashMap<String, ConcurrentLinkedQueue<SensorSample>>()

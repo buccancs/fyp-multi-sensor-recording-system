@@ -1,55 +1,25 @@
-"""
-Session Management Module for Multi-Sensor Recording System Controller
-
-This module implements the SessionManager class for Milestone 3.3: Webcam Capture Integration.
-It provides session folder creation, organization, and lifecycle management for coordinated
-recording across multiple devices including PC webcam.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-29
-Milestone: 3.3 - Webcam Capture Integration (PC Recording)
-"""
+"""session management for multi-sensor recording system"""
 
 import json
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List
-
-# Import centralized logging
 from utils.logging_config import get_logger
 
-# Get logger for this module
 logger = get_logger(__name__)
 
 
 class SessionManager:
-    """
-    Session manager for coordinating multi-device recording sessions.
-
-    This class handles:
-    - Session folder creation and organization
-    - Session metadata management
-    - Recording lifecycle coordination
-    - File organization and naming
-    """
+    """session manager for coordinating multi-device recording sessions"""
 
     def __init__(self, base_recordings_dir: str = "recordings"):
         self.logger = get_logger(__name__)
-        self.logger.info(f"for initialized")
-        """
-        Initialize session manager.
-
-        Args:
-            base_recordings_dir (str): Base directory for all recordings
-        """
         self.base_recordings_dir = Path(base_recordings_dir)
         self.current_session: Optional[Dict] = None
         self.session_history: List[Dict] = []
-
-        # Ensure base directory exists
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"SessionManager initialized with base directory: {self.base_recordings_dir}")
+        logger.info(f"session manager initialized with base directory: {self.base_recordings_dir}")
 
     @staticmethod
     def validate_session_name(session_name: str) -> bool:
@@ -98,24 +68,13 @@ class SessionManager:
         return f"{device_id}_{file_type}_{timestamp_str}.{extension}"
 
     def create_session(self, session_name: Optional[str] = None) -> Dict:
-        """
-        Create a new recording session.
-
-        Args:
-            session_name (str, optional): Custom session name. If None, generates timestamp-based name.
-
-        Returns:
-            Dict: Session information including session_id, folder_path, start_time
-        """
-        logger.info(f"Creating new session with name: {session_name}")
+        """create a new recording session"""
+        logger.info(f"creating new session with name: {session_name}")
         
-        # Generate session ID and name
         timestamp = datetime.now()
         if session_name is None:
             session_id = timestamp.strftime("session_%Y%m%d_%H%M%S")
         else:
-            # Sanitize custom name for filesystem compatibility
-            # Replace spaces with underscores and remove invalid characters
             safe_name = "".join(
                 c if c.isalnum() or c in ("-", "_") else "_" 
                 for c in session_name.replace(" ", "_")
@@ -129,11 +88,9 @@ class SessionManager:
             
             session_id = f"{safe_name}_{timestamp.strftime('%Y%m%d_%H%M%S')}"
 
-        # Create session folder
         session_folder = self.base_recordings_dir / session_id
         session_folder.mkdir(parents=True, exist_ok=True)
 
-        # Create session metadata
         session_info = {
             "session_id": session_id,
             "session_name": session_name or session_id,
@@ -146,28 +103,20 @@ class SessionManager:
             "status": "active",
         }
 
-        # Save session metadata
         metadata_file = session_folder / "session_metadata.json"
         with open(metadata_file, "w") as f:
             json.dump(session_info, f, indent=2)
 
         self.current_session = session_info
-
-        print(f"[DEBUG_LOG] Session created: {session_id} at {session_folder}")
+        logger.info(f"session created: {session_id}")
         return session_info
 
     def end_session(self) -> Optional[Dict]:
-        """
-        End the current recording session.
-
-        Returns:
-            Dict: Final session information, or None if no active session
-        """
+        """end the current recording session"""
         if not self.current_session:
-            print("[DEBUG_LOG] No active session to end")
+            logger.warning("no active session to end")
             return None
 
-        # Update session end time and duration
         end_time = datetime.now()
         start_time = datetime.fromisoformat(self.current_session["start_time"])
         duration = (end_time - start_time).total_seconds()
@@ -176,32 +125,24 @@ class SessionManager:
         self.current_session["duration"] = duration
         self.current_session["status"] = "completed"
 
-        # Save updated metadata
         metadata_file = (
             Path(self.current_session["folder_path"]) / "session_metadata.json"
         )
         with open(metadata_file, "w") as f:
             json.dump(self.current_session, f, indent=2)
 
-        # Add to session history
         self.session_history.append(self.current_session.copy())
-
         session_id = self.current_session["session_id"]
-        print(f"[DEBUG_LOG] Session ended: {session_id} (duration: {duration:.1f}s)")
+        logger.info(f"session ended: {session_id} (duration: {duration:.1f}s)")
 
         completed_session = self.current_session
         self.current_session = None
-
         return completed_session
 
     def add_device_to_session(
         self, device_id: str, device_type: str, capabilities: List[str]
     ):
-        """
-        Add a device to the current session.
-
-        Args:
-            device_id (str): Unique device identifier
+        """add a device to the current session"""
             device_type (str): Type of device (e.g., "android_phone", "pc_webcam")
             capabilities (List[str]): List of device capabilities
         """

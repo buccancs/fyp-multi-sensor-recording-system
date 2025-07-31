@@ -46,20 +46,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
- * Enhanced CameraRecorder Module (Milestone 2.2)
- *
- * Provides comprehensive Camera2 API implementation with:
- * - TextureView integration for live preview with proper orientation handling
- * - Multi-stream configuration supporting simultaneous Preview + 4K Video + RAW capture
- * - Professional DNG creation with full metadata embedding using DngCreator
- * - Enhanced session management with comprehensive SessionInfo tracking
- * - Samsung S21/S22 optimization with LEVEL_3 hardware capabilities
- *
- * Public API:
- * - initialize(TextureView): Prepares camera and binds TextureView for live preview
- * - startSession(recordVideo, captureRaw): Starts capture session with configuration flags
- * - stopSession(): Stops session and releases resources with proper cleanup
- * - captureRawImage(): Manual RAW capture during active session
+ * enhanced camera recorder with camera2 api
+ * supports preview + 4k video + raw capture
  */
 @Singleton
 class CameraRecorder
@@ -70,16 +58,13 @@ class CameraRecorder
         private val logger: Logger,
         private val handSegmentationManager: HandSegmentationManager,
     ) {
-        // Camera2 API components
         private var cameraDevice: CameraDevice? = null
         private var captureSession: CameraCaptureSession? = null
 
-        // Preview streaming (injected via method call from RecordingService)
         private var previewStreamer: PreviewStreamer? = null
 
         /**
-         * Set the PreviewStreamer instance for live streaming functionality.
-         * Called by RecordingService to inject the service-scoped PreviewStreamer.
+         * set preview streamer for live streaming
          */
         fun setPreviewStreamer(streamer: PreviewStreamer) {
             previewStreamer = streamer
@@ -88,14 +73,12 @@ class CameraRecorder
 
         private var cameraCharacteristics: CameraCharacteristics? = null
 
-        // Output components
         private var mediaRecorder: MediaRecorder? = null
         private var rawImageReader: ImageReader? = null
         private var previewImageReader: ImageReader? = null
         private var textureView: TextureView? = null
         private var previewSurface: Surface? = null
 
-        // Threading and synchronization
         private var backgroundThread: HandlerThread? = null
         private var backgroundHandler: Handler? = null
         private val cameraLock = Semaphore(1)

@@ -45,26 +45,24 @@ import com.multisensor.recording.managers.UsbDeviceManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-// Shimmer UI Components imports
+// shimmer ui components imports
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
 import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 
-// Centralized logging
+// centralized logging
 import com.multisensor.recording.util.AppLogger
 import com.multisensor.recording.util.logD
 import com.multisensor.recording.util.logE
 import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logW
 
-// Hand Segmentation
+// hand segmentation
 import com.multisensor.recording.handsegmentation.HandSegmentationManager
 import com.multisensor.recording.ui.components.HandSegmentationControlView
 
 /**
- * Main activity for the Multi-Sensor Recording System.
- * Provides the primary user interface for controlling recording sessions,
- * viewing camera previews, and monitoring system status.
+ * main activity for multi-sensor recording system
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
@@ -95,7 +93,6 @@ class MainActivity : AppCompatActivity(),
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
 
-    // Shimmer UI state management
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
     private var preferredBtType: ShimmerBluetoothManagerAndroid.BT_TYPE = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
