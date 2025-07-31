@@ -40,7 +40,7 @@ This directory contains all consolidated documentation for the Multi-Sensor Sync
 
 ## 🔍 Finding What You Need
 
-**New Users**: Start with `/user-guides/USER_GUIDE.md`
+**New Users**: Start with `/user-guides/user-guide.md`
 
 **Developers**: Check `/technical/` for architecture and `/api/` for schemas
 
@@ -61,20 +61,20 @@ This organization ensures that current, relevant documentation is easily accessi
 ## 📚 Key Documents by Category
 
 ### Essential Starting Points
-- `user-guides/USER_GUIDE.md` - Main user documentation
-- `reference/DATA_STORAGE_QUICK_REFERENCE.md` - Quick data location guide
-- `technical/SYSTEM_ARCHITECTURE.md` - System overview
+- `user-guides/user-guide.md` - Main user documentation
+- `reference/data-storage-quick-reference.md` - Quick data location guide
+- `technical/system-architecture-overview.md` - System overview
 
 ### Integration Guides
-- `user-guides/SHIMMER_PC_INTEGRATION_GUIDE.md` - Shimmer sensor setup
-- `user-guides/SHIMMER_INTEGRATION_GUIDE.md` - Android Shimmer integration
-- `user-guides/ROCK_SOLID_INTEGRATION_GUIDE.md` - Thermal camera integration
+- `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
+- `user-guides/shimmer-integration-guide.md` - Android Shimmer integration
+- `user-guides/rock-solid-integration-guide.md` - Thermal camera integration
 
 ### Technical References
-- `technical/DATA_STRUCTURE_DOCUMENTATION.md` - Data organization details
-- `technical/SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md` - Shimmer technical specs
-- `technical/TOPDON_TC001_COMPREHENSIVE_DOCUMENTATION.md` - Thermal camera specs
-- `technical/ROCK_SOLID_NETWORKING.md` - Network synchronization details
+- `technical/data-structure-documentation.md` - Data organization details
+- `technical/shimmer3-gsr-plus-comprehensive-documentation.md` - Shimmer technical specs
+- `technical/topdon-tc001-comprehensive-documentation.md` - Thermal camera specs
+- `technical/rock-solid-networking.md` - Network synchronization details
 
 ### API and Schemas
 - `api/session_metadata_schema.json` - Session data format
@@ -83,10 +83,10 @@ This organization ensures that current, relevant documentation is easily accessi
 - `api/processing_metadata_schema.json` - Processing results format
 
 ### Quick References
-- `reference/FILE_NAMING_STANDARDS.md` - Naming conventions
-- `reference/SHIMMER3_GSR_PLUS_QUICK_REFERENCE.md` - Shimmer quick start
-- `reference/README_TESTING.md` - Testing procedures
-- `reference/TEST_DOCUMENTATION.md` - Test documentation
+- `reference/file-naming-standards.md` - Naming conventions
+- `reference/shimmer3-gsr-plus-quick-reference.md` - Shimmer quick start
+- `reference/readme-testing.md` - Testing procedures
+- `reference/test-documentation.md` - Test documentation
 
 ---
 
