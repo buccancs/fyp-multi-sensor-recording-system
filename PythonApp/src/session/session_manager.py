@@ -239,6 +239,125 @@ class SessionManager:
         """
         return self.current_session.copy() if self.current_session else None
 
+    def has_hand_segmentation_available(self) -> bool:
+        """
+        Check if hand segmentation functionality is available.
+        
+        Returns:
+            bool: True if hand segmentation can be used
+        """
+        try:
+            import sys
+            import os
+            
+            # Try to import hand segmentation module
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+            from hand_segmentation import SessionPostProcessor
+            return True
+        except ImportError:
+            return False
+    
+    def trigger_post_session_processing(self, 
+                                      session_id: Optional[str] = None,
+                                      enable_hand_segmentation: bool = True,
+                                      segmentation_method: str = "mediapipe") -> Dict[str, any]:
+        """
+        Trigger post-session processing including hand segmentation.
+        
+        Args:
+            session_id: Session to process (defaults to last completed session)
+            enable_hand_segmentation: Whether to run hand segmentation
+            segmentation_method: Method to use for hand segmentation
+            
+        Returns:
+            Dictionary with processing results
+        """
+        results = {
+            'session_id': session_id,
+            'hand_segmentation': {
+                'enabled': enable_hand_segmentation,
+                'available': self.has_hand_segmentation_available(),
+                'success': False,
+                'results': None,
+                'error': None
+            }
+        }
+        
+        if not enable_hand_segmentation:
+            results['hand_segmentation']['success'] = True
+            return results
+            
+        if not self.has_hand_segmentation_available():
+            results['hand_segmentation']['error'] = "Hand segmentation module not available"
+            return results
+        
+        try:
+            import sys
+            import os
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+            from hand_segmentation import create_session_post_processor
+            
+            # Use the same base directory as this session manager
+            processor = create_session_post_processor(str(self.base_recordings_dir))
+            
+            # Determine which session to process
+            target_session = session_id
+            if not target_session:
+                # Use the most recent session if available
+                if self.session_history:
+                    target_session = self.session_history[-1]['session_id']
+                elif self.current_session:
+                    target_session = self.current_session['session_id']
+            
+            if not target_session:
+                results['hand_segmentation']['error'] = "No session found to process"
+                return results
+            
+            # Process the session
+            print(f"[INFO] Starting post-session hand segmentation for: {target_session}")
+            segmentation_results = processor.process_session(
+                target_session, 
+                method=segmentation_method,
+                output_cropped=True,
+                output_masks=True
+            )
+            
+            results['hand_segmentation']['success'] = True
+            results['hand_segmentation']['results'] = segmentation_results
+            
+            # Update session metadata to indicate processing completed
+            self._update_session_post_processing_status(target_session, True)
+            
+            print(f"[INFO] Post-session processing completed for: {target_session}")
+            
+        except Exception as e:
+            error_msg = f"Error in post-session processing: {str(e)}"
+            results['hand_segmentation']['error'] = error_msg
+            print(f"[ERROR] {error_msg}")
+        
+        return results
+    
+    def _update_session_post_processing_status(self, session_id: str, completed: bool):
+        """Update session metadata to track post-processing status."""
+        try:
+            session_folder = self.get_session_folder(session_id)
+            if session_folder:
+                metadata_file = session_folder / "session_metadata.json"
+                if metadata_file.exists():
+                    import json
+                    with open(metadata_file, 'r') as f:
+                        metadata = json.load(f)
+                    
+                    metadata['post_processing'] = {
+                        'hand_segmentation_completed': completed,
+                        'hand_segmentation_timestamp': datetime.now().isoformat() if completed else None
+                    }
+                    
+                    with open(metadata_file, 'w') as f:
+                        json.dump(metadata, f, indent=2)
+        except Exception as e:
+            print(f"[WARNING] Failed to update post-processing status: {e}")
+
     def _update_session_metadata(self):
         """Update session metadata file with current session information."""
         if not self.current_session:
