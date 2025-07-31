@@ -90,4 +90,87 @@
         <item>300</item>
     </string-array>
 
+    <!-- Thermal Frame Rate Arrays -->
+    <string-array name="thermal_frame_rate_entries">
+        <item>25 fps (Standard TC001)</item>
+        <item>30 fps (Enhanced)</item>
+        <item>20 fps (Battery Saving)</item>
+        <item>15 fps (Low Power)</item>
+        <item>10 fps (Very Low Power)</item>
+    </string-array>
+
+    <string-array name="thermal_frame_rate_values">
+        <item>25</item>
+        <item>30</item>
+        <item>20</item>
+        <item>15</item>
+        <item>10</item>
+    </string-array>
+
+    <!-- Thermal Color Palette Arrays -->
+    <string-array name="thermal_palette_entries">
+        <item>Iron (Black-Red-Yellow-White)</item>
+        <item>Rainbow (Full Spectrum)</item>
+        <item>Grayscale (Monochrome)</item>
+        <item>Hot Metal (Blue-Purple-Red-Yellow)</item>
+        <item>Arctic (Blue-Cyan-White)</item>
+        <item>Medical (High Contrast)</item>
+    </string-array>
+
+    <string-array name="thermal_palette_values">
+        <item>iron</item>
+        <item>rainbow</item>
+        <item>grayscale</item>
+        <item>hot_metal</item>
+        <item>arctic</item>
+        <item>medical</item>
+    </string-array>
+
+    <!-- Thermal Temperature Range Arrays -->
+    <string-array name="thermal_temp_range_entries">
+        <item>Auto Range (Dynamic)</item>
+        <item>-20°C to 150°C (Extended)</item>
+        <item>0°C to 100°C (Standard)</item>
+        <item>15°C to 45°C (Human Body)</item>
+        <item>20°C to 40°C (Room Temperature)</item>
+        <item>Custom Range</item>
+    </string-array>
+
+    <string-array name="thermal_temp_range_values">
+        <item>auto</item>
+        <item>-20_150</item>
+        <item>0_100</item>
+        <item>15_45</item>
+        <item>20_40</item>
+        <item>custom</item>
+    </string-array>
+
+    <!-- Thermal Temperature Units Arrays -->
+    <string-array name="thermal_units_entries">
+        <item>Celsius (°C)</item>
+        <item>Fahrenheit (°F)</item>
+        <item>Kelvin (K)</item>
+    </string-array>
+
+    <string-array name="thermal_units_values">
+        <item>celsius</item>
+        <item>fahrenheit</item>
+        <item>kelvin</item>
+    </string-array>
+
+    <!-- Thermal Data Format Arrays -->
+    <string-array name="thermal_format_entries">
+        <item>Radiometric (Full Temperature Data)</item>
+        <item>Visual (Image Only)</item>
+        <item>Combined (Image + Temperature)</item>
+        <item>Raw (Sensor Data)</item>
+    </string-array>
+
+    <string-array name="thermal_format_values">
+        <item>radiometric</item>
+        <item>visual</item>
+        <item>combined</item>
+        <item>raw</item>
+    </string-array>
+
 </resources>

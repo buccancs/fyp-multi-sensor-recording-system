@@ -5,6 +5,7 @@ import android.os.Environment
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.File
@@ -29,6 +30,7 @@ class CalibrationCaptureManager
         private val cameraRecorder: CameraRecorder,
         private val thermalRecorder: ThermalRecorder,
         private val syncClockManager: SyncClockManager,
+        private val thermalSettings: ThermalCameraSettings,
         private val logger: Logger,
     ) {
         companion object {
@@ -48,6 +50,7 @@ class CalibrationCaptureManager
             val thermalFilePath: String?,
             val timestamp: Long,
             val syncedTimestamp: Long,
+            val thermalConfig: ThermalCameraSettings.ThermalConfig?,
             val errorMessage: String? = null,
         )
 
@@ -64,9 +67,11 @@ class CalibrationCaptureManager
                 val actualCalibrationId = calibrationId ?: generateCalibrationId()
                 val captureTimestamp = System.currentTimeMillis()
                 val syncedTimestamp = syncClockManager.getSyncedTimestamp(captureTimestamp)
+                val currentThermalConfig = thermalSettings.getCurrentConfig()
 
                 logger.info("[DEBUG_LOG] Starting calibration capture: $actualCalibrationId")
                 logger.info("[DEBUG_LOG] Capture settings - RGB: $captureRgb, Thermal: $captureThermal, HighRes: $highResolution")
+                logger.info("[DEBUG_LOG] Thermal settings - Enabled: ${currentThermalConfig.isEnabled}, Format: ${currentThermalConfig.dataFormat}")
 
                 try {
                     // Ensure calibration directory exists
@@ -130,6 +135,7 @@ class CalibrationCaptureManager
                         thermalFilePath = thermalFilePath,
                         timestamp = captureTimestamp,
                         syncedTimestamp = syncedTimestamp,
+                        thermalConfig = currentThermalConfig,
                     )
                 } catch (e: Exception) {
                     logger.error("Error during calibration capture: $actualCalibrationId", e)
@@ -140,6 +146,7 @@ class CalibrationCaptureManager
                         thermalFilePath = null,
                         timestamp = captureTimestamp,
                         syncedTimestamp = syncedTimestamp,
+                        thermalConfig = currentThermalConfig,
                         errorMessage = e.message,
                     )
                 }

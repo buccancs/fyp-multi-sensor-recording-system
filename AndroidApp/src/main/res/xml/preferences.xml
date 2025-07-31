@@ -82,6 +82,99 @@
 
     </PreferenceCategory>
 
+    <!-- Thermal Camera Configuration Category -->
+    <PreferenceCategory
+        android:title="Thermal Camera Configuration"
+        android:icon="@android:drawable/ic_menu_camera">
+
+        <!-- Thermal Frame Rate -->
+        <ListPreference
+            android:key="thermal_frame_rate"
+            android:title="Thermal Frame Rate"
+            android:summary="Select thermal camera frame rate"
+            android:dialogTitle="Choose Thermal Frame Rate"
+            android:entries="@array/thermal_frame_rate_entries"
+            android:entryValues="@array/thermal_frame_rate_values"
+            android:defaultValue="25"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Thermal Color Palette -->
+        <ListPreference
+            android:key="thermal_color_palette"
+            android:title="Thermal Color Palette"
+            android:summary="Select thermal color palette for display"
+            android:dialogTitle="Choose Color Palette"
+            android:entries="@array/thermal_palette_entries"
+            android:entryValues="@array/thermal_palette_values"
+            android:defaultValue="iron"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Thermal Temperature Range -->
+        <ListPreference
+            android:key="thermal_temperature_range"
+            android:title="Temperature Range"
+            android:summary="Select temperature measurement range"
+            android:dialogTitle="Choose Temperature Range"
+            android:entries="@array/thermal_temp_range_entries"
+            android:entryValues="@array/thermal_temp_range_values"
+            android:defaultValue="auto"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Thermal Emissivity -->
+        <EditTextPreference
+            android:key="thermal_emissivity"
+            android:title="Emissivity"
+            android:summary="Set thermal emissivity value (0.1-1.0)"
+            android:dialogTitle="Enter Emissivity Value"
+            android:dialogMessage="Enter emissivity value between 0.1 and 1.0"
+            android:defaultValue="0.95"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- Auto-calibration -->
+        <SwitchPreferenceCompat
+            android:key="thermal_auto_calibration"
+            android:title="Auto-Calibration"
+            android:summary="Enable automatic thermal calibration"
+            android:defaultValue="true" />
+
+        <!-- High-Resolution Mode -->
+        <SwitchPreferenceCompat
+            android:key="thermal_high_resolution"
+            android:title="High-Resolution Mode"
+            android:summary="Enable high-resolution thermal capture when available"
+            android:defaultValue="false" />
+
+        <!-- Temperature Units -->
+        <ListPreference
+            android:key="thermal_temperature_units"
+            android:title="Temperature Units"
+            android:summary="Select temperature display units"
+            android:dialogTitle="Choose Temperature Units"
+            android:entries="@array/thermal_units_entries"
+            android:entryValues="@array/thermal_units_values"
+            android:defaultValue="celsius"
+            app:useSimpleSummaryProvider="false" />
+
+        <!-- USB Priority Mode -->
+        <SwitchPreferenceCompat
+            android:key="thermal_usb_priority"
+            android:title="USB Priority Access"
+            android:summary="Request exclusive USB access for thermal camera"
+            android:defaultValue="true" />
+
+        <!-- Thermal Data Format -->
+        <ListPreference
+            android:key="thermal_data_format"
+            android:title="Data Format"
+            android:summary="Select thermal data storage format"
+            android:dialogTitle="Choose Data Format"
+            android:entries="@array/thermal_format_entries"
+            android:entryValues="@array/thermal_format_values"
+            android:defaultValue="radiometric"
+            app:useSimpleSummaryProvider="false" />
+
+    </PreferenceCategory>
+
     <!-- Network Configuration Category -->
     <PreferenceCategory
         android:title="Network Configuration"
