@@ -1,11 +1,7 @@
 package com.multisensor.recording.recording
 
 /**
- * Comprehensive session information tracking for multi-sensor recording sessions.
- * Tracks file outputs, timestamps, configuration flags, and session metadata.
- *
- * Based on Milestone 2.2 and 2.3 specifications for enhanced session management
- * including thermal camera recording support.
+ * session info for multi-sensor recording
  */
 data class SessionInfo(
     val sessionId: String,
@@ -26,22 +22,22 @@ data class SessionInfo(
     var errorMessage: String? = null,
 ) {
     /**
-     * Get session duration in milliseconds
+     * get session duration in milliseconds
      */
     fun getDurationMs(): Long = if (endTime > startTime) endTime - startTime else 0L
 
     /**
-     * Get number of RAW images captured
+     * get number of raw images captured
      */
     fun getRawImageCount(): Int = rawFilePaths.size
 
     /**
-     * Check if session is currently active
+     * check if session is currently active
      */
     fun isActive(): Boolean = startTime > 0L && endTime == 0L
 
     /**
-     * Mark session as completed
+     * mark session as completed
      */
     fun markCompleted() {
         if (endTime == 0L) {
