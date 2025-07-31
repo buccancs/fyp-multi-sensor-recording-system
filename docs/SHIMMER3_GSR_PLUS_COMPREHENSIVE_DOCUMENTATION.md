@@ -140,11 +140,14 @@ The Shimmer3 GSR+ is built around a sophisticated microcontroller-based architec
 ### 3.2 Core Processing Unit
 
 #### MSP430F5437A Microcontroller
-- **Architecture**: 16-bit RISC CPU
-- **Clock Speed**: Up to 25 MHz
-- **Memory**: 256KB Flash, 16KB RAM
-- **Power Consumption**: Ultra-low power design
-- **Peripherals**: Multiple UART, SPI, I2C interfaces
+
+The MSP430F5437A microcontroller represents the computational heart of the Shimmer3 GSR+ platform, providing sophisticated processing capabilities while maintaining ultra-low power consumption characteristics essential for extended wearable operation. This advanced microcontroller incorporates a 16-bit RISC CPU architecture that delivers excellent computational efficiency and enables complex real-time signal processing operations without compromising battery life.
+
+The microcontroller operates at clock speeds up to 25 MHz, providing sufficient computational power for real-time data processing, sensor fusion algorithms, and wireless communication management. This processing capability enables on-device preprocessing of physiological signals, reducing wireless bandwidth requirements and enabling more sophisticated analysis capabilities that would otherwise require external processing resources.
+
+The memory architecture includes 256KB of Flash memory for program storage and firmware updates, along with 16KB of RAM for data processing and temporary storage. This substantial memory allocation enables complex algorithm implementation and supports sophisticated data buffering capabilities that ensure reliable data collection even during temporary communication interruptions.
+
+The ultra-low power design incorporates multiple power management modes that enable aggressive power optimization without compromising functionality. The microcontroller includes multiple UART, SPI, and I2C interfaces that provide comprehensive connectivity options for sensor integration and external device communication, enabling flexible hardware configurations and future expandability.
 
 #### Key Features
 ```c
@@ -163,56 +166,64 @@ POWER_MODES = "Active, LPM0-4"
 #### Primary Sensors
 
 **Galvanic Skin Response (GSR)**
-- **Technology**: Constant voltage excitation method
-- **Range**: 10kΩ to 4.7MΩ configurable
-- **Resolution**: 16-bit effective
-- **Sampling Rate**: Up to 1000 Hz
-- **Accuracy**: ±1% full scale
+
+The GSR measurement system represents the primary sensing capability of the Shimmer3 GSR+ platform, implementing a sophisticated constant voltage excitation method that provides highly accurate and stable measurements of skin conductance. This measurement technology utilizes a precisely controlled 0.5V DC excitation voltage that maintains consistent measurement conditions while minimizing skin irritation and ensuring long-term measurement stability.
+
+The configurable measurement range from 10kΩ to 4.7MΩ enables optimal performance across diverse skin conditions and participant demographics. This wide range capability ensures that the device can accommodate participants with naturally dry skin, high arousal states, or environmental conditions that affect skin moisture content. The 16-bit effective resolution provides exceptional measurement precision that enables detection of subtle physiological changes that might be missed by lower-resolution systems.
+
+The sampling rate capability up to 1000 Hz ensures that even rapid physiological responses can be captured with sufficient temporal resolution for detailed analysis. The system maintains ±1% full-scale accuracy across the entire measurement range, providing research-grade precision that meets the requirements of demanding scientific applications.
 
 **Photoplethysmography (PPG)**
-- **Technology**: Reflective optical sensor
-- **Wavelengths**: Red (660nm) and Infrared (880nm)
-- **Dynamic Range**: 12-bit resolution
-- **Sample Rate**: Up to 1000 Hz
+
+The integrated PPG sensor system utilizes advanced reflective optical technology that enables comprehensive cardiovascular monitoring through non-invasive measurement of blood volume changes. The dual-wavelength approach incorporates both red (660nm) and infrared (880nm) light sources that provide complementary information about oxygen saturation and cardiovascular function.
+
+The 12-bit dynamic range ensures excellent signal quality across diverse skin tones and lighting conditions, while the sampling rate capability up to 1000 Hz enables detailed analysis of heart rate variability and pulse wave characteristics. This high-resolution capability supports advanced cardiovascular analysis techniques that require precise timing information for accurate physiological assessment.
 
 **3-Axis Accelerometer**
-- **Sensor**: LSM303DLHC
-- **Range**: ±2g, ±4g, ±8g, ±16g (configurable)
-- **Resolution**: 12-bit
-- **Sensitivity**: Up to 1mg resolution
+
+The LSM303DLHC accelerometer provides comprehensive motion detection and activity monitoring capabilities that enable contextualization of physiological measurements and detection of movement artifacts. The configurable measurement ranges of ±2g, ±4g, ±8g, and ±16g accommodate diverse activity levels from subtle postural changes to vigorous physical activity.
+
+The 12-bit resolution and sensitivity up to 1mg enable detection of subtle movements that might affect physiological measurements, allowing for sophisticated artifact detection and signal quality assessment. This motion information can be integrated with physiological signals to provide comprehensive understanding of activity-related physiological responses.
 
 **3-Axis Gyroscope**
-- **Sensor**: L3GD20
-- **Range**: ±250°/s, ±500°/s, ±2000°/s
-- **Resolution**: 16-bit
-- **Sensitivity**: 8.75 mdps/LSB
+
+The L3GD20 gyroscope sensor provides precise angular velocity measurements that complement the accelerometer data for comprehensive motion characterization. The configurable measurement ranges of ±250°/s, ±500°/s, and ±2000°/s accommodate different activity types and enable optimal sensitivity for specific applications.
+
+The 16-bit resolution and sensitivity of 8.75 mdps/LSB provide exceptional precision for detecting rotational movements that might not be captured by accelerometer measurements alone. This comprehensive motion sensing capability enables sophisticated activity recognition and movement artifact identification.
 
 **3-Axis Magnetometer**
-- **Sensor**: LSM303DLHC
-- **Range**: ±1.3, ±1.9, ±2.5, ±4.0, ±4.7, ±5.6, ±8.1 Gauss
-- **Resolution**: 12-bit
+
+The integrated LSM303DLHC magnetometer provides magnetic field measurements that enable orientation determination and navigation capabilities. The configurable measurement ranges from ±1.3 to ±8.1 Gauss accommodate diverse magnetic environments and enable optimal sensitivity for specific applications.
+
+The 12-bit resolution provides sufficient precision for orientation determination and compass functionality, enabling comprehensive spatial context for physiological measurements and supporting advanced analysis techniques that require precise orientation information.
 
 #### Secondary Sensors (Optional)
 
 **Electrocardiography (ECG)**
-- **Channels**: 2-lead configuration
-- **Bandwidth**: 0.5-40 Hz
-- **Resolution**: 12-bit
-- **Input Impedance**: >10MΩ
+
+The optional ECG capability provides comprehensive cardiac monitoring through a sophisticated 2-lead configuration that enables detailed analysis of cardiac rhythm and morphology. The signal processing bandwidth of 0.5-40 Hz encompasses the full frequency range of clinically relevant ECG components, ensuring that all important cardiac features are captured with high fidelity.
+
+The 12-bit resolution provides sufficient precision for detailed ECG analysis while maintaining reasonable data rates and power consumption. The high input impedance of >10MΩ ensures minimal signal loading and enables reliable measurements even with suboptimal electrode contact conditions.
 
 **Electromyography (EMG)**
-- **Channels**: Single differential
-- **Bandwidth**: 10-450 Hz
-- **Gain**: Programmable (1-100x)
+
+The EMG sensing capability enables monitoring of muscle activity through single differential channel configuration with sophisticated signal conditioning. The bandwidth of 10-450 Hz captures the essential frequency components of EMG signals while filtering out unwanted noise and artifacts.
+
+The programmable gain capability from 1-100x enables optimization for different muscle groups and activity levels, ensuring optimal signal quality across diverse measurement scenarios. This flexibility enables both surface EMG measurements for large muscle groups and more sensitive measurements for smaller muscles or subtle activity detection.
 
 ### 3.4 Communication Subsystem
 
 #### Bluetooth Module (RN-42)
-- **Standard**: Bluetooth 2.1 + EDR Class 2
-- **Range**: Up to 10 meters (Class 2)
-- **Data Rate**: Up to 2.1 Mbps
-- **Power Class**: Class 2 (2.5mW)
-- **Profiles**: SPP (Serial Port Profile)
+
+The integrated RN-42 Bluetooth module provides the foundation for wireless communication between the Shimmer3 GSR+ and connected Android devices. This module implements Bluetooth 2.1 + Enhanced Data Rate (EDR) Class 2 specifications, which represent an optimal balance between communication performance, power consumption, and cost-effectiveness for physiological monitoring applications.
+
+The Class 2 power specification enables reliable communication ranges up to 10 meters, which provides sufficient connectivity for most monitoring scenarios while maintaining manageable power consumption levels. This range capability ensures that users can move freely within typical indoor environments without experiencing connection interruptions, supporting naturalistic monitoring scenarios that are essential for valid physiological data collection.
+
+The maximum data rate capability of up to 2.1 Mbps provides substantial bandwidth for simultaneous transmission of multiple high-resolution physiological signals without requiring data compression or temporal resolution reduction. This high throughput capability is particularly important for multi-sensor configurations where GSR, PPG, accelerometer, and other sensor data must be transmitted simultaneously with minimal latency.
+
+The 2.5mW power class represents a carefully optimized power specification that ensures wireless communication does not dominate the device's overall power budget. This power efficiency enables extended operational periods while maintaining reliable communication links, supporting the extended monitoring sessions required for comprehensive physiological studies.
+
+The Serial Port Profile (SPP) implementation provides straightforward integration with Android applications through standard Bluetooth serial communication paradigms, simplifying application development while maintaining the reliability and performance characteristics essential for professional physiological monitoring applications.
 
 #### Communication Protocols
 ```
@@ -280,9 +291,12 @@ Galvanic Skin Response, also known as Electrodermal Activity (EDA), measures the
 #### Biological Mechanisms
 
 **Sweat Gland Activity**
-- Eccrine sweat glands are controlled by the sympathetic nervous system
-- Emotional arousal increases sweat gland activity
-- Increased moisture content raises skin conductance
+
+The physiological foundation of galvanic skin response measurements lies in the sophisticated relationship between the sympathetic nervous system and eccrine sweat gland function. Eccrine sweat glands are directly controlled by sympathetic nerve fibers that respond to emotional and psychological stimuli independently of thermal regulation mechanisms. This neural control enables GSR measurements to serve as objective indicators of psychological arousal and emotional state changes.
+
+Emotional arousal triggers increased activity in sympathetic nerve pathways that innervate eccrine sweat glands throughout the body, particularly in the hands and fingers where GSR measurements are typically obtained. This increased neural activity stimulates sweat gland secretion even when thermal regulation is not required, resulting in increased skin moisture content that directly affects electrical conductance measurements.
+
+The relationship between increased moisture content and elevated skin conductance forms the fundamental basis for GSR as a physiological measurement technique. As sweat gland activity increases in response to emotional or psychological stimuli, the resulting increase in skin moisture creates a more conductive pathway for electrical current, enabling sensitive detection of autonomic nervous system activation through non-invasive skin conductance measurements.
 
 **Neural Pathways**
 ```
@@ -380,24 +394,28 @@ t(i) = onset time of response i
 ### 4.5 Electrode Technology
 
 #### Electrode Specifications
-- **Material**: Ag/AgCl (Silver/Silver Chloride)
-- **Size**: 8mm diameter active area
-- **Impedance**: <5kΩ at 1kHz
-- **Stability**: Long-term drift <1%/hour
+
+The electrode system represents a critical component of the GSR measurement infrastructure, where the quality and characteristics of the skin-electrode interface directly impact measurement accuracy and signal quality. The Shimmer3 GSR+ utilizes advanced Ag/AgCl (Silver/Silver Chloride) electrodes that provide optimal electrical characteristics for physiological signal acquisition.
+
+The Silver/Silver Chloride electrode composition provides excellent electrochemical stability and minimal polarization effects that could introduce measurement artifacts. This electrode chemistry has been extensively validated for physiological measurements and provides consistent performance across diverse skin conditions and measurement durations.
+
+The 8mm diameter active area represents an optimal balance between signal quality and user comfort, providing sufficient contact area for stable electrical connection while maintaining a compact form factor suitable for extended wear. The electrode impedance specification of less than 5kΩ at 1kHz ensures minimal signal loading and optimal signal-to-noise ratio for high-quality GSR measurements.
+
+The long-term stability specification of less than 1% drift per hour ensures that extended monitoring sessions maintain measurement accuracy without requiring frequent recalibration. This stability characteristic is essential for longitudinal studies and continuous monitoring applications where measurement consistency over time is critical for valid data interpretation.
 
 #### Placement Guidelines
-```
-Optimal Placement Sites:
-1. Index and middle finger (distal phalanges)
-2. Palm and wrist (thenar and hypothenar eminences)
-3. Foot sole (for long-term monitoring)
 
-Considerations:
-- Skin preparation (cleaning, slight abrasion)
-- Electrode gel application
-- Consistent pressure and contact
-- Temperature stabilization period
-```
+Optimal electrode placement is essential for obtaining high-quality GSR measurements that accurately reflect physiological activity while minimizing artifacts and measurement variability. The selection of appropriate measurement sites must consider factors including sweat gland density, mechanical stability, user comfort, and measurement objectives.
+
+The distal phalanges of the index and middle fingers represent the most commonly used measurement sites due to their high eccrine sweat gland density and minimal interference from physical activities. These sites provide excellent signal quality and are easily accessible for electrode placement, making them ideal for controlled laboratory measurements and short-term monitoring scenarios.
+
+Palm and wrist locations, specifically the thenar and hypothenar eminences, offer alternative placement sites that may be more suitable for extended monitoring periods or activities where finger electrode placement is impractical. These sites provide good signal quality while allowing greater freedom of hand movement during monitoring sessions.
+
+Foot sole placement enables specialized applications requiring long-term monitoring where hand-based electrode placement is not feasible. While this placement site may provide lower signal amplitude, it offers excellent mechanical stability for extended monitoring applications.
+
+Proper skin preparation procedures are essential for establishing optimal electrode contact and ensuring measurement quality. Skin cleaning removes oils and debris that could impair electrical contact, while slight abrasion increases conductivity by removing dead skin cells and improving electrode-skin interface characteristics.
+
+Electrode gel application provides consistent electrical coupling between the electrode and skin surface, reducing contact impedance and improving signal quality. Consistent pressure and contact ensure stable electrode placement throughout the measurement period, while temperature stabilization allows the measurement site to reach thermal equilibrium before data collection begins.
 
 ### 4.6 Data Quality Metrics
 
