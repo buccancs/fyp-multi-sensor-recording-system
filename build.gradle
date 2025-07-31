@@ -33,14 +33,19 @@ task pythonTest(type: Exec) {
     
     workingDir file('PythonApp')
     
+    // Cross-platform Python executable detection
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def pythonExe = isWindows ? 'python.exe' : 'python'
+    def scriptsDir = isWindows ? 'Scripts' : 'bin'
+    
     // Check if conda environment exists, otherwise use system python
     def condaEnvPath = System.getenv('CONDA_PREFIX')
-    if (condaEnvPath && file("${condaEnvPath}/Scripts/python.exe").exists()) {
-        commandLine "${condaEnvPath}/Scripts/python.exe", '-m', 'pytest', 'tests/', '-v'
-    } else if (file('PythonApp/venv/Scripts/python.exe').exists()) {
-        commandLine 'PythonApp/venv/Scripts/python.exe', '-m', 'pytest', 'tests/', '-v'
+    if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'pytest', 'tests/', '-v'
+    } else if (file("PythonApp/venv/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "PythonApp/venv/${scriptsDir}/${pythonExe}", '-m', 'pytest', 'tests/', '-v'
     } else {
-        commandLine 'python', '-m', 'pytest', 'tests/', '-v'
+        commandLine pythonExe, '-m', 'pytest', 'tests/', '-v'
     }
     
     // Ignore exit value to prevent build failure if tests don't exist yet
@@ -51,10 +56,10 @@ task pythonTest(type: Exec) {
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Python tests passed"
         } else {
-            println "⚠ Python tests failed or not found (exit code: ${execResult.exitValue})"
+            println "⚠ Python tests failed or not found (exit code: ${executionResult.get().exitValue})"
         }
     }
 }
@@ -66,8 +71,9 @@ task setupPythonEnv(type: Exec) {
     
     workingDir file('.')
     
-    // Check if conda is available
-    def condaCmd = System.getProperty('os.name').toLowerCase().contains('windows') ? 'conda.exe' : 'conda'
+    // Cross-platform conda command detection
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def condaCmd = isWindows ? 'conda.exe' : 'conda'
     
     commandLine condaCmd, 'env', 'create', '-f', 'environment.yml', '--force'
     ignoreExitValue = true
@@ -77,10 +83,10 @@ task setupPythonEnv(type: Exec) {
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Conda environment created successfully"
         } else {
-            println "⚠ Failed to create conda environment (exit code: ${execResult.exitValue})"
+            println "⚠ Failed to create conda environment (exit code: ${executionResult.get().exitValue})"
             println "  Make sure conda is installed and environment.yml exists"
         }
     }
@@ -106,11 +112,16 @@ task pythonLint(type: Exec) {
     
     workingDir file('PythonApp')
     
+    // Cross-platform Python executable detection
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def pythonExe = isWindows ? 'python.exe' : 'python'
+    def scriptsDir = isWindows ? 'Scripts' : 'bin'
+    
     def condaEnvPath = System.getenv('CONDA_PREFIX')
-    if (condaEnvPath && file("${condaEnvPath}/Scripts/python.exe").exists()) {
-        commandLine "${condaEnvPath}/Scripts/python.exe", '-m', 'flake8', 'src/', '--max-line-length=88'
+    if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'flake8', 'src/', '--max-line-length=88'
     } else {
-        commandLine 'python', '-m', 'flake8', 'src/', '--max-line-length=88'
+        commandLine pythonExe, '-m', 'flake8', 'src/', '--max-line-length=88'
     }
     
     ignoreExitValue = true
@@ -120,10 +131,10 @@ task pythonLint(type: Exec) {
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Python linting passed"
         } else {
-            println "⚠ Python linting issues found (exit code: ${execResult.exitValue})"
+            println "⚠ Python linting issues found (exit code: ${executionResult.get().exitValue})"
         }
     }
 }
@@ -148,11 +159,16 @@ task pythonPackage(type: Exec) {
     
     workingDir file('PythonApp')
     
+    // Cross-platform Python executable detection
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def pythonExe = isWindows ? 'python.exe' : 'python'
+    def scriptsDir = isWindows ? 'Scripts' : 'bin'
+    
     def condaEnvPath = System.getenv('CONDA_PREFIX')
-    if (condaEnvPath && file("${condaEnvPath}/Scripts/python.exe").exists()) {
-        commandLine "${condaEnvPath}/Scripts/python.exe", '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
+    if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
     } else {
-        commandLine 'python', '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
+        commandLine pythonExe, '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
     }
     
     ignoreExitValue = true
@@ -162,10 +178,10 @@ task pythonPackage(type: Exec) {
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Python application packaged successfully"
         } else {
-            println "⚠ Python packaging failed (exit code: ${execResult.exitValue})"
+            println "⚠ Python packaging failed (exit code: ${executionResult.get().exitValue})"
         }
     }
 }
