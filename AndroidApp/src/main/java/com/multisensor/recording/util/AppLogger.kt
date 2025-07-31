@@ -384,7 +384,7 @@ object AppLogger {
     /**
      * Update performance statistics for an operation
      */
-    internal fun updatePerformanceStats(operationName: String, durationMs: Long) {
+    fun updatePerformanceStats(operationName: String, durationMs: Long) {
         performanceStats.compute(operationName) { _, existing ->
             if (existing == null) {
                 PerformanceStats(
