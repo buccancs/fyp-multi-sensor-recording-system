@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import com.multisensor.recording.R
 import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -284,18 +285,20 @@ fun UserFeedbackManager.showLowBatteryWarning(view: View, level: Int) {
     showWarning(
         view, 
         "Low battery ($level%). Connect charger for extended recording.",
-        "Settings"
-    ) {
-        // Navigate to battery settings
-    }
+        "Settings",
+        {
+            // Navigate to battery settings
+        }
+    )
 }
 
 fun UserFeedbackManager.showPermissionRequired(view: View, permission: String) {
     showError(
         view,
         "Permission required: $permission",
-        "Grant"
-    ) {
-        // Trigger permission request
-    }
+        "Grant",
+        {
+            // Trigger permission request
+        }
+    )
 }
