@@ -6,7 +6,9 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.*
+import org.mockito.kotlin.whenever
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.any
 import com.multisensor.recording.util.Logger
 
 /**
