@@ -78,10 +78,10 @@ The main enhanced window provides three primary panels:
 
 #### Running the Enhanced UI
 
-1. **Direct Launch**:
+1. **Direct Launch** (Enhanced UI is now the default):
    ```bash
    cd PythonApp/src
-   python main_enhanced_ui.py
+   python main.py
    ```
 
 2. **Demo Mode**:
