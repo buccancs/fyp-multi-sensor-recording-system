@@ -772,7 +772,7 @@ python tools/validate_data_schemas.py --session PythonApp/recordings/session_202
 
 ## Contributing
 
-We welcome contributions to improve the multi-sensor recording system:
+I welcome contributions to improve the multi-sensor recording system:
 
 1. Fork the repository and create a feature branch
 2. Make your changes following the established coding standards
