@@ -295,14 +295,16 @@ class CircularBuffer<T>(private val capacity: Int) {
 
 ## Resources
 
-- **Full Documentation**: [SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md](SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md)
-- **Official API**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
-- **Integration Guide**: [../AndroidApp/SHIMMER_INTEGRATION_GUIDE.md](../AndroidApp/SHIMMER_INTEGRATION_GUIDE.md)
-- **Implementation Example**: [../AndroidApp/src/main/java/com/multisensor/recording/](../AndroidApp/src/main/java/com/multisensor/recording/)
+Developers seeking comprehensive information should begin with the full documentation available in [SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md](SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md), which provides master thesis-level technical analysis covering all aspects of Shimmer3 GSR+ integration, from hardware specifications to advanced implementation patterns.
+
+The official API documentation is maintained in the [Shimmer Java Android API repository](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API), which contains the latest SDK updates, API references, and example implementations that demonstrate best practices for Android integration.
+
+Practical implementation guidance is available through the [integration guide](../AndroidApp/SHIMMER_INTEGRATION_GUIDE.md), which provides step-by-step instructions for common integration scenarios. Working examples can be found in the [implementation directory](../AndroidApp/src/main/java/com/multisensor/recording/), which contains production-ready code that demonstrates proper API usage and architectural patterns.
 
 ## Support
 
-For issues and questions:
-- Check [Troubleshooting section](SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md#14-troubleshooting-and-diagnostics) in full documentation
-- Visit [Shimmer Support Forum](https://www.shimmersensing.com/support/)
-- Review [GitHub Issues](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API/issues)
+When encountering issues or questions during implementation, developers should first consult the [troubleshooting section](SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md#14-troubleshooting-and-diagnostics) in the comprehensive documentation, which provides systematic diagnostic procedures and solutions for common problems.
+
+Additional support is available through the [Shimmer Support Forum](https://www.shimmersensing.com/support/), where community members and Shimmer Research engineers provide assistance with technical questions and implementation challenges.
+
+For specific API issues or bug reports, developers should review existing [GitHub Issues](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API/issues) and submit new issues with detailed descriptions and reproducible examples when necessary.

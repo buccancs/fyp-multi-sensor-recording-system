@@ -369,14 +369,16 @@ fun setGSRRange(deviceId: String, range: Int) {
 #### Temporal Components
 
 **Tonic Component (SCL - Skin Conductance Level)**
-- Slow-changing baseline level
-- Time constant: minutes to hours
-- Represents general arousal state
+
+The tonic component of galvanic skin response represents the slowly-changing baseline conductance level that reflects the overall state of sympathetic nervous system activation. This component exhibits slow temporal dynamics with time constants measured in minutes to hours, making it particularly useful for assessing sustained changes in arousal state that occur over extended periods.
+
+The SCL component provides valuable information about general arousal state and individual differences in sympathetic nervous system reactivity. Elevated baseline conductance levels may indicate chronic stress, heightened alertness, or individual predisposition toward sympathetic activation, while lower baseline levels may reflect relaxed states or reduced sympathetic tone.
 
 **Phasic Component (SCR - Skin Conductance Response)**
-- Rapid changes in response to stimuli
-- Time constant: 1-5 seconds
-- Event-related responses
+
+The phasic component represents rapid changes in skin conductance that occur in direct response to discrete stimuli or events. These responses exhibit much faster temporal dynamics with time constants typically ranging from 1-5 seconds, enabling precise temporal correlation with specific stimuli or behavioral events.
+
+SCR measurements provide detailed information about event-related autonomic responses and enable researchers to examine the temporal dynamics of sympathetic activation in response to specific psychological or physiological challenges. The rapid response characteristics make this component particularly valuable for studying stimulus-response relationships and real-time emotional processing.
 
 #### Mathematical Model
 ```
@@ -2676,8 +2678,10 @@ fun `should handle complete data collection workflow`() = runTest {
 **Issue: Device Not Discovered During Scanning**
 
 *Symptoms:*
-- Device doesn't appear in scan results
-- Bluetooth scanning completes without finding Shimmer devices
+
+Common symptoms of device discovery failures include situations where the target Shimmer device doesn't appear in scan results despite being powered on and within communication range. Users may experience scenarios where Bluetooth scanning processes complete successfully but fail to identify any Shimmer devices, even when multiple devices are present and functioning normally.
+
+These symptoms often indicate underlying issues with the Android device's Bluetooth configuration, permission settings, or environmental factors that interfere with device discovery protocols. The diagnostic process must systematically evaluate each potential cause to identify and resolve the underlying problem.
 
 *Diagnostic Steps:*
 ```kotlin
@@ -2724,9 +2728,10 @@ class ConnectionDiagnostics {
 **Issue: Poor Signal Quality or Artifacts**
 
 *Symptoms:*
-- High noise levels in GSR signal
-- Frequent signal dropouts
-- Unrealistic physiological values
+
+Signal quality issues manifest through various observable characteristics that indicate compromised measurement integrity. High noise levels in GSR signals appear as excessive signal variability that obscures physiological responses and reduces measurement sensitivity. Frequent signal dropouts create data gaps that interrupt continuous monitoring and compromise analysis validity.
+
+Unrealistic physiological values may indicate sensor calibration problems, electrode contact issues, or environmental interference that affects measurement accuracy. These symptoms require systematic evaluation to identify the underlying causes and implement appropriate corrective measures that restore optimal signal quality.
 
 *Diagnostic Algorithm:*
 ```kotlin
@@ -3000,28 +3005,32 @@ class ClinicalResearchFramework {
 The Shimmer3 GSR+ platform represents a sophisticated solution for physiological data collection and analysis in Android applications. This comprehensive documentation has covered:
 
 #### Technical Excellence
-- **Robust Architecture**: Multi-layer design ensuring scalability and maintainability
-- **Advanced Analytics**: Sophisticated signal processing and machine learning integration
-- **Performance Optimization**: Efficient memory management and computational optimization
-- **Error Resilience**: Comprehensive error handling and automated recovery mechanisms
+
+The technical foundation of the Shimmer3 GSR+ platform demonstrates exceptional engineering sophistication through its robust architecture, which implements a multi-layer design approach that ensures both scalability and maintainability across diverse application scenarios. This architectural approach enables developers to build upon a solid foundation while maintaining flexibility for future enhancements and customizations.
+
+Advanced analytics capabilities incorporate sophisticated signal processing algorithms and machine learning integration that enable real-time physiological analysis and pattern recognition. These analytics tools provide developers with powerful capabilities for extracting meaningful insights from complex physiological data streams, supporting both basic monitoring applications and advanced research scenarios.
+
+Performance optimization throughout the platform reflects careful attention to efficient memory management and computational optimization strategies that enable reliable operation even on resource-constrained mobile devices. The comprehensive error resilience framework includes robust error handling mechanisms and automated recovery procedures that maintain system stability under challenging operational conditions.
 
 #### Development Best Practices
-- **Clean Architecture**: MVVM pattern with reactive programming principles
-- **Testing Strategy**: Comprehensive unit, integration, and end-to-end testing
-- **Code Quality**: Modern Kotlin practices with dependency injection
-- **Documentation**: Extensive inline documentation and API references
+
+The development framework emphasizes clean architecture principles that implement the MVVM pattern with reactive programming paradigms, creating maintainable and testable code structures that facilitate long-term project sustainability. This architectural approach ensures that applications remain manageable and extensible as they grow in complexity and functionality.
+
+Comprehensive testing strategies encompass unit testing, integration testing, and end-to-end testing approaches that ensure code quality and reliability across all system components. Modern Kotlin development practices combined with dependency injection frameworks create robust, maintainable codebases that support professional-grade application development.
+
+Extensive inline documentation and comprehensive API references provide developers with the information needed to effectively utilize platform capabilities while reducing development time and minimizing integration challenges.
 
 #### Research Enablement
-- **Scientific Rigor**: Proper calibration procedures and data validation
-- **Reproducibility**: Standardized data formats and processing pipelines
-- **Scalability**: Support for multi-device, multi-participant studies
-- **Compliance**: Privacy protection and regulatory compliance frameworks
+
+Scientific rigor permeates all aspects of the platform through proper calibration procedures and comprehensive data validation frameworks that ensure measurement accuracy and research integrity. Standardized data formats and processing pipelines support reproducibility requirements essential for scientific research and enable reliable comparison of results across different studies and research groups.
+
+Scalability features enable support for multi-device, multi-participant studies that require coordinated data collection from multiple physiological sensors operating simultaneously. Privacy protection and regulatory compliance frameworks ensure that research applications meet ethical and legal requirements for human subjects research.
 
 #### Future-Ready Design
-- **Extensibility**: Modular architecture supporting new sensors and algorithms
-- **Adaptability**: Configuration-driven systems for diverse use cases
-- **Innovation**: Framework for integrating emerging technologies
-- **Sustainability**: Long-term maintenance and evolution strategies
+
+Extensibility features throughout the platform support modular architecture designs that accommodate new sensors and algorithms as they become available, ensuring that investments in application development remain valuable as technology continues to evolve. Configuration-driven systems provide adaptability for diverse use cases without requiring code modifications or system rebuilds.
+
+Innovation frameworks facilitate integration of emerging technologies and research developments, enabling the platform to evolve with advancing scientific understanding and technological capabilities. Sustainability considerations ensure long-term maintenance and evolution strategies that protect development investments and support continuing platform enhancement.
 
 The integration of Shimmer3 GSR+ with Android applications opens unprecedented opportunities for physiological computing research, clinical applications, and human-centered technology development. The robust technical foundation presented in this documentation ensures that developers and researchers can build reliable, scalable, and innovative applications that push the boundaries of what's possible in wearable technology and physiological sensing.
 
@@ -3152,10 +3161,9 @@ shimmerRecorder.setEnabledChannels(deviceId, setOf(
 shimmerRecorder.startStreaming()
 ```
 
-For detailed implementation guidance, refer to:
-- `AndroidApp/SHIMMER_INTEGRATION_GUIDE.md` - Complete developer guide
-- `AndroidApp/src/test/` - Comprehensive test suite examples
-- Official Shimmer repositories for additional API documentation
+For detailed implementation guidance, developers should consult the comprehensive developer guide located at `AndroidApp/SHIMMER_INTEGRATION_GUIDE.md`, which provides step-by-step implementation instructions and best practices for integrating Shimmer3 GSR+ devices into Android applications. The comprehensive test suite examples in `AndroidApp/src/test/` demonstrate proper testing approaches and provide validated examples of correct API usage.
+
+Additional technical documentation and advanced API features are available through the official Shimmer repositories, which provide access to the latest SDK updates, community-contributed examples, and detailed technical specifications that complement this documentation.
 
 ---
 
