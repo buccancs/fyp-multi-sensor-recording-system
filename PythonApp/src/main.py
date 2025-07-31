@@ -61,7 +61,7 @@ def main():
         logger.debug("Creating Enhanced MainWindow instance")
         main_window = EnhancedMainWindow()
         logger.info("Enhanced MainWindow created successfully")
-        
+
         logger.debug("Showing main window")
         main_window.show()
         logger.info("Enhanced main window displayed")
