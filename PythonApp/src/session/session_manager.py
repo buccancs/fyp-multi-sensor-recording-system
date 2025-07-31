@@ -21,6 +21,52 @@ class SessionManager:
 
         logger.info(f"session manager initialized with base directory: {self.base_recordings_dir}")
 
+    @staticmethod
+    def validate_session_name(session_name: str) -> bool:
+        """
+        Validate if a session name follows naming conventions.
+        
+        Args:
+            session_name: The session name to validate
+            
+        Returns:
+            bool: True if valid, False otherwise
+        """
+        if not session_name:
+            return False
+            
+        # Check length
+        if len(session_name) > 80:  # Leave room for timestamp
+            return False
+            
+        # Check characters (allow alphanumeric, spaces, hyphens, underscores)
+        import re
+        if not re.match(r'^[a-zA-Z0-9\s\-_]+$', session_name):
+            return False
+            
+        return True
+
+    @staticmethod
+    def generate_device_filename(device_id: str, file_type: str, extension: str, 
+                                timestamp: Optional[datetime] = None) -> str:
+        """
+        Generate standardized filename for device files.
+        
+        Args:
+            device_id: Device identifier (e.g., 'phone_1', 'webcam_1')
+            file_type: Type of file (e.g., 'rgb', 'thermal', 'gsr')
+            extension: File extension without dot (e.g., 'mp4', 'csv')
+            timestamp: Optional timestamp, uses current time if None
+            
+        Returns:
+            str: Standardized filename
+        """
+        if timestamp is None:
+            timestamp = datetime.now()
+        
+        timestamp_str = timestamp.strftime("%Y%m%d_%H%M%S")
+        return f"{device_id}_{file_type}_{timestamp_str}.{extension}"
+
     def create_session(self, session_name: Optional[str] = None) -> Dict:
         """create a new recording session"""
         logger.info(f"creating new session with name: {session_name}")
@@ -30,8 +76,16 @@ class SessionManager:
             session_id = timestamp.strftime("session_%Y%m%d_%H%M%S")
         else:
             safe_name = "".join(
-                c for c in session_name if c.isalnum() or c in (" ", "-", "_")
-            ).rstrip()
+                c if c.isalnum() or c in ("-", "_") else "_" 
+                for c in session_name.replace(" ", "_")
+            ).strip("_")
+            
+            # Ensure name is not empty and not too long
+            if not safe_name or len(safe_name) == 0:
+                safe_name = "session"
+            elif len(safe_name) > 50:  # Limit length for filesystem compatibility
+                safe_name = safe_name[:50].rstrip("_")
+            
             session_id = f"{safe_name}_{timestamp.strftime('%Y%m%d_%H%M%S')}"
 
         session_folder = self.base_recordings_dir / session_id
