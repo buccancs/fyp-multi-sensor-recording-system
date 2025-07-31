@@ -12,7 +12,7 @@ Milestone: 3.1 - PyQt GUI Scaffolding and Application Framework
 
 import os
 import sys
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, qVersion
 from PyQt5.QtWidgets import QApplication
 
 # Add the src directory to the Python path for imports
@@ -35,7 +35,7 @@ def main():
     """Main application entry point."""
     logger.info("=== Multi-Sensor Recording System Controller Starting ===")
     logger.info(f"Python version: {sys.version}")
-    logger.info(f"PyQt5 available, Qt version: {Qt.qVersion()}")
+    logger.info(f"PyQt5 available, Qt version: {qVersion()}")
     
     try:
         # Enable high DPI scaling for better display on high-resolution screens
