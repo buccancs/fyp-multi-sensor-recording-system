@@ -40,6 +40,8 @@ class CalibrationManager:
     """
 
     def __init__(self, output_dir: str = "calibration_data"):
+        self.logger = get_logger(__name__)
+        self.logger.info(f"for initialized")
         """
         Initialize calibration manager.
 

@@ -1,4 +1,6 @@
 """
+
+from utils.logging_config import get_logger, log_function_entry, performance_timer
 Application class for the Multi-Sensor Recording System.
 
 This module implements the Application class that serves as a dependency injection
@@ -36,6 +38,8 @@ class Application(QObject):
     """
     
     def __init__(self):
+        self.logger = get_logger(__name__)
+        self.logger.info(f"Application initialized")
         """Initialize the application and create all services."""
         super().__init__()
         
