@@ -57,6 +57,13 @@ This platform is particularly suited for:
 
 The Shimmer3 GSR+ is a compact, wearable sensor platform developed by Shimmer Research for physiological data collection. The device combines multiple sensing modalities in a single, battery-powered unit that communicates wirelessly with host systems via Bluetooth.
 
+**Official Development Resources:**
+- **Shimmer Android API**: [https://github.com/ShimmerEngineering/ShimmerAndroidAPI](https://github.com/ShimmerEngineering/ShimmerAndroidAPI)
+- **Shimmer Java Android API**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+- **Shimmer Research Official Site**: [https://www.shimmersensing.com/](https://www.shimmersensing.com/)
+
+This documentation covers the integration of Shimmer3 GSR+ devices using the official Shimmer Research APIs and SDKs, providing a comprehensive guide for Android application developers.
+
 ### 2.2 Historical Context
 
 Shimmer Research has been developing wearable sensor platforms since 2008, with the Shimmer3 generation representing significant advances in:
@@ -1315,20 +1322,72 @@ class ConnectionLifecycleManager @Inject constructor(
 
 The Shimmer Java Android API provides a comprehensive framework for integrating Shimmer3 GSR+ devices with Android applications. The API follows a modular architecture designed for scalability, maintainability, and ease of use.
 
-#### Core API Components
+**Official API Repository**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+
+#### Core API Components from Official Shimmer SDK
+
+The integration leverages key classes from the official Shimmer Android API:
+
+```java
+// Core Shimmer Classes (from official repository)
+import com.shimmerresearch.android.Shimmer;
+import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid;
+import com.shimmerresearch.driver.ObjectCluster;
+import com.shimmerresearch.driver.Configuration;
+
+// Main API Components
+class ShimmerBluetoothManagerAndroid {
+    // Device discovery and connection management
+    public void connectShimmerDevice(String bluetoothAddress)
+    public void startStreaming(String bluetoothAddress)
+    public void stopStreaming(String bluetoothAddress)
+    public void startSDLogging(String bluetoothAddress)
+    public void stopSDLogging(String bluetoothAddress)
+}
+
+class Shimmer {
+    // Individual device control and configuration
+    public void writeEnabledSensors(long enabledSensors)
+    public void writeSamplingRate(double samplingRate)
+    public void writeGSRRange(int gsrRange)
+    public void writeAccelRange(int accelRange)
+    public ObjectCluster getLatestReceivedObjectCluster()
+}
+
+class ObjectCluster {
+    // Data container for sensor readings
+    public Collection<FormatCluster> getCollectionOfFormatClusters(String objectClusterName)
+    public double getFormatClusterValue(String channelName, String formatName)
+    public String[] getNames()
+}
+```
+
+#### Enhanced Integration Layer
+
+Our implementation extends the official API with additional functionality:
 
 ```kotlin
-// Primary API Entry Point
-class ShimmerManager {
-    private val bluetoothAdapter: BluetoothAdapter
-    private val deviceManager: ShimmerDeviceManager
-    private val dataProcessor: ShimmerDataProcessor
-    private val connectionManager: ConnectionManager
+// Custom integration layer built on official Shimmer API
+class ShimmerRecorder @Inject constructor(
+    private val shimmerBluetoothManager: ShimmerBluetoothManagerAndroid,
+    private val sessionManager: SessionManager,
+    private val logger: Logger
+) {
+    // Enhanced connection management with retry logic
+    suspend fun connectSingleDevice(
+        macAddress: String,
+        deviceName: String,
+        connectionType: ShimmerBluetoothManagerAndroid.BT_TYPE
+    ): Boolean
     
-    fun initialize(context: Context): Result<Unit>
-    fun scanForDevices(): Flow<ShimmerDevice>
-    fun connectToDevice(device: ShimmerDevice): Result<ShimmerConnection>
-    fun getConnectedDevices(): List<ShimmerConnection>
+    // Multi-device management capabilities
+    suspend fun connectMultipleDevices(deviceConfigs: List<DeviceConfig>): List<ConnectionResult>
+    
+    // Session-based data recording
+    suspend fun startSessionRecording(sessionId: String): Boolean
+    
+    // Real-time data quality assessment
+    fun getDataQualityMetrics(deviceId: String): DataQualityMetrics?
 }
 ```
 
@@ -2940,8 +2999,10 @@ As the field continues to evolve, this platform will serve as a cornerstone for 
 
 1. **Shimmer Official Documentation**
    - Shimmer3 GSR+ User Manual v3.2
-   - Shimmer Java Android API Reference
+   - **Shimmer Java Android API Reference**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+   - **Shimmer Android API Documentation**: [https://github.com/ShimmerEngineering/ShimmerAndroidAPI](https://github.com/ShimmerEngineering/ShimmerAndroidAPI)
    - Bluetooth Communication Protocol Specification
+   - **Official Shimmer Engineering Resources**: [https://github.com/ShimmerEngineering](https://github.com/ShimmerEngineering)
 
 2. **Academic References**
    - Boucsein, W. (2012). *Electrodermal Activity*. Springer Science & Business Media.
@@ -2982,9 +3043,83 @@ As the field continues to evolve, this platform will serve as a cornerstone for 
 
 ### 16.4 Code Examples and Repositories
 
-- **Official Shimmer Android Examples**: [GitHub Repository Link]
-- **Community Contributions**: [Community Forum Link]
-- **Research Implementations**: [Academic Code Repository]
+1. **Official Shimmer Engineering Repositories**
+   - **Shimmer Android API**: [https://github.com/ShimmerEngineering/ShimmerAndroidAPI](https://github.com/ShimmerEngineering/ShimmerAndroidAPI)
+   - **Shimmer Java Android API**: [https://github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
+   - **Shimmer Base Documentation**: [https://github.com/ShimmerEngineering/shimmer-base-api](https://github.com/ShimmerEngineering/shimmer-base-api)
+
+2. **Community Resources**
+   - **Shimmer Support Forum**: [https://www.shimmersensing.com/support/](https://www.shimmersensing.com/support/)
+   - **Shimmer Developer Community**: [https://github.com/ShimmerEngineering](https://github.com/ShimmerEngineering)
+   - **Research Implementations**: [Academic Code Repository]
+
+3. **Integration Examples**
+   - **Android App Implementation**: `AndroidApp/src/main/java/com/multisensor/recording/`
+   - **Shimmer Integration Guide**: `AndroidApp/SHIMMER_INTEGRATION_GUIDE.md`
+   - **Enhanced Features**: `AndroidApp/IMPROVEMENTS_SUMMARY.md`
+
+### 16.5 Practical Implementation Examples
+
+This repository contains a complete implementation of Shimmer3 GSR+ integration within the Bucika GSR Android application, serving as a comprehensive reference for developers:
+
+#### Android Application Structure
+```
+AndroidApp/
+├── src/main/java/com/multisensor/recording/
+│   ├── recording/
+│   │   ├── ShimmerRecorder.kt                    # Main Shimmer integration class
+│   │   ├── DeviceStatusTracker.kt                # Device status monitoring
+│   │   └── PCCommunicationHandler.kt             # Communication management
+│   ├── ui/
+│   │   ├── components/                           # UI components for Shimmer control
+│   │   └── MainViewModel.kt                      # ViewModel with Shimmer state management
+│   └── data/
+│       ├── SensorSample.kt                       # Data models for sensor readings
+│       └── SessionManager.kt                     # Session and file management
+├── SHIMMER_INTEGRATION_GUIDE.md                  # Developer integration guide
+├── IMPROVEMENTS_SUMMARY.md                       # Feature enhancements documentation
+└── validate_shimmer_integration.sh               # Integration validation script
+```
+
+#### Key Implementation Features
+
+1. **Multi-Device Management**: The implementation supports simultaneous connection and data collection from multiple Shimmer3 GSR+ devices
+2. **Real-Time Data Processing**: ObjectCluster-based data processing with real-time quality metrics
+3. **Session Integration**: Seamless integration with the broader multi-sensor recording system
+4. **Error Recovery**: Robust error handling with automatic reconnection capabilities
+5. **Data Quality Monitoring**: Real-time signal quality assessment and battery monitoring
+
+#### Getting Started with the Implementation
+
+```kotlin
+// Example usage from the Android app
+val shimmerRecorder = ShimmerRecorder(context, sessionManager, logger)
+shimmerRecorder.initialize()
+
+// Connect to device
+val connected = shimmerRecorder.connectSingleDevice(
+    macAddress = "00:06:66:66:96:86",
+    deviceName = "Shimmer3-GSR+",
+    connectionType = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
+)
+
+// Configure sensors
+shimmerRecorder.setEnabledChannels(deviceId, setOf(
+    SensorChannel.GSR,
+    SensorChannel.PPG,
+    SensorChannel.ACCEL_X,
+    SensorChannel.ACCEL_Y,
+    SensorChannel.ACCEL_Z
+))
+
+// Start data collection
+shimmerRecorder.startStreaming()
+```
+
+For detailed implementation guidance, refer to:
+- `AndroidApp/SHIMMER_INTEGRATION_GUIDE.md` - Complete developer guide
+- `AndroidApp/src/test/` - Comprehensive test suite examples
+- Official Shimmer repositories for additional API documentation
 
 ---
 
