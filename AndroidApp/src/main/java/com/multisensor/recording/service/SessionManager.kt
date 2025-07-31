@@ -3,6 +3,7 @@ package com.multisensor.recording.service
 import android.content.Context
 import android.os.Environment
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,6 +24,7 @@ class SessionManager
     constructor(
         @ApplicationContext private val context: Context,
         private val logger: Logger,
+        private val thermalSettings: ThermalCameraSettings,
     ) {
         private var currentSession: RecordingSession? = null
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
@@ -30,11 +32,14 @@ class SessionManager
         companion object {
             private const val BASE_FOLDER_NAME = "MultiSensorRecording"
             private const val SESSION_INFO_FILE = "session_info.txt"
+            private const val SESSION_CONFIG_FILE = "session_config.json"
             private const val RGB_VIDEO_FILE = "rgb_video.mp4"
             private const val THERMAL_VIDEO_FILE = "thermal_video.mp4"
+            private const val THERMAL_DATA_FOLDER = "thermal_data"
             private const val RAW_FRAMES_FOLDER = "raw_frames"
             private const val SHIMMER_DATA_FILE = "shimmer_data.csv"
             private const val LOG_FILE = "session_log.txt"
+            private const val CALIBRATION_FOLDER = "calibration"
         }
 
         /**
@@ -90,6 +95,9 @@ class SessionManager
                     // Write session info file
                     writeSessionInfo(session)
 
+                    // Write session configuration file with thermal settings
+                    writeSessionConfig(session)
+
                     logger.info("Session created successfully: $sessionId at ${sessionFolder.absolutePath}")
 
                     sessionId
@@ -142,9 +150,12 @@ class SessionManager
                     sessionFolder = session.sessionFolder,
                     rgbVideoFile = File(session.sessionFolder, RGB_VIDEO_FILE),
                     thermalVideoFile = File(session.sessionFolder, THERMAL_VIDEO_FILE),
+                    thermalDataFolder = File(session.sessionFolder, THERMAL_DATA_FOLDER),
                     rawFramesFolder = File(session.sessionFolder, RAW_FRAMES_FOLDER),
                     shimmerDataFile = File(session.sessionFolder, SHIMMER_DATA_FILE),
                     logFile = File(session.sessionFolder, LOG_FILE),
+                    calibrationFolder = File(session.sessionFolder, CALIBRATION_FOLDER),
+                    sessionConfigFile = File(session.sessionFolder, SESSION_CONFIG_FILE),
                 )
             }
 
@@ -155,9 +166,12 @@ class SessionManager
             val sessionFolder: File,
             val rgbVideoFile: File,
             val thermalVideoFile: File,
+            val thermalDataFolder: File,
             val rawFramesFolder: File,
             val shimmerDataFile: File,
             val logFile: File,
+            val calibrationFolder: File,
+            val sessionConfigFile: File,
         )
 
         /**
@@ -186,9 +200,22 @@ class SessionManager
          * Creates necessary subfolders for a session
          */
         private fun createSessionSubfolders(sessionFolder: File) {
+            // Create raw frames folder
             val rawFramesFolder = File(sessionFolder, RAW_FRAMES_FOLDER)
             if (!rawFramesFolder.exists() && !rawFramesFolder.mkdirs()) {
                 logger.warning("Failed to create raw frames folder: ${rawFramesFolder.absolutePath}")
+            }
+            
+            // Create thermal data folder
+            val thermalDataFolder = File(sessionFolder, THERMAL_DATA_FOLDER)
+            if (!thermalDataFolder.exists() && !thermalDataFolder.mkdirs()) {
+                logger.warning("Failed to create thermal data folder: ${thermalDataFolder.absolutePath}")
+            }
+            
+            // Create calibration folder
+            val calibrationFolder = File(sessionFolder, CALIBRATION_FOLDER)
+            if (!calibrationFolder.exists() && !calibrationFolder.mkdirs()) {
+                logger.warning("Failed to create calibration folder: ${calibrationFolder.absolutePath}")
             }
         }
 
@@ -211,11 +238,65 @@ class SessionManager
                         appendLine("Status: ${session.status}")
                         appendLine("Session Folder: ${session.sessionFolder.absolutePath}")
                         appendLine("Created: ${Date()}")
+                        appendLine("")
+                        appendLine("=== Folder Structure ===")
+                        appendLine("RGB Video: $RGB_VIDEO_FILE")
+                        appendLine("Thermal Video: $THERMAL_VIDEO_FILE")
+                        appendLine("Thermal Data: $THERMAL_DATA_FOLDER/")
+                        appendLine("Raw Frames: $RAW_FRAMES_FOLDER/")
+                        appendLine("Shimmer Data: $SHIMMER_DATA_FILE")
+                        appendLine("Calibration: $CALIBRATION_FOLDER/")
+                        appendLine("Session Config: $SESSION_CONFIG_FILE")
+                        appendLine("Log File: $LOG_FILE")
                     }
 
                 infoFile.writeText(info)
             } catch (e: Exception) {
                 logger.error("Failed to write session info", e)
+            }
+        }
+
+        /**
+         * Writes session configuration including thermal settings
+         */
+        private fun writeSessionConfig(session: RecordingSession) {
+            try {
+                val configFile = File(session.sessionFolder, SESSION_CONFIG_FILE)
+                val thermalConfig = thermalSettings.getCurrentConfig()
+                
+                val configJson = buildString {
+                    appendLine("{")
+                    appendLine("  \"session_id\": \"${session.sessionId}\",")
+                    appendLine("  \"start_time\": ${session.startTime},")
+                    appendLine("  \"timestamp\": \"${Date(session.startTime)}\",")
+                    appendLine("  \"thermal_camera\": {")
+                    appendLine("    \"enabled\": ${thermalConfig.isEnabled},")
+                    appendLine("    \"frame_rate\": ${thermalConfig.frameRate},")
+                    appendLine("    \"color_palette\": \"${thermalConfig.colorPalette}\",")
+                    appendLine("    \"temperature_range\": \"${thermalConfig.temperatureRange}\",")
+                    appendLine("    \"emissivity\": ${thermalConfig.emissivity},")
+                    appendLine("    \"auto_calibration\": ${thermalConfig.autoCalibration},")
+                    appendLine("    \"high_resolution\": ${thermalConfig.highResolution},")
+                    appendLine("    \"temperature_units\": \"${thermalConfig.temperatureUnits}\",")
+                    appendLine("    \"usb_priority\": ${thermalConfig.usbPriority},")
+                    appendLine("    \"data_format\": \"${thermalConfig.dataFormat}\"")
+                    appendLine("  },")
+                    appendLine("  \"folder_structure\": {")
+                    appendLine("    \"rgb_video\": \"$RGB_VIDEO_FILE\",")
+                    appendLine("    \"thermal_video\": \"$THERMAL_VIDEO_FILE\",")
+                    appendLine("    \"thermal_data_folder\": \"$THERMAL_DATA_FOLDER\",")
+                    appendLine("    \"raw_frames_folder\": \"$RAW_FRAMES_FOLDER\",")
+                    appendLine("    \"shimmer_data\": \"$SHIMMER_DATA_FILE\",")
+                    appendLine("    \"calibration_folder\": \"$CALIBRATION_FOLDER\",")
+                    appendLine("    \"log_file\": \"$LOG_FILE\"")
+                    appendLine("  }")
+                    appendLine("}")
+                }
+                
+                configFile.writeText(configJson)
+                logger.debug("Session configuration written to: ${configFile.absolutePath}")
+            } catch (e: Exception) {
+                logger.error("Failed to write session config", e)
             }
         }
 
@@ -230,9 +311,12 @@ class SessionManager
                         sessionFolder = session.sessionFolder,
                         rgbVideoFile = File(session.sessionFolder, RGB_VIDEO_FILE),
                         thermalVideoFile = File(session.sessionFolder, THERMAL_VIDEO_FILE),
+                        thermalDataFolder = File(session.sessionFolder, THERMAL_DATA_FOLDER),
                         rawFramesFolder = File(session.sessionFolder, RAW_FRAMES_FOLDER),
                         shimmerDataFile = File(session.sessionFolder, SHIMMER_DATA_FILE),
                         logFile = File(session.sessionFolder, LOG_FILE),
+                        calibrationFolder = File(session.sessionFolder, CALIBRATION_FOLDER),
+                        sessionConfigFile = File(session.sessionFolder, SESSION_CONFIG_FILE),
                     )
 
                 logger.info("Session Summary:")

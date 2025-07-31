@@ -112,6 +112,169 @@ class SettingsActivity : AppCompatActivity() {
                 value?.let { summary = "Frame Rate: ${it}fps" }
             }
 
+            // Thermal Frame Rate validation
+            findPreference<androidx.preference.ListPreference>("thermal_frame_rate")?.apply {
+                setOnPreferenceChangeListener { _, newValue ->
+                    val frameRate = newValue as String
+                    summary = "Thermal Frame Rate: ${frameRate}fps"
+                    true
+                }
+
+                // Set initial summary
+                value?.let { summary = "Thermal Frame Rate: ${it}fps" }
+            }
+
+            // Thermal Color Palette
+            findPreference<androidx.preference.ListPreference>("thermal_color_palette")?.apply {
+                setOnPreferenceChangeListener { _, newValue ->
+                    val palette = newValue as String
+                    val displayName = when (palette) {
+                        "iron" -> "Iron"
+                        "rainbow" -> "Rainbow"
+                        "grayscale" -> "Grayscale"
+                        "hot_metal" -> "Hot Metal"
+                        "arctic" -> "Arctic"
+                        "medical" -> "Medical"
+                        else -> palette
+                    }
+                    summary = "Color Palette: $displayName"
+                    true
+                }
+
+                // Set initial summary
+                value?.let { 
+                    val displayName = when (it) {
+                        "iron" -> "Iron"
+                        "rainbow" -> "Rainbow"
+                        "grayscale" -> "Grayscale"
+                        "hot_metal" -> "Hot Metal"
+                        "arctic" -> "Arctic"
+                        "medical" -> "Medical"
+                        else -> it
+                    }
+                    summary = "Color Palette: $displayName"
+                }
+            }
+
+            // Thermal Temperature Range
+            findPreference<androidx.preference.ListPreference>("thermal_temperature_range")?.apply {
+                setOnPreferenceChangeListener { _, newValue ->
+                    val range = newValue as String
+                    val displayName = when (range) {
+                        "auto" -> "Auto Range"
+                        "-20_150" -> "-20°C to 150°C"
+                        "0_100" -> "0°C to 100°C"
+                        "15_45" -> "15°C to 45°C (Human Body)"
+                        "20_40" -> "20°C to 40°C (Room Temp)"
+                        "custom" -> "Custom Range"
+                        else -> range
+                    }
+                    summary = "Temperature Range: $displayName"
+                    true
+                }
+
+                // Set initial summary
+                value?.let { 
+                    val displayName = when (it) {
+                        "auto" -> "Auto Range"
+                        "-20_150" -> "-20°C to 150°C"
+                        "0_100" -> "0°C to 100°C"
+                        "15_45" -> "15°C to 45°C (Human Body)"
+                        "20_40" -> "20°C to 40°C (Room Temp)"
+                        "custom" -> "Custom Range"
+                        else -> it
+                    }
+                    summary = "Temperature Range: $displayName"
+                }
+            }
+
+            // Thermal Emissivity validation
+            findPreference<androidx.preference.EditTextPreference>("thermal_emissivity")?.apply {
+                setOnPreferenceChangeListener { _, newValue ->
+                    val emissivityStr = newValue as String
+                    try {
+                        val emissivity = emissivityStr.toFloat()
+                        if (emissivity in 0.1f..1.0f) {
+                            summary = "Emissivity: $emissivity"
+                            true
+                        } else {
+                            android.widget.Toast
+                                .makeText(
+                                    context,
+                                    "Emissivity must be between 0.1 and 1.0",
+                                    android.widget.Toast.LENGTH_LONG,
+                                ).show()
+                            false
+                        }
+                    } catch (e: NumberFormatException) {
+                        android.widget.Toast
+                            .makeText(
+                                context,
+                                "Invalid emissivity value",
+                                android.widget.Toast.LENGTH_LONG,
+                            ).show()
+                        false
+                    }
+                }
+
+                // Set initial summary
+                text?.let { summary = "Emissivity: $it" }
+            }
+
+            // Thermal Temperature Units
+            findPreference<androidx.preference.ListPreference>("thermal_temperature_units")?.apply {
+                setOnPreferenceChangeListener { _, newValue ->
+                    val units = newValue as String
+                    val displayName = when (units) {
+                        "celsius" -> "Celsius (°C)"
+                        "fahrenheit" -> "Fahrenheit (°F)"
+                        "kelvin" -> "Kelvin (K)"
+                        else -> units
+                    }
+                    summary = "Temperature Units: $displayName"
+                    true
+                }
+
+                // Set initial summary
+                value?.let { 
+                    val displayName = when (it) {
+                        "celsius" -> "Celsius (°C)"
+                        "fahrenheit" -> "Fahrenheit (°F)"
+                        "kelvin" -> "Kelvin (K)"
+                        else -> it
+                    }
+                    summary = "Temperature Units: $displayName"
+                }
+            }
+
+            // Thermal Data Format
+            findPreference<androidx.preference.ListPreference>("thermal_data_format")?.apply {
+                setOnPreferenceChangeListener { _, newValue ->
+                    val format = newValue as String
+                    val displayName = when (format) {
+                        "radiometric" -> "Radiometric (Full Temperature Data)"
+                        "visual" -> "Visual (Image Only)"
+                        "combined" -> "Combined (Image + Temperature)"
+                        "raw" -> "Raw (Sensor Data)"
+                        else -> format
+                    }
+                    summary = "Data Format: $displayName"
+                    true
+                }
+
+                // Set initial summary
+                value?.let { 
+                    val displayName = when (it) {
+                        "radiometric" -> "Radiometric (Full Temperature Data)"
+                        "visual" -> "Visual (Image Only)"
+                        "combined" -> "Combined (Image + Temperature)"
+                        "raw" -> "Raw (Sensor Data)"
+                        else -> it
+                    }
+                    summary = "Data Format: $displayName"
+                }
+            }
+
             // Server IP validation
             findPreference<androidx.preference.EditTextPreference>("server_ip")?.apply {
                 setOnPreferenceChangeListener { _, newValue ->
