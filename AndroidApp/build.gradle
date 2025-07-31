@@ -382,7 +382,7 @@ tasks.withType(Test) {
     jacoco.excludes = ['jdk.internal.*']
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDevDebugUnitTest', 'createDevDebugCoverageReport']) {
     group = "Reporting"
     description = "Generates Jacoco coverage reports."
     
@@ -412,8 +412,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     classDirectories.setFrom(files([debugTree, kotlinDebugTree]))
     
     executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-        "jacoco/testDebugUnitTest.exec",
-        "outputs/code_coverage/debugAndroidTest/connected/**/*.ec"
+        "jacoco/testDevDebugUnitTest.exec",
+        "outputs/code_coverage/devDebugAndroidTest/connected/**/*.ec"
     ]))
 
     sourceDirectories.setFrom(files([
