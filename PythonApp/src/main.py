@@ -25,7 +25,7 @@ from utils.logging_config import get_logger, AppLogger
 log_level = os.environ.get('MSR_LOG_LEVEL', 'INFO')
 AppLogger.set_level(log_level)
 
-from gui.main_window import MainWindow
+from gui.dual_webcam_main_window import DualWebcamMainWindow
 
 # Get logger for this module
 logger = get_logger(__name__)
@@ -55,9 +55,9 @@ def main():
         logger.info("Application properties configured")
 
         # Create and show the main window
-        logger.debug("Creating MainWindow instance")
-        main_window = MainWindow()
-        logger.info("MainWindow created successfully")
+        logger.debug("Creating DualWebcamMainWindow instance")
+        main_window = DualWebcamMainWindow()
+        logger.info("DualWebcamMainWindow created successfully")
         
         logger.debug("Showing main window")
         main_window.show()
