@@ -7,20 +7,20 @@ This directory contains comprehensive academic documentation for the "Contactles
 The documentation is organized according to academic thesis/report standards:
 
 ### Chapter 2: Context and Background
-- **[Context_Background.md](Context_Background.md)** - Literature review, related work, and theoretical foundations
-- **[Technology_Selection.md](Technology_Selection.md)** - Tool and framework selection rationale
-- **[Computer_Vision_Background.md](Computer_Vision_Background.md)** - Computer vision and machine learning foundations
+- **[context-background.md](context-background.md)** - Literature review, related work, and theoretical foundations
+- **[technology-selection.md](technology-selection.md)** - Tool and framework selection rationale
+- **[computer-vision-background.md](computer-vision-background.md)** - Computer vision and machine learning foundations
 
 ### Chapter 3: Requirements and Analysis  
-- **[Problem_Statement.md](Problem_Statement.md)** - Detailed problem elaboration
-- **[Requirements_Analysis.md](Requirements_Analysis.md)** - Structured requirements and use cases
+- **[problem-statement.md](problem-statement.md)** - Detailed problem elaboration
+- **[requirements-analysis.md](requirements-analysis.md)** - Structured requirements and use cases
 - **[Data_Modeling.md](Data_Modeling.md)** - Data analysis and system modeling
 
 ### Chapter 4: Design and Implementation
-- **[System_Architecture.md](System_Architecture.md)** - Overall system design and architecture
-- **[Android_Application_Design.md](Android_Application_Design.md)** - Android app design and implementation
-- **[Python_Application_Design.md](Python_Application_Design.md)** - Desktop controller design
-- **[Networking_Synchronization.md](Networking_Synchronization.md)** - Network protocols and sync mechanisms
+- **[system-architecture-detailed.md](system-architecture-detailed.md)** - Overall system design and architecture
+- **[android-application-design.md](android-application-design.md)** - Android app design and implementation
+- **[python-application-design.md](python-application-design.md)** - Desktop controller design
+- **[networking-synchronization.md](networking-synchronization.md)** - Network protocols and sync mechanisms
 - **[Sensor_Integration.md](Sensor_Integration.md)** - Hardware sensor integration design
 - **[UI_UX_Design.md](UI_UX_Design.md)** - User interface and experience design
 - **[Database_Storage_Design.md](Database_Storage_Design.md)** - Data storage and management
