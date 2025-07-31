@@ -1,5 +1,9 @@
 package com.multisensor.recording.controllers
 
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logE
+
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog

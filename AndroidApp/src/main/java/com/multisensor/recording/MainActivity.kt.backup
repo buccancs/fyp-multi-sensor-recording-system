@@ -115,8 +115,6 @@ class MainActivity : AppCompatActivity(),
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppLogger.logMethodEntry("MainActivity", "onCreate", "Initializing main activity")
-        AppLogger.logMemoryUsage("MainActivity", "onCreate - start")
         super.onCreate(savedInstanceState)
         
         AppLogger.logLifecycle("MainActivity", "onCreate")
@@ -297,7 +295,6 @@ class MainActivity : AppCompatActivity(),
         }
 
     override fun onResume() {
-        AppLogger.logMethodEntry("MainActivity", "onResume", "Activity resuming")
         super.onResume()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onResume() called")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity is now fully visible and interactive")
@@ -322,7 +319,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onPause() {
-        AppLogger.logMethodEntry("MainActivity", "onPause", "Activity pausing")
         super.onPause()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onPause() called")
     }

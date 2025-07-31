@@ -34,6 +34,8 @@ class SessionManager:
     """
 
     def __init__(self, base_recordings_dir: str = "recordings"):
+        self.logger = get_logger(__name__)
+        self.logger.info(f"for initialized")
         """
         Initialize session manager.
 
