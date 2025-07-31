@@ -32,7 +32,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
+      uses: conda-incubator/setup-miniconda@v3
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -125,7 +125,7 @@ jobs:
         echo "- Pre-commit hooks: Validated" >> integration-test-report.md
         
     - name: Upload integration test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: integration-test-results
@@ -155,7 +155,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
+      uses: conda-incubator/setup-miniconda@v3
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -184,7 +184,7 @@ jobs:
         conda list --name ${{ env.CONDA_ENV_NAME }}
         
     - name: Upload platform test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: platform-test-results-${{ matrix.os }}
         path: |
@@ -283,7 +283,7 @@ jobs:
         fi
         
     - name: Upload documentation report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: documentation-test-results
         path: documentation-report.md
@@ -298,7 +298,7 @@ jobs:
     
     steps:
     - name: Download all test results
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: test-results/
         
@@ -343,14 +343,14 @@ jobs:
         echo "All components of the multi-sensor recording system have been validated." >> integration-summary.md
         
     - name: Upload consolidated summary
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: integration-test-summary
         path: integration-summary.md
         retention-days: 30
         
     - name: Comment PR with integration results
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       if: github.event_name == 'pull_request'
       with:
         script: |

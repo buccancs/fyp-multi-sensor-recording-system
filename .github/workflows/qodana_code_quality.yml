@@ -104,7 +104,7 @@ jobs:
         
       # Cache Qodana analysis results
       - name: Cache Qodana results
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.qodana_cache
@@ -162,7 +162,7 @@ jobs:
           
       # Upload comprehensive results as artifacts
       - name: Upload Qodana results and reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: qodana-analysis-report-${{ github.run_number }}
@@ -173,7 +173,7 @@ jobs:
           
       # Comment quality results on PR (if it's a PR)
       - name: Comment PR with quality results
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         if: github.event_name == 'pull_request' && always()
         with:
           script: |
