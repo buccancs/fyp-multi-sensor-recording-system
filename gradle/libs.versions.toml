@@ -41,6 +41,7 @@ robolectric = "4.13"
 truth = "1.4.4"
 uiautomator = "2.3.0"
 xxpermissions = "20.0"
+annotation = "1.9.1"
 
 [libraries]
 # AndroidX & Google - Core UI Components
@@ -106,6 +107,7 @@ espresso-intents = { module = "androidx.test.espresso:espresso-intents", version
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
 uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 
 [bundles]
 # Core UI Components
