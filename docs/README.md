@@ -15,12 +15,21 @@ The user documentation focuses on practical guidance for finding and working wit
 
 - **[Data Structure Documentation](DATA_STRUCTURE_DOCUMENTATION.md)** - This comprehensive resource explains the complete technical architecture of how data is organized. It covers file hierarchies, data schemas, relationships between files, and provides detailed explanations of each data type and its purpose within the recording system.
 
+- **[Shimmer3 GSR+ Quick Reference](SHIMMER3_GSR_PLUS_QUICK_REFERENCE.md)** - Essential quick-start guide for developers integrating Shimmer3 GSR+ devices, including setup instructions, configuration examples, and common use cases.
+
 ### For Developers and Technical Users  
 The developer documentation provides the technical specifications and standards needed for system maintenance, extension, and integration.
 
 - **[File Naming Standards](FILE_NAMING_STANDARDS.md)** - This detailed specification document covers all naming conventions used throughout the system. It explains the rationale behind naming patterns, provides examples for different scenarios, and includes validation guidelines to ensure consistency across all recorded data.
 
 - **[JSON Schemas](schemas/)** - This directory contains machine-readable schema definitions that formally specify the structure and validation rules for all JSON files in the system. These schemas enable automated validation and serve as authoritative references for data format specifications.
+
+### Device-Specific Technical Documentation
+Comprehensive technical documentation for the individual sensor platforms and devices integrated into the system.
+
+- **[Shimmer3 GSR+ Comprehensive Documentation](SHIMMER3_GSR_PLUS_COMPREHENSIVE_DOCUMENTATION.md)** - Master thesis-level technical documentation covering Shimmer3 GSR+ physiological sensor integration, including hardware specifications, Android API integration, communication protocols, data processing algorithms, and implementation best practices.
+
+- **[Topdon TC001 Thermal Camera Documentation](TOPDON_TC001_COMPREHENSIVE_DOCUMENTATION.md)** - Comprehensive technical documentation for thermal camera integration, covering hardware specifications, SDK architecture, USB communication protocols, Android integration patterns, and performance optimization strategies.
 
 ## 🗂️ File Organization Overview
 
