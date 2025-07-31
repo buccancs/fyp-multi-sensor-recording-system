@@ -2,6 +2,9 @@ package com.multisensor.recording.service
 
 import android.content.Context
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.recording.ThermalCameraSettings
+import com.multisensor.recording.dao.SessionStateDao
+import com.multisensor.recording.recovery.CrashRecoveryManager
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -26,13 +29,19 @@ import java.io.File
 class SessionManagerTest {
     private lateinit var context: Context
     private lateinit var mockLogger: Logger
+    private lateinit var mockThermalSettings: ThermalCameraSettings
+    private lateinit var mockSessionStateDao: SessionStateDao
+    private lateinit var mockCrashRecoveryManager: CrashRecoveryManager
     private lateinit var sessionManager: SessionManager
 
     @Before
     fun setup() {
         context = RuntimeEnvironment.getApplication()
         mockLogger = mockk(relaxed = true)
-        sessionManager = SessionManager(context, mockLogger)
+        mockThermalSettings = mockk(relaxed = true)
+        mockSessionStateDao = mockk(relaxed = true)
+        mockCrashRecoveryManager = mockk(relaxed = true)
+        sessionManager = SessionManager(context, mockLogger, mockThermalSettings, mockSessionStateDao, mockCrashRecoveryManager)
     }
 
     @After

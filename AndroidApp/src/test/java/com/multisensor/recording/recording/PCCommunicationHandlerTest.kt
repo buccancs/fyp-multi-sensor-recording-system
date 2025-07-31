@@ -6,9 +6,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.whenever
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.any
+import org.mockito.kotlin.*
 import com.multisensor.recording.util.Logger
 
 /**
@@ -23,12 +21,15 @@ class PCCommunicationHandlerTest {
     @Mock  
     private lateinit var mockConnectionManager: ConnectionManager
     
+    @Mock
+    private lateinit var mockSessionManager: SessionManager
+    
     private lateinit var pcCommunicationHandler: PCCommunicationHandler
     
     @Before
     fun setup() {
-        MockitoAnnotations.openMocks(this)
-        pcCommunicationHandler = PCCommunicationHandler(mockLogger, mockConnectionManager)
+        MockitoAnnotations.initMocks(this)
+        pcCommunicationHandler = PCCommunicationHandler(mockLogger, mockConnectionManager, mockSessionManager)
     }
     
     @Test
@@ -36,14 +37,14 @@ class PCCommunicationHandlerTest {
         // given
         val serverAddress = "192.168.1.100"
         val serverPort = 8080
-        whenever(mockConnectionManager.connect(serverAddress, serverPort)).thenReturn(true)
+        whenever(mockConnectionManager.connectWithRetry(any(), any())).thenReturn(true)
         
         // when
-        val result = pcCommunicationHandler.connectToPC(serverAddress, serverPort)
+        val result = pcCommunicationHandler.establishConnection(serverAddress, serverPort)
         
         // then
         assertTrue(result)
-        verify(mockConnectionManager).connect(serverAddress, serverPort)
+        verify(mockConnectionManager).connectWithRetry(any(), any())
         verify(mockLogger).logI(any())
     }
     
@@ -52,10 +53,10 @@ class PCCommunicationHandlerTest {
         // given
         val serverAddress = "192.168.1.100" 
         val serverPort = 8080
-        whenever(mockConnectionManager.connect(serverAddress, serverPort)).thenReturn(false)
+        whenever(mockConnectionManager.connectWithRetry(any(), any())).thenReturn(false)
         
         // when
-        val result = pcCommunicationHandler.connectToPC(serverAddress, serverPort)
+        val result = pcCommunicationHandler.establishConnection(serverAddress, serverPort)
         
         // then
         assertFalse(result)
@@ -71,13 +72,13 @@ class PCCommunicationHandlerTest {
             thermalConnected = true,
             shimmerConnected = false
         )
-        whenever(mockConnectionManager.isConnected()).thenReturn(true)
+        whenever(mockConnectionManager.getConnectionStatus()).thenReturn(ConnectionManager.ConnectionStatus.CONNECTED)
         
         // when
-        pcCommunicationHandler.sendDeviceStatus(deviceStatus)
+        pcCommunicationHandler.sendStatusUpdate(deviceStatus)
         
         // then
-        verify(mockConnectionManager).sendMessage(any())
+        verify(mockConnectionManager).sendData(any())
     }
     
     @Test
@@ -86,14 +87,14 @@ class PCCommunicationHandlerTest {
         val startCommand = """{"command": "start_recording", "sessionId": "test_123"}"""
         var commandReceived = false
         
-        pcCommunicationHandler.setCommandCallback { command ->
-            if (command.type == "start_recording") {
+        pcCommunicationHandler.setMessageHandler { command ->
+            if (command.contains("start_recording")) {
                 commandReceived = true
             }
         }
         
         // when
-        pcCommunicationHandler.processIncomingMessage(startCommand)
+        pcCommunicationHandler.handleIncomingData(startCommand)
         
         // then
         assertTrue(commandReceived)
@@ -106,7 +107,7 @@ class PCCommunicationHandlerTest {
         val malformedCommand = """{"command": "invalid_json"...}"""
         
         // when
-        pcCommunicationHandler.processIncomingMessage(malformedCommand)
+        pcCommunicationHandler.handleIncomingData(malformedCommand)
         
         // then
         verify(mockLogger).logE(any())
@@ -115,10 +116,10 @@ class PCCommunicationHandlerTest {
     @Test  
     fun `should disconnect from pc cleanly`() = runTest {
         // given
-        whenever(mockConnectionManager.isConnected()).thenReturn(true)
+        whenever(mockConnectionManager.getConnectionStatus()).thenReturn(ConnectionManager.ConnectionStatus.CONNECTED)
         
         // when
-        pcCommunicationHandler.disconnect()
+        pcCommunicationHandler.closeConnection()
         
         // then
         verify(mockConnectionManager).disconnect()
@@ -129,13 +130,13 @@ class PCCommunicationHandlerTest {
     fun `should stream preview data to pc when connected`() = runTest {
         // given
         val previewData = byteArrayOf(0x12, 0x34, 0x56, 0x78)
-        whenever(mockConnectionManager.isConnected()).thenReturn(true)
+        whenever(mockConnectionManager.getConnectionStatus()).thenReturn(ConnectionManager.ConnectionStatus.CONNECTED)
         
         // when
-        pcCommunicationHandler.sendPreviewFrame(previewData)
+        pcCommunicationHandler.sendPreviewData(previewData)
         
         // then
-        verify(mockConnectionManager).sendBinaryData(previewData)
+        verify(mockConnectionManager).sendData(previewData)
     }
     
     private data class DeviceStatus(

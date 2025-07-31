@@ -186,10 +186,10 @@ class UsbDeviceManagerUnitTest {
         // Given
         val mockDevice1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/002")
         val mockDevice2 = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "/dev/bus/usb/001/003")
-        val deviceMap = mapOf(
+        val deviceMap = HashMap(mapOf(
             "device1" to mockDevice1,
             "device2" to mockDevice2
-        )
+        ))
         every { mockUsbManager.deviceList } returns deviceMap
 
         // When
@@ -206,10 +206,10 @@ class UsbDeviceManagerUnitTest {
         // Given
         val supportedDevice = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901)
         val unsupportedDevice = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678)
-        val deviceMap = mapOf(
+        val deviceMap = HashMap(mapOf(
             "supported" to supportedDevice,
             "unsupported" to unsupportedDevice
-        )
+        ))
         every { mockUsbManager.deviceList } returns deviceMap
 
         // When
@@ -225,7 +225,7 @@ class UsbDeviceManagerUnitTest {
     fun `hasSupportedDeviceConnected should return true when supported device present`() {
         // Given
         val supportedDevice = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901)
-        val deviceMap = mapOf("supported" to supportedDevice)
+        val deviceMap = HashMap(mapOf("supported" to supportedDevice))
         every { mockUsbManager.deviceList } returns deviceMap
 
         // When
@@ -239,7 +239,7 @@ class UsbDeviceManagerUnitTest {
     fun `hasSupportedDeviceConnected should return false when no supported devices`() {
         // Given
         val unsupportedDevice = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678)
-        val deviceMap = mapOf("unsupported" to unsupportedDevice)
+        val deviceMap = HashMap(mapOf("unsupported" to unsupportedDevice))
         every { mockUsbManager.deviceList } returns deviceMap
 
         // When
@@ -252,7 +252,7 @@ class UsbDeviceManagerUnitTest {
     @Test
     fun `hasSupportedDeviceConnected should return false when no devices connected`() {
         // Given
-        every { mockUsbManager.deviceList } returns emptyMap()
+        every { mockUsbManager.deviceList } returns HashMap()
 
         // When
         val hasSupported = usbDeviceManager.hasSupportedDeviceConnected(mockContext)
@@ -338,12 +338,12 @@ class UsbDeviceManagerUnitTest {
         val device3 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5830, deviceName = "device3")
         val unsupportedDevice = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "unsupported")
 
-        val deviceMap = mapOf(
+        val deviceMap = HashMap(mapOf(
             "device1" to device1,
             "device2" to device2,
             "device3" to device3,
             "unsupported" to unsupportedDevice
-        )
+        ))
         every { mockUsbManager.deviceList } returns deviceMap
 
         // When

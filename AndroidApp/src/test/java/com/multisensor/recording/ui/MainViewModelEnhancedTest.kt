@@ -79,7 +79,8 @@ class MainViewModelEnhancedTest {
         coEvery { shimmerRecorder.initialize() } returns true
 
         // When
-        viewModel.initializeSystemEnhanced()
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // Then
         val finalState = viewModel.uiState.first()
@@ -97,7 +98,8 @@ class MainViewModelEnhancedTest {
         coEvery { shimmerRecorder.initialize() } returns true
 
         // When
-        viewModel.initializeSystemEnhanced()
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // Then
         val finalState = viewModel.uiState.first()
@@ -124,14 +126,15 @@ class MainViewModelEnhancedTest {
     @Test
     fun `startRecordingEnhanced should start recording when conditions are met`() = testDispatcher.runBlockingTest {
         // Given
-        every { sessionManager.startSession(any()) } returns true
+        every { sessionManager.createNewSession() } returns "test-session-123"
         every { sessionManager.getCurrentSession() } returns mockk {
             every { sessionId } returns "test-session-123"
             every { startTime } returns System.currentTimeMillis()
         }
         
         // Set up initialized state
-        viewModel.initializeSystemEnhanced()
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // When
         viewModel.startRecordingEnhanced()
@@ -146,11 +149,12 @@ class MainViewModelEnhancedTest {
     @Test
     fun `stopRecordingEnhanced should stop recording and clean up`() = testDispatcher.runBlockingTest {
         // Given - start recording first
-        every { sessionManager.startSession(any()) } returns true
-        every { sessionManager.stopCurrentSession() } returns true
+        every { sessionManager.createNewSession() } returns "test-session-123"
+        every { sessionManager.finalizeCurrentSession() } returns Unit
         
         // Set up recording state
-        viewModel.initializeSystemEnhanced()
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView)
         viewModel.startRecordingEnhanced()
 
         // When
@@ -162,13 +166,14 @@ class MainViewModelEnhancedTest {
         assertThat(finalState.recordingSessionId).isNull()
         assertThat(finalState.statusText).contains("stopped successfully")
         
-        verify { sessionManager.stopCurrentSession() }
+        verify { sessionManager.finalizeCurrentSession() }
     }
 
     @Test
     fun `clearErrorDialog should reset error state`() = testDispatcher.runBlockingTest {
         // Given - set up error state
-        viewModel.initializeSystemEnhanced() // This might set an error
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView) // This might set an error
 
         // When
         viewModel.clearErrorDialog()
@@ -192,9 +197,19 @@ class MainViewModelEnhancedTest {
     @Test
     fun `connection monitoring should update connection states`() = testDispatcher.runBlockingTest {
         // Given
-        every { sessionManager.isPcConnected() } returns true
-        every { shimmerRecorder.isConnected() } returns true
-        every { thermalRecorder.isConnected() } returns false
+        every { sessionManager.getDeviceState() } returns mockk {
+            every { pcConnected } returns true
+        }
+        every { shimmerRecorder.isConnected.get() } returns true
+        every { thermalRecorder.getThermalCameraStatus() } returns ThermalRecorder.ThermalCameraStatus(
+            isAvailable = false,
+            isRecording = false,
+            isPreviewActive = false,
+            width = 256,
+            height = 192,
+            frameRate = 25,
+            frameCount = 0
+        )
 
         // The connection monitoring runs in background coroutines
         // In real tests, you would advance the test dispatcher time
@@ -225,7 +240,8 @@ class MainViewModelEnhancedTest {
         coEvery { cameraRecorder.initialize() } throws SecurityException("Camera permission required")
 
         // When
-        viewModel.initializeSystemEnhanced()
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // Then
         val finalState = viewModel.uiState.first()
@@ -250,7 +266,9 @@ class MainViewModelEnhancedTest {
     @Test
     fun `device count calculation should be accurate`() = testDispatcher.runBlockingTest {
         // Given - mock connection states
-        every { sessionManager.isPcConnected() } returns true
+        every { sessionManager.getDeviceState() } returns mockk {
+            every { pcConnected } returns true
+        }
         every { shimmerRecorder.getShimmerStatus() } returns ShimmerRecorder.ShimmerStatus(
             isAvailable = true,
             isConnected = true,

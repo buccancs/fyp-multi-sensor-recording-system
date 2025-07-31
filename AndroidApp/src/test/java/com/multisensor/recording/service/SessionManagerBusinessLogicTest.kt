@@ -107,6 +107,9 @@ class SessionManagerBusinessLogicTest {
         val rawFramesFolder = File(sessionFolder, "raw_frames")
         val shimmerDataFile = File(sessionFolder, "shimmer_data.csv")
         val logFile = File(sessionFolder, "session.log")
+        val thermalDataFolder = File(sessionFolder, "thermal_data")
+        val calibrationFolder = File(sessionFolder, "calibration")
+        val sessionConfigFile = File(sessionFolder, "session_config.json")
 
         // When
         val filePaths =
@@ -117,6 +120,9 @@ class SessionManagerBusinessLogicTest {
                 rawFramesFolder = rawFramesFolder,
                 shimmerDataFile = shimmerDataFile,
                 logFile = logFile,
+                thermalDataFolder = thermalDataFolder,
+                calibrationFolder = calibrationFolder,
+                sessionConfigFile = sessionConfigFile,
             )
 
         // Then
@@ -126,6 +132,9 @@ class SessionManagerBusinessLogicTest {
         assertEquals(rawFramesFolder, filePaths.rawFramesFolder)
         assertEquals(shimmerDataFile, filePaths.shimmerDataFile)
         assertEquals(logFile, filePaths.logFile)
+        assertEquals(thermalDataFolder, filePaths.thermalDataFolder)
+        assertEquals(calibrationFolder, filePaths.calibrationFolder)
+        assertEquals(sessionConfigFile, filePaths.sessionConfigFile)
     }
 
     @Test
@@ -137,6 +146,9 @@ class SessionManagerBusinessLogicTest {
         val rawFramesFolder = File(sessionFolder, "raw_frames")
         val shimmerDataFile = File(sessionFolder, "shimmer_data.csv")
         val logFile = File(sessionFolder, "session.log")
+        val thermalDataFolder = File(sessionFolder, "thermal_data")
+        val calibrationFolder = File(sessionFolder, "calibration")
+        val sessionConfigFile = File(sessionFolder, "session_config.json")
 
         // When
         val filePaths =
@@ -147,6 +159,9 @@ class SessionManagerBusinessLogicTest {
                 rawFramesFolder = rawFramesFolder,
                 shimmerDataFile = shimmerDataFile,
                 logFile = logFile,
+                thermalDataFolder = thermalDataFolder,
+                calibrationFolder = calibrationFolder,
+                sessionConfigFile = sessionConfigFile,
             )
 
         // Then
@@ -154,7 +169,10 @@ class SessionManagerBusinessLogicTest {
         assertTrue("Thermal video should be MP4", filePaths.thermalVideoFile.name.endsWith(".mp4"))
         assertTrue("Shimmer data should be CSV", filePaths.shimmerDataFile.name.endsWith(".csv"))
         assertTrue("Log file should be .log", filePaths.logFile.name.endsWith(".log"))
+        assertTrue("Session config should be JSON", filePaths.sessionConfigFile.name.endsWith(".json"))
         assertTrue("Raw frames should be a directory", filePaths.rawFramesFolder.name == "raw_frames")
+        assertTrue("Thermal data should be a directory", filePaths.thermalDataFolder.name == "thermal_data")
+        assertTrue("Calibration should be a directory", filePaths.calibrationFolder.name == "calibration")
     }
 
     @Test

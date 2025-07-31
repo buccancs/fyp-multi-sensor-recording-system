@@ -31,6 +31,7 @@ class ThermalRecorderUnitTest {
     private lateinit var mockContext: Context
     private lateinit var mockSessionManager: SessionManager
     private lateinit var mockLogger: Logger
+    private lateinit var mockThermalSettings: ThermalCameraSettings
 
     private val testSessionId = "test_thermal_session_123"
 
@@ -40,6 +41,7 @@ class ThermalRecorderUnitTest {
         mockContext = mockk(relaxed = true)
         mockSessionManager = mockk(relaxed = true)
         mockLogger = mockk(relaxed = true)
+        mockThermalSettings = mockk(relaxed = true)
 
         // Mock session manager to return valid paths
         val mockSessionPaths = mockk<SessionManager.SessionFilePaths>()
@@ -47,7 +49,7 @@ class ThermalRecorderUnitTest {
         every { mockSessionManager.getSessionFilePaths() } returns mockSessionPaths
 
         // Create ThermalRecorder instance
-        thermalRecorder = ThermalRecorder(mockContext, mockSessionManager, mockLogger)
+        thermalRecorder = ThermalRecorder(mockContext, mockSessionManager, mockLogger, mockThermalSettings)
     }
 
     @After
