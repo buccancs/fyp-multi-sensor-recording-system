@@ -1,50 +1,49 @@
 # Multi-Sensor Synchronized Recording System
 
-A comprehensive monorepo project combining an **Android mobile app** (Kotlin, Camera2 API, Shimmer sensors, USB thermal camera SDK) with a **Python desktop controller app** (PyQt5 UI, OpenCV for calibration, and socket networking) for synchronized multi-modal data recording.
+A comprehensive system combining an Android mobile app with a Python desktop controller for synchronized multi-modal data recording.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Cross-Platform Setup
 
-This project now supports **Windows**, **Linux**, and **macOS** development environments.
+This project supports Windows, Linux, and macOS development environments.
 
-#### Option 1: Unified Setup (Recommended)
+**Automatic Setup (Recommended):**
 ```bash
-# Automatically detects your platform and runs the appropriate setup
-python3 setup.py
+python3 tools/development/setup.py
 ```
 
-#### Option 2: Platform-Specific Setup
+**Platform-Specific Setup:**
 
-**Windows:**
+Windows:
 ```powershell
-.\setup_dev_env.ps1
+tools/development/setup_dev_env.ps1
 ```
 
-**Linux/macOS:**
+Linux/macOS:
 ```bash
-./setup.sh
+tools/development/setup.sh
 ```
 
 ### Prerequisites
 
-- **Java 11+** (for Android development)
-- **Conda/Miniconda** (for Python environment management)
-- **Git** (for version control)
+- Java 11+ (for Android development)
+- Conda/Miniconda (for Python environment management)
+- Git (for version control)
 
 ### After Setup
 
 ```bash
-# Activate the Python environment
+# activate python environment
 conda activate thermal-env
 
-# Run the desktop application
+# run desktop application
 ./gradlew :PythonApp:runDesktopApp
 
-# Run Python tests
+# run python tests
 ./gradlew :PythonApp:runPythonTests
 
-# Build Android APK
+# build android apk
 ./gradlew :AndroidApp:assembleDebug
 ```
 
