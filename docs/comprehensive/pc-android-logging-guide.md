@@ -1062,24 +1062,32 @@ The comprehensive logging system enables effective troubleshooting:
 ### Diagnostic Procedures
 
 **Step 1: Identify the Issue**
-- Search logs for error and warning messages
-- Check timestamp correlation across devices
-- Identify affected system components
+- Search logs for error and warning messages using sophisticated filtering and pattern matching tools that can quickly locate relevant entries across multiple log sources and time periods. The search capabilities include regex support, contextual filtering, and automated issue classification.
+
+- Check timestamp correlation across devices to identify synchronization issues or timing-related problems that might affect data integrity. This includes automated analysis of time drift patterns and identification of events that occurred outside expected temporal windows.
+
+- Identify affected system components by analyzing error propagation patterns and determining which parts of the system are experiencing problems. The analysis includes dependency mapping and impact assessment to understand the full scope of issues.
 
 **Step 2: Analyze Context**
-- Review system state before issue occurrence
-- Check performance metrics during problem period
-- Examine user actions that may have triggered issue
+- Review system state before issue occurrence by examining configuration settings, resource utilization, and operational parameters that were active when problems began. This contextual analysis helps identify environmental factors that may have contributed to issues.
+
+- Check performance metrics during problem period to correlate system resource usage with error occurrence and identify whether performance bottlenecks contributed to system problems. The analysis includes trend analysis and anomaly detection.
+
+- Examine user actions that may have triggered issue by reviewing user interface interactions, configuration changes, and operational commands that preceded problem onset. This helps distinguish between system-induced and user-induced issues.
 
 **Step 3: Determine Root Cause**
-- Correlate errors across multiple log sources
-- Analyze performance trends
-- Check configuration and environment factors
+- Correlate errors across multiple log sources by performing sophisticated cross-referencing analysis that identifies causal relationships between events occurring in different system components. This analysis uses automated pattern recognition and timeline correlation.
+
+- Analyze performance trends to identify gradual degradation patterns that may have led to system failures, including resource exhaustion, memory leaks, and cumulative timing drift that affects system stability over time.
+
+- Check configuration and environment factors including network conditions, hardware status, and software version compatibility that may have created conditions conducive to system problems.
 
 **Step 4: Implement Solution**
-- Apply appropriate fixes based on log analysis
-- Monitor logs to verify resolution
-- Document solution for future reference
+- Apply appropriate fixes based on log analysis findings, using documented remediation procedures and validated solutions that address root causes rather than just symptoms. The implementation includes verification testing and rollback procedures.
+
+- Monitor logs to verify resolution by establishing continuous monitoring of key system indicators that confirm problem resolution and ensure that fixes remain effective over time.
+
+- Document solution for future reference by creating detailed incident reports, updating troubleshooting guides, and contributing to the knowledge base of system maintenance procedures.
 
 ## Log Management and Rotation
 
@@ -1088,16 +1096,22 @@ The system implements comprehensive log management to ensure efficient storage u
 ### Log Rotation Policies
 
 **PC Application:**
-- **File size limit**: 10 MB per log file
-- **Retention period**: 30 days for general logs, 1 year for session logs
-- **Compression**: Automatic compression of rotated logs
-- **Archive location**: Configurable archive directory
+- **File size limit**: 10 MB per log file with intelligent splitting that ensures log entries are never truncated mid-message and maintains chronological ordering across file boundaries. The system monitors file sizes continuously and performs rotation during low-activity periods to minimize system impact.
+
+- **Retention period**: 30 days for general operational logs and 1 year for session logs containing research data, with configurable policies that can be adjusted based on storage capacity and regulatory requirements. The system provides automated alerts when approaching retention limits.
+
+- **Compression**: Automatic compression of rotated logs using efficient algorithms that balance compression ratio with decompression speed, ensuring archived logs remain accessible for analysis while minimizing storage requirements. The compression includes integrity verification and error detection.
+
+- **Archive location**: Configurable archive directory with support for both local and network storage destinations, including automatic failover to backup locations when primary storage becomes unavailable. The system maintains archive catalogs for efficient log retrieval.
 
 **Android Application:**
-- **File size limit**: 5 MB per log file
-- **Retention period**: 7 days for general logs, 30 days for session logs
-- **Storage limit**: Maximum 100 MB total log storage
-- **Cleanup frequency**: Daily automatic cleanup
+- **File size limit**: 5 MB per log file optimized for mobile device storage constraints while ensuring sufficient capacity for detailed logging during extended recording sessions. The system intelligently manages file rotation to prevent storage exhaustion on resource-limited devices.
+
+- **Retention period**: 7 days for general operational logs and 30 days for session logs, with automatic cleanup procedures that prioritize preservation of session data over routine operational logs. The retention policy includes emergency extension capabilities for troubleshooting purposes.
+
+- **Storage limit**: Maximum 100 MB total log storage with intelligent space management that automatically removes older logs when approaching limits while preserving critical session data and recent error logs. The system provides warnings when approaching storage thresholds.
+
+- **Cleanup frequency**: Daily automatic cleanup operations scheduled during low-activity periods to minimize impact on recording operations, with manual cleanup capabilities for immediate space recovery when needed. The cleanup process includes verification of archive completion before deletion.
 
 ### Storage Management
 
@@ -1166,16 +1180,22 @@ The logging system includes comprehensive security and privacy protections:
 ### Data Protection
 
 **Sensitive Data Filtering:**
-- Automatic detection and redaction of personal information
-- Encryption of logs containing sensitive data
-- Access control for different log categories
-- Audit trails for log access
+- Automatic detection and redaction of personal information using sophisticated pattern recognition algorithms that identify and mask personally identifiable information (PII), including names, addresses, phone numbers, and other sensitive data that might inadvertently appear in log entries. The filtering system uses configurable rules and machine learning techniques to ensure comprehensive protection.
+
+- Encryption of logs containing sensitive data with industry-standard AES-256 encryption that protects confidential information both at rest and in transit. The encryption system uses secure key management practices and supports key rotation to maintain long-term data security.
+
+- Access control for different log categories that implements role-based permissions ensuring that researchers, system administrators, and support staff can only access log information appropriate to their responsibilities. The access control system includes time-limited access tokens and session management.
+
+- Audit trails for log access that maintain comprehensive records of who accessed which logs when, providing accountability and supporting compliance with research data governance requirements. The audit system includes tamper-evident logging and secure storage.
 
 **Privacy Compliance:**
-- GDPR-compliant data handling
-- Configurable data retention periods
-- Right to erasure implementation
-- Consent management integration
+- GDPR-compliant data handling that implements all required privacy protections including data minimization, purpose limitation, and transparent processing. The system provides automated compliance reporting and supports data subject rights under privacy regulations.
+
+- Configurable data retention periods that allow institutions to set retention policies based on regulatory requirements, research needs, and institutional policies. The system provides automated enforcement of retention limits and secure deletion of expired data.
+
+- Right to erasure implementation that enables complete removal of personal data upon request while maintaining system integrity and research data validity. The erasure process includes verification procedures and audit trail maintenance.
+
+- Consent management integration that links log data handling to participant consent status and research protocol requirements, ensuring that data processing remains aligned with participant permissions and study protocols.
 
 ### Security Measures
 
