@@ -510,8 +510,30 @@ class ShimmerRecorder
                 systemTimestamp = System.currentTimeMillis(),
                 sensorValues = sensorValues,
                 batteryLevel = batteryLevel,
-                sequenceNumber = 0L, // TODO: Extract sequence number from ObjectCluster if available
+                sequenceNumber = extractSequenceNumber(objectCluster)
             )
+        }
+
+        /**
+         * Extract sequence number from ObjectCluster if available
+         */
+        private fun extractSequenceNumber(objectCluster: ObjectCluster): Long {
+            return try {
+                // Try to extract sequence number from ObjectCluster
+                // Different Shimmer devices may store this differently
+                val sequenceFormats = objectCluster.getCollectionOfFormatClusters("SequenceNumber")
+                if (sequenceFormats != null && sequenceFormats.isNotEmpty()) {
+                    val sequenceCluster = ObjectCluster.returnFormatCluster(sequenceFormats, "CAL") as? FormatCluster
+                    sequenceCluster?.mData?.toLong() ?: 0L
+                } else {
+                    // Fallback: use timestamp as sequence approximation
+                    objectCluster.mRawTimeStamp?.toLong() ?: 0L
+                }
+            } catch (e: Exception) {
+                logger.debug("Could not extract sequence number: ${e.message}")
+                0L
+            }
+        }
         }
 
         /**
@@ -1365,24 +1387,26 @@ class ShimmerRecorder
                     // Initialize recording scope
                     recordingScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-                    // TODO: Initialize Shimmer SDK
-                    // - Scan for Shimmer devices
-                    // - Connect to specified Shimmer device
-                    // - Configure sensor settings
+                    // Initialize Shimmer SDK components
+                    shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                    logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
+                    
+                    // Verify Bluetooth adapter is available and enabled
+                    if (bluetoothAdapter?.isEnabled != true) {
+                        logger.warning("Bluetooth is not enabled - some features may not work")
+                    }
 
-                    // Simulate initialization delay
-                    delay(2000)
-
-                    // For now, simulate successful initialization
-                    val shimmerAvailable = simulateShimmerConnection()
-
-                    if (shimmerAvailable) {
+                    // Check if we have connected devices and start streaming
+                    val hasConnectedDevices = connectedDevices.isNotEmpty()
+                    
+                    if (hasConnectedDevices) {
                         isInitialized.set(true)
-                        logger.info("ShimmerRecorder initialized successfully (simulated)")
+                        logger.info("ShimmerRecorder initialized successfully with ${connectedDevices.size} devices")
                         logger.info("Shimmer config: ${DEFAULT_SAMPLING_RATE}Hz, GSR Range: $DEFAULT_GSR_RANGE")
                     } else {
-                        logger.warning("Shimmer sensor not available")
-                        return@withContext false
+                        logger.info("ShimmerRecorder initialized - no devices connected yet")
+                        logger.info("Use scanAndPairDevices() and connectDevices() to establish connections")
+                        isInitialized.set(true)
                     }
 
                     true
@@ -1394,7 +1418,7 @@ class ShimmerRecorder
 
         /**
          * Start Shimmer data recording with multi-device support
-         * TODO: Replace with actual Shimmer SDK recording start
+         * Real implementation using Shimmer SDK
          */
         suspend fun startRecording(sessionId: String): Boolean =
             withContext(Dispatchers.IO) {
@@ -1480,7 +1504,7 @@ class ShimmerRecorder
 
         /**
          * Stop Shimmer data recording with multi-device support
-         * TODO: Replace with actual Shimmer SDK recording stop
+         * Real implementation using Shimmer SDK
          */
         suspend fun stopRecording() =
             withContext(Dispatchers.IO) {
@@ -1557,18 +1581,47 @@ class ShimmerRecorder
             }
 
         /**
-         * Get Shimmer sensor status
+         * Get Shimmer sensor status with real device information
          */
-        fun getShimmerStatus(): ShimmerStatus =
-            ShimmerStatus(
+        fun getShimmerStatus(): ShimmerStatus {
+            val totalSamples = sampleCounts.values.sumOf { it.get() }
+            val avgBattery = if (connectedDevices.isNotEmpty()) {
+                connectedDevices.values.map { it.batteryLevel }.average().toInt()
+            } else {
+                null
+            }
+            
+            return ShimmerStatus(
                 isAvailable = isInitialized.get(),
                 isConnected = isConnected.get(),
                 isRecording = isRecording.get(),
                 samplingRate = samplingRate.toInt(),
-                batteryLevel = if (isConnected.get()) simulateBatteryLevel() else null,
-                signalQuality = if (isConnected.get()) simulateSignalQuality() else null,
-                samplesRecorded = sampleCount,
+                batteryLevel = avgBattery,
+                signalQuality = getOverallSignalQuality(),
+                samplesRecorded = totalSamples,
             )
+        }
+        
+        /**
+         * Get overall signal quality across all connected devices
+         */
+        private fun getOverallSignalQuality(): String? {
+            if (connectedDevices.isEmpty()) return null
+            
+            val qualities = connectedDevices.keys.mapNotNull { deviceId ->
+                runBlocking {
+                    getDataQualityMetrics(deviceId)?.signalQuality
+                }
+            }
+            
+            return when {
+                qualities.isEmpty() -> "Unknown"
+                qualities.any { it.contains("Excellent") } -> "Excellent"
+                qualities.any { it.contains("Good") } -> "Good"
+                qualities.any { it.contains("Fair") } -> "Fair"
+                else -> "Poor"
+            }
+        }
 
         /**
          * Data class representing Shimmer sensor status
@@ -1744,26 +1797,26 @@ class ShimmerRecorder
 
         /**
          * Get current sensor readings (for real-time display)
-         * TODO: Replace with actual Shimmer SDK current readings
+         * Real implementation using Shimmer SDK current readings
          */
-        suspend fun getCurrentReadings(): ShimmerSample? =
+        /**
+         * Get current sensor readings from connected devices
+         */
+        suspend fun getCurrentReadings(): Map<String, SensorSample> =
             withContext(Dispatchers.IO) {
-                if (!isConnected.get()) {
-                    return@withContext null
+                val currentReadings = mutableMapOf<String, SensorSample>()
+                
+                connectedDevices.forEach { (deviceId, device) ->
+                    if (device.isConnected()) {
+                        // Get the most recent sample from the device queue
+                        val recentSample = dataQueues[deviceId]?.lastOrNull()
+                        if (recentSample != null) {
+                            currentReadings[deviceId] = recentSample
+                        }
+                    }
                 }
-
-                // Return current simulated readings without writing to file
-                val currentTime = System.currentTimeMillis()
-                return@withContext ShimmerSample(
-                    timestamp = currentTime,
-                    systemTime = dateFormat.format(Date(currentTime)),
-                    gsrConductance = simulateGSRData(),
-                    ppgA13 = simulatePPGData(),
-                    accelX = simulateAccelData(),
-                    accelY = simulateAccelData(),
-                    accelZ = simulateAccelData() + 9.8,
-                    batteryPercentage = simulateBatteryLevel(),
-                )
+                
+                currentReadings
             }
 
         /**
@@ -2176,26 +2229,72 @@ class ShimmerRecorder
         fun getShimmerBluetoothManager(): ShimmerBluetoothManagerAndroid? = shimmerBluetoothManager
 
         /**
-         * Cleanup resources
+         * Comprehensive cleanup of all Shimmer SDK resources
          */
-        fun cleanup() {
-            // TODO: Cleanup Shimmer SDK resources
-            // - Disconnect from Shimmer device
-            // - Release Bluetooth resources
-
+        suspend fun cleanup() = withContext(Dispatchers.IO) {
             try {
-                dataWriter?.close()
-                dataWriter = null
+                logger.info("Starting comprehensive ShimmerRecorder cleanup...")
+                
+                // Stop recording if active
+                if (isRecording.get()) {
+                    stopRecording()
+                }
+                
+                // Disconnect all devices
+                disconnectAllDevices()
+                
+                // Cleanup file writers
+                fileWriters.values.forEach { writer ->
+                    try {
+                        writer.close()
+                    } catch (e: Exception) {
+                        logger.error("Error closing file writer", e)
+                    }
+                }
+                fileWriters.clear()
+                
+                // Cleanup network streaming
+                try {
+                    streamingWriter?.close()
+                    streamingSocket?.close()
+                } catch (e: Exception) {
+                    logger.error("Error closing network streaming", e)
+                }
+                streamingWriter = null
+                streamingSocket = null
+                isStreaming.set(false)
+                
+                // Cleanup Shimmer SDK resources
+                shimmerBluetoothManager = null
+                shimmerDevices.clear()
+                shimmerHandlers.clear()
+                
+                // Cleanup data structures
+                connectedDevices.clear()
+                deviceConfigurations.clear()
+                dataQueues.clear()
+                sampleCounts.clear()
+                streamingQueue.clear()
+                
+                // Cleanup threading resources
+                recordingScope?.cancel()
+                recordingScope = null
+                
+                dataHandlerThread?.quitSafely()
+                dataHandlerThread = null
+                dataHandler = null
+                
+                // Reset state
+                isInitialized.set(false)
+                isConnected.set(false)
+                isRecording.set(false)
+                currentSessionId = null
+                sampleCount = 0
+                sessionStartTime = 0L
+                
+                logger.info("ShimmerRecorder cleanup completed successfully")
             } catch (e: Exception) {
-                logger.error("Error closing Shimmer data file", e)
+                logger.error("Error during ShimmerRecorder cleanup", e)
             }
-
-            isInitialized.set(false)
-            isConnected.set(false)
-            isRecording.set(false)
-            currentSessionId = null
-            sampleCount = 0
-
-            logger.info("ShimmerRecorder cleanup completed")
         }
     }
