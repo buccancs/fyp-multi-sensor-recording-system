@@ -103,6 +103,11 @@ $RECYCLE.BIN/
 ### Project Specific ###
 external/
 docs/generated_docs
+recordings/
+.output.txt
+build-validation-report.html
+phase1_validation_report_*.json
+test_video.mp4
 
 ### Application Logs ###
 logs/
