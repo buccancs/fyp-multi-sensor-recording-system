@@ -21,8 +21,6 @@ fragmentKtx = "1.8.2"
 # Dependency Injection
 hilt = "2.52"
 
-# Coroutines
-coroutines = "1.8.1"
 # Room Database - Phase 3 State Persistence
 room = "2.6.1"
 
