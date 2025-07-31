@@ -30,6 +30,13 @@ This directory contains all consolidated documentation for the Multi-Sensor Sync
   - End-user operational procedures
   - Getting started tutorials
 
+### `/comprehensive/`
+- **Complete system documentation** covering:
+  - PC/Android UI comprehensive guide with screenshots
+  - PC/Android logging systems documentation
+  - PC/Android testing infrastructure guide
+  - Cross-platform integration documentation
+
 ### `/deprecated/`
 - **Development-stage documents** that are no longer actively maintained:
   - Milestone completion reports
@@ -41,6 +48,8 @@ This directory contains all consolidated documentation for the Multi-Sensor Sync
 ## 🔍 Finding What You Need
 
 **New Users**: Start with `/user-guides/user-guide.md`
+
+**Comprehensive Guides**: See `/comprehensive/` for complete PC/Android documentation
 
 **Developers**: Check `/technical/` for architecture and `/api/` for schemas
 
@@ -62,8 +71,14 @@ This organization ensures that current, relevant documentation is easily accessi
 
 ### Essential Starting Points
 - `user-guides/user-guide.md` - Main user documentation
+- `comprehensive/README.md` - Complete PC/Android documentation suite
 - `reference/data-storage-quick-reference.md` - Quick data location guide
 - `technical/system-architecture-overview.md` - System overview
+
+### Comprehensive Guides
+- `comprehensive/pc-android-ui-guide.md` - Complete UI documentation with screenshots
+- `comprehensive/pc-android-logging-guide.md` - Logging systems documentation  
+- `comprehensive/pc-android-testing-guide.md` - Testing infrastructure guide
 
 ### Integration Guides
 - `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
