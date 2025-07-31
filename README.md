@@ -1,50 +1,49 @@
 # Multi-Sensor Synchronized Recording System
 
-A comprehensive monorepo project combining an **Android mobile app** (Kotlin, Camera2 API, Shimmer sensors, USB thermal camera SDK) with a **Python desktop controller app** (PyQt5 UI, OpenCV for calibration, and socket networking) for synchronized multi-modal data recording.
+A comprehensive system combining an Android mobile app with a Python desktop controller for synchronized multi-modal data recording.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Cross-Platform Setup
 
-This project now supports **Windows**, **Linux**, and **macOS** development environments.
+This project supports Windows, Linux, and macOS development environments.
 
-#### Option 1: Unified Setup (Recommended)
+**Automatic Setup (Recommended):**
 ```bash
-# Automatically detects your platform and runs the appropriate setup
-python3 setup.py
+python3 tools/development/setup.py
 ```
 
-#### Option 2: Platform-Specific Setup
+**Platform-Specific Setup:**
 
-**Windows:**
+Windows:
 ```powershell
-.\setup_dev_env.ps1
+tools/development/setup_dev_env.ps1
 ```
 
-**Linux/macOS:**
+Linux/macOS:
 ```bash
-./setup.sh
+tools/development/setup.sh
 ```
 
 ### Prerequisites
 
-- **Java 11+** (for Android development)
-- **Conda/Miniconda** (for Python environment management)
-- **Git** (for version control)
+- Java 11+ (for Android development)
+- Conda/Miniconda (for Python environment management)
+- Git (for version control)
 
 ### After Setup
 
 ```bash
-# Activate the Python environment
+# activate python environment
 conda activate thermal-env
 
-# Run the desktop application
+# run desktop application
 ./gradlew :PythonApp:runDesktopApp
 
-# Run Python tests
+# run python tests
 ./gradlew :PythonApp:runPythonTests
 
-# Build Android APK
+# build android apk
 ./gradlew :AndroidApp:assembleDebug
 ```
 
@@ -60,35 +59,188 @@ The system is designed for research applications, particularly for capturing syn
 
 ## 🏗️ Architecture
 
+### System Overview
+
+```mermaid
+graph TB
+    subgraph "Multi-Sensor Recording System"
+        subgraph "Hardware Layer"
+            A1[Samsung S22 #1<br/>Camera + Thermal]
+            A2[Samsung S22 #2<br/>Camera + Thermal]
+            W1[Logitech Brio 4K #1]
+            W2[Logitech Brio 4K #2]
+            S1[Shimmer3 GSR+ #1]
+            S2[Shimmer3 GSR+ #2]
+        end
+        
+        subgraph "Android Apps"
+            AA1[Android App #1]
+            AA2[Android App #2]
+        end
+        
+        subgraph "PC Controller"
+            PC[Windows PC<br/>Master Controller]
+            GUI[PyQt5 GUI]
+            CAL[OpenCV Calibration]
+            NET[Socket Network]
+        end
+        
+        A1 --> AA1
+        A2 --> AA2
+        S1 --> AA1
+        S2 --> AA2
+        
+        AA1 -->|WiFi Socket| PC
+        AA2 -->|WiFi Socket| PC
+        W1 -->|USB| PC
+        W2 -->|USB| PC
+        
+        PC --> GUI
+        PC --> CAL
+        PC --> NET
+    end
+```
+
+### Android Application Architecture
+
+```mermaid
+graph TB
+    subgraph "Android App Architecture"
+        subgraph "UI Layer"
+            MA[MainActivity]
+            VM[MainViewModel]
+            UI[UI Components]
+        end
+        
+        subgraph "Recording Layer"
+            CR[CameraRecorder<br/>Camera2 API]
+            TR[ThermalRecorder<br/>Topdon SDK]
+            SR[ShimmerRecorder<br/>Bluetooth]
+            SM[SessionManager]
+        end
+        
+        subgraph "Communication Layer"
+            PCH[PCCommunicationHandler]
+            CM[ConnectionManager]
+            PS[PreviewStreamer]
+        end
+        
+        subgraph "Data Layer"
+            DS[DeviceStatusTracker]
+            SI[SessionInfo]
+            SS[SensorSample]
+        end
+        
+        MA --> VM
+        VM --> CR
+        VM --> TR
+        VM --> SR
+        VM --> SM
+        
+        CR --> PCH
+        TR --> PCH
+        SR --> PCH
+        PCH --> CM
+        
+        CR --> PS
+        PS --> CM
+        
+        CR --> DS
+        TR --> DS
+        SR --> DS
+        
+        SM --> SI
+        SR --> SS
+    end
+```
+
+### PC Application Architecture
+
+```mermaid
+graph TB
+    subgraph "Python Desktop Controller"
+        subgraph "GUI Layer"
+            APP[application.py<br/>Main Entry]
+            UI[PyQt5 Interface]
+            LOG[Logging System]
+        end
+        
+        subgraph "Camera Management"
+            WM[WebcamManager<br/>USB Cameras]
+            CAM[Camera Control]
+            REC[Recording Pipeline]
+        end
+        
+        subgraph "Calibration System"
+            CM[CalibrationManager]
+            CP[CalibrationProcessor]
+            CR[CalibrationResult]
+            CV[OpenCV Algorithms]
+        end
+        
+        subgraph "Network Layer"
+            SM[SessionManager<br/>Socket Server]
+            NCH[NetworkCommunicationHandler]
+            DS[DeviceService]
+        end
+        
+        subgraph "Data Processing"
+            DP[DataProcessor]
+            SYNC[SynchronizationEngine]
+            EXP[DataExporter]
+        end
+        
+        APP --> UI
+        APP --> LOG
+        UI --> WM
+        UI --> CM
+        UI --> SM
+        
+        WM --> CAM
+        CAM --> REC
+        
+        CM --> CP
+        CP --> CR
+        CM --> CV
+        
+        SM --> NCH
+        NCH --> DS
+        
+        REC --> DP
+        DP --> SYNC
+        SYNC --> EXP
+    end
+```
+
 ### Monorepo Structure
 ```
 project-root/
-├── settings.gradle              # Gradle settings: includes both modules
-├── build.gradle                 # Root Gradle build configuration
-├── .gitmodules                  # Git submodules configuration
-├── gradle/wrapper/              # Gradle Wrapper files
-├── gradlew & gradlew.bat        # Gradle wrapper scripts
-├── AndroidApp/                  # Android app module (Kotlin + Camera2, Shimmer, etc.)
-│   ├── build.gradle             # Android module build configuration
-│   ├── src/main/                # Android source code
-│   │   ├── AndroidManifest.xml  # Android app manifest
-│   │   ├── java/...             # Kotlin source packages
-│   │   └── res/...              # Android resources
-├── PythonApp/                   # Python desktop app module (PyQt5, OpenCV)
-│   ├── build.gradle             # Python module build configuration
-│   ├── src/                     # Python source files
-│   │   └── main.py              # Entry-point script for PyQt5 app
-├── external/                    # External dependencies (Git submodules)
-│   ├── IRCamera/                # Thermal camera library (submodule)
-│   ├── psychopy/                # PsychoPy library (submodule)
-│   ├── pyshimmer/               # Python Shimmer SDK (submodule)
-│   ├── Shimmer-Java-Android-API/ # Android Shimmer SDK (submodule)
-│   ├── topdon-sdk/              # Topdon thermal camera SDK (submodule)
-│   └── TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3/ # Legacy Topdon SDK (local directory)
-├── docs/                        # Project documentation
-├── changelog.md                 # Project changelog
-├── todo.md                      # Task tracking
-└── .gitignore                   # Git ignore file
+├── settings.gradle              # gradle settings: includes both modules
+├── build.gradle                 # root gradle build configuration
+├── .gitmodules                  # git submodules configuration
+├── gradle/wrapper/              # gradle wrapper files
+├── gradlew & gradlew.bat        # gradle wrapper scripts
+├── AndroidApp/                  # android app module (kotlin + camera2, shimmer, etc.)
+│   ├── build.gradle             # android module build configuration
+│   ├── src/main/                # android source code
+│   │   ├── AndroidManifest.xml  # android app manifest
+│   │   ├── java/...             # kotlin source packages
+│   │   └── res/...              # android resources
+├── PythonApp/                   # python desktop app module (pyqt5, opencv)
+│   ├── build.gradle             # python module build configuration
+│   ├── src/                     # python source files
+│   │   └── main.py              # entry-point script for pyqt5 app
+├── external/                    # external dependencies (git submodules)
+│   ├── IRCamera/                # thermal camera library (submodule)
+│   ├── psychopy/                # psychopy library (submodule)
+│   ├── pyshimmer/               # python shimmer sdk (submodule)
+│   ├── Shimmer-Java-Android-API/ # android shimmer sdk (submodule)
+│   ├── topdon-sdk/              # topdon thermal camera sdk (submodule)
+│   └── TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3/ # legacy topdon sdk (local directory)
+├── docs/                        # project documentation
+├── changelog.md                 # project changelog
+├── todo.md                      # task tracking
+└── .gitignore                   # git ignore file
 ```
 
 ### Git Submodules
@@ -104,6 +256,199 @@ This project uses Git submodules to manage external dependencies from GitHub rep
 | `external/topdon-sdk` | [buccancs/topdon-sdk](https://github.com/buccancs/topdon-sdk.git) | Topdon thermal camera SDK |
 
 **Note**: The `TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3` directory contains legacy proprietary SDK files and remains as a local directory.
+
+### Synchronization Flow
+
+```mermaid
+sequenceDiagram
+    participant PC as PC Controller
+    participant A1 as Android App #1
+    participant A2 as Android App #2
+    participant S1 as Shimmer3 #1
+    participant S2 as Shimmer3 #2
+    
+    PC->>A1: Connect Socket
+    PC->>A2: Connect Socket
+    A1->>S1: Bluetooth Connect
+    A2->>S2: Bluetooth Connect
+    
+    PC->>A1: Sync Clock Request
+    PC->>A2: Sync Clock Request
+    A1->>PC: Clock Response
+    A2->>PC: Clock Response
+    
+    PC->>A1: Start Recording
+    PC->>A2: Start Recording
+    
+    par Recording Phase
+        A1->>S1: Start GSR Recording
+        A1->>A1: Start Camera Recording
+        A1->>A1: Start Thermal Recording
+    and
+        A2->>S2: Start GSR Recording
+        A2->>A2: Start Camera Recording
+        A2->>A2: Start Thermal Recording
+    and
+        PC->>PC: Start USB Webcam Recording
+    end
+    
+    loop Data Streaming
+        A1->>PC: Preview Stream + Status
+        A2->>PC: Preview Stream + Status
+        S1->>A1: GSR Data
+        S2->>A2: GSR Data
+    end
+    
+    PC->>A1: Stop Recording
+    PC->>A2: Stop Recording
+    A1->>S1: Stop GSR Recording
+    A2->>S2: Stop GSR Recording
+```
+
+### Networking Architecture
+
+```mermaid
+graph TB
+    subgraph "Network Communication"
+        subgraph "PC Controller (Server)"
+            SS[Socket Server<br/>Port 8080]
+            SH[Session Handler]
+            CM[Command Manager]
+            DS[Data Synchronizer]
+        end
+        
+        subgraph "Android Device #1"
+            SC1[Socket Client]
+            PCH1[PC Communication Handler]
+            PS1[Preview Streamer<br/>Port 8081]
+        end
+        
+        subgraph "Android Device #2"
+            SC2[Socket Client]
+            PCH2[PC Communication Handler]
+            PS2[Preview Streamer<br/>Port 8082]
+        end
+        
+        subgraph "WiFi Network"
+            WIFI[192.168.1.x Network]
+        end
+        
+        SS -->|Command Channel| SC1
+        SS -->|Command Channel| SC2
+        PS1 -->|Preview Stream| SS
+        PS2 -->|Preview Stream| SS
+        
+        SC1 -.->|WiFi| WIFI
+        SC2 -.->|WiFi| WIFI
+        SS -.->|WiFi| WIFI
+        
+        SH --> CM
+        CM --> DS
+        PCH1 --> PS1
+        PCH2 --> PS2
+    end
+```
+
+### Data Collection Flow
+
+```mermaid
+flowchart TD
+    START([Recording Session Start])
+    
+    subgraph "Data Sources"
+        A1[Android #1<br/>Camera + Thermal]
+        A2[Android #2<br/>Camera + Thermal]
+        S1[Shimmer3 #1<br/>GSR Data]
+        S2[Shimmer3 #2<br/>GSR Data]
+        W1[USB Webcam #1]
+        W2[USB Webcam #2]
+    end
+    
+    subgraph "Data Processing"
+        SYNC[Synchronization Engine]
+        PROC[Data Processor]
+        CAL[Calibration System]
+    end
+    
+    subgraph "Data Storage"
+        VID[Video Files<br/>MP4 + RAW]
+        THER[Thermal Data<br/>Binary Format]
+        GSR[GSR Data<br/>CSV/JSON]
+        META[Metadata<br/>Session Info]
+    end
+    
+    START --> A1
+    START --> A2
+    START --> W1
+    START --> W2
+    
+    A1 --> S1
+    A2 --> S2
+    
+    A1 --> SYNC
+    A2 --> SYNC
+    S1 --> SYNC
+    S2 --> SYNC
+    W1 --> SYNC
+    W2 --> SYNC
+    
+    SYNC --> PROC
+    PROC --> CAL
+    
+    CAL --> VID
+    CAL --> THER
+    CAL --> GSR
+    CAL --> META
+```
+
+### Individual Sensor Integration
+
+```mermaid
+graph LR
+    subgraph "Shimmer3 GSR+ Integration"
+        SHIMMER[Shimmer3 Device]
+        BLE[Bluetooth LE]
+        SDK[Shimmer Android SDK]
+        GSR[GSR Data Processing]
+        
+        SHIMMER -->|Bluetooth| BLE
+        BLE --> SDK
+        SDK --> GSR
+    end
+    
+    subgraph "Thermal Camera Integration"
+        TOPDON[Topdon Thermal Camera]
+        USB_C[USB-C Connection]
+        TSDK[Topdon SDK]
+        THERMAL[Thermal Image Processing]
+        
+        TOPDON -->|USB-C| USB_C
+        USB_C --> TSDK
+        TSDK --> THERMAL
+    end
+    
+    subgraph "Camera2 Integration"
+        CAM[Samsung S22 Camera]
+        CAM2[Camera2 API]
+        VID[Video Recording]
+        RAW[RAW Image Capture]
+        
+        CAM --> CAM2
+        CAM2 --> VID
+        CAM2 --> RAW
+    end
+    
+    subgraph "USB Webcam Integration"
+        WEBCAM[Logitech Brio 4K]
+        USB[USB 3.0]
+        OPENCV[OpenCV Capture]
+        STREAM[Video Stream]
+        
+        WEBCAM -->|USB 3.0| USB
+        USB --> OPENCV
+        OPENCV --> STREAM
+    end
+```
 
 #### Working with Submodules
 
