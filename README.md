@@ -2,6 +2,52 @@
 
 A comprehensive monorepo project combining an **Android mobile app** (Kotlin, Camera2 API, Shimmer sensors, USB thermal camera SDK) with a **Python desktop controller app** (PyQt5 UI, OpenCV for calibration, and socket networking) for synchronized multi-modal data recording.
 
+## 🚀 Quick Start
+
+### Cross-Platform Setup
+
+This project now supports **Windows**, **Linux**, and **macOS** development environments.
+
+#### Option 1: Unified Setup (Recommended)
+```bash
+# Automatically detects your platform and runs the appropriate setup
+python3 setup.py
+```
+
+#### Option 2: Platform-Specific Setup
+
+**Windows:**
+```powershell
+.\setup_dev_env.ps1
+```
+
+**Linux/macOS:**
+```bash
+./setup.sh
+```
+
+### Prerequisites
+
+- **Java 11+** (for Android development)
+- **Conda/Miniconda** (for Python environment management)
+- **Git** (for version control)
+
+### After Setup
+
+```bash
+# Activate the Python environment
+conda activate thermal-env
+
+# Run the desktop application
+./gradlew :PythonApp:runDesktopApp
+
+# Run Python tests
+./gradlew :PythonApp:runPythonTests
+
+# Build Android APK
+./gradlew :AndroidApp:assembleDebug
+```
+
 ## 🎯 Project Overview
 
 This system enables synchronized recording from multiple data sources:
