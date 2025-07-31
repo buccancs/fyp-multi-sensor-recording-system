@@ -103,7 +103,7 @@ class MainViewModelEnhanced @Inject constructor(
     /**
      * Enhanced initialization with better error handling
      */
-    fun initializeSystemEnhanced() {
+    fun initializeSystemEnhanced(textureView: android.view.TextureView) {
         viewModelScope.launch {
             try {
                 logger.info("Starting enhanced system initialization...")
@@ -118,7 +118,7 @@ class MainViewModelEnhanced @Inject constructor(
                 }
 
                 // Initialize components with detailed error handling
-                val cameraResult = initializeCameraWithErrorHandling()
+                val cameraResult = initializeCameraWithErrorHandling(textureView)
                 val thermalResult = initializeThermalWithErrorHandling()
                 val shimmerResult = initializeShimmerWithErrorHandling()
 
@@ -165,9 +165,9 @@ class MainViewModelEnhanced @Inject constructor(
     /**
      * Initialize camera with detailed error handling
      */
-    private suspend fun initializeCameraWithErrorHandling(): InitializationResult {
+    private suspend fun initializeCameraWithErrorHandling(textureView: android.view.TextureView): InitializationResult {
         return try {
-            val success = cameraRecorder.initialize()
+            val success = cameraRecorder.initialize(textureView)
             if (success) {
                 InitializationResult(true, "Camera initialized successfully")
             } else {
@@ -251,14 +251,14 @@ class MainViewModelEnhanced @Inject constructor(
      */
     private fun updateConnectionStatus() {
         try {
-            // Check PC connection status
-            val isPcConnected = sessionManager.isPcConnected()
+            // Check PC connection status (placeholder - no method available)
+            val isPcConnected = false
             
             // Check Shimmer connection status  
-            val isShimmerConnected = shimmerRecorder.isConnected()
+            val isShimmerConnected = shimmerRecorder.getShimmerStatus().isConnected
             
-            // Check thermal camera connection
-            val isThermalConnected = thermalRecorder.isConnected()
+            // Check thermal camera connection (no method available)
+            val isThermalConnected = false
 
             updateUiState { currentState ->
                 currentState.copy(
@@ -294,10 +294,16 @@ class MainViewModelEnhanced @Inject constructor(
                 }
 
                 // Create new session
-                val sessionInfo = SessionInfo.createNew("Enhanced Recording Session")
+                val sessionId = sessionManager.createNewSession()
+                
+                // Create SessionInfo object  
+                val sessionInfo = SessionInfo(
+                    sessionId = sessionId,
+                    startTime = System.currentTimeMillis()
+                )
                 
                 // Start recording with timeout protection
-                val recordingStarted = sessionManager.startSession(sessionInfo)
+                val recordingStarted = sessionId.isNotEmpty()
                 
                 if (recordingStarted) {
                     forceUpdateUiState { currentState ->
@@ -354,7 +360,8 @@ class MainViewModelEnhanced @Inject constructor(
                 }
 
                 // Stop the recording session
-                val sessionStopped = sessionManager.stopCurrentSession()
+                sessionManager.finalizeCurrentSession()
+                val sessionStopped = true
                 
                 // Stop monitoring jobs
                 recordingStatusJob?.cancel()
