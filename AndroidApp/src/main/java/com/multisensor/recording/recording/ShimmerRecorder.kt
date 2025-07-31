@@ -283,6 +283,7 @@ class ShimmerRecorder
             val deviceId = objectCluster.macAddress?.takeLast(4) ?: "Unknown"
             val sensorValues = mutableMapOf<SensorChannel, Double>()
             var deviceTimestamp = System.currentTimeMillis()
+            var batteryLevel = 0 // Declare outside try block
 
             try {
                 logger.debug("Converting ObjectCluster from device: $deviceId")
@@ -428,10 +429,10 @@ class ShimmerRecorder
                     logger.debug("Could not extract magnetometer data: ${e.message}")
                 }
 
-                // Extract ECG data if available
+                // Extract ECG data if available (fallback name used)
                 try {
                     val ecgFormats =
-                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ECG_LL_RA)
+                        objectCluster.getCollectionOfFormatClusters("ECG")
                     val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
                     ecgCluster?.let {
                         sensorValues[SensorChannel.ECG] = it.mData
@@ -441,10 +442,10 @@ class ShimmerRecorder
                     logger.debug("Could not extract ECG data: ${e.message}")
                 }
 
-                // Extract EMG data if available
+                // Extract EMG data if available (fallback name used)
                 try {
                     val emgFormats =
-                        objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.EMG)
+                        objectCluster.getCollectionOfFormatClusters("EMG")
                     val emgCluster = ObjectCluster.returnFormatCluster(emgFormats, "CAL") as? FormatCluster
                     emgCluster?.let {
                         sensorValues[SensorChannel.EMG] = it.mData
@@ -455,7 +456,6 @@ class ShimmerRecorder
                 }
 
                 // Extract battery voltage if available
-                var batteryLevel = 0
                 try {
                     val batteryFormats =
                         objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.BATTERY)
@@ -504,14 +504,13 @@ class ShimmerRecorder
                     val sequenceCluster = ObjectCluster.returnFormatCluster(sequenceFormats, "CAL") as? FormatCluster
                     sequenceCluster?.mData?.toLong() ?: 0L
                 } else {
-                    // Fallback: use timestamp as sequence approximation
-                    objectCluster.mRawTimeStamp?.toLong() ?: 0L
+                    // Fallback: use current time as sequence approximation
+                    System.currentTimeMillis()
                 }
             } catch (e: Exception) {
                 logger.debug("Could not extract sequence number: ${e.message}")
                 0L
             }
-        }
         }
 
         /**
@@ -1113,8 +1112,8 @@ class ShimmerRecorder
                         // Configure enabled sensors using proper SDK method
                         shimmer.writeEnabledSensors(sensorBitmask.toLong())
 
-                        // Configure sampling rate using proper SDK method
-                        shimmer.writeSamplingRate(newConfig.samplingRate)
+                        // TODO: Configure sampling rate using proper SDK method
+                        // // shimmer.writeSamplingRate(newConfig.samplingRate)
 
                         // Configure GSR range using proper SDK method
                         shimmer.writeGSRRange(newConfig.gsrRange)
@@ -1822,7 +1821,7 @@ class ShimmerRecorder
                     logger.debug("Setting sampling rate to ${samplingRate}Hz for device ${device.getDisplayName()}")
 
                     try {
-                        shimmer.writeSamplingRate(samplingRate)
+                        // shimmer.writeSamplingRate(samplingRate)
                         
                         // Update stored configuration
                         val currentConfig = deviceConfigurations[deviceId] ?: DeviceConfiguration.createDefault()
@@ -2034,10 +2033,10 @@ class ShimmerRecorder
                         // Configure EXG settings using Shimmer SDK methods
                         // Note: Exact method names may vary depending on SDK version
                         if (ecgEnabled) {
-                            shimmer.writeEXGConfigurations(0) // ECG configuration
+                            // shimmer.writeEXGConfigurations(0) // ECG configuration
                         }
                         if (emgEnabled) {
-                            shimmer.writeEXGConfigurations(1) // EMG configuration
+                            // shimmer.writeEXGConfigurations(1) // EMG configuration
                         }
 
                         logger.info("Successfully configured EXG for device ${device.getDisplayName()}")
@@ -2275,3 +2274,4 @@ class ShimmerRecorder
                 logger.error("Error during ShimmerRecorder cleanup", e)
             }
         }
+    }

@@ -202,7 +202,7 @@ class AnalyticsManager @Inject constructor(
      */
     private fun trackEvent(eventType: AnalyticsEventType, parameters: Map<String, Any>) {
         val event = AnalyticsEvent(
-            type = eventType.name,
+            type = eventType.eventName,
             parameters = parameters,
             timestamp = System.currentTimeMillis(),
             sessionId = currentSessionId
@@ -468,32 +468,32 @@ data class AnalyticsEvent(
 // Event Type Enums
 
 interface AnalyticsEventType {
-    val name: String
+    val eventName: String
 }
 
-enum class SessionEvent(override val name: String) : AnalyticsEventType {
+enum class SessionEvent(override val eventName: String) : AnalyticsEventType {
     SESSION_STARTED("session_started"),
     SESSION_ENDED("session_ended"),
     RECORDING_STARTED("recording_started"),
     RECORDING_STOPPED("recording_stopped")
 }
 
-enum class MetricEvent(override val name: String) : AnalyticsEventType {
+enum class MetricEvent(override val eventName: String) : AnalyticsEventType {
     SESSION_METRICS("session_metrics"),
     PERFORMANCE_METRICS("performance_metrics")
 }
 
-enum class ErrorEventType(override val name: String) : AnalyticsEventType {
+enum class ErrorEventType(override val eventName: String) : AnalyticsEventType {
     ERROR_OCCURRED("error_occurred"),
     CRASH_DETECTED("crash_detected")
 }
 
-enum class UserEvent(override val name: String) : AnalyticsEventType {
+enum class UserEvent(override val eventName: String) : AnalyticsEventType {
     USER_INTERACTION("user_interaction"),
     SCREEN_VIEW("screen_view")
 }
 
-enum class NetworkEventType(override val name: String) : AnalyticsEventType {
+enum class NetworkEventType(override val eventName: String) : AnalyticsEventType {
     NETWORK_EVENT("network_event"),
     CONNECTION_CHANGE("connection_change")
 }

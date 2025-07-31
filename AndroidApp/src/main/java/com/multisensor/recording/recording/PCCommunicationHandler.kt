@@ -168,7 +168,7 @@ class PCCommunicationHandler(
             if (isRunning.compareAndSet(true, false)) {
                 logger.info("Stopping PC communication server")
                 
-                _connectionState.value = PCConnectionState.DISCONNECTING
+                _connectionState.value = PCConnectionState.DISCONNECTED
                 
                 // Close all active connections
                 activeConnections.values.forEach { connection ->

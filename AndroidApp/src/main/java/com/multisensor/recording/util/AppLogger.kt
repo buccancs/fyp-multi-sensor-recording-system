@@ -384,7 +384,7 @@ object AppLogger {
     /**
      * Update performance statistics for an operation
      */
-    private fun updatePerformanceStats(operationName: String, durationMs: Long) {
+    fun updatePerformanceStats(operationName: String, durationMs: Long) {
         performanceStats.compute(operationName) { _, existing ->
             if (existing == null) {
                 PerformanceStats(
@@ -636,26 +636,6 @@ object AppLogger {
     }
     
     /**
-     * Enhanced thread information logging
-     */
-    fun logThreadInfo(tag: String, context: String = "Thread Info") {
-        val thread = Thread.currentThread()
-        val threadGroup = thread.threadGroup
-        val activeCount = Thread.activeCount()
-        
-        d(tag, "🧵 $context - Thread: ${thread.name}, ID: ${thread.id}, " +
-                "State: ${thread.state}, Priority: ${thread.priority}, " +
-                "Group: ${threadGroup?.name}, Active Count: $activeCount",
-          context = mapOf(
-              "thread_name" to thread.name,
-              "thread_id" to thread.id,
-              "thread_state" to thread.state.name,
-              "thread_priority" to thread.priority,
-              "active_count" to activeCount
-          ))
-    }
-    
-    /**
      * Enhanced error logging with automatic stack trace and context
      */
     fun logError(tag: String, operation: String, error: Throwable, context: Map<String, Any>? = null) {
@@ -793,17 +773,6 @@ object AppLogger {
         }
     }
     
-    /**
-     * Format file size in human-readable format
-     */
-    private fun formatFileSize(bytes: Long): String {
-        return when {
-            bytes < 1024 -> "$bytes B"
-            bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-            bytes < 1024 * 1024 * 1024 -> "${bytes / (1024 * 1024)} MB"
-            else -> "${bytes / (1024 * 1024 * 1024)} GB"
-        }
-    }
 }
 
 /**
