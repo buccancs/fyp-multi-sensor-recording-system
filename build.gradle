@@ -26,37 +26,6 @@ task assembleAll {
     }
 }
 
-// Cross-platform Python executable detection
-def getPythonExecutable() {
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    def scriptsDir = isWindows ? 'Scripts' : 'bin'
-    
-    // Check conda environment
-    def condaEnvPath = System.getenv('CONDA_PREFIX')
-    if (condaEnvPath) {
-        def condaPython = file("${condaEnvPath}/${scriptsDir}/${pythonExe}")
-        if (condaPython.exists()) {
-            return condaPython.absolutePath
-        }
-    }
-    
-    // Check venv in project root
-    def venvPython = file("venv/${scriptsDir}/${pythonExe}")
-    if (venvPython.exists()) {
-        return venvPython.absolutePath
-    }
-    
-    // Check venv in PythonApp directory
-    def pythonAppVenv = file("PythonApp/venv/${scriptsDir}/${pythonExe}")
-    if (pythonAppVenv.exists()) {
-        return pythonAppVenv.absolutePath
-    }
-    
-    // Fall back to system python
-    return isWindows ? 'python' : 'python3'
-}
-
 // Task to run Python tests via pytest
 task pythonTest(type: Exec) {
     group = 'verification'
@@ -64,68 +33,61 @@ task pythonTest(type: Exec) {
     
     workingDir file('PythonApp')
     
-    def pythonExe = getPythonExecutable()
-    commandLine pythonExe, '-m', 'pytest', 'tests/', '-v'
+    // Cross-platform Python executable detection
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def pythonExe = isWindows ? 'python.exe' : 'python'
+    def scriptsDir = isWindows ? 'Scripts' : 'bin'
+    
+    // Check if conda environment exists, otherwise use system python
+    def condaEnvPath = System.getenv('CONDA_PREFIX')
+    if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'pytest', 'tests/', '-v'
+    } else if (file("PythonApp/venv/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "PythonApp/venv/${scriptsDir}/${pythonExe}", '-m', 'pytest', 'tests/', '-v'
+    } else {
+        commandLine pythonExe, '-m', 'pytest', 'tests/', '-v'
+    }
     
     // Ignore exit value to prevent build failure if tests don't exist yet
     ignoreExitValue = true
     
     doFirst {
-        println "Running Python tests with: ${pythonExe}"
+        println "Running Python tests..."
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Python tests passed"
         } else {
-            println "⚠ Python tests failed or not found (exit code: ${execResult.exitValue})"
+            println "⚠ Python tests failed or not found (exit code: ${executionResult.get().exitValue})"
         }
     }
 }
 
-// Task to set up Python environment (cross-platform)
+// Task to set up Python environment
 task setupPythonEnv(type: Exec) {
     group = 'setup'
-    description = 'Sets up Python environment (conda or venv)'
+    description = 'Sets up Python conda environment from environment.yml'
     
     workingDir file('.')
     
+    // Cross-platform conda command detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    
-    // Try conda first, fall back to venv
     def condaCmd = isWindows ? 'conda.exe' : 'conda'
-    def hasCondaEnv = file('environment.yml').exists()
     
-    if (hasCondaEnv) {
-        commandLine condaCmd, 'env', 'create', '-f', 'environment.yml', '--force'
-    } else {
-        // Fall back to venv + requirements.txt
-        def pythonCmd = isWindows ? 'python' : 'python3'
-        def venvScript = isWindows ? 'venv\\Scripts\\activate.bat' : 'venv/bin/activate'
-        
-        if (isWindows) {
-            commandLine 'cmd', '/c', "${pythonCmd} -m venv venv && ${venvScript} && pip install -r requirements.txt"
-        } else {
-            commandLine 'bash', '-c', "${pythonCmd} -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
-        }
-    }
-    
+    commandLine condaCmd, 'env', 'create', '-f', 'environment.yml', '--force'
     ignoreExitValue = true
     
     doFirst {
-        if (hasCondaEnv) {
-            println "Setting up Python conda environment..."
-        } else {
-            println "Setting up Python venv environment..."
-        }
+        println "Setting up Python conda environment..."
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
-            println "✓ Python environment created successfully"
+        if (executionResult.get().exitValue == 0) {
+            println "✓ Conda environment created successfully"
         } else {
-            println "⚠ Failed to create Python environment (exit code: ${execResult.exitValue})"
-            println "  Try running the platform-specific setup script instead"
+            println "⚠ Failed to create conda environment (exit code: ${executionResult.get().exitValue})"
+            println "  Make sure conda is installed and environment.yml exists"
         }
     }
 }
@@ -143,27 +105,36 @@ task codeQuality {
     }
 }
 
-// Task to run Python linting (cross-platform)
+// Task to run Python linting
 task pythonLint(type: Exec) {
     group = 'verification'
     description = 'Runs Python linting with flake8'
     
     workingDir file('PythonApp')
     
-    def pythonExe = getPythonExecutable()
-    commandLine pythonExe, '-m', 'flake8', 'src/', '--max-line-length=88'
+    // Cross-platform Python executable detection
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def pythonExe = isWindows ? 'python.exe' : 'python'
+    def scriptsDir = isWindows ? 'Scripts' : 'bin'
+    
+    def condaEnvPath = System.getenv('CONDA_PREFIX')
+    if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'flake8', 'src/', '--max-line-length=88'
+    } else {
+        commandLine pythonExe, '-m', 'flake8', 'src/', '--max-line-length=88'
+    }
     
     ignoreExitValue = true
     
     doFirst {
-        println "Running Python linting with: ${pythonExe}"
+        println "Running Python linting..."
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Python linting passed"
         } else {
-            println "⚠ Python linting issues found (exit code: ${execResult.exitValue})"
+            println "⚠ Python linting issues found (exit code: ${executionResult.get().exitValue})"
         }
     }
 }
@@ -181,34 +152,36 @@ task buildRelease {
     }
 }
 
-// Task to package Python application (cross-platform)
+// Task to package Python application
 task pythonPackage(type: Exec) {
     group = 'build'
     description = 'Packages Python application using PyInstaller'
     
     workingDir file('PythonApp')
     
-    def pythonExe = getPythonExecutable()
+    // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def additionalArgs = isWindows ? ['--windowed'] : []
+    def pythonExe = isWindows ? 'python.exe' : 'python'
+    def scriptsDir = isWindows ? 'Scripts' : 'bin'
     
-    commandLine([pythonExe, '-m', 'PyInstaller', 'src/main.py', '--onefile'] + additionalArgs)
+    def condaEnvPath = System.getenv('CONDA_PREFIX')
+    if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
+        commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
+    } else {
+        commandLine pythonExe, '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
+    }
     
     ignoreExitValue = true
     
     doFirst {
-        println "Packaging Python application with: ${pythonExe}"
+        println "Packaging Python application..."
     }
     
     doLast {
-        if (execResult.exitValue == 0) {
+        if (executionResult.get().exitValue == 0) {
             println "✓ Python application packaged successfully"
-            def distDir = file("PythonApp/dist")
-            if (distDir.exists()) {
-                println "  Executable location: ${distDir.absolutePath}"
-            }
         } else {
-            println "⚠ Python packaging failed (exit code: ${execResult.exitValue})"
+            println "⚠ Python packaging failed (exit code: ${executionResult.get().exitValue})"
         }
     }
 }

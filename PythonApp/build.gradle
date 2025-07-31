@@ -2,41 +2,10 @@ plugins {
     id 'ru.vyarus.use-python' version '3.0.0'
 }
 
-// Cross-platform Python environment detection
-def getPythonPath() {
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    def scriptsDir = isWindows ? 'Scripts' : 'bin'
-    
-    // 1. Check conda environment
-    def condaEnvPath = System.getenv('CONDA_PREFIX')
-    if (condaEnvPath) {
-        def condaPython = file("${condaEnvPath}/${scriptsDir}/${pythonExe}")
-        if (condaPython.exists()) {
-            return condaPython.absolutePath
-        }
-    }
-    
-    // 2. Check project root venv
-    def venvPython = file("../venv/${scriptsDir}/${pythonExe}")
-    if (venvPython.exists()) {
-        return venvPython.absolutePath
-    }
-    
-    // 3. Check local venv
-    def localVenvPython = file("venv/${scriptsDir}/${pythonExe}")
-    if (localVenvPython.exists()) {
-        return localVenvPython.absolutePath
-    }
-    
-    // 4. Use system python
-    return isWindows ? 'python' : 'python3'
-}
-
 python {
-    // Use detected Python path
-    pythonPath = getPythonPath()
-    
+    // Use system Python (default). Optionally specify path:
+    // pythonPath = "C:/Python39/python.exe"
+
     // Production dependencies with exact versions for reproducible builds
     pip 'pyqt5:5.15.7'
     pip 'opencv-python:4.8.0.74'
