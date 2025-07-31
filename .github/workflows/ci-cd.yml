@@ -80,8 +80,13 @@ jobs:
     - name: Build Android project (using Milestone 5.1 tasks)
       run: ./gradlew AndroidApp:assembleDebug --stacktrace
       
-    - name: Run Android unit tests
-      run: ./gradlew AndroidApp:testDebugUnitTest --stacktrace
+    - name: Run Android unit tests for all variants
+      run: |
+        echo "Running comprehensive unit tests for all Android variants..."
+        ./gradlew AndroidApp:test --stacktrace
+        echo "Running specific variant tests for coverage..."
+        ./gradlew AndroidApp:testDevDebugUnitTest --stacktrace
+        ./gradlew AndroidApp:testProdDebugUnitTest --stacktrace
       
     - name: Run Android lint
       run: ./gradlew AndroidApp:lintDebug --stacktrace
@@ -90,8 +95,8 @@ jobs:
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: Android Unit Tests
-        path: AndroidApp/build/test-results/testDebugUnitTest/*.xml
+        name: Android Unit Tests - All Variants
+        path: AndroidApp/build/test-results/**/TEST-*.xml
         reporter: java-junit
         
     - name: Upload Android build artifacts
@@ -205,10 +210,16 @@ jobs:
         python --version
         which python
         
-    - name: Run Python tests (Milestone 5.1 Gradle task)
+    - name: Run comprehensive Python tests
       shell: bash -l {0}
-      run: ./gradlew pythonTest --stacktrace
-      
+      run: |
+        echo "Running all Python tests with coverage..."
+        ./gradlew PythonApp:runPythonTestsWithCoverage --stacktrace
+        echo "Running Python setup validation..."
+        ./gradlew PythonApp:testPythonSetup --stacktrace
+        echo "Running Gradle Python test integration..."
+        ./gradlew pythonTest --stacktrace
+        
     - name: Run Python linting (Milestone 5.1 Gradle task)
       shell: bash -l {0}
       run: ./gradlew pythonLint --stacktrace

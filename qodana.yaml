@@ -8,22 +8,46 @@ version: "1.0"
 profile:
   name: qodana.recommended
 
-#Enable inspections
-#include:
-#  - name: <SomeEnabledInspectionId>
+#Enable inspections for multi-language project (Python + Kotlin/Android)
+include:
+  - name: PythonUnreachableCode
+  - name: PyUnusedLocal
+  - name: PyPep8Naming
+  - name: UnusedDeclaration
+  - name: KotlinUnusedImport
 
-#Disable inspections
-#exclude:
-#  - name: <SomeDisabledInspectionId>
-#    paths:
-#      - <path/where/not/run/inspection>
+#Disable less relevant inspections for CI/CD
+exclude:
+  - name: SpellCheckingInspection
+    paths:
+      - "*"
+  - name: GrazieInspection
+    paths:
+      - "*"
 
-#Execute shell command before Qodana execution (Applied in CI/CD pipeline)
-#bootstrap: sh ./prepare-qodana.sh
+# Multi-language project paths
+projectType: 
+  - Android
+  - Python
 
-#Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
-#plugins:
-#  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
+# Include both source directories for analysis
+include:
+  paths:
+    - AndroidApp/src
+    - PythonApp/src
 
-#Specify Qodana linter for analysis (Applied in CI/CD pipeline)
-linter: jetbrains/qodana-<linter>:2025.1
+# Exclude build outputs and dependencies
+exclude:
+  paths:
+    - build/
+    - AndroidApp/build/
+    - PythonApp/build/
+    - "**/.gradle/"
+    - "**/node_modules/"
+    - "**/__pycache__/"
+    - "**/*.pyc"
+    - "**/venv/"
+    - "**/env/"
+
+# For multi-language projects, use JVM linter which supports both Kotlin and Python
+linter: jetbrains/qodana-jvm:2025.1

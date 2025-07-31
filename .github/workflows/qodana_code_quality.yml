@@ -1,24 +1,106 @@
-name: Qodana
+# Qodana Code Quality Analysis for Python and Kotlin/Android
+# Integrates with main CI/CD pipeline for comprehensive code analysis
+
+name: Qodana Code Quality
 on:
   workflow_dispatch:
   pull_request:
+    branches: [ main, develop ]
   push:
-    branches:
-      - master
+    branches: [ main, develop ]
+
+env:
+  JAVA_VERSION: '17'
+  PYTHON_VERSION: '3.9'
 
 jobs:
-  qodana:
+  # Path-based filtering to optimize Qodana runs
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.changes.outputs.android }}
+      python: ${{ steps.changes.outputs.python }}
+      config: ${{ steps.changes.outputs.config }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            android:
+              - 'AndroidApp/**'
+              - '*.gradle'
+              - 'gradle/**'
+            python:
+              - 'PythonApp/**'
+              - 'environment.yml'
+            config:
+              - 'qodana.yaml'
+              - '.github/workflows/qodana_code_quality.yml'
+
+  qodana-analysis:
+    name: Multi-Language Code Quality Analysis
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.android == 'true' || needs.changes.outputs.python == 'true' || needs.changes.outputs.config == 'true' || github.event_name == 'workflow_dispatch' }}
     permissions:
       contents: write
       pull-requests: write
       checks: write
+      security-events: write
+    
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: 'Qodana Scan'
+          
+      # Set up Java for Android/Kotlin analysis
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          
+      # Set up Python environment for Python analysis
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      # Install Python dependencies for analysis context
+      - name: Install Python dependencies
+        if: needs.changes.outputs.python == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f PythonApp/requirements.txt ]; then pip install -r PythonApp/requirements.txt; fi
+          
+      # Grant permissions to gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        
+      # Run Qodana analysis for both Python and Kotlin/Android
+      - name: 'Qodana Scan - Multi-Language Analysis'
         uses: JetBrains/qodana-action@v2025.1
+        with:
+          args: --baseline,qodana.sarif.json
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          
+      # Upload results to GitHub Security tab
+      - name: Upload Qodana results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+          
+      # Upload detailed results as artifacts
+      - name: Upload Qodana results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: qodana-report
+          path: ${{ runner.temp }}/qodana/results/
+          retention-days: 7
