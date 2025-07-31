@@ -5,9 +5,9 @@ name: Performance Monitoring
 
 on:
   push:
-    branches: [main, develop]
+    branches: [master, dev]
   pull_request:
-    branches: [main]
+    branches: [master]
   schedule:
     # Run performance tests weekly
     - cron: '0 4 * * 2'
