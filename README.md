@@ -81,7 +81,7 @@ git submodule update --remote external/psychopy
 ### Prerequisites
 
 1. **Java 17 or Java 21** (recommended for best compatibility)
-   - ⚠️ **Important**: Java 24 may cause compatibility issues with Gradle 8.4
+   - ⚠️ **Important**: Java 24 may cause compatibility issues with Gradle 8.11
    - Download from [Eclipse Temurin](https://adoptium.net/) or [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
 
 2. **Android Studio** (Arctic Fox or later)
@@ -502,8 +502,9 @@ python --version
 - **Image Processing:** Pillow
 
 ### Build System
-- **Primary:** Gradle 8.4 with multi-project setup
-- **Android Plugin:** 8.1.2
+- **Primary:** Gradle 8.11.1 with multi-project setup
+- **Android Plugin:** 8.7.3
+- **Kotlin:** 2.1.0
 - **Python Integration:** ru.vyarus.use-python plugin 3.0.0
 
 ## 📱 Android App Features
