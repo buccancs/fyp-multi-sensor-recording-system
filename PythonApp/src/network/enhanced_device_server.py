@@ -81,6 +81,12 @@ class ConnectionStats:
     error_count: int = 0
     average_latency: float = 0.0
     latency_samples: deque = field(default_factory=lambda: deque(maxlen=100))
+    min_latency: float = float('inf')
+    max_latency: float = 0.0
+    jitter: float = 0.0
+    packet_loss_rate: float = 0.0
+    ping_count: int = 0
+    pong_count: int = 0
 
 
 class EnhancedRemoteDevice:
@@ -169,11 +175,34 @@ class EnhancedRemoteDevice:
             return None
 
     def update_latency(self, latency: float):
-        """Update latency statistics."""
+        """Update latency statistics with advanced metrics."""
         with QMutexLocker(self.mutex):
             self.stats.latency_samples.append(latency)
+            
+            # Update min/max latency
+            self.stats.min_latency = min(self.stats.min_latency, latency)
+            self.stats.max_latency = max(self.stats.max_latency, latency)
+            
+            # Calculate average latency
             if self.stats.latency_samples:
                 self.stats.average_latency = sum(self.stats.latency_samples) / len(self.stats.latency_samples)
+                
+                # Calculate jitter (standard deviation of latency)
+                if len(self.stats.latency_samples) >= 2:
+                    variance = sum((x - self.stats.average_latency) ** 2 for x in self.stats.latency_samples) / len(self.stats.latency_samples)
+                    self.stats.jitter = variance ** 0.5
+                
+                # Update packet loss rate based on ping/pong ratio
+                if self.stats.ping_count > 0:
+                    self.stats.packet_loss_rate = max(0, (self.stats.ping_count - self.stats.pong_count) / self.stats.ping_count * 100)
+    
+    def update_ping_stats(self, is_response: bool = False):
+        """Update ping/pong statistics."""
+        with QMutexLocker(self.mutex):
+            if is_response:
+                self.stats.pong_count += 1
+            else:
+                self.stats.ping_count += 1
 
     def increment_error_count(self):
         """Increment error counters."""
@@ -208,7 +237,14 @@ class EnhancedRemoteDevice:
                     "bytes_received": self.stats.bytes_received,
                     "error_count": self.stats.error_count,
                     "average_latency": round(self.stats.average_latency, 2),
-                    "connection_duration": round(time.time() - self.stats.connected_at, 1)
+                    "min_latency": round(self.stats.min_latency, 2) if self.stats.min_latency != float('inf') else 0,
+                    "max_latency": round(self.stats.max_latency, 2),
+                    "jitter": round(self.stats.jitter, 2),
+                    "packet_loss_rate": round(self.stats.packet_loss_rate, 2),
+                    "ping_count": self.stats.ping_count,
+                    "pong_count": self.stats.pong_count,
+                    "connection_duration": round(time.time() - self.stats.connected_at, 1),
+                    "latency_samples": len(self.stats.latency_samples)
                 }
             }
 
@@ -703,6 +739,12 @@ class EnhancedDeviceServer(QThread):
             stats = {
                 "active_devices": len(self.devices),
                 "total_connections": self.network_stats["total_connections"],
+                "overall_stats": {
+                    "total_messages": sum(device.stats.messages_sent + device.stats.messages_received for device in self.devices.values()),
+                    "total_bytes": sum(device.stats.bytes_sent + device.stats.bytes_received for device in self.devices.values()),
+                    "average_latency": self._calculate_overall_latency(),
+                    "network_quality": self._assess_overall_network_quality()
+                },
                 "devices": {}
             }
             
@@ -710,12 +752,108 @@ class EnhancedDeviceServer(QThread):
                 stats["devices"][device_id] = device.get_status_summary()
         
         return stats
+    
+    def _calculate_overall_latency(self) -> float:
+        """Calculate overall average latency across all devices."""
+        if not self.devices:
+            return 0.0
+        
+        total_latency = 0.0
+        device_count = 0
+        
+        for device in self.devices.values():
+            if device.stats.latency_samples:
+                total_latency += device.stats.average_latency
+                device_count += 1
+        
+        return total_latency / device_count if device_count > 0 else 0.0
+    
+    def _assess_overall_network_quality(self) -> str:
+        """Assess overall network quality."""
+        if not self.devices:
+            return "unknown"
+        
+        avg_latency = self._calculate_overall_latency()
+        
+        if avg_latency < 50:
+            return "excellent"
+        elif avg_latency < 100:
+            return "good"
+        elif avg_latency < 200:
+            return "fair"
+        else:
+            return "poor"
+    
+    def get_device_latency_statistics(self, device_id: str) -> Dict[str, Any]:
+        """Get detailed latency statistics for a specific device."""
+        with QMutexLocker(self.devices_mutex):
+            device = self.devices.get(device_id)
+            if not device:
+                return {"error": f"Device {device_id} not found"}
+            
+            with QMutexLocker(device.mutex):
+                return {
+                    "device_id": device_id,
+                    "average_latency": device.stats.average_latency,
+                    "min_latency": device.stats.min_latency if device.stats.min_latency != float('inf') else 0,
+                    "max_latency": device.stats.max_latency,
+                    "jitter": device.stats.jitter,
+                    "packet_loss_rate": device.stats.packet_loss_rate,
+                    "ping_count": device.stats.ping_count,
+                    "pong_count": device.stats.pong_count,
+                    "sample_count": len(device.stats.latency_samples),
+                    "recent_samples": list(device.stats.latency_samples)[-10:] if device.stats.latency_samples else []
+                }
 
     def handle_status_update(self, device: EnhancedRemoteDevice, message: Dict[str, Any]):
         """Handle device status update."""
-        # Process status data
-        status_data = {k: v for k, v in message.items() if k != 'type'}
-        self.message_received.emit(device.device_id, message)
+        # Check if this is a ping message embedded in storage field
+        storage = message.get('storage', '')
+        if isinstance(storage, str) and storage.startswith('ping:'):
+            self.handle_ping_message(device, storage, message.get('timestamp', time.time()))
+        else:
+            # Process regular status data
+            status_data = {k: v for k, v in message.items() if k != 'type'}
+            self.message_received.emit(device.device_id, message)
+    
+    def handle_ping_message(self, device: EnhancedRemoteDevice, ping_data: str, original_timestamp: float):
+        """Handle ping message and send pong response."""
+        try:
+            # Parse ping data: "ping:pingId:timestamp:sequence"
+            parts = ping_data.split(':')
+            if len(parts) >= 4:
+                ping_id = parts[1]
+                ping_timestamp = float(parts[2])
+                sequence = int(parts[3])
+                
+                # Create pong response embedded in status message
+                current_time = time.time()
+                pong_data = f"pong:{ping_id}:{ping_timestamp}:{current_time}:{sequence}"
+                
+                response = NetworkMessage(
+                    type='status',
+                    payload={
+                        'type': 'status',
+                        'storage': pong_data,
+                        'timestamp': current_time,
+                        'battery': None,
+                        'temperature': None,
+                        'recording': False,
+                        'connected': True
+                    },
+                    priority=MessagePriority.HIGH
+                )
+                device.queue_message(response)
+                
+                # Update device latency with ping timing
+                ping_latency = (current_time - ping_timestamp) * 1000  # Convert to ms
+                device.update_latency(ping_latency / 2)  # Half for one-way latency
+                device.update_ping_stats(is_response=True)  # This is a pong response
+                
+                logger.debug(f"Responded to ping {ping_id} from {device.device_id}, RTT: {ping_latency:.2f}ms")
+                
+        except Exception as e:
+            logger.error(f"Error handling ping message: {e}")
 
     def handle_acknowledgment(self, device: EnhancedRemoteDevice, message: Dict[str, Any]):
         """Handle message acknowledgment."""

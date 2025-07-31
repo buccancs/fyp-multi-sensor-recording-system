@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import kotlin.collections.ArrayDeque
+import kotlin.math
 
 /**
  * Enhanced JSON Socket Client with rock-solid networking features.
@@ -74,10 +75,16 @@ class EnhancedJsonSocketClient @Inject constructor(
     private var baseReconnectDelay = 1000L // 1 second
     private var maxReconnectDelay = 30000L // 30 seconds
     
-    // Streaming management
-    private var streamingQuality = StreamingQuality.MEDIUM
-    private var adaptiveQualityEnabled = true
-    private var lastFrameTime = AtomicLong(0)
+    // Ping/Pong latency measurement
+    private val pendingPings = ConcurrentHashMap<String, Long>()
+    private var pingCounter = AtomicLong(0)
+    private val pingInterval = 10000L // 10 seconds
+    private var lastPingTime = AtomicLong(0)
+    
+    // Enhanced latency metrics
+    private var jitter: Double = 0.0
+    private var packetLoss: Double = 0.0
+    private var networkQuality: NetworkQuality = NetworkQuality.UNKNOWN
     
     // Configuration
     private var serverIp: String = networkConfig.getServerIp()
@@ -115,15 +122,34 @@ class EnhancedJsonSocketClient @Inject constructor(
     }
     
     /**
-     * Connection states
+     * Network quality assessment
      */
-    enum class ConnectionState {
-        DISCONNECTED,
-        CONNECTING,
-        CONNECTED,
-        RECONNECTING,
-        ERROR
+    enum class NetworkQuality {
+        EXCELLENT,  // <30ms latency, <1% jitter, <0.1% loss
+        GOOD,       // <100ms latency, <5% jitter, <1% loss
+        FAIR,       // <300ms latency, <10% jitter, <5% loss
+        POOR,       // >300ms latency, >10% jitter, >5% loss
+        UNKNOWN     // Not enough data
     }
+    
+    /**
+     * Ping message for latency measurement
+     */
+    private data class PingMessage(
+        val pingId: String,
+        val timestamp: Long,
+        val sequence: Long
+    )
+    
+    /**
+     * Pong response message
+     */
+    private data class PongMessage(
+        val pingId: String,
+        val originalTimestamp: Long,
+        val responseTimestamp: Long,
+        val sequence: Long
+    )
     
     /**
      * Priority message wrapper
@@ -421,6 +447,9 @@ class EnhancedJsonSocketClient @Inject constructor(
             // Heartbeat sender coroutine
             launch { heartbeatSenderLoop() }
             
+            // Ping sender coroutine for latency measurement
+            launch { pingSenderLoop() }
+            
             // Connection monitor coroutine
             launch { connectionMonitorLoop() }
             
@@ -512,6 +541,70 @@ class EnhancedJsonSocketClient @Inject constructor(
                 break
             }
         }
+    }
+    
+    /**
+     * Ping sender loop for accurate latency measurement
+     */
+    private suspend fun pingSenderLoop() {
+        while (isConnected.get() && shouldReconnect.get()) {
+            try {
+                delay(pingInterval)
+                
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastPingTime.get() >= pingInterval) {
+                    sendPing()
+                    lastPingTime.set(currentTime)
+                }
+                
+            } catch (e: Exception) {
+                logger.error("Ping sender error", e)
+                break
+            }
+        }
+    }
+    
+    /**
+     * Send ping message for latency measurement
+     */
+    private suspend fun sendPing() {
+        val pingId = "ping_${pingCounter.incrementAndGet()}"
+        val timestamp = System.currentTimeMillis()
+        
+        // Store ping for latency calculation
+        pendingPings[pingId] = timestamp
+        
+        // Create ping message as a status message with ping data
+        val pingMessage = StatusMessage(
+            battery = null,
+            storage = null,
+            temperature = null,
+            recording = false,
+            connected = true
+        )
+        
+        // We'll add ping metadata to the message when sending
+        val enhancedMessage = createPingAsJsonMessage(pingId, timestamp)
+        sendMessage(enhancedMessage, MessagePriority.HIGH)
+        
+        // Clean up old pings (older than 60 seconds)
+        val cutoffTime = timestamp - 60000
+        pendingPings.entries.removeAll { it.value < cutoffTime }
+    }
+    
+    /**
+     * Create ping message as generic JSON message
+     */
+    private fun createPingAsJsonMessage(pingId: String, timestamp: Long): JsonMessage {
+        // Since we need to work with existing JsonMessage types, we'll use StatusMessage
+        // and add ping information in a way that can be detected by the server
+        return StatusMessage(
+            battery = null,
+            storage = "ping:$pingId:$timestamp:${pingCounter.get()}",
+            temperature = null,
+            recording = false,
+            connected = true
+        )
     }
     
     /**
@@ -674,6 +767,8 @@ class EnhancedJsonSocketClient @Inject constructor(
             "heartbeat_response" -> handleHeartbeatResponse(message)
             "ack" -> handleAcknowledgment(message)
             "handshake_ack" -> handleHandshakeAck(message)
+            "status" -> handleStatusMessage(message)
+            "pong" -> handlePongMessage(message)
             else -> {
                 // Forward to command callback
                 commandCallback?.invoke(message)
@@ -695,9 +790,65 @@ class EnhancedJsonSocketClient @Inject constructor(
      */
     private suspend fun handleHeartbeatResponse(message: JsonMessage) {
         // Calculate latency if timestamp is available
-        if (message is StatusMessage) {
-            // Parse timestamp and calculate latency
-            // Implementation depends on message structure
+        try {
+            val currentTime = System.currentTimeMillis()
+            
+            // Extract timestamp from different message types
+            val messageTimestamp = when (message) {
+                is StatusMessage -> {
+                    // Try to get timestamp from generic message data
+                    extractTimestampFromMessage(message)
+                }
+                is AckMessage -> {
+                    // Handle timestamp in ACK message
+                    extractTimestampFromMessage(message)
+                }
+                else -> {
+                    // Try to extract from generic message
+                    extractTimestampFromMessage(message)
+                }
+            }
+            
+            if (messageTimestamp != null) {
+                val latency = currentTime - messageTimestamp
+                updateLatencyStatistics(latency)
+                logger.debug("Heartbeat latency: ${latency}ms")
+            }
+            
+        } catch (e: Exception) {
+            logger.error("Error calculating heartbeat latency", e)
+        }
+    }
+    
+    /**
+     * Extract timestamp from message data
+     */
+    private fun extractTimestampFromMessage(message: JsonMessage): Long? {
+        return try {
+            // Try to get timestamp field from the message using reflection or parsing
+            val jsonString = JsonMessage.toJson(message)
+            val jsonMap = kotlinx.serialization.json.Json.parseToJsonElement(jsonString).jsonObject
+            jsonMap["timestamp"]?.jsonPrimitive?.longOrNull
+        } catch (e: Exception) {
+            logger.debug("Could not extract timestamp from message", e)
+            null
+        }
+    }
+    
+    /**
+     * Update latency statistics
+     */
+    private fun updateLatencyStatistics(latency: Long) {
+        connectionStats.latencySamples.addLast(latency)
+        
+        // Keep only recent samples (last 100)
+        while (connectionStats.latencySamples.size > 100) {
+            connectionStats.latencySamples.removeFirst()
+        }
+        
+        // Calculate average latency
+        if (connectionStats.latencySamples.isNotEmpty()) {
+            connectionStats.averageLatency = connectionStats.latencySamples.average()
         }
     }
     
@@ -712,10 +863,117 @@ class EnhancedJsonSocketClient @Inject constructor(
     }
     
     /**
-     * Handle handshake acknowledgment
+     * Handle status message (including ping responses)
      */
-    private suspend fun handleHandshakeAck(message: JsonMessage) {
-        logger.info("Handshake acknowledged by server")
+    private suspend fun handleStatusMessage(message: JsonMessage) {
+        if (message is StatusMessage) {
+            // Check if this is a pong response (ping embedded in storage field)
+            message.storage?.let { storage ->
+                if (storage.startsWith("pong:")) {
+                    handlePongResponse(storage)
+                }
+            }
+        }
+        
+        // Forward to regular callback
+        commandCallback?.invoke(message)
+    }
+    
+    /**
+     * Handle pong response embedded in status message
+     */
+    private fun handlePongResponse(pongData: String) {
+        try {
+            // Parse pong data: "pong:pingId:originalTimestamp:responseTimestamp:sequence"
+            val parts = pongData.split(":")
+            if (parts.size >= 5) {
+                val pingId = parts[1]
+                val originalTimestamp = parts[2].toLong()
+                val responseTimestamp = parts[3].toLong()
+                val sequence = parts[4].toLong()
+                
+                // Calculate round-trip time
+                val currentTime = System.currentTimeMillis()
+                val rtt = currentTime - originalTimestamp
+                
+                // Remove from pending pings
+                pendingPings.remove(pingId)
+                
+                // Update latency statistics
+                updateLatencyStatistics(rtt)
+                
+                // Calculate network quality metrics
+                updateNetworkQualityMetrics(rtt)
+                
+                logger.debug("Ping $pingId RTT: ${rtt}ms")
+            }
+        } catch (e: Exception) {
+            logger.error("Error processing pong response", e)
+        }
+    }
+    
+    /**
+     * Handle dedicated pong message
+     */
+    private suspend fun handlePongMessage(message: JsonMessage) {
+        // Handle dedicated pong messages if implemented
+        logger.debug("Received pong message")
+    }
+    
+    /**
+     * Update network quality metrics including jitter calculation
+     */
+    private fun updateNetworkQualityMetrics(latency: Long) {
+        // Calculate jitter (variation in latency)
+        if (connectionStats.latencySamples.size >= 2) {
+            val previousLatencies = connectionStats.latencySamples.takeLast(10)
+            val latencyVariance = previousLatencies.map { (it - connectionStats.averageLatency).let { diff -> diff * diff } }.average()
+            jitter = kotlin.math.sqrt(latencyVariance)
+        }
+        
+        // Update packet loss estimation based on pending pings
+        val totalPings = pingCounter.get()
+        val lostPings = pendingPings.size
+        if (totalPings > 0) {
+            packetLoss = (lostPings.toDouble() / totalPings.toDouble()) * 100.0
+        }
+        
+        // Assess network quality
+        networkQuality = assessNetworkQuality(connectionStats.averageLatency, jitter, packetLoss)
+        
+        // Adapt streaming quality based on network conditions
+        if (adaptiveQualityEnabled) {
+            adaptStreamingQualityAdvanced()
+        }
+    }
+    
+    /**
+     * Assess network quality based on metrics
+     */
+    private fun assessNetworkQuality(avgLatency: Double, jitter: Double, packetLoss: Double): NetworkQuality {
+        return when {
+            avgLatency < 30 && jitter < 5 && packetLoss < 0.1 -> NetworkQuality.EXCELLENT
+            avgLatency < 100 && jitter < 20 && packetLoss < 1.0 -> NetworkQuality.GOOD
+            avgLatency < 300 && jitter < 50 && packetLoss < 5.0 -> NetworkQuality.FAIR
+            else -> NetworkQuality.POOR
+        }
+    }
+    
+    /**
+     * Advanced streaming quality adaptation based on comprehensive metrics
+     */
+    private fun adaptStreamingQualityAdvanced() {
+        val newQuality = when (networkQuality) {
+            NetworkQuality.EXCELLENT -> StreamingQuality.HIGH
+            NetworkQuality.GOOD -> StreamingQuality.MEDIUM
+            NetworkQuality.FAIR, NetworkQuality.POOR -> StreamingQuality.LOW
+            NetworkQuality.UNKNOWN -> StreamingQuality.MEDIUM
+        }
+        
+        if (newQuality != streamingQuality) {
+            streamingQuality = newQuality
+            logger.info("Adapted streaming quality to: ${newQuality.name} (Network: ${networkQuality.name})")
+        }
     }
     
     /**
@@ -884,10 +1142,18 @@ class EnhancedJsonSocketClient @Inject constructor(
         "error_count" to connectionStats.errorCount.get(),
         "reconnection_count" to connectionStats.reconnectionCount.get(),
         "average_latency" to connectionStats.averageLatency,
+        "latency_jitter" to jitter,
+        "packet_loss_percent" to packetLoss,
+        "network_quality" to networkQuality.name,
         "streaming_quality" to streamingQuality.name,
         "connection_duration" to if (connectionStats.connectedAt > 0) {
             System.currentTimeMillis() - connectionStats.connectedAt
-        } else 0
+        } else 0,
+        "ping_statistics" to mapOf(
+            "total_pings_sent" to pingCounter.get(),
+            "pending_pings" to pendingPings.size,
+            "successful_pings" to (pingCounter.get() - pendingPings.size)
+        )
     )
     
     /**
@@ -904,5 +1170,62 @@ class EnhancedJsonSocketClient @Inject constructor(
     fun setStreamingQuality(quality: StreamingQuality) {
         streamingQuality = quality
         logger.info("Streaming quality set to: ${quality.name}")
+    }
+    
+    /**
+     * Get current network latency
+     */
+    fun getCurrentLatency(): Double = connectionStats.averageLatency
+    
+    /**
+     * Get network jitter
+     */
+    fun getNetworkJitter(): Double = jitter
+    
+    /**
+     * Get packet loss percentage
+     */
+    fun getPacketLoss(): Double = packetLoss
+    
+    /**
+     * Get current network quality assessment
+     */
+    fun getNetworkQuality(): NetworkQuality = networkQuality
+    
+    /**
+     * Get detailed latency statistics
+     */
+    fun getLatencyStatistics(): Map<String, Any> {
+        val samples = connectionStats.latencySamples
+        return if (samples.isNotEmpty()) {
+            mapOf(
+                "average_latency_ms" to connectionStats.averageLatency,
+                "min_latency_ms" to samples.minOrNull(),
+                "max_latency_ms" to samples.maxOrNull(),
+                "jitter_ms" to jitter,
+                "sample_count" to samples.size,
+                "recent_latencies" to samples.takeLast(10)
+            )
+        } else {
+            mapOf(
+                "average_latency_ms" to 0.0,
+                "sample_count" to 0,
+                "message" to "No latency samples available"
+            )
+        }
+    }
+    
+    /**
+     * Reset latency statistics
+     */
+    fun resetLatencyStatistics() {
+        connectionStats.latencySamples.clear()
+        connectionStats.averageLatency = 0.0
+        jitter = 0.0
+        packetLoss = 0.0
+        networkQuality = NetworkQuality.UNKNOWN
+        pendingPings.clear()
+        pingCounter.set(0)
+        logger.info("Latency statistics reset")
     }
 }
