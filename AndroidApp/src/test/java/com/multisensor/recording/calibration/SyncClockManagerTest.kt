@@ -216,8 +216,8 @@ class SyncClockManagerTest {
             assertTrue("Sync should be valid initially", syncClockManager.isSyncValid())
 
             // Mock time passage beyond validity duration
-            // Note: In real implementation, we would need to mock System.currentTimeMillis()
-            // For this test, we verify the logic conceptually
+            // Note: In real implementation, I would need to mock System.currentTimeMillis()
+            // For this test, I verify the logic conceptually
             val syncStatus = syncClockManager.getSyncStatus()
             assertTrue("Sync age should be small initially", syncStatus.syncAge < 1000L)
 

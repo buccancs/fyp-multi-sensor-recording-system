@@ -369,7 +369,7 @@ class FileViewUiStateTest {
         assertTrue("[DEBUG_LOG] Should contain RAW_IMAGE type", types.contains(FileType.RAW_IMAGE))
         assertTrue("[DEBUG_LOG] Should contain THERMAL_DATA type", types.contains(FileType.THERMAL_DATA))
         
-        // Verify we have exactly 3 types
+        // Verify I have exactly 3 types
         assertEquals("[DEBUG_LOG] Should have exactly 3 file types", 3, types.size)
     }
 

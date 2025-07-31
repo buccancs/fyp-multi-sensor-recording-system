@@ -561,7 +561,7 @@ class SessionManager
                     sessionInfo.updateThermalFrameCount(estimatedFrameCount)
                 }
 
-                // Mark as completed if we have an end time
+                // Mark as completed if I have an end time
                 if (endTime > 0) {
                     sessionInfo.markCompleted()
                 }
@@ -610,7 +610,7 @@ class SessionManager
 
                     logger.info("Session deletion complete - Deleted: $deletedCount, Failed: $failedCount")
 
-                    // Return true if we deleted at least some sessions and had no failures
+                    // Return true if I deleted at least some sessions and had no failures
                     deletedCount > 0 && failedCount == 0
                 } catch (e: Exception) {
                     logger.error("Failed to delete all sessions", e)

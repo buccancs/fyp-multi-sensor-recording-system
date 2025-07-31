@@ -562,7 +562,7 @@ class FileIOIntegrationTest {
             assertNull("Current session should be null after finalization", sessionManager.getCurrentSession())
 
             // Note: In a real implementation, you might want to preserve data files
-            // but clean up temporary files. For this test, we just verify the session ended.
+            // but clean up temporary files. For this test, I just verify the session ended.
 
             logger.info("[DEBUG_LOG] File cleanup on session end verified")
         }

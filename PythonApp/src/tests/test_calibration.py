@@ -359,7 +359,7 @@ def test_calibration_with_real_data():
 
     object_points, image_points = test_data.load_real_calibration_data(data_dir)
 
-    if len(object_points) >= 3:  # Only run if we have real data
+    if len(object_points) >= 3:  # Only run if I have real data
         calibration_tester = CalibrationTester()
 
         rms_error, camera_matrix, dist_coeffs = calibration_tester.run_calibration(

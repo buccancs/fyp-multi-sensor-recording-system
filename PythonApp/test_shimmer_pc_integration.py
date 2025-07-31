@@ -257,7 +257,7 @@ def test_android_device_manager():
             print("❌ Failed to stop session")
             return False
         
-        # Check if we received data
+        # Check if I received data
         if len(data_samples_received) < 10:
             print(f"❌ Expected more data samples, got {len(data_samples_received)}")
             return False
@@ -345,7 +345,7 @@ def test_shimmer_manager():
             print("❌ Failed to stop streaming")
             return False
         
-        # Check if we received Shimmer data
+        # Check if I received Shimmer data
         if len(shimmer_samples) < 10:
             print(f"❌ Expected more Shimmer samples, got {len(shimmer_samples)}")
             return False

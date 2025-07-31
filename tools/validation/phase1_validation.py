@@ -84,7 +84,7 @@ class Phase1Validator:
     def validate_logging_infrastructure(self) -> bool:
         """
         Test 1: Validate comprehensive logging infrastructure is working.
-        This ensures we can track all processes and validate system behavior.
+        This ensures I can track all processes and validate system behavior.
         """
         test_name = "logging_infrastructure"
         self.logger.info("=== Phase 1 Test: Logging Infrastructure Validation ===")
@@ -294,7 +294,7 @@ class Phase1Validator:
     def test_performance_monitoring(self) -> bool:
         """
         Test 4: Validate performance monitoring capabilities.
-        Ensures we can track system performance during architectural changes.
+        Ensures I can track system performance during architectural changes.
         """
         test_name = "performance_monitoring"
         self.logger.info("=== Phase 1 Test: Performance Monitoring Validation ===")

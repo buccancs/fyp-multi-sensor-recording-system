@@ -371,7 +371,7 @@ class ThermalCameraBulletproofIntegrationTest {
     }
 
     private fun createMockUsbDevice(vendorId: Int, productId: Int): UsbDevice {
-        // This is a simplified mock for testing - in real test we'd use mockk
+        // This is a simplified mock for testing - in real test I'd use mockk
         return object : UsbDevice() {
             override fun getVendorId(): Int = vendorId
             override fun getProductId(): Int = productId

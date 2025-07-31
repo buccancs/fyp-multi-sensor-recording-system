@@ -163,7 +163,7 @@ class CameraRecorderManualTest {
             delay(3000) // Allow 3 seconds for preview to start and stabilize
 
             // Step 5: Verify no crashes occurred during preview
-            // If we reach this point without exceptions, preview is working
+            // If I reach this point without exceptions, preview is working
             println("[DEBUG_LOG] Preview running smoothly for 3 seconds")
 
             // Step 6: Test orientation handling (simulate device rotation)

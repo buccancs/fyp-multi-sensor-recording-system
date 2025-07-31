@@ -825,7 +825,7 @@ class TestFramework:
                 status = "PASS" if result.success else "FAIL"
                 print(f"[DEBUG_LOG] {result.test_name}: {status} - {result.message}")
 
-                # Run video validation if we have a video file
+                # Run video validation if I have a video file
                 if (
                     result.test_name == "session_synchronization"
                     and result.success

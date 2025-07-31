@@ -68,7 +68,7 @@ class BluetoothDiagnosticTest {
                     println("[DEBUG_LOG] $info")
                     deviceInfo.add(info)
 
-                    // Check if this device matches our Shimmer criteria
+                    // Check if this device matches my Shimmer criteria
                     val isShimmerDevice =
                         device.name?.contains("Shimmer", ignoreCase = true) == true ||
                             device.name?.contains("RN42", ignoreCase = true) == true
@@ -76,7 +76,7 @@ class BluetoothDiagnosticTest {
                     println("[DEBUG_LOG]   ---")
                 }
 
-                // Apply our filtering logic
+                // Apply my filtering logic
                 val shimmerDevices =
                     pairedDevices
                         ?.filter { device ->

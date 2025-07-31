@@ -868,7 +868,7 @@ jobs:
           --junitxml=reports/integration-tests.xml
           
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: pc-test-results-${{ matrix.python-version }}
         path: reports/
@@ -898,7 +898,7 @@ jobs:
       run: ./gradlew AndroidApp:assembleDebug
       
     - name: Upload Android test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: android-test-results
         path: AndroidApp/build/reports/

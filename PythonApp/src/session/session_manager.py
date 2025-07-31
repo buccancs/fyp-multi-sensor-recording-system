@@ -142,7 +142,10 @@ class SessionManager:
     def add_device_to_session(
         self, device_id: str, device_type: str, capabilities: List[str]
     ):
-        """add a device to the current session"""
+        """Add a device to the current session
+        
+        Args:
+            device_id (str): Unique identifier for the device
             device_type (str): Type of device (e.g., "android_phone", "pc_webcam")
             capabilities (List[str]): List of device capabilities
         """

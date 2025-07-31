@@ -41,7 +41,7 @@ data class SensorSample(
                     SensorChannel.GSR to gsrConductance,
                     SensorChannel.PPG to ppgValue,
                     SensorChannel.ACCEL to accelX, // Note: This simplifies 3-axis accel to single value
-                    // In real implementation, we might need separate channels for X, Y, Z
+                    // In real implementation, I might need separate channels for X, Y, Z
                 )
 
             return SensorSample(

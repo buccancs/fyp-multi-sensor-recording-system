@@ -162,7 +162,7 @@ class Logger
             val today = fileDateFormat.format(Date())
             val expectedFileName = "multisensor_$today$LOG_FILE_EXTENSION"
 
-            // Check if we need to create a new log file
+            // Check if I need to create a new log file
             if (currentLogFile?.name != expectedFileName) {
                 // Close current file writer
                 fileWriter?.close()

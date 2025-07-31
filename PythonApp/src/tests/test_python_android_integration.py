@@ -320,7 +320,7 @@ class TestPythonAndroidIntegration(unittest.TestCase):
                 # Server should handle gracefully (not crash)
                 try:
                     response_data = client_socket.recv(1024)
-                    # If we get a response, server handled it gracefully
+                    # If I get a response, server handled it gracefully
                 except socket.timeout:
                     # Timeout is also acceptable (server ignored invalid request)
                     pass

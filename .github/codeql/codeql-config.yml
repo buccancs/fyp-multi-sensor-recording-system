@@ -1,0 +1,48 @@
+# CodeQL Configuration for Multi-Sensor Recording System
+# Enhanced security analysis configuration
+
+name: "CodeQL Security Analysis"
+
+# Disable the default codeql queries
+disable-default-queries: false
+
+# Run additional queries for enhanced security analysis
+queries:
+  - name: security-extended
+    uses: security-extended
+  - name: security-and-quality
+    uses: security-and-quality
+
+# Path-based filtering to focus analysis
+paths:
+  - "AndroidApp/src/main/**"
+  - "PythonApp/src/**"
+
+# Exclude test files and generated code from security analysis
+paths-ignore:
+  - "AndroidApp/src/test/**"
+  - "AndroidApp/src/androidTest/**"
+  - "PythonApp/tests/**"
+  - "**/test_*"
+  - "**/tests/**"
+  - "**/build/**"
+  - "**/generated/**"
+  - "**/.gradle/**"
+
+# Configure specific language analysis
+query-filters:
+  - exclude:
+      id: "js/unused-local-variable"
+  - include:
+      kind: "problem"
+      severity: "error"
+  - include:
+      kind: "path-problem"
+      precision: "high"
+
+# Compilation configuration for Java/Kotlin
+packs:
+  - "codeql/java-queries:Security"
+  - "codeql/python-queries:Security"
+  - "codeql/java-queries:Correctness"
+  - "codeql/python-queries:Correctness"

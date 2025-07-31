@@ -583,7 +583,7 @@ class EnhancedJsonSocketClient @Inject constructor(
             connected = true
         )
         
-        // We'll add ping metadata to the message when sending
+        // I'll add ping metadata to the message when sending
         val enhancedMessage = createPingAsJsonMessage(pingId, timestamp)
         sendMessage(enhancedMessage, MessagePriority.HIGH)
         
@@ -596,7 +596,7 @@ class EnhancedJsonSocketClient @Inject constructor(
      * Create ping message as generic JSON message
      */
     private fun createPingAsJsonMessage(pingId: String, timestamp: Long): JsonMessage {
-        // Since we need to work with existing JsonMessage types, we'll use StatusMessage
+        // Since I need to work with existing JsonMessage types, I'll use StatusMessage
         // and add ping information in a way that can be detected by the server
         return StatusMessage(
             battery = null,
