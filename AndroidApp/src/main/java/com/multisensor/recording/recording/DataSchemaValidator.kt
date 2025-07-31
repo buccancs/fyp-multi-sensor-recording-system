@@ -6,6 +6,16 @@ import com.shimmerresearch.driver.Configuration
 import kotlinx.coroutines.*
 
 /**
+ * Simple range class for double values
+ */
+data class DoubleRange(
+    val start: Double,
+    val endInclusive: Double
+) {
+    operator fun contains(value: Double): Boolean = value in start..endInclusive
+}
+
+/**
  * Comprehensive data schema validator for Shimmer3 GSR+ devices.
  * 
  * This class ensures rock-solid preparation for Shimmer device data schemas by:
@@ -85,7 +95,7 @@ class DataSchemaValidator(
                         displayName = "GSR Conductance",
                         dataType = DataType.DOUBLE,
                         unit = "µS",
-                        validRange = 0.0..100.0,
+                        validRange = DoubleRange(0.0, 100.0),
                         precision = 3,
                         isRequired = true,
                         calibrationRequired = true
@@ -97,7 +107,7 @@ class DataSchemaValidator(
                         displayName = "PPG (A13)",
                         dataType = DataType.DOUBLE,
                         unit = "mV",
-                        validRange = 0.0..3300.0,
+                        validRange = DoubleRange(0.0, 3300.0),
                         precision = 2,
                         isRequired = false,
                         calibrationRequired = true
@@ -109,7 +119,7 @@ class DataSchemaValidator(
                         displayName = "Accelerometer X",
                         dataType = DataType.DOUBLE,
                         unit = "g",
-                        validRange = -16.0..16.0,
+                        validRange = DoubleRange(-16.0, 16.0),
                         precision = 4,
                         isRequired = false,
                         calibrationRequired = true
@@ -119,7 +129,7 @@ class DataSchemaValidator(
                         displayName = "Accelerometer Y",
                         dataType = DataType.DOUBLE,
                         unit = "g",
-                        validRange = -16.0..16.0,
+                        validRange = DoubleRange(-16.0, 16.0),
                         precision = 4,
                         isRequired = false,
                         calibrationRequired = true
@@ -129,7 +139,7 @@ class DataSchemaValidator(
                         displayName = "Accelerometer Z",
                         dataType = DataType.DOUBLE,
                         unit = "g",
-                        validRange = -16.0..16.0,
+                        validRange = DoubleRange(-16.0, 16.0),
                         precision = 4,
                         isRequired = false,
                         calibrationRequired = true
@@ -141,7 +151,7 @@ class DataSchemaValidator(
                         displayName = "Gyroscope X",
                         dataType = DataType.DOUBLE,
                         unit = "°/s",
-                        validRange = -2000.0..2000.0,
+                        validRange = DoubleRange(-2000.0, 2000.0),
                         precision = 3,
                         isRequired = false,
                         calibrationRequired = true
@@ -151,7 +161,7 @@ class DataSchemaValidator(
                         displayName = "Gyroscope Y",
                         dataType = DataType.DOUBLE,
                         unit = "°/s",
-                        validRange = -2000.0..2000.0,
+                        validRange = DoubleRange(-2000.0, 2000.0),
                         precision = 3,
                         isRequired = false,
                         calibrationRequired = true
@@ -161,7 +171,7 @@ class DataSchemaValidator(
                         displayName = "Gyroscope Z",
                         dataType = DataType.DOUBLE,
                         unit = "°/s",
-                        validRange = -2000.0..2000.0,
+                        validRange = DoubleRange(-2000.0, 2000.0),
                         precision = 3,
                         isRequired = false,
                         calibrationRequired = true
@@ -173,7 +183,7 @@ class DataSchemaValidator(
                         displayName = "Magnetometer X",
                         dataType = DataType.DOUBLE,
                         unit = "gauss",
-                        validRange = -8.0..8.0,
+                        validRange = DoubleRange(-8.0, 8.0),
                         precision = 4,
                         isRequired = false,
                         calibrationRequired = true
@@ -183,7 +193,7 @@ class DataSchemaValidator(
                         displayName = "Magnetometer Y",
                         dataType = DataType.DOUBLE,
                         unit = "gauss",
-                        validRange = -8.0..8.0,
+                        validRange = DoubleRange(-8.0, 8.0),
                         precision = 4,
                         isRequired = false,
                         calibrationRequired = true
@@ -193,7 +203,7 @@ class DataSchemaValidator(
                         displayName = "Magnetometer Z",
                         dataType = DataType.DOUBLE,
                         unit = "gauss",
-                        validRange = -8.0..8.0,
+                        validRange = DoubleRange(-8.0, 8.0),
                         precision = 4,
                         isRequired = false,
                         calibrationRequired = true
@@ -205,7 +215,7 @@ class DataSchemaValidator(
                         displayName = "ECG (LL-RA)",
                         dataType = DataType.DOUBLE,
                         unit = "mV",
-                        validRange = -1650.0..1650.0,
+                        validRange = DoubleRange(-1650.0, 1650.0),
                         precision = 3,
                         isRequired = false,
                         calibrationRequired = true
@@ -215,7 +225,7 @@ class DataSchemaValidator(
                         displayName = "EMG",
                         dataType = DataType.DOUBLE,
                         unit = "mV",
-                        validRange = -1650.0..1650.0,
+                        validRange = DoubleRange(-1650.0, 1650.0),
                         precision = 3,
                         isRequired = false,
                         calibrationRequired = true
@@ -227,7 +237,7 @@ class DataSchemaValidator(
                         displayName = "Timestamp",
                         dataType = DataType.LONG,
                         unit = "ms",
-                        validRange = 0.0..Double.MAX_VALUE,
+                        validRange = DoubleRange(0.0, Double.MAX_VALUE),
                         precision = 0,
                         isRequired = true,
                         calibrationRequired = false
@@ -237,14 +247,14 @@ class DataSchemaValidator(
                         displayName = "Battery Voltage",
                         dataType = DataType.DOUBLE,
                         unit = "V",
-                        validRange = 2.5..4.2,
+                        validRange = DoubleRange(2.5, 4.2),
                         precision = 3,
                         isRequired = false,
                         calibrationRequired = true
                     )
                 ),
                 requiredChannels = setOf("GSR_CONDUCTANCE", "TIMESTAMP"),
-                samplingRateRange = 1.0..1000.0,
+                samplingRateRange = DoubleRange(1.0, 1000.0),
                 maxChannelsSimultaneous = 15,
                 dataFormat = "ObjectCluster"
             )

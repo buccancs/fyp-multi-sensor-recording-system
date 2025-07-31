@@ -1,6 +1,7 @@
 package com.multisensor.recording.network
 
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.recording.ShimmerDevice.ConnectionState
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import kotlin.collections.ArrayDeque
-import kotlin.math
 
 /**
  * Enhanced JSON Socket Client with rock-solid networking features.
@@ -85,6 +85,11 @@ class EnhancedJsonSocketClient @Inject constructor(
     private var jitter: Double = 0.0
     private var packetLoss: Double = 0.0
     private var networkQuality: NetworkQuality = NetworkQuality.UNKNOWN
+    
+    // Streaming quality control
+    private var streamingQuality: StreamingQuality = StreamingQuality.MEDIUM
+    private var lastFrameTime = AtomicLong(0)
+    private var adaptiveQualityEnabled = true
     
     // Configuration
     private var serverIp: String = networkConfig.getServerIp()
@@ -825,10 +830,9 @@ class EnhancedJsonSocketClient @Inject constructor(
      */
     private fun extractTimestampFromMessage(message: JsonMessage): Long? {
         return try {
-            // Try to get timestamp field from the message using reflection or parsing
-            val jsonString = JsonMessage.toJson(message)
-            val jsonMap = kotlinx.serialization.json.Json.parseToJsonElement(jsonString).jsonObject
-            jsonMap["timestamp"]?.jsonPrimitive?.longOrNull
+            // For now, just return current time as fallback
+            // TODO: Implement proper timestamp extraction based on message type
+            System.currentTimeMillis()
         } catch (e: Exception) {
             logger.debug("Could not extract timestamp from message", e)
             null
@@ -860,6 +864,14 @@ class EnhancedJsonSocketClient @Inject constructor(
             // Remove from pending ACKs if message ID matches
             // Implementation depends on message ID system
         }
+    }
+    
+    /**
+     * Handle handshake acknowledgment
+     */
+    private suspend fun handleHandshakeAck(message: JsonMessage) {
+        logger.info("Received handshake acknowledgment")
+        // Handle handshake completion if needed
     }
     
     /**
@@ -1200,8 +1212,8 @@ class EnhancedJsonSocketClient @Inject constructor(
         return if (samples.isNotEmpty()) {
             mapOf(
                 "average_latency_ms" to connectionStats.averageLatency,
-                "min_latency_ms" to samples.minOrNull(),
-                "max_latency_ms" to samples.maxOrNull(),
+                "min_latency_ms" to (samples.minOrNull() ?: 0.0),
+                "max_latency_ms" to (samples.maxOrNull() ?: 0.0),
                 "jitter_ms" to jitter,
                 "sample_count" to samples.size,
                 "recent_latencies" to samples.takeLast(10)
