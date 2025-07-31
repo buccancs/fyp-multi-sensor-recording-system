@@ -30,8 +30,9 @@ A complete guide to the user interfaces of the Multi-Sensor Recording System, co
 
 The Multi-Sensor Recording System features sophisticated user interfaces designed to provide researchers with intuitive control over complex multi-modal data collection. The system consists of two primary interface components:
 
-- **PC Desktop Controller**: A PyQt5-based application that serves as the master control interface
-- **Android Mobile Application**: A native Kotlin application running on Samsung S22 devices
+- **PC Desktop Controller**: A sophisticated PyQt5-based application that serves as the master control interface for the entire multi-sensor recording system. This desktop application provides researchers with comprehensive oversight of all connected devices, real-time monitoring capabilities, and centralized control over recording sessions. The interface is designed to handle complex multi-modal data collection scenarios while maintaining an intuitive user experience.
+
+- **Android Mobile Application**: A native Kotlin application specifically developed for Samsung S22 devices that acts as a mobile sensor collection platform. These mobile applications capture high-quality camera footage, thermal imaging data, and physiological sensor readings (GSR) while maintaining precise synchronization with the central PC controller. Each Android device operates semi-autonomously while remaining connected to the desktop coordinator for session management and data coordination.
 
 Both interfaces are designed with modern UI principles, featuring clean layouts, intuitive controls, and real-time status monitoring capabilities. The interfaces work together seamlessly to provide synchronized control over multiple sensor modalities.
 
@@ -39,11 +40,15 @@ Both interfaces are designed with modern UI principles, featuring clean layouts,
 
 The UI design follows several core principles that ensure usability in research environments:
 
-- **Clarity**: Clear visual hierarchy with distinct sections for different functions
-- **Responsiveness**: Real-time updates of device status and recording progress
-- **Reliability**: Robust error handling with clear user feedback
-- **Efficiency**: Streamlined workflows for common research tasks
-- **Professional**: Clean, modern aesthetic suitable for scientific applications
+- **Clarity**: The interface maintains a clear visual hierarchy with distinct sections for different functions, ensuring that researchers can quickly locate and access the tools they need. Each functional area uses consistent spacing, typography, and color schemes to reduce cognitive load during complex recording sessions.
+
+- **Responsiveness**: The system provides real-time updates of device status and recording progress through live data streams and immediate visual feedback. Status changes are reflected instantly across all interface elements, allowing researchers to monitor system health and recording quality in real-time.
+
+- **Reliability**: Robust error handling mechanisms provide clear user feedback when issues occur, with detailed diagnostic information and suggested remediation steps. The interface gracefully handles device disconnections, network interruptions, and other common research environment challenges.
+
+- **Efficiency**: Streamlined workflows for common research tasks minimize the number of clicks and interactions required to complete standard operations. Keyboard shortcuts, batch operations, and automated sequences help researchers focus on their studies rather than system management.
+
+- **Professional**: The interface features a clean, modern aesthetic suitable for scientific applications, with a professional color palette and typography that maintains readability under various lighting conditions common in research environments.
 
 ## PC Desktop Application UI
 
@@ -106,10 +111,13 @@ The application features several specialized control panels, each designed for s
 The recording control panel provides centralized control over all recording devices. It features modern button styling with clear visual feedback for different states.
 
 **Key Features:**
-- **Start/Stop Recording**: Primary action buttons with distinct styling
-- **Session Timer**: Real-time display of recording duration
-- **Recording Status**: Visual indicators for each device's recording state
-- **Emergency Stop**: Prominent emergency stop functionality
+- **Start/Stop Recording**: Primary action buttons featuring distinct styling and immediate visual feedback to clearly indicate the current recording state. These buttons use color-coded backgrounds and iconography to prevent accidental activation and provide confidence in system state during critical recording moments.
+
+- **Session Timer**: A real-time display showing the current recording duration with millisecond precision, helping researchers track session length and ensure compliance with study protocols. The timer includes lap functionality for marking important events during recording sessions.
+
+- **Recording Status**: Comprehensive visual indicators for each connected device's recording state, displaying not only whether recording is active but also data quality metrics, storage utilization, and any warning conditions that require attention.
+
+- **Emergency Stop**: A prominently positioned emergency stop button that immediately halts all recording across all devices while preserving data integrity. This feature includes confirmation prompts and automatic session archiving to protect collected data even during emergency shutdown procedures.
 
 ```mermaid
 flowchart LR
@@ -136,21 +144,28 @@ flowchart LR
 Each connected device has its own status panel that provides comprehensive information about the device's current state and capabilities.
 
 **Status Categories:**
-- **Connection Status**: Network connectivity and communication health
-- **Battery Level**: Power status for mobile devices
-- **Storage Space**: Available storage for recordings
-- **Sensor Status**: Individual sensor functionality (camera, thermal, GSR)
-- **Performance Metrics**: CPU usage, memory consumption, temperature
+- **Connection Status**: Comprehensive monitoring of network connectivity and communication health between the PC controller and Android devices. This includes not only basic connectivity but also signal strength, latency measurements, and data transmission quality metrics that help researchers identify potential connectivity issues before they impact data collection.
+
+- **Battery Level**: Detailed power status monitoring for mobile devices, including current charge percentage, estimated remaining recording time, and power consumption trends. The system provides proactive warnings when battery levels approach critical thresholds and can automatically adjust recording parameters to extend session duration.
+
+- **Storage Space**: Real-time monitoring of available storage capacity for recordings on each device, with predictive analysis of storage consumption based on current recording settings. The interface displays both absolute values and estimated remaining recording time based on current data rates.
+
+- **Sensor Status**: Individual monitoring of sensor functionality including camera operation, thermal imaging performance, and GSR sensor readings. Each sensor displays health status, calibration state, and real-time data quality metrics to ensure optimal recording conditions throughout the session.
+
+- **Performance Metrics**: Comprehensive system performance monitoring including CPU usage, memory consumption, and device temperature readings. These metrics help researchers identify potential performance bottlenecks and ensure system stability during extended recording sessions.
 
 #### Calibration Control Panel
 
 The calibration system provides researchers with tools to ensure precise spatial and temporal alignment of all sensors.
 
 **Calibration Features:**
-- **Camera Calibration**: Intrinsic and extrinsic parameter calculation
-- **Clock Synchronization**: Precise temporal alignment across devices
-- **Spatial Registration**: Alignment of different sensor modalities
-- **Quality Assessment**: Validation of calibration accuracy
+- **Camera Calibration**: Sophisticated intrinsic and extrinsic parameter calculation system that determines precise camera characteristics including focal length, distortion coefficients, and spatial positioning relative to other sensors. The calibration process uses advanced algorithms to ensure accurate spatial registration across all camera devices in the multi-sensor array.
+
+- **Clock Synchronization**: High-precision temporal alignment system that maintains microsecond-level synchronization across all devices in the recording system. This feature accounts for network latency, processing delays, and hardware clock drift to ensure that data from different sensors can be accurately correlated temporally.
+
+- **Spatial Registration**: Advanced alignment algorithms that establish precise spatial relationships between different sensor modalities, enabling accurate fusion of camera, thermal, and physiological data. The system uses reference markers and geometric optimization to determine exact sensor positioning and orientation.
+
+- **Quality Assessment**: Comprehensive validation of calibration accuracy through statistical analysis of calibration residuals, repeatability testing, and real-time monitoring of calibration drift. The system provides quantitative metrics for calibration quality and alerts researchers when recalibration may be needed.
 
 ### Device Status Displays
 
@@ -171,10 +186,13 @@ Modern status indicators use color coding to provide immediate visual feedback:
 
 The interface continuously updates device information to provide researchers with current system status:
 
-- **Live preview streams** from all camera devices
-- **Real-time data visualization** for physiological sensors
-- **Network throughput indicators** for data transmission
-- **Storage usage monitors** for each recording device
+- **Live preview streams** from all camera devices display real-time video feeds with resolution and frame rate indicators, allowing researchers to monitor video quality and adjust positioning as needed. The preview system includes zoom, pan, and overlay capabilities for detailed inspection of recording setup.
+
+- **Real-time data visualization** for physiological sensors presents GSR readings in graphical format with trend analysis and threshold monitoring. The visualization includes automatic scaling, noise filtering, and event marking capabilities to help researchers identify important physiological responses during recording.
+
+- **Network throughput indicators** for data transmission show current bandwidth utilization, packet loss rates, and transmission latency for each connected device. These metrics help researchers optimize network settings and identify potential bottlenecks that could affect data quality.
+
+- **Storage usage monitors** for each recording device display both current storage consumption and projected usage based on recording settings. The monitors include automatic cleanup recommendations and low-space warnings to prevent data loss due to storage limitations.
 
 ### Recording Controls
 
@@ -708,24 +726,33 @@ The system includes comprehensive error handling and troubleshooting capabilitie
 
 The system provides several diagnostic tools to help identify and resolve issues:
 
-- **Connection test utilities** for network troubleshooting
-- **Performance monitors** for system resource analysis
-- **Log viewers** for detailed error analysis
-- **System health checks** for overall system validation
+- **Connection test utilities** for network troubleshooting that provide comprehensive diagnostics of network connectivity between PC and Android devices, including latency measurements, bandwidth testing, and packet loss analysis. These utilities help researchers identify and resolve network issues that could impact data collection quality.
+
+- **Performance monitors** for system resource analysis that track CPU usage, memory consumption, disk I/O, and network utilization across all system components. The monitors provide real-time visualization and historical trending to help identify performance bottlenecks and optimize system configuration.
+
+- **Log viewers** for detailed error analysis that provide sophisticated filtering, searching, and visualization capabilities for system logs. The viewers can correlate events across multiple devices and highlight patterns that indicate potential issues or system optimization opportunities.
+
+- **System health checks** for overall system validation that perform comprehensive automated testing of all system components, including hardware connectivity, software functionality, and data integrity verification. These checks can be run on-demand or scheduled to ensure continuous system readiness.
 
 ### Recovery Procedures
 
 **Automatic Recovery:**
-- **Connection retry logic** for temporary network issues
-- **Service restart capabilities** for crashed components
-- **Data recovery tools** for corrupted sessions
-- **Graceful degradation** when partial system failure occurs
+- **Connection retry logic** for temporary network issues that automatically attempts to reestablish communication with disconnected devices using exponential backoff algorithms and intelligent retry scheduling. The system maintains session continuity even during brief network interruptions common in research environments.
+
+- **Service restart capabilities** for crashed components that automatically detect and restart failed system services while preserving session data and maintaining synchronization across the remaining active devices. The restart process includes integrity checks and state recovery procedures.
+
+- **Data recovery tools** for corrupted sessions that can reconstruct partial session data, validate data integrity, and recover usable portions of sessions that experienced interruptions. These tools include sophisticated algorithms for temporal data alignment and gap detection.
+
+- **Graceful degradation** when partial system failure occurs that allows the system to continue operating with reduced functionality rather than complete failure. The system automatically adjusts recording parameters and notifies researchers of the modified operational state.
 
 **Manual Recovery:**
-- **Reset to defaults** for configuration issues
-- **Force restart procedures** for severe problems
-- **Emergency recording stop** for safety scenarios
-- **Data export tools** for session recovery
+- **Reset to defaults** for configuration issues that provides a safe fallback to known-good system configuration while preserving critical user settings and session data. The reset process includes backup creation and selective configuration restoration options.
+
+- **Force restart procedures** for severe problems that provide emergency system restart capabilities while attempting to preserve as much session data as possible. These procedures include automatic session archiving and system state logging for post-incident analysis.
+
+- **Emergency recording stop** for safety scenarios that immediately halts all recording activities across all devices while ensuring data integrity and providing clear documentation of the emergency stop conditions. This feature includes automatic incident reporting and system state preservation.
+
+- **Data export tools** for session recovery that can extract and format session data even from partially corrupted sessions, providing researchers with maximum data recovery options and detailed reports of data quality and completeness.
 
 ---
 

@@ -33,11 +33,15 @@ The Multi-Sensor Recording System employs comprehensive testing strategies acros
 
 The testing approach follows several key principles:
 
-- **Comprehensive Coverage**: Tests cover all critical system components and use cases
-- **Research-Focused**: Tests are designed for scientific research requirements
-- **Automated Execution**: Most tests can be run automatically in CI/CD pipelines
-- **Real-World Scenarios**: Tests simulate actual research usage patterns
-- **Performance Validation**: Tests verify system performance under various conditions
+- **Comprehensive Coverage**: Tests cover all critical system components and use cases through a systematic approach that ensures every major code path, error condition, and integration scenario is validated. The coverage includes not only functional testing but also performance validation, security testing, and reliability verification under various operational conditions.
+
+- **Research-Focused**: Tests are specifically designed for scientific research requirements, including validation of data integrity, temporal synchronization accuracy, and sensor calibration precision. The testing framework includes specialized assertions for research-specific metrics and validates compliance with scientific data collection standards.
+
+- **Automated Execution**: Most tests can be run automatically in CI/CD pipelines without human intervention, enabling continuous validation of system quality as code changes are made. The automation includes sophisticated test orchestration, environment setup, and results reporting that integrates seamlessly with development workflows.
+
+- **Real-World Scenarios**: Tests simulate actual research usage patterns including multi-device coordination, network interruptions, and typical researcher workflows. These scenarios help ensure that the system performs reliably under the complex conditions encountered in real research environments.
+
+- **Performance Validation**: Tests verify system performance under various conditions including high data throughput, extended recording sessions, and resource-constrained environments. The performance testing includes benchmarking, regression detection, and capacity planning to ensure consistent system behavior.
 
 ### Test Pyramid Structure
 
@@ -982,24 +986,32 @@ The system follows established testing best practices for research software:
 ### Test Design Principles
 
 **1. Test Independence**
-- Each test should be able to run independently
-- Tests should not depend on the execution order
-- Shared state should be minimized
+- Each test should be able to run independently without relying on the execution state or results of other tests, ensuring that test results are deterministic and that individual test failures can be easily isolated and debugged. This independence is achieved through proper test setup and teardown procedures that establish and clean up test environments.
+
+- Tests should not depend on the execution order, meaning that the test suite should produce identical results regardless of the sequence in which individual tests are run. This requirement ensures robust continuous integration and allows for parallel test execution to improve testing efficiency.
+
+- Shared state should be minimized between tests to prevent unexpected interactions and improve test reliability. When shared resources are necessary, they should be properly managed through fixtures and dependency injection to maintain clear test boundaries.
 
 **2. Clear Test Names**
-- Test names should describe what is being tested
-- Use the Given-When-Then structure in comments
-- Include expected behavior in the test name
+- Test names should describe what is being tested in clear, descriptive language that makes the test's purpose immediately obvious to developers and researchers reviewing the code. Good test names serve as documentation and help identify which functionality is affected when tests fail.
+
+- Use the Given-When-Then structure in comments to clearly articulate test scenarios, making it easy for team members to understand the test logic and expected outcomes. This structure helps ensure that tests are comprehensive and properly focused.
+
+- Include expected behavior in the test name to make test results self-documenting and help developers quickly understand what functionality has been validated or what has failed during test execution.
 
 **3. Comprehensive Coverage**
-- Test both happy path and error scenarios
-- Include edge cases and boundary conditions
-- Test performance under various loads
+- Test both happy path and error scenarios to ensure that the system behaves correctly under normal conditions and gracefully handles exceptional situations. This dual approach helps build robust software that performs reliably in research environments.
+
+- Include edge cases and boundary conditions in the test suite to validate system behavior at the limits of expected operation. Edge case testing is particularly important for research software where unusual but valid input conditions may occur.
+
+- Test performance under various loads to ensure that the system maintains acceptable performance characteristics across different usage scenarios, from single-user testing to full multi-device research sessions.
 
 **4. Fast Feedback**
-- Unit tests should execute quickly (<1 second each)
-- Integration tests should complete within reasonable time
-- Provide clear error messages for test failures
+- Unit tests should execute quickly (less than 1 second each) to enable rapid development cycles and frequent test execution during code development. Fast tests encourage developers to run tests frequently, catching issues early in the development process.
+
+- Integration tests should complete within reasonable time limits to maintain development productivity while still providing thorough validation of component interactions. The system balances comprehensive testing with practical development needs.
+
+- Provide clear error messages for test failures that include sufficient context for developers to quickly identify and resolve issues. Good error messages reduce debugging time and improve development efficiency.
 
 ### Test Maintenance
 

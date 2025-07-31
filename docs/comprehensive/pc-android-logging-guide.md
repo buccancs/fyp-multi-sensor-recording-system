@@ -30,11 +30,15 @@ The Multi-Sensor Recording System employs comprehensive logging across both PC a
 
 ### Logging Objectives
 
-- **Operational Transparency**: Provide complete visibility into system operations
-- **Research Traceability**: Maintain detailed records for scientific reproducibility
-- **Debugging Support**: Enable rapid identification and resolution of issues
-- **Performance Monitoring**: Track system performance and resource usage
-- **Audit Compliance**: Meet research data management requirements
+- **Operational Transparency**: Provide complete visibility into system operations by capturing detailed information about every component interaction, configuration change, and operational state transition. This comprehensive logging enables researchers and system administrators to understand exactly how the system behaves under different conditions and identify optimization opportunities.
+
+- **Research Traceability**: Maintain detailed records for scientific reproducibility by documenting every aspect of data collection sessions, including participant information, experimental parameters, device configurations, and environmental conditions. This detailed audit trail ensures that research results can be validated and experiments can be precisely replicated.
+
+- **Debugging Support**: Enable rapid identification and resolution of issues through comprehensive error logging, performance monitoring, and system state tracking. The logging system captures not only error conditions but also the complete context leading up to problems, significantly reducing troubleshooting time and improving system reliability.
+
+- **Performance Monitoring**: Track system performance and resource usage across all components to identify bottlenecks, optimize resource allocation, and ensure consistent performance during critical recording sessions. The monitoring system includes predictive analysis to identify potential performance issues before they impact data collection.
+
+- **Audit Compliance**: Meet research data management requirements by providing comprehensive logs that satisfy institutional review board requirements, data protection regulations, and scientific publication standards. The logging system includes features for data anonymization, access control, and retention policy enforcement.
 
 ### System-Wide Logging Architecture
 
@@ -135,22 +139,31 @@ graph TB
 #### Core Logging Components
 
 **Configuration Module (`logging_config.py`)**
-- Centralized logging setup and configuration
-- Multiple handler management (file, console, network)
-- Dynamic log level adjustment
-- Performance monitoring integration
+- Centralized logging setup and configuration management that provides a single point of control for all logging behavior across the application. This module handles complex configuration scenarios including environment-specific settings, dynamic configuration updates, and integration with external logging services.
+
+- Multiple handler management capabilities that allow simultaneous logging to file systems, console outputs, and network destinations. The system intelligently routes different types of log messages to appropriate handlers while maintaining performance and preventing log duplication.
+
+- Dynamic log level adjustment functionality that enables real-time modification of logging verbosity without requiring application restart. This feature is particularly valuable during debugging sessions and performance optimization efforts.
+
+- Performance monitoring integration that seamlessly incorporates system metrics into the logging stream, providing correlation between application events and system resource utilization patterns.
 
 **Session Logger (`session_logger.py`)**
-- Research session-specific logging
-- Structured JSON event recording
-- Real-time UI integration via Qt signals
-- Thread-safe operation for concurrent logging
+- Research session-specific logging capabilities that create dedicated log streams for individual recording sessions, making it easy to analyze session-specific events and troubleshoot issues that occur during particular experiments.
+
+- Structured JSON event recording that captures complex data structures and relationships in a machine-readable format, enabling automated analysis and integration with research data management systems.
+
+- Real-time UI integration via Qt signals that allows the user interface to display live logging information, providing researchers with immediate feedback about system operations and potential issues.
+
+- Thread-safe operation for concurrent logging that ensures log integrity even when multiple system components are generating log messages simultaneously during high-activity periods.
 
 **Structured Formatter**
-- JSON-formatted log output for machine parsing
-- Standardized field mapping
-- Exception tracking with full stack traces
-- Performance metrics integration
+- JSON-formatted log output designed for machine parsing and automated analysis, with standardized field names and data types that facilitate integration with log analysis tools and research data processing pipelines.
+
+- Standardized field mapping that ensures consistent log structure across all system components, making it easier to correlate events and perform comprehensive system analysis.
+
+- Exception tracking with full stack traces that captures complete error context including function call sequences, variable states, and system conditions at the time of errors.
+
+- Performance metrics integration that embeds timing information, resource usage data, and system health indicators directly into log entries for comprehensive performance analysis.
 
 ### Log Configuration
 
@@ -199,10 +212,13 @@ LOGGING_CONFIG = {
 
 The system supports runtime configuration changes:
 
-- **Log level adjustment** for different debugging scenarios
-- **Handler addition/removal** for specialized logging needs
-- **Formatter switching** between human-readable and machine-readable formats
-- **Performance monitoring toggles** for production vs. development environments
+- **Log level adjustment** capabilities for different debugging scenarios that allow researchers and system administrators to increase verbosity for troubleshooting while maintaining optimal performance during normal operations. The system supports granular level control on a per-component basis.
+
+- **Handler addition/removal** functionality for specialized logging needs that enables dynamic reconfiguration of log destinations based on operational requirements. This includes the ability to add temporary debugging handlers or redirect logs to specialized analysis tools.
+
+- **Formatter switching** between human-readable and machine-readable formats that accommodates different use cases, from real-time debugging displays to automated log processing systems. The switching can be performed at runtime without interrupting system operation.
+
+- **Performance monitoring toggles** for production vs. development environments that allow detailed performance logging during development and testing while minimizing overhead in production research environments where system performance is critical.
 
 ### Log Levels and Categories
 
@@ -331,16 +347,22 @@ Standard fields included in all structured log entries:
 Additional fields based on logging context:
 
 **Session Events:**
-- `session_id`: Unique session identifier
-- `participant_id`: Research participant identifier
-- `experiment_name`: Experiment or study name
-- `device_list`: Array of connected devices
+- `session_id`: Unique session identifier that maintains consistency across all log entries for a specific recording session, enabling easy correlation of events and comprehensive session analysis. This identifier is generated at session initiation and persists throughout the entire recording lifecycle.
+
+- `participant_id`: Research participant identifier that provides linkage to participant demographics and study enrollment information while maintaining appropriate privacy protections. This field supports both anonymous and identified research protocols based on study requirements.
+
+- `experiment_name`: Experiment or study name that associates log entries with specific research protocols, enabling analysis of system behavior across different experimental conditions and helping researchers track performance across multiple studies.
+
+- `device_list`: Array of connected devices that documents the complete hardware configuration for each session, including device identifiers, capabilities, and status information. This comprehensive device inventory supports troubleshooting and helps ensure experimental reproducibility.
 
 **Performance Events:**
-- `cpu_usage`: CPU utilization percentage
-- `memory_usage`: Memory consumption in MB
-- `disk_usage`: Disk space usage in MB
-- `network_throughput`: Network data rate in Mbps
+- `cpu_usage`: CPU utilization percentage captured at high frequency to provide detailed insights into computational load patterns and help identify performance bottlenecks during intensive data processing operations. The measurements include both instantaneous and averaged values over configurable time windows.
+
+- `memory_usage`: Memory consumption in MB tracked across all system components to monitor memory efficiency and detect potential memory leaks or excessive resource consumption that could impact system stability during long recording sessions.
+
+- `disk_usage`: Disk space usage in MB monitored continuously to prevent storage exhaustion and enable predictive capacity planning. The monitoring includes both current usage and projected consumption based on current recording rates and session duration.
+
+- `network_throughput`: Network data rate in Mbps measured for all device connections to ensure adequate bandwidth for high-quality data transmission and identify network bottlenecks that could affect synchronization or data quality.
 
 **Error Events:**
 - `error_type`: Exception class name
