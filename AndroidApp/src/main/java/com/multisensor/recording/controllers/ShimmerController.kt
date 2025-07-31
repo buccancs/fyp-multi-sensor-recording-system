@@ -11,6 +11,8 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import com.multisensor.recording.recording.ShimmerRecorder
+
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.ui.MainViewModel
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
@@ -18,6 +20,8 @@ import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import javax.inject.Inject
 import javax.inject.Singleton
+
+
 
 /**
  * Controller responsible for handling all Shimmer device integration logic.
@@ -279,7 +283,7 @@ class ShimmerController @Inject constructor(
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting device information for: $deviceId")
             
             viewModel.getShimmerDeviceInfo(deviceId) { deviceInfo ->
-                val infoText = deviceInfo?.getDisplaySummary() ?: "Device information not available"
+                val infoText = deviceInfo?.toString() ?: "Device information not available"
                 callback(infoText)
             }
         } ?: run {
@@ -295,7 +299,7 @@ class ShimmerController @Inject constructor(
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting data quality metrics for: $deviceId")
             
             viewModel.getShimmerDataQuality(deviceId) { metrics ->
-                val metricsText = metrics?.getDisplaySummary() ?: "Data quality metrics not available"
+                val metricsText = metrics?.toString() ?: "Data quality metrics not available"
                 callback(metricsText)
             }
         } ?: run {

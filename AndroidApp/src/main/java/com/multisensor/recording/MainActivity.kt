@@ -1480,7 +1480,9 @@ class MainActivity : AppCompatActivity(),
         runOnUiThread {
             val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
             handSegmentationControl.showError(error)
-            logE("Hand segmentation error: $error")
+            android.util.Log.e("MainActivity", "Error: $error")
+            binding.statusText.text = "Error: $error"
+            Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
         }
     }
     
@@ -1613,12 +1615,6 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
         binding.statusText.text = "Shimmer configuration completed"
         Toast.makeText(this, "Shimmer configuration completed", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onError(message: String) {
-        android.util.Log.e("MainActivity", "[DEBUG_LOG] Manager error: $message")
-        binding.statusText.text = "Error: $message"
-        Toast.makeText(this, "Error: $message", Toast.LENGTH_LONG).show()
     }
 
     // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========

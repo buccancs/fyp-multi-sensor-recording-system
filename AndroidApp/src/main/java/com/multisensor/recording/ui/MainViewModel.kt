@@ -533,7 +533,7 @@ class MainViewModel
          */
         fun getShimmerDeviceInfo(
             deviceId: String,
-            callback: (com.multisensor.recording.recording.ShimmerRecorder.DeviceInformation?) -> Unit
+            callback: (Any?) -> Unit
         ) {
             viewModelScope.launch {
                 try {
@@ -552,7 +552,7 @@ class MainViewModel
          */
         fun getShimmerDataQuality(
             deviceId: String,
-            callback: (com.multisensor.recording.recording.ShimmerRecorder.DataQualityMetrics?) -> Unit
+            callback: (Any?) -> Unit
         ) {
             viewModelScope.launch {
                 try {
