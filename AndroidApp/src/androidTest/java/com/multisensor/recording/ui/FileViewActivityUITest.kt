@@ -104,8 +104,8 @@ class FileViewActivityUITest {
             .check(matches(isDisplayed()))
             .perform(click())
 
-        // The spinner should open (we can't easily test the dropdown items in Espresso)
-        // But we can verify the spinner is clickable and responds
+        // The spinner should open (I can't easily test the dropdown items in Espresso)
+        // But I can verify the spinner is clickable and responds
         onView(withId(R.id.filter_spinner))
             .check(matches(isClickable()))
 

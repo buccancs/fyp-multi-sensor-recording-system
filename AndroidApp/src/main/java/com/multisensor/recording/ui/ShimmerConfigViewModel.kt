@@ -76,7 +76,7 @@ class ShimmerConfigViewModel @Inject constructor(
                     ShimmerDeviceItem(
                         name = "Shimmer Device",
                         macAddress = address,
-                        rssi = -50, // Default RSSI since we don't have actual scan data
+                        rssi = -50, // Default RSSI since I don't have actual scan data
                         isConnectable = true
                     )
                 }

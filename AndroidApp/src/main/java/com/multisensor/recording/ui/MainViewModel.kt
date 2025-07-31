@@ -289,7 +289,7 @@ class MainViewModel
             }
 
             // Note: RAW capture capability would be tracked in UiState if needed
-            // For now, we'll proceed with the capture attempt
+            // For now, I'll proceed with the capture attempt
             viewModelScope.launch {
                 try {
                     logger.info("Triggering manual RAW capture...")
@@ -345,7 +345,7 @@ class MainViewModel
             }
 
             // Note: Video recording configuration would be tracked in UiState if needed
-            // For now, we'll just log the change
+            // For now, I'll just log the change
             logger.info("Video recording ${if (enabled) "enabled" else "disabled"}")
         }
 
@@ -359,7 +359,7 @@ class MainViewModel
             }
 
             // Note: RAW capture configuration would be tracked in UiState if needed
-            // For now, we'll just log the change
+            // For now, I'll just log the change
             logger.info("RAW capture ${if (enabled) "enabled" else "disabled"}")
         }
 

@@ -577,7 +577,7 @@ class TestErrorHandlingAndEdgeCases:
     def test_concurrent_operations(self):
         """Test handling of concurrent operations."""
         # This would be more comprehensive with actual threading,
-        # but we test the state management aspects
+        # but I test the state management aspects
 
         self.manager.start_calibration_session(["device_1"], "concurrent_test")
 

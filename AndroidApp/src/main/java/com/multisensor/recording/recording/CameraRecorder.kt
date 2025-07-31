@@ -646,7 +646,7 @@ class CameraRecorder
                                 }
 
                                 override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-                                    // Called for each frame - not needed for our implementation
+                                    // Called for each frame - not needed for my implementation
                                 }
                             }
                     }

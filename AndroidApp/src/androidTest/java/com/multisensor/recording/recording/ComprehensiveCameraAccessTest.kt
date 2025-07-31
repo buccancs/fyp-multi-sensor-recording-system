@@ -291,7 +291,7 @@ class ComprehensiveCameraAccessTest {
                 println("[DEBUG_LOG] 3. Camera is a supported Topdon model (TC001/Plus)")
 
                 // This is not a failure if no IR camera is connected
-                // but we log it for manual verification
+                // but I log it for manual verification
             }
         }
 

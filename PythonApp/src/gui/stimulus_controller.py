@@ -524,7 +524,7 @@ class StimulusController(QWidget):
 
     def on_position_changed(self, position):
         """Handle position changes during playback."""
-        # This is called frequently, so we don't log every change
+        # This is called frequently, so I don't log every change
 
     def on_duration_changed(self, duration):
         """Handle duration changes when media is loaded."""

@@ -300,7 +300,7 @@ class NetworkRecoveryManager @Inject constructor(
                 networkType = getNetworkType(network)
             )
             
-            // If we were recovering, mark as successful
+            // If I was recovering, mark as successful
             if (isRecovering.getAndSet(false)) {
                 successfulRecoveries++
                 reconnectAttempts.set(0)

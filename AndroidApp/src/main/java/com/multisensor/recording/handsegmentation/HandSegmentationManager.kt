@@ -159,7 +159,7 @@ class HandSegmentationManager @Inject constructor(
                 AppLogger.logI(TAG, "Starting post-processing of recorded video: $videoPath")
                 
                 // This would integrate with video processing logic
-                // For now, we'll create a placeholder that would work with MediaMetadataRetriever
+                // For now, I'll create a placeholder that would work with MediaMetadataRetriever
                 val outputDir = File(videoPath).parent + "/hand_segmentation"
                 File(outputDir).mkdirs()
                 

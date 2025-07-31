@@ -247,7 +247,7 @@ class SessionManagerBusinessLogicTest {
         val hasSufficientSpace = availableSpace >= requiredSpace
 
         // Then
-        // This test depends on actual disk space, so we just verify the logic works
+        // This test depends on actual disk space, so I just verify the logic works
         assertTrue("Available space should be non-negative", availableSpace >= 0)
         assertEquals(
             "Logic should match expected result",

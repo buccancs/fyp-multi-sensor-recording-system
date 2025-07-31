@@ -208,7 +208,7 @@ class AdaptiveFrameRateController
 
             addQualityToHistory(quality.score)
 
-            // Check if we should adapt based on hysteresis and timing
+            // Check if I should adapt based on hysteresis and timing
             if (shouldAdaptFrameRate(quality.score)) {
                 val newFrameRate = calculateOptimalFrameRate(quality.score)
                 val reason = "Network quality ${quality.score} (${getQualityDescription(quality.score)})"
