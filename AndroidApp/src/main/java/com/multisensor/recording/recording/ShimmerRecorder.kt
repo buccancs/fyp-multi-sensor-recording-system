@@ -2297,4 +2297,3 @@ class ShimmerRecorder
                 logger.error("Error during ShimmerRecorder cleanup", e)
             }
         }
-    }

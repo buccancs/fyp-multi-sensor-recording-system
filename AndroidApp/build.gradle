@@ -255,6 +255,10 @@ dependencies {
     implementation libs.hilt.android
     ksp libs.hilt.compiler
 
+    // Room Database - Phase 3 State Persistence
+    implementation libs.bundles.room
+    ksp libs.room.compiler
+
     // Networking & Serialization
     implementation libs.bundles.networking
 
