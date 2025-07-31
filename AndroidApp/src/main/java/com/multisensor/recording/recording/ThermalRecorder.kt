@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// Topdon SDK imports
+// topdon sdk imports
 import com.infisense.iruvc.ircmd.ConcreteIRCMDBuilder
 import com.infisense.iruvc.ircmd.IRCMD
 import com.infisense.iruvc.ircmd.IRCMDType
@@ -45,15 +45,7 @@ import com.infisense.iruvc.uvc.UVCCamera
 import com.infisense.iruvc.uvc.UVCType
 
 /**
- * ThermalRecorder manages thermal camera capture using Topdon TC001/Plus cameras.
- * Implements Milestone 2.3 specifications for thermal recording with:
- * - USB permission handling and Topdon SDK integration
- * - Frame acquisition and radiometric data buffering
- * - Live preview rendering pipeline
- * - Preview frame compression and streaming to PC
- * - Raw frame file format implementation
- * - Threading and concurrency model
- * - Session integration and file management
+ * thermal recorder for topdon tc001/plus cameras
  */
 @Singleton
 class ThermalRecorder
@@ -68,13 +60,11 @@ class ThermalRecorder
             private const val TAG = "ThermalRecorder"
             private const val USB_PERMISSION_ACTION = "com.multisensor.recording.USB_PERMISSION"
 
-            // Topdon camera specifications
             private const val THERMAL_WIDTH = 256
             private const val THERMAL_HEIGHT = 192
             private const val THERMAL_FRAME_RATE = 25
             private const val BYTES_PER_PIXEL = 2
 
-            // Supported Topdon device PIDs
             private val SUPPORTED_PRODUCT_IDS = intArrayOf(0x3901, 0x5840, 0x5830, 0x5838)
 
             // File format constants
