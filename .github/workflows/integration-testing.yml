@@ -23,16 +23,16 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -41,7 +41,7 @@ jobs:
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       
     - name: Install enhanced Python testing tools
       shell: bash -l {0}
@@ -125,7 +125,7 @@ jobs:
         echo "- Pre-commit hooks: Validated" >> integration-test-report.md
         
     - name: Upload integration test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: integration-test-results
@@ -146,16 +146,16 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -164,7 +164,7 @@ jobs:
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       
     - name: Test platform-specific build
       shell: bash -l {0}
@@ -184,7 +184,7 @@ jobs:
         conda list --name ${{ env.CONDA_ENV_NAME }}
         
     - name: Upload platform test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: platform-test-results-${{ matrix.os }}
         path: |
@@ -198,10 +198,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         
@@ -283,7 +283,7 @@ jobs:
         fi
         
     - name: Upload documentation report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: documentation-test-results
         path: documentation-report.md
@@ -298,7 +298,7 @@ jobs:
     
     steps:
     - name: Download all test results
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         path: test-results/
         
@@ -343,14 +343,14 @@ jobs:
         echo "All components of the multi-sensor recording system have been validated." >> integration-summary.md
         
     - name: Upload consolidated summary
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: integration-test-summary
         path: integration-summary.md
         retention-days: 30
         
     - name: Comment PR with integration results
-      uses: actions/github-script@v7
+      uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       with:
         script: |

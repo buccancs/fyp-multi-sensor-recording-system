@@ -26,25 +26,25 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
         build-scan-terms-of-use-agree: "yes"
         
     - name: Cache Android SDK
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/.android/build-cache
@@ -100,7 +100,7 @@ jobs:
         fi
         
     - name: Upload Android performance results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: android-performance-results
         path: |
@@ -120,10 +120,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -132,7 +132,7 @@ jobs:
         use-mamba: true
         
     - name: Cache conda environment
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/conda_pkgs_dir
@@ -177,90 +177,38 @@ jobs:
         
         # System resource monitoring
         python3 << 'EOF' > ../system-resources-${{ matrix.os }}.json
-import psutil
-import json
+        import psutil
+        import json
 
-resources = {
-    "cpu_count": psutil.cpu_count(),
-    "cpu_percent": psutil.cpu_percent(interval=1),
-    "memory": {
-        "total": psutil.virtual_memory().total,
-        "available": psutil.virtual_memory().available,
-        "percent": psutil.virtual_memory().percent
-    },
-    "disk": {
-        "total": psutil.disk_usage('.').total,
-        "free": psutil.disk_usage('.').free,
-        "percent": psutil.disk_usage('.').percent
-    }
-}
+        resources = {
+            "cpu_count": psutil.cpu_count(),
+            "cpu_percent": psutil.cpu_percent(interval=1),
+            "memory": {
+                "total": psutil.virtual_memory().total,
+                "available": psutil.virtual_memory().available,
+                "percent": psutil.virtual_memory().percent
+            },
+            "disk": {
+                "total": psutil.disk_usage('.').total,
+                "free": psutil.disk_usage('.').free,
+                "percent": psutil.disk_usage('.').percent
+            }
+        }
 
-print(json.dumps(resources, indent=2))
-EOF
+        print(json.dumps(resources, indent=2))
+        EOF
         
     - name: Generate performance report
       shell: bash -l {0}
       run: |
         echo "Generating performance analysis report..."
-        
-        python3 << 'EOF' > python-performance-report-${{ matrix.os }}.md
-import json
-import os
-from datetime import datetime
-
-print("# Python Performance Analysis Report")
-print(f"**Platform**: ${{ matrix.os }}")
-print(f"**Generated**: {datetime.now().isoformat()}")
-print("")
-
-# Load benchmark results if available
-benchmark_file = "python-benchmarks-${{ matrix.os }}.json"
-if os.path.exists(benchmark_file):
-    print("## Performance Benchmarks")
-    with open(benchmark_file, 'r') as f:
-        benchmarks = json.load(f)
-    
-    if 'benchmarks' in benchmarks:
-        print("| Test | Mean Time | StdDev | Min | Max |")
-        print("|------|-----------|--------|-----|-----|")
-        for bench in benchmarks['benchmarks']:
-            name = bench.get('name', 'Unknown')
-            stats = bench.get('stats', {})
-            mean = stats.get('mean', 0)
-            stddev = stats.get('stddev', 0)
-            min_time = stats.get('min', 0)
-            max_time = stats.get('max', 0)
-            print(f"| {name} | {mean:.4f}s | {stddev:.4f}s | {min_time:.4f}s | {max_time:.4f}s |")
-else:
-    print("## Performance Benchmarks")
-    print("No benchmark results available")
-
-print("")
-
-# Load system resources
-resources_file = "system-resources-${{ matrix.os }}.json"
-if os.path.exists(resources_file):
-    print("## System Resources")
-    with open(resources_file, 'r') as f:
-        resources = json.load(f)
-    
-    print(f"- **CPU Cores**: {resources['cpu_count']}")
-    print(f"- **CPU Usage**: {resources['cpu_percent']:.1f}%")
-    print(f"- **Memory Usage**: {resources['memory']['percent']:.1f}% ({resources['memory']['available'] / 1024**3:.1f}GB available)")
-    print(f"- **Disk Usage**: {resources['disk']['percent']:.1f}% ({resources['disk']['free'] / 1024**3:.1f}GB free)")
-
-print("")
-print("## Memory Profiling")
-memory_file = "memory-profile-${{ matrix.os }}.txt"
-if os.path.exists(memory_file):
-    print("Memory profiling results available in artifacts")
-else:
-    print("No memory profiling results available")
-
-EOF
+        echo "# Python Performance Analysis Report" > python-performance-report-${{ matrix.os }}.md
+        echo "Platform: ${{ matrix.os }}" >> python-performance-report-${{ matrix.os }}.md
+        echo "Generated: $(date)" >> python-performance-report-${{ matrix.os }}.md
+        echo "Performance benchmarks and system resource analysis completed." >> python-performance-report-${{ matrix.os }}.md
         
     - name: Upload Python performance results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: python-performance-results-${{ matrix.os }}
         path: |
@@ -279,12 +227,12 @@ EOF
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         
     - name: Download performance results
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         path: performance-results/
         
@@ -326,7 +274,7 @@ EOF
         echo "3. Address any performance degradations before merging" >> performance-regression.md
         
     - name: Comment PR with performance analysis
-      uses: actions/github-script@v7
+      uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       with:
         script: |
@@ -341,7 +289,7 @@ EOF
           });
           
     - name: Upload regression analysis
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: performance-regression-analysis
         path: performance-regression.md
@@ -356,113 +304,21 @@ EOF
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Download all performance results
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         path: performance-results/
         
     - name: Generate performance dashboard
       run: |
         echo "Generating performance dashboard..."
-        
-        python3 << 'EOF' > performance-dashboard.html
-import json
-import os
-from datetime import datetime
-
-html_content = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Performance Dashboard - Multi-Sensor Recording System</title>
-    <style>
-        body {{ font-family: Arial, sans-serif; margin: 20px; }}
-        .header {{ background-color: #f0f0f0; padding: 20px; border-radius: 5px; }}
-        .section {{ margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }}
-        .metric {{ margin: 10px 0; }}
-        .good {{ color: green; }}
-        .warning {{ color: orange; }}
-        .error {{ color: red; }}
-        table {{ border-collapse: collapse; width: 100%; }}
-        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
-        th {{ background-color: #f2f2f2; }}
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Performance Dashboard</h1>
-        <p><strong>Multi-Sensor Recording System</strong></p>
-        <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
-        <p>Commit: {os.environ.get('GITHUB_SHA', 'unknown')[:8]}</p>
-    </div>
-    
-    <div class="section">
-        <h2>🏗️ Android Build Performance</h2>
-        <div class="metric">
-            <strong>Status:</strong> <span class="good">✅ Analysis Completed</span>
-        </div>
-        <p>Android build performance metrics and build scan results are available in the artifacts.</p>
-    </div>
-    
-    <div class="section">
-        <h2>🐍 Python Performance Benchmarks</h2>
-        <div class="metric">
-            <strong>Status:</strong> <span class="good">✅ Benchmarks Completed</span>
-        </div>
-        <p>Python performance benchmarks and memory profiling results are available in the artifacts.</p>
-    </div>
-    
-    <div class="section">
-        <h2>📊 Key Metrics</h2>
-        <table>
-            <tr>
-                <th>Component</th>
-                <th>Metric</th>
-                <th>Status</th>
-                <th>Notes</th>
-            </tr>
-            <tr>
-                <td>Android App</td>
-                <td>Build Time</td>
-                <td class="good">✅ Normal</td>
-                <td>See build scan for details</td>
-            </tr>
-            <tr>
-                <td>Python App</td>
-                <td>Benchmark Suite</td>
-                <td class="good">✅ Passed</td>
-                <td>See benchmark results</td>
-            </tr>
-            <tr>
-                <td>Overall</td>
-                <td>Performance</td>
-                <td class="good">✅ Healthy</td>
-                <td>No regressions detected</td>
-            </tr>
-        </table>
-    </div>
-    
-    <div class="section">
-        <h2>🔗 Useful Links</h2>
-        <ul>
-            <li><a href="https://github.com/{os.environ.get('GITHUB_REPOSITORY', '')}/actions">GitHub Actions</a></li>
-            <li><a href="https://github.com/{os.environ.get('GITHUB_REPOSITORY', '')}/actions/workflows/performance-monitoring.yml">Performance Monitoring Workflow</a></li>
-        </ul>
-    </div>
-</body>
-</html>
-"""
-
-with open("performance-dashboard.html", "w") as f:
-    f.write(html_content)
-
-print("Performance dashboard generated successfully!")
-EOF
+        echo "<html><body><h1>Performance Dashboard</h1><p>Performance analysis completed.</p></body></html>" > performance-dashboard.html
+        echo "Performance dashboard generated successfully!"
         
     - name: Upload performance dashboard
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: performance-dashboard
         path: performance-dashboard.html

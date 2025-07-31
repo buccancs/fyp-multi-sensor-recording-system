@@ -31,16 +31,16 @@ jobs:
       
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         
@@ -50,7 +50,7 @@ jobs:
         pip install safety pip-audit osv-scanner
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       
     - name: Gradle dependency vulnerability scan
       run: |
@@ -73,7 +73,7 @@ jobs:
         fi
         
     - name: Upload dependency scan results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: dependency-scan-results
@@ -91,16 +91,16 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       
     - name: Check for Android dependency updates
       run: |
@@ -119,7 +119,7 @@ jobs:
         fi
         
     - name: Upload Android dependency report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: android-dependency-report
         path: |
@@ -134,10 +134,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         
@@ -176,7 +176,7 @@ jobs:
         fi
         
     - name: Upload Python dependency report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: python-dependency-report
         path: |
@@ -191,16 +191,16 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         
@@ -210,7 +210,7 @@ jobs:
         pip install pip-licenses licensecheck
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       
     - name: Check Android licenses
       run: |
@@ -240,7 +240,7 @@ jobs:
         echo "See build/reports/license/ for detailed Android license information" >> license-compliance.md
         
     - name: Upload license compliance report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: license-compliance-report
         path: |
@@ -262,10 +262,10 @@ jobs:
       
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Download all dependency reports
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         path: dependency-reports/
         
@@ -310,7 +310,7 @@ jobs:
         echo "4. Update dependencies in a controlled manner with proper testing" >> dependency-summary.md
         
     - name: Create or update dependency tracking issue
-      uses: actions/github-script@v7
+      uses: actions/github-script@v6
       with:
         script: |
           const fs = require('fs');
@@ -353,7 +353,7 @@ jobs:
           }
           
     - name: Upload consolidated summary
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: dependency-management-summary
         path: dependency-summary.md

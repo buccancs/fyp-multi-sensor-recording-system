@@ -33,8 +33,8 @@ jobs:
       gradle: ${{ steps.changes.outputs.gradle }}
       ci: ${{ steps.changes.outputs.ci }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: dorny/paths-filter@v3
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
@@ -75,18 +75,18 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0  # Needed for SonarQube analysis
       
     - name: Set up JDK ${{ matrix.java-version }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
@@ -95,13 +95,13 @@ jobs:
         build-scan-terms-of-use-agree: "yes"
         
     - name: Validate Gradle wrapper
-      uses: gradle/actions/wrapper-validation@v4
+      uses: gradle/actions/wrapper-validation@v3
       
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
     - name: Cache Android SDK
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/.android/build-cache
@@ -126,7 +126,7 @@ jobs:
       run: ./gradlew AndroidApp:lintDebug --stacktrace
       
     - name: Generate test reports
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v1.9.1
       if: success() || failure()
       with:
         name: Android Unit Tests - JDK ${{ matrix.java-version }}
@@ -135,7 +135,7 @@ jobs:
         fail-on-error: false
         
     - name: Upload Android build artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: success()
       with:
         name: android-build-artifacts-jdk${{ matrix.java-version }}
@@ -159,16 +159,16 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         cache-read-only: true
@@ -183,7 +183,7 @@ jobs:
         sudo udevadm trigger --name-match=kvm
       
     - name: AVD cache
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       id: avd-cache
       with:
         path: |
@@ -217,7 +217,7 @@ jobs:
         script: ./gradlew AndroidApp:connectedDebugAndroidTest --stacktrace
         
     - name: Upload integration test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: android-integration-test-results-api${{ matrix.api-level }}-${{ matrix.target }}
@@ -244,10 +244,10 @@ jobs:
         
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
@@ -257,7 +257,7 @@ jobs:
         use-mamba: true  # Use mamba for faster dependency resolution
         
     - name: Cache conda environment
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/conda_pkgs_dir
@@ -268,13 +268,13 @@ jobs:
           ${{ runner.os }}-conda-
         
     - name: Set up JDK ${{ env.JAVA_VERSION }} (for Gradle integration)
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Setup Gradle (for Python integration tests)
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         cache-read-only: true
@@ -351,7 +351,7 @@ jobs:
       continue-on-error: true
       
     - name: Upload Python test results and coverage
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: python-test-results-${{ matrix.os }}-py${{ matrix.python-version }}
@@ -366,7 +366,7 @@ jobs:
         retention-days: 14
         
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v3
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.9'
       with:
         file: ./PythonApp/coverage.xml
@@ -383,25 +383,25 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
         build-scan-terms-of-use-agree: "yes"
         
     - name: Set up Miniconda for performance tests
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -444,35 +444,35 @@ jobs:
       run: |
         echo "Generating performance summary dashboard..."
         python3 << 'EOF'
-import json
-import os
-from datetime import datetime
+        import json
+        import os
+        from datetime import datetime
 
-# Create performance summary
-performance_data = {
-    "timestamp": datetime.now().isoformat(),
-    "commit": os.environ.get("GITHUB_SHA", "unknown"),
-    "branch": os.environ.get("GITHUB_REF_NAME", "unknown"),
-    "build_metrics": {},
-    "python_benchmarks": {}
-}
+        # Create performance summary
+        performance_data = {
+            "timestamp": datetime.now().isoformat(),
+            "commit": os.environ.get("GITHUB_SHA", "unknown"),
+            "branch": os.environ.get("GITHUB_REF_NAME", "unknown"),
+            "build_metrics": {},
+            "python_benchmarks": {}
+        }
 
-# Load Python benchmarks if available
-try:
-    with open("python-benchmarks.json", "r") as f:
-        performance_data["python_benchmarks"] = json.load(f)
-except FileNotFoundError:
-    performance_data["python_benchmarks"] = {"status": "no_benchmarks_found"}
+        # Load Python benchmarks if available
+        try:
+            with open("python-benchmarks.json", "r") as f:
+                performance_data["python_benchmarks"] = json.load(f)
+        except FileNotFoundError:
+            performance_data["python_benchmarks"] = {"status": "no_benchmarks_found"}
 
-# Save performance summary
-with open("performance-summary.json", "w") as f:
-    json.dump(performance_data, f, indent=2)
+        # Save performance summary
+        with open("performance-summary.json", "w") as f:
+            json.dump(performance_data, f, indent=2)
 
-print("Performance summary generated!")
-EOF
+        print("Performance summary generated!")
+        EOF
         
     - name: Upload performance results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: performance-analysis-results
@@ -501,16 +501,16 @@ EOF
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -519,14 +519,14 @@ EOF
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
         build-scan-terms-of-use-agree: "yes"
         
     - name: Cache conda environment
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/conda_pkgs_dir
@@ -568,7 +568,7 @@ EOF
         python -m build --wheel --outdir ../dist/ || echo "Python packaging test completed"
         
     - name: Upload build validation results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: build-validation-results-${{ matrix.os }}
@@ -591,18 +591,18 @@ EOF
       
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0  # Full history for security analysis
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         
@@ -619,7 +619,7 @@ EOF
         config-file: ./.github/codeql/codeql-config.yml
         
     - name: Setup Gradle for CodeQL
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: true
         
@@ -705,7 +705,7 @@ EOF
         category: 'semgrep'
         
     - name: Upload security artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: security-scan-results
@@ -726,18 +726,18 @@ EOF
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0  # Needed for changelog generation
       
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
         
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
         python-version: ${{ env.PYTHON_VERSION }}
@@ -746,7 +746,7 @@ EOF
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         build-scan-publish: true
@@ -754,7 +754,7 @@ EOF
         build-scan-terms-of-use-agree: "yes"
         
     - name: Cache conda environment
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/conda_pkgs_dir
@@ -809,7 +809,7 @@ EOF
         KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
         
     - name: Create comprehensive GitHub Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ steps.version.outputs.version }}
         name: "Multi-Sensor Recording System ${{ steps.version.outputs.version }}"
@@ -826,7 +826,7 @@ EOF
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Upload release artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: release-artifacts-${{ steps.version.outputs.version }}
         path: |
