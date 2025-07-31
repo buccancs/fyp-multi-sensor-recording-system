@@ -2,52 +2,153 @@
 
 ## 1. Introduction to System Architecture
 
-The contactless GSR prediction system represents a complex distributed architecture that integrates multiple hardware platforms, diverse sensor modalities, real-time processing capabilities, and advanced machine learning algorithms. The system architecture must address the challenges of multi-device coordination, real-time data processing, reliable communication, and scalable deployment while maintaining research-grade accuracy and clinical reliability.
+The contactless GSR prediction system represents a sophisticated distributed computing architecture that seamlessly integrates multiple heterogeneous hardware platforms, diverse multi-modal sensor technologies, real-time signal processing capabilities, and state-of-the-art machine learning algorithms into a cohesive research platform. This system architecture addresses the fundamental challenges inherent in distributed physiological monitoring systems, including precise multi-device temporal synchronization, real-time data processing with sub-second latency requirements, robust inter-device communication protocols, and scalable deployment architectures that can accommodate varying research configurations while maintaining the exacting standards of research-grade measurement accuracy and clinical reliability demanded by physiological research applications.
 
-This chapter presents a comprehensive analysis of the system architecture, focusing on the design decisions that enable effective integration of all system components. The architecture follows established patterns for distributed systems while incorporating novel approaches specific to multi-modal physiological monitoring applications.
+The architectural complexity stems from the inherently distributed nature of the measurement problem, where multiple sensing devices must operate in perfect coordination to capture synchronized multi-modal data streams from subjects under study. Unlike traditional centralized measurement systems, this distributed approach enables the flexible positioning of sensing devices around subjects while maintaining precise temporal relationships between data streams from different modalities. This distributed sensing capability is essential for contactless monitoring applications where sensor placement flexibility directly impacts measurement quality and experimental feasibility.
 
-### 1.1 Architectural Principles
+This comprehensive chapter presents an in-depth technical analysis of the complete system architecture, with particular emphasis on the design decisions, engineering trade-offs, and implementation strategies that enable effective integration of all system components into a functioning research platform. The architecture draws upon established patterns from distributed systems engineering while incorporating novel approaches specifically developed for multi-modal physiological monitoring applications. The discussion encompasses both the theoretical foundations underlying the architectural decisions and the practical implementation considerations that drive system design choices.
+
+The architectural analysis reveals how the system successfully balances competing requirements such as real-time performance versus processing accuracy, distributed autonomy versus centralized coordination, and research flexibility versus operational reliability. These fundamental trade-offs permeate every aspect of the system design, from low-level communication protocols to high-level data processing workflows, requiring careful consideration of how architectural decisions propagate through the entire system hierarchy.
+
+### 1.1 Architectural Principles and Design Philosophy
+
+The foundational architectural principles governing this system's design reflect decades of evolution in distributed systems engineering, adapted specifically for the unique challenges posed by real-time physiological monitoring applications. These principles form the theoretical foundation upon which all subsequent design decisions are evaluated and implemented.
 
 **Modularity and Separation of Concerns:**
-The system architecture employs strict modular design principles, separating distinct functional areas into independent components with well-defined interfaces. This approach enables independent development, testing, and maintenance of different system aspects while facilitating future enhancements and modifications.
+The system architecture employs rigorous modular design principles that create clear, well-defined boundaries between distinct functional domains, enabling each component to operate as an independent, self-contained unit with precisely specified interfaces. This architectural approach draws heavily from the principles of domain-driven design, where each module encapsulates specific domain knowledge and functionality while exposing minimal, well-documented interfaces to other system components. The modular separation extends beyond simple code organization to encompass data models, communication protocols, and deployment strategies, ensuring that changes within one module do not propagate uncontrolled effects throughout the system.
 
-**Distributed Processing:**
-Processing capabilities are distributed across multiple devices and platforms, leveraging the computational strengths of each component. Mobile devices handle local data acquisition and preprocessing, while the desktop controller manages coordination, analysis, and storage. This distribution optimizes performance while maintaining system responsiveness.
+The implementation of strict separation of concerns enables independent development lifecycles for different system components, allowing specialized teams to focus on their areas of expertise without requiring deep knowledge of other system domains. This architectural decision proves particularly valuable in research environments where different aspects of the system may evolve at different rates based on research priorities and technological advances. For example, improvements to machine learning algorithms can be implemented and validated independently of changes to camera processing pipelines, enabling more agile development and validation processes.
 
-**Fault Tolerance and Resilience:**
-The architecture incorporates multiple levels of fault tolerance to ensure continued operation despite component failures. Redundant communication paths, automatic failover mechanisms, and graceful degradation strategies maintain system functionality under adverse conditions.
+The modular architecture also facilitates comprehensive testing strategies, where each module can be thoroughly tested in isolation before integration testing validates inter-module interactions. This testing approach significantly improves system reliability by enabling early detection of issues within individual components before they manifest as complex system-level failures that are difficult to diagnose and resolve.
 
-**Scalability and Extensibility:**
-The system design anticipates future growth in device count, processing requirements, and functional capabilities. Scalable communication protocols, modular processing pipelines, and extensible data formats support system evolution without requiring architectural redesign.
+**Distributed Processing and Computational Load Balancing:**
+The architecture implements sophisticated distributed processing strategies that intelligently leverage the unique computational capabilities and resource constraints of each system component. Rather than employing a simple centralized processing model, the system distributes computational workloads based on careful analysis of processing requirements, available computational resources, power constraints, and communication costs associated with data movement between components.
 
-**Security and Privacy:**
-Privacy protection and data security are integrated into the architecture at all levels, from local data processing to network communication and storage. Multi-layered security approaches protect sensitive physiological data throughout the system lifecycle.
+Mobile devices, despite their computational limitations, handle computationally intensive but localized tasks such as real-time image processing for hand detection and region-of-interest extraction. This design decision minimizes the need to transmit high-bandwidth video data across the network while leveraging the specialized image processing capabilities of modern mobile processors. The local processing approach also provides important benefits in terms of privacy protection, as raw video data remains on the capture device rather than being transmitted across potentially insecure network connections.
 
-### 1.2 Architectural Context
+The desktop controller system manages higher-level coordination tasks, complex signal processing algorithms, and machine learning inference operations that benefit from the increased computational resources and specialized hardware (such as discrete GPUs) available on desktop platforms. This distribution strategy optimizes overall system performance while maintaining reasonable power consumption on battery-powered mobile devices.
 
-**Research Environment Requirements:**
-The system must operate effectively in diverse research environments, from controlled laboratory settings to naturalistic field studies. This requirement drives architectural decisions regarding portability, setup simplicity, and environmental robustness.
+The distributed processing architecture also incorporates sophisticated load balancing mechanisms that can dynamically adjust processing distribution based on real-time system conditions. When mobile device battery levels drop or thermal constraints limit processing capability, the system can automatically shift additional processing load to the desktop controller, maintaining overall system performance despite changing operational conditions.
 
-**Multi-Stakeholder Support:**
-Different stakeholders interact with the system in various roles, requiring flexible interfaces and access controls. Researchers need comprehensive control and monitoring capabilities, while subjects require simple, non-intrusive interfaces that minimize experimental disruption.
+**Fault Tolerance and System Resilience:**
+The architecture incorporates multiple layers of fault tolerance mechanisms designed to ensure continued system operation despite component failures, network disruptions, or environmental challenges commonly encountered in research settings. These resilience mechanisms operate at multiple system levels, from low-level hardware error detection to high-level workflow recovery strategies.
 
-**Regulatory and Ethical Compliance:**
-The architecture must support compliance with research ethics requirements, data protection regulations, and potential medical device standards. This compliance is achieved through built-in privacy protection, audit capabilities, and validation frameworks.
+At the communication level, the system implements redundant communication paths with automatic failover capabilities. When the primary Wi-Fi communication channel experiences disruption, backup communication mechanisms can maintain critical coordination functions while the system works to restore full connectivity. The communication layer also implements sophisticated error detection and correction mechanisms that can identify and compensate for data corruption or loss during transmission.
+
+Data integrity protection extends throughout the system, with comprehensive checksums, validation algorithms, and redundant storage mechanisms ensuring that collected research data remains intact despite system failures. The system maintains multiple copies of critical data and implements automated recovery procedures that can restore lost data from backup sources without requiring manual intervention.
+
+The fault tolerance architecture also includes graceful degradation strategies that allow the system to continue operating with reduced functionality when certain components fail. For example, if one camera device fails during a multi-device measurement session, the system can continue collecting data from remaining devices while automatically adjusting processing algorithms to account for the reduced sensor coverage.
+
+**Scalability and Future Extensibility:**
+The system design incorporates forward-looking architectural decisions that anticipate future growth in device count, processing requirements, sensor modalities, and functional capabilities. Rather than optimizing solely for current requirements, the architecture provides extension points and expansion mechanisms that can accommodate future enhancements without requiring fundamental architectural redesign.
+
+The communication protocol design supports dynamic device discovery and configuration, enabling new sensor devices to be added to existing measurement sessions without requiring system restart or reconfiguration. This capability proves essential for research applications where experimental requirements may evolve during data collection or where different research studies require different sensor configurations.
+
+The data processing pipeline architecture employs plugin-based extensibility mechanisms that allow new signal processing algorithms, machine learning models, or analysis techniques to be integrated into the system without modifying core system components. This extensibility approach enables the system to evolve with advancing research methodologies while maintaining backward compatibility with existing datasets and analysis workflows.
+
+Scalability considerations also extend to data storage and management, where the system architecture supports both local and cloud-based storage options with automatic scaling based on data volume requirements. The storage architecture can seamlessly transition between different storage backends as research data volumes grow beyond local storage capacity.
+
+**Security, Privacy, and Ethical Data Handling:**
+Privacy protection and data security considerations are integrated into every level of the system architecture, reflecting the sensitive nature of physiological data and the stringent requirements of human subjects research. The security architecture implements defense-in-depth strategies that provide multiple layers of protection against unauthorized access, data corruption, and privacy breaches.
+
+Local data processing minimizes the exposure of sensitive raw data by performing initial analysis on capture devices before transmitting only processed results across network connections. This approach significantly reduces the attack surface for potential privacy breaches while also improving system performance by reducing network bandwidth requirements.
+
+Communication security employs industry-standard encryption protocols with key management systems designed specifically for research environments. The system supports both symmetric and asymmetric encryption approaches, with automatic key rotation and secure key distribution mechanisms that ensure communication security without requiring complex manual key management procedures.
+
+Data anonymization and pseudonymization capabilities are built into the core data processing pipeline, enabling researchers to protect subject privacy while maintaining the data relationships necessary for scientific analysis. The system supports configurable anonymization policies that can be tailored to specific research requirements and regulatory compliance needs.
+
+### 1.2 Architectural Context and Environmental Considerations
+
+The architectural design must accommodate the complex and varied requirements imposed by different research environments, user populations, and experimental methodologies, requiring flexible adaptation capabilities while maintaining consistent performance and reliability standards across diverse operational contexts.
+
+**Research Environment Requirements and Operational Flexibility:**
+The system must demonstrate robust operational capability across an exceptionally wide range of research environments, from highly controlled laboratory settings with stable environmental conditions and reliable infrastructure to naturalistic field studies conducted in unpredictable environments with limited infrastructure support. This environmental diversity drives fundamental architectural decisions regarding system portability, setup complexity, environmental robustness, and infrastructure dependencies.
+
+In controlled laboratory environments, the system can leverage stable power supplies, high-quality network infrastructure, and controlled lighting and temperature conditions to optimize measurement accuracy and system performance. The architecture takes advantage of these favorable conditions by implementing more sophisticated processing algorithms and higher-resolution data collection modes that might not be feasible in resource-constrained field environments.
+
+Conversely, in field research environments, the system must operate effectively with limited power availability, unreliable network connectivity, and highly variable environmental conditions that can significantly impact measurement quality. The architecture addresses these challenges through adaptive power management strategies, offline operation capabilities, and robust environmental compensation algorithms that maintain measurement validity despite suboptimal conditions.
+
+The architectural flexibility extends to physical setup requirements, where the system can accommodate different spatial configurations based on research space constraints and experimental requirements. Whether deployed in a small clinical examination room or a large behavioral research laboratory, the system adapts its sensor placement strategies and communication topologies to optimize performance within available space constraints.
+
+**Multi-Stakeholder Support and Role-Based System Interaction:**
+The system architecture must support fundamentally different interaction patterns and requirements for various stakeholder groups, each with distinct goals, technical expertise levels, and system access needs. This multi-stakeholder support requires sophisticated user interface design, flexible access control mechanisms, and adaptable system behavior that can provide appropriate functionality and information to each user role.
+
+Research investigators require comprehensive system control and monitoring capabilities, including access to detailed system status information, real-time data quality assessments, experimental parameter configuration options, and troubleshooting tools. The architecture provides these users with powerful interfaces that expose the full complexity and capability of the system while maintaining safety mechanisms that prevent accidental system damage or data loss.
+
+Research subjects interact with the system through carefully designed interfaces that minimize cognitive load and experimental disruption while providing necessary feedback about system status and measurement progress. The subject-facing interfaces prioritize simplicity, clarity, and non-intrusiveness, hiding the underlying system complexity while maintaining transparency about data collection activities to support informed consent requirements.
+
+Technical support personnel require diagnostic access to system internals, including detailed logging information, performance metrics, hardware status monitoring, and remote troubleshooting capabilities. The architecture provides specialized interfaces and tools that enable efficient system maintenance and problem resolution without requiring physical access to deployed systems.
+
+System administrators need comprehensive oversight capabilities for multi-system deployments, including centralized monitoring, configuration management, software update distribution, and security policy enforcement. The architecture supports these requirements through centralized management interfaces that can coordinate multiple distributed system instances while maintaining appropriate security boundaries.
+
+**Regulatory and Ethical Compliance Framework:**
+The architecture incorporates comprehensive compliance mechanisms designed to support adherence to research ethics requirements, data protection regulations, and emerging medical device standards that may apply to physiological monitoring systems used in clinical research contexts. These compliance features are integrated into the fundamental system design rather than being added as afterthoughts, ensuring that compliance support does not compromise system performance or reliability.
+
+The compliance framework begins with built-in privacy protection mechanisms that implement privacy-by-design principles throughout the system architecture. Personal data minimization strategies ensure that the system collects, processes, and stores only the minimum data necessary for research objectives, while comprehensive data anonymization capabilities enable research analysis while protecting subject privacy.
+
+Audit and traceability capabilities provide comprehensive logging of all system activities, data access events, and configuration changes, creating an immutable audit trail that supports research integrity validation and regulatory compliance verification. The audit system operates independently of other system components, ensuring that audit data remains intact even if other system components experience failures or security breaches.
+
+The architecture also supports configurable data retention and deletion policies that enable compliance with varying regulatory requirements across different research contexts and jurisdictions. Automated data lifecycle management ensures that personal data is retained only as long as necessary for research purposes and is securely deleted when retention periods expire.
+
+Consent management capabilities integrated into the system architecture support dynamic consent models where research subjects can modify their consent preferences throughout the research study. The system automatically adapts data collection and processing activities based on current consent status, ensuring ongoing compliance with subject preferences and regulatory requirements.
 
 ## 2. Overall System Architecture
 
-### 2.1 High-Level Architecture Overview
+## 2. Overall System Architecture
 
-The contactless GSR prediction system employs a distributed architecture consisting of multiple interconnected subsystems, each optimized for specific functions within the overall system workflow.
+### 2.1 High-Level Architecture Overview and System Topology
 
-**Core Architectural Components:**
+The contactless GSR prediction system employs a sophisticated distributed architecture consisting of multiple interconnected subsystems, each specifically optimized for distinct functional roles within the comprehensive data acquisition, processing, and analysis workflow. This distributed approach enables the system to leverage the unique capabilities of different hardware platforms while managing the complex coordination required for real-time multi-modal physiological monitoring.
 
-**Mobile Data Acquisition Units (Android Devices):**
-- Primary function: Real-time multi-modal data capture
-- Secondary function: Local preprocessing and data buffering
-- Hardware: Samsung Galaxy S22 smartphones with attached thermal cameras
-- Communication: Wi-Fi networking for coordination and data transmission
-- Local processing: Hand detection, ROI extraction, initial signal processing
+The architectural topology reflects careful consideration of the fundamental requirements for contactless physiological monitoring, including the need for flexible sensor positioning, real-time data processing, reliable inter-device communication, and scalable deployment strategies. Unlike monolithic systems that concentrate all functionality within a single device, this distributed architecture enables optimal placement of different functional components based on their specific requirements and constraints.
+
+**Core Architectural Components and Their Functional Roles:**
+
+**Mobile Data Acquisition Units (Android Devices) - Primary Sensing Platforms:**
+
+These specialized sensing platforms serve as the cornerstone of the data acquisition infrastructure, responsible for capturing high-quality multi-modal sensor data while performing sophisticated real-time preprocessing to optimize system performance and data quality. Each mobile unit represents a complete sensing system capable of independent operation while participating in coordinated multi-device measurement sessions.
+
+The mobile platforms perform several critical functions that leverage the unique capabilities of modern smartphone hardware. The primary function involves coordinating multiple sensor modalities to capture synchronized data streams that provide complementary information about physiological state. The RGB camera system captures high-resolution visible light imagery that enables detection of subtle color changes associated with blood volume variations, while the integrated thermal camera provides temperature distribution data that reveals sympathetic nervous system activation patterns.
+
+The selection of Samsung Galaxy S22 smartphones as the hardware platform reflects careful analysis of the specific requirements for contactless physiological monitoring applications. These devices provide exceptional camera quality with precise exposure control, advanced image stabilization systems, and powerful mobile processors capable of real-time image processing. The high-quality display systems enable precise feedback to research subjects, while the robust wireless communication capabilities ensure reliable coordination with other system components.
+
+The attachment of specialized thermal cameras transforms these mobile platforms into sophisticated multi-spectral sensing systems capable of simultaneous visible and infrared imaging. The thermal cameras provide temperature measurement capabilities with sensitivity sufficient to detect the subtle thermal changes associated with sympathetic activation and circulatory responses. The integration of thermal and visible cameras requires sophisticated calibration and synchronization mechanisms to ensure accurate alignment between the different imaging modalities.
+
+Local preprocessing capabilities implemented on the mobile platforms significantly enhance overall system performance by reducing network bandwidth requirements and improving real-time responsiveness. Hand detection algorithms operating on the mobile devices identify regions of interest within the captured imagery, enabling focused analysis on physiologically relevant areas while reducing computational load on downstream processing systems. ROI extraction and initial signal conditioning prepare the sensor data for efficient transmission and further analysis.
+
+The mobile platforms also implement sophisticated power management strategies that balance measurement quality with battery life constraints. Adaptive processing algorithms can modify their computational complexity based on available power levels, ensuring continued operation throughout extended measurement sessions while maintaining acceptable data quality standards.
+
+**Desktop Controller System - Central Coordination and Processing Hub:**
+
+The desktop controller system serves as the central nervous system of the distributed architecture, coordinating all system activities while providing the computational resources necessary for advanced signal processing and machine learning operations. This centralized coordination approach enables sophisticated multi-device synchronization while leveraging the superior computational capabilities available on desktop platforms.
+
+The controller system implements comprehensive device management capabilities that enable automatic discovery, configuration, and coordination of mobile sensing units. The device management subsystem maintains real-time awareness of all connected devices, monitoring their operational status, battery levels, data quality metrics, and communication connectivity. This comprehensive monitoring enables proactive system management that can address potential issues before they impact data collection quality.
+
+Real-time data processing capabilities implemented on the desktop controller enable sophisticated analysis techniques that would be computationally prohibitive on mobile platforms. Advanced signal processing algorithms extract physiological signals from multi-modal sensor data, while machine learning models provide real-time GSR predictions based on the processed signals. The desktop platform's superior computational resources enable more sophisticated algorithms and higher temporal resolution processing than would be feasible with distributed processing approaches.
+
+The controller system also implements comprehensive data storage and management capabilities that ensure research data integrity while supporting flexible analysis workflows. Local storage systems provide high-speed access to recent data for real-time analysis, while archival storage systems ensure long-term data preservation for longitudinal research studies. The storage architecture supports both structured and unstructured data formats, accommodating the diverse data types generated by multi-modal sensing systems.
+
+Visualization and user interface capabilities provide researchers with comprehensive real-time insight into system operation and data quality. The desktop interface presents synchronized views of all sensor data streams, enabling immediate assessment of measurement quality and system performance. Advanced visualization tools help researchers identify potential issues and optimize experimental configurations for specific research requirements.
+
+**Network Communication Infrastructure - System Backbone:**
+
+The network communication infrastructure forms the critical backbone that enables coordinated operation of the distributed system components. This communication layer must support multiple simultaneous data streams while maintaining precise temporal synchronization and ensuring reliable data delivery despite varying network conditions.
+
+The wireless networking approach provides essential flexibility for research applications where sensor positioning requirements may conflict with wired connectivity constraints. Wi-Fi networking offers the bandwidth and latency characteristics necessary for real-time data transmission while supporting dynamic device configuration and mobile sensor positioning. The networking architecture implements sophisticated quality-of-service mechanisms that prioritize critical control traffic while ensuring adequate bandwidth allocation for data streams.
+
+Communication protocol design emphasizes reliability and fault tolerance, with comprehensive error detection and recovery mechanisms that ensure data integrity despite temporary network disruptions. Automatic reconnection capabilities enable seamless recovery from network interruptions, while data buffering mechanisms prevent data loss during temporary connectivity issues.
+
+The networking infrastructure also implements security mechanisms that protect sensitive physiological data during transmission. Encryption protocols ensure that intercepted network traffic cannot reveal personal health information, while authentication mechanisms prevent unauthorized devices from accessing the research system or contaminating collected data.
+
+**Data Storage and Analysis Subsystem - Information Management:**
+
+The data storage and analysis subsystem provides comprehensive information management capabilities that support both real-time research activities and long-term data preservation requirements. This subsystem must accommodate the high data volumes generated by multi-modal sensing while providing efficient access to historical data for longitudinal analysis.
+
+Storage architecture design reflects the diverse requirements of different data types, from high-frequency sensor data requiring rapid access to processed analysis results requiring long-term preservation. The storage system implements hierarchical storage management that automatically migrates data between different storage tiers based on access patterns and retention requirements.
+
+Data format standardization ensures compatibility between different system components while supporting future extensibility requirements. The storage system implements standardized data formats that facilitate interoperability with external analysis tools while maintaining comprehensive metadata that preserves the context necessary for scientific reproducibility.
+
+Backup and disaster recovery mechanisms protect against data loss while supporting distributed deployment scenarios where different research sites may have varying infrastructure capabilities. Automated backup systems ensure regular data protection without requiring manual intervention, while recovery procedures enable rapid restoration of system functionality following hardware failures or other disruptions.
 - Storage: Local buffering with automated backup to central storage
 
 **Central Control Station (Desktop Computer):**

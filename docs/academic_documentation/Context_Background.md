@@ -30,23 +30,65 @@ The theoretical basis for contactless physiological monitoring rests on several 
 
 ## 2.2 Galvanic Skin Response: Physiological Background
 
+## 2.2 Galvanic Skin Response: Physiological Background
+
 ### 2.2.1 Neurophysiological Basis of GSR
 
-Galvanic Skin Response (GSR), also known as Electrodermal Activity (EDA) or Skin Conductance Response (SCR), represents the electrical conductance of the skin, which varies in response to sympathetic nervous system activation. The physiological mechanism underlying GSR involves the activity of eccrine sweat glands, which are innervated by sympathetic cholinergic fibers.
+Galvanic Skin Response (GSR), also recognized in the scientific literature as Electrodermal Activity (EDA) or Skin Conductance Response (SCR), represents one of the most direct and sensitive physiological measurements of sympathetic nervous system activation available to researchers studying human autonomic responses. The underlying physiological mechanism involves the electrical conductance characteristics of human skin, which undergo systematic variations in direct response to sympathetic nervous system activation patterns that control eccrine sweat gland activity throughout the body.
 
-Unlike other autonomic responses controlled by both sympathetic and parasympathetic systems, eccrine sweat gland activity is solely under sympathetic control. This makes GSR a particularly sensitive and direct measure of sympathetic arousal, responding to emotional, cognitive, and physical stimuli with characteristic patterns.
+The neurophysiological foundation of GSR measurement rests on the unique innervation pattern of eccrine sweat glands, which distinguishes them from other autonomically controlled physiological systems. Unlike most other autonomic functions that receive dual innervation from both sympathetic and parasympathetic divisions of the autonomic nervous system, eccrine sweat glands are exclusively under sympathetic cholinergic control. This singular innervation pattern makes GSR an exceptionally direct and unambiguous indicator of sympathetic nervous system activation, free from the confounding influences of parasympathetic activity that can complicate the interpretation of other autonomic measures such as heart rate variability or respiratory patterns.
 
-The eccrine sweat glands are most densely distributed on the palms and fingers, making these locations optimal for GSR measurement. The traditional approach involves placing electrodes on these high-density areas and measuring the electrical conductance between them. When sympathetic activation occurs, the sweat glands increase their activity, filling the sweat ducts with conductive fluid and thereby increasing skin conductance.
+The sympathetic control of eccrine sweat glands operates through a specialized subset of sympathetic neurons that utilize acetylcholine as their neurotransmitter, rather than the norepinephrine typically associated with sympathetic innervation of other target organs. These sympathetic cholinergic fibers originate in the intermediolateral cell column of the spinal cord, travel through the sympathetic chain, and form extensive neural networks that innervate the approximately 2-4 million eccrine sweat glands distributed across the human body surface.
 
-### 2.2.2 GSR Signal Characteristics
+The density distribution of eccrine sweat glands varies dramatically across different body regions, with the highest concentrations found on the palms of the hands and soles of the feet, where gland density can reach 200-700 glands per square centimeter. This high density on the palms makes them the optimal location for GSR measurement, as the large number of responsive glands in a small area provides maximal signal amplitude and sensitivity to sympathetic activation. The physiological significance of this distribution pattern relates to the evolutionary importance of maintaining grip security through moisture control on grasping surfaces, linking GSR responses to fundamental survival mechanisms.
 
-GSR signals exhibit both tonic and phasic components:
+The cellular mechanism underlying GSR generation involves the rapid filling of sweat ducts with conductive electrolyte solution in response to sympathetic stimulation. When sympathetic cholinergic neurons release acetylcholine at the neuroglandular junction, the neurotransmitter binds to muscarinic acetylcholine receptors on sweat gland cells, initiating a cascade of intracellular signaling events that culminate in the active transport of sodium, chloride, and other electrolytes from the bloodstream into the sweat duct lumen. This electrolyte-rich fluid dramatically increases the electrical conductivity of the skin surface, creating the characteristic conductance change that defines the GSR response.
 
-**Skin Conductance Level (SCL):** The tonic component represents the baseline level of skin conductance, varying slowly over time scales of minutes to hours. SCL reflects general arousal state and can be influenced by factors such as hydration, temperature, and circadian rhythms.
+The temporal dynamics of this physiological process create the characteristic GSR signal morphology observed in research applications. The initial sympathetic activation triggers rapid electrolyte secretion that fills the sweat ducts within 1-2 seconds, creating the steep rising phase of the GSR response. The subsequent slower recovery phase, lasting 5-15 seconds, reflects the gradual reabsorption of electrolytes and the return of the sweat ducts to their baseline state. This temporal pattern provides valuable information about both the intensity of sympathetic activation (reflected in response amplitude) and the efficiency of autonomic regulation (reflected in recovery characteristics).
 
-**Skin Conductance Response (SCR):** The phasic component consists of rapid increases in conductance following specific stimuli. SCRs typically have a rise time of 1-4 seconds and a recovery time of 2-10 seconds. The amplitude, frequency, and recovery characteristics of SCRs provide information about the intensity and nature of sympathetic activation.
+### 2.2.2 GSR Signal Characteristics and Measurement Principles
 
-**Temporal Dynamics:** GSR responses exhibit characteristic temporal patterns that depend on stimulus type and individual differences. Anticipatory responses can occur before stimulus presentation, immediate responses occur within 1-3 seconds of stimulus onset, and delayed responses may emerge 3-7 seconds after stimulation.
+GSR signals demonstrate complex temporal and amplitude characteristics that reflect the underlying physiological processes governing sympathetic nervous system function. Understanding these signal characteristics is essential for developing effective contactless measurement approaches that can accurately capture and interpret the physiological information encoded in GSR responses.
+
+**Tonic and Phasic Components of GSR:**
+
+The GSR signal can be conceptually and analytically decomposed into two distinct components that reflect different aspects of sympathetic nervous system function and provide complementary information about autonomic state and reactivity.
+
+**Skin Conductance Level (SCL) - The Tonic Component:**
+The tonic component, typically referred to as Skin Conductance Level (SCL), represents the slowly varying baseline level of skin conductance that changes over time scales ranging from minutes to hours. SCL reflects the general arousal state of the sympathetic nervous system and provides important information about overall autonomic tone, stress levels, and physiological readiness for action.
+
+SCL variations are influenced by numerous physiological and environmental factors that operate over different time scales. Circadian rhythms create predictable daily patterns in SCL, with typical increases during periods of normal waking activity and decreases during sleep and rest periods. These circadian influences must be considered in research applications that involve measurements at different times of day or across extended time periods.
+
+Hydration status significantly affects SCL measurements, as adequate body fluid levels are necessary for normal sweat gland function and electrolyte transport. Dehydration can reduce baseline conductance levels and impair the ability to generate normal GSR responses to stimulation. Similarly, ambient temperature and humidity conditions affect baseline conductance through their influence on passive moisture content of the skin surface and the thermally driven component of sweat production.
+
+Individual differences in SCL reflect both genetic factors affecting sweat gland density and function, as well as acquired characteristics such as fitness level, medication use, and chronic stress exposure. These individual differences necessitate careful consideration of baseline measurements and normalization procedures in research applications comparing responses across different subjects or measurement sessions.
+
+**Skin Conductance Response (SCR) - The Phasic Component:**
+The phasic component consists of rapid, transient increases in skin conductance that occur in response to specific stimuli or spontaneously as a result of ongoing sympathetic activity. These responses, termed Skin Conductance Responses (SCRs), provide detailed information about the temporal dynamics of sympathetic activation and the reactivity of the autonomic nervous system to internal and external stimuli.
+
+SCR morphology follows characteristic patterns that reflect the underlying physiological processes governing sweat gland activation and recovery. The typical SCR exhibits a rapid onset following stimulus presentation, with rise times typically ranging from 1-4 seconds depending on stimulus intensity and individual physiological characteristics. The response reaches peak amplitude within 3-6 seconds of stimulus onset, followed by a more gradual recovery phase that returns conductance levels toward baseline over a period of 5-15 seconds.
+
+The amplitude characteristics of SCRs provide quantitative information about the magnitude of sympathetic activation, with larger responses generally indicating stronger or more significant sympathetic stimulation. However, the relationship between stimulus intensity and response amplitude is not linear, exhibiting complex adaptation and habituation patterns that depend on stimulus timing, individual sensitivity, and physiological state.
+
+Response frequency patterns provide additional information about ongoing sympathetic activity, with higher frequencies of spontaneous SCRs typically indicating elevated arousal or stress levels. The temporal clustering of responses can reveal information about psychological state and cognitive processing, as complex cognitive tasks often produce characteristic patterns of GSR activation that reflect mental workload and processing demands.
+
+**Temporal Dynamics and Response Patterns:**
+The temporal characteristics of GSR responses provide crucial information for understanding the underlying physiological and psychological processes driving sympathetic activation. Different types of stimuli and psychological states produce characteristic temporal patterns that can be analyzed to extract specific information about autonomic function and psychological state.
+
+**Anticipatory Responses:**
+GSR responses can occur in anticipation of expected stimuli, reflecting the preparatory activation of the sympathetic nervous system based on cognitive expectation and emotional anticipation. These anticipatory responses demonstrate the close coupling between cognitive processes and autonomic function, providing valuable insights into psychological state and emotional regulation.
+
+Anticipatory responses typically begin 2-5 seconds before stimulus presentation and can provide information about anxiety levels, expectation patterns, and the effectiveness of psychological coping strategies. The magnitude and timing of anticipatory responses often correlate with subjective reports of anxiety and stress, making them valuable indicators for research applications focused on emotional regulation and stress response.
+
+**Immediate Responses:**
+Immediate GSR responses occur within 1-3 seconds of stimulus onset and reflect the direct sympathetic activation produced by stimulus processing. These responses provide information about stimulus salience, emotional significance, and the intensity of physiological arousal produced by specific stimuli or events.
+
+The latency of immediate responses can provide additional information about cognitive processing speed and the efficiency of stimulus-response pathways. Shorter latencies typically indicate more direct or automatic responses, while longer latencies may reflect more complex cognitive processing or deliberative evaluation of stimulus significance.
+
+**Delayed Responses:**
+Delayed GSR responses emerge 3-7 seconds after stimulus presentation and often reflect secondary cognitive processes such as stimulus evaluation, memory retrieval, or emotional regulation efforts. These delayed responses can provide valuable information about higher-order cognitive processes that may not be apparent in immediate physiological responses.
+
+The presence and characteristics of delayed responses can indicate the engagement of cognitive coping strategies, emotional regulation processes, or complex decision-making activities that extend beyond immediate stimulus-response patterns. Understanding these delayed responses is particularly important for research applications investigating psychological interventions, therapeutic processes, or complex behavioral patterns.
 
 ### 2.2.3 Applications in Affective Computing
 
