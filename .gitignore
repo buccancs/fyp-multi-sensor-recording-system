@@ -110,3 +110,9 @@ PythonApp/logs/
 *.log
 test_recordings/
 test_calibration/
+
+### Hand Segmentation Outputs (generated files) ###
+hand_segmentation_*/
+demo_output_*/
+comparison_*/
+demo_hands_video.mp4

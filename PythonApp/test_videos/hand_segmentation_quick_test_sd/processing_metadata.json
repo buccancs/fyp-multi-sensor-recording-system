@@ -1,0 +1,14 @@
+{
+  "input_video": "../test_videos/quick_test_sd.mp4",
+  "output_directory": "../test_videos/hand_segmentation_quick_test_sd",
+  "processed_frames": 90,
+  "detected_hands_count": 0,
+  "processing_time": 2.1616532802581787,
+  "output_files": {
+    "cropped_video": "../test_videos/hand_segmentation_quick_test_sd/hands_cropped.mp4",
+    "detection_log": "../test_videos/hand_segmentation_quick_test_sd/detection_log.json"
+  },
+  "success": true,
+  "error_message": null,
+  "processed_at": "2025-07-31T02:17:59.788228"
+}
