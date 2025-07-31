@@ -10,20 +10,15 @@ import org.mockito.kotlin.whenever
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.any
 import com.multisensor.recording.util.Logger
-import java.net.Socket
-import java.io.IOException
 
 /**
  * comprehensive test suite for connection manager
- * tests socket creation, data transmission, and connection lifecycle
+ * tests bluetooth device connection management, retry logic, and health monitoring
  */
 class ConnectionManagerTest {
     
     @Mock
     private lateinit var mockLogger: Logger
-    
-    @Mock
-    private lateinit var mockSocket: Socket
     
     private lateinit var connectionManager: ConnectionManager
     
@@ -34,134 +29,175 @@ class ConnectionManagerTest {
     }
     
     @Test
-    fun `should create socket connection successfully`() = runTest {
-        // given
-        val serverAddress = "192.168.1.100"
-        val serverPort = 8080
-        
+    fun `should start connection management successfully`() {
         // when
-        val result = connectionManager.connect(serverAddress, serverPort)
+        connectionManager.startManagement()
         
-        // then - connection attempt should be logged
-        verify(mockLogger).logI(any())
+        // then - management start should be logged
+        verify(mockLogger).info(any())
+        
+        // and - should report as managing
+        val stats = connectionManager.getOverallStatistics()
+        assertTrue(stats["isManaging"] as Boolean)
     }
     
     @Test
-    fun `should handle socket timeout gracefully`() = runTest {
+    fun `should stop connection management cleanly`() {
         // given
-        val serverAddress = "192.168.1.999" // unreachable address
-        val serverPort = 8080
+        connectionManager.startManagement()
         
         // when
-        val result = connectionManager.connect(serverAddress, serverPort)
+        connectionManager.stopManagement()
+        
+        // then
+        verify(mockLogger).info(any())
+        
+        // and - should report as not managing
+        val stats = connectionManager.getOverallStatistics()
+        assertFalse(stats["isManaging"] as Boolean)
+    }
+    
+    @Test
+    fun `should attempt device connection with retry logic`() = runTest {
+        // given
+        val deviceId = "shimmer_device_001"
+        val mockConnectionFunction: suspend () -> Boolean = { true }
+        
+        // when
+        val result = connectionManager.connectWithRetry(deviceId, mockConnectionFunction)
+        
+        // then
+        assertTrue(result)
+        verify(mockLogger).info(any())
+    }
+    
+    @Test
+    fun `should handle connection failures gracefully`() = runTest {
+        // given
+        val deviceId = "shimmer_device_002"
+        val mockConnectionFunction: suspend () -> Boolean = { false }
+        
+        // when
+        val result = connectionManager.connectWithRetry(deviceId, mockConnectionFunction)
         
         // then
         assertFalse(result)
-        verify(mockLogger).logE(any())
+        verify(mockLogger).error(any())
     }
     
     @Test
-    fun `should send text messages over socket`() = runTest {
+    fun `should track connection statistics correctly`() = runTest {
         // given
-        val message = """{"command": "status_update", "data": "test"}"""
-        whenever(mockSocket.isConnected).thenReturn(true)
+        val deviceId = "shimmer_device_003"
+        val mockConnectionFunction: suspend () -> Boolean = { true }
         
-        // when 
-        connectionManager.sendMessage(message)
+        // when
+        connectionManager.connectWithRetry(deviceId, mockConnectionFunction)
         
         // then
-        verify(mockLogger).logD(any())
+        val stats = connectionManager.getConnectionStatistics(deviceId)
+        assertEquals(deviceId, stats["deviceId"])
+        assertTrue((stats["totalAttempts"] as Int) > 0)
     }
     
     @Test
-    fun `should send binary data over socket`() = runTest {
+    fun `should start auto-reconnection for device`() {
         // given
-        val binaryData = byteArrayOf(0x01, 0x02, 0x03, 0x04)
-        whenever(mockSocket.isConnected).thenReturn(true)
+        val deviceId = "shimmer_device_004"
+        val mockConnectionFunction: suspend () -> Boolean = { true }
+        connectionManager.startManagement()
         
         // when
-        connectionManager.sendBinaryData(binaryData)
+        connectionManager.startAutoReconnection(deviceId, mockConnectionFunction)
         
-        // then
-        verify(mockLogger).logD(any())
-    }
-    
-    @Test  
-    fun `should handle socket write errors gracefully`() = runTest {
-        // given
-        val message = "test message"
-        whenever(mockSocket.isConnected).thenReturn(false)
-        
-        // when
-        connectionManager.sendMessage(message)
-        
-        // then
-        verify(mockLogger).logE(any())
+        // then - should not throw exception and start reconnection monitoring
+        verify(mockLogger).info(any())
     }
     
     @Test
-    fun `should close socket connection cleanly`() = runTest {
+    fun `should stop auto-reconnection for device`() {
         // given
-        whenever(mockSocket.isConnected).thenReturn(true)
+        val deviceId = "shimmer_device_005" 
+        val mockConnectionFunction: suspend () -> Boolean = { true }
+        connectionManager.startManagement()
+        connectionManager.startAutoReconnection(deviceId, mockConnectionFunction)
         
         // when
-        connectionManager.disconnect()
+        connectionManager.stopAutoReconnection(deviceId)
         
         // then
-        verify(mockLogger).logI(any())
+        verify(mockLogger).debug(any())
     }
     
     @Test
-    fun `should detect connection status correctly`() {
+    fun `should start health monitoring for device`() {
         // given
-        whenever(mockSocket.isConnected).thenReturn(true)
-        whenever(mockSocket.isClosed).thenReturn(false)
+        val deviceId = "shimmer_device_006"
+        connectionManager.startManagement()
         
         // when
-        val isConnected = connectionManager.isConnected()
+        connectionManager.startHealthMonitoring(deviceId)
         
-        // then - default implementation should return false until real socket is connected
-        assertFalse(isConnected)
+        // then - should not throw exception
+        // Health monitoring starts in background
     }
     
     @Test
-    fun `should handle network interruption during transmission`() = runTest {
-        // given
-        val largeMessage = "x".repeat(10000) // large message to test chunking
-        whenever(mockSocket.isConnected).thenReturn(true)
-        
+    fun `should get overall connection statistics`() {
         // when
-        connectionManager.sendMessage(largeMessage)
+        val stats = connectionManager.getOverallStatistics()
         
         // then
-        verify(mockLogger).logD(any())
+        assertNotNull(stats)
+        assertTrue(stats.containsKey("totalDevices"))
+        assertTrue(stats.containsKey("healthyDevices"))
+        assertTrue(stats.containsKey("unhealthyDevices"))
+        assertTrue(stats.containsKey("totalConnectionAttempts"))
+        assertTrue(stats.containsKey("successfulConnections"))
+        assertTrue(stats.containsKey("failedConnections"))
+        assertTrue(stats.containsKey("successRate"))
+        assertTrue(stats.containsKey("isManaging"))
     }
     
     @Test
-    fun `should validate server address format`() = runTest {
+    fun `should reset device statistics correctly`() = runTest {
         // given
-        val invalidAddress = "not.a.valid.ip"
-        val validPort = 8080
+        val deviceId = "shimmer_device_007"
+        val mockConnectionFunction: suspend () -> Boolean = { true }
+        connectionManager.connectWithRetry(deviceId, mockConnectionFunction)
         
         // when
-        val result = connectionManager.connect(invalidAddress, validPort)
+        connectionManager.resetDeviceStatistics(deviceId)
         
         // then
-        assertFalse(result)
-        verify(mockLogger).logE(any())
+        verify(mockLogger).info(any())
+        val stats = connectionManager.getConnectionStatistics(deviceId)
+        assertEquals(0, stats["totalAttempts"])
     }
     
     @Test
-    fun `should validate port range`() = runTest {
-        // given
-        val validAddress = "192.168.1.100"
-        val invalidPort = 70000 // out of valid range
-        
+    fun `should reset all statistics correctly`() {
         // when
-        val result = connectionManager.connect(validAddress, invalidPort)
+        connectionManager.resetAllStatistics()
         
         // then
-        assertFalse(result)
-        verify(mockLogger).logE(any())
+        verify(mockLogger).info(any())
+        val stats = connectionManager.getOverallStatistics()
+        assertEquals(0, stats["totalDevices"])
+        assertEquals(0L, stats["totalConnectionAttempts"])
+    }
+    
+    @Test
+    fun `should cleanup resources properly`() {
+        // given
+        connectionManager.startManagement()
+        
+        // when
+        connectionManager.cleanup()
+        
+        // then
+        verify(mockLogger).info(any())
+        val stats = connectionManager.getOverallStatistics()
+        assertFalse(stats["isManaging"] as Boolean)
     }
 }

@@ -251,11 +251,25 @@ class MainViewModelEnhancedTest {
     fun `device count calculation should be accurate`() = testDispatcher.runBlockingTest {
         // Given - mock connection states
         every { sessionManager.isPcConnected() } returns true
-        every { shimmerRecorder.isConnected() } returns true  
-        every { thermalRecorder.isConnected() } returns true
+        every { shimmerRecorder.getShimmerStatus() } returns ShimmerRecorder.ShimmerStatus(
+            isAvailable = true,
+            isConnected = true,
+            isRecording = false,
+            samplingRate = 256
+        )
+        every { thermalRecorder.getThermalCameraStatus() } returns ThermalRecorder.ThermalCameraStatus(
+            isAvailable = true,
+            isRecording = false,
+            isPreviewActive = false,
+            width = 256,
+            height = 192,
+            frameRate = 25,
+            frameCount = 0
+        )
 
         // When initialized, the system should count connected devices correctly
-        viewModel.initializeSystemEnhanced()
+        val mockTextureView = mockk<android.view.TextureView>()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // In real implementation, verify device count is calculated correctly
         // Should be 4 devices: main camera + PC + Shimmer + Thermal
