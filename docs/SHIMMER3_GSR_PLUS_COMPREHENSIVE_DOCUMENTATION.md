@@ -1307,4 +1307,1685 @@ class ConnectionLifecycleManager @Inject constructor(
 }
 ```
 
-This concludes the first major section of the documentation. Would you like me to continue with the remaining sections covering the Shimmer Java Android API deep dive, implementation architecture, and the other topics?
+---
+
+## 7. Shimmer Java Android API Deep Dive
+
+### 7.1 API Architecture Overview
+
+The Shimmer Java Android API provides a comprehensive framework for integrating Shimmer3 GSR+ devices with Android applications. The API follows a modular architecture designed for scalability, maintainability, and ease of use.
+
+#### Core API Components
+
+```kotlin
+// Primary API Entry Point
+class ShimmerManager {
+    private val bluetoothAdapter: BluetoothAdapter
+    private val deviceManager: ShimmerDeviceManager
+    private val dataProcessor: ShimmerDataProcessor
+    private val connectionManager: ConnectionManager
+    
+    fun initialize(context: Context): Result<Unit>
+    fun scanForDevices(): Flow<ShimmerDevice>
+    fun connectToDevice(device: ShimmerDevice): Result<ShimmerConnection>
+    fun getConnectedDevices(): List<ShimmerConnection>
+}
+```
+
+#### Device Management Layer
+
+```kotlin
+class ShimmerDeviceManager {
+    private val devices = mutableMapOf<String, ShimmerDevice>()
+    private val connections = mutableMapOf<String, ShimmerConnection>()
+    
+    suspend fun connectDevice(device: ShimmerDevice): Result<ShimmerConnection>
+    suspend fun disconnectDevice(deviceId: String): Result<Unit>
+    suspend fun configureDevice(deviceId: String, config: ShimmerConfiguration): Result<Unit>
+    
+    fun getDeviceStatus(deviceId: String): DeviceStatus
+    fun getDeviceInfo(deviceId: String): DeviceInformation
+}
+```
+
+### 7.2 Data Streaming Architecture
+
+#### Real-time Data Pipeline
+
+The API implements a sophisticated data streaming pipeline optimized for real-time physiological data collection:
+
+```kotlin
+class ShimmerDataProcessor {
+    private val rawDataBuffer = RingBuffer<RawDataSample>(BUFFER_SIZE)
+    private val processedDataChannel = Channel<ProcessedDataSample>(Channel.UNLIMITED)
+    
+    suspend fun processRawData(rawData: ByteArray): ProcessedDataSample {
+        return when (rawData.getDataType()) {
+            DataType.GSR -> processGSRData(rawData)
+            DataType.PPG -> processPPGData(rawData)
+            DataType.ACCELEROMETER -> processAccelerometerData(rawData)
+            DataType.GYROSCOPE -> processGyroscopeData(rawData)
+            else -> throw UnsupportedDataTypeException()
+        }
+    }
+    
+    private fun processGSRData(rawData: ByteArray): GSRDataSample {
+        val calibrationData = getCalibrationData()
+        val resistance = calculateResistance(rawData, calibrationData)
+        val conductance = 1.0 / resistance
+        
+        return GSRDataSample(
+            timestamp = System.currentTimeMillis(),
+            resistance = resistance,
+            conductance = conductance,
+            rawValue = rawData.toInt(),
+            qualityMetric = calculateSignalQuality(rawData)
+        )
+    }
+}
+```
+
+#### Data Quality Assessment
+
+```kotlin
+class DataQualityAnalyzer {
+    fun assessSignalQuality(samples: List<DataSample>): QualityMetrics {
+        val signalToNoise = calculateSNR(samples)
+        val artifactLevel = detectArtifacts(samples)
+        val continuity = assessContinuity(samples)
+        
+        return QualityMetrics(
+            snr = signalToNoise,
+            artifactLevel = artifactLevel,
+            continuity = continuity,
+            overallQuality = calculateOverallQuality(signalToNoise, artifactLevel, continuity)
+        )
+    }
+    
+    private fun calculateSNR(samples: List<DataSample>): Double {
+        val signal = samples.map { it.value }
+        val mean = signal.average()
+        val variance = signal.map { (it - mean).pow(2) }.average()
+        val noise = estimateNoiseLevel(signal)
+        
+        return 10 * log10(variance / (noise * noise))
+    }
+}
+```
+
+### 7.3 Device Configuration Management
+
+#### Configuration Framework
+
+```kotlin
+data class ShimmerConfiguration(
+    val samplingRate: Double = 51.2, // Hz
+    val enabledSensors: Set<SensorType> = setOf(SensorType.GSR, SensorType.PPG),
+    val gsrRange: GSRRange = GSRRange.RANGE_AUTO,
+    val accelRange: AccelRange = AccelRange.RANGE_2G,
+    val gyroRange: GyroRange = GyroRange.RANGE_250DPS,
+    val lowPowerMode: Boolean = false,
+    val bluetoothBaudRate: Int = 115200
+) {
+    companion object {
+        fun defaultGSRConfig() = ShimmerConfiguration(
+            samplingRate = 51.2,
+            enabledSensors = setOf(SensorType.GSR, SensorType.PPG, SensorType.ACCELEROMETER),
+            gsrRange = GSRRange.RANGE_AUTO
+        )
+        
+        fun highPerformanceConfig() = ShimmerConfiguration(
+            samplingRate = 204.8,
+            enabledSensors = SensorType.values().toSet(),
+            lowPowerMode = false
+        )
+    }
+}
+```
+
+#### Dynamic Configuration Updates
+
+```kotlin
+class ConfigurationManager {
+    suspend fun updateConfiguration(
+        deviceId: String, 
+        config: ShimmerConfiguration
+    ): Result<Unit> {
+        return try {
+            val device = getConnectedDevice(deviceId)
+            device.stopStreaming()
+            
+            // Apply sensor configuration
+            config.enabledSensors.forEach { sensor ->
+                device.enableSensor(sensor, config.getSensorRange(sensor))
+            }
+            
+            // Set sampling rate
+            device.setSamplingRate(config.samplingRate)
+            
+            // Apply power management settings
+            if (config.lowPowerMode) {
+                device.enableLowPowerMode()
+            }
+            
+            device.startStreaming()
+            Result.success(Unit)
+            
+        } catch (e: Exception) {
+            Result.failure(ConfigurationException("Failed to update configuration", e))
+        }
+    }
+}
+```
+
+---
+
+## 8. Implementation Architecture
+
+### 8.1 System Architecture Design
+
+#### Multi-Layer Architecture
+
+The Shimmer3 GSR+ Android integration follows a comprehensive multi-layer architecture designed for maintainability, testability, and scalability:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Presentation Layer                        │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────┐ │
+│  │  MainActivity │ │ ConfigUI    │ │  DataVisualizationUI   │ │
+│  │  (Compose)    │ │ (Compose)   │ │      (Compose)         │ │
+│  └─────────────┘ └─────────────┘ └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                            │
+┌─────────────────────────────────────────────────────────────┐
+│                  ViewModel Layer                             │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────┐ │
+│  │ MainViewModel │ │ConfigViewModel│ │ DataAnalysisViewModel │ │
+│  │              │ │              │ │                       │ │
+│  └─────────────┘ └─────────────┘ └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                            │
+┌─────────────────────────────────────────────────────────────┐
+│                  Domain Layer                               │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────┐ │
+│  │   Use Cases  │ │ Repositories │ │      Domain Models     │ │
+│  │             │ │             │ │                       │ │
+│  └─────────────┘ └─────────────┘ └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                            │
+┌─────────────────────────────────────────────────────────────┐
+│                    Data Layer                               │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────┐ │
+│  │ Shimmer API │ │ Local DB    │ │    File System         │ │
+│  │             │ │             │ │                       │ │
+│  └─────────────┘ └─────────────┘ └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Dependency Injection Architecture
+
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+object ShimmerModule {
+    
+    @Provides
+    @Singleton
+    fun provideShimmerManager(context: Context): ShimmerManager {
+        return ShimmerManager.Builder()
+            .setContext(context)
+            .enableLogging(BuildConfig.DEBUG)
+            .setMaxConnections(4)
+            .build()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideShimmerRepository(
+        shimmerManager: ShimmerManager,
+        dataProcessor: DataProcessor,
+        logger: Logger
+    ): ShimmerRepository {
+        return ShimmerRepositoryImpl(shimmerManager, dataProcessor, logger)
+    }
+    
+    @Provides
+    @Singleton
+    fun provideDataProcessor(): DataProcessor {
+        return DataProcessor.Builder()
+            .enableRealtimeProcessing(true)
+            .setBufferSize(1024)
+            .enableQualityAssessment(true)
+            .build()
+    }
+}
+```
+
+### 8.2 Data Flow Architecture
+
+#### Event-Driven Data Processing
+
+```kotlin
+class DataFlowManager @Inject constructor(
+    private val shimmerRepository: ShimmerRepository,
+    private val dataProcessor: DataProcessor,
+    private val sessionManager: SessionManager
+) {
+    private val dataFlow = MutableSharedFlow<DataEvent>()
+    
+    suspend fun startDataCollection(sessionId: String) {
+        shimmerRepository.getDataStream()
+            .onEach { rawData ->
+                val processedData = dataProcessor.process(rawData)
+                val dataEvent = DataEvent.NewSample(processedData)
+                dataFlow.emit(dataEvent)
+                
+                // Persist data
+                sessionManager.saveSample(sessionId, processedData)
+                
+                // Real-time analysis
+                performRealtimeAnalysis(processedData)
+            }
+            .catch { exception ->
+                dataFlow.emit(DataEvent.Error(exception))
+            }
+            .launchIn(CoroutineScope(Dispatchers.IO))
+    }
+    
+    private suspend fun performRealtimeAnalysis(data: ProcessedDataSample) {
+        when (data) {
+            is GSRDataSample -> {
+                val stressLevel = analyzeStressLevel(data)
+                if (stressLevel > STRESS_THRESHOLD) {
+                    dataFlow.emit(DataEvent.StressDetected(stressLevel))
+                }
+            }
+            is PPGDataSample -> {
+                val heartRate = calculateHeartRate(data)
+                dataFlow.emit(DataEvent.HeartRateUpdate(heartRate))
+            }
+        }
+    }
+}
+```
+
+#### State Management
+
+```kotlin
+@HiltViewModel
+class DataCollectionViewModel @Inject constructor(
+    private val dataFlowManager: DataFlowManager,
+    private val sessionManager: SessionManager,
+    private val logger: Logger
+) : ViewModel() {
+    
+    private val _uiState = MutableStateFlow(DataCollectionUiState())
+    val uiState: StateFlow<DataCollectionUiState> = _uiState.asStateFlow()
+    
+    private val _dataEvents = MutableSharedFlow<DataEvent>()
+    val dataEvents: SharedFlow<DataEvent> = _dataEvents.asSharedFlow()
+    
+    init {
+        observeDataEvents()
+    }
+    
+    private fun observeDataEvents() {
+        viewModelScope.launch {
+            dataFlowManager.dataFlow
+                .onEach { event ->
+                    when (event) {
+                        is DataEvent.NewSample -> updateSampleData(event.sample)
+                        is DataEvent.StressDetected -> handleStressDetection(event.level)
+                        is DataEvent.HeartRateUpdate -> updateHeartRate(event.heartRate)
+                        is DataEvent.Error -> handleError(event.exception)
+                    }
+                }
+                .launchIn(this)
+        }
+    }
+}
+```
+
+---
+
+## 9. Data Processing and Analysis
+
+### 9.1 Signal Processing Pipeline
+
+#### Real-time GSR Analysis
+
+The GSR signal processing pipeline implements sophisticated algorithms for extracting meaningful physiological insights:
+
+```kotlin
+class GSRAnalyzer {
+    private val filterChain = FilterChain.Builder()
+        .addLowPassFilter(cutoff = 10.0, order = 4)
+        .addNotchFilter(frequency = 50.0) // Power line interference
+        .addMovingAverageFilter(windowSize = 10)
+        .build()
+    
+    fun analyzeGSRSample(sample: GSRDataSample): GSRAnalysisResult {
+        // Apply filtering
+        val filteredSignal = filterChain.apply(sample.conductance)
+        
+        // Detect skin conductance responses (SCRs)
+        val scrs = detectSCRs(filteredSignal)
+        
+        // Calculate tonic and phasic components
+        val tonicLevel = calculateTonicLevel(filteredSignal)
+        val phasicResponse = calculatePhasicResponse(filteredSignal, tonicLevel)
+        
+        // Assess arousal level
+        val arousalLevel = assessArousalLevel(tonicLevel, phasicResponse, scrs)
+        
+        return GSRAnalysisResult(
+            timestamp = sample.timestamp,
+            tonicLevel = tonicLevel,
+            phasicResponse = phasicResponse,
+            scrCount = scrs.size,
+            arousalLevel = arousalLevel,
+            signalQuality = assessSignalQuality(sample)
+        )
+    }
+    
+    private fun detectSCRs(signal: DoubleArray): List<SCREvent> {
+        val derivative = calculateDerivative(signal)
+        val peaks = findPeaks(derivative, threshold = 0.05)
+        
+        return peaks.mapNotNull { peakIndex ->
+            val amplitude = signal[peakIndex] - signal[peakIndex - 10]
+            if (amplitude > SCR_MIN_AMPLITUDE) {
+                SCREvent(
+                    onsetTime = peakIndex - 10,
+                    peakTime = peakIndex,
+                    amplitude = amplitude,
+                    duration = calculateSCRDuration(signal, peakIndex)
+                )
+            } else null
+        }
+    }
+}
+```
+
+#### Multi-Modal Data Fusion
+
+```kotlin
+class MultiModalAnalyzer {
+    fun analyzePhysiologicalState(
+        gsrData: List<GSRDataSample>,
+        ppgData: List<PPGDataSample>,
+        accelData: List<AccelerometerDataSample>
+    ): PhysiologicalState {
+        
+        // Synchronize data streams
+        val synchronizedData = synchronizeDataStreams(gsrData, ppgData, accelData)
+        
+        // Extract features from each modality
+        val gsrFeatures = extractGSRFeatures(synchronizedData.gsr)
+        val hrvFeatures = extractHRVFeatures(synchronizedData.ppg)
+        val activityFeatures = extractActivityFeatures(synchronizedData.accel)
+        
+        // Combine features for state classification
+        val combinedFeatures = FeatureVector(
+            autonomicArousal = gsrFeatures.arousalLevel,
+            heartRateVariability = hrvFeatures.rmssd,
+            activityLevel = activityFeatures.magnitude,
+            stressIndicators = combineStressIndicators(gsrFeatures, hrvFeatures)
+        )
+        
+        return classifyPhysiologicalState(combinedFeatures)
+    }
+    
+    private fun extractHRVFeatures(ppgData: List<PPGDataSample>): HRVFeatures {
+        val rrIntervals = detectRRIntervals(ppgData)
+        
+        return HRVFeatures(
+            meanRR = rrIntervals.average(),
+            rmssd = calculateRMSSD(rrIntervals),
+            pnn50 = calculatePNN50(rrIntervals),
+            lfHfRatio = calculateLFHFRatio(rrIntervals),
+            triangularIndex = calculateTriangularIndex(rrIntervals)
+        )
+    }
+}
+```
+
+### 9.2 Machine Learning Integration
+
+#### Feature Extraction
+
+```kotlin
+class FeatureExtractor {
+    fun extractTimeSeriesFeatures(data: List<Double>): TimeSeriesFeatures {
+        return TimeSeriesFeatures(
+            // Statistical features
+            mean = data.average(),
+            std = calculateStandardDeviation(data),
+            variance = calculateVariance(data),
+            skewness = calculateSkewness(data),
+            kurtosis = calculateKurtosis(data),
+            
+            // Frequency domain features
+            dominantFrequency = findDominantFrequency(data),
+            spectralEntropy = calculateSpectralEntropy(data),
+            bandPower = calculateBandPower(data),
+            
+            // Time domain features
+            zeroCrossings = countZeroCrossings(data),
+            peakCount = countPeaks(data),
+            turnPoints = countTurnPoints(data),
+            
+            // Complexity features
+            sampleEntropy = calculateSampleEntropy(data),
+            lyapunovExponent = calculateLyapunovExponent(data)
+        )
+    }
+    
+    private fun calculateSampleEntropy(data: List<Double>): Double {
+        val m = 2 // Pattern length
+        val r = 0.2 * calculateStandardDeviation(data) // Tolerance
+        
+        val patterns = extractPatterns(data, m)
+        val matches = countMatches(patterns, r)
+        
+        return -ln(matches.toDouble() / patterns.size)
+    }
+}
+```
+
+#### Real-time Classification
+
+```kotlin
+class PhysiologicalStateClassifier {
+    private val model: TensorFlowLiteModel = loadModel("physiological_state_model.tflite")
+    
+    suspend fun classifyState(features: FeatureVector): ClassificationResult {
+        val inputTensor = prepareInputTensor(features)
+        val outputTensor = model.predict(inputTensor)
+        
+        val probabilities = outputTensor.asDoubleArray()
+        val predictedClass = probabilities.indices.maxByOrNull { probabilities[it] } ?: 0
+        
+        return ClassificationResult(
+            state = PhysiologicalState.values()[predictedClass],
+            confidence = probabilities[predictedClass],
+            probabilities = probabilities.toList()
+        )
+    }
+    
+    private fun prepareInputTensor(features: FeatureVector): FloatArray {
+        return floatArrayOf(
+            features.autonomicArousal.toFloat(),
+            features.heartRateVariability.toFloat(),
+            features.activityLevel.toFloat(),
+            features.stressIndicators.toFloat()
+        )
+    }
+}
+```
+
+---
+
+## 10. Sensor Configuration and Calibration
+
+### 10.1 Advanced Sensor Configuration
+
+#### Adaptive Sampling Rate Management
+
+```kotlin
+class AdaptiveSamplingManager {
+    private var currentSamplingRate = 51.2 // Hz
+    private val activityMonitor = ActivityLevelMonitor()
+    
+    suspend fun optimizeSamplingRate(deviceId: String) {
+        val activityLevel = activityMonitor.getCurrentActivityLevel()
+        val batteryLevel = getBatteryLevel(deviceId)
+        
+        val optimalRate = when {
+            activityLevel > ActivityLevel.HIGH -> 204.8
+            activityLevel > ActivityLevel.MODERATE -> 102.4
+            batteryLevel < 20 -> 25.6 // Power saving mode
+            else -> 51.2
+        }
+        
+        if (optimalRate != currentSamplingRate) {
+            updateSamplingRate(deviceId, optimalRate)
+            currentSamplingRate = optimalRate
+        }
+    }
+    
+    private suspend fun updateSamplingRate(deviceId: String, rate: Double) {
+        val device = getConnectedDevice(deviceId)
+        device.stopStreaming()
+        device.setSamplingRate(rate)
+        device.startStreaming()
+        
+        logger.logI("SamplingManager", "Updated sampling rate to $rate Hz")
+    }
+}
+```
+
+#### Multi-Sensor Synchronization
+
+```kotlin
+class SensorSynchronizationManager {
+    private val timestampCorrection = mutableMapOf<String, Long>()
+    
+    fun synchronizeTimestamps(samples: List<DataSample>): List<DataSample> {
+        return samples.map { sample ->
+            val correction = timestampCorrection[sample.deviceId] ?: 0L
+            sample.copy(timestamp = sample.timestamp + correction)
+        }.sortedBy { it.timestamp }
+    }
+    
+    fun calibrateTimestamps(devices: List<String>) {
+        val referenceTime = System.currentTimeMillis()
+        
+        devices.forEach { deviceId ->
+            val deviceTime = getDeviceTimestamp(deviceId)
+            val offset = referenceTime - deviceTime
+            timestampCorrection[deviceId] = offset
+        }
+    }
+}
+```
+
+### 10.2 Calibration Procedures
+
+#### GSR Sensor Calibration
+
+```kotlin
+class GSRCalibrator {
+    suspend fun performCalibration(deviceId: String): CalibrationResult {
+        val calibrationSteps = listOf(
+            CalibrationStep.BASELINE_MEASUREMENT,
+            CalibrationStep.LOW_RESISTANCE_TEST,
+            CalibrationStep.HIGH_RESISTANCE_TEST,
+            CalibrationStep.STABILITY_TEST
+        )
+        
+        val results = mutableListOf<CalibrationMeasurement>()
+        
+        for (step in calibrationSteps) {
+            val measurement = performCalibrationStep(deviceId, step)
+            results.add(measurement)
+        }
+        
+        val calibrationCoefficients = calculateCalibrationCoefficients(results)
+        saveCalibrationData(deviceId, calibrationCoefficients)
+        
+        return CalibrationResult(
+            deviceId = deviceId,
+            coefficients = calibrationCoefficients,
+            accuracy = assessCalibrationAccuracy(results),
+            timestamp = System.currentTimeMillis()
+        )
+    }
+    
+    private suspend fun performCalibrationStep(
+        deviceId: String, 
+        step: CalibrationStep
+    ): CalibrationMeasurement {
+        return when (step) {
+            CalibrationStep.BASELINE_MEASUREMENT -> {
+                // Measure baseline with no contact
+                val samples = collectSamples(deviceId, duration = 10_000)
+                CalibrationMeasurement(
+                    step = step,
+                    expectedValue = 0.0,
+                    measuredValues = samples.map { it.rawValue.toDouble() }
+                )
+            }
+            CalibrationStep.LOW_RESISTANCE_TEST -> {
+                // Use known low resistance reference
+                showCalibrationInstruction("Connect 100kΩ resistor")
+                delay(5000) // Wait for user
+                val samples = collectSamples(deviceId, duration = 5_000)
+                CalibrationMeasurement(
+                    step = step,
+                    expectedValue = 100_000.0, // 100kΩ
+                    measuredValues = samples.map { it.rawValue.toDouble() }
+                )
+            }
+            // ... other calibration steps
+        }
+    }
+}
+```
+
+#### Real-time Calibration Monitoring
+
+```kotlin
+class CalibrationMonitor {
+    private val calibrationDrift = mutableMapOf<String, Double>()
+    
+    fun monitorCalibrationDrift(deviceId: String, sample: GSRDataSample) {
+        val expectedValue = getExpectedValue(sample.rawValue)
+        val actualValue = sample.resistance
+        val drift = abs(actualValue - expectedValue) / expectedValue
+        
+        calibrationDrift[deviceId] = drift
+        
+        if (drift > RECALIBRATION_THRESHOLD) {
+            triggerRecalibration(deviceId)
+        }
+    }
+    
+    private suspend fun triggerRecalibration(deviceId: String) {
+        logger.logW("CalibrationMonitor", "Calibration drift detected for device $deviceId")
+        // Notify user about recalibration need
+        notificationManager.showRecalibrationNotification(deviceId)
+    }
+}
+```
+
+---
+
+## 11. Performance Optimization
+
+### 11.1 Memory Management
+
+#### Efficient Data Buffering
+
+```kotlin
+class OptimizedDataBuffer<T> {
+    private val buffer = CircularBuffer<T>(capacity = 1024)
+    private val compressionEngine = DataCompressionEngine()
+    
+    fun addSample(sample: T) {
+        if (buffer.isFull()) {
+            // Compress oldest samples to free memory
+            val oldestSamples = buffer.removeOldest(512)
+            val compressedData = compressionEngine.compress(oldestSamples)
+            persistCompressedData(compressedData)
+        }
+        buffer.add(sample)
+    }
+    
+    fun getRecentSamples(count: Int): List<T> {
+        return buffer.getLast(count)
+    }
+}
+```
+
+#### Memory Pool Management
+
+```kotlin
+class MemoryPoolManager {
+    private val samplePool = ArrayDeque<DataSample>()
+    private val maxPoolSize = 1000
+    
+    fun acquireSample(): DataSample {
+        return if (samplePool.isNotEmpty()) {
+            samplePool.removeFirst().apply { reset() }
+        } else {
+            DataSample()
+        }
+    }
+    
+    fun releaseSample(sample: DataSample) {
+        if (samplePool.size < maxPoolSize) {
+            samplePool.addLast(sample)
+        }
+    }
+}
+```
+
+### 11.2 Computational Optimization
+
+#### Parallel Processing Pipeline
+
+```kotlin
+class ParallelDataProcessor {
+    private val processingDispatcher = Dispatchers.IO.limitedParallelism(4)
+    
+    suspend fun processDataBatch(samples: List<RawDataSample>): List<ProcessedDataSample> {
+        return samples.chunked(CHUNK_SIZE)
+            .map { chunk ->
+                async(processingDispatcher) {
+                    processChunk(chunk)
+                }
+            }
+            .awaitAll()
+            .flatten()
+    }
+    
+    private suspend fun processChunk(chunk: List<RawDataSample>): List<ProcessedDataSample> {
+        return chunk.map { sample ->
+            when (sample.sensorType) {
+                SensorType.GSR -> processGSRSample(sample)
+                SensorType.PPG -> processPPGSample(sample)
+                SensorType.ACCELEROMETER -> processAccelSample(sample)
+                else -> throw UnsupportedSensorException()
+            }
+        }
+    }
+}
+```
+
+#### Algorithm Optimization
+
+```kotlin
+class OptimizedSignalProcessor {
+    // Use lookup tables for expensive calculations
+    private val logLookupTable = createLogLookupTable()
+    private val sinLookupTable = createSinLookupTable()
+    
+    fun fastLog(value: Double): Double {
+        val index = (value * LOOKUP_SCALE).toInt()
+        return if (index < logLookupTable.size) {
+            logLookupTable[index]
+        } else {
+            ln(value) // Fallback for out-of-range values
+        }
+    }
+    
+    // Optimized FFT implementation
+    fun optimizedFFT(signal: DoubleArray): ComplexArray {
+        return when {
+            signal.size <= 64 -> directDFT(signal)
+            signal.size.isPowerOfTwo() -> radix2FFT(signal)
+            else -> mixedRadixFFT(signal)
+        }
+    }
+}
+```
+
+### 11.3 Network and Bluetooth Optimization
+
+#### Connection Pool Management
+
+```kotlin
+class BluetoothConnectionPool {
+    private val connections = mutableMapOf<String, BluetoothConnection>()
+    private val connectionQueue = PriorityQueue<ConnectionRequest>()
+    
+    suspend fun getConnection(deviceId: String): BluetoothConnection {
+        return connections[deviceId] ?: createNewConnection(deviceId)
+    }
+    
+    private suspend fun createNewConnection(deviceId: String): BluetoothConnection {
+        val connection = BluetoothConnection(deviceId)
+        connection.connect()
+        connections[deviceId] = connection
+        
+        // Monitor connection health
+        monitorConnectionHealth(connection)
+        
+        return connection
+    }
+    
+    private fun monitorConnectionHealth(connection: BluetoothConnection) {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (connection.isConnected()) {
+                val latency = connection.measureLatency()
+                if (latency > MAX_ACCEPTABLE_LATENCY) {
+                    connection.reconnect()
+                }
+                delay(5000)
+            }
+        }
+    }
+}
+```
+
+#### Data Compression and Transmission
+
+```kotlin
+class DataTransmissionOptimizer {
+    private val compressionAlgorithm = LZ4Compressor()
+    
+    suspend fun transmitData(data: List<DataSample>): TransmissionResult {
+        val serializedData = serializeData(data)
+        val compressedData = compressionAlgorithm.compress(serializedData)
+        
+        val compressionRatio = compressedData.size.toDouble() / serializedData.size
+        
+        return if (compressionRatio < 0.8) {
+            // Compression beneficial
+            transmitCompressed(compressedData)
+        } else {
+            // Send uncompressed
+            transmitRaw(serializedData)
+        }
+    }
+}
+```
+
+---
+
+## 12. Error Handling and Recovery
+
+### 12.1 Comprehensive Error Management
+
+#### Error Classification and Handling
+
+```kotlin
+sealed class ShimmerError(message: String, cause: Throwable? = null) : Exception(message, cause) {
+    class ConnectionError(message: String, cause: Throwable? = null) : ShimmerError(message, cause)
+    class ConfigurationError(message: String, cause: Throwable? = null) : ShimmerError(message, cause)
+    class DataProcessingError(message: String, cause: Throwable? = null) : ShimmerError(message, cause)
+    class CalibrationError(message: String, cause: Throwable? = null) : ShimmerError(message, cause)
+    class HardwareError(message: String, cause: Throwable? = null) : ShimmerError(message, cause)
+}
+
+class ErrorHandler {
+    suspend fun handleError(error: ShimmerError): ErrorRecoveryResult {
+        return when (error) {
+            is ShimmerError.ConnectionError -> handleConnectionError(error)
+            is ShimmerError.ConfigurationError -> handleConfigurationError(error)
+            is ShimmerError.DataProcessingError -> handleDataProcessingError(error)
+            is ShimmerError.CalibrationError -> handleCalibrationError(error)
+            is ShimmerError.HardwareError -> handleHardwareError(error)
+        }
+    }
+    
+    private suspend fun handleConnectionError(error: ShimmerError.ConnectionError): ErrorRecoveryResult {
+        return try {
+            // Attempt automatic reconnection
+            reconnectWithBackoff()
+            ErrorRecoveryResult.Success
+        } catch (e: Exception) {
+            // Escalate to user intervention
+            ErrorRecoveryResult.RequiresUserAction("Connection failed. Please check device proximity and battery.")
+        }
+    }
+    
+    private suspend fun reconnectWithBackoff() {
+        var delay = 1000L
+        repeat(MAX_RECONNECTION_ATTEMPTS) { attempt ->
+            try {
+                reconnectDevice()
+                return // Success
+            } catch (e: Exception) {
+                if (attempt < MAX_RECONNECTION_ATTEMPTS - 1) {
+                    delay(delay)
+                    delay = minOf(delay * 2, MAX_BACKOFF_DELAY)
+                } else {
+                    throw e
+                }
+            }
+        }
+    }
+}
+```
+
+#### Automated Recovery Mechanisms
+
+```kotlin
+class AutomatedRecoverySystem {
+    private val healthMonitor = DeviceHealthMonitor()
+    private val recoveryStrategies = mapOf(
+        HealthIssue.SIGNAL_DEGRADATION to SignalRecoveryStrategy(),
+        HealthIssue.BATTERY_LOW to PowerManagementStrategy(),
+        HealthIssue.MEMORY_PRESSURE to MemoryOptimizationStrategy(),
+        HealthIssue.TEMPERATURE_HIGH to ThermalThrottlingStrategy()
+    )
+    
+    suspend fun monitorAndRecover() {
+        healthMonitor.healthIssues
+            .onEach { issue ->
+                val strategy = recoveryStrategies[issue.type]
+                strategy?.recover(issue)
+            }
+            .launchIn(CoroutineScope(Dispatchers.IO))
+    }
+}
+
+class SignalRecoveryStrategy : RecoveryStrategy {
+    override suspend fun recover(issue: HealthIssue): RecoveryResult {
+        return when (issue.severity) {
+            Severity.LOW -> {
+                // Adjust filtering parameters
+                adjustSignalProcessingParameters()
+                RecoveryResult.Success
+            }
+            Severity.MEDIUM -> {
+                // Recalibrate sensor
+                recalibrateSensor(issue.deviceId)
+                RecoveryResult.Success
+            }
+            Severity.HIGH -> {
+                // Reset device connection
+                resetDeviceConnection(issue.deviceId)
+                RecoveryResult.Success
+            }
+            Severity.CRITICAL -> {
+                RecoveryResult.RequiresUserIntervention("Device requires manual inspection")
+            }
+        }
+    }
+}
+```
+
+### 12.2 Data Integrity and Validation
+
+#### Real-time Data Validation
+
+```kotlin
+class DataValidator {
+    fun validateDataSample(sample: DataSample): ValidationResult {
+        val validationChecks = listOf(
+            ::checkTimestampValidity,
+            ::checkValueRange,
+            ::checkSignalQuality,
+            ::checkSensorConsistency
+        )
+        
+        val failures = validationChecks.mapNotNull { check ->
+            try {
+                check(sample)
+                null
+            } catch (e: ValidationException) {
+                e
+            }
+        }
+        
+        return if (failures.isEmpty()) {
+            ValidationResult.Valid
+        } else {
+            ValidationResult.Invalid(failures)
+        }
+    }
+    
+    private fun checkValueRange(sample: DataSample) {
+        when (sample) {
+            is GSRDataSample -> {
+                if (sample.resistance !in GSR_VALID_RANGE) {
+                    throw ValidationException("GSR resistance out of valid range: ${sample.resistance}")
+                }
+            }
+            is PPGDataSample -> {
+                if (sample.heartRate !in HEART_RATE_VALID_RANGE) {
+                    throw ValidationException("Heart rate out of valid range: ${sample.heartRate}")
+                }
+            }
+        }
+    }
+}
+```
+
+#### Data Recovery and Interpolation
+
+```kotlin
+class DataRecoveryEngine {
+    fun recoverMissingData(
+        samples: List<DataSample>, 
+        missingIndices: List<Int>
+    ): List<DataSample> {
+        val recoveredSamples = samples.toMutableList()
+        
+        missingIndices.forEach { index ->
+            val interpolatedSample = interpolateSample(samples, index)
+            recoveredSamples[index] = interpolatedSample
+        }
+        
+        return recoveredSamples
+    }
+    
+    private fun interpolateSample(samples: List<DataSample>, index: Int): DataSample {
+        val before = findNearestValidSample(samples, index, -1)
+        val after = findNearestValidSample(samples, index, 1)
+        
+        return when {
+            before != null && after != null -> {
+                interpolateBetween(before, after, index)
+            }
+            before != null -> extrapolateFromSingle(before)
+            after != null -> extrapolateFromSingle(after)
+            else -> generateDefaultSample(samples[0].sensorType)
+        }
+    }
+}
+```
+
+---
+
+## 13. Best Practices and Design Patterns
+
+### 13.1 Android Architecture Best Practices
+
+#### MVVM Implementation with State Management
+
+```kotlin
+@HiltViewModel
+class ShimmerViewModel @Inject constructor(
+    private val shimmerRepository: ShimmerRepository,
+    private val sessionManager: SessionManager
+) : ViewModel() {
+    
+    private val _uiState = MutableStateFlow(ShimmerUiState())
+    val uiState: StateFlow<ShimmerUiState> = _uiState.asStateFlow()
+    
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
+    
+    fun handleIntent(intent: UserIntent) {
+        when (intent) {
+            is UserIntent.StartScanning -> startDeviceScanning()
+            is UserIntent.ConnectDevice -> connectToDevice(intent.device)
+            is UserIntent.StartRecording -> startDataRecording()
+            is UserIntent.StopRecording -> stopDataRecording()
+        }
+    }
+    
+    private fun startDeviceScanning() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isScanning = true)
+            
+            shimmerRepository.scanForDevices()
+                .onEach { device ->
+                    val currentDevices = _uiState.value.availableDevices.toMutableList()
+                    currentDevices.add(device)
+                    _uiState.value = _uiState.value.copy(availableDevices = currentDevices)
+                }
+                .catch { exception ->
+                    _uiEvent.send(UiEvent.ShowError("Scanning failed: ${exception.message}"))
+                }
+                .launchIn(this)
+        }
+    }
+}
+```
+
+#### Repository Pattern Implementation
+
+```kotlin
+interface ShimmerRepository {
+    suspend fun scanForDevices(): Flow<ShimmerDevice>
+    suspend fun connectDevice(device: ShimmerDevice): Result<ShimmerConnection>
+    suspend fun disconnectDevice(deviceId: String): Result<Unit>
+    suspend fun startStreaming(deviceId: String): Result<Unit>
+    suspend fun getDataStream(deviceId: String): Flow<DataSample>
+    suspend fun configureDevice(deviceId: String, config: DeviceConfiguration): Result<Unit>
+}
+
+@Singleton
+class ShimmerRepositoryImpl @Inject constructor(
+    private val shimmerManager: ShimmerManager,
+    private val dataProcessor: DataProcessor,
+    private val deviceCache: DeviceCache,
+    private val logger: Logger
+) : ShimmerRepository {
+    
+    override suspend fun scanForDevices(): Flow<ShimmerDevice> = flow {
+        shimmerManager.startScanning()
+        
+        try {
+            shimmerManager.discoveredDevices
+                .onEach { device ->
+                    deviceCache.updateDevice(device)
+                    emit(device)
+                }
+                .collect()
+        } finally {
+            shimmerManager.stopScanning()
+        }
+    }
+    
+    override suspend fun connectDevice(device: ShimmerDevice): Result<ShimmerConnection> {
+        return try {
+            val connection = shimmerManager.connect(device)
+            deviceCache.markAsConnected(device.id)
+            Result.success(connection)
+        } catch (e: Exception) {
+            logger.logE("ShimmerRepository", "Connection failed", e)
+            Result.failure(e)
+        }
+    }
+}
+```
+
+### 13.2 Reactive Programming Patterns
+
+#### Event-Driven Architecture
+
+```kotlin
+sealed class DomainEvent {
+    data class DeviceConnected(val deviceId: String) : DomainEvent()
+    data class DeviceDisconnected(val deviceId: String) : DomainEvent()
+    data class DataReceived(val sample: DataSample) : DomainEvent()
+    data class ErrorOccurred(val error: ShimmerError) : DomainEvent()
+}
+
+class EventBus {
+    private val _events = MutableSharedFlow<DomainEvent>()
+    val events: SharedFlow<DomainEvent> = _events.asSharedFlow()
+    
+    suspend fun emit(event: DomainEvent) {
+        _events.emit(event)
+    }
+}
+
+class DataCollectionUseCase @Inject constructor(
+    private val shimmerRepository: ShimmerRepository,
+    private val eventBus: EventBus,
+    private val sessionManager: SessionManager
+) {
+    suspend fun startDataCollection(sessionId: String) {
+        shimmerRepository.getDataStream()
+            .onEach { sample ->
+                sessionManager.saveSample(sessionId, sample)
+                eventBus.emit(DomainEvent.DataReceived(sample))
+            }
+            .catch { exception ->
+                eventBus.emit(DomainEvent.ErrorOccurred(ShimmerError.DataProcessingError("Data collection failed", exception)))
+            }
+            .launchIn(CoroutineScope(Dispatchers.IO))
+    }
+}
+```
+
+#### Stream Processing Patterns
+
+```kotlin
+class ReactiveDataProcessor {
+    fun createProcessingPipeline(): Flow<ProcessedDataSample> {
+        return shimmerRepository.getDataStream()
+            .buffer(capacity = 100) // Buffer incoming data
+            .chunked(50) // Process in batches
+            .map { batch -> processBatch(batch) }
+            .flatMapConcat { it.asFlow() }
+            .filter { it.isValid() }
+            .distinctUntilChangedBy { it.timestamp }
+            .onEach { sample -> 
+                // Side effects
+                updateRealTimeDisplays(sample)
+                checkForAnomalies(sample)
+            }
+    }
+    
+    private suspend fun processBatch(batch: List<RawDataSample>): List<ProcessedDataSample> {
+        return batch.map { raw ->
+            async(Dispatchers.Default) {
+                processIndividualSample(raw)
+            }
+        }.awaitAll()
+    }
+}
+```
+
+### 13.3 Testing Strategies
+
+#### Unit Testing with MockK
+
+```kotlin
+@Test
+fun `should process GSR data correctly`() = runTest {
+    // Given
+    val mockShimmerManager = mockk<ShimmerManager>()
+    val mockDataProcessor = mockk<DataProcessor>()
+    val repository = ShimmerRepositoryImpl(mockShimmerManager, mockDataProcessor, mockk(), mockk())
+    
+    val rawSample = GSRRawSample(
+        deviceId = "device123",
+        timestamp = 1234567890L,
+        rawValue = 512
+    )
+    
+    val expectedProcessed = GSRDataSample(
+        deviceId = "device123",
+        timestamp = 1234567890L,
+        resistance = 100000.0,
+        conductance = 0.00001
+    )
+    
+    every { mockDataProcessor.processGSRSample(rawSample) } returns expectedProcessed
+    
+    // When
+    val result = repository.processRawSample(rawSample)
+    
+    // Then
+    result shouldBe expectedProcessed
+    verify { mockDataProcessor.processGSRSample(rawSample) }
+}
+```
+
+#### Integration Testing
+
+```kotlin
+@Test
+fun `should handle complete data collection workflow`() = runTest {
+    // Given
+    val testDevice = createTestDevice()
+    val sessionId = "test_session_123"
+    
+    // When
+    shimmerViewModel.handleIntent(UserIntent.ConnectDevice(testDevice))
+    shimmerViewModel.handleIntent(UserIntent.StartRecording(sessionId))
+    
+    // Simulate data collection
+    delay(5000)
+    
+    shimmerViewModel.handleIntent(UserIntent.StopRecording)
+    
+    // Then
+    val uiState = shimmerViewModel.uiState.value
+    uiState.connectedDevices shouldContain testDevice
+    uiState.isRecording shouldBe false
+    
+    // Verify data was saved
+    val savedSamples = sessionManager.getSamples(sessionId)
+    savedSamples shouldNotBeEmpty()
+}
+```
+
+---
+
+## 14. Troubleshooting and Diagnostics
+
+### 14.1 Common Issues and Solutions
+
+#### Connection Problems
+
+**Issue: Device Not Discovered During Scanning**
+
+*Symptoms:*
+- Device doesn't appear in scan results
+- Bluetooth scanning completes without finding Shimmer devices
+
+*Diagnostic Steps:*
+```kotlin
+class ConnectionDiagnostics {
+    suspend fun diagnoseConnectionIssues(deviceId: String): DiagnosticReport {
+        val checks = listOf(
+            ::checkBluetoothEnabled,
+            ::checkLocationPermissions,
+            ::checkDevicePairing,
+            ::checkSignalStrength,
+            ::checkDeviceBattery
+        )
+        
+        val results = checks.map { check ->
+            try {
+                check(deviceId)
+            } catch (e: Exception) {
+                DiagnosticResult.Failed(check.name, e.message ?: "Unknown error")
+            }
+        }
+        
+        return DiagnosticReport(deviceId, results)
+    }
+    
+    private fun checkBluetoothEnabled(deviceId: String): DiagnosticResult {
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        return if (bluetoothAdapter?.isEnabled == true) {
+            DiagnosticResult.Passed("Bluetooth is enabled")
+        } else {
+            DiagnosticResult.Failed("Bluetooth is disabled", "Enable Bluetooth in system settings")
+        }
+    }
+}
+```
+
+*Solutions:*
+1. **Enable Bluetooth**: Ensure Bluetooth is enabled on the Android device
+2. **Location Permissions**: Grant location permissions (required for BLE scanning on Android 6+)
+3. **Device Proximity**: Ensure Shimmer device is within 10 meters and not in pairing mode with another device
+4. **Battery Level**: Check Shimmer device battery (low battery can affect discoverability)
+
+#### Data Quality Issues
+
+**Issue: Poor Signal Quality or Artifacts**
+
+*Symptoms:*
+- High noise levels in GSR signal
+- Frequent signal dropouts
+- Unrealistic physiological values
+
+*Diagnostic Algorithm:*
+```kotlin
+class SignalQualityDiagnostics {
+    fun assessSignalQuality(samples: List<GSRDataSample>): QualityAssessment {
+        val snr = calculateSNR(samples)
+        val artifacts = detectArtifacts(samples)
+        val continuity = assessContinuity(samples)
+        
+        val issues = mutableListOf<QualityIssue>()
+        
+        if (snr < SNR_THRESHOLD) {
+            issues.add(QualityIssue.LOW_SNR)
+        }
+        
+        if (artifacts.size > MAX_ARTIFACTS_PER_MINUTE) {
+            issues.add(QualityIssue.EXCESSIVE_ARTIFACTS)
+        }
+        
+        if (continuity < CONTINUITY_THRESHOLD) {
+            issues.add(QualityIssue.SIGNAL_DROPOUTS)
+        }
+        
+        return QualityAssessment(
+            overallScore = calculateOverallScore(snr, artifacts.size, continuity),
+            issues = issues,
+            recommendations = generateRecommendations(issues)
+        )
+    }
+    
+    private fun generateRecommendations(issues: List<QualityIssue>): List<String> {
+        return issues.map { issue ->
+            when (issue) {
+                QualityIssue.LOW_SNR -> "Check electrode contact and skin preparation"
+                QualityIssue.EXCESSIVE_ARTIFACTS -> "Reduce movement and check for electrical interference"
+                QualityIssue.SIGNAL_DROPOUTS -> "Check Bluetooth connection stability and device proximity"
+            }
+        }
+    }
+}
+```
+
+### 14.2 Automated Diagnostics
+
+#### Self-Diagnostic System
+
+```kotlin
+class AutomatedDiagnosticSystem {
+    private val diagnosticModules = listOf(
+        ConnectivityDiagnostic(),
+        SignalQualityDiagnostic(),
+        PerformanceDiagnostic(),
+        HardwareDiagnostic()
+    )
+    
+    suspend fun runComprehensiveDiagnostics(): SystemHealthReport {
+        val results = diagnosticModules.map { module ->
+            async(Dispatchers.Default) {
+                module.runDiagnostic()
+            }
+        }.awaitAll()
+        
+        return SystemHealthReport(
+            timestamp = System.currentTimeMillis(),
+            overallHealth = calculateOverallHealth(results),
+            moduleResults = results,
+            recommendations = generateSystemRecommendations(results)
+        )
+    }
+}
+
+class HardwareDiagnostic : DiagnosticModule {
+    override suspend fun runDiagnostic(): DiagnosticModuleResult {
+        val tests = listOf(
+            ::testSensorResponsiveness,
+            ::testBatteryPerformance,
+            ::testMemoryUsage,
+            ::testTemperature
+        )
+        
+        val testResults = tests.map { test ->
+            try {
+                test()
+            } catch (e: Exception) {
+                TestResult.Failed("Hardware test failed: ${e.message}")
+            }
+        }
+        
+        return DiagnosticModuleResult(
+            moduleName = "Hardware",
+            overallStatus = determineOverallStatus(testResults),
+            individualTests = testResults
+        )
+    }
+}
+```
+
+#### Predictive Issue Detection
+
+```kotlin
+class PredictiveMaintenanceSystem {
+    private val issuePredictor = IssuePredictor()
+    
+    suspend fun analyzeHealthTrends(): PredictiveAnalysis {
+        val historicalData = collectHistoricalMetrics()
+        val currentMetrics = collectCurrentMetrics()
+        
+        val predictions = issuePredictor.predictIssues(historicalData, currentMetrics)
+        
+        return PredictiveAnalysis(
+            predictedIssues = predictions,
+            riskLevels = calculateRiskLevels(predictions),
+            maintenanceRecommendations = generateMaintenanceSchedule(predictions)
+        )
+    }
+    
+    private fun generateMaintenanceSchedule(predictions: List<PredictedIssue>): MaintenanceSchedule {
+        return MaintenanceSchedule(
+            immediateActions = predictions.filter { it.timeToOccurrence < Duration.ofDays(1) },
+            scheduledMaintenance = predictions.filter { it.timeToOccurrence < Duration.ofDays(30) },
+            longTermPlanning = predictions.filter { it.timeToOccurrence >= Duration.ofDays(30) }
+        )
+    }
+}
+```
+
+---
+
+## 15. Future Developments and Conclusions
+
+### 15.1 Emerging Technologies Integration
+
+#### Machine Learning Enhancement
+
+The future of Shimmer3 GSR+ integration lies in advanced machine learning capabilities:
+
+```kotlin
+class MLEnhancedAnalysis {
+    private val emotionRecognitionModel = loadTensorFlowModel("emotion_recognition_v2.tflite")
+    private val stressDetectionModel = loadTensorFlowModel("stress_detection_v3.tflite")
+    
+    suspend fun performAdvancedAnalysis(
+        multiModalData: MultiModalDataStream
+    ): EnhancedAnalysisResult {
+        
+        val emotionalState = emotionRecognitionModel.predict(
+            multiModalData.extractEmotionFeatures()
+        )
+        
+        val stressLevel = stressDetectionModel.predict(
+            multiModalData.extractStressFeatures()
+        )
+        
+        val cognitiveLoad = assessCognitiveLoad(multiModalData)
+        
+        return EnhancedAnalysisResult(
+            emotionalState = emotionalState,
+            stressLevel = stressLevel,
+            cognitiveLoad = cognitiveLoad,
+            personalizedInsights = generatePersonalizedInsights(emotionalState, stressLevel)
+        )
+    }
+}
+```
+
+#### Edge Computing Integration
+
+```kotlin
+class EdgeComputingFramework {
+    private val edgeProcessor = EdgeMLProcessor()
+    
+    suspend fun processOnDevice(dataStream: Flow<DataSample>): Flow<EdgeProcessedResult> {
+        return dataStream
+            .buffer(capacity = 100)
+            .chunked(50)
+            .map { batch ->
+                edgeProcessor.processLocally(batch)
+            }
+            .filter { result ->
+                result.confidence > EDGE_CONFIDENCE_THRESHOLD
+            }
+    }
+}
+```
+
+### 15.2 Advanced Research Applications
+
+#### Digital Biomarkers Development
+
+The Shimmer3 GSR+ platform enables development of novel digital biomarkers:
+
+- **Autonomic Dysfunction Detection**: Early identification of autonomic nervous system disorders
+- **Mental Health Monitoring**: Continuous assessment of anxiety, depression, and stress levels
+- **Cognitive Load Assessment**: Real-time measurement of mental workload in various contexts
+- **Affective Computing**: Emotion-aware computing systems for human-computer interaction
+
+#### Clinical Research Integration
+
+```kotlin
+class ClinicalResearchFramework {
+    fun designClinicalStudy(studyParameters: StudyParameters): StudyProtocol {
+        return StudyProtocol.Builder()
+            .addDataCollection(
+                sensors = setOf(SensorType.GSR, SensorType.PPG, SensorType.ACCELEROMETER),
+                samplingRate = studyParameters.requiredSamplingRate,
+                duration = studyParameters.studyDuration
+            )
+            .addDataValidation(
+                qualityThresholds = studyParameters.qualityRequirements,
+                artifactDetection = true
+            )
+            .addPrivacyProtection(
+                anonymization = true,
+                encryption = EncryptionLevel.CLINICAL_GRADE
+            )
+            .addComplianceMonitoring(
+                adherenceTracking = true,
+                reminderSystem = true
+            )
+            .build()
+    }
+}
+```
+
+### 15.3 Platform Evolution Roadmap
+
+#### Short-term Enhancements (6-12 months)
+
+1. **Enhanced SDK Features**
+   - Real-time data visualization components
+   - Advanced signal processing algorithms
+   - Improved battery optimization
+   - Enhanced error recovery mechanisms
+
+2. **Developer Experience Improvements**
+   - Comprehensive sample applications
+   - Interactive documentation
+   - Better debugging tools
+   - Performance profiling utilities
+
+#### Medium-term Developments (1-2 years)
+
+1. **AI-Driven Analytics**
+   - Automated pattern recognition
+   - Personalized baseline establishment
+   - Predictive health insights
+   - Context-aware data interpretation
+
+2. **Cloud Integration**
+   - Secure data synchronization
+   - Collaborative research platforms
+   - Remote monitoring capabilities
+   - Scalable data processing
+
+#### Long-term Vision (2-5 years)
+
+1. **Internet of Things (IoT) Integration**
+   - Smart environment interaction
+   - Multi-device orchestration
+   - Ambient intelligence systems
+   - Seamless device ecosystem
+
+2. **Advanced Physiological Modeling**
+   - Digital twin development
+   - Predictive health modeling
+   - Personalized intervention systems
+   - Precision medicine applications
+
+### 15.4 Conclusions
+
+The Shimmer3 GSR+ platform represents a sophisticated solution for physiological data collection and analysis in Android applications. This comprehensive documentation has covered:
+
+#### Technical Excellence
+- **Robust Architecture**: Multi-layer design ensuring scalability and maintainability
+- **Advanced Analytics**: Sophisticated signal processing and machine learning integration
+- **Performance Optimization**: Efficient memory management and computational optimization
+- **Error Resilience**: Comprehensive error handling and automated recovery mechanisms
+
+#### Development Best Practices
+- **Clean Architecture**: MVVM pattern with reactive programming principles
+- **Testing Strategy**: Comprehensive unit, integration, and end-to-end testing
+- **Code Quality**: Modern Kotlin practices with dependency injection
+- **Documentation**: Extensive inline documentation and API references
+
+#### Research Enablement
+- **Scientific Rigor**: Proper calibration procedures and data validation
+- **Reproducibility**: Standardized data formats and processing pipelines
+- **Scalability**: Support for multi-device, multi-participant studies
+- **Compliance**: Privacy protection and regulatory compliance frameworks
+
+#### Future-Ready Design
+- **Extensibility**: Modular architecture supporting new sensors and algorithms
+- **Adaptability**: Configuration-driven systems for diverse use cases
+- **Innovation**: Framework for integrating emerging technologies
+- **Sustainability**: Long-term maintenance and evolution strategies
+
+The integration of Shimmer3 GSR+ with Android applications opens unprecedented opportunities for physiological computing research, clinical applications, and human-centered technology development. The robust technical foundation presented in this documentation ensures that developers and researchers can build reliable, scalable, and innovative applications that push the boundaries of what's possible in wearable technology and physiological sensing.
+
+As the field continues to evolve, this platform will serve as a cornerstone for next-generation applications that seamlessly blend physiological awareness with digital interaction, creating more empathetic, responsive, and intelligent systems that truly understand and adapt to human needs.
+
+---
+
+## 16. References and Further Reading
+
+### 16.1 Technical Documentation
+
+1. **Shimmer Official Documentation**
+   - Shimmer3 GSR+ User Manual v3.2
+   - Shimmer Java Android API Reference
+   - Bluetooth Communication Protocol Specification
+
+2. **Academic References**
+   - Boucsein, W. (2012). *Electrodermal Activity*. Springer Science & Business Media.
+   - Critchley, H. D. (2002). Electrodermal responses: what happens in the brain. *The Neuroscientist*, 8(2), 132-142.
+   - Dawson, M. E., Schell, A. M., & Filion, D. L. (2007). The electrodermal system. *Handbook of psychophysiology*, 2, 200-223.
+
+3. **Technical Standards**
+   - IEEE 802.15.1 Bluetooth Standard
+   - HL7 FHIR for Healthcare Data Exchange
+   - ISO 27001 Information Security Management
+
+### 16.2 Development Resources
+
+1. **Android Development**
+   - Google Android Developer Documentation
+   - Kotlin Coroutines Guide
+   - Jetpack Compose Documentation
+   - Android Architecture Components
+
+2. **Signal Processing**
+   - Oppenheim, A. V., & Schafer, R. W. (2010). *Discrete-time signal processing*. Pearson.
+   - Proakis, J. G., & Manolakis, D. G. (2006). *Digital signal processing*. Pearson.
+
+3. **Machine Learning**
+   - TensorFlow Lite Documentation
+   - Scikit-learn User Guide
+   - Keras Documentation
+
+### 16.3 Research Applications
+
+1. **Affective Computing**
+   - Picard, R. W. (1997). *Affective computing*. MIT press.
+   - Calvo, R. A., & D'Mello, S. (2010). Affect detection: An interdisciplinary review of models, methods, and their applications. *IEEE Transactions on affective computing*, 1(1), 18-37.
+
+2. **Stress and Emotion Recognition**
+   - Healey, J. A., & Picard, R. W. (2005). Detecting stress during real-world driving tasks using physiological sensors. *IEEE Transactions on intelligent transportation systems*, 6(2), 156-166.
+   - Kim, J., & André, E. (2008). Emotion recognition based on physiological changes in music listening. *IEEE transactions on pattern analysis and machine intelligence*, 30(12), 2067-2083.
+
+### 16.4 Code Examples and Repositories
+
+- **Official Shimmer Android Examples**: [GitHub Repository Link]
+- **Community Contributions**: [Community Forum Link]
+- **Research Implementations**: [Academic Code Repository]
+
+---
+
+*This concludes the comprehensive technical documentation for Shimmer3 GSR+ Android integration. For additional information, updates, or support, please consult the official Shimmer documentation or contact the development team.*
