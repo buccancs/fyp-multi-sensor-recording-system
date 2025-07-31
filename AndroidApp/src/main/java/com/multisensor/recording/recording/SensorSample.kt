@@ -148,14 +148,16 @@ data class SensorSample(
     fun getChannelCount(): Int = sensorValues.size
 
     /**
-     * Convert to CSV format string
+     * Convert to CSV format string with enhanced sensor support
      */
     fun toCsvString(includeHeader: Boolean = false): String {
         val header =
             if (includeHeader) {
                 "Timestamp_ms,DeviceTime_ms,SystemTime_ms,SessionTime_ms,DeviceId,SequenceNumber," +
-                    "GSR_Conductance_uS,PPG_A13,Accel_X_g,Accel_Y_g,Accel_Z_g," +
-                    "Gyro_X_dps,Gyro_Y_dps,Gyro_Z_dps,Mag_X_gauss,Mag_Y_gauss,Mag_Z_gauss," +
+                    "GSR_Conductance_uS,PPG_A13," +
+                    "Accel_X_g,Accel_Y_g,Accel_Z_g," +
+                    "Gyro_X_dps,Gyro_Y_dps,Gyro_Z_dps," +
+                    "Mag_X_gauss,Mag_Y_gauss,Mag_Z_gauss," +
                     "ECG_mV,EMG_mV,Battery_Percentage\n"
             } else {
                 ""
@@ -171,15 +173,15 @@ data class SensorSample(
                 sequenceNumber,
                 getSensorValue(SensorChannel.GSR) ?: 0.0,
                 getSensorValue(SensorChannel.PPG) ?: 0.0,
-                getSensorValue(SensorChannel.ACCEL) ?: 0.0, // Simplified - would need X,Y,Z separately
-                0.0, // Accel Y placeholder
-                0.0, // Accel Z placeholder
-                getSensorValue(SensorChannel.GYRO) ?: 0.0, // Simplified - would need X,Y,Z separately
-                0.0, // Gyro Y placeholder
-                0.0, // Gyro Z placeholder
-                getSensorValue(SensorChannel.MAG) ?: 0.0, // Simplified - would need X,Y,Z separately
-                0.0, // Mag Y placeholder
-                0.0, // Mag Z placeholder
+                getSensorValue(SensorChannel.ACCEL_X) ?: getSensorValue(SensorChannel.ACCEL) ?: 0.0,
+                getSensorValue(SensorChannel.ACCEL_Y) ?: 0.0,
+                getSensorValue(SensorChannel.ACCEL_Z) ?: 0.0,
+                getSensorValue(SensorChannel.GYRO_X) ?: getSensorValue(SensorChannel.GYRO) ?: 0.0,
+                getSensorValue(SensorChannel.GYRO_Y) ?: 0.0,
+                getSensorValue(SensorChannel.GYRO_Z) ?: 0.0,
+                getSensorValue(SensorChannel.MAG_X) ?: getSensorValue(SensorChannel.MAG) ?: 0.0,
+                getSensorValue(SensorChannel.MAG_Y) ?: 0.0,
+                getSensorValue(SensorChannel.MAG_Z) ?: 0.0,
                 getSensorValue(SensorChannel.ECG) ?: 0.0,
                 getSensorValue(SensorChannel.EMG) ?: 0.0,
                 batteryLevel,

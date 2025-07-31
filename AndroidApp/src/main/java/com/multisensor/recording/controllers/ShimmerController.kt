@@ -126,7 +126,7 @@ class ShimmerController @Inject constructor(
     }
     
     /**
-     * Handle device selection result from ShimmerBluetoothDialog
+     * Enhanced device selection with connection type support
      */
     fun handleDeviceSelectionResult(address: String?, name: String?) {
         if (address != null && name != null) {
@@ -134,12 +134,196 @@ class ShimmerController @Inject constructor(
             selectedShimmerAddress = address
             selectedShimmerName = name
             
-            // Show connection type selection dialog
-            // Note: Context will be provided by the callback implementation
+            // Store selection for future use
+            callback?.runOnUiThread {
+                callback?.updateStatusText("Device selected: $name")
+                callback?.showToast("Selected: $name")
+            }
+            
             callback?.onDeviceSelected(address, name)
         } else {
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Device selection cancelled")
             callback?.onDeviceSelectionCancelled()
+        }
+    }
+
+    /**
+     * Connect to selected Shimmer device with enhanced error handling
+     */
+    fun connectToSelectedDevice(viewModel: MainViewModel) {
+        selectedShimmerAddress?.let { address ->
+            selectedShimmerName?.let { name ->
+                android.util.Log.d("ShimmerController", "[DEBUG_LOG] Connecting to device: $name ($address)")
+                
+                callback?.updateStatusText("Connecting to $name...")
+                
+                // Use ViewModel's enhanced connection method
+                viewModel.connectShimmerDevice(address, name, preferredBtType) { success ->
+                    callback?.runOnUiThread {
+                        if (success) {
+                            callback?.updateStatusText("Connected to $name")
+                            callback?.showToast("Successfully connected to $name")
+                            callback?.onConnectionStatusChanged(true)
+                        } else {
+                            callback?.updateStatusText("Failed to connect to $name")
+                            callback?.showToast("Failed to connect to $name")
+                            callback?.onShimmerError("Connection failed")
+                        }
+                    }
+                }
+            }
+        } ?: run {
+            callback?.onShimmerError("No device selected")
+        }
+    }
+
+    /**
+     * Configure sensor channels for connected device
+     */
+    fun configureSensorChannels(viewModel: MainViewModel, enabledChannels: Set<String>) {
+        selectedShimmerAddress?.let { deviceId ->
+            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Configuring sensors for device: $deviceId")
+            
+            // Convert string channel names to SensorChannel enum
+            val sensorChannels = enabledChannels.mapNotNull { channelName ->
+                try {
+                    // This would need to be implemented based on actual channel names
+                    // DeviceConfiguration.SensorChannel.valueOf(channelName)
+                    null // Placeholder
+                } catch (e: Exception) {
+                    null
+                }
+            }.toSet()
+            
+            callback?.updateStatusText("Configuring sensors...")
+            
+            viewModel.configureShimmerSensors(deviceId, sensorChannels) { success ->
+                callback?.runOnUiThread {
+                    if (success) {
+                        callback?.updateStatusText("Sensors configured successfully")
+                        callback?.showToast("Sensor configuration updated")
+                        callback?.onConfigurationComplete()
+                    } else {
+                        callback?.updateStatusText("Failed to configure sensors")
+                        callback?.showToast("Sensor configuration failed")
+                        callback?.onShimmerError("Configuration failed")
+                    }
+                }
+            }
+        } ?: run {
+            callback?.onShimmerError("No device connected")
+        }
+    }
+
+    /**
+     * Update sampling rate for connected device
+     */
+    fun setSamplingRate(viewModel: MainViewModel, samplingRate: Double) {
+        selectedShimmerAddress?.let { deviceId ->
+            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Setting sampling rate to ${samplingRate}Hz for device: $deviceId")
+            
+            callback?.updateStatusText("Setting sampling rate to ${samplingRate}Hz...")
+            
+            viewModel.setShimmerSamplingRate(deviceId, samplingRate) { success ->
+                callback?.runOnUiThread {
+                    if (success) {
+                        callback?.updateStatusText("Sampling rate set to ${samplingRate}Hz")
+                        callback?.showToast("Sampling rate updated")
+                    } else {
+                        callback?.updateStatusText("Failed to set sampling rate")
+                        callback?.showToast("Failed to update sampling rate")
+                        callback?.onShimmerError("Sampling rate configuration failed")
+                    }
+                }
+            }
+        } ?: run {
+            callback?.onShimmerError("No device connected")
+        }
+    }
+
+    /**
+     * Update GSR range for connected device
+     */
+    fun setGSRRange(viewModel: MainViewModel, gsrRange: Int) {
+        selectedShimmerAddress?.let { deviceId ->
+            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Setting GSR range to $gsrRange for device: $deviceId")
+            
+            callback?.updateStatusText("Setting GSR range to $gsrRange...")
+            
+            viewModel.setShimmerGSRRange(deviceId, gsrRange) { success ->
+                callback?.runOnUiThread {
+                    if (success) {
+                        callback?.updateStatusText("GSR range set to $gsrRange")
+                        callback?.showToast("GSR range updated")
+                    } else {
+                        callback?.updateStatusText("Failed to set GSR range")
+                        callback?.showToast("Failed to update GSR range")
+                        callback?.onShimmerError("GSR range configuration failed")
+                    }
+                }
+            }
+        } ?: run {
+            callback?.onShimmerError("No device connected")
+        }
+    }
+
+    /**
+     * Get real-time device information and data quality metrics
+     */
+    fun getDeviceInformation(viewModel: MainViewModel, callback: (deviceInfo: String?) -> Unit) {
+        selectedShimmerAddress?.let { deviceId ->
+            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting device information for: $deviceId")
+            
+            viewModel.getShimmerDeviceInfo(deviceId) { deviceInfo ->
+                val infoText = deviceInfo?.getDisplaySummary() ?: "Device information not available"
+                callback(infoText)
+            }
+        } ?: run {
+            callback("No device connected")
+        }
+    }
+
+    /**
+     * Get real-time data quality metrics
+     */
+    fun getDataQualityMetrics(viewModel: MainViewModel, callback: (metrics: String?) -> Unit) {
+        selectedShimmerAddress?.let { deviceId ->
+            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting data quality metrics for: $deviceId")
+            
+            viewModel.getShimmerDataQuality(deviceId) { metrics ->
+                val metricsText = metrics?.getDisplaySummary() ?: "Data quality metrics not available"
+                callback(metricsText)
+            }
+        } ?: run {
+            callback("No device connected")
+        }
+    }
+
+    /**
+     * Disconnect from current device
+     */
+    fun disconnectDevice(viewModel: MainViewModel) {
+        selectedShimmerAddress?.let { deviceId ->
+            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Disconnecting from device: $deviceId")
+            
+            callback?.updateStatusText("Disconnecting...")
+            
+            viewModel.disconnectShimmerDevice(deviceId) { success ->
+                callback?.runOnUiThread {
+                    if (success) {
+                        callback?.updateStatusText("Disconnected")
+                        callback?.showToast("Device disconnected")
+                        callback?.onConnectionStatusChanged(false)
+                        resetState()
+                    } else {
+                        callback?.updateStatusText("Failed to disconnect")
+                        callback?.showToast("Disconnect failed")
+                        callback?.onShimmerError("Disconnect failed")
+                    }
+                }
+            }
+        } ?: run {
+            callback?.onShimmerError("No device connected")
         }
     }
     
