@@ -14,7 +14,6 @@ Milestone: 3.2 - Device Connection Manager and Socket Server
 
 import base64
 import json
-import logging
 import os
 import socket
 import struct
@@ -23,8 +22,11 @@ import time
 from PyQt5.QtCore import QThread, pyqtSignal
 from typing import Dict, List, Optional, Any
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
 # Set up logging
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class RemoteDevice:
@@ -208,6 +210,7 @@ class JsonSocketServer(QThread):
         self.server_socket: Optional[socket.socket] = None
         self.running = False
         self.devices: Dict[str, RemoteDevice] = {}  # device_id -> RemoteDevice mapping
+        self.clients: Dict[str, socket.socket] = {}  # device_id -> client socket mapping
         self.client_threads: List[threading.Thread] = []
 
         protocol_type = (
@@ -309,6 +312,8 @@ class JsonSocketServer(QThread):
                 device = self.devices[device_id]
                 device.disconnect()
                 del self.devices[device_id]
+                if device_id in self.clients:
+                    del self.clients[device_id]
                 self.device_disconnected.emit(device_id)
                 logger.info(f"Device {device_id} disconnected")
             else:
@@ -358,6 +363,7 @@ class JsonSocketServer(QThread):
             # Create RemoteDevice object and store it
             remote_device = RemoteDevice(device_id, capabilities, client_socket)
             self.devices[device_id] = remote_device
+            self.clients[device_id] = client_socket
 
             # Emit device connected signal
             self.device_connected.emit(device_id, capabilities)

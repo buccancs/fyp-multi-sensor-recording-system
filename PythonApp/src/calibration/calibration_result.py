@@ -16,6 +16,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional, Any
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class CalibrationResult:
     """

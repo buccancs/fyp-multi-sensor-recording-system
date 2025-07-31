@@ -21,6 +21,19 @@ import android.view.TextureView
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
+import com.multisensor.recording.handsegmentation.HandSegmentationManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.graphics.Rect
+import android.graphics.YuvImage
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.File
@@ -33,20 +46,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
- * Enhanced CameraRecorder Module (Milestone 2.2)
- *
- * Provides comprehensive Camera2 API implementation with:
- * - TextureView integration for live preview with proper orientation handling
- * - Multi-stream configuration supporting simultaneous Preview + 4K Video + RAW capture
- * - Professional DNG creation with full metadata embedding using DngCreator
- * - Enhanced session management with comprehensive SessionInfo tracking
- * - Samsung S21/S22 optimization with LEVEL_3 hardware capabilities
- *
- * Public API:
- * - initialize(TextureView): Prepares camera and binds TextureView for live preview
- * - startSession(recordVideo, captureRaw): Starts capture session with configuration flags
- * - stopSession(): Stops session and releases resources with proper cleanup
- * - captureRawImage(): Manual RAW capture during active session
+ * enhanced camera recorder with camera2 api
+ * supports preview + 4k video + raw capture
  */
 @Singleton
 class CameraRecorder
@@ -55,17 +56,15 @@ class CameraRecorder
         @ApplicationContext private val context: Context,
         private val sessionManager: SessionManager,
         private val logger: Logger,
+        private val handSegmentationManager: HandSegmentationManager,
     ) {
-        // Camera2 API components
         private var cameraDevice: CameraDevice? = null
         private var captureSession: CameraCaptureSession? = null
 
-        // Preview streaming (injected via method call from RecordingService)
         private var previewStreamer: PreviewStreamer? = null
 
         /**
-         * Set the PreviewStreamer instance for live streaming functionality.
-         * Called by RecordingService to inject the service-scoped PreviewStreamer.
+         * set preview streamer for live streaming
          */
         fun setPreviewStreamer(streamer: PreviewStreamer) {
             previewStreamer = streamer
@@ -74,14 +73,12 @@ class CameraRecorder
 
         private var cameraCharacteristics: CameraCharacteristics? = null
 
-        // Output components
         private var mediaRecorder: MediaRecorder? = null
         private var rawImageReader: ImageReader? = null
         private var previewImageReader: ImageReader? = null
         private var textureView: TextureView? = null
         private var previewSurface: Surface? = null
 
-        // Threading and synchronization
         private var backgroundThread: HandlerThread? = null
         private var backgroundHandler: Handler? = null
         private val cameraLock = Semaphore(1)
@@ -1123,11 +1120,97 @@ class CameraRecorder
 
                 // Pass image to PreviewStreamer for processing and transmission (if available)
                 previewStreamer?.onRgbFrameAvailable(image)
+                
+                // Process frame for hand segmentation if enabled
+                processFrameForHandSegmentation(image)
+                
             } catch (e: Exception) {
                 logger.error("Error handling preview image", e)
                 image?.close()
             }
             // Note: PreviewStreamer is responsible for closing the image
+        }
+        
+        /**
+         * Process camera frame for hand segmentation
+         */
+        private fun processFrameForHandSegmentation(image: Image) {
+            try {
+                // Check if hand segmentation is active
+                val status = handSegmentationManager.getStatus()
+                if (!status.isEnabled || !status.isRealTimeProcessing) {
+                    return
+                }
+                
+                // Convert Image to Bitmap for hand segmentation processing
+                val bitmap = convertImageToBitmap(image)
+                if (bitmap != null) {
+                    // Process frame asynchronously to avoid blocking camera pipeline
+                    handSegmentationManager.processFrame(bitmap, System.currentTimeMillis())
+                }
+                
+            } catch (e: Exception) {
+                logger.warning("Error processing frame for hand segmentation", e)
+            }
+        }
+        
+        /**
+         * Convert Camera2 Image to Bitmap for hand segmentation processing
+         */
+        private fun convertImageToBitmap(image: Image): Bitmap? {
+            return try {
+                when (image.format) {
+                    ImageFormat.JPEG -> {
+                        // JPEG format - direct conversion
+                        val buffer = image.planes[0].buffer
+                        val bytes = ByteArray(buffer.remaining())
+                        buffer.get(bytes)
+                        BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    }
+                    ImageFormat.YUV_420_888 -> {
+                        // YUV format - convert to RGB
+                        convertYuv420ToBitmap(image)
+                    }
+                    else -> {
+                        logger.warning("Unsupported image format for hand segmentation: ${image.format}")
+                        null
+                    }
+                }
+            } catch (e: Exception) {
+                logger.warning("Error converting image to bitmap", e)
+                null
+            }
+        }
+        
+        /**
+         * Convert YUV_420_888 Image to RGB Bitmap
+         */
+        private fun convertYuv420ToBitmap(image: Image): Bitmap? {
+            return try {
+                val yBuffer = image.planes[0].buffer
+                val uBuffer = image.planes[1].buffer
+                val vBuffer = image.planes[2].buffer
+                
+                val ySize = yBuffer.remaining()
+                val uSize = uBuffer.remaining()
+                val vSize = vBuffer.remaining()
+                
+                val nv21 = ByteArray(ySize + uSize + vSize)
+                
+                yBuffer.get(nv21, 0, ySize)
+                vBuffer.get(nv21, ySize, vSize)
+                uBuffer.get(nv21, ySize + vSize, uSize)
+                
+                val yuvImage = YuvImage(nv21, ImageFormat.NV21, image.width, image.height, null)
+                val out = ByteArrayOutputStream()
+                yuvImage.compressToJpeg(Rect(0, 0, image.width, image.height), 80, out)
+                val imageBytes = out.toByteArray()
+                
+                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            } catch (e: Exception) {
+                logger.warning("Error converting YUV to bitmap", e)
+                null
+            }
         }
 
         /**

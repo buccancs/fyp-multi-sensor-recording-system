@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <!-- App Bar with better elevation and modern design -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.MultiSensorRecording"
+        app:elevation="4dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:title="Multi-Sensor Recording"
+            app:titleTextColor="@color/colorOnPrimary"
+            app:menu="@menu/main_menu" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content with NestedScrollView for better scrolling -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- System Status Card with improved design -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/statusCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
+                app:contentPadding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="System Status"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Connection Status with Material Design indicators -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="8dp">
+
+                        <!-- PC Connection -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="8dp">
+
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/pcConnectionIndicator"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="12dp"
+                                app:indicatorColor="@color/statusIndicatorDisconnected"
+                                app:trackColor="@color/statusIndicatorDisconnected"
+                                app:indicatorSize="24dp"
+                                app:trackThickness="3dp" />
+
+                            <TextView
+                                android:id="@+id/pcConnectionStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="PC Connection: Waiting..."
+                                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                android:textColor="@color/textColorPrimary" />
+
+                        </LinearLayout>
+
+                        <!-- Shimmer Sensor -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="8dp">
+
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/shimmerConnectionIndicator"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="12dp"
+                                app:indicatorColor="@color/statusIndicatorDisconnected"
+                                app:trackColor="@color/statusIndicatorDisconnected"
+                                app:indicatorSize="24dp"
+                                app:trackThickness="3dp" />
+
+                            <TextView
+                                android:id="@+id/shimmerConnectionStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Shimmer Sensor: Disconnected"
+                                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                android:textColor="@color/textColorPrimary" />
+
+                        </LinearLayout>
+
+                        <!-- Thermal Camera -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/thermalConnectionIndicator"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="12dp"
+                                app:indicatorColor="@color/statusIndicatorDisconnected"
+                                app:trackColor="@color/statusIndicatorDisconnected"
+                                app:indicatorSize="24dp"
+                                app:trackThickness="3dp" />
+
+                            <TextView
+                                android:id="@+id/thermalConnectionStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Thermal Camera: Disconnected"
+                                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                android:textColor="@color/textColorPrimary" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Battery Status with improved styling -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@color/containerBackground"
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/batteryIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_battery_unknown"
+                            android:contentDescription="Battery level indicator" />
+
+                        <TextView
+                            android:id="@+id/batteryLevelText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Battery: Checking..."
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/textColorPrimary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Camera Preview Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/previewCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
+                app:contentPadding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Camera Preview"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Recording Status Indicators -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/recordingStatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="● Not Recording"
+                            android:layout_marginEnd="8dp"
+                            app:chipBackgroundColor="@color/recordingInactive"
+                            app:chipStrokeWidth="0dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/streamingStatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📶 Live Stream: Off"
+                            android:visibility="gone"
+                            app:chipBackgroundColor="@color/streamingActive"
+                            app:chipStrokeWidth="0dp" />
+
+                    </LinearLayout>
+
+                    <!-- Camera Previews -->
+                    <LinearLayout
+                        android:id="@+id/previewContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            app:cardCornerRadius="4dp"
+                            app:cardElevation="1dp">
+
+                            <TextureView
+                                android:id="@+id/texturePreview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            app:cardCornerRadius="4dp"
+                            app:cardElevation="1dp">
+
+                            <ImageView
+                                android:id="@+id/thermalPreviewImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/containerBackground"
+                                android:scaleType="centerCrop"
+                                android:contentDescription="Thermal Camera Preview" />
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Control Buttons Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/controlsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
+                app:contentPadding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Recording Controls"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Primary Action Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/startRecordingButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="Start Recording"
+                            android:textColor="@color/colorOnPrimary"
+                            app:backgroundTint="@color/buttonPrimary"
+                            app:icon="@drawable/ic_record"
+                            app:iconGravity="textStart" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/stopRecordingButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Stop Recording"
+                            android:textColor="@color/colorOnPrimary"
+                            android:enabled="false"
+                            app:backgroundTint="@color/buttonDanger"
+                            app:icon="@drawable/ic_stop"
+                            app:iconGravity="textStart" />
+
+                    </LinearLayout>
+
+                    <!-- Secondary Action Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/calibrationButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="Calibration"
+                            app:icon="@drawable/ic_calibrate"
+                            app:iconGravity="textStart" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/settingsButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Settings"
+                            app:icon="@drawable/ic_settings"
+                            app:iconGravity="textStart" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Status Messages with improved UX -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/statusMessageCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/containerBackground"
+                app:contentPadding="16dp">
+
+                <TextView
+                    android:id="@+id/statusText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="System initializing..."
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="@color/textColorSecondary"
+                    android:gravity="center" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Button for quick recording -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/quickRecordFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Quick record toggle"
+        app:srcCompat="@drawable/ic_record"
+        app:backgroundTint="@color/colorPrimary"
+        app:tint="@color/colorOnPrimary" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

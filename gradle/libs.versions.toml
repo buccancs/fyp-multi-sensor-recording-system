@@ -3,7 +3,12 @@
 # This file centralizes all dependency versions for better maintainability
 
 [versions]
-# AndroidX & Google
+# Kotlin & Coroutines - Updated to latest
+kotlin = "2.0.20"
+coroutines = "1.8.1"
+ksp = "2.0.20-1.0.24"
+
+# AndroidX & Google - Updated to latest
 coreKtx = "1.13.1"
 appcompat = "1.7.0"
 material = "1.12.0"
@@ -18,6 +23,8 @@ hilt = "2.52"
 
 # Coroutines
 coroutines = "1.8.1"
+# Room Database - Phase 3 State Persistence
+room = "2.6.1"
 
 # Networking
 okhttp = "4.12.0"
@@ -48,6 +55,7 @@ androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 
 # AndroidX - Camera Components
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camera" }
@@ -75,6 +83,12 @@ moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "mosh
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+
+# Room Database Libraries - Phase 3 State Persistence
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 # Unit Testing
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -108,7 +122,8 @@ core-ui = [
 lifecycle = [
     "androidx-lifecycle-viewmodel-ktx",
     "androidx-lifecycle-livedata-ktx", 
-    "androidx-lifecycle-service"
+    "androidx-lifecycle-service",
+    "androidx-lifecycle-process"
 ]
 
 # Camera Components
@@ -131,6 +146,12 @@ networking = [
     "okhttp-logging-interceptor",
     "moshi",
     "moshi-kotlin"
+]
+
+# Room Database - Phase 3 State Persistence
+room = [
+    "room-runtime",
+    "room-ktx"
 ]
 
 # Unit Testing

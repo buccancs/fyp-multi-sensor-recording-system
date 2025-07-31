@@ -420,6 +420,216 @@ class MainViewModel
         }
 
         /**
+         * Connect to a specific Shimmer device with enhanced error handling
+         */
+        fun connectShimmerDevice(
+            macAddress: String,
+            deviceName: String,
+            connectionType: com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Connecting to Shimmer device: $deviceName ($macAddress) via $connectionType")
+                    val success = shimmerRecorder.connectSingleDevice(macAddress, deviceName, connectionType)
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            isShimmerConnected = success,
+                            statusText = if (success) "Connected to $deviceName" else "Failed to connect to $deviceName"
+                        )
+                    }
+                    
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to connect to Shimmer device", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
+         * Configure sensor channels for a specific Shimmer device
+         */
+        fun configureShimmerSensors(
+            deviceId: String,
+            enabledChannels: Set<com.multisensor.recording.recording.DeviceConfiguration.SensorChannel>,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Configuring sensors for device: $deviceId")
+                    val success = shimmerRecorder.setEnabledChannels(deviceId, enabledChannels)
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to configure sensors for device: $deviceId", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
+         * Set sampling rate for a specific Shimmer device
+         */
+        fun setShimmerSamplingRate(
+            deviceId: String,
+            samplingRate: Double,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Setting sampling rate to ${samplingRate}Hz for device: $deviceId")
+                    val success = shimmerRecorder.setSamplingRate(deviceId, samplingRate)
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to set sampling rate for device: $deviceId", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
+         * Set GSR range for a specific Shimmer device
+         */
+        fun setShimmerGSRRange(
+            deviceId: String,
+            gsrRange: Int,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Setting GSR range to $gsrRange for device: $deviceId")
+                    val success = shimmerRecorder.setGSRRange(deviceId, gsrRange)
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to set GSR range for device: $deviceId", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
+         * Set accelerometer range for a specific Shimmer device
+         */
+        fun setShimmerAccelRange(
+            deviceId: String,
+            accelRange: Int,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Setting accelerometer range to ±${accelRange}g for device: $deviceId")
+                    val success = shimmerRecorder.setAccelRange(deviceId, accelRange)
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to set accelerometer range for device: $deviceId", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
+         * Get detailed device information for a specific Shimmer device
+         */
+        fun getShimmerDeviceInfo(
+            deviceId: String,
+            callback: (com.multisensor.recording.recording.ShimmerRecorder.DeviceInformation?) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Getting device information for: $deviceId")
+                    val deviceInfo = shimmerRecorder.getDeviceInformation(deviceId)
+                    callback(deviceInfo)
+                } catch (e: Exception) {
+                    logger.error("Failed to get device information for: $deviceId", e)
+                    callback(null)
+                }
+            }
+        }
+
+        /**
+         * Get real-time data quality metrics for a specific Shimmer device
+         */
+        fun getShimmerDataQuality(
+            deviceId: String,
+            callback: (com.multisensor.recording.recording.ShimmerRecorder.DataQualityMetrics?) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Getting data quality metrics for: $deviceId")
+                    val metrics = shimmerRecorder.getDataQualityMetrics(deviceId)
+                    callback(metrics)
+                } catch (e: Exception) {
+                    logger.error("Failed to get data quality metrics for: $deviceId", e)
+                    callback(null)
+                }
+            }
+        }
+
+        /**
+         * Disconnect from a specific Shimmer device
+         */
+        fun disconnectShimmerDevice(
+            deviceId: String,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Disconnecting from Shimmer device: $deviceId")
+                    val success = shimmerRecorder.disconnectAllDevices() // For now, disconnect all
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            isShimmerConnected = false,
+                            statusText = if (success) "Disconnected from device" else "Failed to disconnect"
+                        )
+                    }
+                    
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to disconnect from Shimmer device: $deviceId", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
+         * Scan for available Shimmer devices
+         */
+        fun scanForShimmerDevices(callback: (List<String>) -> Unit) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Scanning for Shimmer devices...")
+                    val devices = shimmerRecorder.scanAndPairDevices()
+                    callback(devices)
+                } catch (e: Exception) {
+                    logger.error("Failed to scan for Shimmer devices", e)
+                    callback(emptyList())
+                }
+            }
+        }
+
+        /**
+         * Enable or disable clock synchronization for a specific device
+         */
+        fun enableShimmerClockSync(
+            deviceId: String,
+            enable: Boolean,
+            callback: (Boolean) -> Unit
+        ) {
+            viewModelScope.launch {
+                try {
+                    logger.info("${if (enable) "Enabling" else "Disabling"} clock sync for device: $deviceId")
+                    val success = shimmerRecorder.enableClockSync(deviceId, enable)
+                    callback(success)
+                } catch (e: Exception) {
+                    logger.error("Failed to configure clock sync for device: $deviceId", e)
+                    callback(false)
+                }
+            }
+        }
+
+        /**
          * Start SD logging on connected Shimmer devices
          */
         fun startShimmerSDLogging(callback: (Boolean) -> Unit) {

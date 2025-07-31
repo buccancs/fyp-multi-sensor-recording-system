@@ -27,7 +27,7 @@ from network.device_server import (
     create_command_message,
     decode_base64_image,
 )
-from test_device_simulator import DeviceSimulator
+from tests.test_device_simulator import DeviceSimulator
 
 
 class TestJsonSocketServer(unittest.TestCase):

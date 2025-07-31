@@ -39,10 +39,14 @@
     <!-- Notification Permission (for API 33+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- USB Permissions for Thermal Camera -->
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
+    
     <!-- Hardware features -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
     <uses-feature android:name="android.hardware.usb.host" android:required="true" />
+    <uses-feature android:name="android.hardware.usb.accessory" android:required="false" />
 
     <application
         android:name=".MultiSensorApplication"

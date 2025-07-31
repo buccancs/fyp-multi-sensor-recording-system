@@ -45,21 +45,32 @@ import com.multisensor.recording.managers.UsbDeviceManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-// Shimmer UI Components imports
+// shimmer ui components imports
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
 import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 
+// centralized logging
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
+
+// hand segmentation
+import com.multisensor.recording.handsegmentation.HandSegmentationManager
+import com.multisensor.recording.ui.components.HandSegmentationControlView
+
 /**
- * Main activity for the Multi-Sensor Recording System.
- * Provides the primary user interface for controlling recording sessions,
- * viewing camera previews, and monitoring system status.
+ * main activity for multi-sensor recording system
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     PermissionManager.PermissionCallback,
     ShimmerManager.ShimmerCallback,
-    UsbDeviceManager.UsbDeviceCallback {
+    UsbDeviceManager.UsbDeviceCallback,
+    HandSegmentationManager.HandSegmentationListener,
+    HandSegmentationControlView.HandSegmentationControlListener {
     
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
@@ -79,7 +90,9 @@ class MainActivity : AppCompatActivity(),
     @Inject
     lateinit var usbDeviceManager: UsbDeviceManager
 
-    // Shimmer UI state management
+    @Inject
+    lateinit var handSegmentationManager: HandSegmentationManager
+
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
     private var preferredBtType: ShimmerBluetoothManagerAndroid.BT_TYPE = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
@@ -88,19 +101,19 @@ class MainActivity : AppCompatActivity(),
     private val shimmerDeviceSelectionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        AppLogger.logMethodEntry("MainActivity", "shimmerDeviceSelectionLauncher", "resultCode=${result.resultCode}")
+        
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             // Get selected device information from dialog
             selectedShimmerAddress = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
             selectedShimmerName = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
 
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected:")
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $selectedShimmerAddress")
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $selectedShimmerName")
+            logI("Shimmer device selected: Address=$selectedShimmerAddress, Name=$selectedShimmerName")
 
             // Show BLE/Classic connection type selection dialog
             showBtTypeConnectionOption()
         } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
+            logI("Shimmer device selection cancelled")
             Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
         }
     }
@@ -108,9 +121,13 @@ class MainActivity : AppCompatActivity(),
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppLogger.logMethodEntry("MainActivity", "onCreate", "Initializing main activity")
+        AppLogger.logMemoryUsage("MainActivity", "onCreate - start")
         super.onCreate(savedInstanceState)
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== APP STARTUP: onCreate() called =====")
+        
+        AppLogger.logLifecycle("MainActivity", "onCreate")
+        logI("=== Multi-Sensor Recording Application Starting ===")
+        AppLogger.logMemoryUsage("MainActivity", "Application Startup")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onCreate() starting")
 
         // Initialize view binding
@@ -139,12 +156,12 @@ class MainActivity : AppCompatActivity(),
         handleUsbDeviceIntent(intent)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         android.util.Log.d("MainActivity", "[DEBUG_LOG] onNewIntent() called")
 
         // Handle USB device attachment
-        intent?.let { handleUsbDeviceIntent(it) }
+        handleUsbDeviceIntent(intent)
     }
 
     /**
@@ -286,6 +303,7 @@ class MainActivity : AppCompatActivity(),
         }
 
     override fun onResume() {
+        AppLogger.logMethodEntry("MainActivity", "onResume", "Activity resuming")
         super.onResume()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onResume() called")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity is now fully visible and interactive")
@@ -310,6 +328,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onPause() {
+        AppLogger.logMethodEntry("MainActivity", "onPause", "Activity pausing")
         super.onPause()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onPause() called")
     }
@@ -509,6 +528,9 @@ class MainActivity : AppCompatActivity(),
         // Initially disable stop buttons
         binding.stopRecordingButton.isEnabled = false
 
+        // Setup hand segmentation controls
+        setupHandSegmentation()
+
         // Initialize status monitoring system
         initializeStatusMonitoring()
     }
@@ -636,6 +658,11 @@ class MainActivity : AppCompatActivity(),
         // Update session information if available
         state.currentSessionInfo?.let { sessionInfo ->
             updateSessionInfoDisplay(sessionInfo)
+        }
+
+        // Update hand segmentation for session changes
+        state.recordingSessionId?.let { sessionId ->
+            updateHandSegmentationForSession(sessionId)
         }
 
         // Update Shimmer status text
@@ -1396,6 +1423,110 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] About dialog displayed")
     }
 
+    // ===== Hand Segmentation Integration =====
+    
+    /**
+     * Setup hand segmentation controls and integration
+     */
+    private fun setupHandSegmentation() {
+        val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
+        handSegmentationControl.setListener(this)
+        
+        // Initialize hand segmentation for current session if one exists
+        viewModel.uiState.value.recordingSessionId?.let { sessionId ->
+            handSegmentationManager.initializeForSession(sessionId, this)
+        }
+        
+        logI("Hand segmentation controls initialized")
+    }
+    
+    /**
+     * Update hand segmentation controls when session changes
+     */
+    private fun updateHandSegmentationForSession(sessionId: String?) {
+        sessionId?.let {
+            handSegmentationManager.initializeForSession(it, this)
+            val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
+            handSegmentationControl.updateStatus(handSegmentationManager.getStatus())
+            logI("Hand segmentation updated for session: $it")
+        }
+    }
+    
+    // ===== HandSegmentationManager.HandSegmentationListener Implementation =====
+    
+    override fun onHandDetectionStatusChanged(isEnabled: Boolean, handsDetected: Int) {
+        runOnUiThread {
+            val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
+            handSegmentationControl.updateHandDetectionStatus(isEnabled, handsDetected)
+        }
+    }
+    
+    override fun onDatasetProgress(totalSamples: Int, leftHands: Int, rightHands: Int) {
+        runOnUiThread {
+            val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
+            handSegmentationControl.updateDatasetProgress(totalSamples, leftHands, rightHands)
+        }
+    }
+    
+    override fun onDatasetSaved(datasetPath: String, totalSamples: Int) {
+        runOnUiThread {
+            val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
+            handSegmentationControl.showDatasetSaved(datasetPath, totalSamples)
+            Toast.makeText(this, "Dataset saved: $totalSamples samples", Toast.LENGTH_LONG).show()
+        }
+    }
+    
+    override fun onError(error: String) {
+        runOnUiThread {
+            val handSegmentationControl = findViewById<HandSegmentationControlView>(R.id.handSegmentationControl)
+            handSegmentationControl.showError(error)
+            logE("Hand segmentation error: $error")
+        }
+    }
+    
+    // ===== HandSegmentationControlView.HandSegmentationControlListener Implementation =====
+    
+    override fun onHandSegmentationToggled(enabled: Boolean) {
+        handSegmentationManager.setEnabled(enabled)
+        logI("Hand segmentation ${if (enabled) "enabled" else "disabled"}")
+    }
+    
+    override fun onRealTimeProcessingToggled(enabled: Boolean) {
+        handSegmentationManager.setRealTimeProcessing(enabled)
+        logI("Real-time hand processing ${if (enabled) "enabled" else "disabled"}")
+    }
+    
+    override fun onCroppedDatasetToggled(enabled: Boolean) {
+        handSegmentationManager.setCroppedDatasetEnabled(enabled)
+        logI("Cropped dataset creation ${if (enabled) "enabled" else "disabled"}")
+    }
+    
+    override fun onSaveDatasetClicked() {
+        handSegmentationManager.saveCroppedDataset { success, datasetPath, totalSamples ->
+            runOnUiThread {
+                if (success && datasetPath != null) {
+                    logI("Hand dataset saved successfully: $datasetPath")
+                } else {
+                    Toast.makeText(this, "Failed to save dataset", Toast.LENGTH_SHORT).show()
+                    logE("Failed to save hand dataset")
+                }
+            }
+        }
+    }
+    
+    override fun onClearDatasetClicked() {
+        AlertDialog.Builder(this)
+            .setTitle("Clear Dataset")
+            .setMessage("Are you sure you want to clear the current hand dataset? This action cannot be undone.")
+            .setPositiveButton("Clear") { _, _ ->
+                handSegmentationManager.clearCurrentDataset()
+                Toast.makeText(this, "Dataset cleared", Toast.LENGTH_SHORT).show()
+                logI("Hand dataset cleared")
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
@@ -1421,6 +1552,9 @@ class MainActivity : AppCompatActivity(),
         if (::statusUpdateHandler.isInitialized) {
             statusUpdateHandler.removeCallbacksAndMessages(null)
         }
+
+        // Cleanup hand segmentation
+        handSegmentationManager.cleanup()
 
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring system cleaned up")
     }

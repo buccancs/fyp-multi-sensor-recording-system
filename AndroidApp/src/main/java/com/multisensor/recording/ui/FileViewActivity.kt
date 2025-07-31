@@ -18,6 +18,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.util.Logger

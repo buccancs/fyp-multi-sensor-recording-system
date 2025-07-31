@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "$id": "processing_metadata_schema.json",
+  "title": "Processing Metadata Schema",
+  "description": "Schema for post-processing metadata JSON files",
+  "type": "object",
+  "required": [
+    "processing_type",
+    "start_time",
+    "source_videos"
+  ],
+  "properties": {
+    "processing_type": {
+      "type": "string",
+      "enum": ["hand_segmentation", "synchronization", "motion_analysis", "thermal_analysis"],
+      "description": "Type of processing performed"
+    },
+    "method": {
+      "type": "string",
+      "description": "Specific method or algorithm used"
+    },
+    "source_videos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "List of input video files"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Processing start timestamp"
+    },
+    "end_time": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Processing completion timestamp"
+    },
+    "duration": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Processing duration in seconds"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["running", "completed", "failed"],
+      "description": "Processing status"
+    },
+    "results": {
+      "type": "object",
+      "description": "Processing results and statistics"
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Processing parameters and configuration"
+    },
+    "output_files": {
+      "type": "object",
+      "description": "Generated output files by category",
+      "patternProperties": {
+        "^[a-zA-Z_]+$": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "error_type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "List of errors encountered during processing"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "processing_type": {
+            "const": "hand_segmentation"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "enum": ["mediapipe", "yolo", "manual"]
+          },
+          "results": {
+            "type": "object",
+            "properties": {
+              "total_frames": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "hands_detected_frames": {
+                "type": "integer", 
+                "minimum": 0
+              },
+              "detection_rate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "confidence_threshold": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "crop_margin": {
+                "type": "number",
+                "minimum": 0
+              },
+              "output_resolution": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

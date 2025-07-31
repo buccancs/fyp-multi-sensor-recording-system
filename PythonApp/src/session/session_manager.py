@@ -1,76 +1,96 @@
-"""
-Session Management Module for Multi-Sensor Recording System Controller
-
-This module implements the SessionManager class for Milestone 3.3: Webcam Capture Integration.
-It provides session folder creation, organization, and lifecycle management for coordinated
-recording across multiple devices including PC webcam.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-29
-Milestone: 3.3 - Webcam Capture Integration (PC Recording)
-"""
+"""session management for multi-sensor recording system"""
 
 import json
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List
+from utils.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class SessionManager:
-    """
-    Session manager for coordinating multi-device recording sessions.
-
-    This class handles:
-    - Session folder creation and organization
-    - Session metadata management
-    - Recording lifecycle coordination
-    - File organization and naming
-    """
+    """session manager for coordinating multi-device recording sessions"""
 
     def __init__(self, base_recordings_dir: str = "recordings"):
-        """
-        Initialize session manager.
-
-        Args:
-            base_recordings_dir (str): Base directory for all recordings
-        """
+        self.logger = get_logger(__name__)
         self.base_recordings_dir = Path(base_recordings_dir)
         self.current_session: Optional[Dict] = None
         self.session_history: List[Dict] = []
-
-        # Ensure base directory exists
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 
-        print(
-            f"[DEBUG_LOG] SessionManager initialized with base directory: {self.base_recordings_dir}"
-        )
+        logger.info(f"session manager initialized with base directory: {self.base_recordings_dir}")
+
+    @staticmethod
+    def validate_session_name(session_name: str) -> bool:
+        """
+        Validate if a session name follows naming conventions.
+        
+        Args:
+            session_name: The session name to validate
+            
+        Returns:
+            bool: True if valid, False otherwise
+        """
+        if not session_name:
+            return False
+            
+        # Check length
+        if len(session_name) > 80:  # Leave room for timestamp
+            return False
+            
+        # Check characters (allow alphanumeric, spaces, hyphens, underscores)
+        import re
+        if not re.match(r'^[a-zA-Z0-9\s\-_]+$', session_name):
+            return False
+            
+        return True
+
+    @staticmethod
+    def generate_device_filename(device_id: str, file_type: str, extension: str, 
+                                timestamp: Optional[datetime] = None) -> str:
+        """
+        Generate standardized filename for device files.
+        
+        Args:
+            device_id: Device identifier (e.g., 'phone_1', 'webcam_1')
+            file_type: Type of file (e.g., 'rgb', 'thermal', 'gsr')
+            extension: File extension without dot (e.g., 'mp4', 'csv')
+            timestamp: Optional timestamp, uses current time if None
+            
+        Returns:
+            str: Standardized filename
+        """
+        if timestamp is None:
+            timestamp = datetime.now()
+        
+        timestamp_str = timestamp.strftime("%Y%m%d_%H%M%S")
+        return f"{device_id}_{file_type}_{timestamp_str}.{extension}"
 
     def create_session(self, session_name: Optional[str] = None) -> Dict:
-        """
-        Create a new recording session.
-
-        Args:
-            session_name (str, optional): Custom session name. If None, generates timestamp-based name.
-
-        Returns:
-            Dict: Session information including session_id, folder_path, start_time
-        """
-        # Generate session ID and name
+        """create a new recording session"""
+        logger.info(f"creating new session with name: {session_name}")
+        
         timestamp = datetime.now()
         if session_name is None:
             session_id = timestamp.strftime("session_%Y%m%d_%H%M%S")
         else:
-            # Sanitize custom name for filesystem
             safe_name = "".join(
-                c for c in session_name if c.isalnum() or c in (" ", "-", "_")
-            ).rstrip()
+                c if c.isalnum() or c in ("-", "_") else "_" 
+                for c in session_name.replace(" ", "_")
+            ).strip("_")
+            
+            # Ensure name is not empty and not too long
+            if not safe_name or len(safe_name) == 0:
+                safe_name = "session"
+            elif len(safe_name) > 50:  # Limit length for filesystem compatibility
+                safe_name = safe_name[:50].rstrip("_")
+            
             session_id = f"{safe_name}_{timestamp.strftime('%Y%m%d_%H%M%S')}"
 
-        # Create session folder
         session_folder = self.base_recordings_dir / session_id
         session_folder.mkdir(parents=True, exist_ok=True)
 
-        # Create session metadata
         session_info = {
             "session_id": session_id,
             "session_name": session_name or session_id,
@@ -83,28 +103,20 @@ class SessionManager:
             "status": "active",
         }
 
-        # Save session metadata
         metadata_file = session_folder / "session_metadata.json"
         with open(metadata_file, "w") as f:
             json.dump(session_info, f, indent=2)
 
         self.current_session = session_info
-
-        print(f"[DEBUG_LOG] Session created: {session_id} at {session_folder}")
+        logger.info(f"session created: {session_id}")
         return session_info
 
     def end_session(self) -> Optional[Dict]:
-        """
-        End the current recording session.
-
-        Returns:
-            Dict: Final session information, or None if no active session
-        """
+        """end the current recording session"""
         if not self.current_session:
-            print("[DEBUG_LOG] No active session to end")
+            logger.warning("no active session to end")
             return None
 
-        # Update session end time and duration
         end_time = datetime.now()
         start_time = datetime.fromisoformat(self.current_session["start_time"])
         duration = (end_time - start_time).total_seconds()
@@ -113,32 +125,24 @@ class SessionManager:
         self.current_session["duration"] = duration
         self.current_session["status"] = "completed"
 
-        # Save updated metadata
         metadata_file = (
             Path(self.current_session["folder_path"]) / "session_metadata.json"
         )
         with open(metadata_file, "w") as f:
             json.dump(self.current_session, f, indent=2)
 
-        # Add to session history
         self.session_history.append(self.current_session.copy())
-
         session_id = self.current_session["session_id"]
-        print(f"[DEBUG_LOG] Session ended: {session_id} (duration: {duration:.1f}s)")
+        logger.info(f"session ended: {session_id} (duration: {duration:.1f}s)")
 
         completed_session = self.current_session
         self.current_session = None
-
         return completed_session
 
     def add_device_to_session(
         self, device_id: str, device_type: str, capabilities: List[str]
     ):
-        """
-        Add a device to the current session.
-
-        Args:
-            device_id (str): Unique device identifier
+        """add a device to the current session"""
             device_type (str): Type of device (e.g., "android_phone", "pc_webcam")
             capabilities (List[str]): List of device capabilities
         """
@@ -230,6 +234,125 @@ class SessionManager:
             Dict: Current session info, or None if no active session
         """
         return self.current_session.copy() if self.current_session else None
+
+    def has_hand_segmentation_available(self) -> bool:
+        """
+        Check if hand segmentation functionality is available.
+        
+        Returns:
+            bool: True if hand segmentation can be used
+        """
+        try:
+            import sys
+            import os
+            
+            # Try to import hand segmentation module
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+            from hand_segmentation import SessionPostProcessor
+            return True
+        except ImportError:
+            return False
+    
+    def trigger_post_session_processing(self, 
+                                      session_id: Optional[str] = None,
+                                      enable_hand_segmentation: bool = True,
+                                      segmentation_method: str = "mediapipe") -> Dict[str, any]:
+        """
+        Trigger post-session processing including hand segmentation.
+        
+        Args:
+            session_id: Session to process (defaults to last completed session)
+            enable_hand_segmentation: Whether to run hand segmentation
+            segmentation_method: Method to use for hand segmentation
+            
+        Returns:
+            Dictionary with processing results
+        """
+        results = {
+            'session_id': session_id,
+            'hand_segmentation': {
+                'enabled': enable_hand_segmentation,
+                'available': self.has_hand_segmentation_available(),
+                'success': False,
+                'results': None,
+                'error': None
+            }
+        }
+        
+        if not enable_hand_segmentation:
+            results['hand_segmentation']['success'] = True
+            return results
+            
+        if not self.has_hand_segmentation_available():
+            results['hand_segmentation']['error'] = "Hand segmentation module not available"
+            return results
+        
+        try:
+            import sys
+            import os
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+            from hand_segmentation import create_session_post_processor
+            
+            # Use the same base directory as this session manager
+            processor = create_session_post_processor(str(self.base_recordings_dir))
+            
+            # Determine which session to process
+            target_session = session_id
+            if not target_session:
+                # Use the most recent session if available
+                if self.session_history:
+                    target_session = self.session_history[-1]['session_id']
+                elif self.current_session:
+                    target_session = self.current_session['session_id']
+            
+            if not target_session:
+                results['hand_segmentation']['error'] = "No session found to process"
+                return results
+            
+            # Process the session
+            print(f"[INFO] Starting post-session hand segmentation for: {target_session}")
+            segmentation_results = processor.process_session(
+                target_session, 
+                method=segmentation_method,
+                output_cropped=True,
+                output_masks=True
+            )
+            
+            results['hand_segmentation']['success'] = True
+            results['hand_segmentation']['results'] = segmentation_results
+            
+            # Update session metadata to indicate processing completed
+            self._update_session_post_processing_status(target_session, True)
+            
+            print(f"[INFO] Post-session processing completed for: {target_session}")
+            
+        except Exception as e:
+            error_msg = f"Error in post-session processing: {str(e)}"
+            results['hand_segmentation']['error'] = error_msg
+            print(f"[ERROR] {error_msg}")
+        
+        return results
+    
+    def _update_session_post_processing_status(self, session_id: str, completed: bool):
+        """Update session metadata to track post-processing status."""
+        try:
+            session_folder = self.get_session_folder(session_id)
+            if session_folder:
+                metadata_file = session_folder / "session_metadata.json"
+                if metadata_file.exists():
+                    import json
+                    with open(metadata_file, 'r') as f:
+                        metadata = json.load(f)
+                    
+                    metadata['post_processing'] = {
+                        'hand_segmentation_completed': completed,
+                        'hand_segmentation_timestamp': datetime.now().isoformat() if completed else None
+                    }
+                    
+                    with open(metadata_file, 'w') as f:
+                        json.dump(metadata, f, indent=2)
+        except Exception as e:
+            print(f"[WARNING] Failed to update post-processing status: {e}")
 
     def _update_session_metadata(self):
         """Update session metadata file with current session information."""

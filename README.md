@@ -1,48 +1,307 @@
 # Multi-Sensor Synchronized Recording System
 
-A comprehensive monorepo project combining an **Android mobile app** (Kotlin, Camera2 API, Shimmer sensors, USB thermal camera SDK) with a **Python desktop controller app** (PyQt5 UI, OpenCV for calibration, and socket networking) for synchronized multi-modal data recording.
+A comprehensive research platform that orchestrates synchronized data collection from multiple sensor modalities including smartphone cameras, thermal imaging, USB webcams, and physiological sensors. The system combines an Android mobile application with a Python desktop controller to enable precise temporal synchronization across all data sources for multi-modal research applications.
 
-## 🎯 Project Overview
+## Project Overview
 
-This system enables synchronized recording from multiple data sources:
-- **2 Android smartphones** (Samsung S22) with attached thermal cameras
-- **2 Logitech Brio 4K USB webcams** connected to a Windows PC
-- **Shimmer3 GSR+ physiological sensors** for biometric data
-- **Windows PC controller** acting as the master orchestrator
+This system enables synchronized recording from multiple data sources for research applications, particularly useful for capturing synchronized video, thermal, and physiological data during stimulus presentation experiments:
 
-The system is designed for research applications, particularly for capturing synchronized video, thermal, and physiological data during stimulus presentation experiments.
+- **2 Android smartphones** (Samsung S22) with attached thermal cameras for mobile data collection
+- **2 Logitech Brio 4K USB webcams** connected to a Windows PC for stationary high-quality video capture
+- **Shimmer3 GSR+ physiological sensors** for biometric data collection via Bluetooth
+- **Windows PC controller** acting as the master orchestrator and data synchronization hub
 
-## 🏗️ Architecture
+The architecture provides researchers with a robust platform for multi-modal data collection with microsecond-precision synchronization across all sensors.
+
+## Quick Start
+
+### Prerequisites
+
+- **Java 17 or Java 21** (recommended for optimal compatibility)
+- **Conda/Miniconda** for Python environment management
+- **Android Studio** (Arctic Fox or later) for Android development
+- **Git** for version control
+
+> **Note**: Python installation is **not required** - the setup script automatically installs Miniconda and configures the environment.
+
+### Automated Setup
+
+The project includes automated setup scripts that handle the complete environment configuration:
+
+```bash
+# Complete automated setup (recommended)
+python3 tools/development/setup.py
+
+# Platform-specific setup
+# Windows:
+tools/development/setup_dev_env.ps1
+
+# Linux/macOS:
+tools/development/setup.sh
+```
+
+These scripts automatically install Miniconda, create the conda environment, install all dependencies, configure Android SDK components, and validate the complete build system.
+
+### Quick Build Commands
+
+```bash
+# Activate Python environment
+conda activate thermal-env
+
+# Build entire project
+./gradlew build
+
+# Run desktop application
+./gradlew :PythonApp:runDesktopApp
+
+# Build Android APK
+./gradlew :AndroidApp:assembleDebug
+
+# Run tests
+./gradlew :PythonApp:runPythonTests
+```
+
+## System Architecture
+
+The system employs a distributed architecture where multiple sensor nodes coordinate with a central controller to achieve synchronized data collection across heterogeneous sensor types.
+
+### Complete Data Flow Architecture
+
+```mermaid
+graph TB
+    subgraph "Data Collection Layer"
+        subgraph "Mobile Sensors"
+            A1[Android Device #1<br/>Camera + Thermal + GSR]
+            A2[Android Device #2<br/>Camera + Thermal + GSR]
+        end
+        
+        subgraph "Stationary Sensors"
+            W1[USB Webcam #1<br/>4K Video]
+            W2[USB Webcam #2<br/>4K Video]
+        end
+        
+        subgraph "Physiological Sensors"
+            S1[Shimmer3 GSR+ #1<br/>Bluetooth]
+            S2[Shimmer3 GSR+ #2<br/>Bluetooth]
+        end
+    end
+    
+    subgraph "Processing & Control Layer"
+        PC[PC Controller<br/>Synchronization Master]
+        SYNC[Temporal Synchronization<br/>Engine]
+        CAL[Camera Calibration<br/>System]
+        STIM[Stimulus Presentation<br/>Controller]
+    end
+    
+    subgraph "Data Storage & Analysis"
+        VID[Video Files<br/>MP4 + RAW]
+        THER[Thermal Data<br/>Binary + Metadata]
+        GSR[Physiological Data<br/>CSV + Timestamps]
+        META[Session Metadata<br/>JSON + Logs]
+    end
+    
+    A1 -->|WiFi Socket| PC
+    A2 -->|WiFi Socket| PC
+    S1 -->|Bluetooth| A1
+    S2 -->|Bluetooth| A2
+    W1 -->|USB 3.0| PC
+    W2 -->|USB 3.0| PC
+    
+    PC --> SYNC
+    PC --> CAL
+    PC --> STIM
+    
+    SYNC --> VID
+    SYNC --> THER
+    SYNC --> GSR
+    SYNC --> META
+    
+    CAL -.->|Calibration Data| VID
+    STIM -.->|Event Timing| META
+```
+
+### Hardware Integration Overview
+
+```mermaid
+graph TB
+    subgraph "Multi-Sensor Recording System"
+        subgraph "Hardware Layer"
+            A1[Samsung S22 #1<br/>Camera + Thermal]
+            A2[Samsung S22 #2<br/>Camera + Thermal]
+            W1[Logitech Brio 4K #1]
+            W2[Logitech Brio 4K #2]
+            S1[Shimmer3 GSR+ #1]
+            S2[Shimmer3 GSR+ #2]
+        end
+        
+        subgraph "Android Apps"
+            AA1[Android App #1]
+            AA2[Android App #2]
+        end
+        
+        subgraph "PC Controller"
+            PC[Windows PC<br/>Master Controller]
+            GUI[PyQt5 GUI]
+            CAL[OpenCV Calibration]
+            NET[Socket Network]
+        end
+        
+        A1 --> AA1
+        A2 --> AA2
+        S1 --> AA1
+        S2 --> AA2
+        
+        AA1 -->|WiFi Socket| PC
+        AA2 -->|WiFi Socket| PC
+        W1 -->|USB| PC
+        W2 -->|USB| PC
+        
+        PC --> GUI
+        PC --> CAL
+        PC --> NET
+    end
+```
+
+### Android Application Architecture
+
+```mermaid
+graph TB
+    subgraph "Android App Architecture"
+        subgraph "UI Layer"
+            MA[MainActivity]
+            VM[MainViewModel]
+            UI[UI Components]
+        end
+        
+        subgraph "Recording Layer"
+            CR[CameraRecorder<br/>Camera2 API]
+            TR[ThermalRecorder<br/>Topdon SDK]
+            SR[ShimmerRecorder<br/>Bluetooth]
+            SM[SessionManager]
+        end
+        
+        subgraph "Communication Layer"
+            PCH[PCCommunicationHandler]
+            CM[ConnectionManager]
+            PS[PreviewStreamer]
+        end
+        
+        subgraph "Data Layer"
+            DS[DeviceStatusTracker]
+            SI[SessionInfo]
+            SS[SensorSample]
+        end
+        
+        MA --> VM
+        VM --> CR
+        VM --> TR
+        VM --> SR
+        VM --> SM
+        
+        CR --> PCH
+        TR --> PCH
+        SR --> PCH
+        PCH --> CM
+        
+        CR --> PS
+        PS --> CM
+        
+        CR --> DS
+        TR --> DS
+        SR --> DS
+        
+        SM --> SI
+        SR --> SS
+    end
+```
+
+### PC Application Architecture
+
+```mermaid
+graph TB
+    subgraph "Python Desktop Controller"
+        subgraph "GUI Layer"
+            APP[application.py<br/>Main Entry]
+            UI[PyQt5 Interface]
+            LOG[Logging System]
+        end
+        
+        subgraph "Camera Management"
+            WM[WebcamManager<br/>USB Cameras]
+            CAM[Camera Control]
+            REC[Recording Pipeline]
+        end
+        
+        subgraph "Calibration System"
+            CM[CalibrationManager]
+            CP[CalibrationProcessor]
+            CR[CalibrationResult]
+            CV[OpenCV Algorithms]
+        end
+        
+        subgraph "Network Layer"
+            SM[SessionManager<br/>Socket Server]
+            NCH[NetworkCommunicationHandler]
+            DS[DeviceService]
+        end
+        
+        subgraph "Data Processing"
+            DP[DataProcessor]
+            SYNC[SynchronizationEngine]
+            EXP[DataExporter]
+        end
+        
+        APP --> UI
+        APP --> LOG
+        UI --> WM
+        UI --> CM
+        UI --> SM
+        
+        WM --> CAM
+        CAM --> REC
+        
+        CM --> CP
+        CP --> CR
+        CM --> CV
+        
+        SM --> NCH
+        NCH --> DS
+        
+        REC --> DP
+        DP --> SYNC
+        SYNC --> EXP
+    end
+```
 
 ### Monorepo Structure
 ```
 project-root/
-├── settings.gradle              # Gradle settings: includes both modules
-├── build.gradle                 # Root Gradle build configuration
-├── .gitmodules                  # Git submodules configuration
-├── gradle/wrapper/              # Gradle Wrapper files
-├── gradlew & gradlew.bat        # Gradle wrapper scripts
-├── AndroidApp/                  # Android app module (Kotlin + Camera2, Shimmer, etc.)
-│   ├── build.gradle             # Android module build configuration
-│   ├── src/main/                # Android source code
-│   │   ├── AndroidManifest.xml  # Android app manifest
-│   │   ├── java/...             # Kotlin source packages
-│   │   └── res/...              # Android resources
-├── PythonApp/                   # Python desktop app module (PyQt5, OpenCV)
-│   ├── build.gradle             # Python module build configuration
-│   ├── src/                     # Python source files
-│   │   └── main.py              # Entry-point script for PyQt5 app
-├── external/                    # External dependencies (Git submodules)
-│   ├── IRCamera/                # Thermal camera library (submodule)
-│   ├── psychopy/                # PsychoPy library (submodule)
-│   ├── pyshimmer/               # Python Shimmer SDK (submodule)
-│   ├── Shimmer-Java-Android-API/ # Android Shimmer SDK (submodule)
-│   ├── topdon-sdk/              # Topdon thermal camera SDK (submodule)
-│   └── TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3/ # Legacy Topdon SDK (local directory)
-├── docs/                        # Project documentation
-├── changelog.md                 # Project changelog
-├── todo.md                      # Task tracking
-└── .gitignore                   # Git ignore file
+├── settings.gradle              # gradle settings: includes both modules
+├── build.gradle                 # root gradle build configuration
+├── .gitmodules                  # git submodules configuration
+├── gradle/wrapper/              # gradle wrapper files
+├── gradlew & gradlew.bat        # gradle wrapper scripts
+├── AndroidApp/                  # android app module (kotlin + camera2, shimmer, etc.)
+│   ├── build.gradle             # android module build configuration
+│   ├── src/main/                # android source code
+│   │   ├── AndroidManifest.xml  # android app manifest
+│   │   ├── java/...             # kotlin source packages
+│   │   └── res/...              # android resources
+├── PythonApp/                   # python desktop app module (pyqt5, opencv)
+│   ├── build.gradle             # python module build configuration
+│   ├── src/                     # python source files
+│   │   └── main.py              # entry-point script for pyqt5 app
+├── external/                    # external dependencies (git submodules)
+│   ├── IRCamera/                # thermal camera library (submodule)
+│   ├── psychopy/                # psychopy library (submodule)
+│   ├── pyshimmer/               # python shimmer sdk (submodule)
+│   ├── Shimmer-Java-Android-API/ # android shimmer sdk (submodule)
+│   ├── topdon-sdk/              # topdon thermal camera sdk (submodule)
+│   └── TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3/ # legacy topdon sdk (local directory)
+├── docs/                        # project documentation
+├── changelog.md                 # project changelog
+├── todo.md                      # task tracking
+└── .gitignore                   # git ignore file
 ```
 
 ### Git Submodules
@@ -58,6 +317,199 @@ This project uses Git submodules to manage external dependencies from GitHub rep
 | `external/topdon-sdk` | [buccancs/topdon-sdk](https://github.com/buccancs/topdon-sdk.git) | Topdon thermal camera SDK |
 
 **Note**: The `TOPDON_EXAMPLE_SDK_USB_IR_1.3.7 3` directory contains legacy proprietary SDK files and remains as a local directory.
+
+### Synchronization Flow
+
+```mermaid
+sequenceDiagram
+    participant PC as PC Controller
+    participant A1 as Android App #1
+    participant A2 as Android App #2
+    participant S1 as Shimmer3 #1
+    participant S2 as Shimmer3 #2
+    
+    PC->>A1: Connect Socket
+    PC->>A2: Connect Socket
+    A1->>S1: Bluetooth Connect
+    A2->>S2: Bluetooth Connect
+    
+    PC->>A1: Sync Clock Request
+    PC->>A2: Sync Clock Request
+    A1->>PC: Clock Response
+    A2->>PC: Clock Response
+    
+    PC->>A1: Start Recording
+    PC->>A2: Start Recording
+    
+    par Recording Phase
+        A1->>S1: Start GSR Recording
+        A1->>A1: Start Camera Recording
+        A1->>A1: Start Thermal Recording
+    and
+        A2->>S2: Start GSR Recording
+        A2->>A2: Start Camera Recording
+        A2->>A2: Start Thermal Recording
+    and
+        PC->>PC: Start USB Webcam Recording
+    end
+    
+    loop Data Streaming
+        A1->>PC: Preview Stream + Status
+        A2->>PC: Preview Stream + Status
+        S1->>A1: GSR Data
+        S2->>A2: GSR Data
+    end
+    
+    PC->>A1: Stop Recording
+    PC->>A2: Stop Recording
+    A1->>S1: Stop GSR Recording
+    A2->>S2: Stop GSR Recording
+```
+
+### Networking Architecture
+
+```mermaid
+graph TB
+    subgraph "Network Communication"
+        subgraph "PC Controller (Server)"
+            SS[Socket Server<br/>Port 8080]
+            SH[Session Handler]
+            CM[Command Manager]
+            DS[Data Synchronizer]
+        end
+        
+        subgraph "Android Device #1"
+            SC1[Socket Client]
+            PCH1[PC Communication Handler]
+            PS1[Preview Streamer<br/>Port 8081]
+        end
+        
+        subgraph "Android Device #2"
+            SC2[Socket Client]
+            PCH2[PC Communication Handler]
+            PS2[Preview Streamer<br/>Port 8082]
+        end
+        
+        subgraph "WiFi Network"
+            WIFI[192.168.1.x Network]
+        end
+        
+        SS -->|Command Channel| SC1
+        SS -->|Command Channel| SC2
+        PS1 -->|Preview Stream| SS
+        PS2 -->|Preview Stream| SS
+        
+        SC1 -.->|WiFi| WIFI
+        SC2 -.->|WiFi| WIFI
+        SS -.->|WiFi| WIFI
+        
+        SH --> CM
+        CM --> DS
+        PCH1 --> PS1
+        PCH2 --> PS2
+    end
+```
+
+### Data Collection Flow
+
+```mermaid
+flowchart TD
+    START([Recording Session Start])
+    
+    subgraph "Data Sources"
+        A1[Android #1<br/>Camera + Thermal]
+        A2[Android #2<br/>Camera + Thermal]
+        S1[Shimmer3 #1<br/>GSR Data]
+        S2[Shimmer3 #2<br/>GSR Data]
+        W1[USB Webcam #1]
+        W2[USB Webcam #2]
+    end
+    
+    subgraph "Data Processing"
+        SYNC[Synchronization Engine]
+        PROC[Data Processor]
+        CAL[Calibration System]
+    end
+    
+    subgraph "Data Storage"
+        VID[Video Files<br/>MP4 + RAW]
+        THER[Thermal Data<br/>Binary Format]
+        GSR[GSR Data<br/>CSV/JSON]
+        META[Metadata<br/>Session Info]
+    end
+    
+    START --> A1
+    START --> A2
+    START --> W1
+    START --> W2
+    
+    A1 --> S1
+    A2 --> S2
+    
+    A1 --> SYNC
+    A2 --> SYNC
+    S1 --> SYNC
+    S2 --> SYNC
+    W1 --> SYNC
+    W2 --> SYNC
+    
+    SYNC --> PROC
+    PROC --> CAL
+    
+    CAL --> VID
+    CAL --> THER
+    CAL --> GSR
+    CAL --> META
+```
+
+### Individual Sensor Integration
+
+```mermaid
+graph LR
+    subgraph "Shimmer3 GSR+ Integration"
+        SHIMMER[Shimmer3 Device]
+        BLE[Bluetooth LE]
+        SDK[Shimmer Android SDK]
+        GSR[GSR Data Processing]
+        
+        SHIMMER -->|Bluetooth| BLE
+        BLE --> SDK
+        SDK --> GSR
+    end
+    
+    subgraph "Thermal Camera Integration"
+        TOPDON[Topdon Thermal Camera]
+        USB_C[USB-C Connection]
+        TSDK[Topdon SDK]
+        THERMAL[Thermal Image Processing]
+        
+        TOPDON -->|USB-C| USB_C
+        USB_C --> TSDK
+        TSDK --> THERMAL
+    end
+    
+    subgraph "Camera2 Integration"
+        CAM[Samsung S22 Camera]
+        CAM2[Camera2 API]
+        VID[Video Recording]
+        RAW[RAW Image Capture]
+        
+        CAM --> CAM2
+        CAM2 --> VID
+        CAM2 --> RAW
+    end
+    
+    subgraph "USB Webcam Integration"
+        WEBCAM[Logitech Brio 4K]
+        USB[USB 3.0]
+        OPENCV[OpenCV Capture]
+        STREAM[Video Stream]
+        
+        WEBCAM -->|USB 3.0| USB
+        USB --> OPENCV
+        OPENCV --> STREAM
+    end
+```
 
 #### Working with Submodules
 
@@ -76,413 +528,159 @@ git submodule update --remote
 git submodule update --remote external/psychopy
 ```
 
-## 🚀 Quick Start (Milestone 5 Enhanced)
-
-### Prerequisites
-
-1. **Java 17 or Java 21** (recommended for best compatibility)
-   - ⚠️ **Important**: Java 24 may cause compatibility issues with Gradle 8.11
-   - Download from [Eclipse Temurin](https://adoptium.net/) or [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
-
-2. **Android Studio** (Arctic Fox or later)
-   - Download from [developer.android.com](https://developer.android.com/studio)
-   - Ensure Android SDK is properly configured
-   - Set `ANDROID_HOME` environment variable
-
-3. **Git** for version control
-
-4. **Internet connection** (for Miniconda and dependency downloads)
-
-> **Note**: Python installation is **no longer required** - the setup script will install Miniconda automatically!
-
-### 🎯 One-Command Setup (Milestone 5.1)
-
-**Enhanced Environment Bootstrapping Script:**
-```powershell
-# Complete automated setup (installs Miniconda, creates conda env, configures everything)
-.\setup_dev_env.ps1
-
-# Force reinstall everything (useful for clean setup)
-.\setup_dev_env.ps1 -ForceReinstall
-
-# Skip build validation for faster setup
-.\setup_dev_env.ps1 -SkipValidation
-
-# Verbose output for troubleshooting
-.\setup_dev_env.ps1 -Verbose
-```
-
-This script automatically:
-- ✅ Installs Miniconda (if not present)
-- ✅ Creates conda environment from `environment.yml`
-- ✅ Installs all Python dependencies (PyQt5, OpenCV, etc.)
-- ✅ Configures Android SDK components
-- ✅ Sets up Gradle wrapper
-- ✅ Tests the complete build system
-
-### 🔧 Build Automation (Milestone 5.1)
-
-**New Gradle Tasks:**
-```powershell
-# Build everything (Android APK + Python tests)
-.\gradlew assembleAll
-
-# Setup/update conda environment
-.\gradlew setupPythonEnv
-
-# Run code quality checks (Android lint + Python flake8)
-.\gradlew codeQuality
-
-# Build release versions of both apps
-.\gradlew buildRelease
-
-# Package Python app as executable
-.\gradlew pythonPackage
-
-# Run Python tests only
-.\gradlew pythonTest
-
-# Run Python linting only
-.\gradlew pythonLint
-```
-
-### 🐍 Python Environment (Conda-based)
-
-The project now uses **Conda** for Python dependency management:
-
-```powershell
-# Activate the conda environment
-conda activate thermal-env
-
-# Verify environment
-conda list
-
-# Update environment from environment.yml
-conda env update -f environment.yml
-```
-
-### 📱 IDE Setup
-
-**Android Studio:**
-1. Open Android Studio
-2. Choose "Open an existing project"
-3. Select the `AndroidApp` folder
-4. Wait for Gradle sync to complete
-
-**Python IDE (PyCharm/VSCode):**
-1. Open the project root directory
-2. Set Python interpreter to: `%USERPROFILE%\Miniconda3\envs\thermal-env\python.exe`
-3. Mark `PythonApp/src` as Sources Root
-
-## 🔄 CI/CD Pipeline (Milestone 5.2)
-
-The project includes a comprehensive GitHub Actions CI/CD pipeline with:
-
-### ✅ Automated Testing
-- **Path-based job filtering** - Only runs relevant tests when files change
-- **Matrix builds** - Tests across multiple OS and environments
-- **Conda environment setup** - Uses the same environment.yml as development
-- **Quality gates** - Code must pass linting and tests to merge
-
-### 🚀 Build Automation
-- **Android CI**: Build APK, run unit tests, lint checks
-- **Python CI**: Conda environment, pytest, flake8, mypy
-- **Integration testing**: End-to-end build validation
-- **Security scanning**: Trivy vulnerability scanner
-
-### 📦 Release Automation
-- **Automatic releases** on main branch pushes
-- **Multi-platform artifacts**: Android APK + Windows Python executable
-- **Signed APKs** (when keystore secrets are configured)
-- **Release notes** with build information
-
-### 🔧 CI Status Badges
-![CI Status](https://github.com/yourorg/yourrepo/workflows/CI%2FCD%20Pipeline/badge.svg)
-
-## 👥 Team Workflow (Milestone 5.1)
-
-### Branching Strategy
-- **Main branch**: Production-ready code
-- **Develop branch**: Integration branch for features
-- **Feature branches**: `feature/description` for individual tasks
-- **Pull requests**: Required for all changes with code review
-
-### Development Process
-1. Create feature branch from develop
-2. Make changes and test locally with `.\gradlew assembleAll`
-3. Push changes - CI automatically runs tests
-4. Create pull request to develop branch
-5. Code review and CI checks must pass
-6. Merge to develop, then to main for releases
-
-### Code Quality Standards
-- **Android**: Ktlint formatting, Android Lint checks
-- **Python**: Black formatting, flake8 linting, mypy type checking
-- **Pre-commit hooks**: Optional but recommended
-- **Test coverage**: Aim for comprehensive test coverage
-
-### Build Validation
-
-After setup, validate your build environment:
-
-```powershell
-# Full validation with tests
-.\scripts\validate-build.ps1
-
-# Quick validation without tests
-.\scripts\validate-build.ps1 -SkipTests
-
-# Verbose output for debugging
-.\scripts\validate-build.ps1 -Verbose
-```
-
-## 🔧 Development Workflow
+## Development Workflow
 
 ### Build Commands
 
-**Complete Project Build:**
+The project uses Gradle as the primary build system with support for both Android and Python components:
+
 ```bash
 # Build entire project (Android + Python)
-.\gradlew build
+./gradlew build
 
-# Clean and rebuild
-.\gradlew clean build
-```
+# Clean and rebuild everything
+./gradlew clean build
 
-**Android App Development:**
-```bash
-# Build debug APK
-.\gradlew AndroidApp:assembleDebug
+# Build specific components
+./gradlew AndroidApp:assembleDebug      # Android debug APK
+./gradlew AndroidApp:assembleRelease    # Android release APK
+./gradlew AndroidApp:installDebug       # Install on connected device
 
-# Build release APK
-.\gradlew AndroidApp:assembleRelease
-
-# Install on connected device
-.\gradlew AndroidApp:installDebug
-
-# Build all variants
-.\gradlew AndroidApp:assemble
-```
-
-**Python Desktop App:**
-```bash
-# Install Python dependencies
-.\gradlew PythonApp:pipInstall
-
-# Run desktop controller app
-.\gradlew PythonApp:runDesktopApp
-
-# Run calibration routines
-.\gradlew PythonApp:runCalibration
-
-# Test Python environment
-.\gradlew PythonApp:testPythonSetup
+# Python environment management
+./gradlew PythonApp:pipInstall          # Install Python dependencies
+./gradlew PythonApp:runDesktopApp       # Run desktop controller
+./gradlew PythonApp:runCalibration      # Run calibration routines
 ```
 
 ### Testing Commands
 
-**Android Testing:**
 ```bash
-# Run unit tests
-.\gradlew AndroidApp:testDebugUnitTest
+# Android testing
+./gradlew AndroidApp:testDebugUnitTest         # Unit tests
+./gradlew AndroidApp:connectedDebugAndroidTest # Integration tests (requires device)
+./gradlew AndroidApp:lintDebug                 # Lint checks
 
-# Run integration tests (requires emulator/device)
-.\gradlew AndroidApp:connectedDebugAndroidTest
-
-# Run lint checks
-.\gradlew AndroidApp:lintDebug
-
-# Generate test coverage report
-.\gradlew AndroidApp:testDebugUnitTestCoverage
+# Python testing  
+./gradlew PythonApp:runPythonTests             # Python unit tests
+./gradlew PythonApp:runPythonTestsWithCoverage # Tests with coverage
+./gradlew PythonApp:runPythonLinting           # Code quality checks
+./gradlew PythonApp:formatPythonCode           # Format code
 ```
 
-**Python Testing:**
+### Build Variants
+
+The Android app supports multiple build configurations for different environments:
+
+- **Debug**: Development build with debugging enabled
+- **Release**: Production build with optimizations  
+- **Staging**: Pre-production build for testing
+
+Example commands for specific variants:
 ```bash
-# Run Python unit tests
-.\gradlew PythonApp:runPythonTests
-
-# Run tests with coverage
-.\gradlew PythonApp:runPythonTestsWithCoverage
-
-# Run code quality checks
-.\gradlew PythonApp:runPythonLinting
-
-# Run type checking
-.\gradlew PythonApp:runPythonTypeCheck
-
-# Format code
-.\gradlew PythonApp:formatPythonCode
+./gradlew AndroidApp:assembleDevDebug
+./gradlew AndroidApp:assembleProdRelease
+./gradlew AndroidApp:testDevDebugUnitTest
 ```
 
-### Build Variants & Flavors
+## Technology Stack
 
-The Android app supports multiple build configurations:
+### Android Application (Kotlin)
+- **Language**: Kotlin with Android Views and ViewBinding
+- **Camera**: Camera2 API for 4K recording and RAW capture
+- **Networking**: OkHttp for socket communication
+- **Dependency Injection**: Hilt
+- **Concurrency**: Kotlin Coroutines
+- **Architecture**: Clean Architecture with Repository pattern
 
-**Build Types:**
-- `debug` - Development build with debugging enabled
-- `release` - Production build with optimizations
-- `staging` - Pre-production build for testing
+### Python Desktop Application
+- **Language**: Python 3.8+ with PyQt5 5.15.7 for GUI
+- **Computer Vision**: OpenCV 4.8.0.74 for camera calibration and processing
+- **Numerical Computing**: NumPy 1.24.3 for data processing
+- **Networking**: WebSockets and Requests for communication
+- **Image Processing**: Pillow for image manipulation
 
-**Product Flavors:**
-- `dev` - Development environment configuration
-- `prod` - Production environment configuration
+### Build System
+- **Primary Build Tool**: Gradle 8.4 with multi-project setup
+- **Android Plugin**: 8.1.2 for Android development
+- **Python Integration**: ru.vyarus.use-python plugin 3.0.0 for Python environment management
 
-**Example Commands:**
+## Key Features
+
+### Android Application Features
+- 4K RGB video recording with simultaneous RAW image capture
+- Thermal camera integration using Topdon SDK for thermal imaging
+- Shimmer3 GSR+ sensor communication via Bluetooth for physiological data
+- Real-time preview streaming to PC controller for monitoring
+- Socket-based remote control interface for synchronized operation
+- Local data storage with comprehensive session management
+
+### Desktop Controller Features  
+- PyQt5 GUI with real-time device status monitoring across all sensors
+- Comprehensive recording control interface with start/stop/calibration functions
+- USB webcam capture and recording for stationary high-quality video
+- Advanced camera calibration algorithms for intrinsic and extrinsic parameters
+- Stimulus presentation system for controlled experimental paradigms
+- Data synchronization and export tools for multi-modal data analysis
+
+## Configuration
+
+### Python Environment
+The Python environment uses Conda for dependency management. Dependencies are automatically configured through the setup scripts, but can also be managed manually:
+
 ```bash
-# Build specific variant
-.\gradlew AndroidApp:assembleDevDebug
-.\gradlew AndroidApp:assembleProdRelease
+# Activate the conda environment
+conda activate thermal-env
 
-# Test specific variant
-.\gradlew AndroidApp:testDevDebugUnitTest
+# Update environment from environment.yml
+conda env update -f environment.yml
+
+# Verify installation
+conda list
 ```
 
-### CI/CD Pipeline
+### Android Configuration
+Key Android build settings:
+- **Compile SDK**: 34 (Android 14)
+- **Min SDK**: 24 (Android 7.0) 
+- **Target SDK**: 34 (Android 14)
+- **Namespace**: `com.multisensor.recording`
 
-The project includes a comprehensive GitHub Actions pipeline:
-
-**Automated Workflows:**
-- **Android Build & Test** - Builds APK and runs unit tests
-- **Android Integration Tests** - Runs UI tests on emulator
-- **Python Cross-Platform Tests** - Tests on Windows, macOS, Linux
-- **Build Validation** - Comprehensive environment validation
-- **Security Scanning** - Vulnerability detection
-- **Automated Releases** - Creates releases on main branch
-
-**Pipeline Configuration:** `.github/workflows/ci-cd.yml`
-
-**Local Pipeline Testing:**
-```bash
-# Run same validations as CI
-.\scripts\validate-build.ps1
-
-# Test specific components
-.\scripts\validate-build.ps1 -SkipTests
-```
-
-## 🔧 Troubleshooting Guide
+## Troubleshooting
 
 ### Common Issues and Solutions
 
-#### Java Version Issues
+**Java Version Compatibility**
+- Use Java 17 or Java 21 for optimal compatibility
+- Java 24 may cause issues with Gradle 8.4
+- Set `JAVA_HOME` environment variable correctly
 
-**Problem:** Build fails with "Unsupported class file major version" error
-```
-Solution: Use Java 17 or Java 21 instead of Java 24
-1. Download Java 17 from Eclipse Temurin
-2. Set JAVA_HOME environment variable
-3. Update PATH to point to correct Java version
-4. Verify: java -version
-```
+**Python Environment Issues**  
+- Ensure Python 3.8+ is available
+- Use the automated setup scripts for conda environment creation
+- Check that all dependencies are installed with `conda list`
 
-**Problem:** Gradle daemon issues with Java version
-```
-Solution: Stop Gradle daemon and restart
-.\gradlew --stop
-.\gradlew build
-```
+**Android Build Issues**
+- Ensure Android SDK is properly configured
+- Set `ANDROID_HOME` or `ANDROID_SDK_ROOT` environment variable
+- Verify required Android SDK components are installed
 
-#### Python Environment Issues
-
-**Problem:** Python dependencies installation fails
-```
-Solution: Check Python version and pip
-1. Verify Python 3.8+: python --version
-2. Update pip: python -m pip install --upgrade pip
-3. Clear pip cache: pip cache purge
-4. Retry: .\gradlew PythonApp:pipInstall
-```
-
-**Problem:** PyQt5 installation fails on Windows
-```
-Solution: Install Visual C++ redistributables
-1. Download Microsoft Visual C++ Redistributable
-2. Install and restart
-3. Retry PyQt5 installation
-```
-
-#### Android Build Issues
-
-**Problem:** Android SDK not found
-```
-Solution: Set Android SDK environment variables
-1. Install Android Studio
-2. Set ANDROID_HOME or ANDROID_SDK_ROOT
-3. Add SDK tools to PATH
-4. Verify: .\scripts\validate-build.ps1
-```
-
-**Problem:** Gradle sync fails in Android Studio
-```
-Solution: Clear caches and restart
-1. File > Invalidate Caches and Restart
-2. Delete .gradle folder in project root
-3. Restart Android Studio
-4. Sync project
-```
-
-#### Build Validation Failures
-
-**Problem:** Build validation script fails
-```
-Solution: Run with verbose output for debugging
-.\scripts\validate-build.ps1 -Verbose
-Check build-validation.log for detailed errors
-```
-
-**Problem:** Tests fail during validation
-```
-Solution: Run tests individually to isolate issues
-.\gradlew AndroidApp:testDebugUnitTest --info
-.\gradlew PythonApp:runPythonTests --stacktrace
-```
-
-### Performance Optimization
-
-#### Gradle Build Performance
+**Build Validation**
+Run the validation script for comprehensive environment checking:
 ```bash
-# Enable parallel builds
-echo "org.gradle.parallel=true" >> gradle.properties
-
-# Increase memory allocation
-echo "org.gradle.jvmargs=-Xmx4g" >> gradle.properties
-
-# Enable build cache
-echo "org.gradle.caching=true" >> gradle.properties
+./scripts/validate-build.ps1 -Verbose
 ```
 
-#### Android Studio Performance
-```
-1. Increase IDE memory: Help > Edit Custom VM Options
-   -Xmx4g
-2. Enable offline mode: File > Settings > Build > Gradle
-3. Disable unnecessary plugins
-```
+## Documentation
 
-### Environment Verification Commands
+### Architecture and Implementation
+- **Architecture Details**: See `docs/architecture/` for detailed system design
+- **API Documentation**: Generated docs available in `docs/generated_docs/`
+- **Development Guidelines**: See `docs/development/` for coding standards
 
-```bash
-# Quick environment check
-java -version
-python --version
-.\gradlew --version
-
-# Comprehensive validation
-.\scripts\validate-build.ps1
-
-# Test specific components
-.\gradlew AndroidApp:assembleDebug --dry-run
-.\gradlew PythonApp:testPythonSetup
-```
-
-### Getting Help
-
-1. **Check build logs:** Look for detailed error messages in console output
-2. **Run validation:** Use `.\scripts\validate-build.ps1 -Verbose` for detailed diagnostics
-3. **Check documentation:** Review `docs/` folder for architecture details
-4. **GitHub Issues:** Report bugs with full error logs and environment details
-
-## 🛠️ Technology Stack
+### Data Management
+- **[Data Storage Guide](docs/DATA_STORAGE_QUICK_REFERENCE.md)**: Quick reference for data organization
+- **[Data Structure Documentation](docs/DATA_STRUCTURE_DOCUMENTATION.md)**: Complete technical documentation
+- **[File Naming Standards](docs/FILE_NAMING_STANDARDS.md)**: Naming conventions for consistency
 
 ### Android App (Kotlin)
 - **Language:** Kotlin
@@ -565,89 +763,33 @@ Key Android settings in `AndroidApp/build.gradle`:
 
 ### Running Tests
 ```bash
-# Android unit tests
-./gradlew :AndroidApp:test
+# Validate recorded sessions
+python tools/validate_data_schemas.py --all-sessions
 
-# Android instrumented tests
-./gradlew :AndroidApp:connectedAndroidTest
-
-# Python environment test
-./gradlew :PythonApp:testPythonSetup
+# Check specific session  
+python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
 ```
 
-## 📋 Development Guidelines
+## Contributing
 
-### Code Style
-- **Kotlin:** Follow official Kotlin coding conventions
-- **Python:** Follow PEP 8 style guide
-- **Comments:** Minimal commenting, focus on self-documenting code
-- **Cognitive Complexity:** Keep under 15 per function
+We welcome contributions to improve the multi-sensor recording system:
 
-### Git Workflow
-- Use feature branches for new development
-- Update `changelog.md` for all significant changes
-- Update `todo.md` for incomplete work or future ideas
-- Keep commits atomic and well-described
+1. Fork the repository and create a feature branch
+2. Make your changes following the established coding standards
+3. Update documentation as needed for any new features
+4. Ensure all tests pass and add new tests for new functionality
+5. Submit a pull request with a clear description of changes
 
-### Documentation
-- Always maintain up-to-date documentation
-- Generate Mermaid diagrams for architectural changes
-- Update README.md for setup or workflow changes
+### Development Standards
+- **Kotlin**: Follow official Kotlin coding conventions
+- **Python**: Adhere to PEP 8 style guidelines  
+- **Git**: Use descriptive commit messages and feature branches
+- **Documentation**: Keep README and docs up-to-date with changes
 
-## 🚨 Troubleshooting
+## License
 
-### Common Issues
+This project is licensed under the MIT License. See the LICENSE file for complete details.
 
-**Gradle Sync Fails:**
-- Ensure Python is installed and in PATH
-- Check internet connection for dependency downloads
-- Try `./gradlew clean` and sync again
+## Acknowledgments
 
-**Python Module Import Errors:**
-- Run `./gradlew :PythonApp:pipInstall` to install dependencies
-- Verify Python version is 3.8 or higher
-- Check that virtual environment is created in `.gradle/python/`
-
-**Android Build Errors:**
-- Ensure Android SDK is properly configured
-- Check that `local.properties` points to correct SDK location
-- Verify all required Android SDK components are installed
-
-**IDE Integration Issues:**
-- Install Python plugin in Android Studio
-- Ignore "No Python interpreter" warnings (expected)
-- Use Gradle tasks to run Python code instead of IDE run configurations
-
-## 📚 Documentation
-
-- **Architecture:** See `docs/markdown/architecture.md`
-- **Milestones:** See `docs/markdown/` for detailed implementation guides
-- **Changelog:** See `changelog.md` for version history
-- **TODO:** See `todo.md` for pending tasks and future work
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Update documentation as needed
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Built for multi-sensor research applications
-- Inspired by modern Android development practices
-- Leverages proven Python scientific computing stack
-- Designed for Windows development environments
-
----
-
-**Status:** Milestone 1 Complete ✅  
-**Next:** Milestone 2.1 - Android Application Implementation  
-**Last Updated:** 2025-07-28
+This multi-sensor recording system is designed for advanced research applications requiring precise temporal synchronization across diverse sensor modalities. The architecture leverages modern Android development practices and the proven Python scientific computing ecosystem to provide a robust platform for multi-modal data collection in experimental research environments.

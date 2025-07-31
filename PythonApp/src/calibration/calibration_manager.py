@@ -20,6 +20,12 @@ from typing import Dict, List, Optional, Any
 from .calibration_processor import CalibrationProcessor
 from .calibration_result import CalibrationResult
 
+# Import centralized logging
+from utils.logging_config import get_logger
+
+# Get logger for this module
+logger = get_logger(__name__)
+
 
 class CalibrationManager:
     """
@@ -34,6 +40,8 @@ class CalibrationManager:
     """
 
     def __init__(self, output_dir: str = "calibration_data"):
+        self.logger = get_logger(__name__)
+        self.logger.info(f"for initialized")
         """
         Initialize calibration manager.
 
@@ -62,9 +70,8 @@ class CalibrationManager:
         self.is_capturing = False
         self.capture_count = {}  # device_id -> count
 
-        print(
-            f"[DEBUG_LOG] CalibrationManager initialized with output directory: {self.output_dir}"
-        )
+        logger.info(f"CalibrationManager initialized with output directory: {self.output_dir}")
+        logger.debug(f"Pattern: {self.pattern_type}, Size: {self.chessboard_size}, Square: {self.square_size}mm")
 
     def start_calibration_session(
         self, device_ids: List[str], session_name: str = None
@@ -79,7 +86,10 @@ class CalibrationManager:
         Returns:
             Dict: Session information
         """
+        logger.info(f"Starting calibration session for devices: {device_ids}")
+        
         if self.is_capturing:
+            logger.error("Attempted to start calibration session while another is in progress")
             raise RuntimeError("Calibration session already in progress")
 
         # Generate session info
@@ -89,6 +99,7 @@ class CalibrationManager:
 
         session_folder = self.output_dir / session_name
         session_folder.mkdir(parents=True, exist_ok=True)
+        logger.debug(f"Created session folder: {session_folder}")
 
         self.current_session = {
             "session_name": session_name,

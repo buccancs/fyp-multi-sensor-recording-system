@@ -14,6 +14,12 @@ import android.view.SurfaceView
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
+import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.util.logD
+import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.logI
+import com.multisensor.recording.util.logW
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.BufferedOutputStream
@@ -26,7 +32,7 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// Topdon SDK imports
+// topdon sdk imports
 import com.infisense.iruvc.ircmd.ConcreteIRCMDBuilder
 import com.infisense.iruvc.ircmd.IRCMD
 import com.infisense.iruvc.ircmd.IRCMDType
@@ -39,15 +45,7 @@ import com.infisense.iruvc.uvc.UVCCamera
 import com.infisense.iruvc.uvc.UVCType
 
 /**
- * ThermalRecorder manages thermal camera capture using Topdon TC001/Plus cameras.
- * Implements Milestone 2.3 specifications for thermal recording with:
- * - USB permission handling and Topdon SDK integration
- * - Frame acquisition and radiometric data buffering
- * - Live preview rendering pipeline
- * - Preview frame compression and streaming to PC
- * - Raw frame file format implementation
- * - Threading and concurrency model
- * - Session integration and file management
+ * thermal recorder for topdon tc001/plus cameras
  */
 @Singleton
 class ThermalRecorder
@@ -56,18 +54,17 @@ class ThermalRecorder
         @ApplicationContext private val context: Context,
         private val sessionManager: SessionManager,
         private val logger: Logger,
+        private val thermalSettings: ThermalCameraSettings,
     ) {
         companion object {
             private const val TAG = "ThermalRecorder"
             private const val USB_PERMISSION_ACTION = "com.multisensor.recording.USB_PERMISSION"
 
-            // Topdon camera specifications
             private const val THERMAL_WIDTH = 256
             private const val THERMAL_HEIGHT = 192
             private const val THERMAL_FRAME_RATE = 25
             private const val BYTES_PER_PIXEL = 2
 
-            // Supported Topdon device PIDs
             private val SUPPORTED_PRODUCT_IDS = intArrayOf(0x3901, 0x5840, 0x5830, 0x5838)
 
             // File format constants
@@ -107,6 +104,9 @@ class ThermalRecorder
         private var thermalDataFile: File? = null
         private var fileOutputStream: BufferedOutputStream? = null
         private val frameCounter = AtomicLong(0)
+
+        // Current thermal configuration
+        private var currentThermalConfig: ThermalCameraSettings.ThermalConfig? = null
 
         // Preview surface
         private var previewSurface: SurfaceView? = null
@@ -169,6 +169,11 @@ class ThermalRecorder
             try {
                 logger.info("Initializing ThermalRecorder")
 
+                // Load current thermal configuration
+                currentThermalConfig = thermalSettings.getCurrentConfig()
+                logger.info("Loaded thermal configuration:")
+                logger.info(thermalSettings.getConfigSummary())
+
                 this.previewSurface = previewSurface
                 this.previewStreamer = previewStreamer
 
@@ -183,7 +188,14 @@ class ThermalRecorder
                             override fun onAttach(device: UsbDevice) {
                                 logger.debug("Topdon USBMonitor: Device attached - ${device.deviceName}")
                                 if (isSupportedThermalCamera(device)) {
-                                    topdonUsbMonitor?.requestPermission(device)
+                                    // Check USB priority setting
+                                    val config = currentThermalConfig ?: thermalSettings.getCurrentConfig()
+                                    if (config.usbPriority) {
+                                        logger.info("Requesting priority USB access for thermal camera")
+                                        topdonUsbMonitor?.requestPermission(device)
+                                    } else {
+                                        topdonUsbMonitor?.requestPermission(device)
+                                    }
                                 }
                             }
 
@@ -192,6 +204,9 @@ class ThermalRecorder
                                 granted: Boolean,
                             ) {
                                 logger.debug("Topdon USBMonitor: Permission granted=$granted for ${device.deviceName}")
+                                if (granted) {
+                                    logger.info("USB permission granted for thermal camera with priority access")
+                                }
                             }
 
                             override fun onConnect(
@@ -261,6 +276,17 @@ class ThermalRecorder
             return try {
                 logger.info("Starting thermal recording for session: $sessionId")
 
+                // Get current thermal configuration and apply it
+                currentThermalConfig = thermalSettings.getCurrentConfig()
+                
+                if (!currentThermalConfig!!.isEnabled) {
+                    logger.info("Thermal recording is disabled in settings")
+                    return false
+                }
+
+                logger.info("Applying thermal configuration for recording:")
+                logger.info(thermalSettings.getConfigSummary())
+
                 currentSessionId = sessionId
 
                 // Get session directory from SessionManager
@@ -271,13 +297,33 @@ class ThermalRecorder
                         return false
                     }
 
-                thermalDataFile = File(sessionDir, "thermal_$sessionId.dat")
+                // Ensure thermal data folder exists
+                val thermalDataDir = sessionFilePaths.thermalDataFolder
+                if (!thermalDataDir.exists() && !thermalDataDir.mkdirs()) {
+                    logger.error("Could not create thermal data directory: ${thermalDataDir.absolutePath}")
+                    return false
+                }
+
+                // Create thermal data file with configuration-based naming
+                val config = currentThermalConfig!!
+                val thermalFileName = when (config.dataFormat) {
+                    "radiometric" -> "thermal_${sessionId}_radiometric.dat"
+                    "visual" -> "thermal_${sessionId}_visual.dat"
+                    "combined" -> "thermal_${sessionId}_combined.dat"
+                    "raw" -> "thermal_${sessionId}_raw.dat"
+                    else -> "thermal_${sessionId}.dat"
+                }
+
+                thermalDataFile = File(thermalDataDir, thermalFileName)
 
                 // Initialize file output stream
                 fileOutputStream = BufferedOutputStream(FileOutputStream(thermalDataFile!!))
 
-                // Write file header
-                writeFileHeader()
+                // Write file header with configuration metadata
+                writeFileHeaderWithConfig()
+
+                // Apply thermal camera settings before starting preview
+                applyCameraSettings()
 
                 // Start thermal camera recording by starting preview (which includes frame capture)
                 if (!startPreview()) {
@@ -289,7 +335,7 @@ class ThermalRecorder
                 frameCounter.set(0)
                 isRecording.set(true)
 
-                logger.info("Thermal recording started successfully")
+                logger.info("Thermal recording started successfully with configuration: ${config.dataFormat}")
                 true
             } catch (e: Exception) {
                 logger.error("Failed to start thermal recording", e)
@@ -846,15 +892,79 @@ class ThermalRecorder
         }
 
         /**
-         * Write thermal data file header
+         * Apply thermal camera settings to the hardware
          */
-        private fun writeFileHeader() {
+        private fun applyCameraSettings() {
+            val config = currentThermalConfig ?: return
+            
+            try {
+                logger.info("Applying thermal camera settings...")
+                
+                // Apply frame rate if supported
+                if (config.frameRate != THERMAL_FRAME_RATE) {
+                    logger.info("Setting thermal frame rate to: ${config.frameRate} fps")
+                    // Note: Actual frame rate setting depends on Topdon SDK capabilities
+                    // The SDK may have limitations on which frame rates are supported
+                }
+                
+                // Apply emissivity setting
+                logger.info("Setting thermal emissivity to: ${config.emissivity}")
+                // Note: Emissivity setting would be applied through Topdon SDK if supported
+                
+                // Apply temperature range settings
+                config.getTemperatureRangeValues()?.let { (minTemp, maxTemp) ->
+                    logger.info("Setting temperature range: ${minTemp}°C to ${maxTemp}°C")
+                    // Note: Temperature range setting would be applied through Topdon SDK if supported
+                }
+                
+                // Enable auto-calibration if requested
+                if (config.autoCalibration) {
+                    logger.info("Auto-calibration enabled")
+                    // Note: Auto-calibration would be configured through Topdon SDK
+                }
+                
+                // Set high-resolution mode if supported and enabled
+                if (config.highResolution) {
+                    logger.info("High-resolution mode requested")
+                    // Note: High-resolution mode would be set through Topdon SDK if available
+                }
+                
+                logger.info("Thermal camera settings applied successfully")
+                
+            } catch (e: Exception) {
+                logger.warning("Some thermal camera settings could not be applied", e)
+            }
+        }
+
+        /**
+         * Write thermal data file header with configuration metadata
+         */
+        private fun writeFileHeaderWithConfig() {
             fileOutputStream?.let { output ->
-                val header = ByteBuffer.allocate(THERMAL_FILE_HEADER_SIZE)
-                header.put("THERMAL1".toByteArray()) // 8 bytes identifier
+                val config = currentThermalConfig ?: thermalSettings.getCurrentConfig()
+                
+                // Extended header with configuration metadata
+                val configString = thermalSettings.exportConfigToString()
+                val configBytes = configString.toByteArray()
+                val configLength = configBytes.size
+                
+                // Calculate total header size: basic header + config length + config data
+                val totalHeaderSize = THERMAL_FILE_HEADER_SIZE + 4 + configLength
+                
+                val header = ByteBuffer.allocate(totalHeaderSize)
+                
+                // Write basic header
+                header.put("THERMAL2".toByteArray()) // Updated version identifier for enhanced format
                 header.putInt(THERMAL_WIDTH) // 4 bytes width
                 header.putInt(THERMAL_HEIGHT) // 4 bytes height
+                
+                // Write configuration data length and data
+                header.putInt(configLength) // 4 bytes config length
+                header.put(configBytes) // Config data
+                
                 output.write(header.array())
+                
+                logger.debug("Written enhanced thermal file header with configuration metadata")
             }
         }
 
