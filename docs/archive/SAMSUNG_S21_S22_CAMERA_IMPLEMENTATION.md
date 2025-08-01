@@ -1,9 +1,9 @@
 # Samsung S21/S22 Camera Recording and Stage 3 RAW Extraction Implementation
 
 > **📋 NOTE**: This documentation has been superseded by the comprehensive Camera Recording System documentation:
-> - **Technical Deep-Dive**: [README_CameraRecorder.md](../technical/README_CameraRecorder.md)
-> - **User Guide**: [USER_GUIDE_CameraRecorder.md](../user-guides/USER_GUIDE_CameraRecorder.md) 
-> - **Protocol Specification**: [PROTOCOL_CameraRecorder.md](../technical/PROTOCOL_CameraRecorder.md)
+> - **Technical Deep-Dive**: [README_CameraRecorder.md](../new_documentation/README_CameraRecorder.md)
+> - **User Guide**: [USER_GUIDE_CameraRecorder.md](../new_documentation/USER_GUIDE_CameraRecorder.md) 
+> - **Protocol Specification**: [PROTOCOL_CameraRecorder.md](../new_documentation/PROTOCOL_CameraRecorder.md)
 > 
 > This file is archived for historical reference.
 
