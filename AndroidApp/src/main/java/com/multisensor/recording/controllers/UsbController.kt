@@ -36,6 +36,7 @@ class UsbController @Inject constructor(
         private const val PREF_CONNECTION_COUNT = "connection_count"
         private const val PREF_DEVICE_VENDOR_ID = "device_vendor_id"
         private const val PREF_DEVICE_PRODUCT_ID = "device_product_id"
+        private const val SCANNING_INTERVAL_MS = 5000L // 5 seconds
     }
     
     /**
@@ -52,6 +53,11 @@ class UsbController @Inject constructor(
     }
 
     private var callback: UsbCallback? = null
+    
+    // Periodic scanning state
+    private var isScanning = false
+    private var lastKnownDevices = mutableSetOf<String>()
+    private val scanningHandler = android.os.Handler(android.os.Looper.getMainLooper())
     
     /**
      * Set the callback for USB device events
@@ -227,22 +233,86 @@ class UsbController @Inject constructor(
     
     /**
      * Initialize USB monitoring for already connected devices
-     * TODO: Implement periodic scanning for device state changes
+     * Implements periodic scanning for device state changes
      */
     fun initializeUsbMonitoring(context: Context) {
         android.util.Log.d("UsbController", "[DEBUG_LOG] Initializing USB monitoring...")
         
-        val connectedDevices = getConnectedUsbDevices(context)
-        android.util.Log.d("UsbController", "[DEBUG_LOG] Found ${connectedDevices.size} connected USB devices")
+        // Initial device scan
+        scanForDevices(context)
         
-        val supportedDevices = getConnectedSupportedDevices(context)
-        if (supportedDevices.isNotEmpty()) {
-            android.util.Log.d("UsbController", "[DEBUG_LOG] Found ${supportedDevices.size} supported TOPDON devices")
-            supportedDevices.forEach { device ->
-                handleSupportedDeviceAttached(context, device)
+        // Start periodic scanning
+        startPeriodicScanning(context)
+    }
+    
+    /**
+     * Start periodic USB device scanning
+     */
+    private fun startPeriodicScanning(context: Context) {
+        if (isScanning) {
+            android.util.Log.d("UsbController", "[DEBUG_LOG] USB scanning already active")
+            return
+        }
+        
+        isScanning = true
+        android.util.Log.d("UsbController", "[DEBUG_LOG] Starting periodic USB device scanning (${SCANNING_INTERVAL_MS}ms interval)")
+        
+        val scanningRunnable = object : Runnable {
+            override fun run() {
+                if (isScanning) {
+                    scanForDevices(context)
+                    scanningHandler.postDelayed(this, SCANNING_INTERVAL_MS)
+                }
             }
-        } else {
-            android.util.Log.d("UsbController", "[DEBUG_LOG] No supported TOPDON devices currently connected")
+        }
+        
+        scanningHandler.postDelayed(scanningRunnable, SCANNING_INTERVAL_MS)
+    }
+    
+    /**
+     * Stop periodic USB device scanning
+     */
+    fun stopPeriodicScanning() {
+        if (isScanning) {
+            isScanning = false
+            scanningHandler.removeCallbacksAndMessages(null)
+            android.util.Log.d("UsbController", "[DEBUG_LOG] USB periodic scanning stopped")
+        }
+    }
+    
+    /**
+     * Scan for USB devices and detect changes
+     */
+    private fun scanForDevices(context: Context) {
+        try {
+            val connectedDevices = getConnectedUsbDevices(context)
+            val currentDeviceNames = connectedDevices.map { it.deviceName }.toSet()
+            
+            // Detect newly connected devices
+            val newDevices = currentDeviceNames - lastKnownDevices
+            val removedDevices = lastKnownDevices - currentDeviceNames
+            
+            // Handle newly connected devices
+            newDevices.forEach { deviceName ->
+                val device = connectedDevices.find { it.deviceName == deviceName }
+                device?.let {
+                    android.util.Log.d("UsbController", "[DEBUG_LOG] Detected new USB device: $deviceName")
+                    if (usbDeviceManager.isSupportedTopdonDevice(it)) {
+                        handleSupportedDeviceAttached(context, it)
+                    }
+                }
+            }
+            
+            // Handle removed devices (log only since we handle detachment via system events)
+            removedDevices.forEach { deviceName ->
+                android.util.Log.d("UsbController", "[DEBUG_LOG] USB device disconnected: $deviceName")
+            }
+            
+            // Update known devices
+            lastKnownDevices = currentDeviceNames.toMutableSet()
+            
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Error during USB device scanning: ${e.message}")
         }
     }
     

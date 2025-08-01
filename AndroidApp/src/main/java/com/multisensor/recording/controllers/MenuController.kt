@@ -389,10 +389,61 @@ class MenuController @Inject constructor() {
     
     /**
      * Update menu item visibility based on app state
-     * TODO: Implement dynamic menu updates
+     * Implements dynamic menu updates
      */
     fun updateMenuVisibility(menu: Menu, isRecording: Boolean) {
-        // TODO: Hide/show menu items based on recording state
         android.util.Log.d("MenuController", "[DEBUG_LOG] Menu visibility update - recording: $isRecording")
+        
+        try {
+            // Disable certain menu items during recording
+            menu.findItem(R.id.action_settings)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_network_config)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_shimmer_config)?.isEnabled = !isRecording
+            
+            // Sync test items should only be available when not recording
+            menu.findItem(R.id.action_test_flash_sync)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_test_beep_sync)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_test_clock_sync)?.isEnabled = !isRecording
+            
+            // Sync status can be checked anytime
+            menu.findItem(R.id.action_sync_status)?.isEnabled = true
+            
+            // File browser may be restricted during recording
+            menu.findItem(R.id.action_file_browser)?.isEnabled = !isRecording
+            
+            // About dialog can be accessed anytime
+            menu.findItem(R.id.action_about)?.isEnabled = true
+            
+            android.util.Log.d("MenuController", "[DEBUG_LOG] Menu items ${if (isRecording) "disabled" else "enabled"} for recording state")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MenuController", "[DEBUG_LOG] Error updating menu visibility: ${e.message}")
+        }
+    }
+    
+    /**
+     * Check if sync features are available
+     */
+    private fun areSyncFeaturesAvailable(): Boolean {
+        // In a real implementation, this would check:
+        // - Network connectivity
+        // - Server availability
+        // - Sync service status
+        return true // Simplified for now
+    }
+    
+    /**
+     * Get menu item usage statistics
+     */
+    fun getMenuUsageStatistics(): Map<String, Any> {
+        return mapOf(
+            "total_interactions" to menuItemSelectionCount.values.sum(),
+            "unique_items_used" to menuItemSelectionCount.size,
+            "most_used_item" to getMostUsedMenuItem(),
+            "last_interaction" to lastMenuInteraction,
+            "interaction_history_size" to menuAccessHistory.size,
+            "average_interactions_per_item" to if (menuItemSelectionCount.isNotEmpty()) 
+                menuItemSelectionCount.values.average() else 0.0
+        )
     }
 }

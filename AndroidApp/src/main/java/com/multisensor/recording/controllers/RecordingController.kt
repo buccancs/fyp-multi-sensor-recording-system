@@ -28,6 +28,19 @@ import javax.inject.Singleton
 class RecordingController @Inject constructor() {
     
     /**
+     * Data class for recording session metadata
+     */
+    data class RecordingSession(
+        val sessionId: String,
+        val startTime: Long,
+        val endTime: Long? = null,
+        val duration: Long = 0L,
+        val isComplete: Boolean = false,
+        val hasErrors: Boolean = false,
+        val metadata: Map<String, Any> = emptyMap()
+    )
+    
+    /**
      * Interface for recording-related callbacks to the UI layer
      */
     interface RecordingCallback {
@@ -38,9 +51,14 @@ class RecordingController @Inject constructor() {
         fun updateStatusText(text: String)
         fun showToast(message: String, duration: Int = android.widget.Toast.LENGTH_SHORT)
     }
-    
+
     private var callback: RecordingCallback? = null
     private var isRecordingSystemInitialized = false
+    
+    // Session management
+    private var currentSession: RecordingSession? = null
+    private val sessionHistory = mutableListOf<RecordingSession>()
+    private var totalRecordingTime: Long = 0L
     
     /**
      * Set the callback for recording events
@@ -86,6 +104,21 @@ class RecordingController @Inject constructor() {
         }
         
         try {
+            // Create new recording session
+            val sessionId = "session_${System.currentTimeMillis()}"
+            val startTime = System.currentTimeMillis()
+            
+            currentSession = RecordingSession(
+                sessionId = sessionId,
+                startTime = startTime,
+                metadata = mapOf(
+                    "app_version" to getAppVersion(),
+                    "device_model" to android.os.Build.MODEL,
+                    "android_version" to android.os.Build.VERSION.RELEASE,
+                    "start_timestamp" to startTime
+                )
+            )
+            
             // Start recording service
             val intent = Intent(context, RecordingService::class.java).apply {
                 action = RecordingService.ACTION_START_RECORDING
@@ -96,11 +129,15 @@ class RecordingController @Inject constructor() {
             viewModel.startRecording()
             
             callback?.onRecordingStarted()
-            callback?.updateStatusText("Recording in progress...")
+            callback?.updateStatusText("Recording in progress - Session: ${currentSession?.sessionId ?: "Unknown"}")
             
-            android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording started successfully")
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording started successfully - Session: ${currentSession?.sessionId}")
         } catch (e: Exception) {
             android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to start recording: ${e.message}")
+            
+            // Mark session as failed
+            currentSession = currentSession?.copy(hasErrors = true)
+            
             callback?.onRecordingError("Failed to start recording: ${e.message}")
             callback?.updateStatusText("Recording start failed")
         }
@@ -114,6 +151,29 @@ class RecordingController @Inject constructor() {
         android.util.Log.d("RecordingController", "[DEBUG_LOG] Stopping recording session")
         
         try {
+            // Complete current session
+            currentSession?.let { session ->
+                val endTime = System.currentTimeMillis()
+                val duration = endTime - session.startTime
+                
+                val completedSession = session.copy(
+                    endTime = endTime,
+                    duration = duration,
+                    isComplete = true
+                )
+                
+                // Add to session history
+                sessionHistory.add(completedSession)
+                totalRecordingTime += duration
+                
+                // Keep only last 50 sessions
+                if (sessionHistory.size > 50) {
+                    sessionHistory.removeAt(0)
+                }
+                
+                android.util.Log.d("RecordingController", "[DEBUG_LOG] Session completed: ${completedSession.sessionId}, Duration: ${duration}ms")
+            }
+            
             // Stop recording service
             val intent = Intent(context, RecordingService::class.java).apply {
                 action = RecordingService.ACTION_STOP_RECORDING
@@ -123,12 +183,22 @@ class RecordingController @Inject constructor() {
             // Stop recording via ViewModel
             viewModel.stopRecording()
             
+            val sessionId = currentSession?.sessionId ?: "Unknown"
+            val duration = currentSession?.let { (System.currentTimeMillis() - it.startTime) / 1000 } ?: 0
+            
+            // Clear current session
+            currentSession = null
+            
             callback?.onRecordingStopped()
-            callback?.updateStatusText("Recording stopped - Processing data...")
+            callback?.updateStatusText("Recording stopped - Session: $sessionId (${duration}s)")
             
             android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording stopped successfully")
         } catch (e: Exception) {
             android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to stop recording: ${e.message}")
+            
+            // Mark session as failed if it exists
+            currentSession = currentSession?.copy(hasErrors = true, endTime = System.currentTimeMillis())
+            
             callback?.onRecordingError("Failed to stop recording: ${e.message}")
             callback?.updateStatusText("Recording stop failed")
         }
@@ -152,22 +222,31 @@ class RecordingController @Inject constructor() {
             // Service status checking
             val serviceStatus = when {
                 !isRecordingSystemInitialized -> "Not Initialized"
+                currentSession != null -> "Recording Active"
                 else -> "Ready"
             }
             append("- Service Status: $serviceStatus\n")
             
-            // Session information retrieval
-            val sessionInfo = buildString {
-                append("Active Session: ")
-                if (isRecordingSystemInitialized) {
-                    val timestamp = System.currentTimeMillis()
-                    val sessionId = "session_${timestamp % 100000}"
-                    append("$sessionId (started: ${java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date(timestamp))})")
-                } else {
-                    append("None")
-                }
-            }
-            append("- Session Info: $sessionInfo")
+            // Current session information
+            val currentSessionInfo = currentSession?.let { session ->
+                val duration = System.currentTimeMillis() - session.startTime
+                val timeFormat = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+                "${session.sessionId} (${timeFormat.format(java.util.Date(session.startTime))}, ${duration/1000}s)"
+            } ?: "None"
+            append("- Current Session: $currentSessionInfo\n")
+            
+            // Session history summary
+            append("- Total Sessions: ${sessionHistory.size}\n")
+            append("- Total Recording Time: ${formatDuration(totalRecordingTime)}\n")
+            
+            // Last session info
+            val lastSession = sessionHistory.lastOrNull()
+            val lastSessionInfo = lastSession?.let { session ->
+                val status = if (session.isComplete && !session.hasErrors) "✓" else "✗"
+                val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
+                "$status ${session.sessionId} (${timeFormat.format(java.util.Date(session.startTime))}, ${formatDuration(session.duration)})"
+            } ?: "None"
+            append("- Last Session: $lastSessionInfo")
         }
     }
     
@@ -216,11 +295,21 @@ class RecordingController @Inject constructor() {
     
     /**
      * Get estimated recording duration based on available storage
-     * TODO: Implement storage calculation logic
+     * Implements storage calculation logic
      */
     fun getEstimatedRecordingDuration(context: Context): String {
-        // TODO: Calculate based on available storage and recording settings
-        return "TODO - implement storage-based duration estimation"
+        return try {
+            val availableBytes = getAvailableStorageSpace(context)
+            
+            // Estimate recording data rate (approximate)
+            val estimatedDataRatePerSecond = 2 * 1024 * 1024 // 2MB per second (rough estimate)
+            val estimatedDurationSeconds = availableBytes / estimatedDataRatePerSecond
+            
+            formatDuration(estimatedDurationSeconds * 1000)
+        } catch (e: Exception) {
+            android.util.Log.e("RecordingController", "[DEBUG_LOG] Error calculating recording duration: ${e.message}")
+            "Unable to calculate"
+        }
     }
     
     /**
@@ -262,14 +351,59 @@ class RecordingController @Inject constructor() {
     
     /**
      * Get recording session metadata
-     * TODO: Implement session metadata collection
+     * Implements session metadata collection
      */
     fun getSessionMetadata(): Map<String, Any> {
         return mapOf(
             "initialized" to isRecordingSystemInitialized,
             "timestamp" to System.currentTimeMillis(),
-            // TODO: Add more metadata fields
-            "version" to "TODO - implement version tracking"
+            "total_sessions" to sessionHistory.size,
+            "total_recording_time_ms" to totalRecordingTime,
+            "current_session_id" to (currentSession?.sessionId ?: "none"),
+            "last_session_complete" to (sessionHistory.lastOrNull()?.isComplete ?: false),
+            "app_version" to getAppVersion(),
+            "successful_sessions" to sessionHistory.count { it.isComplete && !it.hasErrors }
         )
+    }
+    
+    /**
+     * Get available storage space
+     */
+    private fun getAvailableStorageSpace(context: Context): Long {
+        return try {
+            val dataDir = context.filesDir
+            val stat = android.os.StatFs(dataDir.absolutePath)
+            stat.availableBytes
+        } catch (e: Exception) {
+            android.util.Log.e("RecordingController", "[DEBUG_LOG] Error getting storage space: ${e.message}")
+            0L
+        }
+    }
+    
+    /**
+     * Format duration in milliseconds to human readable string
+     */
+    private fun formatDuration(millis: Long): String {
+        val seconds = millis / 1000
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val remainingSeconds = seconds % 60
+        
+        return when {
+            hours > 0 -> "${hours}h ${minutes}m ${remainingSeconds}s"
+            minutes > 0 -> "${minutes}m ${remainingSeconds}s" 
+            else -> "${remainingSeconds}s"
+        }
+    }
+    
+    /**
+     * Get app version
+     */
+    private fun getAppVersion(): String {
+        return try {
+            "1.0.0" // In a real app, this would be retrieved from BuildConfig or PackageManager
+        } catch (e: Exception) {
+            "unknown"
+        }
     }
 }
