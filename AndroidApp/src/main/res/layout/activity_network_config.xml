@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="Legacy Socket Port (Milestone 2.5)">
+        android:hint="Legacy Socket Port">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_legacy_port"

@@ -80,7 +80,7 @@ class CalibrationCaptureManagerTest {
                 thermalFilePath = "/test/thermal.png",
                 timestamp = System.currentTimeMillis(),
                 syncedTimestamp = System.currentTimeMillis() + 100,
-                thermalConfig = null,
+                thermalConfig = mockThermalCameraSettings.getCurrentConfig(),
             )
 
         assertTrue("Result should be successful", result.success)

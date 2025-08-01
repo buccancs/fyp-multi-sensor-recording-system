@@ -34,7 +34,7 @@ import javax.inject.Inject
 /**
  * Comprehensive Manual Test Suite for Shimmer3 GSR+ Hardware Validation
  *
- * This test suite implements the complete 10-point manual test plan from milestone 2.4
+ * This test suite implements the complete manual test plan
  * specifications for validating Shimmer3 GSR+ multi-device support with actual hardware.
  *
  * Requirements:
@@ -677,7 +677,7 @@ class ShimmerRecorderManualTest {
 
     /**
      * Comprehensive integration test that runs all test scenarios in sequence.
-     * This simulates the complete manual test workflow from milestone 2.4 specifications.
+     * This simulates the complete manual test workflow from specifications.
      */
     @Test
     fun testComplete_ShimmerHardwareValidation() =

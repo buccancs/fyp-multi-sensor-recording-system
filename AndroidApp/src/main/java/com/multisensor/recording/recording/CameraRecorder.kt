@@ -760,7 +760,7 @@ class CameraRecorder
                         continue
                     }
 
-                    // Check for RAW capability - essential for milestone requirements
+                    // Check for RAW capability - essential for requirements
                     val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
                     val hasRawCapability = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
                     val hasBackwardCompatibility =
@@ -1542,7 +1542,7 @@ class CameraRecorder
         }
 
         /**
-         * Trigger LED flash sync signal - Milestone 2.8
+         * Trigger LED flash sync signal
          * Uses camera flashlight for multi-device synchronization
          */
         suspend fun triggerFlashSync(durationMs: Long = 200): Boolean =
@@ -1604,7 +1604,7 @@ class CameraRecorder
             }
 
         /**
-         * Set camera flash mode on/off - Milestone 2.8
+         * Set camera flash mode on/off
          */
         private suspend fun setFlashMode(flashOn: Boolean): Boolean =
             withContext(Dispatchers.IO) {
@@ -1643,7 +1643,7 @@ class CameraRecorder
             }
 
         /**
-         * Check if camera flash is available - Milestone 2.8
+         * Check if camera flash is available
          */
         fun isFlashAvailable(): Boolean {
             return try {

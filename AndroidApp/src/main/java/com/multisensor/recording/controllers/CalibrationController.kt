@@ -92,7 +92,7 @@ class CalibrationController @Inject constructor(
         callback?.showToast("Starting calibration capture...")
         callback?.onCalibrationStarted()
         
-        // Use actual CalibrationCaptureManager for Milestone 2.8
+        // Use actual CalibrationCaptureManager for 
         lifecycleScope.launch {
             try {
                 val result = calibrationCaptureManager.captureCalibrationImages(
@@ -142,7 +142,7 @@ class CalibrationController @Inject constructor(
     }
     
     /**
-     * Triggers comprehensive calibration capture feedback - Enhanced for Milestone 2.8
+     * Triggers comprehensive calibration capture feedback - Enhanced for 
      */
     private fun triggerCalibrationCaptureSuccess(calibrationId: String = "unknown") {
         android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration photo captured - triggering feedback for ID: $calibrationId")
@@ -226,7 +226,7 @@ class CalibrationController @Inject constructor(
     }
     
     /**
-     * Test flash sync signal - Milestone 2.8
+     * Test flash sync signal - 
      */
     fun testFlashSync(lifecycleScope: LifecycleCoroutineScope) {
         android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing flash sync signal")
@@ -252,7 +252,7 @@ class CalibrationController @Inject constructor(
     }
     
     /**
-     * Test beep sync signal - Milestone 2.8
+     * Test beep sync signal - 
      */
     fun testBeepSync() {
         android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing beep sync signal")
@@ -272,7 +272,7 @@ class CalibrationController @Inject constructor(
     }
     
     /**
-     * Test clock synchronization - Milestone 2.8
+     * Test clock synchronization - 
      */
     fun testClockSync(lifecycleScope: LifecycleCoroutineScope) {
         android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing clock synchronization")
@@ -313,7 +313,7 @@ class CalibrationController @Inject constructor(
     }
     
     /**
-     * Display current sync status - Milestone 2.8
+     * Display current sync status - 
      */
     fun showSyncStatus() {
         val syncStatus = syncClockManager.getSyncStatus()

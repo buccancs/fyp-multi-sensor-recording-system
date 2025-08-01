@@ -3,6 +3,7 @@ package com.multisensor.recording.recording
 import android.content.Context
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -24,6 +25,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
     val mockContext: Context = mockk(relaxed = true)
     val mockSessionManager: SessionManager = mockk(relaxed = true)
     val mockLogger: Logger = mockk(relaxed = true)
+    val mockThermalSettings: ThermalCameraSettings = mockk(relaxed = true)
     val testSessionId = "test_thermal_session_123"
     
     lateinit var thermalRecorder: ThermalRecorder
@@ -37,7 +39,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
         every { mockSessionManager.getSessionFilePaths() } returns mockSessionPaths
 
         // Create ThermalRecorder instance
-        thermalRecorder = ThermalRecorder(mockContext, mockSessionManager, mockLogger)
+        thermalRecorder = ThermalRecorder(mockContext, mockSessionManager, mockLogger, mockThermalSettings)
     }
 
     describe("ThermalRecorder initialization") {
@@ -47,7 +49,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.initialize()
                 
                 result shouldBe true
-                verify { mockLogger.d(any(), any()) }
+                verify { mockLogger.debug(any<String>(), any()) }
             }
         }
         
@@ -59,7 +61,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.initialize()
                 
                 result shouldBe false
-                verify { mockLogger.e(any(), any(), any()) }
+                verify { mockLogger.error(any<String>(), any()) }
             }
         }
     }
@@ -73,7 +75,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.startRecording(testSessionId)
                 
                 result shouldBe true
-                verify { mockLogger.i(any(), "Starting thermal recording for session: $testSessionId") }
+                verify { mockLogger.info(any(), "Starting thermal recording for session: $testSessionId") }
             }
         }
         
@@ -82,7 +84,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.startRecording(testSessionId)
                 
                 result shouldBe false
-                verify { mockLogger.e(any(), "Cannot start recording: ThermalRecorder not initialized") }
+                verify { mockLogger.error(any(), "Cannot start recording: ThermalRecorder not initialized") }
             }
         }
         
@@ -94,7 +96,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.stopRecording()
                 
                 result shouldBe true
-                verify { mockLogger.i(any(), "Thermal recording stopped") }
+                verify { mockLogger.info(any(), "Thermal recording stopped") }
             }
         }
         
@@ -103,7 +105,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.stopRecording()
                 
                 result shouldBe false
-                verify { mockLogger.w(any(), "Stop recording called but not currently recording") }
+                verify { mockLogger.warning(any(), "Stop recording called but not currently recording") }
             }
         }
     }
@@ -117,7 +119,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.startPreview()
                 
                 result shouldBe true
-                verify { mockLogger.d(any(), "Thermal preview started") }
+                verify { mockLogger.debug(any(), "Thermal preview started") }
             }
         }
         
@@ -129,7 +131,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.stopPreview()
                 
                 result shouldBe true
-                verify { mockLogger.d(any(), "Thermal preview stopped") }
+                verify { mockLogger.debug(any(), "Thermal preview stopped") }
             }
         }
     }
@@ -166,7 +168,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
             
             thermalRecorder.setTemperatureRange(minTemp, maxTemp)
             
-            verify { mockLogger.d(any(), "Temperature range set: $minTemp to $maxTemp") }
+            verify { mockLogger.debug(any(), "Temperature range set: $minTemp to $maxTemp") }
         }
         
         it("should set color palette correctly") {
@@ -174,7 +176,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
             
             thermalRecorder.setColorPalette(palette)
             
-            verify { mockLogger.d(any(), "Color palette set: $palette") }
+            verify { mockLogger.debug(any(), "Color palette set: $palette") }
         }
     }
 
@@ -190,7 +192,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 result1 shouldBe true
                 result2 shouldBe false
                 
-                verify { mockLogger.w(any(), "Recording already in progress") }
+                verify { mockLogger.warning(any(), "Recording already in progress") }
             }
         }
         
@@ -204,7 +206,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.startRecording(testSessionId)
                 
                 result shouldBe false
-                verify { mockLogger.e(any(), any(), any()) }
+                verify { mockLogger.error(any<String>(), any()) }
             }
         }
         
@@ -218,7 +220,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 
                 thermalRecorder.isRecording() shouldBe false
                 thermalRecorder.isInitialized() shouldBe false
-                verify { mockLogger.i(any(), "ThermalRecorder cleanup completed") }
+                verify { mockLogger.info(any(), "ThermalRecorder cleanup completed") }
             }
         }
     }
@@ -238,7 +240,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 )
                 
                 verify { 
-                    mockLogger.d(any(), match { 
+                    mockLogger.debug(any(), match { 
                         it.contains("Device configured with emissivity: 0.95") 
                     }) 
                 }
@@ -253,7 +255,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 thermalRecorder.configureDevice(emissivity = 1.5f)
                 
                 verify { 
-                    mockLogger.w(any(), match { 
+                    mockLogger.warning(any(), match { 
                         it.contains("Invalid emissivity value") 
                     }) 
                 }

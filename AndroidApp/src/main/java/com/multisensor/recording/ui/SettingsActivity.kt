@@ -8,7 +8,7 @@ import com.multisensor.recording.R
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Settings and Configuration Activity - Milestone 2.7 UI Enhancement
+ * Settings and Configuration Activity - UI Enhancement
  *
  * Provides comprehensive settings interface for:
  * - Shimmer MAC address configuration
@@ -41,7 +41,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

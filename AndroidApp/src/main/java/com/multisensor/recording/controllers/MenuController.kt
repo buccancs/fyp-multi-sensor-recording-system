@@ -286,7 +286,7 @@ class MenuController @Inject constructor() {
                 Multi-Sensor Recording System
                 
                 Version: 1.0.0
-                Build: Milestone 2.7 Complete
+                Build: Complete
                 
                 Features:
                 • Real-time status monitoring

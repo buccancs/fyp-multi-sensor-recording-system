@@ -11,7 +11,7 @@ import kotlin.math.*
 /**
  * CalibrationQualityAssessment provides automated quality evaluation for calibration images.
  *
- * Enhanced for Milestone 2.9 with computer vision algorithms including:
+ * Enhanced for with computer vision algorithms including:
  * - Calibration pattern detection (chessboard and circle grid)
  * - Image sharpness and contrast analysis
  * - RGB-thermal alignment verification

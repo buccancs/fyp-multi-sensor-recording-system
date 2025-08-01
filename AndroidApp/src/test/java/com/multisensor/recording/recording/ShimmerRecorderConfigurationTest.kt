@@ -5,9 +5,7 @@ import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.ints.bePositive
 import io.kotest.matchers.ints.between
-import io.kotest.matchers.longs.bePositive as longBePositive
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -142,7 +140,7 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             status shouldNotBe null
             status.isAvailable shouldBe true
-            status.samplingRate shouldBe bePositive()
+            (status.samplingRate > 0) shouldBe true
             if (status.batteryLevel != null) {
                 status.batteryLevel shouldBe between(0, 100)
             }
@@ -187,7 +185,7 @@ class ShimmerRecorderConfigurationTest : FunSpec({
             // Readings may be empty if no data is available
             if (readings.isNotEmpty()) {
                 readings.values.forEach { sensorSample ->
-                    sensorSample.systemTimestamp shouldBe longBePositive()
+                    (sensorSample.systemTimestamp > 0L) shouldBe true
                     sensorSample.batteryLevel shouldBe between(0, 100)
                 }
             }

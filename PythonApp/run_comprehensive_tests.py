@@ -34,6 +34,12 @@ try:
 except ImportError:
     INTEGRATION_TESTS_AVAILABLE = False
 
+try:
+    from tests.test_comprehensive_recording_session import run_comprehensive_recording_session_test
+    RECORDING_SESSION_TESTS_AVAILABLE = True
+except ImportError:
+    RECORDING_SESSION_TESTS_AVAILABLE = False
+
 
 class EnhancedTestRunner:
     """Enhanced test runner with comprehensive reporting and analysis."""
@@ -93,7 +99,8 @@ class EnhancedTestRunner:
         components = {
             'Calibration Tests': CALIBRATION_TESTS_AVAILABLE,
             'Shimmer Tests': SHIMMER_TESTS_AVAILABLE,
-            'Integration Tests': INTEGRATION_TESTS_AVAILABLE
+            'Integration Tests': INTEGRATION_TESTS_AVAILABLE,
+            'Recording Session Tests': RECORDING_SESSION_TESTS_AVAILABLE
         }
         
         for component, available in components.items():
@@ -245,6 +252,21 @@ class EnhancedTestRunner:
         else:
             print("  Shimmer tests: Not available")
             self.results['shimmer_tests'] = {'status': 'not_available'}
+        
+        # Recording session tests
+        if RECORDING_SESSION_TESTS_AVAILABLE:
+            print("  Running recording session tests...")
+            try:
+                success = run_comprehensive_recording_session_test()
+                self.results['recording_session_tests'] = {'success': success}
+                status = "✓ PASSED" if success else "✗ FAILED"
+                print(f"  Recording session tests: {status}")
+            except Exception as e:
+                print(f"  Recording session tests error: {e}")
+                self.results['recording_session_tests'] = {'success': False, 'error': str(e)}
+        else:
+            print("  Recording session tests: Not available")
+            self.results['recording_session_tests'] = {'status': 'not_available'}
         
         print()
     
@@ -483,7 +505,7 @@ class EnhancedTestRunner:
         print()
         
         # Summary by category
-        categories = ['unit_tests', 'calibration_tests', 'shimmer_tests', 'integration_tests']
+        categories = ['unit_tests', 'calibration_tests', 'shimmer_tests', 'integration_tests', 'recording_session_tests']
         
         passed = 0
         failed = 0
@@ -560,7 +582,7 @@ class EnhancedTestRunner:
     def _overall_success(self):
         """Determine overall test success."""
         # Check critical test categories
-        critical_categories = ['calibration_tests', 'shimmer_tests', 'integration_tests']
+        critical_categories = ['calibration_tests', 'shimmer_tests', 'integration_tests', 'recording_session_tests']
         
         for category in critical_categories:
             if category in self.results:

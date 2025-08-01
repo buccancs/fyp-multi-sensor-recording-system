@@ -1,0 +1,14 @@
+=== Enhanced Stress Testing Suite ===
+Category: Performance & Stress
+Description: Memory, CPU, and concurrent session stress testing with performance monitoring and resource validation
+Success: False
+Duration: 0.19s
+Exit Code: 1
+
+=== STDOUT ===
+
+=== STDERR ===
+Traceback (most recent call last):
+  File "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/test_enhanced_stress_testing.py", line 34, in <module>
+    import psutil
+ModuleNotFoundError: No module named 'psutil'

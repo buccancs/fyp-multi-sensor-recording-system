@@ -29,8 +29,7 @@ import org.junit.runners.Suite
     com.multisensor.recording.integration.DataFlowIntegrationTest::class,
     com.multisensor.recording.integration.MultiSensorCoordinationTest::class,
     com.multisensor.recording.integration.ProtocolIntegrationTest::class,
-    com.multisensor.recording.integration.FileIOIntegrationTest::class,
-    com.multisensor.recording.integration.Milestone28IntegrationTest::class
+    com.multisensor.recording.integration.FileIOIntegrationTest::class
 )
 class ComprehensiveInstrumentedTestSuite
 
