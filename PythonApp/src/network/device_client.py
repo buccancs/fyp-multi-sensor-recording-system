@@ -13,11 +13,14 @@ Milestone: 4.1 - Device Communication Implementation
 
 import json
 import socket
+import ssl
 import threading
 import time
-from typing import Dict, Optional, Any
+import uuid
+from collections import defaultdict
+from typing import Dict, Optional, Any, Tuple, List
 
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QTimer
 
 
 class DeviceClient(QThread):
@@ -62,6 +65,31 @@ class DeviceClient(QThread):
         self.heartbeat_interval = 5  # seconds
         self.max_reconnect_attempts = 3
 
+        # Enhanced features for reliable communication
+        self._pending_acknowledgments: Dict[str, Dict[str, Any]] = {}
+        self._ack_timeout = 10  # seconds
+        self._retry_attempts = 3
+        self._rate_limiter: Dict[str, List[float]] = defaultdict(list)
+        self._max_requests_per_minute = 60
+        
+        # SSL/TLS configuration
+        self._ssl_enabled = False
+        self._ssl_context: Optional[ssl.SSLContext] = None
+        self._ssl_certfile = None
+        self._ssl_keyfile = None
+        
+        # Device capability management
+        self._supported_capabilities = {
+            "recording", "streaming", "calibration", 
+            "thermal_imaging", "gsr_monitoring", "audio_capture"
+        }
+        
+        # Performance monitoring
+        self._message_stats = {
+            "sent": 0, "received": 0, "errors": 0, 
+            "avg_latency": 0.0, "connection_count": 0
+        }
+
     def run(self):
         """
         Main thread execution method - implements the server socket communication loop.
@@ -78,6 +106,13 @@ class DeviceClient(QThread):
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.server_socket.settimeout(1.0)  # Non-blocking accept with timeout
 
+            # Configure SSL if enabled
+            if self._ssl_enabled and self._ssl_context:
+                self.server_socket = self._ssl_context.wrap_socket(
+                    self.server_socket, server_side=True
+                )
+                print(f"[DEBUG_LOG] SSL/TLS enabled for secure communication")
+
             self.server_socket.bind(("0.0.0.0", self.server_port))
             self.server_socket.listen(5)
 
@@ -87,7 +122,15 @@ class DeviceClient(QThread):
                 try:
                     # Accept incoming connections with timeout
                     client_socket, address = self.server_socket.accept()
+                    
+                    # Check rate limiting before processing connection
+                    if not self._check_rate_limit(address[0]):
+                        print(f"[DEBUG_LOG] Rate limited connection from {address}")
+                        client_socket.close()
+                        continue
+                        
                     print(f"[DEBUG_LOG] New connection from {address}")
+                    self._message_stats["connection_count"] += 1
 
                     # Handle the new device connection in a separate thread
                     connection_thread = threading.Thread(
@@ -111,6 +154,62 @@ class DeviceClient(QThread):
             self._cleanup_server_socket()
 
         print("[DEBUG_LOG] DeviceClient thread stopped")
+
+    def configure_ssl(self, certfile: str, keyfile: str, ca_certs: Optional[str] = None) -> bool:
+        """
+        Configure SSL/TLS encryption for secure communication.
+        
+        Args:
+            certfile (str): Path to server certificate file
+            keyfile (str): Path to server private key file  
+            ca_certs (str, optional): Path to CA certificates for client verification
+            
+        Returns:
+            bool: True if SSL configuration successful, False otherwise
+        """
+        try:
+            self._ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+            self._ssl_context.load_cert_chain(certfile, keyfile)
+            
+            if ca_certs:
+                self._ssl_context.load_verify_locations(ca_certs)
+                self._ssl_context.verify_mode = ssl.CERT_REQUIRED
+            else:
+                self._ssl_context.verify_mode = ssl.CERT_NONE
+                
+            self._ssl_enabled = True
+            self._ssl_certfile = certfile
+            self._ssl_keyfile = keyfile
+            
+            print(f"[DEBUG_LOG] SSL/TLS configured successfully")
+            return True
+            
+        except Exception as e:
+            self.error_occurred.emit(f"SSL configuration failed: {str(e)}")
+            return False
+
+    def _check_rate_limit(self, device_ip: str) -> bool:
+        """
+        Check if device exceeds rate limiting thresholds.
+        
+        Args:
+            device_ip (str): IP address of the device
+            
+        Returns:
+            bool: True if within rate limit, False if exceeded
+        """
+        current_time = time.time()
+        requests = self._rate_limiter[device_ip]
+        
+        # Remove requests older than 1 minute
+        requests[:] = [req_time for req_time in requests if current_time - req_time < 60]
+        
+        if len(requests) >= self._max_requests_per_minute:
+            print(f"[DEBUG_LOG] Rate limit exceeded for {device_ip}")
+            return False
+            
+        requests.append(current_time)
+        return True
 
     def connect_to_device(self, device_ip: str, device_port: int = 8080) -> bool:
         """
@@ -241,14 +340,16 @@ class DeviceClient(QThread):
         device_index: int,
         command: str,
         parameters: Optional[Dict[str, Any]] = None,
+        require_ack: bool = True,
     ) -> bool:
         """
-        Send a command to a specific device using JSON protocol.
+        Send a command to a specific device using JSON protocol with acknowledgment support.
 
         Args:
             device_index (int): Index of the target device
             command (str): Command to send (START, STOP, CALIBRATE, etc.)
             parameters (dict): Optional command parameters
+            require_ack (bool): Whether to require acknowledgment for reliable delivery
 
         Returns:
             bool: True if command sent successfully, False otherwise
@@ -260,26 +361,53 @@ class DeviceClient(QThread):
                 print(f"[DEBUG_LOG] Device {device_index} not found")
                 return False
 
+            device = self.devices[device_index]
+            
+            # Check rate limiting
+            if not self._check_rate_limit(device["ip"]):
+                self.error_occurred.emit(f"Rate limit exceeded for device {device_index}")
+                return False
+
             try:
+                # Generate unique message ID for acknowledgment tracking
+                message_id = str(uuid.uuid4())
+                timestamp = time.time()
+                
                 # Format command as JSON message
                 message = {
                     "type": "command",
                     "command": command,
                     "parameters": parameters or {},
-                    "timestamp": time.time(),
-                    "message_id": f"{device_index}_{int(time.time() * 1000)}",
+                    "timestamp": timestamp,
+                    "message_id": message_id,
+                    "require_ack": require_ack,
                 }
 
                 # Send command over socket connection
-                device_socket = self.devices[device_index]["socket"]
+                device_socket = device["socket"]
                 json_data = json.dumps(message).encode("utf-8")
                 device_socket.send(json_data)
+                
+                # Track for acknowledgment if required
+                if require_ack:
+                    self._pending_acknowledgments[message_id] = {
+                        "device_index": device_index,
+                        "command": command,
+                        "timestamp": timestamp,
+                        "attempts": 1,
+                        "max_attempts": self._retry_attempts,
+                    }
+                    
+                    # Start acknowledgment timeout timer
+                    QTimer.singleShot(
+                        self._ack_timeout * 1000,
+                        lambda: self._handle_ack_timeout(message_id)
+                    )
 
-                # TODO: Implement acknowledgment handling and timeout/retry logic
-                # For now, assume success if no exception is raised
-
+                self._message_stats["sent"] += 1
                 print(
                     f"[DEBUG_LOG] Command '{command}' sent successfully to device {device_index}"
+                    f" (msg_id: {message_id})"
                 )
                 return True
 
@@ -287,10 +415,71 @@ class DeviceClient(QThread):
                 error_msg = f"Failed to send command '{command}' to device {device_index}: {str(e)}"
                 self.error_occurred.emit(error_msg)
                 print(f"[DEBUG_LOG] {error_msg}")
+                self._message_stats["errors"] += 1
 
                 # Remove failed device connection
                 self._remove_failed_device(device_index)
                 return False
+
+    def _handle_ack_timeout(self, message_id: str) -> None:
+        """
+        Handle acknowledgment timeout for reliable message delivery.
+        
+        Args:
+            message_id (str): ID of the message that timed out
+        """
+        if message_id not in self._pending_acknowledgments:
+            return
+            
+        ack_info = self._pending_acknowledgments[message_id]
+        device_index = ack_info["device_index"]
+        command = ack_info["command"]
+        attempts = ack_info["attempts"]
+        max_attempts = ack_info["max_attempts"]
+        
+        if attempts < max_attempts:
+            # Retry sending the command
+            print(f"[DEBUG_LOG] Retrying command '{command}' to device {device_index} "
+                  f"(attempt {attempts + 1}/{max_attempts})")
+            
+            ack_info["attempts"] += 1
+            ack_info["timestamp"] = time.time()
+            
+            # Resend the command
+            with self._device_lock:
+                if device_index in self.devices:
+                    try:
+                        device_socket = self.devices[device_index]["socket"]
+                        message = {
+                            "type": "command",
+                            "command": command,
+                            "parameters": ack_info.get("parameters", {}),
+                            "timestamp": ack_info["timestamp"],
+                            "message_id": message_id,
+                            "require_ack": True,
+                            "retry_attempt": attempts + 1,
+                        }
+                        
+                        json_data = json.dumps(message).encode("utf-8")
+                        device_socket.send(json_data)
+                        
+                        # Reset timeout timer
+                        QTimer.singleShot(
+                            self._ack_timeout * 1000,
+                            lambda: self._handle_ack_timeout(message_id)
+                        )
+                        
+                    except Exception as e:
+                        print(f"[DEBUG_LOG] Retry failed for message {message_id}: {e}")
+                        del self._pending_acknowledgments[message_id]
+                        self._remove_failed_device(device_index)
+        else:
+            # Max attempts reached, give up
+            print(f"[DEBUG_LOG] Max retry attempts reached for message {message_id}")
+            del self._pending_acknowledgments[message_id]
+            self.error_occurred.emit(
+                f"Command '{command}' failed after {max_attempts} attempts to device {device_index}"
+            )
 
     def stop_client(self) -> None:
         """
@@ -313,7 +502,76 @@ class DeviceClient(QThread):
 
         print("[DEBUG_LOG] DeviceClient stopped successfully")
 
-    def get_connected_devices(self) -> Dict[int, Dict[str, Any]]:
+    def negotiate_capabilities(self, device_index: int, requested_capabilities: List[str]) -> Dict[str, bool]:
+        """
+        Negotiate device capabilities to determine supported features.
+        
+        Args:
+            device_index (int): Index of the target device
+            requested_capabilities (List[str]): List of requested capabilities
+            
+        Returns:
+            Dict[str, bool]: Dictionary mapping capabilities to availability
+        """
+        print(f"[DEBUG_LOG] Negotiating capabilities with device {device_index}")
+        
+        with self._device_lock:
+            if device_index not in self.devices:
+                return {}
+                
+            device = self.devices[device_index]
+            device_capabilities = set(device.get("capabilities", []))
+            
+            # Check which requested capabilities are available
+            capability_status = {}
+            for capability in requested_capabilities:
+                if capability in self._supported_capabilities and capability in device_capabilities:
+                    capability_status[capability] = True
+                else:
+                    capability_status[capability] = False
+                    
+            # Send capability negotiation request
+            negotiation_message = {
+                "type": "capability_negotiation",
+                "requested_capabilities": requested_capabilities,
+                "supported_capabilities": list(self._supported_capabilities),
+                "timestamp": time.time(),
+                "message_id": str(uuid.uuid4()),
+            }
+            
+            try:
+                device_socket = device["socket"]
+                json_data = json.dumps(negotiation_message).encode("utf-8")
+                device_socket.send(json_data)
+                
+                print(f"[DEBUG_LOG] Capability negotiation completed for device {device_index}")
+                return capability_status
+                
+            except Exception as e:
+                self.error_occurred.emit(f"Capability negotiation failed for device {device_index}: {str(e)}")
+                return {}
+
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """
+        Get performance metrics and statistics for monitoring and analysis.
+        
+        Returns:
+            Dict[str, Any]: Performance metrics including latency, throughput, error rates
+        """
+        with self._device_lock:
+            connected_devices = len(self.devices)
+            
+        return {
+            "connected_devices": connected_devices,
+            "total_connections": self._message_stats["connection_count"],
+            "messages_sent": self._message_stats["sent"],
+            "messages_received": self._message_stats["received"],
+            "error_count": self._message_stats["errors"],
+            "average_latency_ms": self._message_stats["avg_latency"] * 1000,
+            "pending_acknowledgments": len(self._pending_acknowledgments),
+            "ssl_enabled": self._ssl_enabled,
+            "rate_limit_per_minute": self._max_requests_per_minute,
+        }
         """
         Get list of currently connected devices with their information.
 
@@ -462,19 +720,34 @@ class DeviceClient(QThread):
 
     def _process_device_message(self, device_id: int, message: Dict[str, Any]) -> None:
         """
-        Process incoming messages from devices.
+        Process incoming messages from devices with enhanced protocol support.
 
         Args:
             device_id: ID of the device that sent the message
             message: Parsed message data
         """
         message_type = message.get("type")
+        timestamp = time.time()
 
         if message_type == "heartbeat":
             # Update last heartbeat time
             with self._device_lock:
                 if device_id in self.devices:
-                    self.devices[device_id]["last_heartbeat"] = time.time()
+                    self.devices[device_id]["last_heartbeat"] = timestamp
+
+        elif message_type == "acknowledgment":
+            # Handle command acknowledgment for reliable delivery
+            message_id = message.get("message_id")
+            if message_id and message_id in self._pending_acknowledgments:
+                ack_info = self._pending_acknowledgments[message_id]
+                
+                # Calculate latency
+                latency = timestamp - ack_info["timestamp"]
+                self._update_latency_stats(latency)
+                
+                del self._pending_acknowledgments[message_id]
+                print(f"[DEBUG_LOG] Received acknowledgment for message {message_id} "
+                      f"(latency: {latency:.3f}s)")
 
         elif message_type == "frame":
             # Emit frame received signal
@@ -487,9 +760,40 @@ class DeviceClient(QThread):
             status_info = message.get("status", {})
             self.status_updated.emit(device_id, status_info)
 
+        elif message_type == "capability_response":
+            # Handle capability negotiation response
+            device_capabilities = message.get("capabilities", [])
+            with self._device_lock:
+                if device_id in self.devices:
+                    self.devices[device_id]["capabilities"] = device_capabilities
+            print(f"[DEBUG_LOG] Updated capabilities for device {device_id}: {device_capabilities}")
+
+        elif message_type == "error":
+            # Handle error messages from device
+            error_msg = message.get("error", "Unknown error")
+            self.error_occurred.emit(f"Device {device_id} error: {error_msg}")
+
         else:
             print(
                 f"[DEBUG_LOG] Unknown message type from device {device_id}: {message_type}"
+            )
+
+        self._message_stats["received"] += 1
+
+    def _update_latency_stats(self, latency: float) -> None:
+        """
+        Update latency statistics for performance monitoring.
+        
+        Args:
+            latency (float): Message round-trip latency in seconds
+        """
+        # Simple exponential moving average
+        alpha = 0.1
+        if self._message_stats["avg_latency"] == 0:
+            self._message_stats["avg_latency"] = latency
+        else:
+            self._message_stats["avg_latency"] = (
+                alpha * latency + (1 - alpha) * self._message_stats["avg_latency"]
             )
 
     def _remove_failed_device(self, device_id: int) -> None:
