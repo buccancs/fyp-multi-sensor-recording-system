@@ -338,6 +338,16 @@ class DualWebcamMainWindow(QMainWindow):
         """Set up signal connections."""
         self.settings_panel.settings_changed.connect(self.on_settings_changed)
         
+    def on_dual_frame_ready(self, pixmap1: QPixmap, pixmap2: QPixmap):
+        """Handle dual frame ready signal and update preview widgets."""
+        try:
+            if pixmap1 and not pixmap1.isNull():
+                self.camera1_preview.update_preview(pixmap1)
+            if pixmap2 and not pixmap2.isNull():
+                self.camera2_preview.update_preview(pixmap2)
+        except Exception as e:
+            logger.error(f"Error updating frame previews: {e}", exc_info=True)
+        
     def apply_initial_settings(self):
         """Apply initial settings provided during construction."""
         if self.initial_settings:
@@ -400,6 +410,9 @@ class DualWebcamMainWindow(QMainWindow):
                 height=settings['height'],
                 fps=settings['fps']
             )
+            
+            # Connect dual frame ready signal for preview updates
+            self.dual_webcam_capture.dual_frame_ready.connect(self.on_dual_frame_ready)
             
             # Start preview
             if self.dual_webcam_capture.start_capture():
@@ -546,9 +559,6 @@ class DualWebcamMainWindow(QMainWindow):
                     self.camera2_preview.update_status(
                         frame_data.camera2_frame is not None, camera2_fps
                     )
-                    
-                    # TODO: Convert frames to QPixmap and update preview
-                    # This would require implementing frame conversion utilities
                     
         except Exception as e:
             logger.error(f"Error updating UI: {e}", exc_info=True)
