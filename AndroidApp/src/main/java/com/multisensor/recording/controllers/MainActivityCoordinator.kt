@@ -400,13 +400,13 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun getShimmerConnectionStatus(): TextView? {
-                // TODO: Add Shimmer connection status text view access to coordinator callback
-                return null
+                // Get Shimmer connection status text view access via coordinator callback
+                return callback?.getShimmerConnectionStatus()
             }
             
             override fun getShimmerConnectionIndicator(): View? {
-                // TODO: Add Shimmer connection indicator view access to coordinator callback
-                return null
+                // Get Shimmer connection indicator view access via coordinator callback
+                return callback?.getShimmerConnectionIndicator()
             }
             
             override fun getThermalConnectionStatus(): TextView? {

@@ -105,11 +105,11 @@ class ShimmerController @Inject constructor(
                 // Update UI to show connection attempt
                 callback?.updateStatusText("Connecting to $name ($preferredBtType)...")
                 
-                // TODO: Connect via ViewModel/ShimmerRecorder - implement connectShimmerDevice method
-                // This should be implemented when integrating with the ViewModel
-                callback?.showToast("Connecting to $name via $preferredBtType")
+                // Connection will be handled via connectToSelectedDevice method
+                // which should be called after device selection is complete
+                callback?.showToast("Device selected: $name")
                 
-                // Notify callback of connection attempt
+                // Notify callback of device selection
                 callback?.onDeviceSelected(address, name)
             }
         } ?: run {
@@ -342,27 +342,27 @@ class ShimmerController @Inject constructor(
     fun showShimmerSensorConfiguration(context: Context, viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Showing Shimmer sensor configuration")
         
-        // TODO: Get connected shimmer device from ViewModel
-        // This is a placeholder implementation that should be completed during integration
-        /*
-        val shimmerDevice = viewModel.getConnectedShimmerDevice()
+        // Get connected shimmer device from ViewModel
+        val shimmerDevice = viewModel.getFirstConnectedShimmerDevice()
         val btManager = viewModel.getShimmerBluetoothManager()
         
         if (shimmerDevice != null && btManager != null) {
             if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
-                ShimmerDialogConfigurations.buildShimmerSensorEnableDetails(shimmerDevice, context as Activity, btManager)
-                callback?.onConfigurationComplete()
+                try {
+                    com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
+                        .buildShimmerSensorEnableDetails(shimmerDevice, context as android.app.Activity, btManager)
+                    callback?.onConfigurationComplete()
+                } catch (e: Exception) {
+                    android.util.Log.e("ShimmerController", "[DEBUG_LOG] Error showing sensor configuration: ${e.message}")
+                    callback?.onShimmerError("Failed to show sensor configuration: ${e.message}")
+                }
             } else {
                 callback?.showToast("Cannot configure - device is streaming or logging")
             }
         } else {
             callback?.showToast("No Shimmer device connected")
+            android.util.Log.w("ShimmerController", "[DEBUG_LOG] No connected Shimmer device available for configuration")
         }
-        */
-        
-        // Temporary implementation until ViewModel integration is complete
-        callback?.showToast("Shimmer sensor configuration - Coming soon")
-        android.util.Log.d("ShimmerController", "[DEBUG_LOG] Sensor configuration - placeholder implementation")
     }
     
     /**
@@ -372,27 +372,27 @@ class ShimmerController @Inject constructor(
     fun showShimmerGeneralConfiguration(context: Context, viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Showing Shimmer general configuration")
         
-        // TODO: Get connected shimmer device from ViewModel
-        // This is a placeholder implementation that should be completed during integration
-        /*
-        val shimmerDevice = viewModel.getConnectedShimmerDevice()
+        // Get connected shimmer device from ViewModel
+        val shimmerDevice = viewModel.getFirstConnectedShimmerDevice()
         val btManager = viewModel.getShimmerBluetoothManager()
         
         if (shimmerDevice != null && btManager != null) {
             if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
-                ShimmerDialogConfigurations.buildShimmerConfigOptions(shimmerDevice, context as Activity, btManager)
-                callback?.onConfigurationComplete()
+                try {
+                    com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
+                        .buildShimmerConfigOptions(shimmerDevice, context as android.app.Activity, btManager)
+                    callback?.onConfigurationComplete()
+                } catch (e: Exception) {
+                    android.util.Log.e("ShimmerController", "[DEBUG_LOG] Error showing general configuration: ${e.message}")
+                    callback?.onShimmerError("Failed to show general configuration: ${e.message}")
+                }
             } else {
                 callback?.showToast("Cannot configure - device is streaming or logging")
             }
         } else {
             callback?.showToast("No Shimmer device connected")
+            android.util.Log.w("ShimmerController", "[DEBUG_LOG] No connected Shimmer device available for configuration")
         }
-        */
-        
-        // Temporary implementation until ViewModel integration is complete
-        callback?.showToast("Shimmer general configuration - Coming soon")
-        android.util.Log.d("ShimmerController", "[DEBUG_LOG] General configuration - placeholder implementation")
     }
     
     /**
