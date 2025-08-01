@@ -12,27 +12,74 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 👥 User Documentation
 - **[Complete User Guide](user-guides/CONSOLIDATED_USER_GUIDE.md)** - Comprehensive user manual
+
 - **[Camera Recording Guide](new_documentation/USER_GUIDE_CameraRecorder.md)** - Camera system operation and Samsung S21/S22 optimization
+
+- **[UI Navigation Guide](new_documentation/USER_GUIDE_ui_navigation.md)** - Modern Android UI navigation and interface usage
+
+- **[Python Desktop Controller - User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Python Desktop Controller usage guide
+
 - **[Navigation Guide](user-guides/CONSOLIDATED_USER_GUIDE.md#navigation-and-user-interface)** - Interface and navigation
+
 - **[Device Management](user-guides/CONSOLIDATED_USER_GUIDE.md#device-management)** - Device setup and configuration
 - **[Recording Sessions](user-guides/CONSOLIDATED_USER_GUIDE.md#recording-sessions)** - Recording procedures and best practices
 - **[Data Management](user-guides/CONSOLIDATED_USER_GUIDE.md#data-management-and-export)** - Data organization and export
 - **[Troubleshooting Guide](user-guides/CONSOLIDATED_USER_GUIDE.md#troubleshooting)** - Common issues and solutions
+- **[Session Management User Guide](new_documentation/USER_GUIDE_session_management.md)** - Complete session and data storage user guide
 
 ### 🔧 Developer Documentation
 - **[Implementation Guide](implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Complete technical implementation
+
 - **[Camera Recording System](new_documentation/README_CameraRecorder.md)** - Camera system architecture and Samsung S21/S22 optimization
 - **[Camera System Protocol](new_documentation/PROTOCOL_CameraRecorder.md)** - Camera APIs and data contracts
+
+- **[Python Desktop Controller - Technical](new_documentation/README_python_desktop_controller.md)** - Python Desktop Controller architecture and implementation
+- **[Python Desktop Controller - Protocol](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols and data formats
+
 - **[Repository Component Inventory](REPOSITORY_COMPONENT_INVENTORY.md)** - Complete catalog of all features, components, and modules
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
+- **[UI Architecture Guide](new_documentation/README_ui_architecture.md)** - Comprehensive UI, State, and Navigation Architecture documentation
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
+- **[Session Management Technical](new_documentation/README_session_management.md)** - Session and data storage system technical deep-dive
+
+- **[Networking Protocol - Technical Deep-Dive](new_documentation/README_networking_protocol.md)** - Complete networking and communication protocol implementation
+- **[Networking Protocol - User Guide](new_documentation/USER_GUIDE_networking_protocol.md)** - Practical guide for network setup and usage
+- **[Networking Protocol - Data Contracts](new_documentation/PROTOCOL_networking_protocol.md)** - Message specifications and protocol reference
+
+- **[Shimmer3 GSR+ Technical Deep-Dive](new_documentation/README_shimmer3_gsr_plus.md)** - Shimmer device integration architecture
+
+### 📊 Device-Specific Documentation
+- **[Shimmer3 GSR+ Documentation](new_documentation/INDEX.md)** - Comprehensive Shimmer3 GSR+ device documentation
+- **[Shimmer3 GSR+ User Guide](new_documentation/USER_GUIDE_shimmer3_gsr_plus.md)** - Practical device usage guide
+- **[Shimmer3 GSR+ Protocol](new_documentation/PROTOCOL_shimmer3_gsr_plus.md)** - Data formats and communication protocols
+
+### 🌡️ Thermal Camera Documentation
+- **[Topdon TC001 Technical Guide](new_documentation/README_topdon_tc001.md)** - Complete technical documentation for TC001 and TC001 Plus
+- **[Topdon TC001 User Guide](new_documentation/USER_GUIDE_topdon_tc001.md)** - Practical usage instructions and procedures
+- **[Topdon TC001 Protocol Reference](new_documentation/PROTOCOL_topdon_tc001.md)** - Data formats, APIs, and communication protocols
+
 
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
 - **[UIController Research](academic/UIController-Theoretical-Foundations.md)** - UI architecture research
 - **[Performance Evaluation](academic/Performance-Evaluation.md)** - System performance analysis
 - **[Design Patterns Analysis](academic/Design-Patterns-Analysis.md)** - Architectural pattern analysis
+
+### 🖥️ Python Desktop Controller Application
+The central command and control hub documentation:
+
+- **[Technical Architecture](new_documentation/README_python_desktop_controller.md)** - Complete technical implementation and architecture
+- **[User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Step-by-step usage instructions and workflows
+- **[Protocol Specification](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols, APIs, and data formats
+
+**Key Features Documented:**
+- Master orchestration and device coordination
+- Real-time monitoring and status tracking
+- Multi-device session management
+- USB webcam integration and control
+- Network communication protocols
+- Data aggregation and post-session analysis
 
 ---
 
@@ -44,10 +91,27 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [README.md](../README.md) | Project overview and quick start | All users |
+| [README_python_desktop_controller.md](new_documentation/README_python_desktop_controller.md) | Python Desktop Controller technical documentation | Developers |
+| [USER_GUIDE_python_desktop_controller.md](new_documentation/USER_GUIDE_python_desktop_controller.md) | Python Desktop Controller user guide | End users |
+| [PROTOCOL_python_desktop_controller.md](new_documentation/PROTOCOL_python_desktop_controller.md) | Python Desktop Controller protocols and APIs | Developers |
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
-| [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
+
+| [README_ui_architecture.md](new_documentation/README_ui_architecture.md) | UI, State, and Navigation Architecture technical documentation | Developers |
+| [USER_GUIDE_ui_navigation.md](new_documentation/USER_GUIDE_ui_navigation.md) | UI Navigation and Interface user guide | End users |
+| [PROTOCOL_ui_state_management.md](new_documentation/PROTOCOL_ui_state_management.md) | UI State Management protocol and data contracts | Developers |
+
+
+| [new_documentation/README_session_management.md](new_documentation/README_session_management.md) | Session Management and Data Storage System technical documentation | Developers |
+| [new_documentation/USER_GUIDE_session_management.md](new_documentation/USER_GUIDE_session_management.md) | Session Management and Data Storage System user guide | End users |
+| [new_documentation/PROTOCOL_session_management.md](new_documentation/PROTOCOL_session_management.md) | Session Management data contracts and protocols | Developers |
+
 | [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
+
+| [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
+| [README_networking_protocol.md](new_documentation/README_networking_protocol.md) | Networking and Communication Protocol technical deep-dive | Developers |
+| [USER_GUIDE_networking_protocol.md](new_documentation/USER_GUIDE_networking_protocol.md) | Networking protocol practical usage guide | End users |
+| [PROTOCOL_networking_protocol.md](new_documentation/PROTOCOL_networking_protocol.md) | Message specifications and data contracts | Developers |
 
 ### 📁 User Guides (`docs/user-guides/`)
 Comprehensive user-facing documentation for operators and researchers:
@@ -98,9 +162,12 @@ Detailed technical specifications and architecture documentation:
 |----------|---------|---------|
 | [system-architecture-specification.md](technical/system-architecture-specification.md) | Complete system architecture | Architecture reference |
 | [UIController-Enhanced-Features.md](technical/UIController-Enhanced-Features.md) | UI enhancement details | Development reference |
+
 | [mobile-application-architecture.md](technical/mobile-application-architecture.md) | Android app architecture | Mobile development |
-| [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
 | [network-protocols-synchronization.md](technical/network-protocols-synchronization.md) | Network protocols | Network development |
+
+| [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
+
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
 | [thermal-camera-integration.md](technical/thermal-camera-integration.md) | Thermal camera setup | Hardware integration |
 | [README_CameraRecorder.md](new_documentation/README_CameraRecorder.md) | Camera Recording System technical deep-dive | Developers |
@@ -120,7 +187,36 @@ Quick reference materials and API documentation:
 
 | Document | Content | Purpose |
 |----------|---------|---------|
+| [Session Management Quick Reference](new_documentation/session-management-quick-reference.md) | Session lifecycle, operations, and troubleshooting quick reference | Quick reference |
 | [API Quick Reference](reference/) | API quick reference cards | Developer reference |
+
+
+### 📁 Comprehensive Documentation (`docs/comprehensive/`)
+Complete component-specific documentation following component-first approach:
+
+| Document | Content | Target Users |
+|----------|---------|--------------|
+| [README_topdon_tc001.md](new_documentation/README_topdon_tc001.md) | Technical deep-dive for Topdon TC001/TC001 Plus | Developers, System Architects |
+| [USER_GUIDE_topdon_tc001.md](new_documentation/USER_GUIDE_topdon_tc001.md) | Practical user guide for thermal cameras | End users, Researchers |
+| [PROTOCOL_topdon_tc001.md](new_documentation/PROTOCOL_topdon_tc001.md) | Data contracts and API specifications | Developers, Integration Teams |
+
+**Key Features:**
+- Hardware specifications and architecture details
+- Step-by-step setup and operation procedures  
+- Complete API reference and data format specifications
+- Troubleshooting guides and best practices
+- Research-grade calibration and synchronization protocols
+
+### 📁 Shimmer3 GSR+ Documentation (`docs/new_documentation/`)
+Comprehensive documentation for Shimmer3 GSR+ device integration:
+
+| Document | Content | Purpose |
+|----------|---------|---------|
+| [INDEX.md](new_documentation/INDEX.md) | Documentation navigation guide | Entry point |
+| [README_shimmer3_gsr_plus.md](new_documentation/README_shimmer3_gsr_plus.md) | Technical deep-dive and architecture | Developers |
+| [USER_GUIDE_shimmer3_gsr_plus.md](new_documentation/USER_GUIDE_shimmer3_gsr_plus.md) | Practical user guide | Researchers |
+| [PROTOCOL_shimmer3_gsr_plus.md](new_documentation/PROTOCOL_shimmer3_gsr_plus.md) | Data formats and protocols | Developers/Analysts |
+
 
 ---
 
@@ -133,14 +229,19 @@ Main Entry Points:
 ├── README.md (Project Overview)
 ├── user-guides/CONSOLIDATED_USER_GUIDE.md (Complete User Manual)
 ├── implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md (Complete Technical Guide)
-└── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
+├── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
+└── new_documentation/README_topdon_tc001.md (Topdon TC001/TC001 Plus Technical Guide)
 
 Supporting Documentation:
 ├── API_REFERENCE.md (API Documentation)
 ├── technical/ (Technical Specifications)
 ├── academic/ (Individual Research Papers)
 ├── testing/ (Testing Methodology)
-└── reference/ (Quick Reference Materials)
+├── reference/ (Quick Reference Materials)
+└── comprehensive/ (Component-Specific Documentation)
+    ├── README_topdon_tc001.md (Technical Deep-Dive)
+    ├── USER_GUIDE_topdon_tc001.md (Practical User Guide)
+    └── PROTOCOL_topdon_tc001.md (Data Contracts & APIs)
 ```
 
 ### Cross-References
