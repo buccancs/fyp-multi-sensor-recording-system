@@ -122,4 +122,29 @@ class PermissionManager @Inject constructor() {
         android.util.Log.d("PermissionManager", "[DEBUG_LOG] Summary: $grantedCount granted, $deniedCount denied out of ${allPermissions.size} total")
         android.util.Log.d("PermissionManager", "[DEBUG_LOG] ===== END PERMISSION STATES =====")
     }
+    
+    /**
+     * Get all required permissions for formal analysis
+     */
+    fun getAllRequiredPermissions(): List<String> {
+        return AllAndroidPermissions.getDangerousPermissions().toList()
+    }
+    
+    /**
+     * Get currently granted permissions for complexity analysis
+     */
+    fun getGrantedPermissions(context: Context): List<String> {
+        return AllAndroidPermissions.getDangerousPermissions().filter { permission ->
+            ContextCompat.checkSelfPermission(context, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        }
+    }
+    
+    /**
+     * Get currently denied permissions for analysis
+     */
+    fun getDeniedPermissions(context: Context): List<String> {
+        return AllAndroidPermissions.getDangerousPermissions().filter { permission ->
+            ContextCompat.checkSelfPermission(context, permission) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        }
+    }
 }

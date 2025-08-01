@@ -134,12 +134,23 @@ def main():
         app.setApplicationVersion("1.0.0")
         app.setOrganizationName("Multi-Sensor Recording System Team")
         
-        # Create main window
+        # Create main window with camera configuration
         logger.info("Creating main window...")
-        main_window = DualWebcamMainWindow()
         
-        # Apply configuration if needed
-        # TODO: Pass camera indices and settings to main window
+        # Prepare camera settings
+        camera_settings = {
+            'camera1_index': camera_indices[0],
+            'camera2_index': camera_indices[1],
+            'width': width,
+            'height': height,
+            'fps': args.fps
+        }
+        
+        logger.info(f"Passing camera settings to main window: {camera_settings}")
+        main_window = DualWebcamMainWindow(
+            camera_indices=camera_indices,
+            initial_settings=camera_settings
+        )
         
         # Show window
         main_window.show()
