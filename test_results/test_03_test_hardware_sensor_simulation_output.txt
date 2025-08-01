@@ -1,330 +1,332 @@
 === Hardware Sensor Simulation Test ===
 Category: Hardware Integration
-Description: Sensor simulation on correct ports
+Description: Comprehensive sensor simulation on correct ports with realistic data rates and error injection
 Success: True
-Duration: 6.34s
+Duration: 6.19s
 Exit Code: 0
 
 === STDOUT ===
-04:56:28 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
-04:56:28 [[32mINFO[0m] AppLogger: Log level: INFO
-04:56:28 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
-04:56:28 [[32mINFO[0m] AppLogger: Console output: True
-04:56:28 [[32mINFO[0m] AppLogger: File output: True
-04:56:28 [[32mINFO[0m] AppLogger: Structured logging: True
-04:56:28 [[36mDEBUG[0m] asyncio: Using selector: EpollSelector
-04:56:28 [[32mINFO[0m] __main__: Starting Hardware Sensor Simulation Test...
-04:56:28 [[32mINFO[0m] __main__: HardwareSensorTest initialized in /tmp/sensor_test_qn0r07yj
-04:56:28 [[32mINFO[0m] __main__: ================================================================================
-04:56:28 [[32mINFO[0m] __main__: HARDWARE SENSOR SIMULATION TEST - START
-04:56:28 [[32mINFO[0m] __main__: ================================================================================
-04:56:28 [[32mINFO[0m] __main__: === Detecting All Sensor Types ===
-04:56:28 [[32mINFO[0m] __main__: Detecting USB cameras...
-04:56:28 [[32mINFO[0m] __main__: Created simulated USB camera 1
-04:56:28 [[32mINFO[0m] __main__: Created simulated USB camera 2
-04:56:28 [[32mINFO[0m] __main__: USB cameras: 0 real, 2 simulated
-04:56:28 [[32mINFO[0m] __main__: Scanning for Bluetooth devices...
-04:56:28 [[32mINFO[0m] __main__: Bluetooth scan completed: 2 devices found
-04:56:28 [[32mINFO[0m] __main__: Bluetooth devices: 0 real, 2 simulated
-04:56:28 [[32mINFO[0m] __main__: Detecting thermal camera...
-04:56:28 [[32mINFO[0m] __main__: Thermal camera simulation initialized
-04:56:28 [[32mINFO[0m] __main__: Thermal camera: simulated
-04:56:28 [[32mINFO[0m] __main__: Setting up network sensor simulators...
-04:56:28 [[32mINFO[0m] __main__: Network devices: 2 simulated
-04:56:28 [[32mINFO[0m] __main__: === Testing Sensor Port Assignments ===
-04:56:28 [[36mDEBUG[0m] __main__: ✅ USB camera port: /dev/video10
-04:56:28 [[36mDEBUG[0m] __main__: ✅ Bluetooth address: 00:06:66:AA:BB:01
-04:56:28 [[32mINFO[0m] __main__: Thermal camera simulation initialized
-04:56:28 [[36mDEBUG[0m] __main__: ✅ Thermal camera: usb_c
-04:56:28 [[36mDEBUG[0m] __main__: ✅ Network ports: 8080+
-04:56:28 [[36mDEBUG[0m] __main__: ✅ Preview stream ports: 8081-8082
-04:56:28 [[32mINFO[0m] __main__: ✅ Port assignment test: 5/5 correct (100.0%)
-04:56:28 [[32mINFO[0m] __main__: === Testing Sensor Synchronization ===
-04:56:28 [[32mINFO[0m] __main__: ✅ Synchronization test: good (max drift: 3.00ms)
-04:56:28 [[32mINFO[0m] __main__: 
+05:17:17 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+05:17:17 [[32mINFO[0m] AppLogger: Log level: INFO
+05:17:17 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+05:17:17 [[32mINFO[0m] AppLogger: Console output: True
+05:17:17 [[32mINFO[0m] AppLogger: File output: True
+05:17:17 [[32mINFO[0m] AppLogger: Structured logging: True
+05:17:17 [[33mWARNING[0m] __main__: OpenCV not available - will simulate camera detection
+05:17:17 [[33mWARNING[0m] __main__: NumPy not available - will use basic calculations
+05:17:17 [[36mDEBUG[0m] asyncio: Using selector: EpollSelector
+05:17:17 [[32mINFO[0m] __main__: Starting Hardware Sensor Simulation Test...
+05:17:17 [[32mINFO[0m] __main__: HardwareSensorTest initialized in /tmp/sensor_test_hz29tsem
+05:17:17 [[32mINFO[0m] __main__: ================================================================================
+05:17:17 [[32mINFO[0m] __main__: HARDWARE SENSOR SIMULATION TEST - START
+05:17:17 [[32mINFO[0m] __main__: ================================================================================
+05:17:17 [[32mINFO[0m] __main__: === Detecting All Sensor Types ===
+05:17:17 [[32mINFO[0m] __main__: Detecting USB cameras...
+05:17:17 [[32mINFO[0m] __main__: Created simulated USB camera 1
+05:17:17 [[32mINFO[0m] __main__: Created simulated USB camera 2
+05:17:17 [[32mINFO[0m] __main__: USB cameras: 0 real, 2 simulated
+05:17:17 [[32mINFO[0m] __main__: Scanning for Bluetooth devices...
+05:17:17 [[32mINFO[0m] __main__: Bluetooth scan completed: 2 devices found
+05:17:17 [[32mINFO[0m] __main__: Bluetooth devices: 0 real, 2 simulated
+05:17:17 [[32mINFO[0m] __main__: Detecting thermal camera...
+05:17:17 [[32mINFO[0m] __main__: Thermal camera simulation initialized
+05:17:17 [[32mINFO[0m] __main__: Thermal camera: simulated
+05:17:17 [[32mINFO[0m] __main__: Setting up network sensor simulators...
+05:17:17 [[32mINFO[0m] __main__: Network devices: 2 simulated
+05:17:17 [[32mINFO[0m] __main__: === Testing Sensor Port Assignments ===
+05:17:17 [[36mDEBUG[0m] __main__: ✅ USB camera port: /dev/video10
+05:17:17 [[36mDEBUG[0m] __main__: ✅ Bluetooth address: 00:06:66:AA:BB:01
+05:17:17 [[32mINFO[0m] __main__: Thermal camera simulation initialized
+05:17:17 [[36mDEBUG[0m] __main__: ✅ Thermal camera: usb_c
+05:17:17 [[36mDEBUG[0m] __main__: ✅ Network ports: 8080+
+05:17:17 [[36mDEBUG[0m] __main__: ✅ Preview stream ports: 8081-8082
+05:17:17 [[32mINFO[0m] __main__: ✅ Port assignment test: 5/5 correct (100.0%)
+05:17:17 [[32mINFO[0m] __main__: === Testing Sensor Synchronization ===
+05:17:17 [[32mINFO[0m] __main__: ✅ Synchronization test: good (max drift: 3.30ms)
+05:17:17 [[32mINFO[0m] __main__: 
 --- Running Sensor Detection Test ---
-04:56:28 [[32mINFO[0m] __main__: Sensor Detection: ✅ PASS
-04:56:28 [[32mINFO[0m] __main__: 
+05:17:17 [[32mINFO[0m] __main__: Sensor Detection: ✅ PASS
+05:17:17 [[32mINFO[0m] __main__: 
 --- Running USB Camera Streams Test ---
-04:56:28 [[32mINFO[0m] __main__: === Testing USB Camera Streams ===
-04:56:28 [[32mINFO[0m] __main__: Started camera stream: Simulated USB Camera 1
-04:56:28 [[32mINFO[0m] __main__: Started camera stream: Simulated USB Camera 2
-04:56:28 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:28 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
-04:56:29 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
-04:56:30 [[32mINFO[0m] __main__: Stopped camera stream: Simulated USB Camera 1
-04:56:30 [[32mINFO[0m] __main__: Stopped camera stream: Simulated USB Camera 2
-04:56:30 [[32mINFO[0m] __main__: ✅ USB camera test: 20 frames collected from 2 cameras
-04:56:30 [[32mINFO[0m] __main__: USB Camera Streams: ✅ PASS
-04:56:30 [[32mINFO[0m] __main__: 
+05:17:17 [[32mINFO[0m] __main__: === Testing USB Camera Streams ===
+05:17:17 [[32mINFO[0m] __main__: Started camera stream: Simulated USB Camera 1
+05:17:17 [[32mINFO[0m] __main__: Started camera stream: Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 1
+05:17:17 [[36mDEBUG[0m] __main__: Collected frame from Simulated USB Camera 2
+05:17:18 [[32mINFO[0m] __main__: Stopped camera stream: Simulated USB Camera 1
+05:17:18 [[32mINFO[0m] __main__: Stopped camera stream: Simulated USB Camera 2
+05:17:18 [[32mINFO[0m] __main__: ✅ USB camera test: 20 frames collected from 2 cameras
+05:17:18 [[32mINFO[0m] __main__: USB Camera Streams: ✅ PASS
+05:17:18 [[32mINFO[0m] __main__: 
 --- Running Bluetooth Sensors Test ---
-04:56:30 [[32mINFO[0m] __main__: === Testing Bluetooth Sensors ===
-04:56:30 [[32mINFO[0m] __main__: Connected to Shimmer: Shimmer3-GSR-001
-04:56:30 [[32mINFO[0m] __main__: Connected to Shimmer: Shimmer3-GSR-002
-04:56:30 [[32mINFO[0m] __main__: Started GSR recording: Shimmer3-GSR-001
-04:56:30 [[32mINFO[0m] __main__: Started GSR recording: Shimmer3-GSR-002
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.5 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.5 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.0 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 152.0 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.5 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.5 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.0 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 151.0 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.5 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.5 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
-04:56:30 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
-04:56:31 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
-04:56:31 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
-04:56:31 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
-04:56:31 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
-04:56:31 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
-04:56:31 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
-04:56:31 [[32mINFO[0m] __main__: Stopped GSR recording: Shimmer3-GSR-001
-04:56:31 [[32mINFO[0m] __main__: Disconnected from Shimmer: Shimmer3-GSR-001
-04:56:31 [[32mINFO[0m] __main__: Stopped GSR recording: Shimmer3-GSR-002
-04:56:31 [[32mINFO[0m] __main__: Disconnected from Shimmer: Shimmer3-GSR-002
-04:56:31 [[32mINFO[0m] __main__: ✅ Bluetooth sensor test: 100 GSR samples from 2 devices
-04:56:31 [[32mINFO[0m] __main__: Bluetooth Sensors: ✅ PASS
-04:56:31 [[32mINFO[0m] __main__: 
+05:17:18 [[32mINFO[0m] __main__: === Testing Bluetooth Sensors ===
+05:17:18 [[32mINFO[0m] __main__: Connected to Shimmer: Shimmer3-GSR-001
+05:17:18 [[32mINFO[0m] __main__: Connected to Shimmer: Shimmer3-GSR-002
+05:17:18 [[32mINFO[0m] __main__: Started GSR recording: Shimmer3-GSR-001
+05:17:18 [[32mINFO[0m] __main__: Started GSR recording: Shimmer3-GSR-002
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.5 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.5 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.0 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 152.0 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.5 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.5 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.1 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.0 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 151.0 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.9 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.8 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.7 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.6 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.5 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.5 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.4 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.3 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
+05:17:18 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
+05:17:19 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
+05:17:19 [[36mDEBUG[0m] __main__: GSR sample: 150.2 kΩ
+05:17:19 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
+05:17:19 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
+05:17:19 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
+05:17:19 [[36mDEBUG[0m] __main__: GSR sample: 150.1 kΩ
+05:17:19 [[32mINFO[0m] __main__: Stopped GSR recording: Shimmer3-GSR-001
+05:17:19 [[32mINFO[0m] __main__: Disconnected from Shimmer: Shimmer3-GSR-001
+05:17:19 [[32mINFO[0m] __main__: Stopped GSR recording: Shimmer3-GSR-002
+05:17:19 [[32mINFO[0m] __main__: Disconnected from Shimmer: Shimmer3-GSR-002
+05:17:19 [[32mINFO[0m] __main__: ✅ Bluetooth sensor test: 100 GSR samples from 2 devices
+05:17:19 [[32mINFO[0m] __main__: Bluetooth Sensors: ✅ PASS
+05:17:19 [[32mINFO[0m] __main__: 
 --- Running Thermal Camera Test ---
-04:56:31 [[32mINFO[0m] __main__: === Testing Thermal Camera ===
-04:56:31 [[32mINFO[0m] __main__: Connected to thermal camera (simulated)
-04:56:31 [[32mINFO[0m] __main__: Started thermal recording
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.9-40.4°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.3-41.6°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=17.6-40.5°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=15.5-41.6°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.5-41.6°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=17.1-41.4°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=17.2-40.8°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.5-41.6°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=15.4-41.1°C
-04:56:31 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=17.0-41.8°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.6-40.2°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.4-40.4°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.1-41.5°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.7-40.6°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=15.4-40.5°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.5-40.9°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=17.0-41.9°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.6-42.3°C
-04:56:32 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.1-40.6°C
-04:56:33 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.1°C, range=16.4-42.3°C
-04:56:33 [[32mINFO[0m] __main__: Stopped thermal recording
-04:56:33 [[32mINFO[0m] __main__: Disconnected thermal camera
-04:56:33 [[32mINFO[0m] __main__: ✅ Thermal camera test: 20 frames, temp range 25.1-25.1°C (avg 25.1°C)
-04:56:33 [[32mINFO[0m] __main__: Thermal Camera: ✅ PASS
-04:56:33 [[32mINFO[0m] __main__: 
+05:17:19 [[32mINFO[0m] __main__: === Testing Thermal Camera ===
+05:17:19 [[32mINFO[0m] __main__: Connected to thermal camera (simulated)
+05:17:19 [[32mINFO[0m] __main__: Started thermal recording
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:19 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:20 [[36mDEBUG[0m] __main__: Thermal frame: avg=25.0°C, range=20.0-40.0°C
+05:17:21 [[32mINFO[0m] __main__: Stopped thermal recording
+05:17:21 [[32mINFO[0m] __main__: Disconnected thermal camera
+05:17:21 [[32mINFO[0m] __main__: ✅ Thermal camera test: 20 frames, temp range 25.0-25.0°C (avg 25.0°C)
+05:17:21 [[32mINFO[0m] __main__: Thermal Camera: ✅ PASS
+05:17:21 [[32mINFO[0m] __main__: 
 --- Running Network Sensors Test ---
-04:56:33 [[32mINFO[0m] __main__: === Testing Network Sensors ===
-04:56:33 [[32mINFO[0m] __main__: Network sensors started for phone_1 on port 8080
-04:56:33 [[32mINFO[0m] __main__: Network sensors started for phone_2 on port 8090
-04:56:33 [[32mINFO[0m] __main__: Started 2 network sensor services
-04:56:33 [[32mINFO[0m] __main__: Testing camera sensors...
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
-04:56:33 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
-04:56:33 [[32mINFO[0m] __main__:   camera: 20 samples collected
-04:56:33 [[32mINFO[0m] __main__: Testing accelerometer sensors...
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:33 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:34 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:34 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:34 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
-04:56:34 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
-04:56:34 [[32mINFO[0m] __main__:   accelerometer: 20 samples collected
-04:56:34 [[32mINFO[0m] __main__: Testing gyroscope sensors...
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
-04:56:34 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
-04:56:34 [[32mINFO[0m] __main__:   gyroscope: 20 samples collected
-04:56:34 [[32mINFO[0m] __main__: Testing magnetometer sensors...
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:34 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:35 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:35 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:35 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
-04:56:35 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
-04:56:35 [[32mINFO[0m] __main__:   magnetometer: 20 samples collected
-04:56:35 [[32mINFO[0m] __main__: Network sensors stopped for phone_1
-04:56:35 [[32mINFO[0m] __main__: Network sensors stopped for phone_2
-04:56:35 [[32mINFO[0m] __main__: ✅ Network sensor test: 80 total samples from 4 sensor types
-04:56:35 [[32mINFO[0m] __main__: Network Sensors: ✅ PASS
-04:56:35 [[32mINFO[0m] __main__: 
+05:17:21 [[32mINFO[0m] __main__: === Testing Network Sensors ===
+05:17:21 [[32mINFO[0m] __main__: Network sensors started for phone_1 on port 8080
+05:17:21 [[32mINFO[0m] __main__: Network sensors started for phone_2 on port 8090
+05:17:21 [[32mINFO[0m] __main__: Started 2 network sensor services
+05:17:21 [[32mINFO[0m] __main__: Testing camera sensors...
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_1_camera
+05:17:21 [[36mDEBUG[0m] __main__: Network camera sample from phone_2_camera
+05:17:21 [[32mINFO[0m] __main__:   camera: 20 samples collected
+05:17:21 [[32mINFO[0m] __main__: Testing accelerometer sensors...
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:21 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:22 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_1_accelerometer
+05:17:22 [[36mDEBUG[0m] __main__: Network accelerometer sample from phone_2_accelerometer
+05:17:22 [[32mINFO[0m] __main__:   accelerometer: 20 samples collected
+05:17:22 [[32mINFO[0m] __main__: Testing gyroscope sensors...
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_1_gyroscope
+05:17:22 [[36mDEBUG[0m] __main__: Network gyroscope sample from phone_2_gyroscope
+05:17:22 [[32mINFO[0m] __main__:   gyroscope: 20 samples collected
+05:17:22 [[32mINFO[0m] __main__: Testing magnetometer sensors...
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:22 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:23 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:23 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:23 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_1_magnetometer
+05:17:23 [[36mDEBUG[0m] __main__: Network magnetometer sample from phone_2_magnetometer
+05:17:23 [[32mINFO[0m] __main__:   magnetometer: 20 samples collected
+05:17:23 [[32mINFO[0m] __main__: Network sensors stopped for phone_1
+05:17:23 [[32mINFO[0m] __main__: Network sensors stopped for phone_2
+05:17:23 [[32mINFO[0m] __main__: ✅ Network sensor test: 80 total samples from 4 sensor types
+05:17:23 [[32mINFO[0m] __main__: Network Sensors: ✅ PASS
+05:17:23 [[32mINFO[0m] __main__: 
 --- Running Port Assignments Test ---
-04:56:35 [[32mINFO[0m] __main__: Port Assignments: ✅ PASS
-04:56:35 [[32mINFO[0m] __main__: 
+05:17:23 [[32mINFO[0m] __main__: Port Assignments: ✅ PASS
+05:17:23 [[32mINFO[0m] __main__: 
 --- Running Synchronization Test ---
-04:56:35 [[32mINFO[0m] __main__: Synchronization: ✅ PASS
-04:56:35 [[32mINFO[0m] __main__: ================================================================================
-04:56:35 [[32mINFO[0m] __main__: ✅ HARDWARE SENSOR SIMULATION TEST - SUCCESS
-04:56:35 [[32mINFO[0m] __main__: Tests Passed: 7/7 (100.0%)
-04:56:35 [[32mINFO[0m] __main__: Duration: 6.16 seconds
-04:56:35 [[32mINFO[0m] __main__: Data Samples: 220 (35.7/sec)
-04:56:35 [[32mINFO[0m] __main__: ================================================================================
+05:17:23 [[32mINFO[0m] __main__: Synchronization: ✅ PASS
+05:17:23 [[32mINFO[0m] __main__: ================================================================================
+05:17:23 [[32mINFO[0m] __main__: ✅ HARDWARE SENSOR SIMULATION TEST - SUCCESS
+05:17:23 [[32mINFO[0m] __main__: Tests Passed: 7/7 (100.0%)
+05:17:23 [[32mINFO[0m] __main__: Duration: 6.10 seconds
+05:17:23 [[32mINFO[0m] __main__: Data Samples: 220 (36.1/sec)
+05:17:23 [[32mINFO[0m] __main__: ================================================================================
 
 ======================================================================
 🔬 HARDWARE SENSOR SIMULATION TEST SUMMARY
@@ -333,8 +335,8 @@ Exit Code: 0
 📊 PERFORMANCE:
   Tests Passed: 7/7
   Success Rate: 100.0%
-  Duration: 6.16 seconds
-  Data Samples: 220 (35.7/sec)
+  Duration: 6.10 seconds
+  Data Samples: 220 (36.1/sec)
 
 🔍 SENSOR DETECTION:
   USB Cameras: 0 real, 2 simulated
@@ -356,16 +358,8 @@ Exit Code: 0
 
 ⏱️  SYNCHRONIZATION:
   Quality: Good
-  Max Drift: 3.00ms
+  Max Drift: 3.30ms
 ======================================================================
-04:56:35 [[32mINFO[0m] __main__: Test results saved to: /tmp/sensor_test_qn0r07yj/sensor_test_results.json
+05:17:23 [[32mINFO[0m] __main__: Test results saved to: /tmp/sensor_test_hz29tsem/sensor_test_results.json
 
 === STDERR ===
-[ WARN:0@0.013] global cap_v4l.cpp:914 open VIDEOIO(V4L2:/dev/video0): can't open camera by index
-[ERROR:0@0.013] global obsensor_uvc_stream_channel.cpp:163 getStreamChannelGroup Camera index out of range
-[ WARN:0@0.013] global cap_v4l.cpp:914 open VIDEOIO(V4L2:/dev/video1): can't open camera by index
-[ERROR:0@0.013] global obsensor_uvc_stream_channel.cpp:163 getStreamChannelGroup Camera index out of range
-[ WARN:0@0.013] global cap_v4l.cpp:914 open VIDEOIO(V4L2:/dev/video2): can't open camera by index
-[ERROR:0@0.013] global obsensor_uvc_stream_channel.cpp:163 getStreamChannelGroup Camera index out of range
-[ WARN:0@0.013] global cap_v4l.cpp:914 open VIDEOIO(V4L2:/dev/video3): can't open camera by index
-[ERROR:0@0.013] global obsensor_uvc_stream_channel.cpp:163 getStreamChannelGroup Camera index out of range

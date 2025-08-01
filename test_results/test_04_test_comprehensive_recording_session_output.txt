@@ -2,172 +2,172 @@
 Category: Complete System
 Description: Complete end-to-end recording system validation
 Success: False
-Duration: 6.26s
+Duration: 6.18s
 Exit Code: 1
 
 === STDOUT ===
-04:56:35 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
-04:56:35 [[32mINFO[0m] AppLogger: Log level: INFO
-04:56:35 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
-04:56:35 [[32mINFO[0m] AppLogger: Console output: True
-04:56:35 [[32mINFO[0m] AppLogger: File output: True
-04:56:35 [[32mINFO[0m] AppLogger: Structured logging: True
-04:56:35 [[31mERROR[0m] __main__: Missing dependencies: cannot import name 'Resolution' from 'config.webcam_config' (/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/config/webcam_config.py)
+05:03:13 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+05:03:13 [[32mINFO[0m] AppLogger: Log level: INFO
+05:03:13 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+05:03:13 [[32mINFO[0m] AppLogger: Console output: True
+05:03:13 [[32mINFO[0m] AppLogger: File output: True
+05:03:13 [[32mINFO[0m] AppLogger: Structured logging: True
+05:03:13 [[31mERROR[0m] __main__: Missing dependencies: No module named 'PyQt5'
 ⚠️  Some dependencies are missing, running with mock components
-04:56:35 [[36mDEBUG[0m] asyncio: Using selector: EpollSelector
-04:56:35 [[32mINFO[0m] __main__: Starting Comprehensive Recording Session Integration Test...
-04:56:35 [[32mINFO[0m] __main__: ComprehensiveRecordingSessionTest initialized in /tmp/recording_test_ki7kdwwh
-04:56:35 [[32mINFO[0m] __main__: ================================================================================
-04:56:35 [[32mINFO[0m] __main__: STARTING COMPREHENSIVE RECORDING SESSION TEST
-04:56:35 [[32mINFO[0m] __main__: ================================================================================
-04:56:35 [[32mINFO[0m] __main__: STEP 1: Setting up test environment...
-04:56:35 [[32mINFO[0m] __main__: Setting up comprehensive test environment...
-04:56:35 [[32mINFO[0m] session.session_manager: session manager initialized with base directory: /tmp/recording_test_ki7kdwwh/recordings
-04:56:35 [[33mWARNING[0m] __main__: Using mock device server due to missing dependencies
-04:56:35 [[32mINFO[0m] __main__: MockWebcamCapture initialized
-04:56:35 [[32mINFO[0m] __main__: MockShimmerManager initialized
-04:56:35 [[32mINFO[0m] __main__: Test environment setup completed
-04:56:35 [[32mINFO[0m] __main__: STEP 2: Creating mock Android devices...
-04:56:35 [[32mINFO[0m] __main__: Creating 2 mock Android devices...
-04:56:35 [[32mINFO[0m] __main__: MockAndroidDevice phone_1 initialized
-04:56:35 [[32mINFO[0m] __main__: MockAndroidDevice phone_2 initialized
-04:56:35 [[32mINFO[0m] __main__: Created 2 mock Android devices
-04:56:35 [[32mINFO[0m] __main__: STEP 3: Testing device connections...
-04:56:35 [[32mINFO[0m] __main__: Testing device connections...
-04:56:36 [[31mERROR[0m] __main__: Failed to connect phone_1 to PC: [Errno 111] Connection refused
-04:56:36 [[31mERROR[0m] __main__: Failed to connect phone_2 to PC: [Errno 111] Connection refused
-04:56:36 [[33mWARNING[0m] __main__: Only 0/2 devices connected
-04:56:36 [[32mINFO[0m] __main__: STEP 4: Testing recording session lifecycle...
-04:56:36 [[32mINFO[0m] __main__: === Testing Recording Session Lifecycle ===
-04:56:36 [[32mINFO[0m] __main__: Step 1: Creating recording session...
-04:56:36 [[32mINFO[0m] session.session_manager: creating new session with name: integration_test_session
-04:56:36 [[32mINFO[0m] session.session_manager: session created: integration_test_session_20250801_045636
-04:56:36 [[32mINFO[0m] __main__: Created session: integration_test_session_20250801_045636
-04:56:36 [[32mINFO[0m] __main__: Step 2: Configuring sensors...
-04:56:36 [[32mINFO[0m] __main__: MockWebcamCapture started on camera 0
-04:56:36 [[32mINFO[0m] __main__: Started webcam 0: Mock USB Webcam 1
-04:56:36 [[32mINFO[0m] __main__: MockWebcamCapture started on camera 1
-04:56:36 [[32mINFO[0m] __main__: Started webcam 1: Mock USB Webcam 2
-04:56:36 [[32mINFO[0m] __main__: MockShimmerManager discovered 2 devices
-04:56:36 [[32mINFO[0m] __main__: MockShimmerManager connected to 00:06:66:XX:XX:01
-04:56:36 [[32mINFO[0m] __main__: Connected Shimmer device: Shimmer3-001
-04:56:36 [[32mINFO[0m] __main__: MockShimmerManager connected to 00:06:66:XX:XX:02
-04:56:36 [[32mINFO[0m] __main__: Connected Shimmer device: Shimmer3-002
-04:56:36 [[32mINFO[0m] __main__: Step 3: Synchronizing device clocks...
-04:56:36 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:36 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:36 [[32mINFO[0m] __main__: Clock synchronization completed
-04:56:36 [[32mINFO[0m] __main__: Step 4: Starting recording session...
-04:56:36 [[32mINFO[0m] __main__: MockWebcamCapture started recording to /tmp/recording_test_ki7kdwwh/recordings/integration_test_session_20250801_045636/webcam_0.mp4
-04:56:36 [[32mINFO[0m] __main__: Started webcam recording: /tmp/recording_test_ki7kdwwh/recordings/integration_test_session_20250801_045636/webcam_0.mp4
-04:56:36 [[32mINFO[0m] __main__: MockWebcamCapture started recording to /tmp/recording_test_ki7kdwwh/recordings/integration_test_session_20250801_045636/webcam_1.mp4
-04:56:36 [[32mINFO[0m] __main__: Started webcam recording: /tmp/recording_test_ki7kdwwh/recordings/integration_test_session_20250801_045636/webcam_1.mp4
-04:56:36 [[32mINFO[0m] __main__: MockShimmerManager started recording session integration_test_session_20250801_045636
-04:56:36 [[32mINFO[0m] __main__: Started Shimmer recording: 00:06:66:XX:XX:01
-04:56:36 [[32mINFO[0m] __main__: MockShimmerManager started recording session integration_test_session_20250801_045636
-04:56:36 [[32mINFO[0m] __main__: Started Shimmer recording: 00:06:66:XX:XX:02
-04:56:36 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:36 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:36 [[32mINFO[0m] __main__: All devices started recording
-04:56:36 [[32mINFO[0m] __main__: Step 5: Recording for 5.0 seconds...
-04:56:37 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:37 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:37 [[36mDEBUG[0m] __main__: Recording progress: 1/5 seconds
-04:56:38 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:38 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:38 [[36mDEBUG[0m] __main__: Recording progress: 2/5 seconds
-04:56:39 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:39 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:39 [[36mDEBUG[0m] __main__: Recording progress: 3/5 seconds
-04:56:40 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:40 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:40 [[36mDEBUG[0m] __main__: Recording progress: 4/5 seconds
-04:56:41 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:41 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:41 [[36mDEBUG[0m] __main__: Recording progress: 5/5 seconds
-04:56:41 [[32mINFO[0m] __main__: Step 6: Stopping recording session...
-04:56:41 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:41 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
-04:56:41 [[32mINFO[0m] __main__: MockWebcamCapture saved recording to /tmp/recording_test_ki7kdwwh/recordings/integration_test_session_20250801_045636/webcam_1.mp4
-04:56:41 [[32mINFO[0m] __main__: Webcam recording stopped
-04:56:41 [[32mINFO[0m] __main__: MockShimmerManager stopped recording session integration_test_session_20250801_045636
-04:56:41 [[32mINFO[0m] __main__: Shimmer recording stopped: {'session_id': 'integration_test_session_20250801_045636', 'duration': 5.010794639587402, 'sample_count': 256, 'file_path': 'mock_gsr_data_integration_test_session_20250801_045636.csv'}
-04:56:41 [[32mINFO[0m] __main__: Step 7: Finalizing session...
-04:56:41 [[32mINFO[0m] __main__: === Recording Session Completed Successfully ===
-04:56:41 [[32mINFO[0m] __main__: Session ID: integration_test_session_20250801_045636
-04:56:41 [[32mINFO[0m] __main__: Duration: 5.01 seconds
-04:56:41 [[32mINFO[0m] __main__: Files created: 4
-04:56:41 [[32mINFO[0m] __main__: STEP 5: Testing error conditions...
-04:56:41 [[32mINFO[0m] __main__: === Testing Error Conditions ===
-04:56:41 [[32mINFO[0m] __main__: Test 1: Simulating device disconnection...
-04:56:41 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
-04:56:41 [[32mINFO[0m] __main__: Test 2: Testing invalid message handling...
-04:56:41 [[32mINFO[0m] __main__: Test 3: Simulating low storage space...
-04:56:41 [[32mINFO[0m] __main__: Test 4: Testing session management edge cases...
-04:56:41 [[32mINFO[0m] session.session_manager: creating new session with name: invalid/name\test
-04:56:41 [[32mINFO[0m] session.session_manager: session created: invalid_name_test_20250801_045641
-04:56:41 [[32mINFO[0m] __main__: Completed 3 error condition tests
-04:56:41 [[32mINFO[0m] __main__: STEP 6: Testing logging functionality...
-04:56:41 [[32mINFO[0m] __main__: === Testing Logging Functionality ===
-04:56:41 [[36mDEBUG[0m] test_debug: Test DEBUG message for comprehensive logging test
-04:56:41 [[32mINFO[0m] test_info: Test INFO message for comprehensive logging test
-04:56:41 [[33mWARNING[0m] test_warning: Test WARNING message for comprehensive logging test
-04:56:41 [[31mERROR[0m] test_error: Test ERROR message for comprehensive logging test
-04:56:41 [[35mCRITICAL[0m] test_critical: Test CRITICAL message for comprehensive logging test
-04:56:41 [[32mINFO[0m] test_session_manager: Testing logging for session_manager component
-04:56:41 [[32mINFO[0m] test_device_server: Testing logging for device_server component
-04:56:41 [[32mINFO[0m] test_webcam_capture: Testing logging for webcam_capture component
-04:56:41 [[32mINFO[0m] test_shimmer_manager: Testing logging for shimmer_manager component
-04:56:41 [[32mINFO[0m] performance_test: Operation completed in 10.1ms
-04:56:41 [[31mERROR[0m] error_test: Test exception caught and logged
+05:03:13 [[36mDEBUG[0m] asyncio: Using selector: EpollSelector
+05:03:13 [[32mINFO[0m] __main__: Starting Comprehensive Recording Session Integration Test...
+05:03:13 [[32mINFO[0m] __main__: ComprehensiveRecordingSessionTest initialized in /tmp/recording_test_reaocv00
+05:03:13 [[32mINFO[0m] __main__: ================================================================================
+05:03:13 [[32mINFO[0m] __main__: STARTING COMPREHENSIVE RECORDING SESSION TEST
+05:03:13 [[32mINFO[0m] __main__: ================================================================================
+05:03:13 [[32mINFO[0m] __main__: STEP 1: Setting up test environment...
+05:03:13 [[32mINFO[0m] __main__: Setting up comprehensive test environment...
+05:03:13 [[32mINFO[0m] session.session_manager: session manager initialized with base directory: /tmp/recording_test_reaocv00/recordings
+05:03:13 [[33mWARNING[0m] __main__: Using mock device server due to missing dependencies
+05:03:13 [[32mINFO[0m] __main__: MockWebcamCapture initialized
+05:03:13 [[32mINFO[0m] __main__: MockShimmerManager initialized
+05:03:13 [[32mINFO[0m] __main__: Test environment setup completed
+05:03:13 [[32mINFO[0m] __main__: STEP 2: Creating mock Android devices...
+05:03:13 [[32mINFO[0m] __main__: Creating 2 mock Android devices...
+05:03:13 [[32mINFO[0m] __main__: MockAndroidDevice phone_1 initialized
+05:03:13 [[32mINFO[0m] __main__: MockAndroidDevice phone_2 initialized
+05:03:13 [[32mINFO[0m] __main__: Created 2 mock Android devices
+05:03:13 [[32mINFO[0m] __main__: STEP 3: Testing device connections...
+05:03:13 [[32mINFO[0m] __main__: Testing device connections...
+05:03:14 [[31mERROR[0m] __main__: Failed to connect phone_1 to PC: [Errno 111] Connection refused
+05:03:14 [[31mERROR[0m] __main__: Failed to connect phone_2 to PC: [Errno 111] Connection refused
+05:03:14 [[33mWARNING[0m] __main__: Only 0/2 devices connected
+05:03:14 [[32mINFO[0m] __main__: STEP 4: Testing recording session lifecycle...
+05:03:14 [[32mINFO[0m] __main__: === Testing Recording Session Lifecycle ===
+05:03:14 [[32mINFO[0m] __main__: Step 1: Creating recording session...
+05:03:14 [[32mINFO[0m] session.session_manager: creating new session with name: integration_test_session
+05:03:14 [[32mINFO[0m] session.session_manager: session created: integration_test_session_20250801_050314
+05:03:14 [[32mINFO[0m] __main__: Created session: integration_test_session_20250801_050314
+05:03:14 [[32mINFO[0m] __main__: Step 2: Configuring sensors...
+05:03:14 [[32mINFO[0m] __main__: MockWebcamCapture started on camera 0
+05:03:14 [[32mINFO[0m] __main__: Started webcam 0: Mock USB Webcam 1
+05:03:14 [[32mINFO[0m] __main__: MockWebcamCapture started on camera 1
+05:03:14 [[32mINFO[0m] __main__: Started webcam 1: Mock USB Webcam 2
+05:03:14 [[32mINFO[0m] __main__: MockShimmerManager discovered 2 devices
+05:03:14 [[32mINFO[0m] __main__: MockShimmerManager connected to 00:06:66:XX:XX:01
+05:03:14 [[32mINFO[0m] __main__: Connected Shimmer device: Shimmer3-001
+05:03:14 [[32mINFO[0m] __main__: MockShimmerManager connected to 00:06:66:XX:XX:02
+05:03:14 [[32mINFO[0m] __main__: Connected Shimmer device: Shimmer3-002
+05:03:14 [[32mINFO[0m] __main__: Step 3: Synchronizing device clocks...
+05:03:14 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:14 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:14 [[32mINFO[0m] __main__: Clock synchronization completed
+05:03:14 [[32mINFO[0m] __main__: Step 4: Starting recording session...
+05:03:14 [[32mINFO[0m] __main__: MockWebcamCapture started recording to /tmp/recording_test_reaocv00/recordings/integration_test_session_20250801_050314/webcam_0.mp4
+05:03:14 [[32mINFO[0m] __main__: Started webcam recording: /tmp/recording_test_reaocv00/recordings/integration_test_session_20250801_050314/webcam_0.mp4
+05:03:14 [[32mINFO[0m] __main__: MockWebcamCapture started recording to /tmp/recording_test_reaocv00/recordings/integration_test_session_20250801_050314/webcam_1.mp4
+05:03:14 [[32mINFO[0m] __main__: Started webcam recording: /tmp/recording_test_reaocv00/recordings/integration_test_session_20250801_050314/webcam_1.mp4
+05:03:14 [[32mINFO[0m] __main__: MockShimmerManager started recording session integration_test_session_20250801_050314
+05:03:14 [[32mINFO[0m] __main__: Started Shimmer recording: 00:06:66:XX:XX:01
+05:03:14 [[32mINFO[0m] __main__: MockShimmerManager started recording session integration_test_session_20250801_050314
+05:03:14 [[32mINFO[0m] __main__: Started Shimmer recording: 00:06:66:XX:XX:02
+05:03:14 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:14 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:14 [[32mINFO[0m] __main__: All devices started recording
+05:03:14 [[32mINFO[0m] __main__: Step 5: Recording for 5.0 seconds...
+05:03:15 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:15 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:15 [[36mDEBUG[0m] __main__: Recording progress: 1/5 seconds
+05:03:16 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:16 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:16 [[36mDEBUG[0m] __main__: Recording progress: 2/5 seconds
+05:03:17 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:17 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:17 [[36mDEBUG[0m] __main__: Recording progress: 3/5 seconds
+05:03:18 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:18 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:18 [[36mDEBUG[0m] __main__: Recording progress: 4/5 seconds
+05:03:19 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:19 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:19 [[36mDEBUG[0m] __main__: Recording progress: 5/5 seconds
+05:03:19 [[32mINFO[0m] __main__: Step 6: Stopping recording session...
+05:03:19 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:19 [[31mERROR[0m] __main__: Failed to send message from phone_2: [Errno 32] Broken pipe
+05:03:19 [[32mINFO[0m] __main__: MockWebcamCapture saved recording to /tmp/recording_test_reaocv00/recordings/integration_test_session_20250801_050314/webcam_1.mp4
+05:03:19 [[32mINFO[0m] __main__: Webcam recording stopped
+05:03:19 [[32mINFO[0m] __main__: MockShimmerManager stopped recording session integration_test_session_20250801_050314
+05:03:19 [[32mINFO[0m] __main__: Shimmer recording stopped: {'session_id': 'integration_test_session_20250801_050314', 'duration': 5.0112245082855225, 'sample_count': 256, 'file_path': 'mock_gsr_data_integration_test_session_20250801_050314.csv'}
+05:03:19 [[32mINFO[0m] __main__: Step 7: Finalizing session...
+05:03:19 [[32mINFO[0m] __main__: === Recording Session Completed Successfully ===
+05:03:19 [[32mINFO[0m] __main__: Session ID: integration_test_session_20250801_050314
+05:03:19 [[32mINFO[0m] __main__: Duration: 5.01 seconds
+05:03:19 [[32mINFO[0m] __main__: Files created: 4
+05:03:19 [[32mINFO[0m] __main__: STEP 5: Testing error conditions...
+05:03:19 [[32mINFO[0m] __main__: === Testing Error Conditions ===
+05:03:19 [[32mINFO[0m] __main__: Test 1: Simulating device disconnection...
+05:03:19 [[31mERROR[0m] __main__: Failed to send message from phone_1: [Errno 32] Broken pipe
+05:03:19 [[32mINFO[0m] __main__: Test 2: Testing invalid message handling...
+05:03:19 [[32mINFO[0m] __main__: Test 3: Simulating low storage space...
+05:03:19 [[32mINFO[0m] __main__: Test 4: Testing session management edge cases...
+05:03:19 [[32mINFO[0m] session.session_manager: creating new session with name: invalid/name\test
+05:03:19 [[32mINFO[0m] session.session_manager: session created: invalid_name_test_20250801_050319
+05:03:19 [[32mINFO[0m] __main__: Completed 3 error condition tests
+05:03:19 [[32mINFO[0m] __main__: STEP 6: Testing logging functionality...
+05:03:19 [[32mINFO[0m] __main__: === Testing Logging Functionality ===
+05:03:19 [[36mDEBUG[0m] test_debug: Test DEBUG message for comprehensive logging test
+05:03:19 [[32mINFO[0m] test_info: Test INFO message for comprehensive logging test
+05:03:19 [[33mWARNING[0m] test_warning: Test WARNING message for comprehensive logging test
+05:03:19 [[31mERROR[0m] test_error: Test ERROR message for comprehensive logging test
+05:03:19 [[35mCRITICAL[0m] test_critical: Test CRITICAL message for comprehensive logging test
+05:03:19 [[32mINFO[0m] test_session_manager: Testing logging for session_manager component
+05:03:19 [[32mINFO[0m] test_device_server: Testing logging for device_server component
+05:03:19 [[32mINFO[0m] test_webcam_capture: Testing logging for webcam_capture component
+05:03:19 [[32mINFO[0m] test_shimmer_manager: Testing logging for shimmer_manager component
+05:03:19 [[32mINFO[0m] performance_test: Operation completed in 10.1ms
+05:03:19 [[31mERROR[0m] error_test: Test exception caught and logged
 Traceback (most recent call last):
   File "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/test_comprehensive_recording_session.py", line 942, in test_logging_functionality
     raise ValueError("Test exception for logging verification")
 ValueError: Test exception for logging verification
-04:56:41 [[32mINFO[0m] __main__: Log file structured.log: 1097988 bytes
-04:56:41 [[32mINFO[0m] __main__: Log file errors.log: 7578 bytes
-04:56:41 [[32mINFO[0m] __main__: Log file application.log: 310839 bytes
-04:56:41 [[32mINFO[0m] __main__: Logging functionality test completed successfully
-04:56:41 [[32mINFO[0m] __main__: STEP 7: Testing UI responsiveness...
-04:56:41 [[32mINFO[0m] __main__: === Testing UI Responsiveness (Simulated) ===
-04:56:41 [[36mDEBUG[0m] __main__: Simulated button click 1: 1.07ms
-04:56:41 [[36mDEBUG[0m] __main__: Simulated button click 2: 1.07ms
-04:56:41 [[36mDEBUG[0m] __main__: Simulated button click 3: 1.07ms
-04:56:41 [[36mDEBUG[0m] __main__: Simulated button click 4: 1.07ms
-04:56:41 [[36mDEBUG[0m] __main__: Simulated button click 5: 1.07ms
-04:56:41 [[32mINFO[0m] __main__: UI responsiveness good: max response time 1.07ms
-04:56:41 [[32mINFO[0m] __main__: STEP 8: Verifying file structure...
-04:56:41 [[32mINFO[0m] __main__: === Verifying File Structure ===
-04:56:41 [[32mINFO[0m] __main__: Checking session directory: invalid_name_test_20250801_045641
-04:56:41 [[32mINFO[0m] __main__: Found metadata files: ['session_metadata.json']
-04:56:41 [[33mWARNING[0m] __main__: File naming issue: session_metadata.json
-04:56:41 [[32mINFO[0m] __main__: Checking session directory: integration_test_session_20250801_045636
-04:56:41 [[32mINFO[0m] __main__: Found metadata files: ['session_metadata.json']
-04:56:41 [[32mINFO[0m] __main__: Found data files: ['webcam_1.mp4']
-04:56:41 [[33mWARNING[0m] __main__: File naming issue: session_metadata.json
-04:56:41 [[32mINFO[0m] __main__: File structure verification completed
-04:56:41 [[32mINFO[0m] __main__: Total files created: 3
-04:56:41 [[32mINFO[0m] __main__: ================================================================================
-04:56:41 [[32mINFO[0m] __main__: ❌ COMPREHENSIVE RECORDING SESSION TEST - FAILED
-04:56:41 [[32mINFO[0m] __main__: Test Duration: 6.05 seconds
-04:56:41 [[32mINFO[0m] __main__: ================================================================================
-04:56:41 [[32mINFO[0m] __main__: Cleaning up test resources...
-04:56:41 [[32mINFO[0m] __main__: MockAndroidDevice phone_1 disconnected
-04:56:41 [[32mINFO[0m] __main__: MockAndroidDevice phone_2 disconnected
-04:56:41 [[32mINFO[0m] __main__: MockWebcamCapture stopped
-04:56:41 [[32mINFO[0m] __main__: Cleanup completed
+05:03:19 [[32mINFO[0m] __main__: Log file structured.log: 547854 bytes
+05:03:19 [[32mINFO[0m] __main__: Log file errors.log: 3673 bytes
+05:03:19 [[32mINFO[0m] __main__: Log file application.log: 155138 bytes
+05:03:19 [[32mINFO[0m] __main__: Logging functionality test completed successfully
+05:03:19 [[32mINFO[0m] __main__: STEP 7: Testing UI responsiveness...
+05:03:19 [[32mINFO[0m] __main__: === Testing UI Responsiveness (Simulated) ===
+05:03:19 [[36mDEBUG[0m] __main__: Simulated button click 1: 1.09ms
+05:03:19 [[36mDEBUG[0m] __main__: Simulated button click 2: 1.09ms
+05:03:19 [[36mDEBUG[0m] __main__: Simulated button click 3: 1.09ms
+05:03:19 [[36mDEBUG[0m] __main__: Simulated button click 4: 1.09ms
+05:03:19 [[36mDEBUG[0m] __main__: Simulated button click 5: 1.09ms
+05:03:19 [[32mINFO[0m] __main__: UI responsiveness good: max response time 1.09ms
+05:03:19 [[32mINFO[0m] __main__: STEP 8: Verifying file structure...
+05:03:19 [[32mINFO[0m] __main__: === Verifying File Structure ===
+05:03:19 [[32mINFO[0m] __main__: Checking session directory: integration_test_session_20250801_050314
+05:03:19 [[32mINFO[0m] __main__: Found metadata files: ['session_metadata.json']
+05:03:19 [[32mINFO[0m] __main__: Found data files: ['webcam_1.mp4']
+05:03:19 [[33mWARNING[0m] __main__: File naming issue: session_metadata.json
+05:03:19 [[32mINFO[0m] __main__: Checking session directory: invalid_name_test_20250801_050319
+05:03:19 [[32mINFO[0m] __main__: Found metadata files: ['session_metadata.json']
+05:03:19 [[33mWARNING[0m] __main__: File naming issue: session_metadata.json
+05:03:19 [[32mINFO[0m] __main__: File structure verification completed
+05:03:19 [[32mINFO[0m] __main__: Total files created: 3
+05:03:19 [[32mINFO[0m] __main__: ================================================================================
+05:03:19 [[32mINFO[0m] __main__: ❌ COMPREHENSIVE RECORDING SESSION TEST - FAILED
+05:03:19 [[32mINFO[0m] __main__: Test Duration: 6.04 seconds
+05:03:19 [[32mINFO[0m] __main__: ================================================================================
+05:03:19 [[32mINFO[0m] __main__: Cleaning up test resources...
+05:03:19 [[32mINFO[0m] __main__: MockAndroidDevice phone_1 disconnected
+05:03:19 [[32mINFO[0m] __main__: MockAndroidDevice phone_2 disconnected
+05:03:19 [[32mINFO[0m] __main__: MockWebcamCapture stopped
+05:03:19 [[32mINFO[0m] __main__: Cleanup completed
 
 ================================================================================
 📊 COMPREHENSIVE RECORDING SESSION TEST SUMMARY
 ================================================================================
 💥 OVERALL RESULT: FAILED ❌
-⏱️  TEST DURATION: 6.05 seconds
+⏱️  TEST DURATION: 6.04 seconds
 
 📋 INDIVIDUAL TEST RESULTS:
   Setup Environment: ✅
   Device Connections: ❌
   Recording Session: ✅
-    Session ID: integration_test_session_20250801_045636
+    Session ID: integration_test_session_20250801_050314
     Duration: 5.01s
     Files Created: 4
   Error Condition Tests: 3 tests executed
@@ -180,12 +180,7 @@ ValueError: Test exception for logging verification
   Total Messages Received: 0
   Total Data Sent: 0.00 MB
 
-⚡ PERFORMANCE METRICS:
-  Memory Usage: 75.3 MB
-  CPU Usage: 0.0%
-  Thread Count: 4
-
 ================================================================================
-04:56:41 [[32mINFO[0m] __main__: Test results saved to: /tmp/recording_test_ki7kdwwh/test_results.json
+05:03:19 [[32mINFO[0m] __main__: Test results saved to: /tmp/recording_test_reaocv00/test_results.json
 
 === STDERR ===

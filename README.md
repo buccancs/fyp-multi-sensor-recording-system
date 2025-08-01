@@ -879,45 +879,229 @@ Key Android settings in `AndroidApp/build.gradle`:
 
 ## 🧪 Testing
 
-### Running Tests
+The Multi-Sensor Recording System includes a comprehensive testing framework that validates all aspects of the system functionality, from individual component operation to complete end-to-end recording scenarios. The testing suite has been significantly extended to include advanced capabilities that ensure system reliability under various real-world conditions.
+
+### Enhanced Testing Architecture
+
+The testing framework follows a multi-layered approach that provides thorough coverage of all system components:
+
+- **Foundation Tests**: Core logging and component integration validation
+- **Functional Tests**: Individual feature and component testing
+- **Integration Tests**: Cross-component and cross-platform coordination testing
+- **Performance Tests**: Memory, CPU, and throughput validation under load
+- **Resilience Tests**: Error recovery, network issues, and stress scenario testing
+- **Quality Tests**: Data integrity, corruption detection, and recovery validation
+
+### Running the Complete Test Suite
+
+The comprehensive test suite orchestrates all testing scenarios as specified in the original requirements, with significant enhancements for real-world research environments:
+
 ```bash
-# Validate complete system functionality
-./gradlew build
+# Run the complete enhanced test suite (recommended)
+python PythonApp/run_complete_test_suite.py
 
-# Test calibration implementation
-python PythonApp/test_calibration_implementation.py
-
-# Test Shimmer integration
-python PythonApp/test_shimmer_implementation.py
-
-# Validate recorded sessions
-python tools/validate_data_schemas.py --all-sessions
-
-# Check specific session  
-python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
+# This will execute all test categories:
+# 1. Integration Logging Test - Enhanced log analysis and validation
+# 2. Focused Recording Session Test - PC-Android coordination with error recovery  
+# 3. Hardware Sensor Simulation Test - Realistic sensor data and port validation
+# 4. Enhanced Stress Testing Suite - Memory, CPU, and concurrent session testing
+# 5. Network Resilience Testing - Latency, packet loss, and connection recovery
+# 6. Data Integrity Validation Test - Corruption detection and file integrity
+# 7. Comprehensive Recording Test - Complete end-to-end system validation
 ```
 
-### Implementation Testing
-The system includes comprehensive testing for all major components:
+### Individual Test Categories
 
-**Calibration Testing:**
-- Pattern detection validation with various calibration boards
-- Single camera calibration accuracy testing
-- Stereo calibration validation with synthetic and real data
-- Quality assessment algorithm verification
-- Data persistence and loading validation
+#### Basic System Validation
+```bash
+# Validate complete system functionality with build verification
+./gradlew build
 
-**Shimmer Integration Testing:**
-- Multi-library fallback testing (pyshimmer, bluetooth, pybluez)
-- Device discovery and connection validation
-- Data streaming accuracy and performance testing
-- Session management and CSV export verification
-- Error handling with missing dependencies
+# Test core component implementations
+python PythonApp/test_calibration_implementation.py
+python PythonApp/test_shimmer_implementation.py
 
-**Android Compatibility Testing:**
-- DngCreator reflection-based implementation testing
-- Sampling rate configuration across different SDK versions
-- UI component validation with error state management
+# Validate basic integration and logging
+python PythonApp/test_integration_logging.py
+```
+
+#### Core Recording Functionality Testing
+```bash
+# Test PC-Android coordination and recording lifecycle
+python PythonApp/test_focused_recording_session.py
+
+# Test comprehensive sensor simulation on correct ports
+python PythonApp/test_hardware_sensor_simulation.py
+
+# Test complete end-to-end recording system
+python PythonApp/test_comprehensive_recording_session.py
+```
+
+#### Enhanced Performance and Resilience Testing
+```bash
+# Test system performance under stress conditions
+python PythonApp/test_enhanced_stress_testing.py
+
+# Test network resilience and connection recovery
+python PythonApp/test_network_resilience.py
+
+# Test data integrity and corruption handling
+python PythonApp/test_data_integrity_validation.py
+```
+
+#### Session Data Validation
+```bash
+# Validate all recorded sessions
+python tools/validate_data_schemas.py --all-sessions
+
+# Check specific session integrity
+python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
+
+# Validate session metadata and file integrity
+python tools/validate_session_integrity.py --session session_20250731_143022
+```
+
+### Testing Capabilities and Coverage
+
+The enhanced testing framework validates the complete problem statement requirements plus additional capabilities for research-grade reliability:
+
+#### Original Requirements Validation ✅
+1. **PC and Android app coordination**: Multiple device scenarios with connection recovery
+2. **Phone connected to PC/IDE simulation**: Socket-based communication with error handling
+3. **Recording session started from computer**: Various configuration scenarios and edge cases
+4. **Available sensors used, rest simulated on correct ports**: Realistic data rates and port assignment
+5. **Communication and networking testing**: Error conditions, recovery, and quality monitoring
+6. **File saving and post processing**: Data integrity checks and metadata validation
+7. **Button reaction and UI responsiveness**: Stress scenarios and response time validation
+8. **Freezing/crashing detection and error handling**: Comprehensive recovery mechanisms
+9. **Comprehensive logging verification**: Log analysis, anomaly detection, and validation
+
+#### Enhanced Testing Capabilities 🚀
+1. **Memory and Performance Monitoring**: Extended session testing with resource tracking
+2. **Network Resilience Validation**: Latency, packet loss, and bandwidth limitation simulation
+3. **Data Integrity Assurance**: Checksum validation, corruption detection, and recovery testing
+4. **Concurrent Session Testing**: Multi-user scenarios and scalability validation
+5. **Error Injection Testing**: Systematic failure simulation and recovery validation
+6. **Performance Regression Detection**: Baseline comparison and performance monitoring
+7. **Cross-Platform Compatibility**: Testing across different operating system configurations
+
+### Implementation Testing Details
+
+The system includes comprehensive testing for all major components with advanced validation capabilities:
+
+#### **Enhanced Calibration Testing**
+- **Pattern Detection Validation**: Support for various calibration board types and sizes
+- **Accuracy Assessment**: Sub-pixel precision validation and error analysis
+- **Stereo Calibration**: RGB-thermal alignment with rotation/translation validation
+- **Quality Metrics**: Coverage analysis, RMS error assessment, and calibration recommendations
+- **Persistence Testing**: Save/load validation with metadata integrity checking
+- **Performance Testing**: Calibration speed and memory usage under various image conditions
+
+#### **Advanced Shimmer Integration Testing**
+- **Multi-Library Fallback**: Comprehensive testing across pyshimmer, bluetooth, and pybluez libraries
+- **Device Discovery**: Bluetooth scanning reliability and automatic pairing validation
+- **Data Streaming**: Real-time sensor data accuracy with callback system validation
+- **Session Management**: CSV export integrity and session-based data organization
+- **Error Recovery**: Graceful handling of missing dependencies and connection failures
+- **Performance Validation**: Data throughput testing and memory usage optimization
+
+#### **Comprehensive Android Compatibility Testing**
+- **DngCreator Enhancement**: Reflection-based API compatibility for Android 21+ requirements
+- **Sampling Rate Configuration**: Enhanced configuration across different SDK versions
+- **UI State Management**: Comprehensive validation with error state handling
+- **SessionInfo Display**: Status indicators, progress tracking, and user feedback validation
+- **Resource Management**: Memory cleanup and proper lifecycle handling
+- **Network Communication**: Robust socket communication with automatic reconnection
+
+#### **Extended Performance Testing**
+- **Memory Usage Monitoring**: Leak detection during extended recording sessions
+- **CPU Performance**: Validation under high sensor data throughput conditions
+- **Concurrent Sessions**: Multi-session scalability testing with resource contention
+- **Network Throughput**: Bandwidth utilization and optimization under various conditions
+- **Storage I/O Performance**: Large file operation testing and disk space management
+- **Resource Cleanup**: Validation of proper resource release after session termination
+
+#### **Advanced Network Resilience Testing**
+- **Latency Simulation**: Configurable delay testing from 1ms to 500ms with jitter
+- **Packet Loss Handling**: Recovery testing at various loss rates (0.1% to 10%)
+- **Connection Recovery**: Automatic reconnection and session continuation validation
+- **Bandwidth Adaptation**: Performance under constrained network conditions
+- **Quality Degradation**: Graceful handling of network quality changes
+- **Multi-Device Coordination**: Network stability with multiple simultaneous connections
+
+#### **Comprehensive Data Integrity Testing**
+- **Checksum Validation**: MD5 and SHA256 verification for all recorded data types
+- **Corruption Detection**: Various corruption scenario testing (random, header, truncation)
+- **Format Validation**: File format integrity checking for video, thermal, GSR, and metadata
+- **Recovery Mechanisms**: Data recovery and error reporting under corruption scenarios
+- **Cross-Platform Compatibility**: Data integrity across different operating systems
+- **Temporal Synchronization**: Timestamp accuracy and consistency validation
+
+### Test Results and Reporting
+
+The testing framework provides comprehensive reporting and analysis:
+
+#### **Real-Time Test Monitoring**
+- **Progress Tracking**: Live updates during test execution with detailed status
+- **Performance Metrics**: Real-time resource usage monitoring and alerting
+- **Error Detection**: Immediate notification of test failures with context
+- **Recovery Validation**: Automatic verification of error recovery mechanisms
+
+#### **Comprehensive Test Reports**
+```bash
+# Test results are automatically saved to test_results/ directory
+ls test_results/
+# complete_test_results.json          - Overall test suite results
+# enhanced_stress_test_results.json   - Performance and stress test data
+# network_resilience_test_results.json - Network testing analysis
+# data_integrity_test_results.json    - Data quality validation results
+```
+
+#### **Quality Metrics and Coverage**
+- **Success Rate Tracking**: Percentage of tests passing with trend analysis
+- **Performance Benchmarks**: Resource usage trends and regression detection
+- **Coverage Analysis**: Requirements validation with evidence tracking
+- **Reliability Metrics**: Error rates, recovery success, and system stability
+
+### Testing Best Practices for Research Environments
+
+The testing framework is specifically designed for research applications with the following considerations:
+
+#### **Scientific Data Integrity**
+- All recorded data is validated for integrity using cryptographic checksums
+- Temporal synchronization accuracy is verified to ensure research-grade precision
+- Cross-device data correlation is tested to maintain experimental validity
+- File format compliance is verified to ensure long-term data accessibility
+
+#### **Experimental Reliability**
+- Extended session testing validates system stability during long research sessions
+- Multi-participant scenarios are tested to ensure scalability for group studies
+- Error recovery mechanisms are validated to prevent data loss during experiments
+- Network resilience testing ensures reliable operation in various research facility environments
+
+#### **Reproducibility and Documentation**
+- All test scenarios are fully documented with expected outcomes and validation criteria
+- Test data generation is deterministic to ensure reproducible results
+- Performance baselines are established to detect system degradation over time
+- Comprehensive logging provides audit trails for research compliance requirements
+
+### Continuous Integration and Quality Assurance
+
+The testing framework integrates with continuous integration systems to maintain code quality:
+
+```bash
+# Automated testing in CI/CD pipelines
+./gradlew :PythonApp:runPythonTests          # Python unit tests
+./gradlew :AndroidApp:testDebugUnitTest      # Android unit tests  
+./gradlew :AndroidApp:connectedDebugAndroidTest # Android integration tests
+
+# Quality gates and validation
+./gradlew :PythonApp:runPythonTestsWithCoverage # Coverage analysis
+./gradlew :AndroidApp:lintDebug                 # Code quality checks
+./gradlew :PythonApp:formatPythonCode          # Code formatting validation
+```
+
+This comprehensive testing approach ensures that the Multi-Sensor Recording System meets research-grade requirements for reliability, accuracy, and data integrity while providing the flexibility needed for diverse experimental scenarios.
 - SessionInfo display and status indicator testing
 
 ## Contributing

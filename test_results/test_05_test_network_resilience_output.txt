@@ -1,0 +1,169 @@
+=== Network Resilience Testing ===
+Category: Network & Connectivity
+Description: Network latency, packet loss, and connection recovery simulation with realistic network conditions
+Success: True
+Duration: 104.88s
+Exit Code: 0
+
+=== STDOUT ===
+05:17:23 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+05:17:23 [[32mINFO[0m] AppLogger: Log level: INFO
+05:17:23 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+05:17:23 [[32mINFO[0m] AppLogger: Console output: True
+05:17:23 [[32mINFO[0m] AppLogger: File output: True
+05:17:23 [[32mINFO[0m] AppLogger: Structured logging: True
+05:17:23 [[32mINFO[0m] __main__: ================================================================================
+05:17:23 [[32mINFO[0m] __main__: 🌐 NETWORK RESILIENCE TESTING SUITE - MULTI-SENSOR RECORDING SYSTEM
+05:17:23 [[32mINFO[0m] __main__: ================================================================================
+05:17:23 [[32mINFO[0m] __main__: 🌐 Starting comprehensive network resilience testing...
+05:17:23 [[32mINFO[0m] __main__: 🧪 Testing network condition: Perfect Network
+05:17:23 [[32mINFO[0m] __main__:    Ideal network conditions for baseline testing
+05:17:23 [[32mINFO[0m] __main__:    Latency: 1.0ms, Loss: 0.0%, Bandwidth: unlimited Mbps
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera connected successfully
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera connected successfully
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera connected successfully
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor connected successfully
+05:17:23 [[32mINFO[0m] __main__: Connected 4/4 devices
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera started recording for session network_test_perfect_network_1754025443
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor started recording for session network_test_perfect_network_1754025443
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera started recording for session network_test_perfect_network_1754025443
+05:17:23 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera started recording for session network_test_perfect_network_1754025443
+05:17:23 [[32mINFO[0m] __main__: Started recording on 4 devices
+05:17:43 [[32mINFO[0m] __main__: ✅ PASSED Network condition: Perfect Network
+05:17:43 [[32mINFO[0m] __main__:    Messages: 48/48 received (0.0% loss)
+05:17:43 [[32mINFO[0m] __main__:    Latency: 1.0ms avg, 1.1ms max
+05:17:43 [[32mINFO[0m] __main__:    Throughput: 0.00 Mbps
+05:17:43 [[32mINFO[0m] __main__:    Errors: 0, Drops: 0
+05:17:43 [[32mINFO[0m] __main__: 🧪 Testing network condition: High Latency
+05:17:43 [[32mINFO[0m] __main__:    High latency network typical of satellite connections
+05:17:43 [[32mINFO[0m] __main__:    Latency: 500.0ms, Loss: 0.0%, Bandwidth: unlimited Mbps
+05:17:43 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera connected successfully
+05:17:43 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor connected successfully
+05:17:44 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera connected successfully
+05:17:44 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera connected successfully
+05:17:44 [[32mINFO[0m] __main__: Connected 4/4 devices
+05:17:44 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera started recording for session network_test_high_latency_1754025464
+05:17:44 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera started recording for session network_test_high_latency_1754025464
+05:17:44 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera started recording for session network_test_high_latency_1754025464
+05:17:44 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor started recording for session network_test_high_latency_1754025464
+05:17:44 [[32mINFO[0m] __main__: Started recording on 4 devices
+05:18:04 [[32mINFO[0m] __main__: ✅ PASSED Network condition: High Latency
+05:18:04 [[32mINFO[0m] __main__:    Messages: 40/40 received (0.0% loss)
+05:18:04 [[32mINFO[0m] __main__:    Latency: 487.6ms avg, 597.7ms max
+05:18:04 [[32mINFO[0m] __main__:    Throughput: 0.00 Mbps
+05:18:04 [[32mINFO[0m] __main__:    Errors: 0, Drops: 0
+05:18:04 [[32mINFO[0m] __main__: 🧪 Testing network condition: Packet Loss
+05:18:04 [[32mINFO[0m] __main__:    Network with moderate packet loss
+05:18:04 [[32mINFO[0m] __main__:    Latency: 50.0ms, Loss: 5.0%, Bandwidth: unlimited Mbps
+05:18:04 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor connected successfully
+05:18:04 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera connected successfully
+05:18:05 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera connected successfully
+05:18:05 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera connected successfully
+05:18:05 [[32mINFO[0m] __main__: Connected 4/4 devices
+05:18:05 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera started recording for session network_test_packet_loss_1754025485
+05:18:05 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera started recording for session network_test_packet_loss_1754025485
+05:18:05 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor started recording for session network_test_packet_loss_1754025485
+05:18:05 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera started recording for session network_test_packet_loss_1754025485
+05:18:05 [[32mINFO[0m] __main__: Started recording on 4 devices
+05:18:25 [[32mINFO[0m] __main__: ✅ PASSED Network condition: Packet Loss
+05:18:25 [[32mINFO[0m] __main__:    Messages: 47/48 received (2.1% loss)
+05:18:25 [[32mINFO[0m] __main__:    Latency: 46.9ms avg, 69.6ms max
+05:18:25 [[32mINFO[0m] __main__:    Throughput: 0.00 Mbps
+05:18:25 [[32mINFO[0m] __main__:    Errors: 0, Drops: 0
+05:18:25 [[32mINFO[0m] __main__: 🧪 Testing network condition: Limited Bandwidth
+05:18:25 [[32mINFO[0m] __main__:    Bandwidth-limited network typical of cellular connections
+05:18:25 [[32mINFO[0m] __main__:    Latency: 100.0ms, Loss: 1.0%, Bandwidth: 1.0 Mbps
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera connected successfully
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera connected successfully
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera connected successfully
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor connected successfully
+05:18:25 [[32mINFO[0m] __main__: Connected 4/4 devices
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera started recording for session network_test_limited_bandwidth_1754025505
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor started recording for session network_test_limited_bandwidth_1754025505
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera started recording for session network_test_limited_bandwidth_1754025505
+05:18:25 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera started recording for session network_test_limited_bandwidth_1754025505
+05:18:25 [[32mINFO[0m] __main__: Started recording on 4 devices
+05:18:47 [[32mINFO[0m] __main__: ✅ PASSED Network condition: Limited Bandwidth
+05:18:47 [[32mINFO[0m] __main__:    Messages: 47/48 received (2.1% loss)
+05:18:47 [[32mINFO[0m] __main__:    Latency: 104.3ms avg, 144.7ms max
+05:18:47 [[32mINFO[0m] __main__:    Throughput: 0.00 Mbps
+05:18:47 [[32mINFO[0m] __main__:    Errors: 0, Drops: 0
+05:18:47 [[32mINFO[0m] __main__: 🧪 Testing network condition: Unstable Connection
+05:18:47 [[32mINFO[0m] __main__:    Unstable network with occasional disconnections
+05:18:47 [[32mINFO[0m] __main__:    Latency: 200.0ms, Loss: 3.0%, Bandwidth: 2.0 Mbps
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera connected successfully
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera connected successfully
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor connected successfully
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera connected successfully
+05:18:47 [[32mINFO[0m] __main__: Connected 4/4 devices
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_1_usb_camera started recording for session network_test_unstable_connection_1754025527
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_0_android_camera started recording for session network_test_unstable_connection_1754025527
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_2_thermal_camera started recording for session network_test_unstable_connection_1754025527
+05:18:47 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor started recording for session network_test_unstable_connection_1754025527
+05:18:47 [[32mINFO[0m] __main__: Started recording on 4 devices
+05:19:01 [[33mWARNING[0m] __main__: Simulated connection drop in Unstable Connection
+05:19:01 [[33mWARNING[0m] __main__: Connection lost for net_test_device_3_shimmer_sensor, attempting reconnection...
+05:19:01 [[32mINFO[0m] __main__: Device net_test_device_3_shimmer_sensor connected successfully
+05:19:08 [[32mINFO[0m] __main__: ✅ PASSED Network condition: Unstable Connection
+05:19:08 [[32mINFO[0m] __main__:    Messages: 42/45 received (6.7% loss)
+05:19:08 [[32mINFO[0m] __main__:    Latency: 198.3ms avg, 290.3ms max
+05:19:08 [[32mINFO[0m] __main__:    Throughput: 0.00 Mbps
+05:19:08 [[32mINFO[0m] __main__:    Errors: 0, Drops: 0
+05:19:08 [[32mINFO[0m] __main__: 
+================================================================================
+05:19:08 [[32mINFO[0m] __main__: 📊 NETWORK RESILIENCE TESTING RESULTS
+05:19:08 [[32mINFO[0m] __main__: ================================================================================
+05:19:08 [[32mINFO[0m] __main__: 📈 SUCCESS RATE: 100.0% (5/5 tests)
+05:19:08 [[32mINFO[0m] __main__: ⏱️  TOTAL DURATION: 104.8 seconds
+05:19:08 [[32mINFO[0m] __main__: 
+🌐 DETAILED NETWORK TEST RESULTS:
+05:19:08 [[32mINFO[0m] __main__:   ✅ PASSED: Perfect Network
+05:19:08 [[32mINFO[0m] __main__:     Duration: 20.0s
+05:19:08 [[32mINFO[0m] __main__:     Message Loss: 0.0%
+05:19:08 [[32mINFO[0m] __main__:     Avg Latency: 1.0ms
+05:19:08 [[32mINFO[0m] __main__:     Throughput: 0.00 Mbps
+05:19:08 [[32mINFO[0m] __main__:     Connection Drops: 0
+05:19:08 [[32mINFO[0m] __main__:     Recovery Time: 0.0s
+05:19:08 [[32mINFO[0m] __main__:   ✅ PASSED: High Latency
+05:19:08 [[32mINFO[0m] __main__:     Duration: 21.5s
+05:19:08 [[32mINFO[0m] __main__:     Message Loss: 0.0%
+05:19:08 [[32mINFO[0m] __main__:     Avg Latency: 487.6ms
+05:19:08 [[32mINFO[0m] __main__:     Throughput: 0.00 Mbps
+05:19:08 [[32mINFO[0m] __main__:     Connection Drops: 0
+05:19:08 [[32mINFO[0m] __main__:     Recovery Time: 0.0s
+05:19:08 [[32mINFO[0m] __main__:   ✅ PASSED: Packet Loss
+05:19:08 [[32mINFO[0m] __main__:     Duration: 20.8s
+05:19:08 [[32mINFO[0m] __main__:     Message Loss: 2.1%
+05:19:08 [[32mINFO[0m] __main__:     Avg Latency: 46.9ms
+05:19:08 [[32mINFO[0m] __main__:     Throughput: 0.00 Mbps
+05:19:08 [[32mINFO[0m] __main__:     Connection Drops: 0
+05:19:08 [[32mINFO[0m] __main__:     Recovery Time: 0.0s
+05:19:08 [[32mINFO[0m] __main__:   ✅ PASSED: Limited Bandwidth
+05:19:08 [[32mINFO[0m] __main__:     Duration: 21.6s
+05:19:08 [[32mINFO[0m] __main__:     Message Loss: 2.1%
+05:19:08 [[32mINFO[0m] __main__:     Avg Latency: 104.3ms
+05:19:08 [[32mINFO[0m] __main__:     Throughput: 0.00 Mbps
+05:19:08 [[32mINFO[0m] __main__:     Connection Drops: 0
+05:19:08 [[32mINFO[0m] __main__:     Recovery Time: 0.0s
+05:19:08 [[32mINFO[0m] __main__:   ✅ PASSED: Unstable Connection
+05:19:08 [[32mINFO[0m] __main__:     Duration: 20.8s
+05:19:08 [[32mINFO[0m] __main__:     Message Loss: 6.7%
+05:19:08 [[32mINFO[0m] __main__:     Avg Latency: 198.3ms
+05:19:08 [[32mINFO[0m] __main__:     Throughput: 0.00 Mbps
+05:19:08 [[32mINFO[0m] __main__:     Connection Drops: 0
+05:19:08 [[32mINFO[0m] __main__:     Recovery Time: 0.0s
+05:19:08 [[32mINFO[0m] __main__: 
+🎯 NETWORK RESILIENCE TESTING ACHIEVEMENTS:
+05:19:08 [[32mINFO[0m] __main__:   ✨ Network latency simulation and tolerance validated
+05:19:08 [[32mINFO[0m] __main__:   ✨ Packet loss recovery and retry mechanisms tested
+05:19:08 [[32mINFO[0m] __main__:   ✨ Connection dropout and reconnection logic verified
+05:19:08 [[32mINFO[0m] __main__:   ✨ Bandwidth limitation adaptation confirmed
+05:19:08 [[32mINFO[0m] __main__:   ✨ Network quality degradation handling validated
+05:19:08 [[32mINFO[0m] __main__:   ✨ Multi-device network coordination tested
+05:19:08 [[32mINFO[0m] __main__:   ✨ Real-world network condition simulation completed
+05:19:08 [[32mINFO[0m] __main__: 
+💾 Network resilience test results saved to: test_results/network_resilience_test_results.json
+05:19:08 [[32mINFO[0m] __main__: 
+🎉 ALL NETWORK RESILIENCE TESTS PASSED!
+
+=== STDERR ===
