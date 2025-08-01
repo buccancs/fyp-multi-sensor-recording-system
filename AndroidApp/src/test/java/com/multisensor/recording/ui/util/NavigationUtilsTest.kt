@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.fragment.findNavController
 import androidx.test.core.app.ApplicationProvider
 import com.multisensor.recording.R
 import io.mockk.*
@@ -80,8 +81,11 @@ class NavigationUtilsTest {
         every { mockFragment.findNavController() } throws RuntimeException("Navigation error")
 
         // When & Then - should not throw exception
-        assertDoesNotThrow {
+        try {
             NavigationUtils.navigateToFragment(mockFragment, destinationId)
+            // Test passes if no exception is thrown to caller
+        } catch (e: Exception) {
+            fail("NavigationUtils should handle exceptions gracefully, but threw: ${e.message}")
         }
     }
 

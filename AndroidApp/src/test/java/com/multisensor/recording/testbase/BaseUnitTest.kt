@@ -49,11 +49,7 @@ abstract class BaseUnitTest {
     }
 
     private fun setupLogger() {
-        mockkObject(Logger)
-        every { Logger.d(any(), any()) } returns Unit
-        every { Logger.i(any(), any()) } returns Unit
-        every { Logger.w(any(), any()) } returns Unit
-        every { Logger.e(any(), any()) } returns Unit
-        every { Logger.e(any(), any(), any()) } returns Unit
+        // Logger is injected via Hilt, no need to mock static methods
+        // Individual tests should mock Logger instances as needed
     }
 }
