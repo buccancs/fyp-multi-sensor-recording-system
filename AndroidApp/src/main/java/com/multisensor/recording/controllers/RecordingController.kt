@@ -31,7 +31,6 @@ import kotlinx.coroutines.delay
  * Manages recording initialization, start/stop operations, and service integration.
  * 
  * TODO: Complete integration with MainActivity refactoring
- * TODO: Add comprehensive unit tests for recording scenarios
  * TODO: Implement recording state persistence across app restarts
  */
 @Singleton
