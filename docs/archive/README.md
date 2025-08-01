@@ -1,88 +1,109 @@
-# Archive Documentation
+# Documentation Directory
 
-This directory contains legacy documentation files that have been consolidated into the main documentation structure. These files are preserved for historical reference but are no longer actively maintained.
+This directory contains all consolidated documentation for the Multi-Sensor Synchronized Recording System. The documentation has been reorganized into clear categories for better navigation and maintenance.
 
-## Consolidation Summary
+## 📁 Directory Structure
 
-All content from these archived files has been integrated into the consolidated documentation structure:
+### `/api/`
+- **JSON schema files** defining data structures and APIs
+- Schema validation files for session data, calibration data, and metadata
+- Use these when integrating with the system or validating data formats
 
-### Academic Documentation
-**Consolidated into:** [`docs/academic/CONSOLIDATED_RESEARCH_SUMMARY.md`](../academic/CONSOLIDATED_RESEARCH_SUMMARY.md)
+### `/reference/`
+- **Quick reference guides** and lookup documentation
+- File naming standards and conventions
+- Testing documentation and procedures
+- Essential reference materials for daily use
 
-- `ACADEMIC_CALIBRATION_ANALYSIS.md` - Calibration system research analysis
-- `ACADEMIC_RECORDING_CONTROLLER_ANALYSIS.md` - Recording controller research
-- `ACADEMIC_RESEARCH_SUMMARY.md` - Original research summary
-- `ACADEMIC_SHIMMER_CONTROLLER_ANALYSIS.md` - Shimmer controller research
+### `/technical/`
+- **Comprehensive technical documentation** including:
+  - System architecture and design documents
+  - Component-specific technical guides (Shimmer, Thermal cameras, etc.)
+  - Networking and synchronization technical details
+  - Data structure specifications
+  - Requirements analysis and technology selection
 
-### Implementation Documentation
-**Consolidated into:** [`docs/implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md`](../implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)
+### `/user-guides/`
+- **Step-by-step user guides** for:
+  - System setup and configuration
+  - Integration guides for various components
+  - End-user operational procedures
+  - Getting started tutorials
 
-- `ADVANCED_CALIBRATION_IMPLEMENTATION.md` - Advanced calibration features
-- `CALIBRATION_CONTROLLER_IMPLEMENTATION.md` - Calibration controller details
-- `CALIBRATION_ENHANCEMENT_SUMMARY.md` - Calibration enhancement summary
-- `IMPLEMENTATION_COMPLETION_SUMMARY.md` - Overall implementation summary
-- `PERMISSION_CONTROLLER_IMPLEMENTATION.md` - Permission controller implementation
-- `RECORDING_CONTROLLER_IMPLEMENTATION.md` - Recording controller implementation
-- `SAMSUNG_S21_S22_CAMERA_IMPLEMENTATION.md` - Samsung camera implementation
-- `SHIMMER_CONTROLLER_ENHANCEMENT_IMPLEMENTATION.md` - Shimmer enhancements
-- `SHIMMER_IMPLEMENTATION_SUMMARY.md` - Shimmer implementation summary
-- `TECHNICAL_IMPLEMENTATION_GUIDE.md` - Original technical guide
-- `TEST_IMPLEMENTATION_SUMMARY.md` - Testing implementation summary
+### `/comprehensive/`
+- **Consolidation directory** containing:
+  - Updated README explaining consolidation of documentation
+  - References to consolidated Python Desktop Controller documentation
+  - Historical organization information
 
-### TODO Items
-**Integrated into:** Main documentation with proper TODO sections
+### `/deprecated/`
+- **Development-stage documents** that are no longer actively maintained:
+  - Milestone completion reports
+  - Development implementation summaries  
+  - Architecture diagrams from development phases
+  - Progress tracking and planning documents
+  - Historical development artifacts
 
-- `TODO_NetworkController.md` - Network controller development tasks
+## 🔍 Finding What You Need
 
-## Benefits of Consolidation
+**New Users**: Start with `/user-guides/user-guide.md`
 
-### For Users
-- **Single Entry Points**: Four main documents instead of 15+ scattered files
-- **Improved Navigation**: Clear structure with comprehensive table of contents
-- **Consistent Information**: Eliminates conflicting or outdated information
-- **Better Search**: Easier to find relevant information within consolidated documents
+**Comprehensive Guides**: See `/comprehensive/` for complete PC/Android documentation
 
-### For Maintainers
-- **Reduced Overhead**: Maintain 4 documents instead of 15+ individual files
-- **Consistency**: Single source of truth for each domain area
-- **Quality Control**: Better oversight of documentation quality and accuracy
-- **Version Control**: Simplified tracking of documentation changes
+**Developers**: Check `/technical/` for architecture and `/api/` for schemas
 
-## Migration Notes
+**Quick Answers**: Look in `/reference/` for fast lookup information
 
-### Content Preservation
-- All technical content has been preserved and enhanced
-- Academic rigor maintained in research documentation
-- Implementation details expanded with additional context
-- Cross-references updated to reflect new organization
+**Historical Context**: See `/deprecated/` for development history
 
-### Access Patterns
-- Original file concepts accessible through consolidated documents
-- Search functionality covers all migrated content
-- Navigation optimized for user workflows
-- Progressive disclosure supports different expertise levels
+## 📋 Document Categories
 
-## Future Documentation
+All documents have been categorized based on their current relevance and target audience:
 
-All new documentation should follow the consolidated structure:
+- **Active Documentation**: User guides, technical references, and API documentation that is actively maintained
+- **Reference Materials**: Quick lookups, standards, and testing procedures
+- **Deprecated Content**: Development milestones, progress reports, and outdated implementation details
 
-1. **User Documentation** → `docs/user-guides/CONSOLIDATED_USER_GUIDE.md`
-2. **Technical Implementation** → `docs/implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md`
-3. **Academic Research** → `docs/academic/CONSOLIDATED_RESEARCH_SUMMARY.md`
-4. **API Documentation** → `docs/API_REFERENCE.md`
+This organization ensures that current, relevant documentation is easily accessible while preserving historical development artifacts for reference.
 
-## Historical Reference
+## 📚 Key Documents by Category
 
-These archived files remain available for:
-- Historical development tracking
-- Academic citation of original research
-- Reference for specific implementation details
-- Verification of consolidation accuracy
+### Essential Starting Points
+- `user-guides/user-guide.md` - Main user documentation
+- `comprehensive/README.md` - Complete PC/Android documentation suite
+- `new_documentation/session-management-quick-reference.md` - Session operations and data location guide
+- `technical/system-architecture-overview.md` - System overview
 
-For current documentation, always refer to the consolidated documents in the main docs/ structure.
+### Comprehensive Guides
+
+- `new_documentation/README_python_desktop_controller.md` - Complete Python Desktop Controller technical documentation
+- `new_documentation/USER_GUIDE_python_desktop_controller.md` - Python Desktop Controller user guide
+- `new_documentation/PROTOCOL_python_desktop_controller.md` - Python Desktop Controller protocol specification
+
+- `new_documentation/` - Complete Android Mobile Application documentation with technical guides, user manuals, and protocol specifications
+
+
+### Integration Guides
+- `new_documentation/USER_GUIDE_shimmer3_gsr_plus.md` - Shimmer3 GSR+ practical user guide
+- `user-guides/rock-solid-integration-guide.md` - Thermal camera integration
+
+### Technical References
+- `technical/data-structure-documentation.md` - Data organization details
+- `new_documentation/README_shimmer3_gsr_plus.md` - Shimmer3 GSR+ technical deep-dive
+- `technical/topdon-tc001-comprehensive-documentation.md` - Thermal camera specs
+
+### API and Schemas
+- `new_documentation/session_metadata_schema.json` - Session data format
+- `new_documentation/calibration_session_schema.json` - Calibration data format
+- `new_documentation/session_log_schema.json` - Event logging format
+- `api/processing_metadata_schema.json` - Processing results format
+
+### Quick References
+- `reference/file-naming-standards.md` - Naming conventions
+- `new_documentation/INDEX.md` - Shimmer3 GSR+ comprehensive documentation index
+- `reference/readme-testing.md` - Testing procedures
+- `reference/test-documentation.md` - Test documentation
 
 ---
 
-*Archive Created: January 31, 2024*  
-*Consolidation Version: 2.0*  
-*Files Archived: 15 documentation files*
+**Note**: This reorganization consolidates 135+ documentation files from across the repository into a clear, navigable structure. Development-stage documents have been preserved in the `/deprecated/` folder for historical reference.
