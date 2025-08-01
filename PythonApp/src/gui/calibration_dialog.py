@@ -470,7 +470,7 @@ class CalibrationDialog(QDialog):
                 if "device_" in base_filename.lower():
                     # Extract device ID from patterns like "device_1", "device_2", etc.
                     import re
-                    match = re.search(r'device_(\w+)', base_filename.lower())
+                    match = re.search(r'device_(\d+)', base_filename.lower())
                     if match:
                         device_id = f"device_{match.group(1)}"
                 
