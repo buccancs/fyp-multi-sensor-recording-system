@@ -309,7 +309,7 @@ class UIUtilsTest {
         every { mockView.animate() } returns mockAnimator
         every { mockAnimator.alpha(any()) } returns mockAnimator
         every { mockAnimator.setDuration(any()) } returns mockAnimator
-        every { mockAnimator.withEndAction(any()) } returns mockAnimator
+        every { mockAnimator.withEndAction(any<Runnable>()) } returns mockAnimator
 
         // When
         UIUtils.setViewVisibilityWithAnimation(mockView, false, 100)
@@ -317,7 +317,7 @@ class UIUtilsTest {
         // Then
         verify { mockAnimator.alpha(0.0f) }
         verify { mockAnimator.setDuration(100) }
-        verify { mockAnimator.withEndAction(any()) }
+        verify { mockAnimator.withEndAction(any<Runnable>()) }
     }
 
     @Test

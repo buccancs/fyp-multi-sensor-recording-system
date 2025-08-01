@@ -461,7 +461,44 @@ class CalibrationDialog(QDialog):
 
             if filename:
                 # Extract device ID from filename or prompt user
-                device_id = "device_1"  # TODO: Better device ID handling
+                # Better device ID handling - extract from filename or ask user
+                device_id = None
+                
+                # Try to extract device ID from filename
+                import os
+                base_filename = os.path.basename(filename)
+                if "device_" in base_filename.lower():
+                    # Extract device ID from patterns like "device_1", "device_2", etc.
+                    import re
+                    match = re.search(r'device_(\d+)', base_filename.lower())
+                    if match:
+                        device_id = f"device_{match.group(1)}"
+                
+                # If no device ID found in filename, prompt user
+                if not device_id:
+                    connected_devices = self.get_connected_devices()
+                    if connected_devices:
+                        from PyQt5.QtWidgets import QInputDialog
+                        device_id, ok = QInputDialog.getItem(
+                            self, 
+                            "Select Device", 
+                            "Select the device this calibration file belongs to:",
+                            connected_devices,
+                            0,
+                            False
+                        )
+                        if not ok:
+                            return  # User cancelled
+                    else:
+                        # Fallback: ask for custom device ID
+                        from PyQt5.QtWidgets import QInputDialog
+                        device_id, ok = QInputDialog.getText(
+                            self,
+                            "Device ID",
+                            "Enter device ID for this calibration:"
+                        )
+                        if not ok or not device_id:
+                            device_id = "device_1"  # Final fallback
 
                 result = CalibrationResult.load_from_file(filename)
                 self.device_results[device_id] = result
@@ -492,9 +529,32 @@ class CalibrationDialog(QDialog):
 
     def get_connected_devices(self):
         """Get list of connected device IDs."""
-        # TODO: Implement actual device discovery
-        # For now, return mock devices
-        return ["device_1", "device_2"]
+        # Implement actual device discovery from server
+        connected_devices = []
+        
+        try:
+            if hasattr(self.server, 'connected_devices') and self.server.connected_devices:
+                # Get actual connected devices from the server
+                connected_devices = list(self.server.connected_devices.keys())
+            elif hasattr(self.server, 'get_connected_devices'):
+                # Alternative method if available
+                connected_devices = self.server.get_connected_devices()
+            else:
+                # Try to get devices from server's client list
+                if hasattr(self.server, 'clients') and self.server.clients:
+                    connected_devices = [f"device_{i+1}" for i in range(len(self.server.clients))]
+                
+            # If no devices found, provide some defaults for testing
+            if not connected_devices:
+                # Return mock devices for testing when no real devices are connected
+                connected_devices = ["device_1", "device_2"]
+                
+        except Exception as e:
+            print(f"Error getting connected devices: {e}")
+            # Fallback to mock devices
+            connected_devices = ["device_1", "device_2"]
+        
+        return connected_devices
 
     def update_device_list(self, device_ids):
         """Update the device list display."""

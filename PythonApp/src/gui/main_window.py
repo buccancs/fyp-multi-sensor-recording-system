@@ -466,7 +466,78 @@ class MainWindow(QMainWindow):
     def on_sensor_data_received(self, device_id, sensor_data):
         """Handle sensor data from device."""
         self.log_message(f"Sensor data from {device_id}: {list(sensor_data.keys())}")
-        # TODO: Add sensor data visualization in future milestone
+        
+        # Add sensor data visualization
+        try:
+            # Update device panel with sensor data
+            device_index = self.get_device_index(device_id)
+            if device_index >= 0:
+                # Extract key sensor values for display
+                sensor_info = []
+                
+                # Handle IMU data
+                if 'accelerometer' in sensor_data:
+                    acc = sensor_data['accelerometer']
+                    if isinstance(acc, dict):
+                        sensor_info.append(f"Acc: X={acc.get('x', 0):.2f}, Y={acc.get('y', 0):.2f}, Z={acc.get('z', 0):.2f}")
+                    else:
+                        sensor_info.append(f"Acc: {acc}")
+                
+                if 'gyroscope' in sensor_data:
+                    gyro = sensor_data['gyroscope']
+                    if isinstance(gyro, dict):
+                        sensor_info.append(f"Gyro: X={gyro.get('x', 0):.2f}, Y={gyro.get('y', 0):.2f}, Z={gyro.get('z', 0):.2f}")
+                    else:
+                        sensor_info.append(f"Gyro: {gyro}")
+                
+                # Handle GSR data
+                if 'gsr' in sensor_data:
+                    gsr = sensor_data['gsr']
+                    if isinstance(gsr, (int, float)):
+                        sensor_info.append(f"GSR: {gsr:.2f}")
+                    elif isinstance(gsr, dict):
+                        sensor_info.append(f"GSR: {gsr.get('value', 'N/A')}")
+                    else:
+                        sensor_info.append(f"GSR: {gsr}")
+                
+                # Handle temperature data
+                if 'temperature' in sensor_data:
+                    temp = sensor_data['temperature']
+                    if isinstance(temp, (int, float)):
+                        sensor_info.append(f"Temp: {temp:.1f}°C")
+                    else:
+                        sensor_info.append(f"Temp: {temp}")
+                
+                # Update device status with sensor info
+                if sensor_info and device_index < self.device_panel.get_device_count():
+                    item = self.device_panel.device_list.item(device_index)
+                    if item:
+                        current_text = item.text()
+                        # Remove old sensor data if present
+                        if " [Sensors:" in current_text:
+                            current_text = current_text.split(" [Sensors:")[0]
+                        
+                        # Add new sensor data
+                        sensor_summary = "; ".join(sensor_info[:2])  # Limit to first 2 sensors to avoid clutter
+                        item.setText(f"{current_text} [Sensors: {sensor_summary}]")
+                
+                # Log sensor data to session logger if session is active
+                if hasattr(self, 'session_logger') and self.session_logger.is_session_active():
+                    # Convert sensor data to a format suitable for logging
+                    sensor_values = {}
+                    for key, value in sensor_data.items():
+                        if isinstance(value, dict):
+                            # Flatten nested dict
+                            for subkey, subvalue in value.items():
+                                sensor_values[f"{key}_{subkey}"] = subvalue
+                        else:
+                            sensor_values[key] = value
+                    
+                    # Log the sensor data
+                    self.session_logger.log_sensor_data(device_id, sensor_values)
+                
+        except Exception as e:
+            self.log_message(f"Error processing sensor data from {device_id}: {e}")
 
     def on_notification_received(self, device_id, event_type, event_data):
         """Handle notification from device."""
@@ -1010,21 +1081,90 @@ class MainWindow(QMainWindow):
             self.log_message(
                 f"Thermal overlay {'enabled' if enabled else 'disabled'} for {device_id}"
             )
-            # TODO: Implement overlay functionality in preview panel
-            # This would integrate with the preview panel to show/hide thermal overlay
+            
+            # Implement overlay functionality in preview panel
+            device_index = self.get_device_index(device_id)
+            if device_index >= 0 and hasattr(self.preview_tabs, 'set_thermal_overlay'):
+                # Enable/disable thermal overlay for the specific device
+                self.preview_tabs.set_thermal_overlay(device_index, enabled)
+                
+                # Update status message
+                overlay_status = "enabled" if enabled else "disabled"
+                self.statusBar().showMessage(f"Thermal overlay {overlay_status} for {device_id}")
+                
+                # Log overlay change to session logger if session is active
+                if hasattr(self, 'session_logger') and self.session_logger.is_session_active():
+                    self.session_logger.log_calibration_event(
+                        'overlay_toggle',
+                        device_id=device_id,
+                        overlay_enabled=enabled
+                    )
+            else:
+                # Fallback if preview panel doesn't support overlay yet
+                self.log_message(f"Preview panel overlay not yet implemented for {device_id}")
+                self.statusBar().showMessage("Thermal overlay feature not yet fully implemented")
 
         except Exception as e:
             self.log_message(f"Error toggling overlay: {str(e)}")
+            self.statusBar().showMessage(f"Error toggling overlay: {str(e)}")
 
     def handle_calibration_completed(self, device_id: str, result):
         """Handle calibration completion from dialog."""
         try:
             self.log_message(f"Calibration completed for {device_id}")
-            # TODO: Store calibration results for use in main application
-            # This could be integrated with session management
+            
+            # Store calibration results for use in main application
+            # Save calibration results to session if active
+            if hasattr(self, 'session_manager') and self.session_manager.get_current_session():
+                try:
+                    # Create calibration result data structure
+                    calibration_data = {
+                        'device_id': device_id,
+                        'timestamp': result.get('timestamp') if isinstance(result, dict) else None,
+                        'calibration_type': result.get('type', 'thermal_rgb') if isinstance(result, dict) else 'thermal_rgb',
+                        'result': result,
+                        'status': 'completed'
+                    }
+                    
+                    # Add calibration data to session
+                    self.session_manager.add_calibration_result(device_id, calibration_data)
+                    
+                    # Log calibration completion to session logger
+                    if hasattr(self, 'session_logger') and self.session_logger.is_session_active():
+                        self.session_logger.log_calibration_event(
+                            'calibration_completed',
+                            device_id=device_id,
+                            calibration_type=calibration_data['calibration_type'],
+                            result_summary=str(result)[:100]  # Truncate for logging
+                        )
+                    
+                    self.statusBar().showMessage(f"Calibration results saved for {device_id}")
+                    
+                except Exception as e:
+                    self.log_message(f"Error saving calibration results: {e}")
+                    self.statusBar().showMessage(f"Error saving calibration results")
+            else:
+                # Store in a temporary calibration results cache if no active session
+                if not hasattr(self, 'calibration_results_cache'):
+                    self.calibration_results_cache = {}
+                
+                self.calibration_results_cache[device_id] = {
+                    'result': result,
+                    'timestamp': self.get_current_timestamp(),
+                    'status': 'completed'
+                }
+                
+                self.log_message(f"Calibration results cached for {device_id} (no active session)")
+                self.statusBar().showMessage(f"Calibration completed for {device_id} (cached)")
 
         except Exception as e:
             self.log_message(f"Error handling calibration completion: {str(e)}")
+            self.statusBar().showMessage(f"Error handling calibration completion")
+    
+    def get_current_timestamp(self):
+        """Get current timestamp in ISO format."""
+        from datetime import datetime
+        return datetime.now().isoformat()
 
     def closeEvent(self, event):
         """Handle application close event."""

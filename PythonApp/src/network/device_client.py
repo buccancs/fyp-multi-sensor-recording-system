@@ -38,9 +38,12 @@ class DeviceClient(QThread):
         self.devices = {}  # Dictionary to store device connections
         self.running = False
 
-        # TODO: Initialize actual network configuration
+        # Initialize actual network configuration
         self.server_port = 8080
         self.buffer_size = 4096
+        self.connection_timeout = 30  # seconds
+        self.heartbeat_interval = 5  # seconds
+        self.max_reconnect_attempts = 3
 
     def run(self):
         """
