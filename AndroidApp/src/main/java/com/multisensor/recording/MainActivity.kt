@@ -40,6 +40,7 @@ import com.multisensor.recording.util.PermissionTool
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.managers.PermissionManager
+import com.multisensor.recording.controllers.PermissionController
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +67,7 @@ import com.multisensor.recording.ui.components.HandSegmentationControlView
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
-    PermissionManager.PermissionCallback,
+    PermissionController.PermissionCallback,
     ShimmerManager.ShimmerCallback,
     UsbDeviceManager.UsbDeviceCallback,
     HandSegmentationManager.HandSegmentationListener,
@@ -83,6 +84,9 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var permissionManager: PermissionManager
+
+    @Inject
+    lateinit var permissionController: PermissionController
 
     @Inject
     lateinit var shimmerManager: ShimmerManager
@@ -138,6 +142,10 @@ class MainActivity : AppCompatActivity(),
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel initialized")
+
+        // Initialize PermissionController with callback
+        permissionController.setCallback(this)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] PermissionController initialized")
 
         // Setup UI
         setupUI()
@@ -256,18 +264,12 @@ class MainActivity : AppCompatActivity(),
      * Check if all required permissions are granted
      */
     private fun areAllPermissionsGranted(): Boolean =
-        AllAndroidPermissions.getDangerousPermissions().all { permission ->
-            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-        }
+        permissionController.areAllPermissionsGranted(this)
 
     override fun onStart() {
         super.onStart()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onStart() called")
     }
-
-    private var hasCheckedPermissionsOnStartup = false
-    private var permissionRetryCount = 0
-    private val maxPermissionRetries = 5 // Prevent infinite loops while being persistent
 
     // Status Display System - UI Enhancements
     private var currentBatteryLevel = -1
@@ -309,22 +311,10 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity is now fully visible and interactive")
 
         // Log current permission states for debugging
-        logCurrentPermissionStates()
+        permissionController.logCurrentPermissionStates(this)
 
         // Check and request permissions on first resume (app startup)
-        if (!hasCheckedPermissionsOnStartup) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] First onResume() - checking permissions for app startup")
-            hasCheckedPermissionsOnStartup = true
-
-            // Small delay to ensure activity is fully ready
-            binding.root.post {
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] About to call checkPermissions() in onResume()")
-                checkPermissions()
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] checkPermissions() call completed in onResume()")
-            }
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Subsequent onResume() - skipping permission check")
-        }
+        permissionController.initializePermissionsOnStartup(this)
     }
 
     override fun onPause() {
@@ -339,26 +329,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun logCurrentPermissionStates() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] === Current Permission States (XXPermissions) ===")
-
-        val missingPermissions = PermissionTool.getMissingDangerousPermissions(this)
-        val allPermissionsGranted = PermissionTool.areAllDangerousPermissionsGranted(this)
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted: $allPermissionsGranted")
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Missing permissions count: ${missingPermissions.size}")
-
-        if (missingPermissions.isNotEmpty()) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Missing permissions:")
-            missingPermissions.forEach { permission ->
-                val displayName = getPermissionDisplayName(permission)
-                android.util.Log.d("MainActivity", "[DEBUG_LOG]   - $displayName ($permission)")
-            }
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] ⚠ MISSING PERMISSIONS - Dialog should appear")
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] ✓ ALL PERMISSIONS GRANTED - No dialog needed")
-        }
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] === End Permission States ===")
+        permissionController.logCurrentPermissionStates(this)
     }
 
     // Status Display System Methods - UI Enhancements
@@ -522,7 +493,7 @@ class MainActivity : AppCompatActivity(),
 
         binding.requestPermissionsButton.setOnClickListener {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request button clicked")
-            requestPermissionsManually()
+            permissionController.requestPermissionsManually(this)
         }
 
         binding.navigationModeButton.setOnClickListener {
@@ -720,81 +691,25 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun checkPermissions() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting permission check via PermissionManager...")
-
-        if (permissionManager.areAllPermissionsGranted(this)) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions already granted, initializing system")
-            initializeRecordingSystem()
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Requesting permissions via PermissionManager...")
-            binding.statusText.text = "Requesting permissions..."
-
-            // Use PermissionManager for permission requests
-            permissionManager.requestPermissions(this, this)
-        }
-
-        // Update permission button visibility based on current permission status
-        updatePermissionButtonVisibility()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating permission check to PermissionController")
+        permissionController.checkPermissions(this)
     }
 
-    private fun showTemporaryDenialMessage(
-        temporarilyDenied: List<String>,
-        grantedCount: Int,
-        totalCount: Int,
-    ) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing temporary denial message for ${temporarilyDenied.size} permissions")
-
-        val message =
-            "Some permissions were denied but can be requested again.\n\n" +
-                "Denied permissions:\n" +
-                temporarilyDenied.joinToString("\n") { "• ${getPermissionDisplayName(it)}" } +
-                "\n\nYou can grant these permissions using the 'Request Permissions' button."
-
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-
-        binding.statusText.text = "Permissions: $grantedCount/$totalCount granted - Some permissions denied"
-
-        android.util.Log.i("MainActivity", "Temporary permission denial: ${temporarilyDenied.joinToString(", ")}")
-    }
-
-    private fun showPermanentlyDeniedMessage(permanentlyDenied: List<String>) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing permanently denied permissions message")
-
-        val message =
-            "Some permissions have been permanently denied. " +
-                "Please enable them manually in Settings > Apps > Multi-Sensor Recording > Permissions.\n\n" +
-                "Permanently denied permissions:\n" +
-                permanentlyDenied.joinToString("\n") { "• ${getPermissionDisplayName(it)}" }
-
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-
-        binding.statusText.text = "Permissions required - Please enable in Settings"
-
-        // Log the permanently denied permissions
-        android.util.Log.w("MainActivity", "Permanently denied permissions: ${permanentlyDenied.joinToString(", ")}")
-    }
+    // Removed - now handled by PermissionController
+    // private fun requestPermissionsManually() - moved to PermissionController.requestPermissionsManually()
+    // private fun logCurrentPermissionStates() - moved to PermissionController.logCurrentPermissionStates()
+    // private var hasCheckedPermissionsOnStartup - moved to PermissionController
+    // private var permissionRetryCount - moved to PermissionController
 
     private fun getPermissionDisplayName(permission: String): String {
-        return permissionManager.getPermissionDisplayName(permission)
+        return permissionController.getPermissionDisplayName(permission)
     }
 
-    private fun requestPermissionsManually() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request initiated by user")
-
-        // Reset the startup flag to allow permission checking again
-        hasCheckedPermissionsOnStartup = false
-
-        // Reset retry counter for fresh manual attempt
-        permissionRetryCount = 0
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Reset permission retry counter to 0 for manual request")
-
-        // Hide the button while processing
-        binding.requestPermissionsButton.visibility = android.view.View.GONE
-        binding.statusText.text = "Requesting permissions..."
-
-        // Call the same permission checking logic
-        checkPermissions()
-    }
+    // Removed - now handled by PermissionController
+    // private fun requestPermissionsManually() - moved to PermissionController.requestPermissionsManually()
+    // private fun logCurrentPermissionStates() - moved to PermissionController.logCurrentPermissionStates()
+    // private var hasCheckedPermissionsOnStartup - moved to PermissionController
+    // private var permissionRetryCount - moved to PermissionController
 
     private fun launchNavigationMode() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching navigation mode")
@@ -808,15 +723,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun updatePermissionButtonVisibility() {
-        val allPermissionsGranted = permissionManager.areAllPermissionsGranted(this)
-
-        if (!allPermissionsGranted) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing permission request button - permissions missing")
-            binding.requestPermissionsButton.visibility = android.view.View.VISIBLE
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Hiding permission request button - all permissions granted")
-            binding.requestPermissionsButton.visibility = android.view.View.GONE
-        }
+        permissionController.updatePermissionButtonVisibility(this)
     }
 
     private fun initializeRecordingSystem() {
@@ -1586,25 +1493,40 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring system cleaned up")
     }
 
-    // ========== PermissionManager.PermissionCallback Implementation ==========
+    // ========== PermissionController.PermissionCallback Implementation ==========
     
     override fun onAllPermissionsGranted() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionManager")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionController")
         initializeRecordingSystem()
         binding.statusText.text = "All permissions granted - System ready"
-        updatePermissionButtonVisibility()
     }
 
     override fun onPermissionsTemporarilyDenied(deniedPermissions: List<String>, grantedCount: Int, totalCount: Int) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.size}")
-        showTemporaryDenialMessage(deniedPermissions, grantedCount, totalCount)
-        updatePermissionButtonVisibility()
+        binding.statusText.text = "Permissions: $grantedCount/$totalCount granted - Some permissions denied"
     }
 
     override fun onPermissionsPermanentlyDenied(deniedPermissions: List<String>) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions permanently denied: ${deniedPermissions.size}")
-        showPermanentlyDeniedMessage(deniedPermissions)
-        updatePermissionButtonVisibility()
+        binding.statusText.text = "Permissions required - Please enable in Settings"
+    }
+    
+    override fun onPermissionCheckStarted() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission check started")
+        binding.statusText.text = "Checking permissions..."
+    }
+    
+    override fun onPermissionRequestCompleted() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission request completed")
+        // Final status will be set by other callbacks
+    }
+    
+    override fun updateStatusText(text: String) {
+        binding.statusText.text = text
+    }
+    
+    override fun showPermissionButton(show: Boolean) {
+        binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
     }
 
     // ========== ShimmerManager.ShimmerCallback Implementation ==========

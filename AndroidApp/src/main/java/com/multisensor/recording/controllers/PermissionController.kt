@@ -155,10 +155,10 @@ class PermissionController @Inject constructor(
         // Reset the startup flag to allow permission checking again
         hasCheckedPermissionsOnStartup = false
         
-        // Increment retry counter for tracking
-        permissionRetryCount++
+        // Reset retry counter for fresh manual attempt (don't increment for manual requests)
+        permissionRetryCount = 0
         persistState()
-        android.util.Log.d("PermissionController", "[DEBUG_LOG] Incremented permission retry counter to $permissionRetryCount")
+        android.util.Log.d("PermissionController", "[DEBUG_LOG] Reset permission retry counter to 0 for manual request")
         
         // Hide the button while processing
         callback?.showPermissionButton(false)
@@ -346,5 +346,28 @@ class PermissionController @Inject constructor(
         hasCheckedPermissionsOnStartup = false
         permissionRetryCount = 0
         android.util.Log.d("PermissionController", "[DEBUG_LOG] All persisted permission state cleared")
+    }
+    
+    /**
+     * Initialize permissions check on app startup
+     * Should be called from MainActivity.onResume() on first resume
+     */
+    fun initializePermissionsOnStartup(context: Context) {
+        if (!hasCheckedPermissionsOnStartup) {
+            android.util.Log.d("PermissionController", "[DEBUG_LOG] First startup - checking permissions")
+            hasCheckedPermissionsOnStartup = true
+            checkPermissions(context)
+        } else {
+            android.util.Log.d("PermissionController", "[DEBUG_LOG] Subsequent startup - skipping permission check")
+            // Still update button visibility in case permissions changed externally
+            updatePermissionButtonVisibility(context)
+        }
+    }
+    
+    /**
+     * Log current permission states for debugging
+     */
+    fun logCurrentPermissionStates(context: Context) {
+        permissionManager.logCurrentPermissionStates(context)
     }
 }
