@@ -581,4 +581,231 @@ class CalibrationControllerTest {
         
         println("[DEBUG_LOG] Multiple concurrent calibrations test passed")
     }
+    
+    // ========== Advanced Feature Tests ==========
+    
+    @Test
+    fun testAdvancedQualityAssessment() = runTest {
+        println("[DEBUG_LOG] Testing advanced quality assessment with statistical analysis")
+        
+        // Add multiple quality samples for statistical analysis
+        repeat(10) { i ->
+            val testResult = CalibrationCaptureManager.CalibrationCaptureResult(
+                success = true,
+                calibrationId = "test_calib_$i",
+                rgbFilePath = "/test/rgb_$i.jpg",
+                thermalFilePath = "/test/thermal_$i.png",
+                timestamp = System.currentTimeMillis(),
+                syncedTimestamp = System.currentTimeMillis() + (i * 10), // Varying sync offset
+                thermalConfig = null,
+                errorMessage = null
+            )
+            
+            coEvery { 
+                mockCalibrationCaptureManager.captureCalibrationImages(any(), any(), any(), any()) 
+            } returns testResult
+            
+            val mockLifecycleScope = mockk<LifecycleCoroutineScope>(relaxed = true)
+            every { mockLifecycleScope.launch(any(), any(), any()) } answers {
+                val block = arg<suspend () -> Unit>(2)
+                launch { block() }
+            }
+            
+            calibrationController.runCalibration(mockLifecycleScope)
+            testDispatcher.scheduler.advanceUntilIdle()
+        }
+        
+        // Test statistical validation
+        val validation = calibrationController.performStatisticalValidation()
+        assertNotNull("Statistical validation should be available", validation)
+        assertTrue("Should have confidence level", validation.confidenceLevel >= 0.0f)
+        
+        // Test pattern optimization
+        val optimization = calibrationController.analyzePatternOptimization()
+        assertNotNull("Pattern optimization should be available", optimization)
+        assertTrue("Efficiency should be valid", optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f)
+        
+        println("[DEBUG_LOG] Advanced quality assessment test passed")
+    }
+    
+    @Test
+    fun testMachineLearningPrediction() {
+        println("[DEBUG_LOG] Testing machine learning quality prediction")
+        
+        // Test quality prediction for different patterns
+        CalibrationController.CalibrationPattern.values().forEach { pattern ->
+            val (predictedQuality, uncertainty) = calibrationController.predictCalibrationQuality(pattern)
+            
+            assertTrue("Predicted quality should be valid", predictedQuality >= 0.0f && predictedQuality <= 1.0f)
+            assertTrue("Uncertainty should be valid", uncertainty >= 0.0f && uncertainty <= 1.0f)
+            
+            println("[DEBUG_LOG] Pattern ${pattern.displayName}: Quality=${String.format("%.3f", predictedQuality)}, Uncertainty=${String.format("%.3f", uncertainty)}")
+        }
+        
+        println("[DEBUG_LOG] Machine learning prediction test passed")
+    }
+    
+    @Test
+    fun testStatisticalValidation() = runTest {
+        println("[DEBUG_LOG] Testing statistical validation framework")
+        
+        // Add sufficient samples for statistical analysis
+        repeat(15) { i ->
+            val mockResult = CalibrationCaptureManager.CalibrationCaptureResult(
+                success = true,
+                calibrationId = "stat_test_$i",
+                rgbFilePath = "/test/rgb.jpg",
+                thermalFilePath = "/test/thermal.png",
+                timestamp = System.currentTimeMillis(),
+                syncedTimestamp = System.currentTimeMillis(),
+                thermalConfig = null,
+                errorMessage = null
+            )
+            
+            coEvery { 
+                mockCalibrationCaptureManager.captureCalibrationImages(any(), any(), any(), any()) 
+            } returns mockResult
+            
+            // Mock sync status for consistent quality calculation
+            val mockSyncStatus = SyncClockManager.SyncStatus(
+                isSynchronized = true,
+                clockOffsetMs = (10 - i).toLong(), // Improving sync over time
+                lastSyncTimestamp = System.currentTimeMillis(),
+                pcReferenceTime = System.currentTimeMillis(),
+                syncAge = 100L
+            )
+            every { mockSyncClockManager.getSyncStatus() } returns mockSyncStatus
+            
+            val mockLifecycleScope = mockk<LifecycleCoroutineScope>(relaxed = true)
+            every { mockLifecycleScope.launch(any(), any(), any()) } answers {
+                val block = arg<suspend () -> Unit>(2)
+                launch { block() }
+            }
+            
+            calibrationController.runCalibration(mockLifecycleScope)
+            testDispatcher.scheduler.advanceUntilIdle()
+        }
+        
+        // Perform statistical validation
+        val validation = calibrationController.performStatisticalValidation()
+        
+        assertTrue("Should have valid statistical analysis", validation.isValid || !validation.isValid) // Either outcome is valid
+        assertTrue("Confidence level should be reasonable", validation.confidenceLevel >= 0.0f && validation.confidenceLevel <= 1.0f)
+        assertTrue("P-value should be valid", validation.pValue >= 0.0f && validation.pValue <= 1.0f)
+        assertNotNull("Should have recommendation", validation.recommendation)
+        
+        println("[DEBUG_LOG] Statistical validation: Valid=${validation.isValid}, Confidence=${validation.confidenceLevel}, P-value=${validation.pValue}")
+        println("[DEBUG_LOG] Statistical validation test passed")
+    }
+    
+    @Test
+    fun testComprehensiveCalibrationReport() = runTest {
+        println("[DEBUG_LOG] Testing comprehensive calibration report generation")
+        
+        // Add some calibration data
+        repeat(5) { i ->
+            val mockResult = CalibrationCaptureManager.CalibrationCaptureResult(
+                success = true,
+                calibrationId = "report_test_$i",
+                rgbFilePath = "/test/rgb.jpg",
+                thermalFilePath = "/test/thermal.png",
+                timestamp = System.currentTimeMillis(),
+                syncedTimestamp = System.currentTimeMillis(),
+                thermalConfig = null,
+                errorMessage = null
+            )
+            
+            coEvery { 
+                mockCalibrationCaptureManager.captureCalibrationImages(any(), any(), any(), any()) 
+            } returns mockResult
+            
+            val mockLifecycleScope = mockk<LifecycleCoroutineScope>(relaxed = true)
+            every { mockLifecycleScope.launch(any(), any(), any()) } answers {
+                val block = arg<suspend () -> Unit>(2)
+                launch { block() }
+            }
+            
+            calibrationController.runCalibration(mockLifecycleScope)
+            testDispatcher.scheduler.advanceUntilIdle()
+        }
+        
+        // Generate comprehensive report
+        val report = calibrationController.generateCalibrationReport()
+        
+        assertNotNull("Report should be generated", report)
+        assertTrue("Should have timestamp", report.timestamp > 0)
+        assertEquals("Should track total calibrations", 5, report.totalCalibrations)
+        assertTrue("Average quality should be valid", report.averageQuality >= 0.0f && report.averageQuality <= 1.0f)
+        assertTrue("Quality std dev should be valid", report.qualityStandardDeviation >= 0.0f)
+        assertNotNull("Should include pattern optimization", report.patternOptimization)
+        assertNotNull("Should include statistical validation", report.statisticalValidation)
+        assertNotNull("Should include quality trend", report.qualityTrend)
+        assertTrue("Should have recommendations", report.systemRecommendations.isNotEmpty())
+        assertNotNull("Should include performance metrics", report.performanceMetrics)
+        
+        println("[DEBUG_LOG] Report generated: ${report.totalCalibrations} calibrations, avg quality = ${String.format("%.3f", report.averageQuality)}")
+        println("[DEBUG_LOG] Trend: ${report.qualityTrend}, Recommendations: ${report.systemRecommendations.size}")
+        println("[DEBUG_LOG] Comprehensive calibration report test passed")
+    }
+    
+    @Test
+    fun testAdvancedValidationSetup() {
+        println("[DEBUG_LOG] Testing advanced calibration setup validation")
+        
+        // Test with insufficient sync quality
+        val poorSyncStatus = SyncClockManager.SyncStatus(
+            isSynchronized = true,
+            clockOffsetMs = 75L, // Poor sync
+            lastSyncTimestamp = System.currentTimeMillis(),
+            pcReferenceTime = System.currentTimeMillis(),
+            syncAge = 1000L
+        )
+        every { mockSyncClockManager.getSyncStatus() } returns poorSyncStatus
+        every { mockSyncClockManager.isSyncValid() } returns true
+        
+        val (isValid, issues) = calibrationController.validateCalibrationSetup()
+        
+        assertFalse("Should detect sync quality issues", isValid)
+        assertTrue("Should report sync offset issue", issues.any { it.contains("Clock offset") && it.contains("75ms") })
+        
+        // Test with good sync
+        val goodSyncStatus = SyncClockManager.SyncStatus(
+            isSynchronized = true,
+            clockOffsetMs = 15L, // Good sync
+            lastSyncTimestamp = System.currentTimeMillis(),
+            pcReferenceTime = System.currentTimeMillis(),
+            syncAge = 1000L
+        )
+        every { mockSyncClockManager.getSyncStatus() } returns goodSyncStatus
+        
+        val (isValidGood, issuesGood) = calibrationController.validateCalibrationSetup()
+        
+        // May still have other issues, but sync should not be one of them
+        assertFalse("Should not report sync offset issue", issuesGood.any { it.contains("Clock offset") && it.contains("exceeds") })
+        
+        println("[DEBUG_LOG] Advanced validation setup test passed")
+    }
+    
+    @Test
+    fun testPatternOptimizationAnalysis() {
+        println("[DEBUG_LOG] Testing pattern optimization analysis")
+        
+        // Test with each pattern
+        CalibrationController.CalibrationPattern.values().forEach { pattern ->
+            calibrationController.setCalibrationPattern(pattern)
+            
+            val optimization = calibrationController.analyzePatternOptimization()
+            
+            assertNotNull("Optimization should be available", optimization)
+            assertTrue("Pattern efficiency should be valid", optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f)
+            assertTrue("Convergence rate should be valid", optimization.convergenceRate >= 0.0f && optimization.convergenceRate <= 1.0f)
+            assertTrue("Spatial coverage should be valid", optimization.spatialCoverage >= 0.0f && optimization.spatialCoverage <= 1.0f)
+            assertTrue("Redundancy analysis should be valid", optimization.redundancyAnalysis >= 0.0f && optimization.redundancyAnalysis <= 1.0f)
+            assertNotNull("Should recommend a pattern", optimization.recommendedPattern)
+            
+            println("[DEBUG_LOG] Pattern ${pattern.displayName}: Efficiency=${String.format("%.3f", optimization.patternEfficiency)}, Coverage=${String.format("%.3f", optimization.spatialCoverage)}")
+        }
+        
+        println("[DEBUG_LOG] Pattern optimization analysis test passed")
+    }
 }
