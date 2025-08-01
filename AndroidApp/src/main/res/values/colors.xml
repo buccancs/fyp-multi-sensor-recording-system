@@ -63,4 +63,10 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+    
+    <!-- New Simplified Design Colors -->
+    <color name="preview_placeholder">#EEEEEE</color>
+    <color name="status_background">#F0F0F0</color>
+    <color name="status_message_background">#2E2E2E</color>
+    <color name="status_message_text">#FFFFFF</color>
 </resources>
