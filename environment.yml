@@ -8,11 +8,11 @@ channels:
   - defaults
 
 dependencies:
-  # Core Python
-  - python=3.9
+  # Core Python - flexible version to avoid conflicts
+  - python>=3.9,<3.12
 
   # GUI Framework  
-  - pyqt=5.15.10
+  - pyqt=5.15.*
   
   # Computer Vision and Image Processing
   - opencv

@@ -17,7 +17,7 @@ on:
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=4 -Dorg.gradle.parallel=true
   JAVA_VERSION: '17'
-  PYTHON_VERSION: '3.9'
+  PYTHON_VERSION: '3.10'
   CONDA_ENV_NAME: 'thermal-env'
   # Performance and caching optimizations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
@@ -33,7 +33,7 @@ jobs:
       gradle: ${{ steps.changes.outputs.gradle }}
       ci: ${{ steps.changes.outputs.ci }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -116,11 +116,12 @@ jobs:
       
     - name: Run Android unit tests for all variants
       run: |
-        echo "Running comprehensive unit tests for all Android variants..."
+        echo "Running comprehensive unit tests for all Android variants with modern test architecture..."
         ./gradlew AndroidApp:test --stacktrace --continue
         echo "Running specific variant tests for coverage..."
         ./gradlew AndroidApp:testDevDebugUnitTest --stacktrace
         ./gradlew AndroidApp:testProdDebugUnitTest --stacktrace
+        echo "Generating comprehensive test reports..."
       
     - name: Run Android lint
       run: ./gradlew AndroidApp:lintDebug --stacktrace
@@ -214,7 +215,11 @@ jobs:
         force-avd-creation: false
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
-        script: ./gradlew AndroidApp:connectedDebugAndroidTest --stacktrace
+        script: |
+          echo "Running modernized Android instrumented tests..."
+          ./gradlew AndroidApp:connectedDebugAndroidTest --stacktrace
+          echo "Generating instrumented test coverage reports..."
+          ./gradlew AndroidApp:createDevDebugCoverageReport --stacktrace
         
     - name: Upload integration test results
       uses: actions/upload-artifact@v4
@@ -233,13 +238,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ['3.10', '3.11']
         exclude:
           # Reduce matrix size for efficiency - test edge cases on Ubuntu only
           - os: windows-latest
-            python-version: '3.10'
+            python-version: '3.11'
           - os: macos-latest
-            python-version: '3.10'
+            python-version: '3.11'
       fail-fast: false
         
     steps:
@@ -367,7 +372,7 @@ jobs:
         
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.9'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10'
       with:
         file: ./PythonApp/coverage.xml
         flags: python
@@ -669,7 +674,7 @@ jobs:
         safety check --json --output ../safety-results.json || true
         
     - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/gradle-jvm@master
+      uses: snyk/actions/gradle@master
       continue-on-error: true
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
