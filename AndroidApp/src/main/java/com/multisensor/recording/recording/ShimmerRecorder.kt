@@ -1638,8 +1638,8 @@ class ShimmerRecorder
         )
 
         /**
-         * Simulate Shimmer device connection
-         * TODO: Replace with actual Shimmer SDK connection
+         * Simulate Shimmer device connection (deprecated - real implementation available)
+         * Note: This is legacy simulation code. Real implementation uses ShimmerBluetoothManagerAndroid
          */
         private suspend fun simulateShimmerConnection(): Boolean {
             // In real implementation, this would:
@@ -1671,8 +1671,8 @@ class ShimmerRecorder
         }
 
         /**
-         * Start simulated data collection
-         * TODO: Replace with actual Shimmer SDK data callback
+         * Start simulated data collection (deprecated - real implementation available)
+         * Note: This is legacy simulation code. Real implementation uses Shimmer SDK callbacks
          */
         private suspend fun startSimulatedDataCollection() {
             // In real implementation, this would set up Shimmer SDK callbacks
@@ -1685,8 +1685,8 @@ class ShimmerRecorder
         }
 
         /**
-         * Simulate writing a sensor sample (called by real Shimmer callbacks)
-         * TODO: Replace with actual Shimmer SDK data handling
+         * Simulate writing a sensor sample (deprecated - real implementation available)
+         * Note: This is legacy simulation code. Real implementation uses handleShimmerData()
          */
         suspend fun simulateDataSample(): ShimmerSample =
             withContext(Dispatchers.IO) {
