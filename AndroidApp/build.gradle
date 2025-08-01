@@ -105,8 +105,8 @@ android {
                         maxHeapSize = "2048m"
                         
                         // Enable comprehensive test reporting
-                        reports.html.enabled = true
-                        reports.junitXml.enabled = true
+                        reports.html.required = true
+                        reports.junitXml.required = true
                         
                         // Performance monitoring configuration
                         systemProperty 'junit.jupiter.execution.parallel.enabled', 'true'
@@ -422,8 +422,8 @@ tasks.withType(Test) {
     
     // Enhanced reporting
     reports {
-        html.enabled = true
-        junitXml.enabled = true
+        html.required = true
+        junitXml.required = true
     }
     
     // Test execution options
@@ -450,9 +450,9 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     description = "Generate comprehensive test coverage reports."
 
     reports {
-        xml.enabled = true
-        html.enabled = true
-        csv.enabled = false
+        xml.required = true
+        html.required = true
+        csv.required = false
     }
 
     def fileFilter = [
@@ -566,75 +566,19 @@ task comprehensiveTest {
         println "📈 Coverage report: build/reports/jacoco/jacocoTestReport/html/index.html"
     }
 }
-    jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
-}
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDevDebugUnitTest', 'testProdDebugUnitTest', 'createDevDebugCoverageReport', 'createProdDebugCoverageReport']) {
-    group = "Reporting"
-    description = "Generates Jacoco coverage reports."
+// Detekt configuration for Kotlin static analysis
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$projectDir/../detekt.yml")
+    baseline = file("$projectDir/detekt-baseline.xml")
     
     reports {
-        xml.required = true
-        html.required = true
+        html.enabled = true
+        xml.enabled = true
+        txt.enabled = true
+        sarif.enabled = true
+        md.enabled = false
     }
-
-    def fileFilter = [
-        '**/R.class',
-        '**/R$*.class',
-        '**/BuildConfig.*',
-        '**/Manifest*.*',
-        '**/*Test*.*',
-        'android/**/*.*',
-        '**/databinding/*',
-        '**/generated/**/*.*',
-        '**/*_Factory.*',
-        '**/*_MembersInjector.*',
-        '**/*Fragment.*',
-        '**/*Activity.*'
-    ]
-
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter)
-    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
-
-    classDirectories.setFrom(files([debugTree, kotlinDebugTree]))
-    
-    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-        "jacoco/testDevDebugUnitTest.exec",
-        "jacoco/testProdDebugUnitTest.exec",
-        "outputs/code_coverage/devDebugAndroidTest/connected/**/*.ec",
-        "outputs/code_coverage/prodDebugAndroidTest/connected/**/*.ec"
-    ]))
-
-    sourceDirectories.setFrom(files([
-        "$project.projectDir/src/main/java",
-        "$project.projectDir/src/main/kotlin",
-        "$project.projectDir/src/debug/java",
-        "$project.projectDir/src/debug/kotlin"
-    ]))
-}
-
-// Custom tasks for enhanced development workflow
-task formatKotlin(type: JavaExec, group: "formatting") {
-    description = "Format Kotlin code with ktlint"
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "-F", "src/**/*.kt"
-}
-
-task lintKotlin(type: JavaExec, group: "verification") {
-    description = "Check Kotlin code style with ktlint"
-    classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
-    args "src/**/*.kt"
-}
-
-// Integration with enhanced build process
-tasks.named("check").configure {
-    dependsOn("detekt")
-    dependsOn("lintKotlin") 
-}
-
-tasks.named("build").configure {
-    finalizedBy("jacocoTestReport")
 }
