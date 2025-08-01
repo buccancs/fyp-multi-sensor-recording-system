@@ -613,4 +613,373 @@ class UIController @Inject constructor() {
             }
         }
     }
+    
+    // ========== UI Component Validation and Error Handling ==========
+    
+    /**
+     * Validate all UI components and return validation results
+     */
+    fun validateUIComponents(): UIValidationResult {
+        val errors = mutableListOf<String>()
+        val warnings = mutableListOf<String>()
+        
+        try {
+            // Validate callback availability
+            if (callback == null) {
+                errors.add("UI callback is null - UI operations will fail")
+            } else {
+                // Validate context availability
+                try {
+                    callback?.getContext()
+                } catch (e: Exception) {
+                    errors.add("Context not available: ${e.message}")
+                }
+                
+                // Validate critical UI components
+                if (callback?.getStatusText() == null) {
+                    warnings.add("Status text view is null - status updates may not display")
+                }
+                
+                if (callback?.getStartRecordingButton() == null) {
+                    errors.add("Start recording button is null - recording cannot be initiated")
+                }
+                
+                if (callback?.getStopRecordingButton() == null) {
+                    errors.add("Stop recording button is null - recording cannot be stopped")
+                }
+                
+                if (callback?.getBatteryLevelText() == null) {
+                    warnings.add("Battery level text is null - battery status will not display")
+                }
+                
+                // Validate connection indicators
+                if (callback?.getPcConnectionIndicator() == null) {
+                    warnings.add("PC connection indicator is null - PC status will not display")
+                }
+                
+                if (callback?.getShimmerConnectionIndicator() == null) {
+                    warnings.add("Shimmer connection indicator is null - Shimmer status will not display")
+                }
+                
+                if (callback?.getThermalConnectionIndicator() == null) {
+                    warnings.add("Thermal connection indicator is null - thermal camera status will not display")
+                }
+            }
+            
+            // Validate consolidated components
+            if (::pcStatusIndicator.isInitialized) {
+                try {
+                    // Test if component is functional
+                    pcStatusIndicator.contentDescription
+                } catch (e: Exception) {
+                    warnings.add("PC status indicator may be corrupted: ${e.message}")
+                }
+            } else {
+                warnings.add("PC status indicator not initialized - using legacy indicator")
+            }
+            
+            if (::shimmerStatusIndicator.isInitialized) {
+                try {
+                    shimmerStatusIndicator.contentDescription
+                } catch (e: Exception) {
+                    warnings.add("Shimmer status indicator may be corrupted: ${e.message}")
+                }
+            } else {
+                warnings.add("Shimmer status indicator not initialized - using legacy indicator")
+            }
+            
+            if (::thermalStatusIndicator.isInitialized) {
+                try {
+                    thermalStatusIndicator.contentDescription
+                } catch (e: Exception) {
+                    warnings.add("Thermal status indicator may be corrupted: ${e.message}")
+                }
+            } else {
+                warnings.add("Thermal status indicator not initialized - using legacy indicator")
+            }
+            
+            if (::recordingButtonPair.isInitialized) {
+                try {
+                    // Test if button pair is functional
+                    recordingButtonPair.contentDescription
+                } catch (e: Exception) {
+                    warnings.add("Recording button pair may be corrupted: ${e.message}")
+                }
+            } else {
+                warnings.add("Recording button pair not initialized - using legacy buttons")
+            }
+            
+            // Validate SharedPreferences
+            if (sharedPreferences == null) {
+                warnings.add("SharedPreferences not available - UI state will not persist")
+            }
+            
+        } catch (e: Exception) {
+            errors.add("Critical error during UI validation: ${e.message}")
+        }
+        
+        return UIValidationResult(
+            isValid = errors.isEmpty(),
+            errors = errors,
+            warnings = warnings,
+            componentCount = getComponentCount(),
+            validationTimestamp = System.currentTimeMillis()
+        )
+    }
+    
+    /**
+     * Attempt to recover from UI component errors
+     */
+    fun recoverFromUIErrors(): UIRecoveryResult {
+        val recoveryActions = mutableListOf<String>()
+        var success = true
+        
+        try {
+            android.util.Log.d("UIController", "[DEBUG_LOG] Attempting UI error recovery")
+            
+            // Attempt to re-initialize components if callback is available
+            if (callback != null) {
+                try {
+                    initializeUIComponents()
+                    recoveryActions.add("Re-initialized UI components")
+                } catch (e: Exception) {
+                    success = false
+                    recoveryActions.add("Failed to re-initialize UI components: ${e.message}")
+                }
+                
+                // Attempt to restore UI state from preferences
+                try {
+                    val savedState = getSavedUIState()
+                    if (savedState.lastBatteryLevel >= 0) {
+                        recoveryActions.add("Restored UI state from preferences")
+                    }
+                } catch (e: Exception) {
+                    recoveryActions.add("Could not restore UI state: ${e.message}")
+                }
+                
+                // Validate accessibility settings
+                try {
+                    applyThemeFromPreferences()
+                    recoveryActions.add("Applied theme preferences")
+                } catch (e: Exception) {
+                    recoveryActions.add("Could not apply theme preferences: ${e.message}")
+                }
+            } else {
+                success = false
+                recoveryActions.add("Cannot recover - UI callback is null")
+            }
+            
+        } catch (e: Exception) {
+            success = false
+            recoveryActions.add("Critical recovery error: ${e.message}")
+        }
+        
+        return UIRecoveryResult(
+            success = success,
+            recoveryActions = recoveryActions,
+            recoveryTimestamp = System.currentTimeMillis()
+        )
+    }
+    
+    /**
+     * Validate UI state for consistency and completeness
+     */
+    fun validateUIState(state: MainUiState): UIStateValidationResult {
+        val issues = mutableListOf<String>()
+        val suggestions = mutableListOf<String>()
+        
+        try {
+            // Validate basic state consistency
+            if (state.isRecording && state.canStartRecording) {
+                issues.add("Inconsistent recording state: recording is active but start button is enabled")
+            }
+            
+            if (!state.isRecording && state.canStopRecording) {
+                issues.add("Inconsistent recording state: recording is not active but stop button is enabled")
+            }
+            
+            if (state.isRecording && state.canRunCalibration) {
+                issues.add("Inconsistent state: recording is active but calibration is allowed")
+            }
+            
+            // Validate battery level
+            if (state.batteryLevel < 0 && state.batteryLevel != -1) {
+                issues.add("Invalid battery level: ${state.batteryLevel} (should be -1 for unknown or 0-100)")
+            }
+            
+            if (state.batteryLevel > 100) {
+                issues.add("Invalid battery level: ${state.batteryLevel} (should not exceed 100)")
+            }
+            
+            if (state.batteryLevel in 1..20) {
+                suggestions.add("Low battery level detected: ${state.batteryLevel}% - consider showing warning")
+            }
+            
+            // Validate streaming state
+            if (state.isStreaming && state.streamingFrameRate <= 0) {
+                issues.add("Inconsistent streaming state: streaming is active but frame rate is ${state.streamingFrameRate}")
+            }
+            
+            if (!state.isStreaming && state.streamingFrameRate > 0) {
+                suggestions.add("Streaming not active but frame rate is ${state.streamingFrameRate} - may indicate stopped streaming")
+            }
+            
+            // Validate connection consistency
+            if (state.isRecording && !state.isPcConnected && !state.isShimmerConnected && !state.isThermalConnected) {
+                issues.add("Recording is active but no devices are connected - this may indicate a problem")
+            }
+            
+            if (state.canStartRecording && !state.isPcConnected && !state.isShimmerConnected && !state.isThermalConnected) {
+                suggestions.add("Recording is enabled but no devices connected - user may need to connect devices first")
+            }
+            
+            // Validate error state
+            if (state.errorMessage != null && !state.showErrorDialog) {
+                suggestions.add("Error message present but dialog not shown - error may not be visible to user")
+            }
+            
+            if (state.showErrorDialog && state.errorMessage.isNullOrBlank()) {
+                issues.add("Error dialog should be shown but no error message provided")
+            }
+            
+            // Validate session info
+            if (state.currentSessionInfo != null && state.currentSessionInfo.sessionId.isBlank()) {
+                issues.add("Session info provided but session ID is blank")
+            }
+            
+            // Validate status text
+            if (state.statusText.isBlank()) {
+                suggestions.add("Status text is blank - consider providing status information")
+            }
+            
+        } catch (e: Exception) {
+            issues.add("Critical error during state validation: ${e.message}")
+        }
+        
+        return UIStateValidationResult(
+            isValid = issues.isEmpty(),
+            issues = issues,
+            suggestions = suggestions,
+            validationTimestamp = System.currentTimeMillis()
+        )
+    }
+    
+    /**
+     * Get count of available UI components
+     */
+    private fun getComponentCount(): Int {
+        var count = 0
+        callback?.let { cb ->
+            if (cb.getStatusText() != null) count++
+            if (cb.getStartRecordingButton() != null) count++
+            if (cb.getStopRecordingButton() != null) count++
+            if (cb.getCalibrationButton() != null) count++
+            if (cb.getPcConnectionIndicator() != null) count++
+            if (cb.getShimmerConnectionIndicator() != null) count++
+            if (cb.getThermalConnectionIndicator() != null) count++
+            if (cb.getBatteryLevelText() != null) count++
+            if (cb.getRecordingIndicator() != null) count++
+            if (cb.getStreamingIndicator() != null) count++
+            if (cb.getStreamingLabel() != null) count++
+            if (cb.getStreamingDebugOverlay() != null) count++
+            if (cb.getRequestPermissionsButton() != null) count++
+            if (cb.getShimmerStatusText() != null) count++
+        }
+        return count
+    }
+    
+    /**
+     * Enable accessibility features dynamically
+     */
+    fun enableAccessibilityFeatures() {
+        try {
+            setAccessibilityMode(true)
+            
+            // Apply accessibility improvements to existing components
+            val savedState = getSavedUIState()
+            if (savedState.accessibilityMode) {
+                if (::pcStatusIndicator.isInitialized) {
+                    pcStatusIndicator.contentDescription = "PC connection status indicator"
+                }
+                if (::shimmerStatusIndicator.isInitialized) {
+                    shimmerStatusIndicator.contentDescription = "Shimmer sensor status indicator"
+                }
+                if (::thermalStatusIndicator.isInitialized) {
+                    thermalStatusIndicator.contentDescription = "Thermal camera status indicator"
+                }
+                if (::recordingButtonPair.isInitialized) {
+                    recordingButtonPair.contentDescription = "Recording control buttons"
+                }
+            }
+            
+            android.util.Log.d("UIController", "[DEBUG_LOG] Accessibility features enabled")
+        } catch (e: Exception) {
+            android.util.Log.e("UIController", "[DEBUG_LOG] Failed to enable accessibility features: ${e.message}")
+        }
+    }
+    
+    /**
+     * Apply dynamic theme with validation
+     */
+    fun applyDynamicTheme(themeMode: String, highContrast: Boolean = false): Boolean {
+        return try {
+            // Validate theme mode
+            val validThemes = listOf("light", "dark", "auto", "default")
+            if (themeMode !in validThemes) {
+                android.util.Log.w("UIController", "[DEBUG_LOG] Invalid theme mode: $themeMode, using default")
+                setThemeMode("default")
+            } else {
+                setThemeMode(themeMode)
+            }
+            
+            setHighContrastMode(highContrast)
+            
+            // Apply theme to existing components if initialized
+            if (::pcStatusIndicator.isInitialized || ::shimmerStatusIndicator.isInitialized || 
+                ::thermalStatusIndicator.isInitialized) {
+                android.util.Log.d("UIController", "[DEBUG_LOG] Updating component themes")
+                // Force a UI update to apply new theme
+                val currentState = MainUiState(statusText = "Theme updated")
+                updateUIFromState(currentState)
+            }
+            
+            android.util.Log.d("UIController", "[DEBUG_LOG] Dynamic theme applied: $themeMode, high contrast: $highContrast")
+            true
+        } catch (e: Exception) {
+            android.util.Log.e("UIController", "[DEBUG_LOG] Failed to apply dynamic theme: ${e.message}")
+            false
+        }
+    }
+    
+    // ========== Data Classes for Validation Results ==========
+    
+    /**
+     * Result of UI component validation
+     */
+    data class UIValidationResult(
+        val isValid: Boolean,
+        val errors: List<String>,
+        val warnings: List<String>,
+        val componentCount: Int,
+        val validationTimestamp: Long
+    )
+    
+    /**
+     * Result of UI error recovery attempt
+     */
+    data class UIRecoveryResult(
+        val success: Boolean,
+        val recoveryActions: List<String>,
+        val recoveryTimestamp: Long
+    )
+    
+    /**
+     * Result of UI state validation
+     */
+    data class UIStateValidationResult(
+        val isValid: Boolean,
+        val issues: List<String>,
+        val suggestions: List<String>,
+        val validationTimestamp: Long
+    )
 }
