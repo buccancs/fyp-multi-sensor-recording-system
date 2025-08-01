@@ -12,7 +12,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 👥 User Documentation
 - **[Complete User Guide](user-guides/CONSOLIDATED_USER_GUIDE.md)** - Comprehensive user manual
-- **[UI Navigation Guide](USER_GUIDE_ui_navigation.md)** - Modern Android UI navigation and interface usage
+- **[UI Navigation Guide](new_documentation/USER_GUIDE_ui_navigation.md)** - Modern Android UI navigation and interface usage
 - **[Device Management](user-guides/CONSOLIDATED_USER_GUIDE.md#device-management)** - Device setup and configuration
 - **[Recording Sessions](user-guides/CONSOLIDATED_USER_GUIDE.md#recording-sessions)** - Recording procedures and best practices
 - **[Data Management](user-guides/CONSOLIDATED_USER_GUIDE.md#data-management-and-export)** - Data organization and export
@@ -23,7 +23,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[Repository Component Inventory](REPOSITORY_COMPONENT_INVENTORY.md)** - Complete catalog of all features, components, and modules
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
-- **[UI Architecture Guide](README_ui_architecture.md)** - Comprehensive UI, State, and Navigation Architecture documentation
+- **[UI Architecture Guide](new_documentation/README_ui_architecture.md)** - Comprehensive UI, State, and Navigation Architecture documentation
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
 
 ### 🎓 Academic Documentation
@@ -44,9 +44,9 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | [README.md](../README.md) | Project overview and quick start | All users |
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
-| [README_ui_architecture.md](README_ui_architecture.md) | UI, State, and Navigation Architecture technical documentation | Developers |
-| [USER_GUIDE_ui_navigation.md](USER_GUIDE_ui_navigation.md) | UI Navigation and Interface user guide | End users |
-| [PROTOCOL_ui_state_management.md](PROTOCOL_ui_state_management.md) | UI State Management protocol and data contracts | Developers |
+| [README_ui_architecture.md](new_documentation/README_ui_architecture.md) | UI, State, and Navigation Architecture technical documentation | Developers |
+| [USER_GUIDE_ui_navigation.md](new_documentation/USER_GUIDE_ui_navigation.md) | UI Navigation and Interface user guide | End users |
+| [PROTOCOL_ui_state_management.md](new_documentation/PROTOCOL_ui_state_management.md) | UI State Management protocol and data contracts | Developers |
 | [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
 
 ### 📁 User Guides (`docs/user-guides/`)
