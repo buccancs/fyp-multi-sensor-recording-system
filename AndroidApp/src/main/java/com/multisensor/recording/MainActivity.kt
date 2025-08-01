@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -40,8 +41,13 @@ import com.multisensor.recording.util.PermissionTool
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.managers.PermissionManager
+import com.multisensor.recording.controllers.PermissionController
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
+import com.multisensor.recording.controllers.ShimmerController
+import com.multisensor.recording.controllers.MainActivityCoordinator
+import com.multisensor.recording.controllers.UIController
+import com.multisensor.recording.controllers.UsbController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -70,8 +76,9 @@ import com.multisensor.recording.controllers.NetworkController
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     PermissionManager.PermissionCallback,
-    ShimmerManager.ShimmerCallback,
+    ShimmerController.ShimmerCallback,
     UsbDeviceManager.UsbDeviceCallback,
+
     HandSegmentationManager.HandSegmentationListener,
     HandSegmentationControlView.HandSegmentationControlListener,
     NetworkController.NetworkCallback {
@@ -89,16 +96,35 @@ class MainActivity : AppCompatActivity(),
     lateinit var permissionManager: PermissionManager
 
     @Inject
+    lateinit var permissionController: PermissionController
+
+    @Inject
     lateinit var shimmerManager: ShimmerManager
 
     @Inject
+    lateinit var shimmerController: ShimmerController
+
+    @Inject
     lateinit var usbDeviceManager: UsbDeviceManager
+
+    @Inject
+    lateinit var calibrationController: CalibrationController
+
+    @Inject
+    lateinit var usbController: UsbController
+
 
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
     
     @Inject
     lateinit var networkController: NetworkController
+
+    @Inject
+    lateinit var mainActivityCoordinator: MainActivityCoordinator
+
+    @Inject
+    lateinit var uiController: UIController
 
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
@@ -112,16 +138,16 @@ class MainActivity : AppCompatActivity(),
         
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             // Get selected device information from dialog
-            selectedShimmerAddress = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
-            selectedShimmerName = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
+            val address = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
+            val name = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
 
-            logI("Shimmer device selected: Address=$selectedShimmerAddress, Name=$selectedShimmerName")
+            logI("Shimmer device selected: Address=$address, Name=$name")
 
-            // Show BLE/Classic connection type selection dialog
-            showBtTypeConnectionOption()
+            // Use ShimmerController to handle device selection
+            shimmerController.handleDeviceSelectionResult(address, name)
         } else {
             logI("Shimmer device selection cancelled")
-            Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
+            shimmerController.handleDeviceSelectionResult(null, null)
         }
     }
     private var looper: Looper? = null
@@ -150,9 +176,22 @@ class MainActivity : AppCompatActivity(),
         initializeNetworkController()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController integration initialized")
 
+        // Initialize ShimmerController with callback
+        shimmerController.setCallback(this)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] ShimmerController initialized and callback set")
+
         // Setup UI
         setupUI()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] UI setup completed")
+
+        // Setup managers and callbacks (TODO: Add proper callback setup methods to managers)
+        // shimmerManager.setCallback(this)
+        // permissionManager.setCallback(this)
+        // handSegmentationManager.setListener(this)
+        usbController.setCallback(this)
+
+        // Initialize USB monitoring for already connected devices
+        usbController.initializeUsbMonitoring(this)
 
         // Note: Permission checking moved to onResume() for better timing
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission checking will be done in onResume() for better timing")
@@ -164,7 +203,7 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== APP STARTUP: onCreate() completed =====")
 
         // Handle USB device attachment if launched by USB intent
-        handleUsbDeviceIntent(intent)
+        usbController.handleUsbDeviceIntent(this, intent)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -172,13 +211,8 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] onNewIntent() called")
 
         // Handle USB device attachment
-        handleUsbDeviceIntent(intent)
-    }
+        usbController.handleUsbDeviceIntent(this, intent)
 
-    /**
-     * Handle USB device attachment intent
-     * This method is called when the app is launched due to a Topdon device being connected
-     */
     private fun handleUsbDeviceIntent(intent: Intent) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Handling USB device intent: ${intent.action}")
 
@@ -267,18 +301,12 @@ class MainActivity : AppCompatActivity(),
      * Check if all required permissions are granted
      */
     private fun areAllPermissionsGranted(): Boolean =
-        AllAndroidPermissions.getDangerousPermissions().all { permission ->
-            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-        }
+        permissionController.areAllPermissionsGranted(this)
 
     override fun onStart() {
         super.onStart()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onStart() called")
     }
-
-    private var hasCheckedPermissionsOnStartup = false
-    private var permissionRetryCount = 0
-    private val maxPermissionRetries = 5 // Prevent infinite loops while being persistent
 
     // Status Display System - UI Enhancements
     private var currentBatteryLevel = -1
@@ -320,22 +348,10 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity is now fully visible and interactive")
 
         // Log current permission states for debugging
-        logCurrentPermissionStates()
+        permissionController.logCurrentPermissionStates(this)
 
         // Check and request permissions on first resume (app startup)
-        if (!hasCheckedPermissionsOnStartup) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] First onResume() - checking permissions for app startup")
-            hasCheckedPermissionsOnStartup = true
-
-            // Small delay to ensure activity is fully ready
-            binding.root.post {
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] About to call checkPermissions() in onResume()")
-                checkPermissions()
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] checkPermissions() call completed in onResume()")
-            }
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Subsequent onResume() - skipping permission check")
-        }
+        permissionController.initializePermissionsOnStartup(this)
     }
 
     override fun onPause() {
@@ -350,26 +366,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun logCurrentPermissionStates() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] === Current Permission States (XXPermissions) ===")
-
-        val missingPermissions = PermissionTool.getMissingDangerousPermissions(this)
-        val allPermissionsGranted = PermissionTool.areAllDangerousPermissionsGranted(this)
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted: $allPermissionsGranted")
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Missing permissions count: ${missingPermissions.size}")
-
-        if (missingPermissions.isNotEmpty()) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Missing permissions:")
-            missingPermissions.forEach { permission ->
-                val displayName = getPermissionDisplayName(permission)
-                android.util.Log.d("MainActivity", "[DEBUG_LOG]   - $displayName ($permission)")
-            }
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] ⚠ MISSING PERMISSIONS - Dialog should appear")
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] ✓ ALL PERMISSIONS GRANTED - No dialog needed")
-        }
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] === End Permission States ===")
+        permissionController.logCurrentPermissionStates(this)
     }
 
     // Status Display System Methods - UI Enhancements
@@ -515,8 +512,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupUI() {
-        // Initialize consolidated UI components
-        initializeUIComponents()
+        // Initialize coordinator with callback implementation
+        initializeCoordinator()
+        
+        // Initialize UIController through coordinator
+        initializeUIControllerIntegration()
         
         // Setup recording control buttons
         binding.startRecordingButton.setOnClickListener {
@@ -533,7 +533,7 @@ class MainActivity : AppCompatActivity(),
 
         binding.requestPermissionsButton.setOnClickListener {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request button clicked")
-            requestPermissionsManually()
+            permissionController.requestPermissionsManually(this)
         }
 
         binding.navigationModeButton.setOnClickListener {
@@ -552,9 +552,134 @@ class MainActivity : AppCompatActivity(),
     }
     
     /**
-     * Initialize consolidated UI components
+     * Initialize the main activity coordinator with callback implementation
+     */
+    private fun initializeCoordinator() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing MainActivityCoordinator")
+        
+        val coordinatorCallback = object : MainActivityCoordinator.CoordinatorCallback {
+            override fun updateStatusText(text: String) {
+                runOnUiThread {
+                    binding.statusText.text = text
+                }
+            }
+            
+            override fun showToast(message: String, duration: Int) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, message, duration).show()
+                }
+            }
+            
+            override fun runOnUiThread(action: () -> Unit) {
+                this@MainActivity.runOnUiThread(action)
+            }
+            
+            override fun getContentView(): View = binding.root
+            override fun getStreamingIndicator(): View? = binding.streamingIndicator
+            override fun getStreamingLabel(): View? = binding.streamingLabel
+            override fun getStreamingDebugOverlay(): TextView? = binding.streamingDebugOverlay
+            
+            override fun showPermissionButton(show: Boolean) {
+                runOnUiThread {
+                    binding.requestPermissionsButton.visibility = if (show) View.VISIBLE else View.GONE
+                }
+            }
+            
+            // UI Controller callback methods implementation
+            override fun getContext(): Context = this@MainActivity
+            override fun getStatusText(): TextView? = binding.statusText
+            override fun getStartRecordingButton(): View? = binding.startRecordingButton
+            override fun getStopRecordingButton(): View? = binding.stopRecordingButton
+            override fun getCalibrationButton(): View? = binding.calibrationButton
+            override fun getPcConnectionIndicator(): View? = binding.pcConnectionIndicator
+            override fun getShimmerConnectionIndicator(): View? = binding.shimmerConnectionIndicator
+            override fun getThermalConnectionIndicator(): View? = binding.thermalConnectionIndicator
+            override fun getPcConnectionStatus(): TextView? = binding.pcConnectionStatus
+            override fun getShimmerConnectionStatus(): TextView? = binding.shimmerConnectionStatus
+            override fun getThermalConnectionStatus(): TextView? = binding.thermalConnectionStatus
+            override fun getBatteryLevelText(): TextView? = binding.batteryLevelText
+            override fun getRecordingIndicator(): View? = binding.recordingIndicator
+            override fun getRequestPermissionsButton(): View? = binding.requestPermissionsButton
+            override fun getShimmerStatusText(): TextView? = binding.shimmerStatusText
+        }
+        
+        mainActivityCoordinator.initialize(coordinatorCallback)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] MainActivityCoordinator initialized successfully")
+    }
+    
+    /**
+     * Initialize UIController integration with validation and error handling
+     */
+    private fun initializeUIControllerIntegration() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing UIController integration")
+        
+        try {
+            // Initialize UI components through UIController
+            uiController.initializeUIComponents()
+            
+            // Validate UI components
+            val validationResult = uiController.validateUIComponents()
+            if (!validationResult.isValid) {
+                android.util.Log.w("MainActivity", "[DEBUG_LOG] UI validation failed: ${validationResult.errors}")
+                // Attempt recovery
+                val recoveryResult = uiController.recoverFromUIErrors()
+                if (recoveryResult.success) {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] UI recovery successful: ${recoveryResult.recoveryActions}")
+                } else {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] UI recovery failed: ${recoveryResult.recoveryActions}")
+                }
+            } else {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] UI validation passed: ${validationResult.componentCount} components available")
+            }
+            
+            // Apply saved theme preferences
+            uiController.applyThemeFromPreferences()
+            
+            // Enable accessibility features if needed
+            val savedState = uiController.getSavedUIState()
+            if (savedState.accessibilityMode) {
+                uiController.enableAccessibilityFeatures()
+            }
+            
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] UIController integration completed successfully")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController integration: ${e.message}")
+            Toast.makeText(this, "UI initialization error: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+    
+    /**
+     * Initialize consolidated UI components (legacy method - now delegated to UIController)
      */
     private fun initializeUIComponents() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating UI component initialization to UIController")
+        
+        try {
+            // Get consolidated components from UIController
+            val consolidatedComponents = uiController.getConsolidatedComponents()
+            
+            // Initialize local references for backward compatibility
+            consolidatedComponents.pcStatusIndicator?.let { pcStatusIndicator = it }
+            consolidatedComponents.shimmerStatusIndicator?.let { shimmerStatusIndicator = it }
+            consolidatedComponents.thermalStatusIndicator?.let { thermalStatusIndicator = it }
+            consolidatedComponents.recordingButtonPair?.let { recordingButtonPair = it }
+            
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] UI components delegated to UIController successfully")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to delegate UI components: ${e.message}")
+            // Fallback to legacy initialization
+            initializeLegacyUIComponents()
+        }
+    }
+    
+    /**
+     * Fallback legacy UI component initialization
+     */
+    private fun initializeLegacyUIComponents() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Falling back to legacy UI component initialization")
+        
         // Initialize StatusIndicatorView components
         pcStatusIndicator = StatusIndicatorView(this).apply {
             setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "PC: Waiting for PC...")
@@ -581,9 +706,7 @@ class MainActivity : AppCompatActivity(),
             setButtonsEnabled(true, false) // Initially only start is enabled
         }
         
-        // UI Consolidation: Using consolidated components for consistent interface
-        // This demonstrates the programmatic creation and configuration of consolidated UI components
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Consolidated UI components initialized successfully")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Legacy UI components initialized successfully")
     }
 
     /**
@@ -735,7 +858,7 @@ class MainActivity : AppCompatActivity(),
 
         if (permissionManager.areAllPermissionsGranted(this)) {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions already granted, initializing system")
-            initializeRecordingSystem()
+            initializeRecordingSystemInternal()
         } else {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] Requesting permissions via PermissionManager...")
             binding.statusText.text = "Requesting permissions..."
@@ -768,44 +891,21 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.i("MainActivity", "Temporary permission denial: ${temporarilyDenied.joinToString(", ")}")
     }
 
-    private fun showPermanentlyDeniedMessage(permanentlyDenied: List<String>) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing permanently denied permissions message")
-
-        val message =
-            "Some permissions have been permanently denied. " +
-                "Please enable them manually in Settings > Apps > Multi-Sensor Recording > Permissions.\n\n" +
-                "Permanently denied permissions:\n" +
-                permanentlyDenied.joinToString("\n") { "• ${getPermissionDisplayName(it)}" }
-
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-
-        binding.statusText.text = "Permissions required - Please enable in Settings"
-
-        // Log the permanently denied permissions
-        android.util.Log.w("MainActivity", "Permanently denied permissions: ${permanentlyDenied.joinToString(", ")}")
-    }
+    // Removed - now handled by PermissionController
+    // private fun requestPermissionsManually() - moved to PermissionController.requestPermissionsManually()
+    // private fun logCurrentPermissionStates() - moved to PermissionController.logCurrentPermissionStates()
+    // private var hasCheckedPermissionsOnStartup - moved to PermissionController
+    // private var permissionRetryCount - moved to PermissionController
 
     private fun getPermissionDisplayName(permission: String): String {
-        return permissionManager.getPermissionDisplayName(permission)
+        return permissionController.getPermissionDisplayName(permission)
     }
 
-    private fun requestPermissionsManually() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request initiated by user")
-
-        // Reset the startup flag to allow permission checking again
-        hasCheckedPermissionsOnStartup = false
-
-        // Reset retry counter for fresh manual attempt
-        permissionRetryCount = 0
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Reset permission retry counter to 0 for manual request")
-
-        // Hide the button while processing
-        binding.requestPermissionsButton.visibility = android.view.View.GONE
-        binding.statusText.text = "Requesting permissions..."
-
-        // Call the same permission checking logic
-        checkPermissions()
-    }
+    // Removed - now handled by PermissionController
+    // private fun requestPermissionsManually() - moved to PermissionController.requestPermissionsManually()
+    // private fun logCurrentPermissionStates() - moved to PermissionController.logCurrentPermissionStates()
+    // private var hasCheckedPermissionsOnStartup - moved to PermissionController
+    // private var permissionRetryCount - moved to PermissionController
 
     private fun launchNavigationMode() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching navigation mode")
@@ -819,18 +919,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun updatePermissionButtonVisibility() {
-        val allPermissionsGranted = permissionManager.areAllPermissionsGranted(this)
-
-        if (!allPermissionsGranted) {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing permission request button - permissions missing")
-            binding.requestPermissionsButton.visibility = android.view.View.VISIBLE
-        } else {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Hiding permission request button - all permissions granted")
-            binding.requestPermissionsButton.visibility = android.view.View.GONE
-        }
+        permissionController.updatePermissionButtonVisibility(this)
     }
 
-    private fun initializeRecordingSystem() {
+    private fun initializeRecordingSystemInternal() {
         // Get TextureView from layout for camera preview
         val textureView = binding.texturePreview
 
@@ -873,42 +965,64 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun runCalibration() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting enhanced calibration capture with CalibrationCaptureManager")
-
-        // Show initial calibration start message
-        Toast.makeText(this, "Starting calibration capture...", Toast.LENGTH_SHORT).show()
-
-        // Use actual CalibrationCaptureManager for 
-        lifecycleScope.launch {
-            try {
-                val result =
-                    calibrationCaptureManager.captureCalibrationImages(
-                        calibrationId = null, // Auto-generate ID
-                        captureRgb = true,
-                        captureThermal = true,
-                        highResolution = true,
-                    )
-
-                if (result.success) {
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}")
-
-                    // Trigger enhanced feedback for successful capture
-                    runOnUiThread {
-                        triggerCalibrationCaptureSuccess(result.calibrationId)
-                    }
-                } else {
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}")
-                    runOnUiThread {
-                        Toast.makeText(this@MainActivity, "Calibration capture failed: ${result.errorMessage}", Toast.LENGTH_LONG).show()
-                    }
-                }
-            } catch (e: Exception) {
-                android.util.Log.e("MainActivity", "[DEBUG_LOG] Error during calibration capture", e)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting calibration via CalibrationController")
+        
+        // Use CalibrationController for all calibration functionality
+        calibrationController.runCalibration(lifecycleScope)
+    }
+    
+    /**
+     * Initialize CalibrationController with MainActivity callback
+     */
+    private fun initializeCalibrationController() {
+        calibrationController.setCallback(object : CalibrationController.CalibrationCallback {
+            override fun onCalibrationStarted() {
+                updateStatusText("Calibration started...")
+            }
+            
+            override fun onCalibrationCompleted(calibrationId: String) {
+                updateStatusText("Calibration completed: $calibrationId")
+                Toast.makeText(this@MainActivity, "✅ Calibration completed: $calibrationId", Toast.LENGTH_LONG).show()
+            }
+            
+            override fun onCalibrationFailed(errorMessage: String) {
+                updateStatusText("Calibration failed: $errorMessage")
+                Toast.makeText(this@MainActivity, "❌ Calibration failed: $errorMessage", Toast.LENGTH_LONG).show()
+            }
+            
+            override fun onSyncTestCompleted(success: Boolean, message: String) {
+                val emoji = if (success) "✅" else "❌"
+                Toast.makeText(this@MainActivity, "$emoji $message", Toast.LENGTH_LONG).show()
+            }
+            
+            override fun updateStatusText(text: String) {
                 runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Calibration error: ${e.message}", Toast.LENGTH_LONG).show()
+                    if (::binding.isInitialized) {
+                        binding.statusText.text = text
+                    }
                 }
             }
-        }
+            
+            override fun showToast(message: String, duration: Int) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, message, duration).show()
+                }
+            }
+            
+            override fun runOnUiThread(action: () -> Unit) {
+                this@MainActivity.runOnUiThread(action)
+            }
+            
+            override fun getContentView(): View {
+                return binding.root
+            }
+            
+            override fun getContext(): Context {
+                return this@MainActivity
+            }
+        })
+        
+        calibrationController.initialize()
     }
 
     /**
@@ -1211,57 +1325,11 @@ class MainActivity : AppCompatActivity(),
 
 
     /**
-     * Show Bluetooth connection type selection dialog (BLE vs Classic)
-     * Following the official bluetoothManagerExample pattern
-     */
-    private fun showBtTypeConnectionOption() {
-        val alertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setCancelable(false)
-        alertDialog.setMessage("Choose preferred Bluetooth type")
-
-        alertDialog.setButton(Dialog.BUTTON_POSITIVE, "BT CLASSIC") { _, _ ->
-            preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
-            connectSelectedShimmerDevice()
-        }
-
-        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "BLE") { _, _ ->
-            preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BLE
-            connectSelectedShimmerDevice()
-        }
-
-        alertDialog.show()
-    }
-
-    /**
-     * Connect to the selected Shimmer device using the chosen connection type
-     */
-    private fun connectSelectedShimmerDevice() {
-        selectedShimmerAddress?.let { address ->
-            selectedShimmerName?.let { name ->
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Connecting to Shimmer device:")
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $address")
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $name")
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] - Connection Type: $preferredBtType")
-
-                // Update UI to show connection attempt
-                binding.statusText.text = "Connecting to $name ($preferredBtType)..."
-
-                // Connect via ViewModel/ShimmerRecorder with proper implementation
-                // Implementation note: This would call the actual connection method when fully integrated
-                // viewModel.connectShimmerDevice(address, name, preferredBtType)
-
-                Toast.makeText(this, "Connecting to $name via $preferredBtType", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    /**
      * Launch ShimmerBluetoothDialog for device selection using modern Activity Result API
      */
     fun launchShimmerDeviceDialog() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching Shimmer device selection dialog")
-        val intent = Intent(this, ShimmerBluetoothDialog::class.java)
-        shimmerDeviceSelectionLauncher.launch(intent)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching Shimmer device selection dialog via ShimmerController")
+        shimmerController.launchShimmerDeviceDialog(this, shimmerDeviceSelectionLauncher)
     }
 
     /**
@@ -1269,22 +1337,8 @@ class MainActivity : AppCompatActivity(),
      * Requires a connected Shimmer device
      */
     fun showShimmerSensorConfiguration() {
-        // Get connected shimmer device from ViewModel when available
-        // Implementation note: These methods would be implemented in ViewModel for device integration
-        // val shimmerDevice = viewModel.getConnectedShimmerDevice()
-        // val btManager = viewModel.getShimmerBluetoothManager()
-
-        // if (shimmerDevice != null && btManager != null) {
-        //     if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
-        //         ShimmerDialogConfigurations.buildShimmerSensorEnableDetails(shimmerDevice, this, btManager)
-        //     } else {
-        //         Toast.makeText(this, "Cannot configure - device is streaming or logging", Toast.LENGTH_SHORT).show()
-        //     }
-        // } else {
-        //     Toast.makeText(this, "No Shimmer device connected", Toast.LENGTH_SHORT).show()
-        // }
-
-        Toast.makeText(this, "Shimmer sensor configuration - Coming soon", Toast.LENGTH_SHORT).show()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer sensor configuration to ShimmerController")
+        shimmerController.showShimmerSensorConfiguration(this, viewModel)
     }
 
     /**
@@ -1292,79 +1346,24 @@ class MainActivity : AppCompatActivity(),
      * Requires a connected Shimmer device
      */
     fun showShimmerGeneralConfiguration() {
-        // Get connected shimmer device from ViewModel when available  
-        // Implementation note: These methods would be implemented in ViewModel for device integration
-        // val shimmerDevice = viewModel.getConnectedShimmerDevice()
-        // val btManager = viewModel.getShimmerBluetoothManager()
-
-        // if (shimmerDevice != null && btManager != null) {
-        //     if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
-        //         ShimmerDialogConfigurations.buildShimmerConfigOptions(shimmerDevice, this, btManager)
-        //     } else {
-        //         Toast.makeText(this, "Cannot configure - device is streaming or logging", Toast.LENGTH_SHORT).show()
-        //     }
-        // } else {
-        //     Toast.makeText(this, "No Shimmer device connected", Toast.LENGTH_SHORT).show()
-        // }
-
-        Toast.makeText(this, "Shimmer general configuration - Coming soon", Toast.LENGTH_SHORT).show()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer general configuration to ShimmerController")
+        shimmerController.showShimmerGeneralConfiguration(this, viewModel)
     }
 
     /**
      * Start SD logging on connected Shimmer device
      */
     fun startShimmerSDLogging() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting Shimmer SD logging")
-
-        // Check if any device is currently streaming or logging
-        if (viewModel.isAnyShimmerDeviceStreaming()) {
-            Toast.makeText(this, "Cannot start SD logging - device is streaming", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (viewModel.isAnyShimmerDeviceSDLogging()) {
-            Toast.makeText(this, "SD logging is already active", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Start SD logging via ViewModel wrapper method
-        viewModel.startShimmerSDLogging { success ->
-            runOnUiThread {
-                if (success) {
-                    Toast.makeText(this@MainActivity, "SD logging started", Toast.LENGTH_SHORT).show()
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] SD logging started successfully")
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to start SD logging", Toast.LENGTH_SHORT).show()
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to start SD logging")
-                }
-            }
-        }
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer SD logging start to ShimmerController")
+        shimmerController.startShimmerSDLogging(viewModel)
     }
 
     /**
      * Stop SD logging on connected Shimmer device
      */
     fun stopShimmerSDLogging() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Stopping Shimmer SD logging")
-
-        // Check if any device is currently SD logging
-        if (!viewModel.isAnyShimmerDeviceSDLogging()) {
-            Toast.makeText(this, "No SD logging is currently active", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Stop SD logging via ViewModel wrapper method
-        viewModel.stopShimmerSDLogging { success ->
-            runOnUiThread {
-                if (success) {
-                    Toast.makeText(this@MainActivity, "SD logging stopped", Toast.LENGTH_SHORT).show()
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] SD logging stopped successfully")
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to stop SD logging", Toast.LENGTH_SHORT).show()
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to stop SD logging")
-                }
-            }
-        }
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer SD logging stop to ShimmerController")
+        shimmerController.stopShimmerSDLogging(viewModel)
     }
 
     // Menu Handling - UI Enhancement
@@ -1583,6 +1582,9 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
 
+        // Stop USB monitoring
+        usbController.stopPeriodicScanning()
+
         // Ensure recording service is stopped when activity is destroyed
         if (viewModel.uiState.value.isRecording) {
             stopRecording()
@@ -1612,48 +1614,67 @@ class MainActivity : AppCompatActivity(),
         // Cleanup hand segmentation
         handSegmentationManager.cleanup()
 
+        // Cleanup CalibrationController
+        if (::calibrationController.isInitialized) {
+            calibrationController.cleanup()
+        }
+
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring system cleaned up")
     }
 
-    // ========== PermissionManager.PermissionCallback Implementation ==========
+    // ========== PermissionController.PermissionCallback Implementation ==========
     
     override fun onAllPermissionsGranted() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionManager")
-        initializeRecordingSystem()
+        initializeRecordingSystemInternal()
         binding.statusText.text = "All permissions granted - System ready"
-        updatePermissionButtonVisibility()
     }
 
     override fun onPermissionsTemporarilyDenied(deniedPermissions: List<String>, grantedCount: Int, totalCount: Int) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.size}")
-        showTemporaryDenialMessage(deniedPermissions, grantedCount, totalCount)
-        updatePermissionButtonVisibility()
+        binding.statusText.text = "Permissions: $grantedCount/$totalCount granted - Some permissions denied"
     }
 
     override fun onPermissionsPermanentlyDenied(deniedPermissions: List<String>) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions permanently denied: ${deniedPermissions.size}")
-        showPermanentlyDeniedMessage(deniedPermissions)
-        updatePermissionButtonVisibility()
+        binding.statusText.text = "Permissions required - Please enable in Settings"
+    }
+    
+    override fun onPermissionCheckStarted() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission check started")
+        binding.statusText.text = "Checking permissions..."
+    }
+    
+    override fun onPermissionRequestCompleted() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission request completed")
+        // Final status will be set by other callbacks
+    }
+    
+    override fun updateStatusText(text: String) {
+        binding.statusText.text = text
+    }
+    
+    override fun showPermissionButton(show: Boolean) {
+        binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
     }
 
-    // ========== ShimmerManager.ShimmerCallback Implementation ==========
+    // ========== ShimmerController.ShimmerCallback Implementation ==========
     
     override fun onDeviceSelected(address: String, name: String) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected via ShimmerManager:")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected via ShimmerController:")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $address")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $name")
         
         selectedShimmerAddress = address
         selectedShimmerName = name
         
-        // Update UI to reflect device selection
-        binding.statusText.text = "Shimmer device selected: $name"
-        updateSensorConnectionStatus(true, false) // Shimmer connected, thermal not connected
+        // Show BLE/Classic connection type selection dialog
+        shimmerController.showBtTypeConnectionOption(this)
     }
 
     override fun onDeviceSelectionCancelled() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
-        Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
+        showToast("Device selection cancelled")
     }
 
     override fun onConnectionStatusChanged(connected: Boolean) {
@@ -1661,36 +1682,48 @@ class MainActivity : AppCompatActivity(),
         updateShimmerConnectionStatus(connected)
         
         val statusMessage = if (connected) "Shimmer device connected" else "Shimmer device disconnected"
-        binding.statusText.text = statusMessage
-        Toast.makeText(this, statusMessage, Toast.LENGTH_SHORT).show()
+        updateStatusText(statusMessage)
+        showToast(statusMessage)
     }
 
     override fun onConfigurationComplete() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
-        binding.statusText.text = "Shimmer configuration completed"
-        Toast.makeText(this, "Shimmer configuration completed", Toast.LENGTH_SHORT).show()
+        updateStatusText("Shimmer configuration completed")
+        showToast("Shimmer configuration completed")
     }
 
-    // Disambiguated onError for ShimmerManager
-    fun onShimmerError(message: String) {
-        android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Manager error: $message")
-        binding.statusText.text = "Shimmer Error: $message"
-        Toast.makeText(this, "Shimmer Error: $message", Toast.LENGTH_LONG).show()
+    override fun onShimmerError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Controller error: $message")
+        updateStatusText("Shimmer Error: $message")
+        showToast("Shimmer Error: $message", Toast.LENGTH_LONG)
     }
 
-    // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========
+    override fun updateStatusText(text: String) {
+        runOnUiThread {
+            binding.statusText.text = text
+        }
+    }
+
+    override fun showToast(message: String, duration: Int) {
+        runOnUiThread {
+            Toast.makeText(this, message, duration).show()
+        }
+    }
+
+    override fun runOnUiThread(action: () -> Unit) {
+        runOnUiThread(action)
+    }
+
+    // ========== UsbController.UsbCallback Implementation ==========
     
     override fun onSupportedDeviceAttached(device: UsbDevice) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbDeviceManager")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbController")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device: ${device.deviceName}")
-        
-        val deviceInfo = usbDeviceManager.getDeviceInfoString(device)
-        binding.statusText.text = "Supported TOPDON device connected"
         
         // Update thermal connection status
         updateThermalConnectionStatus(true)
         
-        Toast.makeText(this, "TOPDON device connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "TOPDON thermal camera connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onUnsupportedDeviceAttached(device: UsbDevice) {
@@ -1707,13 +1740,11 @@ class MainActivity : AppCompatActivity(),
         // Update thermal connection status
         updateThermalConnectionStatus(false)
         
-        binding.statusText.text = "USB device disconnected"
         Toast.makeText(this, "USB device disconnected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 
-    // Disambiguated onError for UsbDeviceManager
-    fun onUsbError(message: String) {
-        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Manager error: $message")
+    override fun onUsbError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Controller error: $message")
         binding.statusText.text = "USB Error: $message"
         Toast.makeText(this, "USB Error: $message", Toast.LENGTH_LONG).show()
     }
@@ -1821,6 +1852,21 @@ class MainActivity : AppCompatActivity(),
             val status = if (enabled) "Enabled" else "Disabled"
             binding.statusText.text = "Encryption: $status"
             Toast.makeText(this, "Encryption: $status", Toast.LENGTH_SHORT).show()
+
+    override fun updateStatusText(text: String) {
+        binding.statusText.text = text
+    }
+
+    override fun initializeRecordingSystem() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing recording system from USB controller")
+        // Call the private initializeRecordingSystem method
+        this.initializeRecordingSystemInternal()
+    }
+
+    override fun areAllPermissionsGranted(): Boolean {
+        return AllAndroidPermissions.getDangerousPermissions().all { permission ->
+            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
         }
     }
 }

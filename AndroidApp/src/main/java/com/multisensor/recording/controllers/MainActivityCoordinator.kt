@@ -408,27 +408,33 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun registerBroadcastReceiver(receiver: android.content.BroadcastReceiver, filter: android.content.IntentFilter): android.content.Intent? {
-                // TODO: Implement broadcast receiver registration via callback
-                return null
+                // Simple delegation to callback - remove complex error handling
+                return try {
+                    callback?.getContext()?.registerReceiver(receiver, filter)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivityCoordinator", "Failed to register broadcast receiver", e)
+                    null
+                }
             }
             
             override fun unregisterBroadcastReceiver(receiver: android.content.BroadcastReceiver) {
-                // TODO: Implement broadcast receiver unregistration via callback
+                try {
+                    callback?.getContext()?.unregisterReceiver(receiver)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivityCoordinator", "Failed to unregister broadcast receiver", e)
+                }
             }
             
             override fun getBatteryLevelText(): TextView? {
-                // TODO: Add battery level text view access to coordinator callback
-                return null
+                return callback?.getBatteryLevelText()
             }
             
             override fun getPcConnectionStatus(): TextView? {
-                // TODO: Add PC connection status text view access to coordinator callback
-                return null
+                return callback?.getPcConnectionStatus()
             }
             
             override fun getPcConnectionIndicator(): View? {
-                // TODO: Add PC connection indicator view access to coordinator callback
-                return null
+                return callback?.getPcConnectionIndicator()
             }
             
             override fun getShimmerConnectionStatus(): TextView? {
@@ -442,13 +448,11 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun getThermalConnectionStatus(): TextView? {
-                // TODO: Add thermal connection status text view access to coordinator callback
-                return null
+                return callback?.getThermalConnectionStatus()
             }
             
             override fun getThermalConnectionIndicator(): View? {
-                // TODO: Add thermal connection indicator view access to coordinator callback
-                return null
+                return callback?.getThermalConnectionIndicator()
             }
         })
     }
@@ -650,14 +654,34 @@ class MainActivityCoordinator @Inject constructor(
      */
     fun initializeRecordingSystem(context: Context, textureView: TextureView, viewModel: MainViewModel) {
         android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating recording system initialization")
+        
+        // Initialize state persistence first
+        recordingController.initializeStatePersistence(context)
+        
+        // Then initialize the recording system
         recordingController.initializeRecordingSystem(context, textureView, viewModel)
     }
     
     /**
-     * Start recording through coordinator
+     * Start recording through coordinator with quality validation
      */
     fun startRecording(context: Context, viewModel: MainViewModel) {
         android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating recording start")
+        
+        // Validate prerequisites before starting
+        if (!recordingController.validateRecordingPrerequisites(context)) {
+            android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Recording prerequisites not met")
+            return
+        }
+        
+        // Check if current quality is suitable for available resources
+        val currentQuality = recordingController.getCurrentQuality()
+        if (!recordingController.validateQualityForResources(context, currentQuality)) {
+            val recommendedQuality = recordingController.getRecommendedQuality(context)
+            android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Current quality $currentQuality not suitable, switching to $recommendedQuality")
+            recordingController.setRecordingQuality(recommendedQuality)
+        }
+        
         recordingController.startRecording(context, viewModel)
         networkController.updateStreamingUI(context, true)
     }
@@ -669,6 +693,50 @@ class MainActivityCoordinator @Inject constructor(
         android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating recording stop")
         recordingController.stopRecording(context, viewModel)
         networkController.updateStreamingUI(context, false)
+    }
+    
+    /**
+     * Emergency stop recording through coordinator
+     */
+    fun emergencyStopRecording(context: Context, viewModel: MainViewModel) {
+        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating emergency recording stop")
+        recordingController.emergencyStopRecording(context, viewModel)
+        networkController.updateStreamingUI(context, false)
+    }
+    
+    /**
+     * Set recording quality through coordinator
+     */
+    fun setRecordingQuality(context: Context, quality: RecordingController.RecordingQuality) {
+        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating recording quality change to $quality")
+        
+        if (recordingController.validateQualityForResources(context, quality)) {
+            recordingController.setRecordingQuality(quality)
+        } else {
+            android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Quality $quality not suitable for current resources")
+            callback?.showToast("Quality $quality not suitable for current storage/resources", android.widget.Toast.LENGTH_LONG)
+        }
+    }
+    
+    /**
+     * Get recording status through coordinator
+     */
+    fun getRecordingStatus(): String {
+        return recordingController.getRecordingStatus()
+    }
+    
+    /**
+     * Get current recording quality through coordinator
+     */
+    fun getCurrentRecordingQuality(): RecordingController.RecordingQuality {
+        return recordingController.getCurrentQuality()
+    }
+    
+    /**
+     * Get available recording qualities through coordinator
+     */
+    fun getAvailableRecordingQualities(): Array<RecordingController.RecordingQuality> {
+        return recordingController.getAvailableQualities()
     }
     
     /**
@@ -736,6 +804,40 @@ class MainActivityCoordinator @Inject constructor(
             append(calibrationController.getCalibrationStatus())
             append("\n")
             append(networkController.getStreamingStatus())
+            append("\n")
+            
+            // Add enhanced recording status
+            append("=== Recording Controller Enhanced Status ===\n")
+            val currentState = recordingController.getCurrentState()
+            append("Current Quality: ${recordingController.getCurrentQuality().displayName}\n")
+            append("Service Health: ${if (recordingController.isServiceHealthy()) "✓ Healthy" else "✗ Unhealthy"}\n")
+            append("State Persistence: ${if (currentState.isInitialized) "✓ Active" else "✗ Inactive"}\n")
+            append("Session Count: ${currentState.sessionCount}\n")
+            append("Total Recording Time: ${formatDuration(currentState.totalRecordingTime)}\n")
+            
+            // Add service connection status
+            val serviceState = recordingController.serviceConnectionState.value
+            append("Service Connected: ${if (serviceState.isConnected) "✓ Yes" else "✗ No"}\n")
+            if (serviceState.lastHeartbeat != null) {
+                val timeSinceHeartbeat = System.currentTimeMillis() - serviceState.lastHeartbeat
+                append("Last Heartbeat: ${timeSinceHeartbeat}ms ago\n")
+            }
+        }
+    }
+    
+    /**
+     * Format duration helper method
+     */
+    private fun formatDuration(millis: Long): String {
+        val seconds = millis / 1000
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val remainingSeconds = seconds % 60
+        
+        return when {
+            hours > 0 -> "${hours}h ${minutes}m ${remainingSeconds}s"
+            minutes > 0 -> "${minutes}m ${remainingSeconds}s" 
+            else -> "${remainingSeconds}s"
         }
     }
     
