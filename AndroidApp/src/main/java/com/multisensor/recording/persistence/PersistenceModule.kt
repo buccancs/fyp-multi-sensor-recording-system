@@ -12,6 +12,7 @@ import javax.inject.Singleton
 /**
  * Phase 3: State Persistence System
  * Hilt module for providing persistence dependencies
+ * Extended to include Shimmer device state persistence
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,5 +33,16 @@ object PersistenceModule {
     @Provides
     fun provideSessionStateDao(database: SessionStateDatabase): SessionStateDao {
         return database.sessionStateDao()
+    }
+    
+    @Provides
+    fun provideShimmerDeviceStateDao(database: SessionStateDatabase): ShimmerDeviceStateDao {
+        return database.shimmerDeviceStateDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideShimmerDeviceStateRepository(@ApplicationContext context: Context): ShimmerDeviceStateRepository {
+        return ShimmerDeviceStateRepository(context)
     }
 }

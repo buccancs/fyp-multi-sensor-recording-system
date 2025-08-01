@@ -9,17 +9,23 @@ import android.content.Context
  * Phase 3: State Persistence System
  * Room database for session state persistence
  *
- * Implements the Phase 3 requirement for persistent session state management
- * to support crash recovery and session restoration capabilities.
+ * Extended to include Shimmer device state persistence for comprehensive
+ * device configuration and connection state management across app restarts.
+ * Supports multiple simultaneous Shimmer devices as required.
  */
 @Database(
-    entities = [SessionState::class],
-    version = 1,
+    entities = [
+        SessionState::class,
+        ShimmerDeviceState::class,
+        ShimmerConnectionHistory::class
+    ],
+    version = 2, // Incremented version for new entities
     exportSchema = false
 )
 abstract class SessionStateDatabase : RoomDatabase() {
     
     abstract fun sessionStateDao(): SessionStateDao
+    abstract fun shimmerDeviceStateDao(): ShimmerDeviceStateDao
     
     companion object {
         @Volatile
