@@ -35,15 +35,18 @@ import javax.inject.Singleton
  * Extracted from MainActivity to improve separation of concerns and testability.
  * Works in coordination with ShimmerManager for comprehensive Shimmer device handling.
  * 
- * Enhanced with device state persistence across app restarts and support for 
- * multiple simultaneous Shimmer devices with comprehensive error handling.
+ * Enhanced with:
+ * - Device state persistence across app restarts ✓
+ * - Support for multiple simultaneous Shimmer devices ✓ 
+ * - Comprehensive error handling with retry mechanisms ✓
  * 
  * TODO: Add comprehensive unit tests for Shimmer device scenarios
  */
 @Singleton
 class ShimmerController @Inject constructor(
     private val shimmerManager: ShimmerManager,
-    private val shimmerDeviceStateRepository: ShimmerDeviceStateRepository
+    private val shimmerDeviceStateRepository: ShimmerDeviceStateRepository,
+    private val shimmerErrorHandler: ShimmerErrorHandler
 ) {
     
     /**
@@ -316,7 +319,7 @@ class ShimmerController @Inject constructor(
     }
     
     /**
-     * Connect to a specific Shimmer device (supports multiple devices)
+     * Connect to a specific Shimmer device with comprehensive error handling (supports multiple devices)
      */
     fun connectToDevice(address: String, name: String, viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Connecting to device: $name ($address)")
@@ -329,45 +332,93 @@ class ShimmerController @Inject constructor(
         
         callback?.updateStatusText("Connecting to $name...")
         
-        // Log connection attempt
+        // Use error handler for connection with retry logic
         persistenceScope.launch {
-            shimmerDeviceStateRepository.logConnectionAttempt(address, false, null, name, preferredBtType)
-        }
-        
-        // Use ViewModel's enhanced connection method with error handling
-        viewModel.connectShimmerDevice(address, name, preferredBtType) { success ->
-            callback?.runOnUiThread {
-                if (success) {
-                    callback?.updateStatusText("Connected to $name")
-                    callback?.showToast("Successfully connected to $name")
-                    callback?.onConnectionStatusChanged(true)
-                    
-                    // Reset retry attempts and update persistence
-                    connectionRetryAttempts.remove(address)
-                    updateConnectionStatus(address, name, true)
-                } else {
-                    val retryCount = connectionRetryAttempts.getOrDefault(address, 0) + 1
-                    connectionRetryAttempts[address] = retryCount
-                    
-                    val errorMessage = "Connection failed (attempt $retryCount/$maxRetryAttempts)"
-                    callback?.updateStatusText("Failed to connect to $name")
-                    callback?.showToast(errorMessage)
-                    
-                    // Update persistence with error
-                    persistenceScope.launch {
-                        shimmerDeviceStateRepository.logConnectionAttempt(address, false, errorMessage, name, preferredBtType)
+            val attemptConnection: suspend () -> Boolean = {
+                withContext(Dispatchers.Main) {
+                    var connectionResult = false
+                    viewModel.connectShimmerDevice(address, name, preferredBtType) { success ->
+                        connectionResult = success
                     }
-                    
-                    // Attempt retry if under limit
-                    if (retryCount < maxRetryAttempts) {
-                        android.util.Log.d("ShimmerController", "[DEBUG_LOG] Scheduling retry $retryCount for $name")
-                        // Schedule retry after delay (could use Handler or coroutines)
-                        callback?.showToast("Will retry connection in 5 seconds...")
-                    } else {
-                        callback?.onShimmerError("Connection failed after $maxRetryAttempts attempts")
+                    connectionResult
+                }
+            }
+            
+            try {
+                
+                val success = shimmerErrorHandler.handleError(
+                    deviceAddress = address,
+                    deviceName = name,
+                    exception = null,
+                    errorMessage = null,
+                    attemptNumber = connectionRetryAttempts.getOrDefault(address, 0) + 1,
+                    connectionType = preferredBtType,
+                    onRetry = attemptConnection,
+                    onFinalFailure = { strategy ->
+                        // Use callback directly since this is already in the coroutine scope
+                        callback?.runOnUiThread {
+                            callback?.updateStatusText("Failed to connect to $name")
+                            callback?.showToast(strategy.userMessage, Toast.LENGTH_LONG)
+                            callback?.onShimmerError(strategy.userMessage)
+                        }
+                        
+                        // Generate diagnostic report for persistent failures
+                        if (strategy.userActionRequired) {
+                            generateAndShowDiagnostics(address)
+                        }
+                    }
+                )
+                
+                // Handle success on main thread
+                callback?.runOnUiThread {
+                    if (success) {
+                        callback?.updateStatusText("Connected to $name")
+                        callback?.showToast("Successfully connected to $name")
+                        callback?.onConnectionStatusChanged(true)
+                        
+                        // Reset retry attempts and update persistence
                         connectionRetryAttempts.remove(address)
+                        persistenceScope.launch {
+                            shimmerErrorHandler.resetErrorState(address)
+                            updateConnectionStatus(address, name, true)
+                        }
                     }
                 }
+                
+            } catch (e: Exception) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Connection error for $name: ${e.message}")
+                
+                callback?.runOnUiThread {
+                    callback?.onShimmerError("Connection error: ${e.message}")
+                }
+                
+                // Log the error
+                shimmerDeviceStateRepository.logConnectionAttempt(address, false, e.message, name, preferredBtType)
+            }
+        }
+    }
+    
+    /**
+     * Generate and optionally show diagnostic information
+     */
+    private fun generateAndShowDiagnostics(address: String) {
+        persistenceScope.launch {
+            try {
+                val diagnostics = shimmerErrorHandler.generateDiagnosticReport(address)
+                val recommendations = shimmerErrorHandler.checkDeviceHealth(address)
+                
+                callback?.runOnUiThread {
+                    val message = if (recommendations.isNotEmpty()) {
+                        "Connection failed. Suggestions:\n${recommendations.take(3).joinToString("\n")}"
+                    } else {
+                        "Connection failed. Check device status and try again."
+                    }
+                    
+                    callback?.showToast(message, Toast.LENGTH_LONG)
+                    android.util.Log.d("ShimmerController", "[DIAGNOSTICS] $diagnostics")
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Failed to generate diagnostics: ${e.message}")
             }
         }
     }
