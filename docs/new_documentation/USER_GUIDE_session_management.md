@@ -489,9 +489,9 @@ Export data for use with external analysis tools:
 
 ### Documentation Resources
 
-- **Quick Reference**: `docs/reference/session-management-quick-reference.md`
-- **Technical Details**: `docs/README_session_management.md`
-- **API Documentation**: `docs/PROTOCOL_session_management.md`
+- **Quick Reference**: `session-management-quick-reference.md`
+- **Technical Details**: `README_session_management.md`
+- **API Documentation**: `PROTOCOL_session_management.md`
 
 ### Support Channels
 
