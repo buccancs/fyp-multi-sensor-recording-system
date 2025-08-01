@@ -2,6 +2,7 @@ package com.multisensor.recording.ui.util
 
 import android.content.Context
 import android.view.View
+import android.view.ViewPropertyAnimator
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.test.core.app.ApplicationProvider
@@ -288,7 +289,7 @@ class UIUtilsTest {
     @Test
     fun `setViewVisibilityWithAnimation should show view`() {
         // Given
-        val mockAnimator = mockk<View.ViewPropertyAnimator>(relaxed = true)
+        val mockAnimator = mockk<ViewPropertyAnimator>(relaxed = true)
         every { mockView.animate() } returns mockAnimator
         every { mockAnimator.alpha(any()) } returns mockAnimator
         every { mockAnimator.setDuration(any()) } returns mockAnimator
@@ -305,7 +306,7 @@ class UIUtilsTest {
     @Test
     fun `setViewVisibilityWithAnimation should hide view`() {
         // Given
-        val mockAnimator = mockk<View.ViewPropertyAnimator>(relaxed = true)
+        val mockAnimator = mockk<ViewPropertyAnimator>(relaxed = true)
         every { mockView.animate() } returns mockAnimator
         every { mockAnimator.alpha(any()) } returns mockAnimator
         every { mockAnimator.setDuration(any()) } returns mockAnimator

@@ -1,7 +1,10 @@
 package com.multisensor.recording.service
 
 import android.content.Context
+import com.multisensor.recording.persistence.CrashRecoveryManager
+import com.multisensor.recording.persistence.SessionStateDao
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -32,7 +35,10 @@ class SessionManagerTest {
     fun setup() {
         context = RuntimeEnvironment.getApplication()
         mockLogger = mockk(relaxed = true)
-        sessionManager = SessionManager(context, mockLogger)
+        val mockThermalSettings = mockk<ThermalCameraSettings>(relaxed = true)
+        val mockSessionStateDao = mockk<SessionStateDao>(relaxed = true)
+        val mockCrashRecoveryManager = mockk<CrashRecoveryManager>(relaxed = true)
+        sessionManager = SessionManager(context, mockLogger, mockThermalSettings, mockSessionStateDao, mockCrashRecoveryManager)
     }
 
     @After
