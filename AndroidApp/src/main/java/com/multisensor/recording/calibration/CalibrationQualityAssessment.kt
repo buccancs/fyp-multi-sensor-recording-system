@@ -239,54 +239,101 @@ class CalibrationQualityAssessment
          * Detects chessboard pattern using corner detection algorithms
          */
         private fun detectChessboardPattern(image: Bitmap): PatternDetectionResult {
-            // TODO: Implement OpenCV-based chessboard detection
-            // This is a placeholder implementation for now
+            // Implement Android-native chessboard detection
             logger.debug("[DEBUG_LOG] Analyzing chessboard pattern in image (${image.width}x${image.height})")
 
             val expectedCorners = (CHESSBOARD_ROWS - 1) * (CHESSBOARD_COLS - 1)
 
-            // Simulate pattern detection analysis
-            val mockCornerCount = (expectedCorners * 0.8).toInt() // 80% detection rate
-            val completeness = mockCornerCount.toFloat() / expectedCorners.toFloat()
-            val patternScore = completeness * 0.9f // Slightly reduce for geometric distortion
+            try {
+                // Convert bitmap to grayscale for analysis
+                val grayBitmap = convertToGrayscale(image)
+                
+                // Apply edge detection to find potential corners
+                val edges = detectEdges(grayBitmap)
+                
+                // Find corner candidates using simple corner detection
+                val cornerCandidates = findCornerCandidates(edges)
+                
+                // Filter candidates to find chessboard pattern
+                val chessboardCorners = filterChessboardCorners(cornerCandidates, image.width, image.height)
+                
+                val detectedCorners = chessboardCorners.size
+                val completeness = detectedCorners.toFloat() / expectedCorners.toFloat()
+                
+                // Calculate pattern score based on detected corners and geometric consistency
+                val geometricScore = calculateGeometricConsistency(chessboardCorners)
+                val patternScore = completeness * geometricScore
+                
+                logger.debug("[DEBUG_LOG] Chessboard detection - Corners: $detectedCorners/$expectedCorners, Score: $patternScore")
 
-            logger.debug("[DEBUG_LOG] Chessboard detection - Corners: $mockCornerCount/$expectedCorners, Score: $patternScore")
-
-            return PatternDetectionResult(
-                patternFound = mockCornerCount >= expectedCorners * 0.7,
-                patternType = PatternType.CHESSBOARD,
-                cornerCount = mockCornerCount,
-                patternScore = patternScore,
-                geometricDistortion = 0.1f,
-                completeness = completeness,
-            )
+                return PatternDetectionResult(
+                    patternFound = detectedCorners >= expectedCorners * 0.7,
+                    patternType = PatternType.CHESSBOARD,
+                    cornerCount = detectedCorners,
+                    patternScore = patternScore,
+                    geometricDistortion = 1.0f - geometricScore,
+                    completeness = completeness,
+                )
+            } catch (e: Exception) {
+                logger.error("Error in chessboard detection", e)
+                return PatternDetectionResult(
+                    patternFound = false,
+                    patternType = PatternType.CHESSBOARD,
+                    cornerCount = 0,
+                    patternScore = 0.0f,
+                    geometricDistortion = 1.0f,
+                    completeness = 0.0f,
+                )
+            }
         }
 
         /**
          * Detects circle grid pattern using blob detection algorithms
          */
         private fun detectCircleGridPattern(image: Bitmap): PatternDetectionResult {
-            // TODO: Implement OpenCV-based circle grid detection
-            // This is a placeholder implementation for now
+            // Implement Android-native circle grid detection
             logger.debug("[DEBUG_LOG] Analyzing circle grid pattern in image (${image.width}x${image.height})")
 
             val expectedCircles = CIRCLE_GRID_ROWS * CIRCLE_GRID_COLS
 
-            // Simulate circle detection analysis
-            val mockCircleCount = (expectedCircles * 0.75).toInt() // 75% detection rate for thermal
-            val completeness = mockCircleCount.toFloat() / expectedCircles.toFloat()
-            val patternScore = completeness * 0.85f // Thermal images typically have lower quality
+            try {
+                // Convert bitmap to grayscale for analysis
+                val grayBitmap = convertToGrayscale(image)
+                
+                // Apply blob detection to find circular patterns
+                val blobs = detectCircularBlobs(grayBitmap)
+                
+                // Filter blobs to find grid pattern
+                val gridCircles = filterGridCircles(blobs, image.width, image.height)
+                
+                val detectedCircles = gridCircles.size
+                val completeness = detectedCircles.toFloat() / expectedCircles.toFloat()
+                
+                // Calculate pattern score based on detected circles and grid consistency
+                val gridScore = calculateGridConsistency(gridCircles)
+                val patternScore = completeness * gridScore * 0.85f // Thermal images typically have lower quality
+                
+                logger.debug("[DEBUG_LOG] Circle grid detection - Circles: $detectedCircles/$expectedCircles, Score: $patternScore")
 
-            logger.debug("[DEBUG_LOG] Circle grid detection - Circles: $mockCircleCount/$expectedCircles, Score: $patternScore")
-
-            return PatternDetectionResult(
-                patternFound = mockCircleCount >= expectedCircles * 0.6,
-                patternType = PatternType.CIRCLE_GRID,
-                cornerCount = mockCircleCount,
-                patternScore = patternScore,
-                geometricDistortion = 0.15f,
-                completeness = completeness,
-            )
+                return PatternDetectionResult(
+                    patternFound = detectedCircles >= expectedCircles * 0.6,
+                    patternType = PatternType.CIRCLE_GRID,
+                    cornerCount = detectedCircles,
+                    patternScore = patternScore,
+                    geometricDistortion = 1.0f - gridScore,
+                    completeness = completeness,
+                )
+            } catch (e: Exception) {
+                logger.error("Error in circle grid detection", e)
+                return PatternDetectionResult(
+                    patternFound = false,
+                    patternType = PatternType.CIRCLE_GRID,
+                    cornerCount = 0,
+                    patternScore = 0.0f,
+                    geometricDistortion = 1.0f,
+                    completeness = 0.0f,
+                )
+            }
         }
 
         /**
@@ -572,27 +619,51 @@ class CalibrationQualityAssessment
         ): AlignmentMetrics {
             logger.debug("[DEBUG_LOG] Analyzing RGB-thermal alignment - RGB: ${rgbImage.width}x${rgbImage.height}, Thermal: ${thermalImage.width}x${thermalImage.height}")
 
-            // TODO: Implement feature matching between RGB and thermal images
-            // This is a placeholder implementation for now
+            try {
+                // Implement feature matching between RGB and thermal images
+                val rgbFeatures = extractKeyFeatures(rgbImage)
+                val thermalFeatures = extractKeyFeatures(thermalImage)
+                
+                // Match features between the two images
+                val matches = matchFeatures(rgbFeatures, thermalFeatures)
+                
+                // Calculate alignment metrics from feature matches
+                val alignmentResults = calculateAlignmentFromMatches(matches)
+                
+                // Compute transformation matrix if enough matches found
+                val transformationMatrix = if (matches.size >= 4) {
+                    calculateTransformationMatrix(matches)
+                } else {
+                    null
+                }
+                
+                val alignmentScore = calculateAlignmentScore(
+                    alignmentResults.averageError,
+                    alignmentResults.maxError,
+                    matches.size
+                )
 
-            // Simulate feature matching analysis
-            val mockFeatureCount = 25 // Simulated feature matches
-            val mockAverageError = 5.5f // pixels
-            val mockMaxError = 12.0f // pixels
+                logger.debug(
+                    "[DEBUG_LOG] Alignment analysis - Features: ${matches.size}, Avg Error: ${alignmentResults.averageError}, Score: $alignmentScore",
+                )
 
-            val alignmentScore = calculateAlignmentScore(mockAverageError, mockMaxError, mockFeatureCount)
-
-            logger.debug(
-                "[DEBUG_LOG] Alignment analysis - Features: $mockFeatureCount, Avg Error: $mockAverageError, Score: $alignmentScore",
-            )
-
-            return AlignmentMetrics(
-                featureMatchCount = mockFeatureCount,
-                averageError = mockAverageError,
-                maxError = mockMaxError,
-                transformationMatrix = null, // TODO: Implement transformation matrix calculation
-                alignmentScore = alignmentScore,
-            )
+                return AlignmentMetrics(
+                    featureMatchCount = matches.size,
+                    averageError = alignmentResults.averageError,
+                    maxError = alignmentResults.maxError,
+                    transformationMatrix = transformationMatrix,
+                    alignmentScore = alignmentScore,
+                )
+            } catch (e: Exception) {
+                logger.error("Error in alignment analysis", e)
+                return AlignmentMetrics(
+                    featureMatchCount = 0,
+                    averageError = Float.MAX_VALUE,
+                    maxError = Float.MAX_VALUE,
+                    transformationMatrix = null,
+                    alignmentScore = 0.0f,
+                )
+            }
         }
 
         /**
@@ -695,4 +766,358 @@ class CalibrationQualityAssessment
                 appendLine("  Average Error: ${alignment.averageError} pixels")
                 appendLine("  Alignment Score: ${(alignment.alignmentScore * 100).toInt()}%")
             }
+
+        // Helper data classes for computer vision algorithms
+        private data class Point2D(val x: Float, val y: Float)
+        private data class FeatureMatch(val point1: Point2D, val point2: Point2D, val distance: Float)
+        private data class AlignmentResult(val averageError: Float, val maxError: Float)
+
+        /**
+         * Convert bitmap to grayscale for image analysis
+         */
+        private fun convertToGrayscale(bitmap: Bitmap): Bitmap {
+            val width = bitmap.width
+            val height = bitmap.height
+            val grayBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            
+            for (y in 0 until height) {
+                for (x in 0 until width) {
+                    val pixel = bitmap.getPixel(x, y)
+                    val r = (pixel shr 16) and 0xFF
+                    val g = (pixel shr 8) and 0xFF
+                    val b = pixel and 0xFF
+                    val gray = (0.299 * r + 0.587 * g + 0.114 * b).toInt()
+                    val grayPixel = (0xFF shl 24) or (gray shl 16) or (gray shl 8) or gray
+                    grayBitmap.setPixel(x, y, grayPixel)
+                }
+            }
+            
+            return grayBitmap
+        }
+
+        /**
+         * Detect edges in grayscale image using Sobel operator
+         */
+        private fun detectEdges(bitmap: Bitmap): Bitmap {
+            val width = bitmap.width
+            val height = bitmap.height
+            val edgeBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            
+            // Sobel operators
+            val sobelX = arrayOf(
+                intArrayOf(-1, 0, 1),
+                intArrayOf(-2, 0, 2),
+                intArrayOf(-1, 0, 1)
+            )
+            
+            val sobelY = arrayOf(
+                intArrayOf(-1, -2, -1),
+                intArrayOf(0, 0, 0),
+                intArrayOf(1, 2, 1)
+            )
+            
+            for (y in 1 until height - 1) {
+                for (x in 1 until width - 1) {
+                    var gx = 0
+                    var gy = 0
+                    
+                    for (i in -1..1) {
+                        for (j in -1..1) {
+                            val pixel = bitmap.getPixel(x + j, y + i)
+                            val gray = pixel and 0xFF
+                            gx += gray * sobelX[i + 1][j + 1]
+                            gy += gray * sobelY[i + 1][j + 1]
+                        }
+                    }
+                    
+                    val magnitude = sqrt((gx * gx + gy * gy).toDouble()).toInt().coerceIn(0, 255)
+                    val edgePixel = (0xFF shl 24) or (magnitude shl 16) or (magnitude shl 8) or magnitude
+                    edgeBitmap.setPixel(x, y, edgePixel)
+                }
+            }
+            
+            return edgeBitmap
+        }
+
+        /**
+         * Find corner candidates using Harris corner detection
+         */
+        private fun findCornerCandidates(bitmap: Bitmap): List<Point2D> {
+            val corners = mutableListOf<Point2D>()
+            val width = bitmap.width
+            val height = bitmap.height
+            val threshold = 100
+            
+            // Simple corner detection based on edge density
+            val windowSize = 5
+            val halfWindow = windowSize / 2
+            
+            for (y in halfWindow until height - halfWindow step 3) {
+                for (x in halfWindow until width - halfWindow step 3) {
+                    var edgeSum = 0
+                    
+                    for (wy in -halfWindow..halfWindow) {
+                        for (wx in -halfWindow..halfWindow) {
+                            val pixel = bitmap.getPixel(x + wx, y + wy)
+                            edgeSum += (pixel and 0xFF)
+                        }
+                    }
+                    
+                    if (edgeSum > threshold * windowSize * windowSize) {
+                        corners.add(Point2D(x.toFloat(), y.toFloat()))
+                    }
+                }
+            }
+            
+            return corners
+        }
+
+        /**
+         * Filter corner candidates to find chessboard pattern
+         */
+        private fun filterChessboardCorners(candidates: List<Point2D>, width: Int, height: Int): List<Point2D> {
+            // Filter corners to find grid-like pattern
+            val filtered = mutableListOf<Point2D>()
+            val gridSpacingX = width / CHESSBOARD_COLS.toFloat()
+            val gridSpacingY = height / CHESSBOARD_ROWS.toFloat()
+            val tolerance = minOf(gridSpacingX, gridSpacingY) * 0.3f
+            
+            for (candidate in candidates) {
+                // Check if corner is near expected grid position
+                val gridX = (candidate.x / gridSpacingX).roundToInt()
+                val gridY = (candidate.y / gridSpacingY).roundToInt()
+                val expectedX = gridX * gridSpacingX
+                val expectedY = gridY * gridSpacingY
+                
+                val distance = sqrt((candidate.x - expectedX).pow(2) + (candidate.y - expectedY).pow(2))
+                
+                if (distance < tolerance && gridX in 1 until CHESSBOARD_COLS - 1 && gridY in 1 until CHESSBOARD_ROWS - 1) {
+                    filtered.add(candidate)
+                }
+            }
+            
+            return filtered
+        }
+
+        /**
+         * Calculate geometric consistency of detected corners
+         */
+        private fun calculateGeometricConsistency(corners: List<Point2D>): Float {
+            if (corners.size < 4) return 0.0f
+            
+            // Check if corners form a reasonable grid pattern
+            var totalDeviation = 0.0f
+            var count = 0
+            
+            for (i in corners.indices) {
+                for (j in i + 1 until corners.size) {
+                    val distance = sqrt(
+                        (corners[i].x - corners[j].x).pow(2) + (corners[i].y - corners[j].y).pow(2)
+                    )
+                    
+                    // Expected distances based on grid spacing
+                    val expectedDistance = 50.0f // Approximate grid spacing
+                    val deviation = abs(distance - expectedDistance) / expectedDistance
+                    totalDeviation += deviation
+                    count++
+                }
+            }
+            
+            val averageDeviation = if (count > 0) totalDeviation / count else 1.0f
+            return (1.0f - averageDeviation.coerceIn(0.0f, 1.0f))
+        }
+
+        /**
+         * Detect circular blobs for circle grid pattern
+         */
+        private fun detectCircularBlobs(bitmap: Bitmap): List<Point2D> {
+            val blobs = mutableListOf<Point2D>()
+            val width = bitmap.width
+            val height = bitmap.height
+            
+            // Simple blob detection based on circular regions
+            val radius = 10
+            val threshold = 150
+            
+            for (y in radius until height - radius step radius) {
+                for (x in radius until width - radius step radius) {
+                    var centerIntensity = 0
+                    var edgeIntensity = 0
+                    var centerCount = 0
+                    var edgeCount = 0
+                    
+                    // Sample center region
+                    for (dy in -radius/3..radius/3) {
+                        for (dx in -radius/3..radius/3) {
+                            if (dx*dx + dy*dy <= (radius/3)*(radius/3)) {
+                                val pixel = bitmap.getPixel(x + dx, y + dy)
+                                centerIntensity += (pixel and 0xFF)
+                                centerCount++
+                            }
+                        }
+                    }
+                    
+                    // Sample edge region
+                    for (dy in -radius..radius) {
+                        for (dx in -radius..radius) {
+                            val distanceSquared = dx*dx + dy*dy
+                            if (distanceSquared > (radius*0.7)*(radius*0.7) && distanceSquared <= radius*radius) {
+                                val pixel = bitmap.getPixel(x + dx, y + dy)
+                                edgeIntensity += (pixel and 0xFF)
+                                edgeCount++
+                            }
+                        }
+                    }
+                    
+                    val avgCenter = if (centerCount > 0) centerIntensity / centerCount else 0
+                    val avgEdge = if (edgeCount > 0) edgeIntensity / edgeCount else 0
+                    
+                    // Circle should have different center vs edge intensity
+                    if (abs(avgCenter - avgEdge) > threshold) {
+                        blobs.add(Point2D(x.toFloat(), y.toFloat()))
+                    }
+                }
+            }
+            
+            return blobs
+        }
+
+        /**
+         * Filter blobs to find grid pattern
+         */
+        private fun filterGridCircles(blobs: List<Point2D>, width: Int, height: Int): List<Point2D> {
+            val filtered = mutableListOf<Point2D>()
+            val gridSpacingX = width / CIRCLE_GRID_COLS.toFloat()
+            val gridSpacingY = height / CIRCLE_GRID_ROWS.toFloat()
+            val tolerance = minOf(gridSpacingX, gridSpacingY) * 0.4f
+            
+            for (blob in blobs) {
+                val gridX = (blob.x / gridSpacingX).roundToInt()
+                val gridY = (blob.y / gridSpacingY).roundToInt()
+                val expectedX = gridX * gridSpacingX
+                val expectedY = gridY * gridSpacingY
+                
+                val distance = sqrt((blob.x - expectedX).pow(2) + (blob.y - expectedY).pow(2))
+                
+                if (distance < tolerance && gridX in 0 until CIRCLE_GRID_COLS && gridY in 0 until CIRCLE_GRID_ROWS) {
+                    filtered.add(blob)
+                }
+            }
+            
+            return filtered
+        }
+
+        /**
+         * Calculate grid consistency for circles
+         */
+        private fun calculateGridConsistency(circles: List<Point2D>): Float {
+            if (circles.size < 4) return 0.0f
+            
+            // Check spacing consistency
+            var horizontalSpacings = mutableListOf<Float>()
+            var verticalSpacings = mutableListOf<Float>()
+            
+            for (i in circles.indices) {
+                for (j in i + 1 until circles.size) {
+                    val dx = abs(circles[i].x - circles[j].x)
+                    val dy = abs(circles[i].y - circles[j].y)
+                    
+                    if (dy < 20) { // Horizontal alignment
+                        horizontalSpacings.add(dx)
+                    }
+                    if (dx < 20) { // Vertical alignment
+                        verticalSpacings.add(dy)
+                    }
+                }
+            }
+            
+            val hVariance = calculateVariance(horizontalSpacings)
+            val vVariance = calculateVariance(verticalSpacings)
+            val totalVariance = (hVariance + vVariance) / 2.0f
+            
+            return (1.0f / (1.0f + totalVariance * 0.01f))
+        }
+
+        /**
+         * Calculate variance of spacing measurements
+         */
+        private fun calculateVariance(values: List<Float>): Float {
+            if (values.isEmpty()) return 1.0f
+            
+            val mean = values.average().toFloat()
+            val variance = values.map { (it - mean).pow(2) }.average().toFloat()
+            return variance
+        }
+
+        /**
+         * Extract key features from image for matching
+         */
+        private fun extractKeyFeatures(bitmap: Bitmap): List<Point2D> {
+            val edgeBitmap = detectEdges(bitmap)
+            val corners = findCornerCandidates(edgeBitmap)
+            
+            // Return strongest corners (simplified feature extraction)
+            return corners.take(100)
+        }
+
+        /**
+         * Match features between two images
+         */
+        private fun matchFeatures(features1: List<Point2D>, features2: List<Point2D>): List<FeatureMatch> {
+            val matches = mutableListOf<FeatureMatch>()
+            val maxDistance = 50.0f
+            
+            for (f1 in features1) {
+                var bestMatch: Point2D? = null
+                var bestDistance = Float.MAX_VALUE
+                
+                for (f2 in features2) {
+                    val distance = sqrt((f1.x - f2.x).pow(2) + (f1.y - f2.y).pow(2))
+                    if (distance < bestDistance && distance < maxDistance) {
+                        bestDistance = distance
+                        bestMatch = f2
+                    }
+                }
+                
+                bestMatch?.let {
+                    matches.add(FeatureMatch(f1, it, bestDistance))
+                }
+            }
+            
+            return matches.sortedBy { it.distance }.take(50) // Keep best matches
+        }
+
+        /**
+         * Calculate alignment metrics from feature matches
+         */
+        private fun calculateAlignmentFromMatches(matches: List<FeatureMatch>): AlignmentResult {
+            if (matches.isEmpty()) {
+                return AlignmentResult(Float.MAX_VALUE, Float.MAX_VALUE)
+            }
+            
+            val errors = matches.map { it.distance }
+            val averageError = errors.average().toFloat()
+            val maxError = errors.maxOrNull() ?: Float.MAX_VALUE
+            
+            return AlignmentResult(averageError, maxError)
+        }
+
+        /**
+         * Calculate transformation matrix from matched points
+         */
+        private fun calculateTransformationMatrix(matches: List<FeatureMatch>): FloatArray? {
+            if (matches.size < 4) return null
+            
+            // Simplified transformation matrix calculation
+            // In a real implementation, this would use least squares fitting
+            val avgDx = matches.map { it.point2.x - it.point1.x }.average().toFloat()
+            val avgDy = matches.map { it.point2.y - it.point1.y }.average().toFloat()
+            
+            // Return a simple translation matrix
+            return floatArrayOf(
+                1.0f, 0.0f, avgDx,
+                0.0f, 1.0f, avgDy,
+                0.0f, 0.0f, 1.0f
+            )
+        }
     }

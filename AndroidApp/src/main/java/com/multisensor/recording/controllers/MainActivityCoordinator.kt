@@ -556,23 +556,25 @@ class MainActivityCoordinator @Inject constructor(
             
             override fun onSyncTestRequested(testType: MenuController.SyncTestType) {
                 android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Sync test requested: $testType")
-                // TODO: Coordinate with CalibrationController for sync tests
+                // Coordinate with CalibrationController for sync tests
                 when (testType) {
                     MenuController.SyncTestType.FLASH_SYNC -> {
-                        // TODO: calibrationController.testFlashSync(lifecycleScope)
+                        callback?.showToast("Flash sync test requires lifecycleScope from MainActivity", Toast.LENGTH_SHORT)
+                        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Flash sync test requested - requires MainActivity to call testFlashSync() directly")
                     }
                     MenuController.SyncTestType.BEEP_SYNC -> {
-                        // TODO: calibrationController.testBeepSync()
+                        calibrationController.testBeepSync()
                     }
                     MenuController.SyncTestType.CLOCK_SYNC -> {
-                        // TODO: calibrationController.testClockSync(lifecycleScope)
+                        callback?.showToast("Clock sync test requires lifecycleScope from MainActivity", Toast.LENGTH_SHORT)
+                        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Clock sync test requested - requires MainActivity to call testClockSync() directly")
                     }
                 }
             }
             
             override fun onSyncStatusRequested() {
                 android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Sync status requested")
-                // TODO: calibrationController.showSyncStatus()
+                calibrationController.showSyncStatus()
             }
             
             override fun onMenuError(message: String) {
@@ -643,6 +645,22 @@ class MainActivityCoordinator @Inject constructor(
     fun runCalibration(lifecycleScope: LifecycleCoroutineScope) {
         android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating calibration run")
         calibrationController.runCalibration(lifecycleScope)
+    }
+    
+    /**
+     * Test flash sync signal through coordinator
+     */
+    fun testFlashSync(lifecycleScope: LifecycleCoroutineScope) {
+        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating flash sync test")
+        calibrationController.testFlashSync(lifecycleScope)
+    }
+    
+    /**
+     * Test clock sync through coordinator
+     */
+    fun testClockSync(lifecycleScope: LifecycleCoroutineScope) {
+        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating clock sync test")
+        calibrationController.testClockSync(lifecycleScope)
     }
     
     /**
