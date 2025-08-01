@@ -42,6 +42,7 @@ import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.managers.PermissionManager
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
+import com.multisensor.recording.controllers.UsbController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -68,7 +69,7 @@ import com.multisensor.recording.ui.components.HandSegmentationControlView
 class MainActivity : AppCompatActivity(),
     PermissionManager.PermissionCallback,
     ShimmerManager.ShimmerCallback,
-    UsbDeviceManager.UsbDeviceCallback,
+    UsbController.UsbCallback,
     HandSegmentationManager.HandSegmentationListener,
     HandSegmentationControlView.HandSegmentationControlListener {
     
@@ -89,6 +90,9 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var usbDeviceManager: UsbDeviceManager
+
+    @Inject
+    lateinit var usbController: UsbController
 
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
@@ -143,6 +147,15 @@ class MainActivity : AppCompatActivity(),
         setupUI()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] UI setup completed")
 
+        // Setup managers and callbacks
+        shimmerManager.setCallback(this)
+        permissionManager.setCallback(this)
+        handSegmentationManager.setListener(this)
+        usbController.setCallback(this)
+
+        // Initialize USB monitoring for already connected devices
+        usbController.initializeUsbMonitoring(this)
+
         // Note: Permission checking moved to onResume() for better timing
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission checking will be done in onResume() for better timing")
 
@@ -153,7 +166,7 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== APP STARTUP: onCreate() completed =====")
 
         // Handle USB device attachment if launched by USB intent
-        handleUsbDeviceIntent(intent)
+        usbController.handleUsbDeviceIntent(this, intent)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -161,95 +174,7 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] onNewIntent() called")
 
         // Handle USB device attachment
-        handleUsbDeviceIntent(intent)
-    }
-
-    /**
-     * Handle USB device attachment intent
-     * This method is called when the app is launched due to a Topdon device being connected
-     */
-    private fun handleUsbDeviceIntent(intent: Intent) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Handling USB device intent: ${intent.action}")
-
-        when (intent.action) {
-            UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
-                val device: UsbDevice? = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
-                } else {
-                    @Suppress("DEPRECATION")
-                    intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
-                }
-                device?.let { usbDevice ->
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] USB device attached:")
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device name: ${usbDevice.deviceName}")
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}")
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}")
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device class: ${usbDevice.deviceClass}")
-
-                    // Check if this is a supported Topdon thermal camera
-                    if (isSupportedTopdonDevice(usbDevice)) {
-                        android.util.Log.d("MainActivity", "[DEBUG_LOG] ✓ Supported Topdon thermal camera detected!")
-
-                        // Show user notification
-                        Toast
-                            .makeText(
-                                this,
-                                "Topdon Thermal Camera Connected!\nDevice: ${usbDevice.deviceName}",
-                                Toast.LENGTH_LONG,
-                            ).show()
-
-                        // Update status
-                        binding.statusText.text = "Topdon thermal camera connected - Ready for recording"
-
-                        // Initialize thermal recorder if permissions are available
-                        if (areAllPermissionsGranted()) {
-                            android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions available, initializing thermal recorder")
-                            initializeRecordingSystem()
-                        } else {
-                            android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions not available, requesting permissions first")
-                            binding.statusText.text = "Thermal camera detected - Please grant permissions to continue"
-                        }
-                    } else {
-                        android.util.Log.d("MainActivity", "[DEBUG_LOG] ⚠ USB device is not a supported Topdon thermal camera")
-                        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported devices: VID=0x0BDA, PID=0x3901/0x5840/0x5830/0x5838")
-                    }
-                } ?: run {
-                    android.util.Log.w("MainActivity", "[DEBUG_LOG] USB device attachment intent received but no device found")
-                }
-            }
-            else -> {
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Intent action: ${intent.action} (not USB device attachment)")
-            }
-        }
-    }
-
-    /**
-     * Check if the USB device is a supported Topdon thermal camera
-     * Based on vendor ID and product ID matching ThermalRecorder configuration
-     */
-    private fun isSupportedTopdonDevice(device: UsbDevice): Boolean {
-        val vendorId = device.vendorId
-        val productId = device.productId
-
-        // Topdon vendor ID (matches device_filter.xml and IRCamera library)
-        val topdonVendorId = 0x0BDA
-
-        // Supported product IDs (matches ThermalRecorder.kt)
-        val supportedProductIds = intArrayOf(0x3901, 0x5840, 0x5830, 0x5838)
-
-        val isSupported = vendorId == topdonVendorId && supportedProductIds.contains(productId)
-
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Device support check:")
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Expected VID: 0x${String.format("%04X", topdonVendorId)}")
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Actual VID: 0x${String.format("%04X", vendorId)}")
-        android.util.Log.d(
-            "MainActivity",
-            "[DEBUG_LOG] - Expected PIDs: ${supportedProductIds.joinToString { "0x${String.format("%04X", it)}" }}",
-        )
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Actual PID: 0x${String.format("%04X", productId)}")
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] - Is supported: $isSupported")
-
-        return isSupported
+        usbController.handleUsbDeviceIntent(this, intent)
     }
 
     /**
@@ -1557,6 +1482,9 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
 
+        // Stop USB monitoring
+        usbController.stopPeriodicScanning()
+
         // Ensure recording service is stopped when activity is destroyed
         if (viewModel.uiState.value.isRecording) {
             stopRecording()
@@ -1649,19 +1577,16 @@ class MainActivity : AppCompatActivity(),
         Toast.makeText(this, "Shimmer Error: $message", Toast.LENGTH_LONG).show()
     }
 
-    // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========
+    // ========== UsbController.UsbCallback Implementation ==========
     
     override fun onSupportedDeviceAttached(device: UsbDevice) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbDeviceManager")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbController")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device: ${device.deviceName}")
-        
-        val deviceInfo = usbDeviceManager.getDeviceInfoString(device)
-        binding.statusText.text = "Supported TOPDON device connected"
         
         // Update thermal connection status
         updateThermalConnectionStatus(true)
         
-        Toast.makeText(this, "TOPDON device connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "TOPDON thermal camera connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onUnsupportedDeviceAttached(device: UsbDevice) {
@@ -1678,14 +1603,37 @@ class MainActivity : AppCompatActivity(),
         // Update thermal connection status
         updateThermalConnectionStatus(false)
         
-        binding.statusText.text = "USB device disconnected"
         Toast.makeText(this, "USB device disconnected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 
-    // Disambiguated onError for UsbDeviceManager
-    fun onUsbError(message: String) {
-        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Manager error: $message")
+    override fun onUsbError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Controller error: $message")
         binding.statusText.text = "USB Error: $message"
         Toast.makeText(this, "USB Error: $message", Toast.LENGTH_LONG).show()
+    }
+
+    override fun updateStatusText(text: String) {
+        binding.statusText.text = text
+    }
+
+    override fun initializeRecordingSystem() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing recording system from USB controller")
+        // Call the private initializeRecordingSystem method
+        this.initializeRecordingSystemInternal()
+    }
+    
+    private fun initializeRecordingSystemInternal() {
+        // Get TextureView from layout for camera preview
+        val textureView = binding.texturePreview
+
+        // Initialize system with TextureView for enhanced CameraRecorder integration
+        viewModel.initializeSystem(textureView)
+        binding.statusText.text = "System initialized - Ready to record"
+    }
+
+    override fun areAllPermissionsGranted(): Boolean {
+        return AllAndroidPermissions.getDangerousPermissions().all { permission ->
+            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+        }
     }
 }
