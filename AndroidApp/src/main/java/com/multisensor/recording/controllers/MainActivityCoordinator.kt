@@ -381,27 +381,33 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun registerBroadcastReceiver(receiver: android.content.BroadcastReceiver, filter: android.content.IntentFilter): android.content.Intent? {
-                // TODO: Implement broadcast receiver registration via callback
-                return null
+                // Simple delegation to callback - remove complex error handling
+                return try {
+                    callback?.getContext()?.registerReceiver(receiver, filter)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivityCoordinator", "Failed to register broadcast receiver", e)
+                    null
+                }
             }
             
             override fun unregisterBroadcastReceiver(receiver: android.content.BroadcastReceiver) {
-                // TODO: Implement broadcast receiver unregistration via callback
+                try {
+                    callback?.getContext()?.unregisterReceiver(receiver)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivityCoordinator", "Failed to unregister broadcast receiver", e)
+                }
             }
             
             override fun getBatteryLevelText(): TextView? {
-                // TODO: Add battery level text view access to coordinator callback
-                return null
+                return callback?.getBatteryLevelText()
             }
             
             override fun getPcConnectionStatus(): TextView? {
-                // TODO: Add PC connection status text view access to coordinator callback
-                return null
+                return callback?.getPcConnectionStatus()
             }
             
             override fun getPcConnectionIndicator(): View? {
-                // TODO: Add PC connection indicator view access to coordinator callback
-                return null
+                return callback?.getPcConnectionIndicator()
             }
             
             override fun getShimmerConnectionStatus(): TextView? {
@@ -415,13 +421,11 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun getThermalConnectionStatus(): TextView? {
-                // TODO: Add thermal connection status text view access to coordinator callback
-                return null
+                return callback?.getThermalConnectionStatus()
             }
             
             override fun getThermalConnectionIndicator(): View? {
-                // TODO: Add thermal connection indicator view access to coordinator callback
-                return null
+                return callback?.getThermalConnectionIndicator()
             }
         })
     }
