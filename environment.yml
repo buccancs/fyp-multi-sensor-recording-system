@@ -48,6 +48,6 @@ dependencies:
     - memory-profiler
     - psutil
     - isort
-    - pre-commi
+    - pre-commit
     - sphinx
     - sphinx-rtd-theme
