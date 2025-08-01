@@ -20,14 +20,14 @@
         android:layout_marginBottom="24dp" />
 
     <Button
-        android:id="@+id/connect_devices_button"
+        android:id="@+id/connectDevicesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Connect Devices"
         android:layout_marginBottom="8dp" />
 
     <Button
-        android:id="@+id/scan_devices_button"
+        android:id="@+id/scanDevicesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Scan for Devices"

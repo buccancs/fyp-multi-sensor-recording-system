@@ -174,6 +174,9 @@ dependencies {
     testImplementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     testImplementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    
+    // ViewPager2 for fragment navigation
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     // Architecture
     implementation(libs.bundles.lifecycle)

@@ -20,14 +20,14 @@
         android:layout_marginBottom="24dp" />
 
     <Button
-        android:id="@+id/run_calibration_button"
+        android:id="@+id/runCalibrationButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Run Calibration"
         android:layout_marginBottom="16dp" />
 
     <TextView
-        android:id="@+id/calibration_status"
+        android:id="@+id/calibrationStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ready for calibration"
