@@ -250,6 +250,11 @@ tasks.register("generateConstants") {
     outputs.file(outputFile)
     doLast {
         val json = JsonSlurper().parse(configFile) as Map<*, *>
+        val network = json["network"] as Map<*, *>
+        val devices = json["devices"] as Map<*, *>
+        val resolution = devices["resolution"] as Map<*, *>
+        val calibration = json["calibration"] as Map<*, *>
+        
         outputDir.mkdirs()
         outputFile.writeText("""
         // Auto-generated from config.json. Do not edit manually.
@@ -257,6 +262,26 @@ tasks.register("generateConstants") {
         object CommonConstants {
             const val PROTOCOL_VERSION: Int = ${json["protocol_version"]}
             const val APP_VERSION: String = "${json["version"]}"
+            
+            object Network {
+                const val HOST: String = "${network["host"]}"
+                const val PORT: Int = ${network["port"]}
+                const val TIMEOUT_SECONDS: Int = ${network["timeout_seconds"]}
+            }
+            
+            object Devices {
+                const val CAMERA_ID: Int = ${devices["camera_id"]}
+                const val FRAME_RATE: Int = ${devices["frame_rate"]}
+                const val RESOLUTION_WIDTH: Int = ${resolution["width"]}
+                const val RESOLUTION_HEIGHT: Int = ${resolution["height"]}
+            }
+            
+            object Calibration {
+                const val PATTERN_TYPE: String = "${calibration["pattern_type"]}"
+                const val PATTERN_ROWS: Int = ${calibration["pattern_rows"]}
+                const val PATTERN_COLS: Int = ${calibration["pattern_cols"]}
+                const val SQUARE_SIZE_M: Double = ${calibration["square_size_m"]}
+            }
         }
         """.trimIndent())
         println("Generated CommonConstants.kt from config.json")

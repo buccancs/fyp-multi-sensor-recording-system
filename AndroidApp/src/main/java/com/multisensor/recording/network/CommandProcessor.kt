@@ -25,6 +25,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileWriter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -531,11 +535,67 @@ class CommandProcessor
          */
         private fun updateRecordingMetadata(stimulusTime: Long) {
             try {
-                // TODO: Add stimulus timestamp to recording metadata
-                // This could involve writing to a metadata file or updating session info
-                logger.info("RECORDING_METADATA: stimulus_time=$stimulusTime, session_id=$currentSessionId")
+                // Create metadata entry with stimulus timestamp
+                val sessionId = currentSessionId ?: "unknown_session"
+                val timestamp = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US).format(Date(stimulusTime))
+                
+                // Create metadata entry
+                val metadataEntry = mapOf(
+                    "type" to "stimulus_marker",
+                    "session_id" to sessionId,
+                    "timestamp_ms" to stimulusTime,
+                    "timestamp_iso" to timestamp,
+                    "device_timestamp" to System.currentTimeMillis(),
+                    "event_type" to "beep_stimulus"
+                )
+                
+                // Write to metadata file if session manager is available
+                sessionManager?.let { sm ->
+                    writeMetadataToFile(metadataEntry, sm.getSessionOutputDir())
+                }
+                
+                // Log the metadata for immediate debugging
+                logger.info("RECORDING_METADATA: stimulus_time=$stimulusTime, session_id=$sessionId, iso_timestamp=$timestamp")
+                
+                // Update session manager with stimulus information if available
+                sessionManager?.addStimulusEvent(stimulusTime, "beep_stimulus")
+                
             } catch (e: Exception) {
                 logger.error("Failed to update recording metadata", e)
+            }
+        }
+        
+        /**
+         * Write metadata entry to file
+         */
+        private fun writeMetadataToFile(metadataEntry: Map<String, Any>, outputDir: File?) {
+            try {
+                outputDir?.let { dir ->
+                    val metadataFile = File(dir, "stimulus_metadata.json")
+                    val jsonEntry = buildString {
+                        append("{\n")
+                        metadataEntry.entries.forEachIndexed { index, (key, value) ->
+                            append("  \"$key\": ")
+                            when (value) {
+                                is String -> append("\"$value\"")
+                                is Number -> append(value)
+                                else -> append("\"$value\"")
+                            }
+                            if (index < metadataEntry.size - 1) append(",")
+                            append("\n")
+                        }
+                        append("}\n")
+                    }
+                    
+                    // Append to existing metadata file
+                    FileWriter(metadataFile, true).use { writer ->
+                        writer.write(jsonEntry)
+                    }
+                    
+                    logger.info("Wrote stimulus metadata to: ${metadataFile.absolutePath}")
+                }
+            } catch (e: Exception) {
+                logger.error("Failed to write metadata to file", e)
             }
         }
 

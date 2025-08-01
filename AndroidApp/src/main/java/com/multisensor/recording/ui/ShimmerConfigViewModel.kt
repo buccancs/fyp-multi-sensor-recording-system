@@ -286,8 +286,28 @@ class ShimmerConfigViewModel @Inject constructor(
             try {
                 // Apply sensor configuration to device if connected
                 if (_uiState.value.isDeviceConnected) {
-                    // TODO: Implement actual sensor configuration update
-                    delay(500) // Simulate configuration time
+                    // Implement actual sensor configuration update
+                    val sensorChannels = enabledSensors.mapNotNull { sensorName ->
+                        // Convert string sensor names to SensorChannel enum values
+                        try {
+                            com.multisensor.recording.recording.DeviceConfiguration.SensorChannel.valueOf(sensorName.uppercase())
+                        } catch (e: IllegalArgumentException) {
+                            logger.warning("Unknown sensor channel: $sensorName")
+                            null
+                        }
+                    }.toSet()
+                    
+                    val result = _uiState.value.selectedDevice?.let { device ->
+                        shimmerRecorder.setEnabledChannels(device.macAddress, sensorChannels)
+                    } ?: false
+                    
+                    if (!result) {
+                        logger.warning("Failed to update sensor configuration")
+                    } else {
+                        logger.info("Sensor configuration updated successfully")
+                    }
+                    
+                    delay(500) // Allow time for configuration to apply
                 }
                 _uiState.update { it.copy(isConfiguring = false) }
             } catch (e: Exception) {
@@ -310,8 +330,18 @@ class ShimmerConfigViewModel @Inject constructor(
             try {
                 // Apply sampling rate to device if connected
                 if (_uiState.value.isDeviceConnected) {
-                    // TODO: Implement actual sampling rate update
-                    delay(200) // Simulate configuration time
+                    // Implement actual sampling rate update
+                    val result = _uiState.value.selectedDevice?.let { device ->
+                        shimmerRecorder.setSamplingRate(device.macAddress, samplingRate.toDouble())
+                    } ?: false
+                    
+                    if (!result) {
+                        logger.warning("Failed to update sampling rate")
+                    } else {
+                        logger.info("Sampling rate updated to ${samplingRate}Hz")
+                    }
+                    
+                    delay(200) // Allow time for configuration to apply
                 }
             } catch (e: Exception) {
                 logger.error("Error updating sampling rate", e)
@@ -342,4 +372,51 @@ class ShimmerConfigViewModel @Inject constructor(
             ) 
         }
     }
+
+    /**
+     * Apply configuration preset
+     */
+    fun applyConfigurationPreset(presetName: String) {
+        logger.info("Applying configuration preset: $presetName")
+        
+        val (enabledSensors, samplingRate) = when (presetName) {
+            "Default" -> {
+                // Standard GSR+ configuration
+                Pair(setOf("GSR", "PPG", "ACCEL"), 256)
+            }
+            "High Performance" -> {
+                // All sensors enabled with high sampling rate
+                Pair(setOf("GSR", "PPG", "ACCEL", "GYRO", "MAG", "ECG"), 512)
+            }
+            "Low Power" -> {
+                // Minimal sensors with low sampling rate
+                Pair(setOf("GSR", "PPG"), 128)
+            }
+            "Custom" -> {
+                // Keep current configuration
+                return
+            }
+            else -> {
+                logger.warning("Unknown preset: $presetName")
+                return
+            }
+        }
+        
+        // Update UI state with preset configuration
+        _uiState.update { 
+            it.copy(
+                enabledSensors = enabledSensors,
+                samplingRate = samplingRate
+            ) 
+        }
+        
+        // Apply the preset configuration to the device
+        updateSensorConfiguration(enabledSensors)
+        updateSamplingRate(samplingRate)
+    }
+
+    /**
+     * Get available configuration presets
+     */
+    fun getAvailablePresets(): List<String> = listOf("Default", "High Performance", "Low Power", "Custom")
 }

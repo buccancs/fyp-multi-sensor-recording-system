@@ -55,8 +55,22 @@ class MenuController @Inject constructor() {
         BEEP_SYNC,
         CLOCK_SYNC
     }
-    
+
     private var callback: MenuCallback? = null
+    
+    // Menu state tracking
+    private val menuItemSelectionCount = mutableMapOf<Int, Int>()
+    private val menuAccessHistory = mutableListOf<MenuAccessRecord>()
+    private var lastMenuInteraction = 0L
+    
+    /**
+     * Data class for tracking menu access patterns
+     */
+    data class MenuAccessRecord(
+        val itemId: Int,
+        val timestamp: Long,
+        val itemTitle: String
+    )
     
     /**
      * Set the callback for menu events
@@ -88,6 +102,9 @@ class MenuController @Inject constructor() {
      */
     fun handleOptionsItemSelected(item: MenuItem): Boolean {
         android.util.Log.d("MenuController", "[DEBUG_LOG] Menu item selected: ${item.itemId}")
+        
+        // Track menu item selection
+        trackMenuItemSelection(item.itemId, item.title?.toString() ?: "Unknown")
         
         return when (item.itemId) {
             R.id.action_settings -> {
@@ -131,6 +148,24 @@ class MenuController @Inject constructor() {
                 false
             }
         }
+    }
+    
+    /**
+     * Track menu item selection for analytics and debugging
+     */
+    private fun trackMenuItemSelection(itemId: Int, itemTitle: String) {
+        lastMenuInteraction = System.currentTimeMillis()
+        
+        // Update selection count
+        menuItemSelectionCount[itemId] = (menuItemSelectionCount[itemId] ?: 0) + 1
+        
+        // Add to access history (keep last 50 records)
+        menuAccessHistory.add(MenuAccessRecord(itemId, lastMenuInteraction, itemTitle))
+        if (menuAccessHistory.size > 50) {
+            menuAccessHistory.removeAt(0)
+        }
+        
+        android.util.Log.d("MenuController", "[DEBUG_LOG] Menu tracking: $itemTitle selected ${menuItemSelectionCount[itemId]} times")
     }
     
     /**
@@ -285,9 +320,23 @@ class MenuController @Inject constructor() {
             append("Menu Controller Status:\n")
             append("- Callback Set: ${callback != null}\n")
             append("- Context Available: ${callback?.getContext() != null}\n")
-            // TODO: Add more menu status information
-            append("- Menu Items: TODO - implement menu item tracking")
+            append("- Total Menu Interactions: ${menuItemSelectionCount.values.sum()}\n")
+            append("- Unique Items Used: ${menuItemSelectionCount.size}\n")
+            append("- Last Interaction: ${if (lastMenuInteraction > 0) 
+                java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date(lastMenuInteraction))
+                else "Never"}\n")
+            append("- Most Used Item: ${getMostUsedMenuItem()}")
         }
+    }
+    
+    /**
+     * Get the most frequently used menu item
+     */
+    private fun getMostUsedMenuItem(): String {
+        return menuItemSelectionCount.maxByOrNull { it.value }?.let { entry ->
+            val itemName = menuAccessHistory.findLast { it.itemId == entry.key }?.itemTitle ?: "Unknown"
+            "$itemName (${entry.value} times)"
+        } ?: "None"
     }
     
     /**
@@ -295,7 +344,13 @@ class MenuController @Inject constructor() {
      */
     fun resetState() {
         android.util.Log.d("MenuController", "[DEBUG_LOG] Menu controller state reset")
-        // TODO: Reset menu-specific state if needed
+        
+        // Reset menu tracking state
+        menuItemSelectionCount.clear()
+        menuAccessHistory.clear()
+        lastMenuInteraction = 0L
+        
+        android.util.Log.d("MenuController", "[DEBUG_LOG] Menu tracking data cleared")
     }
     
     /**
@@ -334,10 +389,61 @@ class MenuController @Inject constructor() {
     
     /**
      * Update menu item visibility based on app state
-     * TODO: Implement dynamic menu updates
+     * Implements dynamic menu updates
      */
     fun updateMenuVisibility(menu: Menu, isRecording: Boolean) {
-        // TODO: Hide/show menu items based on recording state
         android.util.Log.d("MenuController", "[DEBUG_LOG] Menu visibility update - recording: $isRecording")
+        
+        try {
+            // Disable certain menu items during recording
+            menu.findItem(R.id.action_settings)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_network_config)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_shimmer_config)?.isEnabled = !isRecording
+            
+            // Sync test items should only be available when not recording
+            menu.findItem(R.id.action_test_flash_sync)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_test_beep_sync)?.isEnabled = !isRecording
+            menu.findItem(R.id.action_test_clock_sync)?.isEnabled = !isRecording
+            
+            // Sync status can be checked anytime
+            menu.findItem(R.id.action_sync_status)?.isEnabled = true
+            
+            // File browser may be restricted during recording
+            menu.findItem(R.id.action_file_browser)?.isEnabled = !isRecording
+            
+            // About dialog can be accessed anytime
+            menu.findItem(R.id.action_about)?.isEnabled = true
+            
+            android.util.Log.d("MenuController", "[DEBUG_LOG] Menu items ${if (isRecording) "disabled" else "enabled"} for recording state")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MenuController", "[DEBUG_LOG] Error updating menu visibility: ${e.message}")
+        }
+    }
+    
+    /**
+     * Check if sync features are available
+     */
+    private fun areSyncFeaturesAvailable(): Boolean {
+        // In a real implementation, this would check:
+        // - Network connectivity
+        // - Server availability
+        // - Sync service status
+        return true // Simplified for now
+    }
+    
+    /**
+     * Get menu item usage statistics
+     */
+    fun getMenuUsageStatistics(): Map<String, Any> {
+        return mapOf(
+            "total_interactions" to menuItemSelectionCount.values.sum(),
+            "unique_items_used" to menuItemSelectionCount.size,
+            "most_used_item" to getMostUsedMenuItem(),
+            "last_interaction" to lastMenuInteraction,
+            "interaction_history_size" to menuAccessHistory.size,
+            "average_interactions_per_item" to if (menuItemSelectionCount.isNotEmpty()) 
+                menuItemSelectionCount.values.average() else 0.0
+        )
     }
 }

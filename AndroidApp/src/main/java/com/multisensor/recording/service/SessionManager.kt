@@ -128,6 +128,41 @@ class SessionManager
          * Gets the current active session
          */
         fun getCurrentSession(): RecordingSession? = currentSession
+        
+        /**
+         * Get the current session's output directory
+         */
+        fun getSessionOutputDir(): File? {
+            return currentSession?.sessionFolder
+        }
+        
+        /**
+         * Add stimulus event to current session
+         */
+        fun addStimulusEvent(timestamp: Long, eventType: String) {
+            currentSession?.let { session ->
+                try {
+                    // Add to session's stimulus events list (we'll need to add this field)
+                    logger.info("Adding stimulus event to session ${session.sessionId}: type=$eventType, timestamp=$timestamp")
+                    
+                    // Create stimulus marker file if it doesn't exist
+                    val stimulusFile = File(session.sessionFolder, "stimulus_events.csv")
+                    val isNewFile = !stimulusFile.exists()
+                    
+                    stimulusFile.appendText(
+                        if (isNewFile) {
+                            "timestamp_ms,event_type,session_time_ms\n$timestamp,$eventType,${timestamp - session.startTime}\n"
+                        } else {
+                            "$timestamp,$eventType,${timestamp - session.startTime}\n"
+                        }
+                    )
+                    
+                    logger.info("Stimulus event recorded in: ${stimulusFile.absolutePath}")
+                } catch (e: Exception) {
+                    logger.error("Failed to add stimulus event to session", e)
+                }
+            }
+        }
 
         /**
          * Finalizes the current session

@@ -1,6 +1,9 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.LinearLayout
@@ -110,8 +113,13 @@ class CardSectionLayout @JvmOverloads constructor(
         // Adjust header color based on card background
         when {
             background != null -> {
-                // TODO: Detect background color and set appropriate text color
-                header.setLightTheme() // Default to light theme
+                // Detect background color and set appropriate text color
+                val backgroundColor = extractBackgroundColor()
+                if (isColorDark(backgroundColor)) {
+                    header.setDarkTheme() // Light text on dark background
+                } else {
+                    header.setLightTheme() // Dark text on light background
+                }
             }
             else -> header.setLightTheme()
         }
@@ -128,5 +136,41 @@ class CardSectionLayout @JvmOverloads constructor(
             dp.toFloat(),
             resources.displayMetrics
         ).toInt()
+    }
+
+    /**
+     * Extract the dominant color from the background drawable
+     */
+    private fun extractBackgroundColor(): Int {
+        return when (val bg = background) {
+            is ColorDrawable -> bg.color
+            is GradientDrawable -> {
+                // For gradient drawables, we can't easily extract the color
+                // Default to a neutral assumption (light background)
+                Color.WHITE
+            }
+            else -> {
+                // For other drawables (e.g., images, shapes), default to light
+                Color.WHITE
+            }
+        }
+    }
+
+    /**
+     * Determine if a color is considered dark
+     * Uses the relative luminance formula to determine darkness
+     */
+    private fun isColorDark(color: Int): Boolean {
+        // Extract RGB components
+        val red = Color.red(color)
+        val green = Color.green(color)
+        val blue = Color.blue(color)
+        
+        // Calculate relative luminance using the sRGB color space formula
+        // https://www.w3.org/TR/WCAG20/#relativeluminancedef
+        val luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255.0
+        
+        // Consider dark if luminance is below 0.5 (50%)
+        return luminance < 0.5
     }
 }
