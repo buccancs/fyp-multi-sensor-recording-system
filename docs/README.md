@@ -81,13 +81,12 @@ This organization ensures that current, relevant documentation is easily accessi
 - `comprehensive/pc-android-testing-guide.md` - Testing infrastructure guide
 
 ### Integration Guides
-- `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
-- `user-guides/shimmer-integration-guide.md` - Android Shimmer integration
+- `shimmer3_gsr_plus/USER_GUIDE_shimmer3_gsr_plus.md` - Shimmer3 GSR+ practical user guide
 - `user-guides/rock-solid-integration-guide.md` - Thermal camera integration
 
 ### Technical References
 - `technical/data-structure-documentation.md` - Data organization details
-- `technical/shimmer3-gsr-plus-comprehensive-documentation.md` - Shimmer technical specs
+- `shimmer3_gsr_plus/README_shimmer3_gsr_plus.md` - Shimmer3 GSR+ technical deep-dive
 - `technical/topdon-tc001-comprehensive-documentation.md` - Thermal camera specs
 - `technical/rock-solid-networking.md` - Network synchronization details
 
@@ -99,7 +98,7 @@ This organization ensures that current, relevant documentation is easily accessi
 
 ### Quick References
 - `reference/file-naming-standards.md` - Naming conventions
-- `reference/shimmer3-gsr-plus-quick-reference.md` - Shimmer quick start
+- `shimmer3_gsr_plus/INDEX.md` - Shimmer3 GSR+ comprehensive documentation index
 - `reference/readme-testing.md` - Testing procedures
 - `reference/test-documentation.md` - Test documentation
 

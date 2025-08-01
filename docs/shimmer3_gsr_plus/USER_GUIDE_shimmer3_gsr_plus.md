@@ -573,4 +573,59 @@ title('Phasic GSR with SCR Peaks');
 xlabel('Time'); ylabel('Conductance (μS)');
 ```
 
+## Testing and Validation
+
+### Android Integration Testing
+
+For comprehensive testing of the Android Shimmer integration:
+
+```bash
+# Run enhanced test suite for Shimmer recorder
+./gradlew testDebugUnitTest --tests "ShimmerRecorderEnhancedTest"
+
+# Run integration tests with real hardware
+./gradlew connectedAndroidTest --tests "ShimmerIntegrationTest"
+```
+
+### Hardware Validation Steps
+
+1. **Device Connection Test**: Verify Bluetooth pairing and communication
+2. **Sensor Configuration Test**: Confirm all sensor channels respond correctly  
+3. **Data Quality Validation**: Check signal ranges and sampling rates
+4. **Session Recording Test**: Verify CSV file generation and data integrity
+
+### Performance Validation
+
+```kotlin
+// Memory management for real-time data streaming
+class CircularBuffer<T>(private val capacity: Int) {
+    private val buffer = arrayOfNulls<Any>(capacity) as Array<T?>
+    private var writeIndex = 0
+    private var size = 0
+    
+    fun add(item: T) {
+        buffer[writeIndex] = item
+        writeIndex = (writeIndex + 1) % capacity
+        if (size < capacity) size++
+    }
+    
+    fun getLatest(count: Int): List<T> {
+        val result = mutableListOf<T>()
+        val startIdx = if (size < capacity) 0 else writeIndex
+        for (i in 0 until minOf(count, size)) {
+            val idx = (startIdx + size - count + i) % capacity
+            buffer[idx]?.let { result.add(it) }
+        }
+        return result
+    }
+}
+```
+
+### Version Compatibility
+
+- **Shimmer SDK**: 3.2.3_beta
+- **Android API**: 24+ (Android 7.0)  
+- **Bluetooth**: Classic and BLE support
+- **Java**: 17+ compatibility
+
 This comprehensive user guide provides researchers with the practical knowledge needed to effectively utilize the Shimmer3 GSR+ device for high-quality physiological data collection. Following these procedures ensures reliable data collection, proper device management, and successful integration with analysis workflows.

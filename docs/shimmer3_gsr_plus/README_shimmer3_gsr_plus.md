@@ -572,6 +572,49 @@ def _start_simulated_streaming(self, device_id: str) -> None:
     self.thread_pool.submit(simulate_data)
 ```
 
+### Battery Optimization Strategies
+
+The system includes comprehensive battery optimization features for extended measurement sessions:
+
+```kotlin
+// Dynamic sampling rate management for battery conservation
+fun optimizeSamplingForBattery(isActivelyRecording: Boolean, batteryLevel: Int) {
+    when {
+        batteryLevel < 20 -> {
+            // Critical battery: minimal power mode
+            shimmer.writeSamplingRate(1.0) // 1 Hz 
+            shimmer.writeEnabledSensors(Configuration.Shimmer3.SENSOR_GSR) // GSR only
+        }
+        batteryLevel < 50 && !isActivelyRecording -> {
+            // Low battery during standby: reduced rate
+            shimmer.writeSamplingRate(5.0) // 5 Hz for basic monitoring
+        }
+        isActivelyRecording -> {
+            // Active recording: optimal balance
+            shimmer.writeSamplingRate(51.2) // Standard recording rate
+        }
+        else -> {
+            // Normal operation: full capability
+            shimmer.writeSamplingRate(128.0) // High-resolution mode
+        }
+    }
+}
+
+// Sensor combination optimization
+fun configurePowerOptimalSensors(powerMode: PowerMode): Int {
+    return when (powerMode) {
+        PowerMode.LOW_POWER -> 
+            Configuration.Shimmer3.SENSOR_GSR // GSR only
+        PowerMode.STANDARD -> 
+            Configuration.Shimmer3.SENSOR_GSR or Configuration.Shimmer3.SENSOR_PPG_A13
+        PowerMode.HIGH_PERFORMANCE -> 
+            Configuration.Shimmer3.SENSOR_GSR or 
+            Configuration.Shimmer3.SENSOR_PPG_A13 or 
+            Configuration.Shimmer3.SENSOR_LSM303DLHC_ACCEL
+    }
+}
+```
+
 ## Error Handling and Recovery
 
 ### Comprehensive Error Classification
