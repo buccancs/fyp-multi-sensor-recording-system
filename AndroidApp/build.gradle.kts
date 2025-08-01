@@ -20,9 +20,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "com.multisensor.recording.CustomTestRunner"
-
         ndk {
             abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64"))
         }
@@ -34,7 +32,6 @@ android {
             pickFirsts.add("META-INF/LICENSE-notice.md")
             excludes.add("META-INF/kotlinx-coroutines-core.kotlin_module")
         }
-
         jniLibs {
             useLegacyPackaging = false
             val libsToPickFirst = listOf(
@@ -60,7 +57,6 @@ android {
                 debugSymbolLevel = "SYMBOL_TABLE"
             }
         }
-
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -70,7 +66,6 @@ android {
                 debugSymbolLevel = "SYMBOL_TABLE"
             }
         }
-
         create("staging") {
             initWith(getByName("debug"))
             isDebuggable = false
@@ -164,56 +159,62 @@ configurations {
 dependencies {
     // Core & UI Components
     implementation(libs.bundles.core.ui)
+    testImplementation(libs.bundles.core.ui)
 
     // Settings and Preferences
     implementation("androidx.preference:preference-ktx:1.2.1")
+    testImplementation("androidx.preference:preference-ktx:1.2.1")
 
     // Material Design Components
     implementation("com.google.android.material:material:1.12.0")
+    testImplementation("com.google.android.material:material:1.12.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    testImplementation("androidx.cardview:cardview:1.0.0")
 
     // Jetpack Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    testImplementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    testImplementation("androidx.navigation:navigation-testing:2.7.7") // For testing navigation graphs
+    testImplementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
     // Architecture
     implementation(libs.bundles.lifecycle)
+    testImplementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.android)
     implementation(libs.bundles.activity.fragment)
-    testImplementation("androidx.arch.core:core-testing:2.2.0") // For testing Architecture Components
-    testImplementation("androidx.fragment:fragment-testing:1.7.1") // For testing Fragments
-    testImplementation(libs.kotlinx.coroutines.test) // For testing coroutines (assuming alias exists)
+    testImplementation(libs.bundles.activity.fragment)
 
     // Permissions
     implementation(libs.xxpermissions)
+    testImplementation(libs.xxpermissions)
 
     // CameraX
     implementation(libs.bundles.camera)
-    testImplementation(libs.bundles.camera.testing) // For testing CameraX (assuming alias exists)
+    testImplementation(libs.bundles.camera)
 
     // Dependency Injection
     implementation(libs.hilt.android)
+    testImplementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
     // Room Database
     implementation(libs.bundles.room)
+    testImplementation(libs.bundles.room)
     ksp(libs.room.compiler)
-    testImplementation(libs.bundles.room.testing) // For testing Room (assuming alias exists)
 
     // Networking
     implementation(libs.bundles.networking)
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0") // For mocking server responses
+    testImplementation(libs.bundles.networking)
 
-    // Unit Testing
+    // Pre-existing Test Dependencies
     testImplementation(libs.bundles.enhanced.unit.testing)
-    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.hilt.android.testing) // Stays as it's a specific test artifact
     kspTest(libs.hilt.compiler)
 
-    // Integration Testing
     androidTestImplementation(libs.bundles.enhanced.integration.testing)
     androidTestUtil("androidx.test:orchestrator:1.5.0")
-    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.hilt.android.testing) // Stays as it's a specific test artifact
     kspAndroidTest(libs.hilt.compiler)
 
     // Code Quality
@@ -247,10 +248,8 @@ tasks.register("generateConstants") {
     description = "Generates Kotlin constants from config.json."
     val configFile = file("src/main/assets/config.json")
     val outputFile = file("$outputDir/com/multisensor/recording/config/CommonConstants.kt")
-
     inputs.file(configFile)
     outputs.file(outputFile)
-
     doLast {
         val json = JsonSlurper().parse(configFile) as Map<*, *>
         outputDir.mkdirs()
@@ -289,14 +288,11 @@ jacoco {
 tasks.register<JacocoReport>("jacocoTestReport") {
     group = "Reporting"
     description = "Generates Jacoco coverage reports for all variants."
-
     dependsOn(tasks.matching { it.name.startsWith("test") && it.name.endsWith("UnitTest") })
-
     reports {
         xml.required.set(true)
         html.required.set(true)
     }
-
     val fileFilter = listOf(
         "**/R.class", "**/R$*.class", "**/BuildConfig.*",
         "**/*_Factory.*", "**/*_MembersInjector.*", "**/*Module*.*",
@@ -304,11 +300,9 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     )
     val javaClasses = fileTree("$buildDir/intermediates/javac/debug/classes") { exclude(fileFilter) }
     val kotlinClasses = fileTree("$buildDir/tmp/kotlin-classes/debug") { exclude(fileFilter) }
-
     classDirectories.setFrom(files(javaClasses, kotlinClasses))
     sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
     executionData.setFrom(fileTree(buildDir) { include("jacoco/**/*.exec", "outputs/code_coverage/**/*.ec") })
-
     doFirst {
         executionData.setFrom(files(executionData.files.filter { it.exists() }))
     }
