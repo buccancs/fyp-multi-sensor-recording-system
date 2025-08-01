@@ -17,7 +17,7 @@ on:
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=4 -Dorg.gradle.parallel=true
   JAVA_VERSION: '17'
-  PYTHON_VERSION: '3.9'
+  PYTHON_VERSION: '3.10'
   CONDA_ENV_NAME: 'thermal-env'
   # Performance and caching optimizations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
@@ -86,7 +86,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-disabled: false
         cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
@@ -169,7 +169,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-disabled: false
         cache-read-only: true
@@ -238,13 +238,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ['3.10', '3.11']
         exclude:
           # Reduce matrix size for efficiency - test edge cases on Ubuntu only
           - os: windows-latest
-            python-version: '3.10'
+            python-version: '3.11'
           - os: macos-latest
-            python-version: '3.10'
+            python-version: '3.11'
       fail-fast: false
         
     steps:
@@ -279,7 +279,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle (for Python integration tests)
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-disabled: false
         cache-read-only: true
@@ -372,7 +372,7 @@ jobs:
         
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.9'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10'
       with:
         file: ./PythonApp/coverage.xml
         flags: python
@@ -399,7 +399,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
@@ -524,7 +524,7 @@ jobs:
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
@@ -624,7 +624,7 @@ jobs:
         config-file: ./.github/codeql/codeql-config.yml
         
     - name: Setup Gradle for CodeQL
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-disabled: true
         
@@ -674,7 +674,7 @@ jobs:
         safety check --json --output ../safety-results.json || true
         
     - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/gradle-jvm@master
+      uses: snyk/actions/gradle-jvm@v1.5.0
       continue-on-error: true
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -751,7 +751,7 @@ jobs:
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-disabled: false
         build-scan-publish: true
