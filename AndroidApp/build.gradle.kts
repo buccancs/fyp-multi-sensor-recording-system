@@ -288,6 +288,10 @@ tasks.register("generateConstants") {
         println("Generated CommonConstants.kt from config.json")
     }
 }
+// Mark the generateConstants task as incompatible with the configuration cache
+tasks.named("generateConstants") {
+    notCompatibleWithConfigurationCache("Task uses script object references which are not cache-compatible.")
+}
 
 tasks.named("preBuild") {
     dependsOn("generateConstants")
