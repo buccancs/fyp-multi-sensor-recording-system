@@ -99,7 +99,11 @@ class MainActivity : AppCompatActivity(),
     lateinit var usbDeviceManager: UsbDeviceManager
 
     @Inject
+    lateinit var calibrationController: CalibrationController
+
+    @Inject
     lateinit var usbController: UsbController
+
 
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
@@ -930,42 +934,64 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun runCalibration() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting enhanced calibration capture with CalibrationCaptureManager")
-
-        // Show initial calibration start message
-        Toast.makeText(this, "Starting calibration capture...", Toast.LENGTH_SHORT).show()
-
-        // Use actual CalibrationCaptureManager for 
-        lifecycleScope.launch {
-            try {
-                val result =
-                    calibrationCaptureManager.captureCalibrationImages(
-                        calibrationId = null, // Auto-generate ID
-                        captureRgb = true,
-                        captureThermal = true,
-                        highResolution = true,
-                    )
-
-                if (result.success) {
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}")
-
-                    // Trigger enhanced feedback for successful capture
-                    runOnUiThread {
-                        triggerCalibrationCaptureSuccess(result.calibrationId)
-                    }
-                } else {
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}")
-                    runOnUiThread {
-                        Toast.makeText(this@MainActivity, "Calibration capture failed: ${result.errorMessage}", Toast.LENGTH_LONG).show()
-                    }
-                }
-            } catch (e: Exception) {
-                android.util.Log.e("MainActivity", "[DEBUG_LOG] Error during calibration capture", e)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting calibration via CalibrationController")
+        
+        // Use CalibrationController for all calibration functionality
+        calibrationController.runCalibration(lifecycleScope)
+    }
+    
+    /**
+     * Initialize CalibrationController with MainActivity callback
+     */
+    private fun initializeCalibrationController() {
+        calibrationController.setCallback(object : CalibrationController.CalibrationCallback {
+            override fun onCalibrationStarted() {
+                updateStatusText("Calibration started...")
+            }
+            
+            override fun onCalibrationCompleted(calibrationId: String) {
+                updateStatusText("Calibration completed: $calibrationId")
+                Toast.makeText(this@MainActivity, "✅ Calibration completed: $calibrationId", Toast.LENGTH_LONG).show()
+            }
+            
+            override fun onCalibrationFailed(errorMessage: String) {
+                updateStatusText("Calibration failed: $errorMessage")
+                Toast.makeText(this@MainActivity, "❌ Calibration failed: $errorMessage", Toast.LENGTH_LONG).show()
+            }
+            
+            override fun onSyncTestCompleted(success: Boolean, message: String) {
+                val emoji = if (success) "✅" else "❌"
+                Toast.makeText(this@MainActivity, "$emoji $message", Toast.LENGTH_LONG).show()
+            }
+            
+            override fun updateStatusText(text: String) {
                 runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Calibration error: ${e.message}", Toast.LENGTH_LONG).show()
+                    if (::binding.isInitialized) {
+                        binding.statusText.text = text
+                    }
                 }
             }
-        }
+            
+            override fun showToast(message: String, duration: Int) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, message, duration).show()
+                }
+            }
+            
+            override fun runOnUiThread(action: () -> Unit) {
+                this@MainActivity.runOnUiThread(action)
+            }
+            
+            override fun getContentView(): View {
+                return binding.root
+            }
+            
+            override fun getContext(): Context {
+                return this@MainActivity
+            }
+        })
+        
+        calibrationController.initialize()
     }
 
     /**
@@ -1668,6 +1694,11 @@ class MainActivity : AppCompatActivity(),
 
         // Cleanup hand segmentation
         handSegmentationManager.cleanup()
+
+        // Cleanup CalibrationController
+        if (::calibrationController.isInitialized) {
+            calibrationController.cleanup()
+        }
 
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring system cleaned up")
     }
