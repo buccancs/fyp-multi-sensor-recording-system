@@ -674,7 +674,7 @@ jobs:
         safety check --json --output ../safety-results.json || true
         
     - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/gradle-jvm@v1.5.0
+      uses: snyk/actions/gradle-jvm@v0.4.0
       continue-on-error: true
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
