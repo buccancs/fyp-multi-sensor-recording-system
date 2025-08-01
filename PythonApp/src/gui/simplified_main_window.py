@@ -33,6 +33,10 @@ from PyQt5.QtWidgets import (
 from .device_panel import DeviceStatusPanel
 from .preview_panel import PreviewPanel
 from .calibration_dialog import CalibrationDialog
+from .common_components import (
+    ModernButton, ModernGroupBox, StatusIndicator, 
+    ProgressIndicator, LogViewer, ConnectionManager
+)
 
 
 class SimplifiedMainWindow(QMainWindow):
@@ -79,11 +83,11 @@ class SimplifiedMainWindow(QMainWindow):
         self.logger.info("Simplified UI setup completed")
 
     def create_recording_tab(self):
-        """Create the main recording control tab."""
+        """Create the main recording control tab using modern components."""
         recording_widget = QWidget()
         layout = QVBoxLayout(recording_widget)
         
-        # Title
+        # Title using modern styling
         title = QLabel("Recording Control")
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;")
         layout.addWidget(title)
@@ -91,36 +95,41 @@ class SimplifiedMainWindow(QMainWindow):
         # Create splitter for better layout
         splitter = QSplitter(Qt.Horizontal)
         
-        # Left side - Controls
-        controls_frame = QFrame()
-        controls_frame.setFrameStyle(QFrame.StyledPanel)
-        controls_layout = QVBoxLayout(controls_frame)
+        # Left side - Controls using modern group box
+        controls_group = ModernGroupBox("Recording Controls")
+        controls_layout = QVBoxLayout(controls_group)
         
-        # Recording buttons
-        self.start_button = QPushButton("Start Recording")
-        self.start_button.setStyleSheet("QPushButton { background-color: #4CAF50; color: white; padding: 10px; font-size: 14px; }")
+        # Recording buttons using modern button components
+        self.start_button = ModernButton("Start Recording", "success")
         self.start_button.clicked.connect(self.start_recording)
         controls_layout.addWidget(self.start_button)
         
-        self.stop_button = QPushButton("Stop Recording")
-        self.stop_button.setStyleSheet("QPushButton { background-color: #f44336; color: white; padding: 10px; font-size: 14px; }")
+        self.stop_button = ModernButton("Stop Recording", "danger")
         self.stop_button.setEnabled(False)
         self.stop_button.clicked.connect(self.stop_recording)
         controls_layout.addWidget(self.stop_button)
         
-        # Status display
-        self.status_label = QLabel("Ready to record")
-        self.status_label.setStyleSheet("padding: 10px; background-color: #f0f0f0; border: 1px solid #ccc;")
-        controls_layout.addWidget(self.status_label)
+        # Status display using status indicator
+        self.status_indicator = StatusIndicator("Recording Status")
+        self.status_indicator.set_status(False, "Ready to record")
+        controls_layout.addWidget(self.status_indicator)
+        
+        # Progress indicator for recording operations
+        self.progress_indicator = ProgressIndicator("Session Progress")
+        controls_layout.addWidget(self.progress_indicator)
         
         controls_layout.addStretch()
         
         # Right side - Preview
+        preview_group = ModernGroupBox("Live Preview")
+        preview_layout = QVBoxLayout(preview_group)
+        
         self.preview_panel = PreviewPanel(self)
+        preview_layout.addWidget(self.preview_panel)
         
         # Add to splitter
-        splitter.addWidget(controls_frame)
-        splitter.addWidget(self.preview_panel)
+        splitter.addWidget(controls_group)
+        splitter.addWidget(preview_group)
         splitter.setSizes([300, 700])  # Give more space to preview
         
         layout.addWidget(splitter)
@@ -128,7 +137,7 @@ class SimplifiedMainWindow(QMainWindow):
         self.tab_widget.addTab(recording_widget, "Recording")
 
     def create_devices_tab(self):
-        """Create the device management tab."""
+        """Create the device management tab using modern components."""
         devices_widget = QWidget()
         layout = QVBoxLayout(devices_widget)
         
@@ -137,28 +146,49 @@ class SimplifiedMainWindow(QMainWindow):
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;")
         layout.addWidget(title)
         
-        # Device status panel
-        self.device_panel = DeviceStatusPanel(self)
-        layout.addWidget(self.device_panel)
+        # Device connection managers
+        devices_group = ModernGroupBox("Connected Devices")
+        devices_layout = QVBoxLayout(devices_group)
         
-        # Connection controls
-        connection_layout = QHBoxLayout()
+        # Create connection managers for different device types
+        self.pc_connection = ConnectionManager("PC Controller")
+        self.pc_connection.connectionRequested.connect(lambda: self.connect_device("PC"))
+        self.pc_connection.disconnectionRequested.connect(lambda: self.disconnect_device("PC"))
+        devices_layout.addWidget(self.pc_connection)
         
-        connect_button = QPushButton("Connect Devices")
-        connect_button.clicked.connect(self.connect_devices)
-        connection_layout.addWidget(connect_button)
+        self.android_connection = ConnectionManager("Android Devices")
+        self.android_connection.connectionRequested.connect(lambda: self.connect_device("Android"))
+        self.android_connection.disconnectionRequested.connect(lambda: self.disconnect_device("Android"))
+        devices_layout.addWidget(self.android_connection)
         
-        disconnect_button = QPushButton("Disconnect All")
-        disconnect_button.clicked.connect(self.disconnect_devices)
-        connection_layout.addWidget(disconnect_button)
+        self.shimmer_connection = ConnectionManager("Shimmer Sensors")
+        self.shimmer_connection.connectionRequested.connect(lambda: self.connect_device("Shimmer"))
+        self.shimmer_connection.disconnectionRequested.connect(lambda: self.disconnect_device("Shimmer"))
+        devices_layout.addWidget(self.shimmer_connection)
         
-        connection_layout.addStretch()
-        layout.addLayout(connection_layout)
+        layout.addWidget(devices_group)
+        
+        # Global connection controls
+        controls_group = ModernGroupBox("Global Controls")
+        controls_layout = QHBoxLayout(controls_group)
+        
+        connect_all_button = ModernButton("Connect All", "success")
+        connect_all_button.clicked.connect(self.connect_all_devices)
+        controls_layout.addWidget(connect_all_button)
+        
+        disconnect_all_button = ModernButton("Disconnect All", "danger")
+        disconnect_all_button.clicked.connect(self.disconnect_all_devices)
+        controls_layout.addWidget(disconnect_all_button)
+        
+        controls_layout.addStretch()
+        
+        layout.addWidget(controls_group)
+        layout.addStretch()
         
         self.tab_widget.addTab(devices_widget, "Devices")
 
     def create_calibration_tab(self):
-        """Create the calibration tab."""
+        """Create the calibration tab using modern components."""
         calibration_widget = QWidget()
         layout = QVBoxLayout(calibration_widget)
         
@@ -167,23 +197,31 @@ class SimplifiedMainWindow(QMainWindow):
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;")
         layout.addWidget(title)
         
-        # Calibration controls
-        calibration_button = QPushButton("Run Calibration")
-        calibration_button.setStyleSheet("QPushButton { background-color: #2196F3; color: white; padding: 10px; font-size: 14px; }")
+        # Calibration controls group
+        calibration_group = ModernGroupBox("Calibration Controls")
+        calibration_layout = QVBoxLayout(calibration_group)
+        
+        # Calibration button using modern component
+        calibration_button = ModernButton("Run Calibration", "primary")
         calibration_button.clicked.connect(self.run_calibration)
-        layout.addWidget(calibration_button)
+        calibration_layout.addWidget(calibration_button)
         
-        # Calibration status
-        self.calibration_status = QLabel("Ready for calibration")
-        self.calibration_status.setStyleSheet("padding: 10px; background-color: #f0f0f0; border: 1px solid #ccc;")
-        layout.addWidget(self.calibration_status)
+        # Calibration status indicator
+        self.calibration_status = StatusIndicator("Calibration Status")
+        self.calibration_status.set_status(False, "Ready for calibration")
+        calibration_layout.addWidget(self.calibration_status)
         
+        # Calibration progress indicator
+        self.calibration_progress = ProgressIndicator("Calibration Progress")
+        calibration_layout.addWidget(self.calibration_progress)
+        
+        layout.addWidget(calibration_group)
         layout.addStretch()
         
         self.tab_widget.addTab(calibration_widget, "Calibration")
 
     def create_files_tab(self):
-        """Create the files management tab."""
+        """Create the files management tab using modern components."""
         files_widget = QWidget()
         layout = QVBoxLayout(files_widget)
         
@@ -192,26 +230,29 @@ class SimplifiedMainWindow(QMainWindow):
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;")
         layout.addWidget(title)
         
-        # File operations
-        file_layout = QHBoxLayout()
+        # File operations group
+        operations_group = ModernGroupBox("File Operations")
+        operations_layout = QHBoxLayout(operations_group)
         
-        open_folder_button = QPushButton("Open Recordings Folder")
+        open_folder_button = ModernButton("Open Recordings Folder", "primary")
         open_folder_button.clicked.connect(self.open_recordings_folder)
-        file_layout.addWidget(open_folder_button)
+        operations_layout.addWidget(open_folder_button)
         
-        export_button = QPushButton("Export Data")
+        export_button = ModernButton("Export Data", "secondary")
         export_button.clicked.connect(self.export_data)
-        file_layout.addWidget(export_button)
+        operations_layout.addWidget(export_button)
         
-        file_layout.addStretch()
-        layout.addLayout(file_layout)
+        operations_layout.addStretch()
+        layout.addWidget(operations_group)
         
-        # File list placeholder
-        file_info = QLabel("Recent recordings will appear here")
-        file_info.setStyleSheet("padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd;")
-        layout.addWidget(file_info)
+        # System log viewer
+        log_group = ModernGroupBox("System Log")
+        log_layout = QVBoxLayout(log_group)
         
-        layout.addStretch()
+        self.log_viewer = LogViewer("Recent Activity")
+        log_layout.addWidget(self.log_viewer)
+        
+        layout.addWidget(log_group)
         
         self.tab_widget.addTab(files_widget, "Files")
 
@@ -245,57 +286,165 @@ class SimplifiedMainWindow(QMainWindow):
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage("Ready")
 
-    # Action methods (simplified)
+    # Action methods using modern components
     def start_recording(self):
-        """Start recording session."""
+        """Start recording session with enhanced feedback."""
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
-        self.status_label.setText("Recording in progress...")
+        self.status_indicator.set_status(True, "Recording in progress...")
+        self.progress_indicator.set_indeterminate(True)
         self.status_bar.showMessage("Recording started")
         self.logger.info("Recording started")
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Recording session started", "INFO")
 
     def stop_recording(self):
-        """Stop recording session."""
+        """Stop recording session with enhanced feedback."""
         self.start_button.setEnabled(True)
         self.stop_button.setEnabled(False)
-        self.status_label.setText("Recording stopped")
+        self.status_indicator.set_status(False, "Recording stopped")
+        self.progress_indicator.set_indeterminate(False)
+        self.progress_indicator.set_progress(100, "Session complete")
         self.status_bar.showMessage("Recording stopped")
         self.logger.info("Recording stopped")
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Recording session stopped", "INFO")
 
-    def connect_devices(self):
-        """Connect to devices."""
-        self.status_bar.showMessage("Connecting to devices...")
-        self.logger.info("Device connection initiated")
+    def connect_device(self, device_type):
+        """Connect to a specific device type."""
+        self.status_bar.showMessage(f"Connecting to {device_type}...")
+        self.logger.info(f"{device_type} connection initiated")
+        
+        # Simulate connection process
+        QTimer.singleShot(1500, lambda: self.connection_complete(device_type, True))
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry(f"Connecting to {device_type}", "INFO")
 
-    def disconnect_devices(self):
-        """Disconnect all devices."""
-        self.status_bar.showMessage("Disconnected from devices")
-        self.logger.info("All devices disconnected")
+    def disconnect_device(self, device_type):
+        """Disconnect from a specific device type."""
+        self.status_bar.showMessage(f"Disconnecting from {device_type}...")
+        self.logger.info(f"{device_type} disconnection initiated")
+        
+        # Update connection manager
+        if device_type == "PC" and hasattr(self, 'pc_connection'):
+            self.pc_connection.set_connection_status(False, "Disconnected")
+        elif device_type == "Android" and hasattr(self, 'android_connection'):
+            self.android_connection.set_connection_status(False, "Disconnected")
+        elif device_type == "Shimmer" and hasattr(self, 'shimmer_connection'):
+            self.shimmer_connection.set_connection_status(False, "Disconnected")
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry(f"Disconnected from {device_type}", "INFO")
+
+    def connection_complete(self, device_type, success):
+        """Handle connection completion."""
+        if success:
+            status_text = "Connected"
+            log_level = "INFO"
+            message = f"Connected to {device_type}"
+        else:
+            status_text = "Connection failed"
+            log_level = "ERROR"
+            message = f"Failed to connect to {device_type}"
+        
+        # Update appropriate connection manager
+        if device_type == "PC" and hasattr(self, 'pc_connection'):
+            self.pc_connection.set_connection_status(success, status_text)
+        elif device_type == "Android" and hasattr(self, 'android_connection'):
+            self.android_connection.set_connection_status(success, status_text)
+        elif device_type == "Shimmer" and hasattr(self, 'shimmer_connection'):
+            self.shimmer_connection.set_connection_status(success, status_text)
+        
+        self.status_bar.showMessage(message)
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry(message, log_level)
+
+    def connect_all_devices(self):
+        """Connect to all devices sequentially."""
+        self.logger.info("Connecting to all devices")
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Initiating connection to all devices", "INFO")
+        
+        # Connect to devices in sequence
+        device_types = ["PC", "Android", "Shimmer"]
+        for i, device_type in enumerate(device_types):
+            QTimer.singleShot(i * 1000, lambda dt=device_type: self.connect_device(dt))
+
+    def disconnect_all_devices(self):
+        """Disconnect from all devices."""
+        self.logger.info("Disconnecting from all devices")
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Disconnecting from all devices", "INFO")
+        
+        device_types = ["PC", "Android", "Shimmer"]
+        for device_type in device_types:
+            self.disconnect_device(device_type)
 
     def run_calibration(self):
-        """Run calibration process."""
-        self.calibration_status.setText("Running calibration...")
+        """Run calibration process with enhanced feedback."""
+        self.calibration_status.set_status(True, "Running calibration...")
+        self.calibration_progress.set_progress(0, "Starting calibration...")
         self.status_bar.showMessage("Calibration in progress...")
         self.logger.info("Calibration started")
         
-        # Simulate calibration process
-        QTimer.singleShot(2000, self.calibration_complete)
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Camera calibration started", "INFO")
+        
+        # Simulate calibration progress
+        self.calibration_timer = QTimer()
+        self.calibration_step = 0
+        self.calibration_timer.timeout.connect(self.update_calibration_progress)
+        self.calibration_timer.start(200)  # Update every 200ms
+
+    def update_calibration_progress(self):
+        """Update calibration progress indicators."""
+        self.calibration_step += 1
+        progress = min(100, self.calibration_step * 5)
+        
+        if progress < 100:
+            self.calibration_progress.set_progress(progress, f"Calibrating... {progress}%")
+        else:
+            self.calibration_timer.stop()
+            self.calibration_complete()
 
     def calibration_complete(self):
-        """Handle calibration completion."""
-        self.calibration_status.setText("Calibration completed successfully")
+        """Handle calibration completion with enhanced feedback."""
+        self.calibration_status.set_status(False, "Calibration completed successfully")
+        self.calibration_progress.set_progress(100, "Calibration complete")
         self.status_bar.showMessage("Calibration complete")
         self.logger.info("Calibration completed")
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Camera calibration completed successfully", "INFO")
 
     def open_recordings_folder(self):
-        """Open recordings folder."""
+        """Open recordings folder with enhanced feedback."""
         self.status_bar.showMessage("Opening recordings folder...")
         self.logger.info("Opening recordings folder")
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Opening recordings folder", "INFO")
 
     def export_data(self):
-        """Export recorded data."""
+        """Export recorded data with enhanced feedback."""
         self.status_bar.showMessage("Exporting data...")
         self.logger.info("Data export initiated")
+        
+        # Add log entry
+        if hasattr(self, 'log_viewer'):
+            self.log_viewer.add_log_entry("Data export initiated", "INFO")
 
     def show_settings(self):
         """Show settings dialog."""

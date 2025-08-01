@@ -14,6 +14,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.multisensor.recording.databinding.ActivityMainSimplifiedBinding
+import com.multisensor.recording.ui.SettingsActivity
+import com.multisensor.recording.ui.util.NavigationUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -82,29 +84,27 @@ class SimplifiedMainActivity : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         
-        when (item.itemId) {
-            R.id.nav_recording -> navController.navigate(R.id.nav_recording)
-            R.id.nav_devices -> navController.navigate(R.id.nav_devices)
-            R.id.nav_calibration -> navController.navigate(R.id.nav_calibration)
-            R.id.nav_files -> navController.navigate(R.id.nav_files)
-            R.id.nav_settings -> {
-                // Launch settings activity
-                // startActivity(Intent(this, SettingsActivity::class.java))
-            }
-            R.id.nav_network -> {
-                // Launch network config activity
-                // startActivity(Intent(this, NetworkConfigActivity::class.java))
-            }
-            R.id.nav_shimmer -> {
-                // Launch shimmer config activity
-                // startActivity(Intent(this, ShimmerConfigActivity::class.java))
-            }
-            R.id.nav_sync_test -> {
-                // Show sync tests
-                showSyncTests()
-            }
-            R.id.nav_about -> {
-                showAbout()
+        // Use NavigationUtils for main navigation items
+        val handled = NavigationUtils.handleDrawerNavigation(navController, item.itemId)
+        
+        if (!handled) {
+            // Handle non-navigation items (settings, tools, etc.)
+            when (item.itemId) {
+                R.id.nav_settings -> {
+                    NavigationUtils.launchActivity(this, SettingsActivity::class.java)
+                }
+                R.id.nav_network -> {
+                    showNetworkConfiguration()
+                }
+                R.id.nav_shimmer -> {
+                    showShimmerConfiguration()
+                }
+                R.id.nav_sync_test -> {
+                    showSyncTests()
+                }
+                R.id.nav_about -> {
+                    showAbout()
+                }
             }
         }
         
@@ -112,23 +112,64 @@ class SimplifiedMainActivity : AppCompatActivity(), NavigationView.OnNavigationI
         return true
     }
 
-    private fun showSyncTests() {
-        // Placeholder for sync tests
+    private fun showNetworkConfiguration() {
         android.app.AlertDialog.Builder(this)
-            .setTitle("Sync Tests")
-            .setMessage("Sync testing functionality coming soon")
+            .setTitle("Network Configuration")
+            .setMessage(
+                "Network Settings:\n\n" +
+                "• PC Connection: Socket-based communication\n" +
+                "• Default Port: 8080 (command channel)\n" +
+                "• Preview Streams: 8081-8082\n" +
+                "• Auto-discovery: Enabled\n\n" +
+                "Advanced network configuration will be available in future updates."
+            )
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showShimmerConfiguration() {
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Shimmer Configuration")
+            .setMessage(
+                "Shimmer GSR+ Settings:\n\n" +
+                "• Bluetooth Connection: Auto-detect\n" +
+                "• Sampling Rate: 51.2 Hz (default)\n" +
+                "• Sensors: GSR, PPG, Accelerometer\n" +
+                "• Data Format: CSV with timestamps\n\n" +
+                "Device-specific configuration available after connection."
+            )
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showSyncTests() {
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Synchronization Tests")
+            .setMessage(
+                "Sync Testing Features:\n\n" +
+                "• Clock synchronization between devices\n" +
+                "• Latency measurement and compensation\n" +
+                "• Timestamp alignment validation\n" +
+                "• Multi-device coordination tests\n\n" +
+                "Comprehensive sync testing tools coming soon."
+            )
             .setPositiveButton("OK", null)
             .show()
     }
 
     private fun showAbout() {
         android.app.AlertDialog.Builder(this)
-            .setTitle("About")
+            .setTitle("About Multi-Sensor Recording System")
             .setMessage(
                 "Multi-Sensor Recording System\n" +
-                "Simplified Navigation Architecture\n" +
-                "Version 1.0.0\n\n" +
-                "Focus: Simplicity and Cleanliness"
+                "Navigation Architecture v2.0\n\n" +
+                "Features:\n" +
+                "• Clean fragment-based navigation\n" +
+                "• Simplified user interface design\n" +
+                "• Enhanced maintainability\n" +
+                "• Modern Android architecture\n\n" +
+                "Focus: Simplicity, cleanliness, and maintainability\n" +
+                "Built with Kotlin, Navigation Component, and Material Design"
             )
             .setPositiveButton("OK", null)
             .show()

@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.FragmentRecordingBinding
 import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.util.UIUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -74,75 +74,58 @@ class RecordingFragment : Fragment() {
         binding.startRecordingButton.isEnabled = state.canStartRecording
         binding.stopRecordingButton.isEnabled = state.canStopRecording
         
-        // Update connection indicators
-        updateConnectionIndicator(binding.pcConnectionIndicator, state.isPcConnected)
-        updateConnectionIndicator(binding.shimmerConnectionIndicator, state.isShimmerConnected)
-        updateConnectionIndicator(binding.thermalConnectionIndicator, state.isThermalConnected)
+        // Update connection indicators using UIUtils
+        UIUtils.updateConnectionIndicator(requireContext(), binding.pcConnectionIndicator, state.isPcConnected)
+        UIUtils.updateConnectionIndicator(requireContext(), binding.shimmerConnectionIndicator, state.isShimmerConnected)
+        UIUtils.updateConnectionIndicator(requireContext(), binding.thermalConnectionIndicator, state.isThermalConnected)
         
-        // Update status texts
-        binding.pcConnectionStatus.text = "PC: ${if (state.isPcConnected) "Connected" else "Waiting..."}"
-        binding.shimmerConnectionStatus.text = "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Off"}"
-        binding.thermalConnectionStatus.text = "Thermal: ${if (state.isThermalConnected) "Connected" else "Off"}"
+        // Update status texts using UIUtils
+        binding.pcConnectionStatus.text = UIUtils.getConnectionStatusText("PC", state.isPcConnected)
+        binding.shimmerConnectionStatus.text = UIUtils.getConnectionStatusText("Shimmer", state.isShimmerConnected)
+        binding.thermalConnectionStatus.text = UIUtils.getConnectionStatusText("Thermal", state.isThermalConnected)
         
-        // Update battery level
-        val batteryText = if (state.batteryLevel >= 0) {
-            "Battery: ${state.batteryLevel}%"
-        } else {
-            "Battery: ---%"
-        }
-        binding.batteryLevelText.text = batteryText
+        // Update battery level using UIUtils
+        binding.batteryLevelText.text = UIUtils.formatBatteryText(state.batteryLevel)
         
-        // Update recording status
+        // Update recording status using UIUtils
         updateRecordingStatus(state.isRecording)
         
-        // Update streaming info
-        if (state.isStreaming && state.streamingFrameRate > 0) {
-            binding.streamingDebugOverlay.text = "Streaming: ${state.streamingFrameRate}fps (${state.streamingDataSize})"
-        } else {
-            binding.streamingDebugOverlay.text = "Ready to stream"
-        }
+        // Update streaming info using UIUtils
+        binding.streamingDebugOverlay.text = UIUtils.formatStreamingText(
+            state.isStreaming, 
+            state.streamingFrameRate, 
+            state.streamingDataSize
+        )
         
         // Update overall status
         binding.statusText.text = state.statusText
         
-        // Handle errors
+        // Handle errors using UIUtils
         state.errorMessage?.let { errorMsg ->
             if (state.showErrorDialog) {
-                Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
+                UIUtils.showStatusMessage(requireContext(), errorMsg, true)
                 viewModel.clearError()
             }
         }
     }
 
     private fun updateConnectionIndicator(indicator: View, isConnected: Boolean) {
-        val colorRes = if (isConnected) {
-            com.multisensor.recording.R.color.statusIndicatorConnected
-        } else {
-            com.multisensor.recording.R.color.statusIndicatorDisconnected
-        }
-        indicator.setBackgroundColor(requireContext().getColor(colorRes))
+        UIUtils.updateConnectionIndicator(requireContext(), indicator, isConnected)
     }
 
     private fun updateRecordingStatus(isRecording: Boolean) {
-        val statusText = if (isRecording) "Recording in progress..." else "Ready to record"
-        binding.recordingStatusText.text = statusText
-        
-        val colorRes = if (isRecording) {
-            com.multisensor.recording.R.color.recordingActive
-        } else {
-            com.multisensor.recording.R.color.recordingInactive
-        }
-        binding.recordingIndicator.setBackgroundColor(requireContext().getColor(colorRes))
+        binding.recordingStatusText.text = UIUtils.getRecordingStatusText(isRecording)
+        UIUtils.updateRecordingIndicator(requireContext(), binding.recordingIndicator, isRecording)
     }
 
     private fun startRecording() {
         viewModel.startRecording()
-        Toast.makeText(context, "Starting recording...", Toast.LENGTH_SHORT).show()
+        UIUtils.showStatusMessage(requireContext(), "Starting recording...")
     }
 
     private fun stopRecording() {
         viewModel.stopRecording()
-        Toast.makeText(context, "Stopping recording...", Toast.LENGTH_SHORT).show()
+        UIUtils.showStatusMessage(requireContext(), "Stopping recording...")
     }
 
     override fun onDestroyView() {
