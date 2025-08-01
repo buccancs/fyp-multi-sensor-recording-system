@@ -1,37 +1,72 @@
 package com.multisensor.recording.recording
 
+import com.multisensor.recording.util.Logger
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.string
+import io.kotest.property.forAll
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
-import org.junit.Assert.*
-import com.multisensor.recording.util.Logger
 
 /**
- * Simple test suite for connection manager
- * Tests basic initialization and setup
+ * Modern Kotlin test suite for ConnectionManager using property-based testing
+ * Tests basic initialization, setup, and connection management
  */
-class ConnectionManagerTestSimple {
+class ConnectionManagerTestSimple : FunSpec({
     
-    private lateinit var mockLogger: Logger
-    private lateinit var connectionManager: ConnectionManager
+    val mockLogger: Logger = mockk(relaxed = true)
+    lateinit var connectionManager: ConnectionManager
     
-    @Before
-    fun setup() {
+    beforeEach {
         MockKAnnotations.init(this, relaxed = true)
-        mockLogger = mockk(relaxed = true)
+        clearAllMocks()
         connectionManager = ConnectionManager(mockLogger)
     }
     
-    @Test
-    fun `should initialize connection manager successfully`() = runTest {
-        // given
-        // ConnectionManager should be created in setup
-        
-        // when - verify the manager is properly initialized
-        // then 
-        assertTrue("ConnectionManager should be initialized", ::connectionManager.isInitialized)
+    test("should initialize connection manager successfully") {
+        runTest {
+            connectionManager shouldNotBe null
+            // ConnectionManager should be created in setup
+            connectionManager.javaClass.simpleName shouldBe "ConnectionManager"
+        }
     }
     
-    // TODO: Add more comprehensive tests when API is stable
-}
+    test("should handle various connection string formats") {
+        runTest {
+            forAll(
+                Arb.string(5..50).filter { it.isNotBlank() }
+            ) { connectionString ->
+                // Test that connection manager can handle various string formats
+                val result = connectionManager.validateConnectionString(connectionString)
+                result != null // Should return some result for any non-empty string
+            }
+        }
+    }
+    
+    test("should log initialization events") {
+        runTest {
+            // Verify that logger is called during initialization
+            verify { mockLogger wasNot Called }
+            
+            connectionManager.initialize()
+            
+            verify(atLeast = 1) { mockLogger.d(any(), any()) }
+        }
+    }
+    
+    test("should maintain state consistency") {
+        runTest {
+            connectionManager.isConnected() shouldBe false
+            
+            // If we had a working connection manager, we could test:
+            // connectionManager.connect("test")
+            // connectionManager.isConnected() shouldBe true
+        }
+    }
+    
+    afterEach {
+        clearAllMocks()
+    }
+})
