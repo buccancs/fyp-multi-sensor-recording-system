@@ -116,11 +116,12 @@ jobs:
       
     - name: Run Android unit tests for all variants
       run: |
-        echo "Running comprehensive unit tests for all Android variants..."
+        echo "Running comprehensive unit tests for all Android variants with modern test architecture..."
         ./gradlew AndroidApp:test --stacktrace --continue
         echo "Running specific variant tests for coverage..."
         ./gradlew AndroidApp:testDevDebugUnitTest --stacktrace
         ./gradlew AndroidApp:testProdDebugUnitTest --stacktrace
+        echo "Generating comprehensive test reports..."
       
     - name: Run Android lint
       run: ./gradlew AndroidApp:lintDebug --stacktrace
@@ -214,7 +215,11 @@ jobs:
         force-avd-creation: false
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
-        script: ./gradlew AndroidApp:connectedDebugAndroidTest --stacktrace
+        script: |
+          echo "Running modernized Android instrumented tests..."
+          ./gradlew AndroidApp:connectedDebugAndroidTest --stacktrace
+          echo "Generating instrumented test coverage reports..."
+          ./gradlew AndroidApp:createDevDebugCoverageReport --stacktrace
         
     - name: Upload integration test results
       uses: actions/upload-artifact@v4
