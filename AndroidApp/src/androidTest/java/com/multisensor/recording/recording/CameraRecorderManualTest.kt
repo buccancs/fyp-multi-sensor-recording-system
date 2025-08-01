@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
- * Manual Test Plan Implementation for Milestone 2.2 CameraRecorder Module
- * Based on the 10 test scenarios from 2_2_milestone.md specification
+ * Manual Test Plan Implementation for CameraRecorder Module
+ * Based on the test scenarios from specification
  */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

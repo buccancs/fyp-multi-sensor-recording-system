@@ -67,10 +67,7 @@ import org.junit.runners.Suite
     com.multisensor.recording.ui.components.LabelTextViewTest::class,
     
     // ViewModels - State Management
-    com.multisensor.recording.ui.viewmodel.MainUiStateTest::class,
-    
-    // Protocol and integration - System Validation
-    com.multisensor.recording.protocol.Milestone6Test::class
+    com.multisensor.recording.ui.viewmodel.MainUiStateTest::class
 )
 class ComprehensiveUnitTestSuite
 

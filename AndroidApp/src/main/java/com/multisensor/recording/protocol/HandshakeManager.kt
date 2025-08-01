@@ -10,7 +10,7 @@ import java.net.Socket
 /**
  * HandshakeManager for Android - handles initial handshake with version checking.
  *
- * This class implements the handshake protocol described in Milestone 6 to ensure
+ * This class implements the handshake protocol described in to ensure
  * compatibility between Android and Python applications by exchanging protocol
  * version information at connection start.
  */

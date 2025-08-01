@@ -138,20 +138,20 @@ class RecordingService : Service() {
         createNotificationChannel()
 
 
-        // Initialize Milestone 2.6 JSON Socket Client and Command Processor
+        // Initialize JSON Socket Client and Command Processor
         initializeJsonCommunication()
 
         // Inject PreviewStreamer into CameraRecorder (method injection for scoping compatibility)
         cameraRecorder.setPreviewStreamer(previewStreamer)
 
-        // Initialize Milestone 2.7 Adaptive Frame Rate Control
+        // Initialize Adaptive Frame Rate Control
         initializeAdaptiveFrameRateControl()
 
         logger.info("RecordingService initialization complete")
     }
 
     /**
-     * Initialize adaptive frame rate control system for Milestone 2.7
+     * Initialize adaptive frame rate control system for 
      */
     private fun initializeAdaptiveFrameRateControl() {
         try {
@@ -190,7 +190,7 @@ class RecordingService : Service() {
     }
 
     /**
-     * Initialize JSON-based communication system for Milestone 2.6
+     * Initialize JSON-based communication system for 
      */
     private fun initializeJsonCommunication() {
         try {
@@ -253,7 +253,7 @@ class RecordingService : Service() {
         // Stop preview streaming
         previewStreamer.stopStreaming()
 
-        // Stop adaptive frame rate control system (Milestone 2.7)
+        // Stop adaptive frame rate control system ()
         try {
             adaptiveFrameRateController.stop()
             networkQualityMonitor.stopMonitoring()
@@ -284,7 +284,7 @@ class RecordingService : Service() {
                 val statusInfo = gatherStatusInformation()
 
 
-                // Broadcast via JSON socket connection (Milestone 2.6)
+                // Broadcast via JSON socket connection ()
                 broadcastStatusViaJsonSocket(statusInfo)
 
                 // Send local broadcast for UI updates

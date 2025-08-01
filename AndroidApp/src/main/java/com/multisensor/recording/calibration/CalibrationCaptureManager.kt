@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 /**
  * CalibrationCaptureManager coordinates synchronized capture from RGB and thermal cameras
- * for Milestone 2.8 calibration and sync features.
+ * for calibration and sync features.
  *
  * This manager ensures both cameras capture images in quick succession with matching
  * identifiers for later calibration processing.

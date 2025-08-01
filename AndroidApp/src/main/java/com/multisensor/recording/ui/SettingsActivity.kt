@@ -8,7 +8,7 @@ import com.multisensor.recording.R
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Settings and Configuration Activity - Milestone 2.7 UI Enhancement
+ * Settings and Configuration Activity - UI Enhancement
  *
  * Provides comprehensive settings interface for:
  * - Shimmer MAC address configuration

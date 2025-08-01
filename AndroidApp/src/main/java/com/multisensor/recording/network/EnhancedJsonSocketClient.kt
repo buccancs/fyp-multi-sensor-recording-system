@@ -32,7 +32,7 @@ import kotlin.collections.ArrayDeque
  * - Comprehensive connection monitoring
  * - Automatic reconnection with intelligent retry logic
  * 
- * Based on Milestone 2.6 specifications with significant reliability enhancements.
+ * Based on specifications with significant reliability enhancements.
  */
 @ServiceScoped
 class EnhancedJsonSocketClient @Inject constructor(

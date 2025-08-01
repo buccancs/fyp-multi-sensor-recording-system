@@ -14,7 +14,7 @@ import javax.inject.Inject
 /**
  * Network Configuration Activity
  * Allows users to configure server IP and port settings
- * Resolves Milestone 2.6 Implementation Gap: Hardcoded IP Configuration
+ * Resolves Implementation Gap: Hardcoded IP Configuration
  */
 @AndroidEntryPoint
 class NetworkConfigActivity : AppCompatActivity() {

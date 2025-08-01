@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * File Transfer Handler for Milestone 3.6 - File Transfer and Data Aggregation
+ * File Transfer Handler for - File Transfer and Data Aggregation
  *
  * Handles file transfer requests from PC server by reading files in chunks
  * and sending them via Base64-encoded JSON messages over the existing socket connection.

@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity(),
     private var permissionRetryCount = 0
     private val maxPermissionRetries = 5 // Prevent infinite loops while being persistent
 
-    // Status Display System - Milestone 2.7 UI Enhancements
+    // Status Display System - UI Enhancements
     private var currentBatteryLevel = -1
     private var isPcConnected = false
     private var isShimmerConnected = false
@@ -361,7 +361,7 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] === End Permission States ===")
     }
 
-    // Status Display System Methods - Milestone 2.7 UI Enhancements
+    // Status Display System Methods - UI Enhancements
 
     /**
      * Updates the battery level display with current percentage
@@ -836,7 +836,7 @@ class MainActivity : AppCompatActivity(),
         // Show initial calibration start message
         Toast.makeText(this, "Starting calibration capture...", Toast.LENGTH_SHORT).show()
 
-        // Use actual CalibrationCaptureManager for Milestone 2.8
+        // Use actual CalibrationCaptureManager for 
         lifecycleScope.launch {
             try {
                 val result =
@@ -870,7 +870,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * Triggers comprehensive calibration capture feedback - Enhanced for Milestone 2.8
+     * Triggers comprehensive calibration capture feedback - Enhanced for 
      */
     private fun triggerCalibrationCaptureSuccess(calibrationId: String = "unknown") {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Calibration photo captured - triggering feedback for ID: $calibrationId")
@@ -963,10 +963,10 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Multi-angle calibration guidance displayed")
     }
 
-    // ========== Milestone 2.8 Sync Signal Testing Methods ==========
+    // ========== Sync Signal Testing Methods ==========
 
     /**
-     * Test flash sync signal - Milestone 2.8
+     * Test flash sync signal - 
      */
     private fun testFlashSync() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing flash sync signal")
@@ -990,7 +990,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * Test beep sync signal - Milestone 2.8
+     * Test beep sync signal - 
      */
     private fun testBeepSync() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing beep sync signal")
@@ -1008,7 +1008,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * Test clock synchronization - Milestone 2.8
+     * Test clock synchronization - 
      */
     private fun testClockSync() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing clock synchronization")
@@ -1046,7 +1046,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * Display current sync status - Milestone 2.8
+     * Display current sync status - 
      */
     private fun showSyncStatus() {
         val syncStatus = syncClockManager.getSyncStatus()
@@ -1325,7 +1325,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    // Menu Handling - Milestone 2.7 UI Enhancement
+    // Menu Handling - UI Enhancement
 
     /**
      * Creates the options menu for MainActivity
@@ -1369,25 +1369,25 @@ class MainActivity : AppCompatActivity(),
                 true
             }
             R.id.action_test_flash_sync -> {
-                // Test Flash Sync Signal - Milestone 2.8
+                // Test Flash Sync Signal - 
                 android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Flash Sync")
                 testFlashSync()
                 true
             }
             R.id.action_test_beep_sync -> {
-                // Test Beep Sync Signal - Milestone 2.8
+                // Test Beep Sync Signal - 
                 android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Beep Sync")
                 testBeepSync()
                 true
             }
             R.id.action_test_clock_sync -> {
-                // Test Clock Synchronization - Milestone 2.8
+                // Test Clock Synchronization - 
                 android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Clock Sync")
                 testClockSync()
                 true
             }
             R.id.action_sync_status -> {
-                // Show Sync Status - Milestone 2.8
+                // Show Sync Status - 
                 android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing Sync Status")
                 showSyncStatus()
                 true
@@ -1409,7 +1409,7 @@ class MainActivity : AppCompatActivity(),
             Multi-Sensor Recording System
             
             Version: 1.0.0
-            Build: Milestone 2.7 Complete
+            Build: Complete
             
             Features:
             • Real-time status monitoring
@@ -1546,7 +1546,7 @@ class MainActivity : AppCompatActivity(),
             stopRecording()
         }
 
-        // Cleanup Status Display System - Milestone 2.7 UI Enhancements
+        // Cleanup Status Display System - UI Enhancements
         try {
             // Unregister battery receiver
             unregisterReceiver(batteryReceiver)

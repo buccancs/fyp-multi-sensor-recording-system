@@ -13,7 +13,7 @@ import java.io.File
 import java.io.FileInputStream
 
 /**
- * Unit tests for FileTransferHandler - Milestone 3.6
+ * Unit tests for FileTransferHandler - Network file transfer functionality
  *
  * Tests the file transfer functionality including:
  * - File validation and error handling
