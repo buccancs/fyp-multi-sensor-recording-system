@@ -579,6 +579,86 @@ class DualWebcamCapture(QThread):
     def get_performance_stats(self) -> Dict:
         """Get performance statistics."""
         return self.performance_stats.copy()
+        
+    def get_latest_frame(self) -> Optional[DualFrameData]:
+        """Get the latest synchronized frame data."""
+        with self.frame_lock:
+            if self.frame_sync_buffer:
+                return self.frame_sync_buffer[-1]
+            return None
+            
+    def get_camera_fps(self, camera_number: int) -> float:
+        """
+        Get current FPS for specified camera.
+        
+        Args:
+            camera_number: Camera number (1 or 2)
+            
+        Returns:
+            float: Current FPS for the camera
+        """
+        if camera_number == 1:
+            return self.camera1_status.fps
+        elif camera_number == 2:
+            return self.camera2_status.fps
+        else:
+            logger.warning(f"Invalid camera number: {camera_number}")
+            return 0.0
+            
+    def start_capture(self) -> bool:
+        """
+        Start camera capture (preview mode).
+        
+        Returns:
+            bool: True if capture started successfully, False otherwise
+        """
+        try:
+            # Initialize cameras if not already done
+            if not self._initialize_cameras():
+                return False
+                
+            # Start preview mode
+            return self.start_preview()
+            
+        except Exception as e:
+            logger.error(f"Error starting capture: {e}", exc_info=True)
+            return False
+            
+    def stop_capture(self):
+        """Stop camera capture."""
+        try:
+            # Stop recording if active
+            if self.is_recording:
+                self.stop_recording()
+                
+            # Stop preview
+            self.stop_preview()
+            
+            # Release cameras
+            self._release_cameras()
+            
+        except Exception as e:
+            logger.error(f"Error stopping capture: {e}", exc_info=True)
+            
+    def _initialize_cameras(self) -> bool:
+        """Private method that calls the public initialize_cameras method."""
+        return self.initialize_cameras()
+        
+    def _release_cameras(self):
+        """Release camera resources."""
+        try:
+            if hasattr(self, 'cap1') and self.cap1:
+                self.cap1.release()
+                self.cap1 = None
+                
+            if hasattr(self, 'cap2') and self.cap2:
+                self.cap2.release()
+                self.cap2 = None
+                
+            logger.debug("Camera resources released")
+            
+        except Exception as e:
+            logger.error(f"Error releasing cameras: {e}", exc_info=True)
 
     def cleanup(self):
         """Clean up resources."""
@@ -633,38 +713,54 @@ class DualWebcamCapture(QThread):
             pass  # Silently ignore errors during destruction
 
 
-def test_dual_webcam_access():
-    """Test function to verify dual webcam access."""
-    logger.info("Testing dual webcam access...")
+def test_dual_webcam_access(camera_indices: List[int] = None):
+    """
+    Test function to verify dual webcam access.
+    
+    Args:
+        camera_indices: List of camera indices to test (default: [0, 1])
+        
+    Returns:
+        bool: True if both cameras are accessible, False otherwise
+    """
+    if camera_indices is None:
+        camera_indices = [0, 1]
+    
+    if len(camera_indices) != 2:
+        logger.error(f"ERROR: Expected 2 camera indices, got {len(camera_indices)}")
+        return False
+        
+    camera1_index, camera2_index = camera_indices
+    logger.info(f"Testing dual webcam access with cameras {camera1_index} and {camera2_index}...")
     
     # Test camera 1
-    cap1 = cv2.VideoCapture(0)
+    cap1 = cv2.VideoCapture(camera1_index)
     if not cap1.isOpened():
-        logger.error("ERROR: Could not open camera 1 (index 0)")
+        logger.error(f"ERROR: Could not open camera 1 (index {camera1_index})")
         return False
     
     ret1, frame1 = cap1.read()
     if ret1:
         height1, width1 = frame1.shape[:2]
-        logger.info(f"SUCCESS: Camera 1 accessible, frame size: {width1}x{height1}")
+        logger.info(f"SUCCESS: Camera {camera1_index} accessible, frame size: {width1}x{height1}")
     else:
-        logger.error("ERROR: Could not capture frame from camera 1")
+        logger.error(f"ERROR: Could not capture frame from camera {camera1_index}")
         cap1.release()
         return False
     
     # Test camera 2
-    cap2 = cv2.VideoCapture(1)
+    cap2 = cv2.VideoCapture(camera2_index)
     if not cap2.isOpened():
-        logger.error("ERROR: Could not open camera 2 (index 1)")
+        logger.error(f"ERROR: Could not open camera 2 (index {camera2_index})")
         cap1.release()
         return False
     
     ret2, frame2 = cap2.read()
     if ret2:
         height2, width2 = frame2.shape[:2]
-        logger.info(f"SUCCESS: Camera 2 accessible, frame size: {width2}x{height2}")
+        logger.info(f"SUCCESS: Camera {camera2_index} accessible, frame size: {width2}x{height2}")
     else:
-        logger.error("ERROR: Could not capture frame from camera 2")
+        logger.error(f"ERROR: Could not capture frame from camera {camera2_index}")
         cap1.release()
         cap2.release()
         return False
@@ -672,7 +768,7 @@ def test_dual_webcam_access():
     cap1.release()
     cap2.release()
     
-    logger.info("SUCCESS: Both cameras accessible for dual recording")
+    logger.info(f"SUCCESS: Both cameras ({camera1_index}, {camera2_index}) accessible for dual recording")
     return True
 
 
