@@ -17,6 +17,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[Recording Sessions](user-guides/CONSOLIDATED_USER_GUIDE.md#recording-sessions)** - Recording procedures and best practices
 - **[Data Management](user-guides/CONSOLIDATED_USER_GUIDE.md#data-management-and-export)** - Data organization and export
 - **[Troubleshooting Guide](user-guides/CONSOLIDATED_USER_GUIDE.md#troubleshooting)** - Common issues and solutions
+- **[Session Management User Guide](new_documentation/USER_GUIDE_session_management.md)** - Complete session and data storage user guide
 
 ### 🔧 Developer Documentation
 - **[Implementation Guide](implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Complete technical implementation
@@ -24,6 +25,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
+- **[Session Management Technical](new_documentation/README_session_management.md)** - Session and data storage system technical deep-dive
 
 - **[Networking Protocol - Technical Deep-Dive](new_documentation/README_networking_protocol.md)** - Complete networking and communication protocol implementation
 - **[Networking Protocol - User Guide](new_documentation/USER_GUIDE_networking_protocol.md)** - Practical guide for network setup and usage
@@ -60,6 +62,12 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | [README.md](../README.md) | Project overview and quick start | All users |
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
+
+| [new_documentation/README_session_management.md](new_documentation/README_session_management.md) | Session Management and Data Storage System technical documentation | Developers |
+| [new_documentation/USER_GUIDE_session_management.md](new_documentation/USER_GUIDE_session_management.md) | Session Management and Data Storage System user guide | End users |
+| [new_documentation/PROTOCOL_session_management.md](new_documentation/PROTOCOL_session_management.md) | Session Management data contracts and protocols | Developers |
+| [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
+
 | [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
 | [README_networking_protocol.md](new_documentation/README_networking_protocol.md) | Networking and Communication Protocol technical deep-dive | Developers |
 | [USER_GUIDE_networking_protocol.md](new_documentation/USER_GUIDE_networking_protocol.md) | Networking protocol practical usage guide | End users |
@@ -130,6 +138,7 @@ Quick reference materials and API documentation:
 
 | Document | Content | Purpose |
 |----------|---------|---------|
+| [Session Management Quick Reference](new_documentation/session-management-quick-reference.md) | Session lifecycle, operations, and troubleshooting quick reference | Quick reference |
 | [API Quick Reference](reference/) | API quick reference cards | Developer reference |
 
 
