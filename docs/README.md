@@ -72,7 +72,7 @@ This organization ensures that current, relevant documentation is easily accessi
 ### Essential Starting Points
 - `user-guides/user-guide.md` - Main user documentation
 - `comprehensive/README.md` - Complete PC/Android documentation suite
-- `reference/data-storage-quick-reference.md` - Quick data location guide
+- `reference/session-management-quick-reference.md` - Session operations and data location guide
 - `technical/system-architecture-overview.md` - System overview
 
 ### Comprehensive Guides

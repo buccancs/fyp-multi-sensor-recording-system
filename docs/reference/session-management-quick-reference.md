@@ -208,13 +208,70 @@ stateDiagram-v2
 | `shimmer_gsr` | gsr_data | shimmer_1, shimmer_2 |
 | `thermal_camera` | thermal_video | thermal_1 |
 
+## Data Format Reference
+
+### Video Files (.mp4)
+- **Resolution**: Usually 1920x1080 (Full HD)
+- **Frame Rate**: 30 frames per second  
+- **Codec**: H.264 (standard video format)
+- **Playable in**: VLC, Windows Media Player, any video player
+
+### Sensor Data (.csv)
+- **Format**: Comma-separated values (opens in Excel)
+- **Columns**: timestamp, sensor_value, additional_metrics
+- **Sample Rate**: Varies by sensor (typically 128-200 samples/second)
+
+## Quick Diagnostic Commands
+
+### Session Health Check
+```bash
+# Navigate to recordings directory
+cd PythonApp/recordings/
+
+# List all sessions
+ls -la
+
+# Check specific session size
+du -h experiment_A_20250731_143022/
+
+# Verify all expected files
+find experiment_A_20250731_143022/ -name "*.mp4" -o -name "*.csv" -o -name "*.json"
+```
+
+### Find Session Issues
+```bash
+# Look for errors in session log
+grep -i "error" experiment_A_20250731_143022_log.json
+
+# Check for incomplete sessions
+find PythonApp/recordings/ -name "session_metadata.json" -exec grep -l '"status": "recording"' {} \;
+
+# Verify file integrity (non-zero sizes)
+find experiment_A_20250731_143022/ -size 0
+```
+
 ## Troubleshooting
 
 ### Common Issues
-- **Session won't create**: Check disk space and permissions
+- **Session won't create**: Check disk space (`df -h`) and permissions
 - **Device won't connect**: Verify network connection and device app
 - **Files missing**: Check session log for transfer errors
 - **Session incomplete**: Use session recovery tools
+- **Can't find session**: Check `PythonApp/recordings/` for timestamped folders
+- **Video won't play**: Check file size > 0 bytes, try VLC player
+- **No sensor data**: Verify device connection in session_metadata.json
+
+### Quick Fixes
+```bash
+# Check available disk space
+df -h PythonApp/recordings/
+
+# Verify session folder permissions
+ls -la PythonApp/recordings/experiment_A_*/
+
+# Find sessions with errors
+grep -r "error" PythonApp/recordings/*/session_*_log.json
+```
 
 ### Debug Commands
 ```python

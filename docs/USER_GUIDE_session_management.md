@@ -489,7 +489,7 @@ Export data for use with external analysis tools:
 
 ### Documentation Resources
 
-- **Quick Reference**: `docs/reference/data-storage-quick-reference.md`
+- **Quick Reference**: `docs/reference/session-management-quick-reference.md`
 - **Technical Details**: `docs/README_session_management.md`
 - **API Documentation**: `docs/PROTOCOL_session_management.md`
 
@@ -500,32 +500,104 @@ Export data for use with external analysis tools:
 3. **Test with Minimal Setup**: Try single device before multi-device sessions
 4. **Community Resources**: Access user forums and knowledge base
 
+## Quick Actions and Commands
+
+### Export Session to CSV
+```bash
+# Look for export folder in your session
+ls experiment_A_20250731_143022/exports/csv/
+```
+
+### Check Session Health
+```bash
+# Verify all expected files are present
+python -c "
+import json
+with open('session_metadata.json', 'r') as f:
+    data = json.load(f)
+print(f'Session: {data[\"session_id\"]}')
+print(f'Duration: {data.get(\"duration\", \"unknown\")} seconds')
+print(f'Files recorded: {sum(len(files) for files in data[\"files\"].values())}')
+"
+```
+
+### Find Problems in Session
+```bash
+# Look for errors in session log
+grep -i "error" experiment_A_20250731_143022_log.json
+```
+
+### Find Specific Data
+```bash
+# Find all videos from session
+find experiment_A_20250731_143022/ -name "*.mp4"
+
+# Find all sensor data
+find experiment_A_20250731_143022/ -name "*.csv"
+
+# Check file sizes
+ls -lh experiment_A_20250731_143022/devices/*/rgb_videos/
+ls -lh experiment_A_20250731_143022/webcam/
+```
+
+### Advanced Troubleshooting
+
+#### "I can't find my session"
+- Check `PythonApp/recordings/` folder
+- Look for folders with format `experiment_A_YYYYMMDD_HHMMSS`
+- If using default names, look for `session_YYYYMMDD_HHMMSS`
+
+#### "My video won't play"
+- Check file size (should be > 0 bytes)
+- Try VLC media player (handles more formats)  
+- Check session log for recording errors
+
+#### "I don't see sensor data"
+- Check `devices/[device_name]/sensor_data/` folder
+- Verify device was connected (check session_metadata.json)
+- Look for .csv files with device name
+
+#### "Session seems incomplete"
+- Check session status in metadata: should be "completed"
+- Look for "session_end" event in log
+- Check for error events in log
+
 ## Best Practices Summary
 
 ### Before Each Session
 - [ ] Verify all devices are connected and functional
-- [ ] Check available storage space
+- [ ] Check available storage space (session folders can be 50MB-2GB+)
 - [ ] Test recording with a short trial session
 - [ ] Prepare stimulus materials if needed
+- [ ] Navigate to `PythonApp/recordings/` to verify write permissions
 
 ### During Sessions
 - [ ] Monitor device connections continuously
 - [ ] Add meaningful markers at important events
 - [ ] Watch for error notifications and respond promptly
 - [ ] Keep sessions to reasonable lengths (< 2 hours recommended)
+- [ ] Monitor available disk space during long sessions
 
 ### After Sessions
-- [ ] Verify all expected files are present
-- [ ] Review session log for any errors
+- [ ] Verify all expected files are present in session folder
+- [ ] Review session log for any errors: `grep -i "error" *_log.json`
+- [ ] Check session_metadata.json shows status: "completed"
 - [ ] Start post-processing if desired
 - [ ] Backup important sessions
 - [ ] Document session notes while memory is fresh
 
 ### Data Organization
-- [ ] Use consistent naming conventions
+- [ ] Use consistent naming conventions for experiments
 - [ ] Organize related sessions in groups
 - [ ] Maintain external documentation of experimental conditions
-- [ ] Regular backup of critical data
+- [ ] Regular backup of critical data (sessions can be large)
 - [ ] Archive old sessions to free up space
+- [ ] Remember: Every session creates its own folder with all data organized inside
+
+### Quick Reference
+- **Session metadata**: Always start with `session_metadata.json` to understand what was recorded
+- **Event timeline**: Check `session_YYYYMMDD_HHMMSS_log.json` for detailed chronological events
+- **File formats**: Videos (.mp4), sensor data (.csv), calibration (.json)
+- **Troubleshooting**: Check session logs first, then verify file sizes aren't 0 bytes
 
 By following this user guide, you'll be able to effectively manage recording sessions and organize your multi-sensor data for successful analysis and research outcomes.

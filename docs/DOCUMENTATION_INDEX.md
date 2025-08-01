@@ -117,9 +117,8 @@ Quick reference materials and API documentation:
 
 | Document | Content | Purpose |
 |----------|---------|---------|
-| [data-storage-quick-reference.md](reference/data-storage-quick-reference.md) | Data storage and session quick reference | Quick reference |
+| [Session Management Quick Reference](reference/session-management-quick-reference.md) | Session lifecycle, operations, and troubleshooting quick reference | Quick reference |
 | [API Quick Reference](reference/) | API quick reference cards | Developer reference |
-| [Session Management Quick Reference](reference/session-management-quick-reference.md) | Session lifecycle and operations quick reference | Quick reference |
 
 ---
 
