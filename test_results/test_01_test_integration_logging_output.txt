@@ -1,0 +1,279 @@
+=== Integration Logging Test ===
+Category: Foundation
+Description: Basic logging and component integration
+Success: True
+Duration: 0.32s
+Exit Code: 0
+
+=== STDOUT ===
+04:56:23 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+04:56:23 [[32mINFO[0m] AppLogger: Log level: INFO
+04:56:23 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+04:56:23 [[32mINFO[0m] AppLogger: Console output: True
+04:56:23 [[32mINFO[0m] AppLogger: File output: True
+04:56:23 [[32mINFO[0m] AppLogger: Structured logging: True
+Warning: Could not import WebcamConfiguration: cannot import name 'Resolution' from 'config.webcam_config' (/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/config/webcam_config.py)
+Warning: Could not import RecoveryManager: cannot import name 'RecoveryManager' from 'error_handling.recovery_manager' (/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/src/error_handling/recovery_manager.py)
+Starting Multi-Sensor Recording System Logging Integration Test...
+04:56:23 [[32mINFO[0m] IntegrationTest: === Multi-Sensor Recording System - Comprehensive Logging Integration Test ===
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing Session Management logging...
+04:56:23 [[32mINFO[0m] session.session_manager: session manager initialized with base directory: test_recordings
+04:56:23 [[32mINFO[0m] session.session_manager: creating new session with name: integration_test_session
+04:56:23 [[32mINFO[0m] session.session_manager: session created: integration_test_session_20250801_045623
+04:56:23 [[32mINFO[0m] IntegrationTest: Session created: integration_test_session_20250801_045623
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing Calibration System logging...
+04:56:23 [[32mINFO[0m] calibration.calibration_manager: for initialized
+[DEBUG_LOG] CalibrationProcessor initialized
+04:56:23 [[32mINFO[0m] calibration.calibration_manager: CalibrationManager initialized with output directory: test_calibration
+04:56:23 [[36mDEBUG[0m] calibration.calibration_manager: Pattern: chessboard, Size: (9, 6), Square: 25.0mm
+04:56:23 [[32mINFO[0m] calibration.calibration_manager: Starting calibration session for devices: ['device1', 'device2']
+04:56:23 [[36mDEBUG[0m] calibration.calibration_manager: Created session folder: test_calibration/test_calibration_session
+[DEBUG_LOG] Calibration session started: test_calibration_session
+04:56:23 [[32mINFO[0m] IntegrationTest: Calibration session started: test_calibration_session
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing Network Server logging...
+04:56:23 [[32mINFO[0m] network.device_server: JsonSocketServer initialized for 0.0.0.0:9001 using length-prefixed JSON protocol
+04:56:23 [[32mINFO[0m] IntegrationTest: Network server instance created
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing Webcam Configuration logging...
+04:56:23 [[33mWARNING[0m] IntegrationTest: Webcam config test skipped - module not available
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing Error Recovery System logging...
+04:56:23 [[33mWARNING[0m] IntegrationTest: Recovery manager test skipped - module not available
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing exception handling with logging...
+04:56:23 [[31mERROR[0m] IntegrationTest: Successfully caught and logged test exception
+Traceback (most recent call last):
+  File "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/test_integration_logging.py", line 133, in test_comprehensive_logging
+    raise ValueError("Test exception for logging verification")
+ValueError: Test exception for logging verification
+04:56:23 [[36mDEBUG[0m] IntegrationTest: Debug message - detailed troubleshooting info
+04:56:23 [[32mINFO[0m] IntegrationTest: Info message - general application flow
+04:56:23 [[33mWARNING[0m] IntegrationTest: Warning message - potential issue detected
+04:56:23 [[31mERROR[0m] IntegrationTest: Error message - recoverable error occurred
+04:56:23 [[35mCRITICAL[0m] IntegrationTest: Critical message - serious system issue
+04:56:23 [[32mINFO[0m] IntegrationTest: Testing performance timing...
+04:56:23 [[32mINFO[0m] IntegrationTest: Operation completed in 100.1ms
+04:56:23 [[32mINFO[0m] IntegrationTest: Memory usage: RSS=65MB, VMS=493MB
+04:56:23 [[32mINFO[0m] IntegrationTest: Log files generated: ['structured.log', 'errors.log', 'application.log']
+04:56:23 [[32mINFO[0m] IntegrationTest: Log file structured.log: 565620 bytes
+04:56:23 [[32mINFO[0m] IntegrationTest: Log file errors.log: 4350 bytes
+04:56:23 [[32mINFO[0m] IntegrationTest: Log file application.log: 160445 bytes
+04:56:23 [[32mINFO[0m] IntegrationTest: === Comprehensive Logging Integration Test - SUCCESS ===
+✅ Comprehensive logging test PASSED
+04:56:23 [[32mINFO[0m] RotationTest: Testing log rotation by generating many log entries...
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 1: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 1: Additional debugging information for entry 1
+04:56:23 [[33mWARNING[0m] RotationTest: Milestone log entry 1
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 2: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 2: Additional debugging information for entry 2
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 3: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 3: Additional debugging information for entry 3
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 4: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 4: Additional debugging information for entry 4
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 5: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 5: Additional debugging information for entry 5
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 6: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 6: Additional debugging information for entry 6
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 7: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 7: Additional debugging information for entry 7
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 8: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 8: Additional debugging information for entry 8
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 9: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 9: Additional debugging information for entry 9
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 10: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 10: Additional debugging information for entry 10
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 11: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 11: Additional debugging information for entry 11
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 12: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 12: Additional debugging information for entry 12
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 13: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 13: Additional debugging information for entry 13
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 14: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 14: Additional debugging information for entry 14
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 15: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 15: Additional debugging information for entry 15
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 16: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 16: Additional debugging information for entry 16
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 17: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 17: Additional debugging information for entry 17
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 18: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 18: Additional debugging information for entry 18
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 19: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 19: Additional debugging information for entry 19
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 20: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 20: Additional debugging information for entry 20
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 21: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 21: Additional debugging information for entry 21
+04:56:23 [[33mWARNING[0m] RotationTest: Milestone log entry 21
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 22: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 22: Additional debugging information for entry 22
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 23: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 23: Additional debugging information for entry 23
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 24: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 24: Additional debugging information for entry 24
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 25: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 25: Additional debugging information for entry 25
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 26: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 26: Additional debugging information for entry 26
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 27: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 27: Additional debugging information for entry 27
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 28: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 28: Additional debugging information for entry 28
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 29: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 29: Additional debugging information for entry 29
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 30: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 30: Additional debugging information for entry 30
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 31: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 31: Additional debugging information for entry 31
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 32: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 32: Additional debugging information for entry 32
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 33: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 33: Additional debugging information for entry 33
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 34: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 34: Additional debugging information for entry 34
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 35: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 35: Additional debugging information for entry 35
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 36: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 36: Additional debugging information for entry 36
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 37: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 37: Additional debugging information for entry 37
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 38: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 38: Additional debugging information for entry 38
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 39: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 39: Additional debugging information for entry 39
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 40: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 40: Additional debugging information for entry 40
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 41: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 41: Additional debugging information for entry 41
+04:56:23 [[33mWARNING[0m] RotationTest: Milestone log entry 41
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 42: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 42: Additional debugging information for entry 42
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 43: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 43: Additional debugging information for entry 43
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 44: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 44: Additional debugging information for entry 44
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 45: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 45: Additional debugging information for entry 45
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 46: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 46: Additional debugging information for entry 46
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 47: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 47: Additional debugging information for entry 47
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 48: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 48: Additional debugging information for entry 48
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 49: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 49: Additional debugging information for entry 49
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 50: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 50: Additional debugging information for entry 50
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 51: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 51: Additional debugging information for entry 51
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 52: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 52: Additional debugging information for entry 52
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 53: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 53: Additional debugging information for entry 53
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 54: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 54: Additional debugging information for entry 54
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 55: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 55: Additional debugging information for entry 55
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 56: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 56: Additional debugging information for entry 56
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 57: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 57: Additional debugging information for entry 57
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 58: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 58: Additional debugging information for entry 58
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 59: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 59: Additional debugging information for entry 59
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 60: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 60: Additional debugging information for entry 60
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 61: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 61: Additional debugging information for entry 61
+04:56:23 [[33mWARNING[0m] RotationTest: Milestone log entry 61
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 62: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 62: Additional debugging information for entry 62
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 63: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 63: Additional debugging information for entry 63
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 64: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 64: Additional debugging information for entry 64
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 65: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 65: Additional debugging information for entry 65
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 66: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 66: Additional debugging information for entry 66
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 67: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 67: Additional debugging information for entry 67
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 68: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 68: Additional debugging information for entry 68
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 69: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 69: Additional debugging information for entry 69
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 70: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 70: Additional debugging information for entry 70
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 71: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 71: Additional debugging information for entry 71
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 72: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 72: Additional debugging information for entry 72
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 73: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 73: Additional debugging information for entry 73
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 74: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 74: Additional debugging information for entry 74
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 75: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 75: Additional debugging information for entry 75
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 76: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 76: Additional debugging information for entry 76
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 77: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 77: Additional debugging information for entry 77
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 78: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 78: Additional debugging information for entry 78
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 79: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 79: Additional debugging information for entry 79
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 80: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 80: Additional debugging information for entry 80
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 81: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 81: Additional debugging information for entry 81
+04:56:23 [[33mWARNING[0m] RotationTest: Milestone log entry 81
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 82: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 82: Additional debugging information for entry 82
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 83: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 83: Additional debugging information for entry 83
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 84: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 84: Additional debugging information for entry 84
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 85: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 85: Additional debugging information for entry 85
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 86: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 86: Additional debugging information for entry 86
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 87: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 87: Additional debugging information for entry 87
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 88: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 88: Additional debugging information for entry 88
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 89: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 89: Additional debugging information for entry 89
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 90: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 90: Additional debugging information for entry 90
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 91: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 91: Additional debugging information for entry 91
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 92: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 92: Additional debugging information for entry 92
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 93: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 93: Additional debugging information for entry 93
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 94: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 94: Additional debugging information for entry 94
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 95: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 95: Additional debugging information for entry 95
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 96: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 96: Additional debugging information for entry 96
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 97: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 97: Additional debugging information for entry 97
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 98: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 98: Additional debugging information for entry 98
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 99: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 99: Additional debugging information for entry 99
+04:56:23 [[32mINFO[0m] RotationTest: Log entry 100: Testing log rotation functionality with detailed messages
+04:56:23 [[36mDEBUG[0m] RotationTest: Debug entry 100: Additional debugging information for entry 100
+04:56:23 [[32mINFO[0m] RotationTest: Log rotation test completed
+✅ Log rotation test completed
+
+============================================================
+📋 TEST SUMMARY:
+✅ Centralized logging configuration
+✅ Multiple module logging integration
+✅ Different log levels and formatting
+✅ Exception handling with stack traces
+✅ Performance and memory logging
+✅ Log file creation and rotation
+============================================================
+
+=== STDERR ===
