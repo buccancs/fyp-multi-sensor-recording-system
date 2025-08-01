@@ -2,12 +2,12 @@
 
 This directory contains comprehensive documentation for the Multi-Sensor Recording System. 
 
-**Note:** Android Mobile Application documentation has been consolidated into the dedicated `../android/` directory with complete technical guides, user manuals, and protocol specifications.
+**Note:** Android Mobile Application documentation has been consolidated into the dedicated `../new_documentation/` directory with complete technical guides, user manuals, and protocol specifications.
 
 For Android application documentation, please refer to:
-- `../android/README_Android_Mobile_Application.md` - Technical overview and architecture
-- `../android/USER_GUIDE_Android_Mobile_Application.md` - User manual and procedures  
-- `../android/PROTOCOL_Android_Mobile_Application.md` - Protocol specifications and data contracts
+- `../new_documentation/README_Android_Mobile_Application.md` - Technical overview and architecture
+- `../new_documentation/USER_GUIDE_Android_Mobile_Application.md` - User manual and procedures  
+- `../new_documentation/PROTOCOL_Android_Mobile_Application.md` - Protocol specifications and data contracts
 
 ## Documentation Standards
 
@@ -21,9 +21,9 @@ All documentation follows these principles:
 ## Getting Started
 
 For Android application development and usage:
-1. **Technical Details**: Start with `../android/README_Android_Mobile_Application.md`
-2. **User Procedures**: Reference `../android/USER_GUIDE_Android_Mobile_Application.md`
-3. **API Integration**: Follow `../android/PROTOCOL_Android_Mobile_Application.md`
+1. **Technical Details**: Start with `../new_documentation/README_Android_Mobile_Application.md`
+2. **User Procedures**: Reference `../new_documentation/USER_GUIDE_Android_Mobile_Application.md`
+3. **API Integration**: Follow `../new_documentation/PROTOCOL_Android_Mobile_Application.md`
 
 ## Contributing to Documentation
 
