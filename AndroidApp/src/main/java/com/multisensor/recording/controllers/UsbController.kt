@@ -24,19 +24,25 @@ import javax.inject.Singleton
  * ✅ Implement USB device state persistence across app restarts
  * ✅ Add support for multiple simultaneous USB devices
  * 
+ * ✅ Integrate usage analytics and performance metrics - COMPLETED
+ * ✅ Add advanced connection quality monitoring and reporting - COMPLETED
  * TODO: Add device prioritization for recording when multiple devices are connected
  * TODO: Implement hot-swap detection for device replacement scenarios
  * TODO: Add configuration profiles for per-device settings persistence
- * TODO: Integrate usage analytics and performance metrics
  * TODO: Add network-based device status reporting for remote monitoring
  * TODO: Implement device-specific calibration state persistence
- * TODO: Add advanced connection quality monitoring and reporting
  * TODO: Support for custom device filtering and selection criteria
  */
 @Singleton
 class UsbController @Inject constructor(
     private val usbDeviceManager: UsbDeviceManager
 ) {
+    
+    // Performance analytics integration
+    private val performanceAnalytics = UsbPerformanceAnalytics()
+    
+    // Device prioritization system
+    private val devicePrioritizer = UsbDevicePrioritizer(performanceAnalytics)
     
     companion object {
         private const val USB_PREFS_NAME = "usb_device_prefs"
@@ -84,6 +90,7 @@ class UsbController @Inject constructor(
      * Handle USB device intent from system - extracted from MainActivity
      */
     fun handleUsbDeviceIntent(context: Context, intent: Intent) {
+        val startTime = System.currentTimeMillis()
         android.util.Log.d("UsbController", "[DEBUG_LOG] Handling USB device intent: ${intent.action}")
         
         when (intent.action) {
@@ -97,6 +104,13 @@ class UsbController @Inject constructor(
                 android.util.Log.d("UsbController", "[DEBUG_LOG] Intent action: ${intent.action} (not USB device related)")
             }
         }
+        
+        // Record performance metrics
+        val duration = System.currentTimeMillis() - startTime
+        performanceAnalytics.recordEvent(
+            UsbPerformanceAnalytics.PerformanceEventType.CALLBACK_NOTIFICATION,
+            duration
+        )
     }
     
     /**
@@ -174,9 +188,10 @@ class UsbController @Inject constructor(
     }
     
     /**
-     * Handle supported TOPDON device attachment
+     * Handle supported TOPDON device attachment with performance tracking and prioritization
      */
     private fun handleSupportedDeviceAttached(context: Context, usbDevice: UsbDevice) {
+        val startTime = System.currentTimeMillis()
         val deviceKey = getDeviceKey(usbDevice)
         android.util.Log.d("UsbController", "[DEBUG_LOG] ✓ Supported Topdon thermal camera detected!")
         android.util.Log.d("UsbController", "[DEBUG_LOG] Device key: $deviceKey")
@@ -186,18 +201,31 @@ class UsbController @Inject constructor(
         deviceConnectionTimes[deviceKey] = System.currentTimeMillis()
         deviceConnectionCounts[deviceKey] = (deviceConnectionCounts[deviceKey] ?: 0) + 1
         
-        // Show user notification
+        // Show user notification with priority information
         val deviceCount = connectedSupportedDevices.size
+        val deviceAssessments = getDevicePriorityAssessments()
+        val selectionResult = devicePrioritizer.optimizeDeviceSelection(deviceAssessments)
+        
         val message = if (deviceCount == 1) {
             "Topdon Thermal Camera Connected!\nDevice: ${usbDevice.deviceName}"
         } else {
-            "Topdon Camera #$deviceCount Connected!\nDevice: ${usbDevice.deviceName}\nTotal devices: $deviceCount"
+            val primaryDevice = selectionResult.primaryDevice?.deviceKey?.substringAfterLast("/") ?: "Unknown"
+            "Topdon Camera #$deviceCount Connected!\nDevice: ${usbDevice.deviceName}\nPrimary: $primaryDevice"
         }
         
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         
-        // Update status
-        callback?.updateStatusText(getMultiDeviceStatusText())
+        // Update status with prioritization information
+        val statusText = when (deviceCount) {
+            1 -> "1 Topdon thermal camera connected - Ready for recording"
+            else -> {
+                val primaryInfo = selectionResult.primaryDevice?.let { 
+                    it.deviceKey.substringAfterLast("/") + " (${it.priorityLevel.name})"
+                } ?: "Auto-selecting"
+                "$deviceCount Topdon thermal cameras connected - Primary: $primaryInfo"
+            }
+        }
+        callback?.updateStatusText(statusText)
         
         // Save device state persistence
         saveDeviceConnectionState(context, usbDevice)
@@ -214,6 +242,14 @@ class UsbController @Inject constructor(
         
         // Notify callback
         callback?.onSupportedDeviceAttached(usbDevice)
+        
+        // Record performance metrics
+        val duration = System.currentTimeMillis() - startTime
+        performanceAnalytics.recordEvent(
+            UsbPerformanceAnalytics.PerformanceEventType.DEVICE_ATTACHMENT,
+            duration,
+            deviceKey
+        )
     }
     
     /**
@@ -643,6 +679,125 @@ class UsbController @Inject constructor(
                         append("  • Device $key: $count connections\n")
                     }
                 }
+            }
+        }
+    }
+    
+    // ===== ADVANCED FEATURES: Performance Analytics & Device Prioritization =====
+    
+    /**
+     * Get device priority assessments for all connected devices
+     * Academic implementation using multi-criteria decision analysis
+     */
+    fun getDevicePriorityAssessments(): List<UsbDevicePrioritizer.DevicePriorityAssessment> {
+        return connectedSupportedDevices.map { (deviceKey, device) ->
+            val connectionTime = deviceConnectionTimes[deviceKey]
+            val connectionCount = deviceConnectionCounts[deviceKey] ?: 0
+            devicePrioritizer.assessDevicePriority(deviceKey, device, connectionTime, connectionCount)
+        }
+    }
+    
+    /**
+     * Get optimized device selection for recording operations
+     * Uses advanced algorithms for multi-device scenario optimization
+     */
+    fun getOptimizedDeviceSelection(maxDevices: Int = 3): UsbDevicePrioritizer.DeviceSelectionResult {
+        val assessments = getDevicePriorityAssessments()
+        return devicePrioritizer.optimizeDeviceSelection(assessments, maxDevices)
+    }
+    
+    /**
+     * Get comprehensive performance analytics report
+     * Academic-grade analysis with statistical metrics
+     */
+    fun getPerformanceAnalyticsReport(context: Context): UsbPerformanceAnalytics.PerformanceReport {
+        return performanceAnalytics.generatePerformanceReport(context)
+    }
+    
+    /**
+     * Monitor connection quality for a specific device
+     * Real-time quality assessment with predictive analysis
+     */
+    fun monitorDeviceConnectionQuality(deviceKey: String): String {
+        return performanceAnalytics.monitorConnectionQuality(deviceKey)
+    }
+    
+    /**
+     * Generate detailed priority analysis report
+     * Academic-style analysis with mathematical rigor
+     */
+    fun generateDevicePriorityReport(): String {
+        val assessments = getDevicePriorityAssessments()
+        return devicePrioritizer.generatePriorityAnalysisReport(assessments)
+    }
+    
+    /**
+     * Update device priority based on real-time performance feedback
+     * Implements adaptive learning for continuous optimization
+     */
+    fun updateDevicePerformanceFeedback(
+        deviceKey: String,
+        performanceScore: Double,
+        actualReliability: Double,
+        resourceUsage: Double
+    ) {
+        devicePrioritizer.updateDevicePriorityFeedback(
+            deviceKey, performanceScore, actualReliability, resourceUsage
+        )
+    }
+    
+    /**
+     * Get real-time resource utilization metrics
+     * Academic-grade performance monitoring
+     */
+    fun getResourceUtilizationMetrics(): Map<String, Double> {
+        return performanceAnalytics.getResourceUtilization()
+    }
+    
+    /**
+     * Reset all performance analytics data
+     * Useful for controlled experiments and testing
+     */
+    fun resetPerformanceAnalytics() {
+        performanceAnalytics.resetAnalytics()
+    }
+    
+    /**
+     * Get comprehensive system status with academic analysis
+     * Combines multi-device state, performance metrics, and priority analysis
+     */
+    fun getComprehensiveSystemStatus(context: Context): String {
+        val basicStatus = getMultiDeviceStatusSummary(context)
+        val performanceReport = getPerformanceAnalyticsReport(context)
+        val priorityReport = generateDevicePriorityReport()
+        val selectionResult = getOptimizedDeviceSelection()
+        
+        return buildString {
+            append("Comprehensive USB Controller System Analysis\n")
+            append("═══════════════════════════════════════════════\n\n")
+            
+            append("MULTI-DEVICE STATUS:\n")
+            append(basicStatus)
+            append("\n\n")
+            
+            append("PERFORMANCE ANALYTICS:\n")
+            append("• Total Events Processed: ${performanceReport.totalEvents}\n")
+            append("• Average Response Time: ${"%.2f".format(performanceReport.averageResponseTime)}ms\n")
+            append("• 95th Percentile Response: ${performanceReport.percentile95ResponseTime}ms\n")
+            append("• CPU Efficiency Score: ${"%.3f".format(performanceReport.cpuEfficiencyScore)}\n")
+            append("• Memory Utilization: ${performanceReport.memoryUtilization / 1024}KB\n")
+            append("• Event Throughput: ${"%.2f".format(performanceReport.eventThroughput)} events/sec\n\n")
+            
+            append("DEVICE PRIORITIZATION:\n")
+            append("• Primary Device: ${selectionResult.primaryDevice?.deviceKey ?: "None"}\n")
+            append("• Secondary Devices: ${selectionResult.secondaryDevices.size}\n")
+            append("• Selection Quality Score: ${"%.3f".format(selectionResult.optimizationMetrics.totalQualityScore)}\n")
+            append("• Expected Reliability: ${"%.3f".format(selectionResult.optimizationMetrics.expectedReliability)}\n")
+            append("• Resource Efficiency: ${"%.3f".format(selectionResult.optimizationMetrics.resourceEfficiency)}\n\n")
+            
+            append("SYSTEM RECOMMENDATIONS:\n")
+            performanceReport.systemRecommendations.forEach { recommendation ->
+                append("• $recommendation\n")
             }
         }
     }
