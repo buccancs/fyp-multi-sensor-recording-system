@@ -1,47 +1,41 @@
 # Comprehensive Documentation
 
-This directory contains comprehensive documentation for the Multi-Sensor Recording System. 
+This directory previously contained comprehensive documentation for the Multi-Sensor Recording System. The content has been consolidated into the main Python Desktop Controller documentation for better organization and maintenance.
 
-**Note:** Android Mobile Application documentation has been consolidated into the dedicated `../new_documentation/` directory with complete technical guides, user manuals, and protocol specifications.
+## Consolidated Documentation
 
-For Android application documentation, please refer to:
-- `../new_documentation/README_Android_Mobile_Application.md` - Technical overview and architecture
-- `../new_documentation/USER_GUIDE_Android_Mobile_Application.md` - User manual and procedures  
-- `../new_documentation/PROTOCOL_Android_Mobile_Application.md` - Protocol specifications and data contracts
+The comprehensive guides have been merged into the following main documentation files:
 
-## Documentation Standards
+### 📱 **UI Documentation** → [User Guide](../new_documentation/USER_GUIDE_python_desktop_controller.md)
+User interface guidance is now included in the main Python Desktop Controller user guide with enhanced practical examples and workflows.
 
-All documentation follows these principles:
+### 📊 **Logging Documentation** → [Technical Documentation](../new_documentation/README_python_desktop_controller.md) & [Protocol Specification](../new_documentation/PROTOCOL_python_desktop_controller.md)
+Logging and monitoring information has been integrated into:
+- Technical implementation details in the README
+- Protocol specifications in the PROTOCOL documentation
 
-- **Comprehensive Coverage**: Complete information for each topic
-- **Research-Focused**: Tailored for scientific research applications
-- **Visual Integration**: Diagrams and tables for complex concepts
-- **Practical Examples**: Real code snippets and usage patterns
+### 🧪 **Testing Documentation** → [Technical Documentation](../new_documentation/README_python_desktop_controller.md)
+Testing framework and methodology information has been consolidated into the main technical documentation with enhanced examples and architecture diagrams.
+
+## Benefits of Consolidation
+
+- **Reduced Maintenance**: Single authoritative source for each topic
+- **Improved Discoverability**: Clear entry points for different user types
+- **Consistent Information**: Eliminates conflicting or outdated information
+- **Better Organization**: Logical structure follows user workflows
 
 ## Getting Started
 
-For Android application development and usage:
-1. **Technical Details**: Start with `../new_documentation/README_Android_Mobile_Application.md`
-2. **User Procedures**: Reference `../new_documentation/USER_GUIDE_Android_Mobile_Application.md`
-3. **API Integration**: Follow `../new_documentation/PROTOCOL_Android_Mobile_Application.md`
-
-## Contributing to Documentation
-
-When updating these guides:
-
-1. Maintain the established structure and style
-2. Update all related sections when making changes
-3. Include mermaid diagrams for complex processes
-4. Add tables for reference information
-5. Keep examples current with the codebase
-6. Cross-reference related sections
+1. **For UI Development**: Start with the [Python Desktop Controller User Guide](../new_documentation/USER_GUIDE_python_desktop_controller.md)
+2. **For Technical Implementation**: Reference the [Python Desktop Controller Technical Documentation](../new_documentation/README_python_desktop_controller.md)
+3. **For Protocol Details**: Follow the [Python Desktop Controller Protocol Specification](../new_documentation/PROTOCOL_python_desktop_controller.md)
 
 ## Related Documentation
 
 - [Technical Documentation](../technical/): Detailed technical specifications
 - [User Guides](../user-guides/): End-user documentation
-- [API Documentation](../api/): API reference materials
+- [API Documentation](../API_REFERENCE.md): API reference materials
 
 ---
 
-This comprehensive documentation suite provides complete coverage of the Multi-Sensor Recording System for researchers, developers, and system administrators.
+The consolidated documentation provides complete coverage of the Multi-Sensor Recording System with improved organization and maintainability.

@@ -31,11 +31,10 @@ This directory contains all consolidated documentation for the Multi-Sensor Sync
   - Getting started tutorials
 
 ### `/comprehensive/`
-- **Complete system documentation** covering:
-  - PC/Android UI comprehensive guide with screenshots
-  - PC/Android logging systems documentation
-  - PC/Android testing infrastructure guide
-  - Cross-platform integration documentation
+- **Consolidation directory** containing:
+  - Updated README explaining consolidation of documentation
+  - References to consolidated Python Desktop Controller documentation
+  - Historical organization information
 
 ### `/deprecated/`
 - **Development-stage documents** that are no longer actively maintained:
@@ -76,7 +75,13 @@ This organization ensures that current, relevant documentation is easily accessi
 - `technical/system-architecture-overview.md` - System overview
 
 ### Comprehensive Guides
+
+- `new_documentation/README_python_desktop_controller.md` - Complete Python Desktop Controller technical documentation
+- `new_documentation/USER_GUIDE_python_desktop_controller.md` - Python Desktop Controller user guide
+- `new_documentation/PROTOCOL_python_desktop_controller.md` - Python Desktop Controller protocol specification
+
 - `new_documentation/` - Complete Android Mobile Application documentation with technical guides, user manuals, and protocol specifications
+
 
 ### Integration Guides
 - `new_documentation/USER_GUIDE_shimmer3_gsr_plus.md` - Shimmer3 GSR+ practical user guide

@@ -12,6 +12,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 👥 User Documentation
 - **[Complete User Guide](user-guides/CONSOLIDATED_USER_GUIDE.md)** - Comprehensive user manual
+- **[Python Desktop Controller - User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Python Desktop Controller usage guide
 - **[Navigation Guide](user-guides/CONSOLIDATED_USER_GUIDE.md#navigation-and-user-interface)** - Interface and navigation
 - **[Device Management](user-guides/CONSOLIDATED_USER_GUIDE.md#device-management)** - Device setup and configuration
 - **[Recording Sessions](user-guides/CONSOLIDATED_USER_GUIDE.md#recording-sessions)** - Recording procedures and best practices
@@ -21,6 +22,8 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 🔧 Developer Documentation
 - **[Implementation Guide](implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Complete technical implementation
+- **[Python Desktop Controller - Technical](new_documentation/README_python_desktop_controller.md)** - Python Desktop Controller architecture and implementation
+- **[Python Desktop Controller - Protocol](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols and data formats
 - **[Repository Component Inventory](REPOSITORY_COMPONENT_INVENTORY.md)** - Complete catalog of all features, components, and modules
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
@@ -50,6 +53,21 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[Performance Evaluation](academic/Performance-Evaluation.md)** - System performance analysis
 - **[Design Patterns Analysis](academic/Design-Patterns-Analysis.md)** - Architectural pattern analysis
 
+### 🖥️ Python Desktop Controller Application
+The central command and control hub documentation:
+
+- **[Technical Architecture](new_documentation/README_python_desktop_controller.md)** - Complete technical implementation and architecture
+- **[User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Step-by-step usage instructions and workflows
+- **[Protocol Specification](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols, APIs, and data formats
+
+**Key Features Documented:**
+- Master orchestration and device coordination
+- Real-time monitoring and status tracking
+- Multi-device session management
+- USB webcam integration and control
+- Network communication protocols
+- Data aggregation and post-session analysis
+
 ---
 
 ## Documentation Structure
@@ -60,6 +78,9 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [README.md](../README.md) | Project overview and quick start | All users |
+| [README_python_desktop_controller.md](new_documentation/README_python_desktop_controller.md) | Python Desktop Controller technical documentation | Developers |
+| [USER_GUIDE_python_desktop_controller.md](new_documentation/USER_GUIDE_python_desktop_controller.md) | Python Desktop Controller user guide | End users |
+| [PROTOCOL_python_desktop_controller.md](new_documentation/PROTOCOL_python_desktop_controller.md) | Python Desktop Controller protocols and APIs | Developers |
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
 
@@ -121,7 +142,12 @@ Detailed technical specifications and architecture documentation:
 |----------|---------|---------|
 | [system-architecture-specification.md](technical/system-architecture-specification.md) | Complete system architecture | Architecture reference |
 | [UIController-Enhanced-Features.md](technical/UIController-Enhanced-Features.md) | UI enhancement details | Development reference |
+
+| [mobile-application-architecture.md](technical/mobile-application-architecture.md) | Android app architecture | Mobile development |
+| [network-protocols-synchronization.md](technical/network-protocols-synchronization.md) | Network protocols | Network development |
+
 | [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
+
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
 | [thermal-camera-integration.md](technical/thermal-camera-integration.md) | Thermal camera setup | Hardware integration |
 | [computer-vision-methodology.md](technical/computer-vision-methodology.md) | CV implementation | Computer vision |
