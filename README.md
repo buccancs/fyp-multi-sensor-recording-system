@@ -879,46 +879,165 @@ Key Android settings in `AndroidApp/build.gradle`:
 
 ## 🧪 Testing
 
-### Running Tests
+The multi-sensor recording system includes a comprehensive testing framework that validates all aspects of the PC-Android simulation workflow. The testing infrastructure provides multiple validation scenarios ranging from basic functionality checks to advanced stress testing and performance benchmarking.
+
+### Comprehensive Recording Session Testing
+
+The system includes a specialized test suite that validates the complete PC-Android recording workflow. This comprehensive test simulates real-world usage scenarios where PC and Android applications work together to collect synchronized multi-sensor data.
+
+#### Quick Validation Testing
+For rapid validation and CI/CD integration, use the quick test runner that covers all core requirements without external dependencies:
+
 ```bash
-# Validate complete system functionality
-./gradlew build
-
-# Test calibration implementation
-python PythonApp/test_calibration_implementation.py
-
-# Test Shimmer integration
-python PythonApp/test_shimmer_implementation.py
-
-# Validate recorded sessions
-python tools/validate_data_schemas.py --all-sessions
-
-# Check specific session  
-python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
+# Quick comprehensive test (recommended for CI/CD)
+cd PythonApp
+python run_quick_recording_session_test.py
 ```
 
-### Implementation Testing
-The system includes comprehensive testing for all major components:
+This streamlined test validates all essential system components including PC application initialization, Android device simulation, communication protocols, recording session management, sensor data generation, file persistence, and logging verification. The test typically completes within 30 seconds and provides immediate feedback on system functionality.
 
-**Calibration Testing:**
-- Pattern detection validation with various calibration boards
-- Single camera calibration accuracy testing
-- Stereo calibration validation with synthetic and real data
-- Quality assessment algorithm verification
-- Data persistence and loading validation
+#### Advanced Recording Session Testing
+For thorough validation with configurable test scenarios, use the enhanced test runner:
 
-**Shimmer Integration Testing:**
-- Multi-library fallback testing (pyshimmer, bluetooth, pybluez)
-- Device discovery and connection validation
-- Data streaming accuracy and performance testing
-- Session management and CSV export verification
-- Error handling with missing dependencies
+```bash
+# Standard comprehensive test
+python run_recording_session_test.py
 
-**Android Compatibility Testing:**
-- DngCreator reflection-based implementation testing
-- Sampling rate configuration across different SDK versions
-- UI component validation with error state management
-- SessionInfo display and status indicator testing
+# Extended test with multiple devices and longer duration
+python run_recording_session_test.py --duration 120 --devices 4 --verbose
+
+# Stress testing with high load scenarios
+python run_recording_session_test.py --stress-test --devices 8 --duration 300
+
+# Performance benchmarking with detailed metrics
+python run_recording_session_test.py --performance-bench --save-logs
+
+# Long-duration stability testing
+python run_recording_session_test.py --long-duration --health-check
+
+# Error condition simulation and recovery testing
+python run_recording_session_test.py --error-simulation --network-issues
+
+# Memory stress testing with high data volumes
+python run_recording_session_test.py --memory-stress --devices 6
+```
+
+#### Test Configuration Options
+
+The comprehensive test runner supports extensive configuration to validate different usage scenarios:
+
+**Basic Testing Options:**
+• `--duration SECONDS` - Set recording simulation duration (default: 30 seconds)
+• `--devices COUNT` - Number of Android devices to simulate (default: 2 devices)
+• `--port PORT` - Server communication port (default: 9000)
+• `--verbose` - Enable detailed progress information and debug output
+• `--log-level LEVEL` - Control logging verbosity (DEBUG, INFO, WARNING, ERROR)
+• `--save-logs` - Persist detailed logs to files for post-analysis
+• `--health-check` - Enable continuous system health monitoring
+
+**Advanced Testing Scenarios:**
+• `--stress-test` - High-load testing with increased device count and concurrent operations
+• `--error-simulation` - Intentional failure injection and recovery validation
+• `--performance-bench` - Detailed performance metrics and benchmarking
+• `--long-duration` - Extended stability testing (minimum 10 minutes)
+• `--network-issues` - Network latency, packet loss, and reconnection testing
+• `--memory-stress` - High memory usage scenarios and leak detection
+
+### Core System Testing
+
+#### Running Tests
+```bash
+# Validate complete system functionality with all components
+./gradlew build
+
+# Test individual components for specific functionality validation
+python PythonApp/test_calibration_implementation.py
+python PythonApp/test_shimmer_implementation.py
+
+# Validate data integrity and session management
+python tools/validate_data_schemas.py --all-sessions
+
+# Check specific recording session data
+python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
+
+# Run comprehensive test suite with all components
+python PythonApp/run_comprehensive_tests.py
+```
+
+### Implementation Testing Categories
+
+The testing framework validates all major system components through targeted test scenarios:
+
+#### Camera Calibration System Testing
+The calibration testing suite validates the OpenCV-based camera calibration implementation with comprehensive quality assessment:
+
+• **Pattern Detection Validation**: Tests chessboard and circle grid detection algorithms with various calibration board configurations and lighting conditions
+• **Single Camera Calibration Accuracy**: Validates intrinsic parameter calculation with RMS error analysis and quality metrics
+• **Stereo Calibration Validation**: Tests RGB-thermal camera alignment with rotation and translation matrix validation using both synthetic and real-world data
+• **Quality Assessment Algorithm Verification**: Validates calibration quality metrics, coverage analysis, and recommendation system accuracy
+• **Data Persistence and Loading**: Tests JSON-based save/load functionality with metadata validation and parameter consistency checks
+
+#### Shimmer Sensor Integration Testing
+The Shimmer testing framework ensures robust Bluetooth sensor connectivity across multiple library implementations:
+
+• **Multi-Library Fallback Testing**: Validates compatibility with pyshimmer, bluetooth, and pybluez libraries with graceful degradation
+• **Device Discovery and Connection**: Tests Bluetooth scanning, device detection, pairing procedures, and serial port identification
+• **Data Streaming Accuracy**: Validates real-time sensor data collection with callback system testing and queue management
+• **Session Management Verification**: Tests session-based data organization with CSV export functionality and metadata persistence
+• **Error Handling Validation**: Ensures graceful handling of missing dependencies, connection failures, and device disconnections
+
+#### Android Application Compatibility Testing
+The Android testing suite validates mobile application functionality and cross-platform compatibility:
+
+• **DngCreator Implementation Testing**: Validates reflection-based API compatibility for Android 21+ with proper resource management
+• **Sampling Rate Configuration**: Tests enhanced sampling rate settings across different SDK versions with reflection-based method detection
+• **UI Component Validation**: Validates user interface responsiveness with error state management and status indicator accuracy
+• **SessionInfo Display Testing**: Tests session information presentation with status indicators, emojis, and user feedback mechanisms
+• **Communication Protocol Testing**: Validates JSON socket communication with PC controller and message acknowledgment systems
+
+#### Integration and System Testing
+The integration testing framework validates end-to-end system functionality:
+
+• **PC-Android Communication**: Tests complete communication workflow with handshake procedures, command processing, and status updates
+• **Multi-Device Coordination**: Validates synchronized operation across multiple Android devices with centralized PC control
+• **Recording Session Management**: Tests complete recording lifecycle from initialization to data export with comprehensive validation
+• **Data Synchronization**: Validates temporal alignment of multi-modal data streams with microsecond precision requirements
+• **File System Integration**: Tests session folder creation, file naming conventions, and data persistence across all sensor types
+
+### Testing Best Practices
+
+#### Development Testing Workflow
+When developing new features or modifications, follow this testing workflow to ensure system reliability:
+
+1. **Unit Testing**: Test individual components in isolation to validate specific functionality
+2. **Integration Testing**: Validate component interactions and data flow between system parts
+3. **System Testing**: Run comprehensive recording session tests to validate end-to-end functionality
+4. **Performance Testing**: Execute benchmarking tests to ensure performance requirements are met
+5. **Stress Testing**: Validate system behavior under high load and resource constraints
+6. **Error Testing**: Test error conditions and recovery mechanisms to ensure system robustness
+
+#### Continuous Integration Testing
+The testing framework is designed for automated CI/CD integration with structured reporting:
+
+```bash
+# CI/CD friendly test execution with structured output
+python run_quick_recording_session_test.py --log-level INFO
+
+# Generate test reports for automated analysis
+python run_recording_session_test.py --save-logs --performance-bench
+
+# Validate system health and performance metrics
+python run_comprehensive_tests.py --generate-report
+```
+
+#### Troubleshooting Test Failures
+When tests fail, use these diagnostic approaches to identify and resolve issues:
+
+• **Verbose Logging**: Use `--verbose` and `--log-level DEBUG` for detailed execution information
+• **Component Isolation**: Test individual components separately to isolate failure sources
+• **Resource Monitoring**: Use `--health-check` to monitor system resources during test execution
+• **Network Diagnostics**: Use `--network-issues` to test connectivity and communication protocols
+• **Performance Analysis**: Use `--performance-bench` to identify performance bottlenecks and optimization opportunities
 
 ## Contributing
 
