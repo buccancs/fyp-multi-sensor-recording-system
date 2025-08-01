@@ -17,11 +17,15 @@ import sys
 def validate_documentation_files():
     """Validate that all required documentation files exist"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
+    new_docs_dir = os.path.join(docs_dir, 'new_documentation')
     
     required_files = [
         'README_python_desktop_controller.md',
         'USER_GUIDE_python_desktop_controller.md', 
         'PROTOCOL_python_desktop_controller.md',
+    ]
+    
+    other_required_files = [
         'DOCUMENTATION_INDEX.md'
     ]
     
@@ -29,7 +33,19 @@ def validate_documentation_files():
     print("=" * 50)
     
     all_files_exist = True
+    
+    # Check files in new_documentation folder
     for filename in required_files:
+        filepath = os.path.join(new_docs_dir, filename)
+        if os.path.exists(filepath):
+            size = os.path.getsize(filepath)
+            print(f"✓ new_documentation/{filename} ({size:,} bytes)")
+        else:
+            print(f"❌ new_documentation/{filename} - NOT FOUND")
+            all_files_exist = False
+    
+    # Check other files in docs root
+    for filename in other_required_files:
         filepath = os.path.join(docs_dir, filename)
         if os.path.exists(filepath):
             size = os.path.getsize(filepath)
@@ -90,6 +106,7 @@ def validate_source_structure():
 def validate_documentation_content():
     """Validate key content exists in documentation"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
+    new_docs_dir = os.path.join(docs_dir, 'new_documentation')
     
     print("\n📄 Validating Documentation Content")
     print("=" * 50)
@@ -130,7 +147,12 @@ def validate_documentation_content():
     all_content_valid = True
     
     for check in content_checks:
-        filepath = os.path.join(docs_dir, check['file'])
+        # Check if file is in new_documentation directory
+        if check['file'] in ['README_python_desktop_controller.md', 'USER_GUIDE_python_desktop_controller.md', 'PROTOCOL_python_desktop_controller.md']:
+            filepath = os.path.join(new_docs_dir, check['file'])
+        else:
+            filepath = os.path.join(docs_dir, check['file'])
+            
         if os.path.exists(filepath):
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -152,6 +174,7 @@ def validate_documentation_content():
 def validate_mermaid_diagrams():
     """Validate that Mermaid diagrams are present"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
+    new_docs_dir = os.path.join(docs_dir, 'new_documentation')
     
     print("\n🔗 Validating Mermaid Diagrams")
     print("=" * 50)
@@ -164,7 +187,7 @@ def validate_mermaid_diagrams():
     
     diagram_count = 0
     for filename in files_to_check:
-        filepath = os.path.join(docs_dir, filename)
+        filepath = os.path.join(new_docs_dir, filename)
         if os.path.exists(filepath):
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()

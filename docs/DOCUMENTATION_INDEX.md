@@ -12,7 +12,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 👥 User Documentation
 - **[Complete User Guide](user-guides/CONSOLIDATED_USER_GUIDE.md)** - Comprehensive user manual
-- **[Python Desktop Controller - User Guide](USER_GUIDE_python_desktop_controller.md)** - Python Desktop Controller usage guide
+- **[Python Desktop Controller - User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Python Desktop Controller usage guide
 - **[Navigation Guide](user-guides/CONSOLIDATED_USER_GUIDE.md#navigation-and-user-interface)** - Interface and navigation
 - **[Device Management](user-guides/CONSOLIDATED_USER_GUIDE.md#device-management)** - Device setup and configuration
 - **[Recording Sessions](user-guides/CONSOLIDATED_USER_GUIDE.md#recording-sessions)** - Recording procedures and best practices
@@ -21,8 +21,8 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 🔧 Developer Documentation
 - **[Implementation Guide](implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Complete technical implementation
-- **[Python Desktop Controller - Technical](README_python_desktop_controller.md)** - Python Desktop Controller architecture and implementation
-- **[Python Desktop Controller - Protocol](PROTOCOL_python_desktop_controller.md)** - Network protocols and data formats
+- **[Python Desktop Controller - Technical](new_documentation/README_python_desktop_controller.md)** - Python Desktop Controller architecture and implementation
+- **[Python Desktop Controller - Protocol](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols and data formats
 - **[Repository Component Inventory](REPOSITORY_COMPONENT_INVENTORY.md)** - Complete catalog of all features, components, and modules
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
@@ -37,9 +37,9 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 ### 🖥️ Python Desktop Controller Application
 The central command and control hub documentation:
 
-- **[Technical Architecture](README_python_desktop_controller.md)** - Complete technical implementation and architecture
-- **[User Guide](USER_GUIDE_python_desktop_controller.md)** - Step-by-step usage instructions and workflows
-- **[Protocol Specification](PROTOCOL_python_desktop_controller.md)** - Network protocols, APIs, and data formats
+- **[Technical Architecture](new_documentation/README_python_desktop_controller.md)** - Complete technical implementation and architecture
+- **[User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Step-by-step usage instructions and workflows
+- **[Protocol Specification](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols, APIs, and data formats
 
 **Key Features Documented:**
 - Master orchestration and device coordination
@@ -59,9 +59,9 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [README.md](../README.md) | Project overview and quick start | All users |
-| [README_python_desktop_controller.md](README_python_desktop_controller.md) | Python Desktop Controller technical documentation | Developers |
-| [USER_GUIDE_python_desktop_controller.md](USER_GUIDE_python_desktop_controller.md) | Python Desktop Controller user guide | End users |
-| [PROTOCOL_python_desktop_controller.md](PROTOCOL_python_desktop_controller.md) | Python Desktop Controller protocols and APIs | Developers |
+| [README_python_desktop_controller.md](new_documentation/README_python_desktop_controller.md) | Python Desktop Controller technical documentation | Developers |
+| [USER_GUIDE_python_desktop_controller.md](new_documentation/USER_GUIDE_python_desktop_controller.md) | Python Desktop Controller user guide | End users |
+| [PROTOCOL_python_desktop_controller.md](new_documentation/PROTOCOL_python_desktop_controller.md) | Python Desktop Controller protocols and APIs | Developers |
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
 | [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |

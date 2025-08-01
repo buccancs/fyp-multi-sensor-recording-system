@@ -75,9 +75,9 @@ This organization ensures that current, relevant documentation is easily accessi
 - `technical/system-architecture-overview.md` - System overview
 
 ### Comprehensive Guides
-- `README_python_desktop_controller.md` - Complete Python Desktop Controller technical documentation
-- `USER_GUIDE_python_desktop_controller.md` - Python Desktop Controller user guide
-- `PROTOCOL_python_desktop_controller.md` - Python Desktop Controller protocol specification
+- `new_documentation/README_python_desktop_controller.md` - Complete Python Desktop Controller technical documentation
+- `new_documentation/USER_GUIDE_python_desktop_controller.md` - Python Desktop Controller user guide
+- `new_documentation/PROTOCOL_python_desktop_controller.md` - Python Desktop Controller protocol specification
 
 ### Integration Guides
 - `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
