@@ -327,6 +327,48 @@ Monitor recording quality in real-time:
    - Receive notifications for connectivity issues
    - Automatic recovery for minor problems
 
+## System Monitoring and Logging
+
+### Real-time Monitoring
+
+The application provides comprehensive monitoring capabilities for research operations:
+
+**Performance Monitoring:**
+- **CPU Usage**: Monitor processing load during multi-device recording
+- **Memory Usage**: Track memory consumption and detect potential leaks
+- **Network Bandwidth**: Monitor data transfer rates and connectivity quality
+- **Storage Space**: Alert when disk space becomes critical
+
+**Session Monitoring:**
+- **Device Status**: Real-time tracking of all connected devices
+- **Data Quality**: Continuous monitoring of recording quality metrics
+- **Synchronization**: Verify temporal alignment across all sensors
+- **Error Detection**: Automatic identification of potential issues
+
+### Log Management
+
+**Log Categories:**
+- **Session Logs**: Recording session details and participant information
+- **Device Logs**: Hardware communication and status information
+- **Network Logs**: Connection events and data transfer details
+- **Performance Logs**: System resource usage and optimization data
+- **Error Logs**: Issue detection and diagnostic information
+
+**Log Locations:**
+- **Session Logs**: `logs/sessions/session_YYYYMMDD_HHMMSS.log`
+- **Application Logs**: `logs/application/multisensor.log`
+- **Performance Logs**: `logs/performance/performance_YYYYMMDD.log`
+
+**Log Configuration:**
+```json
+{
+    "log_level": "INFO",
+    "enable_performance_logging": true,
+    "log_rotation_size": "100MB",
+    "log_retention_days": 30
+}
+```
+
 ## Troubleshooting Common Issues
 
 ### Device Connection Problems

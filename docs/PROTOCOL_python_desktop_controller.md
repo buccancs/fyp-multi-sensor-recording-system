@@ -540,6 +540,91 @@ class WebcamManager:
         """Get single frame for preview"""
 ```
 
+## Logging and Monitoring Protocols
+
+### Log Message Format
+
+**Structured Log Entry:**
+```json
+{
+    "timestamp": "2024-01-31T10:30:45.123Z",
+    "level": "INFO",
+    "category": "session",
+    "component": "SessionManager",
+    "message": "Recording session started",
+    "context": {
+        "session_id": "session_20240131_103045",
+        "device_count": 3,
+        "duration_planned": 300
+    },
+    "metadata": {
+        "thread_id": "main",
+        "process_id": 1234,
+        "memory_usage_mb": 256
+    }
+}
+```
+
+**Log Categories and Levels:**
+
+| Category | Description | Typical Levels |
+|----------|-------------|----------------|
+| `session` | Session management operations | INFO, ERROR |
+| `device` | Device communication events | DEBUG, INFO, WARNING |
+| `network` | Network protocol messages | DEBUG, INFO, ERROR |
+| `camera` | Camera operations and status | INFO, WARNING, ERROR |
+| `calibration` | Calibration procedures | INFO, ERROR |
+| `performance` | Performance metrics | DEBUG, INFO |
+| `security` | Security and permissions | WARNING, ERROR, CRITICAL |
+
+### Performance Monitoring
+
+**Performance Metrics Protocol:**
+```json
+{
+    "timestamp": "2024-01-31T10:30:45.123Z",
+    "metrics": {
+        "cpu_usage_percent": 45.2,
+        "memory_usage_mb": 1024,
+        "network_bandwidth_mbps": 12.5,
+        "disk_usage_percent": 67.8,
+        "active_devices": 3,
+        "recording_fps": 30.0
+    },
+    "thresholds": {
+        "cpu_warning": 80.0,
+        "memory_warning": 2048,
+        "disk_warning": 85.0
+    }
+}
+```
+
+**Status Monitoring Protocol:**
+```json
+{
+    "type": "status_update",
+    "timestamp": "2024-01-31T10:30:45.123Z",
+    "component": "device_manager",
+    "status": {
+        "overall_health": "healthy",
+        "device_count": 3,
+        "devices": {
+            "android_001": {
+                "status": "recording",
+                "connection_quality": "excellent",
+                "battery_level": 85,
+                "storage_available_gb": 12.5
+            },
+            "webcam_001": {
+                "status": "recording",
+                "fps": 30.0,
+                "resolution": "1920x1080"
+            }
+        }
+    }
+}
+```
+
 ## Error Codes and Handling
 
 ### Network Error Codes
