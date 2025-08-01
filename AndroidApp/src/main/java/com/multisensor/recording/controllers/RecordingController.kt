@@ -3,6 +3,7 @@ package com.multisensor.recording.controllers
 import com.multisensor.recording.util.AppLogger
 import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.NetworkUtils
 
 import android.content.Context
 import android.content.Intent
@@ -482,14 +483,7 @@ class RecordingController @Inject constructor() {
      * Validate network connectivity for streaming
      */
     private fun validateNetworkConnectivity(context: Context): Boolean {
-        return try {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
-            val activeNetwork = connectivityManager.activeNetworkInfo
-            activeNetwork?.isConnected == true
-        } catch (e: Exception) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Error validating network connectivity: ${e.message}")
-            false
-        }
+        return NetworkUtils.isNetworkConnected(context)
     }
     
     /**

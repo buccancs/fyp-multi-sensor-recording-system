@@ -1,6 +1,7 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -159,7 +160,7 @@ class HandSegmentationControlView @JvmOverloads constructor(
         
         // Reset color after a delay
         postDelayed({
-            binding.textDatasetStats.setTextColor(context.getColor(android.R.color.primary_text_light))
+            binding.textDatasetStats.setTextColor(Color.BLACK) // Use standard black text instead of deprecated color
         }, 3000)
     }
     

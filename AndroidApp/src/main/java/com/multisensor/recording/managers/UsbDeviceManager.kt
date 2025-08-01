@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
+import android.os.Build
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,7 +43,12 @@ class UsbDeviceManager @Inject constructor() {
         try {
             when (intent.action) {
                 UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
-                    val usbDevice = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+                    val usbDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+                    }
                     if (usbDevice != null) {
                         handleDeviceAttached(usbDevice, callback)
                     } else {
@@ -52,7 +58,12 @@ class UsbDeviceManager @Inject constructor() {
                 }
                 
                 UsbManager.ACTION_USB_DEVICE_DETACHED -> {
-                    val usbDevice = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+                    val usbDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+                    }
                     if (usbDevice != null) {
                         handleDeviceDetached(usbDevice, callback)
                     } else {

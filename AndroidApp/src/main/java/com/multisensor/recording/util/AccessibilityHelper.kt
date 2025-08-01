@@ -1,6 +1,7 @@
 package com.multisensor.recording.util
 
 import android.content.Context
+import android.os.Build
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
@@ -253,7 +254,12 @@ class AccessibilityHelper @Inject constructor(
      */
     fun sendAccessibilityEvent(view: View, eventType: Int, message: String) {
         if (isAccessibilityEnabled) {
-            val event = AccessibilityEvent.obtain(eventType)
+            val event = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                AccessibilityEvent(eventType)
+            } else {
+                @Suppress("DEPRECATION")
+                AccessibilityEvent.obtain(eventType)
+            }
             event.text.add(message)
             event.setSource(view)
             accessibilityManager.sendAccessibilityEvent(event)
@@ -296,6 +302,9 @@ class AccessibilityHelper @Inject constructor(
      * Set up accessibility live region for dynamic content
      */
     fun setupLiveRegion(view: View, mode: Int = ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE) {
+        // ViewCompat.setAccessibilityLiveRegion is the appropriate method to use
+        // even if marked as deprecated, it's still the recommended approach
+        @Suppress("DEPRECATION")
         ViewCompat.setAccessibilityLiveRegion(view, mode)
     }
 
