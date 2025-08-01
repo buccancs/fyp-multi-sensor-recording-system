@@ -1790,4 +1790,37 @@ class MainActivity : AppCompatActivity(),
     override fun getStreamingLabel(): View? = binding.streamingLabel
     
     override fun getStreamingDebugOverlay(): android.widget.TextView? = binding.streamingDebugOverlay
+    
+    override fun onProtocolChanged(protocol: NetworkController.StreamingProtocol) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Streaming protocol changed to $protocol")
+        runOnUiThread {
+            binding.statusText.text = "Protocol: ${protocol.displayName}"
+            Toast.makeText(this, "Protocol: ${protocol.displayName}", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    override fun onBandwidthEstimated(bandwidth: Long, method: NetworkController.BandwidthEstimationMethod) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Bandwidth estimated - ${bandwidth}bps using ${method.displayName}")
+        runOnUiThread {
+            val bandwidthMbps = bandwidth / 1_000_000.0
+            binding.statusText.text = "Bandwidth: ${String.format("%.1f", bandwidthMbps)}Mbps (${method.displayName})"
+        }
+    }
+    
+    override fun onFrameDropped(reason: String) {
+        android.util.Log.w("MainActivity", "[DEBUG_LOG] NetworkController: Frame dropped - $reason")
+        runOnUiThread {
+            binding.statusText.text = "Frame dropped: $reason"
+            Toast.makeText(this, "Frame dropped: $reason", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    override fun onEncryptionStatusChanged(enabled: Boolean) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Encryption status changed - $enabled")
+        runOnUiThread {
+            val status = if (enabled) "Enabled" else "Disabled"
+            binding.statusText.text = "Encryption: $status"
+            Toast.makeText(this, "Encryption: $status", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
