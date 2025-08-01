@@ -6,6 +6,7 @@ import com.multisensor.recording.util.logE
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.widget.Toast
@@ -28,6 +29,15 @@ class UsbController @Inject constructor(
     private val usbDeviceManager: UsbDeviceManager
 ) {
     
+    companion object {
+        private const val USB_PREFS_NAME = "usb_device_prefs"
+        private const val PREF_LAST_CONNECTED_DEVICE = "last_connected_device"
+        private const val PREF_LAST_CONNECTION_TIME = "last_connection_time"
+        private const val PREF_CONNECTION_COUNT = "connection_count"
+        private const val PREF_DEVICE_VENDOR_ID = "device_vendor_id"
+        private const val PREF_DEVICE_PRODUCT_ID = "device_product_id"
+    }
+    
     /**
      * Interface for USB device-related callbacks to the UI layer
      */
@@ -40,7 +50,7 @@ class UsbController @Inject constructor(
         fun initializeRecordingSystem()
         fun areAllPermissionsGranted(): Boolean
     }
-    
+
     private var callback: UsbCallback? = null
     
     /**
@@ -148,6 +158,9 @@ class UsbController @Inject constructor(
         // Update status
         callback?.updateStatusText("Topdon thermal camera connected - Ready for recording")
         
+        // Save device state persistence
+        saveDeviceConnectionState(context, usbDevice)
+        
         // Initialize thermal recorder if permissions are available
         if (callback?.areAllPermissionsGranted() == true) {
             android.util.Log.d("UsbController", "[DEBUG_LOG] Permissions available, initializing thermal recorder")
@@ -239,17 +252,88 @@ class UsbController @Inject constructor(
     fun getUsbStatusSummary(context: Context): String {
         val connectedDevices = getConnectedUsbDevices(context)
         val supportedDevices = getConnectedSupportedDevices(context)
+        val lastDeviceInfo = getLastConnectedDeviceInfo(context)
         
         return buildString {
             append("USB Status Summary:\n")
             append("- Total connected devices: ${connectedDevices.size}\n")
             append("- Supported TOPDON devices: ${supportedDevices.size}\n")
+            append("- Last connected device: $lastDeviceInfo\n")
+            append("- Total connections: ${getConnectionCount(context)}\n")
             if (supportedDevices.isNotEmpty()) {
                 append("- Supported devices:\n")
                 supportedDevices.forEach { device ->
                     append("  • ${device.deviceName} (VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)})\n")
                 }
             }
+        }
+    }
+    
+    /**
+     * Save device connection state for persistence across app restarts
+     */
+    private fun saveDeviceConnectionState(context: Context, device: UsbDevice) {
+        try {
+            val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().apply {
+                putString(PREF_LAST_CONNECTED_DEVICE, device.deviceName)
+                putLong(PREF_LAST_CONNECTION_TIME, System.currentTimeMillis())
+                putInt(PREF_DEVICE_VENDOR_ID, device.vendorId)
+                putInt(PREF_DEVICE_PRODUCT_ID, device.productId)
+                putInt(PREF_CONNECTION_COUNT, getConnectionCount(context) + 1)
+                apply()
+            }
+            
+            android.util.Log.d("UsbController", "[DEBUG_LOG] Device state saved: ${device.deviceName}")
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to save device state: ${e.message}")
+        }
+    }
+    
+    /**
+     * Get information about the last connected device
+     */
+    private fun getLastConnectedDeviceInfo(context: Context): String {
+        return try {
+            val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
+            val deviceName = prefs.getString(PREF_LAST_CONNECTED_DEVICE, null)
+            val lastConnectionTime = prefs.getLong(PREF_LAST_CONNECTION_TIME, 0L)
+            
+            if (deviceName != null && lastConnectionTime > 0) {
+                val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
+                "$deviceName (${timeFormat.format(java.util.Date(lastConnectionTime))})"
+            } else {
+                "None"
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to get last device info: ${e.message}")
+            "Error retrieving info"
+        }
+    }
+    
+    /**
+     * Get total connection count
+     */
+    private fun getConnectionCount(context: Context): Int {
+        return try {
+            val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.getInt(PREF_CONNECTION_COUNT, 0)
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to get connection count: ${e.message}")
+            0
+        }
+    }
+    
+    /**
+     * Check if a previously connected device is available
+     */
+    fun hasPreviouslyConnectedDevice(context: Context): Boolean {
+        return try {
+            val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.getString(PREF_LAST_CONNECTED_DEVICE, null) != null
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to check previous device: ${e.message}")
+            false
         }
     }
 }

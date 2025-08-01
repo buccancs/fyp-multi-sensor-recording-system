@@ -5,6 +5,7 @@ import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logE
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.media.MediaActionSound
 import android.os.Handler
@@ -35,6 +36,14 @@ class CalibrationController @Inject constructor(
     private val syncClockManager: SyncClockManager
 ) {
     
+    companion object {
+        private const val CALIBRATION_PREFS_NAME = "calibration_history"
+        private const val PREF_LAST_CALIBRATION_ID = "last_calibration_id"
+        private const val PREF_LAST_CALIBRATION_TIME = "last_calibration_time"
+        private const val PREF_CALIBRATION_COUNT = "calibration_count"
+        private const val PREF_LAST_CALIBRATION_SUCCESS = "last_calibration_success"
+    }
+    
     /**
      * Interface for calibration-related callbacks to the UI layer
      */
@@ -47,6 +56,7 @@ class CalibrationController @Inject constructor(
         fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT)
         fun runOnUiThread(action: () -> Unit)
         fun getContentView(): View
+        fun getContext(): Context
     }
     
     private var callback: CalibrationCallback? = null
@@ -95,6 +105,11 @@ class CalibrationController @Inject constructor(
                 if (result.success) {
                     android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}")
                     
+                    // Save calibration history
+                    callback?.getContext()?.let { context ->
+                        saveCalibrationHistory(context, result.calibrationId, true)
+                    }
+                    
                     // Trigger enhanced feedback for successful capture
                     callback?.runOnUiThread {
                         triggerCalibrationCaptureSuccess(result.calibrationId)
@@ -103,6 +118,12 @@ class CalibrationController @Inject constructor(
                     callback?.onCalibrationCompleted(result.calibrationId)
                 } else {
                     android.util.Log.e("CalibrationController", "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}")
+                    
+                    // Save failed calibration attempt
+                    callback?.getContext()?.let { context ->
+                        saveCalibrationHistory(context, "failed_${System.currentTimeMillis()}", false)
+                    }
+                    
                     callback?.runOnUiThread {
                         callback?.showToast("Calibration capture failed: ${result.errorMessage}", Toast.LENGTH_LONG)
                     }
@@ -315,14 +336,15 @@ class CalibrationController @Inject constructor(
      */
     fun getCalibrationStatus(): String {
         val syncStatus = syncClockManager.getSyncStatus()
+        val lastCalibrationInfo = callback?.getContext()?.let { getLastCalibrationInfo(it) } ?: "Context unavailable"
         
         return buildString {
             append("Calibration System Status:\n")
             append("- Clock Synchronized: ${syncStatus.isSynchronized}\n")
             append("- Clock Offset: ${syncStatus.clockOffsetMs}ms\n")
             append("- Sync Valid: ${syncClockManager.isSyncValid()}\n")
-            // TODO: Add calibration capture status
-            append("- Last Calibration: TODO - implement calibration history tracking")
+            append("- Last Calibration: $lastCalibrationInfo\n")
+            append("- Total Calibrations: ${callback?.getContext()?.let { getCalibrationCount(it) } ?: 0}")
         }
     }
     
@@ -359,5 +381,63 @@ class CalibrationController @Inject constructor(
      */
     fun getSyncStatistics(): String {
         return syncClockManager.getSyncStatistics().toString()
+    }
+    
+    /**
+     * Save calibration history for tracking
+     */
+    private fun saveCalibrationHistory(context: Context, calibrationId: String, success: Boolean) {
+        try {
+            val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
+            val currentCount = prefs.getInt(PREF_CALIBRATION_COUNT, 0)
+            
+            prefs.edit().apply {
+                putString(PREF_LAST_CALIBRATION_ID, calibrationId)
+                putLong(PREF_LAST_CALIBRATION_TIME, System.currentTimeMillis())
+                putBoolean(PREF_LAST_CALIBRATION_SUCCESS, success)
+                putInt(PREF_CALIBRATION_COUNT, currentCount + 1)
+                apply()
+            }
+            
+            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration history saved: $calibrationId (success: $success)")
+        } catch (e: Exception) {
+            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to save calibration history: ${e.message}")
+        }
+    }
+    
+    /**
+     * Get information about the last calibration
+     */
+    private fun getLastCalibrationInfo(context: Context): String {
+        return try {
+            val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
+            val calibrationId = prefs.getString(PREF_LAST_CALIBRATION_ID, null)
+            val lastTime = prefs.getLong(PREF_LAST_CALIBRATION_TIME, 0L)
+            val success = prefs.getBoolean(PREF_LAST_CALIBRATION_SUCCESS, false)
+            
+            if (calibrationId != null && lastTime > 0) {
+                val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
+                val status = if (success) "✓" else "✗"
+                "$status $calibrationId (${timeFormat.format(java.util.Date(lastTime))})"
+            } else {
+                "None"
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to get last calibration info: ${e.message}")
+            "Error retrieving info"
+        }
+    }
+    
+    /**
+     * Get total calibration count
+     */
+    private fun getCalibrationCount(context: Context): Int {
+        return try {
+            val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.getInt(PREF_CALIBRATION_COUNT, 0)
+        } catch (e: Exception) {
+            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to get calibration count: ${e.message}")
+            0
+        }
     }
 }

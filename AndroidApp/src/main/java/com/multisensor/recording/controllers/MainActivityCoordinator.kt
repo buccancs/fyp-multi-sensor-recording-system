@@ -290,6 +290,10 @@ class MainActivityCoordinator @Inject constructor(
             override fun getContentView(): View {
                 return callback?.getContentView() ?: throw IllegalStateException("Content view not available")
             }
+            
+            override fun getContext(): Context {
+                return callback?.getContext() ?: throw IllegalStateException("Context not available")
+            }
         })
     }
     
