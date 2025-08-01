@@ -391,6 +391,93 @@ data class UsbConnection(
     val connectionTime: Long,
     val isActive: Boolean
 )
+
+### 3.4 Buffer Management and Performance Optimization
+
+Advanced buffer management ensures optimal performance for real-time thermal streaming:
+
+**Thermal Data Buffer Implementation:**
+```kotlin
+class ThermalDataBuffer {
+    companion object {
+        const val OPTIMAL_BUFFER_SIZE = 10
+        const val MAX_FRAME_RETENTION_MS = 1000
+    }
+    
+    private val frameBuffer = ArrayDeque<ThermalFrame>(OPTIMAL_BUFFER_SIZE)
+    private val bufferLock = Mutex()
+    
+    suspend fun addFrame(frame: ThermalFrame) {
+        bufferLock.withLock {
+            // Remove old frames if buffer is full
+            while (frameBuffer.size >= OPTIMAL_BUFFER_SIZE) {
+                frameBuffer.removeFirst()
+            }
+            
+            // Remove frames older than retention period
+            val cutoffTime = System.currentTimeMillis() - MAX_FRAME_RETENTION_MS
+            frameBuffer.removeAll { it.timestamp < cutoffTime }
+            
+            frameBuffer.addLast(frame)
+        }
+    }
+    
+    suspend fun getLatestFrame(): ThermalFrame? {
+        return bufferLock.withLock { frameBuffer.lastOrNull() }
+    }
+    
+    suspend fun getFrameHistory(count: Int): List<ThermalFrame> {
+        return bufferLock.withLock { 
+            frameBuffer.takeLast(count).toList() 
+        }
+    }
+}
+```
+
+**Threading Architecture for Optimal Performance:**
+```kotlin
+class ThermalProcessingThreads {
+    private val acquisitionScope = CoroutineScope(
+        Dispatchers.IO + SupervisorJob()
+    )
+    
+    private val processingScope = CoroutineScope(
+        Dispatchers.Default + SupervisorJob()
+    )
+    
+    private val uiScope = CoroutineScope(
+        Dispatchers.Main + SupervisorJob()
+    )
+    
+    fun startProcessingPipeline(thermalDevice: ThermalDevice) {
+        // Acquisition thread - highest priority
+        acquisitionScope.launch {
+            thermalDevice.frameStream
+                .flowOn(Dispatchers.IO)
+                .collect { rawFrame ->
+                    processingChannel.send(rawFrame)
+                }
+        }
+        
+        // Processing thread - CPU intensive work
+        processingScope.launch {
+            processingChannel.consumeAsFlow()
+                .map { frame -> processFrame(frame) }
+                .flowOn(Dispatchers.Default)
+                .collect { processedFrame ->
+                    uiChannel.send(processedFrame)
+                }
+        }
+        
+        // UI thread - lightweight display updates
+        uiScope.launch {
+            uiChannel.consumeAsFlow()
+                .flowOn(Dispatchers.Main)
+                .collect { frame -> updateUI(frame) }
+        }
+    }
+}
+```
 ```
 
 ## 4. Network Messaging

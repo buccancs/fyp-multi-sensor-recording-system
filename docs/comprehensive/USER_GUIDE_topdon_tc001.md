@@ -505,7 +505,63 @@ Corrections:
 - Account for ambient temperature effects
 ```
 
-### 6.3 Performance Issues
+### 6.3 Advanced Troubleshooting Guide
+
+**Diagnostic Tools and Procedures:**
+
+| Issue Category | Symptoms | Diagnostic Steps | Solutions |
+|----------------|----------|------------------|-----------|
+| **Connection Failure** | Device not detected, timeout errors | Check USB OTG support, cable integrity | Replace cable, restart devices, update drivers |
+| **Poor Image Quality** | Noisy, blurry, or distorted thermal images | Calibration check, lens inspection | Perform calibration, clean lens, adjust settings |
+| **Temperature Inaccuracy** | Readings consistently wrong | Compare with reference thermometer | Verify emissivity, recalibrate, check environment |
+| **Performance Issues** | Slow frame rate, system lag | Monitor system resources | Optimize processing parameters, check device specs |
+| **USB Permission Errors** | Permission denied messages | Review app permissions | Grant USB permissions, restart application |
+
+**System Diagnostic Report:**
+```kotlin
+// Advanced diagnostic information gathering
+fun generateDiagnosticReport(): DiagnosticReport {
+    return DiagnosticReport(
+        // Hardware diagnostics
+        hardwareStatus = checkHardwareStatus(),
+        connectionQuality = assessConnectionQuality(),
+        calibrationStatus = validateCalibration(),
+        
+        // Performance diagnostics
+        frameRate = measureFrameRate(),
+        latency = measureLatency(),
+        memoryUsage = getMemoryUsage(),
+        
+        // Image quality diagnostics
+        imageQuality = assessImageQuality(),
+        temperatureAccuracy = validateTemperatureAccuracy()
+    )
+}
+```
+
+**Error Recovery Procedures:**
+```kotlin
+class ThermalCameraErrorHandler {
+    suspend fun handleCameraError(error: ThermalCameraException): RecoveryResult {
+        return when (error.errorType) {
+            ErrorType.CONNECTION_LOST -> {
+                delay(1000) // Brief wait
+                attemptReconnection()
+            }
+            ErrorType.CALIBRATION_FAILED -> {
+                performRecalibration()
+            }
+            ErrorType.TEMPERATURE_OUT_OF_RANGE -> {
+                adjustTemperatureRange()
+            }
+            ErrorType.HARDWARE_MALFUNCTION -> {
+                reportHardwareIssue()
+                RecoveryResult.MANUAL_INTERVENTION_REQUIRED
+            }
+        }
+    }
+}
+```
 
 **Problem: Low Frame Rate**
 ```

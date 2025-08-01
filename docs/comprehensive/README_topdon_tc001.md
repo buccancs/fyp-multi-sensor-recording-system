@@ -148,6 +148,53 @@ The USB-C interface provides both power delivery and high-speed data communicati
 - **Data Rate**: ~50 MB/s (25 fps × 256×192×16-bit)
 - **Latency**: <40ms end-to-end
 
+### 2.4 Hardware Detection and Configuration
+
+The system automatically detects and configures TC001 variants using USB identification:
+
+```kotlin
+class TC001VariantDetector {
+    companion object {
+        const val TC001_VENDOR_ID = 0x3496
+        const val TC001_STANDARD_PID = 0x1234
+        const val TC001_PLUS_PID = 0x1235
+    }
+    
+    fun detectHardwareVariant(usbDevice: UsbDevice): TC001Variant {
+        if (usbDevice.vendorId != TC001_VENDOR_ID) {
+            throw UnsupportedHardwareException("Invalid vendor ID: ${usbDevice.vendorId}")
+        }
+        
+        return when (usbDevice.productId) {
+            TC001_STANDARD_PID -> TC001StandardVariant(usbDevice)
+            TC001_PLUS_PID -> TC001PlusVariant(usbDevice)
+            else -> throw UnsupportedHardwareException("Unknown product ID: ${usbDevice.productId}")
+        }
+    }
+}
+```
+
+**Device-Specific Configuration:**
+```kotlin
+sealed class TC001Variant(val usbDevice: UsbDevice) {
+    abstract val temperatureRange: ClosedFloatingPointRange<Float>
+    abstract val maxFrameRate: Int
+    abstract val thermalSensitivity: Float
+    
+    class TC001StandardVariant(device: UsbDevice) : TC001Variant(device) {
+        override val temperatureRange = -20f..550f
+        override val maxFrameRate = 25
+        override val thermalSensitivity = 50f // mK NETD
+    }
+    
+    class TC001PlusVariant(device: UsbDevice) : TC001Variant(device) {
+        override val temperatureRange = -20f..650f
+        override val maxFrameRate = 25
+        override val thermalSensitivity = 40f // mK NETD
+    }
+}
+```
+
 ## 3. SDK Integration Architecture
 
 ### 3.1 Topdon SDK 1.3.7 Architecture
