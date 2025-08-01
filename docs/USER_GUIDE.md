@@ -651,6 +651,260 @@ data_record = {
 4. **Data Backup**: Regularly backup calibration data and recorded sessions
 5. **Performance Monitoring**: Monitor system performance during multi-device recording
 
+
+## Testing and Validation Workflows
+
+The multi-sensor recording system includes comprehensive testing capabilities that allow users to validate system functionality, troubleshoot issues, and ensure optimal performance. This section provides detailed guidance on using the testing framework for various validation scenarios.
+
+### Quick System Validation
+
+For rapid system validation, especially useful during initial setup or after system updates, use the quick recording session test:
+
+```bash
+# Navigate to the Python application directory
+cd PythonApp
+
+# Run quick comprehensive validation
+python run_quick_recording_session_test.py
+```
+
+This streamlined test performs a complete validation of the PC-Android simulation workflow in approximately 30 seconds. The test validates all essential system components including:
+
+• **PC Application Initialization**: Verifies that all core components (SessionManager, JsonSocketServer, logging system) initialize correctly
+• **Android Device Simulation**: Tests the creation and management of multiple simulated Android devices with realistic sensor capabilities
+• **Communication Protocols**: Validates JSON socket communication between PC and Android components on production ports
+• **Recording Session Management**: Tests complete recording lifecycle from session creation to data persistence
+• **Sensor Data Generation**: Validates realistic sensor data simulation including GSR, PPG, accelerometer, gyroscope, and magnetometer data
+• **File System Operations**: Verifies session folder creation, file naming conventions, and data persistence
+• **Logging and Monitoring**: Tests comprehensive logging functionality and system health monitoring
+
+The quick test provides immediate feedback with clear success/failure indicators and detailed error reporting when issues are detected.
+
+### Comprehensive Testing Scenarios
+
+For thorough system validation, use the enhanced test runner that supports multiple testing scenarios and extensive configuration options:
+
+#### Basic Comprehensive Testing
+```bash
+# Standard comprehensive test with default parameters
+python run_recording_session_test.py
+
+# Extended test with longer duration and more devices
+python run_recording_session_test.py --duration 120 --devices 4 --verbose
+
+# Test with detailed logging and health monitoring
+python run_recording_session_test.py --save-logs --health-check --log-level DEBUG
+```
+
+#### Advanced Testing Scenarios
+
+**Stress Testing for High-Load Validation:**
+```bash
+# High-load stress testing with multiple devices
+python run_recording_session_test.py --stress-test --devices 8 --duration 300
+
+# Combined stress and performance testing
+python run_recording_session_test.py --stress-test --performance-bench --save-logs
+```
+
+Stress testing validates system behavior under high-load conditions by simulating increased device counts, concurrent operations, and elevated data throughput. This testing scenario is particularly valuable for validating system scalability and identifying performance bottlenecks.
+
+**Performance Benchmarking:**
+```bash
+# Detailed performance metrics collection
+python run_recording_session_test.py --performance-bench --duration 90
+
+# Performance benchmarking with system health monitoring
+python run_recording_session_test.py --performance-bench --health-check --save-logs
+```
+
+Performance benchmarking provides detailed metrics on system throughput, latency, memory usage, and resource utilization. The benchmark results help optimize system configuration and identify areas for performance improvements.
+
+**Stability and Long-Duration Testing:**
+```bash
+# Extended stability testing (minimum 10 minutes)
+python run_recording_session_test.py --long-duration --health-check
+
+# Long-duration test with memory leak detection
+python run_recording_session_test.py --long-duration --memory-stress --save-logs
+```
+
+Long-duration testing validates system stability over extended periods, monitors for memory leaks, and ensures consistent performance during prolonged recording sessions.
+
+**Error Condition and Recovery Testing:**
+```bash
+# Error simulation and recovery validation
+python run_recording_session_test.py --error-simulation --devices 3
+
+# Network issues and reconnection testing
+python run_recording_session_test.py --network-issues --error-simulation
+
+# Combined error and stress testing
+python run_recording_session_test.py --error-simulation --network-issues --stress-test
+```
+
+Error condition testing intentionally introduces various failure scenarios to validate system recovery mechanisms, error handling, and graceful degradation capabilities.
+
+### Component-Specific Testing
+
+#### Camera Calibration Testing
+```bash
+# Test calibration system implementation
+python test_calibration_implementation.py
+
+# Run calibration with specific parameters
+python -c "
+from calibration.calibration import CalibrationManager
+manager = CalibrationManager()
+# Test pattern detection
+success = manager.test_pattern_detection()
+print(f'Pattern detection test: {\"PASSED\" if success else \"FAILED\"}')
+"
+```
+
+#### Shimmer Sensor Testing
+```bash
+# Test Shimmer integration capabilities
+python test_shimmer_implementation.py
+
+# Test specific Shimmer connection methods
+python -c "
+from shimmer.shimmer_manager import ShimmerManager
+manager = ShimmerManager()
+# Test device discovery
+devices = manager.discover_devices()
+print(f'Discovered {len(devices)} Shimmer devices')
+"
+```
+
+#### Integration Testing
+```bash
+# Run complete integration test suite
+python run_comprehensive_tests.py
+
+# Generate detailed test report
+python run_comprehensive_tests.py --generate-report --save-logs
+```
+
+### Testing Configuration and Troubleshooting
+
+#### Test Configuration Options
+
+The testing framework provides extensive configuration options to adapt testing scenarios to specific requirements:
+
+**Duration and Scale Configuration:**
+• `--duration SECONDS` - Set test duration to match typical usage patterns
+• `--devices COUNT` - Configure device count to match deployment scenarios
+• `--port PORT` - Test with different communication ports
+
+**Logging and Monitoring Configuration:**
+• `--verbose` - Enable detailed progress information for debugging
+• `--log-level LEVEL` - Control logging verbosity (DEBUG for maximum detail)
+• `--save-logs` - Persist logs for post-analysis and troubleshooting
+• `--health-check` - Enable continuous system resource monitoring
+
+**Advanced Testing Configuration:**
+• `--stress-test` - Enable high-load testing scenarios
+• `--performance-bench` - Collect detailed performance metrics
+• `--error-simulation` - Test error conditions and recovery mechanisms
+• `--network-issues` - Simulate network connectivity problems
+• `--memory-stress` - Test memory usage under high data volumes
+
+#### Troubleshooting Test Failures
+
+When tests fail, use this systematic approach to identify and resolve issues:
+
+**1. Enable Verbose Logging:**
+```bash
+python run_recording_session_test.py --verbose --log-level DEBUG --save-logs
+```
+This provides detailed execution information and saves logs for analysis.
+
+**2. Test Individual Components:**
+```bash
+# Test calibration system separately
+python test_calibration_implementation.py
+
+# Test Shimmer integration independently
+python test_shimmer_implementation.py
+```
+Component isolation helps identify the specific source of failures.
+
+**3. Check System Resources:**
+```bash
+# Monitor system resources during testing
+python run_recording_session_test.py --health-check --performance-bench
+```
+Resource monitoring reveals memory, CPU, or disk space issues.
+
+**4. Validate Network Configuration:**
+```bash
+# Test with alternative ports
+python run_recording_session_test.py --port 9001
+
+# Test network connectivity
+python run_recording_session_test.py --network-issues
+```
+Network diagnostics help identify connectivity problems.
+
+**5. Analyze Error Patterns:**
+Review saved log files for error patterns, resource constraints, or timing issues. Common issues include:
+• Port conflicts with other applications
+• Insufficient memory for high device counts
+• Network connectivity problems
+• Missing dependencies or configuration errors
+
+#### Performance Optimization
+
+Use performance testing results to optimize system configuration:
+
+**Memory Optimization:**
+• Monitor memory usage during testing with `--memory-stress`
+• Adjust device count based on available system memory
+• Use `--long-duration` testing to identify memory leaks
+
+**Network Optimization:**
+• Test different port configurations with `--port`
+• Validate network stability with `--network-issues`
+• Monitor communication latency during `--performance-bench`
+
+**Scaling Optimization:**
+• Use `--stress-test` to determine maximum device capacity
+• Test concurrent operation limits
+• Validate performance under realistic load conditions
+
+### Test Results Interpretation
+
+#### Success Indicators
+Successful tests display comprehensive validation results:
+```
+✅ COMPREHENSIVE RECORDING SESSION TEST COMPLETED SUCCESSFULLY!
+All requirements have been validated:
+• PC and Android app startup simulation ✓
+• Recording session initiated from computer ✓
+• Sensor simulation on correct ports ✓
+• Communication and networking testing ✓
+• File saving and data persistence ✓
+• Post-processing validation ✓
+• Button reaction simulation ✓
+• Freezing/crashing detection ✓
+• Comprehensive logging validation ✓
+```
+
+#### Performance Metrics
+Performance benchmarking provides detailed metrics:
+• **Execution Time**: Total test duration and per-scenario timing
+• **Resource Usage**: Memory consumption, CPU utilization, disk space
+• **Communication Metrics**: Message throughput, latency, packet loss
+• **Data Processing**: Sensor data generation rates, file I/O performance
+
+#### Error Analysis
+Failed tests provide detailed error information:
+• **Error Location**: Specific test phase or component where failure occurred
+• **Error Type**: Classification of error (network, memory, configuration, etc.)
+• **Recovery Actions**: Suggested remediation steps and configuration changes
+• **System State**: Resource usage and system health at time of failure
+=======
 ## Utility Components and Maintainability Features
 
 ### Navigation Utility Framework
@@ -749,5 +1003,6 @@ Comprehensive error handling in utility classes provides graceful degradation an
 - **Test Execution**: Use the comprehensive test suites to validate system functionality after any modifications
 - **Component Validation**: Individual component tests can be run to isolate and diagnose specific interface issues
 - **Integration Testing**: End-to-end tests validate complete navigation and component interaction workflows
+
 
 For additional support and troubleshooting, refer to the API Reference documentation and the comprehensive test scripts provided with the system.
