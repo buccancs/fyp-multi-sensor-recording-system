@@ -297,13 +297,14 @@ class ShimmerRecorderConfigurationTest {
 
             // Then
             // Readings may be null if no data is available
-            if (readings != null) {
-                assertTrue("Timestamp should be positive", readings.timestamp > 0)
-                assertTrue("GSR conductance should be non-negative", readings.gsrConductance >= 0.0)
-                assertTrue("Battery percentage should be valid", readings.batteryPercentage in 0..100)
+            if (readings.isNotEmpty()) {
+                readings.values.forEach { sensorSample ->
+                    assertTrue("Timestamp should be positive", sensorSample.systemTimestamp > 0)
+                    assertTrue("Battery level should be valid", sensorSample.batteryLevel in 0..100)
+                }
             }
 
-            println("[DEBUG_LOG] Current readings test passed - readings available: ${readings != null}")
+            println("[DEBUG_LOG] Current readings test passed - readings available: ${readings.isNotEmpty()}")
         }
 
     @Test

@@ -12,6 +12,7 @@ import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
 import io.mockk.mockk
 import io.mockk.every
+import io.mockk.coEvery
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -73,7 +74,7 @@ class MainViewModelTest : BaseUnitTest() {
     @Test
     fun `should start recording when requested`() = runTest {
         // Given
-        every { mockSessionManager.createNewSession() } returns "test-session-123"
+        coEvery { mockSessionManager.createNewSession() } returns "test-session-123"
         
         // When
         viewModel.startRecording()
