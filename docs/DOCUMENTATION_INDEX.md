@@ -24,6 +24,9 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
+- **[Networking Protocol - Technical Deep-Dive](README_networking_protocol.md)** - Complete networking and communication protocol implementation
+- **[Networking Protocol - User Guide](USER_GUIDE_networking_protocol.md)** - Practical guide for network setup and usage
+- **[Networking Protocol - Data Contracts](PROTOCOL_networking_protocol.md)** - Message specifications and protocol reference
 
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
@@ -45,6 +48,9 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
 | [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
 | [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
+| [README_networking_protocol.md](README_networking_protocol.md) | Networking and Communication Protocol technical deep-dive | Developers |
+| [USER_GUIDE_networking_protocol.md](USER_GUIDE_networking_protocol.md) | Networking protocol practical usage guide | End users |
+| [PROTOCOL_networking_protocol.md](PROTOCOL_networking_protocol.md) | Message specifications and data contracts | Developers |
 
 ### 📁 User Guides (`docs/user-guides/`)
 Comprehensive user-facing documentation for operators and researchers:
