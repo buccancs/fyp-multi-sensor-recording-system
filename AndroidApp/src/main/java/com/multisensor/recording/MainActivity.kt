@@ -42,6 +42,7 @@ import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.managers.PermissionManager
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
+import com.multisensor.recording.controllers.ShimmerController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -67,7 +68,7 @@ import com.multisensor.recording.ui.components.HandSegmentationControlView
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     PermissionManager.PermissionCallback,
-    ShimmerManager.ShimmerCallback,
+    ShimmerController.ShimmerCallback,
     UsbDeviceManager.UsbDeviceCallback,
     HandSegmentationManager.HandSegmentationListener,
     HandSegmentationControlView.HandSegmentationControlListener {
@@ -88,6 +89,9 @@ class MainActivity : AppCompatActivity(),
     lateinit var shimmerManager: ShimmerManager
 
     @Inject
+    lateinit var shimmerController: ShimmerController
+
+    @Inject
     lateinit var usbDeviceManager: UsbDeviceManager
 
     @Inject
@@ -105,16 +109,16 @@ class MainActivity : AppCompatActivity(),
         
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             // Get selected device information from dialog
-            selectedShimmerAddress = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
-            selectedShimmerName = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
+            val address = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_ADDRESS)
+            val name = result.data?.getStringExtra(ShimmerBluetoothDialog.EXTRA_DEVICE_NAME)
 
-            logI("Shimmer device selected: Address=$selectedShimmerAddress, Name=$selectedShimmerName")
+            logI("Shimmer device selected: Address=$address, Name=$name")
 
-            // Show BLE/Classic connection type selection dialog
-            showBtTypeConnectionOption()
+            // Use ShimmerController to handle device selection
+            shimmerController.handleDeviceSelectionResult(address, name)
         } else {
             logI("Shimmer device selection cancelled")
-            Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
+            shimmerController.handleDeviceSelectionResult(null, null)
         }
     }
     private var looper: Looper? = null
@@ -138,6 +142,10 @@ class MainActivity : AppCompatActivity(),
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel initialized")
+
+        // Initialize ShimmerController with callback
+        shimmerController.setCallback(this)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] ShimmerController initialized and callback set")
 
         // Setup UI
         setupUI()
@@ -1185,57 +1193,11 @@ class MainActivity : AppCompatActivity(),
 
 
     /**
-     * Show Bluetooth connection type selection dialog (BLE vs Classic)
-     * Following the official bluetoothManagerExample pattern
-     */
-    private fun showBtTypeConnectionOption() {
-        val alertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setCancelable(false)
-        alertDialog.setMessage("Choose preferred Bluetooth type")
-
-        alertDialog.setButton(Dialog.BUTTON_POSITIVE, "BT CLASSIC") { _, _ ->
-            preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
-            connectSelectedShimmerDevice()
-        }
-
-        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "BLE") { _, _ ->
-            preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BLE
-            connectSelectedShimmerDevice()
-        }
-
-        alertDialog.show()
-    }
-
-    /**
-     * Connect to the selected Shimmer device using the chosen connection type
-     */
-    private fun connectSelectedShimmerDevice() {
-        selectedShimmerAddress?.let { address ->
-            selectedShimmerName?.let { name ->
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Connecting to Shimmer device:")
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $address")
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $name")
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] - Connection Type: $preferredBtType")
-
-                // Update UI to show connection attempt
-                binding.statusText.text = "Connecting to $name ($preferredBtType)..."
-
-                // Connect via ViewModel/ShimmerRecorder with proper implementation
-                // Implementation note: This would call the actual connection method when fully integrated
-                // viewModel.connectShimmerDevice(address, name, preferredBtType)
-
-                Toast.makeText(this, "Connecting to $name via $preferredBtType", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    /**
      * Launch ShimmerBluetoothDialog for device selection using modern Activity Result API
      */
     fun launchShimmerDeviceDialog() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching Shimmer device selection dialog")
-        val intent = Intent(this, ShimmerBluetoothDialog::class.java)
-        shimmerDeviceSelectionLauncher.launch(intent)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching Shimmer device selection dialog via ShimmerController")
+        shimmerController.launchShimmerDeviceDialog(this, shimmerDeviceSelectionLauncher)
     }
 
     /**
@@ -1243,22 +1205,8 @@ class MainActivity : AppCompatActivity(),
      * Requires a connected Shimmer device
      */
     fun showShimmerSensorConfiguration() {
-        // Get connected shimmer device from ViewModel when available
-        // Implementation note: These methods would be implemented in ViewModel for device integration
-        // val shimmerDevice = viewModel.getConnectedShimmerDevice()
-        // val btManager = viewModel.getShimmerBluetoothManager()
-
-        // if (shimmerDevice != null && btManager != null) {
-        //     if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
-        //         ShimmerDialogConfigurations.buildShimmerSensorEnableDetails(shimmerDevice, this, btManager)
-        //     } else {
-        //         Toast.makeText(this, "Cannot configure - device is streaming or logging", Toast.LENGTH_SHORT).show()
-        //     }
-        // } else {
-        //     Toast.makeText(this, "No Shimmer device connected", Toast.LENGTH_SHORT).show()
-        // }
-
-        Toast.makeText(this, "Shimmer sensor configuration - Coming soon", Toast.LENGTH_SHORT).show()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer sensor configuration to ShimmerController")
+        shimmerController.showShimmerSensorConfiguration(this, viewModel)
     }
 
     /**
@@ -1266,79 +1214,24 @@ class MainActivity : AppCompatActivity(),
      * Requires a connected Shimmer device
      */
     fun showShimmerGeneralConfiguration() {
-        // Get connected shimmer device from ViewModel when available  
-        // Implementation note: These methods would be implemented in ViewModel for device integration
-        // val shimmerDevice = viewModel.getConnectedShimmerDevice()
-        // val btManager = viewModel.getShimmerBluetoothManager()
-
-        // if (shimmerDevice != null && btManager != null) {
-        //     if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
-        //         ShimmerDialogConfigurations.buildShimmerConfigOptions(shimmerDevice, this, btManager)
-        //     } else {
-        //         Toast.makeText(this, "Cannot configure - device is streaming or logging", Toast.LENGTH_SHORT).show()
-        //     }
-        // } else {
-        //     Toast.makeText(this, "No Shimmer device connected", Toast.LENGTH_SHORT).show()
-        // }
-
-        Toast.makeText(this, "Shimmer general configuration - Coming soon", Toast.LENGTH_SHORT).show()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer general configuration to ShimmerController")
+        shimmerController.showShimmerGeneralConfiguration(this, viewModel)
     }
 
     /**
      * Start SD logging on connected Shimmer device
      */
     fun startShimmerSDLogging() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting Shimmer SD logging")
-
-        // Check if any device is currently streaming or logging
-        if (viewModel.isAnyShimmerDeviceStreaming()) {
-            Toast.makeText(this, "Cannot start SD logging - device is streaming", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (viewModel.isAnyShimmerDeviceSDLogging()) {
-            Toast.makeText(this, "SD logging is already active", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Start SD logging via ViewModel wrapper method
-        viewModel.startShimmerSDLogging { success ->
-            runOnUiThread {
-                if (success) {
-                    Toast.makeText(this@MainActivity, "SD logging started", Toast.LENGTH_SHORT).show()
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] SD logging started successfully")
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to start SD logging", Toast.LENGTH_SHORT).show()
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to start SD logging")
-                }
-            }
-        }
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer SD logging start to ShimmerController")
+        shimmerController.startShimmerSDLogging(viewModel)
     }
 
     /**
      * Stop SD logging on connected Shimmer device
      */
     fun stopShimmerSDLogging() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Stopping Shimmer SD logging")
-
-        // Check if any device is currently SD logging
-        if (!viewModel.isAnyShimmerDeviceSDLogging()) {
-            Toast.makeText(this, "No SD logging is currently active", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Stop SD logging via ViewModel wrapper method
-        viewModel.stopShimmerSDLogging { success ->
-            runOnUiThread {
-                if (success) {
-                    Toast.makeText(this@MainActivity, "SD logging stopped", Toast.LENGTH_SHORT).show()
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] SD logging stopped successfully")
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to stop SD logging", Toast.LENGTH_SHORT).show()
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to stop SD logging")
-                }
-            }
-        }
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating Shimmer SD logging stop to ShimmerController")
+        shimmerController.stopShimmerSDLogging(viewModel)
     }
 
     // Menu Handling - UI Enhancement
@@ -1607,24 +1500,23 @@ class MainActivity : AppCompatActivity(),
         updatePermissionButtonVisibility()
     }
 
-    // ========== ShimmerManager.ShimmerCallback Implementation ==========
+    // ========== ShimmerController.ShimmerCallback Implementation ==========
     
     override fun onDeviceSelected(address: String, name: String) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected via ShimmerManager:")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected via ShimmerController:")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $address")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $name")
         
         selectedShimmerAddress = address
         selectedShimmerName = name
         
-        // Update UI to reflect device selection
-        binding.statusText.text = "Shimmer device selected: $name"
-        updateSensorConnectionStatus(true, false) // Shimmer connected, thermal not connected
+        // Show BLE/Classic connection type selection dialog
+        shimmerController.showBtTypeConnectionOption(this)
     }
 
     override fun onDeviceSelectionCancelled() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
-        Toast.makeText(this, "Device selection cancelled", Toast.LENGTH_SHORT).show()
+        showToast("Device selection cancelled")
     }
 
     override fun onConnectionStatusChanged(connected: Boolean) {
@@ -1632,21 +1524,36 @@ class MainActivity : AppCompatActivity(),
         updateShimmerConnectionStatus(connected)
         
         val statusMessage = if (connected) "Shimmer device connected" else "Shimmer device disconnected"
-        binding.statusText.text = statusMessage
-        Toast.makeText(this, statusMessage, Toast.LENGTH_SHORT).show()
+        updateStatusText(statusMessage)
+        showToast(statusMessage)
     }
 
     override fun onConfigurationComplete() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
-        binding.statusText.text = "Shimmer configuration completed"
-        Toast.makeText(this, "Shimmer configuration completed", Toast.LENGTH_SHORT).show()
+        updateStatusText("Shimmer configuration completed")
+        showToast("Shimmer configuration completed")
     }
 
-    // Disambiguated onError for ShimmerManager
-    fun onShimmerError(message: String) {
-        android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Manager error: $message")
-        binding.statusText.text = "Shimmer Error: $message"
-        Toast.makeText(this, "Shimmer Error: $message", Toast.LENGTH_LONG).show()
+    override fun onShimmerError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Controller error: $message")
+        updateStatusText("Shimmer Error: $message")
+        showToast("Shimmer Error: $message", Toast.LENGTH_LONG)
+    }
+
+    override fun updateStatusText(text: String) {
+        runOnUiThread {
+            binding.statusText.text = text
+        }
+    }
+
+    override fun showToast(message: String, duration: Int) {
+        runOnUiThread {
+            Toast.makeText(this, message, duration).show()
+        }
+    }
+
+    override fun runOnUiThread(action: () -> Unit) {
+        runOnUiThread(action)
     }
 
     // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========
