@@ -4,26 +4,80 @@ import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
 /**
- * Complete test suite for all instrumented tests using modern test architecture
+ * Enhanced comprehensive test suite for all instrumented tests with performance monitoring.
  * 
- * Organizes instrumented tests for efficient execution on emulators/devices
+ * Organizes instrumented tests for efficient execution on emulators/devices with
+ * comprehensive performance analysis and hardware validation.
+ * 
+ * @see EnhancedTestRunner for performance monitoring capabilities
+ * @author Multi-Sensor Recording System
+ * @version 2.0.0 - Enhanced with comprehensive testing framework
  */
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-    // UI Integration Tests
+    // UI Integration Tests - Enhanced
     com.multisensor.recording.ui.MainActivityIntegrationTest::class,
+    com.multisensor.recording.ui.FileViewActivityUITest::class,
     
-    // Service Integration Tests
-    com.multisensor.recording.service.RecordingServiceInstrumentedTest::class,
+    // Hardware Integration Tests - Production Ready
+    com.multisensor.recording.recording.ThermalRecorderHardwareTest::class,
+    com.multisensor.recording.recording.ComprehensiveCameraAccessTest::class,
+    com.multisensor.recording.recording.BluetoothDiagnosticTest::class,
+    com.multisensor.recording.recording.ShimmerRecorderDirectTest::class,
     
-    // Hardware Integration Tests (would be added as needed)
-    // com.multisensor.recording.hardware.ShimmerDeviceIntegrationTest::class,
-    // com.multisensor.recording.hardware.ThermalCameraIntegrationTest::class,
-    
-    // Network Integration Tests
-    // com.multisensor.recording.network.NetworkConnectionIntegrationTest::class,
-    
-    // Storage Integration Tests
-    // com.multisensor.recording.storage.FileSystemIntegrationTest::class
+    // System Integration Tests - Comprehensive Validation
+    com.multisensor.recording.integration.DataFlowIntegrationTest::class,
+    com.multisensor.recording.integration.MultiSensorCoordinationTest::class,
+    com.multisensor.recording.integration.ProtocolIntegrationTest::class,
+    com.multisensor.recording.integration.FileIOIntegrationTest::class,
+    com.multisensor.recording.integration.Milestone28IntegrationTest::class
 )
 class ComprehensiveInstrumentedTestSuite
+
+/**
+ * Hardware stress testing suite for device validation under extreme conditions.
+ * 
+ * These tests validate hardware integration and performance under stress:
+ * - Thermal camera intensive operations
+ * - Bluetooth connection reliability under load
+ * - Multi-sensor coordination stress testing
+ * - Extended recording session validation
+ */
+@RunWith(Suite::class)
+@Suite.SuiteClasses(
+    com.multisensor.recording.recording.ThermalCameraBulletproofIntegrationTest::class,
+    com.multisensor.recording.integration.MultiSensorCoordinationTest::class,
+    com.multisensor.recording.integration.DataFlowIntegrationTest::class
+)
+class HardwareStressTestSuite
+
+/**
+ * UI performance testing suite for user experience validation.
+ * 
+ * These tests measure and validate UI performance metrics:
+ * - Touch response latency
+ * - UI rendering performance
+ * - Memory usage during UI operations
+ * - Battery consumption analysis
+ */
+@RunWith(Suite::class)
+@Suite.SuiteClasses(
+    com.multisensor.recording.ui.MainActivityIntegrationTest::class,
+    com.multisensor.recording.ui.FileViewActivityUITest::class
+)
+class UIPerformanceTestSuite
+
+/**
+ * Manual testing suite for scenarios requiring human interaction.
+ * 
+ * These tests require manual interaction and validation:
+ * - Physical device testing scenarios
+ * - Human-in-the-loop validation
+ * - Real-world usage pattern testing
+ */
+@RunWith(Suite::class)
+@Suite.SuiteClasses(
+    com.multisensor.recording.recording.CameraRecorderManualTest::class,
+    com.multisensor.recording.recording.ShimmerRecorderManualTest::class
+)
+class ManualTestSuite

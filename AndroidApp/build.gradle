@@ -88,6 +88,41 @@ android {
             buildConfigField "String", "BUILD_TYPE", '"debug"'
             enableUnitTestCoverage true
             enableAndroidTestCoverage true
+            
+            // Enhanced testing configuration
+            testOptions {
+                execution 'ANDROIDX_TEST_ORCHESTRATOR'
+                animationsDisabled = true
+                
+                // JUnit Platform configuration for enhanced testing
+                unitTests {
+                    includeAndroidResources = true
+                    returnDefaultValues = true
+                    
+                    // Enhanced test execution options
+                    all {
+                        jvmArgs '-XX:MaxMetaspaceSize=512m'
+                        maxHeapSize = "2048m"
+                        
+                        // Enable comprehensive test reporting
+                        reports.html.enabled = true
+                        reports.junitXml.enabled = true
+                        
+                        // Performance monitoring configuration
+                        systemProperty 'junit.jupiter.execution.parallel.enabled', 'true'
+                        systemProperty 'junit.jupiter.execution.parallel.mode.default', 'concurrent'
+                        systemProperty 'performance.monitoring.enabled', 'true'
+                        systemProperty 'stress.testing.enabled', 'false'
+                        
+                        // Test categorization
+                        useJUnitPlatform {
+                            includeEngines 'junit-jupiter', 'junit-vintage'
+                            includeTags 'unit', 'integration', 'performance'
+                            excludeTags 'manual', 'stress'
+                        }
+                    }
+                }
+            }
         }
 
         release {
@@ -320,15 +355,15 @@ dependencies {
     // Networking & Serialization
     implementation libs.bundles.networking
 
-    // Unit Testing
-    testImplementation libs.bundles.unit.testing
+    // Enhanced Unit Testing Framework
+    testImplementation libs.bundles.enhanced.unit.testing
 
     // Hilt Testing
     testImplementation libs.hilt.android.testing
     kspTest libs.hilt.compiler
 
-    // Android (Instrumented) Testing
-    androidTestImplementation libs.bundles.integration.testing
+    // Enhanced Integration Testing Framework
+    androidTestImplementation libs.bundles.enhanced.integration.testing
     
     // Test orchestrator for reliable instrumented tests
     androidTestUtil 'androidx.test:orchestrator:1.4.2'
@@ -374,10 +409,163 @@ detekt {
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.12"
 }
 
+// Enhanced test configuration
 tasks.withType(Test) {
+    useJUnitPlatform()
+    
+    // Performance monitoring
+    systemProperty 'performance.monitoring.enabled', 'true'
+    systemProperty 'memory.tracking.enabled', 'true'
+    
+    // Enhanced reporting
+    reports {
+        html.enabled = true
+        junitXml.enabled = true
+    }
+    
+    // Test execution options
+    maxHeapSize = "2048m"
+    jvmArgs '-XX:MaxMetaspaceSize=512m', '-XX:+UseG1GC'
+    
+    // Test result processing
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+        showStandardStreams false
+    }
+    
+    // Performance thresholds
+    systemProperty 'test.timeout.seconds', '300'
+    systemProperty 'test.memory.threshold.mb', '512'
+}
+
+// Enhanced JaCoCo test coverage task
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+    group = "Reporting"
+    description = "Generate comprehensive test coverage reports."
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        csv.enabled = false
+    }
+
+    def fileFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/*$ViewInjector*.*',
+        '**/*$ViewBinder*.*',
+        '**/Lambda$*.class',
+        '**/Lambda.class',
+        '**/*Lambda.class',
+        '**/*Lambda*.class',
+        '**/*_MembersInjector.class',
+        '**/Dagger*Component*.class',
+        '**/*Module_*Factory.class',
+        '**/di/module/*',
+        '**/*_Factory.*',
+        '**/*Module.*',
+        '**/*Dagger*.*',
+        '**/*Hilt*.*'
+    ]
+
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/javac/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: project.buildDir, includes: [
+        'jacoco/testDebugUnitTest.exec',
+        'outputs/code-coverage/connected/*coverage.ec'
+    ]))
+}
+
+// Enhanced coverage verification task
+task jacocoCoverageVerification(type: JacocoCoverageVerification, dependsOn: ['jacocoTestReport']) {
+    group = "Verification"
+    description = "Verify test coverage meets minimum thresholds."
+    
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.75  // 75% minimum coverage
+            }
+        }
+        
+        rule {
+            enabled = true
+            element = 'CLASS'
+            
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.70  // 70% branch coverage
+            }
+        }
+    }
+}
+
+// Performance testing task
+task performanceTest(type: Test, dependsOn: ['testClasses']) {
+    group = "Verification"
+    description = "Run performance benchmark tests."
+    
+    useJUnitPlatform {
+        includeTags 'performance'
+    }
+    
+    systemProperty 'performance.monitoring.enabled', 'true'
+    systemProperty 'benchmark.mode', 'true'
+    
+    testLogging {
+        events "passed", "failed", "standardOut"
+        showStandardStreams = true
+    }
+}
+
+// Stress testing task
+task stressTest(type: Test, dependsOn: ['testClasses']) {
+    group = "Verification" 
+    description = "Run stress tests for high-load scenarios."
+    
+    useJUnitPlatform {
+        includeTags 'stress'
+    }
+    
+    systemProperty 'stress.testing.enabled', 'true'
+    systemProperty 'stress.duration.minutes', '10'
+    
+    // Extended timeout for stress tests
+    timeout = Duration.ofMinutes(15)
+    
+    testLogging {
+        events "passed", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
+}
+
+// Comprehensive test task that runs all test categories
+task comprehensiveTest {
+    group = "Verification"
+    description = "Run comprehensive test suite with performance monitoring."
+    
+    dependsOn 'testDebugUnitTest', 'jacocoTestReport', 'performanceTest'
+    
+    doLast {
+        println "🎉 Comprehensive Android test suite completed!"
+        println "📊 Check reports in: build/reports/"
+        println "📈 Coverage report: build/reports/jacoco/jacocoTestReport/html/index.html"
+    }
+}
     jacoco.includeNoLocationClasses = true
     jacoco.excludes = ['jdk.internal.*']
 }
