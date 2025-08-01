@@ -324,6 +324,15 @@ class MainActivityCoordinator @Inject constructor(
                 callback?.showToast("Streaming Error: $message", Toast.LENGTH_LONG)
             }
             
+            override fun onStreamingQualityChanged(quality: NetworkController.StreamingQuality) {
+                callback?.updateStatusText("Streaming quality: ${quality.displayName}")
+            }
+            
+            override fun onNetworkRecovery(networkType: String) {
+                callback?.updateStatusText("Network recovered: $networkType")
+                callback?.showToast("Network recovered: $networkType", Toast.LENGTH_SHORT)
+            }
+            
             override fun updateStatusText(text: String) {
                 callback?.updateStatusText(text)
             }
@@ -342,6 +351,24 @@ class MainActivityCoordinator @Inject constructor(
             
             override fun getStreamingDebugOverlay(): TextView? {
                 return callback?.getStreamingDebugOverlay()
+            }
+            
+            override fun onProtocolChanged(protocol: NetworkController.StreamingProtocol) {
+                callback?.updateStatusText("Protocol: ${protocol.displayName}")
+            }
+            
+            override fun onBandwidthEstimated(bandwidth: Long, method: NetworkController.BandwidthEstimationMethod) {
+                val bandwidthMbps = bandwidth / 1_000_000.0
+                callback?.updateStatusText("Bandwidth: ${String.format("%.1f", bandwidthMbps)}Mbps")
+            }
+            
+            override fun onFrameDropped(reason: String) {
+                callback?.updateStatusText("Frame dropped: $reason")
+            }
+            
+            override fun onEncryptionStatusChanged(enabled: Boolean) {
+                val status = if (enabled) "Enabled" else "Disabled"
+                callback?.updateStatusText("Encryption: $status")
             }
         })
     }
