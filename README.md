@@ -768,6 +768,26 @@ Example commands for specific variants:
 
 ## Key Features
 
+### Enhanced USB Device Management
+
+#### Multi-Device USB Support 🆕
+- **Simultaneous Device Handling**: Support for multiple TOPDON thermal cameras connected simultaneously
+- **Intelligent Device Tracking**: Unique identification and management of each connected device
+- **Real-Time Status Updates**: Dynamic UI updates reflecting current multi-device state
+- **Connection Statistics**: Historical tracking of device connections and usage patterns
+
+#### Advanced State Persistence 🆕
+- **Cross-App Session Persistence**: Device state preserved across application restarts
+- **Multi-Device State Management**: Comprehensive tracking of multiple device configurations
+- **Connection History**: Detailed logs of device connections and disconnections
+- **Robust Error Recovery**: Graceful handling of state corruption and restoration failures
+
+#### Smart USB Monitoring 🆕
+- **Periodic Device Scanning**: Configurable interval-based monitoring (5-second default)
+- **Event-Driven Detection**: Immediate response to system USB attachment/detachment events
+- **Performance Optimized**: Efficient resource usage with proper lifecycle management
+- **Comprehensive Logging**: Detailed debug information for troubleshooting and monitoring
+
 ### Android Application Features
 - **4K RGB video recording** with simultaneous RAW image capture using Camera2 API
 - **Thermal camera integration** using Topdon SDK for thermal imaging with USB-C connectivity
