@@ -1,9 +1,9 @@
 # Thermal Camera Integration and Implementation
 
 > **📖 Comprehensive Documentation Available**: For detailed Topdon TC001 and TC001 Plus documentation, see:
-> - **[Technical Deep-Dive](../comprehensive/README_topdon_tc001.md)** - Complete hardware specifications and implementation details
-> - **[User Guide](../comprehensive/USER_GUIDE_topdon_tc001.md)** - Step-by-step setup and operation procedures  
-> - **[Protocol Reference](../comprehensive/PROTOCOL_topdon_tc001.md)** - API specifications and data formats
+> - **[Technical Deep-Dive](../new_documentation/README_topdon_tc001.md)** - Complete hardware specifications and implementation details
+> - **[User Guide](../new_documentation/USER_GUIDE_topdon_tc001.md)** - Step-by-step setup and operation procedures  
+> - **[Protocol Reference](../new_documentation/PROTOCOL_topdon_tc001.md)** - API specifications and data formats
 > 
 > This document provides general thermal camera integration overview and system-wide design patterns.
 
@@ -25,8 +25,8 @@ The system currently supports the following thermal camera models:
 
 | Camera Model | Documentation | Key Features |
 |--------------|---------------|--------------|
-| **Topdon TC001** | [Comprehensive Docs](../comprehensive/README_topdon_tc001.md) | 256×192, -20°C to +550°C, USB-C |
-| **Topdon TC001 Plus** | [Comprehensive Docs](../comprehensive/README_topdon_tc001.md) | 256×192, -20°C to +650°C, Enhanced accuracy |
+| **Topdon TC001** | [Comprehensive Docs](../new_documentation/README_topdon_tc001.md) | 256×192, -20°C to +550°C, USB-C |
+| **Topdon TC001 Plus** | [Comprehensive Docs](../new_documentation/README_topdon_tc001.md) | 256×192, -20°C to +650°C, Enhanced accuracy |
 
 For device-specific technical details, implementation guides, and protocols, refer to the comprehensive documentation linked above.
 

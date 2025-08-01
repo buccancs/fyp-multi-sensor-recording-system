@@ -26,9 +26,9 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
 
 ### 🌡️ Thermal Camera Documentation
-- **[Topdon TC001 Technical Guide](comprehensive/README_topdon_tc001.md)** - Complete technical documentation for TC001 and TC001 Plus
-- **[Topdon TC001 User Guide](comprehensive/USER_GUIDE_topdon_tc001.md)** - Practical usage instructions and procedures
-- **[Topdon TC001 Protocol Reference](comprehensive/PROTOCOL_topdon_tc001.md)** - Data formats, APIs, and communication protocols
+- **[Topdon TC001 Technical Guide](new_documentation/README_topdon_tc001.md)** - Complete technical documentation for TC001 and TC001 Plus
+- **[Topdon TC001 User Guide](new_documentation/USER_GUIDE_topdon_tc001.md)** - Practical usage instructions and procedures
+- **[Topdon TC001 Protocol Reference](new_documentation/PROTOCOL_topdon_tc001.md)** - Data formats, APIs, and communication protocols
 
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
@@ -125,9 +125,9 @@ Complete component-specific documentation following component-first approach:
 
 | Document | Content | Target Users |
 |----------|---------|--------------|
-| [README_topdon_tc001.md](comprehensive/README_topdon_tc001.md) | Technical deep-dive for Topdon TC001/TC001 Plus | Developers, System Architects |
-| [USER_GUIDE_topdon_tc001.md](comprehensive/USER_GUIDE_topdon_tc001.md) | Practical user guide for thermal cameras | End users, Researchers |
-| [PROTOCOL_topdon_tc001.md](comprehensive/PROTOCOL_topdon_tc001.md) | Data contracts and API specifications | Developers, Integration Teams |
+| [README_topdon_tc001.md](new_documentation/README_topdon_tc001.md) | Technical deep-dive for Topdon TC001/TC001 Plus | Developers, System Architects |
+| [USER_GUIDE_topdon_tc001.md](new_documentation/USER_GUIDE_topdon_tc001.md) | Practical user guide for thermal cameras | End users, Researchers |
+| [PROTOCOL_topdon_tc001.md](new_documentation/PROTOCOL_topdon_tc001.md) | Data contracts and API specifications | Developers, Integration Teams |
 
 **Key Features:**
 - Hardware specifications and architecture details
@@ -148,7 +148,7 @@ Main Entry Points:
 ├── user-guides/CONSOLIDATED_USER_GUIDE.md (Complete User Manual)
 ├── implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md (Complete Technical Guide)
 ├── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
-└── comprehensive/README_topdon_tc001.md (Topdon TC001/TC001 Plus Technical Guide)
+└── new_documentation/README_topdon_tc001.md (Topdon TC001/TC001 Plus Technical Guide)
 
 Supporting Documentation:
 ├── API_REFERENCE.md (API Documentation)
