@@ -24,6 +24,12 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
+- **[Shimmer3 GSR+ Technical Deep-Dive](shimmer3_gsr_plus/README_shimmer3_gsr_plus.md)** - Shimmer device integration architecture
+
+### 📊 Device-Specific Documentation
+- **[Shimmer3 GSR+ Documentation](shimmer3_gsr_plus/INDEX.md)** - Comprehensive Shimmer3 GSR+ device documentation
+- **[Shimmer3 GSR+ User Guide](shimmer3_gsr_plus/USER_GUIDE_shimmer3_gsr_plus.md)** - Practical device usage guide
+- **[Shimmer3 GSR+ Protocol](shimmer3_gsr_plus/PROTOCOL_shimmer3_gsr_plus.md)** - Data formats and communication protocols
 
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
@@ -114,6 +120,16 @@ Quick reference materials and API documentation:
 | Document | Content | Purpose |
 |----------|---------|---------|
 | [API Quick Reference](reference/) | API quick reference cards | Developer reference |
+
+### 📁 Shimmer3 GSR+ Documentation (`docs/shimmer3_gsr_plus/`)
+Comprehensive documentation for Shimmer3 GSR+ device integration:
+
+| Document | Content | Purpose |
+|----------|---------|---------|
+| [INDEX.md](shimmer3_gsr_plus/INDEX.md) | Documentation navigation guide | Entry point |
+| [README_shimmer3_gsr_plus.md](shimmer3_gsr_plus/README_shimmer3_gsr_plus.md) | Technical deep-dive and architecture | Developers |
+| [USER_GUIDE_shimmer3_gsr_plus.md](shimmer3_gsr_plus/USER_GUIDE_shimmer3_gsr_plus.md) | Practical user guide | Researchers |
+| [PROTOCOL_shimmer3_gsr_plus.md](shimmer3_gsr_plus/PROTOCOL_shimmer3_gsr_plus.md) | Data formats and protocols | Developers/Analysts |
 
 ---
 
