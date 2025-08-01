@@ -76,9 +76,7 @@ This organization ensures that current, relevant documentation is easily accessi
 - `technical/system-architecture-overview.md` - System overview
 
 ### Comprehensive Guides
-- `comprehensive/pc-android-ui-guide.md` - Complete UI documentation with screenshots
-- `comprehensive/pc-android-logging-guide.md` - Logging systems documentation  
-- `comprehensive/pc-android-testing-guide.md` - Testing infrastructure guide
+- `new_documentation/` - Complete Android Mobile Application documentation with technical guides, user manuals, and protocol specifications
 
 ### Integration Guides
 - `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
