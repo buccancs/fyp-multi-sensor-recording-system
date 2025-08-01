@@ -116,7 +116,12 @@ PythonApp/logs/
 test_recordings/
 test_calibration/
 
-### Hand Segmentation Outputs (generated files) ###
+### Test artifacts and generated files ###
+test_videos/
+recordings/
+test_logs/
+security_reports/
+phase*_validation_report_*.json
 hand_segmentation_*/
 demo_output_*/
 comparison_*/
