@@ -86,7 +86,6 @@ This organization ensures that current, relevant documentation is easily accessi
 - `technical/data-structure-documentation.md` - Data organization details
 - `new_documentation/README_shimmer3_gsr_plus.md` - Shimmer3 GSR+ technical deep-dive
 - `technical/topdon-tc001-comprehensive-documentation.md` - Thermal camera specs
-- `technical/rock-solid-networking.md` - Network synchronization details
 
 ### API and Schemas
 - `api/session_metadata_schema.json` - Session data format

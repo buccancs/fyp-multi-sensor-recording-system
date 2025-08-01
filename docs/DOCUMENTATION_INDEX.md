@@ -24,6 +24,11 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
+
+- **[Networking Protocol - Technical Deep-Dive](new_documentation/README_networking_protocol.md)** - Complete networking and communication protocol implementation
+- **[Networking Protocol - User Guide](new_documentation/USER_GUIDE_networking_protocol.md)** - Practical guide for network setup and usage
+- **[Networking Protocol - Data Contracts](new_documentation/PROTOCOL_networking_protocol.md)** - Message specifications and protocol reference
+
 - **[Shimmer3 GSR+ Technical Deep-Dive](new_documentation/README_shimmer3_gsr_plus.md)** - Shimmer device integration architecture
 
 ### 📊 Device-Specific Documentation
@@ -35,6 +40,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[Topdon TC001 Technical Guide](new_documentation/README_topdon_tc001.md)** - Complete technical documentation for TC001 and TC001 Plus
 - **[Topdon TC001 User Guide](new_documentation/USER_GUIDE_topdon_tc001.md)** - Practical usage instructions and procedures
 - **[Topdon TC001 Protocol Reference](new_documentation/PROTOCOL_topdon_tc001.md)** - Data formats, APIs, and communication protocols
+
 
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
@@ -55,7 +61,9 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
 | [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
-| [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
+| [README_networking_protocol.md](new_documentation/README_networking_protocol.md) | Networking and Communication Protocol technical deep-dive | Developers |
+| [USER_GUIDE_networking_protocol.md](new_documentation/USER_GUIDE_networking_protocol.md) | Networking protocol practical usage guide | End users |
+| [PROTOCOL_networking_protocol.md](new_documentation/PROTOCOL_networking_protocol.md) | Message specifications and data contracts | Developers |
 
 ### 📁 User Guides (`docs/user-guides/`)
 Comprehensive user-facing documentation for operators and researchers:
@@ -106,7 +114,6 @@ Detailed technical specifications and architecture documentation:
 | [system-architecture-specification.md](technical/system-architecture-specification.md) | Complete system architecture | Architecture reference |
 | [UIController-Enhanced-Features.md](technical/UIController-Enhanced-Features.md) | UI enhancement details | Development reference |
 | [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
-| [network-protocols-synchronization.md](technical/network-protocols-synchronization.md) | Network protocols | Network development |
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
 | [thermal-camera-integration.md](technical/thermal-camera-integration.md) | Thermal camera setup | Hardware integration |
 | [computer-vision-methodology.md](technical/computer-vision-methodology.md) | CV implementation | Computer vision |
