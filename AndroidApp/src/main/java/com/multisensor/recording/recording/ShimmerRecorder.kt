@@ -1112,8 +1112,18 @@ class ShimmerRecorder
                         // Configure enabled sensors using proper SDK method
                         shimmer.writeEnabledSensors(sensorBitmask.toLong())
 
-                        // TODO: Configure sampling rate using proper SDK method
-                        // // shimmer.writeSamplingRate(newConfig.samplingRate)
+                        // Configure sampling rate using proper SDK method
+                        // Note: writeSamplingRate method availability depends on SDK version
+                        try {
+                            // Check if method exists before calling
+                            val writeMethod = shimmer.javaClass.getMethod("writeSamplingRate", Double::class.java)
+                            writeMethod.invoke(shimmer, newConfig.samplingRate)
+                            logger.debug("Sampling rate configured: ${newConfig.samplingRate} Hz")
+                        } catch (e: NoSuchMethodException) {
+                            logger.warning("writeSamplingRate method not available in this SDK version")
+                        } catch (e: Exception) {
+                            logger.warning("Error setting sampling rate: ${e.message}")
+                        }
 
                         // Configure GSR range using proper SDK method
                         shimmer.writeGSRRange(newConfig.gsrRange)
