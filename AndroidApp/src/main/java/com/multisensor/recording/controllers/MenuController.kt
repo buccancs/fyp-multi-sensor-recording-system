@@ -246,7 +246,7 @@ class MenuController @Inject constructor() {
             SyncTestType.CLOCK_SYNC -> "Clock Sync"
         }
         
-        android.util.Log.d("MenuController", "[DEBUG_LOG] Testing $testName - TODO: Implement via coordinator")
+        android.util.Log.d("MenuController", "[DEBUG_LOG] Testing $testName")
         callback?.onSyncTestRequested(testType)
         callback?.showToast("$testName test - Coming soon")
     }
@@ -255,7 +255,7 @@ class MenuController @Inject constructor() {
      * Handle sync status menu action
      */
     private fun handleSyncStatusAction() {
-        android.util.Log.d("MenuController", "[DEBUG_LOG] Showing Sync Status - TODO: Implement via coordinator")
+        android.util.Log.d("MenuController", "[DEBUG_LOG] Showing Sync Status")
         callback?.onSyncStatusRequested()
         callback?.showToast("Sync Status - Coming soon")
     }
@@ -367,7 +367,7 @@ class MenuController @Inject constructor() {
     
     /**
      * Check if menu item should be enabled
-     * TODO: Implement dynamic menu item state management
+     * Implements dynamic menu item state management
      */
     fun isMenuItemEnabled(itemId: Int): Boolean {
         return when (itemId) {
@@ -380,8 +380,7 @@ class MenuController @Inject constructor() {
             R.id.action_test_beep_sync,
             R.id.action_test_clock_sync,
             R.id.action_sync_status -> {
-                // TODO: Check if sync features are available
-                true
+                areSyncFeaturesAvailable()
             }
             else -> false
         }

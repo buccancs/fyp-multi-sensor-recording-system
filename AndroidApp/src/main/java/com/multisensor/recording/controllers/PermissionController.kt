@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.widget.Toast
 import com.multisensor.recording.managers.PermissionManager
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.pow
 
 /**

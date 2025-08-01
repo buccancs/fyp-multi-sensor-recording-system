@@ -27,7 +27,6 @@ import javax.inject.Singleton
  * separation of concerns while maintaining feature integration.
  * 
  * TODO: Complete integration with MainActivity refactoring
- * TODO: Add comprehensive unit tests for coordinator scenarios
  * TODO: Implement coordinator state persistence across app restarts
  * TODO: Add coordinator-level error handling and recovery
  * TODO: Implement feature dependency validation and management

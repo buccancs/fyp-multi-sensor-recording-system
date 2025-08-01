@@ -1,47 +1,13 @@
 # Comprehensive Documentation
 
-This directory contains comprehensive documentation for the Multi-Sensor Recording System, covering all aspects of the PC and Android applications.
+This directory contains comprehensive documentation for the Multi-Sensor Recording System. 
 
-## Documentation Overview
+**Note:** Android Mobile Application documentation has been consolidated into the dedicated `../new_documentation/` directory with complete technical guides, user manuals, and protocol specifications.
 
-### 📱 [PC/Android UI Guide](pc-android-ui-guide.md)
-A complete guide to the user interfaces of both the Python desktop controller and Android mobile application. Includes:
-- Detailed UI component descriptions
-- User interaction flows  
-- Interface architecture
-- Accessibility features
-- Screenshots and visual examples
-- Troubleshooting UI issues
-
-### 📊 [PC/Android Logging Guide](pc-android-logging-guide.md)
-Comprehensive documentation of the logging systems across both platforms. Covers:
-- Logging architecture and configuration
-- Log levels and categories
-- Structured logging formats
-- Session and performance logging
-- Cross-platform log integration
-- Log analysis and monitoring
-- Security and privacy considerations
-
-### 🧪 [PC/Android Testing Guide](pc-android-testing-guide.md)
-Complete guide to the testing infrastructure and methodologies. Includes:
-- Test architecture and frameworks
-- Unit, integration, and performance testing
-- Cross-platform testing strategies
-- Test automation and CI/CD
-- Test data management
-- Best practices and troubleshooting
-
-## Key Features
-
-Each guide includes:
-
-- **📑 Table of Contents**: Easy navigation to specific topics
-- **📊 Mermaid Diagrams**: Visual system architecture and flow diagrams
-- **📋 Reference Tables**: Quick lookup of configuration options and parameters
-- **💡 Prose-like Style**: Readable explanations with clear technical details
-- **📝 Lists and Examples**: Easy-to-scan information with practical code examples
-- **🔗 Cross-references**: Links between related documentation sections
+For Android application documentation, please refer to:
+- `../new_documentation/README_Android_Mobile_Application.md` - Technical overview and architecture
+- `../new_documentation/USER_GUIDE_Android_Mobile_Application.md` - User manual and procedures  
+- `../new_documentation/PROTOCOL_Android_Mobile_Application.md` - Protocol specifications and data contracts
 
 ## Documentation Standards
 
@@ -51,13 +17,13 @@ All documentation follows these principles:
 - **Research-Focused**: Tailored for scientific research applications
 - **Visual Integration**: Diagrams and tables for complex concepts
 - **Practical Examples**: Real code snippets and usage patterns
-- **Cross-Platform**: Unified coverage of both PC and Android systems
 
 ## Getting Started
 
-1. **For UI Development**: Start with the [PC/Android UI Guide](pc-android-ui-guide.md)
-2. **For Debugging**: Reference the [PC/Android Logging Guide](pc-android-logging-guide.md)
-3. **For Testing**: Follow the [PC/Android Testing Guide](pc-android-testing-guide.md)
+For Android application development and usage:
+1. **Technical Details**: Start with `../new_documentation/README_Android_Mobile_Application.md`
+2. **User Procedures**: Reference `../new_documentation/USER_GUIDE_Android_Mobile_Application.md`
+3. **API Integration**: Follow `../new_documentation/PROTOCOL_Android_Mobile_Application.md`
 
 ## Contributing to Documentation
 
