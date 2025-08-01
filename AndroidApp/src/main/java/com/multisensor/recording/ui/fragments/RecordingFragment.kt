@@ -44,6 +44,9 @@ class RecordingFragment : Fragment() {
         
         setupUI()
         observeViewModel()
+        
+        // Initialize the recording system when this fragment is created
+        initializeRecordingSystem()
     }
 
     private fun setupUI() {
@@ -58,6 +61,21 @@ class RecordingFragment : Fragment() {
         
         // Initialize status
         updateRecordingStatus(false)
+    }
+    
+    private fun initializeRecordingSystem() {
+        // Initialize the recording system with the TextureView from this fragment
+        val textureView = binding.texturePreview
+        
+        // Post to ensure the view is fully laid out
+        textureView.post {
+            try {
+                viewModel.initializeSystem(textureView)
+                UIUtils.showStatusMessage(requireContext(), "Recording system initialized")
+            } catch (e: Exception) {
+                UIUtils.showStatusMessage(requireContext(), "Initialization error: ${e.message}", true)
+            }
+        }
     }
 
     private fun observeViewModel() {

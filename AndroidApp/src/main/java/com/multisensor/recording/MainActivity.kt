@@ -525,6 +525,11 @@ class MainActivity : AppCompatActivity(),
             requestPermissionsManually()
         }
 
+        binding.navigationModeButton.setOnClickListener {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Navigation mode button clicked")
+            launchNavigationMode()
+        }
+
         // Initially disable stop buttons
         binding.stopRecordingButton.isEnabled = false
 
@@ -789,6 +794,17 @@ class MainActivity : AppCompatActivity(),
 
         // Call the same permission checking logic
         checkPermissions()
+    }
+
+    private fun launchNavigationMode() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Launching navigation mode")
+        
+        // Launch the MainNavigationActivity
+        val intent = Intent(this, MainNavigationActivity::class.java)
+        startActivity(intent)
+        
+        // Optionally finish this activity if you want to replace it
+        // finish()
     }
 
     private fun updatePermissionButtonVisibility() {
