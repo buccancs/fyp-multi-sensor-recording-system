@@ -99,19 +99,16 @@ include:
 
 # Exclude specific directories and files from the analysis.
 exclude:
-  - paths:
-    # Common build output and dependency directories
-    - build/
-    - AndroidApp/build/
-    - PythonApp/build/
-    - .gradle/
-    - node_modules/
-    - .idea/
-    # Python-specific exclusions
-    - __pycache__/
-    - venv/
-    - env/
-    - "**/*.pyc"
-
-  # Example of how to disable an inspection entirely:
-  # - name: SpellCheckingInspection
+  - name: All
+    paths:
+      - build/
+      - AndroidApp/build/
+      - PythonApp/build/
+      - .gradle/
+      - node_modules/
+      - .idea/
+      - # Python-specific exclusions
+      - __pycache__/
+      - venv/
+      - env/
+      - "**/*.pyc"
