@@ -30,7 +30,7 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
     fun mainActivity_should_launch_successfully() {
         // When the activity launches
         // Then essential UI elements should be visible
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
     }
 
@@ -40,7 +40,7 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         waitForUiIdle()
         
         // Then the status should show initialization
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
     }
 
@@ -50,10 +50,10 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         waitForUiIdle()
         
         // Then control buttons should be visible
-        onView(withId(R.id.recordButton))
+        onView(withId(R.id.startRecordingButton))
             .check(matches(isDisplayed()))
         
-        onView(withId(R.id.connectButton))
+        onView(withId(R.id.stopRecordingButton))
             .check(matches(isDisplayed()))
     }
 
@@ -64,27 +64,27 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         
         // When clicking the record button
         // Then it should be responsive (no crash)
-        onView(withId(R.id.recordButton))
+        onView(withId(R.id.startRecordingButton))
             .check(matches(isDisplayed()))
             .perform(click())
         
         // Verify app doesn't crash and UI is still responsive
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun connectButton_should_be_clickable() {
+    fun calibrationButton_should_be_clickable() {
         // Given the app is initialized  
         waitForUiIdle()
         
-        // When clicking the connect button
-        onView(withId(R.id.connectButton))
+        // When clicking the calibration button
+        onView(withId(R.id.calibrationButton))
             .check(matches(isDisplayed()))
             .perform(click())
         
         // Then the app should remain stable
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
     }
 
@@ -94,7 +94,7 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         waitForUiIdle()
         
         // Then battery information should be displayed
-        onView(withId(R.id.batteryProgressBar))
+        onView(withId(R.id.batteryLevelText))
             .check(matches(isDisplayed()))
         
         onView(withId(R.id.batteryLevelText))
@@ -107,13 +107,13 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         waitForUiIdle()
         
         // Then device status indicators should be present
-        onView(withId(R.id.pcStatusIndicator))
+        onView(withId(R.id.pcConnectionIndicator))
             .check(matches(isDisplayed()))
         
-        onView(withId(R.id.shimmerStatusIndicator))
+        onView(withId(R.id.shimmerConnectionIndicator))
             .check(matches(isDisplayed()))
         
-        onView(withId(R.id.thermalStatusIndicator))
+        onView(withId(R.id.thermalConnectionIndicator))
             .check(matches(isDisplayed()))
     }
 
@@ -127,10 +127,10 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         waitForUiIdle()
         
         // Then the UI should still be functional
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
         
-        onView(withId(R.id.recordButton))
+        onView(withId(R.id.startRecordingButton))
             .check(matches(isDisplayed()))
     }
 
@@ -144,7 +144,7 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         // Adjust based on actual UI implementation
         
         // Then the main content should remain accessible
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
     }
 
@@ -159,7 +159,7 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         waitForUiIdle()
         
         // Then the UI should still be functional
-        onView(withId(R.id.statusTextView))
+        onView(withId(R.id.statusText))
             .check(matches(isDisplayed()))
     }
 }

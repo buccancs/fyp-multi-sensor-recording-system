@@ -14,6 +14,7 @@ import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.delay
@@ -69,6 +70,9 @@ class ComprehensiveCameraAccessTest {
     @Inject
     lateinit var logger: Logger
 
+    @Inject
+    lateinit var thermalSettings: ThermalCameraSettings
+
     private lateinit var context: Context
     private lateinit var textureView: TextureView
     private lateinit var thermalRecorder: ThermalRecorder
@@ -83,8 +87,7 @@ class ComprehensiveCameraAccessTest {
         // Launch activity using ActivityScenario
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
 
-        // Create ThermalRecorder instance with ThermalCameraSettings
-        val thermalSettings = com.multisensor.recording.util.ThermalCameraSettings(context)
+        // Create ThermalRecorder instance
         thermalRecorder = ThermalRecorder(context, sessionManager, logger, thermalSettings)
 
         // Create TextureView on UI thread
