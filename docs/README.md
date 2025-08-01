@@ -71,34 +71,36 @@ This organization ensures that current, relevant documentation is easily accessi
 ### Essential Starting Points
 - `user-guides/user-guide.md` - Main user documentation
 - `comprehensive/README.md` - Complete PC/Android documentation suite
-- `reference/data-storage-quick-reference.md` - Quick data location guide
+- `new_documentation/session-management-quick-reference.md` - Session operations and data location guide
 - `technical/system-architecture-overview.md` - System overview
 
 ### Comprehensive Guides
+
 - `new_documentation/README_python_desktop_controller.md` - Complete Python Desktop Controller technical documentation
 - `new_documentation/USER_GUIDE_python_desktop_controller.md` - Python Desktop Controller user guide
 - `new_documentation/PROTOCOL_python_desktop_controller.md` - Python Desktop Controller protocol specification
 
+- `new_documentation/` - Complete Android Mobile Application documentation with technical guides, user manuals, and protocol specifications
+
+
 ### Integration Guides
-- `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
-- `user-guides/shimmer-integration-guide.md` - Android Shimmer integration
+- `new_documentation/USER_GUIDE_shimmer3_gsr_plus.md` - Shimmer3 GSR+ practical user guide
 - `user-guides/rock-solid-integration-guide.md` - Thermal camera integration
 
 ### Technical References
 - `technical/data-structure-documentation.md` - Data organization details
-- `technical/shimmer3-gsr-plus-comprehensive-documentation.md` - Shimmer technical specs
+- `new_documentation/README_shimmer3_gsr_plus.md` - Shimmer3 GSR+ technical deep-dive
 - `technical/topdon-tc001-comprehensive-documentation.md` - Thermal camera specs
-- `technical/rock-solid-networking.md` - Network synchronization details
 
 ### API and Schemas
-- `api/session_metadata_schema.json` - Session data format
-- `api/calibration_session_schema.json` - Calibration data format
-- `api/session_log_schema.json` - Event logging format
+- `new_documentation/session_metadata_schema.json` - Session data format
+- `new_documentation/calibration_session_schema.json` - Calibration data format
+- `new_documentation/session_log_schema.json` - Event logging format
 - `api/processing_metadata_schema.json` - Processing results format
 
 ### Quick References
 - `reference/file-naming-standards.md` - Naming conventions
-- `reference/shimmer3-gsr-plus-quick-reference.md` - Shimmer quick start
+- `new_documentation/INDEX.md` - Shimmer3 GSR+ comprehensive documentation index
 - `reference/readme-testing.md` - Testing procedures
 - `reference/test-documentation.md` - Test documentation
 

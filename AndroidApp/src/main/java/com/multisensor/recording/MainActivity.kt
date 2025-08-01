@@ -44,6 +44,7 @@ import com.multisensor.recording.managers.PermissionManager
 import com.multisensor.recording.controllers.PermissionController
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
+import com.multisensor.recording.controllers.CalibrationController
 import com.multisensor.recording.controllers.ShimmerController
 import com.multisensor.recording.controllers.MainActivityCoordinator
 import com.multisensor.recording.controllers.UIController
@@ -1852,6 +1853,8 @@ class MainActivity : AppCompatActivity(),
             val status = if (enabled) "Enabled" else "Disabled"
             binding.statusText.text = "Encryption: $status"
             Toast.makeText(this, "Encryption: $status", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun updateStatusText(text: String) {
         binding.statusText.text = text
@@ -1866,7 +1869,6 @@ class MainActivity : AppCompatActivity(),
     override fun areAllPermissionsGranted(): Boolean {
         return AllAndroidPermissions.getDangerousPermissions().all { permission ->
             ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-
         }
     }
 }
