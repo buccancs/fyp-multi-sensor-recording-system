@@ -133,7 +133,7 @@ class AppLoggerEnhancedTest {
         // Perform several timed operations
         repeat(3) { i ->
             AppLogger.measureTime(tag, "repeated_operation") {
-                Thread.sleep(10 + i * 5) // Variable timing
+                Thread.sleep((10 + i * 5).toLong()) // Variable timing
             }
         }
         

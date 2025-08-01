@@ -40,7 +40,7 @@ class NetworkQualityMonitorTest : BaseRobolectricTest() {
     fun `NetworkQuality data class should initialize correctly`() {
         // Given
         val score = 4
-        val latency = 75
+        val latency = 75L
         val bandwidth = 1500.0
 
         // When

@@ -73,7 +73,7 @@ class MainViewModelTest : BaseUnitTest() {
     @Test
     fun `should start recording when requested`() = runTest {
         // Given
-        every { mockSessionManager.startNewSession() } returns "test-session-123"
+        every { mockSessionManager.createNewSession() } returns "test-session-123"
         
         // When
         viewModel.startRecording()
