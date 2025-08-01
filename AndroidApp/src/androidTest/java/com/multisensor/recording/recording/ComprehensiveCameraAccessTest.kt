@@ -83,8 +83,9 @@ class ComprehensiveCameraAccessTest {
         // Launch activity using ActivityScenario
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
 
-        // Create ThermalRecorder instance
-        thermalRecorder = ThermalRecorder(context, sessionManager, logger)
+        // Create ThermalRecorder instance with ThermalCameraSettings
+        val thermalSettings = com.multisensor.recording.util.ThermalCameraSettings(context)
+        thermalRecorder = ThermalRecorder(context, sessionManager, logger, thermalSettings)
 
         // Create TextureView on UI thread
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
