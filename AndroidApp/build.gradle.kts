@@ -118,7 +118,7 @@ android {
             isReturnDefaultValues = true
             all {
                 it.jvmArgs(
-                    "-XX:MaxMetaspaceSize=512m",
+                    "-XX:MaxMetaspaceSize=2048m",
                     "-Djava.awt.headless=true",
                     "-Dfile.encoding=UTF-8",
                     "--add-opens=java.base/java.lang=ALL-UNNAMED"
@@ -160,14 +160,14 @@ dependencies {
     testImplementation(libs.bundles.core.ui)
 
     // Settings and Preferences
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    testImplementation("androidx.preference:preference-ktx:1.2.1")
+    implementation(libs.androidx.preference.ktx)
+    testImplementation(libs.androidx.preference.ktx)
 
     // Material Design Components
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation("com.google.android.material:material:1.12.0")
+    implementation(libs.androidx.material)
+    testImplementation(libs.androidx.material)
     implementation("androidx.cardview:cardview:1.0.0")
-    testImplementation("androidx.cardview:cardview:1.0.0")
+    testImplementation(libs.cardview)
 
     // Jetpack Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
@@ -217,8 +217,8 @@ dependencies {
 
     // Code Quality
     val ktlint by configurations.getting
-    ktlint("com.pinterest:ktlint:0.51.0")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+    ktlint(libs.ktlint)
+    detektPlugins(libs.detekt.formatting)
 
     // Local SDKs
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
@@ -255,7 +255,7 @@ tasks.register("generateConstants") {
         val devices = json["devices"] as Map<*, *>
         val resolution = devices["resolution"] as Map<*, *>
         val calibration = json["calibration"] as Map<*, *>
-        
+
         outputDir.mkdirs()
         outputFile.writeText("""
         // Auto-generated from config.json. Do not edit manually.

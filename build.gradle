@@ -8,9 +8,6 @@ plugins {
     id 'com.google.dagger.hilt.android' version '2.52' apply false
 }
 
-// Milestone 5.1: Build Automation Tasks
-// =================================
-
 // Task to assemble all components (Android + Python tests)
 tasks.register('assembleAll') {
     group = 'build'
