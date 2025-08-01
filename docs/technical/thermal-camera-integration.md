@@ -1,5 +1,12 @@
 # Thermal Camera Integration and Implementation
 
+> **📖 Enhanced Documentation Available**: For comprehensive Topdon TC001 and TC001 Plus documentation, see:
+> - **[Technical Deep-Dive](../comprehensive/README_topdon_tc001.md)** - Complete hardware specifications and implementation details
+> - **[User Guide](../comprehensive/USER_GUIDE_topdon_tc001.md)** - Step-by-step setup and operation procedures  
+> - **[Protocol Reference](../comprehensive/PROTOCOL_topdon_tc001.md)** - API specifications and data formats
+> 
+> This document provides general thermal camera integration overview, while the comprehensive documentation covers device-specific details.
+
 ## Table of Contents
 
 - [1. Executive Summary](#1-executive-summary)

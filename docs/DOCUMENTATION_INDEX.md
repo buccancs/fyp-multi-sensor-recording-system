@@ -25,6 +25,11 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
 
+### 🌡️ Thermal Camera Documentation
+- **[Topdon TC001 Technical Guide](comprehensive/README_topdon_tc001.md)** - Complete technical documentation for TC001 and TC001 Plus
+- **[Topdon TC001 User Guide](comprehensive/USER_GUIDE_topdon_tc001.md)** - Practical usage instructions and procedures
+- **[Topdon TC001 Protocol Reference](comprehensive/PROTOCOL_topdon_tc001.md)** - Data formats, APIs, and communication protocols
+
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
 - **[UIController Research](academic/UIController-Theoretical-Foundations.md)** - UI architecture research
@@ -115,6 +120,22 @@ Quick reference materials and API documentation:
 |----------|---------|---------|
 | [API Quick Reference](reference/) | API quick reference cards | Developer reference |
 
+### 📁 Comprehensive Documentation (`docs/comprehensive/`)
+Complete component-specific documentation following component-first approach:
+
+| Document | Content | Target Users |
+|----------|---------|--------------|
+| [README_topdon_tc001.md](comprehensive/README_topdon_tc001.md) | Technical deep-dive for Topdon TC001/TC001 Plus | Developers, System Architects |
+| [USER_GUIDE_topdon_tc001.md](comprehensive/USER_GUIDE_topdon_tc001.md) | Practical user guide for thermal cameras | End users, Researchers |
+| [PROTOCOL_topdon_tc001.md](comprehensive/PROTOCOL_topdon_tc001.md) | Data contracts and API specifications | Developers, Integration Teams |
+
+**Key Features:**
+- Hardware specifications and architecture details
+- Step-by-step setup and operation procedures  
+- Complete API reference and data format specifications
+- Troubleshooting guides and best practices
+- Research-grade calibration and synchronization protocols
+
 ---
 
 ## Document Relationships
@@ -126,14 +147,19 @@ Main Entry Points:
 ├── README.md (Project Overview)
 ├── user-guides/CONSOLIDATED_USER_GUIDE.md (Complete User Manual)
 ├── implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md (Complete Technical Guide)
-└── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
+├── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
+└── comprehensive/README_topdon_tc001.md (Topdon TC001/TC001 Plus Technical Guide)
 
 Supporting Documentation:
 ├── API_REFERENCE.md (API Documentation)
 ├── technical/ (Technical Specifications)
 ├── academic/ (Individual Research Papers)
 ├── testing/ (Testing Methodology)
-└── reference/ (Quick Reference Materials)
+├── reference/ (Quick Reference Materials)
+└── comprehensive/ (Component-Specific Documentation)
+    ├── README_topdon_tc001.md (Technical Deep-Dive)
+    ├── USER_GUIDE_topdon_tc001.md (Practical User Guide)
+    └── PROTOCOL_topdon_tc001.md (Data Contracts & APIs)
 ```
 
 ### Cross-References
