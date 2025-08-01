@@ -33,7 +33,7 @@ jobs:
       gradle: ${{ steps.changes.outputs.gradle }}
       ci: ${{ steps.changes.outputs.ci }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -86,7 +86,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
@@ -169,7 +169,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         cache-read-only: true
@@ -279,7 +279,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle (for Python integration tests)
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         cache-read-only: true
@@ -399,7 +399,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
@@ -524,7 +524,7 @@ jobs:
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         build-scan-publish: true
         build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
@@ -624,7 +624,7 @@ jobs:
         config-file: ./.github/codeql/codeql-config.yml
         
     - name: Setup Gradle for CodeQL
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: true
         
@@ -751,7 +751,7 @@ jobs:
         use-mamba: true
         
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v3
       with:
         cache-disabled: false
         build-scan-publish: true
