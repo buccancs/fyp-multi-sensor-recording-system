@@ -61,6 +61,9 @@ import com.multisensor.recording.util.logW
 import com.multisensor.recording.handsegmentation.HandSegmentationManager
 import com.multisensor.recording.ui.components.HandSegmentationControlView
 
+// network controller
+import com.multisensor.recording.controllers.NetworkController
+
 /**
  * main activity for multi-sensor recording system
  */
@@ -70,7 +73,8 @@ class MainActivity : AppCompatActivity(),
     ShimmerManager.ShimmerCallback,
     UsbDeviceManager.UsbDeviceCallback,
     HandSegmentationManager.HandSegmentationListener,
-    HandSegmentationControlView.HandSegmentationControlListener {
+    HandSegmentationControlView.HandSegmentationControlListener,
+    NetworkController.NetworkCallback {
     
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
@@ -92,6 +96,9 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
+    
+    @Inject
+    lateinit var networkController: NetworkController
 
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
@@ -138,6 +145,10 @@ class MainActivity : AppCompatActivity(),
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel initialized")
+        
+        // Initialize NetworkController integration
+        initializeNetworkController()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController integration initialized")
 
         // Setup UI
         setupUI()
@@ -825,7 +836,22 @@ class MainActivity : AppCompatActivity(),
 
         // Initialize system with TextureView for enhanced CameraRecorder integration
         viewModel.initializeSystem(textureView)
+        
+        // Start network monitoring now that system is initialized
+        networkController.startNetworkMonitoring(this)
+        
         binding.statusText.text = "System initialized - Ready to record"
+    }
+    
+    /**
+     * Initialize NetworkController integration with MainActivity
+     * Sets up callbacks and starts network monitoring
+     */
+    private fun initializeNetworkController() {
+        // Set this activity as the callback for network events
+        networkController.setCallback(this)
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController callback set and ready")
     }
 
     private fun startRecording() {
@@ -1561,6 +1587,9 @@ class MainActivity : AppCompatActivity(),
         if (viewModel.uiState.value.isRecording) {
             stopRecording()
         }
+        
+        // Cleanup NetworkController
+        networkController.cleanup()
 
         // Cleanup Status Display System - UI Enhancements
         try {
@@ -1688,4 +1717,77 @@ class MainActivity : AppCompatActivity(),
         binding.statusText.text = "USB Error: $message"
         Toast.makeText(this, "USB Error: $message", Toast.LENGTH_LONG).show()
     }
+    
+    // ========== NetworkController.NetworkCallback Implementation ==========
+    
+    override fun onStreamingStarted() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Streaming started")
+        runOnUiThread {
+            // Update recording UI to reflect streaming state
+            updateRecordingUI(isRecording = true)
+        }
+    }
+    
+    override fun onStreamingStopped() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Streaming stopped")
+        runOnUiThread {
+            // Update recording UI to reflect streaming state
+            updateRecordingUI(isRecording = false)
+        }
+    }
+    
+    override fun onNetworkStatusChanged(connected: Boolean) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Network status changed - connected: $connected")
+        runOnUiThread {
+            val statusMessage = if (connected) "Network connected" else "Network disconnected"
+            binding.statusText.text = statusMessage
+            
+            // Update UI to reflect network connectivity
+            if (!connected) {
+                Toast.makeText(this, "Network connection lost", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
+    override fun onStreamingError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] NetworkController: Streaming error - $message")
+        runOnUiThread {
+            binding.statusText.text = "Streaming Error: $message"
+            Toast.makeText(this, "Streaming Error: $message", Toast.LENGTH_LONG).show()
+        }
+    }
+    
+    override fun onStreamingQualityChanged(quality: NetworkController.StreamingQuality) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController: Streaming quality changed to $quality")
+        runOnUiThread {
+            binding.statusText.text = "Streaming quality: ${quality.displayName}"
+            Toast.makeText(this, "Quality: ${quality.displayName}", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    override fun onNetworkRecovery(networkType: String) {
+        android.util.Log.i("MainActivity", "[DEBUG_LOG] NetworkController: Network recovery successful - $networkType")
+        runOnUiThread {
+            binding.statusText.text = "Network recovered: $networkType"
+            Toast.makeText(this, "Network recovered: $networkType", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    override fun updateStatusText(text: String) {
+        runOnUiThread {
+            binding.statusText.text = text
+        }
+    }
+    
+    override fun showToast(message: String, duration: Int) {
+        runOnUiThread {
+            Toast.makeText(this, message, duration).show()
+        }
+    }
+    
+    override fun getStreamingIndicator(): View? = binding.streamingIndicator
+    
+    override fun getStreamingLabel(): View? = binding.streamingLabel
+    
+    override fun getStreamingDebugOverlay(): android.widget.TextView? = binding.streamingDebugOverlay
 }

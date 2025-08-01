@@ -324,6 +324,15 @@ class MainActivityCoordinator @Inject constructor(
                 callback?.showToast("Streaming Error: $message", Toast.LENGTH_LONG)
             }
             
+            override fun onStreamingQualityChanged(quality: NetworkController.StreamingQuality) {
+                callback?.updateStatusText("Streaming quality: ${quality.displayName}")
+            }
+            
+            override fun onNetworkRecovery(networkType: String) {
+                callback?.updateStatusText("Network recovered: $networkType")
+                callback?.showToast("Network recovered: $networkType", Toast.LENGTH_SHORT)
+            }
+            
             override fun updateStatusText(text: String) {
                 callback?.updateStatusText(text)
             }
