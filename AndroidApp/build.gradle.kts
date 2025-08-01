@@ -123,7 +123,7 @@ android {
                 )
                 it.maxHeapSize = "2048m"
                 it.useJUnitPlatform {
-                    includeEngines("junit-jupiter", "junit-vintage")
+                    includeEngines("junit-jupiter", "junit-vintage", "kotest")
                     includeTags("unit", "integration", "performance")
                     excludeTags("manual", "stress")
                 }
@@ -145,7 +145,7 @@ android {
 
     sourceSets {
         getByName("main") {
-            java.srcDirs("$buildDir/generated/source/config")
+            java.srcDirs("${layout.buildDirectory.get()}/generated/source/config")
         }
     }
 }
@@ -218,6 +218,7 @@ dependencies {
     kspAndroidTest(libs.hilt.compiler)
 
     // Code Quality
+    val ktlint by configurations.getting
     ktlint("com.pinterest:ktlint:0.51.0")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 
@@ -242,7 +243,7 @@ dependencies {
 
 //--------------- Custom Tasks & Build Logic ---------------//
 
-val outputDir = file("$buildDir/generated/source/config")
+val outputDir = file("${layout.buildDirectory.get()}/generated/source/config")
 tasks.register("generateConstants") {
     group = "build"
     description = "Generates Kotlin constants from config.json."
@@ -273,7 +274,6 @@ detekt {
     buildUponDefaultConfig = true
     allRules = false
     config.setFrom(files("$projectDir/../detekt.yml"))
-    baseline.set(file("$projectDir/detekt-baseline.xml"))
     reports {
         html.required.set(true)
         xml.required.set(true)
@@ -311,7 +311,8 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 tasks.register<JavaExec>("formatKotlin") {
     group = "formatting"
     description = "Format Kotlin code with ktlint."
-    classpath = configurations.ktlint.get()
+    val ktlint by configurations.getting
+    classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     args("-F", "src/**/*.kt")
 }
@@ -319,7 +320,8 @@ tasks.register<JavaExec>("formatKotlin") {
 tasks.register<JavaExec>("lintKotlin") {
     group = "verification"
     description = "Check Kotlin code style with ktlint."
-    classpath = configurations.ktlint.get()
+    val ktlint by configurations.getting
+    classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     args("src/**/*.kt")
 }
