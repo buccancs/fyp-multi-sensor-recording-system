@@ -71,6 +71,21 @@
                 android:resource="@xml/device_filter" />
         </activity>
 
+        <!-- Navigation-enabled MainActivity (fragment-based UI) -->
+        <activity
+            android:name=".MainNavigationActivity"
+            android:exported="false"
+            android:label="Multi-Sensor Recording (Navigation)"
+            android:theme="@style/Theme.MultiSensorRecording">
+            <!-- USB Device Intent Filter for Topdon Thermal Camera -->
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
+
         <!-- Network Configuration Activity -->
         <activity
             android:name=".ui.NetworkConfigActivity"
