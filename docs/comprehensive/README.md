@@ -23,11 +23,11 @@ Comprehensive documentation of the logging systems across both platforms. Covers
 - Log analysis and monitoring
 - Security and privacy considerations
 
-### 🧪 [PC/Android Testing Guide](pc-android-testing-guide.md)
-Complete guide to the testing infrastructure and methodologies. Includes:
-- Test architecture and frameworks
-- Unit, integration, and performance testing
-- Cross-platform testing strategies
+### 🧪 [Testing and Quality Assurance Framework](../testing/README_testing_qa_framework.md)
+Complete guide to the comprehensive testing infrastructure and quality assurance processes. Includes:
+- Multi-layered testing architecture with unit, integration, performance, and resilience testing
+- Cross-platform PC-Android communication validation
+- Research-grade reliability standards and compliance procedures
 - Test automation and CI/CD
 - Test data management
 - Best practices and troubleshooting
@@ -57,7 +57,7 @@ All documentation follows these principles:
 
 1. **For UI Development**: Start with the [PC/Android UI Guide](pc-android-ui-guide.md)
 2. **For Debugging**: Reference the [PC/Android Logging Guide](pc-android-logging-guide.md)
-3. **For Testing**: Follow the [PC/Android Testing Guide](pc-android-testing-guide.md)
+3. **For Testing**: Follow the [Testing and Quality Assurance Framework](../testing/TESTING_FRAMEWORK_INDEX.md)
 
 ## Contributing to Documentation
 

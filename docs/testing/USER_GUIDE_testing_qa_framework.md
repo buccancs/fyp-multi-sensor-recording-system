@@ -232,11 +232,106 @@ python test_data_integrity_validation.py
 # - Cross-device synchronization validation
 ```
 
-### Step 5: Quality Assurance (For Compliance Validation)
+### Step 5: Cross-Platform Integration Testing
+
+**Purpose**: Validate complete PC-Android communication and coordination workflows
+
+#### 5.1 Recording Session Integration Testing
+
+**Quick Integration Validation**
+```bash
+cd PythonApp
+
+# Basic PC-Android communication test (3 minutes)
+python run_quick_recording_session_test.py
+
+# Expected output:
+# ✅ PC Application Initialization Complete
+# ✅ Android Device Simulations Active (2 devices)
+# ✅ Communication and Networking Validated
+# ✅ Recording Session Lifecycle Complete
+# ✅ Data Persistence and Integrity Validated
+```
+
+**Comprehensive Integration Testing**
+```bash
+# Full integration test with multiple devices (15 minutes)
+python run_recording_session_test.py --duration 90 --devices 3 --save-logs --verbose
+
+# Test validation includes:
+# - Device discovery and capability negotiation
+# - Synchronized recording start/stop across devices
+# - Real-time sensor data streaming validation
+# - Cross-device timestamp synchronization
+# - Session data persistence and file integrity
+```
+
+#### 5.2 Advanced Integration Scenarios
+
+**Multi-Device Stress Testing**
+```bash
+# Stress test with 8 simulated devices (20 minutes)
+python run_recording_session_test.py --stress-test --devices 8 --duration 300 --performance-bench
+
+# Validates:
+# - System scalability with high device count
+# - Network communication under high load
+# - Memory and CPU usage optimization
+# - Concurrent file I/O operations
+# - Resource cleanup and management
+```
+
+**Error Recovery Integration Testing**
+```bash
+# Error simulation and recovery testing (10 minutes)  
+python run_recording_session_test.py --error-simulation --network-issues --devices 4
+
+# Tests recovery from:
+# - Network connectivity failures
+# - Device disconnection scenarios  
+# - Communication timeout conditions
+# - Partial session data recovery
+# - Graceful degradation handling
+```
+
+#### 5.3 Android Application Testing
+
+**Unit and Integration Testing**
+```bash
+cd ../AndroidApp
+
+# Run comprehensive Android test suite
+./run_comprehensive_android_tests.sh
+
+# Test categories executed:
+# - Unit tests (business logic validation)
+# - Integration tests (hardware communication)
+# - UI tests (user interface workflows)
+# - Performance tests (execution time and memory)
+# - Stress tests (high-load scenarios)
+```
+
+**Performance and Coverage Analysis**
+```bash
+# Performance benchmarking and coverage analysis
+./gradlew performanceTest jacocoTestReport
+
+# Performance thresholds validated:
+# - Execution time < 5 seconds per test
+# - Memory usage < 100MB per test
+# - Code coverage > 75%
+# - Branch coverage > 70%
+
+# View reports:
+# - Performance: app/build/reports/performance/index.html
+# - Coverage: app/build/reports/jacoco/jacocoTestReport/html/index.html
+```
+
+### Step 6: Quality Assurance (For Compliance Validation)
 
 **Purpose**: Ensure system meets research-grade quality standards
 
-#### 5.1 Code Quality Validation
+#### 6.1 Code Quality Validation
 ```bash
 # Python code quality checks
 cd PythonApp

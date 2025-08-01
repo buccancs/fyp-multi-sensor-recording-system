@@ -46,13 +46,12 @@ The Multi-Sensor Recording System implements a comprehensive, multi-layered test
 
 ### 📱 Platform-Specific Documentation
 
-#### [🤖 android-test-architecture.md](android-test-architecture.md) - Android Testing Architecture
-**Purpose**: Detailed Android testing framework documentation
+The platform-specific testing capabilities are now integrated within the main Testing and Quality Assurance Framework documentation above. Key Android testing features include:
 
-**Key Features**:
-- Modern Android testing architecture with base test classes
-- Test data factories and comprehensive test suites
-- UI testing with Espresso and hardware integration testing
+**Android Testing Architecture**:
+- Modern Android testing framework with base test classes (BaseUnitTest, BaseRobolectricTest, BaseInstrumentedTest)
+- Test data factories and comprehensive test suites with SessionInfoTestFactory and UiStateTestFactory
+- UI testing with Espresso and hardware integration testing capabilities
 - Performance monitoring and stress testing capabilities
 - CI/CD integration and quality gates
 
@@ -122,26 +121,34 @@ graph TB
 
 ### ✅ Core Testing Features
 
+### ✅ Core Testing Features
+
 #### Multi-Layered Testing Strategy
-- **Unit Tests**: Component-level validation for Python and Android
-- **Integration Tests**: Cross-component and cross-platform communication
-- **Performance Tests**: Benchmarking, memory analysis, and optimization
-- **Resilience Tests**: Error recovery, network failures, and stress scenarios
-- **Quality Assurance**: Code quality, security, and compliance validation
+- **Unit Tests**: Component-level validation for Python and Android with comprehensive coverage
+- **Integration Tests**: Cross-component and cross-platform communication validation
+- **Performance Tests**: Benchmarking, memory analysis, and optimization with threshold monitoring
+- **Resilience Tests**: Error recovery, network failures, and stress scenarios with automatic validation
+- **Quality Assurance**: Code quality, security, and compliance validation with audit trails
 
 #### Research-Grade Reliability
-- **Data Integrity**: Cryptographic checksums and corruption detection
-- **Temporal Accuracy**: Microsecond precision synchronization validation
-- **Reproducibility**: Deterministic test scenarios for consistent results
-- **Compliance**: Research data management standard adherence
-- **Audit Trail**: Comprehensive logging for research compliance
+- **Data Integrity**: Cryptographic checksums and corruption detection with automatic recovery
+- **Temporal Accuracy**: Microsecond precision synchronization validation across devices
+- **Reproducibility**: Deterministic test scenarios for consistent results in research environments
+- **Compliance**: Research data management standard adherence with documentation
+- **Audit Trail**: Comprehensive logging for research compliance and regulatory requirements
 
 #### Advanced Testing Capabilities
-- **Stress Testing**: High-load scenarios with up to 8 simulated devices
-- **Network Simulation**: Configurable latency, packet loss, and bandwidth constraints
-- **Error Injection**: Systematic failure simulation for robustness validation
-- **Performance Regression**: Automated detection of performance degradation
-- **Cross-Platform Validation**: Python-Android communication and coordination
+- **Stress Testing**: High-load scenarios with up to 8 simulated Android devices and realistic data loads
+- **Network Simulation**: Configurable latency (10ms-500ms), packet loss (0.1%-10%), and bandwidth constraints
+- **Error Injection**: Systematic failure simulation for robustness validation with recovery testing
+- **Performance Regression**: Automated detection of performance degradation with trend analysis
+- **Cross-Platform Validation**: Complete PC-Android communication and coordination testing
+
+#### Real-World Simulation Features
+- **Physiological Data Generation**: Realistic GSR (2-20 μS), PPG (60-100 BPM), and motion sensor simulation
+- **Device Behavior Modeling**: Battery constraints, memory limitations, and processing restrictions
+- **Extended Session Testing**: Long-duration validation (up to 24 hours) for research compliance
+- **Hardware Integration**: Shimmer3 sensor simulation and USB camera testing capabilities
 
 ### 🚀 Automation and Integration
 
@@ -190,28 +197,42 @@ graph TB
 
 ### Quick Start
 ```bash
-# Basic system validation (5 minutes)
+# Rapid system validation (5 minutes)
 cd /home/runner/work/bucika_gsr/bucika_gsr/PythonApp
 python run_quick_recording_session_test.py
 
-# Comprehensive testing (60 minutes)
+# Comprehensive PC-Android integration testing (15 minutes)
+python run_recording_session_test.py --duration 90 --devices 3 --save-logs --verbose
+
+# Complete system validation with all test categories (60 minutes)
 python run_complete_test_suite.py
 
-# Android testing
+# Android application testing with performance monitoring
 cd ../AndroidApp
 ./run_comprehensive_android_tests.sh
+
+# Performance benchmarking and coverage analysis
+./gradlew performanceTest jacocoTestReport
 ```
 
-### Custom Testing Scenarios
+### Advanced Testing Scenarios
 ```bash
-# High-stress testing with multiple devices
-python run_recording_session_test.py --stress-test --devices 8 --duration 300
+# Multi-device stress testing (30 minutes)
+python run_recording_session_test.py --stress-test --devices 8 --duration 300 --performance-bench
 
-# Network resilience testing
-python test_network_resilience.py --latency 100 --packet-loss 5
+# Network resilience and error recovery testing (20 minutes)
+python run_recording_session_test.py --error-simulation --network-issues --devices 4
 
-# Performance benchmarking
-python test_enhanced_stress_testing.py --performance-bench --save-logs
+# Long-duration stability testing (2-24 hours)
+python run_recording_session_test.py --long-duration --health-check --memory-stress
+
+# Quality assurance validation
+python -m flake8 src/ --count --statistics
+python -m mypy src/ --ignore-missing-imports
+../gradlew lintDebug detekt jacocoCoverageVerification
+
+# Security vulnerability scanning
+python -m bandit -r src/ -f json -o security_report.json
 ```
 
 ## Support and Contributing

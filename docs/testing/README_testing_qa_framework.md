@@ -432,6 +432,97 @@ def run_comprehensive_testing():
 - **Metadata Validation**: Session metadata completeness verification
 - **Synchronization Validation**: Cross-device timing accuracy verification
 
+## Cross-Platform Integration Testing
+
+### PC-Android Communication Testing
+
+The framework includes sophisticated cross-platform testing capabilities that validate the complete PC-Android ecosystem under realistic conditions.
+
+#### Recording Session Test Framework
+
+**Comprehensive Session Validation:**
+```bash
+# Quick validation for CI/CD integration
+python PythonApp/run_quick_recording_session_test.py
+
+# Comprehensive testing with multiple devices
+python PythonApp/run_recording_session_test.py --duration 90 --devices 3 --save-logs
+
+# Stress testing with high device load
+python PythonApp/run_recording_session_test.py --stress-test --devices 8 --duration 300
+
+# Error condition and recovery testing
+python PythonApp/run_recording_session_test.py --error-simulation --network-issues
+```
+
+**Test Capabilities:**
+- **Multi-Device Coordination**: Tests synchronized operation across up to 8 Android devices
+- **Realistic Sensor Simulation**: Generates physiologically accurate sensor data matching real Shimmer3 characteristics
+- **Communication Protocol Validation**: Tests JSON socket communication with proper message formatting
+- **Session Lifecycle Testing**: Validates complete recording workflow from initialization to completion
+
+#### Enhanced Android Test Architecture
+
+**Modern Testing Framework Components:**
+```kotlin
+// Base test classes for consistent testing patterns
+class MyComponentTest : BaseUnitTest() {
+    @RelaxedMockK
+    private lateinit var mockDependency: MyDependency
+    
+    @InjectMockKs
+    private lateinit var component: MyComponent
+    
+    @Test
+    fun `should perform action correctly`() = runTest {
+        // Given-When-Then testing pattern
+        val input = SessionInfoTestFactory.createActiveSession()
+        every { mockDependency.process(any()) } returns expectedResult
+        
+        val result = component.performAction(input)
+        
+        assertThat(result).isEqualTo(expectedResult)
+        verify { mockDependency.process(input) }
+    }
+}
+```
+
+**Test Organization Structure:**
+```
+AndroidApp/src/test/java/com/multisensor/recording/
+├── testbase/           # Base test classes and utilities
+├── testfixtures/       # Test data factories and mock objects  
+├── testsuite/          # Test suite definitions and runners
+├── recording/session/  # Session management testing
+├── ui/viewmodel/       # UI state and ViewModel validation
+├── network/            # Network communication testing
+├── managers/           # Manager class testing
+└── calibration/        # Calibration system testing
+```
+
+#### Performance and Stress Testing
+
+**Android Performance Testing:**
+```bash
+# Enhanced Android test suite with performance monitoring
+./AndroidApp/run_comprehensive_android_tests.sh
+
+# Performance benchmarking
+./gradlew performanceTest
+
+# Stress testing with high load
+./AndroidApp/run_comprehensive_android_tests.sh --stress
+
+# Coverage analysis with thresholds
+./gradlew jacocoTestReport
+```
+
+**Performance Monitoring Features:**
+- **Automatic Metrics Collection**: Execution time, memory usage, and resource utilization
+- **Performance Thresholds**: Configurable limits for execution time (5s) and memory (100MB)
+- **Coverage Requirements**: Minimum 75% code coverage with detailed reporting
+- **Regression Detection**: Performance trend analysis over time
+
 ## Integration with Development Workflow
 
 ### Development Testing Workflow

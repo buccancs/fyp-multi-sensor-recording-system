@@ -78,7 +78,7 @@ This organization ensures that current, relevant documentation is easily accessi
 ### Comprehensive Guides
 - `comprehensive/pc-android-ui-guide.md` - Complete UI documentation with screenshots
 - `comprehensive/pc-android-logging-guide.md` - Logging systems documentation  
-- `comprehensive/pc-android-testing-guide.md` - Testing infrastructure guide
+- `testing/README_testing_qa_framework.md` - Comprehensive Testing and Quality Assurance Framework
 
 ### Integration Guides
 - `user-guides/shimmer-pc-integration-guide.md` - Shimmer sensor setup
@@ -100,8 +100,8 @@ This organization ensures that current, relevant documentation is easily accessi
 ### Quick References
 - `reference/file-naming-standards.md` - Naming conventions
 - `reference/shimmer3-gsr-plus-quick-reference.md` - Shimmer quick start
-- `reference/readme-testing.md` - Testing procedures
-- `reference/test-documentation.md` - Test documentation
+- `testing/USER_GUIDE_testing_qa_framework.md` - Testing procedures and user guide
+- `testing/PROTOCOL_testing_qa_framework.md` - Testing protocols and data contracts
 
 ---
 

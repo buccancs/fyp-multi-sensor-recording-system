@@ -647,6 +647,252 @@ sequenceDiagram
 }
 ```
 
+## Cross-Platform Communication Protocols
+
+### PC-Android Recording Session Protocol
+
+#### Session Lifecycle Messages
+
+**Session Initialization Request**
+```json
+{
+  "type": "session_init_request",
+  "timestamp": "2025-01-01T12:00:00.000Z",
+  "sessionId": "session_12345",
+  "participantId": "P001",
+  "experimentConfig": {
+    "duration": 300,
+    "samplingRate": 50,
+    "enabledSensors": ["gsr", "ppg", "accelerometer", "gyroscope", "magnetometer"],
+    "recordingTypes": {
+      "video": true,
+      "thermal": true,
+      "sensor": true
+    }
+  },
+  "deviceRequirements": {
+    "minDevices": 1,
+    "maxDevices": 8,
+    "requiredCapabilities": ["sensor_recording", "video_capture"]
+  }
+}
+```
+
+**Session Initialization Response**
+```json
+{
+  "type": "session_init_response",
+  "timestamp": "2025-01-01T12:00:01.000Z",
+  "sessionId": "session_12345",
+  "deviceId": "android_device_001",
+  "status": "success",
+  "deviceCapabilities": {
+    "sensorTypes": ["gsr", "ppg", "accelerometer", "gyroscope", "magnetometer"],
+    "videoFormats": ["mp4", "avi"],
+    "thermalSupport": true,
+    "maxRecordingDuration": 3600,
+    "availableStorage": 2147483648
+  },
+  "deviceStatus": {
+    "batteryLevel": 85,
+    "cpuUsage": 15.2,
+    "memoryUsage": 512.0,
+    "temperature": 35.0
+  }
+}
+```
+
+#### Real-Time Data Streaming Protocol
+
+**Sensor Data Stream Message**
+```json
+{
+  "type": "sensor_data_stream",
+  "timestamp": "2025-01-01T12:05:30.125Z",
+  "sessionId": "session_12345",
+  "deviceId": "android_device_001",
+  "sequenceNumber": 15032,
+  "sensorData": {
+    "gsr": {
+      "value": 8.45,
+      "unit": "microsiemens",
+      "quality": "good",
+      "timestamp": "2025-01-01T12:05:30.125Z"
+    },
+    "ppg": {
+      "value": 1024,
+      "heartRate": 72,
+      "unit": "arbitrary_units",
+      "quality": "excellent",
+      "timestamp": "2025-01-01T12:05:30.125Z"
+    },
+    "accelerometer": {
+      "x": 0.12,
+      "y": -9.78,
+      "z": 0.05,
+      "unit": "m/s²",
+      "timestamp": "2025-01-01T12:05:30.125Z"
+    },
+    "gyroscope": {
+      "x": 0.01,
+      "y": -0.02,
+      "z": 0.00,
+      "unit": "rad/s",
+      "timestamp": "2025-01-01T12:05:30.125Z"
+    },
+    "magnetometer": {
+      "x": 25.4,
+      "y": -12.8,
+      "z": 48.9,
+      "unit": "μT",
+      "timestamp": "2025-01-01T12:05:30.125Z"
+    }
+  }
+}
+```
+
+#### Device Control Protocol
+
+**Recording Control Command**
+```json
+{
+  "type": "recording_control",
+  "timestamp": "2025-01-01T12:00:05.000Z",
+  "sessionId": "session_12345",
+  "command": "start_recording",
+  "parameters": {
+    "recordingTypes": ["video", "sensor", "thermal"],
+    "videoSettings": {
+      "resolution": "1920x1080",
+      "framerate": 30,
+      "codec": "h264"
+    },
+    "sensorSettings": {
+      "samplingRate": 50,
+      "bufferSize": 1000
+    },
+    "synchronization": {
+      "masterDevice": "pc_controller",
+      "timeSyncProtocol": "ntp",
+      "maxClockDrift": 10
+    }
+  }
+}
+```
+
+**Command Acknowledgment**
+```json
+{
+  "type": "command_acknowledgment",
+  "timestamp": "2025-01-01T12:00:05.500Z",
+  "sessionId": "session_12345",
+  "deviceId": "android_device_001",
+  "commandType": "recording_control",
+  "status": "success",
+  "executionTime": 450,
+  "result": {
+    "recordingStarted": true,
+    "activeSensors": ["gsr", "ppg", "accelerometer", "gyroscope", "magnetometer"],
+    "videoRecording": true,
+    "thermalRecording": false,
+    "estimatedDuration": 300,
+    "dataOutputPath": "/storage/emulated/0/MultiSensorRecording/session_12345/"
+  }
+}
+```
+
+#### Error Handling Protocol
+
+**Error Notification**
+```json
+{
+  "type": "error_notification",
+  "timestamp": "2025-01-01T12:10:15.000Z",
+  "sessionId": "session_12345",
+  "deviceId": "android_device_001",
+  "errorCode": "SENSOR_CONNECTION_LOST",
+  "severity": "high",
+  "errorDetails": {
+    "description": "Connection to Shimmer3 GSR sensor lost",
+    "affectedSensors": ["gsr"],
+    "errorTimestamp": "2025-01-01T12:10:14.850Z",
+    "recoveryAttempts": 3,
+    "automaticRecovery": false,
+    "userActionRequired": true
+  },
+  "recoveryOptions": [
+    {
+      "action": "reconnect_sensor",
+      "description": "Attempt automatic sensor reconnection",
+      "estimatedTime": 10
+    },
+    {
+      "action": "continue_without_sensor",
+      "description": "Continue recording without GSR sensor",
+      "impact": "Loss of GSR data for remainder of session"
+    },
+    {
+      "action": "abort_session",
+      "description": "Stop recording session",
+      "impact": "Complete session termination"
+    }
+  ]
+}
+```
+
+### Android Test Framework Communication Protocol
+
+#### Test Execution Control Messages
+
+**Test Suite Execution Request**
+```json
+{
+  "type": "test_suite_execution_request",
+  "timestamp": "2025-01-01T10:00:00.000Z",
+  "testSuiteId": "comprehensive_android_test_suite",
+  "executionConfig": {
+    "testCategories": ["unit", "integration", "performance", "stress"],
+    "parallel": true,
+    "maxConcurrency": 4,
+    "timeout": 3600,
+    "reportFormat": ["json", "html"],
+    "performanceThresholds": {
+      "maxExecutionTime": 5000,
+      "maxMemoryUsage": 104857600
+    }
+  },
+  "deviceConfig": {
+    "targetDevice": "emulator-5554",
+    "apiLevel": 30,
+    "architecture": "x86_64"
+  }
+}
+```
+
+**Test Execution Progress Update**
+```json
+{
+  "type": "test_execution_progress",
+  "timestamp": "2025-01-01T10:15:30.000Z",
+  "testSuiteId": "comprehensive_android_test_suite",
+  "progress": {
+    "totalTests": 156,
+    "completedTests": 89,
+    "passedTests": 85,
+    "failedTests": 4,
+    "skippedTests": 0,
+    "currentTest": "SessionManagerIntegrationTest.testRecordingLifecycle",
+    "percentComplete": 57.05
+  },
+  "performance": {
+    "averageExecutionTime": 2850,
+    "peakMemoryUsage": 89456640,
+    "currentCpuUsage": 45.2,
+    "estimatedTimeRemaining": 1245
+  }
+}
+```
+
 ## Performance Monitoring Protocol
 
 ### Real-time Metrics Collection
