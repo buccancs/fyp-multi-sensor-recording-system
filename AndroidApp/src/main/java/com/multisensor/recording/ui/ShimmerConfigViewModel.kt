@@ -372,4 +372,51 @@ class ShimmerConfigViewModel @Inject constructor(
             ) 
         }
     }
+
+    /**
+     * Apply configuration preset
+     */
+    fun applyConfigurationPreset(presetName: String) {
+        logger.info("Applying configuration preset: $presetName")
+        
+        val (enabledSensors, samplingRate) = when (presetName) {
+            "Default" -> {
+                // Standard GSR+ configuration
+                Pair(setOf("GSR", "PPG", "ACCEL"), 256)
+            }
+            "High Performance" -> {
+                // All sensors enabled with high sampling rate
+                Pair(setOf("GSR", "PPG", "ACCEL", "GYRO", "MAG", "ECG"), 512)
+            }
+            "Low Power" -> {
+                // Minimal sensors with low sampling rate
+                Pair(setOf("GSR", "PPG"), 128)
+            }
+            "Custom" -> {
+                // Keep current configuration
+                return
+            }
+            else -> {
+                logger.warning("Unknown preset: $presetName")
+                return
+            }
+        }
+        
+        // Update UI state with preset configuration
+        _uiState.update { 
+            it.copy(
+                enabledSensors = enabledSensors,
+                samplingRate = samplingRate
+            ) 
+        }
+        
+        // Apply the preset configuration to the device
+        updateSensorConfiguration(enabledSensors)
+        updateSamplingRate(samplingRate)
+    }
+
+    /**
+     * Get available configuration presets
+     */
+    fun getAvailablePresets(): List<String> = listOf("Default", "High Performance", "Low Power", "Custom")
 }

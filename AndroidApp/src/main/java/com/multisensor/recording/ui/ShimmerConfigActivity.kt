@@ -237,7 +237,7 @@ class ShimmerConfigActivity : AppCompatActivity() {
             }
 
         // Configuration preset spinner
-        val presets = arrayOf("Default", "High Performance", "Low Power", "Custom")
+        val presets = viewModel.getAvailablePresets().toTypedArray()
         val presetAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, presets)
         presetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         configurationPresetSpinner.adapter = presetAdapter
@@ -250,8 +250,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
                     position: Int,
                     id: Long,
                 ) {
-                    // Configuration presets are handled by the ViewModel
-                    // TODO: Move preset logic to ViewModel if needed
+                    // Apply configuration preset using ViewModel
+                    val selectedPreset = presets[position]
+                    viewModel.applyConfigurationPreset(selectedPreset)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}

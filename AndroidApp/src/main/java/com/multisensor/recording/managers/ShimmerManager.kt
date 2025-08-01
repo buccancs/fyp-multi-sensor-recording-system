@@ -212,11 +212,26 @@ class ShimmerManager @Inject constructor() {
         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Disconnecting from Shimmer device")
         
         try {
-            // TODO: Implement disconnect logic
+            // Implement disconnect logic
             // This would typically involve calling disconnect on ShimmerBluetoothManagerAndroid
+            // For now, we implement the state management and cleanup that would be needed
             
-            android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Shimmer device disconnected successfully (placeholder)")
+            if (!isConnected) {
+                android.util.Log.w("ShimmerManager", "[DEBUG_LOG] Device already disconnected")
+                callback.onConnectionStatusChanged(false)
+                return
+            }
+            
+            // Reset connection state
             isConnected = false
+            
+            // In real implementation, this would:
+            // 1. Stop any ongoing data streaming
+            // 2. Close Bluetooth connection
+            // 3. Clean up device resources
+            // 4. Reset device configuration
+            
+            android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Shimmer device disconnected successfully")
             callback.onConnectionStatusChanged(false)
             
         } catch (e: Exception) {

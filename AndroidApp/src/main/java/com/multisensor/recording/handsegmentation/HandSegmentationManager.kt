@@ -164,11 +164,57 @@ class HandSegmentationManager @Inject constructor(
                 
                 // This would integrate with video processing logic
                 // For now, I'll create a placeholder that would work with MediaMetadataRetriever
-                val outputDir = File(videoPath).parent + "/hand_segmentation"
+                val outputDir = File(videoPath).parent?.let { "$it/hand_segmentation" } ?: "/tmp/hand_segmentation"
                 File(outputDir).mkdirs()
                 
-                // TODO: Implement actual video frame extraction and processing
-                // This would require MediaMetadataRetriever or similar to extract frames
+                // Implement actual video frame extraction and processing
+                val mediaRetriever = android.media.MediaMetadataRetriever()
+                try {
+                    mediaRetriever.setDataSource(videoPath)
+                    
+                    // Get video duration and frame rate
+                    val durationMs = mediaRetriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+                    val frameRate = 10 // Extract every 100ms for hand segmentation
+                    
+                    var frameCount = 0
+                    var currentTimeMs = 0L
+                    
+                    logI("Extracting frames from video for hand segmentation: duration=${durationMs}ms")
+                    
+                    // Extract frames at regular intervals
+                    while (currentTimeMs < durationMs && frameCount < 100) { // Limit to prevent excessive processing
+                        try {
+                            val bitmap = mediaRetriever.getFrameAtTime(currentTimeMs * 1000, android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                            
+                            if (bitmap != null) {
+                                // Save frame for hand segmentation processing
+                                val frameFile = File(outputDir, "frame_${String.format("%04d", frameCount)}.jpg")
+                                val out = java.io.FileOutputStream(frameFile)
+                                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, out)
+                                out.close()
+                                bitmap.recycle()
+                                
+                                frameCount++
+                                logD("Extracted frame $frameCount at ${currentTimeMs}ms")
+                            }
+                            
+                            currentTimeMs += (1000 / frameRate) // Next frame interval
+                            
+                        } catch (e: Exception) {
+                            logW("Failed to extract frame at ${currentTimeMs}ms: ${e.message}")
+                            currentTimeMs += (1000 / frameRate)
+                        }
+                    }
+                    
+                    logI("Hand segmentation frame extraction complete: $frameCount frames extracted")
+                    
+                } finally {
+                    try {
+                        mediaRetriever.release()
+                    } catch (e: Exception) {
+                        logW("Error releasing MediaMetadataRetriever: ${e.message}")
+                    }
+                }
                 
                 withContext(Dispatchers.Main) {
                     callback(true, outputDir)
