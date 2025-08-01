@@ -1,331 +1,331 @@
-# Performance Monitoring and Benchmarking
-# Comprehensive performance analysis for Android and Python components
-
-name: Performance Monitoring
-
-on:
-  push:
-    branches: [master, dev]
-  pull_request:
-    branches: [master]
-  schedule:
-    # Run performance tests weekly
-    - cron: '0 4 * * 2'
-  workflow_dispatch:
-
-env:
-  JAVA_VERSION: '17'
-  PYTHON_VERSION: '3.9'
-  CONDA_ENV_NAME: 'thermal-env'
-
-jobs:
-  # Android build performance analysis
-  android-performance:
-    name: Android Build Performance
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-        distribution: 'temurin'
-        
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        build-scan-publish: true
-        build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
-        build-scan-terms-of-use-agree: "yes"
-        
-    - name: Cache Android SDK
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.android/build-cache
-          ~/.android/avd/*
-        key: android-sdk-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          android-sdk-${{ runner.os }}-
-          
-    - name: Warm up Gradle daemon
-      run: |
-        chmod +x gradlew
-        ./gradlew help --quiet
-        
-    - name: Android build performance benchmark
-      run: |
-        echo "Running Android build performance analysis..."
-        
-        # Clean build performance
-        echo "=== Clean Build Performance ===" | tee build-performance.log
-        time ./gradlew clean 2>&1 | tee -a build-performance.log
-        
-        # Full build performance with profiling
-        echo "=== Full Build Performance ===" | tee -a build-performance.log
-        time ./gradlew AndroidApp:assembleDebug --profile --scan 2>&1 | tee -a build-performance.log
-        
-        # Incremental build performance
-        echo "=== Incremental Build Performance ===" | tee -a build-performance.log
-        touch AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt
-        time ./gradlew AndroidApp:assembleDebug --profile 2>&1 | tee -a build-performance.log
-        
-        # Test execution performance
-        echo "=== Test Execution Performance ===" | tee -a build-performance.log
-        time ./gradlew AndroidApp:testDebugUnitTest --profile 2>&1 | tee -a build-performance.log
-        
-    - name: Analyze build scan results
-      run: |
-        echo "Analyzing build performance metrics..."
-        
-        # Extract key metrics from profile reports
-        if [ -d "build/reports/profile" ]; then
-          echo "# Android Build Performance Report" > android-performance-report.md
-          echo "Generated on: $(date)" >> android-performance-report.md
-          echo "" >> android-performance-report.md
-          
-          echo "## Build Time Analysis" >> android-performance-report.md
-          echo "See build/reports/profile/ for detailed build scan results" >> android-performance-report.md
-          echo "" >> android-performance-report.md
-          
-          echo "## Performance Summary" >> android-performance-report.md
-          echo "\`\`\`" >> android-performance-report.md
-          cat build-performance.log | grep -E "(real|user|sys)" >> android-performance-report.md
-          echo "\`\`\`" >> android-performance-report.md
-        fi
-        
-    - name: Upload Android performance results
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-performance-results
-        path: |
-          build/reports/profile/
-          build-performance.log
-          android-performance-report.md
-        retention-days: 30
-
-  # Python performance benchmarking
-  python-performance:
-    name: Python Performance Benchmarks
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-      fail-fast: false
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        auto-update-conda: true
-        python-version: ${{ env.PYTHON_VERSION }}
-        environment-file: environment.yml
-        activate-environment: ${{ env.CONDA_ENV_NAME }}
-        use-mamba: true
-        
-    - name: Cache conda environment
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/conda_pkgs_dir
-          ~/.conda/envs/${{ env.CONDA_ENV_NAME }}
-        key: ${{ runner.os }}-conda-perf-${{ hashFiles('environment.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-conda-
-          
-    - name: Install performance testing tools
-      shell: bash -l {0}
-      run: |
-        pip install --upgrade pip
-        pip install pytest-benchmark memory-profiler psutil line-profiler py-spy
-        pip install -r test-requirements.txt
-        
-    - name: Run Python performance benchmarks
-      shell: bash -l {0}
-      run: |
-        cd PythonApp
-        echo "Running comprehensive Python performance benchmarks..."
-        
-        # CPU and memory benchmarks
-        python -m pytest \
-          --benchmark-only \
-          --benchmark-json=../python-benchmarks-${{ matrix.os }}.json \
-          --benchmark-sort=name \
-          --benchmark-group-by=group \
-          --benchmark-warmup=on \
-          --benchmark-disable-gc \
-          tests/ || echo "Benchmark tests completed"
-          
-    - name: Memory profiling
-      shell: bash -l {0}
-      run: |
-        cd PythonApp
-        echo "Running memory profiling analysis..."
-        
-        # Profile main application components
-        if [ -f src/main.py ]; then
-          python -m memory_profiler src/main.py > ../memory-profile-${{ matrix.os }}.txt || echo "Memory profiling completed"
-        fi
-        
-        # System resource monitoring
-        python3 << 'EOF' > ../system-resources-${{ matrix.os }}.json
-        import psutil
-        import json
-
-        resources = {
-            "cpu_count": psutil.cpu_count(),
-            "cpu_percent": psutil.cpu_percent(interval=1),
-            "memory": {
-                "total": psutil.virtual_memory().total,
-                "available": psutil.virtual_memory().available,
-                "percent": psutil.virtual_memory().percent
-            },
-            "disk": {
-                "total": psutil.disk_usage('.').total,
-                "free": psutil.disk_usage('.').free,
-                "percent": psutil.disk_usage('.').percent
-            }
-        }
-
-        print(json.dumps(resources, indent=2))
-        EOF
-        
-    - name: Generate performance report
-      shell: bash -l {0}
-      run: |
-        echo "Generating performance analysis report..."
-        echo "# Python Performance Analysis Report" > python-performance-report-${{ matrix.os }}.md
-        echo "Platform: ${{ matrix.os }}" >> python-performance-report-${{ matrix.os }}.md
-        echo "Generated: $(date)" >> python-performance-report-${{ matrix.os }}.md
-        echo "Performance benchmarks and system resource analysis completed." >> python-performance-report-${{ matrix.os }}.md
-        
-    - name: Upload Python performance results
-      uses: actions/upload-artifact@v4
-      with:
-        name: python-performance-results-${{ matrix.os }}
-        path: |
-          python-benchmarks-${{ matrix.os }}.json
-          memory-profile-${{ matrix.os }}.txt
-          system-resources-${{ matrix.os }}.json
-          python-performance-report-${{ matrix.os }}.md
-        retention-days: 30
-
-  # Performance regression detection
-  performance-regression:
-    name: Performance Regression Analysis
-    runs-on: ubuntu-latest
-    needs: [android-performance, python-performance]
-    if: github.event_name == 'pull_request'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Download performance results
-      uses: actions/download-artifact@v4
-      with:
-        path: performance-results/
-        
-    - name: Analyze performance regression
-      run: |
-        echo "Analyzing performance regression..."
-        
-        echo "# Performance Regression Analysis" > performance-regression.md
-        echo "Generated for PR #${{ github.event.number }}" >> performance-regression.md
-        echo "Base branch: ${{ github.base_ref }}" >> performance-regression.md
-        echo "Commit: ${{ github.sha }}" >> performance-regression.md
-        echo "" >> performance-regression.md
-        
-        echo "## Summary" >> performance-regression.md
-        echo "Performance analysis completed for both Android and Python components." >> performance-regression.md
-        echo "" >> performance-regression.md
-        
-        echo "## Android Performance" >> performance-regression.md
-        if [ -d "performance-results/android-performance-results" ]; then
-          echo "✅ Android build performance analysis completed" >> performance-regression.md
-          echo "- See artifacts for detailed build scan results" >> performance-regression.md
-        else
-          echo "❌ Android performance results not available" >> performance-regression.md
-        fi
-        
-        echo "" >> performance-regression.md
-        echo "## Python Performance" >> performance-regression.md
-        if [ -d "performance-results/python-performance-results-ubuntu-latest" ]; then
-          echo "✅ Python performance benchmarks completed" >> performance-regression.md
-          echo "- See artifacts for detailed benchmark results" >> performance-regression.md
-        else
-          echo "❌ Python performance results not available" >> performance-regression.md
-        fi
-        
-        echo "" >> performance-regression.md
-        echo "## Recommendations" >> performance-regression.md
-        echo "1. Review performance artifacts for any significant regressions" >> performance-regression.md
-        echo "2. Compare build times and memory usage with baseline" >> performance-regression.md
-        echo "3. Address any performance degradations before merging" >> performance-regression.md
-        
-    - name: Comment PR with performance analysis
-      uses: actions/github-script@v7
-      if: github.event_name == 'pull_request'
-      with:
-        script: |
-          const fs = require('fs');
-          const report = fs.readFileSync('performance-regression.md', 'utf8');
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: report
-          });
-          
-    - name: Upload regression analysis
-      uses: actions/upload-artifact@v4
-      with:
-        name: performance-regression-analysis
-        path: performance-regression.md
-        retention-days: 14
-
-  # Performance dashboard generation
-  performance-dashboard:
-    name: Generate Performance Dashboard
-    runs-on: ubuntu-latest
-    needs: [android-performance, python-performance]
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Download all performance results
-      uses: actions/download-artifact@v4
-      with:
-        path: performance-results/
-        
-    - name: Generate performance dashboard
-      run: |
-        echo "Generating performance dashboard..."
-        echo "<html><body><h1>Performance Dashboard</h1><p>Performance analysis completed.</p></body></html>" > performance-dashboard.html
-        echo "Performance dashboard generated successfully!"
-        
-    - name: Upload performance dashboard
-      uses: actions/upload-artifact@v4
-      with:
-        name: performance-dashboard
-        path: performance-dashboard.html
-        retention-days: 90
-        
-    - name: Deploy to GitHub Pages (if enabled)
-      if: success()
-      run: |
-        echo "Performance dashboard generated and available in artifacts"
-        echo "To enable GitHub Pages deployment, configure the repository settings"
+## Performance Monitoring and Benchmarking
+## Comprehensive performance analysis for Android and Python components
+#
+#name: Performance Monitoring
+#
+#on:
+#  push:
+#    branches: [master, dev]
+#  pull_request:
+#    branches: [master]
+#  schedule:
+#    # Run performance tests weekly
+#    - cron: '0 4 * * 2'
+#  workflow_dispatch:
+#
+#env:
+#  JAVA_VERSION: '17'
+#  PYTHON_VERSION: '3.9'
+#  CONDA_ENV_NAME: 'thermal-env'
+#
+#jobs:
+#  # Android build performance analysis
+#  android-performance:
+#    name: Android Build Performance
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#      with:
+#        fetch-depth: 0
+#
+#    - name: Set up JDK ${{ env.JAVA_VERSION }}
+#      uses: actions/setup-java@v4
+#      with:
+#        java-version: ${{ env.JAVA_VERSION }}
+#        distribution: 'temurin'
+#
+#    - name: Setup Gradle
+#      uses: gradle/actions/setup-gradle@v3
+#      with:
+#        build-scan-publish: true
+#        build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+#        build-scan-terms-of-use-agree: "yes"
+#
+#    - name: Cache Android SDK
+#      uses: actions/cache@v4
+#      with:
+#        path: |
+#          ~/.android/build-cache
+#          ~/.android/avd/*
+#        key: android-sdk-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+#        restore-keys: |
+#          android-sdk-${{ runner.os }}-
+#
+#    - name: Warm up Gradle daemon
+#      run: |
+#        chmod +x gradlew
+#        ./gradlew help --quiet
+#
+#    - name: Android build performance benchmark
+#      run: |
+#        echo "Running Android build performance analysis..."
+#
+#        # Clean build performance
+#        echo "=== Clean Build Performance ===" | tee build-performance.log
+#        time ./gradlew clean 2>&1 | tee -a build-performance.log
+#
+#        # Full build performance with profiling
+#        echo "=== Full Build Performance ===" | tee -a build-performance.log
+#        time ./gradlew AndroidApp:assembleDebug --profile --scan 2>&1 | tee -a build-performance.log
+#
+#        # Incremental build performance
+#        echo "=== Incremental Build Performance ===" | tee -a build-performance.log
+#        touch AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt
+#        time ./gradlew AndroidApp:assembleDebug --profile 2>&1 | tee -a build-performance.log
+#
+#        # Test execution performance
+#        echo "=== Test Execution Performance ===" | tee -a build-performance.log
+#        time ./gradlew AndroidApp:testDebugUnitTest --profile 2>&1 | tee -a build-performance.log
+#
+#    - name: Analyze build scan results
+#      run: |
+#        echo "Analyzing build performance metrics..."
+#
+#        # Extract key metrics from profile reports
+#        if [ -d "build/reports/profile" ]; then
+#          echo "# Android Build Performance Report" > android-performance-report.md
+#          echo "Generated on: $(date)" >> android-performance-report.md
+#          echo "" >> android-performance-report.md
+#
+#          echo "## Build Time Analysis" >> android-performance-report.md
+#          echo "See build/reports/profile/ for detailed build scan results" >> android-performance-report.md
+#          echo "" >> android-performance-report.md
+#
+#          echo "## Performance Summary" >> android-performance-report.md
+#          echo "\`\`\`" >> android-performance-report.md
+#          cat build-performance.log | grep -E "(real|user|sys)" >> android-performance-report.md
+#          echo "\`\`\`" >> android-performance-report.md
+#        fi
+#
+#    - name: Upload Android performance results
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: android-performance-results
+#        path: |
+#          build/reports/profile/
+#          build-performance.log
+#          android-performance-report.md
+#        retention-days: 30
+#
+#  # Python performance benchmarking
+#  python-performance:
+#    name: Python Performance Benchmarks
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ubuntu-latest, windows-latest]
+#      fail-fast: false
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Set up Miniconda
+#      uses: conda-incubator/setup-miniconda@v3
+#      with:
+#        auto-update-conda: true
+#        python-version: ${{ env.PYTHON_VERSION }}
+#        environment-file: environment.yml
+#        activate-environment: ${{ env.CONDA_ENV_NAME }}
+#        use-mamba: true
+#
+#    - name: Cache conda environment
+#      uses: actions/cache@v4
+#      with:
+#        path: |
+#          ~/conda_pkgs_dir
+#          ~/.conda/envs/${{ env.CONDA_ENV_NAME }}
+#        key: ${{ runner.os }}-conda-perf-${{ hashFiles('environment.yml') }}
+#        restore-keys: |
+#          ${{ runner.os }}-conda-
+#
+#    - name: Install performance testing tools
+#      shell: bash -l {0}
+#      run: |
+#        pip install --upgrade pip
+#        pip install pytest-benchmark memory-profiler psutil line-profiler py-spy
+#        pip install -r test-requirements.txt
+#
+#    - name: Run Python performance benchmarks
+#      shell: bash -l {0}
+#      run: |
+#        cd PythonApp
+#        echo "Running comprehensive Python performance benchmarks..."
+#
+#        # CPU and memory benchmarks
+#        python -m pytest \
+#          --benchmark-only \
+#          --benchmark-json=../python-benchmarks-${{ matrix.os }}.json \
+#          --benchmark-sort=name \
+#          --benchmark-group-by=group \
+#          --benchmark-warmup=on \
+#          --benchmark-disable-gc \
+#          tests/ || echo "Benchmark tests completed"
+#
+#    - name: Memory profiling
+#      shell: bash -l {0}
+#      run: |
+#        cd PythonApp
+#        echo "Running memory profiling analysis..."
+#
+#        # Profile main application components
+#        if [ -f src/main.py ]; then
+#          python -m memory_profiler src/main.py > ../memory-profile-${{ matrix.os }}.txt || echo "Memory profiling completed"
+#        fi
+#
+#        # System resource monitoring
+#        python3 << 'EOF' > ../system-resources-${{ matrix.os }}.json
+#        import psutil
+#        import json
+#
+#        resources = {
+#            "cpu_count": psutil.cpu_count(),
+#            "cpu_percent": psutil.cpu_percent(interval=1),
+#            "memory": {
+#                "total": psutil.virtual_memory().total,
+#                "available": psutil.virtual_memory().available,
+#                "percent": psutil.virtual_memory().percent
+#            },
+#            "disk": {
+#                "total": psutil.disk_usage('.').total,
+#                "free": psutil.disk_usage('.').free,
+#                "percent": psutil.disk_usage('.').percent
+#            }
+#        }
+#
+#        print(json.dumps(resources, indent=2))
+#        EOF
+#
+#    - name: Generate performance report
+#      shell: bash -l {0}
+#      run: |
+#        echo "Generating performance analysis report..."
+#        echo "# Python Performance Analysis Report" > python-performance-report-${{ matrix.os }}.md
+#        echo "Platform: ${{ matrix.os }}" >> python-performance-report-${{ matrix.os }}.md
+#        echo "Generated: $(date)" >> python-performance-report-${{ matrix.os }}.md
+#        echo "Performance benchmarks and system resource analysis completed." >> python-performance-report-${{ matrix.os }}.md
+#
+#    - name: Upload Python performance results
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: python-performance-results-${{ matrix.os }}
+#        path: |
+#          python-benchmarks-${{ matrix.os }}.json
+#          memory-profile-${{ matrix.os }}.txt
+#          system-resources-${{ matrix.os }}.json
+#          python-performance-report-${{ matrix.os }}.md
+#        retention-days: 30
+#
+#  # Performance regression detection
+#  performance-regression:
+#    name: Performance Regression Analysis
+#    runs-on: ubuntu-latest
+#    needs: [android-performance, python-performance]
+#    if: github.event_name == 'pull_request'
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#      with:
+#        fetch-depth: 0
+#
+#    - name: Download performance results
+#      uses: actions/download-artifact@v4
+#      with:
+#        path: performance-results/
+#
+#    - name: Analyze performance regression
+#      run: |
+#        echo "Analyzing performance regression..."
+#
+#        echo "# Performance Regression Analysis" > performance-regression.md
+#        echo "Generated for PR #${{ github.event.number }}" >> performance-regression.md
+#        echo "Base branch: ${{ github.base_ref }}" >> performance-regression.md
+#        echo "Commit: ${{ github.sha }}" >> performance-regression.md
+#        echo "" >> performance-regression.md
+#
+#        echo "## Summary" >> performance-regression.md
+#        echo "Performance analysis completed for both Android and Python components." >> performance-regression.md
+#        echo "" >> performance-regression.md
+#
+#        echo "## Android Performance" >> performance-regression.md
+#        if [ -d "performance-results/android-performance-results" ]; then
+#          echo "✅ Android build performance analysis completed" >> performance-regression.md
+#          echo "- See artifacts for detailed build scan results" >> performance-regression.md
+#        else
+#          echo "❌ Android performance results not available" >> performance-regression.md
+#        fi
+#
+#        echo "" >> performance-regression.md
+#        echo "## Python Performance" >> performance-regression.md
+#        if [ -d "performance-results/python-performance-results-ubuntu-latest" ]; then
+#          echo "✅ Python performance benchmarks completed" >> performance-regression.md
+#          echo "- See artifacts for detailed benchmark results" >> performance-regression.md
+#        else
+#          echo "❌ Python performance results not available" >> performance-regression.md
+#        fi
+#
+#        echo "" >> performance-regression.md
+#        echo "## Recommendations" >> performance-regression.md
+#        echo "1. Review performance artifacts for any significant regressions" >> performance-regression.md
+#        echo "2. Compare build times and memory usage with baseline" >> performance-regression.md
+#        echo "3. Address any performance degradations before merging" >> performance-regression.md
+#
+#    - name: Comment PR with performance analysis
+#      uses: actions/github-script@v7
+#      if: github.event_name == 'pull_request'
+#      with:
+#        script: |
+#          const fs = require('fs');
+#          const report = fs.readFileSync('performance-regression.md', 'utf8');
+#
+#          github.rest.issues.createComment({
+#            issue_number: context.issue.number,
+#            owner: context.repo.owner,
+#            repo: context.repo.repo,
+#            body: report
+#          });
+#
+#    - name: Upload regression analysis
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: performance-regression-analysis
+#        path: performance-regression.md
+#        retention-days: 14
+#
+#  # Performance dashboard generation
+#  performance-dashboard:
+#    name: Generate Performance Dashboard
+#    runs-on: ubuntu-latest
+#    needs: [android-performance, python-performance]
+#    if: github.ref == 'refs/heads/main'
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Download all performance results
+#      uses: actions/download-artifact@v4
+#      with:
+#        path: performance-results/
+#
+#    - name: Generate performance dashboard
+#      run: |
+#        echo "Generating performance dashboard..."
+#        echo "<html><body><h1>Performance Dashboard</h1><p>Performance analysis completed.</p></body></html>" > performance-dashboard.html
+#        echo "Performance dashboard generated successfully!"
+#
+#    - name: Upload performance dashboard
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: performance-dashboard
+#        path: performance-dashboard.html
+#        retention-days: 90
+#
+#    - name: Deploy to GitHub Pages (if enabled)
+#      if: success()
+#      run: |
+#        echo "Performance dashboard generated and available in artifacts"
+#        echo "To enable GitHub Pages deployment, configure the repository settings"

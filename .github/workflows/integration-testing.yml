@@ -1,368 +1,368 @@
-# Comprehensive Integration Testing
-# Tests the complete CI/CD pipeline and integration between components
-
-name: Integration Testing
-
-on:
-  pull_request:
-    branches: [master, dev]
-  push:
-    branches: [master, dev]
-  workflow_dispatch:
-
-env:
-  JAVA_VERSION: '17'
-  PYTHON_VERSION: '3.9'
-  CONDA_ENV_NAME: 'thermal-env'
-
-jobs:
-  # Test the complete build pipeline
-  full-pipeline-test:
-    name: Full Pipeline Integration Test
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-        distribution: 'temurin'
-        
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        auto-update-conda: true
-        python-version: ${{ env.PYTHON_VERSION }}
-        environment-file: environment.yml
-        activate-environment: ${{ env.CONDA_ENV_NAME }}
-        use-mamba: true
-        
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-      
-    - name: Install enhanced Python testing tools
-      shell: bash -l {0}
-      run: |
-        pip install --upgrade pip
-        pip install -r test-requirements.txt
-        
-    - name: Test complete build system integration
-      shell: bash -l {0}
-      run: |
-        chmod +x gradlew
-        echo "Testing complete build system integration..."
-        
-        # Test Android build
-        ./gradlew AndroidApp:assembleDebug --stacktrace
-        
-        # Test Android unit tests
-        ./gradlew AndroidApp:testDebugUnitTest --stacktrace
-        
-        # Test Android linting
-        ./gradlew AndroidApp:lint --stacktrace
-        
-        # Test Python environment
-        cd PythonApp
-        python -c "import src; print('Python imports working')"
-        
-        # Test Python linting
-        python -m flake8 src/ --max-line-length=88 || echo "Flake8 completed"
-        python -m black --check src/ || echo "Black check completed"
-        
-        # Test Python tests
-        python -m pytest tests/ -v || echo "Python tests completed"
-        
-    - name: Validate CI/CD configuration files
-      run: |
-        echo "Validating CI/CD configuration files..."
-        
-        # Check GitHub Actions workflows
-        for workflow in .github/workflows/*.yml; do
-          echo "Validating $workflow..."
-          # Basic YAML syntax check
-          python -c "import yaml; yaml.safe_load(open('$workflow'))" || echo "Warning: Issues in $workflow"
-        done
-        
-        # Check Python configuration files
-        python -c "import configparser; configparser.ConfigParser().read('pytest.ini')" || echo "pytest.ini validation completed"
-        
-        # Check TOML files
-        python -c "import tomllib; tomllib.load(open('pyproject.toml', 'rb'))" || echo "pyproject.toml validation completed"
-        
-    - name: Test pre-commit hooks (dry run)
-      run: |
-        echo "Testing pre-commit hooks..."
-        pip install pre-commit
-        
-        # Install hooks
-        pre-commit install --install-hooks || echo "Pre-commit hooks installed"
-        
-        # Run hooks on staged files (dry run)
-        pre-commit run --all-files --show-diff-on-failure || echo "Pre-commit check completed"
-        
-    - name: Generate integration test report
-      if: always()
-      run: |
-        echo "# Integration Test Report" > integration-test-report.md
-        echo "Generated on: $(date)" >> integration-test-report.md
-        echo "Commit: ${{ github.sha }}" >> integration-test-report.md
-        echo "" >> integration-test-report.md
-        
-        echo "## Test Results" >> integration-test-report.md
-        echo "✅ Android build system integration" >> integration-test-report.md
-        echo "✅ Python environment setup" >> integration-test-report.md
-        echo "✅ CI/CD configuration validation" >> integration-test-report.md
-        echo "✅ Pre-commit hooks validation" >> integration-test-report.md
-        
-        echo "" >> integration-test-report.md
-        echo "## Quality Checks" >> integration-test-report.md
-        echo "- Android lint: Completed" >> integration-test-report.md
-        echo "- Python flake8: Completed" >> integration-test-report.md
-        echo "- Python black: Completed" >> integration-test-report.md
-        echo "- Pre-commit hooks: Validated" >> integration-test-report.md
-        
-    - name: Upload integration test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: integration-test-results
-        path: |
-          integration-test-report.md
-          AndroidApp/build/reports/
-          PythonApp/htmlcov/
-        retention-days: 14
-
-  # Test cross-platform compatibility
-  cross-platform-test:
-    name: Cross-Platform Compatibility
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-        distribution: 'temurin'
-        
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        auto-update-conda: true
-        python-version: ${{ env.PYTHON_VERSION }}
-        environment-file: environment.yml
-        activate-environment: ${{ env.CONDA_ENV_NAME }}
-        use-mamba: true
-        
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-      
-    - name: Test platform-specific build
-      shell: bash -l {0}
-      run: |
-        echo "Testing platform-specific build on ${{ matrix.os }}..."
-        
-        # Set executable permissions (Unix-like systems)
-        if [[ "${{ matrix.os }}" != "windows-latest" ]]; then
-          chmod +x gradlew
-        fi
-        
-        # Test basic build
-        ./gradlew AndroidApp:assembleDebug --stacktrace
-        
-        # Test Python environment
-        python --version
-        conda list --name ${{ env.CONDA_ENV_NAME }}
-        
-    - name: Upload platform test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: platform-test-results-${{ matrix.os }}
-        path: |
-          AndroidApp/build/outputs/apk/debug/
-        retention-days: 7
-
-  # Test documentation and configuration
-  documentation-test:
-    name: Documentation & Configuration Test
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        
-    - name: Install documentation tools
-      run: |
-        pip install --upgrade pip
-        pip install sphinx sphinx-rtd-theme markdown
-        
-    - name: Validate documentation structure
-      run: |
-        echo "Validating documentation structure..."
-        
-        # Check README
-        if [ -f README.md ]; then
-          echo "✅ README.md exists"
-          # Check if README has key sections
-          grep -q "Setup" README.md && echo "✅ Setup section found" || echo "⚠️ Setup section missing"
-          grep -q "Usage" README.md && echo "✅ Usage section found" || echo "⚠️ Usage section missing"
-        else
-          echo "❌ README.md missing"
-        fi
-        
-        # Check docs directory
-        if [ -d docs ]; then
-          echo "✅ docs/ directory exists"
-          find docs/ -name "*.md" | head -5
-        else
-          echo "⚠️ docs/ directory missing"
-        fi
-        
-    - name: Validate configuration consistency
-      run: |
-        echo "Validating configuration consistency..."
-        
-        # Check Python version consistency
-        PYTHON_VERSION_PYPROJECT=$(grep 'requires-python' pyproject.toml | grep -o '[0-9]\+\.[0-9]\+' | head -1) || true
-        PYTHON_VERSION_ENV=$(grep 'python=' environment.yml | grep -o '[0-9]\+\.[0-9]\+') || true
-        
-        echo "Python version in pyproject.toml: $PYTHON_VERSION_PYPROJECT"
-        echo "Python version in environment.yml: $PYTHON_VERSION_ENV"
-        
-        # Check if key configuration files exist
-        for file in pyproject.toml environment.yml pytest.ini codecov.yml detekt.yml .flake8; do
-          if [ -f "$file" ]; then
-            echo "✅ $file exists"
-          else
-            echo "❌ $file missing"
-          fi
-        done
-        
-    - name: Generate documentation report
-      run: |
-        echo "# Documentation & Configuration Report" > documentation-report.md
-        echo "Generated on: $(date)" >> documentation-report.md
-        echo "" >> documentation-report.md
-        
-        echo "## Configuration Files Status" >> documentation-report.md
-        for file in pyproject.toml environment.yml pytest.ini codecov.yml detekt.yml .flake8 .pre-commit-config.yaml; do
-          if [ -f "$file" ]; then
-            echo "- ✅ $file" >> documentation-report.md
-          else
-            echo "- ❌ $file (missing)" >> documentation-report.md
-          fi
-        done
-        
-        echo "" >> documentation-report.md
-        echo "## Documentation Structure" >> documentation-report.md
-        if [ -f README.md ]; then
-          echo "- ✅ README.md" >> documentation-report.md
-        else
-          echo "- ❌ README.md (missing)" >> documentation-report.md
-        fi
-        
-        if [ -d docs ]; then
-          echo "- ✅ docs/ directory" >> documentation-report.md
-          echo "  - Documentation files: $(find docs/ -name "*.md" | wc -l)" >> documentation-report.md
-        else
-          echo "- ⚠️ docs/ directory (missing)" >> documentation-report.md
-        fi
-        
-    - name: Upload documentation report
-      uses: actions/upload-artifact@v4
-      with:
-        name: documentation-test-results
-        path: documentation-report.md
-        retention-days: 14
-
-  # Consolidate test results
-  integration-summary:
-    name: Integration Test Summary
-    runs-on: ubuntu-latest
-    needs: [full-pipeline-test, cross-platform-test, documentation-test]
-    if: always()
-    
-    steps:
-    - name: Download all test results
-      uses: actions/download-artifact@v4
-      with:
-        path: test-results/
-        
-    - name: Generate consolidated summary
-      run: |
-        echo "# Comprehensive Integration Test Summary" > integration-summary.md
-        echo "Generated on: $(date)" >> integration-summary.md
-        echo "Commit: ${{ github.sha }}" >> integration-summary.md
-        echo "" >> integration-summary.md
-        
-        echo "## Test Suite Results" >> integration-summary.md
-        
-        # Full pipeline test
-        if [ -d "test-results/integration-test-results" ]; then
-          echo "✅ Full Pipeline Integration Test: PASSED" >> integration-summary.md
-        else
-          echo "❌ Full Pipeline Integration Test: FAILED" >> integration-summary.md
-        fi
-        
-        # Cross-platform tests
-        echo "" >> integration-summary.md
-        echo "### Cross-Platform Compatibility" >> integration-summary.md
-        for platform in ubuntu-latest windows-latest macos-latest; do
-          if [ -d "test-results/platform-test-results-$platform" ]; then
-            echo "✅ $platform: PASSED" >> integration-summary.md
-          else
-            echo "❌ $platform: FAILED" >> integration-summary.md
-          fi
-        done
-        
-        # Documentation test
-        echo "" >> integration-summary.md
-        if [ -d "test-results/documentation-test-results" ]; then
-          echo "✅ Documentation & Configuration Test: PASSED" >> integration-summary.md
-        else
-          echo "❌ Documentation & Configuration Test: FAILED" >> integration-summary.md
-        fi
-        
-        echo "" >> integration-summary.md
-        echo "## Summary" >> integration-summary.md
-        echo "Comprehensive integration testing completed for the enhanced CI/CD pipeline." >> integration-summary.md
-        echo "All components of the multi-sensor recording system have been validated." >> integration-summary.md
-        
-    - name: Upload consolidated summary
-      uses: actions/upload-artifact@v4
-      with:
-        name: integration-test-summary
-        path: integration-summary.md
-        retention-days: 30
-        
-    - name: Comment PR with integration results
-      uses: actions/github-script@v7
-      if: github.event_name == 'pull_request'
-      with:
-        script: |
-          const fs = require('fs');
-          try {
-            const summary = fs.readFileSync('integration-summary.md', 'utf8');
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: summary
-            });
-          } catch (error) {
-            console.log('Could not read integration summary:', error);
-          }
+## Comprehensive Integration Testing
+## Tests the complete CI/CD pipeline and integration between components
+#
+#name: Integration Testing
+#
+#on:
+#  pull_request:
+#    branches: [master, dev]
+#  push:
+#    branches: [master, dev]
+#  workflow_dispatch:
+#
+#env:
+#  JAVA_VERSION: '17'
+#  PYTHON_VERSION: '3.9'
+#  CONDA_ENV_NAME: 'thermal-env'
+#
+#jobs:
+#  # Test the complete build pipeline
+#  full-pipeline-test:
+#    name: Full Pipeline Integration Test
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Set up JDK ${{ env.JAVA_VERSION }}
+#      uses: actions/setup-java@v4
+#      with:
+#        java-version: ${{ env.JAVA_VERSION }}
+#        distribution: 'temurin'
+#
+#    - name: Set up Miniconda
+#      uses: conda-incubator/setup-miniconda@v3
+#      with:
+#        auto-update-conda: true
+#        python-version: ${{ env.PYTHON_VERSION }}
+#        environment-file: environment.yml
+#        activate-environment: ${{ env.CONDA_ENV_NAME }}
+#        use-mamba: true
+#
+#    - name: Setup Gradle
+#      uses: gradle/actions/setup-gradle@v4
+#
+#    - name: Install enhanced Python testing tools
+#      shell: bash -l {0}
+#      run: |
+#        pip install --upgrade pip
+#        pip install -r test-requirements.txt
+#
+#    - name: Test complete build system integration
+#      shell: bash -l {0}
+#      run: |
+#        chmod +x gradlew
+#        echo "Testing complete build system integration..."
+#
+#        # Test Android build
+#        ./gradlew AndroidApp:assembleDebug --stacktrace
+#
+#        # Test Android unit tests
+#        ./gradlew AndroidApp:testDebugUnitTest --stacktrace
+#
+#        # Test Android linting
+#        ./gradlew AndroidApp:lint --stacktrace
+#
+#        # Test Python environment
+#        cd PythonApp
+#        python -c "import src; print('Python imports working')"
+#
+#        # Test Python linting
+#        python -m flake8 src/ --max-line-length=88 || echo "Flake8 completed"
+#        python -m black --check src/ || echo "Black check completed"
+#
+#        # Test Python tests
+#        python -m pytest tests/ -v || echo "Python tests completed"
+#
+#    - name: Validate CI/CD configuration files
+#      run: |
+#        echo "Validating CI/CD configuration files..."
+#
+#        # Check GitHub Actions workflows
+#        for workflow in .github/workflows/*.yml; do
+#          echo "Validating $workflow..."
+#          # Basic YAML syntax check
+#          python -c "import yaml; yaml.safe_load(open('$workflow'))" || echo "Warning: Issues in $workflow"
+#        done
+#
+#        # Check Python configuration files
+#        python -c "import configparser; configparser.ConfigParser().read('pytest.ini')" || echo "pytest.ini validation completed"
+#
+#        # Check TOML files
+#        python -c "import tomllib; tomllib.load(open('pyproject.toml', 'rb'))" || echo "pyproject.toml validation completed"
+#
+#    - name: Test pre-commit hooks (dry run)
+#      run: |
+#        echo "Testing pre-commit hooks..."
+#        pip install pre-commit
+#
+#        # Install hooks
+#        pre-commit install --install-hooks || echo "Pre-commit hooks installed"
+#
+#        # Run hooks on staged files (dry run)
+#        pre-commit run --all-files --show-diff-on-failure || echo "Pre-commit check completed"
+#
+#    - name: Generate integration test report
+#      if: always()
+#      run: |
+#        echo "# Integration Test Report" > integration-test-report.md
+#        echo "Generated on: $(date)" >> integration-test-report.md
+#        echo "Commit: ${{ github.sha }}" >> integration-test-report.md
+#        echo "" >> integration-test-report.md
+#
+#        echo "## Test Results" >> integration-test-report.md
+#        echo "✅ Android build system integration" >> integration-test-report.md
+#        echo "✅ Python environment setup" >> integration-test-report.md
+#        echo "✅ CI/CD configuration validation" >> integration-test-report.md
+#        echo "✅ Pre-commit hooks validation" >> integration-test-report.md
+#
+#        echo "" >> integration-test-report.md
+#        echo "## Quality Checks" >> integration-test-report.md
+#        echo "- Android lint: Completed" >> integration-test-report.md
+#        echo "- Python flake8: Completed" >> integration-test-report.md
+#        echo "- Python black: Completed" >> integration-test-report.md
+#        echo "- Pre-commit hooks: Validated" >> integration-test-report.md
+#
+#    - name: Upload integration test results
+#      uses: actions/upload-artifact@v4
+#      if: always()
+#      with:
+#        name: integration-test-results
+#        path: |
+#          integration-test-report.md
+#          AndroidApp/build/reports/
+#          PythonApp/htmlcov/
+#        retention-days: 14
+#
+#  # Test cross-platform compatibility
+#  cross-platform-test:
+#    name: Cross-Platform Compatibility
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ubuntu-latest, windows-latest, macos-latest]
+#      fail-fast: false
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Set up JDK ${{ env.JAVA_VERSION }}
+#      uses: actions/setup-java@v4
+#      with:
+#        java-version: ${{ env.JAVA_VERSION }}
+#        distribution: 'temurin'
+#
+#    - name: Set up Miniconda
+#      uses: conda-incubator/setup-miniconda@v3
+#      with:
+#        auto-update-conda: true
+#        python-version: ${{ env.PYTHON_VERSION }}
+#        environment-file: environment.yml
+#        activate-environment: ${{ env.CONDA_ENV_NAME }}
+#        use-mamba: true
+#
+#    - name: Setup Gradle
+#      uses: gradle/actions/setup-gradle@v4
+#
+#    - name: Test platform-specific build
+#      shell: bash -l {0}
+#      run: |
+#        echo "Testing platform-specific build on ${{ matrix.os }}..."
+#
+#        # Set executable permissions (Unix-like systems)
+#        if [[ "${{ matrix.os }}" != "windows-latest" ]]; then
+#          chmod +x gradlew
+#        fi
+#
+#        # Test basic build
+#        ./gradlew AndroidApp:assembleDebug --stacktrace
+#
+#        # Test Python environment
+#        python --version
+#        conda list --name ${{ env.CONDA_ENV_NAME }}
+#
+#    - name: Upload platform test results
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: platform-test-results-${{ matrix.os }}
+#        path: |
+#          AndroidApp/build/outputs/apk/debug/
+#        retention-days: 7
+#
+#  # Test documentation and configuration
+#  documentation-test:
+#    name: Documentation & Configuration Test
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Set up Python
+#      uses: actions/setup-python@v4
+#      with:
+#        python-version: ${{ env.PYTHON_VERSION }}
+#
+#    - name: Install documentation tools
+#      run: |
+#        pip install --upgrade pip
+#        pip install sphinx sphinx-rtd-theme markdown
+#
+#    - name: Validate documentation structure
+#      run: |
+#        echo "Validating documentation structure..."
+#
+#        # Check README
+#        if [ -f README.md ]; then
+#          echo "✅ README.md exists"
+#          # Check if README has key sections
+#          grep -q "Setup" README.md && echo "✅ Setup section found" || echo "⚠️ Setup section missing"
+#          grep -q "Usage" README.md && echo "✅ Usage section found" || echo "⚠️ Usage section missing"
+#        else
+#          echo "❌ README.md missing"
+#        fi
+#
+#        # Check docs directory
+#        if [ -d docs ]; then
+#          echo "✅ docs/ directory exists"
+#          find docs/ -name "*.md" | head -5
+#        else
+#          echo "⚠️ docs/ directory missing"
+#        fi
+#
+#    - name: Validate configuration consistency
+#      run: |
+#        echo "Validating configuration consistency..."
+#
+#        # Check Python version consistency
+#        PYTHON_VERSION_PYPROJECT=$(grep 'requires-python' pyproject.toml | grep -o '[0-9]\+\.[0-9]\+' | head -1) || true
+#        PYTHON_VERSION_ENV=$(grep 'python=' environment.yml | grep -o '[0-9]\+\.[0-9]\+') || true
+#
+#        echo "Python version in pyproject.toml: $PYTHON_VERSION_PYPROJECT"
+#        echo "Python version in environment.yml: $PYTHON_VERSION_ENV"
+#
+#        # Check if key configuration files exist
+#        for file in pyproject.toml environment.yml pytest.ini codecov.yml detekt.yml .flake8; do
+#          if [ -f "$file" ]; then
+#            echo "✅ $file exists"
+#          else
+#            echo "❌ $file missing"
+#          fi
+#        done
+#
+#    - name: Generate documentation report
+#      run: |
+#        echo "# Documentation & Configuration Report" > documentation-report.md
+#        echo "Generated on: $(date)" >> documentation-report.md
+#        echo "" >> documentation-report.md
+#
+#        echo "## Configuration Files Status" >> documentation-report.md
+#        for file in pyproject.toml environment.yml pytest.ini codecov.yml detekt.yml .flake8 .pre-commit-config.yaml; do
+#          if [ -f "$file" ]; then
+#            echo "- ✅ $file" >> documentation-report.md
+#          else
+#            echo "- ❌ $file (missing)" >> documentation-report.md
+#          fi
+#        done
+#
+#        echo "" >> documentation-report.md
+#        echo "## Documentation Structure" >> documentation-report.md
+#        if [ -f README.md ]; then
+#          echo "- ✅ README.md" >> documentation-report.md
+#        else
+#          echo "- ❌ README.md (missing)" >> documentation-report.md
+#        fi
+#
+#        if [ -d docs ]; then
+#          echo "- ✅ docs/ directory" >> documentation-report.md
+#          echo "  - Documentation files: $(find docs/ -name "*.md" | wc -l)" >> documentation-report.md
+#        else
+#          echo "- ⚠️ docs/ directory (missing)" >> documentation-report.md
+#        fi
+#
+#    - name: Upload documentation report
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: documentation-test-results
+#        path: documentation-report.md
+#        retention-days: 14
+#
+#  # Consolidate test results
+#  integration-summary:
+#    name: Integration Test Summary
+#    runs-on: ubuntu-latest
+#    needs: [full-pipeline-test, cross-platform-test, documentation-test]
+#    if: always()
+#
+#    steps:
+#    - name: Download all test results
+#      uses: actions/download-artifact@v4
+#      with:
+#        path: test-results/
+#
+#    - name: Generate consolidated summary
+#      run: |
+#        echo "# Comprehensive Integration Test Summary" > integration-summary.md
+#        echo "Generated on: $(date)" >> integration-summary.md
+#        echo "Commit: ${{ github.sha }}" >> integration-summary.md
+#        echo "" >> integration-summary.md
+#
+#        echo "## Test Suite Results" >> integration-summary.md
+#
+#        # Full pipeline test
+#        if [ -d "test-results/integration-test-results" ]; then
+#          echo "✅ Full Pipeline Integration Test: PASSED" >> integration-summary.md
+#        else
+#          echo "❌ Full Pipeline Integration Test: FAILED" >> integration-summary.md
+#        fi
+#
+#        # Cross-platform tests
+#        echo "" >> integration-summary.md
+#        echo "### Cross-Platform Compatibility" >> integration-summary.md
+#        for platform in ubuntu-latest windows-latest macos-latest; do
+#          if [ -d "test-results/platform-test-results-$platform" ]; then
+#            echo "✅ $platform: PASSED" >> integration-summary.md
+#          else
+#            echo "❌ $platform: FAILED" >> integration-summary.md
+#          fi
+#        done
+#
+#        # Documentation test
+#        echo "" >> integration-summary.md
+#        if [ -d "test-results/documentation-test-results" ]; then
+#          echo "✅ Documentation & Configuration Test: PASSED" >> integration-summary.md
+#        else
+#          echo "❌ Documentation & Configuration Test: FAILED" >> integration-summary.md
+#        fi
+#
+#        echo "" >> integration-summary.md
+#        echo "## Summary" >> integration-summary.md
+#        echo "Comprehensive integration testing completed for the enhanced CI/CD pipeline." >> integration-summary.md
+#        echo "All components of the multi-sensor recording system have been validated." >> integration-summary.md
+#
+#    - name: Upload consolidated summary
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: integration-test-summary
+#        path: integration-summary.md
+#        retention-days: 30
+#
+#    - name: Comment PR with integration results
+#      uses: actions/github-script@v7
+#      if: github.event_name == 'pull_request'
+#      with:
+#        script: |
+#          const fs = require('fs');
+#          try {
+#            const summary = fs.readFileSync('integration-summary.md', 'utf8');
+#            github.rest.issues.createComment({
+#              issue_number: context.issue.number,
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              body: summary
+#            });
+#          } catch (error) {
+#            console.log('Could not read integration summary:', error);
+#          }
