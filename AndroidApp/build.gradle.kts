@@ -8,6 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
     id("jacoco")
+    id("ktlint-gradle")
 }
 
 android {
@@ -151,10 +152,6 @@ android {
 }
 
 //--------------- Configurations & Dependencies ---------------//
-
-configurations {
-    val ktlint by creating
-}
 
 dependencies {
     // Core & UI Components
