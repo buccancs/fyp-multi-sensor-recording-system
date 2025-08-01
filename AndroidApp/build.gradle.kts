@@ -8,7 +8,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
     id("jacoco")
-    id("org.jlleitschuh.gradle.ktlint")
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 android {
