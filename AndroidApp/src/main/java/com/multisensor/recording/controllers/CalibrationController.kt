@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.*
+import org.json.JSONObject
 
 /**
  * Controller responsible for handling all calibration system logic.
@@ -646,16 +647,44 @@ class CalibrationController @Inject constructor(
             val sessionJson = prefs.getString(PREF_CALIBRATION_SESSION_STATE, null)
             
             if (sessionJson != null) {
-                // Simple JSON parsing - in production could use Gson or similar
-                val isActive = sessionJson.contains("\"isSessionActive\": true")
+                // Full JSON parsing implementation
+                val jsonObject = JSONObject(sessionJson)
+                val isActive = jsonObject.getBoolean("isSessionActive")
+                
                 if (isActive) {
                     android.util.Log.d("CalibrationController", "[DEBUG_LOG] Active session found, restoring state")
-                    // For now, just log that we found an active session
-                    // TODO: Implement full JSON parsing if needed
+                    
+                    // Parse pattern from stored patternId
+                    val patternId = jsonObject.getString("currentPattern")
+                    val pattern = CalibrationPattern.values().find { it.patternId == patternId } 
+                        ?: CalibrationPattern.SINGLE_POINT
+                    
+                    // Restore complete session state
+                    currentSessionState = CalibrationSessionState(
+                        isSessionActive = isActive,
+                        currentPattern = pattern,
+                        completedPoints = jsonObject.getInt("completedPoints"),
+                        totalPoints = jsonObject.getInt("totalPoints"),
+                        startTimestamp = jsonObject.getLong("startTimestamp"),
+                        lastUpdateTimestamp = jsonObject.getLong("lastUpdateTimestamp"),
+                        sessionId = jsonObject.getString("sessionId")
+                    )
+                    
+                    // Update current pattern to match restored state
+                    currentPattern = pattern
+                    
+                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] Session state restored: ${currentSessionState?.sessionId}")
+                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Pattern: ${pattern.displayName}")
+                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Progress: ${currentSessionState?.completedPoints}/${currentSessionState?.totalPoints}")
+                } else {
+                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] Inactive session found, clearing state")
+                    clearSessionState(context)
                 }
             }
         } catch (e: Exception) {
             android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to restore session state: ${e.message}")
+            // Clear corrupted state
+            clearSessionState(context)
         }
     }
     
