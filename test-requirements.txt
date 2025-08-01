@@ -28,20 +28,20 @@ psutil
 line-profiler
 
 # Coverage and reporting
-coverage[toml]>=7.6.0
-codecov>=2.1.15
+coverage[toml]
+codecov
 
 # Documentation - Latest stable
-sphinx>=8.1.0
-sphinx-rtd-theme>=3.0.0
+sphinx
+sphinx-rtd-theme
 
 # Development utilities
-pre-commit>=4.0.0
-tox>=4.23.0
+pre-commit
+tox
 
 # Additional testing tools for comprehensive coverage
-pytest-datadir>=1.5.0
-pytest-fixtures>=0.1.0
-pytest-mock-resources>=2.12.0
-pytest-repeat>=0.9.0
-pytest-rerunfailures>=14.0
+pytest-datadir
+pytest-fixtures
+pytest-mock-resources
+pytest-repeat
+pytest-rerunfailures
