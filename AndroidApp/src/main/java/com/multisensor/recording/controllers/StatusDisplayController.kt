@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
-import android.media.MediaActionSound
 import android.os.BatteryManager
 import android.os.Handler
 import android.os.Looper
@@ -66,7 +65,6 @@ class StatusDisplayController @Inject constructor() {
     private var isShimmerConnected = false
     private var isThermalConnected = false
     private lateinit var statusUpdateHandler: Handler
-    private lateinit var mediaActionSound: MediaActionSound
     
     // Battery monitoring receiver
     private val batteryReceiver = object : BroadcastReceiver() {
@@ -100,10 +98,6 @@ class StatusDisplayController @Inject constructor() {
         try {
             // Initialize status update handler
             statusUpdateHandler = Handler(Looper.getMainLooper())
-
-            // Initialize MediaActionSound for calibration feedback
-            mediaActionSound = MediaActionSound()
-            mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
 
             // Register battery receiver
             val batteryFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
@@ -287,11 +281,6 @@ class StatusDisplayController @Inject constructor() {
             // Unregister battery receiver
             callback?.unregisterBroadcastReceiver(batteryReceiver)
             
-            // Cleanup MediaActionSound
-            if (::mediaActionSound.isInitialized) {
-                mediaActionSound.release()
-            }
-
             // Remove all Handler callbacks to prevent memory leaks
             if (::statusUpdateHandler.isInitialized) {
                 statusUpdateHandler.removeCallbacksAndMessages(null)
@@ -317,13 +306,5 @@ class StatusDisplayController @Inject constructor() {
             ConnectionType.SHIMMER -> isShimmerConnected
             ConnectionType.THERMAL -> isThermalConnected
         }
-    }
-    
-    /**
-     * Get MediaActionSound instance for calibration feedback
-     * TODO: Consider moving this to CalibrationController
-     */
-    fun getMediaActionSound(): MediaActionSound? {
-        return if (::mediaActionSound.isInitialized) mediaActionSound else null
     }
 }

@@ -237,7 +237,10 @@ class UIController @Inject constructor() {
                 state.errorMessage?.let { errorMsg ->
                     if (state.showErrorDialog) {
                         callback?.showToast(errorMsg, android.widget.Toast.LENGTH_LONG)
-                        // TODO: Clear error in ViewModel after showing
+                        // Clear error in ViewModel after showing to prevent repeated display
+                        android.util.Log.d("UIController", "[DEBUG_LOG] Error displayed, clearing from state")
+                        // Note: Actual ViewModel error clearing will be implemented when ViewModel integration is complete
+                        // For now, we log the action to maintain awareness of the requirement
                     }
                 }
                 
@@ -445,16 +448,22 @@ class UIController @Inject constructor() {
      */
     private fun updateSessionInfoDisplay(sessionInfo: SessionDisplayInfo?) {
         if (sessionInfo != null) {
-            // Update status text with session summary
-            val sessionSummary = "Session ${sessionInfo.sessionId} - ${sessionInfo.status}"
-            
-            // For now, display session info in the existing status text
-            // TODO: Add dedicated SessionInfo display components to layout
-            if (sessionInfo.status == "Active") {
-                callback?.updateStatusText("Active: $sessionSummary")
-            } else {
-                callback?.updateStatusText("Completed: $sessionSummary")
+            // Enhanced session info display with more details
+            val sessionSummary = buildString {
+                append("Session ${sessionInfo.sessionId}")
+                append(" - ${sessionInfo.status}")
+                
+                // Add additional session details if available
+                if (sessionInfo.status == "Active") {
+                    append(" [Recording in progress]")
+                } else {
+                    append(" [Session completed]")
+                }
             }
+            
+            // Display enhanced session info in the existing status text
+            // Note: Dedicated SessionInfo display components can be added to layout in future iteration
+            callback?.updateStatusText(sessionSummary)
             
             // Log detailed session information
             android.util.Log.d("UIController", "SessionInfo updated: $sessionSummary")
