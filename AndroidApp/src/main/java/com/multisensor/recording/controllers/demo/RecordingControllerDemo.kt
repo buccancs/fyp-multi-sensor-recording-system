@@ -103,16 +103,78 @@ class RecordingControllerDemo {
     }
     
     /**
-     * Demonstrate prerequisite validation
+     * Demonstrate analytics integration functionality
      */
-    fun demonstratePrerequisiteValidation(context: Context) {
-        println("\n=== Prerequisite Validation Demo ===")
+    fun demonstrateAnalyticsIntegration(context: Context) {
+        println("\n=== Analytics Integration Demo ===")
         
-        val isValid = recordingController.validateRecordingPrerequisites(context)
-        println("Prerequisites valid: $isValid")
+        // Get current performance metrics
+        val performanceMetrics = recordingController.getCurrentPerformanceMetrics()
+        println("Current Performance Metrics:")
+        println("  Memory Usage: ${performanceMetrics.memoryUsageMB} MB")
+        println("  CPU Usage: ${performanceMetrics.cpuUsagePercent}%")
+        println("  Storage Write Rate: ${performanceMetrics.storageWriteRateMBps} MB/s")
+        println("  Frame Drop Rate: ${performanceMetrics.frameDropRate}")
+        println("  Thermal State: ${performanceMetrics.thermalState}")
         
-        val recommendedQuality = recordingController.getRecommendedQuality(context)
-        println("Recommended quality: ${recommendedQuality.displayName}")
+        // Get quality metrics
+        val qualityMetrics = recordingController.getCurrentQualityMetrics()
+        println("\nCurrent Quality Metrics:")
+        println("  Overall Quality Score: ${qualityMetrics.overallQualityScore}")
+        println("  Recording Efficiency: ${qualityMetrics.recordingEfficiency}")
+        println("  Frame Stability: ${qualityMetrics.frameStability}")
+        
+        // Get intelligent quality recommendation
+        val (recommendedQuality, reasoning) = recordingController.getIntelligentQualityRecommendation(context)
+        println("\nIntelligent Quality Recommendation:")
+        println("  Recommended Quality: ${recommendedQuality.displayName}")
+        println("  Reasoning: $reasoning")
+        
+        // Perform system health check
+        val healthCheck = recordingController.performSystemHealthCheck(context)
+        println("\nSystem Health Check:")
+        healthCheck.forEach { (key, value) ->
+            println("  $key: $value")
+        }
+        
+        // Get session optimization recommendations
+        val optimizations = recordingController.optimizeRecordingSession(context)
+        println("\nSession Optimization Recommendations:")
+        if (optimizations.containsKey("analytics_disabled")) {
+            println("  Analytics is disabled")
+        } else {
+            optimizations.forEach { (key, value) ->
+                println("  $key: $value")
+            }
+        }
+    }
+    
+    /**
+     * Demonstrate advanced analytics capabilities
+     */
+    fun demonstrateAdvancedAnalytics() {
+        println("\n=== Advanced Analytics Demo ===")
+        
+        // Get comprehensive analytics data
+        val analyticsData = recordingController.getAnalyticsData()
+        println("Analytics Data Summary:")
+        
+        if (analyticsData.containsKey("analytics_disabled")) {
+            println("  Analytics is currently disabled")
+        } else {
+            // Display key analytics information
+            analyticsData.forEach { (category, data) ->
+                println("\n$category:")
+                when (data) {
+                    is Map<*, *> -> {
+                        data.forEach { (key, value) ->
+                            println("    $key: $value")
+                        }
+                    }
+                    else -> println("    $data")
+                }
+            }
+        }
     }
     
     /**
@@ -129,13 +191,28 @@ class RecordingControllerDemo {
             demonstrateRecordingStatus()
             demonstrateStatePersistence(context)
             demonstratePrerequisiteValidation(context)
+            demonstrateAnalyticsIntegration(context)
+            demonstrateAdvancedAnalytics()
             
             println("\n=== Demo Complete ===")
-            println("All enhanced features demonstrated successfully!")
+            println("All enhanced features including advanced analytics demonstrated successfully!")
             
         } catch (e: Exception) {
             println("Demo error: ${e.message}")
             e.printStackTrace()
         }
+    }
+    
+    /**
+     * Demonstrate prerequisite validation
+     */
+    fun demonstratePrerequisiteValidation(context: Context) {
+        println("\n=== Prerequisite Validation Demo ===")
+        
+        val isValid = recordingController.validateRecordingPrerequisites(context)
+        println("Prerequisites valid: $isValid")
+        
+        val recommendedQuality = recordingController.getRecommendedQuality(context)
+        println("Recommended quality: ${recommendedQuality.displayName}")
     }
 }

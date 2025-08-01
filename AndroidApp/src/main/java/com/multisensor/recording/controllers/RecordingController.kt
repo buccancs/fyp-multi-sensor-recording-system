@@ -20,6 +20,10 @@ import android.os.IBinder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 /**
  * Controller responsible for handling all recording system logic.
@@ -34,6 +38,11 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 @Singleton
 class RecordingController @Inject constructor() {
+    
+    // Analytics system integration
+    private val analytics = RecordingAnalytics()
+    private val analyticsScope = CoroutineScope(Dispatchers.IO)
+    private var isAnalyticsEnabled = true
     
     /**
      * Data class for recording session metadata
@@ -96,12 +105,19 @@ class RecordingController @Inject constructor() {
     }
     
     /**
-     * Initialize state persistence
+     * Initialize state persistence with enhanced analytics integration
      */
     fun initializeStatePersistence(context: Context) {
         sharedPreferences = context.getSharedPreferences(STATE_PREF_NAME, Context.MODE_PRIVATE)
         restoreState()
-        android.util.Log.d("RecordingController", "[DEBUG_LOG] State persistence initialized")
+        
+        // Initialize analytics system
+        if (isAnalyticsEnabled) {
+            analytics.initializeSession(context, "initialization_session")
+            startPerformanceMonitoring(context)
+        }
+        
+        android.util.Log.d("RecordingController", "[DEBUG_LOG] State persistence initialized with analytics")
     }
     
     /**
@@ -215,6 +231,11 @@ class RecordingController @Inject constructor() {
             val sessionId = "session_${System.currentTimeMillis()}"
             val startTime = System.currentTimeMillis()
             
+            // Initialize analytics for this session
+            if (isAnalyticsEnabled) {
+                analytics.initializeSession(context, sessionId)
+            }
+            
             currentSession = RecordingSession(
                 sessionId = sessionId,
                 startTime = startTime,
@@ -227,7 +248,9 @@ class RecordingController @Inject constructor() {
                     "quality_details" to getQualityDetails(currentQuality),
                     "available_storage_mb" to (getAvailableStorageSpace(context) / (1024 * 1024)),
                     "estimated_duration_hours" to (getAvailableStorageSpace(context) / currentQuality.getEstimatedSizePerSecond() / 3600),
-                    "service_connection_healthy" to isServiceHealthy()
+                    "service_connection_healthy" to isServiceHealthy(),
+                    "analytics_enabled" to isAnalyticsEnabled,
+                    "performance_baseline" to getPerformanceBaseline()
                 )
             )
             
@@ -289,7 +312,9 @@ class RecordingController @Inject constructor() {
                         "final_duration_formatted" to formatDuration(duration),
                         "quality_setting_at_end" to currentQuality.name,
                         "service_health_at_end" to isServiceHealthy(),
-                        "session_metadata" to currentSessionMetadata.toMap()
+                        "session_metadata" to currentSessionMetadata.toMap(),
+                        "analytics_report" to if (isAnalyticsEnabled) analytics.generateAnalyticsReport() else emptyMap<String, Any>(),
+                        "performance_summary" to getSessionPerformanceSummary()
                     )
                 )
                 
@@ -1178,5 +1203,245 @@ class RecordingController @Inject constructor() {
         } catch (e: Exception) {
             "unknown"
         }
+    }
+    
+    /**
+     * Start performance monitoring for analytics
+     */
+    private fun startPerformanceMonitoring(context: Context) {
+        if (!isAnalyticsEnabled) return
+        
+        analyticsScope.launch {
+            while (isAnalyticsEnabled) {
+                try {
+                    analytics.updatePerformanceMetrics(context)
+                    
+                    // Update quality metrics if recording
+                    if (currentSession != null) {
+                        val qualityMetrics = estimateCurrentQualityMetrics()
+                        analytics.updateQualityMetrics(
+                            qualityMetrics.first,  // average bitrate
+                            qualityMetrics.second, // frame stability
+                            qualityMetrics.third   // audio quality
+                        )
+                    }
+                    
+                    delay(5000) // Update every 5 seconds
+                } catch (e: Exception) {
+                    android.util.Log.e("RecordingController", "[DEBUG_LOG] Error in performance monitoring: ${e.message}")
+                    delay(10000) // Wait longer on error
+                }
+            }
+        }
+    }
+    
+    /**
+     * Estimate current quality metrics for analytics
+     */
+    private fun estimateCurrentQualityMetrics(): Triple<Long, Float, Float> {
+        // In a real implementation, these would be measured from actual recording output
+        val avgBitrate = currentQuality.bitrate.toLong()
+        val frameStability = 0.95f // Placeholder - would be measured
+        val audioQuality = 0.9f // Placeholder - would be measured
+        
+        return Triple(avgBitrate, frameStability, audioQuality)
+    }
+    
+    /**
+     * Get performance baseline for session metadata
+     */
+    private fun getPerformanceBaseline(): Map<String, Any> {
+        return mapOf(
+            "baseline_memory_mb" to (Runtime.getRuntime().totalMemory() / (1024 * 1024)),
+            "baseline_timestamp" to System.currentTimeMillis(),
+            "device_performance_class" to estimateDevicePerformanceClass()
+        )
+    }
+    
+    /**
+     * Estimate device performance class
+     */
+    private fun estimateDevicePerformanceClass(): String {
+        val totalMemory = Runtime.getRuntime().maxMemory() / (1024 * 1024)
+        return when {
+            totalMemory > 4096 -> "HIGH_END"
+            totalMemory > 2048 -> "MID_RANGE"
+            else -> "LOW_END"
+        }
+    }
+    
+    /**
+     * Get session performance summary
+     */
+    private fun getSessionPerformanceSummary(): Map<String, Any> {
+        if (!isAnalyticsEnabled) {
+            return mapOf("analytics_disabled" to true)
+        }
+        
+        val resourceStats = analytics.analyzeResourceUtilization()
+        val trendAnalysis = analytics.performTrendAnalysis()
+        
+        return mapOf(
+            "average_memory_usage_mb" to resourceStats.meanMemoryUsage,
+            "peak_memory_usage_mb" to resourceStats.maxMemoryUsage,
+            "average_cpu_usage_percent" to resourceStats.meanCpuUsage,
+            "peak_cpu_usage_percent" to resourceStats.maxCpuUsage,
+            "storage_efficiency" to resourceStats.storageEfficiency,
+            "battery_drain_rate_percent_per_hour" to resourceStats.batteryDrainRate,
+            "performance_trend" to trendAnalysis.performanceTrend.name,
+            "overall_session_quality" to analytics.qualityMetrics.value.overallQualityScore
+        )
+    }
+    
+    /**
+     * Enable or disable analytics collection
+     */
+    fun setAnalyticsEnabled(enabled: Boolean) {
+        isAnalyticsEnabled = enabled
+        android.util.Log.d("RecordingController", "[DEBUG_LOG] Analytics ${if (enabled) "enabled" else "disabled"}")
+    }
+    
+    /**
+     * Get current analytics data
+     */
+    fun getAnalyticsData(): Map<String, Any> {
+        return if (isAnalyticsEnabled) {
+            analytics.generateAnalyticsReport()
+        } else {
+            mapOf("analytics_disabled" to true)
+        }
+    }
+    
+    /**
+     * Get real-time performance metrics
+     */
+    fun getCurrentPerformanceMetrics(): RecordingAnalytics.PerformanceMetrics {
+        return analytics.currentMetrics.value
+    }
+    
+    /**
+     * Get real-time quality metrics
+     */
+    fun getCurrentQualityMetrics(): RecordingAnalytics.QualityMetrics {
+        return analytics.qualityMetrics.value
+    }
+    
+    /**
+     * Perform comprehensive system health check
+     */
+    fun performSystemHealthCheck(context: Context): Map<String, Any> {
+        return mapOf(
+            "recording_system_initialized" to isRecordingSystemInitialized,
+            "service_connection_healthy" to isServiceHealthy(),
+            "current_session_active" to (currentSession != null),
+            "storage_space_sufficient" to validateStorageSpace(context),
+            "camera_permissions_granted" to validateCameraPermissions(context),
+            "battery_level_adequate" to validateBatteryLevel(context),
+            "network_connected" to validateNetworkConnectivity(context),
+            "thermal_state_normal" to (getCurrentPerformanceMetrics().thermalState == RecordingAnalytics.ThermalState.NORMAL),
+            "memory_usage_acceptable" to (getCurrentPerformanceMetrics().memoryUsageMB < 512),
+            "current_quality_setting" to currentQuality.displayName,
+            "recommended_quality" to getRecommendedQuality(context).displayName,
+            "analytics_enabled" to isAnalyticsEnabled,
+            "performance_trend" to if (isAnalyticsEnabled) analytics.performTrendAnalysis().performanceTrend.name else "UNKNOWN"
+        )
+    }
+    
+    /**
+     * Get intelligent quality recommendations based on analytics
+     */
+    fun getIntelligentQualityRecommendation(context: Context): Pair<RecordingQuality, String> {
+        if (!isAnalyticsEnabled) {
+            return Pair(getRecommendedQuality(context), "Analytics disabled - using basic recommendation")
+        }
+        
+        val trendAnalysis = analytics.performTrendAnalysis()
+        val currentMetrics = getCurrentPerformanceMetrics()
+        val resourceStats = analytics.analyzeResourceUtilization()
+        
+        // Advanced recommendation logic based on analytics
+        val recommendedQuality = when {
+            trendAnalysis.recommendedQualityAdjustment == RecordingAnalytics.QualityAdjustmentRecommendation.EMERGENCY_REDUCE -> {
+                RecordingQuality.LOW
+            }
+            trendAnalysis.recommendedQualityAdjustment == RecordingAnalytics.QualityAdjustmentRecommendation.DECREASE -> {
+                when (currentQuality) {
+                    RecordingQuality.ULTRA_HIGH -> RecordingQuality.HIGH
+                    RecordingQuality.HIGH -> RecordingQuality.MEDIUM
+                    RecordingQuality.MEDIUM -> RecordingQuality.LOW
+                    RecordingQuality.LOW -> RecordingQuality.LOW
+                }
+            }
+            trendAnalysis.recommendedQualityAdjustment == RecordingAnalytics.QualityAdjustmentRecommendation.INCREASE -> {
+                when (currentQuality) {
+                    RecordingQuality.LOW -> RecordingQuality.MEDIUM
+                    RecordingQuality.MEDIUM -> RecordingQuality.HIGH
+                    RecordingQuality.HIGH -> RecordingQuality.ULTRA_HIGH
+                    RecordingQuality.ULTRA_HIGH -> RecordingQuality.ULTRA_HIGH
+                }
+            }
+            else -> currentQuality
+        }
+        
+        val reasoning = buildString {
+            append("Analytics-based recommendation: ")
+            append("Performance trend: ${trendAnalysis.performanceTrend.name}, ")
+            append("Memory usage: ${resourceStats.meanMemoryUsage.toInt()}MB avg, ")
+            append("CPU usage: ${resourceStats.meanCpuUsage.toInt()}% avg, ")
+            append("Recommendation: ${trendAnalysis.recommendedQualityAdjustment.name}")
+        }
+        
+        return Pair(recommendedQuality, reasoning)
+    }
+    
+    /**
+     * Advanced recording session optimization
+     */
+    fun optimizeRecordingSession(context: Context): Map<String, Any> {
+        val optimizations = mutableMapOf<String, Any>()
+        
+        if (!isAnalyticsEnabled) {
+            optimizations["analytics_disabled"] = true
+            return optimizations
+        }
+        
+        val trendAnalysis = analytics.performTrendAnalysis()
+        val resourceStats = analytics.analyzeResourceUtilization()
+        val currentMetrics = getCurrentPerformanceMetrics()
+        
+        // Memory optimization
+        if (resourceStats.meanMemoryUsage > 512) {
+            optimizations["memory_optimization"] = "Consider reducing quality or closing background apps"
+        }
+        
+        // CPU optimization
+        if (resourceStats.meanCpuUsage > 70) {
+            optimizations["cpu_optimization"] = "High CPU usage detected - consider lowering frame rate"
+        }
+        
+        // Storage optimization
+        if (resourceStats.storageEfficiency < 0.8f) {
+            optimizations["storage_optimization"] = "Storage write efficiency low - check available space"
+        }
+        
+        // Quality optimization
+        val (recommendedQuality, reasoning) = getIntelligentQualityRecommendation(context)
+        if (recommendedQuality != currentQuality) {
+            optimizations["quality_optimization"] = mapOf(
+                "current_quality" to currentQuality.displayName,
+                "recommended_quality" to recommendedQuality.displayName,
+                "reasoning" to reasoning
+            )
+        }
+        
+        // Performance trend optimization
+        if (trendAnalysis.performanceTrend == RecordingAnalytics.Trend.DEGRADING) {
+            optimizations["performance_trend_warning"] = "Performance degrading - consider session restart"
+        }
+        
+        optimizations["optimization_timestamp"] = System.currentTimeMillis()
+        optimizations["optimization_confidence"] = trendAnalysis.trendStrength
+        
+        return optimizations
     }
 }
