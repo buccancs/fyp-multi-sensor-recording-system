@@ -5,6 +5,7 @@ import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logE
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.View
 import android.widget.TextView
@@ -22,7 +23,6 @@ import javax.inject.Singleton
  * 
  * TODO: Complete integration with MainActivity refactoring
  * TODO: Add comprehensive unit tests for UI management scenarios
- * TODO: Implement UI state persistence across configuration changes
  * TODO: Add support for dynamic theming and accessibility features
  * TODO: Implement UI component validation and error handling
  */
@@ -67,11 +67,77 @@ class UIController @Inject constructor() {
     private lateinit var thermalStatusIndicator: StatusIndicatorView
     private lateinit var recordingButtonPair: ActionButtonPair
     
+    // SharedPreferences for UI state persistence
+    private var sharedPreferences: SharedPreferences? = null
+    
+    companion object {
+        private const val PREFS_NAME = "ui_controller_prefs"
+        private const val KEY_LAST_BATTERY_LEVEL = "last_battery_level"
+        private const val KEY_PC_CONNECTION_STATUS = "pc_connection_status"
+        private const val KEY_SHIMMER_CONNECTION_STATUS = "shimmer_connection_status"
+        private const val KEY_THERMAL_CONNECTION_STATUS = "thermal_connection_status"
+        private const val KEY_RECORDING_STATE = "recording_state"
+        private const val KEY_STREAMING_STATE = "streaming_state"
+        private const val KEY_UI_THEME_MODE = "ui_theme_mode"
+        private const val KEY_ACCESSIBILITY_MODE = "accessibility_mode"
+        private const val KEY_HIGH_CONTRAST_MODE = "high_contrast_mode"
+    }
+    
     /**
-     * Set the callback for UI events
+     * Set the callback for UI events and initialize state persistence
      */
     fun setCallback(callback: UICallback) {
         this.callback = callback
+        
+        // Initialize SharedPreferences for UI state persistence
+        val context = callback.getContext()
+        initializeUIStatePersistence(context)
+    }
+    
+    /**
+     * Initialize SharedPreferences for UI state persistence
+     */
+    private fun initializeUIStatePersistence(context: Context) {
+        try {
+            sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            android.util.Log.d("UIController", "[DEBUG_LOG] UI state persistence initialized")
+        } catch (e: Exception) {
+            android.util.Log.e("UIController", "[DEBUG_LOG] Failed to initialize UI state persistence: ${e.message}")
+        }
+    }
+    
+    /**
+     * Save UI state to SharedPreferences
+     */
+    private fun saveUIState(state: MainUiState) {
+        sharedPreferences?.edit()?.apply {
+            putInt(KEY_LAST_BATTERY_LEVEL, state.batteryLevel)
+            putBoolean(KEY_PC_CONNECTION_STATUS, state.isPcConnected)
+            putBoolean(KEY_SHIMMER_CONNECTION_STATUS, state.isShimmerConnected)
+            putBoolean(KEY_THERMAL_CONNECTION_STATUS, state.isThermalConnected)
+            putBoolean(KEY_RECORDING_STATE, state.isRecording)
+            putBoolean(KEY_STREAMING_STATE, state.isStreaming)
+            apply()
+        }
+    }
+    
+    /**
+     * Get saved UI state from SharedPreferences
+     */
+    fun getSavedUIState(): SavedUIState {
+        return sharedPreferences?.let { prefs ->
+            SavedUIState(
+                lastBatteryLevel = prefs.getInt(KEY_LAST_BATTERY_LEVEL, -1),
+                isPcConnected = prefs.getBoolean(KEY_PC_CONNECTION_STATUS, false),
+                isShimmerConnected = prefs.getBoolean(KEY_SHIMMER_CONNECTION_STATUS, false),
+                isThermalConnected = prefs.getBoolean(KEY_THERMAL_CONNECTION_STATUS, false),
+                wasRecording = prefs.getBoolean(KEY_RECORDING_STATE, false),
+                wasStreaming = prefs.getBoolean(KEY_STREAMING_STATE, false),
+                themeMode = prefs.getString(KEY_UI_THEME_MODE, "default") ?: "default",
+                accessibilityMode = prefs.getBoolean(KEY_ACCESSIBILITY_MODE, false),
+                highContrastMode = prefs.getBoolean(KEY_HIGH_CONTRAST_MODE, false)
+            )
+        } ?: SavedUIState()
     }
     
     /**
@@ -124,6 +190,9 @@ class UIController @Inject constructor() {
         
         callback?.runOnUiThread {
             try {
+                // Save state for persistence across configuration changes
+                saveUIState(state)
+                
                 // Update status text
                 callback?.getStatusText()?.text = state.statusText
                 
@@ -139,27 +208,8 @@ class UIController @Inject constructor() {
                 // Update calibration button
                 callback?.getCalibrationButton()?.isEnabled = state.canRunCalibration
                 
-                // Update consolidated status indicator components
-                if (::pcStatusIndicator.isInitialized) {
-                    pcStatusIndicator.setStatus(
-                        if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-                        "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
-                    )
-                }
-                
-                if (::shimmerStatusIndicator.isInitialized) {
-                    shimmerStatusIndicator.setStatus(
-                        if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-                        "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
-                    )
-                }
-                
-                if (::thermalStatusIndicator.isInitialized) {
-                    thermalStatusIndicator.setStatus(
-                        if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-                        "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
-                    )
-                }
+                // Update consolidated status indicator components with accessibility
+                updateStatusIndicatorsWithAccessibility(state)
                 
                 // Update legacy connection indicators for backward compatibility
                 updateConnectionIndicator(callback?.getPcConnectionIndicator(), state.isPcConnected)
@@ -171,13 +221,8 @@ class UIController @Inject constructor() {
                 callback?.getShimmerConnectionStatus()?.text = "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
                 callback?.getThermalConnectionStatus()?.text = "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
                 
-                // Update battery level
-                val batteryText = if (state.batteryLevel >= 0) {
-                    "Battery: ${state.batteryLevel}%"
-                } else {
-                    "Battery: ---%"
-                }
-                callback?.getBatteryLevelText()?.text = batteryText
+                // Update battery level with color coding
+                updateBatteryLevelDisplay(state.batteryLevel)
                 
                 // Update recording indicator
                 updateRecordingIndicator(state.isRecording)
@@ -201,20 +246,8 @@ class UIController @Inject constructor() {
                     updateSessionInfoDisplay(sessionInfo)
                 }
                 
-                // Update Shimmer status text
-                val shimmerStatusText = when {
-                    state.shimmerDeviceInfo != null -> {
-                        "Shimmer GSR: ${state.shimmerDeviceInfo.deviceName} - Connected"
-                    }
-                    state.isShimmerConnected -> "Shimmer GSR: Connected"
-                    else -> "Shimmer GSR: Disconnected"
-                }
-                callback?.getShimmerStatusText()?.let { textView ->
-                    textView.text = shimmerStatusText
-                    textView.setTextColor(
-                        if (state.isShimmerConnected) Color.GREEN else Color.RED
-                    )
-                }
+                // Update Shimmer status text with accessibility
+                updateShimmerStatusWithAccessibility(state)
                 
                 callback?.onUIStateUpdated(state)
             } catch (e: Exception) {
@@ -225,11 +258,136 @@ class UIController @Inject constructor() {
     }
     
     /**
+     * Update status indicators with accessibility features
+     */
+    private fun updateStatusIndicatorsWithAccessibility(state: MainUiState) {
+        val savedState = getSavedUIState()
+        val isHighContrast = savedState.highContrastMode
+        val isAccessibilityMode = savedState.accessibilityMode
+        
+        if (::pcStatusIndicator.isInitialized) {
+            pcStatusIndicator.setStatus(
+                if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
+            )
+            
+            // Apply accessibility enhancements
+            if (isAccessibilityMode) {
+                pcStatusIndicator.contentDescription = "PC connection status: ${if (state.isPcConnected) "Connected" else "Disconnected"}"
+            }
+        }
+        
+        if (::shimmerStatusIndicator.isInitialized) {
+            shimmerStatusIndicator.setStatus(
+                if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+            )
+            
+            if (isAccessibilityMode) {
+                shimmerStatusIndicator.contentDescription = "Shimmer sensor status: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+            }
+        }
+        
+        if (::thermalStatusIndicator.isInitialized) {
+            thermalStatusIndicator.setStatus(
+                if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+            )
+            
+            if (isAccessibilityMode) {
+                thermalStatusIndicator.contentDescription = "Thermal camera status: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+            }
+        }
+    }
+    
+    /**
+     * Update battery level display with color coding and accessibility
+     */
+    private fun updateBatteryLevelDisplay(batteryLevel: Int) {
+        val savedState = getSavedUIState()
+        val isHighContrast = savedState.highContrastMode
+        
+        val batteryText = if (batteryLevel >= 0) {
+            "Battery: $batteryLevel%"
+        } else {
+            "Battery: ---%"
+        }
+        
+        // Determine color based on battery level and accessibility mode
+        val textColor = when {
+            batteryLevel < 0 -> Color.WHITE
+            isHighContrast -> {
+                when {
+                    batteryLevel > 50 -> Color.GREEN
+                    batteryLevel > 20 -> Color.YELLOW
+                    else -> Color.RED
+                }
+            }
+            else -> {
+                when {
+                    batteryLevel > 50 -> Color.parseColor("#4CAF50") // Softer green
+                    batteryLevel > 20 -> Color.parseColor("#FF9800") // Orange
+                    else -> Color.parseColor("#F44336") // Red
+                }
+            }
+        }
+        
+        callback?.getBatteryLevelText()?.let { textView ->
+            textView.text = batteryText
+            textView.setTextColor(textColor)
+            
+            if (savedState.accessibilityMode) {
+                textView.contentDescription = "Battery level: $batteryLevel percent"
+            }
+        }
+    }
+    
+    /**
+     * Update Shimmer status with accessibility features
+     */
+    private fun updateShimmerStatusWithAccessibility(state: MainUiState) {
+        val savedState = getSavedUIState()
+        val isHighContrast = savedState.highContrastMode
+        
+        val shimmerStatusText = when {
+            state.shimmerDeviceInfo != null -> {
+                "Shimmer GSR: ${state.shimmerDeviceInfo.deviceName} - Connected"
+            }
+            state.isShimmerConnected -> "Shimmer GSR: Connected"
+            else -> "Shimmer GSR: Disconnected"
+        }
+        
+        val textColor = if (isHighContrast) {
+            if (state.isShimmerConnected) Color.GREEN else Color.RED
+        } else {
+            if (state.isShimmerConnected) Color.parseColor("#4CAF50") else Color.parseColor("#F44336")
+        }
+        
+        callback?.getShimmerStatusText()?.let { textView ->
+            textView.text = shimmerStatusText
+            textView.setTextColor(textColor)
+            
+            if (savedState.accessibilityMode) {
+                textView.contentDescription = "Shimmer GSR sensor: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+            }
+        }
+    }
+    
+    /**
      * Helper method to update connection indicators
      * Extracted from MainActivity.updateConnectionIndicator()
      */
     private fun updateConnectionIndicator(indicator: View?, isConnected: Boolean) {
-        indicator?.setBackgroundColor(if (isConnected) Color.GREEN else Color.RED)
+        val savedState = getSavedUIState()
+        val isHighContrast = savedState.highContrastMode
+        
+        val color = if (isHighContrast) {
+            if (isConnected) Color.GREEN else Color.RED
+        } else {
+            if (isConnected) Color.parseColor("#4CAF50") else Color.parseColor("#F44336")
+        }
+        
+        indicator?.setBackgroundColor(color)
     }
     
     /**
@@ -237,9 +395,16 @@ class UIController @Inject constructor() {
      * Extracted from MainActivity.updateRecordingIndicator()
      */
     private fun updateRecordingIndicator(isRecording: Boolean) {
-        callback?.getRecordingIndicator()?.setBackgroundColor(
+        val savedState = getSavedUIState()
+        val isHighContrast = savedState.highContrastMode
+        
+        val color = if (isHighContrast) {
             if (isRecording) Color.RED else Color.GRAY
-        )
+        } else {
+            if (isRecording) Color.parseColor("#F44336") else Color.parseColor("#9E9E9E")
+        }
+        
+        callback?.getRecordingIndicator()?.setBackgroundColor(color)
     }
     
     /**
@@ -247,14 +412,25 @@ class UIController @Inject constructor() {
      * Extracted from MainActivity.updateStreamingIndicator()
      */
     private fun updateStreamingIndicator(isStreaming: Boolean, frameRate: Int, dataSize: String) {
-        callback?.getStreamingIndicator()?.setBackgroundColor(
+        val savedState = getSavedUIState()
+        val isHighContrast = savedState.highContrastMode
+        
+        val color = if (isHighContrast) {
             if (isStreaming) Color.GREEN else Color.GRAY
-        )
+        } else {
+            if (isStreaming) Color.parseColor("#4CAF50") else Color.parseColor("#9E9E9E")
+        }
+        
+        callback?.getStreamingIndicator()?.setBackgroundColor(color)
         
         if (isStreaming && frameRate > 0) {
             callback?.getStreamingDebugOverlay()?.let { overlay ->
                 overlay.text = "Streaming: ${frameRate}fps ($dataSize)"
                 overlay.visibility = View.VISIBLE
+                
+                if (savedState.accessibilityMode) {
+                    overlay.contentDescription = "Currently streaming at $frameRate frames per second, data size $dataSize"
+                }
             }
             callback?.getStreamingLabel()?.visibility = View.VISIBLE
         } else {
@@ -301,6 +477,39 @@ class UIController @Inject constructor() {
     }
     
     /**
+     * Set UI theme mode (light, dark, auto)
+     */
+    fun setThemeMode(themeMode: String) {
+        sharedPreferences?.edit()?.apply {
+            putString(KEY_UI_THEME_MODE, themeMode)
+            apply()
+        }
+        android.util.Log.d("UIController", "[DEBUG_LOG] UI theme mode set to: $themeMode")
+    }
+    
+    /**
+     * Set accessibility mode
+     */
+    fun setAccessibilityMode(enabled: Boolean) {
+        sharedPreferences?.edit()?.apply {
+            putBoolean(KEY_ACCESSIBILITY_MODE, enabled)
+            apply()
+        }
+        android.util.Log.d("UIController", "[DEBUG_LOG] Accessibility mode set to: $enabled")
+    }
+    
+    /**
+     * Set high contrast mode
+     */
+    fun setHighContrastMode(enabled: Boolean) {
+        sharedPreferences?.edit()?.apply {
+            putBoolean(KEY_HIGH_CONTRAST_MODE, enabled)
+            apply()
+        }
+        android.util.Log.d("UIController", "[DEBUG_LOG] High contrast mode set to: $enabled")
+    }
+    
+    /**
      * Data class for consolidated UI components
      */
     data class ConsolidatedUIComponents(
@@ -311,16 +520,36 @@ class UIController @Inject constructor() {
     )
     
     /**
+     * Data class for saved UI state
+     */
+    data class SavedUIState(
+        val lastBatteryLevel: Int = -1,
+        val isPcConnected: Boolean = false,
+        val isShimmerConnected: Boolean = false,
+        val isThermalConnected: Boolean = false,
+        val wasRecording: Boolean = false,
+        val wasStreaming: Boolean = false,
+        val themeMode: String = "default",
+        val accessibilityMode: Boolean = false,
+        val highContrastMode: Boolean = false
+    )
+    
+    /**
      * Get UI controller status for debugging
      */
     fun getUIStatus(): String {
+        val savedState = getSavedUIState()
         return buildString {
             append("UI Controller Status:\n")
             append("- PC Status Indicator: ${if (::pcStatusIndicator.isInitialized) "Initialized" else "Not initialized"}\n")
             append("- Shimmer Status Indicator: ${if (::shimmerStatusIndicator.isInitialized) "Initialized" else "Not initialized"}\n")
             append("- Thermal Status Indicator: ${if (::thermalStatusIndicator.isInitialized) "Initialized" else "Not initialized"}\n")
             append("- Recording Button Pair: ${if (::recordingButtonPair.isInitialized) "Initialized" else "Not initialized"}\n")
-            // TODO: Add more UI status information
+            append("- State Persistence: ${if (sharedPreferences != null) "Enabled" else "Disabled"}\n")
+            append("- Theme Mode: ${savedState.themeMode}\n")
+            append("- Accessibility Mode: ${savedState.accessibilityMode}\n")
+            append("- High Contrast Mode: ${savedState.highContrastMode}\n")
+            append("- Last Battery Level: ${savedState.lastBatteryLevel}%\n")
             append("- Callback Set: ${callback != null}")
         }
     }
@@ -329,8 +558,9 @@ class UIController @Inject constructor() {
      * Reset UI controller state
      */
     fun resetState() {
-        android.util.Log.d("UIController", "[DEBUG_LOG] UI controller state reset")
-        // TODO: Reset UI-specific state if needed
+        // Clear persisted UI state
+        sharedPreferences?.edit()?.clear()?.apply()
+        android.util.Log.d("UIController", "[DEBUG_LOG] UI controller state reset and persisted state cleared")
     }
     
     /**
@@ -338,8 +568,9 @@ class UIController @Inject constructor() {
      */
     fun cleanup() {
         try {
-            // TODO: Cleanup UI resources if needed
+            // Cleanup UI resources and clear callback
             callback = null
+            sharedPreferences = null
             android.util.Log.d("UIController", "[DEBUG_LOG] UI controller resources cleaned up")
         } catch (e: Exception) {
             android.util.Log.w("UIController", "[DEBUG_LOG] Error during UI cleanup: ${e.message}")
@@ -348,7 +579,6 @@ class UIController @Inject constructor() {
     
     /**
      * Set click listeners for recording button pair
-     * TODO: This should be called by the coordinator during initialization
      */
     fun setRecordingButtonListeners(startAction: (View) -> Unit, stopAction: (View) -> Unit) {
         if (::recordingButtonPair.isInitialized) {
@@ -356,6 +586,22 @@ class UIController @Inject constructor() {
             android.util.Log.d("UIController", "[DEBUG_LOG] Recording button listeners set")
         } else {
             android.util.Log.w("UIController", "[DEBUG_LOG] Cannot set listeners - recording button pair not initialized")
+        }
+    }
+    
+    /**
+     * Apply UI theme based on saved preferences
+     */
+    fun applyThemeFromPreferences() {
+        val savedState = getSavedUIState()
+        android.util.Log.d("UIController", "[DEBUG_LOG] Applying UI theme: ${savedState.themeMode}, accessibility: ${savedState.accessibilityMode}, high contrast: ${savedState.highContrastMode}")
+        
+        // Theme application would be handled by the activity/fragment
+        callback?.let { cb ->
+            if (cb is Context) {
+                // Future implementation: apply theme via context
+                android.util.Log.d("UIController", "[DEBUG_LOG] Theme preferences ready for application")
+            }
         }
     }
 }

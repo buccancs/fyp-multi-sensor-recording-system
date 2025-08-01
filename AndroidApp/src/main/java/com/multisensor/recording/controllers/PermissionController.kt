@@ -6,6 +6,7 @@ import com.multisensor.recording.util.logE
 
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
 import com.multisensor.recording.managers.PermissionManager
 import javax.inject.Inject
@@ -17,7 +18,6 @@ import javax.inject.Singleton
  * 
  * TODO: Complete integration with MainActivity refactoring
  * TODO: Add comprehensive unit tests for all permission scenarios
- * TODO: Implement permission state persistence across app restarts
  */
 @Singleton
 class PermissionController @Inject constructor(
@@ -41,11 +41,75 @@ class PermissionController @Inject constructor(
     private var hasCheckedPermissionsOnStartup = false
     private var permissionRetryCount = 0
     
+    // SharedPreferences for state persistence
+    private var sharedPreferences: SharedPreferences? = null
+    
+    companion object {
+        private const val PREFS_NAME = "permission_controller_prefs"
+        private const val KEY_HAS_CHECKED_PERMISSIONS = "has_checked_permissions_on_startup"
+        private const val KEY_PERMISSION_RETRY_COUNT = "permission_retry_count"
+        private const val KEY_LAST_PERMISSION_REQUEST_TIME = "last_permission_request_time"
+        private const val KEY_PERMANENTLY_DENIED_PERMISSIONS = "permanently_denied_permissions"
+    }
+    
     /**
-     * Set the callback for permission events
+     * Set the callback for permission events and initialize state persistence
      */
     fun setCallback(callback: PermissionCallback) {
         this.callback = callback
+        
+        // Initialize SharedPreferences if we have a context
+        if (callback is Context) {
+            initializeStateStorage(callback as Context)
+        }
+    }
+    
+    /**
+     * Initialize SharedPreferences for state persistence
+     */
+    private fun initializeStateStorage(context: Context) {
+        try {
+            sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            loadPersistedState()
+            android.util.Log.d("PermissionController", "[DEBUG_LOG] State persistence initialized")
+        } catch (e: Exception) {
+            android.util.Log.e("PermissionController", "[DEBUG_LOG] Failed to initialize state persistence: ${e.message}")
+        }
+    }
+    
+    /**
+     * Load persisted state from SharedPreferences
+     */
+    private fun loadPersistedState() {
+        sharedPreferences?.let { prefs ->
+            hasCheckedPermissionsOnStartup = prefs.getBoolean(KEY_HAS_CHECKED_PERMISSIONS, false)
+            permissionRetryCount = prefs.getInt(KEY_PERMISSION_RETRY_COUNT, 0)
+            
+            val lastRequestTime = prefs.getLong(KEY_LAST_PERMISSION_REQUEST_TIME, 0)
+            val currentTime = System.currentTimeMillis()
+            
+            // Reset permission state if more than 24 hours have passed since last request
+            if (currentTime - lastRequestTime > 24 * 60 * 60 * 1000) {
+                android.util.Log.d("PermissionController", "[DEBUG_LOG] Resetting permission state after 24 hours")
+                hasCheckedPermissionsOnStartup = false
+                permissionRetryCount = 0
+                persistState()
+            }
+            
+            android.util.Log.d("PermissionController", "[DEBUG_LOG] Loaded persisted state: checked=$hasCheckedPermissionsOnStartup, retries=$permissionRetryCount")
+        }
+    }
+    
+    /**
+     * Persist current state to SharedPreferences
+     */
+    private fun persistState() {
+        sharedPreferences?.edit()?.apply {
+            putBoolean(KEY_HAS_CHECKED_PERMISSIONS, hasCheckedPermissionsOnStartup)
+            putInt(KEY_PERMISSION_RETRY_COUNT, permissionRetryCount)
+            putLong(KEY_LAST_PERMISSION_REQUEST_TIME, System.currentTimeMillis())
+            apply()
+        }
     }
     
     /**
@@ -65,6 +129,8 @@ class PermissionController @Inject constructor(
         
         if (permissionManager.areAllPermissionsGranted(context)) {
             android.util.Log.d("PermissionController", "[DEBUG_LOG] All permissions already granted")
+            hasCheckedPermissionsOnStartup = true
+            persistState()
             callback?.onAllPermissionsGranted()
         } else {
             android.util.Log.d("PermissionController", "[DEBUG_LOG] Requesting permissions via PermissionManager...")
@@ -89,9 +155,10 @@ class PermissionController @Inject constructor(
         // Reset the startup flag to allow permission checking again
         hasCheckedPermissionsOnStartup = false
         
-        // Reset retry counter for fresh manual attempt
-        permissionRetryCount = 0
-        android.util.Log.d("PermissionController", "[DEBUG_LOG] Reset permission retry counter to 0 for manual request")
+        // Increment retry counter for tracking
+        permissionRetryCount++
+        persistState()
+        android.util.Log.d("PermissionController", "[DEBUG_LOG] Incremented permission retry counter to $permissionRetryCount")
         
         // Hide the button while processing
         callback?.showPermissionButton(false)
@@ -176,6 +243,8 @@ class PermissionController @Inject constructor(
         return object : PermissionManager.PermissionCallback {
             override fun onAllPermissionsGranted() {
                 android.util.Log.d("PermissionController", "[DEBUG_LOG] All permissions granted callback received")
+                hasCheckedPermissionsOnStartup = true
+                persistState()
                 callback?.onAllPermissionsGranted()
                 callback?.onPermissionRequestCompleted()
             }
@@ -186,6 +255,7 @@ class PermissionController @Inject constructor(
                 totalCount: Int
             ) {
                 android.util.Log.d("PermissionController", "[DEBUG_LOG] Temporary denial callback received")
+                persistState()
                 // Show message to user about temporarily denied permissions
                 callback?.let { cb ->
                     if (cb is Context) {
@@ -198,6 +268,11 @@ class PermissionController @Inject constructor(
             
             override fun onPermissionsPermanentlyDenied(deniedPermissions: List<String>) {
                 android.util.Log.d("PermissionController", "[DEBUG_LOG] Permanent denial callback received")
+                
+                // Store permanently denied permissions for future reference
+                storePermanentlyDeniedPermissions(deniedPermissions)
+                persistState()
+                
                 // Show message to user about permanently denied permissions
                 callback?.let { cb ->
                     if (cb is Context) {
@@ -211,13 +286,31 @@ class PermissionController @Inject constructor(
     }
     
     /**
+     * Store permanently denied permissions for future reference
+     */
+    private fun storePermanentlyDeniedPermissions(deniedPermissions: List<String>) {
+        sharedPreferences?.edit()?.apply {
+            putStringSet(KEY_PERMANENTLY_DENIED_PERMISSIONS, deniedPermissions.toSet())
+            apply()
+        }
+        android.util.Log.d("PermissionController", "[DEBUG_LOG] Stored permanently denied permissions: ${deniedPermissions.joinToString(", ")}")
+    }
+    
+    /**
+     * Get permanently denied permissions from storage
+     */
+    fun getPermanentlyDeniedPermissions(): Set<String> {
+        return sharedPreferences?.getStringSet(KEY_PERMANENTLY_DENIED_PERMISSIONS, emptySet()) ?: emptySet()
+    }
+    
+    /**
      * Reset internal state (useful for testing or app restart scenarios)
-     * TODO: Implement state persistence to survive app restarts
      */
     fun resetState() {
         hasCheckedPermissionsOnStartup = false
         permissionRetryCount = 0
-        android.util.Log.d("PermissionController", "[DEBUG_LOG] Permission controller state reset")
+        persistState()
+        android.util.Log.d("PermissionController", "[DEBUG_LOG] Permission controller state reset and persisted")
     }
     
     /**
@@ -229,4 +322,29 @@ class PermissionController @Inject constructor(
      * Check if permissions have been checked on startup
      */
     fun hasCheckedPermissionsOnStartup(): Boolean = hasCheckedPermissionsOnStartup
+    
+    /**
+     * Get permission controller status for debugging
+     */
+    fun getPermissionStatus(): String {
+        return buildString {
+            append("Permission Controller Status:\n")
+            append("- Has checked permissions on startup: $hasCheckedPermissionsOnStartup\n")
+            append("- Permission retry count: $permissionRetryCount\n")
+            append("- State persistence: ${if (sharedPreferences != null) "Enabled" else "Disabled"}\n")
+            val permanentlyDenied = getPermanentlyDeniedPermissions()
+            append("- Permanently denied permissions: ${if (permanentlyDenied.isEmpty()) "None" else permanentlyDenied.joinToString(", ")}\n")
+            append("- Last request time: ${sharedPreferences?.getLong(KEY_LAST_PERMISSION_REQUEST_TIME, 0) ?: 0}")
+        }
+    }
+    
+    /**
+     * Clear all persisted permission state (useful for testing or fresh start)
+     */
+    fun clearPersistedState() {
+        sharedPreferences?.edit()?.clear()?.apply()
+        hasCheckedPermissionsOnStartup = false
+        permissionRetryCount = 0
+        android.util.Log.d("PermissionController", "[DEBUG_LOG] All persisted permission state cleared")
+    }
 }
