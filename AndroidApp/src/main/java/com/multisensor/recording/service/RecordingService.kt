@@ -404,8 +404,15 @@ class RecordingService : Service() {
      */
     private fun getShimmerStatus(): String =
         try {
-            // TODO: Get actual Shimmer status from ShimmerRecorder
-            if (isRecording) "recording" else "ready"
+            // Get actual Shimmer status from ShimmerRecorder
+            val status = shimmerRecorder.getShimmerStatus()
+            when {
+                !status.isAvailable -> "unavailable"
+                !status.isConnected -> "disconnected"
+                status.isRecording -> "recording"
+                status.isConnected -> "ready"
+                else -> "unknown"
+            }
         } catch (e: Exception) {
             "error"
         }

@@ -20,6 +20,9 @@ import javax.inject.Singleton
 @Singleton
 class ShimmerManager @Inject constructor() {
     
+    // Track connection state - this would be managed by actual Shimmer SDK integration
+    private var isConnected: Boolean = false
+    
     /**
      * Interface for Shimmer device callbacks
      */
@@ -161,6 +164,7 @@ class ShimmerManager @Inject constructor() {
             
             // Simulate success for now
             android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Shimmer SD logging started successfully (placeholder)")
+            isConnected = true
             callback.onConnectionStatusChanged(true)
             
         } catch (e: Exception) {
@@ -183,6 +187,7 @@ class ShimmerManager @Inject constructor() {
             
             // Simulate success for now
             android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Shimmer SD logging stopped successfully (placeholder)")
+            isConnected = false
             callback.onConnectionStatusChanged(false)
             
         } catch (e: Exception) {
@@ -195,9 +200,9 @@ class ShimmerManager @Inject constructor() {
      * Check if Shimmer device is connected
      */
     fun isDeviceConnected(): Boolean {
-        // TODO: Implement actual connection check
-        // This would typically check ShimmerBluetoothManagerAndroid connection status
-        return false
+        // Return actual connection status - this would typically check ShimmerBluetoothManagerAndroid
+        // For now, return our tracked state which would be updated by actual SDK callbacks
+        return isConnected
     }
     
     /**
@@ -211,6 +216,7 @@ class ShimmerManager @Inject constructor() {
             // This would typically involve calling disconnect on ShimmerBluetoothManagerAndroid
             
             android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Shimmer device disconnected successfully (placeholder)")
+            isConnected = false
             callback.onConnectionStatusChanged(false)
             
         } catch (e: Exception) {
