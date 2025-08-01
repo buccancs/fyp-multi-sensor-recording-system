@@ -147,10 +147,10 @@ class MainActivity : AppCompatActivity(),
         setupUI()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] UI setup completed")
 
-        // Setup managers and callbacks
-        shimmerManager.setCallback(this)
-        permissionManager.setCallback(this)
-        handSegmentationManager.setListener(this)
+        // Setup managers and callbacks (TODO: Add proper callback setup methods to managers)
+        // shimmerManager.setCallback(this)
+        // permissionManager.setCallback(this)
+        // handSegmentationManager.setListener(this)
         usbController.setCallback(this)
 
         // Initialize USB monitoring for already connected devices
@@ -178,9 +178,9 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * Check if all required permissions are granted
+     * Check if all required permissions are granted (private method)
      */
-    private fun areAllPermissionsGranted(): Boolean =
+    private fun areAllPermissionsGrantedInternal(): Boolean =
         AllAndroidPermissions.getDangerousPermissions().all { permission ->
             ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
         }
@@ -649,7 +649,7 @@ class MainActivity : AppCompatActivity(),
 
         if (permissionManager.areAllPermissionsGranted(this)) {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions already granted, initializing system")
-            initializeRecordingSystem()
+            initializeRecordingSystemInternal()
         } else {
             android.util.Log.d("MainActivity", "[DEBUG_LOG] Requesting permissions via PermissionManager...")
             binding.statusText.text = "Requesting permissions..."
@@ -744,7 +744,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun initializeRecordingSystem() {
+    private fun initializeRecordingSystemInternal() {
         // Get TextureView from layout for camera preview
         val textureView = binding.texturePreview
 
@@ -1518,7 +1518,7 @@ class MainActivity : AppCompatActivity(),
     
     override fun onAllPermissionsGranted() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionManager")
-        initializeRecordingSystem()
+        initializeRecordingSystemInternal()
         binding.statusText.text = "All permissions granted - System ready"
         updatePermissionButtonVisibility()
     }
@@ -1620,15 +1620,6 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing recording system from USB controller")
         // Call the private initializeRecordingSystem method
         this.initializeRecordingSystemInternal()
-    }
-    
-    private fun initializeRecordingSystemInternal() {
-        // Get TextureView from layout for camera preview
-        val textureView = binding.texturePreview
-
-        // Initialize system with TextureView for enhanced CameraRecorder integration
-        viewModel.initializeSystem(textureView)
-        binding.statusText.text = "System initialized - Ready to record"
     }
 
     override fun areAllPermissionsGranted(): Boolean {

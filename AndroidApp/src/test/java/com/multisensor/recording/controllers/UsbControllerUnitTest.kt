@@ -387,6 +387,242 @@ class UsbControllerUnitTest {
         verify { mockCallback.updateStatusText(match { it.contains("disconnected") }) }
     }
 
+    // ========== Multiple Device Support Tests ==========
+
+    @Test
+    fun `should track multiple simultaneous devices`() {
+        // Given
+        val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
+        val intent1 = createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        val intent2 = createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(device1) } returns true
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(device2) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When
+        usbController.handleUsbDeviceIntent(mockContext, intent1)
+        usbController.handleUsbDeviceIntent(mockContext, intent2)
+
+        // Then
+        assertEquals(2, usbController.getConnectedSupportedDeviceCount())
+        val connectedDevices = usbController.getConnectedSupportedDevicesList()
+        assertEquals(2, connectedDevices.size)
+        assertTrue(connectedDevices.contains(device1))
+        assertTrue(connectedDevices.contains(device2))
+        
+        verify { mockCallback.updateStatusText(match { it.contains("2 Topdon thermal cameras") }) }
+    }
+
+    @Test
+    fun `should handle device detachment in multi-device scenario`() {
+        // Given - connect two devices
+        val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+
+        // When - disconnect one device
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device1))
+
+        // Then
+        assertEquals(1, usbController.getConnectedSupportedDeviceCount())
+        val remainingDevices = usbController.getConnectedSupportedDevicesList()
+        assertEquals(1, remainingDevices.size)
+        assertTrue(remainingDevices.contains(device2))
+        assertFalse(remainingDevices.contains(device1))
+        
+        verify { mockCallback.updateStatusText(match { it.contains("1 Topdon thermal camera connected") }) }
+    }
+
+    @Test
+    fun `should track device connection times and counts`() {
+        // Given
+        val device = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901)
+        val intent = createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device)
+        val deviceKey = "${device.vendorId}_${device.productId}_${device.deviceName}"
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When - connect the same device multiple times
+        usbController.handleUsbDeviceIntent(mockContext, intent)
+        val firstConnectionTime = usbController.getDeviceConnectionTime(deviceKey)
+        val firstConnectionCount = usbController.getDeviceConnectionCount(deviceKey)
+
+        // Simulate disconnect and reconnect
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device))
+        Thread.sleep(10) // Small delay to ensure different timestamp
+        usbController.handleUsbDeviceIntent(mockContext, intent)
+        
+        val secondConnectionTime = usbController.getDeviceConnectionTime(deviceKey)
+        val secondConnectionCount = usbController.getDeviceConnectionCount(deviceKey)
+
+        // Then
+        assertNotNull(firstConnectionTime)
+        assertEquals(1, firstConnectionCount)
+        assertNotNull(secondConnectionTime)
+        assertEquals(2, secondConnectionCount)
+        assertTrue(secondConnectionTime!! > firstConnectionTime!!)
+    }
+
+    @Test
+    fun `should generate appropriate status text for different device counts`() {
+        // Given
+        val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When/Then - no devices
+        assertEquals(0, usbController.getConnectedSupportedDeviceCount())
+
+        // When/Then - one device
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
+        verify { mockCallback.updateStatusText(match { it.contains("1 Topdon thermal camera connected") }) }
+
+        // When/Then - multiple devices
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        verify { mockCallback.updateStatusText(match { it.contains("2 Topdon thermal cameras connected") }) }
+    }
+
+    @Test
+    fun `should check device connection status by key`() {
+        // Given
+        val device = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val deviceKey = "${device.vendorId}_${device.productId}_${device.deviceName}"
+        val intent = createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device)
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When/Then - device not connected
+        assertFalse(usbController.isDeviceConnected(deviceKey))
+        assertNull(usbController.getDeviceInfoByKey(deviceKey))
+
+        // When/Then - device connected
+        usbController.handleUsbDeviceIntent(mockContext, intent)
+        assertTrue(usbController.isDeviceConnected(deviceKey))
+        assertEquals(device, usbController.getDeviceInfoByKey(deviceKey))
+
+        // When/Then - device disconnected
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device))
+        assertFalse(usbController.isDeviceConnected(deviceKey))
+        assertNull(usbController.getDeviceInfoByKey(deviceKey))
+    }
+
+    @Test
+    fun `should handle mixed supported and unsupported devices correctly`() {
+        // Given
+        val supportedDevice = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val unsupportedDevice = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "/dev/bus/usb/001/002")
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(supportedDevice) } returns true
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(unsupportedDevice) } returns false
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, supportedDevice))
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, unsupportedDevice))
+
+        // Then
+        assertEquals(1, usbController.getConnectedSupportedDeviceCount())
+        val connectedDevices = usbController.getConnectedSupportedDevicesList()
+        assertTrue(connectedDevices.contains(supportedDevice))
+        assertFalse(connectedDevices.contains(unsupportedDevice))
+        
+        verify { mockCallback.onSupportedDeviceAttached(supportedDevice) }
+        verify { mockCallback.onUnsupportedDeviceAttached(unsupportedDevice) }
+    }
+
+    @Test
+    fun `should save and restore multi-device state`() {
+        // Given
+        val mockSharedPrefs = mockk<android.content.SharedPreferences>(relaxed = true)
+        val mockEditor = mockk<android.content.SharedPreferences.Editor>(relaxed = true)
+        
+        every { mockContext.getSharedPreferences(any(), any()) } returns mockSharedPrefs
+        every { mockSharedPrefs.edit() } returns mockEditor
+        every { mockEditor.putInt(any(), any()) } returns mockEditor
+        every { mockEditor.putString(any(), any()) } returns mockEditor
+        every { mockEditor.putStringSet(any(), any()) } returns mockEditor
+        every { mockEditor.putLong(any(), any()) } returns mockEditor
+        every { mockEditor.apply() } just Runs
+
+        val device = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901)
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device))
+
+        // Then
+        verify { mockEditor.putInt("connected_device_count", 1) }
+        verify { mockEditor.putStringSet("connected_device_keys", any()) }
+        verify { mockEditor.apply() }
+    }
+
+    @Test
+    fun `getMultiDeviceStatusSummary should provide comprehensive information`() {
+        // Given
+        val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        
+        val summary = usbController.getMultiDeviceStatusSummary(mockContext)
+
+        // Then
+        assertTrue(summary.contains("Currently connected TOPDON devices: 2"))
+        assertTrue(summary.contains("Currently connected devices:"))
+        assertTrue(summary.contains(device1.deviceName))
+        assertTrue(summary.contains(device2.deviceName))
+    }
+
+    @Test
+    fun `should handle edge case of null device in intent`() {
+        // Given
+        val intent = createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, null)
+
+        // When
+        usbController.handleUsbDeviceIntent(mockContext, intent)
+
+        // Then
+        verify { mockCallback.onUsbError(match { it.contains("no device information available") }) }
+        assertEquals(0, usbController.getConnectedSupportedDeviceCount())
+    }
+
+    @Test
+    fun `should handle device with same VID PID but different device name`() {
+        // Given - two devices with same VID/PID but different device names (different USB ports)
+        val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/002")
+        
+        every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
+        every { mockCallback.areAllPermissionsGranted() } returns true
+
+        // When
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
+        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+
+        // Then - should track as separate devices
+        assertEquals(2, usbController.getConnectedSupportedDeviceCount())
+        val connectedDevices = usbController.getConnectedSupportedDevicesList()
+        assertTrue(connectedDevices.contains(device1))
+        assertTrue(connectedDevices.contains(device2))
+    }
+
     // Helper methods for creating mock objects
 
     private fun createMockUsbDevice(

@@ -19,10 +19,19 @@ import javax.inject.Singleton
  * Extracted from MainActivity to improve separation of concerns and testability.
  * Works in coordination with UsbDeviceManager for comprehensive USB device handling.
  * 
- * TODO: Complete integration with MainActivity refactoring
- * TODO: Add comprehensive unit tests for USB device scenarios
- * TODO: Implement USB device state persistence across app restarts
- * TODO: Add support for multiple simultaneous USB devices
+ * ✅ Complete integration with MainActivity refactoring
+ * ✅ Add comprehensive unit tests for USB device scenarios
+ * ✅ Implement USB device state persistence across app restarts
+ * ✅ Add support for multiple simultaneous USB devices
+ * 
+ * TODO: Add device prioritization for recording when multiple devices are connected
+ * TODO: Implement hot-swap detection for device replacement scenarios
+ * TODO: Add configuration profiles for per-device settings persistence
+ * TODO: Integrate usage analytics and performance metrics
+ * TODO: Add network-based device status reporting for remote monitoring
+ * TODO: Implement device-specific calibration state persistence
+ * TODO: Add advanced connection quality monitoring and reporting
+ * TODO: Support for custom device filtering and selection criteria
  */
 @Singleton
 class UsbController @Inject constructor(
@@ -53,6 +62,11 @@ class UsbController @Inject constructor(
     }
 
     private var callback: UsbCallback? = null
+    
+    // Multiple device management state
+    private val connectedSupportedDevices = mutableMapOf<String, UsbDevice>()
+    private val deviceConnectionTimes = mutableMapOf<String, Long>()
+    private val deviceConnectionCounts = mutableMapOf<String, Int>()
     
     // Periodic scanning state
     private var isScanning = false
@@ -127,8 +141,10 @@ class UsbController @Inject constructor(
         }
         
         device?.let { usbDevice ->
+            val deviceKey = getDeviceKey(usbDevice)
             android.util.Log.d("UsbController", "[DEBUG_LOG] USB device detached:")
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Device name: ${usbDevice.deviceName}")
+            android.util.Log.d("UsbController", "[DEBUG_LOG] - Device key: $deviceKey")
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}")
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}")
             
@@ -136,12 +152,21 @@ class UsbController @Inject constructor(
             
             // Update status if it was a supported device
             if (usbDeviceManager.isSupportedTopdonDevice(usbDevice)) {
-                callback?.updateStatusText("Topdon thermal camera disconnected")
-                Toast.makeText(
-                    context,
-                    "Topdon Thermal Camera Disconnected",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // Remove from our tracking
+                connectedSupportedDevices.remove(deviceKey)
+                
+                val remainingDevices = connectedSupportedDevices.size
+                val message = if (remainingDevices == 0) {
+                    "Topdon Thermal Camera Disconnected"
+                } else {
+                    "Topdon Camera Disconnected\nRemaining devices: $remainingDevices"
+                }
+                
+                callback?.updateStatusText(getMultiDeviceStatusText())
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                
+                // Update multi-device state
+                saveMultiDeviceState(context)
             }
         } ?: run {
             android.util.Log.w("UsbController", "[DEBUG_LOG] USB device detachment intent received but no device found")
@@ -152,20 +177,31 @@ class UsbController @Inject constructor(
      * Handle supported TOPDON device attachment
      */
     private fun handleSupportedDeviceAttached(context: Context, usbDevice: UsbDevice) {
+        val deviceKey = getDeviceKey(usbDevice)
         android.util.Log.d("UsbController", "[DEBUG_LOG] ✓ Supported Topdon thermal camera detected!")
+        android.util.Log.d("UsbController", "[DEBUG_LOG] Device key: $deviceKey")
+        
+        // Track this device in our multiple device management
+        connectedSupportedDevices[deviceKey] = usbDevice
+        deviceConnectionTimes[deviceKey] = System.currentTimeMillis()
+        deviceConnectionCounts[deviceKey] = (deviceConnectionCounts[deviceKey] ?: 0) + 1
         
         // Show user notification
-        Toast.makeText(
-            context,
-            "Topdon Thermal Camera Connected!\nDevice: ${usbDevice.deviceName}",
-            Toast.LENGTH_LONG
-        ).show()
+        val deviceCount = connectedSupportedDevices.size
+        val message = if (deviceCount == 1) {
+            "Topdon Thermal Camera Connected!\nDevice: ${usbDevice.deviceName}"
+        } else {
+            "Topdon Camera #$deviceCount Connected!\nDevice: ${usbDevice.deviceName}\nTotal devices: $deviceCount"
+        }
+        
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         
         // Update status
-        callback?.updateStatusText("Topdon thermal camera connected - Ready for recording")
+        callback?.updateStatusText(getMultiDeviceStatusText())
         
         // Save device state persistence
         saveDeviceConnectionState(context, usbDevice)
+        saveMultiDeviceState(context)
         
         // Initialize thermal recorder if permissions are available
         if (callback?.areAllPermissionsGranted() == true) {
@@ -238,6 +274,9 @@ class UsbController @Inject constructor(
     fun initializeUsbMonitoring(context: Context) {
         android.util.Log.d("UsbController", "[DEBUG_LOG] Initializing USB monitoring...")
         
+        // Restore previous multi-device state
+        restoreMultiDeviceState(context)
+        
         // Initial device scan
         scanForDevices(context)
         
@@ -303,9 +342,24 @@ class UsbController @Inject constructor(
                 }
             }
             
-            // Handle removed devices (log only since we handle detachment via system events)
+            // Handle removed devices - update our tracking
             removedDevices.forEach { deviceName ->
                 android.util.Log.d("UsbController", "[DEBUG_LOG] USB device disconnected: $deviceName")
+                
+                // Find and remove from our tracking by device name
+                val keysToRemove = connectedSupportedDevices.filter { (_, device) -> 
+                    device.deviceName == deviceName 
+                }.keys
+                
+                keysToRemove.forEach { key ->
+                    connectedSupportedDevices.remove(key)
+                }
+                
+                // Update status and save state if we removed supported devices
+                if (keysToRemove.isNotEmpty()) {
+                    callback?.updateStatusText(getMultiDeviceStatusText())
+                    saveMultiDeviceState(context)
+                }
             }
             
             // Update known devices
@@ -317,23 +371,45 @@ class UsbController @Inject constructor(
     }
     
     /**
-     * Get USB device status summary for debugging
+     * Get USB device status summary for debugging - enhanced for multiple devices
      */
     fun getUsbStatusSummary(context: Context): String {
         val connectedDevices = getConnectedUsbDevices(context)
         val supportedDevices = getConnectedSupportedDevices(context)
+        val trackedSupportedDevices = connectedSupportedDevices.size
         val lastDeviceInfo = getLastConnectedDeviceInfo(context)
         
         return buildString {
-            append("USB Status Summary:\n")
+            append("Enhanced USB Status Summary:\n")
             append("- Total connected devices: ${connectedDevices.size}\n")
-            append("- Supported TOPDON devices: ${supportedDevices.size}\n")
+            append("- Supported TOPDON devices (system): ${supportedDevices.size}\n")
+            append("- Tracked supported devices (controller): $trackedSupportedDevices\n")
             append("- Last connected device: $lastDeviceInfo\n")
             append("- Total connections: ${getConnectionCount(context)}\n")
-            if (supportedDevices.isNotEmpty()) {
-                append("- Supported devices:\n")
+            
+            if (connectedSupportedDevices.isNotEmpty()) {
+                append("- Tracked supported devices:\n")
+                connectedSupportedDevices.forEach { (key, device) ->
+                    val connectionTime = deviceConnectionTimes[key]
+                    val connectionCount = deviceConnectionCounts[key] ?: 0
+                    val timeStr = if (connectionTime != null) {
+                        val format = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+                        format.format(java.util.Date(connectionTime))
+                    } else "Unknown"
+                    
+                    append("  • ${device.deviceName} (Key: $key)\n")
+                    append("    VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)}\n")
+                    append("    Connected: $timeStr, Count: $connectionCount\n")
+                }
+            }
+            
+            if (supportedDevices.isNotEmpty() && supportedDevices.size != trackedSupportedDevices) {
+                append("- System-detected but not tracked:\n")
                 supportedDevices.forEach { device ->
-                    append("  • ${device.deviceName} (VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)})\n")
+                    val key = getDeviceKey(device)
+                    if (!connectedSupportedDevices.containsKey(key)) {
+                        append("  • ${device.deviceName} (VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)})\n")
+                    }
                 }
             }
         }
@@ -404,6 +480,170 @@ class UsbController @Inject constructor(
         } catch (e: Exception) {
             android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to check previous device: ${e.message}")
             false
+        }
+    }
+    
+    // ========== Multiple Device Support Methods ==========
+    
+    /**
+     * Generate a unique key for a USB device based on vendor ID, product ID, and device name
+     */
+    private fun getDeviceKey(device: UsbDevice): String {
+        return "${device.vendorId}_${device.productId}_${device.deviceName}"
+    }
+    
+    /**
+     * Get all currently connected and tracked supported devices
+     */
+    fun getConnectedSupportedDevicesList(): List<UsbDevice> {
+        return connectedSupportedDevices.values.toList()
+    }
+    
+    /**
+     * Get count of currently connected supported devices
+     */
+    fun getConnectedSupportedDeviceCount(): Int {
+        return connectedSupportedDevices.size
+    }
+    
+    /**
+     * Get device information for a specific device by key
+     */
+    fun getDeviceInfoByKey(deviceKey: String): UsbDevice? {
+        return connectedSupportedDevices[deviceKey]
+    }
+    
+    /**
+     * Check if a specific device (by key) is currently connected
+     */
+    fun isDeviceConnected(deviceKey: String): Boolean {
+        return connectedSupportedDevices.containsKey(deviceKey)
+    }
+    
+    /**
+     * Get connection time for a specific device
+     */
+    fun getDeviceConnectionTime(deviceKey: String): Long? {
+        return deviceConnectionTimes[deviceKey]
+    }
+    
+    /**
+     * Get connection count for a specific device
+     */
+    fun getDeviceConnectionCount(deviceKey: String): Int {
+        return deviceConnectionCounts[deviceKey] ?: 0
+    }
+    
+    /**
+     * Generate status text for multiple device scenario
+     */
+    private fun getMultiDeviceStatusText(): String {
+        val deviceCount = connectedSupportedDevices.size
+        return when (deviceCount) {
+            0 -> "No thermal cameras connected"
+            1 -> "1 Topdon thermal camera connected - Ready for recording"
+            else -> "$deviceCount Topdon thermal cameras connected - Ready for multi-device recording"
+        }
+    }
+    
+    /**
+     * Save state for multiple devices
+     */
+    private fun saveMultiDeviceState(context: Context) {
+        try {
+            val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().apply {
+                putInt("connected_device_count", connectedSupportedDevices.size)
+                putStringSet("connected_device_keys", connectedSupportedDevices.keys)
+                
+                // Save individual device info
+                connectedSupportedDevices.forEach { (key, device) ->
+                    putString("device_${key}_name", device.deviceName)
+                    putInt("device_${key}_vendor", device.vendorId)
+                    putInt("device_${key}_product", device.productId)
+                    putLong("device_${key}_connected_time", deviceConnectionTimes[key] ?: 0L)
+                    putInt("device_${key}_connection_count", deviceConnectionCounts[key] ?: 0)
+                }
+                
+                apply()
+            }
+            
+            android.util.Log.d("UsbController", "[DEBUG_LOG] Multi-device state saved: ${connectedSupportedDevices.size} devices")
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to save multi-device state: ${e.message}")
+        }
+    }
+    
+    /**
+     * Restore multi-device state from preferences
+     */
+    fun restoreMultiDeviceState(context: Context) {
+        try {
+            val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
+            val deviceKeys = prefs.getStringSet("connected_device_keys", emptySet()) ?: emptySet()
+            
+            android.util.Log.d("UsbController", "[DEBUG_LOG] Restoring multi-device state for ${deviceKeys.size} devices")
+            
+            // Clear current tracking (will be rebuilt from current scan)
+            connectedSupportedDevices.clear()
+            deviceConnectionTimes.clear()
+            
+            // Restore connection counts and times for tracking
+            deviceKeys.forEach { key ->
+                val connectionCount = prefs.getInt("device_${key}_connection_count", 0)
+                val lastConnectionTime = prefs.getLong("device_${key}_connected_time", 0L)
+                
+                if (connectionCount > 0) {
+                    deviceConnectionCounts[key] = connectionCount
+                }
+                if (lastConnectionTime > 0L) {
+                    deviceConnectionTimes[key] = lastConnectionTime
+                }
+            }
+            
+        } catch (e: Exception) {
+            android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to restore multi-device state: ${e.message}")
+        }
+    }
+    
+    /**
+     * Get summary of all tracked devices (connected and historical)
+     */
+    fun getMultiDeviceStatusSummary(context: Context): String {
+        val currentDevices = connectedSupportedDevices.size
+        val lastDeviceInfo = getLastConnectedDeviceInfo(context)
+        val totalConnections = getConnectionCount(context)
+        
+        return buildString {
+            append("Multi-Device USB Status Summary:\n")
+            append("- Currently connected TOPDON devices: $currentDevices\n")
+            append("- Last connected device: $lastDeviceInfo\n")
+            append("- Total historical connections: $totalConnections\n")
+            
+            if (connectedSupportedDevices.isNotEmpty()) {
+                append("- Currently connected devices:\n")
+                connectedSupportedDevices.forEach { (key, device) ->
+                    val connectionTime = deviceConnectionTimes[key]
+                    val connectionCount = deviceConnectionCounts[key] ?: 0
+                    val timeStr = if (connectionTime != null) {
+                        val format = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+                        format.format(java.util.Date(connectionTime))
+                    } else "Unknown"
+                    
+                    append("  • ${device.deviceName} (Key: $key)\n")
+                    append("    VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)}\n")
+                    append("    Connected at: $timeStr, Total connections: $connectionCount\n")
+                }
+            }
+            
+            if (deviceConnectionCounts.isNotEmpty()) {
+                append("- Historical device connections:\n")
+                deviceConnectionCounts.forEach { (key, count) ->
+                    if (!connectedSupportedDevices.containsKey(key)) {
+                        append("  • Device $key: $count connections\n")
+                    }
+                }
+            }
         }
     }
 }
