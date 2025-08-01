@@ -324,6 +324,15 @@ class MainActivityCoordinator @Inject constructor(
                 callback?.showToast("Streaming Error: $message", Toast.LENGTH_LONG)
             }
             
+            override fun onStreamingQualityChanged(quality: NetworkController.StreamingQuality) {
+                callback?.updateStatusText("Streaming quality: ${quality.displayName}")
+            }
+            
+            override fun onNetworkRecovery(networkType: String) {
+                callback?.updateStatusText("Network recovered: $networkType")
+                callback?.showToast("Network recovered: $networkType", Toast.LENGTH_SHORT)
+            }
+            
             override fun updateStatusText(text: String) {
                 callback?.updateStatusText(text)
             }
@@ -342,6 +351,24 @@ class MainActivityCoordinator @Inject constructor(
             
             override fun getStreamingDebugOverlay(): TextView? {
                 return callback?.getStreamingDebugOverlay()
+            }
+            
+            override fun onProtocolChanged(protocol: NetworkController.StreamingProtocol) {
+                callback?.updateStatusText("Protocol: ${protocol.displayName}")
+            }
+            
+            override fun onBandwidthEstimated(bandwidth: Long, method: NetworkController.BandwidthEstimationMethod) {
+                val bandwidthMbps = bandwidth / 1_000_000.0
+                callback?.updateStatusText("Bandwidth: ${String.format("%.1f", bandwidthMbps)}Mbps")
+            }
+            
+            override fun onFrameDropped(reason: String) {
+                callback?.updateStatusText("Frame dropped: $reason")
+            }
+            
+            override fun onEncryptionStatusChanged(enabled: Boolean) {
+                val status = if (enabled) "Enabled" else "Disabled"
+                callback?.updateStatusText("Encryption: $status")
             }
         })
     }
@@ -381,27 +408,33 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun registerBroadcastReceiver(receiver: android.content.BroadcastReceiver, filter: android.content.IntentFilter): android.content.Intent? {
-                // TODO: Implement broadcast receiver registration via callback
-                return null
+                // Simple delegation to callback - remove complex error handling
+                return try {
+                    callback?.getContext()?.registerReceiver(receiver, filter)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivityCoordinator", "Failed to register broadcast receiver", e)
+                    null
+                }
             }
             
             override fun unregisterBroadcastReceiver(receiver: android.content.BroadcastReceiver) {
-                // TODO: Implement broadcast receiver unregistration via callback
+                try {
+                    callback?.getContext()?.unregisterReceiver(receiver)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivityCoordinator", "Failed to unregister broadcast receiver", e)
+                }
             }
             
             override fun getBatteryLevelText(): TextView? {
-                // TODO: Add battery level text view access to coordinator callback
-                return null
+                return callback?.getBatteryLevelText()
             }
             
             override fun getPcConnectionStatus(): TextView? {
-                // TODO: Add PC connection status text view access to coordinator callback
-                return null
+                return callback?.getPcConnectionStatus()
             }
             
             override fun getPcConnectionIndicator(): View? {
-                // TODO: Add PC connection indicator view access to coordinator callback
-                return null
+                return callback?.getPcConnectionIndicator()
             }
             
             override fun getShimmerConnectionStatus(): TextView? {
@@ -415,13 +448,11 @@ class MainActivityCoordinator @Inject constructor(
             }
             
             override fun getThermalConnectionStatus(): TextView? {
-                // TODO: Add thermal connection status text view access to coordinator callback
-                return null
+                return callback?.getThermalConnectionStatus()
             }
             
             override fun getThermalConnectionIndicator(): View? {
-                // TODO: Add thermal connection indicator view access to coordinator callback
-                return null
+                return callback?.getThermalConnectionIndicator()
             }
         })
     }
