@@ -218,7 +218,243 @@ System integration includes USB device communication for thermal cameras, networ
 
 ## 3. Interface Components and Layouts
 
-### 3.1 Main Application Window
+### 3.1 Navigation Architecture Implementation
+
+The navigation architecture represents a fundamental transformation of the user interface system, moving from complex monolithic structures to clean, component-based designs that prioritize maintainability and user experience. This architectural redesign addresses critical usability and maintenance challenges while establishing a foundation for future system enhancement and expansion.
+
+**Architectural Transformation Overview:**
+The navigation redesign achieves a comprehensive restructuring of both Android and Python applications through systematic decomposition of complex interfaces into focused, maintainable components. The Android application transformation reduces the main activity complexity by 90% through fragment-based architecture, while the Python application simplifies multi-panel complexity into an intuitive tabbed interface that organizes functionality according to user workflow patterns.
+
+**Component-Based Design Philosophy:**
+The navigation architecture employs modular component design that separates presentation logic from business logic while maintaining tight integration with underlying system functionality. This approach enables independent development and testing of interface components while ensuring consistent behavior and appearance across the entire application ecosystem.
+
+The component hierarchy reflects logical system organization with clear separation of concerns:
+- **Presentation Components**: Handle user interface rendering and immediate user interaction feedback
+- **Navigation Components**: Manage application flow and state transitions between different functional areas  
+- **Business Logic Components**: Implement research workflow and data processing functionality
+- **Integration Components**: Provide abstraction layer between interface and hardware/network systems
+
+**Android Navigation Architecture Implementation:**
+
+The Android navigation system employs a sophisticated three-tier approach that provides multiple access patterns while maintaining interface clarity and operational efficiency. This multi-tier design accommodates different user preferences and usage patterns while ensuring consistent access to all system functionality.
+
+```mermaid
+graph TB
+    subgraph "Android Navigation Architecture"
+        subgraph "Navigation Drawer Layer"
+            A[Main Functions Group] --> B[Recording Fragment]
+            A --> C[Devices Fragment]
+            A --> D[Calibration Fragment]
+            A --> E[Files Fragment]
+            
+            F[Settings Group] --> G[Settings Activity]
+            F --> H[Network Configuration]
+            F --> I[Shimmer Configuration]
+            
+            J[Tools Group] --> K[Sync Tests]
+            J --> L[About Information]
+        end
+        
+        subgraph "Bottom Navigation Layer"
+            M[Quick Access Bar] --> N[Record Button]
+            M --> O[Monitor Button]
+            M --> P[Calibrate Button]
+        end
+        
+        subgraph "Fragment Architecture"
+            Q[NavigationUtils] --> R[UIUtils]
+            Q --> S[Fragment Coordination]
+            R --> T[Consistent UI Components]
+            S --> U[State Management]
+        end
+    end
+```
+
+**Navigation Drawer Implementation:**
+The navigation drawer provides comprehensive access to all system functionality through logical grouping that reflects research workflow organization. The drawer implementation includes smooth animations, consistent visual feedback, and intelligent state management that maintains user context across navigation operations.
+
+The drawer organization employs three distinct functional groups:
+- **Main Functions**: Core operational areas that represent primary user workflows for multi-sensor data collection
+- **Settings**: Configuration options that customize system behavior for different research requirements  
+- **Tools**: Diagnostic and utility functions that support system maintenance and troubleshooting
+
+**Bottom Navigation Integration:**
+The bottom navigation bar provides immediate access to frequently used functions without requiring drawer navigation. This quick-access system employs semantic icons and clear labels that enable rapid task switching during data collection sessions when efficient navigation is essential for research success.
+
+Bottom navigation implementation includes:
+- **Semantic Color Coding**: Visual indication of current active function with consistent color scheme
+- **Haptic Feedback**: Tactile confirmation of navigation actions for devices that support haptic capabilities
+- **Badge Notifications**: Optional notification badges for functions that require user attention
+- **Adaptive Hiding**: Intelligent hiding during full-screen operations with quick restoration capabilities
+
+**Fragment Architecture Benefits:**
+The fragment-based architecture provides significant advantages for both development and user experience through focused component responsibility and standardized interaction patterns. Each fragment implements specific functionality with clear interfaces and minimal coupling to other components.
+
+Fragment implementation includes:
+- **RecordingFragment**: Comprehensive recording controls with real-time status monitoring and session progress tracking
+- **DevicesFragment**: Device discovery, connection management, and status monitoring with reusable connection components
+- **CalibrationFragment**: Calibration workflow controls with progress tracking and quality assessment feedback
+- **FilesFragment**: Data export, file organization, and session review with integrated logging capabilities
+
+**Python Navigation Architecture Implementation:**
+
+The Python application features a workflow-oriented tabbed interface that organizes functionality according to research phases rather than technical system architecture. This organization enables researchers to focus on experimental objectives while providing logical access to technical controls and advanced features.
+
+```mermaid
+graph TB
+    subgraph "Python Navigation Architecture"
+        subgraph "Tabbed Interface Layer"
+            A[Recording Tab] --> B[Session Management]
+            A --> C[Real-time Monitoring]
+            A --> D[Preview Integration]
+            
+            E[Devices Tab] --> F[Connection Managers]
+            E --> G[Status Monitoring] 
+            E --> H[Global Controls]
+            
+            I[Calibration Tab] --> J[Workflow Guidance]
+            I --> K[Progress Tracking]
+            I --> L[Quality Assessment]
+            
+            M[Files Tab] --> N[Data Management]
+            M --> O[Export Functions]
+            M --> P[System Logging]
+        end
+        
+        subgraph "Component Library"
+            Q[ModernButton] --> R[StatusIndicator]
+            Q --> S[ProgressIndicator]
+            R --> T[ConnectionManager]
+            S --> U[LogViewer]
+            T --> V[ModernGroupBox]
+        end
+        
+        subgraph "Utility Framework"
+            W[Common Components] --> X[Consistent Styling]
+            W --> Y[Reusable Logic]
+            X --> Z[Theme Integration]
+            Y --> AA[Event Coordination]
+        end
+    end
+```
+
+**Tabbed Interface Structure:**
+The tabbed interface employs consistent layout patterns with modern UI components that provide professional appearance and efficient interaction. Each tab represents a distinct phase of research workflow with logical organization that minimizes cognitive load while maintaining access to advanced functionality.
+
+Tab implementation features:
+- **Recording Tab**: Centralized recording controls with real-time preview and session management using modern components
+- **Devices Tab**: Individual device connection management with global coordination functions and comprehensive status monitoring
+- **Calibration Tab**: Guided calibration workflows with progress tracking and quality assessment using standardized components
+- **Files Tab**: Data management functions with integrated system logging and comprehensive export capabilities
+
+**Component-Based Architecture:**
+The Python interface employs a comprehensive library of reusable UI components that ensure consistent appearance and behavior across all functional areas. This component library reduces development complexity while maintaining visual consistency and standardized interaction patterns.
+
+Component library includes:
+- **ModernButton**: Standardized button styling with hover effects and semantic color coding for different action types
+- **StatusIndicator**: Consistent status communication across all device types with coordinated visual feedback systems
+- **ProgressIndicator**: Unified progress visualization for operations ranging from connection attempts to calibration procedures
+- **ConnectionManager**: Standardized device connection controls with status reporting and error handling capabilities
+- **LogViewer**: Comprehensive logging interface with search, filtering, and export capabilities for system monitoring
+- **ModernGroupBox**: Professional container styling that organizes interface elements with consistent visual hierarchy
+
+### 3.2 Navigation Utility Framework Implementation
+
+The navigation architecture includes sophisticated utility frameworks that reduce code duplication while ensuring consistent behavior across all interface components. These frameworks provide centralized management of common operations while maintaining flexibility for component-specific requirements.
+
+**Android Navigation Utilities:**
+The NavigationUtils class provides comprehensive navigation management with error handling, state validation, and consistent behavior across all fragments. This utility framework eliminates navigation-related code duplication while ensuring reliable navigation behavior regardless of system state or user actions.
+
+```kotlin
+object NavigationUtils {
+    fun navigateToFragment(fragment: Fragment, destinationId: Int)
+    fun launchActivity(context: Context, activityClass: Class<*>, extras: Map<String, String>?)
+    fun handleDrawerNavigation(navController: NavController, itemId: Int): Boolean
+    fun getCurrentDestinationName(navController: NavController): String
+    fun canNavigateToDestination(navController: NavController, destinationId: Int): Boolean
+}
+```
+
+Navigation utility features include:
+- **Error Handling**: Comprehensive error recovery for navigation failures with graceful degradation
+- **State Validation**: Pre-navigation checking to prevent invalid navigation attempts and ensure system stability
+- **Logging Integration**: Automatic logging of navigation events for debugging and usage analysis
+- **Consistency Enforcement**: Standardized navigation patterns that ensure predictable behavior across all components
+
+**Android UI Utilities:**
+The UIUtils class standardizes common UI operations including connection indicator updates, recording status management, button styling, and status message presentation. These utilities ensure visual consistency while reducing implementation complexity across all fragments.
+
+```kotlin
+object UIUtils {
+    fun updateConnectionIndicator(context: Context, indicator: View, isConnected: Boolean)
+    fun updateRecordingIndicator(context: Context, indicator: View, isRecording: Boolean)
+    fun showStatusMessage(context: Context, message: String, isLongDuration: Boolean)
+    fun getConnectionStatusText(deviceName: String, isConnected: Boolean): String
+    fun formatBatteryText(batteryLevel: Int): String
+    fun styleButton(context: Context, button: View, buttonType: ButtonType, isEnabled: Boolean)
+}
+```
+
+UI utility features include:
+- **Visual Consistency**: Standardized color schemes and styling patterns across all interface components
+- **Status Communication**: Consistent status indicator behavior with semantic color coding and clear messaging
+- **Accessibility Support**: Built-in accessibility features including proper contrast ratios and screen reader compatibility
+- **Performance Optimization**: Efficient resource management and minimal overhead for frequently used operations
+
+**Python Component Library:**
+The common_components module provides a comprehensive library of reusable UI elements that ensure consistent appearance and behavior while enabling rapid interface development and modification.
+
+```python
+class ModernButton(QPushButton):
+    def __init__(self, text, button_type="primary", parent=None)
+    
+class StatusIndicator(QWidget):
+    def set_status(self, is_connected, status_text="")
+    
+class ProgressIndicator(QWidget):
+    def set_progress(self, value, text="")
+    
+class ConnectionManager(QWidget):
+    connectionRequested = pyqtSignal(str)
+    disconnectionRequested = pyqtSignal(str)
+```
+
+Component library features include:
+- **Modern Styling**: Professional appearance with hover effects and semantic color coding
+- **Event Coordination**: Signal-slot architecture for coordinated behavior across multiple components
+- **State Management**: Intelligent state tracking with automatic visual feedback and status communication
+- **Accessibility Integration**: Full screen reader support and keyboard navigation capabilities
+
+### 3.3 Integration Architecture and Cross-Component Communication
+
+The navigation architecture employs sophisticated integration patterns that enable seamless coordination between different interface components while maintaining clear separation of concerns and testable component boundaries.
+
+**Event-Driven Communication:**
+The integration system employs event-driven communication patterns that enable loose coupling between components while maintaining responsive user interactions and reliable system coordination. The event system provides proper error handling and ensures that component failures don't cascade throughout the system.
+
+Communication architecture includes:
+- **Signal-Slot Mechanisms**: PyQt5 signal-slot architecture for reliable inter-component communication with automatic connection management
+- **Observer Patterns**: Status change notifications that enable coordinated updates across multiple interface components
+- **Message Queuing**: Asynchronous operation coordination that maintains responsive user interface during intensive processing
+- **Exception Handling**: Comprehensive error handling that ensures system stability during unexpected conditions
+
+**State Management Integration:**
+The navigation architecture includes centralized state management that maintains consistency between different interface components and underlying system state. This architecture ensures that changes in one part of the interface are properly reflected throughout the entire application while providing clear audit trails for debugging and optimization.
+
+State management features include:
+- **Centralized State Store**: Single source of truth for application state with coordinated updates across all components
+- **State Persistence**: Automatic saving and restoration of interface state with user preference management
+- **Validation Frameworks**: Comprehensive state validation that prevents invalid configurations and ensures system reliability
+- **Audit Capabilities**: Complete logging of state changes with rollback capabilities for error recovery
+
+**Performance Optimization Framework:**
+The navigation implementation includes comprehensive performance optimization that maintains responsive user interfaces while handling real-time data collection and processing requirements. The optimization framework provides intelligent resource management without sacrificing functionality or user experience.
+
+Performance optimization includes:
+- **Lazy Loading**: Intelligent component initialization that reduces startup time while maintaining full functionality
+- **Resource Pooling**: Efficient object reuse that minimizes memory allocation overhead during intensive operations
+- **Update Batching**: Coordinated interface updates that reduce rendering overhead while maintaining visual responsiveness
+- **Background Processing**: Efficient threading architecture that maintains interface responsiveness during computational tasks
 
 The main application window employs a three-panel layout that organizes functionality according to research workflow patterns while maintaining flexibility for different experimental configurations. The layout uses resizable splitter panels that enable users to adjust space allocation based on their specific research requirements and screen configurations.
 
@@ -823,5 +1059,128 @@ AI integration will include intelligent assistant capabilities that provide guid
 The enhancement roadmap includes support for additional physiological monitoring hardware, integration with laboratory information management systems, and enhanced connectivity options that enable integration with other research infrastructure and external analysis tools.
 
 Hardware expansion will include support for additional physiological sensors that complement GSR measurement, integration with standard laboratory equipment commonly used in physiological research, enhanced connectivity options that enable integration with institutional research infrastructure, and standardized data export formats that support integration with external analysis and publication tools.
+
+## 11. Testing and Quality Assurance Framework
+
+### 11.1 Comprehensive Testing Architecture
+
+The navigation architecture includes an extensive testing framework that validates both Android utility classes and Python component libraries to ensure reliability, maintainability, and consistent behavior across all interface components.
+
+**Android Utility Testing Framework:**
+The Android testing suite provides comprehensive validation of NavigationUtils and UIUtils classes:
+
+- **NavigationUtils Testing**: Complete test coverage for fragment navigation with error handling, activity launching with intent validation, drawer navigation state management, and destination validation logic. Tests use MockK for dependency injection and Robolectric for Android component testing without device dependencies.
+
+- **UIUtils Testing**: Comprehensive validation of connection indicator styling, recording status management, button type application, status message handling, and animation behavior. Tests ensure consistent UI behavior across different Android SDK versions and device configurations.
+
+**Python Component Testing Framework:**
+The Python testing infrastructure validates all common component functionality:
+
+- **StatusIndicator Testing**: Complete validation of status state management, signal emission, visual state transitions, and robust error handling for invalid inputs.
+
+- **ModernButton Testing**: Thorough testing of button styling, type application, enabled/disabled state management, and click event handling across different interaction scenarios.
+
+- **ProgressIndicator Testing**: Comprehensive coverage of progress value updates, status text management, and bounds validation for progress values.
+
+- **ConnectionManager Testing**: Complete testing of device status tracking, multi-device coordination, and connection state management for complex multi-device scenarios.
+
+**Testing Implementation Examples:**
+
+```kotlin
+// Android NavigationUtils test example
+@Test
+fun `navigateToFragment should handle navigation exceptions gracefully`() {
+    // Given
+    val destinationId = R.id.nav_devices
+    every { mockFragment.findNavController() } throws RuntimeException("Navigation error")
+
+    // When & Then - should not throw exception
+    assertDoesNotThrow {
+        NavigationUtils.navigateToFragment(mockFragment, destinationId)
+    }
+}
+
+@Test
+fun `handleDrawerNavigation should return false for unknown item`() {
+    // Given
+    val unknownItemId = 999999
+
+    // When
+    val result = NavigationUtils.handleDrawerNavigation(mockNavController, unknownItemId)
+
+    // Then
+    assertFalse("Navigation should fail for unknown item", result)
+    verify(exactly = 0) { mockNavController.navigate(any<Int>()) }
+}
+```
+
+```python
+# Python component test example
+def test_status_indicator_update(self):
+    """Test StatusIndicator status updates"""
+    indicator = StatusIndicator("Test Device")
+    
+    # Test setting connected status
+    indicator.set_status(True, "Connected successfully")
+    self.assertTrue(indicator.is_connected)
+    self.assertEqual(indicator.status_text, "Connected successfully")
+    
+    # Test setting disconnected status
+    indicator.set_status(False, "Connection lost")
+    self.assertFalse(indicator.is_connected)
+    self.assertEqual(indicator.status_text, "Connection lost")
+```
+
+### 11.2 Quality Assurance Methodology
+
+**Unit Testing Coverage:**
+- **Android Utilities**: 100% method coverage for NavigationUtils and UIUtils classes with comprehensive edge case testing including error conditions, invalid parameters, and exception handling scenarios
+- **Python Components**: Complete component lifecycle testing including creation, state management, signal emission, and proper destruction
+- **Error Handling**: Exhaustive exception handling validation for all utility methods and component operations with graceful degradation testing
+
+**Integration Testing Framework:**
+- **Navigation Flow Testing**: End-to-end navigation testing across all fragments and activities with state persistence validation
+- **Component Interaction**: Comprehensive testing of component coordination and state synchronization across complex user workflows
+- **Device Integration**: Real-world testing of utility classes with actual device interaction scenarios and hardware state management
+
+**Performance and Reliability Testing:**
+- **Memory Usage Validation**: Testing for memory leaks and proper resource cleanup in long-running sessions
+- **Concurrent Operation Testing**: Validation of thread safety and concurrent access patterns for multi-device scenarios
+- **Stress Testing**: Component behavior validation under high-load conditions and rapid state changes
+
+### 11.3 Automated Testing Pipeline
+
+The testing framework includes automated continuous integration that validates all code changes:
+
+**Automated Test Execution:**
+- **Pre-commit Testing**: Automated test execution before code commits to prevent regression introduction
+- **Build Integration**: Complete test suite execution during build processes with failure reporting
+- **Cross-platform Validation**: Automated testing across different Android SDK versions and Python environments
+
+**Code Quality Validation:**
+- **Static Analysis**: Automated code quality checking with customized rules for UI component development
+- **Coverage Reporting**: Detailed test coverage analysis with requirements for maintaining high coverage percentages
+- **Documentation Validation**: Automated checking of code documentation completeness and accuracy
+
+### 11.4 User Acceptance Testing
+
+**Usability Testing Protocol:**
+The interface design undergoes systematic usability testing using established human-computer interaction methodologies adapted for scientific research applications:
+
+- **Task-based Evaluation**: Navigation efficiency assessment using representative research workflows
+- **Error Recovery Assessment**: Testing of user recovery patterns when navigation or component errors occur
+- **Cognitive Load Measurement**: Evaluation of mental effort required for common tasks with the redesigned navigation
+
+**Accessibility Testing:**
+- **Keyboard Navigation**: Complete validation of keyboard-only navigation patterns across all interface components
+- **Screen Reader Compatibility**: Testing with multiple screen reader applications to ensure proper semantic markup interpretation
+- **Color Contrast Validation**: Automated and manual testing of color contrast ratios exceeding WCAG AA standards
+
+### 11.5 Continuous Quality Improvement
+
+**Feedback Integration Process:**
+- **User Feedback Collection**: Systematic collection and analysis of user feedback about navigation efficiency and component usability
+- **Performance Monitoring**: Continuous monitoring of interface performance with automated alerting for degradation
+- **Enhancement Planning**: Regular evaluation of testing results to identify areas for improvement and feature enhancement
 
 This comprehensive user interface design specification provides the foundation for implementing a professional, efficient, and accessible interface that supports the complex requirements of physiological monitoring research while maintaining the flexibility and extensibility necessary for ongoing scientific advancement. The design balances sophisticated functionality with usable simplicity, ensuring that researchers can focus on their scientific objectives while maintaining confidence in their data collection infrastructure.
