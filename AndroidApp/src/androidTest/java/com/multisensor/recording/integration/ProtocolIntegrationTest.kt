@@ -20,7 +20,7 @@ import kotlin.concurrent.thread
  * Android Instrumentation Tests for Protocol Communication.
  *
  * This test class implements the Android instrumentation test hooks described
- * in Milestone 4 for exercising communication logic and state management.
+ * for exercising communication logic and state management.
  * It simulates the PC-server side within the Android test environment.
  */
 @RunWith(AndroidJUnit4::class)

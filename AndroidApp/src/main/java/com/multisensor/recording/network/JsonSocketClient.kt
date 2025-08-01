@@ -17,7 +17,7 @@ import java.nio.ByteOrder
 import javax.inject.Inject
 
 /**
- * JSON Socket Client for Milestone 2.6 Network Communication.
+ * JSON Socket Client for Network Communication.
  * Implements length-prefixed JSON message protocol for bidirectional communication with PC server.
  *
  * Based on 2_6_milestone.md specifications:
@@ -41,7 +41,7 @@ class JsonSocketClient
 
         // Connection configuration
         private var serverIp: String = "192.168.1.100" // Default IP, configurable
-        private var serverPort: Int = 9000 // Milestone 2.6 specifies port 9000
+        private var serverPort: Int = 9000 // specifies port 9000
 
         // Callback for incoming commands
         private var commandCallback: ((JsonMessage) -> Unit)? = null

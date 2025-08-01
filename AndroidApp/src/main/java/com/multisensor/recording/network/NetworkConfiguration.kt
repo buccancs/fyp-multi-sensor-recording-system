@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Network Configuration Manager for Milestone 2.6 Implementation Gap Resolution.
+ * Network Configuration Manager for Implementation Gap Resolution.
  * Manages dynamic server IP configuration to replace hardcoded values.
  *
  * Provides configurable network settings with persistent storage and default values.
@@ -50,7 +50,7 @@ class NetworkConfiguration
         }
 
         /**
-         * Get legacy socket port (Milestone 2.5 compatibility)
+         * Get legacy socket port (compatibility)
          */
         fun getLegacyPort(): Int = sharedPreferences.getInt(KEY_LEGACY_PORT, DEFAULT_LEGACY_PORT)
 
@@ -65,7 +65,7 @@ class NetworkConfiguration
         }
 
         /**
-         * Get JSON socket port (Milestone 2.6)
+         * Get JSON socket port ()
          */
         fun getJsonPort(): Int = sharedPreferences.getInt(KEY_JSON_PORT, DEFAULT_JSON_PORT)
 

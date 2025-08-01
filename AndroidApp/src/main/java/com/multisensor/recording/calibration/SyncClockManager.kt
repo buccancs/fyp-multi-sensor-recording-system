@@ -13,7 +13,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
- * SyncClockManager handles advanced clock synchronization with PC reference time for Milestone 2.9.
+ * SyncClockManager handles advanced clock synchronization with PC reference time for .
  *
  * Enhanced with NTP-style algorithms for ±10ms accuracy, including:
  * - Round-trip time compensation
@@ -32,7 +32,7 @@ class SyncClockManager
         private val logger: Logger,
     ) {
         companion object {
-            // Enhanced constants for ±10ms accuracy (Milestone 2.9)
+            // Enhanced constants for ±10ms accuracy ()
             private const val TARGET_ACCURACY_MS = 10L // Target synchronization accuracy
             private const val MAX_OFFSET_DRIFT_MS = 50L // Reduced from 1000ms for better accuracy
             private const val SYNC_VALIDITY_DURATION_MS = 180000L // 3 minutes (reduced for more frequent sync)
@@ -48,7 +48,7 @@ class SyncClockManager
             private const val LATENCY_MEASUREMENT_SAMPLES = 5 // Samples for latency averaging
         }
 
-        // NTP-style data structures for enhanced synchronization (Milestone 2.9)
+        // NTP-style data structures for enhanced synchronization ()
         data class SyncMeasurement(
             val t1: Long, // Client request timestamp
             val t2: Long, // Server receive timestamp
@@ -81,7 +81,7 @@ class SyncClockManager
         private var pcReferenceTime: Long = 0L
         private var isSynchronized: Boolean = false
 
-        // Enhanced NTP-style measurement tracking (Milestone 2.9)
+        // Enhanced NTP-style measurement tracking ()
         private val syncMeasurements = ConcurrentLinkedQueue<SyncMeasurement>()
         private val latencyMeasurements = ConcurrentLinkedQueue<Long>()
         private var driftRate: Double = 0.0 // Clock drift rate in ms/ms
@@ -97,7 +97,7 @@ class SyncClockManager
         )
 
         /**
-         * Synchronizes device clock with PC reference time using NTP-style algorithms (Milestone 2.9)
+         * Synchronizes device clock with PC reference time using NTP-style algorithms ()
          * Enhanced with multiple measurements, statistical analysis, and outlier rejection for ±10ms accuracy
          */
         suspend fun synchronizeWithPc(
@@ -273,7 +273,7 @@ class SyncClockManager
             return true
         }
 
-        // ========== Enhanced NTP-Style Synchronization Methods (Milestone 2.9) ==========
+        // ========== Enhanced NTP-Style Synchronization Methods () ==========
 
         /**
          * Performs NTP-style synchronization with round-trip compensation

@@ -28,10 +28,10 @@ import java.io.File
 import javax.inject.Inject
 
 /**
- * Command Processor for Milestone 2.6 & 2.8 Network Communication.
+ * Command Processor for & 2.8 Network Communication.
  * Processes incoming JSON commands from PC and executes corresponding actions.
  *
- * Enhanced for Milestone 2.8 with:
+ * Enhanced for with:
  * - Calibration capture coordination with CalibrationCaptureManager
  * - Clock synchronization with SyncClockManager
  * - Sync signal support (flash, beep) for multi-device coordination
@@ -179,7 +179,7 @@ class CommandProcessor
         }
 
         /**
-         * Handle capture_calibration command from PC - Enhanced for Milestone 2.8
+         * Handle capture_calibration command from PC - Enhanced for 
          */
         private suspend fun handleCaptureCalibration(command: CaptureCalibrationCommand) {
             logger.info("[DEBUG_LOG] Processing enhanced capture_calibration command")
@@ -433,7 +433,7 @@ class CommandProcessor
 
 
         /**
-         * Trigger audio stimulus with specified parameters - Milestone 2.8
+         * Trigger audio stimulus with specified parameters - 
          */
         private fun triggerAudioStimulusWithParameters(
             frequencyHz: Int,
@@ -469,7 +469,7 @@ class CommandProcessor
         }
 
         /**
-         * Create flash sync marker for multi-device coordination - Milestone 2.8
+         * Create flash sync marker for multi-device coordination - 
          */
         private fun createFlashSyncMarker(
             syncId: String,
@@ -496,7 +496,7 @@ class CommandProcessor
         }
 
         /**
-         * Create beep sync marker for multi-device coordination - Milestone 2.8
+         * Create beep sync marker for multi-device coordination - 
          */
         private fun createBeepSyncMarker(
             syncId: String,
@@ -564,7 +564,7 @@ class CommandProcessor
         }
 
         /**
-         * Handle flash_sync command from PC - Milestone 2.8
+         * Handle flash_sync command from PC - 
          */
         private suspend fun handleFlashSync(command: FlashSyncCommand) {
             logger.info("[DEBUG_LOG] Processing flash_sync command")
@@ -591,7 +591,7 @@ class CommandProcessor
         }
 
         /**
-         * Handle beep_sync command from PC - Milestone 2.8
+         * Handle beep_sync command from PC - 
          */
         private suspend fun handleBeepSync(command: BeepSyncCommand) {
             logger.info("[DEBUG_LOG] Processing beep_sync command")
@@ -624,7 +624,7 @@ class CommandProcessor
         }
 
         /**
-         * Handle send_file command from PC - Milestone 3.6
+         * Handle send_file command from PC - 
          */
         private suspend fun handleSendFile(command: SendFileCommand) {
             logger.info("Processing send_file command for: ${command.filepath}")
@@ -641,7 +641,7 @@ class CommandProcessor
         }
 
         /**
-         * Handle sync_time command from PC - Milestone 2.8
+         * Handle sync_time command from PC - 
          */
         private suspend fun handleSyncTime(command: SyncTimeCommand) {
             logger.info("[DEBUG_LOG] Processing sync_time command")
@@ -815,7 +815,7 @@ class CommandProcessor
         fun getStimulusTime(): Long? = stimulusTime
 
         /**
-         * Trigger visual stimulus with specified duration - Milestone 2.8
+         * Trigger visual stimulus with specified duration - 
          */
         private suspend fun triggerVisualStimulusWithDuration(durationMs: Long) {
             // Delegate flash control to the CameraRecorder, which owns the camera device.
@@ -829,7 +829,7 @@ class CommandProcessor
         }
 
         /**
-         * Trigger audio stimulus (beep) with specified parameters - Milestone 2.8
+         * Trigger audio stimulus (beep) with specified parameters - 
          */
         private suspend fun triggerAudioStimulusWithParameters(
             frequencyHz: Int,
@@ -874,7 +874,7 @@ class CommandProcessor
         }
 
         /**
-         * Create flash sync marker file for multi-device coordination - Milestone 2.8
+         * Create flash sync marker file for multi-device coordination - 
          */
         private fun createFlashSyncMarker(
             syncId: String,
@@ -905,7 +905,7 @@ class CommandProcessor
         }
 
         /**
-         * Create beep sync marker file for multi-device coordination - Milestone 2.8
+         * Create beep sync marker file for multi-device coordination - 
          */
         private fun createBeepSyncMarker(
             syncId: String,

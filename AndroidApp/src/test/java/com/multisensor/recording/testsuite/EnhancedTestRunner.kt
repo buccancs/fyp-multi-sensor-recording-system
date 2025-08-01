@@ -82,16 +82,19 @@ class EnhancedTestRunner : RunListener() {
         suiteStartTime = System.currentTimeMillis()
         totalTests = description?.testCount() ?: 0
         
-        println("="*100)
+        val separator = "=".repeat(100)
+        val shortSeparator = "-".repeat(100)
+        
+        println(separator)
         println("ENHANCED ANDROID MULTI-SENSOR RECORDING SYSTEM TEST SUITE")
-        println("="*100)
+        println(separator)
         println("Suite started at: ${formatTimestamp(suiteStartTime)}")
         println("Total tests to execute: $totalTests")
         println("Performance monitoring: ENABLED")
         println("Memory tracking: ENABLED")
         println("Stress testing: ${STRESS_TESTS.size} tests identified")
         println("Performance benchmarks: ${PERFORMANCE_TESTS.size} tests identified")
-        println("-"*100)
+        println(shortSeparator)
         
         // Ensure report directory exists
         File(REPORT_DIR).mkdirs()
@@ -286,9 +289,10 @@ class EnhancedTestRunner : RunListener() {
     }
     
     private fun printTestSummary(totalExecutionTime: Long) {
-        println("\n" + "="*100)
+        val separator = "=".repeat(100)
+        println("\n$separator")
         println("ENHANCED ANDROID TEST SUITE SUMMARY")
-        println("="*100)
+        println(separator)
         println("📊 Overall Results:")
         println("   Total Tests: $totalTests")
         println("   ✅ Passed: $passedTests (${(passedTests * 100.0 / totalTests).format(1)}%)")
@@ -309,15 +313,16 @@ class EnhancedTestRunner : RunListener() {
             if (memoryIntensiveTests > 0) println("   $memoryIntensiveTests tests exceeded memory threshold (${MEMORY_THRESHOLD_MB}MB)")
         }
         
-        println("="*100)
+        println(separator)
     }
     
     private fun generatePerformanceAnalysis() {
         val stressTestMetrics = performanceMetrics.values.filter { it.isStressTest }
         val performanceTestMetrics = performanceMetrics.values.filter { it.isPerformanceTest }
         
+        val shortSeparator = "-".repeat(60)
         println("\n📊 PERFORMANCE ANALYSIS")
-        println("-"*60)
+        println(shortSeparator)
         
         if (stressTestMetrics.isNotEmpty()) {
             val avgStressTime = stressTestMetrics.map { it.executionTimeMs }.average()

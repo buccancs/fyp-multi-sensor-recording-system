@@ -1,7 +1,6 @@
 package com.multisensor.recording.testfixtures
 
-import com.multisensor.recording.network.NetworkQuality
-import com.multisensor.recording.recording.RecordingStatistics
+import com.multisensor.recording.network.NetworkQualityMonitor.NetworkQuality
 
 /**
  * Test data factory for network and recording related objects
@@ -10,39 +9,32 @@ import com.multisensor.recording.recording.RecordingStatistics
 object NetworkTestFactory {
 
     fun createNetworkQuality(
-        latency: Long = 50L,
-        bandwidth: Double = 100.0,
-        packetLoss: Double = 0.0,
-        jitter: Long = 5L,
-        connectionStable: Boolean = true
+        score: Int = 4,
+        latencyMs: Long = 50L,
+        bandwidthKbps: Double = 1000.0,
+        timestamp: Long = System.currentTimeMillis()
     ): NetworkQuality {
         return NetworkQuality(
-            latency = latency,
-            bandwidth = bandwidth,
-            packetLoss = packetLoss,
-            jitter = jitter,
-            connectionStable = connectionStable,
-            timestamp = System.currentTimeMillis()
+            score = score,
+            latencyMs = latencyMs,
+            bandwidthKbps = bandwidthKbps,
+            timestamp = timestamp
         )
     }
 
     fun createPoorNetworkQuality(): NetworkQuality {
         return createNetworkQuality(
-            latency = 500L,
-            bandwidth = 10.0,
-            packetLoss = 5.0,
-            jitter = 100L,
-            connectionStable = false
+            score = 1,
+            latencyMs = 500L,
+            bandwidthKbps = 100.0
         )
     }
 
     fun createExcellentNetworkQuality(): NetworkQuality {
         return createNetworkQuality(
-            latency = 5L,
-            bandwidth = 1000.0,
-            packetLoss = 0.0,
-            jitter = 1L,
-            connectionStable = true
+            score = 5,
+            latencyMs = 5L,
+            bandwidthKbps = 2000.0
         )
     }
 }
@@ -52,7 +44,7 @@ object NetworkTestFactory {
  */
 object RecordingTestFactory {
 
-    fun createRecordingStatistics(
+    fun createMockRecordingStatistics(
         sessionId: String = "test-session-${System.currentTimeMillis()}",
         duration: Long = 30000L,
         videoEnabled: Boolean = true,
@@ -62,23 +54,23 @@ object RecordingTestFactory {
         dataSize: Long = 1024 * 1024 * 100, // 100MB
         averageFrameRate: Double = 60.0,
         droppedFrames: Int = 0
-    ): RecordingStatistics {
-        return RecordingStatistics(
-            sessionId = sessionId,
-            duration = duration,
-            videoEnabled = videoEnabled,
-            audioEnabled = audioEnabled,
-            thermalEnabled = thermalEnabled,
-            framesRecorded = framesRecorded,
-            dataSize = dataSize,
-            averageFrameRate = averageFrameRate,
-            droppedFrames = droppedFrames,
-            timestamp = System.currentTimeMillis()
+    ): Map<String, Any> {
+        return mapOf(
+            "sessionId" to sessionId,
+            "duration" to duration,
+            "videoEnabled" to videoEnabled,
+            "audioEnabled" to audioEnabled,
+            "thermalEnabled" to thermalEnabled,
+            "framesRecorded" to framesRecorded,
+            "dataSize" to dataSize,
+            "averageFrameRate" to averageFrameRate,
+            "droppedFrames" to droppedFrames,
+            "timestamp" to System.currentTimeMillis()
         )
     }
 
-    fun createLongRecordingStatistics(): RecordingStatistics {
-        return createRecordingStatistics(
+    fun createLongMockRecordingStatistics(): Map<String, Any> {
+        return createMockRecordingStatistics(
             duration = 300000L, // 5 minutes
             framesRecorded = 18000,
             dataSize = 1024 * 1024 * 1024, // 1GB
@@ -86,8 +78,8 @@ object RecordingTestFactory {
         )
     }
 
-    fun createShortRecordingStatistics(): RecordingStatistics {
-        return createRecordingStatistics(
+    fun createShortMockRecordingStatistics(): Map<String, Any> {
+        return createMockRecordingStatistics(
             duration = 5000L, // 5 seconds
             framesRecorded = 300,
             dataSize = 1024 * 1024 * 10, // 10MB
@@ -95,8 +87,8 @@ object RecordingTestFactory {
         )
     }
 
-    fun createProblematicRecordingStatistics(): RecordingStatistics {
-        return createRecordingStatistics(
+    fun createProblematicMockRecordingStatistics(): Map<String, Any> {
+        return createMockRecordingStatistics(
             duration = 30000L,
             framesRecorded = 1500, // Missing frames
             averageFrameRate = 50.0, // Lower than expected

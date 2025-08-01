@@ -4,7 +4,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 /**
- * JSON message protocol for Milestone 2.6 Network Communication Client.
+ * JSON message protocol for Network Communication Client.
  * Defines message types and structures for bidirectional communication between Android and PC.
  *
  * Based on 2_6_milestone.md specifications for JSON socket communication.
@@ -111,7 +111,7 @@ data class StopRecordCommand(
 }
 
 /**
- * Command to capture calibration images - Enhanced for Milestone 2.8
+ * Command to capture calibration images - Enhanced for 
  */
 data class CaptureCalibrationCommand(
     override val type: String = "capture_calibration",
@@ -162,7 +162,7 @@ data class SetStimulusTimeCommand(
 }
 
 /**
- * Command to trigger LED flash sync signal - Milestone 2.8
+ * Command to trigger LED flash sync signal - 
  */
 data class FlashSyncCommand(
     override val type: String = "flash_sync",
@@ -186,7 +186,7 @@ data class FlashSyncCommand(
 }
 
 /**
- * Command to trigger audio beep sync signal - Milestone 2.8
+ * Command to trigger audio beep sync signal - 
  */
 data class BeepSyncCommand(
     override val type: String = "beep_sync",
@@ -216,7 +216,7 @@ data class BeepSyncCommand(
 }
 
 /**
- * Command to synchronize device clock with PC reference time - Milestone 2.8
+ * Command to synchronize device clock with PC reference time - 
  */
 data class SyncTimeCommand(
     override val type: String = "sync_time",
@@ -240,7 +240,7 @@ data class SyncTimeCommand(
 }
 
 /**
- * Command to request file transfer from device - Milestone 3.6
+ * Command to request file transfer from device - 
  */
 data class SendFileCommand(
     override val type: String = "send_file",
@@ -264,7 +264,7 @@ data class SendFileCommand(
 }
 
 /**
- * Command to acknowledge file receipt - Milestone 3.6
+ * Command to acknowledge file receipt - 
  */
 data class FileReceivedCommand(
     override val type: String = "file_received",
@@ -443,7 +443,7 @@ data class AckMessage(
 }
 
 /**
- * File information message - Milestone 3.6
+ * File information message - 
  */
 data class FileInfoMessage(
     override val type: String = "file_info",
@@ -467,7 +467,7 @@ data class FileInfoMessage(
 }
 
 /**
- * File chunk data message - Milestone 3.6
+ * File chunk data message - 
  */
 data class FileChunkMessage(
     override val type: String = "file_chunk",
@@ -491,7 +491,7 @@ data class FileChunkMessage(
 }
 
 /**
- * File transfer end marker message - Milestone 3.6
+ * File transfer end marker message - 
  */
 data class FileEndMessage(
     override val type: String = "file_end",
