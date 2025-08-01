@@ -27,22 +27,39 @@ classifiers = [
 ]
 
 dependencies = [
-    "PyQt5>=5.15.0",
-    "opencv-python>=4.8.0",
-    "numpy>=1.24.0",
-    "matplotlib>=3.7.0",
-    "requests>=2.31.0",
+    "PyQt5>=5.15.11",
+    "opencv-python>=4.12.0",
+    "numpy>=1.26.0,<2.0.0",  # Keep v1.x for OpenCV compatibility
+    "matplotlib>=3.10.0",
+    "requests>=2.32.0",
+    "pillow>=10.4.0",
+    "scipy>=1.14.0",
+    "pandas>=2.2.0",
+    "websockets>=13.1",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.0.0",
-    "black>=23.7.0",
-    "isort>=5.12.0",
-    "mypy>=1.5.0",
-    "bandit>=1.7.5",
-    "pre-commit>=3.4.0",
+    "pytest>=8.4.0",
+    "pytest-cov>=5.0.0",
+    "black>=25.1.0",
+    "isort>=5.13.0",
+    "mypy>=1.17.0",
+    "bandit>=1.8.0",
+    "pre-commit>=4.0.0",
+    "flake8>=7.3.0",
+]
+shimmer = [
+    "pyshimmer>=1.0.0",  # Optional Shimmer SDK
+    "pybluez>=0.23",     # Optional Bluetooth support
+    "bleak>=0.22.0",     # Modern async Bluetooth
+]
+calibration = [
+    "opencv-contrib-python>=4.12.0",  # Extended OpenCV features
+]
+android = [
+    "adb-shell>=0.5.0",   # Android device communication
+    "pure-python-adb>=0.3.0",  # Pure Python ADB implementation
 ]
 
 [project.urls]
