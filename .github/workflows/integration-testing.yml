@@ -62,7 +62,7 @@ jobs:
         ./gradlew AndroidApp:testDebugUnitTest --stacktrace
         
         # Test Android linting
-        ./gradlew AndroidApp:lintDebug --stacktrace
+        ./gradlew AndroidApp:lint --stacktrace
         
         # Test Python environment
         cd PythonApp
