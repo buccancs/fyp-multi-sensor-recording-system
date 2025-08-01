@@ -31,10 +31,7 @@ import kotlinx.coroutines.delay
  * Manages recording initialization, start/stop operations, and service integration.
  * 
  * TODO: Complete integration with MainActivity refactoring
- * TODO: Add comprehensive unit tests for recording scenarios
  * TODO: Implement recording state persistence across app restarts
- * TODO: Add support for different recording quality settings
- * TODO: Implement recording session management and metadata handling
  */
 @Singleton
 class RecordingController @Inject constructor() {
@@ -903,7 +900,25 @@ class RecordingController @Inject constructor() {
             return false
         }
         
-        // TODO: Add CPU/memory validation for higher quality settings
+        // Validate CPU and memory resources for higher quality settings
+        val currentMetrics = getCurrentPerformanceMetrics()
+        val deviceClass = estimateDevicePerformanceClass()
+        
+        when (quality) {
+            RecordingQuality.ULTRA_HIGH -> {
+                if (deviceClass != "HIGH_END" || currentMetrics.memoryUsageMB > 384) {
+                    android.util.Log.w("RecordingController", "[DEBUG_LOG] Insufficient resources for ULTRA_HIGH quality")
+                    return false
+                }
+            }
+            RecordingQuality.HIGH -> {
+                if (deviceClass == "LOW_END" || currentMetrics.memoryUsageMB > 512) {
+                    android.util.Log.w("RecordingController", "[DEBUG_LOG] Insufficient resources for HIGH quality")
+                    return false
+                }
+            }
+            else -> { /* LOW and MEDIUM qualities are generally acceptable */ }
+        }
         
         return true
     }
