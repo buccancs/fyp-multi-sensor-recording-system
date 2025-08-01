@@ -758,4 +758,4 @@ The system provides several diagnostic tools to help identify and resolve issues
 
 This comprehensive guide provides researchers with the knowledge needed to effectively use both the PC desktop controller and Android mobile application interfaces. The modern, intuitive design ensures that users can focus on their research while the system handles the complexity of multi-sensor data collection.
 
-For additional technical details, refer to the [PC/Android Logging Guide](pc-android-logging-guide.md) and [Testing and Quality Assurance Framework](../testing/README_testing_qa_framework.md).
+For additional technical details, refer to the [PC/Android Logging Guide](pc-android-logging-guide.md) and [Testing and Quality Assurance Framework](../new_documentation/README_testing_qa_framework.md).

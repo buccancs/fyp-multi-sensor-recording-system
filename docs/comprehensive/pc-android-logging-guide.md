@@ -1226,4 +1226,4 @@ The logging system supports various compliance requirements:
 
 This comprehensive logging guide provides researchers and system administrators with complete understanding of the Multi-Sensor Recording System's logging capabilities. The sophisticated logging infrastructure ensures reliable operation, facilitates effective troubleshooting, and maintains comprehensive audit trails for research activities.
 
-For additional technical details, refer to the [PC/Android UI Guide](pc-android-ui-guide.md) and [Testing and Quality Assurance Framework](../testing/README_testing_qa_framework.md).
+For additional technical details, refer to the [PC/Android UI Guide](pc-android-ui-guide.md) and [Testing and Quality Assurance Framework](../new_documentation/README_testing_qa_framework.md).
