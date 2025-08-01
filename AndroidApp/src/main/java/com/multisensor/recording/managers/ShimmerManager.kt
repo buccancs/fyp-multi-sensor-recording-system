@@ -31,7 +31,7 @@ import javax.inject.Singleton
 /**
  * Comprehensive Shimmer Device Management System
  * 
- * This singleton class provides a robust, enterprise-grade solution for managing
+ * This singleton class provides a robust, production-ready solution for managing
  * Shimmer wearable sensor devices within Android applications. The implementation
  * follows the Repository pattern and incorporates dependency injection to ensure
  * testability, maintainability, and scalability.
