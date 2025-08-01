@@ -345,7 +345,275 @@ All messages follow a consistent base structure with mandatory fields:
 | images_used | integer | ○ | Number of images used in calibration |
 | error_message | string | ○ | Error description if success=false |
 
-### 6. Acknowledgment and Error Messages
+### 6. Enhanced Command Protocol with Acknowledgments
+
+#### Extended Command Message Format
+**Direction**: Bidirectional  
+**Purpose**: Enhanced command execution with reliable delivery and priority support
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| type | string | ✓ | Always "command" |
+| command | string | ✓ | Command name (START, STOP, CALIBRATE, STATUS, PING, SYNC_TIME, SET_QUALITY, EMERGENCY_STOP) |
+| parameters | object | ○ | Command-specific parameters |
+| timestamp | number | ✓ | Unix timestamp in milliseconds |
+| message_id | string | ✓ | UUID for acknowledgment tracking |
+| require_ack | boolean | ○ | Whether acknowledgment is required (default: false) |
+| timeout_seconds | integer | ○ | Acknowledgment timeout (default: 30) |
+| priority | string | ○ | Message priority (EMERGENCY, HIGH, NORMAL, LOW) |
+| retry_count | integer | ○ | Number of retry attempts (default: 3) |
+
+**Enhanced Command Types**:
+
+| Command | Description | Parameters | Priority | Use Case |
+|---------|-------------|------------|----------|-----------|
+| `START` | Start recording session | `mode`, `duration`, `sensors`, `quality`, `sync_devices` | HIGH | Begin data collection |
+| `STOP` | Stop current recording | `finalize_immediately`, `transfer_files` | HIGH | End data collection |
+| `CALIBRATE` | Calibrate sensors | `sensor`, `type`, `target_values`, `pattern_config` | NORMAL | Sensor calibration |
+| `STATUS` | Request device status | `include_performance`, `include_sensors` | LOW | Health monitoring |
+| `PING` | Connection test | `payload_size`, `sequence_number` | LOW | Latency measurement |
+| `SYNC_TIME` | Time synchronization | `server_timestamp`, `ntp_offset`, `drift_correction` | HIGH | Clock alignment |
+| `SET_QUALITY` | Adjust streaming quality | `quality_level`, `adaptive_mode`, `bandwidth_limit` | NORMAL | Performance tuning |
+| `EMERGENCY_STOP` | Emergency session halt | `reason`, `preserve_data` | EMERGENCY | Crisis response |
+
+**Example Enhanced Command**:
+```json
+{
+  "type": "command",
+  "command": "START",
+  "parameters": {
+    "mode": "multi_modal_recording",
+    "duration": 300,
+    "sensors": ["GSR", "thermal", "accelerometer", "gyroscope"],
+    "quality": "high",
+    "sync_devices": true,
+    "output_format": "h264",
+    "compression_level": 0.85
+  },
+  "timestamp": 1638360000123,
+  "message_id": "550e8400-e29b-41d4-a716-446655440000",
+  "require_ack": true,
+  "timeout_seconds": 45,
+  "priority": "HIGH",
+  "retry_count": 3
+}
+```
+
+#### Enhanced Acknowledgment Response
+**Direction**: Response to Command  
+**Purpose**: Detailed command execution status and results
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| type | string | ✓ | Always "acknowledgment" |
+| ack_message_id | string | ✓ | Original command message ID |
+| status | string | ✓ | Execution status (success, error, partial, timeout) |
+| timestamp | number | ✓ | Response timestamp |
+| execution_time_ms | number | ○ | Command execution duration |
+| result | object | ○ | Command-specific result data |
+| error_details | object | ○ | Detailed error information |
+| performance_metrics | object | ○ | Execution performance data |
+
+**Example Enhanced Acknowledgment**:
+```json
+{
+  "type": "acknowledgment",
+  "ack_message_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "success",
+  "timestamp": 1638360000234,
+  "execution_time_ms": 78,
+  "result": {
+    "recording_started": true,
+    "session_id": "rec_20240131_143022_001",
+    "active_sensors": ["GSR", "thermal", "accelerometer", "gyroscope"],
+    "estimated_file_size_mb": 245,
+    "recording_path": "/storage/emulated/0/recordings/",
+    "sync_status": "synchronized"
+  },
+  "performance_metrics": {
+    "memory_allocated_mb": 156,
+    "cpu_usage_percent": 18.5,
+    "storage_write_speed_mbps": 23.4
+  }
+}
+```
+
+### 7. Security and Authentication Messages
+
+#### SSL/TLS Handshake Enhancement
+**Direction**: Bidirectional  
+**Purpose**: Negotiate encryption parameters and security features
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| type | string | ✓ | Always "ssl_negotiation" |
+| tls_version | string | ✓ | Minimum TLS version (1.2, 1.3) |
+| cipher_suites | array | ✓ | Supported cipher suites |
+| certificate_required | boolean | ✓ | Whether client certificate is required |
+| compression_enabled | boolean | ○ | Whether to enable TLS compression |
+| perfect_forward_secrecy | boolean | ○ | Require PFS cipher suites |
+| certificate_fingerprint | string | ○ | Expected certificate fingerprint |
+
+**Example SSL Negotiation**:
+```json
+{
+  "type": "ssl_negotiation",
+  "tls_version": "1.2",
+  "cipher_suites": [
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "ECDHE-RSA-CHACHA20-POLY1305",
+    "ECDHE-RSA-AES128-GCM-SHA256"
+  ],
+  "certificate_required": false,
+  "compression_enabled": false,
+  "perfect_forward_secrecy": true,
+  "certificate_fingerprint": "sha256:1A2B3C4D5E..."
+}
+```
+
+#### Rate Limit Status
+**Direction**: PC Server → Android Device  
+**Purpose**: Inform device about rate limiting status
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| type | string | ✓ | Always "rate_limit_status" |
+| timestamp | number | ✓ | Unix timestamp in milliseconds |
+| device_id | string | ✓ | Target device identifier |
+| current_requests | integer | ✓ | Current request count in window |
+| max_requests | integer | ✓ | Maximum allowed requests per window |
+| window_size_seconds | integer | ✓ | Rate limiting window size |
+| reset_time | number | ✓ | Timestamp when limit resets |
+| warning_threshold | number | ○ | Percentage threshold for warnings |
+
+**Example Rate Limit Status**:
+```json
+{
+  "type": "rate_limit_status",
+  "timestamp": 1638360003000,
+  "device_id": "samsung_galaxy_s21_001",
+  "current_requests": 45,
+  "max_requests": 60,
+  "window_size_seconds": 60,
+  "reset_time": 1638360060000,
+  "warning_threshold": 0.8
+}
+```
+
+### 8. Performance Monitoring and Analytics
+
+#### Comprehensive Network Metrics
+**Direction**: Android Device → PC Server  
+**Purpose**: Detailed network performance analytics
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| type | string | ✓ | Always "network_analytics" |
+| timestamp | number | ✓ | Measurement timestamp |
+| reporting_period_ms | integer | ✓ | Metrics collection period |
+| bandwidth_metrics | object | ✓ | Bandwidth measurement data |
+| latency_metrics | object | ✓ | Latency and timing data |
+| reliability_metrics | object | ✓ | Connection reliability data |
+| quality_assessment | object | ✓ | Overall quality evaluation |
+
+**Bandwidth Metrics Object**:
+```json
+{
+  "bandwidth_metrics": {
+    "available_mbps": 45.2,
+    "utilized_mbps": 12.8,
+    "peak_mbps": 48.1,
+    "minimum_mbps": 8.3,
+    "average_mbps": 28.5,
+    "measurement_method": "active_probing"
+  }
+}
+```
+
+**Latency Metrics Object**:
+```json
+{
+  "latency_metrics": {
+    "rtt_ms": 12.5,
+    "jitter_ms": 2.1,
+    "min_latency_ms": 8.2,
+    "max_latency_ms": 24.7,
+    "p50_latency_ms": 11.8,
+    "p95_latency_ms": 18.9,
+    "p99_latency_ms": 23.4,
+    "sample_count": 100
+  }
+}
+```
+
+**Reliability Metrics Object**:
+```json
+{
+  "reliability_metrics": {
+    "packet_loss_percent": 0.05,
+    "connection_drops": 0,
+    "timeout_count": 2,
+    "successful_transmissions": 9847,
+    "failed_transmissions": 5,
+    "retransmission_rate": 0.001,
+    "uptime_percent": 99.98
+  }
+}
+```
+
+### 9. Advanced Error Handling
+
+#### Detailed Error Message
+**Direction**: Bidirectional  
+**Purpose**: Comprehensive error reporting with context and recovery suggestions
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| type | string | ✓ | Always "error" |
+| timestamp | number | ✓ | Error occurrence timestamp |
+| error_code | string | ✓ | Standardized error code |
+| error_category | string | ✓ | Error category (NETWORK, PROTOCOL, DEVICE, SECURITY) |
+| severity | string | ✓ | Error severity (CRITICAL, HIGH, MEDIUM, LOW) |
+| message | string | ✓ | Human-readable error description |
+| context | object | ○ | Additional error context |
+| suggested_actions | array | ○ | Recommended recovery actions |
+| related_message_id | string | ○ | ID of message that caused error |
+
+**Error Code Classification**:
+
+| Category | Code Range | Examples |
+|----------|------------|----------|
+| NETWORK | NET_001-NET_999 | NET_001: Connection timeout, NET_002: DNS resolution failed |
+| PROTOCOL | PROT_001-PROT_999 | PROT_001: Invalid message format, PROT_002: Unsupported protocol version |
+| DEVICE | DEV_001-DEV_999 | DEV_001: Insufficient storage, DEV_002: Sensor initialization failed |
+| SECURITY | SEC_001-SEC_999 | SEC_001: Certificate validation failed, SEC_002: Rate limit exceeded |
+
+**Example Detailed Error**:
+```json
+{
+  "type": "error",
+  "timestamp": 1638360004000,
+  "error_code": "NET_005",
+  "error_category": "NETWORK",
+  "severity": "HIGH",
+  "message": "Network connection unstable: high packet loss detected",
+  "context": {
+    "packet_loss_percent": 15.2,
+    "connection_type": "WiFi",
+    "signal_strength_dbm": -78,
+    "affected_operations": ["streaming", "file_transfer"]
+  },
+  "suggested_actions": [
+    "Move closer to WiFi access point",
+    "Switch to mobile data if available",
+    "Reduce streaming quality",
+    "Retry connection in 30 seconds"
+  ],
+  "related_message_id": "msg_789012"
+}
+```
+
+### 10. Acknowledgment and Error Messages
 
 #### Generic Acknowledgment
 **Direction**: Bidirectional  

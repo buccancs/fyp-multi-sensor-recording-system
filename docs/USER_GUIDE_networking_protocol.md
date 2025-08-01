@@ -298,7 +298,356 @@ recording_session_20240131_143000/
 └── session_metadata.json
 ```
 
-## Troubleshooting Common Issues
+## Comprehensive Troubleshooting Guide
+
+### Connection Issues
+
+#### Problem: Devices Cannot Connect to PC Server
+
+**Symptoms**:
+- Android app shows "Connection Failed" or "Server Unreachable"
+- PC application shows no incoming connections
+- Connection timeout errors
+
+**Diagnostic Steps**:
+1. **Network Connectivity Test**:
+   ```bash
+   # On Android device (using terminal app)
+   ping [PC_IP_ADDRESS]
+   telnet [PC_IP_ADDRESS] 9000
+   ```
+
+2. **PC Server Status Check**:
+   ```python
+   # In PC application console
+   server_status = get_server_status()
+   print(f"Server listening: {server_status.listening}")
+   print(f"Port: {server_status.port}")
+   print(f"Active connections: {server_status.connection_count}")
+   ```
+
+**Solutions**:
+1. **Firewall Configuration**:
+   - Windows: Allow PC application through Windows Firewall
+   - Linux: Configure iptables to allow port 9000
+   - Router: Check port forwarding settings if using different subnets
+
+2. **Network Configuration**:
+   - Ensure all devices are on same network segment
+   - Check DHCP settings and IP address ranges
+   - Verify no VPN or proxy interference
+
+3. **Application Configuration**:
+   - Verify server IP address in Android app settings
+   - Check port number consistency (default: 9000)
+   - Restart both PC and Android applications
+
+#### Problem: Frequent Connection Drops
+
+**Symptoms**:
+- Devices disconnect and reconnect repeatedly
+- "Connection Lost" messages during recording
+- Incomplete data transfers
+
+**Diagnostic Commands**:
+```python
+# Monitor connection stability
+connection_stats = get_connection_statistics()
+print(f"Disconnections per hour: {connection_stats.disconnects_per_hour}")
+print(f"Average connection duration: {connection_stats.avg_duration_minutes}")
+print(f"Reconnection success rate: {connection_stats.reconnect_success_rate}")
+```
+
+**Solutions**:
+1. **Network Stability**:
+   - Switch to 5GHz WiFi band for better stability
+   - Reduce distance between devices and router
+   - Check for electromagnetic interference
+
+2. **Power Management**:
+   - Disable WiFi power saving on Android devices
+   - Prevent Android app from being killed by battery optimization
+   - Keep devices plugged in during long recording sessions
+
+3. **Application Settings**:
+   - Increase connection timeout values
+   - Enable automatic reconnection
+   - Adjust heartbeat interval for network conditions
+
+### Performance Issues
+
+#### Problem: High Latency (>100ms)
+
+**Symptoms**:
+- Delayed response to commands
+- Sluggish preview streaming
+- Poor synchronization between devices
+
+**Performance Monitoring**:
+```python
+# Real-time latency monitoring
+latency_monitor = NetworkLatencyMonitor()
+stats = latency_monitor.get_real_time_stats()
+print(f"Current RTT: {stats.current_rtt}ms")
+print(f"Average RTT: {stats.average_rtt}ms")
+print(f"Jitter: {stats.jitter}ms")
+print(f"95th percentile: {stats.p95_latency}ms")
+```
+
+**Solutions**:
+1. **Network Optimization**:
+   - Use wired Ethernet connection for PC if possible
+   - Switch to less congested WiFi channel
+   - Upgrade network hardware (router, access points)
+
+2. **Quality Adjustment**:
+   - Reduce streaming quality to Medium or Low
+   - Enable adaptive quality management
+   - Limit number of simultaneous streaming devices
+
+3. **System Optimization**:
+   - Close unnecessary applications on both PC and Android
+   - Increase network buffer sizes
+   - Optimize background processes
+
+#### Problem: Poor Data Throughput (<1 MB/s)
+
+**Symptoms**:
+- Slow file transfers
+- Choppy video streaming
+- Timeout errors during data upload
+
+**Bandwidth Testing**:
+```python
+# Bandwidth measurement
+bandwidth_test = NetworkBandwidthTest()
+results = bandwidth_test.run_comprehensive_test()
+print(f"Download speed: {results.download_mbps} Mbps")
+print(f"Upload speed: {results.upload_mbps} Mbps")
+print(f"Available bandwidth: {results.available_mbps} Mbps")
+```
+
+**Solutions**:
+1. **Network Capacity**:
+   - Verify internet connection speed meets requirements
+   - Check for bandwidth-intensive applications
+   - Consider upgrading internet plan
+
+2. **Protocol Optimization**:
+   - Enable data compression
+   - Implement adaptive bitrate streaming
+   - Use TCP window scaling
+
+3. **Hardware Considerations**:
+   - Ensure adequate storage write speeds on Android devices
+   - Check for thermal throttling on mobile devices
+   - Verify sufficient RAM availability
+
+### Security and SSL Issues
+
+#### Problem: SSL/TLS Certificate Errors
+
+**Symptoms**:
+- "Certificate validation failed" messages
+- SSL handshake timeouts
+- Encrypted connection failures
+
+**SSL Diagnostics**:
+```python
+# SSL certificate validation
+ssl_validator = SSLCertificateValidator()
+cert_status = ssl_validator.validate_certificate(server_address)
+print(f"Certificate valid: {cert_status.is_valid}")
+print(f"Expiry date: {cert_status.expiry_date}")
+print(f"Issuer: {cert_status.issuer}")
+print(f"Subject: {cert_status.subject}")
+```
+
+**Solutions**:
+1. **Certificate Management**:
+   - Regenerate server certificates if expired
+   - Ensure certificate chain is complete
+   - Verify certificate matches server hostname
+
+2. **Trust Store Configuration**:
+   - Install CA certificate on Android devices
+   - Update trust store with custom certificates
+   - Configure certificate pinning if required
+
+3. **TLS Settings**:
+   - Use TLS 1.2 or higher
+   - Configure compatible cipher suites
+   - Disable deprecated TLS versions
+
+#### Problem: Rate Limiting Triggered
+
+**Symptoms**:
+- "Rate limit exceeded" error messages
+- Temporary connection blocking
+- Reduced application responsiveness
+
+**Rate Limit Monitoring**:
+```python
+# Check rate limiting status
+rate_limiter = RateLimitMonitor()
+status = rate_limiter.get_current_status("device_ip")
+print(f"Current requests: {status.current_requests}/{status.max_requests}")
+print(f"Reset time: {status.reset_time}")
+print(f"Remaining capacity: {status.remaining_requests}")
+```
+
+**Solutions**:
+1. **Request Optimization**:
+   - Reduce frequency of status requests
+   - Batch multiple operations together
+   - Implement exponential backoff for retries
+
+2. **Rate Limit Configuration**:
+   - Increase rate limits for trusted devices
+   - Implement different limits for different message types
+   - Use token bucket algorithm for burst handling
+
+### Synchronization Issues
+
+#### Problem: Poor Time Synchronization (>10ms drift)
+
+**Symptoms**:
+- Misaligned multi-device recordings
+- Timestamp inconsistencies in data
+- Poor correlation between sensor streams
+
+**Time Sync Diagnostics**:
+```python
+# Time synchronization analysis
+time_sync = TimeSynchronizationAnalyzer()
+sync_status = time_sync.analyze_drift()
+print(f"Current drift: {sync_status.drift_ms}ms")
+print(f"Sync accuracy: {sync_status.accuracy_ms}ms")
+print(f"Last sync: {sync_status.last_sync_time}")
+```
+
+**Solutions**:
+1. **Clock Synchronization**:
+   - Enable NTP synchronization on all devices
+   - Use high-precision time servers
+   - Implement custom time sync protocol
+
+2. **Drift Compensation**:
+   - Monitor and correct for clock drift
+   - Use hardware timestamping when available
+   - Implement predictive drift correction
+
+### Device-Specific Issues
+
+#### Problem: Android Battery Optimization Interfering
+
+**Symptoms**:
+- App killed during background operation
+- Network connections terminated unexpectedly
+- Missing data from Android devices
+
+**Solutions**:
+1. **Battery Optimization Settings**:
+   - Add app to battery optimization whitelist
+   - Enable "Don't optimize" for recording app
+   - Disable adaptive battery for the app
+
+2. **Background Processing**:
+   - Use foreground service for recording
+   - Implement wake locks during critical operations
+   - Monitor app lifecycle states
+
+#### Problem: Insufficient Storage Space
+
+**Symptoms**:
+- Recording stops prematurely
+- File transfer failures
+- Incomplete data capture
+
+**Storage Monitoring**:
+```kotlin
+// Android storage check
+val storageManager = StorageManager()
+val availableSpace = storageManager.getAvailableSpaceGB()
+val requiredSpace = estimateRequiredSpace(recordingDuration)
+if (availableSpace < requiredSpace) {
+    showStorageWarning()
+}
+```
+
+**Solutions**:
+1. **Storage Management**:
+   - Clean up old recording files
+   - Move files to external storage
+   - Implement automatic cleanup policies
+
+2. **Compression and Quality**:
+   - Reduce recording quality for longer sessions
+   - Enable data compression
+   - Use efficient codec settings
+
+## Performance Optimization Tips
+
+### Network Optimization
+
+1. **WiFi Configuration**:
+   ```
+   Recommended Settings:
+   - Channel: Auto (or manual selection for 5GHz)
+   - Channel Width: 80MHz for 5GHz, 40MHz for 2.4GHz
+   - Security: WPA3 or WPA2
+   - Quality of Service: Enable for multimedia traffic
+   ```
+
+2. **Router Settings**:
+   ```
+   Optimal Configuration:
+   - Enable QoS with multimedia priority
+   - Disable band steering for consistent connections
+   - Set transmission power to maximum
+   - Enable beam forming if available
+   ```
+
+### Application Performance
+
+1. **PC Application Optimization**:
+   ```python
+   # Recommended settings
+   config.max_concurrent_devices = 10
+   config.network_buffer_size = 65536
+   config.message_queue_size = 1000
+   config.heartbeat_interval = 5.0
+   config.connection_timeout = 30.0
+   ```
+
+2. **Android Application Tuning**:
+   ```kotlin
+   // Performance settings
+   NetworkConfig.apply {
+       socketBufferSize = 64 * 1024
+       connectionPoolSize = 5
+       keepAliveInterval = 30_000
+       readTimeout = 15_000
+       writeTimeout = 15_000
+   }
+   ```
+
+### Resource Management
+
+1. **Memory Optimization**:
+   - Limit video frame buffer size
+   - Implement memory pooling for large objects
+   - Monitor and prevent memory leaks
+
+2. **CPU Optimization**:
+   - Use hardware acceleration when available
+   - Optimize image processing algorithms
+   - Balance threading for concurrent operations
+
+3. **Storage Optimization**:
+   - Use efficient file formats
+   - Implement compression for sensor data
+   - Clean up temporary files regularly
 
 ### Connection Problems
 

@@ -47,7 +47,6 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
 | [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
-| [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
 | [README_networking_protocol.md](README_networking_protocol.md) | Networking and Communication Protocol technical deep-dive | Developers |
 | [USER_GUIDE_networking_protocol.md](USER_GUIDE_networking_protocol.md) | Networking protocol practical usage guide | End users |
 | [PROTOCOL_networking_protocol.md](PROTOCOL_networking_protocol.md) | Message specifications and data contracts | Developers |
@@ -102,7 +101,6 @@ Detailed technical specifications and architecture documentation:
 | [UIController-Enhanced-Features.md](technical/UIController-Enhanced-Features.md) | UI enhancement details | Development reference |
 | [mobile-application-architecture.md](technical/mobile-application-architecture.md) | Android app architecture | Mobile development |
 | [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
-| [network-protocols-synchronization.md](technical/network-protocols-synchronization.md) | Network protocols | Network development |
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
 | [thermal-camera-integration.md](technical/thermal-camera-integration.md) | Thermal camera setup | Hardware integration |
 | [computer-vision-methodology.md](technical/computer-vision-methodology.md) | CV implementation | Computer vision |

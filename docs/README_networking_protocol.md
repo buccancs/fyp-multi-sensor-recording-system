@@ -248,6 +248,182 @@ class AdaptiveQualityController {
         
         val qualityScore = calculateQualityScore(
             latency = metrics.averageLatency,
+            bandwidth = metrics.availableBandwidth,
+            packetLoss = metrics.packetLossRate,
+            jitter = metrics.jitterMs
+        )
+        
+        val recommendedQuality = when {
+            qualityScore > 0.8 -> StreamingQuality.ULTRA
+            qualityScore > 0.6 -> StreamingQuality.HIGH
+            qualityScore > 0.4 -> StreamingQuality.MEDIUM
+            else -> StreamingQuality.LOW
+        }
+        
+        if (recommendedQuality != currentQuality) {
+            updateStreamingQuality(recommendedQuality)
+        }
+    }
+}
+```
+
+### SSL/TLS Security Implementation
+
+The protocol provides comprehensive security features with configurable encryption:
+
+```python
+# PC Server SSL Configuration
+class SecureServerSocket:
+    def __init__(self):
+        self.ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+        self.ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
+        
+    def configure_ssl(self, certfile, keyfile, ca_certs=None):
+        """Configure SSL/TLS encryption with recommended cipher suites"""
+        self.ssl_context.set_ciphers(
+            'ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:!aNULL:!MD5:!DSS'
+        )
+        self.ssl_context.load_cert_chain(certfile, keyfile)
+        if ca_certs:
+            self.ssl_context.load_verify_locations(ca_certs)
+            self.ssl_context.verify_mode = ssl.CERT_REQUIRED
+```
+
+### Rate Limiting and DoS Protection
+
+Sliding window rate limiter prevents denial-of-service attacks:
+
+```python
+class RateLimiter:
+    def __init__(self, max_requests_per_minute=60):
+        self._max_requests_per_minute = max_requests_per_minute
+        self._rate_limiter = defaultdict(list)
+        self._lock = threading.Lock()
+    
+    def check_rate_limit(self, device_ip: str) -> bool:
+        """Check if request is within rate limits using sliding window"""
+        with self._lock:
+            current_time = time.time()
+            requests = self._rate_limiter[device_ip]
+            
+            # Remove requests older than 60 seconds
+            requests[:] = [t for t in requests if current_time - t < 60]
+            
+            if len(requests) >= self._max_requests_per_minute:
+                return False
+            
+            requests.append(current_time)
+            return True
+
+    def get_rate_info(self, device_ip: str) -> dict:
+        """Get current rate limiting information"""
+        with self._lock:
+            requests = self._rate_limiter[device_ip]
+            return {
+                'current_requests': len(requests),
+                'max_requests': self._max_requests_per_minute,
+                'remaining_requests': self._max_requests_per_minute - len(requests)
+            }
+```
+
+### Enhanced Performance Monitoring
+
+Real-time performance metrics collection and analysis:
+
+```python
+class PerformanceMonitor:
+    def __init__(self):
+        self.metrics = {
+            'messages_sent': 0,
+            'messages_received': 0,
+            'average_latency_ms': 0.0,
+            'connected_devices': 0,
+            'pending_acknowledgments': 0,
+            'error_count': 0,
+            'bytes_transmitted': 0,
+            'successful_handshakes': 0,
+            'failed_connections': 0
+        }
+        self._latency_samples = deque(maxlen=100)  # Keep last 100 samples
+        self._lock = threading.Lock()
+    
+    def record_latency(self, latency_ms: float):
+        """Record latency measurement for statistics"""
+        with self._lock:
+            self._latency_samples.append(latency_ms)
+            if self._latency_samples:
+                self.metrics['average_latency_ms'] = sum(self._latency_samples) / len(self._latency_samples)
+    
+    def get_performance_report(self) -> dict:
+        """Generate comprehensive performance report"""
+        with self._lock:
+            latency_stats = self._calculate_latency_statistics()
+            return {
+                **self.metrics,
+                'latency_statistics': latency_stats,
+                'uptime_seconds': time.time() - self._start_time,
+                'message_rate_per_second': self._calculate_message_rate()
+            }
+    
+    def _calculate_latency_statistics(self) -> dict:
+        """Calculate detailed latency statistics"""
+        if not self._latency_samples:
+            return {}
+        
+        samples = list(self._latency_samples)
+        return {
+            'min_ms': min(samples),
+            'max_ms': max(samples),
+            'mean_ms': sum(samples) / len(samples),
+            'median_ms': sorted(samples)[len(samples) // 2],
+            'p95_ms': sorted(samples)[int(len(samples) * 0.95)],
+            'p99_ms': sorted(samples)[int(len(samples) * 0.99)],
+            'sample_count': len(samples)
+        }
+```
+
+### Capability Negotiation System
+
+Dynamic feature discovery allows devices to negotiate supported capabilities:
+
+```python
+class CapabilityNegotiator:
+    def __init__(self):
+        self.server_capabilities = {
+            'recording': True,
+            'streaming': True,
+            'thermal_imaging': True,
+            'gsr_monitoring': True,
+            'audio_recording': True,
+            'gyroscope_data': True,
+            'accelerometer_data': True,
+            'ssl_encryption': True,
+            'file_transfer': True,
+            'real_time_preview': True
+        }
+    
+    def negotiate_capabilities(self, device_id: int, requested_capabilities: list) -> dict:
+        """Negotiate capabilities with a specific device"""
+        device = self.get_device(device_id)
+        if not device:
+            return {}
+        
+        negotiated = {}
+        for capability in requested_capabilities:
+            server_supports = self.server_capabilities.get(capability, False)
+            device_supports = device.supports_capability(capability)
+            negotiated[capability] = server_supports and device_supports
+        
+        # Store negotiated capabilities for this device
+        device.set_negotiated_capabilities(negotiated)
+        
+        return negotiated
+    
+    def get_device_capabilities(self, device_id: int) -> dict:
+        """Get negotiated capabilities for a device"""
+        device = self.get_device(device_id)
+        return device.get_negotiated_capabilities() if device else {}
+```
             jitter = metrics.jitterVariance,
             packetLoss = metrics.packetLossRate,
             bandwidth = metrics.availableBandwidth
