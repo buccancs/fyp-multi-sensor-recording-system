@@ -22,7 +22,7 @@ import org.junit.runner.RunWith
 abstract class BaseInstrumentedTest {
 
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    open var hiltRule = HiltAndroidRule(this)
 
     protected lateinit var context: Context
 

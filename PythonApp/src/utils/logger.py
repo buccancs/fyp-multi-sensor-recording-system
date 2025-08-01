@@ -43,7 +43,7 @@ class LoggerManager:
         self.loggers = {}
         self.log_handlers = {}
 
-        # TODO: Initialize logging system
+        # Initialize logging system
         self.setup_logging_directory()
         self.setup_default_loggers()
 
@@ -66,40 +66,38 @@ class LoggerManager:
         """
         Set up default loggers for different system components.
 
-        TODO: Implement logger setup:
-        - Create loggers for different modules (GUI, network, calibration)
-        - Configure log levels and formatting
-        - Set up file handlers with rotation
-        - Configure console handlers for development
+        Creates loggers for different modules (GUI, network, calibration)
+        with appropriate log levels and formatting.
         """
-        print("[DEBUG_LOG] Setting up default loggers (placeholder)")
+        import logging
+        
+        print("[DEBUG_LOG] Setting up default loggers")
 
-        # TODO: Implement actual logger setup
-        # logger_configs = {
-        #     'application': {
-        #         'level': logging.INFO,
-        #         'file': 'application.log',
-        #         'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        #     },
-        #     'network': {
-        #         'level': logging.DEBUG,
-        #         'file': 'network.log',
-        #         'format': '%(asctime)s - %(name)s - %(levelname)s - [%(funcName)s:%(lineno)d] - %(message)s'
-        #     },
-        #     'calibration': {
-        #         'level': logging.INFO,
-        #         'file': 'calibration.log',
-        #         'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        #     },
-        #     'performance': {
-        #         'level': logging.INFO,
-        #         'file': 'performance.log',
-        #         'format': '%(asctime)s - %(message)s'
-        #     }
-        # }
-        #
-        # for logger_name, config in logger_configs.items():
-        #     self.create_logger(logger_name, config)
+        logger_configs = {
+            'application': {
+                'level': logging.INFO,
+                'file': 'application/application.log',
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            },
+            'network': {
+                'level': logging.DEBUG,
+                'file': 'network/network.log',
+                'format': '%(asctime)s - %(name)s - %(levelname)s - [%(funcName)s:%(lineno)d] - %(message)s'
+            },
+            'calibration': {
+                'level': logging.INFO,
+                'file': 'calibration/calibration.log',
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            },
+            'performance': {
+                'level': logging.INFO,
+                'file': 'performance/performance.log',
+                'format': '%(asctime)s - %(message)s'
+            }
+        }
+
+        for logger_name, config in logger_configs.items():
+            self.create_logger(logger_name, config)
 
     def create_logger(self, name, config):
         """
@@ -319,27 +317,97 @@ class LoggerManager:
 
         Returns:
             str: Path to exported log file
-
-        TODO: Implement log export functionality:
-        - Filter logs by date range and criteria
-        - Support multiple export formats
-        - Compress exported logs for large datasets
-        - Handle export errors and validation
         """
-        print(
-            f"[DEBUG_LOG] Exporting logs from {start_date} to {end_date} in {output_format} format (placeholder)"
-        )
-
-        # TODO: Implement actual log export
-        # export_filename = f"logs_export_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.{output_format}"
-        # export_path = os.path.join(self.log_directory, "exports", export_filename)
-        #
-        # # Filter and export logs based on criteria
-        # # ... implementation ...
-        #
-        # return export_path
-
-        return ""  # Placeholder return
+        import os
+        import json
+        import csv
+        import gzip
+        from datetime import datetime
+        
+        try:
+            # Create exports directory
+            exports_dir = os.path.join(self.log_directory, "exports")
+            os.makedirs(exports_dir, exist_ok=True)
+            
+            # Generate export filename
+            export_filename = f"logs_export_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.{output_format}"
+            export_path = os.path.join(exports_dir, export_filename)
+            
+            # Collect log entries from all log files
+            log_entries = []
+            
+            # Walk through log directory and process files
+            for root, dirs, files in os.walk(self.log_directory):
+                for file in files:
+                    if file.endswith('.log'):
+                        file_path = os.path.join(root, file)
+                        file_mtime = datetime.fromtimestamp(os.path.getmtime(file_path))
+                        
+                        # Check if file is within date range
+                        if start_date <= file_mtime <= end_date:
+                            try:
+                                with open(file_path, 'r', encoding='utf-8') as f:
+                                    for line in f:
+                                        line = line.strip()
+                                        if line:
+                                            # Try to parse as JSON first
+                                            try:
+                                                log_entry = json.loads(line)
+                                                log_entries.append(log_entry)
+                                            except json.JSONDecodeError:
+                                                # If not JSON, treat as plain text log
+                                                log_entries.append({
+                                                    'timestamp': file_mtime.isoformat(),
+                                                    'level': 'INFO',
+                                                    'message': line,
+                                                    'source_file': file
+                                                })
+                            except Exception as e:
+                                print(f"Error reading log file {file_path}: {e}")
+            
+            # Export based on format
+            if output_format.lower() == 'json':
+                with open(export_path, 'w', encoding='utf-8') as f:
+                    json.dump(log_entries, f, indent=2, default=str)
+            
+            elif output_format.lower() == 'csv':
+                if log_entries:
+                    # Get all possible keys for CSV headers
+                    all_keys = set()
+                    for entry in log_entries:
+                        all_keys.update(entry.keys())
+                    
+                    with open(export_path, 'w', newline='', encoding='utf-8') as f:
+                        writer = csv.DictWriter(f, fieldnames=sorted(all_keys))
+                        writer.writeheader()
+                        writer.writerows(log_entries)
+            
+            elif output_format.lower() == 'txt':
+                with open(export_path, 'w', encoding='utf-8') as f:
+                    for entry in log_entries:
+                        if isinstance(entry, dict):
+                            timestamp = entry.get('timestamp', 'Unknown')
+                            level = entry.get('level', 'INFO')
+                            message = entry.get('message', str(entry))
+                            f.write(f"[{timestamp}] {level}: {message}\n")
+                        else:
+                            f.write(f"{entry}\n")
+            
+            # Compress if file is large (>1MB)
+            if os.path.getsize(export_path) > 1024 * 1024:
+                compressed_path = export_path + '.gz'
+                with open(export_path, 'rb') as f_in:
+                    with gzip.open(compressed_path, 'wb') as f_out:
+                        f_out.writelines(f_in)
+                os.remove(export_path)
+                export_path = compressed_path
+            
+            print(f"Logs exported to: {export_path}")
+            return export_path
+            
+        except Exception as e:
+            print(f"Error exporting logs: {e}")
+            return ""
 
     def cleanup_old_logs(self, retention_days=30):
         """
@@ -348,35 +416,75 @@ class LoggerManager:
         Args:
             retention_days (int): Number of days to retain logs
 
-        TODO: Implement log cleanup:
-        - Remove log files older than retention period
-        - Compress old logs before deletion
-        - Generate cleanup reports
-        - Handle cleanup errors and edge cases
+        Returns:
+            dict: Cleanup report with removed files and errors
         """
-        print(
-            f"[DEBUG_LOG] Cleaning up logs older than {retention_days} days (placeholder)"
-        )
-
-        # TODO: Implement actual log cleanup
-        # cutoff_date = datetime.now() - timedelta(days=retention_days)
-        #
-        # for root, dirs, files in os.walk(self.log_directory):
-        #     for file in files:
-        #         if file.endswith('.log'):
-        #             file_path = os.path.join(root, file)
-        #             file_mtime = datetime.fromtimestamp(os.path.getmtime(file_path))
-        #
-        #             if file_mtime < cutoff_date:
-        #                 try:
-        #                     os.remove(file_path)
-        #                     print(f"Removed old log file: {file_path}")
-        #                 except Exception as e:
-        #                     print(f"Error removing log file {file_path}: {e}")
+        import os
+        import gzip
+        import shutil
+        from datetime import datetime, timedelta
+        
+        cleanup_report = {
+            'removed_files': [],
+            'compressed_files': [],
+            'errors': [],
+            'total_space_freed': 0
+        }
+        
+        try:
+            cutoff_date = datetime.now() - timedelta(days=retention_days)
+            archive_cutoff = datetime.now() - timedelta(days=7)  # Compress files older than 7 days
+            
+            for root, dirs, files in os.walk(self.log_directory):
+                # Skip exports directory
+                if 'exports' in root:
+                    continue
+                    
+                for file in files:
+                    if file.endswith('.log') or file.endswith('.log.gz'):
+                        file_path = os.path.join(root, file)
+                        
+                        try:
+                            file_mtime = datetime.fromtimestamp(os.path.getmtime(file_path))
+                            file_size = os.path.getsize(file_path)
+                            
+                            # Remove files older than retention period
+                            if file_mtime < cutoff_date:
+                                os.remove(file_path)
+                                cleanup_report['removed_files'].append(file_path)
+                                cleanup_report['total_space_freed'] += file_size
+                                print(f"Removed old log file: {file_path}")
+                            
+                            # Compress files older than 7 days but within retention period
+                            elif file_mtime < archive_cutoff and file.endswith('.log'):
+                                compressed_path = file_path + '.gz'
+                                with open(file_path, 'rb') as f_in:
+                                    with gzip.open(compressed_path, 'wb') as f_out:
+                                        shutil.copyfileobj(f_in, f_out)
+                                
+                                # Remove original file after compression
+                                os.remove(file_path)
+                                cleanup_report['compressed_files'].append(compressed_path)
+                                space_saved = file_size - os.path.getsize(compressed_path)
+                                cleanup_report['total_space_freed'] += space_saved
+                                print(f"Compressed log file: {file_path} -> {compressed_path}")
+                        
+                        except Exception as e:
+                            error_msg = f"Error processing log file {file_path}: {e}"
+                            cleanup_report['errors'].append(error_msg)
+                            print(error_msg)
+            
+            print(f"Log cleanup completed. Freed {cleanup_report['total_space_freed']} bytes")
+            return cleanup_report
+            
+        except Exception as e:
+            error_msg = f"Error during log cleanup: {e}"
+            cleanup_report['errors'].append(error_msg)
+            print(error_msg)
+            return cleanup_report
 
 
 # Global logger manager instance
-# TODO: Initialize with proper configuration
 logger_manager = None
 
 
@@ -386,16 +494,28 @@ def get_logger_manager():
 
     Returns:
         LoggerManager: Global logger manager
-
-    TODO: Implement singleton pattern:
-    - Create logger manager if not exists
-    - Load configuration from file
-    - Handle initialization errors
     """
     global logger_manager
     if logger_manager is None:
-        # TODO: Load configuration from file
-        logger_manager = LoggerManager()
+        try:
+            # Try to load configuration from file if it exists
+            import os
+            config_path = os.path.join(os.path.dirname(__file__), '..', '..', 'config', 'logging.json')
+            if os.path.exists(config_path):
+                import json
+                with open(config_path, 'r') as f:
+                    config = json.load(f)
+                logger_manager = LoggerManager(
+                    log_directory=config.get('log_directory', 'logs'),
+                    max_file_size_mb=config.get('max_file_size_mb', 10),
+                    backup_count=config.get('backup_count', 5)
+                )
+            else:
+                # Use default configuration
+                logger_manager = LoggerManager()
+        except Exception as e:
+            print(f"Warning: Error loading logger configuration: {e}. Using defaults.")
+            logger_manager = LoggerManager()
     return logger_manager
 
 
@@ -407,12 +527,8 @@ def log_info(logger_name, message, **kwargs):
         logger_name (str): Logger name
         message (str): Log message
         **kwargs: Additional structured data
-
-    TODO: Implement convenience logging functions for all levels
     """
-    print(f"[DEBUG_LOG] INFO {logger_name}: {message} (placeholder)")
-    # TODO: Use actual logger manager
-    # get_logger_manager().log_structured(logger_name, LogLevel.INFO, message, **kwargs)
+    get_logger_manager().log_structured(logger_name, LogLevel.INFO, message, **kwargs)
 
 
 def log_error(logger_name, message, **kwargs):
@@ -423,12 +539,8 @@ def log_error(logger_name, message, **kwargs):
         logger_name (str): Logger name
         message (str): Log message
         **kwargs: Additional structured data
-
-    TODO: Implement convenience logging functions for all levels
     """
-    print(f"[DEBUG_LOG] ERROR {logger_name}: {message} (placeholder)")
-    # TODO: Use actual logger manager
-    # get_logger_manager().log_structured(logger_name, LogLevel.ERROR, message, **kwargs)
+    get_logger_manager().log_structured(logger_name, LogLevel.ERROR, message, **kwargs)
 
 
 def log_debug(logger_name, message, **kwargs):
@@ -439,9 +551,29 @@ def log_debug(logger_name, message, **kwargs):
         logger_name (str): Logger name
         message (str): Log message
         **kwargs: Additional structured data
-
-    TODO: Implement convenience logging functions for all levels
     """
-    print(f"[DEBUG_LOG] DEBUG {logger_name}: {message} (placeholder)")
-    # TODO: Use actual logger manager
-    # get_logger_manager().log_structured(logger_name, LogLevel.DEBUG, message, **kwargs)
+    get_logger_manager().log_structured(logger_name, LogLevel.DEBUG, message, **kwargs)
+
+
+def log_warning(logger_name, message, **kwargs):
+    """
+    Convenience function for warning-level logging.
+
+    Args:
+        logger_name (str): Logger name
+        message (str): Log message
+        **kwargs: Additional structured data
+    """
+    get_logger_manager().log_structured(logger_name, LogLevel.WARNING, message, **kwargs)
+
+
+def log_critical(logger_name, message, **kwargs):
+    """
+    Convenience function for critical-level logging.
+
+    Args:
+        logger_name (str): Logger name
+        message (str): Log message
+        **kwargs: Additional structured data
+    """
+    get_logger_manager().log_structured(logger_name, LogLevel.CRITICAL, message, **kwargs)

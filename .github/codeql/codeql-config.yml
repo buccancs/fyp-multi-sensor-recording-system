@@ -6,6 +6,15 @@ name: "CodeQL Security Analysis"
 # Run the default queries in addition to the custom ones specified below
 disable-default-queries: false
 
+packs:
+  # For Python
+  - githubsecuritylab/codeql-python-queries
+  - trailofbits/python-queries
+
+  # For Android/Kotlin
+  - githubsecuritylab/codeql-java-queries
+  - trailofbits/java-queries
+
 # Specify which query suites to run
 queries:
   - uses: security-extended
