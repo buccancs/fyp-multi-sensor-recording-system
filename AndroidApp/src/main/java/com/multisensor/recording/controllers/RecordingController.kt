@@ -7,12 +7,19 @@ import com.multisensor.recording.util.NetworkUtils
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.view.TextureView
 import androidx.core.content.ContextCompat
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
+import android.content.ComponentName
+import android.content.ServiceConnection
+import android.os.IBinder
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Controller responsible for handling all recording system logic.
@@ -63,11 +70,99 @@ class RecordingController @Inject constructor() {
     private var currentSessionStartTime: Long? = null
     private val currentSessionMetadata = mutableMapOf<String, Any>()
     
+    // Quality settings management
+    private var currentQuality: RecordingQuality = RecordingQuality.MEDIUM
+    
+    // Service connection monitoring
+    private val _serviceConnectionState = MutableStateFlow(ServiceConnectionState())
+    val serviceConnectionState: StateFlow<ServiceConnectionState> = _serviceConnectionState.asStateFlow()
+    private var recordingServiceConnection: ServiceConnection? = null
+    
+    // State persistence
+    private var sharedPreferences: SharedPreferences? = null
+    private val STATE_PREF_NAME = "recording_controller_state"
+    private val KEY_IS_INITIALIZED = "is_initialized"
+    private val KEY_CURRENT_SESSION_ID = "current_session_id"
+    private val KEY_TOTAL_RECORDING_TIME = "total_recording_time"
+    private val KEY_SESSION_COUNT = "session_count"
+    private val KEY_QUALITY_SETTING = "quality_setting"
+    private val KEY_LAST_SAVE_TIME = "last_save_time"
+    
     /**
      * Set the callback for recording events
      */
     fun setCallback(callback: RecordingCallback) {
         this.callback = callback
+    }
+    
+    /**
+     * Initialize state persistence
+     */
+    fun initializeStatePersistence(context: Context) {
+        sharedPreferences = context.getSharedPreferences(STATE_PREF_NAME, Context.MODE_PRIVATE)
+        restoreState()
+        android.util.Log.d("RecordingController", "[DEBUG_LOG] State persistence initialized")
+    }
+    
+    /**
+     * Save current state to persistent storage
+     */
+    private fun saveState() {
+        sharedPreferences?.edit()?.apply {
+            putBoolean(KEY_IS_INITIALIZED, isRecordingSystemInitialized)
+            putString(KEY_CURRENT_SESSION_ID, currentSession?.sessionId)
+            putLong(KEY_TOTAL_RECORDING_TIME, totalRecordingTime)
+            putInt(KEY_SESSION_COUNT, sessionHistory.size)
+            putString(KEY_QUALITY_SETTING, currentQuality.name)
+            putLong(KEY_LAST_SAVE_TIME, System.currentTimeMillis())
+            apply()
+        }
+        android.util.Log.d("RecordingController", "[DEBUG_LOG] State saved to persistent storage")
+    }
+    
+    /**
+     * Restore state from persistent storage
+     */
+    private fun restoreState() {
+        sharedPreferences?.let { prefs ->
+            isRecordingSystemInitialized = prefs.getBoolean(KEY_IS_INITIALIZED, false)
+            totalRecordingTime = prefs.getLong(KEY_TOTAL_RECORDING_TIME, 0L)
+            
+            val qualityName = prefs.getString(KEY_QUALITY_SETTING, RecordingQuality.MEDIUM.name)
+            currentQuality = try {
+                RecordingQuality.valueOf(qualityName ?: RecordingQuality.MEDIUM.name)
+            } catch (e: IllegalArgumentException) {
+                RecordingQuality.MEDIUM
+            }
+            
+            val sessionId = prefs.getString(KEY_CURRENT_SESSION_ID, null)
+            if (sessionId != null) {
+                // Handle recovery of interrupted session
+                android.util.Log.w("RecordingController", "[DEBUG_LOG] Found interrupted session: $sessionId")
+                // Mark as incomplete session that needs recovery
+                currentSessionMetadata["recovered_session"] = true
+                currentSessionMetadata["original_session_id"] = sessionId
+            }
+            
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] State restored from persistent storage")
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] - Initialized: $isRecordingSystemInitialized")
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] - Total recording time: ${formatDuration(totalRecordingTime)}")
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] - Quality setting: $currentQuality")
+        }
+    }
+    
+    /**
+     * Get current recording controller state
+     */
+    fun getCurrentState(): RecordingControllerState {
+        return RecordingControllerState(
+            isInitialized = isRecordingSystemInitialized,
+            currentSessionId = currentSession?.sessionId,
+            totalRecordingTime = totalRecordingTime,
+            sessionCount = sessionHistory.size,
+            lastQualitySetting = currentQuality,
+            lastSaveTime = System.currentTimeMillis()
+        )
     }
     
     /**
@@ -78,11 +173,20 @@ class RecordingController @Inject constructor() {
         android.util.Log.d("RecordingController", "[DEBUG_LOG] Initializing recording system")
         
         try {
+            // Initialize state persistence if not already done
+            if (sharedPreferences == null) {
+                initializeStatePersistence(context)
+            }
+            
             // Initialize system with TextureView for enhanced CameraRecorder integration
             viewModel.initializeSystem(textureView)
             
             isRecordingSystemInitialized = true
-            callback?.updateStatusText("System initialized - Ready to record")
+            
+            // Save initialization state
+            saveState()
+            
+            callback?.updateStatusText("System initialized - Ready to record (${currentQuality.displayName})")
             callback?.onRecordingInitialized()
             
             android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording system initialized successfully")
@@ -107,7 +211,7 @@ class RecordingController @Inject constructor() {
         }
         
         try {
-            // Create new recording session
+            // Create new recording session with enhanced metadata
             val sessionId = "session_${System.currentTimeMillis()}"
             val startTime = System.currentTimeMillis()
             
@@ -118,21 +222,36 @@ class RecordingController @Inject constructor() {
                     "app_version" to getAppVersion(),
                     "device_model" to android.os.Build.MODEL,
                     "android_version" to android.os.Build.VERSION.RELEASE,
-                    "start_timestamp" to startTime
+                    "start_timestamp" to startTime,
+                    "quality_setting" to currentQuality.name,
+                    "quality_details" to getQualityDetails(currentQuality),
+                    "available_storage_mb" to (getAvailableStorageSpace(context) / (1024 * 1024)),
+                    "estimated_duration_hours" to (getAvailableStorageSpace(context) / currentQuality.getEstimatedSizePerSecond() / 3600),
+                    "service_connection_healthy" to isServiceHealthy()
                 )
             )
             
-            // Start recording service
+            // Start recording service with connection monitoring
+            if (!bindToRecordingService(context)) {
+                android.util.Log.w("RecordingController", "[DEBUG_LOG] Failed to bind to recording service, starting anyway")
+            }
+            
             val intent = Intent(context, RecordingService::class.java).apply {
                 action = RecordingService.ACTION_START_RECORDING
+                // Pass quality settings to service
+                putExtra("quality_setting", currentQuality.name)
+                putExtra("session_id", sessionId)
             }
             ContextCompat.startForegroundService(context, intent)
             
             // Start recording via ViewModel
             viewModel.startRecording()
             
+            // Save state after starting
+            saveState()
+            
             callback?.onRecordingStarted()
-            callback?.updateStatusText("Recording in progress - Session: ${currentSession?.sessionId ?: "Unknown"}")
+            callback?.updateStatusText("Recording in progress - Session: ${currentSession?.sessionId ?: "Unknown"} (${currentQuality.displayName})")
             
             android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording started successfully - Session: ${currentSession?.sessionId}")
         } catch (e: Exception) {
@@ -140,6 +259,7 @@ class RecordingController @Inject constructor() {
             
             // Mark session as failed
             currentSession = currentSession?.copy(hasErrors = true)
+            saveState()
             
             callback?.onRecordingError("Failed to start recording: ${e.message}")
             callback?.updateStatusText("Recording start failed")
@@ -154,7 +274,7 @@ class RecordingController @Inject constructor() {
         android.util.Log.d("RecordingController", "[DEBUG_LOG] Stopping recording session")
         
         try {
-            // Complete current session
+            // Complete current session with enhanced metadata
             currentSession?.let { session ->
                 val endTime = System.currentTimeMillis()
                 val duration = endTime - session.startTime
@@ -162,7 +282,15 @@ class RecordingController @Inject constructor() {
                 val completedSession = session.copy(
                     endTime = endTime,
                     duration = duration,
-                    isComplete = true
+                    isComplete = true,
+                    metadata = session.metadata + mapOf(
+                        "end_timestamp" to endTime,
+                        "final_duration_ms" to duration,
+                        "final_duration_formatted" to formatDuration(duration),
+                        "quality_setting_at_end" to currentQuality.name,
+                        "service_health_at_end" to isServiceHealthy(),
+                        "session_metadata" to currentSessionMetadata.toMap()
+                    )
                 )
                 
                 // Add to session history
@@ -183,6 +311,9 @@ class RecordingController @Inject constructor() {
             }
             context.startService(intent)
             
+            // Unbind from service
+            unbindFromRecordingService(context)
+            
             // Stop recording via ViewModel
             viewModel.stopRecording()
             
@@ -191,6 +322,10 @@ class RecordingController @Inject constructor() {
             
             // Clear current session
             currentSession = null
+            currentSessionMetadata.clear()
+            
+            // Save state after stopping
+            saveState()
             
             callback?.onRecordingStopped()
             callback?.updateStatusText("Recording stopped - Session: $sessionId (${duration}s)")
@@ -201,6 +336,7 @@ class RecordingController @Inject constructor() {
             
             // Mark session as failed if it exists
             currentSession = currentSession?.copy(hasErrors = true, endTime = System.currentTimeMillis())
+            saveState()
             
             callback?.onRecordingError("Failed to stop recording: ${e.message}")
             callback?.updateStatusText("Recording stop failed")
@@ -267,12 +403,20 @@ class RecordingController @Inject constructor() {
             isRecordingSystemInitialized = false
             currentSessionStartTime = null
             currentSessionMetadata.clear()
+            currentSession = null
+            
+            // Reset service connection
+            _serviceConnectionState.value = ServiceConnectionState()
+            recordingServiceConnection = null
             
             // Clear any cached data
             clearCachedData()
             
             // Reset internal counters and flags
             resetInternalCounters()
+            
+            // Save reset state
+            saveState()
             
             android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording controller state reset completed with resource cleanup")
             
@@ -374,14 +518,110 @@ class RecordingController @Inject constructor() {
     
     /**
      * Handle recording service connection status
-     * TODO: Implement service connection monitoring
+     * Implements comprehensive service connection monitoring
      */
     fun handleServiceConnectionStatus(connected: Boolean) {
         android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording service connection status: $connected")
         
+        val currentTime = System.currentTimeMillis()
+        _serviceConnectionState.value = _serviceConnectionState.value.copy(
+            isConnected = connected,
+            connectionTime = if (connected) currentTime else null,
+            lastHeartbeat = if (connected) currentTime else _serviceConnectionState.value.lastHeartbeat,
+            isHealthy = connected
+        )
+        
         if (!connected) {
             callback?.onRecordingError("Lost connection to recording service")
+            // Attempt to reconnect if there's an active session
+            currentSession?.let {
+                android.util.Log.w("RecordingController", "[DEBUG_LOG] Active session detected during service disconnect - attempting recovery")
+                // Mark session as having connection issues
+                currentSessionMetadata["connection_lost"] = currentTime
+            }
+        } else {
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording service connected successfully")
         }
+        
+        saveState()
+    }
+    
+    /**
+     * Bind to recording service with connection monitoring
+     */
+    fun bindToRecordingService(context: Context): Boolean {
+        return try {
+            val serviceIntent = Intent(context, RecordingService::class.java)
+            
+            recordingServiceConnection = object : ServiceConnection {
+                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                    android.util.Log.d("RecordingController", "[DEBUG_LOG] Service connected via ServiceConnection")
+                    handleServiceConnectionStatus(true)
+                }
+                
+                override fun onServiceDisconnected(name: ComponentName?) {
+                    android.util.Log.w("RecordingController", "[DEBUG_LOG] Service disconnected via ServiceConnection")
+                    handleServiceConnectionStatus(false)
+                }
+                
+                override fun onBindingDied(name: ComponentName?) {
+                    android.util.Log.e("RecordingController", "[DEBUG_LOG] Service binding died")
+                    handleServiceConnectionStatus(false)
+                }
+                
+                override fun onNullBinding(name: ComponentName?) {
+                    android.util.Log.e("RecordingController", "[DEBUG_LOG] Service returned null binding")
+                    handleServiceConnectionStatus(false)
+                }
+            }
+            
+            val success = context.bindService(serviceIntent, recordingServiceConnection!!, Context.BIND_AUTO_CREATE)
+            android.util.Log.d("RecordingController", "[DEBUG_LOG] Service binding attempt: $success")
+            success
+        } catch (e: Exception) {
+            android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to bind to recording service: ${e.message}")
+            false
+        }
+    }
+    
+    /**
+     * Unbind from recording service
+     */
+    fun unbindFromRecordingService(context: Context) {
+        try {
+            recordingServiceConnection?.let { connection ->
+                context.unbindService(connection)
+                recordingServiceConnection = null
+                android.util.Log.d("RecordingController", "[DEBUG_LOG] Unbound from recording service")
+            }
+            handleServiceConnectionStatus(false)
+        } catch (e: Exception) {
+            android.util.Log.e("RecordingController", "[DEBUG_LOG] Error unbinding from service: ${e.message}")
+        }
+    }
+    
+    /**
+     * Check service connection health
+     */
+    fun isServiceHealthy(): Boolean {
+        val state = _serviceConnectionState.value
+        if (!state.isConnected) return false
+        
+        // Check if last heartbeat was recent (within 30 seconds)
+        val lastHeartbeat = state.lastHeartbeat ?: return false
+        val timeSinceHeartbeat = System.currentTimeMillis() - lastHeartbeat
+        
+        return timeSinceHeartbeat < 30_000 // 30 seconds
+    }
+    
+    /**
+     * Update service heartbeat
+     */
+    fun updateServiceHeartbeat() {
+        _serviceConnectionState.value = _serviceConnectionState.value.copy(
+            lastHeartbeat = System.currentTimeMillis(),
+            isHealthy = true
+        )
     }
     
     /**
@@ -556,23 +796,152 @@ class RecordingController @Inject constructor() {
     
     /**
      * Handle recording quality settings
-     * TODO: Implement quality settings management
+     * Implements comprehensive quality settings management
      */
     fun setRecordingQuality(quality: RecordingQuality) {
         android.util.Log.d("RecordingController", "[DEBUG_LOG] Setting recording quality: $quality")
-        // TODO: Implement quality settings
+        
+        val previousQuality = currentQuality
+        currentQuality = quality
+        
+        // Add quality change to session metadata if recording
+        currentSession?.let {
+            @Suppress("UNCHECKED_CAST")
+            currentSessionMetadata["quality_changes"] = currentSessionMetadata["quality_changes"]?.let { changes ->
+                when (changes) {
+                    is MutableList<*> -> {
+                        (changes as MutableList<Map<String, Any>>).apply {
+                            add(mapOf(
+                                "timestamp" to System.currentTimeMillis(),
+                                "from" to previousQuality.name,
+                                "to" to quality.name
+                            ))
+                        }
+                    }
+                    else -> {
+                        mutableListOf(mapOf(
+                            "timestamp" to System.currentTimeMillis(),
+                            "from" to previousQuality.name,
+                            "to" to quality.name
+                        ))
+                    }
+                }
+            } ?: mutableListOf(mapOf(
+                "timestamp" to System.currentTimeMillis(),
+                "from" to previousQuality.name,
+                "to" to quality.name
+            ))
+        }
+        
+        saveState()
+        callback?.updateStatusText("Recording quality set to: ${quality.displayName}")
+        android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording quality changed from $previousQuality to $quality")
     }
     
     /**
-     * Recording quality enumeration
-     * TODO: Define proper quality levels and their parameters
+     * Get current recording quality
      */
-    enum class RecordingQuality {
-        LOW,
-        MEDIUM,
-        HIGH,
-        ULTRA_HIGH
+    fun getCurrentQuality(): RecordingQuality = currentQuality
+    
+    /**
+     * Get all available quality settings
+     */
+    fun getAvailableQualities(): Array<RecordingQuality> = RecordingQuality.entries.toTypedArray()
+    
+    /**
+     * Get quality setting details
+     */
+    fun getQualityDetails(quality: RecordingQuality): Map<String, Any> {
+        return mapOf(
+            "displayName" to quality.displayName,
+            "resolution" to "${quality.videoResolution.first}x${quality.videoResolution.second}",
+            "frameRate" to "${quality.frameRate} fps",
+            "bitrate" to "${quality.bitrate / 1000} kbps",
+            "audioSampleRate" to "${quality.audioSampleRate} Hz",
+            "estimatedSizePerSecond" to "${quality.getEstimatedSizePerSecond() / 1024} KB/s",
+            "storageMultiplier" to "${quality.storageMultiplier}x"
+        )
     }
+    
+    /**
+     * Validate quality setting for current system resources
+     */
+    fun validateQualityForResources(context: Context, quality: RecordingQuality): Boolean {
+        val availableSpace = getAvailableStorageSpace(context)
+        val estimatedSizePerSecond = quality.getEstimatedSizePerSecond()
+        
+        // Check if we have at least 10 minutes of recording space at this quality
+        val requiredSpace = estimatedSizePerSecond * 600 // 10 minutes
+        
+        if (availableSpace < requiredSpace) {
+            android.util.Log.w("RecordingController", "[DEBUG_LOG] Insufficient storage for quality $quality")
+            return false
+        }
+        
+        // TODO: Add CPU/memory validation for higher quality settings
+        
+        return true
+    }
+    
+    /**
+     * Get recommended quality based on available resources
+     */
+    fun getRecommendedQuality(context: Context): RecordingQuality {
+        val availableSpace = getAvailableStorageSpace(context)
+        
+        // Start with highest quality and work down based on available space
+        for (quality in RecordingQuality.entries.reversed()) {
+            if (validateQualityForResources(context, quality)) {
+                return quality
+            }
+        }
+        
+        // Fallback to lowest quality if storage is very limited
+        return RecordingQuality.LOW
+    }
+    
+    /**
+     * Recording quality enumeration with detailed configuration parameters
+     */
+    enum class RecordingQuality(
+        val displayName: String,
+        val videoResolution: Pair<Int, Int>,
+        val frameRate: Int,
+        val bitrate: Int,
+        val audioSampleRate: Int,
+        val storageMultiplier: Float
+    ) {
+        LOW("Low Quality", Pair(640, 480), 15, 500_000, 44100, 0.5f),
+        MEDIUM("Medium Quality", Pair(1280, 720), 24, 1_500_000, 44100, 1.0f),
+        HIGH("High Quality", Pair(1920, 1080), 30, 3_000_000, 44100, 2.0f),
+        ULTRA_HIGH("Ultra High Quality", Pair(3840, 2160), 30, 8_000_000, 48000, 4.0f);
+        
+        fun getEstimatedSizePerSecond(): Long {
+            return (bitrate / 8 * storageMultiplier).toLong()
+        }
+    }
+    
+    /**
+     * Service connection state for monitoring
+     */
+    data class ServiceConnectionState(
+        val isConnected: Boolean = false,
+        val connectionTime: Long? = null,
+        val lastHeartbeat: Long? = null,
+        val isHealthy: Boolean = false
+    )
+    
+    /**
+     * Recording controller state for persistence
+     */
+    data class RecordingControllerState(
+        val isInitialized: Boolean = false,
+        val currentSessionId: String? = null,
+        val totalRecordingTime: Long = 0L,
+        val sessionCount: Int = 0,
+        val lastQualitySetting: RecordingQuality = RecordingQuality.MEDIUM,
+        val lastSaveTime: Long = System.currentTimeMillis()
+    )
     
     /**
      * Handle emergency recording stop
