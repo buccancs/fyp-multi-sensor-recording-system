@@ -6,8 +6,14 @@ This directory previously contained comprehensive documentation for the Multi-Se
 
 The comprehensive guides have been merged into the following main documentation files:
 
-### 📱 **UI Documentation** → [User Guide](../new_documentation/USER_GUIDE_python_desktop_controller.md)
-User interface guidance is now included in the main Python Desktop Controller user guide with enhanced practical examples and workflows.
+### 🧪 [Testing and Quality Assurance Framework](../new_documentation/README_testing_qa_framework.md)
+Complete guide to the comprehensive testing infrastructure and quality assurance processes. Includes:
+- Multi-layered testing architecture with unit, integration, performance, and resilience testing
+- Cross-platform PC-Android communication validation
+- Research-grade reliability standards and compliance procedures
+- Test automation and CI/CD
+- Test data management
+- Best practices and troubleshooting
 
 ### 📊 **Logging Documentation** → [Technical Documentation](../new_documentation/README_python_desktop_controller.md) & [Protocol Specification](../new_documentation/PROTOCOL_python_desktop_controller.md)
 Logging and monitoring information has been integrated into:
@@ -26,9 +32,20 @@ Testing framework and methodology information has been consolidated into the mai
 
 ## Getting Started
 
-1. **For UI Development**: Start with the [Python Desktop Controller User Guide](../new_documentation/USER_GUIDE_python_desktop_controller.md)
-2. **For Technical Implementation**: Reference the [Python Desktop Controller Technical Documentation](../new_documentation/README_python_desktop_controller.md)
-3. **For Protocol Details**: Follow the [Python Desktop Controller Protocol Specification](../new_documentation/PROTOCOL_python_desktop_controller.md)
+1. **For UI Development**: Start with the [PC/Android UI Guide](pc-android-ui-guide.md)
+2. **For Debugging**: Reference the [PC/Android Logging Guide](pc-android-logging-guide.md)
+3. **For Testing**: Follow the [Testing and Quality Assurance Framework](../new_documentation/TESTING_FRAMEWORK_INDEX.md)
+
+## Contributing to Documentation
+
+When updating these guides:
+
+1. Maintain the established structure and style
+2. Update all related sections when making changes
+3. Include mermaid diagrams for complex processes
+4. Add tables for reference information
+5. Keep examples current with the codebase
+6. Cross-reference related sections
 
 ## Related Documentation
 

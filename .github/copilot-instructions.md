@@ -15,6 +15,7 @@ For every significant feature, component, or module (e.g., Calibration, Shimmer 
     - Audience: Developers.
     - Goal: To explain the internal design, architecture, and implementation details of the component.
     - Content Must Include:
+        - Table of content
         - An overview of the component's purpose and its role within the overall system.
         - A breakdown of the key classes/modules involved and their responsibilities.
         - Explanation of any complex algorithms or logic (e.g., the OpenCV stereoCalibrate workflow).
@@ -25,6 +26,7 @@ For every significant feature, component, or module (e.g., Calibration, Shimmer 
     - Audience: End-users (researchers) and developers who need to use the feature.
     - Goal: To provide a practical, step-by-step guide on how to use the feature.
     - Content Must Include:
+        - Table of content
         - A "Pre-flight Checklist" of any prerequisites (e.g., "Ensure the thermal-contrast checkerboard is in view").
         - A numbered, sequential guide for using the feature from start to finish.
         - Screenshots of the UI to illustrate key steps.
@@ -35,6 +37,7 @@ For every significant feature, component, or module (e.g., Calibration, Shimmer 
     - Audience: Developers.
     - Goal: To define any specific data formats, APIs, or network messages associated with the component.
     - Content Must Include:
+        - Table of content
         - For network features, provide tables for each JSON message with columns for Field Name, Data Type, Required, and Description.
         - For data-handling features, describe the structure and format of any output files (e.g., the format of the binary file for raw radiometric frames).
         - Mermaid architecture diagrams
