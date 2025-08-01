@@ -30,6 +30,8 @@ import json
 
 # Import centralized logging
 from utils.logging_config import get_logger
+from webcam.advanced_sync_algorithms import AdaptiveSynchronizer, SynchronizationStrategy
+from webcam.cv_preprocessing_pipeline import AdvancedROIDetector, PhysiologicalSignalExtractor, ROIDetectionMethod, SignalExtractionMethod
 
 # Get logger for this module
 logger = get_logger(__name__)
@@ -127,17 +129,42 @@ class DualWebcamCapture(QThread):
         self.recording_start_time: Optional[float] = None
         self.output_directory = "recordings/dual_webcam"
         
-        # Synchronization
+        # Advanced Synchronization
         self.frame_counter = 0
         self.master_start_time = None
         self.sync_threshold_ms = 16.67  # ~1 frame at 60fps tolerance
         self.frame_sync_buffer: List[DualFrameData] = []
         self.max_sync_buffer_size = 10
         
+        # Initialize advanced synchronization algorithms
+        self.synchronizer = AdaptiveSynchronizer(
+            target_fps=preview_fps,
+            sync_threshold_ms=self.sync_threshold_ms,
+            strategy=SynchronizationStrategy.ADAPTIVE_HYBRID
+        )
+        
         # Frame processing and threading
         self.frame_lock = threading.Lock()
         self.last_frames = {'camera1': None, 'camera2': None}
         self.last_sync_quality = 1.0
+        
+        # Advanced Computer Vision Pipeline
+        self.roi_detector = AdvancedROIDetector(
+            method=ROIDetectionMethod.DNN_FACE,
+            tracking_enabled=True,
+            stability_threshold=0.8
+        )
+        
+        self.signal_extractor = PhysiologicalSignalExtractor(
+            method=SignalExtractionMethod.CHROM_METHOD,
+            sampling_rate=preview_fps,
+            signal_length_seconds=10.0
+        )
+        
+        # Physiological monitoring state
+        self.enable_physio_monitoring = False
+        self.current_roi = None
+        self.latest_physio_signal = None
         
         # Camera status tracking
         self.camera1_status = CameraStatus(camera1_index, False, 0, (0, 0), 0, None, None)
@@ -454,38 +481,30 @@ class DualWebcamCapture(QThread):
                     self.error_occurred.emit("Failed to capture frames from one or both cameras")
                     break
                 
-                # Calculate synchronization quality
-                sync_diff_ms = abs(capture_timestamp1 - capture_timestamp2) * 1000
-                sync_quality = max(0.0, 1.0 - (sync_diff_ms / self.sync_threshold_ms))
+                # Use advanced synchronization processing
+                frame_data = self._process_advanced_synchronization(
+                    frame1, frame2, capture_timestamp1, capture_timestamp2
+                )
                 
+                # Update sync quality and statistics
+                sync_quality = frame_data.sync_quality
                 if sync_quality < 0.8:
                     self.performance_stats['sync_violations'] += 1
                     
                 self.last_sync_quality = sync_quality
                 self.sync_status_changed.emit(sync_quality)
                 
-                # Create synchronized frame data
-                frame_data = DualFrameData(
-                    timestamp=current_time,
-                    frame_id=self.frame_counter,
-                    camera1_frame=frame1.copy(),
-                    camera2_frame=frame2.copy(),
-                    camera1_timestamp=capture_timestamp1,
-                    camera2_timestamp=capture_timestamp2,
-                    sync_quality=sync_quality
-                )
-                
                 # Store frames for preview
                 with self.frame_lock:
-                    self.last_frames['camera1'] = frame1.copy()
-                    self.last_frames['camera2'] = frame2.copy()
+                    self.last_frames['camera1'] = frame_data.camera1_frame.copy()
+                    self.last_frames['camera2'] = frame_data.camera2_frame.copy()
                 
                 # Write frames to video files if recording
                 if (self.is_recording and self.writer1 and self.writer2 and
                     (current_time - last_recording_time) >= self.recording_interval):
                     
-                    self.writer1.write(frame1)
-                    self.writer2.write(frame2)
+                    self.writer1.write(frame_data.camera1_frame)
+                    self.writer2.write(frame_data.camera2_frame)
                     last_recording_time = current_time
                     
                     # Update frame counters
@@ -497,8 +516,8 @@ class DualWebcamCapture(QThread):
                 if (self.is_previewing and 
                     (current_time - last_preview_time) >= self.frame_interval):
                     
-                    pixmap1 = self._frame_to_pixmap(frame1)
-                    pixmap2 = self._frame_to_pixmap(frame2)
+                    pixmap1 = self._frame_to_pixmap(frame_data.camera1_frame)
+                    pixmap2 = self._frame_to_pixmap(frame_data.camera2_frame)
                     
                     if pixmap1 and pixmap2:
                         self.dual_frame_ready.emit(pixmap1, pixmap2)
@@ -579,6 +598,86 @@ class DualWebcamCapture(QThread):
     def get_performance_stats(self) -> Dict:
         """Get performance statistics."""
         return self.performance_stats.copy()
+        
+    def get_latest_frame(self) -> Optional[DualFrameData]:
+        """Get the latest synchronized frame data."""
+        with self.frame_lock:
+            if self.frame_sync_buffer:
+                return self.frame_sync_buffer[-1]
+            return None
+            
+    def get_camera_fps(self, camera_number: int) -> float:
+        """
+        Get current FPS for specified camera.
+        
+        Args:
+            camera_number: Camera number (1 or 2)
+            
+        Returns:
+            float: Current FPS for the camera
+        """
+        if camera_number == 1:
+            return self.camera1_status.fps
+        elif camera_number == 2:
+            return self.camera2_status.fps
+        else:
+            logger.warning(f"Invalid camera number: {camera_number}")
+            return 0.0
+            
+    def start_capture(self) -> bool:
+        """
+        Start camera capture (preview mode).
+        
+        Returns:
+            bool: True if capture started successfully, False otherwise
+        """
+        try:
+            # Initialize cameras if not already done
+            if not self._initialize_cameras():
+                return False
+                
+            # Start preview mode
+            return self.start_preview()
+            
+        except Exception as e:
+            logger.error(f"Error starting capture: {e}", exc_info=True)
+            return False
+            
+    def stop_capture(self):
+        """Stop camera capture."""
+        try:
+            # Stop recording if active
+            if self.is_recording:
+                self.stop_recording()
+                
+            # Stop preview
+            self.stop_preview()
+            
+            # Release cameras
+            self._release_cameras()
+            
+        except Exception as e:
+            logger.error(f"Error stopping capture: {e}", exc_info=True)
+            
+    def _initialize_cameras(self) -> bool:
+        """Private method that calls the public initialize_cameras method."""
+        return self.initialize_cameras()
+        
+    def _release_cameras(self):
+        """Release camera resources."""
+        try:
+            if hasattr(self, 'cap1') and self.cap1:
+                self.cap1.release()
+                self.cap1 = None
+                
+            if hasattr(self, 'cap2') and self.cap2:
+                self.cap2.release()
+                self.cap2 = None
+                
+            logger.debug("Camera resources released")
+            
+        except Exception as e:
+            logger.error(f"Error releasing cameras: {e}", exc_info=True)
 
     def cleanup(self):
         """Clean up resources."""
@@ -616,6 +715,267 @@ class DualWebcamCapture(QThread):
             
         except Exception as e:
             logger.error(f"Error during cleanup: {e}")
+    
+    def enable_physiological_monitoring(self, enabled: bool = True):
+        """
+        Enable or disable physiological signal monitoring.
+        
+        Args:
+            enabled: True to enable monitoring, False to disable
+        """
+        self.enable_physio_monitoring = enabled
+        
+        if enabled:
+            logger.info("Physiological monitoring enabled")
+        else:
+            logger.info("Physiological monitoring disabled")
+            self.current_roi = None
+            self.latest_physio_signal = None
+    
+    def get_synchronization_diagnostics(self) -> Dict:
+        """
+        Get comprehensive synchronization diagnostic information.
+        
+        Returns:
+            dict: Detailed synchronization metrics and performance data
+        """
+        if hasattr(self, 'synchronizer'):
+            return self.synchronizer.get_diagnostics()
+        else:
+            return {'error': 'Synchronizer not initialized'}
+    
+    def get_roi_metrics(self) -> Dict:
+        """
+        Get current ROI detection and quality metrics.
+        
+        Returns:
+            dict: ROI detection metrics and quality assessment
+        """
+        if hasattr(self, 'roi_detector'):
+            metrics = self.roi_detector.get_metrics()
+            return {
+                'area_pixels': metrics.area_pixels,
+                'center_coordinates': metrics.center_coordinates,
+                'stability_score': metrics.stability_score,
+                'illumination_uniformity': metrics.illumination_uniformity,
+                'motion_magnitude': metrics.motion_magnitude,
+                'skin_probability': metrics.skin_probability,
+                'signal_to_noise_ratio': metrics.signal_to_noise_ratio,
+                'is_valid': metrics.is_valid,
+                'confidence_score': metrics.confidence_score,
+                'frame_count': metrics.frame_count
+            }
+        else:
+            return {'error': 'ROI detector not initialized'}
+    
+    def get_latest_physiological_signal(self) -> Optional[Dict]:
+        """
+        Get the latest extracted physiological signal with quality metrics.
+        
+        Returns:
+            dict: Latest physiological signal data and metrics, or None if not available
+        """
+        if self.latest_physio_signal is not None:
+            signal = self.latest_physio_signal
+            
+            # Calculate heart rate estimate
+            hr_estimate = signal.get_heart_rate_estimate()
+            
+            return {
+                'timestamp': signal.timestamp,
+                'signal_type': signal.signal_type,
+                'extraction_method': signal.extraction_method,
+                'signal_length': len(signal.signal_data),
+                'sampling_rate': signal.sampling_rate,
+                'snr_db': signal.snr_db,
+                'signal_quality_index': signal.signal_quality_index,
+                'motion_artifacts': signal.motion_artifacts,
+                'heart_rate_estimate_bpm': hr_estimate,
+                'preprocessing_steps': signal.preprocessing_steps,
+                'spectral_features': signal.spectral_features
+            }
+        
+        return None
+    
+    def set_synchronization_strategy(self, strategy: str):
+        """
+        Change the synchronization strategy.
+        
+        Args:
+            strategy: Strategy name ('master_slave', 'cross_corr', 'hardware_sync', 'adaptive_hybrid')
+        """
+        if hasattr(self, 'synchronizer'):
+            try:
+                sync_strategy = SynchronizationStrategy(strategy)
+                self.synchronizer.set_strategy(sync_strategy)
+                logger.info(f"Synchronization strategy changed to: {strategy}")
+            except ValueError:
+                logger.error(f"Invalid synchronization strategy: {strategy}")
+                logger.info(f"Valid strategies: {[s.value for s in SynchronizationStrategy]}")
+        else:
+            logger.error("Synchronizer not initialized")
+    
+    def reset_synchronization_metrics(self):
+        """Reset synchronization metrics and history."""
+        if hasattr(self, 'synchronizer'):
+            self.synchronizer.reset_metrics()
+        
+        # Reset local performance stats
+        self.performance_stats = {
+            'frames_processed': 0,
+            'sync_violations': 0,
+            'dropped_frames': 0,
+            'average_processing_time_ms': 0.0
+        }
+        
+        logger.info("Synchronization metrics reset")
+    
+    def export_synchronization_data(self, filepath: str) -> bool:
+        """
+        Export synchronization diagnostic data to file.
+        
+        Args:
+            filepath: Path to save the diagnostic data
+            
+        Returns:
+            bool: True if export successful, False otherwise
+        """
+        try:
+            import json
+            from datetime import datetime
+            
+            # Gather comprehensive diagnostic data
+            diagnostics = self.get_synchronization_diagnostics()
+            roi_metrics = self.get_roi_metrics()
+            physio_signal = self.get_latest_physiological_signal()
+            
+            export_data = {
+                'export_timestamp': datetime.now().isoformat(),
+                'camera_configuration': {
+                    'camera1_index': self.camera1_index,
+                    'camera2_index': self.camera2_index,
+                    'target_resolution': self.target_resolution,
+                    'recording_fps': self.recording_fps,
+                    'preview_fps': self.preview_fps
+                },
+                'synchronization_diagnostics': diagnostics,
+                'roi_metrics': roi_metrics,
+                'physiological_signal': physio_signal,
+                'performance_stats': self.performance_stats,
+                'camera_status': {
+                    'camera1': {
+                        'index': self.camera1_status.camera_index,
+                        'active': self.camera1_status.is_active,
+                        'fps': self.camera1_status.fps,
+                        'resolution': self.camera1_status.resolution,
+                        'frames_captured': self.camera1_status.frames_captured
+                    },
+                    'camera2': {
+                        'index': self.camera2_status.camera_index,
+                        'active': self.camera2_status.is_active,
+                        'fps': self.camera2_status.fps,
+                        'resolution': self.camera2_status.resolution,
+                        'frames_captured': self.camera2_status.frames_captured
+                    }
+                }
+            }
+            
+            # Write to file
+            with open(filepath, 'w') as f:
+                json.dump(export_data, f, indent=2, default=str)
+            
+            logger.info(f"Synchronization data exported to: {filepath}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to export synchronization data: {e}")
+            return False
+    
+    def _process_advanced_synchronization(self, frame1: np.ndarray, frame2: np.ndarray, 
+                                        timestamp1: float, timestamp2: float) -> DualFrameData:
+        """
+        Process frames using advanced synchronization algorithms.
+        
+        Args:
+            frame1: First camera frame
+            frame2: Second camera frame
+            timestamp1: Timestamp for frame1
+            timestamp2: Timestamp for frame2
+            
+        Returns:
+            DualFrameData: Synchronized frame data with advanced metrics
+        """
+        try:
+            # Use advanced synchronizer
+            sync_frame = self.synchronizer.synchronize_frames(
+                frame1, frame2, timestamp1, timestamp2
+            )
+            
+            # Convert to DualFrameData format
+            frame_data = DualFrameData(
+                timestamp=sync_frame.timestamp,
+                frame_id=sync_frame.frame_id,
+                camera1_frame=sync_frame.camera1_frame,
+                camera2_frame=sync_frame.camera2_frame,
+                camera1_timestamp=timestamp1,
+                camera2_timestamp=timestamp2,
+                sync_quality=sync_frame.sync_quality
+            )
+            
+            # Process physiological monitoring if enabled
+            if self.enable_physio_monitoring:
+                self._process_physiological_monitoring(frame1)
+            
+            return frame_data
+            
+        except Exception as e:
+            logger.error(f"Advanced synchronization processing failed: {e}")
+            
+            # Fallback to basic synchronization
+            sync_diff_ms = abs(timestamp1 - timestamp2) * 1000
+            sync_quality = max(0.0, 1.0 - (sync_diff_ms / self.sync_threshold_ms))
+            
+            return DualFrameData(
+                timestamp=min(timestamp1, timestamp2),
+                frame_id=self.frame_counter,
+                camera1_frame=frame1.copy(),
+                camera2_frame=frame2.copy(),
+                camera1_timestamp=timestamp1,
+                camera2_timestamp=timestamp2,
+                sync_quality=sync_quality
+            )
+    
+    def _process_physiological_monitoring(self, frame: np.ndarray):
+        """
+        Process frame for physiological signal extraction.
+        
+        Args:
+            frame: Input frame for analysis
+        """
+        try:
+            # Detect ROI in the frame
+            roi = self.roi_detector.detect_roi(frame)
+            
+            if roi is not None:
+                self.current_roi = roi
+                x, y, w, h = roi
+                
+                # Extract ROI region
+                roi_region = frame[y:y+h, x:x+w]
+                
+                if roi_region.size > 0:
+                    # Extract physiological signal
+                    physio_signal = self.signal_extractor.extract_signal(roi_region)
+                    
+                    if physio_signal is not None:
+                        # Store latest signal
+                        self.latest_physio_signal = physio_signal
+                        
+                        # Update ROI metrics in signal
+                        physio_signal.roi_metrics = self.roi_detector.get_metrics()
+            
+        except Exception as e:
+            logger.debug(f"Physiological monitoring processing failed: {e}")
 
     def __del__(self):
         """Destructor to ensure cleanup."""
@@ -633,38 +993,54 @@ class DualWebcamCapture(QThread):
             pass  # Silently ignore errors during destruction
 
 
-def test_dual_webcam_access():
-    """Test function to verify dual webcam access."""
-    logger.info("Testing dual webcam access...")
+def test_dual_webcam_access(camera_indices: List[int] = None):
+    """
+    Test function to verify dual webcam access.
+    
+    Args:
+        camera_indices: List of camera indices to test (default: [0, 1])
+        
+    Returns:
+        bool: True if both cameras are accessible, False otherwise
+    """
+    if camera_indices is None:
+        camera_indices = [0, 1]
+    
+    if len(camera_indices) != 2:
+        logger.error(f"ERROR: Expected 2 camera indices, got {len(camera_indices)}")
+        return False
+        
+    camera1_index, camera2_index = camera_indices
+    logger.info(f"Testing dual webcam access with cameras {camera1_index} and {camera2_index}...")
     
     # Test camera 1
-    cap1 = cv2.VideoCapture(0)
+    cap1 = cv2.VideoCapture(camera1_index)
     if not cap1.isOpened():
-        logger.error("ERROR: Could not open camera 1 (index 0)")
+        logger.error(f"ERROR: Could not open camera 1 (index {camera1_index})")
         return False
     
     ret1, frame1 = cap1.read()
     if ret1:
         height1, width1 = frame1.shape[:2]
-        logger.info(f"SUCCESS: Camera 1 accessible, frame size: {width1}x{height1}")
+        logger.info(f"SUCCESS: Camera {camera1_index} accessible, frame size: {width1}x{height1}")
     else:
-        logger.error("ERROR: Could not capture frame from camera 1")
+        logger.error(f"ERROR: Could not capture frame from camera {camera1_index}")
         cap1.release()
         return False
     
     # Test camera 2
-    cap2 = cv2.VideoCapture(1)
+    cap2 = cv2.VideoCapture(camera2_index)
     if not cap2.isOpened():
-        logger.error("ERROR: Could not open camera 2 (index 1)")
+        logger.error(f"ERROR: Could not open camera 2 (index {camera2_index})")
         cap1.release()
         return False
     
     ret2, frame2 = cap2.read()
     if ret2:
         height2, width2 = frame2.shape[:2]
-        logger.info(f"SUCCESS: Camera 2 accessible, frame size: {width2}x{height2}")
+        logger.info(f"SUCCESS: Camera {camera2_index} accessible, frame size: {width2}x{height2}")
     else:
-        logger.error("ERROR: Could not capture frame from camera 2")
+        logger.error(f"ERROR: Could not capture frame from camera {camera2_index}")
         cap1.release()
         cap2.release()
         return False
@@ -672,7 +1048,7 @@ def test_dual_webcam_access():
     cap1.release()
     cap2.release()
     
-    logger.info("SUCCESS: Both cameras accessible for dual recording")
+    logger.info(f"SUCCESS: Both cameras ({camera1_index}, {camera2_index}) accessible for dual recording")
     return True
 
 
