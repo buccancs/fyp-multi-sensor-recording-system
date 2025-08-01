@@ -20,6 +20,7 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 🔧 Developer Documentation
 - **[Implementation Guide](implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Complete technical implementation
+- **[Repository Component Inventory](REPOSITORY_COMPONENT_INVENTORY.md)** - Complete catalog of all features, components, and modules
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
@@ -40,6 +41,7 @@ Located in the root `docs/` directory, these documents provide high-level overvi
 | Document | Description | Audience |
 |----------|-------------|----------|
 | [README.md](../README.md) | Project overview and quick start | All users |
+| [REPOSITORY_COMPONENT_INVENTORY.md](REPOSITORY_COMPONENT_INVENTORY.md) | Complete catalog of all repository components and modules | Developers |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete API documentation | Developers |
 | [USER_GUIDE.md](USER_GUIDE.md) | Navigation architecture guide | End users |
 | [NetworkController.md](NetworkController.md) | Network controller documentation | Developers |
