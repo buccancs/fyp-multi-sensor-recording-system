@@ -115,6 +115,7 @@ object AllAndroidPermissions {
                 Manifest.permission.WRITE_CALL_LOG,
                 Manifest.permission.ADD_VOICEMAIL,
                 Manifest.permission.USE_SIP,
+                @Suppress("DEPRECATION")
                 Manifest.permission.PROCESS_OUTGOING_CALLS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.RECEIVE_SMS,
@@ -291,6 +292,7 @@ object AllAndroidPermissions {
                 Manifest.permission.WRITE_CALL_LOG,
                 Manifest.permission.ADD_VOICEMAIL,
                 Manifest.permission.USE_SIP,
+                @Suppress("DEPRECATION")
                 Manifest.permission.PROCESS_OUTGOING_CALLS,
             ),
         )

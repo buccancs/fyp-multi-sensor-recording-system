@@ -1,5 +1,7 @@
 package com.multisensor.recording.network
 
+import android.annotation.SuppressLint
+import android.os.Build
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.CoroutineScope
@@ -229,8 +231,7 @@ class JsonSocketClient
                     sendHelloMessage(
                         deviceId =
                             android.os.Build.MODEL + "_" +
-                                android.os.Build.SERIAL
-                                    .takeLast(4),
+                                getDeviceSerial().takeLast(4),
                         capabilities = listOf("rgb_video", "thermal", "shimmer"),
                     )
 
@@ -348,4 +349,22 @@ class JsonSocketClient
             } else {
                 "Disconnected"
             }
+    }
+
+    /**
+     * Get device serial number, using modern API where available
+     */
+    @SuppressLint("HardwareIds")
+    private fun getDeviceSerial(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                Build.getSerial()
+            } catch (e: SecurityException) {
+                // Fallback to ANDROID_ID or a default if permission is not granted
+                "UNKNOWN"
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            Build.SERIAL
+        }
     }

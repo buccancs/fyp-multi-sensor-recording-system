@@ -3,6 +3,7 @@ package com.multisensor.recording.controllers
 import com.multisensor.recording.util.AppLogger
 import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logE
+import com.multisensor.recording.util.NetworkUtils
 
 import android.content.Context
 import android.view.View
@@ -203,14 +204,7 @@ class NetworkController @Inject constructor() {
      * Check if network is connected
      */
     private fun isNetworkConnected(context: Context): Boolean {
-        return try {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            networkInfo?.isConnected == true
-        } catch (e: Exception) {
-            android.util.Log.e("NetworkController", "Error checking network connectivity: ${e.message}")
-            false
-        }
+        return NetworkUtils.isNetworkConnected(context)
     }
     
     /**
@@ -232,33 +226,7 @@ class NetworkController @Inject constructor() {
      * Get network type information
      */
     private fun getNetworkType(context: Context): String {
-        return try {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            
-            when {
-                networkInfo == null -> "Disconnected"
-                !networkInfo.isConnected -> "Not Connected"
-                networkInfo.type == android.net.ConnectivityManager.TYPE_WIFI -> "WiFi"
-                networkInfo.type == android.net.ConnectivityManager.TYPE_MOBILE -> {
-                    val subtype = networkInfo.subtype
-                    when (subtype) {
-                        android.telephony.TelephonyManager.NETWORK_TYPE_LTE -> "4G LTE"
-                        android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA,
-                        android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA,
-                        android.telephony.TelephonyManager.NETWORK_TYPE_HSPA -> "3G"
-                        android.telephony.TelephonyManager.NETWORK_TYPE_EDGE,
-                        android.telephony.TelephonyManager.NETWORK_TYPE_GPRS -> "2G"
-                        else -> "Mobile"
-                    }
-                }
-                networkInfo.type == android.net.ConnectivityManager.TYPE_ETHERNET -> "Ethernet"
-                else -> "Other"
-            }
-        } catch (e: Exception) {
-            android.util.Log.e("NetworkController", "Error detecting network type: ${e.message}")
-            "Unknown"
-        }
+        return NetworkUtils.getNetworkType(context)
     }
     
     /**

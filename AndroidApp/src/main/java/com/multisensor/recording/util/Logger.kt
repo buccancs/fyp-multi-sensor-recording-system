@@ -1,6 +1,8 @@
 package com.multisensor.recording.util
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -337,7 +339,13 @@ class Logger
         private fun getAppVersion(): String =
             try {
                 val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-                "${packageInfo.versionName} (${packageInfo.versionCode})"
+                val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    packageInfo.longVersionCode.toString()
+                } else {
+                    @Suppress("DEPRECATION")
+                    packageInfo.versionCode.toString()
+                }
+                "${packageInfo.versionName} ($versionCode)"
             } catch (e: Exception) {
                 "Unknown"
             }

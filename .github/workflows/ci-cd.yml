@@ -124,7 +124,7 @@ jobs:
         echo "Generating comprehensive test reports..."
       
     - name: Run Android lint
-      run: ./gradlew AndroidApp:lintDebug --stacktrace
+      run: ./gradlew AndroidApp:lint --stacktrace
       
     - name: Generate test reports
       uses: dorny/test-reporter@v1.9.1
