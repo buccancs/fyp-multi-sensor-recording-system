@@ -1,26 +1,26 @@
 # Multi-Sensor Recording System - Python Environment
-# Simplified environment configuration for cross-platform compatibility
+# Updated January 2025 with latest stable compatible versions
 
-name: thermal-env
+name: gsr-env
 
 channels:
   - conda-forge
   - defaults
 
 dependencies:
-  # Core Python
-  - python=3.9
+  # Core Python - flexible version to avoid conflicts
+  - python>=3.9,<3.13
 
-  # GUI Framework  
-  - pyqt=5.15.10
+  # GUI Framework - Latest stable PyQt5
+  - pyqt=5.15.*
   
-  # Computer Vision and Image Processing
+  # Computer Vision and Image Processing - Latest compatible versions
   - opencv
   - pillow
-  - numpy
+  - numpy>=1.26.0,<2.0.0  # Keep v1.x for OpenCV compatibility
   - scipy
 
-  # Data Analysis and Visualization
+  # Data Analysis and Visualisation
   - matplotlib
   - pandas
 
@@ -28,19 +28,26 @@ dependencies:
   - requests
   - websockets
 
-  # Testing Framework
+  # Testing Framework - Enhanced testing stack
   - pytest
   - pytest-cov
 
-  # Code Quality Tools
+  # Code Quality Tools - Latest stable
   - flake8
   - black
 
   # Development Tools
   - pip
 
-  # Pip dependencies
+  # Pip dependencies - Latest versions
   - pip:
     - pytest-mock
     - pytest-qt
     - mypy
+    - bandit
+    - memory-profiler
+    - psutil
+    - isort
+    - pre-commit
+    - sphinx
+    - sphinx-rtd-theme

@@ -175,7 +175,7 @@ class NetworkRecoveryManager @Inject constructor(
         _sessionPreservationState.value = preservationState
         currentSessionId = sessionId
         
-        AppLogger.logState(TAG, "Session state preserved for $sessionId")
+        AppLogger.i(TAG, "Session state preserved for $sessionId")
     }
 
     /**
@@ -188,7 +188,7 @@ class NetworkRecoveryManager @Inject constructor(
             val timeSinceDisconnect = System.currentTimeMillis() - preservedState.connectionLostTime
             
             if (timeSinceDisconnect < SESSION_PRESERVATION_TIMEOUT_MS) {
-                AppLogger.logState(TAG, "Restored session state for $sessionId (${timeSinceDisconnect}ms offline)")
+                AppLogger.i(TAG, "Restored session state for $sessionId (${timeSinceDisconnect}ms offline)")
                 return preservedState
             } else {
                 // Session too old, remove it
@@ -364,7 +364,7 @@ class NetworkRecoveryManager @Inject constructor(
             }
             
             if (reconnectAttempts.get() >= MAX_RECONNECT_ATTEMPTS) {
-                AppLogger.logError(TAG, "Maximum recovery attempts reached, manual intervention required")
+                AppLogger.e(TAG, "Maximum recovery attempts reached, manual intervention required")
                 isRecovering.set(false)
             }
         }
@@ -398,7 +398,7 @@ class NetworkRecoveryManager @Inject constructor(
             
             RecoveryStrategy.MANUAL_INTERVENTION -> {
                 // Notify user intervention required
-                AppLogger.logError(TAG, "Manual intervention required for network recovery")
+                AppLogger.e(TAG, "Manual intervention required for network recovery")
                 false
             }
         }
@@ -434,7 +434,7 @@ class NetworkRecoveryManager @Inject constructor(
             val preservedState = restoreSessionState(sessionId)
             if (preservedState != null) {
                 // Notify that session should be restored
-                AppLogger.logState(TAG, "Active session restored: $sessionId")
+                AppLogger.i(TAG, "Active session restored: $sessionId")
                 // This would integrate with SessionManager to actually restore the session
             }
         }
@@ -447,7 +447,8 @@ class NetworkRecoveryManager @Inject constructor(
 fun JsonSocketClient.reconnect(): Boolean {
     return try {
         disconnect()
-        connect()
+        val result = connect()
+        result is Boolean && result
     } catch (e: Exception) {
         false
     }

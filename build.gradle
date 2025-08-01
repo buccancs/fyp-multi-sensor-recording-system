@@ -3,8 +3,8 @@
 plugins {
     id 'com.android.application' version '8.7.3' apply false
     id 'com.android.library' version '8.7.3' apply false
-    id 'org.jetbrains.kotlin.android' version '2.1.0' apply false
-    id 'com.google.devtools.ksp' version '2.1.0-1.0.29' apply false
+    id 'org.jetbrains.kotlin.android' version '2.0.20' apply false
+    id 'com.google.devtools.ksp' version '2.0.20-1.0.24' apply false
     id 'com.google.dagger.hilt.android' version '2.52' apply false
 }
 
@@ -12,13 +12,13 @@ plugins {
 // =================================
 
 // Task to assemble all components (Android + Python tests)
-task assembleAll {
+tasks.register('assembleAll') {
     group = 'build'
     description = 'Builds Android APK and runs Python tests'
-    
+
     dependsOn ':AndroidApp:assembleDebug'
     dependsOn 'pythonTest'
-    
+
     doLast {
         println "✓ All components assembled successfully"
         println "  - Android APK: ${project(':AndroidApp').buildDir}/outputs/apk/debug/"
@@ -27,12 +27,12 @@ task assembleAll {
 }
 
 // Task to run Python tests via pytest
-task pythonTest(type: Exec) {
+tasks.register('pythonTest', Exec) {
     group = 'verification'
     description = 'Runs Python tests using pytest'
-    
+
     workingDir file('PythonApp')
-    
+
     // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
@@ -47,14 +47,14 @@ task pythonTest(type: Exec) {
     } else {
         commandLine pythonExe, '-m', 'pytest', 'tests/', '-v'
     }
-    
+
     // Ignore exit value to prevent build failure if tests don't exist yet
     ignoreExitValue = true
-    
+
     doFirst {
         println "Running Python tests..."
     }
-    
+
     doLast {
         if (executionResult.get().exitValue == 0) {
             println "✓ Python tests passed"
@@ -65,23 +65,23 @@ task pythonTest(type: Exec) {
 }
 
 // Task to set up Python environment
-task setupPythonEnv(type: Exec) {
+tasks.register('setupPythonEnv', Exec) {
     group = 'setup'
     description = 'Sets up Python conda environment from environment.yml'
-    
+
     workingDir file('.')
-    
+
     // Cross-platform conda command detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def condaCmd = isWindows ? 'conda.exe' : 'conda'
-    
+
     commandLine condaCmd, 'env', 'create', '-f', 'environment.yml', '--force'
     ignoreExitValue = true
-    
+
     doFirst {
         println "Setting up Python conda environment..."
     }
-    
+
     doLast {
         if (executionResult.get().exitValue == 0) {
             println "✓ Conda environment created successfully"
@@ -93,25 +93,25 @@ task setupPythonEnv(type: Exec) {
 }
 
 // Task to run code quality checks
-task codeQuality {
+tasks.register('codeQuality') {
     group = 'verification'
     description = 'Runs code quality checks for both Android and Python'
-    
+
     dependsOn ':AndroidApp:lintDebug'
     dependsOn 'pythonLint'
-    
+
     doLast {
         println "✓ Code quality checks completed"
     }
 }
 
 // Task to run Python linting
-task pythonLint(type: Exec) {
+tasks.register('pythonLint', Exec) {
     group = 'verification'
     description = 'Runs Python linting with flake8'
-    
+
     workingDir file('PythonApp')
-    
+
     // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
@@ -123,13 +123,13 @@ task pythonLint(type: Exec) {
     } else {
         commandLine pythonExe, '-m', 'flake8', 'src/', '--max-line-length=88'
     }
-    
+
     ignoreExitValue = true
-    
+
     doFirst {
         println "Running Python linting..."
     }
-    
+
     doLast {
         if (executionResult.get().exitValue == 0) {
             println "✓ Python linting passed"
@@ -140,25 +140,25 @@ task pythonLint(type: Exec) {
 }
 
 // Task to build release versions
-task buildRelease {
+tasks.register('buildRelease') {
     group = 'build'
     description = 'Builds release versions of all components'
-    
+
     dependsOn ':AndroidApp:assembleRelease'
     dependsOn 'pythonPackage'
-    
+
     doLast {
         println "✓ Release build completed"
     }
 }
 
 // Task to package Python application
-task pythonPackage(type: Exec) {
+tasks.register('pythonPackage', Exec) {
     group = 'build'
     description = 'Packages Python application using PyInstaller'
-    
+
     workingDir file('PythonApp')
-    
+
     // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
@@ -170,13 +170,13 @@ task pythonPackage(type: Exec) {
     } else {
         commandLine pythonExe, '-m', 'PyInstaller', 'src/main.py', '--onefile', '--windowed'
     }
-    
+
     ignoreExitValue = true
-    
+
     doFirst {
         println "Packaging Python application..."
     }
-    
+
     doLast {
         if (executionResult.get().exitValue == 0) {
             println "✓ Python application packaged successfully"
@@ -186,6 +186,6 @@ task pythonPackage(type: Exec) {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

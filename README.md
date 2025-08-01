@@ -57,8 +57,15 @@ conda activate thermal-env
 # Build Android APK
 ./gradlew :AndroidApp:assembleDebug
 
-# Run tests
+# Run Python tests and validations
 ./gradlew :PythonApp:runPythonTests
+
+# Test new implementations
+python PythonApp/test_calibration_implementation.py
+python PythonApp/test_shimmer_implementation.py
+
+# Run calibration system
+./gradlew :PythonApp:runCalibration
 ```
 
 ## System Architecture
@@ -233,10 +240,17 @@ graph TB
         end
         
         subgraph "Calibration System"
-            CM[CalibrationManager]
-            CP[CalibrationProcessor]
-            CR[CalibrationResult]
-            CV[OpenCV Algorithms]
+            CM[CalibrationManager<br/>Complete Implementation]
+            CP[CalibrationProcessor<br/>OpenCV Integration]
+            CR[CalibrationResult<br/>Quality Assessment]
+            CV[Computer Vision<br/>Pattern Detection]
+        end
+        
+        subgraph "Shimmer Integration"
+            SM[ShimmerManager<br/>Multi-Library Support]
+            SB[Shimmer Bluetooth<br/>Direct Connection]
+            SA[Shimmer Android<br/>Mediated Connection]
+            SD[Shimmer Data<br/>Stream Processing]
         end
         
         subgraph "Network Layer"
@@ -586,18 +600,21 @@ Example commands for specific variants:
 
 ### Android Application (Kotlin)
 - **Language**: Kotlin with Android Views and ViewBinding
-- **Camera**: Camera2 API for 4K recording and RAW capture
+- **Camera**: Camera2 API for 4K recording and RAW capture with DngCreator compatibility
 - **Networking**: OkHttp for socket communication
 - **Dependency Injection**: Hilt
 - **Concurrency**: Kotlin Coroutines
 - **Architecture**: Clean Architecture with Repository pattern
+- **Shimmer Integration**: Enhanced SDK integration with reflection-based compatibility
 
 ### Python Desktop Application
 - **Language**: Python 3.8+ with PyQt5 5.15.7 for GUI
-- **Computer Vision**: OpenCV 4.8.0.74 for camera calibration and processing
+- **Computer Vision**: OpenCV 4.8.0.74 for complete camera calibration implementation
 - **Numerical Computing**: NumPy 1.24.3 for data processing
 - **Networking**: WebSockets and Requests for communication
 - **Image Processing**: Pillow for image manipulation
+- **Bluetooth Integration**: Multi-library support (pyshimmer, bluetooth, pybluez)
+- **Data Export**: CSV and JSON formats with session management
 
 ### Build System
 - **Primary Build Tool**: Gradle 8.4 with multi-project setup
@@ -607,20 +624,25 @@ Example commands for specific variants:
 ## Key Features
 
 ### Android Application Features
-- 4K RGB video recording with simultaneous RAW image capture
-- Thermal camera integration using Topdon SDK for thermal imaging
-- Shimmer3 GSR+ sensor communication via Bluetooth for physiological data
-- Real-time preview streaming to PC controller for monitoring
-- Socket-based remote control interface for synchronized operation
-- Local data storage with comprehensive session management
+- **4K RGB video recording** with simultaneous RAW image capture using Camera2 API
+- **Thermal camera integration** using Topdon SDK for thermal imaging with USB-C connectivity
+- **Shimmer3 GSR+ sensor communication** via Bluetooth with enhanced sampling rate configuration
+- **Real-time preview streaming** to PC controller for monitoring with adaptive frame rates
+- **Socket-based remote control** interface for synchronized operation across multiple devices
+- **Local data storage** with comprehensive session management and metadata tracking
+- **DngCreator RAW processing** with API compatibility fixes for Android 21+ support
+- **Enhanced UI feedback** with session status indicators and improved error handling
 
 ### Desktop Controller Features  
-- PyQt5 GUI with real-time device status monitoring across all sensors
-- Comprehensive recording control interface with start/stop/calibration functions
-- USB webcam capture and recording for stationary high-quality video
-- Advanced camera calibration algorithms for intrinsic and extrinsic parameters
-- Stimulus presentation system for controlled experimental paradigms
-- Data synchronization and export tools for multi-modal data analysis
+- **PyQt5 GUI** with real-time device status monitoring across all sensors
+- **Comprehensive recording control** interface with start/stop/calibration functions
+- **USB webcam capture** and recording for stationary high-quality video
+- **Complete camera calibration system** with OpenCV-based intrinsic and extrinsic parameter calculation
+- **Shimmer Bluetooth integration** with direct pyshimmer device connections and data streaming
+- **Multi-library fallback support** for Shimmer connectivity (pyshimmer, bluetooth, pybluez)
+- **Calibration quality assessment** with pattern detection and coverage analysis
+- **Stimulus presentation system** for controlled experimental paradigms
+- **Data synchronization and export** tools for multi-modal data analysis
 
 ## Configuration
 
@@ -676,6 +698,12 @@ Run the validation script for comprehensive environment checking:
 - **Architecture Details**: See `docs/architecture/` for detailed system design
 - **API Documentation**: Generated docs available in `docs/generated_docs/`
 - **Development Guidelines**: See `docs/development/` for coding standards
+- **[Implementation Completion Report](docs/IMPLEMENTATION_COMPLETION_REPORT.md)**: Technical details of completed implementations
+
+### New Feature Documentation
+- **[API Reference](docs/API_REFERENCE.md)**: Comprehensive API documentation for CalibrationManager, ShimmerManager, and Android enhancements
+- **[User Guide](docs/USER_GUIDE.md)**: Step-by-step guides for camera calibration and Shimmer sensor integration
+- **[Testing Guide](docs/USER_GUIDE.md#testing)**: Instructions for testing new implementations
 
 ### Data Management
 - **[Data Storage Guide](docs/DATA_STORAGE_QUICK_REFERENCE.md)**: Quick reference for data organization
@@ -766,6 +794,58 @@ tools/development/setup_dev_env.ps1
 tools/development/setup.sh
 ```
 
+## 🎯 Key Implemented Features
+
+### Camera Calibration System
+The calibration system provides comprehensive OpenCV-based camera calibration:
+
+```bash
+# Run calibration tests and demonstrations
+./gradlew PythonApp:runCalibration
+python PythonApp/test_calibration_implementation.py
+```
+
+**Features:**
+- **Pattern Detection**: Chessboard and circle grid detection with sub-pixel accuracy
+- **Single Camera Calibration**: Intrinsic parameter calculation with RMS error analysis  
+- **Stereo Calibration**: RGB-thermal camera alignment with rotation/translation matrices
+- **Quality Assessment**: Coverage analysis with calibration quality metrics and recommendations
+- **Data Persistence**: JSON-based save/load with metadata and parameter validation
+
+### Shimmer Sensor Integration
+The Shimmer system provides comprehensive Bluetooth sensor connectivity:
+
+```bash
+# Test Shimmer integration
+python PythonApp/test_shimmer_implementation.py
+```
+
+**Features:**
+- **Multi-Library Support**: Fallback support for pyshimmer, bluetooth, and pybluez libraries
+- **Device Discovery**: Bluetooth scanning with automatic device detection and pairing
+- **Direct Connections**: Full pyshimmer integration with serial port detection
+- **Data Streaming**: Real-time sensor data with callback system and queue management
+- **Session Management**: Session-based data organization with CSV export
+- **Error Handling**: Graceful degradation when optional libraries are unavailable
+
+### Android Compatibility Enhancements
+Recent Android improvements include:
+
+**DngCreator Support:**
+- Reflection-based API compatibility for Android 21+ requirements
+- Proper resource management with comprehensive cleanup
+- Graceful degradation with informative error messages
+
+**Shimmer Configuration:**
+- Enhanced sampling rate configuration with reflection-based method detection
+- SDK version compatibility handling
+- Robust error recovery for missing SDK methods
+
+**UI Improvements:**
+- Enhanced SessionInfo display with status indicators and emojis
+- Improved error state management with proper user feedback
+- Better connection feedback during device operations
+
 ### Python Dependencies
 The Python environment is managed automatically by Gradle. Dependencies are specified in `PythonApp/build.gradle`:
 
@@ -780,6 +860,16 @@ python {
 }
 ```
 
+### Optional Dependencies for Enhanced Features
+The system includes optional dependencies that enable advanced functionality:
+
+- **pyshimmer**: For direct Shimmer sensor connections (auto-detected)
+- **bluetooth/pybluez**: Alternative Bluetooth libraries for Shimmer connectivity
+- **OpenCV extras**: Additional computer vision algorithms for calibration
+- **psutil**: System monitoring for performance optimization
+
+The system gracefully handles missing optional dependencies and provides informative error messages when features are unavailable.
+
 ### Android Configuration
 Key Android settings in `AndroidApp/build.gradle`:
 - **Compile SDK:** 34
@@ -791,12 +881,44 @@ Key Android settings in `AndroidApp/build.gradle`:
 
 ### Running Tests
 ```bash
+# Validate complete system functionality
+./gradlew build
+
+# Test calibration implementation
+python PythonApp/test_calibration_implementation.py
+
+# Test Shimmer integration
+python PythonApp/test_shimmer_implementation.py
+
 # Validate recorded sessions
 python tools/validate_data_schemas.py --all-sessions
 
 # Check specific session  
 python tools/validate_data_schemas.py --session PythonApp/recordings/session_20250731_143022
 ```
+
+### Implementation Testing
+The system includes comprehensive testing for all major components:
+
+**Calibration Testing:**
+- Pattern detection validation with various calibration boards
+- Single camera calibration accuracy testing
+- Stereo calibration validation with synthetic and real data
+- Quality assessment algorithm verification
+- Data persistence and loading validation
+
+**Shimmer Integration Testing:**
+- Multi-library fallback testing (pyshimmer, bluetooth, pybluez)
+- Device discovery and connection validation
+- Data streaming accuracy and performance testing
+- Session management and CSV export verification
+- Error handling with missing dependencies
+
+**Android Compatibility Testing:**
+- DngCreator reflection-based implementation testing
+- Sampling rate configuration across different SDK versions
+- UI component validation with error state management
+- SessionInfo display and status indicator testing
 
 ## Contributing
 

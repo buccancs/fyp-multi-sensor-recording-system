@@ -89,6 +89,42 @@ data class SessionInfo(
     }
 
     /**
+     * Check if session is completed (has end time)
+     */
+    fun isCompleted(): Boolean = endTime > 0L
+
+    /**
+     * Check if session has an error
+     */
+    fun hasError(): Boolean = errorOccurred
+
+    /**
+     * Check if session is valid (has required data)
+     */
+    fun isValid(): Boolean = isCompleted() && !hasError() && sessionId.isNotEmpty()
+
+    /**
+     * Get thermal frame rate (frames per second)
+     */
+    fun getThermalFrameRate(): Double {
+        if (thermalFrameCount == 0L || !isCompleted()) return 0.0
+        val durationSeconds = getDurationMs() / 1000.0
+        return if (durationSeconds > 0) thermalFrameCount / durationSeconds else 0.0
+    }
+
+    /**
+     * Get formatted session summary for display
+     */
+    fun getSessionSummary(): String {
+        return buildString {
+            append("Duration: ${getDurationMs() / 1000.0}s")
+            if (videoEnabled) append(", Video: Enabled")
+            if (thermalEnabled) append(", Thermal: ${getThermalFrameRate()} fps")
+            if (rawEnabled) append(", Raw: ${getRawImageCount()} files")
+        }
+    }
+
+    /**
      * Get summary string for logging
      */
     fun getSummary(): String =

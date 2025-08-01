@@ -10,8 +10,11 @@ import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.Image
 import android.media.ImageReader
 import android.media.MediaRecorder
-// import android.media.DngCreator // TODO: Fix DngCreator import issue - API compatibility problem
+// DngCreator import - conditionally import based on API availability
+import androidx.annotation.RequiresApi
 import android.os.Build
+// DngCreator only available from API 21+
+// import android.media.DngCreator
 import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
@@ -1304,8 +1307,6 @@ class CameraRecorder
             characteristics: CameraCharacteristics,
             sessionInfo: SessionInfo,
         ) = withContext(Dispatchers.IO) {
-            // TODO: DngCreator implementation temporarily disabled due to API compatibility issue
-            // var dngCreator: DngCreator? = null
             var outputStream: FileOutputStream? = null
 
             try {
@@ -1314,31 +1315,52 @@ class CameraRecorder
                 val dngFile = generateRawFilePath(sessionInfo.sessionId, rawCaptureCount)
 
                 logger.info("Processing RAW image to DNG: ${dngFile.name}")
-                logger.warning("DngCreator temporarily disabled - RAW processing not available")
 
-                // TODO: Uncomment when DngCreator is available
-                // Create DngCreator with camera characteristics and capture result
-                // dngCreator = DngCreator(characteristics, captureResult)
+                // Check if DngCreator is available (API 21+) and handle via reflection
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    try {
+                        // Use reflection to avoid compile-time dependency on DngCreator
+                        val dngCreatorClass = Class.forName("android.media.DngCreator")
+                        val constructor = dngCreatorClass.getConstructor(
+                            CameraCharacteristics::class.java,
+                            TotalCaptureResult::class.java
+                        )
+                        val dngCreator = constructor.newInstance(characteristics, captureResult)
 
-                // Set orientation if available
-                val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
-                if (sensorOrientation != null) {
-                    // TODO: Uncomment when DngCreator is available
-                    // dngCreator.setOrientation(sensorOrientation)
-                    logger.debug("DNG orientation would be set to: $sensorOrientation degrees")
+                        // Set orientation if available
+                        val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
+                        if (sensorOrientation != null) {
+                            val setOrientationMethod = dngCreatorClass.getMethod("setOrientation", Int::class.java)
+                            setOrientationMethod.invoke(dngCreator, sensorOrientation)
+                            logger.debug("DNG orientation set to: $sensorOrientation degrees")
+                        }
+
+                        // Create output stream and write DNG
+                        outputStream = FileOutputStream(dngFile)
+                        val writeImageMethod = dngCreatorClass.getMethod("writeImage", 
+                            java.io.OutputStream::class.java, Image::class.java)
+                        writeImageMethod.invoke(dngCreator, outputStream, image)
+
+                        // Close DngCreator
+                        val closeMethod = dngCreatorClass.getMethod("close")
+                        closeMethod.invoke(dngCreator)
+
+                        // Update session info with successful processing
+                        sessionInfo.addRawFile(dngFile.absolutePath)
+                        logger.info("DNG file created successfully: ${dngFile.absolutePath}")
+                        logger.debug("Total RAW images in session: ${sessionInfo.getRawImageCount()}")
+                        
+                    } catch (e: ClassNotFoundException) {
+                        logger.warning("DngCreator class not found - likely a build environment issue")
+                        sessionInfo.markError("DNG processing: DngCreator class not available")
+                    } catch (e: ReflectiveOperationException) {
+                        logger.warning("DngCreator reflection error: ${e.message}")
+                        sessionInfo.markError("DNG processing: Reflection error")
+                    }
+                } else {
+                    logger.warning("DngCreator not available on API level ${Build.VERSION.SDK_INT} (requires API 21+)")
+                    sessionInfo.markError("DNG processing requires API 21+")
                 }
-
-                // TODO: Uncomment when DngCreator is available
-                // Create output stream and write DNG
-                // outputStream = FileOutputStream(dngFile)
-                // dngCreator.writeImage(outputStream, image)
-
-                // For now, just mark as processed without actual DNG creation
-                sessionInfo.addRawFile(dngFile.absolutePath)
-                sessionInfo.markError("DNG processing temporarily unavailable - API compatibility issue")
-
-                logger.info("RAW image processing placeholder completed: ${dngFile.name}")
-                logger.debug("Total RAW images in session: ${sessionInfo.getRawImageCount()}")
             } catch (e: Exception) {
                 logger.error("Failed to process RAW image to DNG", e)
                 sessionInfo.markError("DNG processing failed: ${e.message}")
@@ -1346,8 +1368,7 @@ class CameraRecorder
                 // Clean up resources
                 try {
                     outputStream?.close()
-                    // TODO: Uncomment when DngCreator is available
-                    // dngCreator?.close()
+                    // DngCreator is closed in the reflection block above
                     image.close()
                 } catch (e: Exception) {
                     logger.warning("Error closing DNG resources", e)

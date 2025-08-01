@@ -1,301 +1,299 @@
 package com.multisensor.recording.ui
 
-import org.junit.Test
-import org.junit.Assert.*
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.shouldBe
 
 /**
- * Unit tests for MainUiState computed properties and behavior
+ * Unit tests for MainUiState computed properties and behavior using Kotest
  * 
  * These tests ensure that the centralized UI state management works correctly
  * and that computed properties return expected values based on state combinations.
  */
-class MainUiStateTest {
-
-    @Test
-    fun `canStartRecording returns true when system is ready and not recording`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            isLoadingRecording = false,
-            isPcConnected = true
-        )
-
-        // When & Then
-        assertTrue("[DEBUG_LOG] Should be able to start recording when system is ready", state.canStartRecording)
-    }
-
-    @Test
-    fun `canStartRecording returns false when not initialized`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = false,
-            isRecording = false,
-            isLoadingRecording = false,
-            isPcConnected = true
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to start recording when not initialized", state.canStartRecording)
-    }
-
-    @Test
-    fun `canStartRecording returns false when already recording`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = true,
-            isLoadingRecording = false,
-            isPcConnected = true
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to start recording when already recording", state.canStartRecording)
-    }
-
-    @Test
-    fun `canStartRecording returns false when loading`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            isLoadingRecording = true,
-            isPcConnected = true
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to start recording when loading", state.canStartRecording)
-    }
-
-    @Test
-    fun `canStartRecording returns true with manual controls when PC not connected`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            isLoadingRecording = false,
-            isPcConnected = false,
-            showManualControls = true
-        )
-
-        // When & Then
-        assertTrue("[DEBUG_LOG] Should be able to start recording with manual controls", state.canStartRecording)
-    }
-
-    @Test
-    fun `canStopRecording returns true when recording and not loading`() {
-        // Given
-        val state = MainUiState(
-            isRecording = true,
-            isLoadingRecording = false
-        )
-
-        // When & Then
-        assertTrue("[DEBUG_LOG] Should be able to stop recording when recording", state.canStopRecording)
-    }
-
-    @Test
-    fun `canStopRecording returns false when not recording`() {
-        // Given
-        val state = MainUiState(
-            isRecording = false,
-            isLoadingRecording = false
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to stop recording when not recording", state.canStopRecording)
-    }
-
-    @Test
-    fun `canStopRecording returns false when loading`() {
-        // Given
-        val state = MainUiState(
-            isRecording = true,
-            isLoadingRecording = true
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to stop recording when loading", state.canStopRecording)
-    }
-
-    @Test
-    fun `canRunCalibration returns true when system ready and not busy`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            isCalibrationRunning = false,
-            isLoadingCalibration = false
-        )
-
-        // When & Then
-        assertTrue("[DEBUG_LOG] Should be able to run calibration when system is ready", state.canRunCalibration)
-    }
-
-    @Test
-    fun `canRunCalibration returns false when recording`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = true,
-            isCalibrationRunning = false,
-            isLoadingCalibration = false
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to run calibration when recording", state.canRunCalibration)
-    }
-
-    @Test
-    fun `canRunCalibration returns false when calibration already running`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            isCalibrationRunning = true,
-            isLoadingCalibration = false
-        )
-
-        // When & Then
-        assertFalse("[DEBUG_LOG] Should not be able to run calibration when already running", state.canRunCalibration)
-    }
-
-    @Test
-    fun `systemHealthStatus returns INITIALIZING when not initialized`() {
-        // Given
-        val state = MainUiState(isInitialized = false)
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] System health should be INITIALIZING", 
-            SystemHealthStatus.INITIALIZING, state.systemHealthStatus)
-    }
-
-    @Test
-    fun `systemHealthStatus returns ERROR when error message present`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            errorMessage = "Test error"
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] System health should be ERROR when error present", 
-            SystemHealthStatus.ERROR, state.systemHealthStatus)
-    }
-
-    @Test
-    fun `systemHealthStatus returns RECORDING when recording`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = true,
-            errorMessage = null
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] System health should be RECORDING when recording", 
-            SystemHealthStatus.RECORDING, state.systemHealthStatus)
-    }
-
-    @Test
-    fun `systemHealthStatus returns READY when PC and sensors connected`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            errorMessage = null,
-            isPcConnected = true,
-            isShimmerConnected = true
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] System health should be READY when all connected", 
-            SystemHealthStatus.READY, state.systemHealthStatus)
-    }
-
-    @Test
-    fun `systemHealthStatus returns PARTIAL_CONNECTION when only PC connected`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            errorMessage = null,
-            isPcConnected = true,
-            isShimmerConnected = false,
-            isThermalConnected = false
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] System health should be PARTIAL_CONNECTION", 
-            SystemHealthStatus.PARTIAL_CONNECTION, state.systemHealthStatus)
-    }
-
-    @Test
-    fun `systemHealthStatus returns DISCONNECTED when nothing connected`() {
-        // Given
-        val state = MainUiState(
-            isInitialized = true,
-            isRecording = false,
-            errorMessage = null,
-            isPcConnected = false,
-            isShimmerConnected = false,
-            isThermalConnected = false
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] System health should be DISCONNECTED", 
-            SystemHealthStatus.DISCONNECTED, state.systemHealthStatus)
-    }
-
-    @Test
-    fun `battery status enum values are correct`() {
-        // Test all battery status values
-        val statuses = BatteryStatus.values()
+class MainUiStateTest : BehaviorSpec({
+    
+    given("MainUiState with various configurations") {
         
-        assertTrue("[DEBUG_LOG] Should contain UNKNOWN status", statuses.contains(BatteryStatus.UNKNOWN))
-        assertTrue("[DEBUG_LOG] Should contain CHARGING status", statuses.contains(BatteryStatus.CHARGING))
-        assertTrue("[DEBUG_LOG] Should contain DISCHARGING status", statuses.contains(BatteryStatus.DISCHARGING))
-        assertTrue("[DEBUG_LOG] Should contain NOT_CHARGING status", statuses.contains(BatteryStatus.NOT_CHARGING))
-        assertTrue("[DEBUG_LOG] Should contain FULL status", statuses.contains(BatteryStatus.FULL))
+        `when`("system is ready and not recording") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                isLoadingRecording = false,
+                isPcConnected = true
+            )
+            
+            then("should be able to start recording") {
+                state.canStartRecording shouldBe true
+            }
+        }
+
+        
+        `when`("system is not initialized") {
+            val state = MainUiState(
+                isInitialized = false,
+                isRecording = false,
+                isLoadingRecording = false,
+                isPcConnected = true
+            )
+            
+            then("should not be able to start recording") {
+                state.canStartRecording shouldBe false
+            }
+        }
+        
+        `when`("system is already recording") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = true,
+                isLoadingRecording = false,
+                isPcConnected = true
+            )
+            
+            then("should not be able to start recording again") {
+                state.canStartRecording shouldBe false
+            }
+        }
+        
+        `when`("system is loading") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                isLoadingRecording = true,
+                isPcConnected = true
+            )
+            
+            then("should not be able to start recording while loading") {
+                state.canStartRecording shouldBe false
+            }
+        }
+        
+        `when`("PC is not connected but manual controls are shown") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                isLoadingRecording = false,
+                isPcConnected = false,
+                showManualControls = true
+            )
+            
+            then("should be able to start recording with manual controls") {
+                state.canStartRecording shouldBe true
+            }
+        }
     }
-
-    @Test
-    fun `shimmer device info data class works correctly`() {
-        // Given
-        val deviceInfo = ShimmerDeviceInfo(
-            deviceName = "Shimmer3-ABC123",
-            macAddress = "00:11:22:33:44:55",
-            isConnected = true,
-            signalStrength = -65,
-            firmwareVersion = "1.2.3"
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] Device name should match", "Shimmer3-ABC123", deviceInfo.deviceName)
-        assertEquals("[DEBUG_LOG] MAC address should match", "00:11:22:33:44:55", deviceInfo.macAddress)
-        assertTrue("[DEBUG_LOG] Should be connected", deviceInfo.isConnected)
-        assertEquals("[DEBUG_LOG] Signal strength should match", -65, deviceInfo.signalStrength)
-        assertEquals("[DEBUG_LOG] Firmware version should match", "1.2.3", deviceInfo.firmwareVersion)
+    
+    given("MainUiState for stopping recording") {
+        
+        `when`("system is recording and not loading") {
+            val state = MainUiState(
+                isRecording = true,
+                isLoadingRecording = false
+            )
+            
+            then("should be able to stop recording") {
+                state.canStopRecording shouldBe true
+            }
+        }
+        
+        `when`("system is not recording") {
+            val state = MainUiState(
+                isRecording = false,
+                isLoadingRecording = false
+            )
+            
+            then("should not be able to stop recording when not recording") {
+                state.canStopRecording shouldBe false
+            }
+        }
+        
+        `when`("system is loading") {
+            val state = MainUiState(
+                isRecording = true,
+                isLoadingRecording = true
+            )
+            
+            then("should not be able to stop recording while loading") {
+                state.canStopRecording shouldBe false
+            }
+        }
     }
-
-    @Test
-    fun `session display info data class works correctly`() {
-        // Given
-        val sessionInfo = SessionDisplayInfo(
-            sessionId = "session_123",
-            startTime = 1640995200000L, // 2022-01-01 00:00:00
-            duration = 3661000L, // 1h 1m 1s
-            deviceCount = 3,
-            recordingMode = "multi_sensor",
-            status = "completed"
-        )
-
-        // When & Then
-        assertEquals("[DEBUG_LOG] Session ID should match", "session_123", sessionInfo.sessionId)
-        assertEquals("[DEBUG_LOG] Start time should match", 1640995200000L, sessionInfo.startTime)
-        assertEquals("[DEBUG_LOG] Duration should match", 3661000L, sessionInfo.duration)
-        assertEquals("[DEBUG_LOG] Device count should match", 3, sessionInfo.deviceCount)
-        assertEquals("[DEBUG_LOG] Recording mode should match", "multi_sensor", sessionInfo.recordingMode)
-        assertEquals("[DEBUG_LOG] Status should match", "completed", sessionInfo.status)
+    
+    given("MainUiState for calibration operations") {
+        
+        `when`("system is ready and not busy") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                isCalibrationRunning = false,
+                isLoadingCalibration = false
+            )
+            
+            then("should be able to run calibration") {
+                state.canRunCalibration shouldBe true
+            }
+        }
+        
+        `when`("system is recording") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = true,
+                isCalibrationRunning = false,
+                isLoadingCalibration = false
+            )
+            
+            then("should not be able to run calibration while recording") {
+                state.canRunCalibration shouldBe false
+            }
+        }
+        
+        `when`("calibration is already running") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                isCalibrationRunning = true,
+                isLoadingCalibration = false
+            )
+            
+            then("should not be able to run calibration again") {
+                state.canRunCalibration shouldBe false
+            }
+        }
     }
-}
+    
+    given("MainUiState system health status") {
+        
+        `when`("system is not initialized") {
+            val state = MainUiState(isInitialized = false)
+            
+            then("should return INITIALIZING status") {
+                state.systemHealthStatus shouldBe SystemHealthStatus.INITIALIZING
+            }
+        }
+        
+        `when`("error message is present") {
+            val state = MainUiState(
+                isInitialized = true,
+                errorMessage = "Test error"
+            )
+            
+            then("should return ERROR status") {
+                state.systemHealthStatus shouldBe SystemHealthStatus.ERROR
+            }
+        }
+        
+        `when`("system is recording") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = true,
+                errorMessage = null
+            )
+            
+            then("should return RECORDING status") {
+                state.systemHealthStatus shouldBe SystemHealthStatus.RECORDING
+            }
+        }
+        
+        `when`("PC and sensors are connected") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                errorMessage = null,
+                isPcConnected = true,
+                isShimmerConnected = true
+            )
+            
+            then("should return READY status") {
+                state.systemHealthStatus shouldBe SystemHealthStatus.READY
+            }
+        }
+        
+        `when`("only PC is connected") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                errorMessage = null,
+                isPcConnected = true,
+                isShimmerConnected = false,
+                isThermalConnected = false
+            )
+            
+            then("should return PARTIAL_CONNECTION status") {
+                state.systemHealthStatus shouldBe SystemHealthStatus.PARTIAL_CONNECTION
+            }
+        }
+        
+        `when`("nothing is connected") {
+            val state = MainUiState(
+                isInitialized = true,
+                isRecording = false,
+                errorMessage = null,
+                isPcConnected = false,
+                isShimmerConnected = false,
+                isThermalConnected = false
+            )
+            
+            then("should return DISCONNECTED status") {
+                state.systemHealthStatus shouldBe SystemHealthStatus.DISCONNECTED
+            }
+        }
+    }
+    
+    given("BatteryStatus enum") {
+        
+        `when`("checking all enum values") {
+            val statuses = BatteryStatus.values()
+            
+            then("should contain all expected statuses") {
+                statuses shouldContain BatteryStatus.UNKNOWN
+                statuses shouldContain BatteryStatus.CHARGING
+                statuses shouldContain BatteryStatus.DISCHARGING
+                statuses shouldContain BatteryStatus.NOT_CHARGING
+                statuses shouldContain BatteryStatus.FULL
+            }
+        }
+    }
+    
+    given("ShimmerDeviceInfo data class") {
+        
+        `when`("creating device info with valid data") {
+            val deviceInfo = ShimmerDeviceInfo(
+                deviceName = "Shimmer3-ABC123",
+                macAddress = "00:11:22:33:44:55",
+                isConnected = true,
+                signalStrength = -65,
+                firmwareVersion = "1.2.3"
+            )
+            
+            then("should have correct properties") {
+                deviceInfo.deviceName shouldBe "Shimmer3-ABC123"
+                deviceInfo.macAddress shouldBe "00:11:22:33:44:55"
+                deviceInfo.isConnected shouldBe true
+                deviceInfo.signalStrength shouldBe -65
+                deviceInfo.firmwareVersion shouldBe "1.2.3"
+            }
+        }
+    }
+    
+    given("SessionDisplayInfo data class") {
+        
+        `when`("creating session info with valid data") {
+            val sessionInfo = SessionDisplayInfo(
+                sessionId = "session_123",
+                startTime = 1640995200000L, // 2022-01-01 00:00:00
+                duration = 3661000L, // 1h 1m 1s
+                deviceCount = 3,
+                recordingMode = "multi_sensor",
+                status = "completed"
+            )
+            
+            then("should have correct properties") {
+                sessionInfo.sessionId shouldBe "session_123"
+                sessionInfo.startTime shouldBe 1640995200000L
+                sessionInfo.duration shouldBe 3661000L
+                sessionInfo.deviceCount shouldBe 3
+                sessionInfo.recordingMode shouldBe "multi_sensor"
+                sessionInfo.status shouldBe "completed"
+            }
+        }
+    }
+})

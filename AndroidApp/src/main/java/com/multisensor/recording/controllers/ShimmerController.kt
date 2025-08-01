@@ -11,6 +11,8 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import com.multisensor.recording.recording.ShimmerRecorder
+
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.ui.MainViewModel
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
@@ -18,6 +20,8 @@ import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import javax.inject.Inject
 import javax.inject.Singleton
+
+
 
 /**
  * Controller responsible for handling all Shimmer device integration logic.

@@ -1,6 +1,7 @@
 package com.multisensor.recording.ui
 
 import android.content.Context
+import android.view.TextureView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.viewModelScope
 import androidx.test.core.app.ApplicationProvider
@@ -46,6 +47,7 @@ class MainViewModelEnhancedTest {
     @MockK private lateinit var shimmerRecorder: ShimmerRecorder
     @MockK private lateinit var sessionManager: SessionManager
     @MockK private lateinit var logger: Logger
+    @MockK private lateinit var mockTextureView: TextureView
 
     private lateinit var context: Context
     private lateinit var viewModel: MainViewModelEnhanced
@@ -74,12 +76,12 @@ class MainViewModelEnhancedTest {
     @Test
     fun `initializeSystemEnhanced should update UI state correctly on success`() = testDispatcher.runBlockingTest {
         // Given
-        coEvery { cameraRecorder.initialize() } returns true
+        coEvery { cameraRecorder.initialize(any()) } returns true
         coEvery { thermalRecorder.initialize() } returns true
         coEvery { shimmerRecorder.initialize() } returns true
 
         // When
-        viewModel.initializeSystemEnhanced()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // Then
         val finalState = viewModel.uiState.first()
@@ -92,12 +94,12 @@ class MainViewModelEnhancedTest {
     @Test
     fun `initializeSystemEnhanced should handle camera initialization failure`() = testDispatcher.runBlockingTest {
         // Given
-        coEvery { cameraRecorder.initialize() } returns false
+        coEvery { cameraRecorder.initialize(any()) } returns false
         coEvery { thermalRecorder.initialize() } returns true
         coEvery { shimmerRecorder.initialize() } returns true
 
         // When
-        viewModel.initializeSystemEnhanced()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // Then
         val finalState = viewModel.uiState.first()
@@ -131,7 +133,7 @@ class MainViewModelEnhancedTest {
         }
         
         // Set up initialized state
-        viewModel.initializeSystemEnhanced()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // When
         viewModel.startRecordingEnhanced()
@@ -150,7 +152,7 @@ class MainViewModelEnhancedTest {
         every { sessionManager.stopCurrentSession() } returns true
         
         // Set up recording state
-        viewModel.initializeSystemEnhanced()
+        viewModel.initializeSystemEnhanced(mockTextureView)
         viewModel.startRecordingEnhanced()
 
         // When
@@ -168,7 +170,7 @@ class MainViewModelEnhancedTest {
     @Test
     fun `clearErrorDialog should reset error state`() = testDispatcher.runBlockingTest {
         // Given - set up error state
-        viewModel.initializeSystemEnhanced() // This might set an error
+        viewModel.initializeSystemEnhanced(mockTextureView) // This might set an error
 
         // When
         viewModel.clearErrorDialog()
@@ -191,16 +193,15 @@ class MainViewModelEnhancedTest {
 
     @Test
     fun `connection monitoring should update connection states`() = testDispatcher.runBlockingTest {
-        // Given
-        every { sessionManager.isPcConnected() } returns true
-        every { shimmerRecorder.isConnected() } returns true
-        every { thermalRecorder.isConnected() } returns false
-
+        // Given - Setup test with mocked dependencies
+        // Note: Removed direct calls to private properties/methods
+        
         // The connection monitoring runs in background coroutines
         // In real tests, you would advance the test dispatcher time
         // to trigger the monitoring updates
         
         assertThat(viewModel).isNotNull()
+    }
     }
 
     @Test
@@ -222,10 +223,10 @@ class MainViewModelEnhancedTest {
     @Test
     fun `error handling should provide user friendly messages`() = testDispatcher.runBlockingTest {
         // Given
-        coEvery { cameraRecorder.initialize() } throws SecurityException("Camera permission required")
+        coEvery { cameraRecorder.initialize(any()) } throws SecurityException("Camera permission required")
 
         // When
-        viewModel.initializeSystemEnhanced()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // Then
         val finalState = viewModel.uiState.first()
@@ -249,13 +250,11 @@ class MainViewModelEnhancedTest {
 
     @Test
     fun `device count calculation should be accurate`() = testDispatcher.runBlockingTest {
-        // Given - mock connection states
-        every { sessionManager.isPcConnected() } returns true
-        every { shimmerRecorder.isConnected() } returns true  
-        every { thermalRecorder.isConnected() } returns true
+        // Given - Setup test with mocked dependencies 
+        // Note: Removed direct calls to private properties/methods
 
         // When initialized, the system should count connected devices correctly
-        viewModel.initializeSystemEnhanced()
+        viewModel.initializeSystemEnhanced(mockTextureView)
 
         // In real implementation, verify device count is calculated correctly
         // Should be 4 devices: main camera + PC + Shimmer + Thermal

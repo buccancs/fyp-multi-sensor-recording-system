@@ -318,7 +318,7 @@ class HandSegmentationEngine(private val context: Context) {
      * Create processed bitmap with hand regions highlighted
      */
     private fun highlightHands(originalBitmap: Bitmap, handRegions: List<HandRegion>): Bitmap {
-        val processedBitmap = originalBitmap.copy(originalBitmap.config, true)
+        val processedBitmap = originalBitmap.copy(originalBitmap.config ?: Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(processedBitmap)
         
         val paint = Paint().apply {

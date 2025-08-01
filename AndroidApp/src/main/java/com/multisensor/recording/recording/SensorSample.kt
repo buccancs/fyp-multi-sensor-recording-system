@@ -113,6 +113,7 @@ data class SensorSample(
                         SensorChannel.MAG -> 25.0 + Math.sin(sequenceNumber * 0.03) * 5.0 // Magnetic field
                         SensorChannel.ECG -> Math.sin(sequenceNumber * 0.3) * 0.5 // ECG simulation
                         SensorChannel.EMG -> Math.random() * 0.1 // EMG noise
+                        else -> 0.0 // Default value for other sensors
                     }
                 sensorValues[sensor] = value
             }

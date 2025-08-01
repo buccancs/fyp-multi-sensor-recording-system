@@ -28,7 +28,7 @@ room = "2.6.1"
 okhttp = "4.12.0"
 moshi = "1.15.1"
 
-# Testing
+# Testing - Updated to latest stable versions
 junit = "4.13.2"
 androidxTestExtJunit = "1.2.1"
 androidxTestCore = "1.6.1"
@@ -40,7 +40,13 @@ mockk = "1.13.12"
 robolectric = "4.13"
 truth = "1.4.4"
 uiautomator = "2.3.0"
+# Enhanced testing frameworks
+junitJupiter = "5.11.3"
+testng = "7.10.2"
+jacoco = "0.8.12"
+kotlinTest = "5.9.1"
 xxpermissions = "20.0"
+annotation = "1.9.1"
 
 [libraries]
 # AndroidX & Google - Core UI Components
@@ -106,6 +112,16 @@ espresso-intents = { module = "androidx.test.espresso:espresso-intents", version
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
 uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+
+# Enhanced Testing Libraries
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiter" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiter" }
+testng = { module = "org.testng:testng", version.ref = "testng" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotlinTest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotlinTest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotlinTest" }
 
 [bundles]
 # Core UI Components
@@ -176,4 +192,38 @@ integration-testing = [
     "uiautomator",
     "mockk-android",
     "kotlinx-coroutines-test"
+]
+
+# Enhanced unit testing with performance monitoring
+enhanced-unit-testing = [
+    "junit",
+    "junit-jupiter-api",
+    "junit-jupiter-engine", 
+    "junit-jupiter-params",
+    "kotest-runner-junit5",
+    "kotest-assertions-core",
+    "kotest-property",
+    "kotlinx-coroutines-test",
+    "androidx-arch-core-testing",
+    "mockk-jvm",
+    "robolectric",
+    "androidx-test-core",
+    "androidx-test-runner",
+    "androidx-test-ext-junit",
+    "google-truth"
+]
+
+# Enhanced integration testing with stress testing
+enhanced-integration-testing = [
+    "androidx-test-ext-junit",
+    "espresso-core",
+    "espresso-intents",
+    "espresso-contrib",
+    "androidx-test-runner",
+    "androidx-test-rules",
+    "uiautomator",
+    "mockk-android",
+    "kotlinx-coroutines-test",
+    "kotest-runner-junit5",
+    "kotest-assertions-core"
 ]
