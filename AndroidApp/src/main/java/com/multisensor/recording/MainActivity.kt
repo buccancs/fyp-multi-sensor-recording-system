@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,8 @@ import com.multisensor.recording.managers.PermissionManager
 import com.multisensor.recording.controllers.PermissionController
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
+import com.multisensor.recording.controllers.MainActivityCoordinator
+import com.multisensor.recording.controllers.UIController
 import com.multisensor.recording.controllers.UsbController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -100,6 +103,12 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
+
+    @Inject
+    lateinit var mainActivityCoordinator: MainActivityCoordinator
+
+    @Inject
+    lateinit var uiController: UIController
 
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
@@ -483,8 +492,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupUI() {
-        // Initialize consolidated UI components
-        initializeUIComponents()
+        // Initialize coordinator with callback implementation
+        initializeCoordinator()
+        
+        // Initialize UIController through coordinator
+        initializeUIControllerIntegration()
         
         // Setup recording control buttons
         binding.startRecordingButton.setOnClickListener {
@@ -520,9 +532,134 @@ class MainActivity : AppCompatActivity(),
     }
     
     /**
-     * Initialize consolidated UI components
+     * Initialize the main activity coordinator with callback implementation
+     */
+    private fun initializeCoordinator() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing MainActivityCoordinator")
+        
+        val coordinatorCallback = object : MainActivityCoordinator.CoordinatorCallback {
+            override fun updateStatusText(text: String) {
+                runOnUiThread {
+                    binding.statusText.text = text
+                }
+            }
+            
+            override fun showToast(message: String, duration: Int) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, message, duration).show()
+                }
+            }
+            
+            override fun runOnUiThread(action: () -> Unit) {
+                this@MainActivity.runOnUiThread(action)
+            }
+            
+            override fun getContentView(): View = binding.root
+            override fun getStreamingIndicator(): View? = binding.streamingIndicator
+            override fun getStreamingLabel(): View? = binding.streamingLabel
+            override fun getStreamingDebugOverlay(): TextView? = binding.streamingDebugOverlay
+            
+            override fun showPermissionButton(show: Boolean) {
+                runOnUiThread {
+                    binding.requestPermissionsButton.visibility = if (show) View.VISIBLE else View.GONE
+                }
+            }
+            
+            // UI Controller callback methods implementation
+            override fun getContext(): Context = this@MainActivity
+            override fun getStatusText(): TextView? = binding.statusText
+            override fun getStartRecordingButton(): View? = binding.startRecordingButton
+            override fun getStopRecordingButton(): View? = binding.stopRecordingButton
+            override fun getCalibrationButton(): View? = binding.calibrationButton
+            override fun getPcConnectionIndicator(): View? = binding.pcConnectionIndicator
+            override fun getShimmerConnectionIndicator(): View? = binding.shimmerConnectionIndicator
+            override fun getThermalConnectionIndicator(): View? = binding.thermalConnectionIndicator
+            override fun getPcConnectionStatus(): TextView? = binding.pcConnectionStatus
+            override fun getShimmerConnectionStatus(): TextView? = binding.shimmerConnectionStatus
+            override fun getThermalConnectionStatus(): TextView? = binding.thermalConnectionStatus
+            override fun getBatteryLevelText(): TextView? = binding.batteryLevelText
+            override fun getRecordingIndicator(): View? = binding.recordingIndicator
+            override fun getRequestPermissionsButton(): View? = binding.requestPermissionsButton
+            override fun getShimmerStatusText(): TextView? = binding.shimmerStatusText
+        }
+        
+        mainActivityCoordinator.initialize(coordinatorCallback)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] MainActivityCoordinator initialized successfully")
+    }
+    
+    /**
+     * Initialize UIController integration with validation and error handling
+     */
+    private fun initializeUIControllerIntegration() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing UIController integration")
+        
+        try {
+            // Initialize UI components through UIController
+            uiController.initializeUIComponents()
+            
+            // Validate UI components
+            val validationResult = uiController.validateUIComponents()
+            if (!validationResult.isValid) {
+                android.util.Log.w("MainActivity", "[DEBUG_LOG] UI validation failed: ${validationResult.errors}")
+                // Attempt recovery
+                val recoveryResult = uiController.recoverFromUIErrors()
+                if (recoveryResult.success) {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] UI recovery successful: ${recoveryResult.recoveryActions}")
+                } else {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] UI recovery failed: ${recoveryResult.recoveryActions}")
+                }
+            } else {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] UI validation passed: ${validationResult.componentCount} components available")
+            }
+            
+            // Apply saved theme preferences
+            uiController.applyThemeFromPreferences()
+            
+            // Enable accessibility features if needed
+            val savedState = uiController.getSavedUIState()
+            if (savedState.accessibilityMode) {
+                uiController.enableAccessibilityFeatures()
+            }
+            
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] UIController integration completed successfully")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController integration: ${e.message}")
+            Toast.makeText(this, "UI initialization error: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+    
+    /**
+     * Initialize consolidated UI components (legacy method - now delegated to UIController)
      */
     private fun initializeUIComponents() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating UI component initialization to UIController")
+        
+        try {
+            // Get consolidated components from UIController
+            val consolidatedComponents = uiController.getConsolidatedComponents()
+            
+            // Initialize local references for backward compatibility
+            consolidatedComponents.pcStatusIndicator?.let { pcStatusIndicator = it }
+            consolidatedComponents.shimmerStatusIndicator?.let { shimmerStatusIndicator = it }
+            consolidatedComponents.thermalStatusIndicator?.let { thermalStatusIndicator = it }
+            consolidatedComponents.recordingButtonPair?.let { recordingButtonPair = it }
+            
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] UI components delegated to UIController successfully")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to delegate UI components: ${e.message}")
+            // Fallback to legacy initialization
+            initializeLegacyUIComponents()
+        }
+    }
+    
+    /**
+     * Fallback legacy UI component initialization
+     */
+    private fun initializeLegacyUIComponents() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Falling back to legacy UI component initialization")
+        
         // Initialize StatusIndicatorView components
         pcStatusIndicator = StatusIndicatorView(this).apply {
             setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "PC: Waiting for PC...")
@@ -549,9 +686,7 @@ class MainActivity : AppCompatActivity(),
             setButtonsEnabled(true, false) // Initially only start is enabled
         }
         
-        // UI Consolidation: Using consolidated components for consistent interface
-        // This demonstrates the programmatic creation and configuration of consolidated UI components
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Consolidated UI components initialized successfully")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Legacy UI components initialized successfully")
     }
 
     /**
