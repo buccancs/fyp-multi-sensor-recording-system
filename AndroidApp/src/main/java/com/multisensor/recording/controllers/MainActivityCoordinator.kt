@@ -172,8 +172,9 @@ class MainActivityCoordinator @Inject constructor(
             
             override fun areAllPermissionsGranted(): Boolean {
                 // Coordinate with permission controller
-                // This will be implemented when MainActivity integration is complete
-                return false // TODO: Implement proper coordination
+                return callback?.getContext()?.let { context ->
+                    permissionController.areAllPermissionsGranted(context)
+                } ?: false
             }
         })
     }
@@ -230,13 +231,17 @@ class MainActivityCoordinator @Inject constructor(
             override fun onRecordingStarted() {
                 callback?.updateStatusText("Recording in progress...")
                 // Coordinate with network controller to update streaming UI
-                // networkController.updateStreamingUI(context, true) // TODO: Add context parameter
+                callback?.getContext()?.let { context ->
+                    networkController.updateStreamingUI(context, true)
+                }
             }
             
             override fun onRecordingStopped() {
                 callback?.updateStatusText("Recording stopped - Processing data...")
                 // Coordinate with network controller to update streaming UI
-                // networkController.updateStreamingUI(context, false) // TODO: Add context parameter
+                callback?.getContext()?.let { context ->
+                    networkController.updateStreamingUI(context, false)
+                }
             }
             
             override fun onRecordingError(message: String) {
