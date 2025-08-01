@@ -43,6 +43,7 @@ import com.multisensor.recording.managers.PermissionManager
 import com.multisensor.recording.controllers.PermissionController
 import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.managers.UsbDeviceManager
+import com.multisensor.recording.controllers.UsbController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -69,7 +70,7 @@ import com.multisensor.recording.ui.components.HandSegmentationControlView
 class MainActivity : AppCompatActivity(),
     PermissionController.PermissionCallback,
     ShimmerManager.ShimmerCallback,
-    UsbDeviceManager.UsbDeviceCallback,
+    UsbController.UsbCallback,
     HandSegmentationManager.HandSegmentationListener,
     HandSegmentationControlView.HandSegmentationControlListener {
     
@@ -93,6 +94,9 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var usbDeviceManager: UsbDeviceManager
+
+    @Inject
+    lateinit var usbController: UsbController
 
     @Inject
     lateinit var handSegmentationManager: HandSegmentationManager
@@ -151,6 +155,15 @@ class MainActivity : AppCompatActivity(),
         setupUI()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] UI setup completed")
 
+        // Setup managers and callbacks (TODO: Add proper callback setup methods to managers)
+        // shimmerManager.setCallback(this)
+        // permissionManager.setCallback(this)
+        // handSegmentationManager.setListener(this)
+        usbController.setCallback(this)
+
+        // Initialize USB monitoring for already connected devices
+        usbController.initializeUsbMonitoring(this)
+
         // Note: Permission checking moved to onResume() for better timing
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission checking will be done in onResume() for better timing")
 
@@ -161,7 +174,7 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== APP STARTUP: onCreate() completed =====")
 
         // Handle USB device attachment if launched by USB intent
-        handleUsbDeviceIntent(intent)
+        usbController.handleUsbDeviceIntent(this, intent)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -169,13 +182,8 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] onNewIntent() called")
 
         // Handle USB device attachment
-        handleUsbDeviceIntent(intent)
-    }
+        usbController.handleUsbDeviceIntent(this, intent)
 
-    /**
-     * Handle USB device attachment intent
-     * This method is called when the app is launched due to a Topdon device being connected
-     */
     private fun handleUsbDeviceIntent(intent: Intent) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Handling USB device intent: ${intent.action}")
 
@@ -691,8 +699,41 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun checkPermissions() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Delegating permission check to PermissionController")
-        permissionController.checkPermissions(this)
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting permission check via PermissionManager...")
+
+        if (permissionManager.areAllPermissionsGranted(this)) {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions already granted, initializing system")
+            initializeRecordingSystemInternal()
+        } else {
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Requesting permissions via PermissionManager...")
+            binding.statusText.text = "Requesting permissions..."
+
+            // Use PermissionManager for permission requests
+            permissionManager.requestPermissions(this, this)
+        }
+
+        // Update permission button visibility based on current permission status
+        updatePermissionButtonVisibility()
+    }
+
+    private fun showTemporaryDenialMessage(
+        temporarilyDenied: List<String>,
+        grantedCount: Int,
+        totalCount: Int,
+    ) {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing temporary denial message for ${temporarilyDenied.size} permissions")
+
+        val message =
+            "Some permissions were denied but can be requested again.\n\n" +
+                "Denied permissions:\n" +
+                temporarilyDenied.joinToString("\n") { "• ${getPermissionDisplayName(it)}" } +
+                "\n\nYou can grant these permissions using the 'Request Permissions' button."
+
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+
+        binding.statusText.text = "Permissions: $grantedCount/$totalCount granted - Some permissions denied"
+
+        android.util.Log.i("MainActivity", "Temporary permission denial: ${temporarilyDenied.joinToString(", ")}")
     }
 
     // Removed - now handled by PermissionController
@@ -726,7 +767,7 @@ class MainActivity : AppCompatActivity(),
         permissionController.updatePermissionButtonVisibility(this)
     }
 
-    private fun initializeRecordingSystem() {
+    private fun initializeRecordingSystemInternal() {
         // Get TextureView from layout for camera preview
         val textureView = binding.texturePreview
 
@@ -1464,6 +1505,9 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
 
+        // Stop USB monitoring
+        usbController.stopPeriodicScanning()
+
         // Ensure recording service is stopped when activity is destroyed
         if (viewModel.uiState.value.isRecording) {
             stopRecording()
@@ -1496,8 +1540,8 @@ class MainActivity : AppCompatActivity(),
     // ========== PermissionController.PermissionCallback Implementation ==========
     
     override fun onAllPermissionsGranted() {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionController")
-        initializeRecordingSystem()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] All permissions granted via PermissionManager")
+        initializeRecordingSystemInternal()
         binding.statusText.text = "All permissions granted - System ready"
     }
 
@@ -1571,19 +1615,16 @@ class MainActivity : AppCompatActivity(),
         Toast.makeText(this, "Shimmer Error: $message", Toast.LENGTH_LONG).show()
     }
 
-    // ========== UsbDeviceManager.UsbDeviceCallback Implementation ==========
+    // ========== UsbController.UsbCallback Implementation ==========
     
     override fun onSupportedDeviceAttached(device: UsbDevice) {
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbDeviceManager")
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Supported USB device attached via UsbController")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Device: ${device.deviceName}")
-        
-        val deviceInfo = usbDeviceManager.getDeviceInfoString(device)
-        binding.statusText.text = "Supported TOPDON device connected"
         
         // Update thermal connection status
         updateThermalConnectionStatus(true)
         
-        Toast.makeText(this, "TOPDON device connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "TOPDON thermal camera connected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onUnsupportedDeviceAttached(device: UsbDevice) {
@@ -1600,14 +1641,28 @@ class MainActivity : AppCompatActivity(),
         // Update thermal connection status
         updateThermalConnectionStatus(false)
         
-        binding.statusText.text = "USB device disconnected"
         Toast.makeText(this, "USB device disconnected: ${device.deviceName}", Toast.LENGTH_SHORT).show()
     }
 
-    // Disambiguated onError for UsbDeviceManager
-    fun onUsbError(message: String) {
-        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Manager error: $message")
+    override fun onUsbError(message: String) {
+        android.util.Log.e("MainActivity", "[DEBUG_LOG] USB Controller error: $message")
         binding.statusText.text = "USB Error: $message"
         Toast.makeText(this, "USB Error: $message", Toast.LENGTH_LONG).show()
+    }
+
+    override fun updateStatusText(text: String) {
+        binding.statusText.text = text
+    }
+
+    override fun initializeRecordingSystem() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing recording system from USB controller")
+        // Call the private initializeRecordingSystem method
+        this.initializeRecordingSystemInternal()
+    }
+
+    override fun areAllPermissionsGranted(): Boolean {
+        return AllAndroidPermissions.getDangerousPermissions().all { permission ->
+            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+        }
     }
 }
