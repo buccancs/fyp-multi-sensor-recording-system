@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
-    id("io.gitlab.arturbosch.detekt")
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
     id("jacoco")
 }
 
@@ -28,26 +28,20 @@ android {
         }
     }
 
-    packagingOptions {
-        // Handle resource conflicts
+    packaging {
         resources {
             pickFirsts.add("META-INF/LICENSE.md")
             pickFirsts.add("META-INF/LICENSE-notice.md")
             excludes.add("META-INF/kotlinx-coroutines-core.kotlin_module")
         }
 
-        // Handle native library (.so) conflicts and 16KB page alignment
         jniLibs {
-            // Ensures native libs are uncompressed and page-aligned for Google Play compliance.
             useLegacyPackaging = false
-
-            // Define ABIs and libraries to handle duplicates from different SDKs
             val libsToPickFirst = listOf(
                 "libUSBUVCCamera.so", "libencrypt.so", "libusbcamera.so", "libircmd.so",
                 "libirparse.so", "libirprocess.so", "libirtemp.so", "libomp.so"
             )
             val abis = listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-
             abis.forEach { abi ->
                 libsToPickFirst.forEach { lib ->
                     pickFirsts.add("lib/$abi/$lib")
@@ -62,7 +56,6 @@ android {
             buildConfigField("String", "BUILD_TYPE", "\"debug\"")
             enableUnitTestCoverage = true
             enableAndroidTestCoverage = true
-            // NDK debug symbol level for 16 KB page size compatibility
             ndk {
                 debugSymbolLevel = "SYMBOL_TABLE"
             }
@@ -123,11 +116,9 @@ android {
     testOptions {
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
-
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
-
             all {
                 it.jvmArgs(
                     "-XX:MaxMetaspaceSize=512m",
@@ -136,20 +127,16 @@ android {
                     "--add-opens=java.base/java.lang=ALL-UNNAMED"
                 )
                 it.maxHeapSize = "2048m"
-
                 it.useJUnitPlatform {
                     includeEngines("junit-jupiter", "junit-vintage")
                     includeTags("unit", "integration", "performance")
                     excludeTags("manual", "stress")
                 }
-
                 it.systemProperty("robolectric.useWindowsCompatibleTempDir", "true")
-
                 it.reports.html.required.set(true)
                 it.reports.junitXml.required.set(true)
             }
         }
-
         managedDevices {
             devices {
                 create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel2api30") {
@@ -171,7 +158,7 @@ android {
 //--------------- Configurations & Dependencies ---------------//
 
 configurations {
-    ktlint
+    val ktlint by creating
 }
 
 dependencies {
@@ -188,17 +175,22 @@ dependencies {
     // Jetpack Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    testImplementation("androidx.navigation:navigation-testing:2.7.7") // For testing navigation graphs
 
     // Architecture
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.bundles.activity.fragment)
+    testImplementation("androidx.arch.core:core-testing:2.2.0") // For testing Architecture Components
+    testImplementation("androidx.fragment:fragment-testing:1.7.1") // For testing Fragments
+    testImplementation(libs.kotlinx.coroutines.test) // For testing coroutines (assuming alias exists)
 
     // Permissions
     implementation(libs.xxpermissions)
 
     // CameraX
     implementation(libs.bundles.camera)
+    testImplementation(libs.bundles.camera.testing) // For testing CameraX (assuming alias exists)
 
     // Dependency Injection
     implementation(libs.hilt.android)
@@ -207,9 +199,11 @@ dependencies {
     // Room Database
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
+    testImplementation(libs.bundles.room.testing) // For testing Room (assuming alias exists)
 
     // Networking
     implementation(libs.bundles.networking)
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0") // For mocking server responses
 
     // Unit Testing
     testImplementation(libs.bundles.enhanced.unit.testing)
@@ -228,13 +222,21 @@ dependencies {
 
     // Local SDKs
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
+    testImplementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
     implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
+    testImplementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
     implementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
+    testImplementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
     implementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
+    testImplementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
     implementation(files("src/main/libs/topdon_1.3.7.aar"))
+    testImplementation(files("src/main/libs/topdon_1.3.7.aar"))
     implementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
+    testImplementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
     implementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
+    testImplementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
     implementation(files("src/main/libs/suplib-release.aar"))
+    testImplementation(files("src/main/libs/suplib-release.aar"))
 }
 
 //--------------- Custom Tasks & Build Logic ---------------//
@@ -252,7 +254,6 @@ tasks.register("generateConstants") {
     doLast {
         val json = JsonSlurper().parse(configFile) as Map<*, *>
         outputDir.mkdirs()
-        // Example of generated code. Expand this template for all your fields.
         outputFile.writeText("""
         // Auto-generated from config.json. Do not edit manually.
         package com.multisensor.recording.config
@@ -308,7 +309,6 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
     executionData.setFrom(fileTree(buildDir) { include("jacoco/**/*.exec", "outputs/code_coverage/**/*.ec") })
 
-    // This ensures the task doesn't fail if a test execution file doesn't exist yet
     doFirst {
         executionData.setFrom(files(executionData.files.filter { it.exists() }))
     }
@@ -330,7 +330,6 @@ tasks.register<JavaExec>("lintKotlin") {
     args("src/**/*.kt")
 }
 
-// Automatically run checks and generate reports
 tasks.named("check") {
     dependsOn("detekt", "lintKotlin")
 }
