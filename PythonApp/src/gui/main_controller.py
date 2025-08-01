@@ -457,13 +457,51 @@ class MainController(QObject):
     
     def _on_stimulus_seek_requested(self, position: float):
         """Handle stimulus seek requests."""
-        # TODO: Implement stimulus seek handling
-        pass
+        # Implement stimulus seek handling
+        try:
+            if hasattr(self, 'stimulus_controller') and self.stimulus_controller:
+                # Convert position percentage to actual seek position
+                duration = self.stimulus_controller.get_duration()
+                if duration > 0:
+                    seek_time = int((position / 100.0) * duration)
+                    self.stimulus_controller.seek_to_position(seek_time)
+                    
+                    # Emit signal for UI updates
+                    self.stimulus_status_changed.emit(f"Stimulus seek to {position:.1f}% ({seek_time}ms)")
+                else:
+                    self.stimulus_status_changed.emit("Cannot seek: no media loaded")
+            else:
+                self.stimulus_status_changed.emit("Stimulus controller not available")
+                
+        except Exception as e:
+            error_msg = f"Error seeking stimulus: {str(e)}"
+            self.stimulus_status_changed.emit(error_msg)
+            self.error_occurred.emit(error_msg)
     
     def _on_stimulus_screen_changed(self, screen_index: int):
         """Handle stimulus screen changes."""
-        # TODO: Implement stimulus screen change handling
-        pass
+        # Implement stimulus screen change handling
+        try:
+            if hasattr(self, 'stimulus_controller') and self.stimulus_controller:
+                # Set the target screen for stimulus display
+                if hasattr(self.stimulus_controller, 'set_display_screen'):
+                    self.stimulus_controller.set_display_screen(screen_index)
+                    self.stimulus_status_changed.emit(f"Stimulus display screen set to {screen_index}")
+                else:
+                    # Store screen index for future use
+                    self.stimulus_controller.target_screen = screen_index
+                    self.stimulus_status_changed.emit(f"Stimulus target screen set to {screen_index}")
+                
+                # Update any UI components that need to know about screen change
+                self.stimulus_screen_changed.emit(screen_index)
+                
+            else:
+                self.stimulus_status_changed.emit("Stimulus controller not available")
+                
+        except Exception as e:
+            error_msg = f"Error changing stimulus screen: {str(e)}"
+            self.stimulus_status_changed.emit(error_msg)
+            self.error_occurred.emit(error_msg)
     
     def _on_start_recording_play_requested(self):
         """Handle start recording/play requests."""

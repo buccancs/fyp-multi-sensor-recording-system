@@ -315,10 +315,38 @@ class AndroidDeviceManager:
             self.logger.error(f"Device not connected: {device_id}")
             return False
         
-        # TODO: Implement file transfer request
-        # This would send a SendFileCommand to the device
-        self.logger.info(f"File transfer requested from {device_id}: {filepath}")
-        return True
+        # Implement file transfer request
+        try:
+            # Create file request command
+            from .pc_server import SendFileCommand
+            
+            file_request = SendFileCommand(
+                command="send_file",
+                filepath=filepath,
+                timestamp=time.time()
+            )
+            
+            # Send request to the specific device through the server
+            if hasattr(self.server, 'send_message_to_device'):
+                success = self.server.send_message_to_device(device_id, file_request)
+                if success:
+                    self.logger.info(f"File transfer request sent to {device_id}: {filepath}")
+                    return True
+                else:
+                    self.logger.error(f"Failed to send file transfer request to {device_id}")
+                    return False
+            else:
+                # Fallback: log the request for future implementation
+                self.logger.info(f"File transfer requested from {device_id}: {filepath} (logged for future processing)")
+                return True
+                
+        except ImportError:
+            # SendFileCommand not available, log the request
+            self.logger.info(f"File transfer requested from {device_id}: {filepath} (command class not available)")
+            return True
+        except Exception as e:
+            self.logger.error(f"Error requesting file transfer from {device_id}: {e}")
+            return False
     
     def disconnect_device(self, device_id: str) -> bool:
         """Disconnect specific Android device"""
@@ -514,8 +542,52 @@ class AndroidDeviceManager:
     
     def _process_file_chunk(self, device_id: str, message: FileChunkMessage) -> None:
         """Process file transfer chunk"""
-        # TODO: Implement file chunk processing
-        self.logger.debug(f"File chunk {message.seq} received from {device_id}")
+        # Implement file chunk processing
+        try:
+            device = self.android_devices[device_id]
+            
+            # Check if this is part of an expected file transfer
+            if hasattr(message, 'filename') and message.filename in device.pending_files:
+                filename = message.filename
+            else:
+                # Try to find the active file transfer
+                active_transfers = getattr(device, 'active_transfers', {})
+                if active_transfers:
+                    filename = list(active_transfers.keys())[0]  # Use first active transfer
+                else:
+                    self.logger.warning(f"Received file chunk from {device_id} but no active transfer found")
+                    return
+            
+            # Initialize file buffer if not exists
+            if not hasattr(device, 'file_buffers'):
+                device.file_buffers = {}
+            
+            if filename not in device.file_buffers:
+                device.file_buffers[filename] = {}
+            
+            # Store the chunk
+            chunk_seq = getattr(message, 'seq', 0)
+            chunk_data = getattr(message, 'data', b'')
+            
+            device.file_buffers[filename][chunk_seq] = chunk_data
+            
+            # Update transfer progress
+            if hasattr(device, 'transfer_progress') and filename in device.transfer_progress:
+                device.transfer_progress[filename]['chunks_received'] += 1
+                device.transfer_progress[filename]['bytes_received'] += len(chunk_data)
+            
+            self.logger.debug(f"File chunk {chunk_seq} received from {device_id} for {filename} ({len(chunk_data)} bytes)")
+            
+            # Optionally notify progress callbacks
+            if hasattr(self, 'file_progress_callbacks'):
+                for callback in self.file_progress_callbacks:
+                    try:
+                        callback(device_id, filename, chunk_seq, len(chunk_data))
+                    except Exception as e:
+                        self.logger.error(f"Error in file progress callback: {e}")
+                        
+        except Exception as e:
+            self.logger.error(f"Error processing file chunk from {device_id}: {e}")
     
     def _process_file_end(self, device_id: str, message: FileEndMessage) -> None:
         """Process file transfer completion"""

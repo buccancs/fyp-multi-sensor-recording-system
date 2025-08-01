@@ -1,5 +1,6 @@
 import java.time.Duration
 import groovy.json.JsonSlurper
+import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
     id("com.android.application")
@@ -296,6 +297,9 @@ detekt {
     buildUponDefaultConfig = true
     allRules = false
     config.setFrom(files("$projectDir/../detekt.yml"))
+}
+
+tasks.withType<Detekt>().configureEach {
     reports {
         html.required.set(true)
         xml.required.set(true)
@@ -320,11 +324,11 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/*_Factory.*", "**/*_MembersInjector.*", "**/*Module*.*",
         "**/databinding/*", "**/generated/**/*.*"
     )
-    val javaClasses = fileTree("$buildDir/intermediates/javac/debug/classes") { exclude(fileFilter) }
-    val kotlinClasses = fileTree("$buildDir/tmp/kotlin-classes/debug") { exclude(fileFilter) }
+    val javaClasses = fileTree("${layout.buildDirectory.get().asFile}/intermediates/javac/debug/classes") { exclude(fileFilter) }
+    val kotlinClasses = fileTree("${layout.buildDirectory.get().asFile}/tmp/kotlin-classes/debug") { exclude(fileFilter) }
     classDirectories.setFrom(files(javaClasses, kotlinClasses))
     sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-    executionData.setFrom(fileTree(buildDir) { include("jacoco/**/*.exec", "outputs/code_coverage/**/*.ec") })
+    executionData.setFrom(fileTree(layout.buildDirectory.get().asFile) { include("jacoco/**/*.exec", "outputs/code_coverage/**/*.ec") })
     doFirst {
         executionData.setFrom(files(executionData.files.filter { it.exists() }))
     }
