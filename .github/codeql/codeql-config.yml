@@ -3,33 +3,29 @@
 
 name: "CodeQL Security Analysis"
 
-# Disable the default codeql queries
+# Run the default queries in addition to the custom ones specified below
 disable-default-queries: false
 
-# Run additional queries for enhanced security analysis
+# Specify which query suites to run
 queries:
-  - name: security-extended
-    uses: security-extended
-  - name: security-and-quality
-    uses: security-and-quality
+  - uses: security-extended
+  - uses: security-and-quality
 
-# Path-based filtering to focus analysis
+# Define which directories to include in the analysis
 paths:
-  - "AndroidApp/src/main/**"
-  - "PythonApp/src/**"
+  - "AndroidApp/src/main/"
+  - "PythonApp/src/"
 
-# Exclude test files and generated code from security analysis
+# Define which directories and file patterns to exclude
 paths-ignore:
-  - "AndroidApp/src/test/**"
-  - "AndroidApp/src/androidTest/**"
-  - "PythonApp/tests/**"
-  - "**/test_*"
-  - "**/tests/**"
-  - "**/build/**"
-  - "**/generated/**"
-  - "**/.gradle/**"
+  - "AndroidApp/src/test/"
+  - "AndroidApp/src/androidTest/"
+  - "PythonApp/tests/"
+  - "**/build/"
+  - "**/generated/"
+  - "**/.gradle/"
 
-# Configure specific language analysis
+# (Optional) Fine-tune which alerts to include or exclude from the results
 query-filters:
   - exclude:
       id: "js/unused-local-variable"
@@ -39,10 +35,3 @@ query-filters:
   - include:
       kind: "path-problem"
       precision: "high"
-
-# Compilation configuration for Java/Kotlin
-packs:
-  - "codeql/java-queries:Security"
-  - "codeql/python-queries:Security"
-  - "codeql/java-queries:Correctness"
-  - "codeql/python-queries:Correctness"
