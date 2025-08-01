@@ -3,6 +3,7 @@ package com.multisensor.recording.util
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 class ThermalCameraSettings
     @Inject
     constructor(
-        private val context: Context,
+        @ApplicationContext private val context: Context,
     ) {
         private val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
