@@ -32,6 +32,9 @@ from unittest.mock import Mock, patch, MagicMock
 import tempfile
 import shutil
 
+# Import pytest for fixtures
+import pytest
+
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
@@ -73,7 +76,7 @@ class MockSensorData:
 
 
 @dataclass
-class TestSessionResult:
+class SessionResult:
     """Results from a recording session test"""
     session_id: str
     success: bool
@@ -526,14 +529,16 @@ class MockShimmerManager:
         return session_data
 
 
-class ComprehensiveRecordingSessionTest:
+class TestComprehensiveRecordingSession:
     """
     Comprehensive test that simulates a complete recording session
     with both PC and Android components
     """
     
-    def __init__(self, test_dir: Optional[str] = None):
-        self.test_dir = Path(test_dir) if test_dir else Path(tempfile.mkdtemp(prefix="recording_test_"))
+    @pytest.fixture(autouse=True)
+    def setup_test(self, tmp_path):
+        """Setup test environment using pytest fixtures"""
+        self.test_dir = tmp_path / "recording_test"
         self.test_dir.mkdir(parents=True, exist_ok=True)
         
         # Test components
@@ -601,6 +606,7 @@ class ComprehensiveRecordingSessionTest:
             self.errors.append(f"Mock device creation error: {e}")
             return False
     
+    @pytest.mark.asyncio
     async def test_device_connections(self) -> bool:
         """Test device connections to PC"""
         try:
@@ -634,7 +640,8 @@ class ComprehensiveRecordingSessionTest:
             self.errors.append(f"Connection test error: {e}")
             return False
     
-    async def test_recording_session_lifecycle(self) -> TestSessionResult:
+    @pytest.mark.asyncio
+    async def test_recording_session_lifecycle(self) -> SessionResult:
         """Test complete recording session lifecycle"""
         session_start = time.time()
         session_errors = []
@@ -771,7 +778,7 @@ class ComprehensiveRecordingSessionTest:
             logger.info(f"Duration: {duration:.2f} seconds")
             logger.info(f"Files created: {len(files_created)}")
             
-            return TestSessionResult(
+            return SessionResult(
                 session_id=session_id,
                 success=True,
                 duration=duration,
@@ -786,7 +793,7 @@ class ComprehensiveRecordingSessionTest:
             logger.error(f"Recording session test failed: {e}")
             session_errors.append(f"Session error: {e}")
             
-            return TestSessionResult(
+            return SessionResult(
                 session_id=session_info.get("session_id", "unknown"),
                 success=False,
                 duration=time.time() - session_start,
@@ -835,6 +842,7 @@ class ComprehensiveRecordingSessionTest:
         except ImportError:
             return {"error": "psutil not available"}
     
+    @pytest.mark.asyncio
     async def test_error_conditions(self) -> List[Dict]:
         """Test various error conditions and recovery"""
         error_tests = []
