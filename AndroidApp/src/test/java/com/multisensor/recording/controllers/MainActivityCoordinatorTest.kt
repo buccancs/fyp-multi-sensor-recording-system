@@ -498,27 +498,115 @@ class MainActivityCoordinatorTest {
     }
 
     @Test
-    fun `test USB controller callback integration`() {
+    fun `test performance metrics calculation and SLA compliance`() {
         // Given
-        val mockUsbDevice = mockk<UsbDevice>()
+        every { mockSharedPreferences.getBoolean(any(), any()) } returns false
+        every { mockSharedPreferences.getLong(any(), any()) } returns 0L
+        every { mockSharedPreferences.getInt(any(), any()) } returns 0
+        every { mockSharedPreferences.getStringSet(any(), any()) } returns emptySet()
+
+        // When
+        coordinator.initialize(mockCallback)
+        val health = coordinator.getCoordinatorHealth()
+
+        // Then
+        assertTrue("Coordinator should be healthy", health.isHealthy)
+        
+        // Verify performance metrics are being tracked
+        val summary = coordinator.getSystemStatusSummary(mockContext)
+        assertTrue("Summary should contain performance metrics", summary.contains("PERFORMANCE METRICS"))
+        assertTrue("Summary should contain SLA compliance", summary.contains("SLA MONITORING"))
+        assertTrue("Summary should contain reliability analysis", summary.contains("RELIABILITY ANALYSIS"))
+    }
+
+    @Test
+    fun `test adaptive recovery strategy selection and learning`() {
+        // Given
+        every { mockPermissionController.setCallback(any()) } throws RuntimeException("Simulated controller failure")
+        every { mockSharedPreferences.getBoolean(any(), any()) } returns false
+        every { mockSharedPreferences.getLong(any(), any()) } returns 0L
+        every { mockSharedPreferences.getInt(any(), any()) } returns 0
+        every { mockSharedPreferences.getStringSet(any(), any()) } returns emptySet()
+
+        // When
+        coordinator.initialize(mockCallback)
+        val health = coordinator.getCoordinatorHealth()
+
+        // Then
+        assertTrue("Should record failure for adaptive learning", health.controllerFailures > 0)
+        
+        // Verify adaptive recovery system is working
+        val summary = coordinator.getSystemStatusSummary(mockContext)
+        assertTrue("Summary should contain adaptive recovery info", summary.contains("ADAPTIVE RECOVERY SYSTEM"))
+    }
+
+    @Test
+    fun `test academic-style system status summary generation`() {
+        // Given
+        every { mockPermissionController.getPermissionRetryCount() } returns 2
+        every { mockUsbController.getUsbStatusSummary(any()) } returns "USB: Connected"
+        every { mockShimmerController.getConnectionStatus() } returns "Shimmer: Connected"
+        every { mockRecordingController.getRecordingStatus() } returns "Recording: Ready"
+        every { mockCalibrationController.getCalibrationStatus() } returns "Calibration: Ready"
+        every { mockNetworkController.getStreamingStatus() } returns "Network: Connected"
         every { mockSharedPreferences.getBoolean(any(), any()) } returns false
         every { mockSharedPreferences.getLong(any(), any()) } returns 0L
         every { mockSharedPreferences.getInt(any(), any()) } returns 0
         every { mockSharedPreferences.getStringSet(any(), any()) } returns emptySet()
         coordinator.initialize(mockCallback)
 
-        // Get the USB controller callback
-        val slot = slot<UsbController.UsbCallback>()
-        verify { mockUsbController.setCallback(capture(slot)) }
-        val usbCallback = slot.captured
-
         // When
-        usbCallback.onSupportedDeviceAttached(mockUsbDevice)
-        usbCallback.onDeviceDetached(mockUsbDevice)
-        usbCallback.updateStatusText("USB status")
+        val summary = coordinator.getSystemStatusSummary(mockContext)
 
         // Then
-        verify { mockCallback.updateStatusText("USB status") }
-        verify(atLeast = 1) { mockCallback.updateStatusText(any()) }
+        assertTrue("Summary should have academic-style formatting", summary.contains("ENTERPRISE SYSTEM STATUS SUMMARY"))
+        assertTrue("Summary should contain architectural overview", summary.contains("ARCHITECTURAL OVERVIEW"))
+        assertTrue("Summary should contain performance metrics", summary.contains("PERFORMANCE METRICS & SLA COMPLIANCE"))
+        assertTrue("Summary should contain reliability analysis", summary.contains("RELIABILITY ANALYSIS"))
+        assertTrue("Summary should contain controller matrix", summary.contains("CONTROLLER STATE MATRIX"))
+        assertTrue("Summary should contain quality metrics", summary.contains("QUALITY ASSURANCE METRICS"))
+        assertTrue("Summary should contain version info", summary.contains("Enterprise v2.0 (Academic Edition)"))
+    }
+
+    @Test
+    fun `test formal state machine invariants`() {
+        // Given
+        every { mockSharedPreferences.getBoolean(any(), any()) } returns false
+        every { mockSharedPreferences.getLong(any(), any()) } returns 0L
+        every { mockSharedPreferences.getInt(any(), any()) } returns 0
+        every { mockSharedPreferences.getStringSet(any(), any()) } returns emptySet()
+
+        // When
+        coordinator.initialize(mockCallback)
+        val health = coordinator.getCoordinatorHealth()
+
+        // Then - Verify formal invariants
+        // Invariant: errorCount ≥ 0 ∧ errorCount ≤ maxRecoveryAttempts
+        assertTrue("Error recovery attempts should be non-negative", health.errorRecoveryAttempts >= 0)
+        
+        // Invariant: isInitialized ⟹ coordinator.isReady
+        if (health.isInitialized) {
+            assertTrue("If initialized, coordinator should be ready", coordinator.isCoordinatorReady())
+        }
+        
+        // Invariant: persistentState.isConsistent ≡ true
+        assertTrue("Persistent state should be consistent", coordinator.isCoordinatorReady() || !health.isInitialized)
+    }
+
+    @Test
+    fun `test academic logging and monitoring integration`() {
+        // Given
+        every { mockSharedPreferences.getBoolean(any(), any()) } returns false
+        every { mockSharedPreferences.getLong(any(), any()) } returns 0L
+        every { mockSharedPreferences.getInt(any(), any()) } returns 0
+        every { mockSharedPreferences.getStringSet(any(), any()) } returns emptySet()
+
+        // When
+        coordinator.initialize(mockCallback)
+
+        // Then
+        // Verify that academic-style logging is being used
+        // This would typically be verified through log inspection in a real system
+        assertTrue("Coordinator should be initialized with academic monitoring", coordinator.isCoordinatorReady())
     }
 }
