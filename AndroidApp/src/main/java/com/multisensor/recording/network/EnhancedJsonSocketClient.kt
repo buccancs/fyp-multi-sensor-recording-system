@@ -826,13 +826,35 @@ class EnhancedJsonSocketClient @Inject constructor(
     }
     
     /**
-     * Extract timestamp from message data
+     * Extract timestamp from message data based on message type.
+     * 
+     * Different message types contain timestamp information in different fields:
+     * - PreviewFrameMessage: Uses 'timestamp' field for frame timing
+     * - SensorDataMessage: Uses 'timestamp' field for sensor reading timing  
+     * - SetStimulusTimeCommand: Uses 'time' field for stimulus timing
+     * - SyncTimeCommand: Uses 'pc_timestamp' field for synchronization timing
+     * - Other message types (StatusMessage, AckMessage, etc.): No timestamp field, returns null
+     * 
+     * This method is used primarily for heartbeat latency calculations and network
+     * quality assessment to determine round-trip times accurately.
+     * 
+     * @param message The JsonMessage to extract timestamp from
+     * @return The timestamp in milliseconds since epoch, or null if message type has no timestamp
      */
     private fun extractTimestampFromMessage(message: JsonMessage): Long? {
         return try {
-            // For now, just return current time as fallback
-            // TODO: Implement proper timestamp extraction based on message type
-            System.currentTimeMillis()
+            when (message) {
+                is PreviewFrameMessage -> message.timestamp
+                is SensorDataMessage -> message.timestamp
+                is SetStimulusTimeCommand -> message.time
+                is SyncTimeCommand -> message.pc_timestamp
+                else -> {
+                    // For message types without explicit timestamps, return null
+                    // This includes StatusMessage, AckMessage, HelloMessage, and command messages
+                    logger.debug("Message type ${message.type} does not contain timestamp field")
+                    null
+                }
+            }
         } catch (e: Exception) {
             logger.debug("Could not extract timestamp from message", e)
             null
