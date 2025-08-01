@@ -76,9 +76,7 @@ This organization ensures that current, relevant documentation is easily accessi
 - `technical/system-architecture-overview.md` - System overview
 
 ### Comprehensive Guides
-- `comprehensive/pc-android-ui-guide.md` - Complete UI documentation with screenshots
-- `comprehensive/pc-android-logging-guide.md` - Logging systems documentation  
-- `comprehensive/pc-android-testing-guide.md` - Testing infrastructure guide
+- `new_documentation/` - Complete Android Mobile Application documentation with technical guides, user manuals, and protocol specifications
 
 ### Integration Guides
 - `new_documentation/USER_GUIDE_shimmer3_gsr_plus.md` - Shimmer3 GSR+ practical user guide

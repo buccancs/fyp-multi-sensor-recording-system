@@ -100,7 +100,6 @@ Detailed technical specifications and architecture documentation:
 |----------|---------|---------|
 | [system-architecture-specification.md](technical/system-architecture-specification.md) | Complete system architecture | Architecture reference |
 | [UIController-Enhanced-Features.md](technical/UIController-Enhanced-Features.md) | UI enhancement details | Development reference |
-| [mobile-application-architecture.md](technical/mobile-application-architecture.md) | Android app architecture | Mobile development |
 | [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
 | [network-protocols-synchronization.md](technical/network-protocols-synchronization.md) | Network protocols | Network development |
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
