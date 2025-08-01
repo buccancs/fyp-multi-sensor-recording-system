@@ -24,6 +24,17 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
 - **[Testing Framework](testing/Testing_Strategy.md)** - Testing methodology and procedures
+- **[Shimmer3 GSR+ Technical Deep-Dive](new_documentation/README_shimmer3_gsr_plus.md)** - Shimmer device integration architecture
+
+### 📊 Device-Specific Documentation
+- **[Shimmer3 GSR+ Documentation](new_documentation/INDEX.md)** - Comprehensive Shimmer3 GSR+ device documentation
+- **[Shimmer3 GSR+ User Guide](new_documentation/USER_GUIDE_shimmer3_gsr_plus.md)** - Practical device usage guide
+- **[Shimmer3 GSR+ Protocol](new_documentation/PROTOCOL_shimmer3_gsr_plus.md)** - Data formats and communication protocols
+
+### 🌡️ Thermal Camera Documentation
+- **[Topdon TC001 Technical Guide](new_documentation/README_topdon_tc001.md)** - Complete technical documentation for TC001 and TC001 Plus
+- **[Topdon TC001 User Guide](new_documentation/USER_GUIDE_topdon_tc001.md)** - Practical usage instructions and procedures
+- **[Topdon TC001 Protocol Reference](new_documentation/PROTOCOL_topdon_tc001.md)** - Data formats, APIs, and communication protocols
 
 ### 🎓 Academic Documentation
 - **[Research Summary](academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions and findings
@@ -94,7 +105,6 @@ Detailed technical specifications and architecture documentation:
 |----------|---------|---------|
 | [system-architecture-specification.md](technical/system-architecture-specification.md) | Complete system architecture | Architecture reference |
 | [UIController-Enhanced-Features.md](technical/UIController-Enhanced-Features.md) | UI enhancement details | Development reference |
-| [mobile-application-architecture.md](technical/mobile-application-architecture.md) | Android app architecture | Mobile development |
 | [desktop-application-architecture.md](technical/desktop-application-architecture.md) | Python app architecture | Desktop development |
 | [network-protocols-synchronization.md](technical/network-protocols-synchronization.md) | Network protocols | Network development |
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
@@ -115,6 +125,34 @@ Quick reference materials and API documentation:
 |----------|---------|---------|
 | [API Quick Reference](reference/) | API quick reference cards | Developer reference |
 
+
+### 📁 Comprehensive Documentation (`docs/comprehensive/`)
+Complete component-specific documentation following component-first approach:
+
+| Document | Content | Target Users |
+|----------|---------|--------------|
+| [README_topdon_tc001.md](new_documentation/README_topdon_tc001.md) | Technical deep-dive for Topdon TC001/TC001 Plus | Developers, System Architects |
+| [USER_GUIDE_topdon_tc001.md](new_documentation/USER_GUIDE_topdon_tc001.md) | Practical user guide for thermal cameras | End users, Researchers |
+| [PROTOCOL_topdon_tc001.md](new_documentation/PROTOCOL_topdon_tc001.md) | Data contracts and API specifications | Developers, Integration Teams |
+
+**Key Features:**
+- Hardware specifications and architecture details
+- Step-by-step setup and operation procedures  
+- Complete API reference and data format specifications
+- Troubleshooting guides and best practices
+- Research-grade calibration and synchronization protocols
+
+### 📁 Shimmer3 GSR+ Documentation (`docs/new_documentation/`)
+Comprehensive documentation for Shimmer3 GSR+ device integration:
+
+| Document | Content | Purpose |
+|----------|---------|---------|
+| [INDEX.md](new_documentation/INDEX.md) | Documentation navigation guide | Entry point |
+| [README_shimmer3_gsr_plus.md](new_documentation/README_shimmer3_gsr_plus.md) | Technical deep-dive and architecture | Developers |
+| [USER_GUIDE_shimmer3_gsr_plus.md](new_documentation/USER_GUIDE_shimmer3_gsr_plus.md) | Practical user guide | Researchers |
+| [PROTOCOL_shimmer3_gsr_plus.md](new_documentation/PROTOCOL_shimmer3_gsr_plus.md) | Data formats and protocols | Developers/Analysts |
+
+
 ---
 
 ## Document Relationships
@@ -126,14 +164,19 @@ Main Entry Points:
 ├── README.md (Project Overview)
 ├── user-guides/CONSOLIDATED_USER_GUIDE.md (Complete User Manual)
 ├── implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md (Complete Technical Guide)
-└── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
+├── academic/CONSOLIDATED_RESEARCH_SUMMARY.md (Complete Research Summary)
+└── new_documentation/README_topdon_tc001.md (Topdon TC001/TC001 Plus Technical Guide)
 
 Supporting Documentation:
 ├── API_REFERENCE.md (API Documentation)
 ├── technical/ (Technical Specifications)
 ├── academic/ (Individual Research Papers)
 ├── testing/ (Testing Methodology)
-└── reference/ (Quick Reference Materials)
+├── reference/ (Quick Reference Materials)
+└── comprehensive/ (Component-Specific Documentation)
+    ├── README_topdon_tc001.md (Technical Deep-Dive)
+    ├── USER_GUIDE_topdon_tc001.md (Practical User Guide)
+    └── PROTOCOL_topdon_tc001.md (Data Contracts & APIs)
 ```
 
 ### Cross-References

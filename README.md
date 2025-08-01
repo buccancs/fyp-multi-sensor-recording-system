@@ -869,6 +869,7 @@ The documentation has been consolidated and reorganized for improved usability a
 - **[🔧 Implementation Guide](docs/implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Technical implementation details
 - **[🎓 Research Summary](docs/academic/CONSOLIDATED_RESEARCH_SUMMARY.md)** - Academic contributions
 - **[🛠 API Reference](docs/API_REFERENCE.md)** - Complete API documentation
+- **[📊 Shimmer3 GSR+ Documentation](docs/shimmer3_gsr_plus/INDEX.md)** - Comprehensive Shimmer3 GSR+ device documentation
 
 #### Documentation Structure
 ```
