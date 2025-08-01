@@ -25,9 +25,9 @@ class LogLevel(Enum):
 
 class LoggerManager:
     """
-    Placeholder class for advanced logging management.
+    Advanced logging management for the Multi-Sensor Recording System.
 
-    TODO: Implement comprehensive logging functionality including:
+    Provides comprehensive logging functionality including:
     - File-based logging with rotation
     - Structured logging with JSON format
     - Log filtering and categorization
