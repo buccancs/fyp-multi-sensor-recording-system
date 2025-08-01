@@ -406,7 +406,7 @@ The training infrastructure supports both local development and scalable cloud-b
 **Cloud Training Options:**
 - **Google Cloud AI Platform:** Scalable training for large datasets
 - **AWS SageMaker:** Alternative cloud training option
-- **Azure Machine Learning:** Enterprise-grade training infrastructure
+- **Azure Machine Learning:** Professional-grade training infrastructure
 
 ## 5. Communication and Networking
 
