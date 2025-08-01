@@ -1,46 +1,41 @@
-# CodeQL Configuration for Multi-Sensor Recording System
-# Enhanced security analysis configuration
-
-name: "CodeQL Security Analysis"
-
-# Run the default queries in addition to the custom ones specified below
-disable-default-queries: false
-
-packs:
-  # For Python
-  - githubsecuritylab/codeql-python-queries
-  - trailofbits/python-queries
-
-  # For Android/Kotlin
-  - githubsecuritylab/codeql-java-queries
-  - trailofbits/java-queries
-
-# Specify which query suites to run
-queries:
-  - uses: security-extended
-  - uses: security-and-quality
-
-# Define which directories to include in the analysis
-paths:
-  - "AndroidApp/src/main/"
-  - "PythonApp/src/"
-
-# Define which directories and file patterns to exclude
-paths-ignore:
-  - "AndroidApp/src/test/"
-  - "AndroidApp/src/androidTest/"
-  - "PythonApp/tests/"
-  - "**/build/"
-  - "**/generated/"
-  - "**/.gradle/"
-
-# (Optional) Fine-tune which alerts to include or exclude from the results
-query-filters:
-  - exclude:
-      id: "js/unused-local-variable"
-  - include:
-      kind: "problem"
-      severity: "error"
-  - include:
-      kind: "path-problem"
-      precision: "high"
+## CodeQL Configuration for Multi-Sensor Recording System
+## Enhanced security analysis configuration
+#
+#name: "CodeQL Security Analysis"
+#
+## Run the default queries in addition to the custom ones specified below
+#disable-default-queries: false
+#
+#packs:
+#  # For Python
+#  - githubsecuritylab/codeql-python-queries
+#  - trailofbits/python-queries
+#
+#  # For Android/Kotlin
+#  - githubsecuritylab/codeql-java-queries
+#  - trailofbits/java-queries
+#
+## Specify which query suites to run
+#queries:
+#  - uses: security-extended
+#  - uses: security-and-quality
+#
+## Define which directories to include in the analysis
+#paths:
+#  - "AndroidApp/src/main/"
+#  - "PythonApp/src/"
+#
+## Define which directories and file patterns to exclude
+#paths-ignore:
+#  - "AndroidApp/src/test/"
+#  - "AndroidApp/src/androidTest/"
+#  - "PythonApp/tests/"
+#  - "**/build/"
+#  - "**/generated/"
+#  - "**/.gradle/"./githu
+#  - include:
+#      kind: "problem"
+#      severity: "error"
+#  - include:
+#      kind: "path-problem"
+#      precision: "high"
