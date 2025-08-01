@@ -1,16 +1,22 @@
-#-------------------------------------------------------------------------------#
-#               Qodana analysis is configured by qodana.yaml file               #
-#             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
-#-------------------------------------------------------------------------------#
 version: "1.0"
 
-#Specify inspection profile for code analysis
-profile:
-  name: qodana.recommended.all
+#-------------------------------------------------------------------------------#
+#        Qodana analysis is configured by the qodana.yaml file            #
+#    https://www.jetbrains.com/help/qodana/qodana-yaml.html     #
+#-------------------------------------------------------------------------------#
 
-#Enable inspections and include paths for multi-language project
+# Specify the inspection profile for code analysis.
+# 'qodana.recommended' is the standard profile for a balance of inspections.
+profile:
+  name: qodana.recommended
+
+# Specify the linter for a multi-language project.
+# The JVM linter includes support for Kotlin, Java, and Python.
+linter: jetbrains/qodana-jvm:2025.1
+
+# (Optional) Force-enable specific inspections if they are not in the profile.
+# Most of these are already included in 'qodana.recommended'.
 include:
-  # Inspection inclusions
   - name: PythonUnreachableCode
   - name: PyUnusedLocal
   - name: PyPep8Naming
@@ -19,35 +25,21 @@ include:
   - name: GrazieInspection
   - name: SpellCheckingInspection
 
-  # Path inclusions
-paths:
-  - AndroidApp/src
-  - PythonApp/src
-  - build/
-  - AndroidApp/build/
-  - PythonApp/build/
-  - "**/.gradle/"
-  - "**/node_modules/"
-  - "**/__pycache__/"
-  - "**/*.pyc"
-  - "**/venv/"
-  - "**/env/"
+# Exclude specific directories and files from the analysis.
+exclude:
+  - paths:
+    # Common build output and dependency directories
+    - build/
+    - AndroidApp/build/
+    - PythonApp/build/
+    - .gradle/
+    - node_modules/
+    - .idea/
+    # Python-specific exclusions
+    - __pycache__/
+    - venv/
+    - env/
+    - "**/*.pyc"
 
-#Disable inspections and exclude paths
-#exclude:
-#  # Inspection exclusions
-#  - name: SpellCheckingInspection
-#    paths:
-#      - "*"
-#  - name: GrazieInspection
-#    paths:
-#      - "*"
-#  # Path exclusions
-
-# Multi-language project paths
-projectType:
-  - Android
-  - Python
-
-# For multi-language projects, use JVM linter which supports both Kotlin and Python
-linter: jetbrains/qodana-jvm:2025.1
+  # Example of how to disable an inspection entirely:
+  # - name: SpellCheckingInspection
