@@ -359,6 +359,9 @@ sequenceDiagram
 - **Garbage Collection**: Optimized object lifecycle management
 - **Memory Monitoring**: Real-time memory usage tracking and alerts
 - **Resource Cleanup**: Automatic resource release on session termination
+- **Object Pooling**: Sophisticated memory management strategies to minimize garbage collection overhead
+- **Efficient Data Structures**: Optimized for computationally intensive image processing operations
+- **Large Data Array Management**: Careful management for high-resolution video processing
 
 #### Storage Management
 - **Local Storage**: Organized session data storage with metadata
@@ -366,9 +369,92 @@ sequenceDiagram
 - **Cleanup Policies**: Automatic cleanup of temporary and old data
 - **Export Functions**: Streamlined data export for external analysis
 
+#### Power Management Strategies
+- **Adaptive Algorithms**: Balance measurement quality against battery life requirements
+- **Dynamic Complexity Adjustment**: Automatic processing complexity adjustment based on power levels
+- **Thermal Condition Monitoring**: Maintains adequate measurement quality during thermal constraints
+- **Extended Operation Support**: Optimized for extended recording sessions
+
+#### Thermal Management Integration
+- **Android Integration**: Coordinates with Android's thermal management capabilities
+- **Overheating Prevention**: Adaptive algorithms prevent device overheating during extended operation
+- **Processing Load Adaptation**: Temporarily reduces processing load when device temperature approaches critical levels
+- **Data Collection Continuity**: Maintains continuous data collection despite thermal constraints
+
 ## Development and Testing
 
 ### 🧪 Testing Framework
+
+The Android application employs a comprehensive modern testing architecture following Android testing best practices:
+
+#### Test Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "Android Test Architecture"
+        subgraph "Test Framework"
+            JUNIT[JUnit 5]
+            ESPRESSO[Espresso UI Testing]
+            MOCKK[MockK Advanced Mocking]
+            HILT[Hilt Testing Framework]
+        end
+        
+        subgraph "Test Types"
+            UNIT_A[Unit Tests (JVM)]
+            INST[Instrumentation Tests]
+            UI_A[UI Tests]
+            INTEG_A[Integration Tests]
+            HARDWARE[Hardware Integration Tests]
+        end
+        
+        subgraph "Test Infrastructure"
+            HILT_TEST[Hilt Testing]
+            ROOM_TEST[Room Database Testing]
+            NETWORK_TEST[Network Layer Testing]
+            CAMERA_TEST[Camera2 API Testing]
+            THERMAL_TEST[Thermal Camera Testing]
+            SENSOR_TEST[Sensor Integration Testing]
+        end
+    end
+    
+    JUNIT --> UNIT_A
+    ESPRESSO --> UI_A
+    MOCKK --> UNIT_A
+    HILT --> INST
+    UNIT_A --> HILT_TEST
+    INST --> ROOM_TEST
+    UI_A --> NETWORK_TEST
+    INTEG_A --> CAMERA_TEST
+    HARDWARE --> THERMAL_TEST
+    HARDWARE --> SENSOR_TEST
+```
+
+#### Base Test Classes
+
+**BaseUnitTest**
+- Foundation for pure unit tests without Android dependencies
+- Features: MockK setup, coroutine test dispatcher, Logger mocking
+- Usage: `class MyTest : BaseUnitTest()`
+
+**BaseRobolectricTest**
+- Android component tests requiring Android context
+- Features: Robolectric environment, application context, MockK setup
+- Usage: `class MyAndroidTest : BaseRobolectricTest()`
+
+**BaseInstrumentedTest**
+- Instrumented tests with Hilt dependency injection
+- Features: Hilt testing setup, Android instrumentation context
+- Usage: `class MyInstrumentedTest : BaseInstrumentedTest()`
+
+**BaseUiIntegrationTest**
+- UI integration tests with Espresso
+- Features: UI testing utilities, view interactions, Hilt integration
+- Usage: `class MyUITest : BaseUiIntegrationTest()`
+
+**BaseHardwareIntegrationTest**
+- Hardware integration tests for devices and sensors
+- Features: Hardware mocking, device simulation, sensor testing
+- Usage: `class MyHardwareTest : BaseHardwareIntegrationTest()`
 
 #### Unit Testing
 - **Component Testing**: Individual sensor and controller validation
@@ -381,6 +467,25 @@ sequenceDiagram
 - **Network Testing**: PC communication protocol validation
 - **Session Testing**: Complete recording workflow validation
 - **Stress Testing**: Extended operation and resource stress testing
+
+#### Test Data Factories
+
+**SessionInfoTestFactory**: Creates consistent `SessionInfo` test data
+**UiStateTestFactory**: Creates UI state test scenarios
+**RecordingTestFactory**: Creates recording statistics and network quality data
+
+#### Test Organization Structure
+```
+src/test/java/com/multisensor/recording/
+├── testbase/           # Base test classes
+├── testfixtures/       # Test data factories
+├── testsuite/          # Test suite definitions
+├── recording/          # Recording component tests
+├── ui/                 # UI component tests
+├── network/            # Network component tests
+├── service/            # Service layer tests
+└── util/               # Utility tests
+```
 
 ### 🔨 Build Configuration
 
@@ -460,6 +565,25 @@ sequenceDiagram
 - **Example Configurations**: Sample configurations for common use cases
 
 ---
+
+## Security and Privacy Implementation
+
+### 🔒 Research-Grade Security
+
+#### Local Data Processing
+- **Privacy Protection**: Sensitive raw data is processed locally on the capture device before transmission
+- **Reduced Privacy Risks**: Significantly reduces privacy risks by minimizing raw data transmission
+- **Performance Benefits**: Improves system performance by reducing network bandwidth requirements for high-resolution video data
+
+#### Encryption and Data Protection
+- **Industry-Standard Encryption**: All data transmission protected using industry-standard encryption protocols
+- **Physiological Data Protection**: Additional protection mechanisms for particularly sensitive physiological data
+- **Comprehensive Audit Trails**: Documents all data access and processing activities for research compliance
+
+#### Research Compliance
+- **Human Subjects Research**: Security mechanisms specifically designed for human subjects research applications
+- **Data Integrity**: Comprehensive validation throughout the entire pipeline from collection to storage
+- **Compliance Documentation**: Detailed audit trails and access logs for regulatory compliance
 
 ## Summary
 

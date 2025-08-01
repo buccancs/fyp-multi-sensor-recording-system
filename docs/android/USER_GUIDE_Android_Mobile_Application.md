@@ -54,7 +54,51 @@ When you first launch the Android Mobile Data Collection app:
 
 ### 2. Main Interface Overview
 
-The main interface provides comprehensive control over all recording functions:
+The main interface features a modern Material Design layout optimized for research use, prioritizing essential recording functions while providing comprehensive device status information.
+
+```mermaid
+graph TB
+    subgraph "Android UI Layout"
+        MA[Main Activity]
+        TB[Top Bar]
+        DS[Device Status]
+        CC[Camera Controls]
+        RC[Recording Controls]
+        SC[Sensor Controls]
+        NI[Network Indicator]
+        
+        MA --> TB
+        MA --> DS
+        MA --> CC
+        MA --> RC
+        MA --> SC
+        MA --> NI
+        
+        subgraph "Device Status Section"
+            BAT[Battery Status]
+            TEMP[Device Temperature]
+            STOR[Storage Info]
+            NET[Network Status]
+        end
+        
+        subgraph "Recording Controls"
+            REC[Record Button]
+            TIMER[Session Timer]
+            QUAL[Quality Indicators]
+        end
+    end
+```
+
+#### Layout Components
+
+The Android interface uses a card-based layout that groups related functionality:
+
+| Component | Function | Visual Design |
+|-----------|----------|---------------|
+| **Status Cards** | Device health monitoring | Rounded corners, color-coded |
+| **Control Buttons** | Primary actions | Material Design FABs |
+| **Progress Indicators** | Real-time feedback | Circular progress, linear bars |
+| **Sensor Readouts** | Live data display | Numeric values, mini-graphs |
 
 #### Navigation Drawer
 - **Recording**: Primary recording controls and session management
@@ -74,6 +118,13 @@ The main interface provides comprehensive control over all recording functions:
 - **Thermal Status**: Thermal camera connection and temperature
 - **Shimmer Status**: GSR sensor connection and data rate
 - **Storage Status**: Available storage space and session count
+
+#### Recording Interface Design
+The recording interface is designed for one-handed operation during research scenarios, featuring:
+- **Large Touch Targets**: Easy operation even with gloves or limited dexterity
+- **Clear Visual Feedback**: Immediate confirmation of all actions
+- **Color-Coded Status**: Intuitive understanding of system state
+- **Minimal Distraction**: Clean interface that doesn't interfere with research procedures
 
 ---
 
