@@ -390,20 +390,8 @@ class WebController:
                 except:
                     pass
             
-            # If no real Shimmer devices, generate demo devices for testing
-            if not real_shimmer_devices:
-                for i in range(2):
-                    device_id = f'shimmer_{i+1}'
-                    self.device_status_received.emit(device_id, {
-                        'type': 'shimmer',
-                        'status': 'connected',
-                        'battery': random.randint(60, 100),
-                        'signal_strength': random.randint(70, 100),
-                        'recording': self._current_session_id is not None,
-                        'sample_rate': 250,
-                        'mac_address': f'00:06:66:66:66:{i+1:02d}'
-                    })
-            else:
+            # Only emit real Shimmer devices, no fake ones
+            if real_shimmer_devices:
                 # Emit real device status
                 for device_id, status in real_shimmer_devices.items():
                     self.device_status_received.emit(device_id, {
@@ -416,7 +404,7 @@ class WebController:
                         'mac_address': status.get('mac_address', 'Unknown')
                     })
             
-            # Check real Android devices first
+            # Check real Android devices only
             real_android_devices = {}
             if self.android_device_manager and hasattr(self.android_device_manager, 'get_connected_devices'):
                 try:
@@ -424,20 +412,8 @@ class WebController:
                 except:
                     pass
             
-            # If no real Android devices, generate demo devices for testing
-            if not real_android_devices:
-                for i in range(2):
-                    device_id = f'android_{i+1}'
-                    self.device_status_received.emit(device_id, {
-                        'type': 'android',
-                        'status': 'connected',
-                        'capabilities': ['gsr', 'thermal', 'camera'],
-                        'battery': random.randint(40, 100),
-                        'temperature': round(random.uniform(35, 42), 1),
-                        'recording': self._current_session_id is not None,
-                        'last_heartbeat': time.time()
-                    })
-            else:
+            # Only emit real Android devices, no fake ones
+            if real_android_devices:
                 # Emit real device status
                 for device_id, device_info in real_android_devices.items():
                     self.device_status_received.emit(device_id, {
@@ -450,33 +426,29 @@ class WebController:
                         'last_heartbeat': device_info.get('last_heartbeat', 0)
                     })
             
-            # Check real webcams first
+            # Check real webcams using system monitor
             real_webcams = []
-            if self.webcam_capture and hasattr(self.webcam_capture, 'get_available_cameras'):
-                try:
-                    real_webcams = self.webcam_capture.get_available_cameras() or []
-                except:
-                    pass
+            try:
+                from utils.system_monitor import get_system_monitor
+                system_monitor = get_system_monitor()
+                real_webcams = system_monitor.detect_webcams()
+            except:
+                # Fallback to webcam capture manager if available
+                if self.webcam_capture and hasattr(self.webcam_capture, 'get_available_cameras'):
+                    try:
+                        real_webcams = self.webcam_capture.get_available_cameras() or []
+                    except:
+                        pass
             
-            # If no real webcams, generate demo webcams for testing  
-            if not real_webcams:
-                for i in range(2):
-                    camera_id = f'webcam_{i+1}'
+            # Only emit real webcams, no fake ones
+            if real_webcams:
+                # Emit real webcam status
+                for camera_info in real_webcams:
+                    camera_id = f'webcam_{camera_info.get("index", 0)}'
                     self.device_status_received.emit(camera_id, {
                         'type': 'webcam',
-                        'status': 'active',
-                        'name': f'USB Camera {i+1}',
-                        'resolution': '1920x1080' if i == 0 else '1280x720',
-                        'fps': 30,
-                        'recording': self._current_session_id is not None
-                    })
-            else:
-                # Emit real webcam status
-                for camera_id, camera_info in enumerate(real_webcams):
-                    self.device_status_received.emit(f'webcam_{camera_id}', {
-                        'type': 'webcam',
-                        'status': 'active',
-                        'name': camera_info.get('name', f'Camera {camera_id}'),
+                        'status': camera_info.get('status', 'active'),
+                        'name': camera_info.get('name', f'Camera {camera_info.get("index", 0)}'),
                         'resolution': camera_info.get('resolution', 'Unknown'),
                         'fps': camera_info.get('fps', 30),
                         'recording': False  # Would need to check actual recording status
@@ -490,59 +462,43 @@ class WebController:
         try:
             import random
             
-            # Get real sensor data from connected devices first
+            # Get real sensor data from connected devices only
             real_shimmer_data = {}
             if self.shimmer_manager and hasattr(self.shimmer_manager, 'get_all_device_status'):
                 try:
                     shimmer_devices = self.shimmer_manager.get_all_device_status() or {}
                     for device_id, status in shimmer_devices.items():
                         if status.get('is_connected', False):
-                            # In a real implementation, this would get actual sensor readings
-                            real_shimmer_data[device_id] = {
-                                'gsr': random.uniform(0.5, 3.0),
-                                'timestamp': time.time()
-                            }
+                            # Get actual sensor readings if available
+                            if hasattr(self.shimmer_manager, 'get_sensor_data'):
+                                sensor_data = self.shimmer_manager.get_sensor_data(device_id)
+                                if sensor_data:
+                                    real_shimmer_data[device_id] = sensor_data
                 except:
                     pass
             
-            # Generate demo sensor data if no real devices
-            if not real_shimmer_data:
-                for i in range(2):
-                    device_id = f'shimmer_{i+1}'
-                    self.sensor_data_received.emit(device_id, {
-                        'gsr': round(random.uniform(0.5, 3.0), 3),
-                        'timestamp': time.time()
-                    })
-            else:
+            # Only emit real sensor data, no fake data
+            if real_shimmer_data:
                 # Emit real sensor data
                 for device_id, data in real_shimmer_data.items():
                     self.sensor_data_received.emit(device_id, data)
             
-            # Get real sensor data from Android devices
+            # Get real sensor data from Android devices only
             real_android_data = {}
             if self.android_device_manager and hasattr(self.android_device_manager, 'get_connected_devices'):
                 try:
                     android_devices = self.android_device_manager.get_connected_devices() or {}
                     for device_id, device_info in android_devices.items():
-                        # In a real implementation, this would get actual sensor readings
-                        real_android_data[device_id] = {
-                            'gsr': random.uniform(0.1, 2.0),
-                            'thermal': random.uniform(25, 35),
-                            'timestamp': time.time()
-                        }
+                        # Get actual sensor readings if available
+                        if hasattr(self.android_device_manager, 'get_sensor_data'):
+                            sensor_data = self.android_device_manager.get_sensor_data(device_id)
+                            if sensor_data:
+                                real_android_data[device_id] = sensor_data
                 except:
                     pass
             
-            # Generate demo Android sensor data if no real devices
-            if not real_android_data:
-                for i in range(2):
-                    device_id = f'android_{i+1}'
-                    self.sensor_data_received.emit(device_id, {
-                        'gsr': round(random.uniform(0.1, 2.0), 3),
-                        'thermal': round(random.uniform(25, 35), 1),
-                        'timestamp': time.time()
-                    })
-            else:
+            # Only emit real sensor data, no fake data
+            if real_android_data:
                 # Emit real sensor data
                 for device_id, data in real_android_data.items():
                     self.sensor_data_received.emit(device_id, data)
@@ -579,14 +535,11 @@ class WebController:
                         logger.info(f"Recording session started using SessionManager: {session_id}")
                         return True
                 except Exception as e:
-                    logger.warning(f"SessionManager failed, using fallback: {e}")
-            
-            # Fallback: manually manage session for demo purposes
-            self._current_session_id = session_id
-            self.recording_started.emit(session_id)
-            self.session_status_changed.emit(session_id, True)
-            logger.info(f"Recording session started (fallback mode): {session_id}")
-            return True
+                    logger.warning(f"SessionManager failed: {e}")
+                    return False
+            else:
+                logger.error("No SessionManager available for recording")
+                return False
         
         except Exception as e:
             logger.error(f"Error starting recording: {e}")
@@ -618,14 +571,11 @@ class WebController:
                         logger.info(f"Recording session stopped using SessionManager: {session_id}")
                         return True
                 except Exception as e:
-                    logger.warning(f"SessionManager failed, using fallback: {e}")
-            
-            # Fallback: manually stop session for demo purposes
-            self._current_session_id = None
-            self.recording_stopped.emit(session_id, 0)
-            self.session_status_changed.emit(session_id, False)
-            logger.info(f"Recording session stopped (fallback mode): {session_id}")
-            return True
+                    logger.warning(f"SessionManager failed: {e}")
+                    return False
+            else:
+                logger.error("No SessionManager available for stopping recording")
+                return False
         
         except Exception as e:
             logger.error(f"Error stopping recording: {e}")

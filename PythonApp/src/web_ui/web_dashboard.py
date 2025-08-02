@@ -48,6 +48,14 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+try:
+    from utils.system_monitor import get_system_monitor
+    SYSTEM_MONITOR_AVAILABLE = True
+except ImportError:
+    logger.warning("System monitor not available")
+    SYSTEM_MONITOR_AVAILABLE = False
+    get_system_monitor = lambda: None
+
 
 class WebDashboardServer:
     """
@@ -287,9 +295,23 @@ class WebDashboardServer:
                     else:
                         return jsonify({'success': False, 'error': 'Connection failed'}), 500
                 else:
-                    # Simulate connection for demo
-                    logger.info(f"Simulating connection to {device_type} device: {device_id}")
-                    return jsonify({'success': True, 'message': f'Connected to {device_id}'})
+                    # Attempt real device connection based on type
+                    if device_type == 'android':
+                        # This would be handled by AndroidDeviceManager
+                        return jsonify({'success': False, 'error': 'Android device manager not available'}), 500
+                    elif device_type == 'shimmer':
+                        # This would be handled by ShimmerManager
+                        return jsonify({'success': False, 'error': 'Shimmer manager not available'}), 500
+                    elif device_type == 'webcam':
+                        # Check if webcam is actually available
+                        if SYSTEM_MONITOR_AVAILABLE:
+                            system_monitor = get_system_monitor()
+                            webcams = system_monitor.detect_webcams()
+                            if any(cam['index'] == int(device_id) for cam in webcams):
+                                return jsonify({'success': True, 'message': f'Webcam {device_id} is available'})
+                        return jsonify({'success': False, 'error': 'Webcam not found'}), 500
+                    else:
+                        return jsonify({'success': False, 'error': 'Unknown device type'}), 400
                     
             except Exception as e:
                 logger.error(f"Device connection error: {e}")
@@ -311,9 +333,15 @@ class WebDashboardServer:
                     else:
                         return jsonify({'success': False, 'error': 'Configuration failed'}), 500
                 else:
-                    # Simulate configuration for demo
-                    logger.info(f"Simulating configuration of {device_type} device: {device_id} with {configuration}")
-                    return jsonify({'success': True, 'message': f'Configured {device_id}'})
+                    # Real device configuration
+                    if device_type in ['android', 'shimmer']:
+                        return jsonify({'success': False, 'error': f'{device_type.title()} manager not available'}), 500
+                    elif device_type == 'webcam':
+                        # Webcam configuration would require actual OpenCV integration
+                        logger.info(f"Webcam {device_id} configuration: {configuration}")
+                        return jsonify({'success': True, 'message': f'Webcam {device_id} configuration updated'})
+                    else:
+                        return jsonify({'success': False, 'error': 'Unknown device type'}), 400
                     
             except Exception as e:
                 logger.error(f"Device configuration error: {e}")
@@ -330,16 +358,32 @@ class WebDashboardServer:
                     test_results = self.controller.test_webcam(webcam_id)
                     return jsonify({'success': True, 'test_results': test_results})
                 else:
-                    # Simulate webcam test for demo
-                    logger.info(f"Simulating webcam test: {webcam_id}")
-                    return jsonify({
-                        'success': True,
-                        'test_results': {
-                            'resolution': '1920x1080',
-                            'fps': 30,
-                            'format': 'MP4'
-                        }
-                    })
+                    # Real webcam testing
+                    if SYSTEM_MONITOR_AVAILABLE:
+                        system_monitor = get_system_monitor()
+                        webcams = system_monitor.detect_webcams()
+                        
+                        # Find the specific webcam
+                        try:
+                            webcam_index = int(webcam_id) if webcam_id else 0
+                            cam_info = next((cam for cam in webcams if cam['index'] == webcam_index), None)
+                            
+                            if cam_info:
+                                return jsonify({
+                                    'success': True,
+                                    'test_results': {
+                                        'resolution': cam_info['resolution'],
+                                        'fps': cam_info['fps'],
+                                        'status': cam_info['status'],
+                                        'index': cam_info['index']
+                                    }
+                                })
+                            else:
+                                return jsonify({'success': False, 'error': f'Webcam {webcam_id} not found'}), 404
+                        except ValueError:
+                            return jsonify({'success': False, 'error': 'Invalid webcam ID'}), 400
+                    else:
+                        return jsonify({'success': False, 'error': 'System monitoring not available'}), 500
                     
             except Exception as e:
                 logger.error(f"Webcam test error: {e}")
@@ -361,9 +405,22 @@ class WebDashboardServer:
                     else:
                         return jsonify({'success': False, 'error': 'Configuration failed'}), 500
                 else:
-                    # Simulate webcam configuration for demo
-                    logger.info(f"Simulating webcam configuration: {webcam_id} to {resolution} @ {fps}fps")
-                    return jsonify({'success': True, 'message': f'Webcam {webcam_id} configured'})
+                    # Real webcam configuration (limited without actual webcam manager)
+                    if SYSTEM_MONITOR_AVAILABLE:
+                        system_monitor = get_system_monitor()
+                        webcams = system_monitor.detect_webcams()
+                        
+                        try:
+                            webcam_index = int(webcam_id) if webcam_id else 0
+                            if any(cam['index'] == webcam_index for cam in webcams):
+                                logger.info(f"Webcam {webcam_id} configuration set: {resolution} @ {fps}fps")
+                                return jsonify({'success': True, 'message': f'Webcam {webcam_id} configured'})
+                            else:
+                                return jsonify({'success': False, 'error': f'Webcam {webcam_id} not found'}), 404
+                        except ValueError:
+                            return jsonify({'success': False, 'error': 'Invalid webcam ID'}), 400
+                    else:
+                        return jsonify({'success': False, 'error': 'System monitoring not available'}), 500
                     
             except Exception as e:
                 logger.error(f"Webcam configuration error: {e}")
@@ -383,9 +440,9 @@ class WebDashboardServer:
                     else:
                         return jsonify({'success': False, 'error': 'Connection failed'}), 500
                 else:
-                    # Simulate Shimmer connection for demo
-                    logger.info(f"Simulating Shimmer connection: {sensor_id}")
-                    return jsonify({'success': True, 'message': f'Connected to Shimmer {sensor_id}'})
+                    # Real Shimmer connection requires ShimmerManager
+                    logger.warning(f"Shimmer connection attempted but ShimmerManager not available: {sensor_id}")
+                    return jsonify({'success': False, 'error': 'Shimmer manager not available'}), 501
                     
             except Exception as e:
                 logger.error(f"Shimmer connection error: {e}")
@@ -407,12 +464,45 @@ class WebDashboardServer:
                     else:
                         return jsonify({'success': False, 'error': 'Configuration failed'}), 500
                 else:
-                    # Simulate Shimmer configuration for demo
-                    logger.info(f"Simulating Shimmer configuration: {sensor_id} at {sample_rate}Hz with {enabled_sensors}")
-                    return jsonify({'success': True, 'message': f'Shimmer {sensor_id} configured'})
+                    # Real Shimmer configuration requires ShimmerManager
+                    logger.warning(f"Shimmer configuration attempted but ShimmerManager not available: {sensor_id}")
+                    return jsonify({'success': False, 'error': 'Shimmer manager not available'}), 501
                     
             except Exception as e:
                 logger.error(f"Shimmer configuration error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/system/status')
+        def api_system_status():
+            """Get real-time system status and monitoring data."""
+            try:
+                if SYSTEM_MONITOR_AVAILABLE:
+                    system_monitor = get_system_monitor()
+                    status = system_monitor.get_comprehensive_status()
+                    return jsonify({'success': True, 'status': status})
+                else:
+                    # Fallback basic system info
+                    import platform
+                    import time
+                    status = {
+                        'timestamp': time.time(),
+                        'system_info': {
+                            'platform': platform.system(),
+                            'hostname': platform.node(),
+                            'python_version': platform.python_version()
+                        },
+                        'cpu': {'usage_percent': 0},
+                        'memory': {'total': 0, 'used': 0, 'percent': 0},
+                        'disk': {},
+                        'network': {},
+                        'webcams': [],
+                        'bluetooth': [],
+                        'processes': []
+                    }
+                    return jsonify({'success': True, 'status': status})
+                    
+            except Exception as e:
+                logger.error(f"System status error: {e}")
                 return jsonify({'success': False, 'error': str(e)}), 500
         
         @self.app.route('/api/sessions/export')
@@ -486,15 +576,22 @@ class WebDashboardServer:
         def api_session_download(session_id):
             """Download session data."""
             try:
-                # In real implementation, would create ZIP file with session data
-                # For demo, return a small text file
-                response_data = f"Session data for {session_id}\nGenerated at: {datetime.now().isoformat()}"
-                
-                from flask import make_response
-                response = make_response(response_data)
-                response.headers['Content-Type'] = 'application/octet-stream'
-                response.headers['Content-Disposition'] = f'attachment; filename={session_id}_data.zip'
-                return response
+                # Real implementation would check if session exists and create ZIP file
+                if self.controller and hasattr(self.controller, 'get_session_data'):
+                    session_data = self.controller.get_session_data(session_id)
+                    if session_data:
+                        # Create downloadable content
+                        response_data = f"Session data for {session_id}\nGenerated at: {datetime.now().isoformat()}"
+                        
+                        from flask import make_response
+                        response = make_response(response_data)
+                        response.headers['Content-Type'] = 'application/octet-stream'
+                        response.headers['Content-Disposition'] = f'attachment; filename={session_id}_data.txt'
+                        return response
+                    else:
+                        return jsonify({'success': False, 'error': 'Session not found'}), 404
+                else:
+                    return jsonify({'success': False, 'error': 'Session manager not available'}), 501
                 
             except Exception as e:
                 logger.error(f"Session download error: {e}")
@@ -594,9 +691,23 @@ class WebDashboardServer:
         def api_playback_video(session_id, filename):
             """Serve video file for playback."""
             try:
-                # In real implementation, would serve actual video files
-                # For demo, return 404 since we don't have real files
-                return jsonify({'success': False, 'error': 'Video file not found'}), 404
+                # Check if session and video file exist
+                if self.controller and hasattr(self.controller, 'get_session_video'):
+                    video_path = self.controller.get_session_video(session_id, filename)
+                    if video_path and os.path.exists(video_path):
+                        return send_from_directory(os.path.dirname(video_path), filename)
+                    else:
+                        return jsonify({'success': False, 'error': 'Video file not found'}), 404
+                else:
+                    # Check recordings directory
+                    recordings_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'recordings')
+                    session_dir = os.path.join(recordings_dir, session_id)
+                    video_path = os.path.join(session_dir, filename)
+                    
+                    if os.path.exists(video_path):
+                        return send_from_directory(session_dir, filename)
+                    else:
+                        return jsonify({'success': False, 'error': 'Video file not found'}), 404
                 
             except Exception as e:
                 logger.error(f"Video playback error: {e}")
@@ -732,9 +843,24 @@ class WebDashboardServer:
             """Get file content for preview."""
             try:
                 file_path = request.args.get('path')
+                if not file_path:
+                    return jsonify({'success': False, 'error': 'No file path provided'}), 400
                 
-                # For demo, return empty response since we don't have real files
-                return jsonify({'success': False, 'error': 'File not found'}), 404
+                # Check if file exists and is readable
+                if os.path.exists(file_path) and os.path.isfile(file_path):
+                    try:
+                        # Only read text files for preview
+                        _, ext = os.path.splitext(file_path)
+                        if ext.lower() in ['.txt', '.log', '.json', '.csv', '.md', '.py', '.js', '.html', '.css']:
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                content = f.read(10000)  # Limit to first 10KB
+                                return jsonify({'success': True, 'content': content, 'type': 'text'})
+                        else:
+                            return jsonify({'success': False, 'error': 'File type not supported for preview'}), 415
+                    except (UnicodeDecodeError, PermissionError):
+                        return jsonify({'success': False, 'error': 'Cannot read file'}), 403
+                else:
+                    return jsonify({'success': False, 'error': 'File not found'}), 404
                 
             except Exception as e:
                 logger.error(f"File content error: {e}")
@@ -745,14 +871,17 @@ class WebDashboardServer:
             """Download a file."""
             try:
                 file_path = request.args.get('path')
+                if not file_path:
+                    return jsonify({'success': False, 'error': 'No file path provided'}), 400
                 
-                # For demo, return a small text file
-                response_data = f"Demo file content for {file_path}"
-                from flask import make_response
-                response = make_response(response_data)
-                response.headers['Content-Type'] = 'application/octet-stream'
-                response.headers['Content-Disposition'] = f'attachment; filename={os.path.basename(file_path)}'
-                return response
+                # Check if file exists and serve it
+                if os.path.exists(file_path) and os.path.isfile(file_path):
+                    try:
+                        return send_from_directory(os.path.dirname(file_path), os.path.basename(file_path))
+                    except PermissionError:
+                        return jsonify({'success': False, 'error': 'Permission denied'}), 403
+                else:
+                    return jsonify({'success': False, 'error': 'File not found'}), 404
                 
             except Exception as e:
                 logger.error(f"File download error: {e}")
