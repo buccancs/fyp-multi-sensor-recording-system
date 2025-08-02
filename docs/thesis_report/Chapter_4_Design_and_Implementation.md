@@ -35,9 +35,15 @@ The modular design extends beyond simple functional decomposition to encompass d
 
 Fault tolerance implementation encompasses multiple layers of resilience including automatic reconnection mechanisms, data redundancy and validation, and adaptive quality management. The system continuously monitors component health and automatically adjusts operational parameters to maintain optimal performance despite changing conditions. When degradation is necessary, the system prioritizes maintenance of core functionality while providing comprehensive logging for post-session analysis and troubleshooting.
 
+**Performance Optimization and Scalability Considerations**: The architectural design incorporates systematic performance optimization strategies that address the computational demands of real-time multi-modal processing while maintaining scalability for future research applications [CITE - Distributed system performance optimization]. The design recognizes that physiological measurement applications require sustained high-performance operation over extended periods, necessitating careful resource management and computational load distribution.
+
+Performance optimization manifests through several architectural decisions including intelligent computational load distribution across available hardware resources, adaptive quality management that adjusts processing complexity based on system capacity, and efficient data flow patterns that minimize computational overhead while maintaining research-grade data quality. The scalability design enables seamless addition of processing capacity through horizontal scaling without requiring architectural modifications.
+
 ### Comprehensive System Topology
 
 The system topology reflects the hybrid star-mesh pattern that provides both the simplicity of centralized coordination and the resilience of distributed operation. The topology supports dynamic reconfiguration during operation, enabling researchers to add or remove devices based on experimental requirements without disrupting ongoing data collection from other participants.
+
+The architectural topology design addresses fundamental challenges in distributed physiological measurement systems while incorporating lessons learned from established distributed computing patterns [CITE - Distributed system architectural patterns]. The topology enables efficient resource utilization while maintaining the precise coordination requirements essential for multi-modal physiological research applications.
 
 ```mermaid
 graph TB
@@ -135,9 +141,19 @@ The theoretical foundation draws from several areas of distributed systems resea
 
 The hybrid model manifests through a master-coordinator pattern where the central PC controller provides session coordination and synchronization services while mobile devices maintain autonomous operation capability. This design enables the system to continue data collection even during temporary coordination interruptions while ensuring precise synchronization when coordination is available.
 
+**Consensus and Coordination Algorithms**: The system employs adapted consensus algorithms specifically designed for the temporal precision requirements of physiological measurement applications [CITE - Consensus algorithms for real-time systems]. Unlike traditional distributed systems that may tolerate eventual consistency, the physiological measurement context requires strong temporal consistency to enable meaningful correlation analysis between sensor modalities.
+
+The consensus implementation incorporates modified Byzantine fault tolerance concepts adapted for mobile device coordination, where individual devices may exhibit performance variations or temporary connectivity issues without compromising overall system integrity. The algorithms maintain temporal ordering guarantees while accommodating the dynamic nature of mobile device networks.
+
+**Clock Synchronization and Drift Compensation**: The system implements sophisticated clock synchronization algorithms that extend traditional Network Time Protocol (NTP) approaches with machine learning-based drift prediction and compensation mechanisms [CITE - Advanced clock synchronization for distributed systems]. The synchronization framework accounts for the heterogeneous timing characteristics of different mobile platforms while maintaining research-grade temporal precision.
+
+The drift compensation system continuously monitors timing characteristics across all devices and applies predictive corrections that maintain synchronization accuracy even during periods of limited network connectivity. This capability is essential for extended recording sessions where cumulative timing drift could compromise data correlation accuracy.
+
 #### Master-Coordinator Pattern Implementation
 
 The master-coordinator pattern provides the organizational framework for managing complex multi-device recording sessions while maintaining clear responsibility boundaries and communication protocols. The pattern implementation addresses the unique challenges of coordinating mobile devices that may have varying computational capabilities, network connectivity characteristics, and battery constraints.
+
+The pattern design incorporates lessons learned from distributed database systems and real-time embedded systems while adapting these concepts to the specific requirements of research instrumentation [CITE - Distributed system design patterns]. The implementation ensures that coordination overhead remains minimal while providing the precise control necessary for synchronized data collection.
 
 ```mermaid
 graph TD

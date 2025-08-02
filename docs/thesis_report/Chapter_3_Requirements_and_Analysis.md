@@ -99,6 +99,156 @@ The requirements elicitation process employed multiple complementary methods des
 
 The functional requirements specification defines the core capabilities that the Multi-Sensor Recording System must provide to achieve its research objectives. These requirements emerged from the comprehensive stakeholder analysis and represent the essential behaviors and operations that enable contactless GSR prediction research. The functional requirements are organized into logical groupings that reflect the system's architectural components and operational workflows.
 
+The requirements engineering process employed systematic analysis methodologies to ensure complete coverage of stakeholder needs while maintaining technical feasibility and research validity [CITE - Requirements engineering for research systems]. The approach recognizes that research software presents unique challenges compared to traditional commercial applications, requiring specialized validation criteria and performance metrics that support scientific methodology and reproducible research outcomes.
+
+### Core System Coordination Requirements
+
+#### FR-001: Multi-Device Coordination and Management
+
+**Requirement Statement**: The system shall coordinate synchronized data collection from a minimum of four simultaneous devices with automatic device discovery, connection management, and status monitoring capabilities.
+
+**Technical Rationale**: Multi-device coordination represents the foundational capability that distinguishes this system from traditional single-device measurement approaches. The design decision to support four simultaneous devices reflects analysis of typical research scenarios requiring both RGB and thermal capture capabilities for multiple participants or multiple viewing angles [CITE - Multi-participant physiological research methodologies]. The automatic discovery capability addresses practical deployment constraints in research environments where technical setup time directly impacts experimental efficiency and participant comfort.
+
+**Validation Criteria**: 
+- Device discovery completion within 30 seconds under standard network conditions
+- Simultaneous connection stability for extended sessions (≥4 hours continuous operation)
+- Automatic reconnection capability with <15 seconds recovery time for transient disconnections
+- Connection status monitoring with 1-second update intervals and comprehensive error reporting
+
+**Implementation Dependencies**: 
+- Network service discovery protocols [CITE - mDNS and service discovery]
+- WebSocket-based communication infrastructure
+- Device capability negotiation and compatibility validation
+- Comprehensive error handling and recovery mechanisms
+
+#### FR-002: Temporal Synchronization and Precision Management
+
+**Requirement Statement**: The system shall maintain temporal synchronization across all connected devices with maximum deviation of ≤5ms from the reference timeline throughout recording sessions.
+
+**Technical Rationale**: Precise temporal synchronization constitutes a critical requirement for multi-modal physiological research where data fusion requires exact temporal alignment between sensor modalities [CITE - Temporal precision requirements in physiological measurement]. The 5ms tolerance specification reflects analysis of physiological signal characteristics and the temporal resolution required for accurate correlation analysis between contactless measurements and reference GSR data. This precision requirement necessitated development of sophisticated synchronization algorithms that compensate for network latency variations and device-specific timing characteristics.
+
+**Validation Criteria**:
+- Initial synchronization establishment within 10 seconds of session initiation
+- Continuous synchronization monitoring with drift detection and correction
+- Temporal precision validation using reference timing signals
+- Comprehensive timing metadata generation for post-session analysis
+
+**Implementation Dependencies**:
+- Network Time Protocol (NTP) synchronization services
+- High-resolution timestamp generation capabilities across platforms
+- Latency measurement and compensation algorithms [CITE - Network latency compensation techniques]
+- Clock drift detection and correction mechanisms
+
+#### FR-003: Session Management and Lifecycle Control
+
+**Requirement Statement**: The system shall provide comprehensive session lifecycle management including session creation, configuration, execution monitoring, and controlled termination with automatic data preservation.
+
+**Technical Rationale**: Session management represents the operational framework that enables reproducible research protocols and ensures data integrity throughout the experimental process. The design incorporates lessons learned from research workflow analysis and addresses the critical need for automated data preservation that protects against data loss due to system failures or operator errors [CITE - Research data management best practices]. The session framework supports complex experimental protocols while maintaining simplicity for routine operations.
+
+**Validation Criteria**:
+- Session configuration persistence and restoration capabilities
+- Real-time session monitoring with status updates and progress indicators
+- Automatic data backup during session execution with configurable intervals
+- Graceful session termination with complete data preservation and metadata generation
+
+### Data Acquisition and Processing Requirements
+
+#### FR-010: Advanced Video Data Capture and Processing
+
+**Requirement Statement**: The system shall capture RGB video data at minimum 30 frames per second with resolution of at least 1920×1080 pixels, including advanced camera control capabilities and real-time quality assessment.
+
+**Technical Rationale**: Video data capture specifications reflect the computational requirements for extracting physiological indicators from visual data while balancing processing demands with hardware capabilities typical of research environments [CITE - Computer vision requirements for physiological monitoring]. The resolution and frame rate specifications ensure adequate temporal and spatial resolution for detecting subtle physiological changes while remaining within the processing capabilities of standard Android devices. Advanced camera control enables adaptation to varying lighting conditions commonly encountered in research settings.
+
+**Performance Specifications**:
+
+| Parameter | Minimum | Target | Maximum |
+|-----------|---------|---------|---------|
+| **Frame Rate** | 30 fps | 60 fps | 120 fps |
+| **Resolution** | 1920×1080 | 3840×2160 | 7680×4320 |
+| **Color Depth** | 8 bits | 10 bits | 12 bits |
+| **Dynamic Range** | Standard | High (HDR) | Extended HDR |
+
+**Implementation Dependencies**:
+- Android Camera2 API for advanced camera control [CITE - Android Camera2 API documentation]
+- Real-time video processing capabilities with hardware acceleration support
+- Adaptive exposure and focus control algorithms
+- Video compression and storage optimization for extended recording sessions
+
+#### FR-011: Thermal Imaging Integration and Analysis
+
+**Requirement Statement**: The system shall integrate thermal imaging capabilities with minimum 25 frames per second acquisition rate and temperature resolution of ≤0.1°C for physiological temperature variation detection.
+
+**Technical Rationale**: Thermal imaging integration provides complementary physiological information that enhances the contactless measurement capability by detecting temperature variations associated with autonomic nervous system responses [CITE - Thermal imaging for physiological measurement]. The specification for 0.1°C temperature resolution ensures adequate sensitivity for detecting physiological responses while accounting for environmental temperature variations typical in research settings. The choice of Topdon TC001 thermal camera reflects analysis of available research-grade thermal imaging solutions that balance measurement accuracy with cost considerations for research laboratory adoption.
+
+**Technical Specifications**:
+- Temperature measurement range: -20°C to +550°C with physiological optimization
+- Thermal sensitivity: ≤40mK (0.04°C) for optimal physiological detection
+- Spatial resolution: 256×192 thermal pixels with visible light overlay capability
+- Calibration accuracy: ±2°C or ±2% of reading with drift compensation
+
+**Implementation Dependencies**:
+- USB-C OTG integration for thermal camera connectivity
+- Thermal camera SDK integration and optimization [CITE - Topdon TC001 SDK documentation]
+- Temperature calibration and environmental compensation algorithms
+- Real-time thermal data processing and feature extraction capabilities
+
+#### FR-012: Physiological Sensor Integration and Validation
+
+**Requirement Statement**: The system shall integrate Shimmer3 GSR+ physiological sensors with minimum 50 Hz sampling rate and provide reference measurements for contactless prediction algorithm validation.
+
+**Technical Rationale**: Integration of reference physiological sensors serves multiple critical functions including ground truth data generation for machine learning model training, real-time validation of contactless measurements, and compliance with established psychophysiological research protocols [CITE - Shimmer3 GSR+ validation studies]. The 50 Hz sampling specification exceeds typical GSR measurement requirements to ensure adequate temporal resolution for correlation analysis with higher-frequency contactless measurements. The Shimmer3 GSR+ selection reflects its established validation in research applications and compatibility with standard psychophysiological research protocols.
+
+**Performance Requirements**:
+- Sampling rate: 50-512 Hz selectable with timestamp precision ≤1ms
+- Dynamic range: 0.1-50 μS with 16-bit resolution for physiological measurements
+- Bluetooth Low Energy connectivity with automatic reconnection capability
+- Real-time data streaming with <100ms latency for immediate validation
+
+**Implementation Dependencies**:
+- PyShimmer library integration for sensor communication [CITE - PyShimmer library documentation]
+- Bluetooth communication protocol optimization for low-latency data transfer
+- Real-time signal processing for quality assessment and artifact detection
+- Cross-platform data synchronization with video and thermal measurements
+
+### Advanced Processing and Analysis Requirements
+
+#### FR-020: Real-Time Signal Processing and Feature Extraction
+
+**Requirement Statement**: The system shall implement real-time signal processing pipelines that extract physiological features from multi-modal sensor data with signal-to-noise ratio ≥20 dB and processing latency ≤200ms.
+
+**Technical Rationale**: Real-time processing capabilities enable immediate feedback for experimental validation and quality assurance while supporting adaptive experimental protocols that respond to participant physiological state [CITE - Real-time physiological signal processing]. The SNR requirement ensures adequate signal quality for reliable feature extraction while the latency specification supports real-time applications requiring immediate physiological assessment. The processing pipeline design incorporates advanced filtering and feature extraction techniques specifically optimized for contactless physiological measurement applications.
+
+**Processing Pipeline Components**:
+- Multi-modal sensor data fusion with temporal alignment verification
+- Adaptive filtering algorithms optimized for physiological signal characteristics
+- Computer vision processing for RGB-based physiological feature extraction
+- Thermal analysis algorithms for autonomic nervous system response detection
+- Statistical quality assessment with real-time validation and confidence metrics
+
+**Implementation Dependencies**:
+- OpenCV computer vision library for advanced image processing [CITE - OpenCV documentation]
+- SciPy signal processing libraries for physiological signal analysis [CITE - SciPy signal processing]
+- Machine learning frameworks for real-time feature extraction and classification
+- Multi-threading and parallel processing optimization for real-time performance
+
+#### FR-021: Machine Learning Inference and Prediction
+
+**Requirement Statement**: The system shall perform contactless GSR prediction using trained machine learning models with inference time ≤100ms and prediction accuracy validated against reference measurements.
+
+**Technical Rationale**: Machine learning inference capabilities represent the core innovation that enables contactless GSR prediction from multi-modal sensor data. The 100ms inference requirement ensures real-time prediction capability suitable for interactive research applications while maintaining prediction accuracy comparable to contact-based measurements [CITE - Machine learning for physiological prediction]. The model architecture must balance prediction accuracy with computational efficiency constraints imposed by real-time operation and mobile platform limitations.
+
+**Model Performance Requirements**:
+- Prediction accuracy: ≥85% correlation with reference GSR measurements
+- Real-time inference: ≤100ms latency for multi-modal feature processing
+- Model adaptability: Support for participant-specific calibration and adaptation
+- Uncertainty quantification: Confidence intervals and prediction reliability metrics
+
+**Implementation Dependencies**:
+- TensorFlow Lite or PyTorch Mobile for optimized mobile inference [CITE - Mobile machine learning frameworks]
+- Model optimization techniques for real-time performance on mobile platforms
+- Feature engineering pipelines optimized for multi-modal physiological data
+- Model validation and testing frameworks ensuring prediction reliability
+
 Each functional requirement includes detailed specifications that provide measurable criteria for validation and acceptance testing. The requirement specifications balance the need for precision with sufficient flexibility to accommodate the diverse research applications that the system must support. The prioritization scheme reflects both the technical dependencies between requirements and their relative importance for achieving the primary research objectives.
 
 ### Core System Functions
