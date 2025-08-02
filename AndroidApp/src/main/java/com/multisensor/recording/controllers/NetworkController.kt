@@ -60,7 +60,7 @@ class NetworkController @Inject constructor() {
         fun onStreamingQualityChanged(quality: StreamingQuality)
         fun onNetworkRecovery(networkType: String)
         fun updateStatusText(text: String)
-        fun showToast(message: String, duration: Int = android.widget.Toast.LENGTH_SHORT)
+        fun showToast(message: String, duration: Int)
         fun getStreamingIndicator(): View?
         fun getStreamingLabel(): View?
         fun getStreamingDebugOverlay(): android.widget.TextView?

@@ -38,10 +38,20 @@ class UIController @Inject constructor() {
     
     companion object {
         private const val UI_PREFS_NAME = "ui_controller_prefs"
+        private const val PREFS_NAME = "ui_controller_prefs"
         private const val PREF_THEME_MODE = "theme_mode"
         private const val PREF_ACCESSIBILITY_ENABLED = "accessibility_enabled"
         private const val PREF_COMPONENT_VALIDATION = "component_validation"
         private const val PREF_UI_STATE = "ui_state"
+        private const val KEY_LAST_BATTERY_LEVEL = "last_battery_level"
+        private const val KEY_PC_CONNECTION_STATUS = "pc_connection_status"
+        private const val KEY_SHIMMER_CONNECTION_STATUS = "shimmer_connection_status"
+        private const val KEY_THERMAL_CONNECTION_STATUS = "thermal_connection_status"
+        private const val KEY_RECORDING_STATE = "recording_state"
+        private const val KEY_STREAMING_STATE = "streaming_state"
+        private const val KEY_UI_THEME_MODE = "ui_theme_mode"
+        private const val KEY_ACCESSIBILITY_MODE = "accessibility_mode"
+        private const val KEY_HIGH_CONTRAST_MODE = "high_contrast_mode"
     }
     
     /**
@@ -119,19 +129,6 @@ class UIController @Inject constructor() {
     
     // SharedPreferences for UI state persistence
     private var sharedPreferences: SharedPreferences? = null
-    
-    companion object {
-        private const val PREFS_NAME = "ui_controller_prefs"
-        private const val KEY_LAST_BATTERY_LEVEL = "last_battery_level"
-        private const val KEY_PC_CONNECTION_STATUS = "pc_connection_status"
-        private const val KEY_SHIMMER_CONNECTION_STATUS = "shimmer_connection_status"
-        private const val KEY_THERMAL_CONNECTION_STATUS = "thermal_connection_status"
-        private const val KEY_RECORDING_STATE = "recording_state"
-        private const val KEY_STREAMING_STATE = "streaming_state"
-        private const val KEY_UI_THEME_MODE = "ui_theme_mode"
-        private const val KEY_ACCESSIBILITY_MODE = "accessibility_mode"
-        private const val KEY_HIGH_CONTRAST_MODE = "high_contrast_mode"
-    }
     
     /**
      * Set the callback for UI events and initialize state persistence
@@ -1159,53 +1156,6 @@ class UIController @Inject constructor() {
         }
         
         android.util.Log.d("UIController", "[DEBUG_LOG] Component validation: $enabled")
-    }
-    
-    /**
-     * Validate UI components
-     */
-    fun validateUIComponents(): ValidationResult {
-        if (!componentValidationEnabled) {
-            return ValidationResult(true)
-        }
-        
-        val errors = mutableListOf<String>()
-        val warnings = mutableListOf<String>()
-        
-        // Validate required components exist
-        if (callback?.getStatusText() == null) {
-            errors.add("Status text component not found")
-        }
-        
-        if (callback?.getStartRecordingButton() == null) {
-            errors.add("Start recording button not found")
-        }
-        
-        if (callback?.getStopRecordingButton() == null) {
-            warnings.add("Stop recording button not found")
-        }
-        
-        // Validate component accessibility
-        callback?.getContext()?.let { context ->
-            val accessibilityManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-            if (accessibilityManager.isEnabled && !accessibilityConfig.isEnabled) {
-                warnings.add("Accessibility is enabled system-wide but not configured in app")
-            }
-        }
-        
-        // Validate theme consistency
-        if (currentThemeMode == ThemeMode.AUTO) {
-            warnings.add("Auto theme mode may cause inconsistent appearance")
-        }
-        
-        val result = ValidationResult(
-            isValid = errors.isEmpty(),
-            errors = errors,
-            warnings = warnings
-        )
-        
-        android.util.Log.d("UIController", "[DEBUG_LOG] UI validation: ${if (result.isValid) "PASSED" else "FAILED"} (${errors.size} errors, ${warnings.size} warnings)")
-        return result
     }
     
     /**

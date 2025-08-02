@@ -551,7 +551,7 @@ class PermissionController @Inject constructor(
      */
     fun analyzeComplexity(context: Context): ComplexityAnalysis {
         val totalPermissions = permissionManager.getAllRequiredPermissions().size
-        val stateSpaceSize = pow(4.0, totalPermissions.toDouble()).toInt() // 4 states per permission
+        val stateSpaceSize = kotlin.math.pow(4.0, totalPermissions.toDouble()).toInt() // 4 states per permission
         val currentGrantedCount = permissionManager.getGrantedPermissions(context).size
         val transitionComplexity = calculateTransitionComplexity(totalPermissions, currentGrantedCount)
         

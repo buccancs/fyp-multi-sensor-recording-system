@@ -77,9 +77,10 @@ import com.multisensor.recording.controllers.NetworkController
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     PermissionManager.PermissionCallback,
+    PermissionController.PermissionCallback,
     ShimmerController.ShimmerCallback,
     UsbDeviceManager.UsbDeviceCallback,
-
+    UsbController.UsbCallback,
     HandSegmentationManager.HandSegmentationListener,
     HandSegmentationControlView.HandSegmentationControlListener,
     NetworkController.NetworkCallback {
@@ -298,12 +299,6 @@ class MainActivity : AppCompatActivity(),
 
         return isSupported
     }
-
-    /**
-     * Check if all required permissions are granted
-     */
-    private fun areAllPermissionsGranted(): Boolean =
-        permissionController.areAllPermissionsGranted(this)
 
     override fun onStart() {
         super.onStart()
@@ -1652,10 +1647,6 @@ class MainActivity : AppCompatActivity(),
         // Final status will be set by other callbacks
     }
     
-    override fun updateStatusText(text: String) {
-        binding.statusText.text = text
-    }
-    
     override fun showPermissionButton(show: Boolean) {
         binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
     }
@@ -1698,22 +1689,6 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Controller error: $message")
         updateStatusText("Shimmer Error: $message")
         showToast("Shimmer Error: $message", Toast.LENGTH_LONG)
-    }
-
-    override fun updateStatusText(text: String) {
-        runOnUiThread {
-            binding.statusText.text = text
-        }
-    }
-
-    override fun showToast(message: String, duration: Int) {
-        runOnUiThread {
-            Toast.makeText(this, message, duration).show()
-        }
-    }
-
-    override fun runOnUiThread(action: () -> Unit) {
-        runOnUiThread(action)
     }
 
     // ========== UsbController.UsbCallback Implementation ==========
@@ -1806,18 +1781,6 @@ class MainActivity : AppCompatActivity(),
         }
     }
     
-    override fun updateStatusText(text: String) {
-        runOnUiThread {
-            binding.statusText.text = text
-        }
-    }
-    
-    override fun showToast(message: String, duration: Int) {
-        runOnUiThread {
-            Toast.makeText(this, message, duration).show()
-        }
-    }
-    
     override fun getStreamingIndicator(): View? = binding.streamingIndicator
     
     override fun getStreamingLabel(): View? = binding.streamingLabel
@@ -1857,10 +1820,6 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun updateStatusText(text: String) {
-        binding.statusText.text = text
-    }
-
     override fun initializeRecordingSystem() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing recording system from USB controller")
         // Call the private initializeRecordingSystem method
@@ -1871,5 +1830,29 @@ class MainActivity : AppCompatActivity(),
         return AllAndroidPermissions.getDangerousPermissions().all { permission ->
             ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
         }
+    }
+
+    // ========== Common Callback Method Implementations ==========
+    // These methods are shared across multiple interfaces
+    
+    override fun updateStatusText(text: String) {
+        runOnUiThread {
+            binding.statusText.text = text
+        }
+    }
+
+    override fun showToast(message: String, duration: Int) {
+        runOnUiThread {
+            Toast.makeText(this, message, duration).show()
+        }
+    }
+    
+    // Additional overload for convenience
+    fun showToast(message: String) {
+        showToast(message, Toast.LENGTH_SHORT)
+    }
+
+    override fun runOnUiThread(action: () -> Unit) {
+        super.runOnUiThread(action)
     }
 }
