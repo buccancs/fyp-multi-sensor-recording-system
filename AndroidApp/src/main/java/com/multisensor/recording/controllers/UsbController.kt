@@ -106,6 +106,8 @@ class UsbController @Inject constructor(
         fun onDeviceDetached(device: UsbDevice)
         fun onUsbError(message: String)
         fun updateStatusText(text: String)
+        fun showToast(message: String, duration: Int)
+        fun getContext(): Context
         fun initializeRecordingSystem()
         fun areAllPermissionsGranted(): Boolean
     }
@@ -935,7 +937,7 @@ class UsbController @Inject constructor(
     fun setDevicePriority(deviceId: String, priority: Int) {
         deviceProfiles[deviceId]?.let { profile ->
             deviceProfiles[deviceId] = profile.copy(priority = priority, lastUsed = System.currentTimeMillis())
-            callback?.getContext()?.let { saveDeviceProfiles(it) }
+            callback?.getContext()?.let { context -> saveDeviceProfiles(context) }
             
             android.util.Log.d("UsbController", "[DEBUG_LOG] Device priority set: $deviceId -> $priority")
         }
@@ -986,9 +988,9 @@ class UsbController @Inject constructor(
                 }
             }
             
-            callback?.showToast("Device replaced: ${newDevice.deviceName}")
+            callback?.showToast("Device replaced: ${newDevice.deviceName}", android.widget.Toast.LENGTH_SHORT)
         } else {
-            callback?.showToast("Device removed: ${removedDevice.deviceName}")
+            callback?.showToast("Device removed: ${removedDevice.deviceName}", android.widget.Toast.LENGTH_SHORT)
         }
     }
     
@@ -1062,7 +1064,7 @@ class UsbController @Inject constructor(
             )
         }
         
-        callback?.getContext()?.let { saveDeviceProfiles(it) }
+        callback?.getContext()?.let { context -> saveDeviceProfiles(context) }
         android.util.Log.d("UsbController", "[DEBUG_LOG] Calibration state saved for device: $deviceId")
     }
     

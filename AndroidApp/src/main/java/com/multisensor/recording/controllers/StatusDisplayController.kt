@@ -122,6 +122,10 @@ class StatusDisplayController @Inject constructor() {
     private var statusThemeConfig = StatusThemeConfig()
     private var statusUpdateInterval = DEFAULT_UPDATE_INTERVAL
     private val customMetrics = mutableMapOf<String, Any>()
+    private var isMonitoringActive = false
+    
+    // Status update timer
+    private var statusUpdateTimer: java.util.Timer? = null
     
     // Battery monitoring receiver
     private val batteryReceiver = object : BroadcastReceiver() {
@@ -265,26 +269,6 @@ class StatusDisplayController @Inject constructor() {
             callback?.onConnectionStatusChanged(ConnectionType.SHIMMER, shimmerConnected)
             callback?.onConnectionStatusChanged(ConnectionType.THERMAL, thermalConnected)
         }
-    }
-    
-    /**
-     * Starts periodic status updates every 5 seconds
-     * Extracted from MainActivity.startPeriodicStatusUpdates()
-     */
-    private fun startPeriodicStatusUpdates() {
-        val updateRunnable = object : Runnable {
-            override fun run() {
-                // Update sensor connection status based on current state
-                // Note: Connection status will be updated by other components when they change
-                // This periodic update mainly ensures UI consistency
-
-                // Schedule next update
-                statusUpdateHandler.postDelayed(this, 5000) // 5 seconds
-            }
-        }
-        statusUpdateHandler.post(updateRunnable)
-        
-        android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Periodic status updates started")
     }
     
     /**
@@ -585,5 +569,33 @@ class StatusDisplayController @Inject constructor() {
         ))
         
         android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Enhanced status display initialized")
+    }
+    
+    /**
+     * Start periodic status updates
+     */
+    private fun startPeriodicStatusUpdates() {
+        if (isMonitoringActive) return
+        
+        statusUpdateTimer = java.util.Timer()
+        statusUpdateTimer?.scheduleAtFixedRate(object : java.util.TimerTask() {
+            override fun run() {
+                // Update status if callback is available
+                callback?.let { 
+                    // Trigger status updates
+                }
+            }
+        }, 0, statusUpdateInterval)
+        
+        isMonitoringActive = true
+    }
+    
+    /**
+     * Stop periodic status updates
+     */
+    private fun stopPeriodicStatusUpdates() {
+        statusUpdateTimer?.cancel()
+        statusUpdateTimer = null
+        isMonitoringActive = false
     }
 }
