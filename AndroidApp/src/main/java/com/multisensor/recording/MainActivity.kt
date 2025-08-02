@@ -113,6 +113,16 @@ class MainActivity : AppCompatActivity() {
                 showError("Failed to open device management: ${e.message}")
             }
         }
+        
+        // Transfer files to PC
+        binding.transferButton.setOnClickListener {
+            try {
+                viewModel.transferFilesToPC()
+                showMessage("File transfer started")
+            } catch (e: Exception) {
+                showError("Failed to start file transfer: ${e.message}")
+            }
+        }
     }
 
     private fun setupFloatingActionButton() {
