@@ -7,11 +7,13 @@ for ensuring consistent parameters between Python and Android platforms.
 """
 
 import json
-import logging
 import os
 from typing import Dict, Any, Optional
 
-logger = logging.getLogger(__name__)
+# Import modern logging system
+from utils.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ConfigManager:

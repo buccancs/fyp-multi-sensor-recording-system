@@ -9,9 +9,11 @@ Created: 2025-07-30
 Author: Junie (Architectural Refactoring)
 """
 
-import logging
 from typing import Optional, Dict, Any, List
 from PyQt5.QtCore import QObject, pyqtSignal
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 # Import backend services
 from network.device_server import JsonSocketServer
@@ -66,7 +68,7 @@ class MainController(QObject):
         super().__init__(parent)
         
         # Initialize logger
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
         
         # Backend services (injected dependencies)
         self._session_manager: Optional[SessionManager] = None
