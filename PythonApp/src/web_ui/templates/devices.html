@@ -583,32 +583,191 @@
         
         function connectDevice(deviceId) {
             console.log(`Connecting to device: ${deviceId}`);
-            // Implement device connection logic
+            
+            fetch('/api/device/connect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    device_id: deviceId,
+                    device_type: 'android'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Successfully connected to ${deviceId}`);
+                    requestDeviceStatus();
+                } else {
+                    alert(`Failed to connect to ${deviceId}: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error connecting device:', error);
+                alert(`Connection failed: ${error.message}`);
+            });
         }
         
         function configureDevice(deviceId) {
             console.log(`Configuring device: ${deviceId}`);
-            // Implement device configuration dialog
+            
+            const config = prompt(`Enter configuration settings for ${deviceId} (JSON format):`, 
+                '{"recording_quality": "4K", "battery_optimization": true}');
+            
+            if (config) {
+                try {
+                    const configData = JSON.parse(config);
+                    
+                    fetch('/api/device/configure', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            device_id: deviceId,
+                            device_type: 'android',
+                            configuration: configData
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Device ${deviceId} configured successfully`);
+                            requestDeviceStatus();
+                        } else {
+                            alert(`Configuration failed: ${data.error}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error configuring device:', error);
+                        alert(`Configuration failed: ${error.message}`);
+                    });
+                } catch (e) {
+                    alert('Invalid JSON configuration format');
+                }
+            }
         }
         
         function testWebcam(webcamId) {
             console.log(`Testing webcam: ${webcamId}`);
-            // Implement webcam test functionality
+            
+            fetch('/api/webcam/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    webcam_id: webcamId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Webcam ${webcamId} test successful\nResolution: ${data.test_results.resolution}\nFrame Rate: ${data.test_results.fps} fps`);
+                } else {
+                    alert(`Webcam test failed: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error testing webcam:', error);
+                alert(`Webcam test failed: ${error.message}`);
+            });
         }
         
         function configureWebcam(webcamId) {
             console.log(`Configuring webcam: ${webcamId}`);
-            // Implement webcam configuration
+            
+            const resolution = prompt('Select resolution:', '1920x1080');
+            const fps = prompt('Frame rate (fps):', '30');
+            
+            if (resolution && fps) {
+                fetch('/api/webcam/configure', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        webcam_id: webcamId,
+                        resolution: resolution,
+                        fps: parseInt(fps)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Webcam ${webcamId} configured successfully`);
+                        requestDeviceStatus();
+                    } else {
+                        alert(`Configuration failed: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error configuring webcam:', error);
+                    alert(`Configuration failed: ${error.message}`);
+                });
+            }
         }
         
         function connectShimmer(sensorId) {
             console.log(`Connecting to Shimmer sensor: ${sensorId}`);
-            // Implement Shimmer connection logic
+            
+            fetch('/api/shimmer/connect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sensor_id: sensorId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Successfully paired with Shimmer sensor ${sensorId}`);
+                    requestDeviceStatus();
+                } else {
+                    alert(`Failed to connect to ${sensorId}: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error connecting Shimmer sensor:', error);
+                alert(`Connection failed: ${error.message}`);
+            });
         }
         
         function configureShimmer(sensorId) {
             console.log(`Configuring Shimmer sensor: ${sensorId}`);
-            // Implement Shimmer configuration
+            
+            const sampleRate = prompt(`Sample rate for ${sensorId} (Hz):`, '256');
+            const sensors = prompt('Enabled sensors (comma-separated):', 'GSR,Accelerometer,Gyroscope');
+            
+            if (sampleRate && sensors) {
+                fetch('/api/shimmer/configure', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sensor_id: sensorId,
+                        sample_rate: parseInt(sampleRate),
+                        enabled_sensors: sensors.split(',').map(s => s.trim())
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Shimmer sensor ${sensorId} configured successfully`);
+                        requestDeviceStatus();
+                    } else {
+                        alert(`Configuration failed: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error configuring Shimmer sensor:', error);
+                    alert(`Configuration failed: ${error.message}`);
+                });
+            }
         }
     </script>
 </body>

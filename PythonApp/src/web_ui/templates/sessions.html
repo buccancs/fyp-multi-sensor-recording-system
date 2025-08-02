@@ -686,17 +686,102 @@
         
         function exportSessions() {
             console.log('Exporting session data...');
-            // Implement session export functionality
+            
+            fetch('/api/sessions/export', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('Export failed');
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `session_export_${new Date().toISOString().slice(0, 10)}.json`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                alert('Session data exported successfully');
+            })
+            .catch(error => {
+                console.error('Error exporting sessions:', error);
+                alert(`Export failed: ${error.message}`);
+            });
         }
         
         function viewSession(sessionId) {
             console.log(`Viewing session: ${sessionId}`);
-            // Implement session details view
+            
+            fetch(`/api/session/${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const session = data.session;
+                    const details = `
+Session Details:
+━━━━━━━━━━━━━━━━
+ID: ${session.id}
+Name: ${session.name || 'Unnamed Session'}
+Start Time: ${new Date(session.start_time).toLocaleString()}
+End Time: ${new Date(session.end_time).toLocaleString()}
+Duration: ${Math.floor(session.duration / 60)}m ${session.duration % 60}s
+Devices: ${session.devices.join(', ')}
+Status: ${session.status}
+Data Size: ${session.data_size}
+━━━━━━━━━━━━━━━━
+
+Data Collected:
+• Video Files: ${session.data_collected?.video_files || 0}
+• Thermal Frames: ${session.data_collected?.thermal_frames || 0}
+• GSR Samples: ${session.data_collected?.gsr_samples || 0}
+• Audio Files: ${session.data_collected?.audio_files || 0}
+                    `;
+                    alert(details);
+                } else {
+                    alert(`Failed to load session details: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error viewing session:', error);
+                alert(`Failed to load session: ${error.message}`);
+            });
         }
         
         function downloadSession(sessionId) {
             console.log(`Downloading session: ${sessionId}`);
-            // Implement session download
+            
+            if (confirm(`Download all data for session ${sessionId}? This may be a large file.`)) {
+                fetch(`/api/session/${sessionId}/download`, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    } else {
+                        throw new Error('Download failed');
+                    }
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${sessionId}_data.zip`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    alert(`Session ${sessionId} downloaded successfully`);
+                })
+                .catch(error => {
+                    console.error('Error downloading session:', error);
+                    alert(`Download failed: ${error.message}`);
+                });
+            }
         }
     </script>
 </body>
