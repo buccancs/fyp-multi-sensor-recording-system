@@ -31,18 +31,44 @@ from gui.enhanced_ui_main_window import EnhancedMainWindow
 logger = get_logger(__name__)
 
 
+def check_display_availability():
+    """Check if a display server is available for GUI applications."""
+    display = os.environ.get('DISPLAY')
+    if not display:
+        logger.warning("No DISPLAY environment variable set")
+        return False
+    return True
+
+
 def main():
     """Main application entry point with enhanced PsychoPy-inspired UI."""
     logger.info("=== Multi-Sensor Recording System Controller Starting (Enhanced UI) ===")
     logger.info(f"Python version: {sys.version}")
     logger.info(f"PyQt5 available, Qt version: {qVersion()}")
     
+    # Check for headless environment
+    headless_mode = os.environ.get('MSR_HEADLESS', 'false').lower() == 'true'
+    if headless_mode:
+        logger.info("Running in headless mode (MSR_HEADLESS=true)")
+        logger.warning("GUI will not be displayed in headless mode")
+    
     try:
+        # Check display availability first
+        if not check_display_availability():
+            logger.warning("No display server detected. GUI might not work properly.")
+            logger.info("To run with virtual display, use: xvfb-run -a python main.py")
+            logger.info("To run in headless mode, set: export MSR_HEADLESS=true")
+        
         # Enable high DPI scaling for better display on high-resolution screens
         # These must be set before creating QApplication
         logger.debug("Configuring high DPI scaling")
         QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
         QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+
+        # Configure platform plugin for headless environments
+        if headless_mode or not check_display_availability():
+            os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+            logger.info("Using offscreen Qt platform for headless operation")
 
         # Create QApplication instance
         logger.debug("Creating QApplication instance")
@@ -62,9 +88,12 @@ def main():
         main_window = EnhancedMainWindow()
         logger.info("Enhanced MainWindow created successfully")
 
-        logger.debug("Showing main window")
-        main_window.show()
-        logger.info("Enhanced main window displayed")
+        if not headless_mode:
+            logger.debug("Showing main window")
+            main_window.show()
+            logger.info("Enhanced main window displayed")
+        else:
+            logger.info("Running in headless mode - window not displayed")
 
         # Start the PyQt event loop
         logger.info("Starting PyQt event loop")
@@ -73,7 +102,22 @@ def main():
         sys.exit(exit_code)
         
     except Exception as e:
-        logger.error(f"Fatal error during application startup: {e}", exc_info=True)
+        # Provide helpful error messages for common issues
+        error_msg = str(e)
+        if "could not connect to display" in error_msg.lower():
+            logger.error("Display connection error - running in headless environment")
+            logger.error("Solutions:")
+            logger.error("1. Use virtual display: xvfb-run -a python main.py")
+            logger.error("2. Set headless mode: export MSR_HEADLESS=true")
+            logger.error("3. Enable X11 forwarding if using SSH")
+        elif "qt platform plugin" in error_msg.lower():
+            logger.error("Qt platform plugin error - GUI initialization failed")
+            logger.error("Solutions:")
+            logger.error("1. Install required Qt packages: sudo apt-get install qt5-default")
+            logger.error("2. Use virtual display: xvfb-run -a python main.py")
+            logger.error("3. Set QT_QPA_PLATFORM=offscreen for headless mode")
+        else:
+            logger.error(f"Fatal error during application startup: {e}", exc_info=True)
         sys.exit(1)
 
 

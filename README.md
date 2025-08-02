@@ -51,8 +51,17 @@ conda activate thermal-env
 # Build entire project
 ./gradlew build
 
-# Run desktop application
+# Run desktop application (smart launcher auto-detects environment)
+cd PythonApp && ./run_app.sh
+
+# Alternative: Run desktop application via Gradle
 ./gradlew :PythonApp:runDesktopApp
+
+# For headless environments (servers, Docker, CI/CD)
+cd PythonApp && xvfb-run -a python src/main.py
+
+# For completely headless operation (no GUI)
+cd PythonApp && MSR_HEADLESS=true python src/main.py
 
 # Build Android APK
 ./gradlew :AndroidApp:assembleDebug
@@ -850,6 +859,13 @@ Key Android build settings:
 - Ensure Android SDK is properly configured
 - Set `ANDROID_HOME` or `ANDROID_SDK_ROOT` environment variable
 - Verify required Android SDK components are installed
+
+**GUI Application Crashes (PyQt5 Display Issues)**
+- **Problem**: App crashes with "could not connect to display" or "no Qt platform plugin could be initialized"
+- **Solution 1** (Virtual Display): `xvfb-run -a python PythonApp/src/main.py`
+- **Solution 2** (Headless Mode): `export MSR_HEADLESS=true && python PythonApp/src/main.py`
+- **Solution 3** (Auto-detect): Use `PythonApp/run_app.sh` launcher script
+- **See**: [Headless Operation Guide](docs/HEADLESS_OPERATION.md) for detailed instructions
 
 **Build Validation**
 Run the validation script for comprehensive environment checking:
