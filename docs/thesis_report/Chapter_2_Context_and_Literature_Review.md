@@ -3,11 +3,45 @@
 ## Table of Contents
 
 1. [Introduction and Research Context](#introduction-and-research-context)
+   - 1.1. [Research Problem Definition and Academic Significance](#research-problem-definition-and-academic-significance)
+   - 1.2. [System Innovation and Technical Contributions](#system-innovation-and-technical-contributions)
 2. [Literature Survey and Related Work](#literature-survey-and-related-work)
+   - 2.1. [Distributed Systems and Mobile Computing Research](#distributed-systems-and-mobile-computing-research)
+   - 2.2. [Contactless Physiological Measurement and Computer Vision](#contactless-physiological-measurement-and-computer-vision)
+   - 2.3. [Thermal Imaging and Multi-Modal Sensor Integration](#thermal-imaging-and-multi-modal-sensor-integration)
+   - 2.4. [Research Software Development and Validation Methodologies](#research-software-development-and-validation-methodologies)
 3. [Supporting Tools, Software, Libraries and Frameworks](#supporting-tools-software-libraries-and-frameworks)
+   - 3.1. [Android Development Platform and Libraries](#android-development-platform-and-libraries)
+     - 3.1.1. [Core Android Framework Components](#core-android-framework-components)
+     - 3.1.2. [Essential Third-Party Libraries](#essential-third-party-libraries)
+     - 3.1.3. [Specialized Hardware Integration Libraries](#specialized-hardware-integration-libraries)
+   - 3.2. [Python Desktop Application Framework and Libraries](#python-desktop-application-framework-and-libraries)
+     - 3.2.1. [Core Python Framework](#core-python-framework)
+     - 3.2.2. [GUI Framework and User Interface Libraries](#gui-framework-and-user-interface-libraries)
+     - 3.2.3. [Computer Vision and Image Processing Libraries](#computer-vision-and-image-processing-libraries)
+     - 3.2.4. [Network Communication and Protocol Libraries](#network-communication-and-protocol-libraries)
+     - 3.2.5. [Data Storage and Management Libraries](#data-storage-and-management-libraries)
+   - 3.3. [Cross-Platform Communication and Integration](#cross-platform-communication-and-integration)
+     - 3.3.1. [JSON Protocol Implementation](#json-protocol-implementation)
+     - 3.3.2. [Network Security and Encryption](#network-security-and-encryption)
+   - 3.4. [Development Tools and Quality Assurance Framework](#development-tools-and-quality-assurance-framework)
+     - 3.4.1. [Version Control and Collaboration Tools](#version-control-and-collaboration-tools)
+     - 3.4.2. [Testing Framework and Quality Assurance](#testing-framework-and-quality-assurance)
+     - 3.4.3. [Code Quality and Static Analysis Tools](#code-quality-and-static-analysis-tools)
 4. [Technology Choices and Justification](#technology-choices-and-justification)
+   - 4.1. [Android Platform Selection and Alternatives Analysis](#android-platform-selection-and-alternatives-analysis)
+   - 4.2. [Python Desktop Platform and Framework Justification](#python-desktop-platform-and-framework-justification)
+   - 4.3. [Communication Protocol and Architecture Decisions](#communication-protocol-and-architecture-decisions)
+   - 4.4. [Database and Storage Architecture Rationale](#database-and-storage-architecture-rationale)
 5. [Theoretical Foundations](#theoretical-foundations)
+   - 5.1. [Distributed Systems Theory and Temporal Coordination](#distributed-systems-theory-and-temporal-coordination)
+   - 5.2. [Signal Processing Theory and Physiological Measurement](#signal-processing-theory-and-physiological-measurement)
+   - 5.3. [Computer Vision and Image Processing Theory](#computer-vision-and-image-processing-theory)
+   - 5.4. [Statistical Analysis and Validation Theory](#statistical-analysis-and-validation-theory)
 6. [Research Gaps and Opportunities](#research-gaps-and-opportunities)
+   - 6.1. [Technical Gaps in Existing Physiological Measurement Systems](#technical-gaps-in-existing-physiological-measurement-systems)
+   - 6.2. [Methodological Gaps in Distributed Research Systems](#methodological-gaps-in-distributed-research-systems)
+   - 6.3. [Research Opportunities and Future Directions](#research-opportunities-and-future-directions)
 
 ---
 
@@ -113,11 +147,23 @@ The networking implementation includes sophisticated connection management that 
 
 **Shimmer Android SDK (com.shimmerresearch.android 1.0.0)**: The Shimmer Android SDK provides comprehensive integration with Shimmer3 GSR+ physiological sensors, offering validated algorithms for data collection, calibration, and quality assessment [CITE - Shimmer Research. (2024). Android SDK Documentation. Shimmer Research Developer Resources]. The SDK includes pre-validated physiological measurement algorithms that ensure scientific accuracy while providing comprehensive configuration options for diverse research protocols and participant populations.
 
-The Shimmer integration includes automatic sensor discovery, connection management, and data streaming capabilities with built-in quality assessment algorithms that detect sensor artifacts and connection issues. The SDK provides access to raw sensor data for custom analysis while offering validated processing algorithms for standard physiological metrics including GSR amplitude, frequency domain analysis, and statistical quality measures essential for research applications.
+The Shimmer3 GSR+ device integration represents a sophisticated wearable sensor platform that enables high-precision galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG), accelerometry, and other biometric parameters [CITE - Burns, A., Greene, B.R., McGrath, M.J., et al. (2010). SHIMMER™–a wireless sensor platform for noninvasive biomedical research. IEEE Sensors Journal, 10(9), 1527-1534]. The device specifications include sampling rates from 1 Hz to 1000 Hz with configurable GSR measurement ranges from 10kΩ to 4.7MΩ across five distinct ranges optimized for different skin conductance conditions.
+
+The SDK architecture supports both direct Bluetooth connections and advanced multi-device coordination through sophisticated connection management algorithms that maintain reliable communication despite the inherent challenges of Bluetooth Low Energy (BLE) communication in research environments [CITE - Bluetooth SIG. (2024). Bluetooth Low Energy Developer Guide. Bluetooth Technology Website]. The implementation includes automatic device discovery, connection state management, and comprehensive error recovery mechanisms that ensure continuous data collection even during temporary communication interruptions.
+
+The data processing capabilities include real-time signal quality assessment through advanced algorithms that detect electrode contact issues, movement artifacts, and signal saturation conditions [CITE - Benedek, M., & Kaernbach, C. (2010). A continuous measure of phasic electrodermal activity. Journal of neuroscience methods, 190(1), 80-91]. The SDK provides access to both raw sensor data for custom analysis and validated processing algorithms for standard physiological metrics including GSR amplitude analysis, frequency domain decomposition, and statistical quality measures essential for research applications.
+
+The Shimmer integration includes automatic sensor discovery, connection management, and data streaming capabilities with built-in quality assessment algorithms that detect sensor artifacts and connection issues. The comprehensive calibration framework enables precise measurement accuracy through manufacturer-validated calibration coefficients and real-time calibration validation that ensures measurement consistency across devices and experimental sessions.
 
 **Topdon SDK Integration (proprietary 2024.1)**: The Topdon thermal camera SDK provides low-level access to thermal imaging capabilities including temperature measurement, thermal data export, and calibration management [CITE - Topdon Technology. (2024). TC001 SDK Documentation. Topdon Developer Resources]. The SDK enables precise temperature measurement across the thermal imaging frame while providing access to raw thermal data for advanced analysis and calibration procedures.
 
-The thermal camera integration includes automatic device detection, USB-C OTG communication management, and comprehensive error handling that ensures reliable operation despite the challenges inherent in USB device communication on mobile platforms. The SDK provides both real-time thermal imaging for preview purposes and high-precision thermal data capture for research analysis, enabling flexible operation modes that balance user interface responsiveness with research data quality requirements.
+The Topdon TC001 and TC001 Plus thermal cameras represent advanced uncooled microbolometer technology with sophisticated technical specifications optimized for research applications [CITE - FLIR Systems. (2019). The Ultimate Infrared Handbook for R&D Professionals. FLIR Commercial Systems]. The TC001 provides 256×192 pixel resolution with temperature ranges from -20°C to +550°C and measurement accuracy of ±2°C or ±2%, while the enhanced TC001 Plus extends the temperature range to +650°C with improved accuracy of ±1.5°C or ±1.5%. Both devices operate at frame rates up to 25 Hz with 8-14 μm spectral range optimized for long-wave infrared (LWIR) detection.
+
+The SDK architecture provides comprehensive integration through Android's USB On-The-Go (OTG) interface, enabling direct communication with thermal imaging hardware through USB-C connections [CITE - USB Implementers Forum. (2024). USB 3.2 Specification. USB-IF Developer Documentation]. The implementation includes sophisticated device detection algorithms, USB communication management, and comprehensive error handling that ensures reliable operation despite the challenges inherent in USB device communication on mobile platforms.
+
+The thermal data processing capabilities include real-time temperature calibration using manufacturer-validated calibration coefficients, advanced thermal image processing algorithms for noise reduction and image enhancement, and comprehensive thermal data export capabilities that support both raw thermal data access and processed temperature matrices [CITE - Gaussorgues, G., & Chomet, S. (2012). Infrared thermography. Springer Science & Business Media]. The SDK enables precise temperature measurement across the thermal imaging frame while providing access to raw thermal data for advanced analysis including emissivity correction, atmospheric compensation, and thermal signature analysis.
+
+The thermal camera integration includes automatic device detection, USB-C OTG communication management, and comprehensive error handling that ensures reliable operation despite the challenges inherent in USB device communication on mobile platforms. The SDK provides both real-time thermal imaging for preview purposes and high-precision thermal data capture for research analysis, enabling flexible operation modes that balance user interface responsiveness with research data quality requirements. The implementation supports advanced features including thermal region of interest (ROI) analysis, temperature alarm configuration, and multi-point temperature measurement that enable sophisticated physiological monitoring applications.
 
 ### Python Desktop Application Framework and Libraries
 
