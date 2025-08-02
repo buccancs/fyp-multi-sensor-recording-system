@@ -29,6 +29,7 @@ import threading
 import time
 import unittest
 from concurrent.futures import ThreadPoolExecutor
+from typing import List
 from unittest.mock import Mock, patch, MagicMock
 
 # Add src directory to path for imports
