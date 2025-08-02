@@ -4,7 +4,8 @@ Enhanced Main Application with Web Dashboard Integration
 
 This demonstrates how to integrate the new web-based dashboard with the existing
 PyQt5 desktop application. This file shows the minimal changes needed to add
-web UI capabilities to the existing application.
+web UI capabilities to the existing application by connecting to the real
+application components.
 
 Author: Multi-Sensor Recording System Team
 Date: 2025-08-02
@@ -45,6 +46,63 @@ except ImportError:
         logger.error("No GUI components available")
         EnhancedMainWindow = None
 
+# Import core application components that we need to connect to
+try:
+    from gui.main_controller import MainController
+    MAIN_CONTROLLER_AVAILABLE = True
+except ImportError:
+    logger.warning("MainController not available")
+    MainController = None
+    MAIN_CONTROLLER_AVAILABLE = False
+
+try:
+    from session.session_manager import SessionManager
+    SESSION_MANAGER_AVAILABLE = True
+except ImportError:
+    logger.warning("SessionManager not available")
+    SessionManager = None
+    SESSION_MANAGER_AVAILABLE = False
+
+try:
+    from shimmer_manager import ShimmerManager
+    SHIMMER_MANAGER_AVAILABLE = True
+except ImportError:
+    logger.warning("ShimmerManager not available")
+    ShimmerManager = None
+    SHIMMER_MANAGER_AVAILABLE = False
+
+try:
+    from network.android_device_manager import AndroidDeviceManager
+    ANDROID_DEVICE_MANAGER_AVAILABLE = True
+except ImportError:
+    logger.warning("AndroidDeviceManager not available")
+    AndroidDeviceManager = None
+    ANDROID_DEVICE_MANAGER_AVAILABLE = False
+
+try:
+    from network.device_server import JsonSocketServer
+    JSON_SOCKET_SERVER_AVAILABLE = True
+except ImportError:
+    logger.warning("JsonSocketServer not available")
+    JsonSocketServer = None
+    JSON_SOCKET_SERVER_AVAILABLE = False
+
+try:
+    from webcam.webcam_capture import WebcamCapture
+    WEBCAM_CAPTURE_AVAILABLE = True
+except ImportError:
+    logger.warning("WebcamCapture not available")
+    WebcamCapture = None
+    WEBCAM_CAPTURE_AVAILABLE = False
+
+try:
+    from gui.stimulus_controller import StimulusController
+    STIMULUS_CONTROLLER_AVAILABLE = True
+except ImportError:
+    logger.warning("StimulusController not available")
+    StimulusController = None
+    STIMULUS_CONTROLLER_AVAILABLE = False
+
 # Import web dashboard integration
 try:
     from web_ui.integration import WebDashboardIntegration
@@ -58,7 +116,7 @@ except ImportError:
 class EnhancedApplicationWithWebUI:
     """
     Enhanced application that combines the existing PyQt5 desktop UI with
-    the new web-based dashboard capabilities.
+    the new web-based dashboard capabilities using the real application architecture.
     """
     
     def __init__(self):
@@ -66,6 +124,15 @@ class EnhancedApplicationWithWebUI:
         self.app = None
         self.main_window = None
         self.web_integration = None
+        
+        # Core application components (same as used by desktop app)
+        self.main_controller = None
+        self.session_manager = None
+        self.shimmer_manager = None
+        self.android_device_manager = None
+        self.json_server = None
+        self.webcam_capture = None
+        self.stimulus_controller = None
         
         logger.info("Enhanced Application with Web UI initialized")
     
@@ -90,6 +157,64 @@ class EnhancedApplicationWithWebUI:
         
         logger.info("QApplication created and configured")
     
+    def setup_backend_services(self):
+        """Setup the backend services that the desktop app uses."""
+        logger.info("Setting up backend services...")
+        
+        try:
+            # Initialize SessionManager
+            if SESSION_MANAGER_AVAILABLE:
+                self.session_manager = SessionManager(base_recordings_dir="recordings")
+                logger.info("SessionManager initialized")
+            
+            # Initialize ShimmerManager
+            if SHIMMER_MANAGER_AVAILABLE:
+                self.shimmer_manager = ShimmerManager()
+                logger.info("ShimmerManager initialized")
+            
+            # Initialize AndroidDeviceManager
+            if ANDROID_DEVICE_MANAGER_AVAILABLE:
+                self.android_device_manager = AndroidDeviceManager(server_port=9000)
+                logger.info("AndroidDeviceManager initialized")
+            
+            # Initialize JsonSocketServer
+            if JSON_SOCKET_SERVER_AVAILABLE:
+                self.json_server = JsonSocketServer(host='0.0.0.0', port=9000)
+                logger.info("JsonSocketServer initialized")
+            
+            # Initialize WebcamCapture
+            if WEBCAM_CAPTURE_AVAILABLE:
+                self.webcam_capture = WebcamCapture()
+                logger.info("WebcamCapture initialized")
+            
+            # Initialize StimulusController
+            if STIMULUS_CONTROLLER_AVAILABLE:
+                self.stimulus_controller = StimulusController()
+                logger.info("StimulusController initialized")
+            
+            # Initialize MainController and inject dependencies
+            if MAIN_CONTROLLER_AVAILABLE:
+                self.main_controller = MainController()
+                
+                # Inject available dependencies
+                if all([self.session_manager, self.json_server, self.webcam_capture, self.stimulus_controller]):
+                    self.main_controller.inject_dependencies(
+                        self.session_manager,
+                        self.json_server,
+                        self.webcam_capture,
+                        self.stimulus_controller
+                    )
+                    logger.info("MainController initialized with dependencies")
+                else:
+                    logger.warning("Some MainController dependencies not available")
+            
+            logger.info("Backend services setup completed")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to setup backend services: {e}")
+            return False
+    
     def setup_desktop_ui(self):
         """Setup the desktop UI components."""
         if EnhancedMainWindow is None:
@@ -113,21 +238,25 @@ class EnhancedApplicationWithWebUI:
             return False
     
     def setup_web_dashboard(self):
-        """Setup the web dashboard integration."""
+        """Setup the web dashboard integration with real application components."""
         if not WEB_UI_AVAILABLE:
             logger.warning("Web UI not available, skipping web dashboard setup")
             return False
         
         try:
-            # Create web dashboard integration
+            # Create web dashboard integration with real components
             self.web_integration = WebDashboardIntegration(
                 enable_web_ui=True,
-                web_port=5000
+                web_port=5000,
+                main_controller=self.main_controller,
+                session_manager=self.session_manager,
+                shimmer_manager=self.shimmer_manager,
+                android_device_manager=self.android_device_manager
             )
             
             # Start the web dashboard
             if self.web_integration.start_web_dashboard():
-                logger.info("Web dashboard started successfully")
+                logger.info("Web dashboard started successfully with real application components")
                 
                 # Connect desktop application events to web dashboard updates
                 self._connect_web_integration()
@@ -188,20 +317,39 @@ class EnhancedApplicationWithWebUI:
         logger.info("Web dashboard integration connected to desktop application")
     
     def _update_web_dashboard_status(self):
-        """Update web dashboard with current desktop application status."""
+        """Update web dashboard with current desktop application status from real components."""
         if not self.web_integration:
             return
         
         try:
-            # Example status update - in real implementation, get actual status
+            # Get real PC status
+            import psutil
+            
+            pc_status = {
+                'status': 'running',
+                'cpu_usage': psutil.cpu_percent(interval=0.1),
+                'memory_usage': psutil.virtual_memory().percent,
+                'disk_usage': psutil.disk_usage('/').percent if os.name != 'nt' else psutil.disk_usage('C:').percent,
+                'ui_active': True,
+                'connected_devices': {
+                    'android': len(self.web_integration.device_status_cache.get('android_devices', {})),
+                    'shimmer': len(self.web_integration.device_status_cache.get('shimmer_sensors', {})),
+                    'webcam': len(self.web_integration.device_status_cache.get('usb_webcams', {}))
+                },
+                'last_update': 'Now'
+            }
+            
+            self.web_integration.update_device_status('pc_controller', 'desktop_app', pc_status)
+            
+        except ImportError:
+            # Fallback if psutil is not available
             self.web_integration.update_device_status('pc_controller', 'desktop_app', {
                 'status': 'running',
-                'cpu_usage': 45,
-                'memory_usage': 60,
+                'cpu_usage': 0,
+                'memory_usage': 0,
                 'ui_active': True,
                 'last_update': 'Now'
             })
-            
         except Exception as e:
             logger.error(f"Failed to update web dashboard status: {e}")
     
@@ -256,15 +404,19 @@ class EnhancedApplicationWithWebUI:
         # Setup PyQt5 application
         self.setup_application()
         
+        # Setup backend services (same as desktop app)
+        if not self.setup_backend_services():
+            logger.error("Failed to setup backend services, continuing with limited functionality")
+        
         # Setup desktop UI
         if not self.setup_desktop_ui():
             logger.error("Failed to setup desktop UI")
             return 1
         
-        # Setup web dashboard (optional)
+        # Setup web dashboard with real components
         web_success = self.setup_web_dashboard()
         if web_success:
-            logger.info("Application started with both desktop and web interfaces")
+            logger.info("Application started with both desktop and web interfaces connected to real components")
         else:
             logger.info("Application started with desktop interface only")
         
@@ -280,8 +432,9 @@ class EnhancedApplicationWithWebUI:
                 "Multi-Sensor Recording System",
                 f"Application started successfully!\n\n"
                 f"Desktop UI: Running\n"
-                f"Web Dashboard: {dashboard_url}\n\n"
-                f"You can access the web interface from any device on your network."
+                f"Web Dashboard: {dashboard_url}\n"
+                f"Connected Components: MainController, SessionManager, ShimmerManager, AndroidDeviceManager\n\n"
+                f"The web interface is connected to the same data sources as the desktop application."
             )
         
         # Start the PyQt event loop
@@ -295,6 +448,35 @@ class EnhancedApplicationWithWebUI:
         if self.web_integration:
             self.web_integration.stop_web_dashboard()
             logger.info("Web dashboard stopped")
+        
+        # Cleanup backend services
+        if self.shimmer_manager and hasattr(self.shimmer_manager, 'shutdown'):
+            try:
+                self.shimmer_manager.shutdown()
+                logger.info("ShimmerManager shut down")
+            except Exception as e:
+                logger.error(f"Error shutting down ShimmerManager: {e}")
+        
+        if self.android_device_manager and hasattr(self.android_device_manager, 'shutdown'):
+            try:
+                self.android_device_manager.shutdown()
+                logger.info("AndroidDeviceManager shut down")
+            except Exception as e:
+                logger.error(f"Error shutting down AndroidDeviceManager: {e}")
+        
+        if self.json_server and hasattr(self.json_server, 'stop'):
+            try:
+                self.json_server.stop()
+                logger.info("JsonSocketServer stopped")
+            except Exception as e:
+                logger.error(f"Error stopping JsonSocketServer: {e}")
+        
+        if self.webcam_capture and hasattr(self.webcam_capture, 'stop'):
+            try:
+                self.webcam_capture.stop()
+                logger.info("WebcamCapture stopped")
+            except Exception as e:
+                logger.error(f"Error stopping WebcamCapture: {e}")
         
         logger.info("Application cleanup completed")
 

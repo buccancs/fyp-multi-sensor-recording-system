@@ -43,24 +43,41 @@ class WebDashboardIntegration:
     significant changes to the existing codebase.
     """
     
-    def __init__(self, enable_web_ui: bool = True, web_port: int = 5000):
+    def __init__(self, enable_web_ui: bool = True, web_port: int = 5000, 
+                 main_controller=None, session_manager=None, shimmer_manager=None, 
+                 android_device_manager=None):
         """
         Initialize the web dashboard integration.
         
         Args:
             enable_web_ui: Whether to enable the web UI (default: True)
             web_port: Port for the web server (default: 5000)
+            main_controller: MainController instance from the desktop app
+            session_manager: SessionManager instance from the desktop app
+            shimmer_manager: ShimmerManager instance from the desktop app
+            android_device_manager: AndroidDeviceManager instance from the desktop app
         """
         self.enable_web_ui = enable_web_ui
         self.web_port = web_port
         self.web_server: Optional[WebDashboardServer] = None
         self.is_running = False
         
+        # Core application components (injected from desktop app)
+        self.main_controller = main_controller
+        self.session_manager = session_manager
+        self.shimmer_manager = shimmer_manager
+        self.android_device_manager = android_device_manager
+        
         # Data bridges for synchronization
         self.device_status_cache = {}
         self.session_info_cache = {}
+        self.connected_signals = False
         
         logger.info(f"Web Dashboard Integration initialized (enabled: {enable_web_ui})")
+        logger.info(f"Connected components: MainController={main_controller is not None}, "
+                   f"SessionManager={session_manager is not None}, "
+                   f"ShimmerManager={shimmer_manager is not None}, "
+                   f"AndroidDeviceManager={android_device_manager is not None})")
     
     def start_web_dashboard(self) -> bool:
         """
@@ -89,8 +106,31 @@ class WebDashboardIntegration:
             
             logger.info(f"Web dashboard started on http://localhost:{self.web_port}")
             
-            # Start data simulation for demo purposes
-            self._start_demo_data_generation()
+            # Connect to real application components if available
+            if self.main_controller is not None:
+                self._connect_to_main_controller()
+                logger.info("Connected web dashboard to MainController")
+            
+            if self.session_manager is not None:
+                self._connect_to_session_manager()
+                logger.info("Connected web dashboard to SessionManager")
+            
+            if self.shimmer_manager is not None:
+                self._connect_to_shimmer_manager()
+                logger.info("Connected web dashboard to ShimmerManager")
+            
+            if self.android_device_manager is not None:
+                self._connect_to_android_device_manager()
+                logger.info("Connected web dashboard to AndroidDeviceManager")
+            
+            # Initialize with current state
+            self._sync_initial_state()
+            
+            # Fallback to demo data if no real components are connected
+            if (self.main_controller is None and self.session_manager is None and 
+                self.shimmer_manager is None and self.android_device_manager is None):
+                logger.warning("No real application components connected, using demo data")
+                self._start_demo_data_generation()
             
             return True
             
@@ -164,6 +204,206 @@ class WebDashboardIntegration:
             except Exception as e:
                 logger.error(f"Failed to update web dashboard sensor data: {e}")
     
+    def _connect_to_main_controller(self):
+        """Connect to MainController signals for real-time updates."""
+        if self.main_controller is None or self.connected_signals:
+            return
+        
+        try:
+            # Connect to device status signals
+            self.main_controller.device_connected.connect(self._on_device_connected)
+            self.main_controller.device_disconnected.connect(self._on_device_disconnected)
+            self.main_controller.device_status_received.connect(self._on_device_status_received)
+            
+            # Connect to session signals
+            self.main_controller.session_status_changed.connect(self._on_session_status_changed)
+            self.main_controller.recording_started.connect(self._on_recording_started)
+            self.main_controller.recording_stopped.connect(self._on_recording_stopped)
+            
+            # Connect to data signals
+            self.main_controller.sensor_data_received.connect(self._on_sensor_data_received)
+            self.main_controller.preview_frame_received.connect(self._on_preview_frame_received)
+            
+            # Connect to error signals
+            self.main_controller.error_occurred.connect(self._on_error_occurred)
+            
+            self.connected_signals = True
+            logger.info("Connected to MainController signals")
+            
+        except Exception as e:
+            logger.error(f"Failed to connect to MainController signals: {e}")
+    
+    def _connect_to_session_manager(self):
+        """Connect to SessionManager for session information."""
+        if self.session_manager is None:
+            return
+        
+        try:
+            # Get current session info
+            if hasattr(self.session_manager, 'current_session') and self.session_manager.current_session:
+                session_info = {
+                    'active': True,
+                    'session_id': self.session_manager.current_session.get('session_id'),
+                    'start_time': self.session_manager.current_session.get('start_time'),
+                    'session_name': self.session_manager.current_session.get('session_name'),
+                    'recording_devices': self.session_manager.current_session.get('connected_devices', []),
+                    'data_collected': self.session_manager.current_session.get('file_counts', {})
+                }
+                self.update_session_info(session_info)
+            
+            logger.info("Connected to SessionManager")
+            
+        except Exception as e:
+            logger.error(f"Failed to connect to SessionManager: {e}")
+    
+    def _connect_to_shimmer_manager(self):
+        """Connect to ShimmerManager for Shimmer device status."""
+        if self.shimmer_manager is None:
+            return
+        
+        try:
+            # Get current Shimmer device status
+            if hasattr(self.shimmer_manager, 'get_all_device_status'):
+                shimmer_devices = self.shimmer_manager.get_all_device_status()
+                for device_id, status in shimmer_devices.items():
+                    self.update_device_status('shimmer_sensors', device_id, {
+                        'status': 'connected' if status.get('is_connected', False) else 'disconnected',
+                        'battery': status.get('battery_level', 0),
+                        'signal_strength': status.get('signal_strength', 0),
+                        'recording': status.get('is_recording', False),
+                        'sample_rate': status.get('sampling_rate', 0),
+                        'mac_address': status.get('mac_address', 'Unknown')
+                    })
+            
+            logger.info("Connected to ShimmerManager")
+            
+        except Exception as e:
+            logger.error(f"Failed to connect to ShimmerManager: {e}")
+    
+    def _connect_to_android_device_manager(self):
+        """Connect to AndroidDeviceManager for Android device status."""
+        if self.android_device_manager is None:
+            return
+        
+        try:
+            # Get current Android device status
+            if hasattr(self.android_device_manager, 'get_connected_devices'):
+                android_devices = self.android_device_manager.get_connected_devices()
+                for device_id, device_info in android_devices.items():
+                    self.update_device_status('android_devices', device_id, {
+                        'status': 'connected',
+                        'capabilities': device_info.get('capabilities', []),
+                        'battery': device_info.get('status', {}).get('battery_level', 0),
+                        'temperature': device_info.get('status', {}).get('temperature', 0),
+                        'recording': device_info.get('is_recording', False),
+                        'last_heartbeat': device_info.get('last_heartbeat', 0)
+                    })
+            
+            logger.info("Connected to AndroidDeviceManager")
+            
+        except Exception as e:
+            logger.error(f"Failed to connect to AndroidDeviceManager: {e}")
+    
+    def _sync_initial_state(self):
+        """Synchronize initial state from real application components."""
+        try:
+            # Update PC controller status
+            self.update_device_status('pc_controller', 'main', {
+                'status': 'running',
+                'cpu_usage': 0,
+                'memory_usage': 0,
+                'disk_usage': 0,
+                'connected_devices': len(self.device_status_cache.get('android_devices', {})) + 
+                                   len(self.device_status_cache.get('shimmer_sensors', {}))
+            })
+            
+            logger.info("Initial state synchronized")
+            
+        except Exception as e:
+            logger.error(f"Failed to sync initial state: {e}")
+    
+    # Signal handlers for MainController events
+    def _on_device_connected(self, device_id: str, capabilities: list):
+        """Handle device connected signal."""
+        device_type = self._determine_device_type(device_id, capabilities)
+        self.update_device_status(device_type, device_id, {
+            'status': 'connected',
+            'capabilities': capabilities,
+            'connection_time': time.time()
+        })
+    
+    def _on_device_disconnected(self, device_id: str):
+        """Handle device disconnected signal."""
+        # Find and update the device in the appropriate category
+        for device_type in ['android_devices', 'usb_webcams', 'shimmer_sensors']:
+            if device_id in self.device_status_cache.get(device_type, {}):
+                self.update_device_status(device_type, device_id, {
+                    'status': 'disconnected',
+                    'disconnection_time': time.time()
+                })
+                break
+    
+    def _on_device_status_received(self, device_id: str, status_data: dict):
+        """Handle device status update signal."""
+        device_type = self._determine_device_type_from_status(device_id, status_data)
+        self.update_device_status(device_type, device_id, status_data)
+    
+    def _on_session_status_changed(self, session_id: str, is_active: bool):
+        """Handle session status change signal."""
+        session_info = {
+            'active': is_active,
+            'session_id': session_id if is_active else None,
+            'start_time': time.time() if is_active else None,
+            'end_time': time.time() if not is_active else None
+        }
+        self.update_session_info(session_info)
+    
+    def _on_recording_started(self, session_id: str):
+        """Handle recording started signal."""
+        session_info = {
+            'active': True,
+            'session_id': session_id,
+            'start_time': time.time(),
+            'recording_devices': list(self.device_status_cache.get('android_devices', {}).keys()) +
+                               list(self.device_status_cache.get('shimmer_sensors', {}).keys())
+        }
+        self.update_session_info(session_info)
+    
+    def _on_recording_stopped(self, session_id: str, duration: float):
+        """Handle recording stopped signal."""
+        session_info = {
+            'active': False,
+            'session_id': None,
+            'end_time': time.time(),
+            'duration': duration
+        }
+        self.update_session_info(session_info)
+    
+    def _on_sensor_data_received(self, device_id: str, sensor_data: dict):
+        """Handle real-time sensor data."""
+        # Extract GSR data if available
+        if 'gsr' in sensor_data:
+            self.update_sensor_data(device_id, 'gsr', sensor_data['gsr'])
+        
+        # Extract thermal data if available
+        if 'thermal' in sensor_data:
+            self.update_sensor_data(device_id, 'thermal', sensor_data['thermal'])
+        
+        # Extract other sensor data
+        for sensor_type, value in sensor_data.items():
+            if isinstance(value, (int, float)):
+                self.update_sensor_data(device_id, sensor_type, value)
+    
+    def _on_preview_frame_received(self, device_id: str, frame_type: str, base64_data: str):
+        """Handle preview frame data (for future web streaming)."""
+        # This could be used for video streaming to the web interface
+        pass
+    
+    def _on_error_occurred(self, component: str, error_message: str):
+        """Handle error signals from the application."""
+        logger.error(f"Application error in {component}: {error_message}")
+        # Could update web UI with error notifications
+    
     def get_web_dashboard_url(self) -> Optional[str]:
         """
         Get the URL of the web dashboard.
@@ -174,6 +414,28 @@ class WebDashboardIntegration:
         if self.is_running:
             return f"http://localhost:{self.web_port}"
         return None
+
+    def _determine_device_type(self, device_id: str, capabilities: list) -> str:
+        """Determine device type based on ID and capabilities."""
+        if 'shimmer' in device_id.lower() or 'gsr' in capabilities:
+            return 'shimmer_sensors'
+        elif 'android' in device_id.lower() or 'phone' in device_id.lower():
+            return 'android_devices'
+        elif 'webcam' in device_id.lower() or 'camera' in device_id.lower():
+            return 'usb_webcams'
+        else:
+            return 'android_devices'  # Default fallback
+    
+    def _determine_device_type_from_status(self, device_id: str, status_data: dict) -> str:
+        """Determine device type from status data."""
+        if 'mac_address' in status_data or 'shimmer' in device_id.lower():
+            return 'shimmer_sensors'
+        elif 'android' in device_id.lower() or 'phone' in device_id.lower():
+            return 'android_devices'
+        elif 'webcam' in device_id.lower() or 'resolution' in status_data:
+            return 'usb_webcams'
+        else:
+            return 'android_devices'  # Default fallback
     
     def _start_demo_data_generation(self):
         """Start generating demo data for the web dashboard."""
@@ -268,13 +530,19 @@ class WebDashboardIntegration:
 _web_integration_instance: Optional[WebDashboardIntegration] = None
 
 
-def get_web_integration(enable_web_ui: bool = True, web_port: int = 5000) -> WebDashboardIntegration:
+def get_web_integration(enable_web_ui: bool = True, web_port: int = 5000, 
+                       main_controller=None, session_manager=None, shimmer_manager=None, 
+                       android_device_manager=None) -> WebDashboardIntegration:
     """
     Get or create the web dashboard integration instance.
     
     Args:
         enable_web_ui: Whether to enable the web UI
         web_port: Port for the web server
+        main_controller: MainController instance from the desktop app
+        session_manager: SessionManager instance from the desktop app
+        shimmer_manager: ShimmerManager instance from the desktop app
+        android_device_manager: AndroidDeviceManager instance from the desktop app
     
     Returns:
         WebDashboardIntegration instance
@@ -282,23 +550,35 @@ def get_web_integration(enable_web_ui: bool = True, web_port: int = 5000) -> Web
     global _web_integration_instance
     
     if _web_integration_instance is None:
-        _web_integration_instance = WebDashboardIntegration(enable_web_ui, web_port)
+        _web_integration_instance = WebDashboardIntegration(
+            enable_web_ui, web_port, main_controller, session_manager, 
+            shimmer_manager, android_device_manager
+        )
     
     return _web_integration_instance
 
 
-def start_web_dashboard(enable_web_ui: bool = True, web_port: int = 5000) -> bool:
+def start_web_dashboard(enable_web_ui: bool = True, web_port: int = 5000,
+                       main_controller=None, session_manager=None, shimmer_manager=None, 
+                       android_device_manager=None) -> bool:
     """
     Convenience function to start the web dashboard.
     
     Args:
         enable_web_ui: Whether to enable the web UI
         web_port: Port for the web server
+        main_controller: MainController instance from the desktop app
+        session_manager: SessionManager instance from the desktop app
+        shimmer_manager: ShimmerManager instance from the desktop app
+        android_device_manager: AndroidDeviceManager instance from the desktop app
     
     Returns:
         True if started successfully, False otherwise
     """
-    integration = get_web_integration(enable_web_ui, web_port)
+    integration = get_web_integration(
+        enable_web_ui, web_port, main_controller, session_manager, 
+        shimmer_manager, android_device_manager
+    )
     return integration.start_web_dashboard()
 
 
