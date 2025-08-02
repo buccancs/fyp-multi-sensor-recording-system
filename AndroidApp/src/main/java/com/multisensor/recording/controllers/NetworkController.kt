@@ -1460,26 +1460,26 @@ class NetworkController @Inject constructor() {
      */
     private fun getSignalStrength(): Int {
         return try {
-            callback?.getContext()?.let { context ->
-                val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val activeNetwork = connectivityManager.activeNetwork
-                val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-                
-                when {
-                    networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> {
-                        // WiFi signal strength
-                        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                        val wifiInfo = wifiManager.connectionInfo
-                        val rssi = wifiInfo.rssi
-                        
-                        // Convert RSSI to percentage (typical range: -100 to -30 dBm)
-                        val signalLevel = WifiManager.calculateSignalLevel(rssi, 100)
-                        android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $signalLevel% (RSSI: $rssi)")
-                        signalLevel
-                    }
-                    networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> {
-                        // Cellular signal strength
-                        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            val context = callback?.getContext() ?: return -1
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork = connectivityManager.activeNetwork
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+            
+            when {
+                networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> {
+                    // WiFi signal strength
+                    val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                    val wifiInfo = wifiManager.connectionInfo
+                    val rssi = wifiInfo.rssi
+                    
+                    // Convert RSSI to percentage (typical range: -100 to -30 dBm)
+                    val signalLevel = WifiManager.calculateSignalLevel(rssi, 100)
+                    android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $signalLevel% (RSSI: $rssi)")
+                    signalLevel
+                }
+                networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> {
+                    // Cellular signal strength
+                    val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
                         
                         // Use reflection to get signal strength for broader compatibility
                         try {
@@ -1502,14 +1502,10 @@ class NetworkController @Inject constructor() {
                             75 // Default when permissions are missing
                         }
                     }
-                    else -> {
-                        android.util.Log.d("NetworkController", "[DEBUG_LOG] Unknown network type, using default signal strength")
-                        75 // Default for unknown network types
-                    }
+                else -> {
+                    android.util.Log.d("NetworkController", "[DEBUG_LOG] Unknown network type, using default signal strength")
+                    75 // Default for unknown network types
                 }
-            } ?: run {
-                android.util.Log.w("NetworkController", "[DEBUG_LOG] No context available for signal strength detection")
-                75 // Default when context is unavailable
             }
         } catch (e: Exception) {
             android.util.Log.e("NetworkController", "[DEBUG_LOG] Error detecting signal strength: ${e.message}")

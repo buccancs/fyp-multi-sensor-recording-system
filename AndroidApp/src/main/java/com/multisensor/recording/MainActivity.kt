@@ -1855,4 +1855,8 @@ class MainActivity : AppCompatActivity(),
     override fun runOnUiThread(action: () -> Unit) {
         super.runOnUiThread(action)
     }
+
+    override fun getContext(): Context {
+        return this
+    }
 }

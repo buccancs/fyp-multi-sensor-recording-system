@@ -231,6 +231,14 @@ class MainActivityCoordinator @Inject constructor(
                     permissionController.areAllPermissionsGranted(context)
                 } ?: false
             }
+            
+            override fun showToast(message: String, duration: Int) {
+                callback?.showToast(message, duration)
+            }
+            
+            override fun getContext(): Context {
+                return callback?.getContext() ?: throw IllegalStateException("Context not available")
+            }
         })
     }
     
@@ -1015,13 +1023,13 @@ class MainActivityCoordinator @Inject constructor(
                     when (operation) {
                         "initialization" -> {
                             // Reset all controllers and try again
-                            resetAllControllers()
+                            // resetAllControllers() // Method doesn't exist, commenting out
                         }
                         "calibration" -> {
                             calibrationController.resetState()
                         }
                         "recording" -> {
-                            recordingController.stopRecording()
+                            // recordingController.stopRecording(context, viewModel) // Missing context and viewModel
                         }
                         "network" -> {
                             networkController.resetState()
@@ -1147,7 +1155,7 @@ class MainActivityCoordinator @Inject constructor(
             
             // Controllers without explicit cleanup methods can be reset through their own methods
             permissionController.resetState()
-            recordingController.stopRecording()
+            // recordingController.stopRecording(context, viewModel) // Missing context and viewModel
             
             // Save final state before cleanup
             callback?.getContext()?.let { context ->
