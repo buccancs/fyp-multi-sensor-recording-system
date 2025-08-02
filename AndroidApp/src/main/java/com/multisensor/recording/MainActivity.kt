@@ -1684,10 +1684,6 @@ class MainActivity : AppCompatActivity(),
         // Final status will be set by other callbacks
     }
     
-    override fun updateStatusText(text: String) {
-        binding.statusText.text = text
-    }
-    
     fun showPermissionButton(show: Boolean) {
 
         binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
@@ -1709,7 +1705,7 @@ class MainActivity : AppCompatActivity(),
 
     fun onDeviceSelectionCancelled() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
-        showToast("Device selection cancelled")
+        showToast("Device selection cancelled", Toast.LENGTH_SHORT)
     }
 
     fun onConnectionStatusChanged(connected: Boolean) {
@@ -1718,13 +1714,13 @@ class MainActivity : AppCompatActivity(),
         
         val statusMessage = if (connected) "Shimmer device connected" else "Shimmer device disconnected"
         updateStatusText(statusMessage)
-        showToast(statusMessage)
+        showToast(statusMessage, Toast.LENGTH_SHORT)
     }
 
     fun onConfigurationComplete() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
         updateStatusText("Shimmer configuration completed")
-        showToast("Shimmer configuration completed")
+        showToast("Shimmer configuration completed", Toast.LENGTH_SHORT)
     }
 
     fun onShimmerError(message: String) {
@@ -1738,11 +1734,6 @@ class MainActivity : AppCompatActivity(),
         runOnUiThread {
             Toast.makeText(this, message, duration).show()
         }
-    }
-    
-    // Implementation for NetworkController.NetworkCallback
-    override fun showToast(message: String, duration: Int) {
-        showToastInternal(message, duration)
     }
 
     // ========== UsbController.UsbCallback Implementation ==========
@@ -1834,8 +1825,6 @@ class MainActivity : AppCompatActivity(),
             Toast.makeText(this, "Network recovered: $networkType", Toast.LENGTH_SHORT).show()
         }
     }
-    
-    override fun getContext(): android.content.Context = this
 
     // ========== NetworkController.NetworkCallback Implementation ==========
     
@@ -1890,8 +1879,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    // ========== Common Callback Method Implementations ==========
-    // These methods are shared across multiple interfaces
+    // ========== Common Interface Implementations ==========
     
     override fun updateStatusText(text: String) {
         runOnUiThread {
@@ -1904,17 +1892,6 @@ class MainActivity : AppCompatActivity(),
             Toast.makeText(this, message, duration).show()
         }
     }
-    
-    // Additional overload for convenience
-    fun showToast(message: String) {
-        showToast(message, Toast.LENGTH_SHORT)
-    }
 
-    override fun runOnUiThread(action: () -> Unit) {
-        super.runOnUiThread(action)
-    }
-
-    override fun getContext(): Context {
-        return this
-    }
+    override fun getContext(): Context = this
 }
