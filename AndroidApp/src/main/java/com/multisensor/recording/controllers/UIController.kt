@@ -1162,53 +1162,6 @@ class UIController @Inject constructor() {
     }
     
     /**
-     * Validate UI components
-     */
-    fun validateUIComponents(): ValidationResult {
-        if (!componentValidationEnabled) {
-            return ValidationResult(true)
-        }
-        
-        val errors = mutableListOf<String>()
-        val warnings = mutableListOf<String>()
-        
-        // Validate required components exist
-        if (callback?.getStatusText() == null) {
-            errors.add("Status text component not found")
-        }
-        
-        if (callback?.getStartRecordingButton() == null) {
-            errors.add("Start recording button not found")
-        }
-        
-        if (callback?.getStopRecordingButton() == null) {
-            warnings.add("Stop recording button not found")
-        }
-        
-        // Validate component accessibility
-        callback?.getContext()?.let { context ->
-            val accessibilityManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-            if (accessibilityManager.isEnabled && !accessibilityConfig.isEnabled) {
-                warnings.add("Accessibility is enabled system-wide but not configured in app")
-            }
-        }
-        
-        // Validate theme consistency
-        if (currentThemeMode == ThemeMode.AUTO) {
-            warnings.add("Auto theme mode may cause inconsistent appearance")
-        }
-        
-        val result = ValidationResult(
-            isValid = errors.isEmpty(),
-            errors = errors,
-            warnings = warnings
-        )
-        
-        android.util.Log.d("UIController", "[DEBUG_LOG] UI validation: ${if (result.isValid) "PASSED" else "FAILED"} (${errors.size} errors, ${warnings.size} warnings)")
-        return result
-    }
-    
-    /**
      * Handle UI errors with recovery
      */
     fun handleUIError(error: String, exception: Exception? = null) {
