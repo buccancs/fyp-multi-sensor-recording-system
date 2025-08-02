@@ -77,8 +77,6 @@ import com.multisensor.recording.controllers.NetworkController
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     PermissionManager.PermissionCallback,
-    PermissionController.PermissionCallback,
-    ShimmerController.ShimmerCallback,
     UsbDeviceManager.UsbDeviceCallback,
     UsbController.UsbCallback,
     HandSegmentationManager.HandSegmentationListener,
@@ -127,6 +125,41 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var uiController: UIController
+
+    // Delegation for ShimmerController.ShimmerCallback to avoid interface conflicts
+    private val shimmerCallbackDelegate = object : ShimmerController.ShimmerCallback {
+        override fun onDeviceSelected(address: String, name: String) {
+            this@MainActivity.onDeviceSelected(address, name)
+        }
+        
+        override fun onDeviceSelectionCancelled() {
+            this@MainActivity.onDeviceSelectionCancelled()
+        }
+        
+        override fun onConnectionStatusChanged(connected: Boolean) {
+            this@MainActivity.onConnectionStatusChanged(connected)
+        }
+        
+        override fun onConfigurationComplete() {
+            this@MainActivity.onConfigurationComplete()
+        }
+        
+        override fun onShimmerError(message: String) {
+            this@MainActivity.onShimmerError(message)
+        }
+        
+        override fun updateStatusText(text: String) {
+            this@MainActivity.updateStatusText(text)
+        }
+        
+        override fun showToast(message: String, duration: Int) {
+            this@MainActivity.showToastInternal(message, duration)
+        }
+        
+        override fun runOnUiThread(action: () -> Unit) {
+            this@MainActivity.runOnUiThread(action)
+        }
+    }
 
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
@@ -179,7 +212,7 @@ class MainActivity : AppCompatActivity(),
         android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController integration initialized")
 
         // Initialize ShimmerController with callback
-        shimmerController.setCallback(this)
+        shimmerController.setCallback(shimmerCallbackDelegate)
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ShimmerController initialized and callback set")
 
         // Setup UI
@@ -300,6 +333,10 @@ class MainActivity : AppCompatActivity(),
         return isSupported
     }
 
+    /**
+     * Check if all required permissions are granted
+     * This method implements the interface requirement for UsbController.UsbCallback
+     */
     override fun onStart() {
         super.onStart()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onStart() called")
@@ -1637,23 +1674,28 @@ class MainActivity : AppCompatActivity(),
         binding.statusText.text = "Permissions required - Please enable in Settings"
     }
     
-    override fun onPermissionCheckStarted() {
+    fun onPermissionCheckStarted() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission check started")
         binding.statusText.text = "Checking permissions..."
     }
     
-    override fun onPermissionRequestCompleted() {
+    fun onPermissionRequestCompleted() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission request completed")
         // Final status will be set by other callbacks
     }
     
-    override fun showPermissionButton(show: Boolean) {
+    override fun updateStatusText(text: String) {
+        binding.statusText.text = text
+    }
+    
+    fun showPermissionButton(show: Boolean) {
+
         binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
     }
 
-    // ========== ShimmerController.ShimmerCallback Implementation ==========
+    // ========== ShimmerController.ShimmerCallback Implementation (via delegation) ==========
     
-    override fun onDeviceSelected(address: String, name: String) {
+    fun onDeviceSelected(address: String, name: String) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selected via ShimmerController:")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Address: $address")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] - Name: $name")
@@ -1665,12 +1707,12 @@ class MainActivity : AppCompatActivity(),
         shimmerController.showBtTypeConnectionOption(this)
     }
 
-    override fun onDeviceSelectionCancelled() {
+    fun onDeviceSelectionCancelled() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
         showToast("Device selection cancelled")
     }
 
-    override fun onConnectionStatusChanged(connected: Boolean) {
+    fun onConnectionStatusChanged(connected: Boolean) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer connection status changed: $connected")
         updateShimmerConnectionStatus(connected)
         
@@ -1679,16 +1721,28 @@ class MainActivity : AppCompatActivity(),
         showToast(statusMessage)
     }
 
-    override fun onConfigurationComplete() {
+    fun onConfigurationComplete() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
         updateStatusText("Shimmer configuration completed")
         showToast("Shimmer configuration completed")
     }
 
-    override fun onShimmerError(message: String) {
+    fun onShimmerError(message: String) {
         android.util.Log.e("MainActivity", "[DEBUG_LOG] Shimmer Controller error: $message")
         updateStatusText("Shimmer Error: $message")
         showToast("Shimmer Error: $message", Toast.LENGTH_LONG)
+    }
+
+    // Common implementation for interfaces with conflicting default parameters
+    private fun showToastInternal(message: String, duration: Int) {
+        runOnUiThread {
+            Toast.makeText(this, message, duration).show()
+        }
+    }
+    
+    // Implementation for NetworkController.NetworkCallback
+    override fun showToast(message: String, duration: Int) {
+        showToastInternal(message, duration)
     }
 
     // ========== UsbController.UsbCallback Implementation ==========
@@ -1780,6 +1834,10 @@ class MainActivity : AppCompatActivity(),
             Toast.makeText(this, "Network recovered: $networkType", Toast.LENGTH_SHORT).show()
         }
     }
+    
+    override fun getContext(): android.content.Context = this
+
+    // ========== NetworkController.NetworkCallback Implementation ==========
     
     override fun getStreamingIndicator(): View? = binding.streamingIndicator
     

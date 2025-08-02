@@ -124,9 +124,6 @@ class StatusDisplayController @Inject constructor() {
     private val customMetrics = mutableMapOf<String, Any>()
     private var isMonitoringActive = false
     
-    // Status update timer
-    private var statusUpdateTimer: java.util.Timer? = null
-    
     // Battery monitoring receiver
     private val batteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -269,6 +266,39 @@ class StatusDisplayController @Inject constructor() {
             callback?.onConnectionStatusChanged(ConnectionType.SHIMMER, shimmerConnected)
             callback?.onConnectionStatusChanged(ConnectionType.THERMAL, thermalConnected)
         }
+    }
+    
+    /**
+     * Starts periodic status updates every 5 seconds
+     * Extracted from MainActivity.startPeriodicStatusUpdates()
+     */
+    private fun startPeriodicStatusUpdates() {
+        val updateRunnable = object : Runnable {
+            override fun run() {
+                // Update sensor connection status based on current state
+                // Note: Connection status will be updated by other components when they change
+                // This periodic update mainly ensures UI consistency
+
+                // Schedule next update
+                statusUpdateHandler.postDelayed(this, 5000) // 5 seconds
+            }
+        }
+        statusUpdateHandler.post(updateRunnable)
+        isMonitoringActive = true
+        
+        android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Periodic status updates started")
+    }
+    
+    /**
+     * Stops periodic status updates
+     */
+    private fun stopPeriodicStatusUpdates() {
+        if (::statusUpdateHandler.isInitialized) {
+            statusUpdateHandler.removeCallbacksAndMessages(null)
+        }
+        isMonitoringActive = false
+        
+        android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Periodic status updates stopped")
     }
     
     /**

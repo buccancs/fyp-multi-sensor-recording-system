@@ -232,12 +232,12 @@ class MainActivityCoordinator @Inject constructor(
                 } ?: false
             }
             
-            override fun showToast(message: String, duration: Int) {
-                callback?.showToast(message, duration)
+            override fun getContext(): android.content.Context {
+                return callback?.getContext() ?: throw IllegalStateException("Context not available")
             }
             
-            override fun getContext(): Context {
-                return callback?.getContext() ?: throw IllegalStateException("Context not available")
+            override fun showToast(message: String, duration: Int) {
+                callback?.showToast(message, duration)
             }
         })
     }
@@ -434,7 +434,7 @@ class MainActivityCoordinator @Inject constructor(
                 callback?.updateStatusText("Encryption: $status")
             }
             
-            override fun getContext(): Context {
+            override fun getContext(): android.content.Context {
                 return callback?.getContext() ?: throw IllegalStateException("Context not available")
             }
         })
@@ -1027,13 +1027,17 @@ class MainActivityCoordinator @Inject constructor(
                     when (operation) {
                         "initialization" -> {
                             // Reset all controllers and try again
-                            // resetAllControllers() // Method doesn't exist, commenting out
+                            resetAllStates()
                         }
                         "calibration" -> {
                             calibrationController.resetState()
                         }
                         "recording" -> {
-                            // recordingController.stopRecording(context, viewModel) // Missing context and viewModel
+                            callback?.getContext()?.let { context ->
+                                // TODO: Need viewModel parameter - this may need to be refactored
+                                // recordingController.stopRecording(context, viewModel)
+                                android.util.Log.w("MainActivityCoordinator", "Cannot stop recording without viewModel access")
+                            }
                         }
                         "network" -> {
                             networkController.resetState()
@@ -1159,7 +1163,10 @@ class MainActivityCoordinator @Inject constructor(
             
             // Controllers without explicit cleanup methods can be reset through their own methods
             permissionController.resetState()
-            // recordingController.stopRecording(context, viewModel) // Missing context and viewModel
+            // TODO: Need context and viewModel for recordingController.stopRecording()
+            // recordingController.stopRecording(context, viewModel)
+            android.util.Log.w("MainActivityCoordinator", "Cannot stop recording in resetAllStates without viewModel access")
+
             
             // Save final state before cleanup
             callback?.getContext()?.let { context ->

@@ -38,7 +38,7 @@ class UIController @Inject constructor() {
     
     companion object {
         private const val UI_PREFS_NAME = "ui_controller_prefs"
-        private const val PREFS_NAME = "ui_controller_prefs"
+        private const val PREFS_NAME = UI_PREFS_NAME // Alias for backwards compatibility
         private const val PREF_THEME_MODE = "theme_mode"
         private const val PREF_ACCESSIBILITY_ENABLED = "accessibility_enabled"
         private const val PREF_COMPONENT_VALIDATION = "component_validation"

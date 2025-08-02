@@ -988,8 +988,8 @@ class CalibrationController @Inject constructor(
     private fun calculateKurtosis(values: List<Float>, mean: Float, std: Float): Float {
         if (std == 0.0f || values.size < 4) return 3.0f
         val n = values.size
-        val kurt = values.sumOf { ((it - mean) / std).pow(4).toDouble() }.toFloat()
-        return kurt * n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) - 3.0f * (n - 1).toDouble().pow(2).toFloat() / ((n - 2) * (n - 3))
+        val kurt = values.sumOf { ((it - mean) / std).toDouble().pow(4.0) }.toFloat()
+        return kurt * n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) - 3.0f * (n - 1).toDouble().pow(2.0).toFloat() / ((n - 2) * (n - 3))
     }
     
     private fun percentile(sortedValues: List<Float>, percentile: Int): Float {
