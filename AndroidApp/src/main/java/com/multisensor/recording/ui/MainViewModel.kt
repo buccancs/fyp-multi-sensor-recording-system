@@ -8,6 +8,9 @@ import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.service.SessionManager
+import com.multisensor.recording.network.FileTransferHandler
+import com.multisensor.recording.network.SendFileCommand
+import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +34,8 @@ class MainViewModel
         private val thermalRecorder: ThermalRecorder,
         private val shimmerRecorder: ShimmerRecorder,
         private val sessionManager: SessionManager,
+        private val fileTransferHandler: FileTransferHandler,
+        private val calibrationCaptureManager: CalibrationCaptureManager,
         private val logger: Logger,
     ) : ViewModel() {
         
@@ -415,12 +420,12 @@ class MainViewModel
         }
 
         /**
-         * Run calibration process
+         * Run calibration process using real CalibrationCaptureManager
          */
         fun runCalibration() {
             viewModelScope.launch {
                 try {
-                    logger.info("Starting calibration process...")
+                    logger.info("Starting calibration process with CalibrationCaptureManager...")
                     updateUiState { currentState ->
                         currentState.copy(
                             statusText = "Running calibration...",
@@ -429,38 +434,44 @@ class MainViewModel
                         )
                     }
 
-                    // Implement actual calibration logic
-                    try {
-                        // Generate calibration image file paths
-                        val timestamp = System.currentTimeMillis()
-                        val rgbPath = "/storage/emulated/0/calibration_rgb_$timestamp.jpg"
-                        val thermalPath = "/storage/emulated/0/calibration_thermal_$timestamp.png"
-                        
-                        // Capture calibration images from both cameras
-                        val rgbResult = cameraRecorder.captureCalibrationImage(rgbPath)
-                        val thermalResult = thermalRecorder.captureCalibrationImage(thermalPath)
-                        
-                        if (rgbResult && thermalResult) {
-                            logger.info("Calibration images captured successfully: RGB=$rgbPath, Thermal=$thermalPath")
-                        } else {
-                            logger.warning("Failed to capture calibration images: RGB=$rgbResult, Thermal=$thermalResult")
+                    // Use the real CalibrationCaptureManager to capture synchronized images
+                    val calibrationResult = calibrationCaptureManager.captureCalibrationImages(
+                        calibrationId = "manual_calibration_${System.currentTimeMillis()}",
+                        captureRgb = true,
+                        captureThermal = true,
+                        highResolution = true
+                    )
+
+                    if (calibrationResult.success) {
+                        val message = buildString {
+                            append("Calibration capture successful")
+                            calibrationResult.rgbFilePath?.let { append("\nRGB: $it") }
+                            calibrationResult.thermalFilePath?.let { append("\nThermal: $it") }
                         }
                         
-                        // Simulate calibration processing time
-                        kotlinx.coroutines.delay(1500)
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                statusText = "Calibration images captured successfully",
+                                isCalibrationRunning = false,
+                                isLoadingCalibration = false
+                            )
+                        }
+                        logger.info("Calibration capture completed successfully: $message")
                         
-                    } catch (e: Exception) {
-                        logger.error("Error during calibration process", e)
+                    } else {
+                        val errorMsg = calibrationResult.errorMessage ?: "Unknown calibration error"
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                errorMessage = "Calibration failed: $errorMsg",
+                                showErrorDialog = true,
+                                statusText = "Calibration failed - Ready",
+                                isCalibrationRunning = false,
+                                isLoadingCalibration = false
+                            )
+                        }
+                        logger.error("Calibration capture failed: $errorMsg")
                     }
-
-                    updateUiState { currentState ->
-                        currentState.copy(
-                            statusText = "Calibration completed - Ready",
-                            isCalibrationRunning = false,
-                            isLoadingCalibration = false
-                        )
-                    }
-                    logger.info("Calibration completed")
+                    
                 } catch (e: Exception) {
                     updateUiState { currentState ->
                         currentState.copy(
@@ -934,18 +945,91 @@ class MainViewModel
         fun transferFilesToPC() {
             viewModelScope.launch {
                 try {
-                    logger.info("Transferring files to PC")
+                    logger.info("Starting file transfer to PC")
                     updateUiState { currentState ->
                         currentState.copy(isTransferring = true)
                     }
-                    // Simulate transfer
-                    kotlinx.coroutines.delay(3000)
-                    updateUiState { currentState ->
-                        currentState.copy(isTransferring = false)
+
+                    // Get all completed sessions
+                    val sessions = sessionManager.getAllSessions()
+                    logger.info("Found ${sessions.size} sessions to transfer")
+                    
+                    if (sessions.isEmpty()) {
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                isTransferring = false,
+                                errorMessage = "No recording sessions found to transfer"
+                            )
+                        }
+                        return@launch
                     }
+
+                    var transferredFiles = 0
+                    var totalFiles = 0
+
+                    // Transfer files from each session
+                    for (session in sessions) {
+                        try {
+                            val sessionFiles = fileTransferHandler.getAvailableFiles(session.sessionId)
+                            totalFiles += sessionFiles.size
+                            
+                            for (filePath in sessionFiles) {
+                                try {
+                                    // Transfer each file using the real FileTransferHandler
+                                    fileTransferHandler.handleSendFileCommand(
+                                        SendFileCommand(
+                                            filepath = filePath,
+                                            filetype = getFileType(filePath)
+                                        )
+                                    )
+                                    transferredFiles++
+                                    logger.info("Transferred file: $filePath")
+                                } catch (e: Exception) {
+                                    logger.error("Failed to transfer file: $filePath", e)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            logger.error("Failed to process session: ${session.sessionId}", e)
+                        }
+                    }
+
+                    val message = if (transferredFiles > 0) {
+                        "Successfully transferred $transferredFiles of $totalFiles files"
+                    } else {
+                        "No files were transferred successfully"
+                    }
+
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            isTransferring = false,
+                            statusText = message
+                        )
+                    }
+                    logger.info("File transfer completed: $message")
+
                 } catch (e: Exception) {
-                    logger.error("Error transferring files", e)
+                    logger.error("Error during file transfer", e)
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            isTransferring = false,
+                            errorMessage = "File transfer failed: ${e.message}"
+                        )
+                    }
                 }
+            }
+        }
+
+        /**
+         * Helper function to determine file type based on file extension
+         */
+        private fun getFileType(filePath: String): String {
+            return when {
+                filePath.endsWith(".mp4") -> "video"
+                filePath.endsWith(".csv") -> "sensor_data"
+                filePath.endsWith(".jpg") || filePath.endsWith(".png") -> "image"
+                filePath.endsWith(".txt") -> "log"
+                filePath.endsWith(".json") -> "config"
+                else -> "data"
             }
         }
 
