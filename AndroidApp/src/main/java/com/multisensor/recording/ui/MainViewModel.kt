@@ -175,9 +175,6 @@ class MainViewModel
                 }
             }
         }
-                }
-            }
-        }
 
         /**
          * Start recording session with enhanced CameraRecorder API
