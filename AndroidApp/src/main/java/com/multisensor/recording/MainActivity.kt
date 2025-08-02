@@ -651,6 +651,9 @@ class MainActivity : AppCompatActivity(),
             // Initialize UI components through UIController
             uiController.initializeUIComponents()
             
+            // Initialize local UI components that are required for MainActivity
+            initializeUIComponents()
+            
             // Validate UI components
             val validationResult = uiController.validateUIComponents()
             if (!validationResult.isValid) {
@@ -680,6 +683,8 @@ class MainActivity : AppCompatActivity(),
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController integration: ${e.message}")
             Toast.makeText(this, "UI initialization error: ${e.message}", Toast.LENGTH_LONG).show()
+            // Ensure fallback initialization for lateinit properties
+            initializeLegacyUIComponents()
         }
     }
     
@@ -768,7 +773,9 @@ class MainActivity : AppCompatActivity(),
         binding.statusText.text = state.statusText
 
         // Update consolidated recording controls
-        recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
+        if (::recordingButtonPair.isInitialized) {
+            recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
+        }
         
         // Update legacy recording controls for backward compatibility
         binding.startRecordingButton.isEnabled = state.canStartRecording
@@ -778,20 +785,26 @@ class MainActivity : AppCompatActivity(),
         binding.calibrationButton.isEnabled = state.canRunCalibration
 
         // Update consolidated status indicator components
-        pcStatusIndicator.setStatus(
-            if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-            "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
-        )
+        if (::pcStatusIndicator.isInitialized) {
+            pcStatusIndicator.setStatus(
+                if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
+            )
+        }
         
-        shimmerStatusIndicator.setStatus(
-            if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-            "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
-        )
+        if (::shimmerStatusIndicator.isInitialized) {
+            shimmerStatusIndicator.setStatus(
+                if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+            )
+        }
         
-        thermalStatusIndicator.setStatus(
-            if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-            "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
-        )
+        if (::thermalStatusIndicator.isInitialized) {
+            thermalStatusIndicator.setStatus(
+                if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+            )
+        }
 
         // Update legacy connection indicators for backward compatibility
         updateConnectionIndicator(binding.pcConnectionIndicator, state.isPcConnected)
