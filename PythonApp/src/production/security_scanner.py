@@ -9,7 +9,6 @@ recording system, including both Python and Android components.
 import asyncio
 import hashlib
 import json
-import logging
 import os
 import re
 import subprocess
@@ -20,6 +19,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple, Any
 import socket
 import ssl
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 
 @dataclass
@@ -55,23 +57,9 @@ class SecurityScanner:
     
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
-        self.logger = self._setup_logging()
+        self.logger = get_logger(__name__)
         self.issues: List[SecurityIssue] = []
         self.scanned_files = 0
-        
-    def _setup_logging(self) -> logging.Logger:
-        """Setup security logging"""
-        logger = logging.getLogger("SecurityScanner")
-        logger.setLevel(logging.INFO)
-        
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        
-        return logger
         
     async def run_comprehensive_scan(self) -> SecurityReport:
         """Run comprehensive security assessment"""

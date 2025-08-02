@@ -7,10 +7,12 @@ in Milestone 4 for ensuring consistent communication between Python and Android.
 """
 
 import json
-import logging
 import os
 import time
 from typing import Dict, List, Any, Optional
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 try:
     from jsonschema import ValidationError, Draft7Validator
@@ -18,9 +20,13 @@ try:
     JSONSCHEMA_AVAILABLE = True
 except ImportError:
     JSONSCHEMA_AVAILABLE = False
-    logging.warning("jsonschema library not available. Using basic validation only.")
+    # We'll log this warning after logger is initialized
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
+
+# Log warning after logger is initialized
+if not JSONSCHEMA_AVAILABLE:
+    logger.warning("jsonschema library not available. Using basic validation only.")
 
 
 class SchemaManager:

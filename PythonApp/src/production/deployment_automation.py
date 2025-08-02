@@ -8,7 +8,6 @@ including build automation, packaging, and production deployment procedures.
 
 import asyncio
 import json
-import logging
 import os
 import shutil
 import subprocess
@@ -20,6 +19,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 import platform
 import hashlib
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 
 @dataclass
@@ -52,7 +54,7 @@ class DeploymentAutomation:
     def __init__(self, project_root: str, version: str = None):
         self.project_root = Path(project_root)
         self.version = version or self._generate_version()
-        self.logger = self._setup_logging()
+        self.logger = get_logger(__name__)
         self.build_results: List[BuildResult] = []
         
         # Build directories
@@ -65,27 +67,6 @@ class DeploymentAutomation:
         
         for build_subdir in [self.android_build_dir, self.python_build_dir, self.docs_build_dir]:
             build_subdir.mkdir(exist_ok=True)
-            
-    def _setup_logging(self) -> logging.Logger:
-        """Setup deployment logging"""
-        logger = logging.getLogger("DeploymentAutomation")
-        logger.setLevel(logging.INFO)
-        
-        # Console handler
-        console_handler = logging.StreamHandler()
-        console_formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        console_handler.setFormatter(console_formatter)
-        logger.addHandler(console_handler)
-        
-        # File handler
-        log_file = self.build_dir / "deployment.log"
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(console_formatter)
-        logger.addHandler(file_handler)
-        
-        return logger
         
     def _generate_version(self) -> str:
         """Generate version string"""

@@ -7,15 +7,17 @@ version information at connection start.
 """
 
 import json
-import logging
 import platform
 import socket
 from typing import Dict, Any, Tuple
 
+# Import modern logging system
+from utils.logging_config import get_logger
+
 from .config_loader import get_config_manager
 from .schema_utils import get_schema_manager
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class HandshakeManager:

@@ -2,13 +2,71 @@
 Category: Performance & Stress
 Description: Memory, CPU, and concurrent session stress testing with performance monitoring and resource validation
 Success: False
-Duration: 0.19s
+Duration: 76.73s
 Exit Code: 1
 
 === STDOUT ===
+23:23:53 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+23:23:53 [[32mINFO[0m] AppLogger: Log level: INFO
+23:23:53 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+23:23:53 [[32mINFO[0m] AppLogger: Console output: True
+23:23:53 [[32mINFO[0m] AppLogger: File output: True
+23:23:53 [[32mINFO[0m] AppLogger: Structured logging: True
+23:23:53 [[32mINFO[0m] __main__: ================================================================================
+23:23:53 [[32mINFO[0m] __main__: 🚀 ENHANCED STRESS TESTING SUITE - MULTI-SENSOR RECORDING SYSTEM
+23:23:53 [[32mINFO[0m] __main__: ================================================================================
+23:23:53 [[32mINFO[0m] __main__: 🧪 Starting memory stress test (45s)...
+23:23:53 [[32mINFO[0m] __main__: Performance monitoring started
+23:23:53 [[33mWARNING[0m] __main__: Device connection failed during stress test: Failed to connect to stress_device_010
+23:23:53 [[32mINFO[0m] __main__: Connected 19 devices for stress testing
+23:24:31 [[33mWARNING[0m] __main__: Data processing error in stress_device_013
+23:24:32 [[32mINFO[0m] __main__: Device stress_device_013 recovered from error
+23:24:38 [[32mINFO[0m] __main__: Performance monitoring stopped. Collected 91 metrics
+23:24:38 [[32mINFO[0m] __main__: ✅ Memory stress test completed:
+23:24:38 [[32mINFO[0m] __main__:    Duration: 45.5s
+23:24:38 [[32mINFO[0m] __main__:    Max Memory: 32.9MB
+23:24:38 [[32mINFO[0m] __main__:    Avg CPU: 0.1%
+23:24:38 [[32mINFO[0m] __main__:    Data Processed: 1300.2MB
+23:24:38 [[32mINFO[0m] __main__:    Errors/Recoveries: 1/1
+23:24:38 [[32mINFO[0m] __main__: 🧪 Starting concurrent session test (3 sessions)...
+23:24:38 [[32mINFO[0m] __main__: Performance monitoring started
+23:24:39 [[31mERROR[0m] __main__: Session concurrent_session_0 failed: Failed to connect to concurrent_session_0_usb
+23:25:09 [[32mINFO[0m] __main__: Performance monitoring stopped. Collected 122 metrics
+23:25:09 [[32mINFO[0m] __main__: ✅ Concurrent session test completed:
+23:25:09 [[32mINFO[0m] __main__:    Sessions: 2/3 successful
+23:25:09 [[32mINFO[0m] __main__:    Duration: 31.0s
+23:25:09 [[32mINFO[0m] __main__:    Max Memory: 33.1MB
+23:25:09 [[32mINFO[0m] __main__:    Peak Threads: 2
+23:25:09 [[32mINFO[0m] __main__: 
+================================================================================
+23:25:09 [[32mINFO[0m] __main__: 📊 ENHANCED STRESS TESTING RESULTS
+23:25:09 [[32mINFO[0m] __main__: ================================================================================
+23:25:09 [[32mINFO[0m] __main__: 📈 SUCCESS RATE: 50.0% (1/2 tests)
+23:25:09 [[32mINFO[0m] __main__: ⏱️  TOTAL DURATION: 76.6 seconds
+23:25:09 [[32mINFO[0m] __main__: 
+🧪 DETAILED TEST RESULTS:
+23:25:09 [[32mINFO[0m] __main__:   ✅ PASSED: Memory Stress Test
+23:25:09 [[32mINFO[0m] __main__:     Duration: 45.5s
+23:25:09 [[32mINFO[0m] __main__:     Max Memory: 32.9MB
+23:25:09 [[32mINFO[0m] __main__:     Avg CPU: 0.1%
+23:25:09 [[32mINFO[0m] __main__:     Data Processed: 1300.2MB
+23:25:09 [[32mINFO[0m] __main__:     Errors: 1
+23:25:09 [[32mINFO[0m] __main__:   ❌ FAILED: Concurrent Session Test
+23:25:09 [[32mINFO[0m] __main__:     Duration: 31.0s
+23:25:09 [[32mINFO[0m] __main__:     Max Memory: 33.1MB
+23:25:09 [[32mINFO[0m] __main__:     Avg CPU: 0.1%
+23:25:09 [[32mINFO[0m] __main__:     Data Processed: 348.0MB
+23:25:09 [[32mINFO[0m] __main__:     Errors: 1
+23:25:09 [[32mINFO[0m] __main__: 
+🎯 ENHANCED STRESS TESTING ACHIEVEMENTS:
+23:25:09 [[32mINFO[0m] __main__:   ✨ Memory usage monitoring and leak detection validated
+23:25:09 [[32mINFO[0m] __main__:   ✨ CPU performance under high-load conditions tested
+23:25:09 [[32mINFO[0m] __main__:   ✨ Concurrent multi-session scalability verified
+23:25:09 [[32mINFO[0m] __main__:   ✨ Error recovery and system resilience validated
+23:25:09 [[32mINFO[0m] __main__:   ✨ Resource cleanup and garbage collection tested
+23:25:09 [[32mINFO[0m] __main__: 
+💾 Enhanced stress test results saved to: test_results/enhanced_stress_test_results.json
+23:25:09 [[31mERROR[0m] __main__: 
+💥 SOME ENHANCED STRESS TESTS FAILED!
 
 === STDERR ===
-Traceback (most recent call last):
-  File "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/test_enhanced_stress_testing.py", line 34, in <module>
-    import psutil
-ModuleNotFoundError: No module named 'psutil'
