@@ -1,5 +1,21 @@
 # Session Management and Data Storage - User Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Pre-flight Checklist](#pre-flight-checklist)
+  - [System Requirements](#system-requirements)
+  - [Device Preparation](#device-preparation)
+  - [Data Storage Setup](#data-storage-setup)
+- [Session Management Workflow](#session-management-workflow)
+- [Step-by-Step Session Guide](#step-by-step-session-guide)
+  - [Step 1: Creating a New Session](#step-1-creating-a-new-session)
+  - [Step 2: Device Connection and Management](#step-2-device-connection-and-management)
+  - [Step 3: Configure Recording Parameters](#step-3-configure-recording-parameters)
+  - [Step 4: Start and Monitor Recording](#step-4-start-and-monitor-recording)
+  - [Step 5: Interact During Recording](#step-5-interact-during-recording)
+  - [Step 6: Stop Recording and End Session](#step-6-stop-recording-and-end-session)
+
 ## Overview
 
 This guide provides step-by-step instructions for using the Session Management and Data Storage System in the Multi-Sensor Recording System. Whether you're conducting a single recording session or managing multiple experimental sessions, this guide will help you understand how to effectively organize, manage, and access your recorded data.

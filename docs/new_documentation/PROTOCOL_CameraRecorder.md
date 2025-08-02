@@ -216,6 +216,80 @@ data class CameraStatus(
 )
 ```
 
+### Camera Recording Data Flow Architecture
+
+```mermaid
+graph TB
+    subgraph "Camera Control Layer"
+        CMD[Command Interface]
+        CONFIG[Configuration Manager]
+        STATUS[Status Monitor]
+    end
+    
+    subgraph "Recording Pipeline"
+        CAM2[Camera2 API]
+        VIDEO[Video Encoder]
+        RAW[RAW Processor]
+        PREVIEW[Preview Stream]
+    end
+    
+    subgraph "Data Storage"
+        MP4[MP4 Video Files]
+        DNG[DNG RAW Files]
+        META[Session Metadata]
+        CALIB[Calibration Images]
+    end
+    
+    subgraph "Network Protocol"
+        STREAM[Preview Streaming]
+        COMMANDS[Control Commands]
+        RESPONSES[Status Responses]
+    end
+    
+    subgraph "Integration Points"
+        HAND[Hand Segmentation]
+        SESSION[Session Manager]
+        SYNC[Synchronization]
+    end
+    
+    %% Main data flow
+    CMD --> CONFIG
+    CONFIG --> CAM2
+    CAM2 --> VIDEO
+    CAM2 --> RAW
+    CAM2 --> PREVIEW
+    
+    VIDEO --> MP4
+    RAW --> DNG
+    CONFIG --> META
+    RAW --> CALIB
+    
+    PREVIEW --> STREAM
+    STATUS --> RESPONSES
+    CMD --> COMMANDS
+    
+    %% Integration flows
+    SESSION --> CMD
+    SYNC --> CONFIG
+    HAND --> RAW
+    
+    %% Feedback loops
+    STATUS -.-> CONFIG
+    RESPONSES -.-> CMD
+    
+    classDef control fill:#e8f5e8
+    classDef processing fill:#e1f5fe
+    classDef storage fill:#f3e5f5
+    classDef network fill:#fff3e0
+    classDef integration fill:#fce4ec
+    
+    class CMD,CONFIG,STATUS control
+    class CAM2,VIDEO,RAW,PREVIEW processing
+    class MP4,DNG,META,CALIB storage
+    class STREAM,COMMANDS,RESPONSES network
+    class HAND,SESSION,SYNC integration
+```
+
 ## Configuration Parameters
 
 ### Video Recording Parameters

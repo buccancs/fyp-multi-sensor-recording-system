@@ -16,6 +16,67 @@
 
 ---
 
+## System API Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "Python API Components"
+        CALIB[CalibrationManager]
+        SESSION[SessionManager]
+        DEVICE[DeviceManager]
+        NETWORK[NetworkManager]
+    end
+    
+    subgraph "Android API Components"
+        CAMERA[CameraRecorder]
+        THERMAL[ThermalRecorder]
+        SHIMMER[ShimmerManager]
+        UI[UIController]
+    end
+    
+    subgraph "Cross-Platform APIs"
+        PROTOCOL[Protocol APIs]
+        SYNC[Synchronization APIs]
+        DATA[Data Management APIs]
+        CONFIG[Configuration APIs]
+    end
+    
+    subgraph "External Integrations"
+        OPENCV[OpenCV APIs]
+        TOPDON[Topdon SDK]
+        SHIMMER_SDK[Shimmer SDK]
+        ANDROID_SDK[Android Camera2]
+    end
+    
+    %% API connections
+    CALIB --> OPENCV
+    CAMERA --> ANDROID_SDK
+    THERMAL --> TOPDON
+    SHIMMER --> SHIMMER_SDK
+    
+    %% Cross-platform connections
+    CALIB --> PROTOCOL
+    SESSION --> SYNC
+    DEVICE --> DATA
+    NETWORK --> CONFIG
+    
+    %% Integration flows
+    PROTOCOL --> UI
+    SYNC --> CAMERA
+    DATA --> SESSION
+    CONFIG --> NETWORK
+    
+    classDef python fill:#e8f5e8
+    classDef android fill:#e1f5fe
+    classDef cross fill:#f3e5f5
+    classDef external fill:#fff3e0
+    
+    class CALIB,SESSION,DEVICE,NETWORK python
+    class CAMERA,THERMAL,SHIMMER,UI android
+    class PROTOCOL,SYNC,DATA,CONFIG cross
+    class OPENCV,TOPDON,SHIMMER_SDK,ANDROID_SDK external
+```
+
 ## Python API Components
 
 ### CalibrationManager API

@@ -1,5 +1,42 @@
 # Python Desktop Controller Application - User Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Pre-flight Checklist](#pre-flight-checklist)
+- [Getting Started](#getting-started)
+  - [System Setup and Installation](#system-setup-and-installation)
+  - [First-Time Configuration](#first-time-configuration)
+- [User Interface Overview](#user-interface-overview)
+  - [Recording Tab](#recording-tab)
+  - [Devices Tab](#devices-tab)
+  - [Calibration Tab](#calibration-tab)
+  - [Files Tab](#files-tab)
+- [Step-by-Step Recording Workflow](#step-by-step-recording-workflow)
+  - [Preparation Phase](#preparation-phase)
+  - [Recording Session](#recording-session)
+  - [Post-Recording Analysis](#post-recording-analysis)
+- [Advanced Features](#advanced-features)
+  - [Custom Recording Profiles](#custom-recording-profiles)
+  - [Multi-Session Management](#multi-session-management)
+  - [Real-Time Monitoring](#real-time-monitoring)
+- [System Monitoring and Logging](#system-monitoring-and-logging)
+  - [Real-time Monitoring](#real-time-monitoring-1)
+  - [Log Management](#log-management)
+- [Troubleshooting Common Issues](#troubleshooting-common-issues)
+  - [Device Connection Problems](#device-connection-problems)
+  - [Recording Quality Issues](#recording-quality-issues)
+  - [Storage and Performance Issues](#storage-and-performance-issues)
+- [Best Practices for Research Applications](#best-practices-for-research-applications)
+  - [Experimental Design Considerations](#experimental-design-considerations)
+  - [Data Management Best Practices](#data-management-best-practices)
+  - [Performance Optimization](#performance-optimization)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Getting Help and Support](#getting-help-and-support)
+  - [Built-in Help System](#built-in-help-system)
+  - [Additional Resources](#additional-resources)
+  - [Reporting Issues](#reporting-issues)
+
 ## Overview
 
 The Python Desktop Controller Application is your central command center for multi-sensor recording sessions. This application coordinates all connected devices, monitors recording progress in real-time, and manages your research data efficiently.
