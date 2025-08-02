@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         setupUI()
         observeViewModel()
+        initializeCamera()
     }
 
     private fun setupUI() {
@@ -174,12 +175,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initializeCamera() {
+        try {
+            // Initialize camera system with TextureView
+            val cameraTextureView = binding.cameraPreview
+            viewModel.initializeSystem(cameraTextureView)
+            
+            // Update status overlay
+            binding.cameraStatusOverlay.text = "Initializing camera..."
+            
+        } catch (e: Exception) {
+            showError("Failed to initialize camera: ${e.message}")
+            binding.cameraStatusOverlay.text = "Camera Error"
+        }
+    }
+
     private fun updateUI(uiState: MainUiState) {
         // Update recording controls
         updateRecordingControls(uiState)
         
         // Update device status indicators
         updateDeviceStatusIndicators(uiState)
+        
+        // Update camera status overlay
+        updateCameraStatusOverlay(uiState)
         
         // Update storage info
         updateStorageInfo(uiState)
@@ -207,6 +226,33 @@ class MainActivity : AppCompatActivity() {
         updateStatusChip(binding.shimmerStatusChip, "Shimmer", uiState.isShimmerConnected)
         updateStatusChip(binding.thermalStatusChip, "Thermal", uiState.isThermalConnected)
         updateStatusChip(binding.networkStatusChip, "Network", uiState.isNetworkConnected)
+    }
+
+    private fun updateCameraStatusOverlay(uiState: MainUiState) {
+        // Show/hide camera status overlay based on initialization state
+        when {
+            uiState.isLoadingPermissions -> {
+                binding.cameraStatusOverlay.text = "Initializing camera..."
+                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            uiState.isInitialized && uiState.errorMessage == null -> {
+                // Camera is working - hide overlay to show live preview
+                binding.cameraStatusOverlay.text = ""
+                binding.cameraStatusOverlay.visibility = android.view.View.GONE
+            }
+            uiState.errorMessage?.contains("camera", ignoreCase = true) == true -> {
+                binding.cameraStatusOverlay.text = "Camera\nError"
+                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            !uiState.isInitialized -> {
+                binding.cameraStatusOverlay.text = "Camera\nDisconnected"
+                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            else -> {
+                binding.cameraStatusOverlay.text = "Camera\n[Live]"
+                binding.cameraStatusOverlay.visibility = android.view.View.GONE
+            }
+        }
     }
     
     private fun updateStatusChip(chip: com.google.android.material.chip.Chip, deviceName: String, isConnected: Boolean) {

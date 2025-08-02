@@ -95,6 +95,14 @@ class MainViewModel
                                 errorMessage = "Camera not available, but other functions may work"
                             )
                         }
+                    } else {
+                        logger.info("Camera initialization successful")
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                isLoadingPermissions = false,
+                                errorMessage = null  // Clear any previous camera errors
+                            )
+                        }
                     }
 
                     // Initialize thermal recorder
