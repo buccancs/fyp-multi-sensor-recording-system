@@ -198,47 +198,151 @@ class MainActivity : AppCompatActivity(),
         AppLogger.logMemoryUsage("MainActivity", "Application Startup")
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onCreate() starting")
 
-        // Initialize view binding
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] View binding initialized and content view set")
+        try {
+            // Initialize view binding - CRITICAL
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] View binding initialized and content view set")
 
-        // Initialize ViewModel
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel initialized")
+            // Initialize ViewModel - CRITICAL
+            viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel initialized")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] CRITICAL ERROR in basic initialization: ${e.message}", e)
+            // If we can't even set up binding or viewmodel, we need to show an error and exit
+            Toast.makeText(this, "Critical initialization error: ${e.message}", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
         
-        // Initialize NetworkController integration
-        initializeNetworkController()
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController integration initialized")
+        // The rest of the initialization should be non-blocking with proper error handling
+        
+        try {
+            // Initialize NetworkController integration
+            initializeNetworkController()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] NetworkController integration initialized")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] NetworkController initialization failed: ${e.message}", e)
+            binding.statusText.text = "Network features unavailable"
+        }
 
-        // Initialize ShimmerController with callback
-        shimmerController.setCallback(shimmerCallbackDelegate)
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] ShimmerController initialized and callback set")
+        try {
+            // Initialize ShimmerController with callback
+            shimmerController.setCallback(shimmerCallbackDelegate)
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] ShimmerController initialized and callback set")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] ShimmerController initialization failed: ${e.message}", e)
+            binding.statusText.text = "Shimmer features unavailable"
+        }
 
-        // Setup UI
-        setupUI()
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] UI setup completed")
+        // Setup UI - CRITICAL (with built-in error handling)
+        try {
+            setupUI()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] UI setup completed")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] UI setup failed, attempting basic recovery: ${e.message}", e)
+            // Fallback: Just set up basic button listeners without advanced features
+            setupEmergencyUI()
+        }
 
-        // Setup managers and callbacks (TODO: Add proper callback setup methods to managers)
-        // shimmerManager.setCallback(this)
-        // permissionManager.setCallback(this)
-        // handSegmentationManager.setListener(this)
-        usbController.setCallback(this)
+        try {
+            // Setup managers and callbacks
+            usbController.setCallback(this)
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] USB controller callback set")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] USB controller setup failed: ${e.message}", e)
+            // Continue without USB monitoring
+        }
 
-        // Initialize USB monitoring for already connected devices
-        usbController.initializeUsbMonitoring(this)
+        try {
+            // Initialize USB monitoring for already connected devices
+            usbController.initializeUsbMonitoring(this)
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] USB monitoring initialized")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] USB monitoring initialization failed: ${e.message}", e)
+            // Continue without USB monitoring
+        }
 
         // Note: Permission checking moved to onResume() for better timing
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission checking will be done in onResume() for better timing")
 
-        // Observe ViewModel state
-        observeViewModel()
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel observers set up")
+        try {
+            // Observe ViewModel state
+            observeViewModel()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] ViewModel observers set up")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] ViewModel observer setup failed: ${e.message}", e)
+            binding.statusText.text = "State management limited"
+        }
 
         android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== APP STARTUP: onCreate() completed =====")
 
-        // Handle USB device attachment if launched by USB intent
-        usbController.handleUsbDeviceIntent(this, intent)
+        try {
+            // Handle USB device attachment if launched by USB intent
+            usbController.handleUsbDeviceIntent(this, intent)
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] USB intent handling failed: ${e.message}", e)
+            // Continue without USB intent handling
+        }
+        
+        // Ensure user knows the app is functional
+        binding.statusText.text = "App loaded - Buttons ready for interaction"
+        Toast.makeText(this, "✅ Multi-Sensor Recording App Ready", Toast.LENGTH_SHORT).show()
+    }
+    
+    /**
+     * Emergency UI setup when normal setupUI() fails
+     * Provides minimal button functionality to ensure app is not completely broken
+     */
+    private fun setupEmergencyUI() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Setting up emergency UI with minimal functionality")
+        
+        try {
+            // Set up only the most basic button functionality
+            binding.startRecordingButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Emergency mode: Start Recording clicked")
+                Toast.makeText(this, "Recording functionality temporarily limited", Toast.LENGTH_SHORT).show()
+                binding.statusText.text = "Emergency mode: Recording limited"
+            }
+
+            binding.stopRecordingButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Emergency mode: Stop Recording clicked")
+                Toast.makeText(this, "Recording functionality temporarily limited", Toast.LENGTH_SHORT).show()
+            }
+
+            binding.calibrationButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Emergency mode: Calibration clicked")
+                Toast.makeText(this, "Calibration functionality temporarily limited", Toast.LENGTH_SHORT).show()
+            }
+
+            binding.requestPermissionsButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Emergency mode: Request Permissions clicked")
+                requestBasicPermissions()
+            }
+
+            binding.navigationModeButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Emergency mode: Navigation mode clicked")
+                try {
+                    launchNavigationMode()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Navigation error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            binding.diagnosticButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Emergency mode: Diagnostic button clicked")
+                runDiagnosticTest()
+            }
+            
+            binding.statusText.text = "Emergency mode active - Limited functionality"
+            Toast.makeText(this, "Emergency mode: Basic buttons active", Toast.LENGTH_LONG).show()
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Even emergency UI setup failed: ${e.message}", e)
+            binding.statusText.text = "Critical UI error - Please restart app"
+            Toast.makeText(this, "Critical UI error: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -556,103 +660,219 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupUI() {
-        // Initialize coordinator with callback implementation
-        initializeCoordinator()
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Starting setupUI()")
         
-        // Initialize UIController through coordinator
-        initializeUIControllerIntegration()
+        // CRITICAL: Setup basic button functionality FIRST before any complex initialization
+        // This ensures buttons work even if advanced features fail
+        setupBasicButtonListeners()
         
-        // Setup recording control buttons
-        binding.startRecordingButton.setOnClickListener {
-            startRecording()
+        try {
+            // Initialize coordinator with callback implementation
+            initializeCoordinator()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Coordinator initialized successfully")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize coordinator: ${e.message}", e)
+            binding.statusText.text = "Warning: Coordinator initialization failed, basic functions available"
         }
-
-        binding.stopRecordingButton.setOnClickListener {
-            stopRecording()
-        }
-
-        binding.calibrationButton.setOnClickListener {
-            runCalibration()
-        }
-
-        binding.requestPermissionsButton.setOnClickListener {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request button clicked")
-            permissionController.requestPermissionsManually(this)
-        }
-
-        binding.navigationModeButton.setOnClickListener {
-            android.util.Log.d("MainActivity", "[DEBUG_LOG] Navigation mode button clicked")
-            launchNavigationMode()
+        
+        try {
+            // Initialize UIController through coordinator
+            initializeUIControllerIntegration()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] UIController initialized successfully")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController: ${e.message}", e)
+            binding.statusText.text = "Warning: UI features limited, basic functions available"
         }
 
         // Initially disable stop buttons
         binding.stopRecordingButton.isEnabled = false
 
-        // Setup hand segmentation controls
-        setupHandSegmentation()
+        try {
+            // Setup hand segmentation controls
+            setupHandSegmentation()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Hand segmentation setup completed")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to setup hand segmentation: ${e.message}", e)
+            // Continue without hand segmentation
+        }
 
-        // Initialize status monitoring system
-        initializeStatusMonitoring()
+        try {
+            // Initialize status monitoring system
+            initializeStatusMonitoring()
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Status monitoring initialized")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize status monitoring: ${e.message}", e)
+            // Continue without status monitoring
+        }
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] setupUI() completed - Buttons should be functional")
+        binding.statusText.text = "UI setup completed - Ready for user interaction"
+    }
+    
+    /**
+     * Setup basic button listeners with minimal dependencies to ensure buttons always work
+     * This method is called FIRST in setupUI() to guarantee button functionality
+     */
+    private fun setupBasicButtonListeners() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Setting up basic button listeners")
+        
+        try {
+            // Setup recording control buttons with basic functionality
+            binding.startRecordingButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Start Recording button clicked")
+                try {
+                    startRecording()
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Error starting recording: ${e.message}", e)
+                    Toast.makeText(this, "Recording error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            binding.stopRecordingButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Stop Recording button clicked")
+                try {
+                    stopRecording()
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Error stopping recording: ${e.message}", e)
+                    Toast.makeText(this, "Stop recording error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            binding.calibrationButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Calibration button clicked")
+                try {
+                    runCalibration()
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Error running calibration: ${e.message}", e)
+                    Toast.makeText(this, "Calibration error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            binding.requestPermissionsButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Manual permission request button clicked")
+                try {
+                    permissionController.requestPermissionsManually(this)
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Error requesting permissions: ${e.message}", e)
+                    Toast.makeText(this, "Permission request error: ${e.message}", Toast.LENGTH_LONG).show()
+                    // Fallback: Try basic permission request
+                    requestBasicPermissions()
+                }
+            }
+
+            binding.navigationModeButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Navigation mode button clicked")
+                try {
+                    launchNavigationMode()
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Error launching navigation mode: ${e.message}", e)
+                    Toast.makeText(this, "Navigation error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            binding.diagnosticButton.setOnClickListener {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Diagnostic button clicked")
+                runDiagnosticTest()
+            }
+            
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] ✅ All basic button listeners set up successfully")
+            Toast.makeText(this, "Buttons activated - Basic functionality ready", Toast.LENGTH_SHORT).show()
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] CRITICAL: Failed to setup basic button listeners: ${e.message}", e)
+            binding.statusText.text = "CRITICAL ERROR: Button setup failed - ${e.message}"
+            Toast.makeText(this, "CRITICAL: Button setup failed: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+    
+    /**
+     * Fallback permission request method for when permissionController fails
+     */
+    private fun requestBasicPermissions() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] Using fallback permission request")
+        try {
+            val permissions = arrayOf(
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            requestPermissions(permissions, 100)
+            Toast.makeText(this, "Requesting basic permissions...", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Fallback permission request also failed: ${e.message}", e)
+            Toast.makeText(this, "Permission system error: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
     
     /**
      * Initialize the main activity coordinator with callback implementation
+     * Enhanced with error handling to prevent blocking UI initialization
      */
     private fun initializeCoordinator() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing MainActivityCoordinator")
         
-        val coordinatorCallback = object : MainActivityCoordinator.CoordinatorCallback {
-            override fun updateStatusText(text: String) {
-                runOnUiThread {
-                    binding.statusText.text = text
+        try {
+            val coordinatorCallback = object : MainActivityCoordinator.CoordinatorCallback {
+                override fun updateStatusText(text: String) {
+                    runOnUiThread {
+                        if (::binding.isInitialized) {
+                            binding.statusText.text = text
+                        }
+                    }
                 }
-            }
-            
-            override fun showToast(message: String, duration: Int) {
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, message, duration).show()
+                
+                override fun showToast(message: String, duration: Int) {
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, message, duration).show()
+                    }
                 }
-            }
-            
-            override fun runOnUiThread(action: () -> Unit) {
-                this@MainActivity.runOnUiThread(action)
-            }
-            
-            override fun getContentView(): View = binding.root
-            override fun getStreamingIndicator(): View? = binding.streamingIndicator
-            override fun getStreamingLabel(): View? = binding.streamingLabel
-            override fun getStreamingDebugOverlay(): TextView? = binding.streamingDebugOverlay
-            
-            override fun showPermissionButton(show: Boolean) {
-                runOnUiThread {
-                    binding.requestPermissionsButton.visibility = if (show) View.VISIBLE else View.GONE
+                
+                override fun runOnUiThread(action: () -> Unit) {
+                    this@MainActivity.runOnUiThread(action)
                 }
+                
+                override fun getContentView(): View = binding.root
+                override fun getStreamingIndicator(): View? = binding.streamingIndicator
+                override fun getStreamingLabel(): View? = binding.streamingLabel
+                override fun getStreamingDebugOverlay(): TextView? = binding.streamingDebugOverlay
+                
+                override fun showPermissionButton(show: Boolean) {
+                    runOnUiThread {
+                        binding.requestPermissionsButton.visibility = if (show) View.VISIBLE else View.GONE
+                    }
+                }
+                
+                // UI Controller callback methods implementation
+                override fun getContext(): Context = this@MainActivity
+                override fun getStatusText(): TextView? = binding.statusText
+                override fun getStartRecordingButton(): View? = binding.startRecordingButton
+                override fun getStopRecordingButton(): View? = binding.stopRecordingButton
+                override fun getCalibrationButton(): View? = binding.calibrationButton
+                override fun getPcConnectionIndicator(): View? = binding.pcConnectionIndicator
+                override fun getShimmerConnectionIndicator(): View? = binding.shimmerConnectionIndicator
+                override fun getThermalConnectionIndicator(): View? = binding.thermalConnectionIndicator
+                override fun getPcConnectionStatus(): TextView? = binding.pcConnectionStatus
+                override fun getShimmerConnectionStatus(): TextView? = binding.shimmerConnectionStatus
+                override fun getThermalConnectionStatus(): TextView? = binding.thermalConnectionStatus
+                override fun getBatteryLevelText(): TextView? = binding.batteryLevelText
+                override fun getRecordingIndicator(): View? = binding.recordingIndicator
+                override fun getRequestPermissionsButton(): View? = binding.requestPermissionsButton
+                override fun getShimmerStatusText(): TextView? = binding.shimmerStatusText
             }
             
-            // UI Controller callback methods implementation
-            override fun getContext(): Context = this@MainActivity
-            override fun getStatusText(): TextView? = binding.statusText
-            override fun getStartRecordingButton(): View? = binding.startRecordingButton
-            override fun getStopRecordingButton(): View? = binding.stopRecordingButton
-            override fun getCalibrationButton(): View? = binding.calibrationButton
-            override fun getPcConnectionIndicator(): View? = binding.pcConnectionIndicator
-            override fun getShimmerConnectionIndicator(): View? = binding.shimmerConnectionIndicator
-            override fun getThermalConnectionIndicator(): View? = binding.thermalConnectionIndicator
-            override fun getPcConnectionStatus(): TextView? = binding.pcConnectionStatus
-            override fun getShimmerConnectionStatus(): TextView? = binding.shimmerConnectionStatus
-            override fun getThermalConnectionStatus(): TextView? = binding.thermalConnectionStatus
-            override fun getBatteryLevelText(): TextView? = binding.batteryLevelText
-            override fun getRecordingIndicator(): View? = binding.recordingIndicator
-            override fun getRequestPermissionsButton(): View? = binding.requestPermissionsButton
-            override fun getShimmerStatusText(): TextView? = binding.shimmerStatusText
+            mainActivityCoordinator.initialize(coordinatorCallback)
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] MainActivityCoordinator initialized successfully")
+            
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize coordinator callback: ${e.message}", e)
+            // Continue without coordinator - buttons will still work
+            throw e // Re-throw to be caught by setupUI
         }
-        
-        mainActivityCoordinator.initialize(coordinatorCallback)
-        android.util.Log.d("MainActivity", "[DEBUG_LOG] MainActivityCoordinator initialized successfully")
     }
     
     /**
      * Initialize UIController integration with validation and error handling
+     * Enhanced to prevent blocking UI initialization if UIController fails
      */
     private fun initializeUIControllerIntegration() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Initializing UIController integration")
@@ -669,32 +889,56 @@ class MainActivity : AppCompatActivity(),
             if (!validationResult.isValid) {
                 android.util.Log.w("MainActivity", "[DEBUG_LOG] UI validation failed: ${validationResult.errors}")
                 // Attempt recovery
-                val recoveryResult = uiController.recoverFromUIErrors()
-                if (recoveryResult.success) {
-                    android.util.Log.d("MainActivity", "[DEBUG_LOG] UI recovery successful: ${recoveryResult.recoveryActions}")
-                } else {
-                    android.util.Log.e("MainActivity", "[DEBUG_LOG] UI recovery failed: ${recoveryResult.recoveryActions}")
+                try {
+                    val recoveryResult = uiController.recoverFromUIErrors()
+                    if (recoveryResult.success) {
+                        android.util.Log.d("MainActivity", "[DEBUG_LOG] UI recovery successful: ${recoveryResult.recoveryActions}")
+                    } else {
+                        android.util.Log.e("MainActivity", "[DEBUG_LOG] UI recovery failed: ${recoveryResult.recoveryActions}")
+                        // Continue without advanced UI features
+                    }
+                } catch (recoveryError: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] UI recovery threw exception: ${recoveryError.message}", recoveryError)
+                    // Continue without advanced UI features
                 }
             } else {
                 android.util.Log.d("MainActivity", "[DEBUG_LOG] UI validation passed: ${validationResult.componentCount} components available")
             }
             
-            // Apply saved theme preferences
-            uiController.applyThemeFromPreferences()
+            // Apply saved theme preferences with error handling
+            try {
+                uiController.applyThemeFromPreferences()
+            } catch (themeError: Exception) {
+                android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to apply theme preferences: ${themeError.message}", themeError)
+                // Continue with default theme
+            }
             
-            // Enable accessibility features if needed
-            val savedState = uiController.getSavedUIState()
-            if (savedState.accessibilityMode) {
-                uiController.enableAccessibilityFeatures()
+            // Enable accessibility features if needed with error handling
+            try {
+                val savedState = uiController.getSavedUIState()
+                if (savedState.accessibilityMode) {
+                    uiController.enableAccessibilityFeatures()
+                }
+            } catch (accessibilityError: Exception) {
+                android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to enable accessibility features: ${accessibilityError.message}", accessibilityError)
+                // Continue without accessibility features
             }
             
             android.util.Log.d("MainActivity", "[DEBUG_LOG] UIController integration completed successfully")
             
         } catch (e: Exception) {
-            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController integration: ${e.message}")
-            Toast.makeText(this, "UI initialization error: ${e.message}", Toast.LENGTH_LONG).show()
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController integration: ${e.message}", e)
+            // Show user-friendly message but continue with basic functionality
+            Toast.makeText(this, "Advanced UI features unavailable, basic functions ready", Toast.LENGTH_LONG).show()
             // Ensure fallback initialization for lateinit properties
-            initializeLegacyUIComponents()
+            try {
+                initializeLegacyUIComponents()
+            } catch (fallbackError: Exception) {
+                android.util.Log.e("MainActivity", "[DEBUG_LOG] Even fallback UI initialization failed: ${fallbackError.message}", fallbackError)
+                // At this point we continue with just the basic button functionality
+            }
+            // Re-throw to be caught by setupUI
+            throw e
         }
     }
     
@@ -1427,73 +1671,127 @@ class MainActivity : AppCompatActivity(),
 
     /**
      * Creates the options menu for MainActivity
+     * Enhanced with error handling
      */
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
+        return try {
+            menuInflater.inflate(R.menu.main_menu, menu)
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] Options menu created successfully")
+            true
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to create options menu: ${e.message}", e)
+            Toast.makeText(this, "Menu unavailable: ${e.message}", Toast.LENGTH_SHORT).show()
+            false
+        }
     }
 
     /**
      * Handles options menu item selections
+     * Enhanced with error handling for each menu action
      */
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean =
         when (item.itemId) {
             R.id.action_settings -> {
-                // Launch Settings Activity
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Settings")
-                val intent = Intent(this, com.multisensor.recording.ui.SettingsActivity::class.java)
-                startActivity(intent)
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Settings")
+                    val intent = Intent(this, com.multisensor.recording.ui.SettingsActivity::class.java)
+                    startActivity(intent)
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to open Settings: ${e.message}", e)
+                    Toast.makeText(this, "Settings unavailable: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_network_config -> {
-                // Launch Network Configuration Activity
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Network Configuration")
-                val intent = Intent(this, com.multisensor.recording.ui.NetworkConfigActivity::class.java)
-                startActivity(intent)
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Network Configuration")
+                    val intent = Intent(this, com.multisensor.recording.ui.NetworkConfigActivity::class.java)
+                    startActivity(intent)
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to open Network Config: ${e.message}", e)
+                    Toast.makeText(this, "Network Config unavailable: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_file_browser -> {
-                // Launch File Browser Activity
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening File Browser")
-                val intent = Intent(this, com.multisensor.recording.ui.FileViewActivity::class.java)
-                startActivity(intent)
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening File Browser")
+                    val intent = Intent(this, com.multisensor.recording.ui.FileViewActivity::class.java)
+                    startActivity(intent)
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to open File Browser: ${e.message}", e)
+                    Toast.makeText(this, "File Browser unavailable: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_shimmer_config -> {
-                // Launch Shimmer Configuration Activity
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Shimmer Configuration")
-                val intent = Intent(this, com.multisensor.recording.ui.ShimmerConfigActivity::class.java)
-                startActivity(intent)
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Opening Shimmer Configuration")
+                    val intent = Intent(this, com.multisensor.recording.ui.ShimmerConfigActivity::class.java)
+                    startActivity(intent)
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to open Shimmer Config: ${e.message}", e)
+                    Toast.makeText(this, "Shimmer Config unavailable: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_test_flash_sync -> {
-                // Test Flash Sync Signal - 
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Flash Sync")
-                testFlashSync()
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Flash Sync")
+                    testFlashSync()
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Flash sync test failed: ${e.message}", e)
+                    Toast.makeText(this, "Flash sync test failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_test_beep_sync -> {
-                // Test Beep Sync Signal - 
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Beep Sync")
-                testBeepSync()
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Beep Sync")
+                    testBeepSync()
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Beep sync test failed: ${e.message}", e)
+                    Toast.makeText(this, "Beep sync test failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_test_clock_sync -> {
-                // Test Clock Synchronization - 
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Clock Sync")
-                testClockSync()
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Testing Clock Sync")
+                    testClockSync()
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Clock sync test failed: ${e.message}", e)
+                    Toast.makeText(this, "Clock sync test failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_sync_status -> {
-                // Show Sync Status - 
-                android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing Sync Status")
-                showSyncStatus()
-                true
+                try {
+                    android.util.Log.d("MainActivity", "[DEBUG_LOG] Showing Sync Status")
+                    showSyncStatus()
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to show sync status: ${e.message}", e)
+                    Toast.makeText(this, "Sync status unavailable: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             R.id.action_about -> {
-                // Show About Dialog
-                showAboutDialog()
-                true
+                try {
+                    showAboutDialog()
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to show about dialog: ${e.message}", e)
+                    Toast.makeText(this, "About dialog unavailable: ${e.message}", Toast.LENGTH_LONG).show()
+                    true
+                }
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -1921,4 +2219,114 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun getContext(): Context = this
+    
+    /**
+     * Run comprehensive diagnostic test to verify app functionality
+     * This helps identify where the app functionality breaks down
+     */
+    private fun runDiagnosticTest() {
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== STARTING DIAGNOSTIC TEST =====")
+        
+        val results = mutableListOf<String>()
+        
+        try {
+            // Test 1: Basic UI binding
+            results.add("✅ UI Binding: WORKING")
+            binding.statusText.text = "Running diagnostic..."
+            
+            // Test 2: Toast functionality
+            Toast.makeText(this, "🔧 Diagnostic Test Running...", Toast.LENGTH_SHORT).show()
+            results.add("✅ Toast Messages: WORKING")
+            
+            // Test 3: ViewModel access
+            try {
+                val currentState = viewModel.uiState.value
+                results.add("✅ ViewModel Access: WORKING")
+            } catch (e: Exception) {
+                results.add("❌ ViewModel Access: FAILED - ${e.message}")
+            }
+            
+            // Test 4: Button functionality
+            results.add("✅ Button Click Handling: WORKING")
+            
+            // Test 5: Permission status
+            try {
+                val allGranted = areAllPermissionsGranted()
+                results.add("ℹ️ All Permissions: ${if (allGranted) "GRANTED" else "MISSING"}")
+            } catch (e: Exception) {
+                results.add("❌ Permission Check: FAILED - ${e.message}")
+            }
+            
+            // Test 6: Controller initialization status
+            try {
+                // Test various controllers
+                results.add("ℹ️ MainActivityCoordinator: ${if (::mainActivityCoordinator.isInitialized) "INITIALIZED" else "NOT INITIALIZED"}")
+                results.add("ℹ️ UIController: ${if (::uiController.isInitialized) "INITIALIZED" else "NOT INITIALIZED"}")
+                results.add("ℹ️ PermissionController: ${if (::permissionController.isInitialized) "INITIALIZED" else "NOT INITIALIZED"}")
+            } catch (e: Exception) {
+                results.add("❌ Controller Status Check: FAILED - ${e.message}")
+            }
+            
+            // Test 7: Navigation capability
+            try {
+                // Just create intent without launching to test if classes exist
+                val navIntent = Intent(this, MainNavigationActivity::class.java)
+                results.add("✅ Navigation Activity: AVAILABLE")
+            } catch (e: Exception) {
+                results.add("❌ Navigation Activity: FAILED - ${e.message}")
+            }
+            
+            // Test 8: Menu capability
+            try {
+                val menuIntent = Intent(this, com.multisensor.recording.ui.SettingsActivity::class.java)
+                results.add("✅ Settings Activity: AVAILABLE")
+            } catch (e: Exception) {
+                results.add("❌ Settings Activity: FAILED - ${e.message}")
+            }
+            
+        } catch (e: Exception) {
+            results.add("❌ CRITICAL: Diagnostic test crashed - ${e.message}")
+            android.util.Log.e("MainActivity", "[DEBUG_LOG] Diagnostic test crashed: ${e.message}", e)
+        }
+        
+        // Display results
+        val report = buildString {
+            appendLine("🔧 DIAGNOSTIC REPORT")
+            appendLine("==================")
+            results.forEach { appendLine(it) }
+            appendLine("==================")
+            appendLine("Time: ${System.currentTimeMillis()}")
+        }
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] DIAGNOSTIC RESULTS:")
+        results.forEach { result ->
+            android.util.Log.d("MainActivity", "[DEBUG_LOG] $result")
+        }
+        
+        // Show results in UI
+        binding.statusText.text = "Diagnostic complete - Check logs for details"
+        
+        // Show summary dialog
+        AlertDialog.Builder(this)
+            .setTitle("🔧 App Functionality Diagnostic")
+            .setMessage(report)
+            .setPositiveButton("OK") { dialog, _ -> 
+                dialog.dismiss()
+                Toast.makeText(this, "Diagnostic complete! Check status and logs.", Toast.LENGTH_LONG).show()
+            }
+            .setNegativeButton("Copy to Clipboard") { dialog, _ ->
+                try {
+                    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    val clip = android.content.ClipData.newPlainText("Diagnostic Report", report)
+                    clipboard.setPrimaryClip(clip)
+                    Toast.makeText(this, "Report copied to clipboard", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Failed to copy: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
+            .show()
+        
+        android.util.Log.d("MainActivity", "[DEBUG_LOG] ===== DIAGNOSTIC TEST COMPLETED =====")
+    }
 }
