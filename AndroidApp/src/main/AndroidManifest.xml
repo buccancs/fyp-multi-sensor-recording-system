@@ -97,7 +97,7 @@
             android:name=".ui.SettingsActivity"
             android:exported="false"
             android:label="Settings"
-            android:theme="@style/Theme.AppCompat.DayNight"
+            android:theme="@style/Theme.MultiSensorRecording"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
