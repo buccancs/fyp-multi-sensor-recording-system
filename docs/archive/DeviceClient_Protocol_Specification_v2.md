@@ -7,6 +7,10 @@
 - **Authors**: Multi-Sensor Recording System Team
 - **Classification**: Technical Specification
 - **Status**: Active Development
+- **Related Documentation**: 
+  - System API Reference: `../new_documentation/PROTOCOL_system_api_reference.md`
+  - Networking Protocol Implementation: `../new_documentation/README_networking_protocol.md`
+  - Data Models: `../new_documentation/PROTOCOL_data_models_and_file_organization.md`
 
 ## 1. Executive Summary
 
@@ -674,3 +678,23 @@ test_scenarios = [
 - **Distribution**: Development Team, QA Team, Security Team
 - **Review Cycle**: Quarterly
 - **Next Review**: April 2025
+
+## Related Documentation
+
+This specification is part of the comprehensive Multi-Sensor Recording System documentation suite:
+
+### Primary References
+- **Complete API Documentation**: `../new_documentation/PROTOCOL_system_api_reference.md`
+- **System Architecture**: `../new_documentation/README_system_architecture.md`
+- **Data Models**: `../new_documentation/PROTOCOL_data_models_and_file_organization.md`
+
+### Implementation Guides
+- **Android Application**: `../new_documentation/README_Android_Mobile_Application.md`
+- **Python Desktop Controller**: `../new_documentation/README_python_desktop_controller.md`
+- **Networking Implementation**: `../new_documentation/README_networking_protocol.md`
+
+### User Documentation
+- **System Operation Guide**: `../new_documentation/USER_GUIDE_system_operation.md`
+- **Multi-Device Synchronization**: `../new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
+
+For complete documentation navigation, see: `../new_documentation/INDEX.md`
