@@ -386,6 +386,16 @@ class MainActivity : AppCompatActivity(),
 
         // Check and request permissions on first resume (app startup)
         permissionController.initializePermissionsOnStartup(this)
+        
+        // Fallback initialization after a delay to ensure UI is functional
+        // even if permission flow doesn't complete properly
+        Handler(Looper.getMainLooper()).postDelayed({
+            val currentState = viewModel.uiState.value
+            if (!currentState.isInitialized && !currentState.isLoadingPermissions) {
+                android.util.Log.d("MainActivity", "[DEBUG_LOG] Permission flow may have stalled, enabling fallback initialization")
+                viewModel.initializeSystemWithFallback()
+            }
+        }, 3000) // 3 second delay
     }
 
     override fun onPause() {
@@ -1680,11 +1690,15 @@ class MainActivity : AppCompatActivity(),
     override fun onPermissionsTemporarilyDenied(deniedPermissions: List<String>, grantedCount: Int, totalCount: Int) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.size}")
         binding.statusText.text = "Permissions: $grantedCount/$totalCount granted - Some permissions denied"
+        // Enable basic functionality even with some permissions denied
+        viewModel.initializeSystemWithFallback()
     }
 
     override fun onPermissionsPermanentlyDenied(deniedPermissions: List<String>) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Permissions permanently denied: ${deniedPermissions.size}")
         binding.statusText.text = "Permissions required - Please enable in Settings"
+        // Enable basic functionality even with permissions denied
+        viewModel.initializeSystemWithFallback()
     }
     
     fun onPermissionCheckStarted() {
