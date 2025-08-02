@@ -53,6 +53,7 @@ android {
         debug {
             isMinifyEnabled = false
             buildConfigField("String", "BUILD_TYPE", "\"debug\"")
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
             enableUnitTestCoverage = true
             enableAndroidTestCoverage = true
             ndk {
@@ -64,6 +65,7 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("String", "BUILD_TYPE", "\"release\"")
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
             ndk {
                 debugSymbolLevel = "SYMBOL_TABLE"
             }
@@ -72,6 +74,7 @@ android {
             initWith(getByName("debug"))
             isDebuggable = false
             buildConfigField("String", "BUILD_TYPE", "\"staging\"")
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
         }
     }
 
@@ -157,89 +160,60 @@ android {
 dependencies {
     // Core & UI Components
     implementation(libs.bundles.core.ui)
-    testImplementation(libs.bundles.core.ui)
-
-    // Settings and Preferences
     implementation(libs.androidx.preference.ktx)
-    testImplementation(libs.androidx.preference.ktx)
-
-    // Material Design Components
     implementation(libs.androidx.material)
-    testImplementation(libs.androidx.material)
     implementation("androidx.cardview:cardview:1.0.0")
-    testImplementation(libs.cardview)
 
-    // Jetpack Navigation
+    // Jetpack Navigation  
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    testImplementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    testImplementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    
-    // ViewPager2 for fragment navigation
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     // Architecture
     implementation(libs.bundles.lifecycle)
-    testImplementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.coroutines.android)
-    testImplementation(libs.kotlinx.coroutines.android)
     implementation(libs.bundles.activity.fragment)
-    testImplementation(libs.bundles.activity.fragment)
-
-    // Permissions
     implementation(libs.xxpermissions)
-    testImplementation(libs.xxpermissions)
 
     // CameraX
     implementation(libs.bundles.camera)
-    testImplementation(libs.bundles.camera)
 
     // Dependency Injection
     implementation(libs.hilt.android)
-    testImplementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
     // Room Database
     implementation(libs.bundles.room)
-    testImplementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
     // Networking
     implementation(libs.bundles.networking)
-    testImplementation(libs.bundles.networking)
 
-    // Pre-existing Test Dependencies
+    // Local SDKs - Main only (tests inherit through main)
+    implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
+    implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
+    implementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
+    implementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
+    implementation(files("src/main/libs/topdon_1.3.7.aar"))
+    implementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
+    implementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
+    implementation(files("src/main/libs/suplib-release.aar"))
+
+    // Unit Test Dependencies
     testImplementation(libs.bundles.enhanced.unit.testing)
-    testImplementation(libs.hilt.android.testing) // Stays as it's a specific test artifact
+    testImplementation(libs.hilt.android.testing)
     kspTest(libs.hilt.compiler)
 
+    // Instrumentation Test Dependencies
     androidTestImplementation(libs.bundles.enhanced.integration.testing)
+    androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil("androidx.test:orchestrator:1.5.0")
-    androidTestImplementation(libs.hilt.android.testing) // Stays as it's a specific test artifact
     kspAndroidTest(libs.hilt.compiler)
 
     // Code Quality
     val ktlint by configurations.getting
     ktlint(libs.ktlint)
     detektPlugins(libs.detekt.formatting)
-
-    // Local SDKs
-    implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
-    testImplementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
-    implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
-    testImplementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
-    implementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
-    testImplementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
-    implementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
-    testImplementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
-    implementation(files("src/main/libs/topdon_1.3.7.aar"))
-    testImplementation(files("src/main/libs/topdon_1.3.7.aar"))
-    implementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
-    testImplementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
-    implementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
-    testImplementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
-    implementation(files("src/main/libs/suplib-release.aar"))
-    testImplementation(files("src/main/libs/suplib-release.aar"))
 }
 
 //--------------- Custom Tasks & Build Logic ---------------//

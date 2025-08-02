@@ -1468,15 +1468,41 @@ class NetworkController @Inject constructor() {
             
             when {
                 networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> {
-                    // WiFi signal strength
+                    // WiFi signal strength using modern APIs
                     val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                    val wifiInfo = wifiManager.connectionInfo
-                    val rssi = wifiInfo.rssi
                     
-                    // Convert RSSI to percentage (typical range: -100 to -30 dBm)
-                    val signalLevel = WifiManager.calculateSignalLevel(rssi, 100)
-                    android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $signalLevel% (RSSI: $rssi)")
-                    signalLevel
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        // Use modern API for Android 10+
+                        try {
+                            val wifiInfo = wifiManager.connectionInfo
+                            val rssi = wifiInfo.rssi
+                            val signalLevel = wifiManager.calculateSignalLevel(rssi)
+                            val percentage = ((signalLevel + 1) * 100) / 5 // Convert 0-4 scale to percentage
+                            android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $percentage% (Level: $signalLevel, RSSI: $rssi)")
+                            percentage
+                        } catch (e: SecurityException) {
+                            android.util.Log.w("NetworkController", "Permission denied for WiFi info")
+                            -1
+                        }
+                    } else {
+                        // Fallback for older Android versions
+                        @Suppress("DEPRECATION")
+                        try {
+                            val wifiInfo = wifiManager.connectionInfo
+                            if (wifiInfo != null) {
+                                val rssi = wifiInfo.rssi
+                                val signalLevel = WifiManager.calculateSignalLevel(rssi, 100)
+                                android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $signalLevel% (RSSI: $rssi)")
+                                signalLevel
+                            } else {
+                                android.util.Log.w("NetworkController", "WiFi info not available")
+                                -1
+                            }
+                        } catch (e: SecurityException) {
+                            android.util.Log.w("NetworkController", "Permission denied for WiFi info")
+                            -1
+                        }
+                    }
                 }
                 networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> {
                     // Cellular signal strength
@@ -1770,7 +1796,7 @@ class NetworkController @Inject constructor() {
                 networkType = networkType,
                 signalStrength = signalStrength,
                 timestamp = System.currentTimeMillis(),
-                latency = 0L // TODO: Implement actual latency measurement
+                latency = 0L // Latency measurement requires ping implementation
 
             )
             

@@ -183,188 +183,45 @@ tasks.register('pythonPackage', Exec) {
     }
 }
 
-// Multiple Full Test Suite Tasks
-tasks.register('runRecordingFullTest', Exec) {
-    group = 'testing'
-    description = 'Runs the Recording Functionality Full Test Suite'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_recording_full_suite.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running Recording Functionality Full Test Suite..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ Recording Full Test Suite passed"
-        } else {
-            println "⚠ Recording Full Test Suite failed (exit code: ${executionResult.get().exitValue})"
+// Optimized Test Suite Tasks using common configuration
+def createTestTask = { taskName, description, scriptName ->
+    tasks.register(taskName, Exec) {
+        group = 'testing'
+        description = description
+        workingDir file('.')
+        
+        def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+        def pythonExe = isWindows ? 'python.exe' : 'python'
+        
+        commandLine pythonExe, scriptName
+        ignoreExitValue = true
+        
+        doFirst {
+            println "Running ${description}..."
+        }
+        
+        doLast {
+            def status = executionResult.get().exitValue == 0 ? "✓ passed" : "⚠ failed (exit code: ${executionResult.get().exitValue})"
+            println "${description} ${status}"
         }
     }
 }
 
-tasks.register('runDeviceManagementFullTest', Exec) {
-    group = 'testing'
-    description = 'Runs the Device Management Full Test Suite'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_device_management_full_suite.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running Device Management Full Test Suite..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ Device Management Full Test Suite passed"
-        } else {
-            println "⚠ Device Management Full Test Suite failed (exit code: ${executionResult.get().exitValue})"
-        }
-    }
-}
+// Create test tasks using the common configuration
+createTestTask('runRecordingFullTest', 'Recording Functionality Full Test Suite', 'test_recording_full_suite.py')
+createTestTask('runDeviceManagementFullTest', 'Device Management Full Test Suite', 'test_device_management_full_suite.py')
+createTestTask('runCalibrationFullTest', 'Calibration Full Test Suite', 'test_calibration_full_suite.py')
+createTestTask('runFileManagementFullTest', 'File Management Full Test Suite', 'test_file_management_full_suite.py')
+createTestTask('runNetworkConnectivityFullTest', 'Network Connectivity Full Test Suite', 'test_network_connectivity_full_suite.py')
 
-tasks.register('runCalibrationFullTest', Exec) {
-    group = 'testing'
-    description = 'Runs the Calibration Full Test Suite'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_calibration_full_suite.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running Calibration Full Test Suite..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ Calibration Full Test Suite passed"
-        } else {
-            println "⚠ Calibration Full Test Suite failed (exit code: ${executionResult.get().exitValue})"
-        }
-    }
-}
+// Additional test tasks using the common configuration  
+createTestTask('runAllFullTestSuites', 'All Full Test Suites using orchestrator', 'test_all_full_suites.py')
+createTestTask('runIDEIntegrationTest', 'IDE Integration Test Suite', 'test_ide_integration_suite.py')
 
-tasks.register('runFileManagementFullTest', Exec) {
-    group = 'testing'
-    description = 'Runs the File Management Full Test Suite'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_file_management_full_suite.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running File Management Full Test Suite..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ File Management Full Test Suite passed"
-        } else {
-            println "⚠ File Management Full Test Suite failed (exit code: ${executionResult.get().exitValue})"
-        }
-    }
-}
-
-tasks.register('runNetworkConnectivityFullTest', Exec) {
-    group = 'testing'
-    description = 'Runs the Network Connectivity Full Test Suite'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_network_connectivity_full_suite.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running Network Connectivity Full Test Suite..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ Network Connectivity Full Test Suite passed"
-        } else {
-            println "⚠ Network Connectivity Full Test Suite failed (exit code: ${executionResult.get().exitValue})"
-        }
-    }
-}
-
-tasks.register('runAllFullTestSuites', Exec) {
-    group = 'testing'
-    description = 'Runs all Full Test Suites using the orchestrator'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_all_full_suites.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running All Full Test Suites..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ All Full Test Suites completed successfully"
-        } else {
-            println "⚠ Some Full Test Suites failed (exit code: ${executionResult.get().exitValue})"
-        }
-    }
-}
-
-// Legacy IDE Integration Test (now one of many test options)
-tasks.register('runIDEIntegrationTest', Exec) {
-    group = 'testing'
-    description = 'Runs the original comprehensive IDE Integration Test Suite'
-    
-    workingDir file('.')
-    
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def pythonExe = isWindows ? 'python.exe' : 'python'
-    
-    commandLine pythonExe, 'test_ide_integration_suite.py'
-    ignoreExitValue = true
-    
-    doFirst {
-        println "Running original IDE Integration Test Suite..."
-    }
-    
-    doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ IDE Integration Test Suite passed"
-        } else {
-            println "⚠ IDE Integration Test Suite failed (exit code: ${executionResult.get().exitValue})"
-        }
-    }
-}
-
-// Python UI Test standalone
+// Python UI Test (different working directory)
 tasks.register('runPythonUITest', Exec) {
     group = 'testing'
     description = 'Runs Python UI Integration Test standalone'
-    
     workingDir file('PythonApp')
     
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
@@ -373,39 +230,26 @@ tasks.register('runPythonUITest', Exec) {
     commandLine pythonExe, 'test_python_ui_integration.py'
     ignoreExitValue = true
     
-    doFirst {
-        println "Running Python UI Integration Test..."
-    }
-    
+    doFirst { println "Running Python UI Integration Test..." }
     doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ Python UI Test passed"
-        } else {
-            println "⚠ Python UI Test failed (exit code: ${executionResult.get().exitValue})"
-        }
+        def status = executionResult.get().exitValue == 0 ? "✓ passed" : "⚠ failed (exit code: ${executionResult.get().exitValue})"
+        println "Python UI Test ${status}"
     }
 }
 
-// Android UI Test standalone
+// Android UI Test (different command structure)
 tasks.register('runIDEIntegrationUITest', Exec) {
     group = 'testing'
     description = 'Runs Android IDE Integration UI Test standalone'
-    
     workingDir file('.')
     
     commandLine './gradlew', ':AndroidApp:connectedAndroidTest', '-Pandroid.testInstrumentationRunnerArguments.class=com.multisensor.recording.IDEIntegrationUITest'
     ignoreExitValue = true
     
-    doFirst {
-        println "Running Android IDE Integration UI Test..."
-    }
-    
+    doFirst { println "Running Android IDE Integration UI Test..." }
     doLast {
-        if (executionResult.get().exitValue == 0) {
-            println "✓ Android UI Test passed"
-        } else {
-            println "⚠ Android UI Test failed (exit code: ${executionResult.get().exitValue})"
-        }
+        def status = executionResult.get().exitValue == 0 ? "✓ passed" : "⚠ failed (exit code: ${executionResult.get().exitValue})"
+        println "Android UI Test ${status}"
     }
 }
 

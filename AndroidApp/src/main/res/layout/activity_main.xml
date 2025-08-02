@@ -1,300 +1,398 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout 
+<androidx.coordinatorlayout.widget.CoordinatorLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <!-- Main Content -->
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <!-- App Bar with Material Design 3 Elevation -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+        app:elevation="@dimen/elevation_card">
 
-        <!-- App Bar -->
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+            android:layout_height="?attr/actionBarSize"
+            app:title="Multi-Sensor Recording"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="Multi-Sensor Recording"
-                app:navigationIcon="@drawable/ic_menu"
-                app:layout_scrollFlags="scroll|enterAlways" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <!-- Progress Indicator for Loading States -->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchorGravity="bottom" />
 
-        <!-- Content Container -->
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <!-- Status Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/statusCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardElevation="2dp"
-                    app:cardCornerRadius="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="System Status"
-                            android:textAppearance="?attr/textAppearanceTitleMedium"
-                            android:layout_marginBottom="12dp" />
-
-                        <!-- PC Connection Status -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="8dp">
-
-                            <View
-                                android:id="@+id/pcConnectionIndicator"
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:layout_marginEnd="8dp"
-                                android:background="@drawable/status_indicator_circle" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/pcConnectionStatus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="PC Connection: Disconnected"
-                                android:textAppearance="?attr/textAppearanceBodyMedium" />
-
-                        </LinearLayout>
-
-                        <!-- Shimmer Status -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="8dp">
-
-                            <View
-                                android:id="@+id/shimmerConnectionIndicator"
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:layout_marginEnd="8dp"
-                                android:background="@drawable/status_indicator_circle" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/shimmerConnectionStatus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Shimmer: Not Connected"
-                                android:textAppearance="?attr/textAppearanceBodyMedium" />
-
-                        </LinearLayout>
-
-                        <!-- Thermal Camera Status -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <View
-                                android:id="@+id/thermalConnectionIndicator"
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:layout_marginEnd="8dp"
-                                android:background="@drawable/status_indicator_circle" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/thermalConnectionStatus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Thermal Camera: Not Connected"
-                                android:textAppearance="?attr/textAppearanceBodyMedium" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Recording Control Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/recordingCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardElevation="2dp"
-                    app:cardCornerRadius="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Recording Control"
-                            android:textAppearance="?attr/textAppearanceTitleMedium"
-                            android:layout_marginBottom="16dp" />
-
-                        <!-- Recording Buttons -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/startRecordingButton"
-                                style="@style/Widget.Material3.Button"
-                                android:layout_width="0dp"
-                                android:layout_height="56dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="8dp"
-                                android:text="Start Recording"
-                                app:icon="@drawable/ic_record" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/stopRecordingButton"
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="56dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="8dp"
-                                android:text="Stop Recording"
-                                app:icon="@drawable/ic_stop" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Quick Actions Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/quickActionsCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="2dp"
-                    app:cardCornerRadius="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Quick Actions"
-                            android:textAppearance="?attr/textAppearanceTitleMedium"
-                            android:layout_marginBottom="16dp" />
-
-                        <!-- Action Buttons Grid -->
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:rowCount="2">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/calibrationButton"
-                                style="@style/Widget.Material3.Button.TonalButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="Calibration"
-                                app:icon="@drawable/ic_calibrate" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/settingsButton"
-                                style="@style/Widget.Material3.Button.TonalButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="Settings"
-                                app:icon="@drawable/ic_settings" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/devicesButton"
-                                style="@style/Widget.Material3.Button.TonalButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="Devices"
-                                app:icon="@drawable/ic_devices" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/filesButton"
-                                style="@style/Widget.Material3.Button.TonalButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_columnWeight="1"
-                                android:layout_margin="4dp"
-                                android:text="Files"
-                                app:icon="@drawable/ic_folder" />
-
-                        </GridLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <!-- FAB for Emergency Actions -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/diagnosticsFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="Run Diagnostics"
-            app:srcCompat="@drawable/ic_diagnostic" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
+    <!-- Optimized Main Content with ConstraintLayout -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header_md3"
-        app:menu="@menu/drawer_menu_md3" />
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</androidx.drawerlayout.widget.DrawerLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/content_padding">
+
+            <!-- Recording Controls Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/recordingCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/elevation_card"
+                app:cardCornerRadius="@dimen/corner_radius_card"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/card_padding">
+
+                    <!-- Camera Previews Side-by-Side with Proper Aspect Ratio -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/rgbCameraCard"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/spacing_xs"
+                        app:cardCornerRadius="@dimen/corner_radius_button"
+                        app:cardElevation="@dimen/elevation_preview"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/thermalCameraCard"
+                        app:layout_constraintWidth_percent="0.48"
+                        app:layout_constraintDimensionRatio="16:9">
+
+                        <androidx.camera.view.PreviewView
+                            android:id="@+id/cameraPreview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Camera\n[Live]"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:background="?attr/colorSurfaceVariant"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/thermalCameraCard"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        app:cardCornerRadius="@dimen/corner_radius_button"
+                        app:cardElevation="@dimen/elevation_preview"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/rgbCameraCard"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.48"
+                        app:layout_constraintDimensionRatio="16:9">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Thermal\n[Live]"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:background="?attr/colorSurfaceVariant"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Recording Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/recordButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height_large"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="Start Recording"
+                        android:textSize="16sp"
+                        app:icon="@drawable/ic_record"
+                        app:iconGravity="textStart"
+                        style="@style/Widget.Material3.Button"
+                        app:layout_constraintTop_toBottomOf="@id/rgbCameraCard"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Recording Status -->
+                    <TextView
+                        android:id="@+id/recordingStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="Ready to record"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:gravity="center"
+                        app:layout_constraintTop_toBottomOf="@id/recordButton"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- System Status Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/statusCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_spacing"
+                app:cardElevation="@dimen/elevation_card"
+                app:cardCornerRadius="@dimen/corner_radius_card"
+                app:layout_constraintTop_toBottomOf="@id/recordingCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/card_padding">
+
+                    <!-- Status Title -->
+                    <TextView
+                        android:id="@+id/statusTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="System Status"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Device Connection Grid -->
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/deviceStatusChips"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        app:chipSpacingHorizontal="@dimen/spacing_small"
+                        app:layout_constraintTop_toBottomOf="@id/statusTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/pcStatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PC: Disconnected"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/shimmerStatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Shimmer: Disconnected"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/thermalStatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thermal: Disconnected"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/networkStatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Network: Offline"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <!-- Storage Progress -->
+                    <TextView
+                        android:id="@+id/storageLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="Storage: 0% used"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurface"
+                        app:layout_constraintTop_toBottomOf="@id/deviceStatusChips"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/storageProgress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:progress="0"
+                        app:indicatorColor="?attr/colorPrimary"
+                        app:layout_constraintTop_toBottomOf="@id/storageLabel"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quick Actions Card with ViewStub for Performance -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quickActionsCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_spacing"
+                app:cardElevation="@dimen/elevation_card"
+                app:cardCornerRadius="@dimen/corner_radius_card"
+                app:layout_constraintTop_toBottomOf="@id/statusCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/card_padding">
+
+                    <TextView
+                        android:id="@+id/quickActionsTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Quick Actions"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Action Buttons Grid - Clean Text-Only Design -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/calibrationButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height_large"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginEnd="@dimen/spacing_xs"
+                        android:text="Calibration"
+                        android:textSize="14sp"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        app:layout_constraintTop_toBottomOf="@id/quickActionsTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/devicesButton"
+                        app:layout_constraintWidth_percent="0.48" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/devicesButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height_large"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        android:text="Devices"
+                        android:textSize="14sp"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        app:layout_constraintTop_toBottomOf="@id/quickActionsTitle"
+                        app:layout_constraintStart_toEndOf="@id/calibrationButton"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.48" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/filesButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height_large"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginEnd="@dimen/spacing_xs"
+                        android:text="Files"
+                        android:textSize="14sp"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        app:layout_constraintTop_toBottomOf="@id/calibrationButton"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/transferButton"
+                        app:layout_constraintWidth_percent="0.48" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/transferButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height_large"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        android:text="Transfer"
+                        android:textSize="14sp"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        app:layout_constraintTop_toBottomOf="@id/devicesButton"
+                        app:layout_constraintStart_toEndOf="@id/filesButton"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintWidth_percent="0.48" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ViewStub for Advanced Settings (Performance Optimization) -->
+            <ViewStub
+                android:id="@+id/advancedSettingsStub"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_spacing"
+                android:layout="@layout/layout_advanced_settings"
+                app:layout_constraintTop_toBottomOf="@id/quickActionsCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!-- Loading State ViewStub -->
+            <ViewStub
+                android:id="@+id/loadingStateStub"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout="@layout/layout_loading_state"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!-- Error State ViewStub -->
+            <ViewStub
+                android:id="@+id/errorStateStub"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout="@layout/layout_error_state"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Button for Settings -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/settingsFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_medium"
+        android:contentDescription="Settings"
+        app:srcCompat="@drawable/ic_settings"
+        app:layout_anchor="@id/quickActionsCard"
+        app:layout_anchorGravity="bottom|end"
+        app:elevation="@dimen/elevation_fab" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
