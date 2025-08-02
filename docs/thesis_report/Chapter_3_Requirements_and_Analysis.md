@@ -141,13 +141,27 @@ The feasibility assessment process included detailed analysis of computational r
 
 ## Functional Requirements
 
-The functional requirements specification defines the core capabilities that the Multi-Sensor Recording System must provide to achieve its research objectives. These requirements emerged from the comprehensive stakeholder analysis and represent the essential behaviors and operations that enable contactless GSR prediction research. The functional requirements are organized into logical groupings that reflect the system's architectural components and operational workflows.
+The comprehensive functional requirements specification systematically defines the essential core capabilities that the Multi-Sensor Recording System must reliably provide to achieve its ambitious research objectives and enable breakthrough advances in contactless physiological measurement science [CITE - Robertson, S., & Robertson, J. (2012). Mastering the requirements process: Getting requirements right. Addison-Wesley Professional]. These meticulously defined requirements emerged from the extensive stakeholder analysis process and represent the fundamental behaviors, operations, and capabilities that are absolutely essential for enabling sophisticated contactless GSR prediction research while maintaining the scientific rigor and measurement precision required for peer-reviewed publication and clinical application [CITE - Wiegers, K., & Beatty, J. (2013). Software requirements. Microsoft Press].
 
-The requirements engineering process employed systematic analysis methodologies to ensure complete coverage of stakeholder needs while maintaining technical feasibility and research validity [CITE - Requirements engineering for research systems]. The approach recognizes that research software presents unique challenges compared to traditional commercial applications, requiring specialized validation criteria and performance metrics that support scientific methodology and reproducible research outcomes.
+The functional requirements are systematically organized into logical groupings that directly reflect the system's sophisticated architectural components and comprehensive operational workflows, ensuring clear traceability between stakeholder needs, system capabilities, and implementation approaches [CITE - Davis, A.M. (1993). Software requirements: objects, functions, and states. Prentice-Hall]. Each requirement specification includes detailed acceptance criteria, performance metrics, validation procedures, and comprehensive rationale that explains why the requirement is essential for achieving research objectives and maintaining scientific validity across diverse experimental contexts.
+
+The requirements engineering process employed systematic analysis methodologies specifically adapted for research software development to ensure complete coverage of stakeholder needs while maintaining technical feasibility, scientific validity, and long-term system maintainability [CITE - Segal, J. (2007). Some problems of professional end user developers. Proceedings IEEE Symposium on Visual Languages and Human-Centric Computing, 111-118]. The specialized approach recognizes that research software presents fundamentally unique challenges compared to traditional commercial applications, requiring specialized validation criteria, performance metrics, and success measures that directly support scientific methodology, reproducible research outcomes, and peer review standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
 ### Core System Coordination Requirements
 
-#### FR-001: Multi-Device Coordination and Management
+The system coordination requirements define the fundamental capabilities necessary for managing multiple heterogeneous devices in a synchronized measurement environment while maintaining research-grade temporal precision and operational reliability across diverse experimental conditions [CITE - Mullender, S. (Ed.). (1993). Distributed systems. ACM Press]. These requirements address the complex challenges of coordinating consumer-grade devices for scientific applications while ensuring measurement validity and experimental reproducibility.
+
+#### FR-001: Multi-Device Coordination and Centralized Management
+
+**Requirement Statement**: The system shall provide comprehensive centralized coordination and management capabilities for multiple heterogeneous Android mobile devices, thermal imaging systems, and reference GSR sensors operating in a distributed measurement environment with research-grade precision and reliability [CITE - Tanenbaum, A.S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. CreateSpace Independent Publishing Platform].
+
+**Detailed Specification**: The central controller application must maintain real-time communication with up to twelve simultaneously connected mobile devices, each equipped with high-resolution cameras and thermal imaging capabilities, while coordinating reference GSR sensor data collection through Bluetooth Low Energy protocols [CITE - Bluetooth SIG. (2019). Bluetooth Core Specification Version 5.1. Bluetooth Special Interest Group]. The coordination system must provide automated device discovery, capability assessment, and configuration management that enables researchers to rapidly deploy measurement sessions without requiring specialized technical expertise or extensive setup procedures.
+
+**Performance Requirements**: Device coordination must maintain temporal synchronization within ±25 milliseconds across all connected devices, support automatic reconnection procedures that restore full coordination within 5 seconds of temporary disconnection, and provide comprehensive status monitoring that detects and reports device health, connectivity status, and measurement quality in real-time [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565].
+
+**Rationale**: Multi-device coordination is fundamental to enabling contactless measurement across multiple participants while maintaining the temporal precision required for physiological research. The capability addresses scalability limitations of traditional single-device measurement systems while providing the redundancy and validation opportunities essential for research-grade data collection [CITE - Lynch, N.A. (1996). Distributed algorithms. Morgan Kaufmann].
+
+**Validation Criteria**: Successful coordination of at least 8 devices simultaneously, maintenance of synchronization precision under normal network conditions, and demonstration of automatic recovery from temporary connectivity interruptions without data loss or measurement artifacts.
 
 **Requirement Statement**: The system shall coordinate synchronized data collection from a minimum of four simultaneous devices with automatic device discovery, connection management, and status monitoring capabilities.
 
@@ -160,10 +174,62 @@ The requirements engineering process employed systematic analysis methodologies 
 - Connection status monitoring with 1-second update intervals and comprehensive error reporting
 
 **Implementation Dependencies**: 
-- Network service discovery protocols [CITE - mDNS and service discovery]
-- WebSocket-based communication infrastructure
-- Device capability negotiation and compatibility validation
-- Comprehensive error handling and recovery mechanisms
+- Network service discovery protocols utilizing multicast DNS (mDNS) and Bonjour service discovery [CITE - Cheshire, S., & Krochmal, M. (2013). DNS-based service discovery. RFC 6763]
+- WebSocket-based communication infrastructure with JSON message protocols
+- Device capability negotiation and compatibility validation systems
+- Comprehensive error handling and recovery mechanisms with detailed logging
+- Network security protocols including TLS encryption for sensitive data transmission
+
+#### FR-002: Advanced Temporal Synchronization and Precision Management
+
+**Requirement Statement**: The system shall establish and maintain precise temporal synchronization across all connected devices with maximum deviation of ≤25 milliseconds from the reference timeline throughout recording sessions, ensuring research-grade temporal precision for multi-modal data analysis [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565].
+
+**Technical Rationale**: Precise temporal synchronization constitutes an absolutely critical requirement for sophisticated multi-modal physiological research where advanced data fusion techniques require exact temporal alignment between diverse sensor modalities to enable meaningful correlation analysis and scientific interpretation [CITE - Mills, D.L. (2006). Computer network time synchronization: the network time protocol on earth and in space. CRC Press]. The 25ms tolerance specification reflects comprehensive analysis of physiological signal characteristics, network latency variations, and the temporal resolution requirements for accurate correlation analysis between contactless measurements and reference GSR data [CITE - Cristian, F. (1989). Probabilistic clock synchronization. Distributed Computing, 3(3), 146-158].
+
+This precision requirement necessitated the development of sophisticated synchronization algorithms that systematically compensate for network latency variations, device-specific timing characteristics, and clock drift phenomena that could compromise measurement validity [CITE - Elson, J., & Estrin, D. (2001). Time synchronization for wireless sensor networks. Proceedings 15th International Parallel and Distributed Processing Symposium, 1965-1970]. The synchronization approach combines Network Time Protocol (NTP) foundations with custom latency compensation techniques specifically adapted for Android device coordination in research environments.
+
+**Performance Specifications**:
+- Initial synchronization establishment within 10 seconds of session initiation with statistical confidence intervals
+- Continuous synchronization monitoring with automated drift detection and correction capabilities
+- Temporal precision validation using reference timing signals and comprehensive statistical analysis
+- Comprehensive timing metadata generation for post-session temporal analysis and validation procedures
+- Support for dynamic latency compensation based on real-time network condition assessment and adaptation
+
+**Validation Criteria**:
+- Demonstrated temporal precision ≤25ms across all devices under normal operating conditions
+- Synchronization stability maintenance during extended sessions (>4 hours) with comprehensive drift monitoring
+- Automatic drift detection and correction with response times <5 seconds
+- Statistical validation of temporal precision using multiple independent timing reference sources
+- Comprehensive temporal metadata generation enabling post-session accuracy verification and analysis
+
+**Implementation Dependencies**:
+- Network Time Protocol (NTP) synchronization services with customized implementation for mobile platforms
+- High-resolution timestamp generation capabilities across heterogeneous Android platforms and API levels
+- Advanced latency measurement and compensation algorithms with real-time adaptation capabilities
+- Clock drift detection and correction mechanisms incorporating statistical analysis and predictive modeling
+- Cross-platform timing libraries ensuring consistent temporal behavior across diverse hardware configurations
+
+#### FR-003: Comprehensive Session Management and Lifecycle Control
+
+**Requirement Statement**: The system shall provide sophisticated session lifecycle management capabilities including session creation, configuration persistence, execution monitoring, controlled termination, and automatic data preservation with comprehensive audit trail generation [CITE - Pressman, R.S., & Maxim, B.R. (2014). Software engineering: a practitioner's approach. McGraw-Hill Education].
+
+**Technical Rationale**: Session management represents the comprehensive operational framework that enables reproducible research protocols, ensures data integrity throughout complex experimental processes, and provides the systematic control mechanisms necessary for conducting rigorous scientific investigations [CITE - Stodden, V., Leisch, F., & Peng, R.D. (Eds.). (2014). Implementing reproducible research. CRC Press]. The sophisticated design incorporates lessons learned from extensive research workflow analysis and addresses the critical need for automated data preservation mechanisms that protect against data loss due to system failures, network interruptions, or operator errors that could compromise months of research effort.
+
+The session framework supports complex experimental protocols involving multiple phases, participant rotations, and diverse measurement configurations while maintaining operational simplicity for routine research applications [CITE - Wilson, G., et al. (2014). Best practices for scientific computing. PLoS Biology, 12(1), e1001745]. The design recognizes that research sessions often extend over multiple hours and may involve dynamic reconfiguration as experimental conditions change or new participants join the study.
+
+**Performance Specifications**:
+- Session configuration persistence with automatic backup and restoration capabilities
+- Real-time session monitoring with comprehensive status updates and progress indicators
+- Automatic data backup during session execution with configurable intervals (default: every 5 minutes)
+- Graceful session termination procedures with complete data preservation and metadata generation
+- Support for session pause/resume functionality enabling flexible experimental protocols
+
+**Validation Criteria**:
+- Session configuration persistence verification through power cycle testing
+- Data integrity validation during automatic backup procedures with checksums and redundancy verification
+- Recovery testing from various failure scenarios including network interruption and device disconnection
+- Metadata completeness verification ensuring all session parameters and environmental conditions are recorded
+- Performance impact assessment ensuring session management overhead <5% of system resources
 
 #### FR-002: Temporal Synchronization and Precision Management
 
@@ -197,30 +263,52 @@ The requirements engineering process employed systematic analysis methodologies 
 
 ### Data Acquisition and Processing Requirements
 
-#### FR-010: Advanced Video Data Capture and Processing
+The data acquisition requirements define the sophisticated sensing capabilities necessary for capturing high-quality multi-modal physiological data while maintaining research-grade precision and enabling advanced analysis techniques [CITE - Gonzalez, R.C., & Woods, R.E. (2017). Digital image processing. Pearson]. These requirements address the complex challenge of extracting physiological information from visual and thermal data while ensuring measurement validity and scientific reproducibility across diverse experimental contexts.
 
-**Requirement Statement**: The system shall capture RGB video data at minimum 30 frames per second with resolution of at least 1920×1080 pixels, including advanced camera control capabilities and real-time quality assessment.
+#### FR-010: Advanced Video Data Capture and Real-Time Processing
 
-**Technical Rationale**: Video data capture specifications reflect the computational requirements for extracting physiological indicators from visual data while balancing processing demands with hardware capabilities typical of research environments [CITE - Computer vision requirements for physiological monitoring]. The resolution and frame rate specifications ensure adequate temporal and spatial resolution for detecting subtle physiological changes while remaining within the processing capabilities of standard Android devices. Advanced camera control enables adaptation to varying lighting conditions commonly encountered in research settings.
+**Requirement Statement**: The system shall provide sophisticated RGB video data capture capabilities at minimum 30 frames per second with resolution of at least 1920×1080 pixels, including advanced camera control features, real-time quality assessment, and adaptive optimization for diverse research environments [CITE - Szeliski, R. (2010). Computer vision: algorithms and applications. Springer Science & Business Media].
 
-**Performance Specifications**:
+**Technical Rationale**: Video data capture specifications reflect comprehensive analysis of computational requirements for extracting physiological indicators from visual data while carefully balancing processing demands with hardware capabilities typically available in research environments [CITE - Hartley, R., & Zisserman, A. (2003). Multiple view geometry in computer vision. Cambridge University Press]. The resolution and frame rate specifications ensure adequate temporal and spatial resolution for detecting subtle physiological changes including micro-expressions, color variations, and movement patterns while remaining within the processing capabilities of standard Android devices used in research settings.
 
-| Parameter | Minimum | Target | Maximum |
-|-----------|---------|---------|---------|
-| **Frame Rate** | 30 fps | 60 fps | 120 fps |
-| **Resolution** | 1920×1080 | 3840×2160 | 7680×4320 |
-| **Color Depth** | 8 bits | 10 bits | 12 bits |
-| **Dynamic Range** | Standard | High (HDR) | Extended HDR |
+Advanced camera control capabilities enable systematic adaptation to varying lighting conditions, participant positioning, and environmental factors commonly encountered in research settings, ensuring consistent data quality across diverse experimental conditions [CITE - Forsyth, D.A., & Ponce, J. (2002). Computer vision: a modern approach. Prentice Hall]. The real-time quality assessment functionality provides immediate feedback about capture quality, enabling researchers to optimize recording conditions and ensure data validity throughout experimental sessions.
+
+**Comprehensive Performance Specifications**:
+
+| Parameter | Minimum Requirement | Target Performance | Maximum Capability | Scientific Rationale |
+|-----------|-------------------|-------------------|-------------------|---------------------|
+| **Frame Rate** | 30 fps | 60 fps | 120 fps | Adequate temporal resolution for physiological change detection |
+| **Resolution** | 1920×1080 (Full HD) | 3840×2160 (4K UHD) | 7680×4320 (8K UHD) | Sufficient spatial detail for facial region analysis |
+| **Color Depth** | 8 bits per channel | 10 bits per channel | 12 bits per channel | Enhanced color discrimination for physiological indicators |
+| **Dynamic Range** | Standard (8 stops) | High Dynamic Range | Extended HDR (12+ stops) | Improved performance under varied lighting conditions |
+| **Compression** | H.264 (AVC) | H.265 (HEVC) | AV1 (future) | Efficient storage with minimal quality degradation |
+
+**Advanced Feature Requirements**:
+- Automatic exposure control with manual override capabilities for experimental consistency
+- Continuous autofocus with face detection priority and manual focus lock options
+- White balance adaptation with custom presets for laboratory lighting conditions
+- Real-time histogram analysis for exposure optimization and quality monitoring
+- Motion detection capabilities for identifying movement artifacts and participant behavior changes
+
+**Validation Criteria**:
+- Video quality assessment using objective metrics (PSNR, SSIM) and subjective evaluation protocols
+- Frame rate stability verification under varying processing loads with <2% frame drop tolerance
+- Color accuracy validation using standard color charts and physiological skin tone references
+- Compression efficiency analysis ensuring <5% quality degradation for research applications
+- Storage optimization verification achieving target compression ratios while maintaining analysis-suitable quality
 
 **Implementation Dependencies**:
-- Android Camera2 API for advanced camera control [CITE - Android Camera2 API documentation]
-- Real-time video processing capabilities with hardware acceleration support
-- Adaptive exposure and focus control algorithms
-- Video compression and storage optimization for extended recording sessions
+- Android Camera2 API integration with advanced control parameter access [CITE - Android Camera2 API documentation]
+- Real-time video processing capabilities utilizing hardware acceleration (GPU/NPU) where available
+- Adaptive exposure and focus control algorithms incorporating machine learning optimization
+- Video compression and storage optimization systems designed for extended recording sessions
+- Integration with computer vision libraries for real-time image analysis and quality assessment
 
-#### FR-011: Thermal Imaging Integration and Analysis
+#### FR-011: Comprehensive Thermal Imaging Integration and Physiological Analysis
 
-**Requirement Statement**: The system shall integrate thermal imaging capabilities with minimum 25 frames per second acquisition rate and temperature resolution of ≤0.1°C for physiological temperature variation detection.
+**Requirement Statement**: The system shall provide sophisticated thermal imaging capabilities with minimum 25 frames per second acquisition rate, temperature resolution of ≤0.1°C, and comprehensive thermal analysis features specifically designed for physiological temperature variation detection and autonomic response monitoring [CITE - Ring, E.F.J., & Ammer, K. (2012). Infrared thermal imaging in medicine. Physiological Measurement, 33(3), R33-R46].
+
+**Technical Rationale**: Thermal imaging integration addresses the critical need for non-contact physiological monitoring through detection of temperature variations associated with blood flow changes, vascular responses, and autonomic nervous system activation patterns [CITE - Merla, A., & Romani, G.L. (2007). Thermal signatures of emotional stress: an infrared imaging study. 2007 29th Annual International Conference of the IEEE Engineering in Medicine and Biology Society, 247-249]. The temperature resolution specification ensures detection of subtle physiological changes typically in the range of 0.2-1.0°C that correlate with electrodermal activity and emotional responses.
 
 **Technical Rationale**: Thermal imaging integration provides complementary physiological information that enhances the contactless measurement capability by detecting temperature variations associated with autonomic nervous system responses [CITE - Thermal imaging for physiological measurement]. The specification for 0.1°C temperature resolution ensures adequate sensitivity for detecting physiological responses while accounting for environmental temperature variations typical in research settings. The choice of Topdon TC001 thermal camera reflects analysis of available research-grade thermal imaging solutions that balance measurement accuracy with cost considerations for research laboratory adoption.
 
