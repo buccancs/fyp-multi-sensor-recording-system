@@ -589,6 +589,307 @@ fun `navigation to recording fragment updates current destination`() {
 }
 ```
 
+### Enhanced State Persistence and Recovery
+
+#### JSON-based State Persistence Protocol
+
+All UI controllers implement standardized JSON-based state persistence:
+
+```json
+{
+  "ui_controller_state": {
+    "version": "1.0",
+    "last_updated": 1640995200000,
+    "theme_config": {
+      "current_theme": "DARK",
+      "auto_theme_enabled": true,
+      "theme_switch_time": "sunset",
+      "custom_colors": {
+        "primary": "#2196F3",
+        "secondary": "#FF9800",
+        "accent": "#4CAF50"
+      }
+    },
+    "accessibility_config": {
+      "increased_touch_targets": true,
+      "high_contrast_mode": false,
+      "audio_feedback": true,
+      "haptic_feedback": true,
+      "font_scale": 1.2
+    },
+    "component_states": {
+      "status_indicators": {
+        "pc_connection": {
+          "visible": true,
+          "status": "connected",
+          "last_update": 1640995200000
+        },
+        "shimmer_connection": {
+          "visible": true,
+          "status": "disconnected",
+          "last_update": 1640995195000
+        }
+      },
+      "action_buttons": {
+        "recording_controls": {
+          "start_enabled": true,
+          "stop_enabled": false,
+          "calibration_enabled": true
+        }
+      }
+    }
+  }
+}
+```
+
+#### Enhanced Theme Management Protocol
+
+**Theme Configuration API:**
+
+| Field Name | Data Type | Required | Description | Valid Values |
+|------------|-----------|----------|-------------|--------------|
+| `current_theme` | String | Yes | Active theme mode | "LIGHT", "DARK", "AUTO" |
+| `auto_theme_enabled` | Boolean | Yes | Automatic theme switching | true, false |
+| `theme_switch_time` | String | No | Auto switch trigger | "sunset", "sunrise", "schedule" |
+| `custom_colors` | Object | No | Custom color overrides | Color hex values |
+
+**Theme Validation Rules:**
+```kotlin
+// Theme consistency validation
+fun validateThemeConfig(config: ThemeConfig): ThemeValidationResult {
+    val errors = mutableListOf<String>()
+    
+    // Validate theme mode
+    if (config.currentTheme !in listOf("LIGHT", "DARK", "AUTO")) {
+        errors.add("Invalid theme mode: ${config.currentTheme}")
+    }
+    
+    // Validate custom colors if present
+    config.customColors?.let { colors ->
+        colors.values.forEach { color ->
+            if (!isValidHexColor(color)) {
+                errors.add("Invalid color format: $color")
+            }
+        }
+    }
+    
+    return ThemeValidationResult(
+        isValid = errors.isEmpty(),
+        errors = errors
+    )
+}
+```
+
+#### Accessibility Configuration Protocol
+
+**Accessibility State Structure:**
+```json
+{
+  "accessibility_config": {
+    "is_enabled": true,
+    "features": {
+      "increased_touch_targets": {
+        "enabled": true,
+        "target_size_dp": 48,
+        "minimum_spacing_dp": 8
+      },
+      "high_contrast_mode": {
+        "enabled": false,
+        "contrast_ratio": 4.5,
+        "background_adjustment": true
+      },
+      "audio_feedback": {
+        "enabled": true,
+        "voice_guidance": true,
+        "sound_effects": true,
+        "volume_level": 0.8
+      },
+      "haptic_feedback": {
+        "enabled": true,
+        "intensity": "medium",
+        "pattern": "standard"
+      }
+    },
+    "screen_reader": {
+      "enabled": false,
+      "reading_speed": "normal",
+      "content_descriptions": true
+    }
+  }
+}
+```
+
+#### Dynamic Menu System Protocol
+
+**Menu Configuration API:**
+
+```json
+{
+  "menu_config": {
+    "dynamic_items": [
+      {
+        "item_id": "advanced_settings",
+        "title": "Advanced Settings",
+        "icon_resource": "ic_advanced_settings",
+        "enabled": true,
+        "visibility": "VISIBLE",
+        "position": 3,
+        "group_id": "settings_group",
+        "action_type": "ACTIVITY_LAUNCH",
+        "action_data": {
+          "target_activity": "AdvancedSettingsActivity",
+          "extras": {
+            "source": "main_menu"
+          }
+        }
+      }
+    ],
+    "context_menu_config": {
+      "trigger_type": "LONG_PRESS",
+      "show_icons": true,
+      "max_items": 8,
+      "animation_enabled": true,
+      "background_dim": true
+    },
+    "menu_analytics": {
+      "track_usage": true,
+      "track_performance": true,
+      "track_accessibility": true
+    }
+  }
+}
+```
+
+**Menu Item Validation:**
+```kotlin
+data class MenuItemValidationResult(
+    val isValid: Boolean,
+    val errors: List<String> = emptyList(),
+    val warnings: List<String> = emptyList()
+)
+
+fun validateMenuItem(item: DynamicMenuItem): MenuItemValidationResult {
+    val errors = mutableListOf<String>()
+    val warnings = mutableListOf<String>()
+    
+    // Required field validation
+    if (item.itemId.isBlank()) {
+        errors.add("Menu item ID cannot be empty")
+    }
+    
+    if (item.title.isBlank()) {
+        errors.add("Menu item title cannot be empty")
+    }
+    
+    // Accessibility validation
+    if (item.icon == null && item.title.length > 20) {
+        warnings.add("Long title without icon may affect accessibility")
+    }
+    
+    return MenuItemValidationResult(
+        isValid = errors.isEmpty(),
+        errors = errors,
+        warnings = warnings
+    )
+}
+```
+
+#### Status Display Controller Protocol
+
+**Custom Status Configuration:**
+```json
+{
+  "status_display_config": {
+    "indicators": [
+      {
+        "indicator_id": "network_quality",
+        "type": "REAL_TIME",
+        "update_interval_ms": 1000,
+        "display_format": "ICON_WITH_TEXT",
+        "data_source": "NetworkController",
+        "threshold_config": {
+          "excellent": 80,
+          "good": 60,
+          "fair": 40,
+          "poor": 20
+        },
+        "visual_config": {
+          "show_percentage": true,
+          "show_units": false,
+          "color_coding": true,
+          "animation_enabled": true
+        }
+      }
+    ],
+    "performance_monitoring": {
+      "enabled": true,
+      "metrics_collection": [
+        "update_frequency",
+        "render_time",
+        "memory_usage",
+        "cpu_usage"
+      ],
+      "alert_thresholds": {
+        "slow_update_ms": 100,
+        "high_memory_mb": 50,
+        "high_cpu_percent": 20
+      }
+    }
+  }
+}
+```
+
+### Enhanced Error Recovery and Validation
+
+#### UI Component Recovery Protocol
+
+```kotlin
+// Component recovery configuration
+data class ComponentRecoveryConfig(
+    val maxRecoveryAttempts: Int = 3,
+    val recoveryDelayMs: Long = 1000,
+    val fallbackToDefault: Boolean = true,
+    val notifyUser: Boolean = false
+)
+
+// Recovery action results
+data class RecoveryActionResult(
+    val action: RecoveryAction,
+    val success: Boolean,
+    val errorMessage: String? = null,
+    val recoveryTime: Long
+)
+
+enum class RecoveryAction {
+    REINITIALIZE_COMPONENT,
+    RESTORE_FROM_PERSISTENCE,
+    RESET_TO_DEFAULT,
+    REQUEST_USER_INPUT,
+    FALLBACK_MODE
+}
+```
+
+#### Validation Pipeline Protocol
+
+```kotlin
+// Multi-stage validation pipeline
+interface UIValidationPipeline {
+    fun validateComponent(component: View): ValidationResult
+    fun validateState(state: MainUiState): ValidationResult
+    fun validateAccessibility(config: AccessibilityConfig): ValidationResult
+    fun validateTheme(theme: ThemeConfig): ValidationResult
+}
+
+// Comprehensive validation result
+data class ValidationResult(
+    val isValid: Boolean,
+    val componentResults: Map<String, ComponentValidationResult>,
+    val globalErrors: List<ValidationError>,
+    val warnings: List<ValidationWarning>,
+    val validationTime: Long = System.currentTimeMillis()
+)
+```
+
 ### Conclusion
 
 This protocol document provides the comprehensive data contract for the Multi-Sensor Recording System's UI architecture. By adhering to these specifications, developers can ensure consistent, reliable, and maintainable UI state management throughout the application lifecycle.

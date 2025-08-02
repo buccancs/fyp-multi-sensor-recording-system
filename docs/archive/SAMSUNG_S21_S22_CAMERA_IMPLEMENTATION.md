@@ -1,5 +1,12 @@
 # Samsung S21/S22 Camera Recording and Stage 3 RAW Extraction Implementation
 
+> **📋 NOTE**: This documentation has been superseded by the comprehensive Camera Recording System documentation:
+> - **Technical Deep-Dive**: [README_CameraRecorder.md](../new_documentation/README_CameraRecorder.md)
+> - **User Guide**: [USER_GUIDE_CameraRecorder.md](../new_documentation/USER_GUIDE_CameraRecorder.md) 
+> - **Protocol Specification**: [PROTOCOL_CameraRecorder.md](../new_documentation/PROTOCOL_CameraRecorder.md)
+> 
+> This file is archived for historical reference.
+
 ## Overview
 
 This implementation enhances the camera recording feature specifically for Samsung S21 and S22 devices, ensuring proper stage 3 RAW image extraction from the camera sensor while adhering to Samsung implementation guidelines and API standards.

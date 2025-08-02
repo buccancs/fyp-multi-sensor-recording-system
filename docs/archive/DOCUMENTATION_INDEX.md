@@ -13,9 +13,12 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 ### 👥 User Documentation
 - **[Complete User Guide](user-guides/CONSOLIDATED_USER_GUIDE.md)** - Comprehensive user manual
 
+- **[Camera Recording Guide](new_documentation/USER_GUIDE_CameraRecorder.md)** - Camera system operation and Samsung S21/S22 optimization
+
 - **[UI Navigation Guide](new_documentation/USER_GUIDE_ui_navigation.md)** - Modern Android UI navigation and interface usage
 
 - **[Python Desktop Controller - User Guide](new_documentation/USER_GUIDE_python_desktop_controller.md)** - Python Desktop Controller usage guide
+
 - **[Navigation Guide](user-guides/CONSOLIDATED_USER_GUIDE.md#navigation-and-user-interface)** - Interface and navigation
 
 - **[Device Management](user-guides/CONSOLIDATED_USER_GUIDE.md#device-management)** - Device setup and configuration
@@ -26,8 +29,13 @@ This index provides a comprehensive guide to all documentation in the multi-sens
 
 ### 🔧 Developer Documentation
 - **[Implementation Guide](implementation/CONSOLIDATED_IMPLEMENTATION_GUIDE.md)** - Complete technical implementation
+
+- **[Camera Recording System](new_documentation/README_CameraRecorder.md)** - Camera system architecture and Samsung S21/S22 optimization
+- **[Camera System Protocol](new_documentation/PROTOCOL_CameraRecorder.md)** - Camera APIs and data contracts
+
 - **[Python Desktop Controller - Technical](new_documentation/README_python_desktop_controller.md)** - Python Desktop Controller architecture and implementation
 - **[Python Desktop Controller - Protocol](new_documentation/PROTOCOL_python_desktop_controller.md)** - Network protocols and data formats
+
 - **[Repository Component Inventory](REPOSITORY_COMPONENT_INVENTORY.md)** - Complete catalog of all features, components, and modules
 - **[API Reference](API_REFERENCE.md)** - Comprehensive API documentation
 - **[System Architecture](technical/system-architecture-specification.md)** - Architecture and design patterns
@@ -111,6 +119,7 @@ Comprehensive user-facing documentation for operators and researchers:
 | Document | Content | Target Users |
 |----------|---------|--------------|
 | [CONSOLIDATED_USER_GUIDE.md](user-guides/CONSOLIDATED_USER_GUIDE.md) | Complete user manual | All users |
+| [USER_GUIDE_CameraRecorder.md](new_documentation/USER_GUIDE_CameraRecorder.md) | Camera Recording System user guide | End users |
 
 **Key Sections:**
 - System setup and installation procedures
@@ -161,6 +170,9 @@ Detailed technical specifications and architecture documentation:
 
 | [physiological-sensor-integration.md](technical/physiological-sensor-integration.md) | Sensor integration | Hardware integration |
 | [thermal-camera-integration.md](technical/thermal-camera-integration.md) | Thermal camera setup | Hardware integration |
+| [README_CameraRecorder.md](new_documentation/README_CameraRecorder.md) | Camera Recording System technical deep-dive | Developers |
+| [USER_GUIDE_CameraRecorder.md](new_documentation/USER_GUIDE_CameraRecorder.md) | Camera system user guide | End users |
+| [PROTOCOL_CameraRecorder.md](new_documentation/PROTOCOL_CameraRecorder.md) | Camera system data contracts and APIs | Developers |
 | [computer-vision-methodology.md](technical/computer-vision-methodology.md) | CV implementation | Computer vision |
 
 ### 📁 Testing Documentation (`docs/testing/`)

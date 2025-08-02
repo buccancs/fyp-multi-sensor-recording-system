@@ -296,6 +296,282 @@ def trigger_post_session_processing(self, session_id: Optional[str] = None,
     return results
 ```
 
+## Enhanced Session Management Features
+
+### JSON-based State Persistence and Recovery
+
+The enhanced session management system implements comprehensive state persistence capabilities across all controllers:
+
+#### Session Recovery Architecture
+
+The system now supports automatic recovery from interrupted operations with detailed state preservation:
+
+```mermaid
+graph TB
+    subgraph "Session Recovery System"
+        SR[Session Recovery Manager]
+        SP[State Persistence Layer]
+        SC[State Coordinator]
+        RH[Recovery Handler]
+    end
+    
+    subgraph "Controller Persistence"
+        CP[CalibrationController<br/>Session State]
+        NP[NetworkController<br/>Connection State]
+        UP[UIController<br/>Theme & Accessibility]
+        RP[RecordingController<br/>Recording State]
+    end
+    
+    subgraph "Recovery Actions"
+        AS[Automatic Session Restore]
+        CS[Configuration Restore]
+        DS[Device State Restore]
+        US[UI State Restore]
+    end
+    
+    SR --> SP
+    SP --> SC
+    SC --> RH
+    
+    CP --> SP
+    NP --> SP
+    UP --> SP
+    RP --> SP
+    
+    RH --> AS
+    RH --> CS
+    RH --> DS
+    RH --> US
+```
+
+#### Calibration Session Persistence
+
+**Enhanced calibration session recovery with complete state preservation:**
+
+```python
+# Calibration session state structure
+calibration_session_state = {
+    "session_info": {
+        "session_id": "cal_session_20220101_120000",
+        "is_active": True,
+        "start_timestamp": 1640995200000,
+        "last_update": 1640995205000,
+        "recovery_count": 0
+    },
+    "pattern_config": {
+        "current_pattern": "STEREO_CHECKERBOARD",
+        "pattern_size": [9, 6],
+        "square_size_mm": 25.0,
+        "detection_parameters": {
+            "adaptive_threshold": True,
+            "corner_refinement": "CORNER_REFINE_RT"
+        }
+    },
+    "progress_tracking": {
+        "completed_points": 8,
+        "total_points": 15,
+        "completion_percentage": 53.3,
+        "captured_images": [
+            {
+                "image_id": "cal_img_001",
+                "timestamp": 1640995201000,
+                "corners_detected": 54,
+                "reprojection_error": 0.34,
+                "quality_score": 0.89
+            }
+        ]
+    },
+    "device_specific_states": {
+        "android_device_01": {
+            "calibration_parameters": {
+                "camera_matrix": [[1000, 0, 960], [0, 1000, 540], [0, 0, 1]],
+                "distortion_coefficients": [0.1, -0.2, 0.0, 0.0, 0.0],
+                "calibration_quality": 0.87
+            }
+        }
+    }
+}
+```
+
+#### Network Security State Management
+
+**Enhanced network security with persistent encryption state:**
+
+```python
+# Network security state with encryption management
+network_security_state = {
+    "encryption_config": {
+        "algorithm": "AES-256-CBC",
+        "key_rotation_enabled": True,
+        "last_key_rotation": 1640995200000,
+        "session_keys": {
+            "current_key_id": "key_20220101_001",
+            "key_generation_time": 1640995200000,
+            "key_expiry_time": 1640995800000
+        }
+    },
+    "ml_bandwidth_model": {
+        "model_version": "1.0",
+        "last_trained": 1640995100000,
+        "training_samples": 1000,
+        "accuracy_score": 0.87,
+        "current_prediction": {
+            "estimated_bandwidth_mbps": 25.4,
+            "confidence_score": 0.92,
+            "prediction_timestamp": 1640995205000
+        }
+    },
+    "signal_monitoring": {
+        "wifi_status": {
+            "ssid": "research_network",
+            "signal_strength_dbm": -45,
+            "quality_percentage": 85,
+            "last_update": 1640995205000
+        },
+        "cellular_status": {
+            "network_type": "5G",
+            "signal_strength_dbm": -78,
+            "data_usage_mb": 124.5,
+            "last_update": 1640995205000
+        }
+    }
+}
+```
+
+#### Device Management Persistence
+
+**Enhanced device state management with prioritization and hot-swap support:**
+
+```python
+# Device management state with advanced features
+device_management_state = {
+    "device_priority_config": {
+        "prioritization_enabled": True,
+        "rules": [
+            {
+                "device_type": "thermal_camera",
+                "priority_weight": 0.9,
+                "criteria": ["temperature_accuracy", "frame_rate", "usb_speed"],
+                "fallback_device": "backup_thermal_001"
+            },
+            {
+                "device_type": "shimmer_sensor", 
+                "priority_weight": 0.8,
+                "criteria": ["battery_level", "signal_strength", "data_quality"],
+                "fallback_device": "backup_shimmer_001"
+            }
+        ]
+    },
+    "hot_swap_detection": {
+        "enabled": True,
+        "detection_interval_ms": 1000,
+        "grace_period_ms": 5000,
+        "auto_reconnect": True,
+        "swap_history": [
+            {
+                "timestamp": 1640995200000,
+                "old_device": "thermal_001",
+                "new_device": "thermal_002",
+                "swap_reason": "device_disconnected",
+                "recovery_success": True
+            }
+        ]
+    },
+    "device_configurations": {
+        "thermal_001": {
+            "persistent_settings": {
+                "emissivity": 0.95,
+                "temperature_range": [-20, 400],
+                "color_palette": "iron",
+                "frame_rate": 30
+            },
+            "calibration_state": {
+                "is_calibrated": True,
+                "calibration_date": "2022-01-01T10:00:00Z",
+                "calibration_quality": 0.92
+            }
+        }
+    }
+}
+```
+
+#### Session Synchronization and Coordination
+
+**Multi-device session coordination with enhanced synchronization:**
+
+```python
+# Session coordination state for multi-device scenarios
+session_coordination_state = {
+    "synchronization_config": {
+        "master_device": "android_device_01",
+        "sync_precision_ms": 2.5,
+        "sync_validation_enabled": True,
+        "last_sync_validation": 1640995200000
+    },
+    "device_session_states": {
+        "android_device_01": {
+            "session_participation": "master",
+            "recording_state": "active",
+            "last_heartbeat": 1640995205000,
+            "data_quality_score": 0.94
+        },
+        "android_device_02": {
+            "session_participation": "slave",
+            "recording_state": "active", 
+            "last_heartbeat": 1640995204000,
+            "data_quality_score": 0.91
+        }
+    },
+    "session_metrics": {
+        "total_duration_ms": 125000,
+        "data_synchronization_quality": 0.96,
+        "device_coordination_score": 0.89,
+        "error_recovery_count": 0
+    }
+}
+```
+
+#### Advanced Error Recovery and Validation
+
+**Comprehensive error recovery with automatic fallback mechanisms:**
+
+```python
+class EnhancedSessionRecovery:
+    def __init__(self):
+        self.recovery_strategies = {
+            "calibration_interruption": self.recover_calibration_session,
+            "network_failure": self.recover_network_connection,
+            "device_disconnection": self.handle_device_hotswap,
+            "storage_failure": self.handle_storage_fallback,
+            "ui_state_corruption": self.recover_ui_state
+        }
+    
+    async def recover_session(self, session_id: str, failure_type: str) -> RecoveryResult:
+        """
+        Comprehensive session recovery with multiple fallback strategies
+        """
+        recovery_attempts = 0
+        max_attempts = 3
+        
+        while recovery_attempts < max_attempts:
+            try:
+                recovery_strategy = self.recovery_strategies.get(failure_type)
+                if recovery_strategy:
+                    result = await recovery_strategy(session_id)
+                    if result.success:
+                        return result
+                    
+                recovery_attempts += 1
+                await asyncio.sleep(2 ** recovery_attempts)  # Exponential backoff
+                
+            except Exception as e:
+                self.logger.error(f"Recovery attempt {recovery_attempts} failed: {e}")
+                recovery_attempts += 1
+        
+        # Final fallback to safe mode
+        return await self.fallback_to_safe_mode(session_id)
+```
+
 ## Data Integrity Features
 
 ### Atomic Operations
