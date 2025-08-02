@@ -148,17 +148,33 @@ session_info = session_logger.start_session("my_experiment")
 ## Migration Status
 
 ### ✅ Migrated Modules
-- `src/application.py`
-- `src/production/deployment_automation.py`
-- `src/production/performance_benchmark.py`
-- `src/production/security_scanner.py`
-- `src/shimmer_manager.py`
-- `src/gui/main_controller.py`
-- `src/gui/common_components.py`
-- `src/session/session_logger.py`
+- `src/application.py` - Main application entry point
+- `src/production/deployment_automation.py` - Production deployment
+- `src/production/performance_benchmark.py` - Performance testing
+- `src/production/security_scanner.py` - Security scanning
+- `src/shimmer_manager.py` - Shimmer sensor management
+- `src/gui/main_controller.py` - Main UI controller
+- `src/gui/common_components.py` - Reusable UI components
+- `src/session/session_logger.py` - Session logging (enhanced integration)
+- `src/protocol/schema_utils.py` - Protocol schema validation
+- `src/protocol/config_loader.py` - Configuration loading
+- `src/protocol/handshake_manager.py` - Protocol handshake
+- `src/config/configuration_manager.py` - Device configuration management
+
+### 📊 Migration Progress
+- **✅ Modern logging usage**: 103+ modules using `utils.logging_config`
+- **📝 Legacy logging usage**: 64 modules still using standard logging
+- **🎯 Migration rate**: ~62% of modules updated
 
 ### 📝 Deprecated Modules
 - `src/utils/logger.py` - Use `utils.logging_config` instead
+
+### 🔄 Remaining Modules for Future Migration
+- GUI modules (simplified_main_window.py, enhanced_ui_main_window.py)
+- Web UI modules (web_dashboard.py, web_controller.py, integration.py)
+- Network modules (various device managers and servers)
+- Utility modules (system_monitor.py, etc.)
+- Test modules that don't require immediate migration
 
 ## Best Practices
 
