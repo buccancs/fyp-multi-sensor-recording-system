@@ -231,6 +231,14 @@ class MainActivityCoordinator @Inject constructor(
                     permissionController.areAllPermissionsGranted(context)
                 } ?: false
             }
+            
+            override fun getContext(): android.content.Context {
+                return callback?.getContext() ?: throw IllegalStateException("Context not available")
+            }
+            
+            override fun showToast(message: String, duration: Int) {
+                callback?.showToast(message, duration)
+            }
         })
     }
     
@@ -424,6 +432,10 @@ class MainActivityCoordinator @Inject constructor(
             override fun onEncryptionStatusChanged(enabled: Boolean) {
                 val status = if (enabled) "Enabled" else "Disabled"
                 callback?.updateStatusText("Encryption: $status")
+            }
+            
+            override fun getContext(): android.content.Context {
+                return callback?.getContext() ?: throw IllegalStateException("Context not available")
             }
         })
     }

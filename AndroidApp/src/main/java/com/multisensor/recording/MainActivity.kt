@@ -1834,6 +1834,8 @@ class MainActivity : AppCompatActivity(),
             Toast.makeText(this, "Network recovered: $networkType", Toast.LENGTH_SHORT).show()
         }
     }
+    
+    override fun getContext(): android.content.Context = this
 
     // ========== NetworkController.NetworkCallback Implementation ==========
     

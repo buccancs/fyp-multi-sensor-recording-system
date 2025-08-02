@@ -38,10 +38,20 @@ class UIController @Inject constructor() {
     
     companion object {
         private const val UI_PREFS_NAME = "ui_controller_prefs"
+        private const val PREFS_NAME = UI_PREFS_NAME // Alias for backwards compatibility
         private const val PREF_THEME_MODE = "theme_mode"
         private const val PREF_ACCESSIBILITY_ENABLED = "accessibility_enabled"
         private const val PREF_COMPONENT_VALIDATION = "component_validation"
         private const val PREF_UI_STATE = "ui_state"
+        private const val KEY_LAST_BATTERY_LEVEL = "last_battery_level"
+        private const val KEY_PC_CONNECTION_STATUS = "pc_connection_status"
+        private const val KEY_SHIMMER_CONNECTION_STATUS = "shimmer_connection_status"
+        private const val KEY_THERMAL_CONNECTION_STATUS = "thermal_connection_status"
+        private const val KEY_RECORDING_STATE = "recording_state"
+        private const val KEY_STREAMING_STATE = "streaming_state"
+        private const val KEY_UI_THEME_MODE = "ui_theme_mode"
+        private const val KEY_ACCESSIBILITY_MODE = "accessibility_mode"
+        private const val KEY_HIGH_CONTRAST_MODE = "high_contrast_mode"
     }
     
     /**
@@ -119,19 +129,6 @@ class UIController @Inject constructor() {
     
     // SharedPreferences for UI state persistence
     private var sharedPreferences: SharedPreferences? = null
-    
-    companion object {
-        private const val PREFS_NAME = "ui_controller_prefs"
-        private const val KEY_LAST_BATTERY_LEVEL = "last_battery_level"
-        private const val KEY_PC_CONNECTION_STATUS = "pc_connection_status"
-        private const val KEY_SHIMMER_CONNECTION_STATUS = "shimmer_connection_status"
-        private const val KEY_THERMAL_CONNECTION_STATUS = "thermal_connection_status"
-        private const val KEY_RECORDING_STATE = "recording_state"
-        private const val KEY_STREAMING_STATE = "streaming_state"
-        private const val KEY_UI_THEME_MODE = "ui_theme_mode"
-        private const val KEY_ACCESSIBILITY_MODE = "accessibility_mode"
-        private const val KEY_HIGH_CONTRAST_MODE = "high_contrast_mode"
-    }
     
     /**
      * Set the callback for UI events and initialize state persistence

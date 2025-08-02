@@ -68,6 +68,7 @@ class NetworkController @Inject constructor() {
         fun onBandwidthEstimated(bandwidth: Long, method: BandwidthEstimationMethod)
         fun onFrameDropped(reason: String)
         fun onEncryptionStatusChanged(enabled: Boolean)
+        fun getContext(): android.content.Context  // Added for context access
     }
     
     private var callback: NetworkCallback? = null
@@ -1771,7 +1772,8 @@ class NetworkController @Inject constructor() {
                 bandwidth = bandwidth,
                 networkType = networkType,
                 signalStrength = signalStrength,
-                timestamp = System.currentTimeMillis()
+                timestamp = System.currentTimeMillis(),
+                latency = 0L // TODO: Implement actual latency measurement
             )
             
             trainingData.add(dataPoint)

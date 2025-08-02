@@ -108,6 +108,8 @@ class UsbController @Inject constructor(
         fun updateStatusText(text: String)
         fun initializeRecordingSystem()
         fun areAllPermissionsGranted(): Boolean
+        fun getContext(): android.content.Context  // Added for context access
+        fun showToast(message: String, duration: Int)  // Removed default to avoid conflicts with other interfaces
     }
 
     private var callback: UsbCallback? = null
@@ -986,9 +988,9 @@ class UsbController @Inject constructor(
                 }
             }
             
-            callback?.showToast("Device replaced: ${newDevice.deviceName}")
+            callback?.showToast("Device replaced: ${newDevice.deviceName}", android.widget.Toast.LENGTH_SHORT)
         } else {
-            callback?.showToast("Device removed: ${removedDevice.deviceName}")
+            callback?.showToast("Device removed: ${removedDevice.deviceName}", android.widget.Toast.LENGTH_SHORT)
         }
     }
     
