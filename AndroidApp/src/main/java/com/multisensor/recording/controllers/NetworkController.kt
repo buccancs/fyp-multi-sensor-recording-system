@@ -69,7 +69,6 @@ class NetworkController @Inject constructor() {
         fun onBandwidthEstimated(bandwidth: Long, method: BandwidthEstimationMethod)
         fun onFrameDropped(reason: String)
         fun onEncryptionStatusChanged(enabled: Boolean)
-        fun getContext(): android.content.Context  // Added for context access
     }
     
     private var callback: NetworkCallback? = null

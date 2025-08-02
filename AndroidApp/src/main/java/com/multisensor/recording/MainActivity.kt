@@ -651,6 +651,9 @@ class MainActivity : AppCompatActivity(),
             // Initialize UI components through UIController
             uiController.initializeUIComponents()
             
+            // Initialize local UI components that are required for MainActivity
+            initializeUIComponents()
+            
             // Validate UI components
             val validationResult = uiController.validateUIComponents()
             if (!validationResult.isValid) {
@@ -680,6 +683,8 @@ class MainActivity : AppCompatActivity(),
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "[DEBUG_LOG] Failed to initialize UIController integration: ${e.message}")
             Toast.makeText(this, "UI initialization error: ${e.message}", Toast.LENGTH_LONG).show()
+            // Ensure fallback initialization for lateinit properties
+            initializeLegacyUIComponents()
         }
     }
     
@@ -768,7 +773,9 @@ class MainActivity : AppCompatActivity(),
         binding.statusText.text = state.statusText
 
         // Update consolidated recording controls
-        recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
+        if (::recordingButtonPair.isInitialized) {
+            recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
+        }
         
         // Update legacy recording controls for backward compatibility
         binding.startRecordingButton.isEnabled = state.canStartRecording
@@ -778,20 +785,26 @@ class MainActivity : AppCompatActivity(),
         binding.calibrationButton.isEnabled = state.canRunCalibration
 
         // Update consolidated status indicator components
-        pcStatusIndicator.setStatus(
-            if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-            "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
-        )
+        if (::pcStatusIndicator.isInitialized) {
+            pcStatusIndicator.setStatus(
+                if (state.isPcConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
+            )
+        }
         
-        shimmerStatusIndicator.setStatus(
-            if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-            "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
-        )
+        if (::shimmerStatusIndicator.isInitialized) {
+            shimmerStatusIndicator.setStatus(
+                if (state.isShimmerConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+            )
+        }
         
-        thermalStatusIndicator.setStatus(
-            if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
-            "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
-        )
+        if (::thermalStatusIndicator.isInitialized) {
+            thermalStatusIndicator.setStatus(
+                if (state.isThermalConnected) StatusIndicatorView.StatusType.CONNECTED else StatusIndicatorView.StatusType.DISCONNECTED,
+                "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+            )
+        }
 
         // Update legacy connection indicators for backward compatibility
         updateConnectionIndicator(binding.pcConnectionIndicator, state.isPcConnected)
@@ -1684,10 +1697,6 @@ class MainActivity : AppCompatActivity(),
         // Final status will be set by other callbacks
     }
     
-    override fun updateStatusText(text: String) {
-        binding.statusText.text = text
-    }
-    
     fun showPermissionButton(show: Boolean) {
 
         binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
@@ -1709,7 +1718,7 @@ class MainActivity : AppCompatActivity(),
 
     fun onDeviceSelectionCancelled() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer device selection cancelled")
-        showToast("Device selection cancelled")
+        showToast("Device selection cancelled", Toast.LENGTH_SHORT)
     }
 
     fun onConnectionStatusChanged(connected: Boolean) {
@@ -1718,13 +1727,13 @@ class MainActivity : AppCompatActivity(),
         
         val statusMessage = if (connected) "Shimmer device connected" else "Shimmer device disconnected"
         updateStatusText(statusMessage)
-        showToast(statusMessage)
+        showToast(statusMessage, Toast.LENGTH_SHORT)
     }
 
     fun onConfigurationComplete() {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Shimmer configuration completed")
         updateStatusText("Shimmer configuration completed")
-        showToast("Shimmer configuration completed")
+        showToast("Shimmer configuration completed", Toast.LENGTH_SHORT)
     }
 
     fun onShimmerError(message: String) {
@@ -1738,11 +1747,6 @@ class MainActivity : AppCompatActivity(),
         runOnUiThread {
             Toast.makeText(this, message, duration).show()
         }
-    }
-    
-    // Implementation for NetworkController.NetworkCallback
-    override fun showToast(message: String, duration: Int) {
-        showToastInternal(message, duration)
     }
 
     // ========== UsbController.UsbCallback Implementation ==========
@@ -1834,8 +1838,6 @@ class MainActivity : AppCompatActivity(),
             Toast.makeText(this, "Network recovered: $networkType", Toast.LENGTH_SHORT).show()
         }
     }
-    
-    override fun getContext(): android.content.Context = this
 
     // ========== NetworkController.NetworkCallback Implementation ==========
     
@@ -1890,8 +1892,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    // ========== Common Callback Method Implementations ==========
-    // These methods are shared across multiple interfaces
+    // ========== Common Interface Implementations ==========
     
     override fun updateStatusText(text: String) {
         runOnUiThread {
@@ -1904,17 +1905,6 @@ class MainActivity : AppCompatActivity(),
             Toast.makeText(this, message, duration).show()
         }
     }
-    
-    // Additional overload for convenience
-    fun showToast(message: String) {
-        showToast(message, Toast.LENGTH_SHORT)
-    }
 
-    override fun runOnUiThread(action: () -> Unit) {
-        super.runOnUiThread(action)
-    }
-
-    override fun getContext(): Context {
-        return this
-    }
+    override fun getContext(): Context = this
 }

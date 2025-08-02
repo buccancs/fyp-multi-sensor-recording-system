@@ -110,8 +110,6 @@ class UsbController @Inject constructor(
         fun getContext(): Context
         fun initializeRecordingSystem()
         fun areAllPermissionsGranted(): Boolean
-        fun getContext(): android.content.Context  // Added for context access
-        fun showToast(message: String, duration: Int)  // Removed default to avoid conflicts with other interfaces
     }
 
     private var callback: UsbCallback? = null
