@@ -537,6 +537,87 @@ Session_YYYYMMDD_HHMMSS/
 - Participant instruction display
 - Automated session sequences
 
+#### 13.3 Enhanced Accessibility and Customization Features
+
+**Dynamic Theming:**
+The app now supports comprehensive theming options for improved user experience:
+
+1. **Theme Selection:**
+   - Navigate to Settings → Appearance → Theme
+   - Choose from Light, Dark, or Auto (system) modes
+   - Auto mode automatically switches based on system settings or time of day
+   - Theme selection persists across app restarts
+
+2. **Custom Color Configuration:**
+   - Access Settings → Appearance → Custom Colors
+   - Modify primary, secondary, and accent colors
+   - Preview changes in real-time
+   - Reset to default with "Restore Defaults" button
+
+**Accessibility Features:**
+Enhanced accessibility support for researchers with diverse needs:
+
+1. **Touch Target Adjustment:**
+   - Navigate to Settings → Accessibility → Touch Targets
+   - Enable "Increased Touch Targets" for larger button areas
+   - Adjust minimum spacing between interactive elements
+   - Particularly helpful for users with motor difficulties
+
+2. **High Contrast Mode:**
+   - Access Settings → Accessibility → Visual
+   - Enable "High Contrast Mode" for improved visibility
+   - Automatically adjusts background and text colors
+   - Maintains minimum 4.5:1 contrast ratio for WCAG compliance
+
+3. **Audio and Haptic Feedback:**
+   - Navigate to Settings → Accessibility → Feedback
+   - Enable "Audio Feedback" for voice guidance and sound effects
+   - Adjust "Haptic Feedback" intensity (light, medium, strong)
+   - Configure feedback patterns for different actions
+
+4. **Screen Reader Support:**
+   - Full compatibility with TalkBack and other screen readers
+   - Comprehensive content descriptions for all UI elements
+   - Keyboard navigation support for external keyboards
+   - Reading speed and verbosity controls
+
+**Advanced Menu System:**
+The enhanced menu system provides dynamic customization options:
+
+1. **Dynamic Menu Items:**
+   - Menu items adapt based on current context and permissions
+   - Research-specific options appear when relevant
+   - Advanced settings become available after initial setup
+   - Custom shortcuts can be added for frequently used features
+
+2. **Context Menus:**
+   - Long-press any major UI element for context-specific options
+   - Quick access to relevant settings and actions
+   - Keyboard shortcuts displayed for accessibility
+   - Icon-based menus for visual clarity
+
+**Session Recovery and State Persistence:**
+Automatic recovery features ensure no data loss:
+
+1. **Automatic Session Recovery:**
+   - Interrupted calibration sessions automatically resume
+   - Recording sessions can be recovered after unexpected app closure
+   - Device configurations persist across app restarts
+   - Network settings and connection state maintained
+
+2. **Configuration Backup:**
+   - All custom settings automatically backed up
+   - Easy restoration of previous configurations
+   - Export/import settings for sharing across devices
+   - Version control for configuration changes
+
+**Usage Instructions:**
+1. Access new features through Settings → Advanced Features
+2. Enable desired accessibility options in Settings → Accessibility  
+3. Customize theme and appearance in Settings → Appearance
+4. Configure session recovery in Settings → Data Management
+5. Test all settings before important recording sessions
+
 ---
 
 ## Best Practices
