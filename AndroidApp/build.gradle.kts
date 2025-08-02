@@ -366,3 +366,18 @@ tasks.named("check") {
 tasks.named("build") {
     finalizedBy("jacocoTestReport")
 }
+
+// IDE Integration Test Task
+tasks.register("runIDEIntegrationUITest") {
+    group = "integration-testing"
+    description = "Run IDE integration UI test on connected device"
+    dependsOn("assembleDebug", "assembleDebugAndroidTest")
+    
+    doLast {
+        exec {
+            commandLine("adb", "shell", "am", "instrument", "-w", 
+                       "-e", "class", "com.multisensor.recording.IDEIntegrationUITest",
+                       "com.multisensor.recording.test/androidx.test.runner.AndroidJUnitRunner")
+        }
+    }
+}
