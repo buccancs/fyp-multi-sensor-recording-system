@@ -26,12 +26,12 @@ The following comparative analysis illustrates the fundamental limitations of tr
 | **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
 | **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
 | **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
-| **Scalability (max participants)** | 4-6 simultaneously | 20+ simultaneously | 4x improvement |
+| **Scalability (max participants)** | 4-6 simultaneously | 4 simultaneously (tested) | Comparable capability |
 | **Equipment Cost per Setup** | $2,400-3,200 | $600-800 | 75% cost reduction |
 | **Motion Artifact Susceptibility** | Very High | Low | 90% reduction |
 | **Ecological Validity** | Limited (lab only) | High (natural settings) | Paradigm shift |
-| **Data Quality** | Research-grade | Research-grade | Maintained |
-| **Temporal Precision** | ±1ms | ±3.2ms | Comparable |
+| **Data Quality** | Research-grade | Developing | Under validation |
+| **Network Resilience** | Not applicable | 1ms-500ms latency tolerance | New capability |
 
 **Figure 3.1: Traditional vs. Contactless Measurement Setup Comparison**
 ```
