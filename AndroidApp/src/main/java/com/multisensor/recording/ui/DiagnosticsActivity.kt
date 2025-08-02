@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityDiagnosticsBinding
+import com.multisensor.recording.ui.DiagnosticsHealthStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -192,19 +193,19 @@ class DiagnosticsActivity : AppCompatActivity() {
     private fun updateSystemHealth(uiState: DiagnosticsUiState) {
         // Overall system health
         binding.systemHealthStatus.text = when (uiState.systemHealthStatus) {
-            SystemHealthStatus.EXCELLENT -> "Excellent"
-            SystemHealthStatus.GOOD -> "Good"
-            SystemHealthStatus.WARNING -> "Warning"
-            SystemHealthStatus.CRITICAL -> "Critical"
-            SystemHealthStatus.UNKNOWN -> "Unknown"
+            DiagnosticsHealthStatus.EXCELLENT -> "Excellent"
+            DiagnosticsHealthStatus.GOOD -> "Good"
+            DiagnosticsHealthStatus.WARNING -> "Warning"
+            DiagnosticsHealthStatus.CRITICAL -> "Critical"
+            DiagnosticsHealthStatus.UNKNOWN -> "Unknown"
         }
         
         binding.systemHealthStatus.setTextColor(getColor(when (uiState.systemHealthStatus) {
-            SystemHealthStatus.EXCELLENT -> com.multisensor.recording.R.color.md_theme_primary
-            SystemHealthStatus.GOOD -> com.multisensor.recording.R.color.md_theme_primary
-            SystemHealthStatus.WARNING -> com.multisensor.recording.R.color.md_theme_secondary
-            SystemHealthStatus.CRITICAL -> com.multisensor.recording.R.color.md_theme_error
-            SystemHealthStatus.UNKNOWN -> com.multisensor.recording.R.color.md_theme_outline
+            DiagnosticsHealthStatus.EXCELLENT -> com.multisensor.recording.R.color.md_theme_primary
+            DiagnosticsHealthStatus.GOOD -> com.multisensor.recording.R.color.md_theme_primary
+            DiagnosticsHealthStatus.WARNING -> com.multisensor.recording.R.color.md_theme_secondary
+            DiagnosticsHealthStatus.CRITICAL -> com.multisensor.recording.R.color.md_theme_error
+            DiagnosticsHealthStatus.UNKNOWN -> com.multisensor.recording.R.color.md_theme_outline
         }))
         
         // System uptime

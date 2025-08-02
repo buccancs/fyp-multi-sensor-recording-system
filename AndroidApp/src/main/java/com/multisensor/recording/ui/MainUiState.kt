@@ -49,6 +49,7 @@ data class MainUiState(
     
     // Error Handling (Critical)
     val errorMessage: String? = null,
+    val showErrorDialog: Boolean = false,
     
     // Loading States (User Feedback)
     val isLoadingRecording: Boolean = false,

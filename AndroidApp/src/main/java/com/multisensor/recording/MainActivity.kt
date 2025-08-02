@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityMainBinding
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
+import com.multisensor.recording.ui.SystemHealthStatus
 import com.multisensor.recording.ui.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -272,12 +273,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateSystemStatus(uiState: MainUiState) {
         binding.systemStatusText.text = when (uiState.systemHealthStatus) {
-            com.multisensor.recording.ui.SystemHealthStatus.INITIALIZING -> "Initializing..."
-            com.multisensor.recording.ui.SystemHealthStatus.READY -> "System Ready"
-            com.multisensor.recording.ui.SystemHealthStatus.PARTIAL_CONNECTION -> "Partial Connection"
-            com.multisensor.recording.ui.SystemHealthStatus.DISCONNECTED -> "Disconnected"
-            com.multisensor.recording.ui.SystemHealthStatus.RECORDING -> "Recording Active"
-            com.multisensor.recording.ui.SystemHealthStatus.ERROR -> "System Error"
+            SystemHealthStatus.INITIALIZING -> "Initializing..."
+            SystemHealthStatus.READY -> "System Ready"
+            SystemHealthStatus.PARTIAL_CONNECTION -> "Partial Connection"
+            SystemHealthStatus.DISCONNECTED -> "Disconnected"
+            SystemHealthStatus.RECORDING -> "Recording Active"
+            SystemHealthStatus.ERROR -> "System Error"
         }
         
         // Update calibration status

@@ -8,9 +8,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 /**
- * System Health Status enumeration
+ * Diagnostics Health Status enumeration
  */
-enum class SystemHealthStatus {
+enum class DiagnosticsHealthStatus {
     EXCELLENT, GOOD, WARNING, CRITICAL, UNKNOWN
 }
 
@@ -47,7 +47,7 @@ data class TestResult(
  */
 data class DiagnosticsUiState(
     // System Health
-    val systemHealthStatus: SystemHealthStatus = SystemHealthStatus.UNKNOWN,
+    val systemHealthStatus: DiagnosticsHealthStatus = DiagnosticsHealthStatus.UNKNOWN,
     val systemUptime: String = "",
     val connectedDevicesCount: Int = 0,
     val activeProcessesCount: Int = 0,
@@ -360,10 +360,10 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
         }
         
         return when (healthScore) {
-            0 -> SystemHealthStatus.CRITICAL
-            1 -> SystemHealthStatus.WARNING
-            2 -> SystemHealthStatus.GOOD
-            else -> SystemHealthStatus.EXCELLENT
+            0 -> DiagnosticsHealthStatus.CRITICAL
+            1 -> DiagnosticsHealthStatus.WARNING
+            2 -> DiagnosticsHealthStatus.GOOD
+            else -> DiagnosticsHealthStatus.EXCELLENT
         }
     }
 
