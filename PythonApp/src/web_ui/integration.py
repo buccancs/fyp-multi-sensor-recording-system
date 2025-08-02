@@ -26,6 +26,14 @@ except ImportError:
     WebDashboardServer = None
 
 try:
+    from web_ui.web_controller import WebController, create_web_controller_with_real_components
+    WEB_CONTROLLER_AVAILABLE = True
+except ImportError:
+    WebController = None
+    create_web_controller_with_real_components = None
+    WEB_CONTROLLER_AVAILABLE = False
+
+try:
     from utils.logging_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
@@ -52,7 +60,7 @@ class WebDashboardIntegration:
         Args:
             enable_web_ui: Whether to enable the web UI (default: True)
             web_port: Port for the web server (default: 5000)
-            main_controller: MainController instance from the desktop app
+            main_controller: MainController instance from the desktop app (PyQt-based) or None
             session_manager: SessionManager instance from the desktop app
             shimmer_manager: ShimmerManager instance from the desktop app
             android_device_manager: AndroidDeviceManager instance from the desktop app
@@ -62,22 +70,37 @@ class WebDashboardIntegration:
         self.web_server: Optional[WebDashboardServer] = None
         self.is_running = False
         
-        # Core application components (injected from desktop app)
+        # Core application components (injected from desktop app or created for web-only mode)
         self.main_controller = main_controller
         self.session_manager = session_manager
         self.shimmer_manager = shimmer_manager
         self.android_device_manager = android_device_manager
+        
+        # Web controller for non-PyQt environments
+        self.web_controller = None
+        self.using_web_controller = False
         
         # Data bridges for synchronization
         self.device_status_cache = {}
         self.session_info_cache = {}
         self.connected_signals = False
         
+        # Determine if we need to use WebController (when main_controller is None or PyQt not available)
+        if self.main_controller is None and WEB_CONTROLLER_AVAILABLE:
+            logger.info("Creating WebController for real component integration (PyQt not available)")
+            self.web_controller = create_web_controller_with_real_components()
+            self.using_web_controller = True
+            # Update references from web controller
+            self.session_manager = self.web_controller.session_manager
+            self.shimmer_manager = self.web_controller.shimmer_manager
+            self.android_device_manager = self.web_controller.android_device_manager
+        
         logger.info(f"Web Dashboard Integration initialized (enabled: {enable_web_ui})")
+        logger.info(f"Using WebController: {self.using_web_controller}")
         logger.info(f"Connected components: MainController={main_controller is not None}, "
-                   f"SessionManager={session_manager is not None}, "
-                   f"ShimmerManager={shimmer_manager is not None}, "
-                   f"AndroidDeviceManager={android_device_manager is not None})")
+                   f"SessionManager={self.session_manager is not None}, "
+                   f"ShimmerManager={self.shimmer_manager is not None}, "
+                   f"AndroidDeviceManager={self.android_device_manager is not None})")
     
     def start_web_dashboard(self) -> bool:
         """
@@ -107,9 +130,11 @@ class WebDashboardIntegration:
             logger.info(f"Web dashboard started on http://localhost:{self.web_port}")
             
             # Connect to real application components if available
-            if self.main_controller is not None:
-                self._connect_to_main_controller()
-                logger.info("Connected web dashboard to MainController")
+            controller_to_use = self.web_controller if self.using_web_controller else self.main_controller
+            
+            if controller_to_use is not None:
+                self._connect_to_controller(controller_to_use)
+                logger.info(f"Connected web dashboard to {'WebController' if self.using_web_controller else 'MainController'}")
             
             if self.session_manager is not None:
                 self._connect_to_session_manager()
@@ -126,11 +151,13 @@ class WebDashboardIntegration:
             # Initialize with current state
             self._sync_initial_state()
             
-            # Fallback to demo data if no real components are connected
-            if (self.main_controller is None and self.session_manager is None and 
+            # Only use demo data if no real components are connected at all
+            if (controller_to_use is None and self.session_manager is None and 
                 self.shimmer_manager is None and self.android_device_manager is None):
                 logger.warning("No real application components connected, using demo data")
                 self._start_demo_data_generation()
+            else:
+                logger.info("Web dashboard connected to real application components")
             
             return True
             
@@ -144,6 +171,10 @@ class WebDashboardIntegration:
             return
         
         try:
+            # Stop web controller monitoring if we're using it
+            if self.using_web_controller and self.web_controller:
+                self.web_controller.stop_monitoring()
+            
             self.web_server.stop_server()
             self.web_server = None
             self.is_running = False
@@ -204,34 +235,38 @@ class WebDashboardIntegration:
             except Exception as e:
                 logger.error(f"Failed to update web dashboard sensor data: {e}")
     
-    def _connect_to_main_controller(self):
-        """Connect to MainController signals for real-time updates."""
-        if self.main_controller is None or self.connected_signals:
+    def _connect_to_controller(self, controller):
+        """Connect to either MainController (PyQt) or WebController signals for real-time updates."""
+        if controller is None or self.connected_signals:
             return
         
         try:
             # Connect to device status signals
-            self.main_controller.device_connected.connect(self._on_device_connected)
-            self.main_controller.device_disconnected.connect(self._on_device_disconnected)
-            self.main_controller.device_status_received.connect(self._on_device_status_received)
+            controller.device_connected.connect(self._on_device_connected)
+            controller.device_disconnected.connect(self._on_device_disconnected)
+            controller.device_status_received.connect(self._on_device_status_received)
             
             # Connect to session signals
-            self.main_controller.session_status_changed.connect(self._on_session_status_changed)
-            self.main_controller.recording_started.connect(self._on_recording_started)
-            self.main_controller.recording_stopped.connect(self._on_recording_stopped)
+            controller.session_status_changed.connect(self._on_session_status_changed)
+            controller.recording_started.connect(self._on_recording_started)
+            controller.recording_stopped.connect(self._on_recording_stopped)
             
             # Connect to data signals
-            self.main_controller.sensor_data_received.connect(self._on_sensor_data_received)
-            self.main_controller.preview_frame_received.connect(self._on_preview_frame_received)
+            controller.sensor_data_received.connect(self._on_sensor_data_received)
             
             # Connect to error signals
-            self.main_controller.error_occurred.connect(self._on_error_occurred)
+            controller.error_occurred.connect(self._on_error_occurred)
             
             self.connected_signals = True
-            logger.info("Connected to MainController signals")
+            controller_type = "WebController" if self.using_web_controller else "MainController"
+            logger.info(f"Connected to {controller_type} signals")
             
         except Exception as e:
-            logger.error(f"Failed to connect to MainController signals: {e}")
+            logger.error(f"Failed to connect to controller signals: {e}")
+    
+    def _connect_to_main_controller(self):
+        """Connect to MainController signals for real-time updates (legacy method)."""
+        self._connect_to_controller(self.main_controller)
     
     def _connect_to_session_manager(self):
         """Connect to SessionManager for session information."""
