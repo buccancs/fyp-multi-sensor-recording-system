@@ -1,5 +1,44 @@
 # Shimmer3 GSR+ Device Integration: Technical Deep-Dive
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Device Specifications](#device-specifications)
+  - [Hardware Capabilities](#hardware-capabilities)
+  - [GSR Sensor Range Configuration](#gsr-sensor-range-configuration)
+- [Architecture Overview](#architecture-overview)
+  - [System Integration Architecture](#system-integration-architecture)
+  - [Data Flow Architecture](#data-flow-architecture)
+- [Key Classes and Components](#key-classes-and-components)
+  - [ShimmerManager Core Implementation](#shimmermanager-core-implementation)
+  - [Connection Type Management](#connection-type-management)
+  - [Data Structure Design](#data-structure-design)
+- [Complex Algorithms and Logic](#complex-algorithms-and-logic)
+  - [Device Discovery and Connection Algorithm](#device-discovery-and-connection-algorithm)
+  - [Data Validation Framework](#data-validation-framework)
+  - [Intelligent Reconnection Algorithm](#intelligent-reconnection-algorithm)
+- [System Integration Details](#system-integration-details)
+  - [Android Integration Components](#android-integration-components)
+  - [PC Server Integration](#pc-server-integration)
+- [Session Management and Data Export](#session-management-and-data-export)
+  - [Session-Based Recording Architecture](#session-based-recording-architecture)
+  - [CSV Export Format](#csv-export-format)
+- [Performance Optimization and Scalability](#performance-optimization-and-scalability)
+  - [Threading Architecture](#threading-architecture)
+  - [Memory Management](#memory-management)
+  - [Battery Optimization Strategies](#battery-optimization-strategies)
+- [Error Handling and Recovery](#error-handling-and-recovery)
+  - [Comprehensive Error Classification](#comprehensive-error-classification)
+  - [Graceful Cleanup and Resource Management](#graceful-cleanup-and-resource-management)
+- [SDK Integration and External References](#sdk-integration-and-external-references)
+  - [Shimmer Research Official SDKs](#shimmer-research-official-sdks)
+  - [Technical Specifications from Online Sources](#technical-specifications-from-online-sources)
+- [Integration with Overall System](#integration-with-overall-system)
+  - [Network Protocol Integration](#network-protocol-integration)
+  - [Session Management Integration](#session-management-integration)
+  - [Calibration System Integration](#calibration-system-integration)
+  - [User Interface Integration](#user-interface-integration)
+
 ## Overview
 
 This document provides a comprehensive technical analysis of the Shimmer3 GSR+ device integration within the Multi-Sensor Recording System. The Shimmer3 GSR+ represents a state-of-the-art wearable sensor platform that enables high-precision galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG), accelerometry, and other biometric parameters.

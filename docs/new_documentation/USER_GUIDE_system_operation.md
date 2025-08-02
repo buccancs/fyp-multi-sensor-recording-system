@@ -38,6 +38,73 @@ Before starting, ensure you have:
 - [ ] **WiFi network** for device communication
 - [ ] **Android Studio** for app development (if needed)
 
+### System Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "Research Environment"
+        RESEARCHER[👨‍🔬 Researcher]
+        SUBJECT[👤 Test Subject]
+    end
+    
+    subgraph "PC Controller Hub"
+        PC[🖥️ Python Desktop Controller]
+        WEBCAM[📹 USB Webcam]
+        STORAGE[💾 Data Storage]
+    end
+    
+    subgraph "Mobile Data Collection Node"
+        ANDROID[📱 Android Smartphone]
+        THERMAL[🌡️ Thermal Camera TC001]
+        CAMERA[📷 4K Camera + RAW]
+    end
+    
+    subgraph "Physiological Sensing"
+        SHIMMER[📊 Shimmer3 GSR+]
+        ELECTRODES[⚡ GSR Electrodes]
+    end
+    
+    subgraph "Network Infrastructure"
+        WIFI[📶 WiFi Network]
+        SYNC[⏱️ Time Synchronization]
+    end
+    
+    %% Connections
+    RESEARCHER --> PC
+    SUBJECT --> SHIMMER
+    SHIMMER --> ELECTRODES
+    
+    PC --> WEBCAM
+    PC --> STORAGE
+    PC --> WIFI
+    
+    ANDROID --> THERMAL
+    ANDROID --> CAMERA
+    ANDROID --> WIFI
+    
+    SHIMMER --> ANDROID
+    WIFI --> SYNC
+    
+    %% Data flows
+    PC -.->|Commands| ANDROID
+    ANDROID -.->|Video Stream| PC
+    ANDROID -.->|Status Updates| PC
+    SHIMMER -.->|GSR Data| ANDROID
+    WEBCAM -.->|Video Data| PC
+    
+    classDef device fill:#e1f5fe
+    classDef sensor fill:#f3e5f5
+    classDef network fill:#e8f5e8
+    classDef person fill:#fff3e0
+    classDef storage fill:#fce4ec
+    
+    class PC,ANDROID,WEBCAM device
+    class SHIMMER,THERMAL,CAMERA,ELECTRODES sensor
+    class WIFI,SYNC network
+    class RESEARCHER,SUBJECT person
+    class STORAGE storage
+```
+
 ### 5-Minute Setup
 
 1. **Download and extract** the project repository
