@@ -937,6 +937,172 @@ sequenceDiagram
 - Configurable metadata collection
 - Export controls for sensitive data
 
+## Output File Formats and Data Export Specifications
+
+The Android Mobile Application generates various data files during recording sessions, including sensor data, metadata, and synchronization information.
+
+### 1. Recording Session Data Files
+
+**Session Metadata (session_metadata.json):**
+```json
+{
+  "sessionMetadata": {
+    "sessionId": "session_20240131_103000",
+    "deviceId": "android_device_001",
+    "startTime": "2024-01-31T10:30:00.000Z",
+    "endTime": "2024-01-31T10:45:00.000Z",
+    "duration_seconds": 900,
+    "deviceInfo": {
+      "model": "Samsung Galaxy S22",
+      "androidVersion": "13",
+      "appVersion": "1.2.3",
+      "capabilities": ["camera_4k", "thermal_tc001", "shimmer_gsr"]
+    },
+    "recordingParameters": {
+      "videoResolution": "3840x2160",
+      "frameRate": 30,
+      "thermalEnabled": true,
+      "shimmerEnabled": true,
+      "rawCaptureEnabled": false
+    },
+    "synchronization": {
+      "pcControllerIP": "192.168.1.100",
+      "syncAccuracy_ms": 2.1,
+      "totalSyncEvents": 180,
+      "successfulSyncs": 179
+    }
+  }
+}
+```
+
+### 2. Video Data Files
+
+**Video File Organization:**
+```
+/storage/emulated/0/MultiSensorRecording/session_20240131_103000/
+├── video_4k.mp4                    # Primary 4K video recording
+├── video_metadata.json             # Video stream metadata
+├── frame_timestamps.csv            # Frame-level timestamp data
+└── video_quality_metrics.json      # Quality assessment data
+```
+
+**Frame Timestamps (frame_timestamps.csv):**
+```csv
+FrameNumber,TimestampUTC,TimestampLocal,ExposureTime_ms,ISO,FocusDistance,Quality
+1,2024-01-31T10:30:00.000Z,1706694600000,16.67,100,1.2,0.98
+2,2024-01-31T10:30:00.033Z,1706694600033,16.67,100,1.2,0.98
+3,2024-01-31T10:30:00.067Z,1706694600067,16.67,100,1.2,0.97
+```
+
+### 3. Thermal Camera Data Files
+
+**Thermal Data Structure:**
+```
+/storage/emulated/0/MultiSensorRecording/session_20240131_103000/thermal/
+├── thermal_frames_raw.bin           # Raw thermal sensor data
+├── thermal_metadata.json           # Thermal recording metadata
+├── temperature_summary.csv         # Frame-by-frame temperature statistics
+└── thermal_calibration.json        # Device calibration parameters
+```
+
+**Temperature Summary (temperature_summary.csv):**
+```csv
+FrameID,Timestamp,MinTemp_C,MaxTemp_C,MeanTemp_C,HotSpots,ColdSpots,Quality
+1,2024-01-31T10:30:00.000Z,18.5,37.2,22.8,3,1,0.95
+2,2024-01-31T10:30:00.040Z,18.3,37.5,23.1,4,1,0.96
+3,2024-01-31T10:30:00.080Z,18.7,36.9,22.6,3,2,0.94
+```
+
+### 4. Shimmer3 GSR+ Sensor Data Files
+
+**GSR Data Files:**
+```
+/storage/emulated/0/MultiSensorRecording/session_20240131_103000/shimmer/
+├── gsr_raw_data.csv                 # Raw GSR sensor readings
+├── gsr_processed.csv                # Processed and calibrated GSR data
+├── shimmer_metadata.json           # Sensor configuration and calibration
+└── gsr_quality_assessment.json     # Signal quality metrics
+```
+
+**GSR Raw Data (gsr_raw_data.csv):**
+```csv
+Timestamp,GSR_Raw,PPG_Raw,AccelX,AccelY,AccelZ,GyroX,GyroY,GyroZ,BatteryLevel,Quality
+2024-01-31T10:30:00.000Z,2048,1024,512,256,768,128,64,192,85,0.98
+2024-01-31T10:30:00.008Z,2051,1027,515,258,771,130,66,195,85,0.98
+2024-01-31T10:30:00.016Z,2049,1025,513,257,769,129,65,193,85,0.97
+```
+
+**GSR Processed Data (gsr_processed.csv):**
+```csv
+Timestamp,GSR_Conductance_uS,HeartRate_BPM,StressLevel,ActivityLevel,SignalQuality
+2024-01-31T10:30:00.000Z,12.5,72,0.3,0.1,0.98
+2024-01-31T10:30:00.008Z,12.7,73,0.3,0.1,0.98
+2024-01-31T10:30:00.016Z,12.3,71,0.2,0.1,0.97
+```
+
+### 5. Device Status and Log Files
+
+**Device Status Log (device_status.json):**
+```json
+{
+  "deviceStatus": {
+    "sessionId": "session_20240131_103000",
+    "generated": "2024-01-31T10:45:00.000Z",
+    "overallHealth": "HEALTHY",
+    "components": {
+      "camera": {
+        "status": "ACTIVE",
+        "framesRecorded": 27000,
+        "framesDropped": 2,
+        "averageFrameRate": 29.98,
+        "lastError": null
+      },
+      "thermal": {
+        "status": "ACTIVE",
+        "temperature": 42.1,
+        "framesRecorded": 22500,
+        "calibrationValid": true,
+        "lastError": null
+      },
+      "shimmer": {
+        "status": "CONNECTED",
+        "batteryLevel": 83,
+        "signalQuality": 0.97,
+        "samplesRecorded": 115200,
+        "lastError": null
+      },
+      "network": {
+        "status": "CONNECTED",
+        "signalStrength": -45,
+        "dataTransferred_mb": 156.7,
+        "connectionDrops": 0,
+        "lastError": null
+      },
+      "storage": {
+        "availableSpace_gb": 128.5,
+        "usedSpace_gb": 2.8,
+        "writeSpeed_mbps": 95.2,
+        "lastError": null
+      }
+    }
+  }
+}
+```
+
+### 6. Error and Event Logs
+
+**Application Log (app_events.log):**
+```
+2024-01-31T10:30:00.000Z [INFO] [Session] Starting recording session: session_20240131_103000
+2024-01-31T10:30:00.125Z [INFO] [Camera] Initialized 4K camera with 30fps settings
+2024-01-31T10:30:02.250Z [INFO] [Thermal] TC001 thermal camera connected and calibrated
+2024-01-31T10:30:05.500Z [INFO] [Shimmer] GSR+ sensor paired and streaming at 128Hz
+2024-01-31T10:30:08.750Z [INFO] [Network] Connected to PC controller at 192.168.1.100:9000
+2024-01-31T10:35:12.125Z [WARN] [Camera] Frame drop detected: buffer overflow (recovered)
+2024-01-31T10:40:18.375Z [INFO] [Sync] Time synchronization completed: accuracy 2.1ms
+2024-01-31T10:45:00.000Z [INFO] [Session] Recording session completed successfully
+```
+
 ---
 
 This protocol documentation provides comprehensive technical specifications for all communication and data formats used by the Android Mobile Data Collection Node. It ensures standardized, reliable, and secure data collection and transmission within the distributed multi-sensor recording system.
