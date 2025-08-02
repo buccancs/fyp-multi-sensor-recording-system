@@ -322,34 +322,34 @@ class EnhancedApplicationWithWebUI:
             return
         
         try:
-            # Get real PC status
-            import psutil
+            # Get real PC status if available
+            try:
+                import psutil
+                pc_status = {
+                    'status': 'running',
+                    'cpu_usage': psutil.cpu_percent(interval=0.1),
+                    'memory_usage': psutil.virtual_memory().percent,
+                    'disk_usage': psutil.disk_usage('/').percent if os.name != 'nt' else psutil.disk_usage('C:').percent,
+                    'ui_active': True,
+                    'last_update': 'Now'
+                }
+            except ImportError:
+                # Fallback if psutil is not available
+                pc_status = {
+                    'status': 'running',
+                    'cpu_usage': 0,
+                    'memory_usage': 0,
+                    'ui_active': True,
+                    'last_update': 'Now'
+                }
             
-            pc_status = {
-                'status': 'running',
-                'cpu_usage': psutil.cpu_percent(interval=0.1),
-                'memory_usage': psutil.virtual_memory().percent,
-                'disk_usage': psutil.disk_usage('/').percent if os.name != 'nt' else psutil.disk_usage('C:').percent,
-                'ui_active': True,
-                'connected_devices': {
-                    'android': len(self.web_integration.device_status_cache.get('android_devices', {})),
-                    'shimmer': len(self.web_integration.device_status_cache.get('shimmer_sensors', {})),
-                    'webcam': len(self.web_integration.device_status_cache.get('usb_webcams', {}))
-                },
-                'last_update': 'Now'
-            }
+            # Update through controller if available
+            if self.web_integration.controller and hasattr(self.web_integration.controller, 'device_status_received'):
+                self.web_integration.controller.device_status_received.emit('desktop_app', {
+                    'type': 'pc_controller',
+                    **pc_status
+                })
             
-            self.web_integration.update_device_status('pc_controller', 'desktop_app', pc_status)
-            
-        except ImportError:
-            # Fallback if psutil is not available
-            self.web_integration.update_device_status('pc_controller', 'desktop_app', {
-                'status': 'running',
-                'cpu_usage': 0,
-                'memory_usage': 0,
-                'ui_active': True,
-                'last_update': 'Now'
-            })
         except Exception as e:
             logger.error(f"Failed to update web dashboard status: {e}")
     

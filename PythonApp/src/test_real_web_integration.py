@@ -52,9 +52,12 @@ def test_real_web_integration():
         
         print("✓ WebDashboardIntegration created successfully")
         print(f"  - Using WebController: {web_integration.using_web_controller}")
-        print(f"  - SessionManager available: {web_integration.session_manager is not None}")
-        print(f"  - ShimmerManager available: {web_integration.shimmer_manager is not None}")
-        print(f"  - AndroidDeviceManager available: {web_integration.android_device_manager is not None}")
+        if web_integration.using_web_controller and web_integration.controller:
+            print(f"  - SessionManager available: {web_integration.controller.session_manager is not None}")
+            print(f"  - ShimmerManager available: {web_integration.controller.shimmer_manager is not None}")
+            print(f"  - AndroidDeviceManager available: {web_integration.controller.android_device_manager is not None}")
+        else:
+            print("  - Using PyQt MainController")
         
         print("\n2. Starting web dashboard...")
         success = web_integration.start_web_dashboard()
@@ -81,10 +84,10 @@ def test_real_web_integration():
                 print(f"   🎬 Session signal: {session_id} -> {'ACTIVE' if is_active else 'INACTIVE'}")
             
             # Connect to signals
-            if web_integration.using_web_controller and web_integration.web_controller:
-                web_integration.web_controller.device_status_received.connect(on_device_status)
-                web_integration.web_controller.sensor_data_received.connect(on_sensor_data)
-                web_integration.web_controller.session_status_changed.connect(on_session_change)
+            if web_integration.using_web_controller and web_integration.controller:
+                web_integration.controller.device_status_received.connect(on_device_status)
+                web_integration.controller.sensor_data_received.connect(on_sensor_data)
+                web_integration.controller.session_status_changed.connect(on_session_change)
                 print("✓ Connected to WebController signals")
             else:
                 print("✗ WebController not available")
@@ -118,10 +121,10 @@ def test_real_web_integration():
             #     pass
             
             print("\n6. Testing session control...")
-            if web_integration.web_controller:
+            if web_integration.controller and web_integration.using_web_controller:
                 # Test starting a recording session
                 print("   Starting recording session...")
-                session_started = web_integration.web_controller.start_recording({
+                session_started = web_integration.controller.start_recording({
                     'session_name': 'test_web_session',
                     'devices': ['android_1', 'shimmer_1']
                 })
@@ -132,7 +135,7 @@ def test_real_web_integration():
                     
                     # Stop the session
                     print("   Stopping recording session...")
-                    session_stopped = web_integration.web_controller.stop_recording()
+                    session_stopped = web_integration.controller.stop_recording()
                     if session_stopped:
                         print("   ✓ Recording session stopped via web controller")
                     else:
@@ -141,9 +144,9 @@ def test_real_web_integration():
                     print("   ⚠️  Failed to start recording session")
             
             print("\n7. Getting current system status...")
-            if web_integration.web_controller:
-                device_status = web_integration.web_controller.get_device_status()
-                session_info = web_integration.web_controller.get_session_info()
+            if web_integration.controller and web_integration.using_web_controller:
+                device_status = web_integration.controller.get_device_status()
+                session_info = web_integration.controller.get_session_info()
                 
                 print(f"   Device Status: {len(device_status.get('shimmer_devices', {}))} Shimmer, "
                       f"{len(device_status.get('android_devices', {}))} Android, "
