@@ -600,4 +600,32 @@ class StatusDisplayController @Inject constructor() {
         
         android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Enhanced status display initialized")
     }
+    
+    /**
+     * Start periodic status updates
+     */
+    private fun startPeriodicStatusUpdates() {
+        if (isMonitoringActive) return
+        
+        statusUpdateTimer = java.util.Timer()
+        statusUpdateTimer?.scheduleAtFixedRate(object : java.util.TimerTask() {
+            override fun run() {
+                // Update status if callback is available
+                callback?.let { 
+                    // Trigger status updates
+                }
+            }
+        }, 0, statusUpdateInterval)
+        
+        isMonitoringActive = true
+    }
+    
+    /**
+     * Stop periodic status updates
+     */
+    private fun stopPeriodicStatusUpdates() {
+        statusUpdateTimer?.cancel()
+        statusUpdateTimer = null
+        isMonitoringActive = false
+    }
 }

@@ -1166,6 +1166,7 @@ class MainActivityCoordinator @Inject constructor(
             // TODO: Need context and viewModel for recordingController.stopRecording()
             // recordingController.stopRecording(context, viewModel)
             android.util.Log.w("MainActivityCoordinator", "Cannot stop recording in resetAllStates without viewModel access")
+
             
             // Save final state before cleanup
             callback?.getContext()?.let { context ->

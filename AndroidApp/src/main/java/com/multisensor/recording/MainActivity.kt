@@ -337,7 +337,6 @@ class MainActivity : AppCompatActivity(),
      * Check if all required permissions are granted
      * This method implements the interface requirement for UsbController.UsbCallback
      */
-
     override fun onStart() {
         super.onStart()
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Activity lifecycle: onStart() called")
@@ -1690,6 +1689,7 @@ class MainActivity : AppCompatActivity(),
     }
     
     fun showPermissionButton(show: Boolean) {
+
         binding.requestPermissionsButton.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
     }
 
@@ -1888,5 +1888,33 @@ class MainActivity : AppCompatActivity(),
         return AllAndroidPermissions.getDangerousPermissions().all { permission ->
             ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
         }
+    }
+
+    // ========== Common Callback Method Implementations ==========
+    // These methods are shared across multiple interfaces
+    
+    override fun updateStatusText(text: String) {
+        runOnUiThread {
+            binding.statusText.text = text
+        }
+    }
+
+    override fun showToast(message: String, duration: Int) {
+        runOnUiThread {
+            Toast.makeText(this, message, duration).show()
+        }
+    }
+    
+    // Additional overload for convenience
+    fun showToast(message: String) {
+        showToast(message, Toast.LENGTH_SHORT)
+    }
+
+    override fun runOnUiThread(action: () -> Unit) {
+        super.runOnUiThread(action)
+    }
+
+    override fun getContext(): Context {
+        return this
     }
 }
