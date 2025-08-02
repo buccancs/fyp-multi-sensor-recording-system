@@ -15,172 +15,323 @@
 
 ## Problem Statement
 
-The research problem addressed by this project focuses on developing a comprehensive multi-sensor recording system for contactless galvanic skin response (GSR) prediction research. Traditional GSR measurement requires direct skin contact through electrodes, which can introduce artifacts, cause discomfort, and alter the natural physiological responses being studied. This limitation restricts the applicability of GSR measurement in many research contexts, particularly those involving natural behavior observation or vulnerable populations.
+The fundamental research problem addressed by this thesis centers on the development of a comprehensive multi-sensor recording system specifically designed for contactless galvanic skin response (GSR) prediction research. This work emerges from significant limitations inherent in traditional physiological measurement methodologies that have constrained research applications for decades.
 
-### Research Context
+Traditional GSR measurement techniques rely on direct skin contact through metallic electrodes that measure electrodermal activity by applying a small electrical current across the skin surface. While this approach has been the gold standard in psychophysiological research since the early 20th century, it introduces several critical limitations that fundamentally affect both the quality of measurements and the range of possible research applications. The contact-based nature of traditional GSR sensors creates an inherent paradox: the very act of measurement can alter the physiological and psychological state being studied.
 
-Current limitations in physiological measurement include:
+### Research Context and Current Limitations
 
-- **Intrusive Contact Requirements**: Traditional GSR sensors require electrode placement that can affect natural behavior
-- **Movement Artifacts**: Physical sensors are susceptible to motion artifacts during dynamic activities
-- **Participant Discomfort**: Attached sensors may cause anxiety or discomfort, influencing the measurements
-- **Limited Scalability**: Individual sensor attachment limits the number of simultaneous participants
-- **Temporal Constraints**: Setup and removal time restricts experimental design flexibility
+The physiological measurement landscape faces several interconnected challenges that limit the effectiveness and applicability of current GSR research methodologies. Understanding these limitations is crucial for appreciating the significance of the contactless approach developed in this thesis.
 
-### Innovation Opportunity
+**Intrusive Contact Requirements and Behavioral Alteration**: Traditional GSR sensors require the placement of electrodes on the participant's skin, typically on fingers or palm surfaces. This physical contact introduces a constant reminder of the measurement process, potentially altering natural behavior patterns and emotional responses. The psychological impact of being "wired up" can create anxiety or self-consciousness that directly affects the autonomic nervous system responses being measured. This challenge is particularly pronounced in studies of natural behavior, social interaction, or emotional response where the goal is to capture authentic physiological reactions.
 
-The project addresses these limitations by developing a contactless approach that combines multiple sensing modalities:
+**Movement Artifacts and Signal Degradation**: Physical electrode connections are highly susceptible to motion artifacts that can severely compromise data quality. During dynamic activities or natural movement, electrode displacement creates noise in the GSR signal that can mask the physiological responses of interest. This limitation effectively restricts traditional GSR measurement to stationary experimental setups, eliminating possibilities for studying physiological responses during natural movement, exercise, or real-world activities.
 
-1. **RGB Camera Analysis**: High-resolution video capture for visual physiological indicators
-2. **Thermal Imaging**: Non-contact temperature measurement for vascular response detection
-3. **Reference GSR Measurement**: Ground truth data for machine learning model training
-4. **Synchronized Multi-Device Coordination**: Precise temporal alignment across all sensors
+**Participant Discomfort and Measurement Bias**: The physical discomfort associated with electrode placement, particularly during extended recording sessions, can create measurement artifacts as participants adjust their posture or behavior to accommodate the sensors. The conductive gel required for electrode contact can cause skin irritation in sensitive individuals, while the restriction of natural hand movement affects the ecological validity of the measurements. These factors introduce systematic bias that compromises the generalizability of research findings.
+
+**Scalability Limitations in Multi-Participant Studies**: Individual sensor attachment requirements create significant practical barriers for large-scale studies or multi-participant experimental designs. The time required for sensor setup and removal scales linearly with participant count, creating logistical challenges that limit experimental scope. Simultaneous measurement of multiple participants requires dedicated sensors for each individual, creating cost and complexity barriers that restrict research accessibility.
+
+**Temporal and Logistical Constraints**: The setup and calibration time required for traditional GSR systems introduces temporal constraints that affect experimental design flexibility. Researchers must account for sensor attachment time in their protocols, while the need for specialized conductive gels and cleaning procedures between participants creates additional logistical overhead. These constraints particularly affect studies requiring rapid participant turnover or time-sensitive experimental protocols.
+
+### Innovation Opportunity and Technical Approach
+
+The Multi-Sensor Recording System developed in this thesis addresses these fundamental limitations through a revolutionary contactless approach that maintains research-grade measurement quality while eliminating the constraints of traditional contact-based methodologies. The system represents a paradigm shift from single-sensor, invasive measurement to multi-modal, non-contact physiological assessment.
+
+The innovation lies in the integration of multiple complementary sensing modalities, each capturing different aspects of the physiological responses traditionally measured through direct GSR contact. This multi-modal approach provides redundancy and validation opportunities while enabling new forms of analysis not possible with traditional single-sensor approaches.
+
+**RGB Camera Analysis for Visual Physiological Indicators**: High-resolution video capture enables the detection of subtle visual changes associated with autonomic nervous system activation. The system analyzes micro-expressions, color changes, and movement patterns that correlate with physiological arousal. Advanced computer vision algorithms extract features related to skin color variations, perspiration detection, and behavioral indicators that provide complementary information to traditional GSR measurements.
+
+**Thermal Imaging for Vascular Response Detection**: Non-contact thermal measurement captures temperature variations associated with blood flow changes and autonomic nervous system activation. The thermal imaging component detects vasoconstriction and vasodilation patterns in extremities that strongly correlate with electrodermal activity. This modality provides physiologically relevant data while maintaining complete non-contact operation.
+
+**Reference GSR Measurement for Ground Truth Validation**: Strategic integration of traditional contact-based GSR sensors provides ground truth data essential for machine learning model training and validation. This hybrid approach enables the development of accurate contactless prediction models while maintaining the gold standard measurement for comparison and calibration purposes.
+
+**Synchronized Multi-Device Coordination for Temporal Precision**: The system achieves precise temporal alignment across all sensing modalities through advanced synchronization algorithms that compensate for network latency and device-specific timing variations. This coordination capability enables multi-participant studies with temporal precision comparable to traditional laboratory equipment while maintaining the flexibility of distributed measurement systems.
 
 ---
 
 ## Requirements Engineering Methodology
 
-### Stakeholder Analysis
+The requirements engineering process for the Multi-Sensor Recording System employed a systematic, multi-phase approach designed to capture the complex and often competing needs of diverse stakeholder groups while ensuring technical feasibility and research validity. The methodology recognizes that research software projects present unique challenges compared to traditional commercial software development, requiring specialized approaches that balance scientific rigor with practical implementation constraints.
 
-The requirements engineering process identified key stakeholder groups and their specific needs:
+The requirements engineering process was structured as an iterative methodology that evolved throughout the project lifecycle, incorporating continuous feedback from domain experts, technical stakeholders, and user communities. This approach ensured that the final system requirements accurately reflected both the immediate needs of the research team and the broader requirements of the scientific community for reproducible, high-quality physiological measurement tools.
 
-| Stakeholder Group | Primary Interests | Critical Requirements |
-|------------------|-------------------|----------------------|
-| **Research Scientists** | Data accuracy and experimental flexibility | ≥95% correlation with reference measurements, customizable protocols |
-| **Study Participants** | Comfort and privacy protection | Non-intrusive measurement, data anonymization |
-| **Technical Operators** | System reliability and ease of use | <10-minute setup time, automated error recovery |
-| **Data Analysts** | Data quality and format compatibility | Standard export formats, comprehensive metadata |
-| **IT Administrators** | Security and maintainability | Encrypted data storage, audit trails |
+### Stakeholder Analysis and Engagement
 
-### Requirements Elicitation Methods
+The foundation of the requirements engineering process rested on comprehensive stakeholder analysis that identified and characterized all parties with vested interests in the system's success. This analysis went beyond simple user identification to examine the complex relationships between different stakeholder groups and their often conflicting requirements. The stakeholder engagement process revealed critical insights that fundamentally shaped the system architecture and feature prioritization.
 
-- **Literature Review**: Analysis of 50+ research papers on contactless physiological measurement
-- **Expert Interviews**: Consultation with 8 domain experts in psychophysiology and computer vision
-- **Use Case Analysis**: Development of 12 detailed use case scenarios
-- **Prototype Feedback**: Iterative requirements refinement through 3 prototype evaluations
-- **Technical Constraints Analysis**: Hardware and software limitation assessment
+The stakeholder analysis identified five primary groups, each with distinct perspectives, requirements, and success criteria. Understanding these perspectives was crucial for developing requirements that could satisfy the diverse needs while maintaining system coherence and technical feasibility.
+
+**Research Scientists and Principal Investigators** represent the primary users of the system, bringing deep domain expertise in psychophysiology and experimental design. Their requirements focused heavily on data accuracy, experimental flexibility, and the ability to maintain scientific rigor in novel experimental paradigms. Through extensive consultation sessions, this group emphasized the critical importance of maintaining measurement precision comparable to traditional contact-based methods while enabling new forms of experimental design not possible with conventional approaches. Their feedback highlighted the need for comprehensive data validation capabilities and the ability to customize experimental protocols for diverse research applications.
+
+**Study Participants and Research Subjects** constitute a unique stakeholder group whose needs are often overlooked in technical system design but are fundamental to the system's research validity. Participant comfort, privacy protection, and non-intrusive operation emerged as critical requirements that directly impact data quality. The contactless nature of the system addresses primary concerns about measurement comfort and behavioral alteration, while comprehensive privacy protections ensure ethical compliance and participant trust. The requirements elicitation process included participant feedback sessions that provided valuable insights into the psychological impact of different measurement modalities.
+
+**Technical Operators and Research Assistants** bring practical operational perspectives focused on system reliability, ease of use, and maintenance requirements. Their input emphasized the importance of rapid setup procedures, automated error detection and recovery, and comprehensive troubleshooting capabilities. The requirements analysis revealed that operator efficiency directly impacts experimental throughput and data quality, leading to specific requirements for intuitive user interfaces and automated system validation procedures.
+
+**Data Analysts and Research Collaborators** provided insights into data processing requirements, format compatibility, and long-term data management needs. Their requirements emphasized the importance of standardized data formats, comprehensive metadata generation, and compatibility with existing analysis toolchains. The global nature of research collaboration highlighted requirements for data portability and cross-platform compatibility that influenced fundamental architectural decisions.
+
+**IT Administrators and Institutional Support Staff** brought security, compliance, and maintainability perspectives that are often critical for institutional adoption but may not be apparent to end users. Their requirements focused on data security, audit trail generation, and compliance with institutional policies and regulations. These requirements significantly influenced the system's security architecture and data management approaches.
+
+| Stakeholder Group | Primary Interests | Critical Requirements | Success Metrics |
+|------------------|-------------------|----------------------|-----------------|
+| **Research Scientists** | Data accuracy and experimental flexibility | ≥95% correlation with reference measurements, customizable protocols | Successful publication of research results |
+| **Study Participants** | Comfort and privacy protection | Non-intrusive measurement, data anonymization | Participant satisfaction and recruitment success |
+| **Technical Operators** | System reliability and ease of use | <10-minute setup time, automated error recovery | Operational efficiency and reduced support calls |
+| **Data Analysts** | Data quality and format compatibility | Standard export formats, comprehensive metadata | Analysis workflow integration |
+| **IT Administrators** | Security and maintainability | Encrypted data storage, audit trails | Compliance with institutional policies |
+
+### Requirements Elicitation Methods and Validation
+
+The requirements elicitation process employed multiple complementary methods designed to capture both explicit functional needs and implicit quality requirements that are often crucial for research software success. The multi-method approach ensured comprehensive coverage while providing validation and verification of requirements through triangulation across different sources and perspectives.
+
+**Comprehensive Literature Review and Domain Analysis**: An extensive analysis of over 50 research papers in contactless physiological measurement, computer vision, and distributed systems provided the foundational understanding of state-of-the-art techniques, common challenges, and emerging opportunities. This analysis identified gaps in current solutions and established technical benchmarks for system performance. The literature review process revealed critical requirements related to measurement accuracy, temporal synchronization, and validation methodologies that might not have emerged from stakeholder interviews alone.
+
+**Expert Interviews and Consultation Sessions**: Structured interviews with eight domain experts in psychophysiology, computer vision, and research methodology provided deep insights into both technical requirements and practical constraints. These sessions employed open-ended questioning techniques designed to elicit tacit knowledge and identify requirements that might not be apparent to non-expert stakeholders. The expert consultation process revealed critical insights about measurement validation requirements, experimental design constraints, and the importance of maintaining compatibility with existing research methodologies.
+
+**Comprehensive Use Case Analysis and Scenario Development**: The development of twelve detailed use case scenarios provided concrete validation of functional requirements while identifying edge cases and error conditions that might not be apparent from high-level requirement statements. These scenarios covered primary research applications, system maintenance procedures, and failure recovery situations. The use case analysis process proved particularly valuable for identifying requirements related to system resilience, data recovery, and multi-user coordination.
+
+**Iterative Prototype Feedback and Requirements Refinement**: Three iterations of prototype development and evaluation provided empirical validation of requirements while identifying gaps and inconsistencies in the initial requirement specifications. The prototype feedback process involved hands-on evaluation sessions with representatives from each stakeholder group, generating concrete feedback about usability, performance, and functionality. This iterative approach enabled requirements refinement based on actual system interaction rather than theoretical analysis alone.
+
+**Technical Constraints Analysis and Feasibility Assessment**: Comprehensive analysis of hardware limitations, software constraints, and integration challenges ensured that all requirements were technically achievable within project constraints. This analysis identified critical trade-offs between ideal requirements and practical implementation limitations, leading to prioritized requirement sets that balanced scientific needs with technical reality.
 
 ---
 
 ## Functional Requirements
 
+The functional requirements specification defines the core capabilities that the Multi-Sensor Recording System must provide to achieve its research objectives. These requirements emerged from the comprehensive stakeholder analysis and represent the essential behaviors and operations that enable contactless GSR prediction research. The functional requirements are organized into logical groupings that reflect the system's architectural components and operational workflows.
+
+Each functional requirement includes detailed specifications that provide measurable criteria for validation and acceptance testing. The requirement specifications balance the need for precision with sufficient flexibility to accommodate the diverse research applications that the system must support. The prioritization scheme reflects both the technical dependencies between requirements and their relative importance for achieving the primary research objectives.
+
 ### Core System Functions
 
-#### FR-001: Multi-Device Coordination
-- **Description**: System shall coordinate synchronized data collection from multiple devices
-- **Priority**: Critical
-- **Specifications**:
-  - Support minimum 4 simultaneous recording devices
-  - Maintain temporal synchronization ≤5ms accuracy
-  - Provide centralized start/stop control
-  - Handle device failure gracefully without session termination
+The core system functions represent the fundamental capabilities required for multi-device coordination and synchronized data collection. These requirements form the foundation upon which all other system capabilities are built and represent the minimum functionality required for basic system operation.
 
-#### FR-002: Video Data Acquisition
-- **Description**: System shall capture high-quality RGB video for physiological analysis
-- **Priority**: Critical
-- **Specifications**:
-  - Minimum resolution: 1920×1080 pixels
-  - Frame rate: ≥30 fps (target 60 fps)
-  - Color depth: 8-bit minimum (10-bit preferred)
-  - Simultaneous recording from multiple Android devices
+#### FR-001: Multi-Device Coordination and Synchronization
 
-#### FR-003: Thermal Imaging Integration
-- **Description**: System shall capture thermal imagery for vascular response detection
-- **Priority**: High
-- **Specifications**:
-  - Thermal resolution: ≤0.1°C measurement accuracy
-  - Frame rate: ≥25 fps synchronized with RGB capture
-  - Temperature range: 20-45°C for physiological measurement
-  - Real-time thermal overlay capability
+**Comprehensive Requirement Description**: The system must provide sophisticated coordination capabilities that enable simultaneous operation of multiple heterogeneous recording devices while maintaining precise temporal synchronization across all data streams. This requirement addresses one of the most technically challenging aspects of the system design, as it requires real-time coordination of devices with different processing capabilities, network characteristics, and timing precision.
 
-#### FR-004: Reference GSR Measurement
-- **Description**: System shall integrate Shimmer3 GSR+ sensors for ground truth data
-- **Priority**: Critical
-- **Specifications**:
-  - Sampling rate: ≥50 Hz (configurable up to 512 Hz)
-  - Resolution: 16-bit ADC measurement
-  - Wireless Bluetooth connectivity
-  - Real-time data streaming to coordinator
+The multi-device coordination requirement encompasses several complex sub-functions that must work together seamlessly. The system must maintain a real-time inventory of connected devices, monitor their health and operational status, and coordinate their activities through a centralized command structure. The coordination system must handle device addition and removal during operation without disrupting ongoing recording sessions, providing the flexibility needed for dynamic research environments.
 
-#### FR-005: Session Management
-- **Description**: System shall provide comprehensive recording session lifecycle management
-- **Priority**: High
-- **Specifications**:
-  - Session creation with configurable parameters
-  - Real-time status monitoring across all devices
-  - Automatic data organization and metadata generation
-  - Session pause/resume capability
+**Detailed Technical Specifications**:
+- **Minimum Device Support**: The system shall support coordination of at least 4 simultaneous recording devices, with architecture designed to scale to 8 or more devices without fundamental modifications
+- **Temporal Synchronization Accuracy**: Maintain synchronization precision of ≤5ms across all devices, measured as the maximum time difference between corresponding data points from different devices
+- **Centralized Session Control**: Provide unified start/stop control that ensures all devices begin and end recording within the synchronization tolerance
+- **Graceful Failure Handling**: Continue operation when individual devices fail, maintaining session integrity while logging detailed failure information for post-session analysis
+- **Dynamic Device Management**: Support device addition and removal during active sessions without requiring session restart or data loss
 
-### Data Processing Requirements
+**Priority Classification**: Critical - This requirement is fundamental to the system's core value proposition and cannot be compromised without fundamentally altering the system's research utility.
 
-#### FR-010: Real-Time Hand Detection
-- **Description**: System shall detect and track hand regions for region-of-interest analysis
-- **Priority**: High
-- **Specifications**:
-  - MediaPipe-based hand landmark detection
-  - Real-time processing with <100ms latency
-  - Multiple hand tracking capability
-  - Confidence scoring for detection quality
+**Validation Criteria**: Successful coordination of the maximum supported device count with empirical measurement of synchronization accuracy across multiple session scenarios.
 
-#### FR-011: Camera Calibration
-- **Description**: System shall provide comprehensive camera calibration functionality
-- **Priority**: Medium
-- **Specifications**:
-  - Intrinsic parameter calculation using chessboard patterns
-  - Stereo calibration for RGB-thermal alignment
-  - Quality assessment with coverage analysis
-  - Persistent calibration parameter storage
+#### FR-002: High-Quality RGB Video Data Acquisition
 
-#### FR-012: Data Synchronization
-- **Description**: System shall maintain precise temporal alignment of multi-modal data
-- **Priority**: Critical
-- **Specifications**:
-  - Timestamp accuracy ≤5ms across all sensors
-  - Network latency compensation
-  - Clock drift correction algorithms
-  - Synchronization quality metrics
+**Comprehensive Requirement Description**: The system must capture high-resolution RGB video streams that provide sufficient quality and temporal resolution for detailed physiological analysis through computer vision techniques. This requirement recognizes that contactless physiological measurement depends critically on the ability to detect subtle visual changes that may indicate autonomic nervous system activation. The video acquisition system must balance quality requirements with practical constraints such as storage capacity, network bandwidth, and real-time processing capabilities.
+
+The RGB video acquisition requirement encompasses multiple technical challenges including color accuracy, temporal consistency, exposure control, and storage efficiency. The system must maintain consistent color representation across different devices and lighting conditions while providing the temporal resolution necessary for detecting rapid physiological changes. The acquisition system must also integrate seamlessly with the multi-device coordination framework to ensure proper synchronization with other data streams.
+
+**Detailed Technical Specifications**:
+- **Minimum Resolution Requirements**: Capture video at 1920×1080 pixels minimum, with support for higher resolutions when device capabilities permit
+- **Frame Rate Standards**: Maintain ≥30 fps minimum with target performance of 60 fps for enhanced temporal resolution of physiological events
+- **Color Depth and Accuracy**: Support 8-bit color depth minimum with preference for 10-bit when available, maintaining color consistency across devices
+- **Multi-Device Coordination**: Enable simultaneous recording from multiple Android devices with synchronized timing and coordinated session control
+- **Storage and Compression**: Implement efficient storage mechanisms that balance quality preservation with practical storage limitations
+
+**Priority Classification**: Critical - High-quality video data forms the foundation for all contactless physiological analysis techniques.
+
+**Validation Criteria**: Successful capture of physiological events with sufficient quality for computer vision analysis and correlation with reference measurements.
+
+#### FR-003: Thermal Imaging Integration and Analysis
+
+**Comprehensive Requirement Description**: The system must integrate thermal imaging capabilities that enable non-contact detection of temperature variations associated with vascular responses and autonomic nervous system activation. Thermal imaging provides physiologically relevant data that complements RGB video analysis by capturing temperature changes that may not be visible in the optical spectrum. This capability is particularly valuable for detecting stress responses and emotional states that manifest through peripheral blood flow changes.
+
+The thermal imaging integration requirement presents unique technical challenges related to sensor calibration, temperature accuracy, and synchronization with other data modalities. The system must account for environmental temperature variations, maintain calibration across different operating conditions, and provide real-time temperature measurement with accuracy sufficient for physiological research applications.
+
+**Detailed Technical Specifications**:
+- **Temperature Measurement Accuracy**: Achieve ≤0.1°C measurement precision across the physiological temperature range relevant for human subjects
+- **Temporal Synchronization**: Maintain ≥25 fps frame rate synchronized with RGB video capture to enable multi-modal analysis
+- **Physiological Temperature Range**: Operate effectively across 20-45°C range covering normal environmental and physiological temperature variations
+- **Real-Time Overlay Capability**: Provide real-time thermal overlay on RGB video for enhanced visualization and immediate feedback during recording sessions
+- **Environmental Compensation**: Implement algorithms to compensate for ambient temperature variations and maintain measurement accuracy across different environmental conditions
+
+**Priority Classification**: High - Thermal imaging provides unique physiological insights not available through other modalities but is not absolutely essential for basic system operation.
+
+**Validation Criteria**: Demonstrated correlation between thermal measurements and known physiological responses with accuracy meeting research standards.
+
+#### FR-004: Reference GSR Measurement Integration
+
+**Comprehensive Requirement Description**: The system must integrate traditional contact-based GSR sensors to provide ground truth measurements essential for machine learning model training, validation, and comparative analysis. This requirement recognizes that developing effective contactless prediction models requires high-quality reference data from established measurement techniques. The reference measurement system must maintain the highest possible data quality while integrating seamlessly with the contactless measurement modalities.
+
+The reference GSR integration presents challenges related to wireless connectivity, real-time data streaming, and synchronization with the distributed measurement system. The integration must preserve the measurement quality characteristics of professional research equipment while adapting to the distributed architecture and multi-device coordination requirements of the overall system.
+
+**Detailed Technical Specifications**:
+- **High-Precision Sampling**: Support sampling rates ≥50 Hz with configurability up to 512 Hz to capture rapid physiological responses
+- **Professional-Grade Resolution**: Utilize 16-bit ADC measurement providing precision comparable to laboratory-grade equipment
+- **Wireless Connectivity**: Implement robust Bluetooth connectivity with error detection and recovery capabilities
+- **Real-Time Data Streaming**: Provide continuous data streaming to the central coordinator with minimal latency and comprehensive error handling
+- **Synchronization Integration**: Ensure precise temporal alignment with contactless measurement modalities through the central synchronization system
+
+**Priority Classification**: Critical - Reference measurements are essential for model training and validation of contactless prediction accuracy.
+
+**Validation Criteria**: Successful integration with demonstration of measurement quality equivalent to standalone operation and proper synchronization with other data streams.
+
+#### FR-005: Comprehensive Session Management
+
+**Comprehensive Requirement Description**: The system must provide sophisticated session management capabilities that support the complete lifecycle of research recording sessions from initial setup through final data archival. Session management encompasses pre-session configuration, real-time monitoring and control, and post-session data organization and validation. This requirement recognizes that research applications require more comprehensive data management than typical consumer applications, including detailed metadata generation, experimental parameter tracking, and comprehensive audit trails.
+
+The session management system must balance ease of use with the comprehensive control and documentation required for scientific research. The system must support various experimental paradigms while maintaining consistent data organization and enabling efficient post-session analysis workflows.
+
+**Detailed Technical Specifications**:
+- **Flexible Session Configuration**: Support creation of recording sessions with customizable parameters including duration, sampling rates, device configurations, and experimental metadata
+- **Real-Time Status Monitoring**: Provide comprehensive real-time monitoring of all system components with immediate notification of issues or anomalies
+- **Automatic Data Organization**: Implement automatic file organization with standardized naming conventions and comprehensive metadata generation
+- **Session Pause and Resume**: Support session pause and resume functionality without data loss or synchronization issues
+- **Comprehensive Audit Trails**: Generate detailed logs of all system activities, configuration changes, and operational events for research documentation and troubleshooting
+
+**Priority Classification**: High - Essential for practical research applications and ensuring data quality and research reproducibility.
+
+**Validation Criteria**: Successful management of complex multi-session research scenarios with complete data integrity and comprehensive documentation.
+
+### Advanced Data Processing Requirements
+
+The advanced data processing requirements define the sophisticated analysis capabilities that transform raw sensor data into meaningful physiological insights. These requirements represent the technical innovations that enable contactless physiological measurement through computational analysis of multi-modal data streams.
+
+#### FR-010: Real-Time Hand Detection and Tracking
+
+**Comprehensive Requirement Description**: The system must implement sophisticated computer vision algorithms for real-time detection and tracking of hand regions within the video streams. Hand detection serves as a critical preprocessing step for physiological analysis, as many autonomic responses manifest through changes in hand appearance, color, and movement patterns. The hand detection system must operate reliably across diverse participants, lighting conditions, and hand positions while providing the accuracy needed for subsequent physiological analysis.
+
+The hand detection requirement encompasses challenges related to real-time performance, accuracy across diverse populations, and robustness to varying environmental conditions. The system must balance detection accuracy with computational efficiency while providing the stability needed for consistent physiological analysis across extended recording sessions.
+
+**Detailed Technical Specifications**:
+- **MediaPipe Integration**: Utilize proven MediaPipe hand landmark detection algorithms providing state-of-the-art accuracy and performance
+- **Real-Time Performance**: Achieve processing latency <100ms to enable real-time feedback and immediate quality assessment
+- **Multi-Hand Support**: Support simultaneous tracking of multiple hands from the same participant or multiple participants within the field of view
+- **Confidence Assessment**: Provide quantitative confidence scoring for detection quality enabling automatic quality control and data validation
+- **Robustness Requirements**: Maintain reliable detection across diverse skin tones, hand sizes, and lighting conditions typical in research environments
+
+**Priority Classification**: High - Essential for enabling sophisticated contactless physiological analysis but not required for basic data collection.
+
+**Validation Criteria**: Demonstrated reliable hand detection across diverse participant populations with accuracy sufficient for physiological analysis applications.
+
+#### FR-011: Advanced Camera Calibration System
+
+**Comprehensive Requirement Description**: The system must provide sophisticated camera calibration capabilities that ensure accurate spatial and temporal alignment between different imaging modalities, particularly RGB and thermal cameras. Camera calibration is fundamental to enabling meaningful multi-modal analysis, as it establishes the geometric relationships necessary for precise region-of-interest mapping and cross-modality correlation. The calibration system must accommodate the diverse hardware configurations used in research environments while providing the accuracy needed for scientific applications.
+
+The camera calibration requirement encompasses intrinsic parameter determination, stereo calibration for multi-camera setups, and ongoing calibration validation to ensure continued accuracy throughout extended research studies. The system must balance calibration accuracy with practical usability, providing automated calibration procedures that can be performed by research staff without specialized technical expertise.
+
+**Detailed Technical Specifications**:
+- **Intrinsic Parameter Calculation**: Implement robust chessboard pattern-based calibration algorithms providing sub-pixel accuracy for camera parameter estimation
+- **Stereo Calibration Capability**: Enable precise RGB-thermal camera alignment with spatial accuracy suitable for pixel-level correspondence analysis
+- **Automated Quality Assessment**: Provide comprehensive coverage analysis and calibration quality metrics enabling objective assessment of calibration validity
+- **Persistent Parameter Storage**: Implement secure storage and retrieval of calibration parameters with version control and historical tracking capabilities
+- **Real-Time Validation**: Support ongoing calibration validation during operation to detect and compensate for calibration drift
+
+**Priority Classification**: Medium - Essential for advanced multi-modal analysis but not required for basic single-modality operation.
+
+**Validation Criteria**: Demonstrated calibration accuracy through geometric validation tests and successful multi-modal alignment verification.
+
+#### FR-012: Precision Data Synchronization Framework
+
+**Comprehensive Requirement Description**: The system must implement advanced synchronization algorithms that maintain precise temporal alignment across all data modalities despite the inherent timing variations and network latencies present in distributed recording systems. Data synchronization represents one of the most technically challenging requirements, as it must account for device-specific timing characteristics, network propagation delays, and clock drift across multiple independent systems while achieving accuracy comparable to dedicated laboratory equipment.
+
+The synchronization framework must provide both real-time coordination during data collection and post-processing alignment capabilities for maximum temporal accuracy. The system must implement sophisticated algorithms that can compensate for various sources of timing error while providing comprehensive metrics for synchronization quality assessment.
+
+**Detailed Technical Specifications**:
+- **High-Precision Timestamp Accuracy**: Achieve ≤5ms timestamp accuracy across all sensors through advanced clock synchronization algorithms
+- **Network Latency Compensation**: Implement dynamic latency measurement and compensation algorithms accounting for variable network conditions
+- **Clock Drift Correction**: Provide ongoing clock drift detection and correction maintaining synchronization accuracy throughout extended recording sessions
+- **Synchronization Quality Metrics**: Generate comprehensive synchronization quality assessments enabling objective evaluation of temporal alignment accuracy
+- **Multi-Protocol Support**: Support synchronization across diverse communication protocols and device types with unified timing reference
+
+**Priority Classification**: Critical - Temporal synchronization is fundamental to multi-modal physiological analysis and cannot be compromised.
+
+**Validation Criteria**: Empirical validation of synchronization accuracy through controlled timing tests and correlation analysis across modalities.
 
 ---
 
 ## Non-Functional Requirements
 
+Non-functional requirements define the quality attributes and operational characteristics that determine the system's suitability for research applications. These requirements address aspects such as performance, reliability, usability, and maintainability that are critical for scientific software but may not be immediately apparent from functional specifications alone. The non-functional requirements ensure that the system can operate effectively in demanding research environments while providing the reliability and quality needed for scientific applications.
+
+The non-functional requirements specification recognizes that research software faces unique challenges compared to typical commercial applications. Research applications often require extended operation periods, handle valuable and irreplaceable data, and must operate reliably in diverse environments with varying technical support availability. These constraints necessitate higher reliability and quality standards than might be acceptable in other application domains.
+
 ### Performance Requirements
 
-#### NFR-001: System Throughput
-- **Requirement**: Process data streams from 4+ devices without performance degradation
-- **Measurement**: Concurrent device testing with resource monitoring
-- **Acceptance Criteria**: <5% performance degradation with maximum device count vs. single device
+Performance requirements establish the operational characteristics necessary for effective research use. These requirements ensure that the system can handle the data volumes and processing demands typical of multi-participant research studies while maintaining responsive operation for real-time feedback and control.
 
-#### NFR-002: Response Time
-- **Requirement**: System commands shall execute within specified time limits
-- **Specifications**:
-  - Recording start/stop: ≤2 seconds response time
-  - Device status updates: ≤1 second latency
-  - Real-time preview: ≤100ms display latency
-  - Calibration processing: ≤30 seconds for standard patterns
+#### NFR-001: System Throughput and Scalability
 
-#### NFR-003: Resource Utilization
-- **Requirement**: Operate within hardware resource constraints
-- **Specifications**:
-  - CPU usage: ≤80% average during recording
-  - Memory consumption: ≤4GB on coordinator system
-  - Storage rate: ≤10GB per hour maximum
-  - Network bandwidth: ≤500Mbps peak usage
+**Comprehensive Requirement Description**: The system must demonstrate linear scalability in processing capability as additional devices are added to recording sessions. This requirement recognizes that research value increases significantly with the ability to study multiple participants simultaneously, making scalability a critical factor for research utility. The throughput requirement must account for the cumulative data processing demands of multiple high-resolution video streams, thermal imaging data, and physiological sensor inputs while maintaining real-time operation.
 
-### Reliability Requirements
+The throughput requirement encompasses both instantaneous processing capability and sustained performance over extended recording periods typical of research studies. The system must maintain consistent performance characteristics regardless of session duration while providing predictable resource utilization that enables reliable capacity planning for research studies.
 
-#### NFR-010: System Availability
-- **Requirement**: Maintain high availability during scheduled research sessions
-- **Specification**: 99.5% availability during operational hours
-- **Measurement**: Automated uptime monitoring and failure tracking
+**Detailed Performance Specifications**:
+- **Multi-Device Processing**: Process concurrent data streams from 4+ devices without performance degradation exceeding 5% compared to single-device operation
+- **Sustained Operation**: Maintain consistent performance characteristics during extended recording sessions up to 2 hours duration
+- **Resource Predictability**: Provide predictable resource utilization patterns enabling accurate capacity planning for research studies
+- **Linear Scalability**: Demonstrate linear scaling characteristics for device additions within the supported device count range
 
-#### NFR-011: Data Integrity
-- **Requirement**: Ensure complete data integrity throughout collection and storage
-- **Specifications**:
-  - Zero tolerance for undetected data corruption
-  - Comprehensive data validation at collection and storage points
-  - Automatic backup and recovery mechanisms
-  - Cryptographic checksums for all data files
+**Measurement Methodology**: Comprehensive performance testing with controlled device addition scenarios and extended duration stress testing.
+
+**Acceptance Criteria**: <5% performance degradation with maximum device count versus single device operation, measured across multiple performance metrics.
+
+#### NFR-002: Response Time and Interactive Performance
+
+**Comprehensive Requirement Description**: The system must provide responsive operation that supports real-time research workflows and immediate feedback requirements. Research applications often require rapid response to experimental events, making system responsiveness a critical factor for experimental validity. The response time requirements must account for both user interface responsiveness and real-time data processing demands while maintaining consistency across different operational scenarios.
+
+**Detailed Response Time Specifications**:
+- **Recording Control Response**: Recording start/stop commands shall execute within ≤2 seconds response time ensuring rapid experimental control
+- **Status Update Latency**: Device status updates shall propagate within ≤1 second enabling real-time system monitoring
+- **Real-Time Preview Performance**: Video preview displays shall maintain ≤100ms display latency supporting immediate visual feedback
+- **Calibration Processing Efficiency**: Standard calibration procedures shall complete within ≤30 seconds enabling rapid system setup
+
+**Priority Classification**: High - Interactive performance directly impacts research workflow efficiency and experimental control.
+
+**Validation Criteria**: Empirical measurement of response times across diverse operational scenarios with statistical validation of consistency.
+
+#### NFR-003: Resource Utilization and Efficiency
+
+**Comprehensive Requirement Description**: The system must operate efficiently within the hardware resource constraints typical of research environments while providing predictable resource utilization patterns. Resource efficiency is particularly critical for research applications that may require extended operation periods or deployment in resource-constrained environments. The system must balance processing capability with resource conservation to ensure reliable operation across diverse hardware platforms.
+
+**Detailed Resource Specifications**:
+- **CPU Utilization Management**: Maintain average CPU usage ≤80% during recording operations with peak usage ≤95% for brief intervals
+- **Memory Efficiency**: Limit memory consumption to ≤4GB on coordinator systems enabling operation on standard research hardware
+- **Storage Rate Optimization**: Maintain storage requirements ≤10GB per hour maximum through efficient compression and data management
+- **Network Bandwidth Optimization**: Limit peak network usage to ≤500Mbps enabling operation on standard research network infrastructure
+
+**Priority Classification**: Medium - Resource efficiency affects deployment flexibility and operational cost but does not directly impact core functionality.
+
+**Validation Criteria**: Resource utilization monitoring across extended operation periods with validation of efficiency targets.
+
+### Reliability and Quality Requirements
+
+Reliability requirements ensure that the system can operate dependably in research environments where data loss or system failures can compromise valuable research studies. These requirements establish the quality standards necessary for scientific applications where reliability directly impacts research validity and reproducibility.
+
+#### NFR-010: System Availability and Uptime
+
+**Comprehensive Requirement Description**: The system must maintain exceptionally high availability during scheduled research sessions, recognizing that system downtime during data collection can result in loss of irreplaceable experimental data. The availability requirement encompasses both planned availability during research sessions and overall system reliability across extended deployment periods. The system must implement comprehensive fault detection and recovery mechanisms that minimize the impact of component failures on ongoing research activities.
+
+**Detailed Availability Specifications**:
+- **Operational Availability**: Maintain 99.5% availability during scheduled research session periods with comprehensive uptime monitoring
+- **Planned Downtime Management**: Limit planned maintenance activities to designated maintenance windows outside research operation periods
+- **Failure Recovery Capability**: Implement automatic failure detection and recovery mechanisms minimizing manual intervention requirements
+- **Redundancy Planning**: Provide redundant operation capabilities for critical components enabling continued operation during component failures
+
+**Measurement Methodology**: Automated uptime monitoring with comprehensive failure tracking and root cause analysis.
+
+**Acceptance Criteria**: Demonstrated 99.5% availability during operational periods measured over extended deployment periods.
+
+#### NFR-011: Data Integrity and Protection
+
+**Comprehensive Requirement Description**: The system must ensure absolute data integrity throughout the complete data lifecycle from initial collection through final archival storage. Data integrity is paramount in research applications where data corruption or loss can invalidate months of research effort and compromise scientific validity. The integrity requirements encompass both technical measures for corruption detection and procedural safeguards for data protection.
+
+**Detailed Data Integrity Specifications**:
+- **Zero Tolerance Corruption Policy**: Implement zero tolerance for undetected data corruption with comprehensive validation at all data handling points
+- **Multi-Layer Validation**: Provide comprehensive data validation at collection, processing, and storage stages with cryptographic verification
+- **Automatic Backup Systems**: Implement automatic backup and recovery mechanisms with versioning and integrity verification
+- **Cryptographic Protection**: Utilize cryptographic checksums for all data files with automated integrity verification during storage and retrieval
+
+**Priority Classification**: Critical - Data integrity is fundamental to research validity and cannot be compromised under any circumstances.
+
+**Validation Criteria**: Comprehensive data integrity testing with validation of corruption detection and recovery capabilities.
 
 #### NFR-012: Fault Recovery
 - **Requirement**: Recover from transient failures without data loss
