@@ -33,6 +33,74 @@ The primary communication method between the Python Desktop Controller and Andro
 | Connection Timeout | 30 seconds | Initial connection timeout |
 | Keep-Alive | 60 seconds | Heartbeat interval |
 
+### Python Desktop Controller Protocol Architecture
+
+```mermaid
+graph TB
+    subgraph "Python Desktop Controller"
+        MAIN[Main Application]
+        DEVICE_MGR[Device Manager]
+        SESSION_MGR[Session Manager]
+        NETWORK[Network Layer]
+    end
+    
+    subgraph "Communication Protocols"
+        JSON_TCP[JSON over TCP]
+        USB_API[USB Device API]
+        FILE_SYS[File System API]
+        LOGGING[Logging Protocol]
+    end
+    
+    subgraph "Connected Devices"
+        ANDROID[Android Devices]
+        WEBCAM[USB Webcams]
+        STORAGE[Storage Devices]
+    end
+    
+    subgraph "Data Flows"
+        CMD_FLOW[Command Messages]
+        STATUS_FLOW[Status Updates]
+        DATA_FLOW[Data Transfer]
+        LOG_FLOW[Log Messages]
+    end
+    
+    %% Protocol connections
+    MAIN --> DEVICE_MGR
+    MAIN --> SESSION_MGR
+    MAIN --> NETWORK
+    
+    DEVICE_MGR --> USB_API
+    SESSION_MGR --> FILE_SYS
+    NETWORK --> JSON_TCP
+    MAIN --> LOGGING
+    
+    %% Device connections
+    JSON_TCP --> ANDROID
+    USB_API --> WEBCAM
+    FILE_SYS --> STORAGE
+    
+    %% Data flows
+    JSON_TCP --> CMD_FLOW
+    JSON_TCP --> STATUS_FLOW
+    USB_API --> DATA_FLOW
+    LOGGING --> LOG_FLOW
+    
+    %% Return flows
+    STATUS_FLOW -.-> NETWORK
+    DATA_FLOW -.-> DEVICE_MGR
+    LOG_FLOW -.-> SESSION_MGR
+    
+    classDef controller fill:#e8f5e8
+    classDef protocol fill:#e1f5fe
+    classDef device fill:#f3e5f5
+    classDef flow fill:#fff3e0
+    
+    class MAIN,DEVICE_MGR,SESSION_MGR,NETWORK controller
+    class JSON_TCP,USB_API,FILE_SYS,LOGGING protocol
+    class ANDROID,WEBCAM,STORAGE device
+    class CMD_FLOW,STATUS_FLOW,DATA_FLOW,LOG_FLOW flow
+```
+
 #### Message Structure
 
 All messages follow a consistent JSON structure:

@@ -17,6 +17,70 @@ This document defines the data contracts, file formats, network protocols, and A
 
 ## Session Metadata Schema
 
+### Session Management Data Flow
+
+```mermaid
+graph TB
+    subgraph "Session Lifecycle"
+        CREATE[Session Creation]
+        METADATA[Generate Metadata]
+        DEVICES[Device Registration]
+        RECORDING[Recording Phase]
+        LOGGING[Event Logging]
+        COMPLETION[Session Completion]
+    end
+    
+    subgraph "Data Structures"
+        SESSION_META[session_metadata.json]
+        EVENT_LOG[session_log.json]
+        DEVICE_STATE[device_states.json]
+        FILE_INDEX[file_index.json]
+    end
+    
+    subgraph "File System"
+        SESSION_DIR[Session Directory]
+        RAW_DATA[Raw Data Files]
+        PROCESSED[Processed Data]
+        LOGS[Log Files]
+    end
+    
+    subgraph "API Layer"
+        SESSION_API[Session Management API]
+        FILE_API[File Management API]
+        QUERY_API[Query Interface]
+    end
+    
+    %% Flow connections
+    CREATE --> METADATA
+    METADATA --> SESSION_META
+    DEVICES --> DEVICE_STATE
+    RECORDING --> LOGGING
+    LOGGING --> EVENT_LOG
+    COMPLETION --> FILE_INDEX
+    
+    %% Storage connections
+    SESSION_META --> SESSION_DIR
+    EVENT_LOG --> LOGS
+    DEVICE_STATE --> SESSION_DIR
+    RAW_DATA --> SESSION_DIR
+    PROCESSED --> SESSION_DIR
+    
+    %% API connections
+    SESSION_API --> SESSION_META
+    FILE_API --> FILE_INDEX
+    QUERY_API --> EVENT_LOG
+    
+    classDef lifecycle fill:#e8f5e8
+    classDef data fill:#e1f5fe
+    classDef storage fill:#f3e5f5
+    classDef api fill:#fff3e0
+    
+    class CREATE,METADATA,DEVICES,RECORDING,LOGGING,COMPLETION lifecycle
+    class SESSION_META,EVENT_LOG,DEVICE_STATE,FILE_INDEX data
+    class SESSION_DIR,RAW_DATA,PROCESSED,LOGS storage
+    class SESSION_API,FILE_API,QUERY_API api
+```
+
 ### session_metadata.json Format
 
 The session metadata file follows a standardized JSON schema that ensures consistency across all recording sessions:

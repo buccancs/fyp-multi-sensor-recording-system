@@ -45,6 +45,54 @@ Before beginning any recording session with the Shimmer3 GSR+, ensure all prereq
 - [ ] **Electromagnetic Interference**: Minimal WiFi/cellular interference
 - [ ] **Movement Constraints**: Stable environment for motion-sensitive measurements
 
+### Shimmer3 GSR+ Setup Workflow
+
+```mermaid
+flowchart TD
+    A[Start Setup] --> B[Hardware Inspection]
+    B --> C{Device Charged?}
+    C -->|No| D[Charge Device]
+    D --> C
+    C -->|Yes| E[Prepare Electrodes]
+    
+    E --> F[Clean Skin with Alcohol]
+    F --> G[Apply Conductive Gel]
+    G --> H[Attach Electrodes]
+    
+    H --> I[Choose Connection Method]
+    I --> J[PC Direct Connection]
+    I --> K[Android Mediated]
+    I --> L[Hybrid PC+Android]
+    
+    J --> M[Start pyshimmer]
+    K --> N[Launch Android App]
+    L --> O[Coordinate Both Systems]
+    
+    M --> P[Device Discovery]
+    N --> P
+    O --> P
+    
+    P --> Q{Device Found?}
+    Q -->|No| R[Check Bluetooth/Pairing]
+    R --> P
+    Q -->|Yes| S[Configure Sensors]
+    
+    S --> T[Set Sampling Rate]
+    T --> U[Enable GSR Channel]
+    U --> V[Start Recording]
+    V --> W[Monitor Data Quality]
+    
+    classDef hardware fill:#ffe6cc
+    classDef software fill:#e6f3ff
+    classDef decision fill:#fff2e6
+    classDef action fill:#e6ffe6
+    
+    class B,E,F,G,H hardware
+    class M,N,O,S,T,U software
+    class C,Q decision
+    class A,D,I,P,V,W action
+```
+
 ## Step-by-Step Setup Guide
 
 ### Step 1: Device Preparation and Placement

@@ -31,6 +31,86 @@ Before using the application, ensure the following:
 
 ### Interface Modes
 
+The Multi-Sensor Recording System provides two interface modes optimized for different use cases and user preferences.
+
+#### Interface Navigation Structure
+
+```mermaid
+graph TD
+    subgraph "Application Launch"
+        START[📱 App Launch]
+        CHOICE{Select Interface Mode}
+    end
+    
+    subgraph "Direct Mode (MainActivity)"
+        MAIN[🎬 MainActivity]
+        RECORD[▶️ Record Button]
+        PREVIEW[👁️ Camera Preview]
+        STATUS[📊 Device Status]
+        CALIBRATE[🎯 Quick Calibration]
+    end
+    
+    subgraph "Navigation Mode (MainNavigationActivity)"
+        NAV[🧭 MainNavigationActivity]
+        
+        TAB1[📹 Recording Tab]
+        TAB2[📱 Devices Tab]
+        TAB3[🎯 Calibration Tab]
+        TAB4[📁 Files Tab]
+        
+        RECORD_FULL[▶️ Full Recording Interface]
+        DEVICE_MGT[⚙️ Device Management]
+        CAL_SYS[🎯 Calibration System]
+        FILE_MGT[📁 File Management]
+    end
+    
+    subgraph "Shared Features"
+        NETWORK[📶 Network Status]
+        SETTINGS[⚙️ Settings]
+        HELP[❓ Help System]
+    end
+    
+    %% Navigation flows
+    START --> CHOICE
+    CHOICE -->|Quick Access| MAIN
+    CHOICE -->|Full Features| NAV
+    
+    MAIN --> RECORD
+    MAIN --> PREVIEW
+    MAIN --> STATUS
+    MAIN --> CALIBRATE
+    
+    NAV --> TAB1
+    NAV --> TAB2
+    NAV --> TAB3
+    NAV --> TAB4
+    
+    TAB1 --> RECORD_FULL
+    TAB2 --> DEVICE_MGT
+    TAB3 --> CAL_SYS
+    TAB4 --> FILE_MGT
+    
+    %% Shared access
+    MAIN --> NETWORK
+    NAV --> NETWORK
+    MAIN --> SETTINGS
+    NAV --> SETTINGS
+    MAIN --> HELP
+    NAV --> HELP
+    
+    classDef start fill:#e8f5e8
+    classDef direct fill:#e1f5fe
+    classDef navigation fill:#f3e5f5
+    classDef shared fill:#fff3e0
+    classDef decision fill:#ffebee
+    
+    class START start
+    class MAIN,RECORD,PREVIEW,STATUS,CALIBRATE direct
+    class NAV,TAB1,TAB2,TAB3,TAB4,RECORD_FULL,DEVICE_MGT,CAL_SYS,FILE_MGT navigation
+    class NETWORK,SETTINGS,HELP shared
+    class CHOICE decision
+```
+
 #### 1. Direct Mode (MainActivity)
 
 **When to Use**: Quick recording sessions, immediate camera access, single-operator use
