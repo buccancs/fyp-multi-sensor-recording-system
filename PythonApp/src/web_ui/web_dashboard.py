@@ -58,7 +58,7 @@ class WebDashboardServer:
     through a responsive web interface.
     """
     
-    def __init__(self, host: str = '0.0.0.0', port: int = 5000, debug: bool = False):
+    def __init__(self, host: str = '0.0.0.0', port: int = 5000, debug: bool = False, controller=None):
         """
         Initialize the web dashboard server.
         
@@ -66,10 +66,12 @@ class WebDashboardServer:
             host: Server host address (default: '0.0.0.0' for all interfaces)
             port: Server port (default: 5000)
             debug: Enable Flask debug mode
+            controller: Controller instance for real backend integration
         """
         self.host = host
         self.port = port
         self.debug = debug
+        self.controller = controller  # For real backend integration
         
         # Initialize Flask app
         self.app = Flask(__name__, 
@@ -166,10 +168,19 @@ class WebDashboardServer:
         
         @self.app.route('/api/session/start', methods=['POST'])
         def api_session_start():
-            """Start a new recording session."""
+            """Start a new recording session using real network protocols."""
             try:
                 config = request.get_json() or {}
                 session_id = f"web_session_{int(time.time())}"
+                
+                # Use real controller to start session via network protocols
+                if self.controller and hasattr(self.controller, 'start_recording_session'):
+                    success = self.controller.start_recording_session(session_id)
+                    if not success:
+                        logger.error(f"Controller failed to start session: {session_id}")
+                        return jsonify({'success': False, 'error': 'Failed to start session via network protocols'}), 500
+                else:
+                    logger.warning("No controller available - falling back to local session tracking")
                 
                 self.session_info.update({
                     'active': True,
@@ -184,7 +195,7 @@ class WebDashboardServer:
                     }
                 })
                 
-                logger.info(f"Recording session started via web interface: {session_id}")
+                logger.info(f"Recording session started via web interface using network protocols: {session_id}")
                 self._broadcast_session_update()
                 
                 return jsonify({'success': True, 'session_id': session_id})
@@ -195,10 +206,20 @@ class WebDashboardServer:
         
         @self.app.route('/api/session/stop', methods=['POST'])
         def api_session_stop():
-            """Stop the current recording session."""
+            """Stop the current recording session using real network protocols."""
             try:
                 if self.session_info['active']:
                     session_id = self.session_info['session_id']
+                    
+                    # Use real controller to stop session via network protocols
+                    if self.controller and hasattr(self.controller, 'stop_recording_session'):
+                        success = self.controller.stop_recording_session()
+                        if not success:
+                            logger.error(f"Controller failed to stop session: {session_id}")
+                            return jsonify({'success': False, 'error': 'Failed to stop session via network protocols'}), 500
+                    else:
+                        logger.warning("No controller available - falling back to local session tracking")
+                    
                     self.session_info.update({
                         'active': False,
                         'session_id': None,
@@ -206,7 +227,7 @@ class WebDashboardServer:
                         'duration': 0
                     })
                     
-                    logger.info(f"Recording session stopped via web interface: {session_id}")
+                    logger.info(f"Recording session stopped via web interface using network protocols: {session_id}")
                     self._broadcast_session_update()
                     
                     return jsonify({'success': True, 'session_id': session_id})

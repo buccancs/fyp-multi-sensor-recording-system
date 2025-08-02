@@ -108,8 +108,13 @@ class WebDashboardIntegration:
             return True
         
         try:
-            # Create and start the web server
-            self.web_server = WebDashboardServer(host='0.0.0.0', port=self.web_port, debug=False)
+            # Create and start the web server with controller integration
+            self.web_server = WebDashboardServer(
+                host='0.0.0.0', 
+                port=self.web_port, 
+                debug=False,
+                controller=self.controller  # Pass controller for network protocol integration
+            )
             self.web_server.start_server()
             self.is_running = True
             
@@ -118,7 +123,7 @@ class WebDashboardIntegration:
             # Connect to controller if available
             if self.controller is not None:
                 self._connect_to_controller()
-                logger.info(f"Connected web dashboard to {'WebController' if self.using_web_controller else 'MainController'}")
+                logger.info(f"Connected web dashboard to {'WebController' if self.using_web_controller else 'MainController'} with network protocol integration")
             else:
                 logger.warning("No controller available for real data integration")
             

@@ -160,26 +160,36 @@ class WebController:
     
     def _connect_to_services(self):
         """Connect to backend service events and data streams."""
-        # Connect to session manager
-        if self.session_manager:
-            # We would connect to session manager events here
-            # For now, we'll poll for status updates
-            pass
+        # Initialize and start Android device manager (uses network protocols)
+        if self.android_device_manager:
+            try:
+                # Initialize the Android device manager (starts network server on port 9000)
+                if self.android_device_manager.initialize():
+                    logger.info("AndroidDeviceManager network server started on port 9000")
+                    
+                    # Connect to device events
+                    self.android_device_manager.add_status_callback(self._on_android_device_status)
+                    self.android_device_manager.add_data_callback(self._on_android_sensor_data)
+                    self.android_device_manager.add_session_callback(self._on_android_session_event)
+                    
+                    logger.info("Connected to AndroidDeviceManager network protocols")
+                else:
+                    logger.error("Failed to initialize AndroidDeviceManager network server")
+            except Exception as e:
+                logger.error(f"Error connecting to AndroidDeviceManager: {e}")
         
         # Connect to shimmer manager
         if self.shimmer_manager:
-            # Connect to Shimmer events
-            pass
+            try:
+                # Initialize shimmer manager if needed
+                if hasattr(self.shimmer_manager, 'initialize'):
+                    self.shimmer_manager.initialize()
+                logger.info("Connected to ShimmerManager")
+            except Exception as e:
+                logger.error(f"Error connecting to ShimmerManager: {e}")
         
-        # Connect to Android device manager
-        if self.android_device_manager:
-            # Connect to Android device events
-            pass
-        
-        # Connect to JSON server
-        if self.json_server:
-            # Connect to network events
-            pass
+        # Note: JsonSocketServer is redundant since AndroidDeviceManager includes network server
+        # We only use AndroidDeviceManager which provides the JSON socket server functionality
     
     def start_monitoring(self):
         """Start monitoring backend services for status updates."""
@@ -198,7 +208,128 @@ class WebController:
         if self._monitoring_thread:
             self._monitoring_thread.join(timeout=5)
         
+        # Cleanup network services
+        if self.android_device_manager:
+            try:
+                self.android_device_manager.shutdown()
+                logger.info("AndroidDeviceManager network server stopped")
+            except Exception as e:
+                logger.error(f"Error stopping AndroidDeviceManager: {e}")
+        
         logger.info("WebController monitoring stopped")
+    
+    def _on_android_device_status(self, device_id: str, android_device):
+        """Handle real Android device status updates from network protocols."""
+        try:
+            # Convert AndroidDevice object to status dict
+            status_data = {
+                'type': 'android',
+                'status': 'connected' if android_device.connected else 'disconnected',
+                'battery': android_device.status.get('battery', 0),
+                'temperature': android_device.status.get('temperature', 0),
+                'storage': android_device.status.get('storage', 0),
+                'recording': android_device.is_recording,
+                'capabilities': android_device.capabilities,
+                'connection_time': android_device.connection_time,
+                'messages_received': android_device.messages_received,
+                'data_samples': android_device.data_samples_received
+            }
+            
+            # Emit to web dashboard
+            self.device_status_received.emit(device_id, status_data)
+            logger.debug(f"Real Android device status update: {device_id}")
+            
+        except Exception as e:
+            logger.error(f"Error processing Android device status: {e}")
+    
+    def _on_android_sensor_data(self, shimmer_data_sample):
+        """Handle real Shimmer sensor data from Android devices via network protocols."""
+        try:
+            # Convert ShimmerDataSample to sensor data dict
+            sensor_data = {
+                'timestamp': shimmer_data_sample.timestamp,
+                'device_id': shimmer_data_sample.android_device_id,
+                'shimmer_device_id': shimmer_data_sample.device_id,
+                'session_id': shimmer_data_sample.session_id,
+                **shimmer_data_sample.sensor_values  # GSR, accelerometer, etc.
+            }
+            
+            # Emit to web dashboard
+            self.sensor_data_received.emit(shimmer_data_sample.android_device_id, sensor_data)
+            logger.debug(f"Real sensor data from {shimmer_data_sample.android_device_id}")
+            
+        except Exception as e:
+            logger.error(f"Error processing Android sensor data: {e}")
+    
+    def _on_android_session_event(self, session_info):
+        """Handle real session events from Android devices."""
+        try:
+            session_active = session_info.end_time is None
+            session_id = session_info.session_id
+            
+            # Emit session status change
+            self.session_status_changed.emit(session_id, session_active)
+            
+            if session_active:
+                self.recording_started.emit(session_id)
+                logger.info(f"Real session started via network: {session_id}")
+            else:
+                duration = session_info.end_time - session_info.start_time
+                self.recording_stopped.emit(session_id, duration)
+                logger.info(f"Real session ended via network: {session_id} ({duration:.1f}s)")
+                
+        except Exception as e:
+            logger.error(f"Error processing Android session event: {e}")
+    
+    def start_recording_session(self, session_id: str) -> bool:
+        """Start recording session using real network protocols."""
+        try:
+            if self.android_device_manager:
+                # Use real network protocols to start session on connected Android devices
+                success = self.android_device_manager.start_session(
+                    session_id=session_id,
+                    record_shimmer=True,
+                    record_video=True, 
+                    record_thermal=True
+                )
+                
+                if success:
+                    self._current_session_id = session_id
+                    logger.info(f"Started real recording session via network: {session_id}")
+                    return True
+                else:
+                    logger.error(f"Failed to start recording session: {session_id}")
+                    return False
+            else:
+                logger.warning("No AndroidDeviceManager available for real session control")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error starting recording session: {e}")
+            return False
+    
+    def stop_recording_session(self) -> bool:
+        """Stop recording session using real network protocols."""
+        try:
+            if self.android_device_manager and self._current_session_id:
+                # Use real network protocols to stop session on connected Android devices
+                success = self.android_device_manager.stop_session()
+                
+                if success:
+                    old_session = self._current_session_id
+                    self._current_session_id = None
+                    logger.info(f"Stopped real recording session via network: {old_session}")
+                    return True
+                else:
+                    logger.error("Failed to stop recording session")
+                    return False
+            else:
+                logger.warning("No active session or AndroidDeviceManager to stop")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error stopping recording session: {e}")
+            return False
     
     def _monitoring_loop(self):
         """Main monitoring loop that polls backend services for updates."""
@@ -592,16 +723,12 @@ def create_web_controller_with_real_components():
     try:
         if ANDROID_DEVICE_MANAGER_AVAILABLE:
             android_device_manager = AndroidDeviceManager(server_port=9000)
-            logger.info("Created AndroidDeviceManager")
+            logger.info("Created AndroidDeviceManager with network server on port 9000")
     except Exception as e:
         logger.error(f"Failed to create AndroidDeviceManager: {e}")
     
-    try:
-        if JSON_SOCKET_SERVER_AVAILABLE:
-            json_server = JsonSocketServer(host='0.0.0.0', port=9000)
-            logger.info("Created JsonSocketServer")
-    except Exception as e:
-        logger.error(f"Failed to create JsonSocketServer: {e}")
+    # Note: JsonSocketServer not needed since AndroidDeviceManager includes network server
+    # json_server = None  # Removed to avoid port conflict
     
     try:
         if WEBCAM_CAPTURE_AVAILABLE:
@@ -610,12 +737,12 @@ def create_web_controller_with_real_components():
     except Exception as e:
         logger.error(f"Failed to create WebcamCapture: {e}")
     
-    # Inject dependencies
+    # Inject dependencies (excluding redundant json_server)
     controller.inject_dependencies(
         session_manager=session_manager,
         shimmer_manager=shimmer_manager,
         android_device_manager=android_device_manager,
-        json_server=json_server,
+        json_server=None,  # Not needed - AndroidDeviceManager includes network server
         webcam_capture=webcam_capture
     )
     
