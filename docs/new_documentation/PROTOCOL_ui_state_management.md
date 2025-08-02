@@ -961,4 +961,59 @@ data class ValidationResult(
 
 This protocol document provides the comprehensive data contract for the Multi-Sensor Recording System's UI architecture. By adhering to these specifications, developers can ensure consistent, reliable, and maintainable UI state management throughout the application lifecycle.
 
+## Output File Formats and Data Export Specifications
+
+The UI State Management system generates various output files for state persistence, debugging, and analytics.
+
+### 1. UI State Persistence Files
+
+**Application State Backup (ui_state_backup.json):**
+```json
+{
+  "stateBackup": {
+    "timestamp": "2024-01-31T10:45:00.000Z",
+    "version": "1.2.3",
+    "mainUiState": {
+      "currentTab": "RECORDING",
+      "recordingState": "ACTIVE",
+      "connectedDevices": 4,
+      "sessionId": "session_20240131_103000"
+    },
+    "userPreferences": {
+      "theme": "DARK",
+      "language": "en_US",
+      "autoSaveInterval": 300,
+      "enableNotifications": true
+    },
+    "deviceStates": [
+      {
+        "deviceId": "android_device_001",
+        "connectionStatus": "CONNECTED",
+        "lastSyncTime": "2024-01-31T10:44:55.000Z",
+        "batterLevel": 85
+      }
+    ]
+  }
+}
+```
+
+### 2. UI Performance Metrics Files
+
+**Performance Report (ui_performance.csv):**
+```csv
+Timestamp,Component,Operation,Duration_ms,MemoryUsage_mb,CPUUsage_percent,UserInteraction
+2024-01-31T10:30:00.000Z,RecordingTab,StateUpdate,25,42.1,12.5,true
+2024-01-31T10:30:01.000Z,DeviceList,Refresh,150,45.2,15.8,false
+2024-01-31T10:30:02.000Z,VideoPreview,FrameUpdate,16,38.9,8.2,false
+```
+
+### 3. UI Error Logs
+
+**UI Error Log (ui_errors.log):**
+```
+2024-01-31T10:30:00.000Z [ERROR] [RecordingTab] State validation failed: invalid device count
+2024-01-31T10:30:05.000Z [WARN] [ThemeManager] Theme resource not found, using default
+2024-01-31T10:30:10.000Z [INFO] [StateManager] Successfully recovered from corrupted state
+```
+
 The formal API definitions, state validation rules, and communication protocols establish a solid foundation for scalable UI development while maintaining system integrity and user experience quality.
