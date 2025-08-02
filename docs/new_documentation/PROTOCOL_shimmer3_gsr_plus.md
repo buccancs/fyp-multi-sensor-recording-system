@@ -1,5 +1,14 @@
 # Shimmer3 GSR+ Device: Protocol and Data Contract Documentation
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Data Structures and Formats](#data-structures-and-formats)
+- [Network Communication Protocols](#network-communication-protocols)
+- [API Specifications](#api-specifications)
+- [File Format Specifications](#file-format-specifications)
+- [Error Codes and Status Messages](#error-codes-and-status-messages)
+
 ## Overview
 
 This document defines the comprehensive data formats, API specifications, and network message protocols for Shimmer3 GSR+ device integration within the Multi-Sensor Recording System. The protocol specifications ensure consistent data exchange, interoperability, and reliable communication across all system components.

@@ -1,5 +1,16 @@
 # Python Desktop Controller Application - Protocol Documentation
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Network Communication Protocol](#network-communication-protocol)
+- [USB Device Integration](#usb-device-integration)
+- [File System Data Formats](#file-system-data-formats)
+- [API Reference](#api-reference)
+- [Logging and Monitoring Protocols](#logging-and-monitoring-protocols)
+- [Error Codes and Handling](#error-codes-and-handling)
+- [Protocol Versioning](#protocol-versioning)
+
 ## Overview
 
 This document defines the data contracts, network protocols, and API specifications for the Python Desktop Controller Application. The controller communicates with Android devices via JSON over TCP sockets and manages USB devices through native system APIs.

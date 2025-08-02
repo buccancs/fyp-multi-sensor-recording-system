@@ -1,5 +1,14 @@
 # Networking and Communication Protocol - Data Contracts and Message Specifications
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Protocol Foundation](#protocol-foundation)
+- [Core Message Types](#core-message-types)
+- [Protocol Flow Patterns](#protocol-flow-patterns)
+- [Data Format Specifications](#data-format-specifications)
+- [Configuration Parameters](#configuration-parameters)
+
 ## Overview
 
 This document defines the comprehensive data contracts, message formats, and network protocols used for communication between the PC controller and Android devices in the Multi-Sensor Recording System. All communication follows a standardized JSON-based protocol with strict schema validation and versioning support.

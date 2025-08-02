@@ -1,5 +1,10 @@
 # UI State Management Protocol
 
+## Table of Contents
+
+- [Data Contract and API Specification](#data-contract-and-api-specification)
+  - [Overview](#overview)
+
 ## Data Contract and API Specification
 
 ### Overview

@@ -1,5 +1,16 @@
 # Session Management and Data Storage - Protocol Documentation
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Session Metadata Schema](#session-metadata-schema)
+- [Session Event Log Schema](#session-event-log-schema)
+- [File Naming Conventions](#file-naming-conventions)
+- [Directory Structure Protocol](#directory-structure-protocol)
+- [Session Management API](#session-management-api)
+- [Network Protocol Messages](#network-protocol-messages)
+- [Data Format Specifications](#data-format-specifications)
+
 ## Overview
 
 This document defines the data contracts, file formats, network protocols, and APIs used by the Session Management and Data Storage System. It serves as the authoritative reference for developers implementing integrations or extending the system functionality.
