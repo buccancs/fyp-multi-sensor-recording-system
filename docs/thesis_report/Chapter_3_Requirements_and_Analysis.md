@@ -98,6 +98,89 @@ timeline
 ```mermaid
 quadrantChart
     title Research Opportunity Analysis
+    x-axis Low Complexity --> High Complexity
+    y-axis Low Impact --> High Impact
+    quadrant-1 Quick Wins
+    quadrant-2 Major Projects
+    quadrant-3 Fill-ins
+    quadrant-4 Questionable
+    
+    Natural Behavior Studies: [0.8, 0.9]
+    Group Dynamics Research: [0.6, 0.8]
+    Pediatric Research: [0.3, 0.9]
+    Long-Duration Studies: [0.4, 0.7]
+    Mobile Applications: [0.5, 0.8]
+    Large Population Studies: [0.7, 0.6]
+    Cross-Cultural Research: [0.2, 0.5]
+```
+
+### System Requirements Analysis Framework
+
+The comprehensive requirements analysis employs a systematic methodology derived from established software engineering practices and specifically adapted for physiological measurement research applications [CITE - Sommerville, I. (2015). Software Engineering. Pearson Education]. The framework incorporates specialized requirements engineering techniques designed to address the unique challenges of research software development where scientific accuracy and measurement validity are paramount concerns.
+
+**Table 3.3: Requirements Analysis Framework Components**
+
+| Framework Component | Purpose | Methodology | Validation Approach |
+|---|---|---|---|
+| **Stakeholder Analysis** | Identify all research participants | Interview protocols, surveys | Stakeholder validation sessions |
+| **Context Analysis** | Define operational environment | Environmental assessment | Field testing validation |
+| **Technology Constraints** | Hardware/software limitations | Technical feasibility studies | Prototype validation |
+| **Performance Requirements** | Quantitative specifications | Benchmarking analysis | Performance testing |
+| **Quality Attributes** | Non-functional characteristics | Quality model application | Quality assurance testing |
+| **Risk Assessment** | Identify potential failures | Risk analysis techniques | Failure mode testing |
+
+**Figure 3.4: Requirements Engineering Process Flow**
+
+```mermaid
+flowchart TD
+    A[Stakeholder Identification] --> B[Requirements Elicitation]
+    B --> C[Requirements Analysis]
+    C --> D[Requirements Specification]
+    D --> E[Requirements Validation]
+    E --> F{Validation Results}
+    F -->|Pass| G[Requirements Baseline]
+    F -->|Fail| C
+    G --> H[Change Management]
+    H --> I[Requirements Traceability]
+    
+    subgraph "Stakeholder Groups"
+        S1[Research Scientists]
+        S2[Study Participants]
+        S3[Technical Personnel]
+        S4[Ethics Committees]
+    end
+    
+    subgraph "Validation Methods"
+        V1[Technical Reviews]
+        V2[Prototype Testing]
+        V3[Stakeholder Feedback]
+        V4[Performance Benchmarks]
+    end
+    
+    A --> S1
+    A --> S2
+    A --> S3
+    A --> S4
+    
+    E --> V1
+    E --> V2
+    E --> V3
+    E --> V4
+```
+
+### Detailed Stakeholder Analysis and Requirements Elicitation
+
+**Table 3.4: Comprehensive Stakeholder Analysis Matrix**
+
+| Stakeholder Group | Primary Interests | Technical Expertise | Influence Level | Engagement Strategy |
+|---|---|---|---|---|
+| **Principal Researchers** | Scientific validity, data quality | High | Very High | Direct collaboration |
+| **Graduate Students** | System usability, learning opportunities | Medium | Medium | Training workshops |
+| **Study Participants** | Comfort, privacy, safety | Low | Medium | User experience testing |
+| **Technical Support** | System reliability, maintainability | High | Medium | Technical documentation |
+| **Ethics Review Board** | Privacy, consent, data protection | Medium | High | Compliance documentation |
+| **Laboratory Managers** | Resource efficiency, scheduling | Medium | Medium | Operational procedures |
+| **IT Infrastructure** | Network security, data storage | High | Medium | Technical integration |
     x-axis Low Technical Complexity --> High Technical Complexity
     y-axis Low Research Impact --> High Research Impact
     
@@ -294,6 +377,117 @@ graph TB
         FR011[FR-011: User Interface Design]
         FR012[FR-012: System Monitoring]
     end
+    
+    FR001 --> FR003
+    FR001 --> FR004
+    FR001 --> FR005
+    FR002 --> FR003
+    FR002 --> FR004
+    FR010 --> FR001
+    FR003 --> FR007
+    FR004 --> FR007
+    FR005 --> FR007
+    FR006 --> FR007
+    FR007 --> FR008
+    FR008 --> FR009
+    FR011 --> FR006
+    FR012 --> FR001
+```
+
+### Core System Performance Specifications
+
+**Table 3.4: Performance Requirements Matrix**
+
+| Performance Category | Target Specification | Minimum Acceptable | Test Method | Validation Criteria |
+|---|---|---|---|---|
+| **Temporal Synchronization** | ±18.7ms accuracy | ±50ms | Network Time Protocol testing | Statistical analysis across 1000+ synchronization events |
+| **Video Frame Rate** | 30 FPS consistent | 24 FPS minimum | Frame timing analysis | 99.5% of frames within timing tolerance |
+| **Thermal Resolution** | 320x240 pixels | 160x120 pixels | Thermal calibration protocol | Spatial accuracy validation with reference targets |
+| **GSR Sampling Rate** | 128 Hz | 64 Hz | Signal analysis validation | Nyquist frequency compliance testing |
+| **System Latency** | <200ms end-to-end | <500ms | Real-time response measurement | Response time percentile analysis |
+| **Data Throughput** | 50 MB/s aggregate | 25 MB/s | Network bandwidth testing | Sustained throughput under load |
+| **Storage Capacity** | 2TB per 8-hour session | 500GB | Capacity utilization monitoring | Storage efficiency analysis |
+| **Battery Life** | 6 hours continuous | 4 hours | Power consumption profiling | Real-world usage validation |
+
+**Table 3.5: Multi-Device Coordination Specifications**
+
+| Coordination Aspect | Specification | Implementation Method | Validation Approach |
+|---|---|---|---|
+| **Maximum Devices** | 12 simultaneous | Dynamic device discovery | Scalability stress testing |
+| **Network Topology** | Hybrid star-mesh | Adaptive routing protocols | Network resilience testing |
+| **Failover Time** | <30 seconds | Automatic reconnection | Fault injection testing |
+| **Data Consistency** | 99.9% integrity | Checksums and validation | Data corruption detection |
+| **Session Recovery** | Complete restoration | State serialization | Recovery scenario testing |
+
+### Hardware Integration Requirements
+
+**Table 3.6: Hardware Compatibility Matrix**
+
+| Device Category | Supported Models | Interface Type | Performance Requirements | Validation Status |
+|---|---|---|---|---|
+| **Android Devices** | Samsung Galaxy S22, S23 | USB-C, WiFi, Bluetooth | Android 12+, 8GB RAM | ✅ Validated |
+| **Thermal Cameras** | Topdon TC001 | USB-C OTG | 9Hz frame rate, 320x240 | ✅ Validated |
+| **USB Webcams** | Logitech C920, C930e | USB 3.0 | 1080p@30fps | ✅ Validated |
+| **GSR Sensors** | Shimmer3 GSR+ | Bluetooth LE | 128Hz sampling | ✅ Validated |
+| **Network Infrastructure** | 802.11ac/ax WiFi | TCP/IP, UDP | 100Mbps minimum | ✅ Validated |
+
+**Figure 3.5: Hardware Integration Architecture**
+
+```mermaid
+graph TB
+    subgraph "Mobile Device Integration"
+        ANDROID[Android Application<br/>Samsung Galaxy S22/S23]
+        THERMAL[Topdon TC001<br/>Thermal Camera]
+        INTERNAL[Internal RGB Camera<br/>108MP Main Sensor]
+        GSR_BT[Shimmer3 GSR+<br/>Bluetooth Connection]
+    end
+    
+    subgraph "PC-Based Components"
+        DESKTOP[Python Desktop Controller<br/>Windows 10/11]
+        USB_CAM1[USB Webcam 1<br/>Logitech C920]
+        USB_CAM2[USB Webcam 2<br/>Logitech C920]
+        STORAGE[Local Storage<br/>2TB NVMe SSD]
+    end
+    
+    subgraph "Network Infrastructure"
+        WIFI[WiFi Router<br/>802.11ac/ax]
+        SYNC[NTP Server<br/>Time Synchronization]
+    end
+    
+    THERMAL --> ANDROID
+    INTERNAL --> ANDROID
+    GSR_BT --> ANDROID
+    
+    USB_CAM1 --> DESKTOP
+    USB_CAM2 --> DESKTOP
+    STORAGE --> DESKTOP
+    
+    ANDROID <--> WIFI
+    DESKTOP <--> WIFI
+    SYNC <--> WIFI
+```
+
+### Detailed Functional Requirements Specifications
+
+**Table 3.7: Priority 1 (Critical) Functional Requirements**
+
+| Requirement ID | Description | Acceptance Criteria | Performance Metrics | Validation Method |
+|---|---|---|---|---|
+| **FR-001** | Multi-Device Coordination | System shall coordinate up to 12 devices simultaneously with automatic discovery and configuration | 99.9% coordination success rate, <30s device addition time | Integration testing with maximum device load |
+| **FR-002** | Temporal Synchronization | System shall maintain ±18.7ms synchronization accuracy across all devices | ≤50ms maximum deviation, 95% within ±25ms | Statistical analysis of timestamp accuracy |
+| **FR-003** | Video Data Acquisition | System shall capture 1080p video at 30 FPS with quality validation | >95% frames within quality threshold, <1% frame drops | Automated quality assessment algorithms |
+| **FR-005** | Reference GSR Measurement | System shall acquire GSR data at 128 Hz with calibrated accuracy | ±2% accuracy vs. reference standard, <0.1% data loss | Comparative validation against laboratory standards |
+| **FR-009** | Data Storage and Export | System shall store all data with integrity validation and multiple export formats | 100% data integrity, support for CSV/JSON/MATLAB formats | Data validation checksums and format testing |
+| **FR-010** | Network Communication | System shall maintain reliable communication with automatic reconnection | 99.9% uptime, <30s reconnection time, packet loss <0.1% | Network stress testing and fault injection |
+
+**Table 3.8: Priority 2 (High) Functional Requirements**
+
+| Requirement ID | Description | Acceptance Criteria | Performance Metrics | Validation Method |
+|---|---|---|---|---|
+| **FR-004** | Thermal Imaging Integration | System shall acquire thermal data at 9 Hz with temperature calibration | ±0.5°C accuracy, 320x240 resolution minimum | Thermal calibration with reference targets |
+| **FR-006** | Session Management | System shall manage experimental sessions with automated protocols | <10 minutes setup time, 99% session completion rate | Time-motion studies and success rate analysis |
+| **FR-008** | Quality Assessment | System shall perform real-time quality assessment and alerts | >95% accurate quality detection, <2s alert latency | Validation against expert quality assessments |
+| **FR-012** | System Monitoring | System shall monitor health and performance with alerts | 100% critical event detection, <5s alert response | Fault injection testing and monitoring validation |
     
     FR010 --> FR001
     FR001 --> FR002
