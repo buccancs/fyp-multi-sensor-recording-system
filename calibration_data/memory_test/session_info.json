@@ -4,7 +4,7 @@
   "device_ids": [
     "device_1"
   ],
-  "start_time": "2025-08-02T23:53:21.663683",
+  "start_time": "2025-08-02T23:59:27.816987",
   "pattern_type": "chessboard",
   "pattern_size": [
     9,
@@ -12,7 +12,7 @@
   ],
   "square_size": 25.0,
   "status": "completed",
-  "end_time": "2025-08-02T23:53:22.181981",
+  "end_time": "2025-08-02T23:59:28.335622",
   "total_captures": {
     "device_1": 0
   },
