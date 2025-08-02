@@ -114,6 +114,82 @@ The documentation is organized into three interconnected components, each servin
 | **3** | 680kΩ - 4.7MΩ | 0.2-1.5 μS | Very dry skin, special populations |
 | **4** | Auto-Range | Dynamic | Long-term monitoring, unknown conditions |
 
+## Comprehensive Research and Technical Documentation
+
+### Academic Research and Context
+
+#### [Academic Research and Literature Review](README_academic_research.md)
+**Audience**: Researchers and Academic Users  
+**Purpose**: Comprehensive academic context, literature review, and research contributions
+
+**Key Contents**:
+- Literature review and background research in contactless physiological monitoring
+- Theoretical foundations including Beer-Lambert Law and signal processing theory
+- Research contributions and innovations in multi-sensor calibration systems
+- Advanced statistical analysis framework with machine learning integration
+- Academic validation framework with peer review criteria
+- Performance evaluation with statistical significance testing
+
+**When to Use**: Understanding research context, academic validation, literature background
+
+#### [Project Context and Objectives](README_project_context.md)
+**Audience**: Developers and Project Managers  
+**Purpose**: Complete project specification, technology rationale, and implementation strategy
+
+**Key Contents**:
+- Research problem definition and scientific motivation
+- Technical requirements and system constraints specifications
+- Technology stack rationale with detailed evaluation framework
+- Implementation strategy and development methodology
+- Success metrics and evaluation criteria
+- Risk management framework and contingency planning
+
+**When to Use**: Project planning, technology selection, implementation guidance
+
+### Advanced Technical Documentation
+
+#### [Validation Methodology and Formal Verification](README_validation_methodology.md)
+**Audience**: Quality Assurance Engineers and Researchers  
+**Purpose**: Formal validation framework and automated verification processes
+
+**Key Contents**:
+- Formal validation algebra and component verification theory
+- Automated verification algorithms with mathematical proofs
+- Statistical validation methods with hypothesis testing
+- Accessibility verification and WCAG compliance framework
+- Performance validation with real-time constraint monitoring
+- Continuous validation pipeline and quality metrics
+
+**When to Use**: Quality assurance, formal verification, statistical validation
+
+#### [Computer Vision Methodology](README_computer_vision.md)
+**Audience**: Computer Vision Engineers and ML Researchers  
+**Purpose**: Comprehensive computer vision pipeline for physiological monitoring
+
+**Key Contents**:
+- Optical and physiological foundations including light-tissue interactions
+- Signal processing pipeline with ROI detection and feature extraction
+- Advanced computer vision techniques including deep learning approaches
+- Multi-modal feature fusion strategies for GSR prediction
+- Performance optimization for real-time mobile processing
+- Implementation architecture with detailed code examples
+
+**When to Use**: Computer vision implementation, physiological signal processing, ML model development
+
+#### [Design Patterns and Performance Analysis](README_design_patterns.md)
+**Audience**: Software Architects and Performance Engineers  
+**Purpose**: Architectural design patterns analysis and performance optimization
+
+**Key Contents**:
+- Comprehensive design pattern analysis (Observer, Strategy, Command patterns)
+- Mathematical performance models and complexity analysis
+- Scalability analysis with empirical benchmarking results
+- Optimization strategies for pattern implementations
+- Memory management and real-time constraint validation
+- Future pattern evolution and emerging requirements
+
+**When to Use**: System architecture, performance optimization, scalability planning
+
 ## External Resources and References
 
 ### Official Shimmer Research Resources
@@ -163,6 +239,11 @@ The documentation is organized into three interconnected components, each servin
 **Wearable Sensor Applications**:
 - Picard, R. W., et al. (2001). Affective wearables. *Personal Technologies*, 1(4), 231-240
 - Schmidt, P., et al. (2018). Introducing WESAD, a multimodal dataset for wearable stress and affect detection. *ICMI '18: Proceedings of the 2018 on International Conference on Multimodal Interaction*
+
+**Computer Vision and Physiological Monitoring**:
+- Verkruysse, W., et al. (2008). Remote plethysmographic imaging using ambient light. *Optics Express*, 16(26), 21434-21445
+- Poh, M. Z., et al. (2010). Non-contact, automated cardiac pulse measurements using video imaging and blind source separation. *Optics Express*, 18(10), 10762-10774
+- Wang, W., et al. (2017). Algorithmic principles of remote PPG. *IEEE Transactions on Biomedical Engineering*, 64(7), 1479-1491
 
 ## Integration Examples
 
