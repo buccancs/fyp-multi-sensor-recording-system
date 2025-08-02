@@ -122,6 +122,7 @@ class StatusDisplayController @Inject constructor() {
     private var statusThemeConfig = StatusThemeConfig()
     private var statusUpdateInterval = DEFAULT_UPDATE_INTERVAL
     private val customMetrics = mutableMapOf<String, Any>()
+    private var isMonitoringActive = false
     
     // Battery monitoring receiver
     private val batteryReceiver = object : BroadcastReceiver() {
@@ -283,8 +284,21 @@ class StatusDisplayController @Inject constructor() {
             }
         }
         statusUpdateHandler.post(updateRunnable)
+        isMonitoringActive = true
         
         android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Periodic status updates started")
+    }
+    
+    /**
+     * Stops periodic status updates
+     */
+    private fun stopPeriodicStatusUpdates() {
+        if (::statusUpdateHandler.isInitialized) {
+            statusUpdateHandler.removeCallbacksAndMessages(null)
+        }
+        isMonitoringActive = false
+        
+        android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Periodic status updates stopped")
     }
     
     /**
