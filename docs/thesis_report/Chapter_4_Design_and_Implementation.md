@@ -51,7 +51,7 @@ Performance optimization manifests through several interconnected architectural 
 
 The system topology reflects the sophisticated hybrid star-mesh pattern that provides both the operational simplicity of centralized coordination and the resilience and flexibility of distributed operation [CITE - Peterson, L.L., & Davie, B.S. (2011). Computer networks: a systems approach. Morgan Kaufmann]. The topology supports dynamic reconfiguration during operation, enabling researchers to add or remove devices based on evolving experimental requirements without disrupting ongoing data collection from other participants or compromising measurement quality for concurrent sessions.
 
-The architectural topology design systematically addresses fundamental challenges in distributed physiological measurement systems while incorporating lessons learned from established distributed computing patterns and proven architectural approaches [CITE - Bernstein, P.A., & Newcomer, E. (2009). Principles of transaction processing. Morgan Kaufmann]. The topology enables efficient resource utilization across heterogeneous hardware while maintaining the precise coordination requirements essential for multi-modal physiological research applications that demand temporal precision and measurement accuracy comparable to traditional laboratory equipment.
+**Figure 4.1: Multi-Sensor Recording System Architecture Overview**
 
 ```mermaid
 graph TB
@@ -98,6 +98,165 @@ graph TB
     SESSION <--> A4
     
     S1 -.-> A1
+    S2 -.-> A2
+    T1 -.-> A3
+    T2 -.-> A4
+    W1 --> PC
+    W2 --> PC
+    
+    A1 --> LOCAL_BUFFER
+    A2 --> LOCAL_BUFFER
+    A3 --> LOCAL_BUFFER
+    A4 --> LOCAL_BUFFER
+    
+    LOCAL_BUFFER --> NETWORK_SYNC
+    NETWORK_SYNC --> CENTRAL_STORAGE
+    
+    style PC fill:#e1f5fe
+    style SYNC fill:#fff3e0
+    style SESSION fill:#f3e5f5
+    style A1 fill:#e8f5e8
+    style A2 fill:#e8f5e8
+    style A3 fill:#e8f5e8
+    style A4 fill:#e8f5e8
+```
+
+**Table 4.1: System Component Specifications**
+
+| Component | Technology Stack | Primary Function | Performance Requirements | Integration Method |
+|---|---|---|---|---|
+| **PC Controller** | Python 3.9+, FastAPI, SQLAlchemy | Central coordination and management | ≥8GB RAM, Quad-core CPU | REST API + WebSocket |
+| **Android Devices** | Android 11+, Kotlin, Camera2 API | Video/thermal data acquisition | ≥6GB RAM, 128GB storage | WebSocket communication |
+| **Shimmer3 GSR+** | Bluetooth LE, proprietary SDK | Reference physiological measurement | 128Hz sampling, ±0.1µS resolution | Bluetooth LE protocol |
+| **Topdon TC001** | USB Video Class, thermal SDK | Thermal imaging capture | 256x192 resolution, 9Hz frame rate | USB integration |
+| **USB Webcams** | DirectShow/V4L2, OpenCV | RGB video capture | 1920x1080@30fps, auto-focus | OpenCV VideoCapture |
+| **Network Infrastructure** | WiFi 802.11ac, Gigabit Ethernet | Data communication backbone | ≥100Mbps throughput, <10ms latency | TCP/WebSocket protocols |
+
+**Figure 4.2: Data Flow and Processing Pipeline**
+
+```mermaid
+flowchart TD
+    subgraph "Data Acquisition Layer"
+        CAM[Camera Sensors]
+        THERMAL[Thermal Sensors] 
+        GSR[GSR Sensors]
+    end
+    
+    subgraph "Local Processing Layer"
+        ANDROID[Android Processing]
+        BUFFER[Local Buffering]
+        COMPRESS[Data Compression]
+        VALIDATE[Quality Validation]
+    end
+    
+    subgraph "Network Communication Layer"
+        PROTOCOL[WebSocket Protocol]
+        ENCRYPT[Data Encryption]
+        SYNC[Time Synchronization]
+        TRANSFER[Data Transfer]
+    end
+    
+    subgraph "Central Processing Layer"
+        RECEIVE[Data Reception]
+        AGGREGATE[Data Aggregation]
+        ANALYSIS[Real-time Analysis]
+        STORAGE[Persistent Storage]
+    end
+    
+    subgraph "Quality Assurance Layer"
+        MONITOR[Quality Monitoring]
+        ALERT[Alert System]
+        RECOVERY[Error Recovery]
+        REPORT[Status Reporting]
+    end
+    
+    CAM --> ANDROID
+    THERMAL --> ANDROID
+    GSR --> ANDROID
+    
+    ANDROID --> BUFFER
+    BUFFER --> COMPRESS
+    COMPRESS --> VALIDATE
+    
+    VALIDATE --> PROTOCOL
+    PROTOCOL --> ENCRYPT
+    ENCRYPT --> SYNC
+    SYNC --> TRANSFER
+    
+    TRANSFER --> RECEIVE
+    RECEIVE --> AGGREGATE
+    AGGREGATE --> ANALYSIS
+    ANALYSIS --> STORAGE
+    
+    ANALYSIS --> MONITOR
+    MONITOR --> ALERT
+    ALERT --> RECOVERY
+    RECOVERY --> REPORT
+    
+    REPORT -.-> ANDROID
+    
+    style CAM fill:#ffeb3b
+    style THERMAL fill:#ff5722
+    style GSR fill:#4caf50
+    style STORAGE fill:#3f51b5
+```
+
+**Table 4.2: Network Communication Protocol Specifications**
+
+| Protocol Layer | Technology | Purpose | Performance Metrics | Security Features |
+|---|---|---|---|---|
+| **Transport Layer** | WebSocket over TLS 1.3 | Bidirectional real-time communication | <50ms latency, 99.9% reliability | End-to-end encryption |
+| **Application Layer** | JSON-based messaging | Structured data exchange | <10ms parsing time | Message integrity validation |
+| **Synchronization** | NTP + custom compensation | Temporal alignment | ±25ms precision | Tamper-resistant timestamps |
+| **Discovery Layer** | mDNS/Bonjour | Automatic device discovery | <30s discovery time | Certificate-based authentication |
+| **Error Recovery** | Automatic reconnection | Fault tolerance | <15s recovery time | Session state preservation |
+| **Data Integrity** | CRC32 + MD5 checksums | Corruption detection | 100% error detection | Cryptographic signatures |
+
+**Figure 4.3: Hybrid Star-Mesh Network Topology**
+
+```mermaid
+graph TB
+    subgraph "Master Coordinator (Star Center)"
+        MASTER[PC Controller<br/>Central Hub]
+    end
+    
+    subgraph "Primary Data Collection Nodes"
+        NODE1[Android Device 1<br/>Primary Camera]
+        NODE2[Android Device 2<br/>Thermal Imaging]
+        NODE3[Android Device 3<br/>GSR Reference]
+        NODE4[Android Device 4<br/>Secondary Camera]
+    end
+    
+    subgraph "Redundant Communication Mesh"
+        NODE1 <--> NODE2
+        NODE2 <--> NODE3
+        NODE3 <--> NODE4
+        NODE4 <--> NODE1
+        NODE1 <--> NODE3
+        NODE2 <--> NODE4
+    end
+    
+    subgraph "External Sensor Integration"
+        THERMAL_EXT[External Thermal Camera]
+        GSR_EXT[External GSR Sensor]
+        WEBCAM[USB Webcam Array]
+    end
+    
+    MASTER <--> NODE1
+    MASTER <--> NODE2
+    MASTER <--> NODE3
+    MASTER <--> NODE4
+    
+    MASTER --> THERMAL_EXT
+    MASTER --> GSR_EXT
+    MASTER --> WEBCAM
+    
+    style MASTER fill:#1565c0,color:#ffffff
+    style NODE1 fill:#2e7d32,color:#ffffff
+    style NODE2 fill:#f57c00,color:#ffffff
+    style NODE3 fill:#c62828,color:#ffffff
+    style NODE4 fill:#6a1b9a,color:#ffffff
+```
     S2 -.-> A2
     T1 -.-> A1
     T2 -.-> A2
