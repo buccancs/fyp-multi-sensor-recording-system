@@ -1,0 +1,47 @@
+# Enhanced Test Requirements for CI/CD Pipeline - Updated January 2025
+# Core testing framework - Latest stable versions
+pytest>=8.4.0
+pytest-cov>=5.0.0
+pytest-xdist>=3.6.0
+pytest-mock>=3.14.0
+
+# Enhanced testing tools
+pytest-html>=4.1.0
+pytest-benchmark>=4.0.0
+pytest-asyncio>=0.23.0
+pytest-timeout>=2.3.0
+pytest-randomly>=3.15.0
+pytest-clarity>=1.0.1
+
+# Code quality and security - Latest stable
+bandit[toml]>=1.8.0
+safety>=3.3.0
+mypy>=1.17.0
+black>=25.1.0
+isort>=5.13.0
+flake8>=7.3.0
+pylint>=3.3.0
+
+# Performance and memory analysis
+memory-profiler
+psutil
+line-profiler
+
+# Coverage and reporting
+coverage[toml]
+codecov
+
+# Documentation - Latest stable
+sphinx
+sphinx-rtd-theme
+
+# Development utilities
+pre-commit
+tox
+
+# Additional testing tools for comprehensive coverage
+pytest-datadir
+pytest-fixtures
+pytest-mock-resources
+pytest-repeat
+pytest-rerunfailures
