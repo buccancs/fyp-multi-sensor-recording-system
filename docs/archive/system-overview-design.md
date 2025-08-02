@@ -11,6 +11,23 @@
 - [5. Directory Structure and Organization](#5-directory-structure-and-organization)
 - [6. Technology Stack](#6-technology-stack)
 - [7. Integration Patterns](#7-integration-patterns)
+- [8. Related Documentation](#8-related-documentation)
+
+## Related Documentation
+
+**This document is part of the archive collection. For comprehensive documentation, see:**
+
+### Primary Documentation
+- **Complete System Architecture**: `../new_documentation/README_system_architecture.md`
+- **Technical Implementation Guide**: `../new_documentation/README_technical_implementation.md`
+- **System Operation Manual**: `../new_documentation/USER_GUIDE_system_operation.md`
+
+### Component Documentation
+- **Android Application**: `../new_documentation/README_Android_Mobile_Application.md`
+- **Python Desktop Controller**: `../new_documentation/README_python_desktop_controller.md`
+- **Multi-Device Synchronization**: `../new_documentation/README_Multi_Device_Synchronization.md`
+
+**Complete Navigation**: `../new_documentation/INDEX.md`
 
 ## 1. Introduction
 
@@ -153,9 +170,21 @@ bucika_gsr/
 │   ├── analysis/            # Data analysis algorithms
 │   └── requirements.txt     # Python dependencies
 ├── docs/                    # Comprehensive documentation
-│   ├── technical/           # Technical specifications
-│   ├── user-guides/         # User documentation
-│   └── api/                 # API reference materials
+│   ├── new_documentation/   # Modern consolidated documentation (43 files)
+│   │   ├── README_*.md      # Component technical deep-dives
+│   │   ├── USER_GUIDE_*.md  # Practical user guides
+│   │   ├── PROTOCOL_*.md    # Data contracts and specifications
+│   │   └── INDEX.md         # Complete navigation roadmap
+│   ├── archive/             # Preserved authoritative specifications (6 files)
+│   │   ├── DeviceClient_Protocol_Specification_v2.md
+│   │   ├── system-overview-design.md
+│   │   ├── REPOSITORY_COMPONENT_INVENTORY.md
+│   │   ├── TODO_DOCUMENTATION.md
+│   │   ├── TODO_NetworkController.md
+│   │   └── README.md        # Archive index
+│   ├── technical/           # Legacy technical specifications
+│   ├── user-guides/         # Legacy user documentation
+│   └── api/                 # Schema and API specifications
 ├── tools/                   # Development utilities and scripts
 │   ├── calibration/         # Calibration utilities
 │   ├── testing/             # Testing frameworks
@@ -215,3 +244,28 @@ Device control operations are implemented using command patterns that enable que
 
 ### Strategy Pattern for Algorithm Selection
 Analysis algorithms are implemented using strategy patterns that enable runtime selection of processing approaches based on data characteristics, performance requirements, and research objectives. This flexibility allows the system to adapt to different experimental protocols without requiring code modifications.
+
+## 8. Related Documentation
+
+This system overview is complemented by comprehensive documentation:
+
+### Complete Documentation Suite
+- **Navigation Index**: `../new_documentation/INDEX.md`
+- **Detailed Architecture**: `../new_documentation/README_system_architecture.md`
+- **Implementation Guide**: `../new_documentation/README_technical_implementation.md`
+
+### Component Documentation
+- **Android Application**: `../new_documentation/README_Android_Mobile_Application.md`
+- **Python Desktop Controller**: `../new_documentation/README_python_desktop_controller.md`
+- **Networking Protocol**: `../new_documentation/README_networking_protocol.md`
+
+### Protocol Specifications
+- **System API Reference**: `../new_documentation/PROTOCOL_system_api_reference.md`
+- **Data Models**: `../new_documentation/PROTOCOL_data_models_and_file_organization.md`
+- **DeviceClient Protocol**: `DeviceClient_Protocol_Specification_v2.md` (this archive)
+
+### User Guides
+- **System Operation**: `../new_documentation/USER_GUIDE_system_operation.md`
+- **Multi-Device Setup**: `../new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
+
+**Last Updated**: January 2025 (Post-consolidation)

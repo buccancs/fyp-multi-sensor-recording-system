@@ -4,6 +4,16 @@
 
 This document provides a comprehensive inventory of every significant feature, component, and module in the **bucika_gsr** multi-sensor synchronized recording system repository.
 
+**Last Updated**: January 2025 (Post-Documentation Consolidation)
+
+## Related Documentation
+
+**This inventory is part of the archive collection. For current implementation guides, see:**
+- **Complete System API**: `../new_documentation/PROTOCOL_system_api_reference.md`
+- **Android Application Guide**: `../new_documentation/README_Android_Mobile_Application.md`
+- **Python Desktop Controller**: `../new_documentation/README_python_desktop_controller.md`
+- **Complete Navigation**: `../new_documentation/INDEX.md`
+
 ---
 
 ## **System Architecture Overview**
@@ -368,11 +378,29 @@ The repository implements a **multi-platform, multi-sensor synchronized recordin
 
 ## **10. File Statistics**
 
+**Post-Consolidation Statistics (January 2025):**
+
+### Code Implementation
 - **Total Python Files**: 141 files
 - **Total Kotlin/Java Files**: 186 files
 - **Major Modules**: 10+ distinct functional areas
 - **Test Files**: 25+ comprehensive test implementations
-- **Documentation Files**: 20+ consolidated and archived documents
+
+### Documentation Structure
+- **New Documentation**: 43 comprehensive files in `docs/new_documentation/`
+  - 15 README_*.md (Technical deep-dives)
+  - 11 USER_GUIDE_*.md (Practical user guides)  
+  - 14 PROTOCOL_*.md (Data contracts and specifications)
+  - 3 Supporting files (INDEX.md, schemas, quick references)
+- **Archive Documentation**: 6 preserved authoritative files in `docs/archive/`
+- **Legacy Documentation**: Organized in `docs/technical/`, `docs/user-guides/`, `docs/api/`
+- **Total Reduction**: 84% file reduction (37→6) in archive while enhancing content quality
+
+### Documentation Impact
+- **Content Volume**: 300KB+ of new consolidated documentation
+- **Coverage**: Research-grade documentation suitable for academic review
+- **Organization**: Component-first approach with role-based navigation
+- **Maintenance**: Single source of truth for each topic area
 
 ---
 
@@ -389,3 +417,21 @@ This repository implements a sophisticated **multi-sensor synchronized recording
 7. **Quality Assurance** - Code quality, security, and performance validation
 
 The system serves as a complete research platform enabling synchronized multi-modal data collection with precision timing and comprehensive session management capabilities.
+
+## References to Current Implementation
+
+### Updated Documentation Structure
+For current implementation details and comprehensive guides, refer to:
+
+- **System Architecture**: `../new_documentation/README_system_architecture.md`
+- **Implementation Guides**: `../new_documentation/README_technical_implementation.md`
+- **Component APIs**: `../new_documentation/PROTOCOL_system_api_reference.md`
+- **User Documentation**: `../new_documentation/USER_GUIDE_system_operation.md`
+
+### Component-Specific Documentation
+- **Android Application**: `../new_documentation/README_Android_Mobile_Application.md`
+- **Python Desktop Controller**: `../new_documentation/README_python_desktop_controller.md`
+- **Networking Protocol**: `../new_documentation/README_networking_protocol.md`
+- **Session Management**: `../new_documentation/README_session_management.md`
+
+**Complete Navigation**: See `../new_documentation/INDEX.md` for role-based quick-start recommendations and comprehensive document relationships.
