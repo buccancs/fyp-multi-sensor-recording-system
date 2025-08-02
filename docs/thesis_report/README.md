@@ -296,3 +296,24 @@ The project successfully bridges the gap between academic research requirements 
 - Educational content supports research methodology training and implementation guidance
 
 This thesis report provides comprehensive documentation of a significant research software development project while contributing novel technical innovations and research methodologies applicable to the broader computer science and research instrumentation communities.
+
+## Component Documentation Reference
+
+This thesis report provides high-level academic analysis and evaluation. For detailed technical implementation information, users should consult the comprehensive component-specific documentation available in the `docs/new_documentation/` directory:
+
+**Core System Documentation:**
+- Android Mobile Application: `README_Android_Mobile_Application.md`, `USER_GUIDE_Android_Mobile_Application.md`, `PROTOCOL_Android_Mobile_Application.md`
+- Python Desktop Controller: `README_python_desktop_controller.md`, `USER_GUIDE_python_desktop_controller.md`, `PROTOCOL_python_desktop_controller.md`  
+- Multi-Device Synchronization: `README_Multi_Device_Synchronization.md`, `USER_GUIDE_Multi_Device_Synchronization.md`, `PROTOCOL_Multi_Device_Synchronization.md`
+- Camera Recording System: `README_CameraRecorder.md`, `USER_GUIDE_CameraRecorder.md`, `PROTOCOL_CameraRecorder.md`
+- Session Management: `README_session_management.md`, `USER_GUIDE_session_management.md`, `PROTOCOL_session_management.md`
+
+**Hardware Integration Documentation:**
+- Shimmer3 GSR+ Integration: `README_shimmer3_gsr_plus.md`, `USER_GUIDE_shimmer3_gsr_plus.md`, `PROTOCOL_shimmer3_gsr_plus.md`
+- TopDon TC001 Thermal Camera: `README_topdon_tc001.md`, `USER_GUIDE_topdon_tc001.md`, `PROTOCOL_topdon_tc001.md`
+
+**Supporting Infrastructure Documentation:**
+- Testing Framework: `README_testing_qa_framework.md`, `USER_GUIDE_testing_qa_framework.md`, `PROTOCOL_testing_qa_framework.md`
+- Networking Protocol: `README_networking_protocol.md`, `USER_GUIDE_networking_protocol.md`, `PROTOCOL_networking_protocol.md`
+
+Each component follows the established documentation pattern with technical deep-dive (README), practical user guide (USER_GUIDE), and data contract specification (PROTOCOL) documents.
