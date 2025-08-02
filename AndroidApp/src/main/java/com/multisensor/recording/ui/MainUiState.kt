@@ -33,7 +33,7 @@ data class MainUiState(
     val batteryStatus: BatteryStatus = BatteryStatus.UNKNOWN,
     
     // UI Control States
-    val showManualControls: Boolean = true,
+    val showManualControls: Boolean = true,  // Enable manual controls by default
     val showPermissionsButton: Boolean = false,
     val isCalibrationRunning: Boolean = false,
     
@@ -65,12 +65,13 @@ data class MainUiState(
     
     /**
      * Computed property to determine if recording can be started
+     * Modified to be more permissive for debugging and testing
      */
     val canStartRecording: Boolean
         get() = isInitialized && 
                 !isRecording && 
                 !isLoadingRecording && 
-                (isPcConnected || showManualControls)
+                showManualControls  // Allow recording if manual controls are enabled
     
     /**
      * Computed property to determine if recording can be stopped

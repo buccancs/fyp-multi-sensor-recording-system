@@ -40,6 +40,15 @@ class MainViewModel
 
         init {
             logger.info("MainViewModel initialized with centralized UiState")
+            
+            // Ensure initial state allows manual controls by default
+            updateUiState { currentState ->
+                currentState.copy(
+                    statusText = "Initializing application...",
+                    showManualControls = true,
+                    showPermissionsButton = false
+                )
+            }
         }
         
         /**
@@ -71,10 +80,14 @@ class MainViewModel
 
                     if (!cameraInitialized) {
                         logger.error("Camera initialization failed")
+                        // Don't fail completely - allow manual controls to work
                         updateUiState { currentState ->
                             currentState.copy(
-                                errorMessage = "Failed to initialize camera",
-                                showErrorDialog = true
+                                statusText = "Camera initialization failed - Manual controls available",
+                                isInitialized = true,  // Still allow other functionality
+                                isLoadingPermissions = false,
+                                showManualControls = true,
+                                errorMessage = "Camera not available, but other functions may work"
                             )
                         }
                     }
@@ -106,7 +119,8 @@ class MainViewModel
                             isLoadingPermissions = false,
                             isThermalConnected = thermalInitialized,
                             isShimmerConnected = shimmerInitialized,
-                            thermalPreviewAvailable = thermalInitialized
+                            thermalPreviewAvailable = thermalInitialized,
+                            showManualControls = true  // Always enable manual controls for testing/debugging
                         )
                     }
                     
@@ -118,7 +132,44 @@ class MainViewModel
                             errorMessage = "System initialization failed: ${e.message}",
                             statusText = "Initialization failed",
                             isLoadingPermissions = false,
-                            showErrorDialog = true
+                            showErrorDialog = true,
+                            isInitialized = true,  // Enable basic UI even on error
+                            showManualControls = true
+                        )
+                    }
+                }
+            }
+        }
+        
+        /**
+         * Fallback initialization that ensures UI functionality even with partial permissions
+         * This allows users to access basic functionality and troubleshoot issues
+         */
+        fun initializeSystemWithFallback() {
+            viewModelScope.launch {
+                try {
+                    logger.info("Initializing system with fallback mode...")
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Basic initialization - Some features may be limited",
+                            isInitialized = true,
+                            isLoadingPermissions = false,
+                            showManualControls = true,
+                            showPermissionsButton = true
+                        )
+                    }
+                    
+                    logger.info("Fallback initialization complete - UI should be functional")
+                } catch (e: Exception) {
+                    logger.error("Fallback initialization error", e)
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Error during initialization",
+                            isInitialized = true,  // Still enable basic UI
+                            showManualControls = true,
+                            showPermissionsButton = true,
+                            errorMessage = "Initialization error: ${e.message}"
                         )
                     }
                 }
