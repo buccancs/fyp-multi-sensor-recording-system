@@ -4,11 +4,27 @@
 
 This test suite implements the requirement to **"create a test that starts the PC app and the Android app through the IntelliJ IDE and tries all the buttons based on the navigation graph, knowing what follows what and checks if it was successful or not. also log everything"**.
 
-### Running the Complete Test Suite
+### Running Multiple Full Test Suites
 
 ```bash
-# Run the complete IDE integration test suite
-cd /home/runner/work/bucika_gsr/bucika_gsr
+# Run all focused test suites using the orchestrator
+./gradlew runAllFullTestSuites
+
+# Or run individual focused test suites:
+./gradlew runRecordingFullTest              # Recording functionality only
+./gradlew runDeviceManagementFullTest       # Device management only  
+./gradlew runCalibrationFullTest            # Calibration functionality only
+./gradlew runFileManagementFullTest         # File operations only
+./gradlew runNetworkConnectivityFullTest    # Network protocols only
+```
+
+### Running Legacy Comprehensive Test Suite
+
+```bash
+# Run the original comprehensive IDE integration test suite
+./gradlew runIDEIntegrationTest
+
+# Or run it directly
 python test_ide_integration_suite.py
 ```
 
@@ -16,34 +32,52 @@ python test_ide_integration_suite.py
 
 ```bash
 # Python UI test only
-cd PythonApp
-python test_python_ui_integration.py
+./gradlew runPythonUITest
 
 # Android UI test only (requires connected device)
-./gradlew :AndroidApp:runIDEIntegrationUITest
+./gradlew runIDEIntegrationUITest
 ```
 
 ## What It Tests
 
-### ✅ Python Desktop Application
-- **Tab Navigation**: Recording, Devices, Calibration, Files tabs
-- **Button Interactions**: All buttons in each tab (start/stop recording, device connections, calibration controls, file operations)
-- **Navigation Flows**: Multi-step navigation sequences
-- **Menu Functionality**: File, Edit, View, Tools, Help menus
-- **Status Indicators**: Connection status, recording status, device status
+### 🎯 Multiple Focused Test Suites
 
-### ✅ Android Mobile Application
-- **Navigation Drawer**: All main navigation items (Recording, Devices, Calibration, Files)
-- **Bottom Navigation**: Quick access buttons (Record, Monitor, Calibrate)
-- **Fragment Testing**: Button interactions in each fragment
-- **Activity Testing**: Settings, Network Config, Shimmer Config activities
-- **Navigation Flows**: Complex navigation paths between screens
+Each test suite is a complete, standalone test that can run independently:
 
-### ✅ Cross-Platform Coordination
-- **Synchronized Launch**: Both apps launched through IntelliJ/Gradle
-- **Comprehensive Logging**: All interactions logged with timestamps
-- **Success Validation**: Each button click and navigation validated
-- **Performance Metrics**: Response times measured for all interactions
+#### ✅ Recording Functionality Full Test Suite
+- **Complete Recording Workflows**: Start/stop recording, preview controls, session management
+- **Recording Settings**: Configuration validation and persistence
+- **Multi-Device Recording**: Synchronized recording across platforms
+- **Error Handling**: Recording failure scenarios and recovery
+
+#### ✅ Device Management Full Test Suite  
+- **Device Discovery**: Scanning and device enumeration
+- **Connection Management**: Pairing, connection establishment, status monitoring
+- **Multi-Device Coordination**: Managing multiple simultaneous device connections
+- **Device Settings**: Configuration and parameter management
+
+#### ✅ Calibration Full Test Suite
+- **Camera Calibration**: Complete calibration workflows and algorithms
+- **Calibration Data Processing**: Data validation and quality assessment
+- **Settings Management**: Calibration parameter configuration
+- **Results Validation**: Calibration output verification
+
+#### ✅ File Management Full Test Suite
+- **Data Export/Import**: File operations and data transfer workflows
+- **Storage Management**: Space monitoring and file organization
+- **File Operations**: Browse, delete, compress operations
+- **Data Integrity**: File validation and consistency checks
+
+#### ✅ Network Connectivity Full Test Suite
+- **Protocol Testing**: JSON socket communication validation
+- **Connection Resilience**: Network failure and recovery scenarios
+- **Data Synchronization**: Cross-platform communication testing
+- **Error Handling**: Network timeout and retry mechanisms
+
+### ✅ Legacy Comprehensive Test Suite
+- **Complete System Test**: All functionality tested in single comprehensive run
+- **Navigation Graph**: Complete Android navigation testing
+- **Cross-Platform Integration**: Coordinated PC and Android testing
 
 ## Test Results
 
@@ -83,12 +117,42 @@ python test_python_ui_integration.py
 - **Error Recovery**: Continues testing after individual failures
 - **Device Flexibility**: Works with connected Android devices or simulation
 
-## Architecture
+## Test Architecture
 
-### Three-Layer Testing Architecture
+### Multiple Full Test Suites Architecture
 
 ```
-IDE Integration Test Suite
+Multiple Full Test Suites
+├── Recording Full Test Suite (test_recording_full_suite.py)
+│   ├── Recording workflows and state management
+│   ├── Preview controls and video streams
+│   └── Cross-platform recording coordination
+├── Device Management Full Test Suite (test_device_management_full_suite.py)
+│   ├── Device discovery and connection workflows
+│   ├── Multi-device management and coordination
+│   └── Device settings and status monitoring
+├── Calibration Full Test Suite (test_calibration_full_suite.py)
+│   ├── Camera calibration algorithms and workflows
+│   ├── Calibration data processing and validation
+│   └── Settings persistence and quality assessment
+├── File Management Full Test Suite (test_file_management_full_suite.py)
+│   ├── Data export/import and file operations
+│   ├── Storage management and organization
+│   └── Data integrity and validation
+├── Network Connectivity Full Test Suite (test_network_connectivity_full_suite.py)
+│   ├── Protocol testing and communication validation
+│   ├── Network resilience and error handling
+│   └── Cross-platform data synchronization
+└── All Test Suites Orchestrator (test_all_full_suites.py)
+    ├── Sequential or parallel execution of all suites
+    ├── Comprehensive reporting across all functional areas
+    └── Aggregated success/failure analysis
+```
+
+### Legacy Comprehensive Architecture
+
+```
+IDE Integration Test Suite (Legacy)
 ├── Main Coordinator (test_ide_integration_suite.py)
 │   ├── Launches both applications via Gradle
 │   ├── Coordinates test execution
