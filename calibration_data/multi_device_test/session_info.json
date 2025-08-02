@@ -1,12 +1,12 @@
 {
   "session_name": "multi_device_test",
-  "session_folder": "calibration_data\\multi_device_test",
+  "session_folder": "calibration_data/multi_device_test",
   "device_ids": [
     "device_1",
     "device_2",
     "device_3"
   ],
-  "start_time": "2025-07-30T05:14:11.144609",
+  "start_time": "2025-08-02T23:53:22.196262",
   "pattern_type": "chessboard",
   "pattern_size": [
     9,
