@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupQuickActions() {
         // Calibration
-        binding.calibrateButton.setOnClickListener {
+        binding.calibrationButton.setOnClickListener {
             try {
                 val intent = Intent(this, com.multisensor.recording.ui.CalibrationActivity::class.java)
                 startActivity(intent)
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupFloatingActionButton() {
-        binding.fabSettings.setOnClickListener {
+        binding.settingsFab.setOnClickListener {
             try {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         binding.recordButton.text = if (uiState.isRecording) "Stop Recording" else "Start Recording"
         
         // Recording status
-        binding.recordingStatusText.text = when {
+        binding.recordingStatus.text = when {
             uiState.isRecording -> "Recording in progress..."
             uiState.canStartRecording -> "Ready to record"
             else -> "Cannot record - check connections"
@@ -192,28 +192,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateDeviceStatusIndicators(uiState: MainUiState) {
-        // Update device status indicators with color-coded dots
-        updateStatusIndicator(binding.pcStatusText, uiState.isPcConnected)
-        updateStatusIndicator(binding.shimmerStatusText, uiState.isShimmerConnected)
-        updateStatusIndicator(binding.thermalStatusText, uiState.isThermalConnected)
-        updateStatusIndicator(binding.networkStatusText, uiState.isNetworkConnected)
+        // Update device status chips with connection status
+        updateStatusChip(binding.pcStatusChip, "PC", uiState.isPcConnected)
+        updateStatusChip(binding.shimmerStatusChip, "Shimmer", uiState.isShimmerConnected)
+        updateStatusChip(binding.thermalStatusChip, "Thermal", uiState.isThermalConnected)
+        updateStatusChip(binding.networkStatusChip, "Network", uiState.isNetworkConnected)
     }
-
-    private fun updateStatusIndicator(textView: com.google.android.material.textview.MaterialTextView, isConnected: Boolean) {
-        textView.text = "●"
-        textView.setTextColor(
-            if (isConnected) {
-                resources.getColor(R.color.status_connected, theme)
-            } else {
-                resources.getColor(R.color.status_disconnected, theme)
-            }
-        )
+    
+    private fun updateStatusChip(chip: com.google.android.material.chip.Chip, deviceName: String, isConnected: Boolean) {
+        chip.text = "$deviceName: ${if (isConnected) "Connected" else "Disconnected"}"
+        chip.isChecked = isConnected
     }
 
     private fun updateStorageInfo(uiState: MainUiState) {
         val usedPercentage = uiState.storageUsagePercentage
-        binding.storageProgressBar.progress = usedPercentage
-        binding.storageText.text = "${formatBytes(uiState.storageAvailable)} available"
+        binding.storageProgress.progress = usedPercentage
+        binding.storageLabel.text = "${formatBytes(uiState.storageAvailable)} available (${uiState.sessionCount} sessions)"
     }
 
     private fun updateToolbarSubtitle(uiState: MainUiState) {

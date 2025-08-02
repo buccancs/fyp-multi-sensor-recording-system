@@ -275,7 +275,7 @@ class UIController @Inject constructor() {
                 updateRecordingIndicator(state.isRecording)
                 
                 // Update streaming indicator and debug overlay
-                updateStreamingIndicator(state.isStreaming, state.streamingFrameRate, state.streamingDataSize)
+                updateStreamingIndicator(state.isStreaming, state.streamingFrameRate.toInt(), state.streamingDataSize.toString())
                 
                 // Update permissions button visibility
                 callback?.getRequestPermissionsButton()?.visibility = if (state.showPermissionsButton) View.VISIBLE else View.GONE
@@ -401,7 +401,7 @@ class UIController @Inject constructor() {
         
         val shimmerStatusText = when {
             state.shimmerDeviceInfo != null -> {
-                "Shimmer GSR: ${state.shimmerDeviceInfo.deviceName} - Connected"
+                "Shimmer GSR: ${state.shimmerDeviceInfo.deviceId} - Connected"
             }
             state.isShimmerConnected -> "Shimmer GSR: Connected"
             else -> "Shimmer GSR: Disconnected"

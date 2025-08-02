@@ -1,6 +1,40 @@
 package com.multisensor.recording.ui
 
 /**
+ * Session information for display in UI
+ */
+data class SessionDisplayInfo(
+    val sessionId: String,
+    val startTime: Long,
+    val duration: Long,
+    val deviceCount: Int,
+    val recordingMode: String,
+    val status: String
+)
+
+/**
+ * Battery status enumeration
+ */
+enum class BatteryStatus {
+    CHARGING,
+    DISCHARGING,
+    FULL,
+    LOW,
+    UNKNOWN
+}
+
+/**
+ * Shimmer device information for display
+ */
+data class ShimmerDeviceInfo(
+    val deviceId: String,
+    val batteryLevel: Int,
+    val signalStrength: Int,
+    val isConnected: Boolean,
+    val lastDataReceived: Long?
+)
+
+/**
  * Streamlined UI State for single-dashboard interface
  * 
  * Minimalist approach focusing only on essential state properties
@@ -30,6 +64,23 @@ data class MainUiState(
     val shimmerBatteryLevel: Int = -1,
     val thermalTemperature: Float? = null,
     val networkAddress: String = "",
+    
+    // Additional device information
+    val batteryLevel: Int = -1,
+    val batteryStatus: BatteryStatus = BatteryStatus.UNKNOWN,
+    val shimmerDeviceInfo: ShimmerDeviceInfo? = null,
+    
+    // Streaming and data flow
+    val isStreaming: Boolean = false,
+    val streamingFrameRate: Double = 0.0,
+    val streamingDataSize: Long = 0L,
+    
+    // UI Control Flags
+    val showPermissionsButton: Boolean = false,
+    val showManualControls: Boolean = false,
+    
+    // Session Information
+    val currentSessionInfo: SessionDisplayInfo? = null,
     
     // Calibration State (Essential for System Readiness)
     val isCameraCalibrated: Boolean = false,

@@ -1,6 +1,9 @@
 package com.multisensor.recording.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,11 +60,7 @@ data class DevicesUiState(
     // Operation Status
     val isConnecting: Boolean = false,
     val isTesting: Boolean = false,
-    val testResults: List<String> = emptyList(),
-    
-    // Overall Status
-    val totalConnectedDevices: Int = 0,
-    val allDevicesHealthy: Boolean = false
+    val testResults: List<String> = emptyList()
 ) {
     val totalConnectedDevices: Int get() = listOf(
         isPcConnected,

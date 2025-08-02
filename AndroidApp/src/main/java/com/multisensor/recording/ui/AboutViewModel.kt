@@ -9,6 +9,8 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -96,37 +98,37 @@ class AboutViewModel @Inject constructor(
     fun refreshSystemInfo() {
         _uiState.value = _uiState.value.copy(isLoading = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+        viewModelScope.launch {
             try {
-                val systemInfo = collectSystemInfo()
-                val hardwareInfo = collectHardwareInfo()
+                val systemInfo = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    collectSystemInfo()
+                }
+                val hardwareInfo = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    collectHardwareInfo()
+                }
                 
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        androidVersion = systemInfo.androidVersion,
-                        androidApiLevel = systemInfo.androidApiLevel,
-                        deviceManufacturer = systemInfo.deviceManufacturer,
-                        deviceModel = systemInfo.deviceModel,
-                        deviceBoard = systemInfo.deviceBoard,
-                        deviceArchitecture = systemInfo.deviceArchitecture,
-                        kernelVersion = systemInfo.kernelVersion,
-                        javaVersion = systemInfo.javaVersion,
-                        totalMemory = hardwareInfo.totalMemory,
-                        availableMemory = hardwareInfo.availableMemory,
-                        totalStorage = hardwareInfo.totalStorage,
-                        availableStorage = hardwareInfo.availableStorage,
-                        processorInfo = hardwareInfo.processorInfo,
-                        screenResolution = hardwareInfo.screenResolution,
-                        screenDensity = hardwareInfo.screenDensity,
-                        cameraInfo = hardwareInfo.cameraInfo,
-                        sensorInfo = hardwareInfo.sensorInfo
-                    )
-                }
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    androidVersion = systemInfo.androidVersion,
+                    androidApiLevel = systemInfo.androidApiLevel,
+                    deviceManufacturer = systemInfo.deviceManufacturer,
+                    deviceModel = systemInfo.deviceModel,
+                    deviceBoard = systemInfo.deviceBoard,
+                    deviceArchitecture = systemInfo.deviceArchitecture,
+                    kernelVersion = systemInfo.kernelVersion,
+                    javaVersion = systemInfo.javaVersion,
+                    totalMemory = hardwareInfo.totalMemory,
+                    availableMemory = hardwareInfo.availableMemory,
+                    totalStorage = hardwareInfo.totalStorage,
+                    availableStorage = hardwareInfo.availableStorage,
+                    processorInfo = hardwareInfo.processorInfo,
+                    screenResolution = hardwareInfo.screenResolution,
+                    screenDensity = hardwareInfo.screenDensity,
+                    cameraInfo = hardwareInfo.cameraInfo,
+                    sensorInfo = hardwareInfo.sensorInfo
+                )
             } catch (e: Exception) {
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                    _uiState.value = _uiState.value.copy(isLoading = false)
-                }
+                _uiState.value = _uiState.value.copy(isLoading = false)
                 android.util.Log.e("AboutViewModel", "Failed to collect system info", e)
             }
         }

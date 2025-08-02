@@ -294,10 +294,12 @@ class CalibrationActivity : AppCompatActivity() {
         // Enable/disable data management buttons
         val hasCalibrationData = uiState.isCameraCalibrated || uiState.isThermalCalibrated || uiState.isShimmerCalibrated
         
-        binding.saveCalibrationButton.isEnabled = hasCalibrationData && !uiState.isAnyCalibrating
-        binding.exportCalibrationButton.isEnabled = hasCalibrationData && !uiState.isAnyCalibrating
-        binding.loadCalibrationButton.isEnabled = !uiState.isAnyCalibrating
-        binding.validateSystemButton.isEnabled = hasCalibrationData && !uiState.isAnyCalibrating && !uiState.isValidating
+        val isAnyCalibrating = uiState.isCameraCalibrating || uiState.isThermalCalibrating || uiState.isShimmerCalibrating
+        
+        binding.saveCalibrationButton.isEnabled = hasCalibrationData && !isAnyCalibrating
+        binding.exportCalibrationButton.isEnabled = hasCalibrationData && !isAnyCalibrating
+        binding.loadCalibrationButton.isEnabled = !isAnyCalibrating
+        binding.validateSystemButton.isEnabled = hasCalibrationData && !isAnyCalibrating && !uiState.isValidating
         
         // Update validation status
         binding.validationStatus.text = when {

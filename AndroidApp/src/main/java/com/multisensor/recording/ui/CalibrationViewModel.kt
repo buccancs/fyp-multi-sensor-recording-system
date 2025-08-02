@@ -1,6 +1,8 @@
 package com.multisensor.recording.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,8 +51,7 @@ data class CalibrationUiState(
     val validationErrors: List<String> = emptyList(),
     
     // General Status
-    val canStartCalibration: Boolean = true,
-    val isAnyCalibrating: Boolean = false
+    val canStartCalibration: Boolean = true
 ) {
     val isAnyCalibrating get() = isCameraCalibrating || isThermalCalibrating || isShimmerCalibrating || isValidating
 }
