@@ -213,6 +213,7 @@ class MainActivity : AppCompatActivity(),
 
         // Handle USB device attachment
         usbController.handleUsbDeviceIntent(this, intent)
+    }
 
     private fun handleUsbDeviceIntent(intent: Intent) {
         android.util.Log.d("MainActivity", "[DEBUG_LOG] Handling USB device intent: ${intent.action}")
