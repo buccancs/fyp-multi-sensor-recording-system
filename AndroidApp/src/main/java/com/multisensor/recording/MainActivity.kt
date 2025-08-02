@@ -59,11 +59,11 @@ class MainActivity : AppCompatActivity() {
         // Setup recording controls
         setupRecordingControls()
         
-        // Setup device status indicators
-        setupDeviceStatus()
-        
         // Setup quick actions
         setupQuickActions()
+        
+        // Setup FAB for settings
+        setupFloatingActionButton()
         
         // Setup toolbar menu
         setupToolbarMenu()
@@ -81,58 +81,11 @@ class MainActivity : AppCompatActivity() {
                 showError("Recording control failed: ${e.message}")
             }
         }
-        
-        // Camera switch button
-        binding.cameraSwitchButton.setOnClickListener {
-            try {
-                // Use existing method if available
-                showMessage("Camera switch requested")
-            } catch (e: Exception) {
-                showError("Camera switch failed: ${e.message}")
-            }
-        }
-    }
-
-    private fun setupDeviceStatus() {
-        // PC connection
-        binding.pcConnectionButton.setOnClickListener {
-            try {
-                showMessage("PC connection requested")
-            } catch (e: Exception) {
-                showError("PC connection failed: ${e.message}")
-            }
-        }
-        
-        // Shimmer connection
-        binding.shimmerConnectionButton.setOnClickListener {
-            try {
-                if (viewModel.uiState.value.isShimmerConnected) {
-                    viewModel.disconnectShimmer()
-                } else {
-                    viewModel.connectShimmer()
-                }
-            } catch (e: Exception) {
-                showError("Shimmer connection failed: ${e.message}")
-            }
-        }
-        
-        // Thermal connection
-        binding.thermalConnectionButton.setOnClickListener {
-            try {
-                if (viewModel.uiState.value.isThermalConnected) {
-                    viewModel.disconnectThermal()
-                } else {
-                    viewModel.connectThermal()
-                }
-            } catch (e: Exception) {
-                showError("Thermal connection failed: ${e.message}")
-            }
-        }
     }
 
     private fun setupQuickActions() {
         // Calibration
-        binding.calibrationButton.setOnClickListener {
+        binding.calibrateButton.setOnClickListener {
             try {
                 val intent = Intent(this, com.multisensor.recording.ui.CalibrationActivity::class.java)
                 startActivity(intent)
@@ -160,13 +113,15 @@ class MainActivity : AppCompatActivity() {
                 showError("Failed to open device management: ${e.message}")
             }
         }
-        
-        // Data transfer
-        binding.transferButton.setOnClickListener {
+    }
+
+    private fun setupFloatingActionButton() {
+        binding.fabSettings.setOnClickListener {
             try {
-                showMessage("Data transfer requested")
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
             } catch (e: Exception) {
-                showError("Data transfer failed: ${e.message}")
+                showError("Failed to open settings: ${e.message}")
             }
         }
     }
@@ -214,10 +169,7 @@ class MainActivity : AppCompatActivity() {
         updateRecordingControls(uiState)
         
         // Update device status indicators
-        updateDeviceStatus(uiState)
-        
-        // Update system status
-        updateSystemStatus(uiState)
+        updateDeviceStatusIndicators(uiState)
         
         // Update storage info
         updateStorageInfo(uiState)
@@ -233,75 +185,35 @@ class MainActivity : AppCompatActivity() {
         
         // Recording status
         binding.recordingStatusText.text = when {
-            uiState.isRecording -> "● Recording - ${formatDuration(uiState.recordingDuration)}"
-            uiState.isReadyToRecord -> "Ready to record"
-            else -> "Not ready"
+            uiState.isRecording -> "Recording in progress..."
+            uiState.canStartRecording -> "Ready to record"
+            else -> "Cannot record - check connections"
         }
-        
-        // Camera controls
-        binding.cameraSwitchButton.isEnabled = !uiState.isRecording
     }
 
-    private fun updateDeviceStatus(uiState: MainUiState) {
-        // PC connection
-        updateConnectionButton(binding.pcConnectionButton, uiState.isPcConnected, "PC")
-        binding.pcStatusText.text = if (uiState.isPcConnected) "Connected" else "Disconnected"
-        
-        // Shimmer connection
-        updateConnectionButton(binding.shimmerConnectionButton, uiState.isShimmerConnected, "Shimmer")
-        binding.shimmerStatusText.text = if (uiState.isShimmerConnected) {
-            "Connected${if (uiState.shimmerBatteryLevel > 0) " (${uiState.shimmerBatteryLevel}%)" else ""}"
-        } else "Disconnected"
-        
-        // Thermal connection
-        updateConnectionButton(binding.thermalConnectionButton, uiState.isThermalConnected, "Thermal")
-        binding.thermalStatusText.text = if (uiState.isThermalConnected) {
-            "Connected${uiState.thermalTemperature?.let { " (${String.format("%.1f°C", it)})" } ?: ""}"
-        } else "Disconnected"
-        
-        // Network status
-        binding.networkStatusText.text = if (uiState.isNetworkConnected) {
-            "Network Connected${if (uiState.networkAddress.isNotEmpty()) " (${uiState.networkAddress})" else ""}"
-        } else "Network Disconnected"
+    private fun updateDeviceStatusIndicators(uiState: MainUiState) {
+        // Update device status indicators with color-coded dots
+        updateStatusIndicator(binding.pcStatusText, uiState.isPcConnected)
+        updateStatusIndicator(binding.shimmerStatusText, uiState.isShimmerConnected)
+        updateStatusIndicator(binding.thermalStatusText, uiState.isThermalConnected)
+        updateStatusIndicator(binding.networkStatusText, uiState.isNetworkConnected)
     }
 
-    private fun updateConnectionButton(button: com.google.android.material.button.MaterialButton, 
-                                      isConnected: Boolean, deviceName: String) {
-        button.text = if (isConnected) "Disconnect $deviceName" else "Connect $deviceName"
-        button.setIconResource(if (isConnected) R.drawable.ic_disconnect else R.drawable.ic_connect)
-    }
-
-    private fun updateSystemStatus(uiState: MainUiState) {
-        binding.systemStatusText.text = when (uiState.systemHealthStatus) {
-            SystemHealthStatus.INITIALIZING -> "Initializing..."
-            SystemHealthStatus.READY -> "System Ready"
-            SystemHealthStatus.PARTIAL_CONNECTION -> "Partial Connection"
-            SystemHealthStatus.DISCONNECTED -> "Disconnected"
-            SystemHealthStatus.RECORDING -> "Recording Active"
-            SystemHealthStatus.ERROR -> "System Error"
-        }
-        
-        // Update calibration status
-        binding.calibrationStatusText.text = when {
-            uiState.isCalibrationRunning -> "Calibrating..."
-            uiState.isCameraCalibrated && uiState.isThermalCalibrated && uiState.isShimmerCalibrated -> "All Calibrated"
-            uiState.isCameraCalibrated || uiState.isThermalCalibrated || uiState.isShimmerCalibrated -> "Partially Calibrated"
-            else -> "Not Calibrated"
-        }
-        
-        binding.calibrationButton.isEnabled = uiState.canRunCalibration
+    private fun updateStatusIndicator(textView: com.google.android.material.textview.MaterialTextView, isConnected: Boolean) {
+        textView.text = "●"
+        textView.setTextColor(
+            if (isConnected) {
+                resources.getColor(R.color.status_connected, theme)
+            } else {
+                resources.getColor(R.color.status_disconnected, theme)
+            }
+        )
     }
 
     private fun updateStorageInfo(uiState: MainUiState) {
         val usedPercentage = uiState.storageUsagePercentage
-        
         binding.storageProgressBar.progress = usedPercentage
         binding.storageText.text = "${formatBytes(uiState.storageAvailable)} available"
-        binding.sessionCountText.text = "${uiState.sessionCount} sessions, ${uiState.fileCount} files"
-        
-        // Transfer status
-        binding.transferButton.isEnabled = !uiState.isTransferring && uiState.fileCount > 0
-        binding.transferStatusText.text = if (uiState.isTransferring) "Transferring..." else "Ready"
     }
 
     private fun updateToolbarSubtitle(uiState: MainUiState) {
