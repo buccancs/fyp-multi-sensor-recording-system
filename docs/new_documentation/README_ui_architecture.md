@@ -1,5 +1,22 @@
 # Android UI, State, and Navigation Architecture
 
+## Table of Contents
+
+- [Technical Deep-Dive Documentation](#technical-deep-dive-documentation)
+  - [Overview](#overview)
+  - [Architecture Patterns](#architecture-patterns)
+  - [Controller Architecture](#controller-architecture)
+  - [Navigation Architecture](#navigation-architecture)
+  - [Enhanced Controller Architecture](#enhanced-controller-architecture)
+  - [State Management](#state-management)
+  - [Integration Architecture](#integration-architecture)
+  - [Architecture Diagrams](#architecture-diagrams)
+  - [Component Relationships](#component-relationships)
+  - [Performance Considerations](#performance-considerations)
+  - [Testing Strategy](#testing-strategy)
+  - [Future Enhancements](#future-enhancements)
+  - [Conclusion](#conclusion)
+
 ## Technical Deep-Dive Documentation
 
 ### Overview

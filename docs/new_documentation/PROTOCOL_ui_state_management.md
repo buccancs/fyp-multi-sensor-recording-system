@@ -1,5 +1,10 @@
 # UI State Management Protocol
 
+## Table of Contents
+
+- [Data Contract and API Specification](#data-contract-and-api-specification)
+  - [Overview](#overview)
+
 ## Data Contract and API Specification
 
 ### Overview
@@ -7,6 +12,68 @@
 This document defines the formal data contracts, APIs, and state management protocols for the Multi-Sensor Recording System's UI architecture. It serves as the authoritative reference for developers working with UI state, navigation events, and controller interactions.
 
 ### State Management Architecture
+
+```mermaid
+graph TB
+    subgraph "UI State Layer"
+        STATE[MainUiState]
+        VIEW_MODEL[MainViewModel]
+        CONTROLLERS[UI Controllers]
+    end
+    
+    subgraph "State Management"
+        FLOW[StateFlow]
+        PERSISTENCE[State Persistence]
+        RECOVERY[State Recovery]
+    end
+    
+    subgraph "UI Components"
+        ACTIVITY[MainActivity]
+        FRAGMENTS[Fragment Views]
+        DIALOGS[Dialog Components]
+    end
+    
+    subgraph "User Interactions"
+        GESTURES[Touch Events]
+        NAVIGATION[Navigation Events]
+        COMMANDS[UI Commands]
+    end
+    
+    %% State flow
+    STATE --> VIEW_MODEL
+    VIEW_MODEL --> FLOW
+    FLOW --> PERSISTENCE
+    PERSISTENCE --> RECOVERY
+    
+    %% UI connections
+    VIEW_MODEL --> ACTIVITY
+    ACTIVITY --> FRAGMENTS
+    FRAGMENTS --> DIALOGS
+    
+    %% Controller connections
+    CONTROLLERS --> STATE
+    CONTROLLERS --> VIEW_MODEL
+    
+    %% User interaction flows
+    GESTURES --> CONTROLLERS
+    NAVIGATION --> VIEW_MODEL
+    COMMANDS --> STATE
+    
+    %% Feedback loops
+    ACTIVITY -.-> CONTROLLERS
+    FRAGMENTS -.-> VIEW_MODEL
+    RECOVERY -.-> STATE
+    
+    classDef state fill:#e8f5e8
+    classDef management fill:#e1f5fe
+    classDef ui fill:#f3e5f5
+    classDef interaction fill:#fff3e0
+    
+    class STATE,VIEW_MODEL,CONTROLLERS state
+    class FLOW,PERSISTENCE,RECOVERY management
+    class ACTIVITY,FRAGMENTS,DIALOGS ui
+    class GESTURES,NAVIGATION,COMMANDS interaction
+```
 
 #### Core State Object: MainUiState
 

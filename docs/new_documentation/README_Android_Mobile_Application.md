@@ -1,5 +1,39 @@
 # Android Mobile Application: Distributed Mobile Data Collection Node
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture Overview](#architecture-overview)
+- [Core Features](#core-features)
+  - [📱 Multi-Sensor Data Collection](#-multi-sensor-data-collection)
+  - [🔧 Enhanced Controller Architecture](#-enhanced-controller-architecture)
+  - [🌐 Distributed Architecture](#-distributed-architecture)
+  - [🔧 Technical Implementation](#-technical-implementation)
+- [User Interface](#user-interface)
+  - [🎛️ Main Activity Interface](#️-main-activity-interface)
+  - [📊 Fragment-based Architecture](#-fragment-based-architecture)
+- [Data Flow Architecture](#data-flow-architecture)
+  - [📈 Recording Workflow](#-recording-workflow)
+  - [💾 Data Storage Organization](#-data-storage-organization)
+- [Integration Protocols](#integration-protocols)
+  - [🔌 PC Communication Protocol](#-pc-communication-protocol)
+  - [📡 Network Configuration](#-network-configuration)
+- [Performance Characteristics](#performance-characteristics)
+  - [⚡ System Performance](#-system-performance)
+  - [🔧 Resource Utilization](#-resource-utilization)
+- [Development and Testing](#development-and-testing)
+  - [🧪 Testing Framework](#-testing-framework)
+  - [🔨 Build Configuration](#-build-configuration)
+- [Deployment and Configuration](#deployment-and-configuration)
+  - [📱 Installation Requirements](#-installation-requirements)
+  - [⚙️ Configuration Management](#️-configuration-management)
+- [Troubleshooting and Support](#troubleshooting-and-support)
+  - [🔍 Common Issues and Solutions](#-common-issues-and-solutions)
+  - [📞 Support Resources](#-support-resources)
+- [Security and Privacy Implementation](#security-and-privacy-implementation)
+  - [🔒 Research-Grade Security](#-research-grade-security)
+- [Summary](#summary)
+
 ## Overview
 
 The Android Mobile Application serves as a sophisticated **distributed mobile data collection node** within the Multi-Sensor Recording System. It is responsible for capturing synchronized data from multiple sensor modalities:

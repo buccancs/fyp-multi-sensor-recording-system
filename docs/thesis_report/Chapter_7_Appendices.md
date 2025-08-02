@@ -15,7 +15,55 @@
 
 ### Technical Documentation for System Maintenance and Extension
 
-This appendix provides comprehensive technical information necessary for future development teams to continue, modify, or extend the Multi-Sensor Recording System. The documentation includes detailed installation procedures, configuration requirements, and architectural guidance essential for system maintenance and enhancement.
+This appendix provides comprehensive technical information necessary for future development teams to continue, modify, or extend the Multi-Sensor Recording System. The system follows a component-first documentation approach with detailed technical specifications available in the `docs/new_documentation/` directory.
+
+### A.1 Component Documentation Reference
+
+The Multi-Sensor Recording System is organized into self-contained components, each with comprehensive documentation:
+
+**Core System Components:**
+- **Android Mobile Application**: `docs/new_documentation/README_Android_Mobile_Application.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
+
+- **Python Desktop Controller**: `docs/new_documentation/README_python_desktop_controller.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
+
+- **Multi-Device Synchronization**: `docs/new_documentation/README_Multi_Device_Synchronization.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
+
+- **Camera Recording System**: `docs/new_documentation/README_CameraRecorder.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
+
+- **Session Management**: `docs/new_documentation/README_session_management.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_session_management.md`
+
+**Hardware Integration Components:**
+- **Shimmer3 GSR+ Sensor**: `docs/new_documentation/README_shimmer3_gsr_plus.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
+
+- **TopDon TC001 Thermal Camera**: `docs/new_documentation/README_topdon_tc001.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
+
+**Testing and Validation:**
+- **Testing Framework**: `docs/new_documentation/README_testing_qa_framework.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
+  - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+
+### A.2 Validated System Configuration
+
+Based on comprehensive testing, the current system supports:
+- **Device Coordination**: Up to 4 simultaneous devices tested and validated
+- **Network Performance**: Latency tolerance from 1ms to 500ms
+- **Test Success Rate**: 71.4% across comprehensive validation scenarios
+- **Data Integrity**: 100% verification across corruption testing scenarios
+- **Cross-Platform Operation**: Android-Python coordination via WebSocket protocol
 
 **Figure A.1: System Architecture Deployment Diagram**
 
@@ -76,18 +124,16 @@ graph TB
 
 #### A.1 System Requirements and Hardware Specifications
 
-**Table A.1: Comprehensive Hardware Specifications Matrix**
+**Table A.1: Tested Hardware Configuration Matrix**
 
-| Component Category | Minimum Specification | Recommended Specification | Research-Grade Specification | Estimated Cost (USD) | Procurement Notes |
-|---|---|---|---|---|---|
-| **Central Controller** | Intel i5 4-core, 8GB RAM, 256GB SSD | Intel i7 8-core, 16GB RAM, 512GB SSD | Intel i9 12-core, 32GB RAM, 1TB NVMe | $800-2,400 | Business/workstation class recommended |
-| **Android Devices** | Android 8.0, 4GB RAM, 64GB storage | Android 11+, 6GB RAM, 128GB storage | Samsung Galaxy S22+, 8GB RAM, 256GB | $300-800 each | Samsung Galaxy series preferred for consistency |
-| **Thermal Cameras** | Topdon TC001 (256x192, 9Hz) | Topdon TC001 with calibration kit | FLIR One Pro (640x480, 30Hz) | $350-1,200 each | Include USB-C adapters and mounting hardware |
-| **GSR Sensors** | Shimmer3 GSR+ basic configuration | Shimmer3 GSR+ with expansion board | Multi-sensor research module with IMU | $1,200-2,500 each | Include electrode sets and calibration solutions |
-| **Network Infrastructure** | Wi-Fi 802.11n, 100Mbps | Wi-Fi 802.11ac dual-band, 1Gbps | Wi-Fi 6E enterprise with PoE+ | $100-800 | Enterprise-grade for research reliability |
-| **Storage Solutions** | 2TB local NVMe SSD | 10TB NAS with RAID 5 | 50TB enterprise NAS with hot-swap | $400-5,000 | Include offsite backup for data security |
-| **Power Management** | Standard power strips | Uninterruptible Power Supply (UPS) | Rack-mounted UPS with monitoring | $200-1,500 | Critical for data integrity during outages |
-| **Cable Management** | Basic cable organization | Professional cable management | Server-grade structured cabling | $100-500 | Reduces interference and maintenance issues |
+| Component Category | Minimum Tested | Recommended Configuration | Notes | Estimated Cost (USD) |
+|---|---|---|---|---|
+| **Central Controller** | Multi-core CPU, 8GB RAM | Python 3.9+, conda environment | Linux/Windows compatible | $800-1,200 |
+| **Android Devices** | Android 8.0+, 4GB RAM | Android 11+, 6GB RAM | 4 devices tested simultaneously | $300-800 each |
+| **Thermal Cameras** | TopDon TC001 compatible | TopDon TC001 with USB-C | USB-C adapter required | $350-500 each |
+| **GSR Sensors** | Shimmer3 GSR+ basic | Shimmer3 GSR+ with BLE | Bluetooth Low Energy support | $1,200-1,800 each |
+| **Network Infrastructure** | Wi-Fi 802.11n | Wi-Fi 802.11ac dual-band | Tested with 1ms-500ms latency | $100-400 |
+| **Storage Solutions** | 1TB local storage | Network storage with backup | Session data and video files | $200-1,000 |
 
 **Table A.2: Software Environment Specifications**
 
@@ -1238,40 +1284,105 @@ The communication protocol design prioritizes reliability and extensibility whil
 
 ## Appendix D: Test Results and Reports
 
-### Comprehensive Testing Validation and Performance Analysis
+### Comprehensive Testing Validation Results
 
-This appendix presents detailed test results that validate system performance, reliability, and research-grade quality. The testing methodology encompasses multiple validation approaches designed specifically for research instrumentation requirements.
+This appendix presents detailed testing results from the comprehensive validation framework implemented for the Multi-Sensor Recording System. The testing results provide empirical evidence of system functionality and identify areas for continued improvement.
 
-#### D.1 Performance Testing Results
+#### D.1 Current Test Suite Results
 
-**System Performance Benchmarks:**
+Based on the latest comprehensive test suite execution (from `test_results/complete_test_results.json`):
 
-The performance testing results demonstrate system capability to meet demanding real-time requirements while maintaining research-grade data quality. Testing was conducted under controlled laboratory conditions with systematic variation of operational parameters.
+**Overall Test Performance:**
+- **Total Test Scenarios**: 7 comprehensive test cases
+- **Successful Tests**: 5 out of 7 (71.4% success rate)
+- **Failed Tests**: 2 (primarily due to missing dependencies)
+- **Total Execution Time**: 271.97 seconds (~4.5 minutes)
+- **Test Execution Date**: August 1, 2025
 
+**Test Results Summary:**
 ```
-Performance Test Results Summary:
-╭─────────────────────────────────────────────────────────╮
-│ Metric                    │ Target   │ Achieved │ Status │
-├───────────────────────────┼──────────┼──────────┼────────┤
-│ Response Time             │ ≤100ms   │ 62ms     │ ✓ PASS │
-│ Throughput               │ 30 fps   │ 30.2 fps │ ✓ PASS │
-│ Synchronization Accuracy │ ≤5ms     │ 3.2ms    │ ✓ PASS │
-│ Data Integrity          │ ≥99.5%   │ 99.98%   │ ✓ PASS │
-│ System Availability     │ ≥99.5%   │ 99.7%    │ ✓ PASS │
-│ Memory Usage            │ ≤2GB     │ 1.4GB    │ ✓ PASS │
-│ CPU Utilization         │ ≤80%     │ 65%      │ ✓ PASS │
-╰─────────────────────────────────────────────────────────╯
+Test Suite Execution Results:
+╭──────────────────────────────────────────────────────────────╮
+│ Test Name                           │ Duration │ Status        │
+├─────────────────────────────────────┼──────────┼───────────────┤
+│ Integration Logging Test            │ 0.18s    │ ✓ PASSED     │
+│ Focused Recording Session Test      │ 5.22s    │ ✓ PASSED     │
+│ Hardware Sensor Simulation Test    │ 45.85s   │ ✓ PASSED     │
+│ Enhanced Stress Testing             │ 0.04s    │ ✗ FAILED     │
+│ Network Resilience Testing          │ 104.88s  │ ✓ PASSED     │
+│ Data Integrity Validation          │ 149.16s  │ ✓ PASSED     │
+│ Comprehensive Recording Session     │ 52.29s   │ ✗ FAILED     │
+╰──────────────────────────────────────────────────────────────╯
 ```
 
-**Detailed Performance Analysis:**
+#### D.2 Network Resilience Test Results
 
-The performance analysis reveals system behavior under various operational conditions, demonstrating consistent performance across different usage scenarios and device configurations.
+The network resilience testing demonstrates robust operation across diverse network conditions:
 
-**Response Time Distribution:**
+**Network Condition Test Results:**
 ```
-Response Time Percentiles:
-- P50 (Median): 58ms
-- P95: 87ms  
+Network Resilience Validation:
+╭─────────────────────────────────────────────────────────────╮
+│ Network Condition    │ Duration │ Messages │ Success Rate   │
+├──────────────────────┼──────────┼──────────┼────────────────┤
+│ Perfect Network      │ 20.0s    │ 48/48    │ 100%          │
+│ High Latency (500ms) │ 21.5s    │ 40/40    │ 100%          │
+│ Packet Loss (5%)     │ 20.8s    │ 47/48    │ 97.9%         │
+│ Limited Bandwidth    │ 21.6s    │ 47/48    │ 97.9%         │
+│ Unstable Connection  │ 20.8s    │ 42/45    │ 93.3%         │
+╰─────────────────────────────────────────────────────────────╯
+```
+
+**Key Performance Achievements:**
+- Successfully coordinated 4 devices across all network conditions
+- Demonstrated automatic connection recovery after simulated dropouts
+- Maintained data integrity across all network stress scenarios
+- Validated graceful degradation under challenging conditions
+
+#### D.3 Data Integrity Validation Results
+
+Comprehensive data corruption testing validates system reliability:
+
+**Corruption Detection Results:**
+```
+Data Integrity Test Results:
+╭──────────────────────────────────────────────────────────────╮
+│ Metric                          │ Value                      │
+├─────────────────────────────────┼────────────────────────────┤
+│ Files Tested                    │ 9 files (multiple formats)│
+│ Corruption Scenarios Applied    │ 9 (random, header, truncate)│
+│ Corruptions Detected           │ 9/9 (100% detection rate) │
+│ Checksum Mismatches Identified │ 9/9 (100% accuracy)       │
+│ Data Loss Quantified           │ 5,793 bytes total          │
+│ Test Duration                   │ 148.9 seconds             │
+╰──────────────────────────────────────────────────────────────╯
+```
+
+#### D.4 System Capabilities Validation
+
+**Validated System Performance:**
+- **Device Coordination**: Up to 4 simultaneous devices tested and validated
+- **Network Latency Tolerance**: 1ms to 500ms range successfully handled
+- **Message Success Rate**: 93.3% to 100% depending on network conditions
+- **Data Integrity**: 100% corruption detection across all test scenarios
+- **Cross-Platform Operation**: Android-Python coordination via WebSocket protocol
+- **Connection Recovery**: Automatic reconnection after network interruptions
+
+#### D.5 Areas Identified for Improvement
+
+**Failed Test Analysis:**
+1. **Enhanced Stress Testing**: Failed due to missing `psutil` dependency
+   - Resolution: Add psutil to requirements.txt
+   - Impact: Resource monitoring capabilities currently unavailable
+
+2. **Comprehensive Recording Session**: Complex integration scenario issues
+   - Status: Under investigation for integration improvements
+   - Next Steps: Enhanced error handling and dependency management
+
+**Test Framework Enhancements:**
+- Automated dependency verification before test execution
+- Enhanced error reporting for failed test scenarios
+- Extended test coverage for edge cases and error conditions  
 - P99: 94ms
 - P99.9: 98ms
 Maximum observed: 101ms

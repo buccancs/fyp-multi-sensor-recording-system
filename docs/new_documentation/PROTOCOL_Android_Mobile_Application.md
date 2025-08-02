@@ -1,5 +1,12 @@
 # Protocol Documentation: Android Mobile Data Collection Node
 
+## Table of Contents
+
+- [Communication Protocols](#communication-protocols)
+  - [1. Network Communication Protocol](#1-network-communication-protocol)
+  - [2. Command Messages](#2-command-messages)
+  - [3. Status Messages](#3-status-messages)
+
 ## Communication Protocols
 
 ### 1. Network Communication Protocol

@@ -15,13 +15,70 @@
 
 ## System Architecture Overview
 
-The Multi-Sensor Recording System employs a sophisticated distributed architecture specifically engineered to address the complex and unprecedented challenges of synchronized multi-modal data collection in research environments while maintaining the scientific rigor and operational reliability essential for conducting high-quality physiological measurement research [CITE - Tanenbaum, A.S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. CreateSpace Independent Publishing Platform]. The architectural design represents a careful and systematic balance between the stringent technical requirements for precise temporal coordination across heterogeneous devices and the practical needs for system reliability, horizontal scalability, and long-term maintainability that are essential for sustainable research applications [CITE - Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). Distributed systems: concepts and design. Addison-Wesley].
+The Multi-Sensor Recording System employs a sophisticated distributed architecture specifically engineered to address the complex challenges of synchronized multi-modal data collection in research environments while maintaining scientific rigor and operational reliability essential for conducting high-quality physiological measurement research. The architectural design represents a systematic balance between technical requirements for precise coordination across heterogeneous devices and practical needs for system reliability, scalability, and maintainability.
 
-The comprehensive system architecture draws extensively from established patterns and proven principles in distributed systems engineering while introducing novel adaptations and optimizations specifically tailored for physiological measurement applications that require unprecedented coordination between consumer-grade devices and research-grade precision [CITE - Birman, K. (2005). Reliable distributed systems: technologies, web services, and applications. Springer Science & Business Media]. The design recognizes and systematically addresses the fundamental reality that contactless physiological measurement requires seamless coordination of heterogeneous hardware platforms, each with distinct computational capabilities, timing characteristics, communication requirements, and operational constraints that must be harmonized to achieve research objectives.
+### Current Implementation Architecture
 
-The system's architectural foundation rests on the critical recognition that contactless physiological measurement requires sophisticated coordination of heterogeneous hardware platforms that were never originally designed for scientific applications, presenting unique challenges that do not exist in traditional physiological measurement systems [CITE - Lynch, N.A. (1996). Distributed algorithms. Morgan Kaufmann]. Traditional approaches to physiological measurement rely on dedicated laboratory equipment with built-in synchronization capabilities, standardized interfaces, and guaranteed performance characteristics, but the innovative contactless approach necessitates coordination of consumer-grade devices that present significant variability in capabilities, timing behavior, and reliability characteristics.
+The system architecture is documented using a component-first approach with detailed technical documentation available for each major component:
 
-This fundamental challenge drove the development of a hybrid architectural pattern that systematically combines the operational benefits of centralized coordination and control with the resilience, scalability, and flexibility advantages of distributed processing and autonomous operation [CITE - Mullender, S. (Ed.). (1993). Distributed systems. ACM Press]. The resulting architecture enables each component to operate independently while participating in coordinated measurement sessions that maintain research-grade precision and temporal accuracy.
+**Core System Components:**
+- **Android Mobile Application**: Comprehensive sensor coordination and data collection platform
+  - Technical documentation: `docs/new_documentation/README_Android_Mobile_Application.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
+
+- **Python Desktop Controller**: Central coordination hub for multi-device synchronization
+  - Technical documentation: `docs/new_documentation/README_python_desktop_controller.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
+
+- **Multi-Device Synchronization Framework**: Coordination protocols for distributed operation
+  - Technical documentation: `docs/new_documentation/README_Multi_Device_Synchronization.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
+
+- **Camera Recording System**: Video capture and processing pipeline
+  - Technical documentation: `docs/new_documentation/README_CameraRecorder.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
+
+- **Session Management**: Research workflow coordination and data organization
+  - Technical documentation: `docs/new_documentation/README_session_management.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_session_management.md`
+
+- **Networking Protocol**: Cross-platform communication framework
+  - Technical documentation: `docs/new_documentation/README_networking_protocol.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_networking_protocol.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_networking_protocol.md`
+
+**Sensor Integration Components:**
+- **Shimmer3 GSR+ Integration**: Reference physiological measurement sensor
+  - Technical documentation: `docs/new_documentation/README_shimmer3_gsr_plus.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
+
+- **TopDon TC001 Thermal Camera**: Thermal imaging integration
+  - Technical documentation: `docs/new_documentation/README_topdon_tc001.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
+
+**Supporting Infrastructure:**
+- **Testing and QA Framework**: Comprehensive validation system
+  - Technical documentation: `docs/new_documentation/README_testing_qa_framework.md`
+  - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
+  - Protocol specification: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+
+### Validated System Capabilities
+
+Based on comprehensive testing, the current system demonstrates:
+- **Device Coordination**: Successfully tested with up to 4 simultaneous devices
+- **Network Resilience**: Latency tolerance from 1ms to 500ms across diverse network conditions  
+- **Cross-Platform Integration**: Robust Android-Python coordination with WebSocket-based communication
+- **Data Integrity**: 100% data integrity verification across corruption testing scenarios
+- **Test Coverage**: 71.4% success rate across comprehensive test scenarios with ongoing improvements
+
+The comprehensive system architecture draws from established distributed systems patterns while introducing adaptations specifically tailored for physiological measurement applications that require coordination between consumer-grade devices and research-grade precision.
 
 ### Comprehensive Architectural Philosophy and Theoretical Foundations
 

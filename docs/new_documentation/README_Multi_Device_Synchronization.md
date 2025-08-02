@@ -1,5 +1,43 @@
 # Multi-Device Synchronization System - Technical Deep-Dive
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Purpose and Role](#purpose-and-role)
+- [System Architecture](#system-architecture)
+- [Key Classes and Components](#key-classes-and-components)
+  - [1. MasterClockSynchronizer](#1-masterclocksynchronizer-master_clock_synchronizerpy)
+  - [2. Clock Drift Compensation System](#2-clock-drift-compensation-system)
+  - [3. SessionSynchronizer](#3-sessionsynchronizer-sessionsession_synchronizerpy)
+  - [3. NTPTimeServer](#3-ntptimeserver-ntp_time_serverpy)
+  - [4. JsonMessage Protocol](#4-jsonmessage-protocol-androidappnetworkjsonmessagekt)
+- [Synchronization Algorithms](#synchronization-algorithms)
+  - [High-Precision Time Synchronization](#high-precision-time-synchronization)
+  - [Event Coordination Protocol](#event-coordination-protocol)
+- [Network Resilience and Recovery](#network-resilience-and-recovery)
+  - [Connection Management](#connection-management)
+  - [Device Discovery and Registration](#device-discovery-and-registration)
+  - [Adaptive Data Streaming](#adaptive-data-streaming)
+  - [Error Handling Strategies](#error-handling-strategies)
+- [Performance Characteristics](#performance-characteristics)
+  - [Synchronization Accuracy](#synchronization-accuracy)
+  - [Scalability Metrics](#scalability-metrics)
+  - [Quality Monitoring](#quality-monitoring)
+- [Integration with System Components](#integration-with-system-components)
+  - [Camera Calibration System Integration](#camera-calibration-system-integration)
+  - [Shimmer Sensor Integration](#shimmer-sensor-integration)
+  - [Data Export Coordination](#data-export-coordination)
+- [Development Guidelines](#development-guidelines)
+  - [Adding New Device Types](#adding-new-device-types)
+  - [Testing Synchronization](#testing-synchronization)
+  - [Performance Optimization](#performance-optimization)
+- [Troubleshooting](#troubleshooting)
+  - [Common Synchronization Issues](#common-synchronization-issues)
+  - [Diagnostic Tools](#diagnostic-tools)
+- [Future Enhancements](#future-enhancements)
+  - [Planned Improvements](#planned-improvements)
+  - [Research Applications](#research-applications)
+
 ## Overview
 
 The Multi-Device Synchronization System is the core scientific feature of the Bucika GSR project, responsible for ensuring precise temporal alignment (sub-millisecond) of data streams from all sensors across distributed devices. This system coordinates RGB cameras, thermal cameras, Shimmer sensors, and webcams to provide synchronized data collection for multi-modal physiological research.
