@@ -22,20 +22,46 @@ data class MainUiState(
     val isRecording: Boolean = false,
     val recordingDuration: Long = 0L,
     val recordingSessionId: String? = null,
+    val isReadyToRecord: Boolean = false,
     
     // Connection Status
     val isPcConnected: Boolean = false,
     val isShimmerConnected: Boolean = false,
     val isThermalConnected: Boolean = false,
+    val isGsrConnected: Boolean = false,
+    val isNetworkConnected: Boolean = false,
+    val isCameraConnected: Boolean = false,
     
     // Device Information
     val batteryLevel: Int = -1,
     val batteryStatus: BatteryStatus = BatteryStatus.UNKNOWN,
+    val shimmerDeviceId: String = "",
+    val networkAddress: String = "",
     
     // UI Control States
     val showManualControls: Boolean = true,  // Enable manual controls by default
     val showPermissionsButton: Boolean = false,
     val isCalibrationRunning: Boolean = false,
+    
+    // Calibration State
+    val isCameraCalibrated: Boolean = false,
+    val isThermalCalibrated: Boolean = false,
+    val isShimmerCalibrated: Boolean = false,
+    val isCalibratingCamera: Boolean = false,
+    val isCalibratingThermal: Boolean = false,
+    val isCalibratingShimmer: Boolean = false,
+    val isSystemValidated: Boolean = false,
+    val isValidating: Boolean = false,
+    val isDiagnosticsRunning: Boolean = false,
+    val diagnosticsCompleted: Boolean = false,
+    
+    // Storage and File Management
+    val storageUsed: Long = 0L,
+    val storageAvailable: Long = 0L,
+    val storageTotal: Long = 0L,
+    val sessionCount: Int = 0,
+    val fileCount: Int = 0,
+    val isTransferring: Boolean = false,
     
     // Streaming State
     val isStreaming: Boolean = false,

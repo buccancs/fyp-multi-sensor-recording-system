@@ -2,41 +2,39 @@ package com.multisensor.recording
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
-import com.google.android.material.navigation.NavigationView
 import com.multisensor.recording.databinding.ActivityMainBinding
 import com.multisensor.recording.ui.MainViewModel
-import com.multisensor.recording.ui.FileViewActivity
-import com.multisensor.recording.ui.NetworkConfigActivity
+import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.SettingsActivity
-import com.multisensor.recording.ui.ShimmerConfigActivity
+import com.multisensor.recording.ui.fragments.PreviewRecordFragment
+import com.multisensor.recording.ui.fragments.DevicesFragment
+import com.multisensor.recording.ui.fragments.FilesFragment
+import com.multisensor.recording.ui.fragments.CalibrationFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Material Design 3 Main Activity
+ * Material Design 3 Main Activity with Bottom Navigation
  * 
- * Clean, minimalist interface focused on essential functionality:
- * - System status monitoring
- * - Recording controls  
- * - Quick access to key features
- * - Simplified navigation
+ * Research data collection app optimized for field use:
+ * - Bottom navigation for primary sections (Preview/Record, Devices, Files, Calibration)
+ * - Live video preview and recording controls
+ * - Mobile-friendly layout for one-handed operation
+ * - Clean Material Design aesthetics
  */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
-    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,66 +53,74 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setupUI()
         observeViewModel()
+        
+        // Load default fragment (Preview/Record)
+        if (savedInstanceState == null) {
+            loadFragment(PreviewRecordFragment())
+            binding.bottomNavigation.selectedItemId = R.id.nav_preview_record
+        }
     }
 
     private fun setupUI() {
         // Setup toolbar
         setSupportActionBar(binding.toolbar)
         
-        // Setup navigation drawer
-        toggle = ActionBarDrawerToggle(
-            this, binding.drawerLayout, binding.toolbar,
-            R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        
-        binding.navView.setNavigationItemSelectedListener(this)
-        
-        // Setup button listeners with error protection
-        setupButtonListeners()
+        // Setup bottom navigation
+        setupBottomNavigation()
     }
 
-    private fun setupButtonListeners() {
-        // Recording controls
-        binding.startRecordingButton.setOnClickListener {
-            try {
-                viewModel.startRecording()
-                showMessage("Recording started")
-            } catch (e: Exception) {
-                showError("Failed to start recording: ${e.message}")
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_preview_record -> {
+                    loadFragment(PreviewRecordFragment())
+                    binding.toolbar.title = "Preview & Record"
+                    true
+                }
+                R.id.nav_devices -> {
+                    loadFragment(DevicesFragment())
+                    binding.toolbar.title = "Device Management"
+                    true
+                }
+                R.id.nav_files -> {
+                    loadFragment(FilesFragment())
+                    binding.toolbar.title = "File Management"
+                    true
+                }
+                R.id.nav_calibration -> {
+                    loadFragment(CalibrationFragment())
+                    binding.toolbar.title = "Calibration"
+                    true
+                }
+                else -> false
             }
         }
         
-        binding.stopRecordingButton.setOnClickListener {
-            try {
-                viewModel.stopRecording()
-                showMessage("Recording stopped")
-            } catch (e: Exception) {
-                showError("Failed to stop recording: ${e.message}")
+        // Setup toolbar menu for settings
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_settings -> {
+                    navigateToActivity(SettingsActivity::class.java)
+                    true
+                }
+                R.id.action_diagnostics -> {
+                    runDiagnostics()
+                    true
+                }
+                else -> false
             }
         }
         
-        // Quick action buttons
-        binding.calibrationButton.setOnClickListener {
-            navigateToFragment("calibration")
-        }
-        
-        binding.settingsButton.setOnClickListener {
-            navigateToActivity(SettingsActivity::class.java)
-        }
-        
-        binding.devicesButton.setOnClickListener {
-            navigateToFragment("devices")
-        }
-        
-        binding.filesButton.setOnClickListener {
-            navigateToActivity(FileViewActivity::class.java)
-        }
-        
-        // Diagnostics FAB
-        binding.diagnosticsFab.setOnClickListener {
-            runDiagnostics()
+        binding.toolbar.inflateMenu(R.menu.main_toolbar_menu)
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        try {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+        } catch (e: Exception) {
+            showError("Failed to load fragment: ${e.message}")
         }
     }
 
@@ -124,21 +130,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.uiState.collect { uiState ->
-                        updateConnectionStatus(binding.pcConnectionIndicator, 
-                                             binding.pcConnectionStatus,
-                                             uiState.isPcConnected, "PC Connection")
-                        
-                        updateConnectionStatus(binding.shimmerConnectionIndicator,
-                                             binding.shimmerConnectionStatus,
-                                             uiState.isShimmerConnected, "Shimmer")
-                        
-                        updateConnectionStatus(binding.thermalConnectionIndicator,
-                                             binding.thermalConnectionStatus,
-                                             uiState.isThermalConnected, "Thermal Camera")
-                        
-                        // Update recording state
-                        binding.startRecordingButton.isEnabled = uiState.canStartRecording
-                        binding.stopRecordingButton.isEnabled = uiState.canStopRecording
+                        // Update toolbar subtitle based on system status
+                        updateToolbarSubtitle(uiState)
                     }
                 }
             }
@@ -148,17 +141,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun updateConnectionStatus(indicator: android.view.View, 
-                                     textView: com.google.android.material.textview.MaterialTextView,
-                                     connected: Boolean, deviceName: String) {
-        val color = if (connected) {
-            getColor(R.color.status_connected)
-        } else {
-            getColor(R.color.status_disconnected)
-        }
+    private fun updateToolbarSubtitle(uiState: MainUiState) {
+        val connectedDevices = listOfNotNull(
+            if (uiState.isPcConnected) "PC" else null,
+            if (uiState.isShimmerConnected) "Shimmer" else null,
+            if (uiState.isThermalConnected) "Thermal" else null,
+            if (uiState.isGsrConnected) "GSR" else null
+        )
         
-        indicator.setBackgroundColor(color)
-        textView.text = "$deviceName: ${if (connected) "Connected" else "Disconnected"}"
+        binding.toolbar.subtitle = when {
+            uiState.isRecording -> "● Recording..."
+            connectedDevices.isNotEmpty() -> "${connectedDevices.size} devices connected"
+            else -> "No devices connected"
+        }
     }
 
     private fun navigateToActivity(activityClass: Class<*>) {
@@ -167,11 +162,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } catch (e: Exception) {
             showError("Navigation failed: ${e.message}")
         }
-    }
-
-    private fun navigateToFragment(fragmentType: String) {
-        // For now, show a message - fragments can be implemented later if needed
-        showMessage("$fragmentType feature coming soon")
     }
 
     private fun runDiagnostics() {
@@ -183,9 +173,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 appendLine("PC Connected: ${currentState.isPcConnected}")
                 appendLine("Shimmer Connected: ${currentState.isShimmerConnected}")
                 appendLine("Thermal Connected: ${currentState.isThermalConnected}")
+                appendLine("GSR Connected: ${currentState.isGsrConnected}")
+                appendLine("Network Connected: ${currentState.isNetworkConnected}")
                 appendLine("Recording Active: ${currentState.isRecording}")
                 appendLine("System Status: ${currentState.systemHealthStatus}")
                 appendLine("Permissions OK: ${checkPermissions()}")
+                appendLine("Storage Available: ${formatBytes(currentState.storageAvailable)}")
                 appendLine("========================")
             }
             
@@ -197,33 +190,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun formatBytes(bytes: Long): String {
+        return when {
+            bytes >= 1024 * 1024 * 1024 -> String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0))
+            bytes >= 1024 * 1024 -> String.format("%.1f MB", bytes / (1024.0 * 1024.0))
+            bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
+            else -> "$bytes B"
+        }
+    }
+
     private fun checkPermissions(): Boolean {
         // Simple permission check - can be expanded
         return checkSelfPermission(android.Manifest.permission.CAMERA) == 
                android.content.pm.PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_recording -> {
-                // Already on main screen
-            }
-            R.id.nav_devices -> navigateToFragment("devices")
-            R.id.nav_calibration -> navigateToFragment("calibration")
-            R.id.nav_files -> navigateToActivity(FileViewActivity::class.java)
-            R.id.nav_settings -> navigateToActivity(SettingsActivity::class.java)
-            R.id.nav_network_config -> navigateToActivity(NetworkConfigActivity::class.java)
-            R.id.nav_shimmer_config -> navigateToActivity(ShimmerConfigActivity::class.java)
-            R.id.nav_diagnostics -> runDiagnostics()
-            R.id.nav_about -> showAbout()
-        }
-        
-        binding.drawerLayout.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    private fun showAbout() {
-        showMessage("Multi-Sensor Recording System v${BuildConfig.VERSION_NAME}")
     }
 
     private fun showMessage(message: String) {
@@ -233,13 +212,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showError(error: String) {
         Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
         android.util.Log.e("MainActivityMD3", error)
-    }
-
-    override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
     }
 }
