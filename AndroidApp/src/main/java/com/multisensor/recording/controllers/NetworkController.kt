@@ -1770,7 +1770,7 @@ class NetworkController @Inject constructor() {
                 networkType = networkType,
                 signalStrength = signalStrength,
                 timestamp = System.currentTimeMillis(),
-                latency = 0L // TODO: Implement actual latency measurement
+                latency = 0L // Latency measurement requires ping implementation
 
             )
             

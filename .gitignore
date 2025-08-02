@@ -106,7 +106,7 @@ docs/generated_docs
 recordings/
 .output.txt
 build-validation-report.html
-phase1_validation_report_*.json
+phase*_validation_report_*.json
 test_video.mp4
 
 ### Application Logs ###
@@ -115,9 +115,28 @@ PythonApp/logs/
 *.log
 test_recordings/
 test_calibration/
+test_results/
 
 ### Hand Segmentation Outputs (generated files) ###
 hand_segmentation_*/
 demo_output_*/
 comparison_*/
 demo_hands_video.mp4
+
+### Build Optimization ###
+# Android build cache
+.gradle/local
+AndroidApp/.gradle/
+# Python cache optimization  
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+# Test artifacts
+.pytest_cache/
+.coverage*
+htmlcov/
+# IDE artifacts
+*.swp
+*.swo
+*~
+.vscode/settings.json
