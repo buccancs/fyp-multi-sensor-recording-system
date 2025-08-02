@@ -1,5 +1,40 @@
 # Networking and Communication Protocol - Technical Deep-Dive
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Component Purpose and System Role](#component-purpose-and-system-role)
+- [Architecture Overview](#architecture-overview)
+- [Key Classes and Modules](#key-classes-and-modules)
+  - [PC-Side Implementation (Python)](#pc-side-implementation-python)
+  - [Android-Side Implementation (Kotlin)](#android-side-implementation-kotlin)
+- [Complex Algorithms and Logic](#complex-algorithms-and-logic)
+  - [Message Prioritization and Queuing Theory](#message-prioritization-and-queuing-theory)
+  - [Temporal Synchronization Framework](#temporal-synchronization-framework)
+  - [Adaptive Quality Control System](#adaptive-quality-control-system)
+  - [SSL/TLS Security Implementation](#ssltls-security-implementation)
+  - [Rate Limiting and DoS Protection](#rate-limiting-and-dos-protection)
+  - [Enhanced Performance Monitoring](#enhanced-performance-monitoring)
+  - [Capability Negotiation System](#capability-negotiation-system)
+- [System Integration](#system-integration)
+  - [Message Flow Architecture](#message-flow-architecture)
+  - [Error Handling and Recovery](#error-handling-and-recovery)
+  - [Performance Monitoring Integration](#performance-monitoring-integration)
+- [Integration Guidelines](#integration-guidelines)
+  - [PC Application Integration](#pc-application-integration)
+  - [Android Application Integration](#android-application-integration)
+- [Enhanced Networking Features](#enhanced-networking-features)
+  - [Advanced Security Implementation](#advanced-security-implementation)
+  - [Machine Learning Bandwidth Prediction](#machine-learning-bandwidth-prediction)
+  - [Advanced Protocol Support](#advanced-protocol-support)
+- [Performance Considerations](#performance-considerations)
+  - [Memory Management](#memory-management)
+  - [CPU Optimization](#cpu-optimization)
+  - [Battery Optimization (Android)](#battery-optimization-android)
+- [Enhanced Security Considerations](#enhanced-security-considerations)
+  - [Advanced Data Protection](#advanced-data-protection)
+  - [Enhanced Network Security](#enhanced-network-security)
+
 ## Overview
 
 The Networking and Communication Protocol is the foundational communication layer that enables real-time, bidirectional communication between the PC controller and Android devices in the Multi-Sensor Recording System. This protocol implements a custom socket-based architecture primarily using WebSockets with JSON messaging to facilitate command/control messages, status updates, and high-throughput data streaming.
