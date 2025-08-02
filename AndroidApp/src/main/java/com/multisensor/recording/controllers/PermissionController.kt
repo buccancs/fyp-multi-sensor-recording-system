@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.multisensor.recording.managers.PermissionManager
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.pow
 
 /**
  * Controller responsible for handling all permission-related logic in mobile physiological sensing applications.
@@ -551,7 +550,7 @@ class PermissionController @Inject constructor(
      */
     fun analyzeComplexity(context: Context): ComplexityAnalysis {
         val totalPermissions = permissionManager.getAllRequiredPermissions().size
-        val stateSpaceSize = kotlin.math.pow(4.0, totalPermissions.toDouble()).toInt() // 4 states per permission
+        val stateSpaceSize = Math.pow(4.0, totalPermissions.toDouble()).toInt() // 4 states per permission
         val currentGrantedCount = permissionManager.getGrantedPermissions(context).size
         val transitionComplexity = calculateTransitionComplexity(totalPermissions, currentGrantedCount)
         

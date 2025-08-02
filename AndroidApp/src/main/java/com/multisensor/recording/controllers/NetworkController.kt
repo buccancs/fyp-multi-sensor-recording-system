@@ -61,6 +61,7 @@ class NetworkController @Inject constructor() {
         fun onNetworkRecovery(networkType: String)
         fun updateStatusText(text: String)
         fun showToast(message: String, duration: Int)
+        fun getContext(): Context
         fun getStreamingIndicator(): View?
         fun getStreamingLabel(): View?
         fun getStreamingDebugOverlay(): android.widget.TextView?
@@ -1763,10 +1764,12 @@ class NetworkController @Inject constructor() {
          * Add training data point for model improvement
          */
         fun addTrainingData(bandwidth: Long, networkType: String, signalStrength: Int) {
+            val currentLatency = 50L // Default latency value, measureNetworkLatency() is a suspend function
             val dataPoint = NetworkDataPoint(
                 bandwidth = bandwidth,
                 networkType = networkType,
                 signalStrength = signalStrength,
+                latency = currentLatency,
                 timestamp = System.currentTimeMillis()
             )
             

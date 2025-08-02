@@ -433,6 +433,10 @@ class MainActivityCoordinator @Inject constructor(
                 val status = if (enabled) "Enabled" else "Disabled"
                 callback?.updateStatusText("Encryption: $status")
             }
+            
+            override fun getContext(): Context {
+                return callback?.getContext() ?: throw IllegalStateException("Context not available")
+            }
         })
     }
     
