@@ -224,6 +224,21 @@ class DeviceConfiguration:
 
 ### JSON Message Formats
 
+All network communication for Shimmer3 GSR+ devices follows standardized JSON message protocols with specific field requirements and data types.
+
+#### Message Structure Requirements
+
+Every JSON message must include these standardized fields:
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| `message_type` | String | Yes | Type of message being sent (discovery, connection, data, etc.) |
+| `timestamp` | String (ISO 8601) | Yes | UTC timestamp when message was created |
+| `source` | String | Yes | Identifier of the device/component sending the message |
+| `session_id` | String | No | Session identifier for tracking related messages |
+| `target_device` | String | No | MAC address or identifier of target Shimmer device |
+| `sequence_number` | Integer | No | Sequential number for message ordering |
+
 #### Device Discovery Messages
 
 **Device Discovery Request**:
