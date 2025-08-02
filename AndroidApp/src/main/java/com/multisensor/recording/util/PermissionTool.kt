@@ -122,36 +122,93 @@ object PermissionTool {
         permissionType: String,
         callback: PermissionCallback,
     ) {
-        XXPermissions
-            .with(context)
-            .permission(permissions)
-            .request(
-                object : OnPermissionCallback {
-                    override fun onGranted(
-                        permissions: MutableList<String>,
-                        allGranted: Boolean,
-                    ) {
-                        if (allGranted) {
-                            callback.onAllGranted()
-                        } else {
-                            callback.onPartiallyGranted(permissions.toList())
+        // Special handling for background location permissions to avoid XXPermissions library restriction
+        val isBackgroundLocationRequest = permissions.size == 1 && 
+            permissions.first() == Permission.ACCESS_BACKGROUND_LOCATION
+        
+        if (isBackgroundLocationRequest) {
+            // For background location, ensure we request it with a clean XXPermissions instance
+            // and add a small delay to avoid potential timing issues
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                requestBackgroundLocationPermission(context, callback)
+            }, 100)
+        } else {
+            // Normal permission request for non-background-location permissions
+            XXPermissions
+                .with(context)
+                .permission(permissions)
+                .request(
+                    object : OnPermissionCallback {
+                        override fun onGranted(
+                            permissions: MutableList<String>,
+                            allGranted: Boolean,
+                        ) {
+                            if (allGranted) {
+                                callback.onAllGranted()
+                            } else {
+                                callback.onPartiallyGranted(permissions.toList())
+                            }
                         }
-                    }
 
-                    override fun onDenied(
-                        permissions: MutableList<String>,
-                        never: Boolean,
-                    ) {
-                        if (never) {
-                            // Permanently denied - show dialog with Settings navigation
-                            showPermanentDenialDialog(context, permissions.toList(), permissionType, callback)
-                        } else {
-                            // Temporarily denied - can be requested again
-                            callback.onTemporarilyDenied(permissions.toList())
+                        override fun onDenied(
+                            permissions: MutableList<String>,
+                            never: Boolean,
+                        ) {
+                            if (never) {
+                                // Permanently denied - show dialog with Settings navigation
+                                showPermanentDenialDialog(context, permissions.toList(), permissionType, callback)
+                            } else {
+                                // Temporarily denied - can be requested again
+                                callback.onTemporarilyDenied(permissions.toList())
+                            }
                         }
-                    }
-                },
-            )
+                    },
+                )
+        }
+    }
+    
+    private fun requestBackgroundLocationPermission(
+        context: Context,
+        callback: PermissionCallback,
+    ) {
+        // Create a fresh XXPermissions instance specifically for background location
+        // to avoid any potential contamination from previous requests
+        try {
+            XXPermissions
+                .with(context)
+                .permission(Permission.ACCESS_BACKGROUND_LOCATION)
+                .request(
+                    object : OnPermissionCallback {
+                        override fun onGranted(
+                            permissions: MutableList<String>,
+                            allGranted: Boolean,
+                        ) {
+                            if (allGranted) {
+                                callback.onAllGranted()
+                            } else {
+                                callback.onPartiallyGranted(permissions.toList())
+                            }
+                        }
+
+                        override fun onDenied(
+                            permissions: MutableList<String>,
+                            never: Boolean,
+                        ) {
+                            if (never) {
+                                // Permanently denied - show dialog with Settings navigation
+                                showPermanentDenialDialog(context, permissions.toList(), "Background Location Permissions", callback)
+                            } else {
+                                // Temporarily denied - can be requested again
+                                callback.onTemporarilyDenied(permissions.toList())
+                            }
+                        }
+                    },
+                )
+        } catch (e: Exception) {
+            // If background location request fails, log the error and continue
+            android.util.Log.e("PermissionTool", "Error requesting background location permission", e)
+            callback.onTemporarilyDenied(listOf(Permission.ACCESS_BACKGROUND_LOCATION))
+        }
     }
 
     private fun showPermanentDenialDialog(
