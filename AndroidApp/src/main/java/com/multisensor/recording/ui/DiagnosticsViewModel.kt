@@ -1,9 +1,12 @@
 package com.multisensor.recording.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -108,9 +111,9 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun runFullSystemDiagnostic() {
         _uiState.value = _uiState.value.copy(isRunningDiagnostic = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+        viewModelScope.launch {
             // Simulate full diagnostic process
-            kotlinx.coroutines.delay(5000)
+            delay(5000)
             
             val timestamp = getCurrentTimestamp()
             
@@ -134,8 +137,8 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun testNetworkConnectivity() {
         _uiState.value = _uiState.value.copy(isTestingNetwork = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            kotlinx.coroutines.delay(3000)
+        viewModelScope.launch {
+            delay(3000)
             
             val timestamp = getCurrentTimestamp()
             val testResults = mutableListOf<TestResult>()
@@ -161,8 +164,8 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun testDeviceCommunication() {
         _uiState.value = _uiState.value.copy(isTestingDevices = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            kotlinx.coroutines.delay(4000)
+        viewModelScope.launch {
+            delay(4000)
             
             val timestamp = getCurrentTimestamp()
             val testResults = mutableListOf<TestResult>()
@@ -188,8 +191,8 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun testSystemPerformance() {
         _uiState.value = _uiState.value.copy(isTestingPerformance = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            kotlinx.coroutines.delay(3500)
+        viewModelScope.launch {
+            delay(3500)
             
             val timestamp = getCurrentTimestamp()
             val testResults = mutableListOf<TestResult>()
@@ -229,8 +232,8 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun refreshSystemStatus() {
         _uiState.value = _uiState.value.copy(isRefreshing = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            kotlinx.coroutines.delay(1500)
+        viewModelScope.launch {
+            delay(1500)
             
             // Simulate system status refresh
             _uiState.value = _uiState.value.copy(
@@ -255,8 +258,8 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun generateDiagnosticReport() {
         _uiState.value = _uiState.value.copy(isGeneratingReport = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            kotlinx.coroutines.delay(2000)
+        viewModelScope.launch {
+            delay(2000)
             
             _uiState.value = _uiState.value.copy(isGeneratingReport = false)
             
@@ -270,8 +273,8 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
     fun exportDiagnosticData() {
         _uiState.value = _uiState.value.copy(isExportingData = true)
         
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            kotlinx.coroutines.delay(1500)
+        viewModelScope.launch {
+            delay(1500)
             
             _uiState.value = _uiState.value.copy(isExportingData = false)
             
@@ -322,9 +325,9 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
 
     private fun startPeriodicMonitoring() {
         // Start a periodic update for real-time metrics
-        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+        viewModelScope.launch {
             while (true) {
-                kotlinx.coroutines.delay(5000) // Update every 5 seconds
+                delay(5000) // Update every 5 seconds
                 
                 if (!_uiState.value.isRefreshing) {
                     updateRealTimeMetrics()
@@ -346,7 +349,7 @@ class DiagnosticsViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    private fun calculateSystemHealth(): SystemHealthStatus {
+    private fun calculateSystemHealth(): DiagnosticsHealthStatus {
         val currentState = _uiState.value
         
         val healthScore = when {

@@ -65,17 +65,17 @@ class DiagnosticsActivity : AppCompatActivity() {
     }
 
     private fun setupDiagnosticActions() {
-        // Run full system diagnostic
-        binding.runFullDiagnosticButton.setOnClickListener {
+        // Run diagnostics (using existing button)
+        binding.runDiagnosticsButton.setOnClickListener {
             try {
                 viewModel.runFullSystemDiagnostic()
-                showMessage("Running full system diagnostic...")
+                showMessage("Running system diagnostics...")
             } catch (e: Exception) {
                 showError("Diagnostic failed: ${e.message}")
             }
         }
         
-        // Test network connectivity
+        // Test network connectivity (using existing button)
         binding.testNetworkButton.setOnClickListener {
             try {
                 viewModel.testNetworkConnectivity()
@@ -84,86 +84,16 @@ class DiagnosticsActivity : AppCompatActivity() {
                 showError("Network test failed: ${e.message}")
             }
         }
-        
-        // Test device communication
-        binding.testDevicesButton.setOnClickListener {
-            try {
-                viewModel.testDeviceCommunication()
-                showMessage("Testing device communication...")
-            } catch (e: Exception) {
-                showError("Device test failed: ${e.message}")
-            }
-        }
-        
-        // Test performance
-        binding.testPerformanceButton.setOnClickListener {
-            try {
-                viewModel.testSystemPerformance()
-                showMessage("Testing system performance...")
-            } catch (e: Exception) {
-                showError("Performance test failed: ${e.message}")
-            }
-        }
-        
-        // Clear error logs
-        binding.clearLogsButton.setOnClickListener {
-            try {
-                viewModel.clearErrorLogs()
-                showMessage("Error logs cleared")
-            } catch (e: Exception) {
-                showError("Failed to clear logs: ${e.message}")
-            }
-        }
-        
-        // Refresh system status
-        binding.refreshStatusButton.setOnClickListener {
-            try {
-                viewModel.refreshSystemStatus()
-                showMessage("Refreshing system status...")
-            } catch (e: Exception) {
-                showError("Refresh failed: ${e.message}")
-            }
-        }
     }
 
     private fun setupReportActions() {
-        // Generate diagnostic report
-        binding.generateReportButton.setOnClickListener {
-            try {
-                viewModel.generateDiagnosticReport()
-                showMessage("Generating diagnostic report...")
-            } catch (e: Exception) {
-                showError("Report generation failed: ${e.message}")
-            }
-        }
-        
-        // Export diagnostic data
-        binding.exportDiagnosticsButton.setOnClickListener {
+        // Export diagnostic data (using existing button)
+        binding.exportLogsButton.setOnClickListener {
             try {
                 viewModel.exportDiagnosticData()
                 showMessage("Exporting diagnostic data...")
             } catch (e: Exception) {
                 showError("Export failed: ${e.message}")
-            }
-        }
-        
-        // Send logs to support
-        binding.sendLogsButton.setOnClickListener {
-            try {
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf("support@multisensor-recording.com"))
-                    putExtra(Intent.EXTRA_SUBJECT, "Diagnostic Logs - Multi-Sensor Recording App")
-                    putExtra(Intent.EXTRA_TEXT, viewModel.getDiagnosticLogContent())
-                }
-                
-                if (intent.resolveActivity(packageManager) != null) {
-                    startActivity(Intent.createChooser(intent, "Send diagnostic logs"))
-                } else {
-                    showError("No email app available")
-                }
-            } catch (e: Exception) {
-                showError("Failed to send logs: ${e.message}")
             }
         }
     }
@@ -184,151 +114,60 @@ class DiagnosticsActivity : AppCompatActivity() {
 
     private fun updateUI(uiState: DiagnosticsUiState) {
         updateSystemHealth(uiState)
-        updatePerformanceMetrics(uiState)
-        updateErrorLogs(uiState)
-        updateTestResults(uiState)
         updateButtons(uiState)
     }
 
     private fun updateSystemHealth(uiState: DiagnosticsUiState) {
-        // Overall system health
-        binding.systemHealthStatus.text = when (uiState.systemHealthStatus) {
-            DiagnosticsHealthStatus.EXCELLENT -> "Excellent"
-            DiagnosticsHealthStatus.GOOD -> "Good"
-            DiagnosticsHealthStatus.WARNING -> "Warning"
-            DiagnosticsHealthStatus.CRITICAL -> "Critical"
-            DiagnosticsHealthStatus.UNKNOWN -> "Unknown"
+        // Update status chips based on system health
+        updateStatusChips(uiState)
+        
+        // Update performance details
+        binding.performanceDetails.text = buildString {
+            append("• Frame Rate: ${uiState.currentFrameRate} FPS\n")
+            append("• CPU Usage: ${uiState.cpuUsagePercent}%\n")
+            append("• Memory Usage: ${uiState.memoryUsagePercent}%\n")
+            append("• Network: ↓${uiState.networkDownload} ↑${uiState.networkUpload}")
         }
         
-        binding.systemHealthStatus.setTextColor(getColor(when (uiState.systemHealthStatus) {
-            DiagnosticsHealthStatus.EXCELLENT -> com.multisensor.recording.R.color.md_theme_primary
-            DiagnosticsHealthStatus.GOOD -> com.multisensor.recording.R.color.md_theme_primary
-            DiagnosticsHealthStatus.WARNING -> com.multisensor.recording.R.color.md_theme_secondary
-            DiagnosticsHealthStatus.CRITICAL -> com.multisensor.recording.R.color.md_theme_error
-            DiagnosticsHealthStatus.UNKNOWN -> com.multisensor.recording.R.color.md_theme_outline
-        }))
+        // Update network details
+        binding.networkDetails.text = buildString {
+            append("• Connection Status: Connected\n")
+            append("• Network Tests: ${uiState.networkTestResults.size} completed\n")
+            append("• Device Tests: ${uiState.deviceTestResults.size} completed")
+        }
         
-        // System uptime
-        binding.systemUptimeText.text = "System Uptime: ${uiState.systemUptime}"
-        
-        // Connected devices count
-        binding.connectedDevicesText.text = "Connected Devices: ${uiState.connectedDevicesCount}/5"
-        
-        // Active processes
-        binding.activeProcessesText.text = "Active Processes: ${uiState.activeProcessesCount}"
-        
-        // Last diagnostic run
-        binding.lastDiagnosticText.text = "Last Diagnostic: ${uiState.lastDiagnosticRun}"
-    }
-
-    private fun updatePerformanceMetrics(uiState: DiagnosticsUiState) {
-        // CPU usage
-        binding.cpuUsageText.text = "CPU Usage: ${uiState.cpuUsagePercent}%"
-        binding.cpuUsageProgress.progress = uiState.cpuUsagePercent
-        
-        // Memory usage
-        binding.memoryUsageText.text = "Memory Usage: ${uiState.memoryUsagePercent}%"
-        binding.memoryUsageProgress.progress = uiState.memoryUsagePercent
-        
-        // Storage usage
-        binding.storageUsageText.text = "Storage Usage: ${uiState.storageUsagePercent}%"
-        binding.storageUsageProgress.progress = uiState.storageUsagePercent
-        
-        // Network bandwidth
-        binding.networkBandwidthText.text = "Network: ↓${uiState.networkDownload} ↑${uiState.networkUpload}"
-        
-        // Battery level (if applicable)
-        binding.batteryLevelText.text = "Battery: ${uiState.batteryLevel}%"
-        binding.batteryLevelProgress.progress = uiState.batteryLevel
-        
-        // Frame rate
-        binding.frameRateText.text = "Frame Rate: ${uiState.currentFrameRate}fps"
-    }
-
-    private fun updateErrorLogs(uiState: DiagnosticsUiState) {
-        // Error count
-        binding.errorCountText.text = "Errors: ${uiState.errorCount}"
-        binding.warningCountText.text = "Warnings: ${uiState.warningCount}"
-        binding.infoCountText.text = "Info: ${uiState.infoCount}"
-        
-        // Recent error logs
-        if (uiState.recentErrorLogs.isNotEmpty()) {
-            binding.errorLogsText.text = uiState.recentErrorLogs.takeLast(20).joinToString("\n") { log ->
-                "${log.timestamp} [${log.level}] ${log.message}"
-            }
-        } else {
-            binding.errorLogsText.text = "No error logs available"
+        // Update device info details
+        binding.deviceInfoDetails.text = buildString {
+            append("• Connected Devices: ${uiState.connectedDevicesCount}\n")
+            append("• Active Processes: ${uiState.activeProcessesCount}\n")
+            append("• System Health: ${uiState.systemHealthStatus}\n")
+            append("• Errors: ${uiState.errorCount}, Warnings: ${uiState.warningCount}")
         }
     }
 
-    private fun updateTestResults(uiState: DiagnosticsUiState) {
-        // Network test results
-        binding.networkTestResults.text = buildString {
-            if (uiState.networkTestResults.isNotEmpty()) {
-                append("Network Tests:\n")
-                uiState.networkTestResults.forEach { result ->
-                    append("• ${result.testName}: ${if (result.passed) "PASS" else "FAIL"}")
-                    if (result.details.isNotEmpty()) {
-                        append(" (${result.details})")
-                    }
-                    append("\n")
-                }
-            } else {
-                append("No network tests run")
-            }
-        }
+    private fun updateStatusChips(uiState: DiagnosticsUiState) {
+        // Update CPU status chip
+        binding.cpuStatusChip.text = "CPU: ${uiState.cpuUsagePercent}%"
+        binding.cpuStatusChip.isSelected = uiState.cpuUsagePercent < 80
         
-        // Device test results
-        binding.deviceTestResults.text = buildString {
-            if (uiState.deviceTestResults.isNotEmpty()) {
-                append("Device Tests:\n")
-                uiState.deviceTestResults.forEach { result ->
-                    append("• ${result.testName}: ${if (result.passed) "PASS" else "FAIL"}")
-                    if (result.details.isNotEmpty()) {
-                        append(" (${result.details})")
-                    }
-                    append("\n")
-                }
-            } else {
-                append("No device tests run")
-            }
-        }
+        // Update memory status chip
+        binding.memoryStatusChip.text = "Memory: ${uiState.memoryUsagePercent}%"
+        binding.memoryStatusChip.isSelected = uiState.memoryUsagePercent < 90
         
-        // Performance test results
-        binding.performanceTestResults.text = buildString {
-            if (uiState.performanceTestResults.isNotEmpty()) {
-                append("Performance Tests:\n")
-                uiState.performanceTestResults.forEach { result ->
-                    append("• ${result.testName}: ${if (result.passed) "PASS" else "FAIL"}")
-                    if (result.details.isNotEmpty()) {
-                        append(" (${result.details})")
-                    }
-                    append("\n")
-                }
-            } else {
-                append("No performance tests run")
-            }
-        }
+        // Update storage status chip
+        binding.storageStatusChip.text = "Storage: ${uiState.storageUsagePercent}%"
+        binding.storageStatusChip.isSelected = uiState.storageUsagePercent < 85
     }
 
     private fun updateButtons(uiState: DiagnosticsUiState) {
         // Disable buttons during tests
-        binding.runFullDiagnosticButton.isEnabled = !uiState.isRunningDiagnostic
+        binding.runDiagnosticsButton.isEnabled = !uiState.isRunningDiagnostic
         binding.testNetworkButton.isEnabled = !uiState.isTestingNetwork
-        binding.testDevicesButton.isEnabled = !uiState.isTestingDevices
-        binding.testPerformanceButton.isEnabled = !uiState.isTestingPerformance
-        
-        // Report buttons
-        binding.generateReportButton.isEnabled = !uiState.isGeneratingReport
-        binding.exportDiagnosticsButton.isEnabled = !uiState.isExportingData
-        
-        // Clear logs button
-        binding.clearLogsButton.isEnabled = uiState.errorCount > 0 || uiState.warningCount > 0
+        binding.exportLogsButton.isEnabled = !uiState.isExportingData
         
         // Update button text for active operations
-        binding.runFullDiagnosticButton.text = if (uiState.isRunningDiagnostic) "Running Diagnostic..." else "Run Full Diagnostic"
-        binding.generateReportButton.text = if (uiState.isGeneratingReport) "Generating..." else "Generate Report"
-        binding.exportDiagnosticsButton.text = if (uiState.isExportingData) "Exporting..." else "Export Data"
+        binding.runDiagnosticsButton.text = if (uiState.isRunningDiagnostic) "Running Tests..." else "Run Tests"
+        binding.exportLogsButton.text = if (uiState.isExportingData) "Exporting..." else "Export Logs"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =

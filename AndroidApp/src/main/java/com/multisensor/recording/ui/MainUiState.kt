@@ -78,15 +78,33 @@ data class MainUiState(
     // UI Control Flags
     val showPermissionsButton: Boolean = false,
     val showManualControls: Boolean = false,
+    val isLoadingPermissions: Boolean = false,
     
     // Session Information
     val currentSessionInfo: SessionDisplayInfo? = null,
+    
+    // Preview availability
+    val thermalPreviewAvailable: Boolean = false,
+    
+    // Device identifiers
+    val shimmerDeviceId: String? = null,
     
     // Calibration State (Essential for System Readiness)
     val isCameraCalibrated: Boolean = false,
     val isThermalCalibrated: Boolean = false,
     val isShimmerCalibrated: Boolean = false,
     val isCalibrationRunning: Boolean = false,
+    val isCalibratingCamera: Boolean = false,
+    val isCalibratingThermal: Boolean = false,
+    val isCalibratingShimmer: Boolean = false,
+    
+    // System validation
+    val isValidating: Boolean = false,
+    val isSystemValidated: Boolean = false,
+    
+    // Diagnostics
+    val isDiagnosticsRunning: Boolean = false,
+    val diagnosticsCompleted: Boolean = false,
     
     // Storage (Critical for Recording)
     val storageUsed: Long = 0L,

@@ -1221,4 +1221,19 @@ class MainViewModel
                 }
             }
         }
+
+        /**
+         * Helper function for debug logging
+         */
+        private fun logD(tag: String, message: String) {
+            logger.debug("[$tag] $message")
+        }
+
+        /**
+         * Update system state - placeholder for system state updates
+         */
+        private fun updateSystemState() {
+            logD("MainViewModel", "System state update requested")
+            // Implementation placeholder - system state updates would go here
+        }
     }
