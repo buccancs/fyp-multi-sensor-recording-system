@@ -1,5 +1,39 @@
 # Camera Recording System (CameraRecorder) - Technical Deep-Dive
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Component Purpose and Role](#component-purpose-and-role)
+- [Architecture Overview](#architecture-overview)
+- [Key Classes and Responsibilities](#key-classes-and-responsibilities)
+  - [CameraRecorder (Main Class)](#camerarecorder-main-class)
+  - [SessionInfo (Data Container)](#sessioninfo-data-container)
+  - [Camera Selection Algorithm](#camera-selection-algorithm)
+- [Stage 3 RAW Extraction Workflow](#stage-3-raw-extraction-workflow)
+  - [RAW Processing Pipeline](#raw-processing-pipeline)
+  - [Samsung-Specific RAW Characteristics](#samsung-specific-raw-characteristics)
+- [Integration with System Components](#integration-with-system-components)
+  - [Hand Segmentation Integration](#hand-segmentation-integration)
+  - [Network Streaming Integration](#network-streaming-integration)
+  - [Calibration System Integration](#calibration-system-integration)
+- [Multi-Stream Configuration](#multi-stream-configuration)
+  - [Simultaneous Capture Capabilities](#simultaneous-capture-capabilities)
+  - [Performance Characteristics](#performance-characteristics)
+- [Error Handling and Recovery](#error-handling-and-recovery)
+  - [Comprehensive Error Management](#comprehensive-error-management)
+- [Configuration Parameters](#configuration-parameters)
+  - [Camera Settings](#camera-settings)
+  - [Samsung S21/S22 Optimization Flags](#samsung-s21s22-optimization-flags)
+- [Testing and Validation](#testing-and-validation)
+  - [Comprehensive Test Coverage](#comprehensive-test-coverage)
+- [Development Guidelines](#development-guidelines)
+  - [Best Practices](#best-practices)
+  - [Integration Considerations](#integration-considerations)
+- [Future Enhancements](#future-enhancements)
+  - [Planned Improvements](#planned-improvements)
+  - [Research Opportunities](#research-opportunities)
+- [Conclusion](#conclusion)
+
 ## Overview
 
 The Camera Recording System (CameraRecorder) is a sophisticated component that manages the phone's native camera using the Camera2 API, optimized for advanced features like Stage 3 RAW image extraction. This component is highly specialized, supporting hardware-specific optimizations for Samsung S21/S22 devices and providing professional-grade camera capabilities within the multi-sensor recording platform.

@@ -1,5 +1,14 @@
 # Shimmer3 GSR+ Device: Protocol and Data Contract Documentation
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Data Structures and Formats](#data-structures-and-formats)
+- [Network Communication Protocols](#network-communication-protocols)
+- [API Specifications](#api-specifications)
+- [File Format Specifications](#file-format-specifications)
+- [Error Codes and Status Messages](#error-codes-and-status-messages)
+
 ## Overview
 
 This document defines the comprehensive data formats, API specifications, and network message protocols for Shimmer3 GSR+ device integration within the Multi-Sensor Recording System. The protocol specifications ensure consistent data exchange, interoperability, and reliable communication across all system components.
@@ -7,6 +16,83 @@ This document defines the comprehensive data formats, API specifications, and ne
 The protocol architecture supports multiple communication pathways including direct Bluetooth connections, Android-mediated connections, and network-based coordination, providing flexibility for diverse research and deployment scenarios.
 
 ## Data Structures and Formats
+
+### Shimmer3 GSR+ Data Architecture
+
+```mermaid
+graph TB
+    subgraph "Data Collection"
+        SENSOR[Shimmer3 GSR+ Device]
+        RAW[Raw Sensor Data]
+        CALIB[Calibration Data]
+        QUALITY[Quality Metrics]
+    end
+    
+    subgraph "Data Processing"
+        PARSER[Data Parser]
+        VALIDATOR[Data Validator]
+        CONVERTER[Unit Converter]
+        FILTER[Signal Filter]
+    end
+    
+    subgraph "Data Structures"
+        SAMPLE[ShimmerSample]
+        BATCH[SampleBatch]
+        SESSION[SessionData]
+        META[Metadata]
+    end
+    
+    subgraph "Output Formats"
+        CSV[CSV Export]
+        JSON[JSON Metadata]
+        BINARY[Binary Data]
+        LOGS[Log Files]
+    end
+    
+    subgraph "Network Protocol"
+        BT[Bluetooth Protocol]
+        TCP[TCP Messages]
+        STATUS[Status Updates]
+        COMMANDS[Control Commands]
+    end
+    
+    %% Data flow
+    SENSOR --> RAW
+    SENSOR --> CALIB
+    SENSOR --> QUALITY
+    
+    RAW --> PARSER
+    CALIB --> VALIDATOR
+    QUALITY --> CONVERTER
+    
+    PARSER --> SAMPLE
+    VALIDATOR --> BATCH
+    CONVERTER --> SESSION
+    FILTER --> META
+    
+    SAMPLE --> CSV
+    BATCH --> JSON
+    SESSION --> BINARY
+    META --> LOGS
+    
+    %% Network flows
+    SENSOR --> BT
+    BT --> TCP
+    TCP --> STATUS
+    TCP --> COMMANDS
+    
+    classDef collection fill:#e8f5e8
+    classDef processing fill:#e1f5fe
+    classDef structure fill:#f3e5f5
+    classDef output fill:#fff3e0
+    classDef network fill:#fce4ec
+    
+    class SENSOR,RAW,CALIB,QUALITY collection
+    class PARSER,VALIDATOR,CONVERTER,FILTER processing
+    class SAMPLE,BATCH,SESSION,META structure
+    class CSV,JSON,BINARY,LOGS output
+    class BT,TCP,STATUS,COMMANDS network
+```
 
 ### Core Data Types
 

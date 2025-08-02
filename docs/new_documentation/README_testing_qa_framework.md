@@ -1,5 +1,31 @@
 # Testing and Quality Assurance Framework - Technical Deep-Dive
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture Overview](#architecture-overview)
+- [Testing Strategy by Component](#testing-strategy-by-component)
+  - [Python Application Testing](#python-application-testing)
+  - [Android Application Testing](#android-application-testing)
+- [Cross-Platform Integration Testing](#cross-platform-integration-testing)
+  - [PC-Android Communication Validation](#pc-android-communication-validation)
+  - [Multi-Device Coordination Testing](#multi-device-coordination-testing)
+- [Performance and Resilience Testing](#performance-and-resilience-testing)
+  - [Performance Validation Framework](#performance-validation-framework)
+  - [Resilience Testing Framework](#resilience-testing-framework)
+- [Quality Assurance Processes](#quality-assurance-processes)
+  - [Code Quality Standards](#code-quality-standards)
+  - [Continuous Integration Integration](#continuous-integration-integration)
+  - [Research-Grade Reliability Standards](#research-grade-reliability-standards)
+- [Testing Automation and Orchestration](#testing-automation-and-orchestration)
+  - [Automated Test Execution](#automated-test-execution)
+  - [Test Data Management](#test-data-management)
+- [Cross-Platform Integration Testing](#cross-platform-integration-testing-1)
+  - [PC-Android Communication Testing](#pc-android-communication-testing)
+- [Integration with Development Workflow](#integration-with-development-workflow)
+  - [Development Testing Workflow](#development-testing-workflow)
+  - [Testing Documentation Standards](#testing-documentation-standards)
+
 ## Overview
 
 The Multi-Sensor Recording System implements a comprehensive, multi-layered testing strategy designed to ensure research-grade reliability across both Python and Android components. This framework provides systematic validation of all system aspects, from individual component functionality to complete end-to-end workflows under various stress conditions.

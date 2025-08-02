@@ -1,5 +1,47 @@
 # Session Management and Data Storage System - Technical Documentation
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture](#architecture)
+  - [Core Classes](#core-classes)
+  - [Data Architecture](#data-architecture)
+- [Implementation Details](#implementation-details)
+  - [Session Lifecycle Management](#session-lifecycle-management)
+  - [Directory Structure Enforcement](#directory-structure-enforcement)
+  - [File Naming Conventions](#file-naming-conventions)
+  - [Device Management](#device-management)
+  - [File Tracking and Management](#file-tracking-and-management)
+  - [Event Logging System](#event-logging-system)
+  - [Post-Processing Integration](#post-processing-integration)
+- [Enhanced Session Management Features](#enhanced-session-management-features)
+  - [JSON-based State Persistence and Recovery](#json-based-state-persistence-and-recovery)
+- [Data Integrity Features](#data-integrity-features)
+  - [Atomic Operations](#atomic-operations)
+  - [Recovery Mechanisms](#recovery-mechanisms)
+  - [Thread Safety](#thread-safety)
+- [Performance Considerations](#performance-considerations)
+  - [Memory Management](#memory-management)
+  - [Disk I/O Optimization](#disk-io-optimization)
+  - [Scalability](#scalability)
+- [Integration Points](#integration-points)
+  - [UI Integration](#ui-integration)
+  - [Device Controller Integration](#device-controller-integration)
+  - [Post-Processing Integration](#post-processing-integration)
+- [Error Handling and Logging](#error-handling-and-logging)
+  - [Error Categories](#error-categories)
+  - [Error Recovery Strategies](#error-recovery-strategies)
+- [Testing Strategy](#testing-strategy)
+  - [Unit Testing](#unit-testing)
+  - [Integration Testing](#integration-testing)
+  - [Performance Testing](#performance-testing)
+- [Testing and Validation](#testing-and-validation)
+  - [Comprehensive Session Testing Framework](#comprehensive-session-testing-framework)
+- [Future Enhancements](#future-enhancements)
+  - [Planned Features](#planned-features)
+  - [Extensibility Points](#extensibility-points)
+- [Conclusion](#conclusion)
+
 ## Overview
 
 The Session Management and Data Storage System is the foundational framework responsible for defining, managing, and storing recording sessions in the Multi-Sensor Recording System. This system enforces a standardized directory structure and file-naming convention to ensure data integrity and facilitate post-processing workflows.

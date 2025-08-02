@@ -1,5 +1,17 @@
 # Shimmer3 GSR+ Device: Practical User Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Pre-flight Checklist](#pre-flight-checklist)
+  - [Hardware Requirements](#hardware-requirements)
+  - [Software Prerequisites](#software-prerequisites)
+  - [Environmental Considerations](#environmental-considerations)
+- [Step-by-Step Setup Guide](#step-by-step-setup-guide)
+  - [Step 1: Device Preparation and Placement](#step-1-device-preparation-and-placement)
+  - [Step 2: Software Configuration](#step-2-software-configuration)
+  - [Step 3: Sensor Configuration](#step-3-sensor-configuration)
+
 ## Overview
 
 This practical guide provides step-by-step instructions for researchers and developers to effectively use the Shimmer3 GSR+ device within the Multi-Sensor Recording System. The guide covers device setup, configuration, data collection, and analysis workflows designed for research applications requiring high-quality physiological data collection.
@@ -32,6 +44,54 @@ Before beginning any recording session with the Shimmer3 GSR+, ensure all prereq
 - [ ] **Humidity Level**: 40-60% relative humidity (prevents electrode drying)
 - [ ] **Electromagnetic Interference**: Minimal WiFi/cellular interference
 - [ ] **Movement Constraints**: Stable environment for motion-sensitive measurements
+
+### Shimmer3 GSR+ Setup Workflow
+
+```mermaid
+flowchart TD
+    A[Start Setup] --> B[Hardware Inspection]
+    B --> C{Device Charged?}
+    C -->|No| D[Charge Device]
+    D --> C
+    C -->|Yes| E[Prepare Electrodes]
+    
+    E --> F[Clean Skin with Alcohol]
+    F --> G[Apply Conductive Gel]
+    G --> H[Attach Electrodes]
+    
+    H --> I[Choose Connection Method]
+    I --> J[PC Direct Connection]
+    I --> K[Android Mediated]
+    I --> L[Hybrid PC+Android]
+    
+    J --> M[Start pyshimmer]
+    K --> N[Launch Android App]
+    L --> O[Coordinate Both Systems]
+    
+    M --> P[Device Discovery]
+    N --> P
+    O --> P
+    
+    P --> Q{Device Found?}
+    Q -->|No| R[Check Bluetooth/Pairing]
+    R --> P
+    Q -->|Yes| S[Configure Sensors]
+    
+    S --> T[Set Sampling Rate]
+    T --> U[Enable GSR Channel]
+    U --> V[Start Recording]
+    V --> W[Monitor Data Quality]
+    
+    classDef hardware fill:#ffe6cc
+    classDef software fill:#e6f3ff
+    classDef decision fill:#fff2e6
+    classDef action fill:#e6ffe6
+    
+    class B,E,F,G,H hardware
+    class M,N,O,S,T,U software
+    class C,Q decision
+    class A,D,I,P,V,W action
+```
 
 ## Step-by-Step Setup Guide
 

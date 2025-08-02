@@ -1,5 +1,37 @@
 # Networking and Communication Protocol - User Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Pre-flight Checklist](#pre-flight-checklist)
+  - [Network Environment](#network-environment)
+  - [PC Application Setup](#pc-application-setup)
+  - [Android Device Setup](#android-device-setup)
+  - [Hardware Requirements](#hardware-requirements)
+- [Step-by-Step Usage Guide](#step-by-step-usage-guide)
+  - [Phase 1: PC Server Initialization](#phase-1-pc-server-initialization)
+  - [Phase 2: Android Device Connection](#phase-2-android-device-connection)
+  - [Phase 3: Multi-Device Coordination](#phase-3-multi-device-coordination)
+  - [Phase 4: Recording Session Management](#phase-4-recording-session-management)
+  - [Phase 5: Advanced Features](#phase-5-advanced-features)
+- [Expected Output and Results](#expected-output-and-results)
+  - [Successful Connection Indicators](#successful-connection-indicators)
+  - [Performance Benchmarks](#performance-benchmarks)
+  - [Data Output Structure](#data-output-structure)
+- [Comprehensive Troubleshooting Guide](#comprehensive-troubleshooting-guide)
+  - [Connection Issues](#connection-issues)
+  - [Performance Issues](#performance-issues)
+  - [Security and SSL Issues](#security-and-ssl-issues)
+  - [Synchronization Issues](#synchronization-issues)
+  - [Device-Specific Issues](#device-specific-issues)
+- [Performance Optimization Tips](#performance-optimization-tips)
+  - [Network Optimization](#network-optimization)
+  - [Application Performance](#application-performance)
+  - [Resource Management](#resource-management)
+- [Advanced Configuration](#advanced-configuration)
+  - [Network Optimization](#network-optimization-1)
+  - [Quality Settings](#quality-settings)
+
 ## Overview
 
 This guide provides step-by-step instructions for using the Networking and Communication Protocol to connect Android devices to the PC controller and establish synchronized multi-device recording sessions. The protocol enables real-time communication between your Android devices and the PC application for coordinated data collection.
