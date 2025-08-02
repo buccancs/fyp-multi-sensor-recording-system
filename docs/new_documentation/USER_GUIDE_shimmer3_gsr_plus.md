@@ -1,5 +1,17 @@
 # Shimmer3 GSR+ Device: Practical User Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Pre-flight Checklist](#pre-flight-checklist)
+  - [Hardware Requirements](#hardware-requirements)
+  - [Software Prerequisites](#software-prerequisites)
+  - [Environmental Considerations](#environmental-considerations)
+- [Step-by-Step Setup Guide](#step-by-step-setup-guide)
+  - [Step 1: Device Preparation and Placement](#step-1-device-preparation-and-placement)
+  - [Step 2: Software Configuration](#step-2-software-configuration)
+  - [Step 3: Sensor Configuration](#step-3-sensor-configuration)
+
 ## Overview
 
 This practical guide provides step-by-step instructions for researchers and developers to effectively use the Shimmer3 GSR+ device within the Multi-Sensor Recording System. The guide covers device setup, configuration, data collection, and analysis workflows designed for research applications requiring high-quality physiological data collection.

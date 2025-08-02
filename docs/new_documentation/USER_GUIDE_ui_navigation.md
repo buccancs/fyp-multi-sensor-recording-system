@@ -1,5 +1,14 @@
 # User Guide: UI Navigation and Interface
 
+## Table of Contents
+
+- [Practical Guide for Using the Multi-Sensor Recording System Interface](#practical-guide-for-using-the-multi-sensor-recording-system-interface)
+  - [Overview](#overview)
+  - [Pre-flight Checklist](#pre-flight-checklist)
+  - [Interface Modes](#interface-modes)
+  - [Navigation Mode Guide](#navigation-mode-guide)
+  - [Status Indicators Guide](#status-indicators-guide)
+
 ## Practical Guide for Using the Multi-Sensor Recording System Interface
 
 ### Overview
