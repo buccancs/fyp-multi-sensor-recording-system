@@ -9,7 +9,6 @@ including memory usage, CPU performance, network throughput, and system stress t
 import asyncio
 import gc
 import json
-import logging
 import os
 import platform
 import psutil
@@ -28,6 +27,9 @@ import statistics
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent
 sys.path.insert(0, str(src_dir))
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 try:
     import cv2
@@ -111,23 +113,9 @@ class PerformanceBenchmarkSuite:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         
-        self.logger = self._setup_logging()
+        self.logger = get_logger(__name__)
         self.results: List[PerformanceBenchmark] = []
         self.system_info = self._get_system_info()
-        
-    def _setup_logging(self) -> logging.Logger:
-        """Setup performance logging"""
-        logger = logging.getLogger("PerformanceBenchmark")
-        logger.setLevel(logging.INFO)
-        
-        handler = logging.FileHandler(self.output_dir / "benchmark.log")
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        
-        return logger
         
     def _get_system_info(self) -> SystemInfo:
         """Collect system information"""

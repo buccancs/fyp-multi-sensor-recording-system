@@ -372,6 +372,184 @@ class AppLogger:
     def get_active_timers(cls) -> Dict[str, Dict[str, Any]]:
         """Get information about currently active performance timers."""
         return cls._performance_monitor.get_active_timers()
+    
+    @classmethod
+    def export_logs(cls, start_date: datetime, end_date: datetime, output_format: str = "json") -> str:
+        """
+        Export logs for a specific date range.
+        
+        Args:
+            start_date: Start date for log export
+            end_date: End date for log export
+            output_format: Export format ('json', 'csv', 'txt')
+            
+        Returns:
+            str: Path to exported log file
+        """
+        import json
+        import csv
+        import gzip
+        import os
+        
+        if not cls._log_dir:
+            raise RuntimeError("Logging not initialized")
+            
+        try:
+            # Create exports directory
+            exports_dir = cls._log_dir / "exports"
+            exports_dir.mkdir(exist_ok=True)
+            
+            # Generate export filename
+            export_filename = f"logs_export_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.{output_format}"
+            export_path = exports_dir / export_filename
+            
+            # Collect log entries from all log files
+            log_entries = []
+            
+            # Walk through log directory and process files
+            for log_file in cls._log_dir.glob("**/*.log"):
+                try:
+                    file_mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+                    
+                    # Check if file is within date range
+                    if start_date <= file_mtime <= end_date:
+                        with open(log_file, 'r', encoding='utf-8') as f:
+                            for line in f:
+                                line = line.strip()
+                                if line:
+                                    # Try to parse as JSON first (structured logs)
+                                    try:
+                                        log_entry = json.loads(line)
+                                        log_entries.append(log_entry)
+                                    except json.JSONDecodeError:
+                                        # If not JSON, treat as plain text log
+                                        log_entries.append({
+                                            'timestamp': file_mtime.isoformat(),
+                                            'level': 'INFO',
+                                            'message': line,
+                                            'source_file': log_file.name
+                                        })
+                except Exception as e:
+                    logger = cls.get_logger("LogExport")
+                    logger.error(f"Error reading log file {log_file}: {e}")
+            
+            # Export based on format
+            if output_format.lower() == 'json':
+                with open(export_path, 'w', encoding='utf-8') as f:
+                    json.dump(log_entries, f, indent=2, default=str)
+            
+            elif output_format.lower() == 'csv':
+                if log_entries:
+                    # Get all possible keys for CSV headers
+                    all_keys = set()
+                    for entry in log_entries:
+                        all_keys.update(entry.keys())
+                    
+                    with open(export_path, 'w', newline='', encoding='utf-8') as f:
+                        writer = csv.DictWriter(f, fieldnames=sorted(all_keys))
+                        writer.writeheader()
+                        writer.writerows(log_entries)
+            
+            elif output_format.lower() == 'txt':
+                with open(export_path, 'w', encoding='utf-8') as f:
+                    for entry in log_entries:
+                        if isinstance(entry, dict):
+                            timestamp = entry.get('timestamp', 'Unknown')
+                            level = entry.get('level', 'INFO')
+                            message = entry.get('message', str(entry))
+                            f.write(f"[{timestamp}] {level}: {message}\n")
+                        else:
+                            f.write(f"{entry}\n")
+            
+            # Compress if file is large (>1MB)
+            if export_path.stat().st_size > 1024 * 1024:
+                compressed_path = export_path.with_suffix(export_path.suffix + '.gz')
+                with open(export_path, 'rb') as f_in:
+                    with gzip.open(compressed_path, 'wb') as f_out:
+                        f_out.writelines(f_in)
+                export_path.unlink()
+                export_path = compressed_path
+            
+            logger = cls.get_logger("LogExport")
+            logger.info(f"Logs exported to: {export_path}")
+            return str(export_path)
+            
+        except Exception as e:
+            logger = cls.get_logger("LogExport")
+            logger.error(f"Error exporting logs: {e}")
+            return ""
+    
+    @classmethod
+    def cleanup_old_logs(cls, retention_days: int = 30) -> Dict[str, Any]:
+        """
+        Clean up old log files based on retention policy.
+        
+        Args:
+            retention_days: Number of days to retain logs
+            
+        Returns:
+            Dict: Cleanup report with removed files and errors
+        """
+        import gzip
+        import shutil
+        from datetime import timedelta
+        
+        if not cls._log_dir:
+            raise RuntimeError("Logging not initialized")
+            
+        cleanup_report = {
+            'removed_files': [],
+            'compressed_files': [],
+            'errors': [],
+            'total_space_freed': 0
+        }
+        
+        try:
+            cutoff_date = datetime.now() - timedelta(days=retention_days)
+            archive_cutoff = datetime.now() - timedelta(days=7)  # Compress files older than 7 days
+            
+            for log_file in cls._log_dir.glob("**/*.log*"):
+                # Skip exports directory
+                if 'exports' in str(log_file):
+                    continue
+                    
+                try:
+                    file_mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+                    file_size = log_file.stat().st_size
+                    
+                    # Remove files older than retention period
+                    if file_mtime < cutoff_date:
+                        log_file.unlink()
+                        cleanup_report['removed_files'].append(str(log_file))
+                        cleanup_report['total_space_freed'] += file_size
+                    
+                    # Compress files older than 7 days but within retention period
+                    elif file_mtime < archive_cutoff and log_file.suffix == '.log':
+                        compressed_path = log_file.with_suffix('.log.gz')
+                        with open(log_file, 'rb') as f_in:
+                            with gzip.open(compressed_path, 'wb') as f_out:
+                                shutil.copyfileobj(f_in, f_out)
+                        
+                        # Remove original file after compression
+                        log_file.unlink()
+                        cleanup_report['compressed_files'].append(str(compressed_path))
+                        space_saved = file_size - compressed_path.stat().st_size
+                        cleanup_report['total_space_freed'] += space_saved
+                
+                except Exception as e:
+                    error_msg = f"Error processing log file {log_file}: {e}"
+                    cleanup_report['errors'].append(error_msg)
+            
+            logger = cls.get_logger("LogCleanup")
+            logger.info(f"Log cleanup completed. Freed {cleanup_report['total_space_freed']} bytes")
+            return cleanup_report
+            
+        except Exception as e:
+            error_msg = f"Error during log cleanup: {e}"
+            cleanup_report['errors'].append(error_msg)
+            logger = cls.get_logger("LogCleanup")
+            logger.error(error_msg)
+            return cleanup_report
 
 
 def get_logger(name: str) -> logging.Logger:

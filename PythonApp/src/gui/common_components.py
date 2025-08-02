@@ -11,13 +11,15 @@ Date: 2025-08-01
 Purpose: Modular UI components for improved maintainability
 """
 
-import logging
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QTextEdit, QProgressBar, QFrame, QGroupBox, QSizePolicy
 )
 from PyQt5.QtGui import QFont, QPalette
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 
 class StatusIndicator(QWidget):
@@ -34,7 +36,7 @@ class StatusIndicator(QWidget):
         super().__init__(parent)
         self.is_connected = False
         self.status_text = "Disconnected"
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
         
         self.setup_ui(label_text)
         self.update_appearance()
