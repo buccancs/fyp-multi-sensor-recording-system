@@ -2,7 +2,10 @@ package com.multisensor.recording.managers
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.ProgressDialog
+import android.os.Build
+import android.view.LayoutInflater
+import android.widget.ProgressBar
+import com.multisensor.recording.R
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.InputType
@@ -207,12 +210,13 @@ class ShimmerManager @Inject constructor(
             if (lastDeviceInfo != null) {
                 android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Found previous device: ${lastDeviceInfo.name} (${lastDeviceInfo.address})")
                 
-                // Show progress dialog while connecting
-                val progressDialog = ProgressDialog(activity)
-                progressDialog.setTitle("Connecting to Shimmer Device")
-                progressDialog.setMessage("Connecting to ${lastDeviceInfo.name}...")
-                progressDialog.setCancelable(false)
-                progressDialog.show()
+                // Show modern progress dialog while connecting
+                val progressDialog = createModernProgressDialog(
+                    activity,
+                    "Connecting to Shimmer Device",
+                    "Connecting to ${lastDeviceInfo.name}...",
+                    false
+                )
                 
                 // Initialize Shimmer SDK if not already done
                 if (shimmerBluetoothManager == null) {
@@ -335,11 +339,12 @@ class ShimmerManager @Inject constructor(
     private fun showScanningDialog(activity: Activity, callback: ShimmerCallback) {
         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Showing scanning dialog")
         
-        val progressDialog = android.app.ProgressDialog(activity)
-        progressDialog.setTitle("Scanning for Shimmer Devices")
-        progressDialog.setMessage("Please wait while scanning for devices...")
-        progressDialog.setCancelable(true)
-        progressDialog.show()
+        val progressDialog = createModernProgressDialog(
+            activity,
+            "Scanning for Shimmer Devices",
+            "Please wait while scanning for devices...",
+            true
+        )
         
         // Simulate scanning delay
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
@@ -1505,12 +1510,13 @@ class ShimmerManager @Inject constructor(
         
         android.util.Log.d(TAG_CONNECTION, "Reconnection attempt $reconnectionAttempts of $RECONNECTION_ATTEMPTS (delay: ${delayMs}ms)")
         
-        // Show progress dialog with attempt information
-        val progressDialog = ProgressDialog(activity)
-        progressDialog.setTitle("Reconnecting to Shimmer Device")
-        progressDialog.setMessage("Attempt $reconnectionAttempts of $RECONNECTION_ATTEMPTS\nConnecting to ${deviceInfo.name}...")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+        // Show modern progress dialog with attempt information
+        val progressDialog = createModernProgressDialog(
+            activity,
+            "Reconnecting to Shimmer Device", 
+            "Attempt $reconnectionAttempts of $RECONNECTION_ATTEMPTS\nConnecting to ${deviceInfo.name}...",
+            false
+        )
         
         Handler(Looper.getMainLooper()).postDelayed({
             try {
@@ -1647,6 +1653,45 @@ class ShimmerManager @Inject constructor(
         } catch (e: Exception) {
             0
         }
+    }
+    
+    /**
+     * Create a modern Material Design progress dialog as replacement for deprecated ProgressDialog
+     */
+    private fun createModernProgressDialog(
+        activity: Activity,
+        title: String,
+        message: String,
+        cancelable: Boolean
+    ): AlertDialog {
+        val dialogView = LayoutInflater.from(activity).inflate(android.R.layout.select_dialog_multichoice, null)
+        
+        return AlertDialog.Builder(activity)
+            .setTitle(title)
+            .setMessage(message)
+            .setCancelable(cancelable)
+            .setView(createProgressView(activity))
+            .create()
+            .also { dialog ->
+                dialog.show()
+            }
+    }
+    
+    /**
+     * Create a simple progress indicator view
+     */
+    private fun createProgressView(context: Context): LinearLayout {
+        val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(50, 30, 50, 30)
+        }
+        
+        val progressBar = ProgressBar(context).apply {
+            isIndeterminate = true
+        }
+        layout.addView(progressBar)
+        
+        return layout
     }
     
     /**

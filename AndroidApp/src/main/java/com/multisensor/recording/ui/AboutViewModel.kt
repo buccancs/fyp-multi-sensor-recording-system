@@ -2,7 +2,6 @@ package com.multisensor.recording.ui
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.hardware.Camera
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Build
@@ -250,7 +249,21 @@ class AboutViewModel @Inject constructor(
         
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Use modern display API for Android 11+
+            try {
+                context.display?.getMetrics(displayMetrics)
+            } catch (e: Exception) {
+                // Fallback to deprecated method if modern API fails
+                @Suppress("DEPRECATION")
+                windowManager.defaultDisplay.getMetrics(displayMetrics)
+            }
+        } else {
+            // Fallback for older Android versions
+            @Suppress("DEPRECATION")
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+        }
         
         val screenResolution = "${displayMetrics.widthPixels} × ${displayMetrics.heightPixels}"
         val screenDensity = displayMetrics.densityDpi.toString()
@@ -286,39 +299,33 @@ class AboutViewModel @Inject constructor(
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun getCameraInfo(): List<String> {
         return try {
             val cameraList = mutableListOf<String>()
             
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
-                val cameraIds = cameraManager.cameraIdList
-                
-                for (cameraId in cameraIds) {
-                    val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-                    val facing = characteristics.get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
-                    val facingStr = when (facing) {
-                        android.hardware.camera2.CameraCharacteristics.LENS_FACING_FRONT -> "Front"
-                        android.hardware.camera2.CameraCharacteristics.LENS_FACING_BACK -> "Back"
-                        android.hardware.camera2.CameraCharacteristics.LENS_FACING_EXTERNAL -> "External"
-                        else -> "Unknown"
-                    }
-                    cameraList.add("Camera $cameraId: $facingStr")
+            // Use modern Camera2 API (available since API 21/Android 5.0)
+            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
+            val cameraIds = cameraManager.cameraIdList
+            
+            for (cameraId in cameraIds) {
+                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+                val facing = characteristics.get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
+                val facingStr = when (facing) {
+                    android.hardware.camera2.CameraCharacteristics.LENS_FACING_FRONT -> "Front"
+                    android.hardware.camera2.CameraCharacteristics.LENS_FACING_BACK -> "Back"
+                    android.hardware.camera2.CameraCharacteristics.LENS_FACING_EXTERNAL -> "External"
+                    else -> "Unknown"
                 }
-            } else {
-                val numberOfCameras = Camera.getNumberOfCameras()
-                for (i in 0 until numberOfCameras) {
-                    val cameraInfo = Camera.CameraInfo()
-                    Camera.getCameraInfo(i, cameraInfo)
-                    val facing = if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) "Front" else "Back"
-                    cameraList.add("Camera $i: $facing")
-                }
+                cameraList.add("Camera $cameraId: $facingStr")
             }
             
-            cameraList
+            if (cameraList.isEmpty()) {
+                listOf("No cameras detected")
+            } else {
+                cameraList
+            }
         } catch (e: Exception) {
-            listOf("Camera information unavailable")
+            listOf("Camera information unavailable: ${e.message}")
         }
     }
 
