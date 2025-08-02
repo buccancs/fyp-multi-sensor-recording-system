@@ -1,354 +1,311 @@
-# Shimmer3 GSR+ Comprehensive Documentation Index
+# Multi-Sensor Recording System - Comprehensive Documentation Index
 
 ## Introduction
 
-This documentation suite provides comprehensive coverage of the Shimmer3 GSR+ device integration within the Multi-Sensor Recording System. The documentation follows a component-first approach, organizing information into three primary documents that address different user needs and use cases.
+This documentation suite provides comprehensive coverage of the Multi-Sensor Recording System, a sophisticated research platform for multi-modal physiological data collection. The documentation follows a component-first approach, organizing information into structured documents that address different user needs and technical requirements.
 
-The Shimmer3 GSR+ represents a professional-grade wearable sensor platform designed for physiological research applications. This integration enables precise galvanic skin response measurements alongside complementary biometric data collection, providing researchers with a robust platform for psychophysiological studies.
+The system enables synchronized data collection from multiple sensor modalities including RGB cameras, thermal imaging, physiological sensors, and motion detection, providing researchers with a robust platform for contactless GSR prediction and psychophysiological studies.
 
 ## Documentation Structure
 
 ### Primary Documentation Components
 
-The documentation is organized into three interconnected components, each serving specific user needs:
+The documentation is organized into comprehensive categories addressing different aspects of the system:
 
-#### 1. [Technical Deep-Dive](README_shimmer3_gsr_plus.md)
-**Audience**: Developers and System Architects  
-**Purpose**: Comprehensive technical analysis of internal design and implementation
+---
 
-**Key Contents**:
-- Device hardware specifications and sensor capabilities  
-- System architecture and integration patterns
-- Class design and component relationships
-- Complex algorithms for device discovery and data processing
-- Threading architecture and performance optimization
-- Error handling and recovery mechanisms
-- SDK integration with online source references
+## 📚 Academic and Research Documentation
 
-**When to Use**: System development, architecture planning, debugging complex issues, extending functionality
-
-#### 2. [Practical User Guide](USER_GUIDE_shimmer3_gsr_plus.md)
-**Audience**: Researchers and End-Users  
-**Purpose**: Step-by-step practical guide for effective device usage
+### [Academic Research](README_academic_research.md)
+**Audience**: Researchers, Academics, Graduate Students  
+**Purpose**: Comprehensive academic context and theoretical foundations
 
 **Key Contents**:
-- Pre-flight checklist and hardware requirements
-- Device preparation and electrode placement protocols
-- Software configuration for PC and Android platforms
-- Sensor configuration and range selection guidelines
-- Data collection workflows and quality assessment
-- Troubleshooting guide and best practices
-- Integration with analysis software (R, MATLAB)
+- Literature review and research positioning
+- Theoretical foundations (Beer-Lambert Law, signal processing theory)
+- Research contributions in multi-sensor calibration
+- Statistical analysis frameworks and validation methodologies
+- Peer review criteria and academic validation standards
 
-**When to Use**: Setting up experiments, configuring devices, collecting data, troubleshooting issues
-
-#### 3. [Protocol and Data Contract](PROTOCOL_shimmer3_gsr_plus.md)
-**Audience**: Developers and Data Analysts  
-**Purpose**: Complete specification of data formats and communication protocols
+### [Project Context](README_project_context.md)
+**Audience**: Project Managers, Stakeholders, Researchers  
+**Purpose**: Complete project specification and strategic overview
 
 **Key Contents**:
-- Data structure definitions and specifications
-- JSON message formats for network communication
-- API specifications for Python and Android platforms
-- CSV export format with column specifications
-- Session metadata format and quality metrics
-- Error codes and status message formats
+- Research problem definition and objectives
+- Technical requirements and constraints
+- Technology stack rationale and evaluation framework
+- Implementation strategy and development roadmap
+- Success metrics and risk management
 
-**When to Use**: API integration, data analysis, protocol implementation, format validation
-
-## Navigation Guide
-
-### For New Users
-
-**First-Time Setup**: Start with the [User Guide Prerequisites](USER_GUIDE_shimmer3_gsr_plus.md#pre-flight-checklist) to ensure all hardware and software requirements are met.
-
-**Device Configuration**: Follow the [Step-by-Step Setup Guide](USER_GUIDE_shimmer3_gsr_plus.md#step-by-step-setup-guide) for initial device configuration and connection establishment.
-
-**Data Collection**: Use the [Data Collection Workflow](USER_GUIDE_shimmer3_gsr_plus.md#data-collection-workflow) for structured recording sessions.
-
-### For Developers
-
-**Architecture Understanding**: Begin with the [System Integration Architecture](README_shimmer3_gsr_plus.md#architecture-overview) to understand the overall design.
-
-**API Integration**: Reference the [API Specifications](PROTOCOL_shimmer3_gsr_plus.md#api-specifications) for programmatic access and control.
-
-**Data Processing**: Examine the [Complex Algorithms and Logic](README_shimmer3_gsr_plus.md#complex-algorithms-and-logic) section for implementation details.
-
-### For Data Analysts
-
-**Data Format Understanding**: Start with [CSV Export Format](PROTOCOL_shimmer3_gsr_plus.md#csv-export-format) to understand data structure.
-
-**Quality Assessment**: Review [Data Quality Assessment](USER_GUIDE_shimmer3_gsr_plus.md#data-quality-assessment) for quality metrics and validation procedures.
-
-**Metadata Interpretation**: Use [JSON Session Metadata Format](PROTOCOL_shimmer3_gsr_plus.md#json-session-metadata-format) to understand session context.
-
-## Quick Reference
-
-### Device Specifications Summary
-
-| Specification | Value | Notes |
-|---------------|-------|-------|
-| **Primary Sensor** | GSR (Galvanic Skin Response) | High-precision electrodermal activity |
-| **Sampling Rate** | 1 Hz to 1000 Hz | Configurable, 51.2 Hz recommended |
-| **GSR Ranges** | 5 ranges + auto-range | 10kΩ to 4.7MΩ coverage |
-| **Additional Sensors** | PPG, Accelerometer, Gyroscope, Magnetometer | Multi-modal physiological monitoring |
-| **Connectivity** | Bluetooth Classic + BLE | Dual-mode connection support |
-| **Battery Life** | 24+ hours | Typical continuous operation |
-| **Data Storage** | MicroSD + Network Transfer | Hybrid storage approach |
-
-### Connection Methods
-
-| Method | Use Case | Advantages | Limitations |
-|--------|----------|-------------|-------------|
-| **Direct PC** | Laboratory research | Low latency, full control | PC Bluetooth required |
-| **Android-Mediated** | Mobile research | Portable, Android integration | Android device dependency |
-| **Simulation** | Development/Testing | No hardware required | Synthetic data only |
-
-### GSR Range Selection Guide
-
-| Range | Resistance | Conductance | Typical Use Case |
-|-------|------------|-------------|------------------|
-| **0** | 10kΩ - 56kΩ | 18-100 μS | High arousal, stress research |
-| **1** | 56kΩ - 220kΩ | 4.5-18 μS | Normal conditions, general studies |
-| **2** | 220kΩ - 680kΩ | 1.5-4.5 μS | Dry skin, low humidity |
-| **3** | 680kΩ - 4.7MΩ | 0.2-1.5 μS | Very dry skin, special populations |
-| **4** | Auto-Range | Dynamic | Long-term monitoring, unknown conditions |
-
-## Comprehensive Research and Technical Documentation
-
-### Academic Research and Context
-
-#### [Academic Research and Literature Review](README_academic_research.md)
-**Audience**: Researchers and Academic Users  
-**Purpose**: Comprehensive academic context, literature review, and research contributions
-
-**Key Contents**:
-- Literature review and background research in contactless physiological monitoring
-- Theoretical foundations including Beer-Lambert Law and signal processing theory
-- Research contributions and innovations in multi-sensor calibration systems
-- Advanced statistical analysis framework with machine learning integration
-- Academic validation framework with peer review criteria
-- Performance evaluation with statistical significance testing
-
-**When to Use**: Understanding research context, academic validation, literature background
-
-#### [Project Context and Objectives](README_project_context.md)
-**Audience**: Developers and Project Managers  
-**Purpose**: Complete project specification, technology rationale, and implementation strategy
-
-**Key Contents**:
-- Research problem definition and scientific motivation
-- Technical requirements and system constraints specifications
-- Technology stack rationale with detailed evaluation framework
-- Implementation strategy and development methodology
-- Success metrics and evaluation criteria
-- Risk management framework and contingency planning
-
-**When to Use**: Project planning, technology selection, implementation guidance
-
-### Advanced Technical Documentation
-
-#### [Validation Methodology and Formal Verification](README_validation_methodology.md)
-**Audience**: Quality Assurance Engineers and Researchers  
-**Purpose**: Formal validation framework and automated verification processes
-
-**Key Contents**:
-- Formal validation algebra and component verification theory
-- Automated verification algorithms with mathematical proofs
-- Statistical validation methods with hypothesis testing
-- Accessibility verification and WCAG compliance framework
-- Performance validation with real-time constraint monitoring
-- Continuous validation pipeline and quality metrics
-
-**When to Use**: Quality assurance, formal verification, statistical validation
-
-#### [Computer Vision Methodology](README_computer_vision.md)
-**Audience**: Computer Vision Engineers and ML Researchers  
+### [Computer Vision](README_computer_vision.md)
+**Audience**: Computer Vision Engineers, ML Researchers  
 **Purpose**: Comprehensive computer vision pipeline for physiological monitoring
 
 **Key Contents**:
-- Optical and physiological foundations including light-tissue interactions
-- Signal processing pipeline with ROI detection and feature extraction
-- Advanced computer vision techniques including deep learning approaches
-- Multi-modal feature fusion strategies for GSR prediction
-- Performance optimization for real-time mobile processing
-- Implementation architecture with detailed code examples
+- Optical foundations and image processing theory
+- Signal processing with ROI detection algorithms
+- Deep learning approaches for feature extraction
+- Multi-modal feature fusion for GSR prediction
+- Mobile optimization strategies and performance analysis
 
-**When to Use**: Computer vision implementation, physiological signal processing, ML model development
+---
 
-#### [Design Patterns and Performance Analysis](README_design_patterns.md)
-**Audience**: Software Architects and Performance Engineers  
-**Purpose**: Architectural design patterns analysis and performance optimization
+## 🏗️ System Architecture Documentation
+
+### [System Architecture](README_system_architecture.md)
+**Audience**: System Architects, Senior Developers  
+**Purpose**: Complete system design and architectural patterns
 
 **Key Contents**:
-- Comprehensive design pattern analysis (Observer, Strategy, Command patterns)
-- Mathematical performance models and complexity analysis
-- Scalability analysis with empirical benchmarking results
-- Optimization strategies for pattern implementations
-- Memory management and real-time constraint validation
-- Future pattern evolution and emerging requirements
+- Distributed system topology and design philosophy
+- Component integration strategy and communication patterns
+- Mobile and desktop architecture specifications
+- Performance optimization and scalability considerations
+- Security and privacy architecture
 
-**When to Use**: System architecture, performance optimization, scalability planning
+### [Design Patterns](README_design_patterns.md)
+**Audience**: Software Architects, Senior Developers  
+**Purpose**: Architectural design patterns analysis and implementation
 
-## External Resources and References
+**Key Contents**:
+- Observer/Strategy/Command patterns implementation
+- Mathematical performance models and optimization
+- Scalability analysis with benchmarking results
+- Memory management and resource optimization
+- Pattern evolution and maintenance strategies
 
-### Official Shimmer Research Resources
+### [Validation Methodology](README_validation_methodology.md)
+**Audience**: QA Engineers, Validation Specialists  
+**Purpose**: Formal validation framework and testing methodologies
 
-**Shimmer Research Official Website**: [www.shimmersensing.com](https://www.shimmersensing.com)
-- Official hardware documentation
-- Firmware updates and changelogs
-- Technical support and user forums
-- Product specifications and datasheets
+**Key Contents**:
+- Component validation algebra and mathematical proofs
+- Automated verification algorithms with statistical validation
+- Accessibility verification (WCAG compliance)
+- Continuous validation pipeline and quality assurance
+- Performance validation and regression testing
 
-**Shimmer Java Android API**: [github.com/ShimmerEngineering/Shimmer-Java-Android-API](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API)
-- Official Android SDK from Shimmer Research
-- API documentation and examples
-- Latest SDK updates and bug fixes
-- Community contributions and extensions
+---
 
-### Community and Extended Resources
+## 🔧 Component Technical Documentation
 
-**pyshimmer Library**: [github.com/seemoo-lab/pyshimmer](https://github.com/seemoo-lab/pyshimmer)
-- Python library for direct PC communication
-- Cross-platform Bluetooth support
-- Research-focused implementation
-- Academic community contributions
+### [Android Mobile Application](README_Android_Mobile_Application.md)
+**Audience**: Android Developers, Mobile Engineers  
+**Purpose**: Technical deep-dive into Android application architecture
 
-**Shimmer SDK Fork**: [github.com/buccancs/shimmer-sdk](https://github.com/buccancs/shimmer-sdk)
-- Enhanced SDK with additional features
-- Integration examples and utilities
-- Extended device support
-- Research application focus
+### [Camera Recording System](README_CameraRecorder.md)
+**Audience**: Computer Vision Engineers, Camera Specialists  
+**Purpose**: Camera system implementation and optimization
 
-**Shimmer Android API Fork**: [github.com/buccancs/ShimmerAndroidAPI](https://github.com/buccancs/ShimmerAndroidAPI)
-- Extended Android integration
-- Multi-device coordination features
-- Enhanced data processing capabilities
-- Production-ready implementations
+### [Shimmer3 GSR+ Integration](README_shimmer3_gsr_plus.md)
+**Audience**: Developers, System Architects  
+**Purpose**: Physiological sensor integration and data processing
 
-### Academic and Research References
+### [Python Desktop Controller](README_python_desktop_controller.md)
+**Audience**: Python Developers, System Integrators  
+**Purpose**: Desktop coordination system and data management
 
-**GSR Measurement Principles**:
-- Boucsein, W. (2012). *Electrodermal Activity*. Springer Science+Business Media
-- Critchley, H. D. (2002). Electrodermal responses: What happens in the brain. *The Neuroscientist*, 8(2), 132-142
+### [Multi-Device Synchronization](README_Multi_Device_Synchronization.md)
+**Audience**: Distributed Systems Engineers  
+**Purpose**: Device coordination and temporal synchronization
 
-**Physiological Signal Processing**:
-- Benedek, M., & Kaernbach, C. (2010). A continuous measure of phasic electrodermal activity. *Journal of Neuroscience Methods*, 190(1), 80-91
-- Greco, A., et al. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. *IEEE Transactions on Biomedical Engineering*, 63(4), 797-804
+### [Networking Protocol](README_networking_protocol.md)
+**Audience**: Network Engineers, Protocol Developers  
+**Purpose**: Communication protocol design and implementation
 
-**Wearable Sensor Applications**:
-- Picard, R. W., et al. (2001). Affective wearables. *Personal Technologies*, 1(4), 231-240
-- Schmidt, P., et al. (2018). Introducing WESAD, a multimodal dataset for wearable stress and affect detection. *ICMI '18: Proceedings of the 2018 on International Conference on Multimodal Interaction*
+### [Session Management](README_session_management.md)
+**Audience**: Developers, Data Engineers  
+**Purpose**: Session lifecycle and data organization
 
-**Computer Vision and Physiological Monitoring**:
-- Verkruysse, W., et al. (2008). Remote plethysmographic imaging using ambient light. *Optics Express*, 16(26), 21434-21445
-- Poh, M. Z., et al. (2010). Non-contact, automated cardiac pulse measurements using video imaging and blind source separation. *Optics Express*, 18(10), 10762-10774
-- Wang, W., et al. (2017). Algorithmic principles of remote PPG. *IEEE Transactions on Biomedical Engineering*, 64(7), 1479-1491
+### [UI Architecture](README_ui_architecture.md)
+**Audience**: UI/UX Developers, Frontend Engineers  
+**Purpose**: User interface design and interaction patterns
 
-## Integration Examples
+### [Testing and QA Framework](README_testing_qa_framework.md)
+**Audience**: QA Engineers, Test Automation Specialists  
+**Purpose**: Comprehensive testing methodology and automation
 
-### Basic Python Integration
+### [Thermal Camera Integration](README_topdon_tc001.md)
+**Audience**: Hardware Integration Engineers  
+**Purpose**: Thermal imaging system integration and calibration
 
-```python
-# Quick start example
-from shimmer_manager import ShimmerManager
+---
 
-# Initialize manager
-manager = ShimmerManager(enable_android_integration=True)
-manager.initialize()
+## 📋 Protocol and Data Contract Documentation
 
-# Discover and connect devices
-devices = manager.scan_and_pair_devices()
-if devices['direct'] or devices['android']:
-    manager.connect_devices(devices)
+### [System API Reference](PROTOCOL_system_api_reference.md)
+**Audience**: Developers, API Consumers  
+**Purpose**: Complete API documentation for all system components
+
+### [Data Models and File Organization](PROTOCOL_data_models_and_file_organization.md)
+**Audience**: Data Engineers, System Administrators  
+**Purpose**: Data storage architecture and file naming standards
+
+### [Functional Requirements Specification](PROTOCOL_functional_requirements_specification.md)
+**Audience**: Requirements Engineers, Stakeholders  
+**Purpose**: Complete functional and non-functional requirements
+
+### [CI/CD Pipeline Enhancement](PROTOCOL_cicd_pipeline_enhancement.md)
+**Audience**: DevOps Engineers, CI/CD Specialists  
+**Purpose**: Automated deployment and quality assurance pipeline
+
+### Component-Specific Protocols
+
+#### Device Integration Protocols
+- [Android Mobile Application Protocol](PROTOCOL_Android_Mobile_Application.md)
+- [Camera Recording Protocol](PROTOCOL_CameraRecorder.md)
+- [Shimmer3 GSR+ Protocol](PROTOCOL_shimmer3_gsr_plus.md)
+- [Python Desktop Controller Protocol](PROTOCOL_python_desktop_controller.md)
+- [Thermal Camera Protocol](PROTOCOL_topdon_tc001.md)
+
+#### System Protocols
+- [Multi-Device Synchronization Protocol](PROTOCOL_Multi_Device_Synchronization.md)
+- [Networking Protocol Specification](PROTOCOL_networking_protocol.md)
+- [Session Management Protocol](PROTOCOL_session_management.md)
+- [UI State Management Protocol](PROTOCOL_ui_state_management.md)
+- [Testing Framework Protocol](PROTOCOL_testing_qa_framework.md)
+
+---
+
+## 👥 User Guide Documentation
+
+### [System Operation Guide](USER_GUIDE_system_operation.md)
+**Audience**: Researchers, End-Users, Operators  
+**Purpose**: Comprehensive system operation and usage guide
+
+**Key Contents**:
+- Quick start guide and system setup
+- Device management and configuration
+- Recording session management
+- Camera calibration procedures
+- Data management and export options
+- Troubleshooting and advanced features
+
+### Component-Specific User Guides
+- [Android Mobile Application Guide](USER_GUIDE_Android_Mobile_Application.md)
+- [Camera Recording Guide](USER_GUIDE_CameraRecorder.md)
+- [Shimmer3 GSR+ Guide](USER_GUIDE_shimmer3_gsr_plus.md)
+- [Python Desktop Controller Guide](USER_GUIDE_python_desktop_controller.md)
+- [Multi-Device Synchronization Guide](USER_GUIDE_Multi_Device_Synchronization.md)
+- [Networking Protocol Guide](USER_GUIDE_networking_protocol.md)
+- [Session Management Guide](USER_GUIDE_session_management.md)
+- [UI Navigation Guide](USER_GUIDE_ui_navigation.md)
+- [Testing Framework Guide](USER_GUIDE_testing_qa_framework.md)
+- [Thermal Camera Guide](USER_GUIDE_topdon_tc001.md)
+
+---
+
+## 🧪 Testing and Validation Documentation
+
+### [Testing Framework Index](TESTING_FRAMEWORK_INDEX.md)
+**Audience**: QA Engineers, Developers  
+**Purpose**: Complete testing strategy and framework overview
+
+### Schema Definitions
+- [Session Metadata Schema](session_metadata_schema.json)
+- [Session Log Schema](session_log_schema.json)
+- [Calibration Session Schema](calibration_session_schema.json)
+
+### Quick Reference Guides
+---
+
+## 📍 Navigation Guide
+
+### For New Users
+
+**🚀 Getting Started**:
+1. Start with [System Operation Guide](USER_GUIDE_system_operation.md) for complete setup and usage
+2. Review [Project Context](README_project_context.md) to understand system capabilities
+3. Follow [Quick Start Guide](USER_GUIDE_system_operation.md#quick-start-guide) for immediate setup
+
+### For Researchers
+
+**📊 Research Focus**:
+1. [Academic Research](README_academic_research.md) - Literature review and theoretical foundations
+2. [Validation Methodology](README_validation_methodology.md) - Statistical validation and quality assurance
+3. [Computer Vision](README_computer_vision.md) - Physiological monitoring techniques
+
+### For Developers
+
+**⚙️ Technical Implementation**:
+1. [System Architecture](README_system_architecture.md) - Overall system design
+2. [System API Reference](PROTOCOL_system_api_reference.md) - Complete API documentation
+3. Component-specific README files for detailed implementation
+
+### For System Administrators
+
+**🔧 Operations and Maintenance**:
+1. [Data Models and File Organization](PROTOCOL_data_models_and_file_organization.md) - Data management
+2. [CI/CD Pipeline Enhancement](PROTOCOL_cicd_pipeline_enhancement.md) - Deployment and automation
+3. [Functional Requirements](PROTOCOL_functional_requirements_specification.md) - System requirements
+
+---
+
+## 🎯 Quick Start Recommendations
+
+| User Role | Recommended Starting Point | Next Steps |
+|-----------|---------------------------|------------|
+| **Researcher** | [System Operation Guide](USER_GUIDE_system_operation.md) | → [Academic Research](README_academic_research.md) |
+| **Android Developer** | [Android App README](README_Android_Mobile_Application.md) | → [Android App Protocol](PROTOCOL_Android_Mobile_Application.md) |
+| **Python Developer** | [Desktop Controller README](README_python_desktop_controller.md) | → [System API Reference](PROTOCOL_system_api_reference.md) |
+| **Computer Vision Engineer** | [Computer Vision README](README_computer_vision.md) | → [Camera Recording](README_CameraRecorder.md) |
+| **System Architect** | [System Architecture](README_system_architecture.md) | → [Design Patterns](README_design_patterns.md) |
+| **QA Engineer** | [Testing Framework](README_testing_qa_framework.md) | → [Validation Methodology](README_validation_methodology.md) |
+
+---
+
+## 🔍 Document Relationships
+
+```mermaid
+graph TD
+    A[System Operation Guide] --> B[Component READMEs]
+    B --> C[Component PROTOCOLs]
+    B --> D[Component USER_GUIDs]
     
-    # Configure sensors
-    channels = {"GSR", "PPG_A13", "ACCEL_X", "ACCEL_Y", "ACCEL_Z"}
-    for device_id in manager.device_status:
-        manager.set_enabled_channels(device_id, channels)
+    E[Academic Research] --> F[Computer Vision]
+    F --> G[Validation Methodology]
     
-    # Start recording
-    session_id = f"test_session_{int(time.time())}"
-    manager.start_recording(session_id)
+    H[System Architecture] --> I[Design Patterns]
+    I --> J[Testing Framework]
     
-    # Monitor for 60 seconds
-    time.sleep(60)
+    K[Project Context] --> L[Functional Requirements]
+    L --> M[CI/CD Pipeline]
     
-    # Stop and cleanup
-    manager.stop_recording()
-    manager.cleanup()
+    classDef userGuide fill:#e8f5e8
+    classDef academic fill:#e3f2fd
+    classDef technical fill:#fff3e0
+    classDef management fill:#f3e5f5
+    
+    class A,D userGuide
+    class E,F,G academic
+    class B,C,H,I,J technical
+    class K,L,M management
 ```
 
-### Android Integration Example
+---
 
-```kotlin
-// Android integration example
-class ShimmerActivity : AppCompatActivity() {
-    private lateinit var shimmerManager: ShimmerAndroidManager
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        shimmerManager = ShimmerAndroidManager(this)
-        shimmerManager.initialize()
-        
-        // Set data callback
-        shimmerManager.setDataCallback { objectCluster ->
-            val sample = objectCluster.toShimmerSample("device_001")
-            processShimmerData(sample)
-        }
-        
-        // Scan and connect
-        lifecycleScope.launch {
-            val devices = shimmerManager.scanForDevices()
-            if (devices.isNotEmpty()) {
-                val result = shimmerManager.connectDevice(
-                    devices.first().macAddress,
-                    BluetoothConnectionType.CLASSIC
-                )
-                if (result.success) {
-                    startDataCollection()
-                }
-            }
-        }
-    }
-}
-```
+## 📝 Version Information
 
-## Version Information
+- **Documentation Version**: 2.0.0
+- **Last Updated**: January 2025
+- **System Version**: Multi-Sensor Recording System v1.0
+- **Compatible Platforms**: Windows, macOS, Linux, Android API 24+
 
-- **Documentation Version**: 1.0.0
-- **Last Updated**: December 2024
-- **Compatible SDK Versions**: 
-  - Shimmer Java Android API: 3.2.3_beta+
-  - pyshimmer: 1.0.0+
-- **Minimum Android API**: 24 (Android 7.0)
-- **Python Requirements**: 3.8+
+---
 
-## Support and Contributing
+## 🤝 Support and Contributing
 
 ### Getting Help
-
-1. **Documentation Issues**: Check the [troubleshooting sections](USER_GUIDE_shimmer3_gsr_plus.md#troubleshooting-guide) in each document
-2. **Technical Support**: Refer to the [Shimmer Support Forum](https://www.shimmersensing.com/support/)
-3. **API Issues**: Review [GitHub Issues](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API/issues) for known problems
+1. Check component-specific troubleshooting sections
+2. Review [System Operation Guide troubleshooting](USER_GUIDE_system_operation.md#troubleshooting)
+3. Consult [Testing Framework](README_testing_qa_framework.md) for validation procedures
 
 ### Contributing
+Documentation improvements are welcome:
+- Error corrections and technical accuracy
+- Usage examples and practical guides  
+- Integration scenarios and best practices
+- Performance optimizations and tips
 
-Contributions to improve this documentation are welcome:
-
-1. **Error Corrections**: Submit corrections for technical accuracy
-2. **Usage Examples**: Add practical examples and use cases
-3. **Integration Guides**: Contribute guides for specific research applications
-4. **Performance Optimizations**: Share optimization techniques and best practices
-
-### Feedback
-
-Documentation feedback helps improve usability and accuracy:
-
-- **Clarity Issues**: Identify sections needing clarification
-- **Missing Information**: Suggest additional topics to cover
-- **Use Case Examples**: Propose specific application examples
-- **Integration Challenges**: Report difficulties in implementation
-
-This comprehensive documentation provides the foundation for successful integration and utilization of Shimmer3 GSR+ devices within research and application environments. The modular structure ensures that users can quickly find relevant information while providing complete technical details for advanced implementation scenarios.
+This comprehensive documentation suite provides complete coverage of the Multi-Sensor Recording System, enabling successful implementation and operation across diverse research and development scenarios.
