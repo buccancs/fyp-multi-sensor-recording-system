@@ -653,7 +653,7 @@ class MenuController @Inject constructor() {
     fun handleContextMenuSelection(item: MenuItem): Boolean {
         val dynamicItem = contextMenuConfig.items.find { it.id == item.itemId }
         if (dynamicItem != null) {
-            recordMenuInteraction(item.itemId, "context_menu")
+            trackMenuItemSelection(item.itemId, dynamicItem.title)
             dynamicItem.action()
             android.util.Log.d("MenuController", "[DEBUG_LOG] Context menu item selected: ${dynamicItem.title}")
             return true
@@ -714,7 +714,7 @@ class MenuController @Inject constructor() {
     fun handleDynamicMenuSelection(itemId: Int): Boolean {
         val dynamicItem = dynamicMenuItems[itemId]
         if (dynamicItem != null) {
-            recordMenuInteraction(itemId, "dynamic_menu")
+            trackMenuItemSelection(itemId, dynamicItem.title)
             dynamicItem.action()
             android.util.Log.d("MenuController", "[DEBUG_LOG] Dynamic menu item selected: ${dynamicItem.title}")
             return true
@@ -729,12 +729,12 @@ class MenuController @Inject constructor() {
     
     private fun getEnabledMenuItems(): Set<Int> {
         // This would be determined by actual menu state - simplified for implementation
-        return setOf(R.id.action_calibration, R.id.action_settings, R.id.action_about)
+        return setOf(R.id.action_settings, R.id.action_network_config, R.id.action_about)
     }
     
     private fun getVisibleMenuItems(): Set<Int> {
         // This would be determined by actual menu state - simplified for implementation
-        return setOf(R.id.action_calibration, R.id.action_settings, R.id.action_about, R.id.action_advanced_settings)
+        return setOf(R.id.action_settings, R.id.action_network_config, R.id.action_about, R.id.action_shimmer_config)
     }
     
     /**

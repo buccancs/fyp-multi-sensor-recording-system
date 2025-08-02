@@ -11,7 +11,7 @@ import android.widget.Toast
 import com.multisensor.recording.managers.PermissionManager
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.pow
+import kotlin.math.*
 
 /**
  * Controller responsible for handling all permission-related logic in mobile physiological sensing applications.
