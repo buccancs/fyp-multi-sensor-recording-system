@@ -133,9 +133,10 @@ class MainActivity : AppCompatActivity() {
         // Calibration
         binding.calibrationButton.setOnClickListener {
             try {
-                viewModel.runCalibration()
+                val intent = Intent(this, com.multisensor.recording.ui.CalibrationActivity::class.java)
+                startActivity(intent)
             } catch (e: Exception) {
-                showError("Calibration failed: ${e.message}")
+                showError("Failed to open calibration: ${e.message}")
             }
         }
         
@@ -152,10 +153,10 @@ class MainActivity : AppCompatActivity() {
         // Device settings
         binding.devicesButton.setOnClickListener {
             try {
-                val intent = Intent(this, com.multisensor.recording.ui.ShimmerConfigActivity::class.java)
+                val intent = Intent(this, com.multisensor.recording.ui.DevicesActivity::class.java)
                 startActivity(intent)
             } catch (e: Exception) {
-                showError("Failed to open device settings: ${e.message}")
+                showError("Failed to open device management: ${e.message}")
             }
         }
         
@@ -177,7 +178,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_diagnostics -> {
-                    runDiagnostics()
+                    navigateToActivity(com.multisensor.recording.ui.DiagnosticsActivity::class.java)
+                    true
+                }
+                R.id.action_about -> {
+                    navigateToActivity(com.multisensor.recording.ui.AboutActivity::class.java)
                     true
                 }
                 else -> false

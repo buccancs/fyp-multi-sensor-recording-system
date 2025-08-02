@@ -14,4 +14,10 @@
         android:title="Diagnostics"
         app:showAsAction="never" />
         
+    <item
+        android:id="@+id/action_about"
+        android:icon="@drawable/ic_info"
+        android:title="About"
+        app:showAsAction="never" />
+        
 </menu>
