@@ -96,3 +96,19 @@ tasks.register('runPythonTypeCheck', PythonTask) {
     description = "Run Python type checking with mypy"
     group = "verification"
 }
+
+// Task to run Python UI integration test
+tasks.register('runPythonUITest', PythonTask) {
+    dependsOn pipInstall
+    command = ["test_python_ui_integration.py"]
+    description = "Run Python desktop application UI integration test"
+    group = "integration-testing"
+}
+
+// Task to run IDE integration test suite
+tasks.register('runIDEIntegrationTest', PythonTask) {
+    dependsOn pipInstall
+    command = ["../test_ide_integration_suite.py"]
+    description = "Run complete IDE integration test suite for both PC and Android apps"
+    group = "integration-testing"
+}
