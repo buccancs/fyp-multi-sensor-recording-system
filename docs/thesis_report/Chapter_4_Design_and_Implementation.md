@@ -15,89 +15,229 @@
 
 ## System Architecture Overview
 
-The Multi-Sensor Recording System employs a sophisticated distributed architecture that coordinates multiple heterogeneous hardware platforms to achieve synchronized multi-modal data collection. The design follows a hybrid star-mesh topology that combines the simplicity of centralized coordination with the resilience of distributed processing.
+The Multi-Sensor Recording System employs a sophisticated distributed architecture specifically designed to address the unique challenges of synchronized multi-modal data collection in research environments. The architectural design represents a careful balance between the technical requirements for precise temporal coordination and the practical needs for system reliability, scalability, and maintainability. The architecture draws from established patterns in distributed systems while introducing novel adaptations specifically tailored for physiological measurement applications.
 
-### Architectural Principles
+The system's architectural foundation rests on the recognition that contactless physiological measurement requires coordination of heterogeneous hardware platforms, each with distinct computational capabilities, timing characteristics, and communication requirements. Traditional approaches to physiological measurement rely on dedicated laboratory equipment with built-in synchronization capabilities, but the contactless approach necessitates coordination of consumer-grade devices that were not originally designed for scientific applications. This challenge drove the development of a hybrid architectural pattern that combines the benefits of centralized coordination with the resilience and scalability advantages of distributed processing.
 
-The system design is guided by several core principles:
+### Fundamental Architectural Philosophy
 
-**Modularity and Separation of Concerns**: Each component operates as an independent unit with well-defined interfaces, enabling parallel development and simplified testing. The architecture enforces clear boundaries between data collection, processing, communication, and storage responsibilities.
+The architectural design philosophy emerges from several key insights gained through analysis of existing physiological measurement systems and the specific requirements of contactless measurement research. The design recognizes that research applications have fundamentally different characteristics from typical consumer or enterprise software applications, requiring approaches that prioritize data quality, temporal precision, and operational reliability over factors such as user interface sophistication or feature richness.
 
-**Distributed Processing with Centralized Coordination**: The design leverages the computational capabilities of mobile devices for data-intensive tasks while maintaining centralized control for session management and synchronization. This approach optimizes network bandwidth usage and provides system resilience.
+**Distributed Autonomy with Centralized Coordination**: The architecture implements a sophisticated balance between device autonomy and centralized control that enables both scalability and reliability. Each mobile device operates as an independent data collection agent with full responsibility for sensor management, data acquisition, and local storage, while participating in a coordinated measurement session managed by a central controller. This approach provides resilience against individual device failures while maintaining the precise coordination necessary for multi-modal analysis.
 
-**Fault Tolerance and Graceful Degradation**: The system continues operation when individual components fail, maintaining data collection from available devices while logging issues for post-session analysis.
+The distributed autonomy principle manifests in several critical design decisions. Each mobile device maintains complete operational capability independent of network connectivity, enabling continued data collection even during temporary communication interruptions. Local data buffering and storage ensure that no data is lost due to network latency or temporary connection issues, while comprehensive timestamp management enables post-session synchronization when real-time coordination is temporarily unavailable.
 
-### Overall System Topology
+**Modularity and Clear Separation of Concerns**: The system architecture enforces strict modularity boundaries that enable independent development, testing, and maintenance of different system components. Each architectural component has well-defined responsibilities and interfaces, facilitating parallel development by multiple team members while ensuring system coherence and integration quality. This modularity also enables selective component replacement or upgrading without affecting other system components, supporting long-term system evolution and adaptation to changing research requirements.
+
+The modular design extends beyond simple functional decomposition to encompass data flow isolation, error handling boundaries, and resource management domains. Each module maintains independent error handling and recovery mechanisms, preventing failures in one component from cascading throughout the system. Resource management is localized within modules, enabling fine-grained optimization and monitoring while preventing resource conflicts between components.
+
+**Fault Tolerance and Graceful Degradation**: The architecture incorporates comprehensive fault tolerance mechanisms that enable continued operation despite component failures or environmental challenges typical in research settings. The system distinguishes between critical failures that require session termination and non-critical issues that can be handled through graceful degradation without compromising overall research objectives.
+
+Fault tolerance implementation encompasses multiple layers of resilience including automatic reconnection mechanisms, data redundancy and validation, and adaptive quality management. The system continuously monitors component health and automatically adjusts operational parameters to maintain optimal performance despite changing conditions. When degradation is necessary, the system prioritizes maintenance of core functionality while providing comprehensive logging for post-session analysis and troubleshooting.
+
+### Comprehensive System Topology
+
+The system topology reflects the hybrid star-mesh pattern that provides both the simplicity of centralized coordination and the resilience of distributed operation. The topology supports dynamic reconfiguration during operation, enabling researchers to add or remove devices based on experimental requirements without disrupting ongoing data collection from other participants.
 
 ```mermaid
 graph TB
     subgraph "Central Coordination Hub"
-        PC[PC Controller<br/>Python Desktop App]
-        SYNC[Synchronization Engine]
-        STORE[Data Storage Manager]
-        PROC[Processing Pipeline]
+        PC[PC Controller<br/>Python Desktop Application]
+        SYNC[Synchronization Engine<br/>Network Time Protocol]
+        STORE[Data Storage Manager<br/>Structured File Organization]
+        PROC[Processing Pipeline<br/>Real-time Analysis]
+        HEALTH[Health Monitor<br/>System Status Tracking]
+        SESSION[Session Manager<br/>Experiment Coordination]
     end
     
-    subgraph "Mobile Data Collection Nodes"
-        A1[Android Device 1<br/>Samsung S22]
-        A2[Android Device 2<br/>Samsung S22]
-        A3[Android Device 3<br/>Samsung S22]
-        A4[Android Device 4<br/>Samsung S22]
+    subgraph "Mobile Data Collection Network"
+        A1[Android Device 1<br/>Samsung Galaxy S22]
+        A2[Android Device 2<br/>Samsung Galaxy S22]
+        A3[Android Device 3<br/>Samsung Galaxy S22]
+        A4[Android Device 4<br/>Samsung Galaxy S22]
     end
     
-    subgraph "Sensor Network"
-        S1[Shimmer3 GSR+ 1] --> A1
-        S2[Shimmer3 GSR+ 2] --> A2
-        T1[Topdon TC001 1] --> A1
-        T2[Topdon TC001 2] --> A2
-        W1[USB Webcam 1] --> PC
-        W2[USB Webcam 2] --> PC
+    subgraph "Sensor Hardware Ecosystem"
+        S1[Shimmer3 GSR+ Sensor 1] 
+        S2[Shimmer3 GSR+ Sensor 2]
+        T1[Topdon TC001 Thermal Camera 1]
+        T2[Topdon TC001 Thermal Camera 2]
+        W1[USB Webcam 1<br/>Logitech C920]
+        W2[USB Webcam 2<br/>Logitech C920]
     end
     
-    PC <--> A1
-    PC <--> A2
-    PC <--> A3
-    PC <--> A4
+    subgraph "Data Flow Architecture"
+        LOCAL_BUFFER[Local Data Buffers]
+        NETWORK_SYNC[Network Synchronization]
+        CENTRAL_STORAGE[Centralized Storage]
+    end
     
-    SYNC --> PROC
-    PROC --> STORE
+    PC --> SYNC
+    PC --> STORE
+    PC --> PROC
+    PC --> HEALTH
+    PC --> SESSION
+    
+    SESSION <--> A1
+    SESSION <--> A2
+    SESSION <--> A3
+    SESSION <--> A4
+    
+    S1 -.-> A1
+    S2 -.-> A2
+    T1 -.-> A1
+    T2 -.-> A2
+    W1 -.-> PC
+    W2 -.-> PC
+    
+    A1 --> LOCAL_BUFFER
+    A2 --> LOCAL_BUFFER
+    A3 --> LOCAL_BUFFER
+    A4 --> LOCAL_BUFFER
+    
+    LOCAL_BUFFER --> NETWORK_SYNC
+    NETWORK_SYNC --> CENTRAL_STORAGE
+    
+    SYNC --> NETWORK_SYNC
+    HEALTH --> A1
+    HEALTH --> A2
+    HEALTH --> A3
+    HEALTH --> A4
 ```
 
-The architecture supports horizontal scaling through the addition of mobile devices without requiring architectural modifications. Each mobile device operates autonomously while participating in the coordinated recording session.
+The topology design accommodates horizontal scaling through the simple addition of mobile devices without requiring architectural modifications or complex reconfiguration procedures. Each mobile device integrates into the coordination network through standardized protocols and interfaces, while the central coordination hub dynamically adapts to accommodate varying device counts and configurations.
+
+**Centralized Coordination Hub Architecture**: The central coordination hub represents the system's brain, responsible for session management, synchronization coordination, and comprehensive data integration. The hub architecture implements a layered design that separates coordination concerns from data processing tasks, enabling independent optimization and scaling of different functional areas.
+
+The synchronization engine maintains precise timing coordination across all devices through sophisticated network time protocol implementation and latency compensation algorithms. The data storage manager provides structured organization of multi-modal data streams with comprehensive metadata generation and validation. The processing pipeline enables real-time analysis and quality assessment, while the health monitor ensures continuous system status tracking and proactive issue detection.
+
+**Distributed Mobile Data Collection Network**: The mobile device network provides the primary data collection capability, with each device functioning as an autonomous agent responsible for specific sensing modalities. The network design enables flexible participant-to-device assignment while maintaining consistent data quality and synchronization across all devices.
+
+Each mobile device implements a complete data collection stack including sensor management, data acquisition, local storage, and network communication. The devices maintain operational independence while participating in coordinated measurement sessions, providing resilience against individual device failures and network connectivity issues.
+
+**Sensor Hardware Ecosystem Integration**: The sensor hardware ecosystem encompasses both integrated mobile device sensors and external specialized measurement equipment. The integration architecture provides unified interfaces for diverse hardware types while accommodating the specific communication and control requirements of each sensor category.
+
+The ecosystem design enables flexible sensor configuration for different research applications while maintaining consistent data formats and synchronization across all sensing modalities. Sensor integration includes automatic detection and configuration capabilities that minimize setup complexity and reduce the potential for configuration errors.
 
 ---
 
 ## Distributed System Design
 
-### Design Philosophy
+The distributed system design represents the architectural core that enables coordination of multiple independent computing platforms while maintaining the precise temporal synchronization and data integrity required for scientific applications. The design addresses fundamental challenges in distributed computing while adapting these solutions to the specific requirements of physiological measurement research. The approach balances theoretical distributed systems principles with practical implementation constraints imposed by mobile platforms and research environment limitations.
 
-The distributed system design addresses the challenge of coordinating multiple independent computing platforms while maintaining precise temporal synchronization and data integrity. The design balances the trade-offs between centralized control and distributed autonomy.
+### Design Philosophy and Theoretical Foundation
 
-#### Master-Coordinator Pattern
+The distributed system design philosophy emerged from careful analysis of the trade-offs inherent in coordinating heterogeneous mobile devices for scientific data collection. Traditional distributed systems often prioritize scalability and eventual consistency, but physiological measurement applications require strong consistency and precise temporal coordination. The design adapts established distributed systems patterns while introducing novel mechanisms specifically tailored for real-time multi-modal data collection.
 
-The system implements a master-coordinator pattern where the PC controller serves as the coordination master while mobile devices act as autonomous data collection agents:
+The theoretical foundation draws from several areas of distributed systems research including clock synchronization algorithms, consensus protocols, and fault-tolerant system design. However, the specific requirements of physiological measurement necessitated adaptations and extensions to these established approaches. The system must achieve microsecond-level timing precision across wireless networks while maintaining operation despite the inherent unreliability of mobile devices and consumer networking equipment.
+
+**Hybrid Coordination Model**: The system implements a novel hybrid coordination model that combines aspects of both centralized and decentralized distributed system architectures. The hybrid approach enables the system to achieve the precision and simplicity of centralized coordination while maintaining the resilience and scalability characteristics of decentralized systems. This balance is particularly important for research applications where system reliability is critical but operational flexibility must be maintained.
+
+The hybrid model manifests through a master-coordinator pattern where the central PC controller provides session coordination and synchronization services while mobile devices maintain autonomous operation capability. This design enables the system to continue data collection even during temporary coordination interruptions while ensuring precise synchronization when coordination is available.
+
+#### Master-Coordinator Pattern Implementation
+
+The master-coordinator pattern provides the organizational framework for managing complex multi-device recording sessions while maintaining clear responsibility boundaries and communication protocols. The pattern implementation addresses the unique challenges of coordinating mobile devices that may have varying computational capabilities, network connectivity characteristics, and battery constraints.
 
 ```mermaid
 graph TD
-    subgraph "Coordination Layer"
-        MASTER[PC Master Controller]
-        COORD[Session Coordinator]
-        SYNC[Synchronization Manager]
-        HEALTH[Health Monitor]
+    subgraph "Coordination Management Layer"
+        MASTER[PC Master Controller<br/>Central Decision Authority]
+        COORD[Session Coordinator<br/>Protocol Manager]
+        SYNC[Synchronization Manager<br/>Time Reference Authority]
+        HEALTH[Health Monitor<br/>Status Aggregation]
+        RESOURCE[Resource Manager<br/>Load Balancing]
     end
     
-    subgraph "Agent Layer"
-        AGENT1[Mobile Agent 1]
-        AGENT2[Mobile Agent 2]
-        AGENT3[Mobile Agent 3]
-        AGENT4[Mobile Agent 4]
+    subgraph "Agent Management Layer"
+        AGENT1[Mobile Agent 1<br/>Data Collection Node]
+        AGENT2[Mobile Agent 2<br/>Data Collection Node]
+        AGENT3[Mobile Agent 3<br/>Data Collection Node]
+        AGENT4[Mobile Agent 4<br/>Data Collection Node]
+    end
+    
+    subgraph "Communication Infrastructure"
+        PROTOCOL[Communication Protocol Stack]
+        DISCOVERY[Device Discovery Service]
+        ENCRYPTION[Security and Encryption Layer]
+        COMPRESSION[Data Compression Layer]
+    end
+    
+    subgraph "Data Management Layer"
+        BUFFER[Distributed Buffer Management]
+        STORAGE[Coordinated Storage System]
+        METADATA[Metadata Generation Engine]
+        VALIDATION[Data Validation Framework]
     end
     
     MASTER --> COORD
     COORD --> SYNC
     SYNC --> HEALTH
+    HEALTH --> RESOURCE
     
     COORD <--> AGENT1
+    COORD <--> AGENT2
+    COORD <--> AGENT3
+    COORD <--> AGENT4
+    
+    AGENT1 <--> PROTOCOL
+    AGENT2 <--> PROTOCOL
+    AGENT3 <--> PROTOCOL
+    AGENT4 <--> PROTOCOL
+    
+    PROTOCOL --> DISCOVERY
+    PROTOCOL --> ENCRYPTION
+    PROTOCOL --> COMPRESSION
+    
+    AGENT1 --> BUFFER
+    AGENT2 --> BUFFER
+    AGENT3 --> BUFFER
+    AGENT4 --> BUFFER
+    
+    BUFFER --> STORAGE
+    STORAGE --> METADATA
+    METADATA --> VALIDATION
+```
+
+**Central Master Controller Responsibilities**: The master controller serves as the authoritative decision-making entity responsible for session lifecycle management, synchronization coordination, and system-wide resource allocation. The controller implements sophisticated state management that tracks the operational status of all system components while coordinating complex multi-phase operations such as session initialization, synchronized recording start/stop, and graceful session termination.
+
+The master controller's design emphasizes reliability and fault tolerance, implementing comprehensive error handling and recovery mechanisms that ensure continued operation despite individual component failures. The controller maintains persistent state information that enables session recovery after temporary failures while providing comprehensive logging for research documentation and system troubleshooting.
+
+**Mobile Agent Architecture**: Each mobile device implements a sophisticated agent architecture that balances autonomous operation with coordinated behavior. The agent design enables independent data collection and local processing while participating in coordinated measurement sessions through standardized communication protocols. The architecture provides resilience against network connectivity issues while maintaining the real-time responsiveness required for physiological measurement applications.
+
+Mobile agents implement local decision-making capabilities that enable continued operation during coordination interruptions while maintaining compatibility with centralized session management. The agent architecture includes comprehensive data buffering, local storage management, and quality assessment capabilities that ensure data integrity regardless of network conditions.
+
+### Advanced Synchronization Architecture
+
+The synchronization architecture represents one of the most technically sophisticated aspects of the system design, addressing the fundamental challenge of achieving precise temporal coordination across wireless networks with inherent latency and jitter characteristics. The synchronization design implements multiple complementary approaches that work together to achieve timing precision comparable to dedicated laboratory equipment.
+
+**Multi-Layer Synchronization Strategy**: The system implements a layered synchronization approach that addresses timing coordination at multiple levels of the system architecture. This multi-layer strategy provides both coarse-grained session coordination and fine-grained timestamp precision, ensuring that data from different modalities can be accurately aligned for scientific analysis.
+
+The synchronization layers include network time protocol implementation for coarse synchronization, software-based clock coordination for medium-precision timing, and hardware timestamp extraction for maximum precision. Each layer contributes to overall timing accuracy while providing redundancy and validation for other synchronization mechanisms.
+
+**Network Latency Compensation Algorithms**: The system implements sophisticated algorithms that dynamically measure and compensate for network latency variations that would otherwise compromise synchronization accuracy. These algorithms continuously monitor round-trip communication times and adjust synchronization parameters to maintain accuracy despite changing network conditions.
+
+The latency compensation implementation includes predictive algorithms that anticipate network condition changes based on historical patterns, enabling proactive synchronization adjustments that maintain accuracy during network congestion or quality variations. The system also implements fallback mechanisms that maintain operation during severe network degradation while providing appropriate quality indicators for post-session analysis.
+
+**Clock Drift Detection and Correction**: Long-duration recording sessions require ongoing clock drift detection and correction to maintain synchronization accuracy throughout extended experimental periods. The system implements continuous monitoring of clock drift across all devices with automatic correction algorithms that maintain synchronization without disrupting ongoing data collection.
+
+The drift correction implementation balances accuracy with stability, applying corrections gradually to avoid introducing artificial timing discontinuities that could affect physiological analysis. The system maintains comprehensive drift monitoring logs that enable post-session validation of synchronization quality and identification of periods requiring special attention during analysis.
+
+### Fault Tolerance and Recovery Mechanisms
+
+The fault tolerance design recognizes that research applications cannot tolerate data loss or extended downtime, requiring comprehensive mechanisms that ensure continued operation despite component failures or environmental challenges. The fault tolerance architecture implements multiple layers of protection including proactive failure detection, automatic recovery mechanisms, and graceful degradation strategies.
+
+**Proactive Health Monitoring**: The system implements comprehensive health monitoring that continuously assesses the operational status of all system components and identifies potential issues before they result in failures. The monitoring system tracks performance metrics, resource utilization, network connectivity quality, and data collection parameters while maintaining historical baselines that enable trend analysis and predictive failure detection.
+
+Health monitoring extends beyond simple status checking to include quality assessment of collected data, enabling early detection of measurement problems that might not manifest as obvious system failures. The monitoring system provides real-time alerts and automatic corrective actions that maintain system operation while providing comprehensive documentation for research quality assurance.
+
+**Automatic Recovery and Reconnection**: The system implements sophisticated automatic recovery mechanisms that restore normal operation after temporary failures without requiring manual intervention. Recovery mechanisms include automatic device reconnection after network interruptions, session state restoration after temporary coordinator failures, and data synchronization after communication gaps.
+
+The recovery implementation prioritizes data integrity over operational continuity, ensuring that no data is lost or corrupted during recovery operations even if this requires temporary operation suspension. Recovery mechanisms include comprehensive validation procedures that verify system integrity before resuming normal operation.
+
+**Graceful Degradation Strategies**: When complete recovery is not possible, the system implements graceful degradation strategies that maintain partial functionality while providing clear indication of operational limitations. Degradation strategies prioritize core data collection functionality while temporarily suspending advanced features that require full system coordination.
+
+The degradation implementation includes dynamic quality assessment that adjusts operational parameters based on available system resources and capabilities. The system maintains comprehensive documentation of degradation events and their impact on data quality, enabling informed decisions about data analysis approaches and quality considerations.
     COORD <--> AGENT2
     COORD <--> AGENT3
     COORD <--> AGENT4
