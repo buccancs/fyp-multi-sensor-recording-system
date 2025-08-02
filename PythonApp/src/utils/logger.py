@@ -1,13 +1,19 @@
 """
 Logger Utilities for Multi-Sensor Recording System Controller
 
+⚠️  DEPRECATED: This module is being phased out in favor of the modern logging system
+    in utils/logging_config.py. New code should use:
+    
+    from utils.logging_config import get_logger
+    logger = get_logger(__name__)
+
 This module provides placeholder functionality for advanced logging capabilities.
-It will be implemented in future milestones to handle file logging, log rotation,
-structured logging, and integration with external logging systems.
+Some functionality like export_logs and cleanup_old_logs may be migrated to the
+new logging system.
 
 Author: Multi-Sensor Recording System Team
 Date: 2025-07-29
-Milestone: 3.1 - PyQt GUI Scaffolding and Application Framework (Placeholder Module)
+Status: DEPRECATED - Use utils.logging_config instead
 """
 
 from enum import Enum

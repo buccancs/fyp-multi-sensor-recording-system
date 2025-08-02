@@ -19,7 +19,6 @@ Date: 2025-01-16 (Enhanced for rock-solid integration)
 """
 
 import csv
-import logging
 import os
 import queue
 import sys
@@ -31,6 +30,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Callable, Any, Set, Union
 from enum import Enum
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 # Import network components for Android integration
 from network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
@@ -197,7 +199,7 @@ class ShimmerManager:
     def __init__(self, session_manager=None, logger=None, enable_android_integration=True):
         """Initialize Enhanced ShimmerManager with Android integration"""
         self.session_manager = session_manager
-        self.logger = logger or logging.getLogger(__name__)
+        self.logger = logger or get_logger(__name__)
         self.enable_android_integration = enable_android_integration
 
         # Device management
@@ -1608,11 +1610,8 @@ class ShimmerManager:
 
 # Enhanced example usage and testing
 if __name__ == "__main__":
-    # Configure logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    )
+    # Modern logging is auto-initialized
+    logger = get_logger(__name__)
 
     # Create callbacks for monitoring
     def on_data_received(sample: ShimmerSample):

@@ -8,11 +8,13 @@ device configurations and export/import session settings.
 
 import json
 import os
-import logging
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, asdict
 from pathlib import Path
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 
 @dataclass
@@ -49,7 +51,7 @@ class ConfigurationManager:
     
     def __init__(self, config_dir: Optional[str] = None):
         """Initialize ConfigurationManager"""
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
         
         # Set up configuration directory
         if config_dir:
