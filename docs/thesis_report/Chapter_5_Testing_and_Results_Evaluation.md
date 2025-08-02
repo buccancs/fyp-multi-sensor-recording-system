@@ -119,17 +119,17 @@ graph TD
     end
     
     subgraph "Specialized Testing Layer"
-        PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>Response time <2.1s avg]
-        STRESS[Stress Tests<br/>Resource Limit Testing<br/>99.7% availability]
-        RELIABILITY[Reliability Tests<br/>Long-Duration Operation<br/>168hr continuous]
-        SECURITY[Security Tests<br/>Data Protection Validation<br/>Zero vulnerabilities]
-        USABILITY[Usability Tests<br/>User Experience Validation<br/>4.3/5.0 satisfaction]
+        PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>4 device coordination]
+        STRESS[Stress Tests<br/>Resource Limit Testing<br/>71.4% success rate]
+        RELIABILITY[Reliability Tests<br/>Network Resilience Testing<br/>1ms-500ms latency tolerance]
+        SECURITY[Security Tests<br/>Data Protection Validation<br/>Integrity verification]
+        USABILITY[Usability Tests<br/>User Experience Validation<br/>Cross-platform integration]
     end
     
     subgraph "Research-Specific Testing Layer"
-        ACCURACY[Accuracy Tests<br/>Measurement Precision Validation<br/>±3.2ms temporal precision]
-        SYNCHRONIZATION[Synchronization Tests<br/>Temporal Accuracy Validation<br/>95.7% within tolerance]
-        SCIENTIFIC[Scientific Validation<br/>Research Methodology Verification<br/>Peer review ready]
+        ACCURACY[Accuracy Tests<br/>Measurement Precision Validation<br/>Network resilience validated]
+        SYNCHRONIZATION[Synchronization Tests<br/>Temporal Coordination Testing<br/>Multi-device synchronization]
+        SCIENTIFIC[Scientific Validation<br/>Research Methodology Verification<br/>Component documentation]
     end
     
     UNIT --> SERVICE
@@ -1217,14 +1217,13 @@ The comprehensive performance testing and benchmarking initiative systematically
 
 | Performance Metric | Target Value | Measured Value | Achievement Rate | Statistical Confidence |
 |---|---|---|---|---|
-| **Response Time (Average)** | <3.0s | 2.1s ± 0.3s | 130% (30% better) | 95% confidence interval |
-| **Response Time (95th Percentile)** | <5.0s | 3.7s ± 0.5s | 135% (35% better) | 95% confidence interval |
-| **Throughput (Peak)** | ≥50 req/min | 67.3 req/min | 135% (35% better) | p < 0.01 significance |
-| **Memory Utilization (Peak)** | <8GB | 5.2GB ± 0.8GB | 154% (54% better) | Stress testing validation |
-| **CPU Utilization (Average)** | <70% | 48.6% ± 12.3% | 144% (44% better) | Extended operation testing |
-| **Network Bandwidth Usage** | <100Mbps | 72.4Mbps ± 15.2Mbps | 138% (38% better) | Multi-device scenarios |
-| **Disk I/O Performance** | ≥500 IOPS | 847 IOPS | 169% (69% better) | Sequential and random access |
-| **Database Query Time** | <200ms | 134ms ± 45ms | 149% (49% better) | Complex query scenarios |
+| **Test Success Rate** | ≥90% | 71.4% ± 5.2% | 79% (needs improvement) | Based on 7 test suite runs |
+| **Network Latency Tolerance** | <100ms | 1ms-500ms | Variable performance | Network resilience testing |
+| **Device Coordination** | ≥4 devices | 4 devices | 100% (meets target) | Multi-device coordination validated |
+| **Data Integrity** | 100% | 100% | 100% (target met) | Comprehensive corruption testing |
+| **Test Suite Duration** | <300s | 272s ± 15s | 109% (9% better) | 95% confidence interval |
+| **Connection Recovery** | ≥95% | 100% | 105% (5% better) | Network dropout scenarios |
+| **Message Loss Tolerance** | <10% | 0-6.7% | Variable | Depends on network conditions |
 
 **Figure 5.3: Performance Benchmark Results Over Time**
 
@@ -1241,15 +1240,12 @@ xychart-beta
 
 **Table 5.4: Scalability Testing Results**
 
-| Device Count | Response Time (avg) | Memory Usage | CPU Usage | Network Load | Success Rate | Notes |
+| Device Count | Network Latency | Message Loss | Connection Success | Sync Quality | Success Rate | Notes |
 |---|---|---|---|---|---|---|
-| **1 Device** | 1.2s ± 0.2s | 2.1GB | 23% | 15Mbps | 100% | Baseline performance |
-| **2 Devices** | 1.4s ± 0.3s | 2.8GB | 31% | 28Mbps | 100% | Linear scaling observed |
-| **4 Devices** | 2.1s ± 0.4s | 4.2GB | 48% | 54Mbps | 99.8% | Optimal configuration |
-| **6 Devices** | 2.9s ± 0.6s | 5.9GB | 62% | 79Mbps | 99.2% | Good performance |
-| **8 Devices** | 3.7s ± 0.8s | 7.1GB | 74% | 98Mbps | 98.1% | Near capacity limit |
-| **10 Devices** | 5.2s ± 1.2s | 9.3GB | 89% | 127Mbps | 94.3% | Resource constraints |
-| **12 Devices** | 7.8s ± 2.1s | 12.1GB | 96% | 156Mbps | 87.6% | Degraded performance |
+| **1 Device** | 1.0ms avg | 0% | 100% | Excellent | 100% | Baseline performance |
+| **2 Devices** | 1.2ms avg | 0% | 100% | Excellent | 100% | Good scaling |
+| **4 Devices** | 46-198ms avg | 0-6.7% | 100% | Good | 100% | Tested configuration |
+| **Higher counts** | Not tested | N/A | N/A | N/A | N/A | Future work needed |
 
 **Figure 5.4: Scalability Performance Analysis**
 
@@ -1262,17 +1258,15 @@ xychart-beta
     line "Target Response Time" [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
 ```
 
-**Table 5.5: Stress Testing Results Under Extreme Conditions**
+**Table 5.5: Stress Testing Results Under Network Conditions**
 
-| Stress Scenario | Duration | Peak Load | System Response | Recovery Time | Data Integrity |
+| Network Scenario | Duration | Network Characteristics | System Response | Message Success | Data Integrity |
 |---|---|---|---|---|---|
-| **High Network Latency** | 2 hours | 500ms latency | Graceful degradation | <30s | 100% preserved |
-| **Limited Bandwidth** | 4 hours | 10Mbps constraint | Adaptive compression | <15s | 100% preserved |
-| **Memory Pressure** | 6 hours | 90% RAM usage | Garbage collection optimization | <45s | 100% preserved |
-| **CPU Overload** | 3 hours | 95% CPU usage | Priority queue management | <20s | 99.8% preserved |
-| **Disk Space Limitation** | 8 hours | <5% free space | Automatic cleanup | <60s | 100% preserved |
-| **Concurrent User Load** | 12 hours | 50 simultaneous sessions | Load balancing | <10s | 99.9% preserved |
-| **Extended Operation** | 168 hours | Continuous operation | Stable performance | N/A | 100% preserved |
+| **Perfect Network** | 20 seconds | 1ms latency, 0% loss | Optimal performance | 100% | 100% preserved |
+| **High Latency** | 21.5 seconds | 500ms latency, 0% loss | Graceful adaptation | 100% | 100% preserved |
+| **Packet Loss** | 20.8 seconds | 50ms latency, 5% loss | Error recovery active | 97.9% | 100% preserved |
+| **Limited Bandwidth** | 21.6 seconds | 100ms latency, 1% loss, 1Mbps | Adaptive behavior | 97.9% | 100% preserved |
+| **Unstable Connection** | 20.8 seconds | 200ms latency, 3% loss, 2Mbps | Connection recovery | 93.3% | 100% preserved |
 
 ### Reliability and Long-Duration Testing
 
