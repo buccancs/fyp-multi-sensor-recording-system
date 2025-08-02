@@ -43,6 +43,10 @@
     <string name="action_stop_recording">Stop Recording</string>
     <string name="action_run_calibration">Run Calibration</string>
     
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    
     <!-- Permissions -->
     <string name="permission_required">Permissions Required</string>
     <string name="permission_request">Request Permissions</string>
