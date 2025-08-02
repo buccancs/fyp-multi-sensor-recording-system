@@ -1,5 +1,18 @@
 # Multi-Device Synchronization System - Protocol Specification
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Network Architecture](#network-architecture)
+- [Communication Ports and Protocols](#communication-ports-and-protocols)
+- [JSON Message Protocol](#json-message-protocol)
+  - [Message Structure](#message-structure)
+  - [Command Messages (PC → Android)](#command-messages-pc--android)
+- [NTP Time Synchronization Protocol](#ntp-time-synchronization-protocol)
+- [File Transfer Protocol](#file-transfer-protocol)
+- [Session State Synchronization](#session-state-synchronization)
+- [Device Discovery Protocol](#device-discovery-protocol)
+
 ## Overview
 
 This document defines the data contracts, APIs, and network message formats used by the Multi-Device Synchronization System. It serves as the authoritative reference for developers implementing synchronization clients, extending the protocol, or integrating new device types.

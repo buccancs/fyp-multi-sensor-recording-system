@@ -1,5 +1,36 @@
 # Multi-Device Synchronization System - User Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [What is Multi-Device Synchronization?](#what-is-multi-device-synchronization)
+  - [Why Synchronization Matters](#why-synchronization-matters)
+- [Pre-flight Checklist](#pre-flight-checklist)
+  - [Network Requirements](#network-requirements)
+  - [Hardware Setup](#hardware-setup)
+  - [Software Verification](#software-verification)
+- [Step-by-Step Setup Guide](#step-by-step-setup-guide)
+  - [Step 1: Start the PC Controller](#step-1-start-the-pc-controller)
+  - [Step 2: Connect Android Devices](#step-2-connect-android-devices)
+  - [Step 3: Verify Synchronization Quality](#step-3-verify-synchronization-quality)
+  - [Step 4: Configure Recording Parameters](#step-4-configure-recording-parameters)
+- [Recording Session Workflow](#recording-session-workflow)
+  - [Starting a Recording Session](#starting-a-recording-session)
+  - [During Recording](#during-recording)
+  - [Stopping a Recording Session](#stopping-a-recording-session)
+- [Expected Results and Data Output](#expected-results-and-data-output)
+  - [File Organization](#file-organization)
+  - [Data Quality Validation](#data-quality-validation)
+  - [Temporal Alignment Verification](#temporal-alignment-verification)
+- [Troubleshooting Guide](#troubleshooting-guide)
+  - [Common Issues and Solutions](#common-issues-and-solutions)
+  - [Advanced Troubleshooting](#advanced-troubleshooting)
+- [Tips for Optimal Performance](#tips-for-optimal-performance)
+  - [Best Practices](#best-practices)
+  - [Performance Expectations](#performance-expectations)
+  - [Recommended Session Workflow](#recommended-session-workflow)
+- [Frequently Asked Questions](#frequently-asked-questions)
+
 ## Overview
 
 The Multi-Device Synchronization System ensures that all your recording devices (smartphones, thermal cameras, webcams, and physiological sensors) capture data at exactly the same moments in time. This guide will help you set up, use, and troubleshoot the synchronization system for your research experiments.

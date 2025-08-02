@@ -1,5 +1,33 @@
 # User Guide: Android Mobile Data Collection Node
 
+## Table of Contents
+
+- [Quick Start Guide](#quick-start-guide)
+  - [Pre-flight Checklist](#pre-flight-checklist)
+- [Getting Started](#getting-started)
+  - [1. Initial App Launch](#1-initial-app-launch)
+  - [2. Main Interface Overview](#2-main-interface-overview)
+- [Recording Procedures](#recording-procedures)
+  - [3. Preparing for Recording](#3-preparing-for-recording)
+  - [4. Recording Session Workflow](#4-recording-session-workflow)
+- [Sensor Configuration](#sensor-configuration)
+  - [5. Camera Setup and Configuration](#5-camera-setup-and-configuration)
+  - [6. Thermal Camera Integration](#6-thermal-camera-integration)
+  - [7. Shimmer3 GSR+ Sensor](#7-shimmer3-gsr-sensor)
+- [Calibration Procedures](#calibration-procedures)
+  - [8. Camera Calibration](#8-camera-calibration)
+  - [9. System Synchronization](#9-system-synchronization)
+- [Data Management](#data-management)
+  - [10. Session Data Organization](#10-session-data-organization)
+  - [11. Quality Assurance](#11-quality-assurance)
+- [Troubleshooting](#troubleshooting)
+  - [12. Common Issues and Solutions](#12-common-issues-and-solutions)
+  - [13. Advanced Features](#13-advanced-features)
+- [Best Practices](#best-practices)
+  - [14. Research Guidelines](#14-research-guidelines)
+- [Support and Resources](#support-and-resources)
+  - [15. Getting Help](#15-getting-help)
+
 ## Quick Start Guide
 
 ### Pre-flight Checklist
