@@ -146,6 +146,21 @@ class WebDashboardServer:
             """Session management page."""
             return render_template('sessions.html')
         
+        @self.app.route('/playback')
+        def playback():
+            """Session playback page."""
+            return render_template('playback.html')
+        
+        @self.app.route('/files')
+        def files():
+            """File viewer page."""
+            return render_template('files.html')
+        
+        @self.app.route('/settings')
+        def settings():
+            """Settings page."""
+            return render_template('settings.html')
+        
         @self.app.route('/api/status')
         def api_status():
             """Get current system status."""
@@ -483,6 +498,610 @@ class WebDashboardServer:
                 
             except Exception as e:
                 logger.error(f"Session download error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        # === PLAYBACK API ENDPOINTS ===
+        
+        @self.app.route('/api/playback/sessions')
+        def api_playback_sessions():
+            """Get list of recorded sessions for playback."""
+            try:
+                # Mock recorded sessions - in real implementation would query storage
+                sessions = [
+                    {
+                        'id': 'session_20250802_001',
+                        'name': 'Baseline Recording',
+                        'start_time': '2025-08-02T10:30:00Z',
+                        'duration': 1800,
+                        'devices': ['android_1', 'android_2', 'webcam_1'],
+                        'status': 'completed'
+                    },
+                    {
+                        'id': 'session_20250802_002', 
+                        'name': 'Stress Test',
+                        'start_time': '2025-08-02T14:15:00Z',
+                        'duration': 1200,
+                        'devices': ['android_1', 'shimmer_1', 'shimmer_2'],
+                        'status': 'completed'
+                    }
+                ]
+                
+                return jsonify({'success': True, 'sessions': sessions})
+                
+            except Exception as e:
+                logger.error(f"Playback sessions error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/session/<session_id>')
+        def api_playback_session_data(session_id):
+            """Get detailed session data for playback."""
+            try:
+                # Mock session data
+                session_data = {
+                    'id': session_id,
+                    'name': 'Baseline Recording',
+                    'start_time': '2025-08-02T10:30:00Z',
+                    'duration': 1800,
+                    'devices': ['android_1', 'android_2', 'webcam_1'],
+                    'status': 'completed',
+                    'data_size': '2.5 GB'
+                }
+                
+                return jsonify({'success': True, 'session': session_data})
+                
+            except Exception as e:
+                logger.error(f"Playback session data error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/session/<session_id>/videos')
+        def api_playback_session_videos(session_id):
+            """Get video files for session playback."""
+            try:
+                # Mock video files
+                videos = [
+                    {'filename': 'camera1.mp4', 'duration': 1800},
+                    {'filename': 'camera2.mp4', 'duration': 1800}
+                ]
+                
+                return jsonify({'success': True, 'videos': videos})
+                
+            except Exception as e:
+                logger.error(f"Playback videos error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/session/<session_id>/sensors')
+        def api_playback_session_sensors(session_id):
+            """Get sensor data for session playback."""
+            try:
+                # Mock sensor data points
+                import random
+                time_points = list(range(0, 1800, 5))  # Every 5 seconds
+                
+                sensor_data = {
+                    'gsr': [{'x': t, 'y': random.uniform(0.1, 2.0)} for t in time_points],
+                    'thermal': [{'x': t, 'y': random.uniform(25, 35)} for t in time_points],
+                    'shimmer': [{'x': t, 'y': random.uniform(0.5, 3.0)} for t in time_points],
+                    'heart_rate': [{'x': t, 'y': random.uniform(60, 100)} for t in time_points]
+                }
+                
+                return jsonify({'success': True, 'sensor_data': sensor_data})
+                
+            except Exception as e:
+                logger.error(f"Playback sensors error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/video/<session_id>/<filename>')
+        def api_playback_video(session_id, filename):
+            """Serve video file for playback."""
+            try:
+                # In real implementation, would serve actual video files
+                # For demo, return 404 since we don't have real files
+                return jsonify({'success': False, 'error': 'Video file not found'}), 404
+                
+            except Exception as e:
+                logger.error(f"Video playback error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/export-segment', methods=['POST'])
+        def api_playback_export_segment():
+            """Export a segment of session data."""
+            try:
+                data = request.get_json() or {}
+                session_id = data.get('session_id')
+                start_time = data.get('start_time')
+                end_time = data.get('end_time')
+                
+                # Mock export process
+                logger.info(f"Exporting segment from {start_time}s to {end_time}s for session {session_id}")
+                
+                return jsonify({'success': True, 'message': 'Segment exported successfully'})
+                
+            except Exception as e:
+                logger.error(f"Export segment error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/session/<session_id>/report')
+        def api_playback_session_report(session_id):
+            """Generate session analysis report."""
+            try:
+                # Mock report generation
+                report_html = f"""
+                <html>
+                <head><title>Session Report - {session_id}</title></head>
+                <body>
+                    <h1>Session Analysis Report</h1>
+                    <h2>Session: {session_id}</h2>
+                    <p>Generated: {datetime.now().isoformat()}</p>
+                    <h3>Summary</h3>
+                    <p>Session duration: 30 minutes</p>
+                    <p>Devices: 3</p>
+                    <p>Data points: 10,800</p>
+                </body>
+                </html>
+                """
+                
+                from flask import make_response
+                response = make_response(report_html)
+                response.headers['Content-Type'] = 'text/html'
+                return response
+                
+            except Exception as e:
+                logger.error(f"Session report error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/playback/session/<session_id>/sync-analysis')
+        def api_playback_sync_analysis(session_id):
+            """Analyze synchronization quality of session."""
+            try:
+                # Mock sync analysis
+                import random
+                analysis = {
+                    'sync_quality': random.uniform(0.7, 0.95),
+                    'max_drift': random.uniform(0.1, 2.0),
+                    'avg_drift': random.uniform(0.05, 0.5)
+                }
+                
+                return jsonify({'success': True, 'analysis': analysis})
+                
+            except Exception as e:
+                logger.error(f"Sync analysis error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        # === FILE VIEWER API ENDPOINTS ===
+        
+        @self.app.route('/api/files/browse')
+        def api_files_browse():
+            """Browse files in directory."""
+            try:
+                path = request.args.get('path', '/')
+                
+                # Mock file listing
+                files = [
+                    {
+                        'name': 'session_20250802_001',
+                        'type': 'directory',
+                        'size': 0,
+                        'modified': '2025-08-02T10:30:00Z',
+                        'path': path + '/session_20250802_001'
+                    },
+                    {
+                        'name': 'camera1.mp4',
+                        'type': 'file',
+                        'size': 2684354560,  # 2.5 GB
+                        'modified': '2025-08-02T11:00:00Z',
+                        'path': path + '/camera1.mp4'
+                    },
+                    {
+                        'name': 'sensor_data.json',
+                        'type': 'file',
+                        'size': 1048576,  # 1 MB
+                        'modified': '2025-08-02T11:00:00Z',
+                        'path': path + '/sensor_data.json'
+                    }
+                ]
+                
+                return jsonify({'success': True, 'files': files})
+                
+            except Exception as e:
+                logger.error(f"File browse error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/details')
+        def api_files_details():
+            """Get detailed file information."""
+            try:
+                file_path = request.args.get('path')
+                
+                # Mock file details
+                file_details = {
+                    'name': os.path.basename(file_path),
+                    'type': 'file',
+                    'size': 1048576,
+                    'modified': '2025-08-02T11:00:00Z',
+                    'path': file_path
+                }
+                
+                return jsonify({'success': True, 'file': file_details})
+                
+            except Exception as e:
+                logger.error(f"File details error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/content')
+        def api_files_content():
+            """Get file content for preview."""
+            try:
+                file_path = request.args.get('path')
+                
+                # For demo, return empty response since we don't have real files
+                return jsonify({'success': False, 'error': 'File not found'}), 404
+                
+            except Exception as e:
+                logger.error(f"File content error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/download')
+        def api_files_download():
+            """Download a file."""
+            try:
+                file_path = request.args.get('path')
+                
+                # For demo, return a small text file
+                response_data = f"Demo file content for {file_path}"
+                from flask import make_response
+                response = make_response(response_data)
+                response.headers['Content-Type'] = 'application/octet-stream'
+                response.headers['Content-Disposition'] = f'attachment; filename={os.path.basename(file_path)}'
+                return response
+                
+            except Exception as e:
+                logger.error(f"File download error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/download-multiple', methods=['POST'])
+        def api_files_download_multiple():
+            """Download multiple files as ZIP."""
+            try:
+                data = request.get_json() or {}
+                files = data.get('files', [])
+                
+                # Mock ZIP creation
+                response_data = f"ZIP archive containing {len(files)} files"
+                from flask import make_response
+                response = make_response(response_data)
+                response.headers['Content-Type'] = 'application/zip'
+                response.headers['Content-Disposition'] = 'attachment; filename=selected_files.zip'
+                return response
+                
+            except Exception as e:
+                logger.error(f"Multiple download error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/delete-multiple', methods=['POST'])
+        def api_files_delete_multiple():
+            """Delete multiple files."""
+            try:
+                data = request.get_json() or {}
+                files = data.get('files', [])
+                
+                # Mock deletion
+                logger.info(f"Deleting {len(files)} files")
+                
+                return jsonify({'success': True, 'message': f'Deleted {len(files)} files'})
+                
+            except Exception as e:
+                logger.error(f"Multiple delete error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/open-external', methods=['POST'])
+        def api_files_open_external():
+            """Open file in external application."""
+            try:
+                data = request.get_json() or {}
+                file_path = data.get('path')
+                
+                # Mock external open
+                logger.info(f"Opening file externally: {file_path}")
+                
+                return jsonify({'success': True, 'message': 'File opened in external application'})
+                
+            except Exception as e:
+                logger.error(f"Open external error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/properties')
+        def api_files_properties():
+            """Get detailed file properties."""
+            try:
+                file_path = request.args.get('path')
+                
+                # Mock properties
+                properties = {
+                    'File Name': os.path.basename(file_path),
+                    'File Type': 'Video File',
+                    'Size': '2.5 GB',
+                    'Created': '2025-08-02T10:30:00Z',
+                    'Modified': '2025-08-02T11:00:00Z',
+                    'Duration': '30:00',
+                    'Resolution': '1920x1080',
+                    'Frame Rate': '30 fps',
+                    'Codec': 'H.264'
+                }
+                
+                return jsonify({'success': True, 'properties': properties})
+                
+            except Exception as e:
+                logger.error(f"File properties error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/create-folder', methods=['POST'])
+        def api_files_create_folder():
+            """Create a new folder."""
+            try:
+                data = request.get_json() or {}
+                path = data.get('path')
+                name = data.get('name')
+                
+                # Mock folder creation
+                logger.info(f"Creating folder {name} in {path}")
+                
+                return jsonify({'success': True, 'message': f'Folder "{name}" created'})
+                
+            except Exception as e:
+                logger.error(f"Create folder error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/upload', methods=['POST'])
+        def api_files_upload():
+            """Upload files."""
+            try:
+                # Mock file upload
+                files = request.files.getlist('files')
+                path = request.form.get('path')
+                
+                logger.info(f"Uploading {len(files)} files to {path}")
+                
+                return jsonify({'success': True, 'message': f'Uploaded {len(files)} files'})
+                
+            except Exception as e:
+                logger.error(f"File upload error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/export-zip')
+        def api_files_export_zip():
+            """Export directory as ZIP."""
+            try:
+                path = request.args.get('path')
+                
+                # Mock ZIP export
+                response_data = f"ZIP export of directory {path}"
+                from flask import make_response
+                response = make_response(response_data)
+                response.headers['Content-Type'] = 'application/zip'
+                response.headers['Content-Disposition'] = f'attachment; filename=export_{int(time.time())}.zip'
+                return response
+                
+            except Exception as e:
+                logger.error(f"Export ZIP error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/files/generate-index')
+        def api_files_generate_index():
+            """Generate file index."""
+            try:
+                path = request.args.get('path')
+                
+                # Mock index generation
+                logger.info(f"Generating index for {path}")
+                
+                return jsonify({'success': True, 'message': 'File index generated'})
+                
+            except Exception as e:
+                logger.error(f"Generate index error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        # === SETTINGS API ENDPOINTS ===
+        
+        @self.app.route('/api/settings')
+        def api_settings_get():
+            """Get current settings."""
+            try:
+                # Mock settings
+                settings = {
+                    'theme': 'light',
+                    'language': 'en',
+                    'autosaveInterval': 5,
+                    'notifications': True,
+                    'recordingDuration': 30,
+                    'videoQuality': '1080p',
+                    'audioRecording': True,
+                    'autoStartRecording': False,
+                    'compressionLevel': 5,
+                    'androidTimeout': 30,
+                    'androidRetries': 3,
+                    'androidAutoReconnect': True,
+                    'shimmerSamplingRate': 256,
+                    'shimmerBatteryWarning': 20,
+                    'shimmerEnabledSensors': ['GSR', 'Accelerometer'],
+                    'webcamResolution': '1920x1080',
+                    'webcamFPS': 30,
+                    'serverPort': 9000,
+                    'webPort': 5000,
+                    'connectionTimeout': 30,
+                    'enableSSL': False,
+                    'dataCompression': True,
+                    'autoCalibration': False,
+                    'calibrationPattern': 'checkerboard',
+                    'patternSize': 25,
+                    'minCalibrationImages': 10,
+                    'storagePath': './recordings',
+                    'autoCleanup': False,
+                    'cleanupThreshold': 85,
+                    'retentionPeriod': 30,
+                    'autoBackup': True,
+                    'backupInterval': 'daily',
+                    'backupPath': './backups',
+                    'debugMode': False,
+                    'logLevel': 'INFO',
+                    'memoryLimit': 1024,
+                    'workerThreads': 4
+                }
+                
+                return jsonify({'success': True, 'settings': settings})
+                
+            except Exception as e:
+                logger.error(f"Get settings error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings', methods=['POST'])
+        def api_settings_save():
+            """Save settings."""
+            try:
+                settings = request.get_json() or {}
+                
+                # Mock settings save
+                logger.info(f"Saving {len(settings)} settings")
+                
+                return jsonify({'success': True, 'message': 'Settings saved successfully'})
+                
+            except Exception as e:
+                logger.error(f"Save settings error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/reset', methods=['POST'])
+        def api_settings_reset():
+            """Reset settings to defaults."""
+            try:
+                # Mock settings reset
+                logger.info("Resetting settings to defaults")
+                
+                return jsonify({'success': True, 'message': 'Settings reset to defaults'})
+                
+            except Exception as e:
+                logger.error(f"Reset settings error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/storage-status')
+        def api_settings_storage_status():
+            """Get storage status information."""
+            try:
+                # Mock storage status
+                import random
+                total = 1000000000000  # 1 TB
+                used = int(total * random.uniform(0.3, 0.8))
+                free = total - used
+                
+                storage = {
+                    'total': total,
+                    'used': used,
+                    'free': free
+                }
+                
+                return jsonify({'success': True, 'storage': storage})
+                
+            except Exception as e:
+                logger.error(f"Storage status error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/backups')
+        def api_settings_backups():
+            """Get list of available backups."""
+            try:
+                # Mock backup list
+                backups = [
+                    {
+                        'name': 'backup_20250802.json',
+                        'date': '2025-08-02T10:00:00Z',
+                        'size': 2048
+                    },
+                    {
+                        'name': 'backup_20250801.json',
+                        'date': '2025-08-01T10:00:00Z',
+                        'size': 1950
+                    }
+                ]
+                
+                return jsonify({'success': True, 'backups': backups})
+                
+            except Exception as e:
+                logger.error(f"Get backups error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/backup', methods=['POST'])
+        def api_settings_create_backup():
+            """Create a new backup."""
+            try:
+                # Mock backup creation
+                backup_name = f"backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                logger.info(f"Creating backup: {backup_name}")
+                
+                return jsonify({'success': True, 'message': f'Backup created: {backup_name}'})
+                
+            except Exception as e:
+                logger.error(f"Create backup error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/restore', methods=['POST'])
+        def api_settings_restore_backup():
+            """Restore from backup."""
+            try:
+                # Mock backup restoration
+                logger.info("Restoring from backup")
+                
+                return jsonify({'success': True, 'message': 'Backup restored successfully'})
+                
+            except Exception as e:
+                logger.error(f"Restore backup error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/backup/<backup_name>/download')
+        def api_settings_download_backup(backup_name):
+            """Download a backup file."""
+            try:
+                # Mock backup download
+                response_data = f"Backup file: {backup_name}"
+                from flask import make_response
+                response = make_response(response_data)
+                response.headers['Content-Type'] = 'application/json'
+                response.headers['Content-Disposition'] = f'attachment; filename={backup_name}'
+                return response
+                
+            except Exception as e:
+                logger.error(f"Download backup error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/backup/<backup_name>', methods=['DELETE'])
+        def api_settings_delete_backup(backup_name):
+            """Delete a backup file."""
+            try:
+                # Mock backup deletion
+                logger.info(f"Deleting backup: {backup_name}")
+                
+                return jsonify({'success': True, 'message': f'Backup deleted: {backup_name}'})
+                
+            except Exception as e:
+                logger.error(f"Delete backup error: {e}")
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.app.route('/api/settings/browse-directory', methods=['POST'])
+        def api_settings_browse_directory():
+            """Browse for directory selection."""
+            try:
+                data = request.get_json() or {}
+                directory_type = data.get('type')
+                
+                # Mock directory selection
+                mock_paths = {
+                    'storage': '/home/user/recordings',
+                    'backup': '/home/user/backups'
+                }
+                
+                selected_path = mock_paths.get(directory_type, '/home/user')
+                
+                return jsonify({'success': True, 'path': selected_path})
+                
+            except Exception as e:
+                logger.error(f"Browse directory error: {e}")
                 return jsonify({'success': False, 'error': str(e)}), 500
     
     def _setup_socket_handlers(self):
