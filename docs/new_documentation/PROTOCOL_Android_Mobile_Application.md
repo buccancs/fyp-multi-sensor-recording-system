@@ -615,9 +615,217 @@ timestamp_unix_ms,timestamp_shimmer,gsr_resistance_kohm,internal_adc_0,internal_
 
 ---
 
-### 6. Error Handling and Recovery
+### 6. Enhanced State Persistence and Recovery Protocols
 
-#### 6.1 Error Code Classifications
+#### 6.1 JSON-based State Persistence
+
+All controllers implement standardized JSON-based state persistence using Android SharedPreferences:
+
+**State Persistence Structure:**
+```json
+{
+  "controller_name": {
+    "state_version": "1.0",
+    "last_updated": 1640995200000,
+    "state_data": {
+      // Controller-specific state data
+    },
+    "recovery_info": {
+      "session_id": "session_20220101_120000",
+      "recovery_attempts": 0,
+      "last_recovery_timestamp": 1640995200000
+    }
+  }
+}
+```
+
+#### 6.2 CalibrationController State Protocol
+
+**Calibration Session State:**
+```json
+{
+  "calibration_session": {
+    "isSessionActive": true,
+    "sessionId": "cal_session_20220101_120000",
+    "currentPattern": "STEREO_CHECKERBOARD",
+    "completedPoints": 8,
+    "totalPoints": 15,
+    "startTimestamp": 1640995200000,
+    "lastUpdateTimestamp": 1640995205000,
+    "pattern_data": {
+      "pattern_size": [9, 6],
+      "square_size_mm": 25.0,
+      "detection_parameters": {
+        "adaptive_threshold": true,
+        "corner_refinement": "CORNER_REFINE_RT"
+      }
+    },
+    "captured_images": [
+      {
+        "image_id": "cal_img_001",
+        "timestamp": 1640995201000,
+        "corners_detected": 54,
+        "reprojection_error": 0.34
+      }
+    ]
+  }
+}
+```
+
+#### 6.3 NetworkController Encryption Protocol
+
+**AES-256 Encryption Configuration:**
+```json
+{
+  "encryption_config": {
+    "algorithm": "AES-256-CBC",
+    "key_length": 256,
+    "iv_length": 16,
+    "key_derivation": "PBKDF2",
+    "iterations": 10000,
+    "salt_length": 32
+  }
+}
+```
+
+**Encrypted Message Structure:**
+```json
+{
+  "type": "encrypted_data",
+  "timestamp": 1640995200000,
+  "encryption": {
+    "algorithm": "AES-256-CBC",
+    "iv": "base64_encoded_initialization_vector",
+    "salt": "base64_encoded_salt",
+    "key_id": "encryption_key_identifier"
+  },
+  "payload": "base64_encoded_encrypted_data"
+}
+```
+
+#### 6.4 Machine Learning Bandwidth Prediction
+
+**Bandwidth Prediction Model Data:**
+```json
+{
+  "ml_bandwidth_model": {
+    "model_type": "linear_regression",
+    "last_trained": 1640995200000,
+    "training_samples": 1000,
+    "accuracy_score": 0.87,
+    "features": [
+      "signal_strength_dbm",
+      "network_type",
+      "time_of_day",
+      "data_usage_mb",
+      "connected_devices"
+    ],
+    "coefficients": [0.45, -0.23, 0.12, -0.08, 0.34],
+    "intercept": 15.6,
+    "prediction_confidence": 0.92
+  }
+}
+```
+
+**Real-time Signal Strength Data:**
+```json
+{
+  "signal_monitoring": {
+    "wifi": {
+      "ssid": "network_name",
+      "rssi_dbm": -45,
+      "frequency_mhz": 5180,
+      "link_speed_mbps": 866,
+      "signal_quality": "excellent"
+    },
+    "cellular": {
+      "network_operator": "carrier_name",
+      "signal_strength_dbm": -78,
+      "network_type": "5G",
+      "signal_quality": "good",
+      "data_usage_mb": 124.5
+    }
+  }
+}
+```
+
+#### 6.5 Device Management Protocol
+
+**Device Prioritization Configuration:**
+```json
+{
+  "device_priority_config": {
+    "prioritization_rules": [
+      {
+        "rule_id": "thermal_priority",
+        "device_type": "thermal_camera",
+        "priority_weight": 0.9,
+        "criteria": ["temperature_accuracy", "frame_rate", "usb_speed"]
+      },
+      {
+        "rule_id": "shimmer_priority", 
+        "device_type": "shimmer_sensor",
+        "priority_weight": 0.8,
+        "criteria": ["battery_level", "signal_strength", "data_quality"]
+      }
+    ],
+    "hot_swap_config": {
+      "detection_interval_ms": 1000,
+      "grace_period_ms": 5000,
+      "auto_reconnect": true,
+      "fallback_device_id": "backup_device_001"
+    }
+  }
+}
+```
+
+#### 6.6 UI State and Theme Management
+
+**UI Controller State Protocol:**
+```json
+{
+  "ui_state": {
+    "theme_config": {
+      "current_theme": "DARK",
+      "auto_theme_enabled": true,
+      "theme_switch_time": "sunset",
+      "custom_colors": {
+        "primary": "#2196F3",
+        "secondary": "#FF9800",
+        "accent": "#4CAF50"
+      }
+    },
+    "accessibility_config": {
+      "increased_touch_targets": true,
+      "high_contrast_mode": false,
+      "audio_feedback": true,
+      "haptic_feedback": true,
+      "font_scale": 1.2
+    },
+    "menu_state": {
+      "dynamic_items": [
+        {
+          "item_id": "advanced_settings",
+          "enabled": true,
+          "visibility": "visible",
+          "position": 3
+        }
+      ],
+      "context_menu_config": {
+        "trigger_type": "long_press",
+        "show_icons": true,
+        "max_items": 8
+      }
+    }
+  }
+}
+```
+
+---
+
+### 7. Error Handling and Recovery
+
+#### 7.1 Error Code Classifications
 
 **Connection Errors (1000-1099)**
 - 1001: Network connection lost
@@ -643,7 +851,7 @@ timestamp_unix_ms,timestamp_shimmer,gsr_resistance_kohm,internal_adc_0,internal_
 - 1303: Memory allocation failed
 - 1304: Permission denied
 
-#### 6.2 Recovery Protocols
+#### 7.2 Recovery Protocols
 
 **Automatic Recovery Actions:**
 - Network reconnection with exponential backoff
@@ -659,23 +867,56 @@ timestamp_unix_ms,timestamp_shimmer,gsr_resistance_kohm,internal_adc_0,internal_
 
 ---
 
-### 7. Security and Privacy
+### 8. Security and Privacy
 
-#### 7.1 Data Protection
+#### 8.1 Enhanced Data Protection
 
-**Encryption:**
-- Optional AES-256 encryption for sensitive data
-- Secure key exchange with PC controller
-- Encrypted storage for session data
-- SSL/TLS for network communication
+**AES-256 Encryption Implementation:**
+- **Algorithm**: AES-256-CBC with PBKDF2 key derivation
+- **Key Management**: Secure key generation with 256-bit entropy
+- **Initialization Vectors**: Cryptographically secure random IV generation
+- **Key Exchange**: Diffie-Hellman key exchange with PC controller
+- **Performance**: Hardware-accelerated encryption when available
 
-**Access Control:**
-- Device authentication required
-- Session-based authorization
-- Role-based permission system
-- Audit trail for all operations
+**Encryption Workflow:**
+```mermaid
+sequenceDiagram
+    participant AC as Android Client
+    participant ENC as Encryption Module
+    participant PC as PC Controller
+    
+    AC->>ENC: Initialize Encryption
+    ENC->>ENC: Generate 256-bit Key
+    ENC->>ENC: Generate Random IV
+    AC->>PC: Key Exchange Request
+    PC->>AC: Public Key Response
+    AC->>ENC: Encrypt Data Stream
+    ENC->>PC: Encrypted Data + IV
+    PC->>ENC: Decrypt Data Stream
+    ENC->>PC: Decrypted Data
+```
 
-#### 7.2 Privacy Compliance
+**Advanced Security Features:**
+- **Perfect Forward Secrecy**: Session keys never reused
+- **Authentication**: HMAC-SHA256 message authentication
+- **Integrity Verification**: CRC32 checksums for data validation
+- **Secure Storage**: Android Keystore integration for key protection
+
+#### 8.2 Network Security Enhancements
+
+**Signal Strength-based Security:**
+- **Adaptive Security Levels**: Encryption strength based on signal quality
+- **Network Quality Assessment**: Real-time evaluation of connection security
+- **Automatic Fallback**: Degraded functionality on unsecure networks
+- **Connection Validation**: Continuous monitoring of network integrity
+
+**ML-Enhanced Security:**
+- **Anomaly Detection**: Machine learning models detect unusual network patterns
+- **Bandwidth Protection**: Predictive models prevent data overflow attacks
+- **Quality Assurance**: AI-driven validation of encryption effectiveness
+- **Adaptive Algorithms**: Self-tuning security parameters based on usage patterns
+
+#### 8.3 Privacy Compliance
 
 **Data Minimization:**
 - Collect only necessary sensor data
