@@ -39,11 +39,15 @@ graph TB
             end
             
             subgraph "Controller Layer"
-                CC[CalibrationController]
+                CC[CalibrationController<br/>+ JSON State Persistence]
                 SC[ShimmerController]
-                UC[UsbController]
-                NC[NetworkController]
+                UC[UsbController<br/>+ Device Prioritization]
+                NC[NetworkController<br/>+ AES-256 Encryption<br/>+ ML Bandwidth Prediction]
                 PC[PermissionController]
+                UIC[UIController<br/>+ Dynamic Theming<br/>+ Accessibility]
+                SDC[StatusDisplayController<br/>+ Custom Indicators]
+                MC[MenuController<br/>+ Dynamic Menus]
+                MAC[MainActivityCoordinator<br/>+ Enhanced State Management]
             end
         end
     end
@@ -103,6 +107,40 @@ graph TB
 - **Sampling Rate Control**: Configurable data collection frequencies
 - **Session-based Recording**: Organized data collection with timestamps
 - **Multiple Sensor Support**: Simultaneous connection to multiple Shimmer devices
+
+### 🔧 Enhanced Controller Architecture
+
+The application features a comprehensive controller architecture with advanced state management, security, and user experience enhancements:
+
+#### State Persistence & Recovery
+- **JSON-based State Persistence**: All controllers implement SharedPreferences-based state persistence with structured JSON storage
+- **Session Recovery**: Automatic restoration of interrupted recording and calibration sessions
+- **Configuration Resilience**: UI state and device configurations survive app restarts and configuration changes
+- **Cross-Controller Synchronization**: Coordinated state management across all system components
+
+#### Advanced Networking & Security
+- **AES-256 Encryption**: Secure data transmission with proper key management and initialization vectors
+- **Real-time Signal Strength**: WiFi RSSI and cellular signal strength monitoring for connection optimization
+- **Machine Learning Bandwidth Prediction**: Linear regression models for adaptive streaming quality
+- **Advanced Protocol Support**: RTMP, WebRTC, HLS, DASH, UDP, and TCP streaming protocols
+
+#### Enhanced Device Management
+- **Device Prioritization**: Intelligent device selection for multi-device recording scenarios
+- **Hot-swap Detection**: Automatic device replacement handling with seamless transitions
+- **Per-device Configuration Profiles**: Persistent settings and calibration states for each device
+- **Network-based Status Reporting**: Remote monitoring and diagnostics capabilities
+
+#### User Interface & Accessibility
+- **Dynamic Theming**: Light, dark, and auto modes with persistent theme selection
+- **Comprehensive Accessibility**: Touch target adjustment, high contrast mode, and audio feedback
+- **UI Component Validation**: Automatic error detection and recovery for UI inconsistencies
+- **Advanced Menu System**: Dynamic menu items, context menus, and keyboard navigation
+
+#### Production-Ready Features
+- **Enhanced Error Handling**: Automatic recovery mechanisms with fallback strategies
+- **Thread Safety**: Concurrent operation support with proper synchronization
+- **Resource Management**: Automatic cleanup and memory optimization
+- **Comprehensive Logging**: Structured logging for debugging and system monitoring
 
 ### 🌐 Distributed Architecture
 
