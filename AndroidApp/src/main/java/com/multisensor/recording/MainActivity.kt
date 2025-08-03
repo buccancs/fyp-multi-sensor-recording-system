@@ -15,7 +15,9 @@ import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.SystemHealthStatus
 import com.multisensor.recording.ui.SettingsActivity
+import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Streamlined Material Design 3 Dashboard
@@ -31,6 +33,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    
+    @Inject
+    lateinit var logger: Logger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         setupUI()
         observeViewModel()
+        initializeCamera()
     }
 
     private fun setupUI() {
@@ -113,6 +119,16 @@ class MainActivity : AppCompatActivity() {
                 showError("Failed to open device management: ${e.message}")
             }
         }
+        
+        // Transfer files to PC
+        binding.transferButton.setOnClickListener {
+            try {
+                viewModel.transferFilesToPC()
+                showMessage("File transfer started")
+            } catch (e: Exception) {
+                showError("Failed to start file transfer: ${e.message}")
+            }
+        }
     }
 
     private fun setupFloatingActionButton() {
@@ -164,12 +180,92 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initializeCamera() {
+        try {
+            // Initialize camera system with TextureView
+            val cameraTextureView = binding.cameraPreview
+            val thermalSurfaceView = binding.thermalPreview
+            
+            viewModel.initializeSystem(cameraTextureView, thermalSurfaceView)
+            
+            // Update status overlays
+            binding.cameraStatusOverlay.text = "Initializing camera..."
+            binding.thermalStatusOverlay.text = "Initializing thermal camera..."
+            
+            // Check RAW stage 3 availability after initialization
+            checkRawStage3Availability()
+            
+            // Check thermal camera availability and update UI
+            checkThermalCameraAvailability()
+            
+        } catch (e: Exception) {
+            showError("Failed to initialize camera: ${e.message}")
+            binding.cameraStatusOverlay.text = "Camera Error"
+            binding.thermalStatusOverlay.text = "Thermal Error"
+        }
+    }
+
+    /**
+     * Check and display RAW stage 3 capture availability
+     */
+    private fun checkRawStage3Availability() {
+        lifecycleScope.launch {
+            try {
+                val isAvailable = viewModel.checkRawStage3Availability()
+                
+                val message = if (isAvailable) {
+                    "✓ RAW Stage 3 Capture: AVAILABLE"
+                } else {
+                    "✗ RAW Stage 3 Capture: NOT AVAILABLE"
+                }
+                
+                // Show status in a toast for immediate user feedback
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                
+                logger.info("RAW Stage 3 availability check completed: $isAvailable")
+                
+            } catch (e: Exception) {
+                logger.error("Error during RAW stage 3 availability check", e)
+                Toast.makeText(this@MainActivity, "Error checking RAW capabilities", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Check thermal camera availability and notify user
+     */
+    private fun checkThermalCameraAvailability() {
+        lifecycleScope.launch {
+            try {
+                val isAvailable = viewModel.checkThermalCameraAvailability()
+                
+                val message = if (isAvailable) {
+                    "✓ Topdon Thermal Camera: AVAILABLE"
+                } else {
+                    "✗ Topdon Thermal Camera: NOT AVAILABLE"
+                }
+                
+                // Show status in a toast for immediate user feedback
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                
+                logger.info("Thermal camera availability check completed: $isAvailable")
+                
+            } catch (e: Exception) {
+                logger.error("Error during thermal camera availability check", e)
+                Toast.makeText(this@MainActivity, "Error checking thermal camera", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun updateUI(uiState: MainUiState) {
         // Update recording controls
         updateRecordingControls(uiState)
         
         // Update device status indicators
         updateDeviceStatusIndicators(uiState)
+        
+        // Update camera status overlay
+        updateCameraStatusOverlay(uiState)
         
         // Update storage info
         updateStorageInfo(uiState)
@@ -197,6 +293,58 @@ class MainActivity : AppCompatActivity() {
         updateStatusChip(binding.shimmerStatusChip, "Shimmer", uiState.isShimmerConnected)
         updateStatusChip(binding.thermalStatusChip, "Thermal", uiState.isThermalConnected)
         updateStatusChip(binding.networkStatusChip, "Network", uiState.isNetworkConnected)
+    }
+
+    private fun updateCameraStatusOverlay(uiState: MainUiState) {
+        // Update RGB camera status overlay
+        when {
+            uiState.isLoadingPermissions -> {
+                binding.cameraStatusOverlay.text = "Initializing camera..."
+                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            uiState.isInitialized && uiState.errorMessage == null -> {
+                // Camera is working - hide overlay to show live preview
+                binding.cameraStatusOverlay.text = ""
+                binding.cameraStatusOverlay.visibility = android.view.View.GONE
+            }
+            uiState.errorMessage?.contains("camera", ignoreCase = true) == true -> {
+                binding.cameraStatusOverlay.text = "Camera\nError"
+                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            !uiState.isInitialized -> {
+                binding.cameraStatusOverlay.text = "Camera\nDisconnected"
+                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            else -> {
+                binding.cameraStatusOverlay.text = "Camera\n[Live]"
+                binding.cameraStatusOverlay.visibility = android.view.View.GONE
+            }
+        }
+
+        // Update thermal camera status overlay
+        when {
+            uiState.isLoadingPermissions -> {
+                binding.thermalStatusOverlay.text = "Initializing thermal camera..."
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            uiState.isThermalConnected && uiState.thermalPreviewAvailable -> {
+                // Thermal camera is working - hide overlay to show live preview
+                binding.thermalStatusOverlay.text = ""
+                binding.thermalStatusOverlay.visibility = android.view.View.GONE
+            }
+            uiState.errorMessage?.contains("thermal", ignoreCase = true) == true -> {
+                binding.thermalStatusOverlay.text = "Thermal\nError"
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            !uiState.isThermalConnected -> {
+                binding.thermalStatusOverlay.text = "Thermal\nDisconnected"
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            else -> {
+                binding.thermalStatusOverlay.text = "Thermal\n[Live]"
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+        }
     }
     
     private fun updateStatusChip(chip: com.google.android.material.chip.Chip, deviceName: String, isConnected: Boolean) {

@@ -484,6 +484,32 @@ class ThermalRecorder
             )
 
         /**
+         * Check if thermal camera (Topdon TC001/Plus) is available for preview
+         * Returns true if a supported Topdon device is connected and initialized
+         */
+        fun isThermalCameraAvailable(): Boolean {
+            try {
+                // Check if USB manager is available
+                if (usbManager == null) {
+                    return false
+                }
+
+                // Check for connected Topdon devices
+                val usbDevices = usbManager?.deviceList ?: return false
+                val supportedDevice = usbDevices.values.find { device ->
+                    device.vendorId == 0x0416 && // Topdon vendor ID
+                    SUPPORTED_PRODUCT_IDS.contains(device.productId)
+                }
+
+                // Return true if device is found and we have initialization
+                return supportedDevice != null && isInitialized.get()
+            } catch (e: Exception) {
+                logger.error("Failed to check thermal camera availability", e)
+                return false
+            }
+        }
+
+        /**
          * Frame callback from Topdon SDK (to be implemented)
          */
         private fun onFrameReceived(
