@@ -198,6 +198,138 @@ graph TB
         PC[PC Controller<br/>Python Desktop Application]
         SYNC[Synchronization Engine<br/>Network Time Protocol]
         STORE[Data Storage Manager<br/>Structured File Organization]
+        CAL[Camera Calibration System<br/>Multi-Device Coordination]
+        ML[Machine Learning Pipeline<br/>Real-Time Inference]
+    end
+    
+    subgraph "Distributed Mobile Sensors"
+        M1[Mobile Device 1<br/>Android Application]
+        M2[Mobile Device 2<br/>Android Application]
+        M3[Mobile Device N<br/>Android Application]
+    end
+    
+    subgraph "Camera Systems"
+        CAM1[USB Camera 1<br/>Logitech Brio 4K]
+        CAM2[USB Camera 2<br/>Logitech Brio 4K]
+    end
+    
+    subgraph "Thermal Imaging"
+        THERM1[Thermal Camera 1<br/>TopDon TC001+]
+        THERM2[Thermal Camera 2<br/>TopDon TC001+]
+    end
+    
+    subgraph "Physiological Sensors"
+        GSR1[Shimmer3 GSR+ 1<br/>Reference Physiological]
+        GSR2[Shimmer3 GSR+ 2<br/>Reference Physiological]
+    end
+    
+    subgraph "Data Processing Pipeline"
+        VISION[Computer Vision Engine<br/>OpenCV + MediaPipe]
+        THERMAL[Thermal Analysis<br/>Temperature Processing]
+        SIGNAL[Signal Processing<br/>Physiological Analysis]
+        FUSION[Multi-Modal Fusion<br/>Data Integration]
+    end
+    
+    PC --- SYNC
+    PC --- STORE
+    PC --- CAL
+    PC --- ML
+    
+    SYNC -.->|Network Time Protocol| M1
+    SYNC -.->|Network Time Protocol| M2
+    SYNC -.->|Network Time Protocol| M3
+    
+    PC -.->|JSON WebSocket| M1
+    PC -.->|JSON WebSocket| M2
+    PC -.->|JSON WebSocket| M3
+    
+    CAM1 --> PC
+    CAM2 --> PC
+    
+    M1 --> THERM1
+    M2 --> THERM2
+    
+    M1 --> GSR1
+    M2 --> GSR2
+    
+    PC --> VISION
+    THERM1 --> THERMAL
+    THERM2 --> THERMAL
+    GSR1 --> SIGNAL
+    GSR2 --> SIGNAL
+    
+    VISION --> FUSION
+    THERMAL --> FUSION
+    SIGNAL --> FUSION
+    
+    FUSION --> STORE
+```
+
+### Comprehensive System Component Architecture
+
+**Central Python Desktop Controller - Master Orchestration Hub:**
+
+The Python Desktop Controller represents the central orchestration hub that implements sophisticated distributed system coordination patterns specifically adapted for research applications. The controller architecture employs a comprehensive dependency injection container with lifecycle management, enabling sophisticated service orchestration that supports both real-time operation and comprehensive testing frameworks.
+
+**Core Controller Components:**
+- **Application Container**: Advanced IoC container providing service orchestration with dependency injection and lifecycle management
+- **Network Layer**: Sophisticated TCP/WebSocket server implementation supporting up to 8 simultaneous device connections with automatic load balancing
+- **Synchronization Engine**: Master clock synchronizer implementing custom NTP protocols optimized for local network precision
+- **Session Management**: Comprehensive session lifecycle management with automatic recovery and data integrity validation
+- **Quality Assurance Engine**: Real-time monitoring and optimization system ensuring research-grade data quality across all sensor modalities
+
+**Advanced Android Mobile Application - Distributed Sensor Nodes:**
+
+The Android mobile application architecture implements sophisticated autonomous operation capabilities while maintaining seamless integration with the central coordination framework. Each mobile device operates as a fully capable data collection agent with complete local autonomy, enabling continued operation during network interruptions while participating in coordinated measurement sessions.
+
+**Mobile Application Architecture:**
+- **Fragment-Based UI**: Modern Android architecture with RecordingFragment, DevicesFragment, and CalibrationFragment for comprehensive operational control
+- **Multi-Sensor Coordination**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors with real-time processing
+- **Local Data Management**: Room database implementation with automatic backup, data validation, and integrity verification
+- **Network Communication**: Retrofit 2 and OkHttp 4 implementation providing robust WebSocket communication with automatic reconnection
+- **Background Processing**: Kotlin Coroutines architecture enabling responsive UI while managing complex sensor coordination tasks
+
+**Shimmer3 GSR+ Integration - Reference Physiological Measurement:**
+
+The Shimmer3 GSR+ integration provides research-grade physiological measurement capabilities through sophisticated wearable sensor platforms. The integration supports high-precision galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG), accelerometry, and magnetometer data.
+
+**Shimmer3 Technical Specifications:**
+- **GSR Measurement Ranges**: Configurable resistance ranges from 10kΩ to 4.7MΩ across five distinct measurement ranges
+- **Sampling Rates**: Configurable from 1 Hz to 1000 Hz with adaptive rate management based on battery and processing constraints
+- **Multi-Sensor Platform**: Integrated PPG, 3-axis accelerometry, gyroscope, and magnetometer for comprehensive physiological monitoring
+- **Wireless Communication**: Bluetooth Classic and Bluetooth Low Energy with automatic device discovery and connection management
+- **Data Quality Assessment**: Real-time signal quality monitoring with electrode contact detection and movement artifact identification
+
+**TopDon Thermal Camera Integration - Advanced Thermal Imaging:**
+
+The TopDon thermal camera integration provides sophisticated thermal imaging capabilities optimized for physiological research applications. The TC001 and TC001 Plus models feature uncooled microbolometer technology with research-grade temperature measurement accuracy and real-time processing capabilities.
+
+**Thermal Camera Technical Specifications:**
+- **Resolution**: 256×192 pixel thermal sensor with high-precision temperature measurement
+- **Temperature Range**: -20°C to +650°C (TC001 Plus) with measurement accuracy of ±1.5°C or ±1.5%
+- **Frame Rate**: Up to 25 Hz with real-time thermal data processing and export capabilities
+- **Spectral Range**: 8-14 μm long-wave infrared (LWIR) optimized for human physiological monitoring
+- **USB-C OTG Integration**: Direct Android device connection with sophisticated device detection and communication management
+
+**Camera Recording System - Stage 3 RAW Extraction:**
+
+The camera recording system implements sophisticated multi-stream capture capabilities with Samsung-specific optimizations for Stage 3 RAW extraction. The system supports simultaneous 4K video recording and RAW image capture with precise temporal synchronization across multiple camera devices.
+
+**Camera System Technical Features:**
+- **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing pipelines
+- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and performance optimization
+- **RAW Processing Pipeline**: DNG file generation with comprehensive metadata embedding and quality validation
+- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration integration
+
+**Advanced Computer Vision Pipeline - Real-Time Analysis:**
+
+The computer vision pipeline integrates OpenCV and MediaPipe frameworks for real-time analysis of physiological and behavioral parameters. The system implements sophisticated hand detection, facial analysis, and movement tracking algorithms optimized for research applications.
+
+**Computer Vision Components:**
+- **Hand Segmentation System**: Real-time hand detection and tracking with region of interest analysis for contactless physiological measurement
+- **Facial Analysis Pipeline**: Advanced facial detection with region-specific analysis for photoplethysmographic signal extraction
+- **Movement Tracking**: Comprehensive motion analysis with artifact detection and quality assessment
+- **Real-Time Processing**: Optimized algorithms supporting simultaneous analysis of multiple high-resolution video streams
         PROC[Processing Pipeline<br/>Real-time Analysis]
         HEALTH[Health Monitor<br/>System Status Tracking]
         SESSION[Session Manager<br/>Experiment Coordination]
