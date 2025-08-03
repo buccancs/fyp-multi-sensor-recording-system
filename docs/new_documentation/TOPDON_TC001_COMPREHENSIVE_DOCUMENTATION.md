@@ -853,9 +853,17 @@ Environmental assessment addresses factors that significantly impact thermal mea
 
 ## 8. Data Management and Export
 
+The comprehensive data management system addresses the complex requirements of research data handling, implementing sophisticated storage architectures and export capabilities that support diverse analytical workflows while maintaining data integrity and research reproducibility standards. The system design recognizes that thermal imaging research generates multiple data products, each serving different analytical purposes and requiring distinct handling procedures to preserve research value.
+
 ### 8.1 File Formats and Structure
 
-The system generates multiple output files for each recording session:
+The multi-format data architecture generates complementary data products that serve different aspects of research workflows, from real-time visualization requirements to detailed post-processing analysis and long-term archival storage. This comprehensive approach ensures that researchers have access to appropriate data formats for immediate analysis while preserving complete information for future research applications that might require different analytical approaches.
+
+The raw radiometric data preservation represents the cornerstone of research data integrity, maintaining complete thermal measurement information without compression or processing artifacts that could compromise analytical accuracy. The binary storage format implements efficient encoding while preserving measurement precision essential for quantitative thermal analysis. This format enables retrospective analysis using different processing algorithms or calibration procedures that might be developed after initial data collection.
+
+Visualization products provide immediate access to thermal patterns through standardized video formats that support both interactive analysis and presentation applications. The H.264 encoding implements efficient compression optimized for thermal image characteristics while maintaining visual quality sufficient for research documentation and communication purposes. The pseudo-color mapping preserves thermal gradient information while providing intuitive visual representation of temperature distributions.
+
+Metadata preservation ensures that research data maintains context and provenance information essential for research reproducibility and long-term data value. The comprehensive metadata includes not only measurement parameters and system configuration but also environmental conditions, calibration status, and processing histories that enable future researchers to understand and appropriately interpret historical data collections.
 
 **Primary Data Files:**
 ```
@@ -878,6 +886,14 @@ Recording_Session_20240131_103000/
 | **calibration_data.json** | JSON | ~10 KB | Accuracy validation |
 
 ### 8.2 Data Export Options
+
+The export system provides comprehensive interfaces for major research computing environments, implementing standardized data access patterns that facilitate integration with existing analytical workflows while maintaining data integrity across different platform environments. The export implementations recognize that thermal imaging research spans multiple disciplines with diverse computational tool preferences, requiring flexible data access that accommodates different analytical approaches.
+
+The MATLAB export interface provides direct access to thermal data arrays through optimized reading functions that handle the binary data format efficiently while preserving measurement precision and associated metadata. The implementation leverages MATLAB's sophisticated array handling capabilities to provide immediate access to thermal data in formats optimized for matrix operations and statistical analysis procedures commonly employed in thermal imaging research.
+
+Python export capabilities implement modern data science workflow patterns, providing integration with popular libraries including NumPy for numerical analysis, pandas for data manipulation, and matplotlib for visualization. The export functions handle data type conversion and array reshaping automatically while preserving measurement accuracy and temporal information essential for time-series analysis of thermal data.
+
+R language support addresses the growing adoption of R in research statistics and data analysis, providing data import functions that integrate seamlessly with R's data frame structures and statistical analysis capabilities. The R interface includes support for temporal data analysis packages and statistical modeling frameworks commonly employed in research applications requiring sophisticated statistical analysis of thermal measurement data.
 
 **MATLAB Export:**
 ```matlab
@@ -945,7 +961,17 @@ File Header Structure:
 
 ## 9. Troubleshooting and Diagnostics
 
+The diagnostic and troubleshooting framework provides comprehensive problem identification and resolution procedures that address common deployment challenges while maintaining system reliability under demanding research conditions. The diagnostic approach implements systematic problem classification and resolution procedures that enable both automated recovery and guided manual intervention based on problem severity and complexity.
+
 ### 9.1 Common Connection Issues
+
+Connection reliability represents one of the most critical aspects of thermal imaging system deployment, as communication failures can result in data loss and experimental invalidation. The troubleshooting approach addresses connection problems through systematic diagnosis that identifies root causes rather than addressing symptoms, enabling more effective resolution and prevention of recurring issues.
+
+Device detection failures often result from complex interactions between Android's USB management framework, device driver compatibility, and power management policies that may not be immediately apparent to users. The diagnostic procedures guide users through systematic verification of USB OTG capabilities, driver installation status, and device permission configurations while providing fallback procedures for challenging deployment scenarios.
+
+Permission management complications arise from Android's sophisticated security framework that requires explicit user consent for USB device access while implementing complex permission inheritance and revocation policies. The troubleshooting guidance addresses both initial permission configuration and dynamic permission management scenarios that can occur during extended research sessions when system updates or security policy changes might affect device access.
+
+Cable and connectivity problems represent surprisingly common failure modes in research deployments, as USB-C cable specifications vary significantly despite apparent physical compatibility. The diagnostic procedures include functional testing approaches that verify both power delivery and data transmission capabilities under thermal imaging load conditions, enabling identification of marginal cables that might function adequately for basic USB operations but fail under the sustained data rates required for thermal imaging applications.
 
 **Problem: Camera Not Detected**
 ```
@@ -1328,9 +1354,15 @@ sequenceDiagram
 
 ## 12. Integration with Multi-Sensor Recording System
 
+The thermal camera integration within the Multi-Sensor Recording System represents a sophisticated example of heterogeneous sensor coordination, demonstrating how thermal imaging capabilities can be seamlessly incorporated into comprehensive physiological and behavioral research platforms. This integration addresses fundamental challenges in multi-modal data collection, including temporal synchronization, data format standardization, and coordinated session management across diverse sensor technologies.
+
 ### 12.1 System Architecture Integration
 
-The TopDon TC001/TC001 Plus thermal cameras integrate seamlessly with the Multi-Sensor Recording System, providing synchronized thermal data alongside other sensor modalities including GSR (Galvanic Skin Response), video recording, and physiological sensors.
+The architectural approach implements a distributed sensing framework where thermal cameras function as specialized data collection nodes within a coordinated research ecosystem. This design leverages the strengths of different computing platforms—utilizing the Android mobile environment for thermal data collection while coordinating overall system operation through a PC-based master controller that manages session coordination, data aggregation, and multi-modal synchronization.
+
+The integration strategy recognizes that different sensor modalities have distinct operational characteristics, data rates, and processing requirements that necessitate specialized handling while maintaining coordinated operation. The thermal imaging subsystem operates semi-autonomously within its Android environment while participating in coordinated data collection protocols managed by the PC coordinator. This approach enables optimal performance for each sensor modality while ensuring synchronized operation essential for multi-modal research applications.
+
+The data flow architecture implements sophisticated buffering and synchronization mechanisms that accommodate the different data rates and processing requirements of diverse sensor modalities. Thermal imaging generates approximately 50 MB/s of data during active recording, significantly exceeding the data rates of physiological sensors but requiring coordination with video recording systems that may generate comparable data volumes. The synchronization framework addresses these rate mismatches while maintaining temporal alignment accuracy essential for multi-modal analysis.
 
 ```mermaid
 graph TB
@@ -1389,6 +1421,14 @@ graph TB
 
 ### 12.2 Synchronization with Other Sensors
 
+The multi-modal synchronization architecture addresses one of the most challenging aspects of coordinated sensor operation: maintaining precise temporal alignment across heterogeneous data collection systems operating under different timing constraints and processing delays. The synchronization approach implements multiple complementary techniques that ensure temporal accuracy while accommodating the practical constraints of diverse sensor technologies and computing platforms.
+
+The synchronization foundation relies on establishing a master time reference that provides consistent temporal coordination across all sensor modalities. The PC-based coordinator maintains this master clock while distributing synchronization signals and coordinating data collection timing across different sensor systems. This centralized approach ensures consistent temporal reference while enabling distributed processing that optimizes performance for each sensor modality.
+
+Clock offset compensation addresses the inevitable timing differences that arise between independent computing systems, each maintaining their own system clocks with different accuracy characteristics and drift patterns. The compensation algorithms continuously monitor timing relationships between sensor systems, implementing statistical analysis of timing patterns to distinguish between systematic offsets and random variations that require different correction approaches.
+
+The drift compensation mechanisms implement predictive algorithms that anticipate timing variations based on observed system behavior patterns, enabling proactive correction before timing errors accumulate to levels that would compromise data analysis validity. These algorithms incorporate temperature compensation, load-dependent variations, and other factors that influence system timing accuracy over extended operational periods typical of research data collection sessions.
+
 **Multi-Modal Synchronization Architecture:**
 ```mermaid
 graph TD
@@ -1438,6 +1478,14 @@ graph TD
 
 ### 12.3 Research Data Integration
 
+The unified data integration framework enables sophisticated multi-modal analysis by providing standardized data formats and temporal alignment that support comprehensive research workflows spanning thermal physiology, stress response analysis, and human-computer interaction studies. The integration approach recognizes that thermal imaging provides unique insights into physiological processes that complement traditional physiological measurements while requiring careful coordination to realize the full analytical potential of multi-modal data collection.
+
+The data format standardization implements comprehensive metadata schemas that preserve essential information from each sensor modality while enabling cross-modal analysis and correlation studies. The thermal imaging metadata includes not only measurement parameters and calibration information but also environmental conditions and system status information that enables researchers to assess data quality and identify factors that might influence analytical results.
+
+Session coordination procedures ensure that multi-modal data collection maintains experimental integrity while accommodating the different operational characteristics of diverse sensor technologies. The coordination framework manages session initialization, data collection timing, and session termination procedures that ensure all sensor modalities capture data during identical time periods while maintaining appropriate sampling rates and data quality standards for each modality.
+
+The quality assurance framework implements continuous monitoring of data collection quality across all sensor modalities, providing real-time feedback that enables researchers to identify and address data quality issues before they compromise experimental validity. The monitoring includes assessment of synchronization accuracy, signal quality, and system performance metrics that ensure research data meets quality standards essential for rigorous scientific analysis.
+
 **Unified Data Format for Multi-Modal Analysis:**
 ```json
 {
@@ -1485,13 +1533,13 @@ graph TD
 
 ### 12.4 Research Applications
 
-**Supported Research Domains:**
-- **Thermal Physiology**: Core body temperature monitoring and heat transfer analysis
-- **Stress Response Research**: Correlation between thermal patterns and physiological stress indicators
-- **Human-Computer Interaction**: Thermal feedback in interactive systems
-- **Medical Research**: Non-invasive temperature monitoring for health assessment
-- **Environmental Studies**: Human thermal comfort and adaptation research
-- **Sports Science**: Athlete performance and recovery monitoring
+The thermal imaging capabilities within the Multi-Sensor Recording System enable diverse research applications that leverage the unique insights provided by thermal measurements in combination with complementary physiological and behavioral data collection modalities. These applications demonstrate the significant research potential that emerges when thermal imaging is integrated with comprehensive multi-modal data collection frameworks rather than employed as an isolated measurement technique.
+
+Thermal physiology research benefits significantly from the combination of thermal imaging with traditional physiological measurements, enabling detailed analysis of thermoregulatory responses that correlate thermal patterns with cardiovascular, respiratory, and autonomic nervous system activity. The synchronized data collection enables researchers to investigate the complex relationships between core body temperature regulation, peripheral thermal patterns, and physiological stress responses that would be difficult to characterize using any single measurement modality.
+
+Stress response research represents a particularly promising application area where thermal imaging provides non-invasive insights into autonomic nervous system activity that complement traditional stress indicators such as galvanic skin response, heart rate variability, and cortisol measurements. The multi-modal approach enables comprehensive characterization of stress responses while providing validation of thermal indicators through correlation with established physiological stress markers.
+
+Human-computer interaction studies benefit from the combination of thermal measurement with behavioral observation and physiological monitoring, enabling investigation of user experience and cognitive load through multiple complementary measurement channels. The thermal imaging provides insights into autonomic responses to interface design and interaction complexity while physiological measurements provide additional context for interpreting thermal patterns in terms of cognitive and emotional responses to technological interfaces.
 
 **Data Analysis Workflows:**
 ```python
@@ -1530,27 +1578,27 @@ research_report = generate_analysis_report(
 
 ## Appendices
 
+## Appendices
+
 ### Appendix A: Quick Reference
 
-**Connection Sequence:**
-1. Enable USB debugging on Android
-2. Connect camera with USB-C cable
-3. Grant USB permissions
-4. Launch Multi-Sensor Recording app
-5. Verify connection status
+The quick reference guide provides essential operational information for rapid deployment and troubleshooting, consolidating the most frequently needed procedures and specifications into an accessible format suitable for field reference during research deployments.
 
-**Essential Settings:**
-- Frame Rate: 25 fps
-- Emissivity: Material-dependent (0.95 default)
-- Temperature Range: Application-dependent
-- Display Mode: Pseudo-color recommended
+The connection sequence represents the standardized procedure for establishing thermal camera connectivity that has been validated across multiple research deployments and device configurations. These procedures incorporate lessons learned from field experience and address common pitfalls that can delay deployment or compromise data collection reliability. The sequence emphasizes verification steps that ensure reliable operation before beginning critical data collection procedures.
 
-**Emergency Procedures:**
-- **Data Recovery**: Check temp storage for partial files
-- **Emergency Stop**: Use Emergency Stop button or disconnect USB
-- **Force Recovery**: Force-stop application if unresponsive
+Essential configuration parameters reflect optimal settings derived from research application experience and thermal imaging best practices. The recommended frame rate of 25 fps provides adequate temporal resolution for most physiological research applications while ensuring reliable data transmission and processing performance. The default emissivity setting of 0.95 accommodates most biological and fabric materials commonly encountered in human subjects research, though material-specific adjustments remain important for precision applications.
+
+Emergency procedures address critical scenarios where immediate action is required to preserve data integrity or system safety. The data recovery procedures recognize that partial data files may contain valuable research information even when normal recording termination procedures were not completed. The emergency stop procedures ensure that both graceful shutdown and immediate termination options are available depending on the urgency of the situation requiring intervention.
 
 ### Appendix B: Material Emissivity Reference
+
+Material emissivity values represent critical parameters for accurate thermal measurement, as emissivity directly affects the relationship between surface temperature and radiated thermal energy detected by thermal imaging systems. The emissivity reference table provides validated values derived from thermal imaging literature and standardized measurement procedures (International Organization for Standardization, 2018) [^16].
+
+The emissivity values for biological materials demonstrate remarkably consistent characteristics across different skin types and conditions, with human skin maintaining emissivity values near 0.98 regardless of pigmentation or surface condition. This consistency makes thermal imaging particularly valuable for medical and physiological research applications where skin temperature measurements provide insights into underlying physiological processes.
+
+Material emissivity variations reflect fundamental differences in surface properties including molecular composition, surface texture, and optical characteristics that affect thermal radiation emission patterns. Metallic materials demonstrate the most dramatic emissivity variations, with polished surfaces exhibiting very low emissivity values due to specular reflection characteristics while oxidized or painted metal surfaces approach the high emissivity values typical of non-metallic materials.
+
+The practical implications of emissivity variations become significant in research applications where measurement accuracy requirements exceed the uncertainties introduced by incorrect emissivity assumptions. Research protocols should include emissivity verification procedures when measurement accuracy requirements approach the level where emissivity uncertainties could affect analytical conclusions or experimental validity.
 
 | Material | Emissivity (ε) | Notes |
 |----------|----------------|-------|
@@ -1566,6 +1614,14 @@ research_report = generate_analysis_report(
 | Polished steel | 0.10-0.30 | Mirror-like finish |
 
 ### Appendix C: Error Code Reference
+
+The error code classification system provides systematic categorization of system faults and operational issues that enables both automated error handling and guided manual troubleshooting procedures. The error classification approach implements severity-based categorization that prioritizes response procedures based on potential impact on data collection integrity and system safety.
+
+Critical errors represent conditions that require immediate attention and typically result in data collection termination to prevent data corruption or system damage. These errors usually indicate hardware failures, communication breakdowns, or safety conditions that exceed normal operational parameters. The recovery procedures for critical errors emphasize data preservation and system safety while providing guidance for restoring operational capability when possible.
+
+Medium and low severity errors represent operational issues that can often be resolved through automated recovery procedures or minor operational adjustments without terminating data collection sessions. The error handling system implements intelligent retry algorithms and graceful degradation procedures that maintain data collection capability while addressing underlying issues that might eventually escalate to more serious conditions if left unresolved.
+
+The error logging and reporting framework maintains comprehensive records of all error conditions and recovery actions, providing valuable diagnostic information for both immediate troubleshooting and long-term system optimization. The error records include timing information, system state data, and environmental conditions that enable systematic analysis of error patterns and development of preventive maintenance procedures that improve system reliability over time.
 
 | Error Code | Name | Severity | Description | Recovery Action |
 |------------|------|----------|-------------|-----------------|
