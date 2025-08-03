@@ -25,18 +25,10 @@ object NetworkUtils {
     fun isNetworkConnected(context: Context): Boolean {
         return try {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val activeNetwork = connectivityManager.activeNetwork
-                val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-                networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true &&
-                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-            } else {
-                @Suppress("DEPRECATION")
-                val networkInfo = connectivityManager.activeNetworkInfo
-                @Suppress("DEPRECATION")
-                networkInfo?.isConnected == true
-            }
+            val activeNetwork = connectivityManager.activeNetwork
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+            networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true &&
+            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         } catch (e: Exception) {
             Log.e(TAG, "Error checking network connectivity: ${e.message}")
             false
@@ -44,57 +36,25 @@ object NetworkUtils {
     }
 
     /**
-     * Get network type information using modern APIs where available.
-     * Falls back to deprecated APIs for older Android versions.
+     * Get network type information using modern APIs.
      */
     fun getNetworkType(context: Context): String {
         return try {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork = connectivityManager.activeNetwork
+            if (activeNetwork == null) return "Disconnected"
             
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val activeNetwork = connectivityManager.activeNetwork
-                if (activeNetwork == null) return "Disconnected"
-                
-                val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-                if (networkCapabilities == null) return "Not Connected"
-                
-                when {
-                    !networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) -> "Not Connected"
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "WiFi"
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                        getCellularNetworkType(context)
-                    }
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "Ethernet"
-                    else -> "Other"
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+            if (networkCapabilities == null) return "Not Connected"
+            
+            when {
+                !networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) -> "Not Connected"
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "WiFi"
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    getCellularNetworkType(context)
                 }
-            } else {
-                @Suppress("DEPRECATION")
-                val networkInfo = connectivityManager.activeNetworkInfo
-                
-                when {
-                    networkInfo == null -> "Disconnected"
-                    @Suppress("DEPRECATION")
-                    !networkInfo.isConnected -> "Not Connected"
-                    @Suppress("DEPRECATION")
-                    networkInfo.type == ConnectivityManager.TYPE_WIFI -> "WiFi"
-                    @Suppress("DEPRECATION")
-                    networkInfo.type == ConnectivityManager.TYPE_MOBILE -> {
-                        @Suppress("DEPRECATION")
-                        val subtype = networkInfo.subtype
-                        when (subtype) {
-                            TelephonyManager.NETWORK_TYPE_LTE -> "4G LTE"
-                            TelephonyManager.NETWORK_TYPE_HSDPA,
-                            TelephonyManager.NETWORK_TYPE_HSUPA,
-                            TelephonyManager.NETWORK_TYPE_HSPA -> "3G"
-                            TelephonyManager.NETWORK_TYPE_EDGE,
-                            TelephonyManager.NETWORK_TYPE_GPRS -> "2G"
-                            else -> "Mobile"
-                        }
-                    }
-                    @Suppress("DEPRECATION")
-                    networkInfo.type == ConnectivityManager.TYPE_ETHERNET -> "Ethernet"
-                    else -> "Other"
-                }
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "Ethernet"
+                else -> "Other"
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error detecting network type: ${e.message}")
