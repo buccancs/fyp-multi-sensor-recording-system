@@ -530,10 +530,12 @@ class ShimmerRecorder
                         return@withContext emptyList()
                     }
 
-                    // Initialize Shimmer Bluetooth Manager if not already done
+                    // Initialize Shimmer Bluetooth Manager if not already done (on main thread)
                     if (shimmerBluetoothManager == null) {
                         logger.info("Initializing ShimmerBluetoothManagerAndroid...")
-                        shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                        withContext(Dispatchers.Main) {
+                            shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                        }
                         logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
                     }
 
@@ -647,9 +649,11 @@ class ShimmerRecorder
                         return@withContext false
                     }
 
-                    // Initialize Shimmer Bluetooth Manager if not already done
+                    // Initialize Shimmer Bluetooth Manager if not already done (on main thread)
                     if (shimmerBluetoothManager == null) {
-                        shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                        withContext(Dispatchers.Main) {
+                            shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                        }
                     }
 
                     try {
@@ -1374,8 +1378,10 @@ class ShimmerRecorder
                     // Initialize recording scope
                     recordingScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-                    // Initialize Shimmer SDK components
-                    shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                    // Initialize Shimmer SDK components (on main thread)
+                    withContext(Dispatchers.Main) {
+                        shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                    }
                     logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
                     
                     // Verify Bluetooth adapter is available and enabled
