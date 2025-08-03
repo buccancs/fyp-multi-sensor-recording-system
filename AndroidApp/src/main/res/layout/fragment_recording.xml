@@ -14,8 +14,7 @@
         android:layout_marginBottom="16dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="@color/md_theme_surface"
-        style="@style/Widget.App.CardView">
+        app:cardBackgroundColor="@color/md_theme_surface">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,8 +128,7 @@
         android:layout_weight="1"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="@color/md_theme_surface"
-        style="@style/Widget.App.CardView">
+        app:cardBackgroundColor="@color/md_theme_surface">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -154,16 +152,21 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/preview_placeholder">
 
+                <!-- RGB Camera Preview using TextureView for compatibility with CameraRecorder -->
+                <TextureView
+                    android:id="@+id/rgbCameraPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/previewPlaceholderText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Recording preview will appear here"
+                    android:text="RGB Camera preview will appear here"
                     android:textSize="14sp"
                     android:textColor="@color/textColorSecondary" />
-
-                <!-- Add actual preview components here as needed -->
 
             </FrameLayout>
 

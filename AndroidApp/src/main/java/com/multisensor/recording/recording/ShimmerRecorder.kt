@@ -534,7 +534,8 @@ class ShimmerRecorder
                     if (shimmerBluetoothManager == null) {
                         logger.info("Initializing ShimmerBluetoothManagerAndroid...")
                         withContext(Dispatchers.Main) {
-                            shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                            val handler = createShimmerHandler()
+                            shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, handler)
                         }
                         logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
                     }
@@ -652,7 +653,8 @@ class ShimmerRecorder
                     // Initialize Shimmer Bluetooth Manager if not already done (on main thread)
                     if (shimmerBluetoothManager == null) {
                         withContext(Dispatchers.Main) {
-                            shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                            val handler = createShimmerHandler()
+                            shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, handler)
                         }
                     }
 
@@ -1380,7 +1382,8 @@ class ShimmerRecorder
 
                     // Initialize Shimmer SDK components (on main thread)
                     withContext(Dispatchers.Main) {
-                        shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, createShimmerHandler())
+                        val handler = createShimmerHandler()
+                        shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, handler)
                     }
                     logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
                     
