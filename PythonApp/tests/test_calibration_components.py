@@ -105,10 +105,10 @@ class TestCalibrationProcessorBasics:
 
     def test_calibration_computation_interface(self):
         """Test calibration computation methods exist"""
-        assert hasattr(self.processor, "calibrate_intrinsics")
-        assert hasattr(self.processor, "calibrate_extrinsics")
-        assert callable(getattr(self.processor, "calibrate_intrinsics", lambda: None))
-        assert callable(getattr(self.processor, "calibrate_extrinsics", lambda: None))
+        assert hasattr(self.processor, "calibrate_camera_intrinsics")
+        assert hasattr(self.processor, "calibrate_stereo_cameras")
+        assert callable(getattr(self.processor, "calibrate_camera_intrinsics", lambda: None))
+        assert callable(getattr(self.processor, "calibrate_stereo_cameras", lambda: None))
 
 
 class TestCalibrationResultBasics:

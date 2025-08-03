@@ -34,7 +34,8 @@ def test_main_ui_state_fixes():
         "lenient_button_logic": r"isInitialized.*&&.*!isRecording.*&&.*!isLoadingRecording.*&&.*showManualControls"
     }
     
-    return check_file_content(file_path, expected_patterns)
+    success, message = check_file_content(file_path, expected_patterns)
+    assert success, message
 
 def test_main_view_model_fixes():
     """Test MainViewModel.kt has fallback initialization"""
@@ -47,7 +48,8 @@ def test_main_view_model_fixes():
         "error_still_enable_ui": r"isInitialized = true.*//.*Enable basic UI even on error"
     }
     
-    return check_file_content(file_path, expected_patterns)
+    success, message = check_file_content(file_path, expected_patterns)
+    assert success, message
 
 def test_main_activity_fixes():
     """Test MainActivity.kt has permission fallback calls"""
@@ -59,7 +61,8 @@ def test_main_activity_fixes():
         "permission_retry_logic": r"Permission flow may have stalled.*fallback initialization"
     }
     
-    return check_file_content(file_path, expected_patterns)
+    success, message = check_file_content(file_path, expected_patterns)
+    assert success, message
 
 def run_all_tests():
     """Run all validation tests"""
