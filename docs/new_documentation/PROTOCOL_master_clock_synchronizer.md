@@ -90,13 +90,21 @@
 
 ## Overview
 
-This document defines the complete protocol specification for the Master Clock Synchronizer component, including data contracts, API interfaces, network protocols, and integration requirements. All components interacting with the synchronization system must adhere to these specifications.
+This document establishes the complete protocol specification for the Master Clock Synchronizer component, defining the comprehensive data contracts, API interfaces, network protocols, and integration requirements that govern all interactions within the temporal coordination system. The specification follows established distributed systems protocol design principles [^24] while incorporating domain-specific requirements for multi-sensor research applications.
+
+All components interacting with the synchronization system must adhere to these specifications to ensure temporal coherence and data integrity throughout the recording ecosystem. The protocol design emphasizes robustness, scalability, and precise timing coordination while maintaining compatibility with diverse device types and network configurations. This comprehensive specification serves as the definitive reference for system integrators, developers, and researchers implementing synchronization functionality.
 
 ## Data Structures
 
+The synchronization system employs a structured approach to data modeling that ensures consistency and reliability across all system interactions. These data structures implement established patterns from distributed systems literature [^25] while incorporating specific requirements for temporal precision and multi-device coordination.
+
 ### Core Synchronization Classes
 
+The core synchronization classes provide the fundamental data structures that enable precise temporal coordination across the distributed recording system. These classes encapsulate the essential state information and behavioral contracts required for maintaining synchronization integrity.
+
 #### SyncStatus
+
+The `SyncStatus` class represents the authoritative state information for each connected device within the synchronization ecosystem. This class implements comprehensive tracking of temporal relationships, quality metrics, and operational status that enables the system to maintain precise coordination across heterogeneous devices.
 
 Represents the synchronization status of a connected device.
 
@@ -1373,5 +1381,13 @@ COMPLETE_CONFIG_SCHEMA = {
     }
 }
 ```
+
+---
+
+## References
+
+[^24]: Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). *Distributed Systems: Concepts and Design* (5th ed.). Addison-Wesley. Chapter 14: Time and Global States.
+
+[^25]: van Steen, M., & Tanenbaum, A. S. (2023). *Distributed Systems* (4th ed.). Maarten van Steen. Chapter 6: Coordination. https://www.distributed-systems.net/
 
 This protocol specification provides the complete technical contract for all interactions with the Master Clock Synchronizer component, ensuring consistent and reliable integration across the entire Bucika GSR system.

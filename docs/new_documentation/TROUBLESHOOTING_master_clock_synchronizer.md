@@ -31,7 +31,9 @@
 
 ## Overview
 
-This guide provides comprehensive troubleshooting procedures, diagnostic tools, and recovery strategies for the Master Clock Synchronizer. It is designed to help researchers, technicians, and system administrators quickly identify and resolve synchronization issues in research environments.
+This comprehensive troubleshooting guide provides systematic diagnostic procedures, recovery strategies, and preventive maintenance protocols for the Master Clock Synchronizer, addressing the complex challenges of maintaining reliable temporal coordination in distributed research environments. The guide follows established fault diagnosis methodologies from distributed systems literature [^31] while incorporating domain-specific troubleshooting techniques developed through extensive field experience with multi-sensor research applications.
+
+The diagnostic approach emphasizes rapid problem identification and resolution to minimize research disruption while maintaining data integrity throughout the recovery process. The procedures documented here address the full spectrum of potential issues, from simple configuration problems to complex network timing anomalies that require sophisticated analysis and intervention strategies. By implementing systematic troubleshooting protocols, research teams can maintain high system availability and temporal precision essential for valid experimental outcomes [^32].
 
 ## Quick Diagnostic Checklist
 
@@ -917,3 +919,11 @@ def disconnect_all_devices(synchronizer):
 ```
 
 This comprehensive troubleshooting guide provides systematic approaches to diagnosing and resolving issues with the Master Clock Synchronizer, ensuring researchers can maintain reliable synchronization even in challenging conditions.
+
+---
+
+## References
+
+[^31]: Gray, J., & Reuter, A. (1992). *Transaction Processing: Concepts and Techniques*. Morgan Kaufmann. Chapter 13: Fault Tolerance.
+
+[^32]: Avizienis, A., Laprie, J. C., Randell, B., & Landwehr, C. (2004). Basic concepts and taxonomy of dependable and secure computing. *IEEE Transactions on Dependable and Secure Computing*, 1(1), 11-33. https://doi.org/10.1109/TDSC.2004.2
