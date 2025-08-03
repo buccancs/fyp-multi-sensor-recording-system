@@ -49,25 +49,33 @@
 
 ## Overview
 
-The Multi-Sensor Recording System implements a comprehensive development and validation ecosystem designed to ensure research-grade reliability, maintainability, and scalability across both Android (Kotlin) and Python components. This system provides developers with sophisticated tools for building, testing, validating, and deploying a complex distributed system that coordinates multiple sensor modalities with microsecond-precision timing requirements.
+The Multi-Sensor Recording System represents a sophisticated advancement in research software engineering, implementing a comprehensive development and validation ecosystem that addresses the unique challenges inherent in distributed physiological measurement systems [CITE - Sommerville, I. (2015). Software Engineering. 10th Edition. Pearson]. Unlike traditional commercial software development approaches, this system prioritizes research-grade reliability, measurement precision, and cross-platform coordination while maintaining the flexibility required for scientific instrumentation that must operate across heterogeneous hardware environments.
 
-The development and validation framework addresses the unique challenges of research software development, where traditional commercial software approaches may be insufficient for validating scientific measurement quality, temporal precision, and multi-modal data synchronization across heterogeneous hardware platforms.
+The development framework emerges from the recognition that research software requires fundamentally different validation approaches compared to commercial applications, particularly when dealing with temporal precision requirements measured in microseconds and multi-modal sensor coordination across wireless networks [CITE - Wilson, G. et al. (2014). Best Practices for Scientific Computing. PLOS Biology, 12(1), e1001745]. Traditional software development methodologies, while effective for commercial applications, often lack the statistical rigor and measurement validation frameworks necessary for scientific instrumentation that must produce publishable research results.
+
+This ecosystem coordinates the complexity of Android mobile development using Kotlin and Gradle build systems with Python desktop applications utilizing specialized computer vision and signal processing libraries, creating a unified development experience that maintains quality standards across both platforms [CITE - Fowler, M. (2013). Continuous Integration. Martin Fowler's Website]. The system addresses the fundamental challenge of maintaining code quality and integration effectiveness when coordinating between mobile and desktop platforms that employ different runtime environments, dependency management systems, and testing frameworks.
 
 ### Key Design Principles
 
-**Research-Grade Quality Assurance**: Every component implements validation procedures that exceed commercial software standards, providing statistical confidence intervals, measurement accuracy verification, and long-term reliability assessment suitable for scientific applications.
+The development and validation framework operates according to four fundamental design principles that distinguish research software development from commercial software engineering practices. These principles reflect the unique requirements of scientific instrumentation where measurement accuracy, reproducibility, and statistical validation take precedence over traditional commercial software metrics.
 
-**Cross-Platform Development Coordination**: Sophisticated build system manages the complexity of coordinating Android (Kotlin/Gradle) and Python (Conda/PyQt5) development while maintaining code quality and integration effectiveness across different technology platforms.
+Research-grade quality assurance forms the cornerstone of the development methodology, implementing validation procedures that substantially exceed commercial software standards through the integration of statistical confidence intervals, measurement accuracy verification protocols, and extended reliability assessment suitable for peer-reviewed scientific applications [CITE - Hatton, L. (1997). The T experiments: errors in scientific software. IEEE Computational Science & Engineering, 4(2), 27-38]. This approach recognizes that research software failures can invalidate months of data collection and compromise scientific conclusions, necessitating validation frameworks that provide mathematical confidence in measurement reliability.
 
-**Automated Validation Pipeline**: Comprehensive testing automation reduces manual verification overhead while ensuring consistent quality standards across all development scenarios, from individual component changes to complete system deployments.
+Cross-platform development coordination addresses the substantial complexity of managing Android mobile development environments alongside Python desktop applications, ensuring that code quality and integration effectiveness remain consistent across fundamentally different technology platforms [CITE - Bass, L., Clements, P., & Kazman, R. (2012). Software Architecture in Practice. 3rd Edition. Addison-Wesley]. The sophisticated build system manages Kotlin compilation for Android targets while simultaneously coordinating Python environment management, dependency resolution, and cross-platform communication protocols that enable seamless data exchange between mobile and desktop components.
 
-**Developer Experience Optimization**: Tools prioritize developer productivity through intelligent automation, comprehensive documentation, and clear feedback mechanisms that enable rapid development iteration while maintaining system reliability.
+Automated validation pipelines reduce manual verification overhead while ensuring consistent quality standards across all development scenarios, from individual component modifications through complete system deployments [CITE - Humble, J., & Farley, D. (2010). Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation. Addison-Wesley]. The automation framework recognizes that research software development often involves complex experimental protocols where manual testing becomes impractical, particularly when validating temporal synchronization across multiple devices or verifying measurement accuracy under varying environmental conditions.
+
+Developer experience optimization prioritizes productivity through intelligent automation, comprehensive documentation, and clear feedback mechanisms that enable rapid development iteration while maintaining the rigorous quality standards required for scientific instrumentation [CITE - McConnell, S. (2004). Code Complete: A Practical Handbook of Software Construction. 2nd Edition. Microsoft Press]. This principle acknowledges that research software development often involves domain experts who may not have extensive software engineering backgrounds, necessitating tools that provide clear guidance and automated quality checks that prevent common implementation errors.
 
 ## Development Tools Architecture
 
-The development tools ecosystem employs a multi-layered architecture that provides comprehensive support for all aspects of system development, from initial environment setup through production deployment validation.
+The development tools ecosystem represents a carefully architected multi-layered framework that addresses the fundamental challenges of coordinating complex distributed system development across heterogeneous platforms and runtime environments [CITE - Shaw, M., & Garlan, D. (1996). Software Architecture: Perspectives on an Emerging Discipline. Prentice Hall]. This architecture provides comprehensive support for every aspect of system development, from initial environment configuration and dependency management through sophisticated production deployment validation protocols.
+
+The architectural design recognizes that modern research software systems increasingly require coordination between mobile platforms, desktop applications, and specialized hardware interfaces, each operating with distinct development environments, compilation targets, and runtime characteristics [CITE - Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley]. Traditional development tools, designed primarily for single-platform applications, prove inadequate when addressing the integration complexity inherent in distributed research systems that must maintain temporal synchronization across wireless networks while coordinating data collection from multiple sensor modalities.
 
 ### Multi-Platform Development Coordination
+
+The multi-platform coordination framework implements sophisticated orchestration mechanisms that enable seamless development across Android mobile environments and Python desktop applications while maintaining code quality standards and integration effectiveness throughout the development lifecycle [CITE - Martin, R.C. (2017). Clean Architecture: A Craftsman's Guide to Software Structure and Design. Prentice Hall]. This coordination addresses the substantial complexity of managing disparate build systems, dependency resolution mechanisms, and testing frameworks that must operate in harmony to produce a unified distributed system.
 
 ```mermaid
 graph TB
@@ -127,19 +135,21 @@ graph TB
 
 ### Tool Integration Framework
 
-The development tools framework implements sophisticated integration patterns that enable seamless coordination between different development environments while maintaining consistency and quality across all platforms.
+The development tools framework implements sophisticated integration patterns that address the fundamental challenge of coordinating disparate development environments while maintaining consistency and quality across platforms that employ fundamentally different architectural paradigms [CITE - Kruchten, P. (1995). The 4+1 View Model of Architecture. IEEE Software, 12(6), 42-50]. This integration framework represents a significant advancement beyond traditional single-platform development approaches, providing unified orchestration capabilities that enable developers to work seamlessly across Android mobile and Python desktop environments.
 
-**Unified Build Orchestration**: The Gradle build system provides centralized coordination of all development activities including compilation, testing, quality analysis, and deployment preparation across both Android and Python components.
+Unified build orchestration through the Gradle build system provides centralized coordination of all development activities, including compilation processes, comprehensive testing execution, automated quality analysis, and deployment preparation protocols that span both Android and Python components [CITE - Gradle Inc. (2023). Gradle User Manual. Gradle.org]. This orchestration addresses the inherent complexity of managing build processes that must coordinate Kotlin compilation for Android targets with Python environment management and cross-platform dependency resolution, ensuring that changes in one component automatically trigger appropriate validation in dependent components.
 
-**Environment Isolation and Reproducibility**: Sophisticated environment management ensures that development environments are completely reproducible across different developer machines and deployment contexts while eliminating configuration drift and dependency conflicts.
+Environment isolation and reproducibility mechanisms ensure that development environments maintain complete reproducibility across different developer machines and deployment contexts while systematically eliminating configuration drift and dependency conflicts that commonly plague research software projects [CITE - Boettiger, C. (2015). An introduction to Docker for reproducible research. ACM SIGOPS Operating Systems Review, 49(1), 71-79]. The framework recognizes that research software development often involves complex dependency chains spanning computer vision libraries, scientific computing packages, and specialized hardware interfaces that must maintain version consistency to ensure reproducible results.
 
-**Automated Quality Gates**: Integration with continuous integration systems provides automated quality verification that prevents regression while enabling rapid development iteration and collaborative development across distributed teams.
+Automated quality gates integration with continuous integration systems provides comprehensive quality verification that prevents regression while enabling rapid development iteration and collaborative development across distributed research teams [CITE - Duvall, P., Matyas, S., & Glover, A. (2007). Continuous Integration: Improving Software Quality and Reducing Risk. Addison-Wesley]. These quality gates implement research-specific validation criteria that extend beyond traditional commercial software metrics to include measurement accuracy verification, temporal precision validation, and statistical confidence assessment.
 
 ## Build System and Environment Management
 
+The build system architecture represents a sophisticated engineering solution to the challenge of coordinating development activities across fundamentally different technology platforms while maintaining the rigorous quality standards required for scientific instrumentation [CITE - Hunt, A., & Thomas, D. (1999). The Pragmatic Programmer: From Journeyman to Master. Addison-Wesley]. This system addresses the unique requirements of research software development where reproducibility, measurement precision, and cross-platform coordination take precedence over traditional commercial software development priorities.
+
 ### Gradle Multi-Project Architecture
 
-The build system implements a sophisticated multi-project Gradle configuration that coordinates Android and Python development while maintaining clear separation of concerns and enabling independent component development.
+The build system implements a sophisticated multi-project Gradle configuration that coordinates Android and Python development workflows while maintaining clear separation of concerns and enabling independent component development that supports parallel development across research team members with diverse technical backgrounds [CITE - Gradle Inc. (2023). Multi-Project Builds. Gradle User Manual]. This architecture recognizes that research software projects often involve domain experts who specialize in different aspects of the system, requiring build tools that support independent development while ensuring integration consistency.
 
 ```mermaid
 graph LR
@@ -182,56 +192,31 @@ graph LR
 
 ### Key Build System Components
 
-**Root Project Configuration (`build.gradle`)**:
-- Global dependency management and version catalogs
-- Plugin version coordination across all modules
-- Common configuration for code quality tools
-- Cross-platform task orchestration
+The build system architecture employs a hierarchical configuration approach that enables sophisticated coordination across diverse technology platforms while maintaining clear separation of concerns and preventing configuration conflicts that commonly arise in multi-platform development environments [CITE - McConnell, S. (2006). Software Estimation: Demystifying the Black Art. Microsoft Press].
 
-**Android Module Configuration (`AndroidApp/build.gradle`)**:
-- Multi-flavor build variants (dev/prod × debug/release/staging)
-- Camera2 API and Bluetooth SDK integration
-- Hilt dependency injection configuration
-- Testing framework setup with instrumentation testing
+Root project configuration through the primary `build.gradle` file establishes the foundation for all development activities, implementing global dependency management and version catalogs that ensure consistency across all project modules while providing plugin version coordination that prevents compatibility conflicts between Android and Python development toolchains [CITE - Gradle Inc. (2023). Version Catalog. Gradle User Manual]. This configuration establishes common quality tool settings that apply consistently across all platforms, ensuring that code quality standards remain uniform whether working with Kotlin Android components or Python desktop applications.
 
-**Python Module Configuration (`PythonApp/build.gradle`)**:
-- Conda environment management and dependency installation
-- PyQt5 and OpenCV integration with specific version pinning
-- Custom tasks for Python testing and code quality analysis
-- Cross-platform executable generation
+Android module configuration within `AndroidApp/build.gradle` implements sophisticated multi-flavor build variants that support development, production, and staging environments across debug and release configurations, enabling comprehensive testing scenarios that reflect real-world deployment conditions [CITE - Android Developers (2023). Configure Build Variants. Android Developer Documentation]. The configuration integrates Camera2 API and Bluetooth SDK dependencies while establishing Hilt dependency injection frameworks that support maintainable architecture patterns and comprehensive testing infrastructure including instrumentation testing capabilities for UI and service validation.
+
+Python module configuration through `PythonApp/build.gradle` provides sophisticated Conda environment management that handles complex dependency installation chains while implementing PyQt5 and OpenCV integration with specific version pinning that ensures reproducible builds across different development environments [CITE - Anaconda Inc. (2023). Conda User Guide. Anaconda Documentation]. The configuration includes custom tasks for Python testing and code quality analysis while supporting cross-platform executable generation that enables distribution of the desktop controller application across different operating systems.
 
 ### Environment Setup Automation
 
-The development environment setup process is fully automated through sophisticated scripts that handle all aspects of environment configuration, dependency installation, and validation verification.
+The development environment setup process represents a comprehensive automation framework that addresses the substantial complexity of configuring development environments that span Android mobile development, Python desktop application development, and specialized computer vision libraries [CITE - Bass, L., Weber, I., & Zhu, L. (2015). DevOps: A Software Architect's Perspective. Addison-Wesley]. This automation recognizes that research software development often involves team members with varying technical backgrounds who require consistent, reliable environment setup that eliminates configuration variations that can introduce subtle bugs or measurement inconsistencies.
 
-**Automated Setup Scripts**:
+Automated setup scripts provide complete environment configuration through cross-platform tools that handle all aspects of environment preparation, from initial dependency installation through comprehensive validation verification that ensures all components operate correctly before development begins. The platform-specific setup scripts for Windows PowerShell and Linux/macOS Bash environments provide optimized installation procedures that account for operating system differences while maintaining functional equivalence across all supported platforms.
 
-```bash
-# Complete automated setup (cross-platform)
-python3 tools/development/setup.py
-
-# Platform-specific setup scripts
-tools/development/setup_dev_env.ps1  # Windows PowerShell
-tools/development/setup.sh           # Linux/macOS Bash
-
-# Individual setup components
-tools/development/setup.ps1          # Core Windows setup
-```
-
-**Environment Validation**:
-
-```bash
-# Comprehensive environment validation
-./gradlew testPythonSetup            # Python dependencies verification
-./gradlew build --dry-run            # Build system validation
-python tools/validation/phase1_validation.py  # System integration check
-```
+Environment validation protocols implement comprehensive verification procedures that systematically test Python dependency installation, build system configuration, and system integration functionality before permitting development activities to proceed [CITE - Spinellis, D. (2005). Code Quality: The Open Source Perspective. Addison-Wesley]. These validation procedures prevent common development issues that arise from incomplete environment setup or dependency conflicts, ensuring that developers can begin productive work immediately after environment configuration completion.
 
 ## Testing Framework Architecture
 
-The testing framework implements a comprehensive multi-layered approach that validates system functionality from individual component operation through complete end-to-end research workflows under realistic operational conditions.
+The testing framework represents a fundamental advancement in research software validation methodology, implementing a comprehensive multi-layered approach that systematically validates system functionality from individual component operation through complete end-to-end research workflows under realistic operational conditions [CITE - Myers, G.J., Sandler, C., & Badgett, T. (2011). The Art of Software Testing. 3rd Edition. John Wiley & Sons]. This framework addresses the unique validation requirements of scientific instrumentation where measurement accuracy, temporal precision, and statistical confidence must be verified through systematic testing procedures that exceed traditional commercial software validation standards.
+
+The architecture recognizes that research software testing requires fundamentally different approaches compared to commercial application testing, particularly when dealing with systems that must maintain microsecond-precision timing across wireless networks while coordinating multiple sensor modalities under varying environmental conditions [CITE - Pezze, M., & Young, M. (2008). Software Testing and Analysis: Process, Principles, and Techniques. John Wiley & Sons]. Traditional testing frameworks, designed primarily for business logic validation, prove inadequate when addressing the statistical rigor and measurement validation requirements inherent in scientific instrumentation development.
 
 ### Multi-Layered Testing Strategy
+
+The multi-layered testing strategy implements a hierarchical validation approach that systematically addresses different aspects of system functionality while building confidence in overall system reliability through progressive validation layers [CITE - Beizer, B. (1995). Black-Box Testing: Techniques for Functional Testing of Software and Systems. John Wiley & Sons]. This strategy recognizes that complex distributed systems require validation approaches that can isolate specific failure modes while also verifying complete system integration under realistic operational scenarios.
 
 ```mermaid
 graph TD
@@ -276,23 +261,13 @@ graph TD
 
 ### Core Testing Infrastructure
 
-**Python Testing Framework**:
-- **pytest** for unit and integration testing with sophisticated fixture management
-- **Coverage.py** for comprehensive code coverage analysis with branch tracking
-- **Mock library** for external dependency simulation and hardware abstraction
-- **Statistical validation** with confidence intervals and hypothesis testing
+The testing infrastructure implements a sophisticated framework that coordinates multiple testing technologies across different runtime environments while maintaining consistency in test execution, reporting, and quality metrics [CITE - Dustin, E., Rashka, J., & Paul, J. (1999). Automated Software Testing: Introduction, Management, and Performance. Addison-Wesley]. This infrastructure addresses the fundamental challenge of testing distributed systems where components operate in different runtime environments but must coordinate to achieve unified functionality.
 
-**Android Testing Framework**:
-- **JUnit 5** for unit testing with modern testing patterns and assertions
-- **AndroidX Test** for instrumentation testing with UI automation
-- **Espresso** for user interface testing with interaction simulation
-- **Robolectric** for Android framework testing without device requirements
+Python testing framework implementation centers on pytest as the primary testing engine, providing sophisticated fixture management capabilities that enable complex test scenarios involving hardware simulation, network communication, and statistical validation [CITE - Okken, B. (2017). Python Testing with pytest. The Pragmatic Bookshelf]. The framework integrates Coverage.py for comprehensive code coverage analysis with branch tracking that ensures all execution paths receive validation attention, while the Mock library provides external dependency simulation and hardware abstraction that enables testing without physical hardware dependencies. Statistical validation components implement confidence intervals and hypothesis testing that verify measurement accuracy and reproducibility according to scientific standards.
 
-**Cross-Platform Testing**:
-- **Socket communication testing** with network simulation and error injection
-- **Multi-device coordination** testing with synchronized operation validation
-- **Performance benchmarking** with statistical analysis and trend detection
-- **Stress testing** with resource exhaustion and recovery validation
+Android testing framework utilization employs JUnit 5 as the foundation for unit testing, providing modern testing patterns and assertions that support comprehensive component validation [CITE - Beck, K., & Gamma, E. (1998). Test Infected: Programmers Love Writing Tests. Java Report]. AndroidX Test integration enables instrumentation testing with UI automation capabilities that verify user interface behavior under realistic interaction scenarios, while Espresso provides sophisticated user interface testing with interaction simulation that validates complex touch gestures and sensor integration. Robolectric integration enables Android framework testing without physical device requirements, supporting rapid development iteration while maintaining comprehensive validation coverage.
+
+Cross-platform testing capabilities address the unique challenges of validating distributed system functionality where Android mobile components must coordinate with Python desktop applications through network communication protocols [CITE - Binder, R.V. (1999). Testing Object-Oriented Systems: Models, Patterns, and Tools. Addison-Wesley]. Socket communication testing implements network simulation and error injection that validates system behavior under realistic network conditions including latency variations, packet loss, and connection interruptions. Multi-device coordination testing provides synchronized operation validation that ensures temporal precision requirements are maintained across multiple wireless devices, while performance benchmarking implements statistical analysis and trend detection that identifies performance degradation before it affects measurement quality. Stress testing procedures implement resource exhaustion and recovery validation that ensures system stability under extended operation conditions typical of research data collection sessions.
 
 ### Specialized Testing Categories
 
