@@ -1523,4 +1523,96 @@ class MainViewModel
             logD("MainViewModel", "System state update requested")
             // Implementation placeholder - system state updates would go here
         }
+        
+        /**
+         * Refresh system status by re-checking all device connections
+         */
+        fun refreshSystemStatus() {
+            viewModelScope.launch {
+                try {
+                    logger.info("Refreshing system status...")
+                    
+                    // Update status to show refresh in progress
+                    updateUiState { currentState ->
+                        currentState.copy(statusText = "Refreshing system status...")
+                    }
+                    
+                    // Re-check thermal camera availability
+                    val thermalAvailable = checkThermalCameraAvailability()
+                    
+                    // Re-check Shimmer connection
+                    val shimmerStatus = shimmerRecorder.getShimmerStatus()
+                    val shimmerConnected = shimmerStatus.isConnected
+                    
+                    // Re-check PC connection (placeholder)
+                    val pcConnected = false // TODO: Implement PC connection check
+                    
+                    // Re-check network status (placeholder)
+                    val networkConnected = false // TODO: Implement network check
+                    
+                    // Update UI state with fresh status
+                    val statusMessage = buildString {
+                        append("Status updated - ")
+                        append("Thermal: ${if (thermalAvailable) "OK" else "N/A"}, ")
+                        append("Shimmer: ${if (shimmerConnected) "OK" else "N/A"}, ")
+                        append("PC: ${if (pcConnected) "OK" else "N/A"}")
+                    }
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = statusMessage,
+                            isThermalConnected = thermalAvailable,
+                            isShimmerConnected = shimmerConnected,
+                            isPcConnected = pcConnected,
+                            isNetworkConnected = networkConnected,
+                            thermalPreviewAvailable = thermalAvailable
+                        )
+                    }
+                    
+                    logger.info("System status refresh completed: $statusMessage")
+                    
+                } catch (e: Exception) {
+                    logger.error("Error during system status refresh", e)
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Status refresh failed",
+                            errorMessage = "Failed to refresh status: ${e.message}"
+                        )
+                    }
+                }
+            }
+        }
+        
+        /**
+         * Scan for available Shimmer devices via Bluetooth (Enhanced)
+         */
+        fun scanForShimmerDevicesEnhanced(callback: (List<Pair<String, String>>) -> Unit) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Scanning for Shimmer devices...")
+                    
+                    // Use ShimmerRecorder to scan for devices
+                    val devices = shimmerRecorder.scanForDevices()
+                    
+                    logger.info("Found ${devices.size} Shimmer devices")
+                    callback(devices)
+                    
+                } catch (e: Exception) {
+                    logger.error("Error during Shimmer device scan", e)
+                    callback(emptyList())
+                }
+            }
+        }
+        
+        /**
+         * Get list of previously connected Shimmer devices
+         */
+        fun getKnownShimmerDevices(): List<Pair<String, String>> {
+            return try {
+                shimmerRecorder.getKnownDevices()
+            } catch (e: Exception) {
+                logger.error("Error getting known Shimmer devices", e)
+                emptyList()
+            }
+        }
     }

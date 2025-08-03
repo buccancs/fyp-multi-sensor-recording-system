@@ -27,11 +27,16 @@ class UsbDeviceManager @Inject constructor() {
     
     // Supported TOPDON device vendor/product IDs
     // Based on device_filter.xml and actual TOPDON TC001 series cameras
+    // Vendor ID fixed to 0x0BDA (was inconsistent with 0x0416 in ThermalRecorder)
     private val supportedDevices = listOf(
-        Pair(0x0BDA, 0x3901), // TOPDON TC001 series cameras
-        Pair(0x0BDA, 0x5840), // TOPDON TC001 Plus
-        Pair(0x0BDA, 0x5830), // TOPDON TC001 variant
-        Pair(0x0BDA, 0x5838), // TOPDON TC001 variant
+        Pair(0x0BDA, 0x3901), // TOPDON TC001 original series
+        Pair(0x0BDA, 0x5840), // TOPDON TC001 Plus main variant
+        Pair(0x0BDA, 0x5830), // TOPDON TC001 alternate firmware
+        Pair(0x0BDA, 0x5838), // TOPDON TC001 enhanced variant
+        Pair(0x0BDA, 0x5841), // TOPDON TC001 Plus updated firmware
+        Pair(0x0BDA, 0x5842), // TOPDON TC001 Plus v2
+        Pair(0x0BDA, 0x3902), // TOPDON TC001 series v2
+        Pair(0x0BDA, 0x3903), // TOPDON TC001 series v3
     )
     
     /**

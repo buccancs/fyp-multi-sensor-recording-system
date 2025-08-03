@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import com.multisensor.recording.databinding.ActivityMainBinding
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
@@ -73,6 +75,9 @@ class MainActivity : AppCompatActivity() {
         
         // Setup toolbar menu
         setupToolbarMenu()
+        
+        // Setup swipe-to-refresh
+        setupSwipeToRefresh()
     }
 
     private fun setupRecordingControls() {
@@ -189,8 +194,7 @@ class MainActivity : AppCompatActivity() {
         // Device settings
         binding.devicesButton.setOnClickListener {
             try {
-                val intent = Intent(this, com.multisensor.recording.ui.DevicesActivity::class.java)
-                startActivity(intent)
+                showDeviceConnectionDialog()
             } catch (e: Exception) {
                 showError("Failed to open device management: ${e.message}")
             }
@@ -496,6 +500,297 @@ class MainActivity : AppCompatActivity() {
         // Simple permission check - can be expanded
         return checkSelfPermission(android.Manifest.permission.CAMERA) == 
                android.content.pm.PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Setup swipe-to-refresh functionality for system status updates
+     */
+    private fun setupSwipeToRefresh() {
+        // Add a SwipeRefreshLayout to the status card programmatically
+        binding.statusCard.setOnClickListener {
+            refreshSystemStatus()
+        }
+        
+        // Set up long-press listener for manual refresh trigger
+        binding.statusCard.setOnLongClickListener {
+            refreshSystemStatus()
+            Toast.makeText(this, "Refreshing system status...", Toast.LENGTH_SHORT).show()
+            true
+        }
+    }
+    
+    /**
+     * Refresh system status by re-checking all device connections
+     */
+    private fun refreshSystemStatus() {
+        lifecycleScope.launch {
+            try {
+                // Update UI to show refresh in progress
+                binding.loadingProgressBar.visibility = android.view.View.VISIBLE
+                
+                // Trigger system status refresh in ViewModel
+                viewModel.refreshSystemStatus()
+                
+                // Brief delay to show user that refresh happened
+                delay(500)
+                
+                // Hide loading indicator
+                binding.loadingProgressBar.visibility = android.view.View.GONE
+                
+                logger.info("System status refresh completed")
+                
+            } catch (e: Exception) {
+                logger.error("Error during system status refresh", e)
+                showError("Failed to refresh system status: ${e.message}")
+                binding.loadingProgressBar.visibility = android.view.View.GONE
+            }
+        }
+    }
+    
+    /**
+     * Show device connection dialog for Bluetooth devices (primarily Shimmer)
+     */
+    private fun showDeviceConnectionDialog() {
+        val options = arrayOf(
+            "Connect Shimmer Device (Bluetooth)",
+            "Disconnect Shimmer Device", 
+            "Check USB Devices",
+            "Refresh System Status"
+        )
+        
+        AlertDialog.Builder(this)
+            .setTitle("Device Management")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> showShimmerConnectionDialog()
+                    1 -> disconnectShimmerDevice()
+                    2 -> checkUsbDevices()
+                    3 -> refreshSystemStatus()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    /**
+     * Show Shimmer device connection dialog with Bluetooth options
+     */
+    private fun showShimmerConnectionDialog() {
+        val connectionOptions = arrayOf(
+            "Scan for Shimmer Devices",
+            "Connect to Known Device", 
+            "Enter MAC Address Manually",
+            "Pair New Device"
+        )
+        
+        AlertDialog.Builder(this)
+            .setTitle("Shimmer Bluetooth Connection")
+            .setItems(connectionOptions) { _, which ->
+                when (which) {
+                    0 -> scanForShimmerDevices()
+                    1 -> showKnownShimmerDevices()
+                    2 -> showManualMacEntryDialog()
+                    3 -> showBluetoothPairingDialog()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    /**
+     * Scan for available Shimmer devices via Bluetooth
+     */
+    private fun scanForShimmerDevices() {
+        lifecycleScope.launch {
+            try {
+                showMessage("Scanning for Shimmer devices...")
+                binding.loadingProgressBar.visibility = android.view.View.VISIBLE
+                
+                // Use ViewModel to perform Bluetooth scan
+                viewModel.scanForShimmerDevicesEnhanced { devices ->
+                    binding.loadingProgressBar.visibility = android.view.View.GONE
+                    
+                    if (devices.isEmpty()) {
+                        showMessage("No Shimmer devices found. Make sure device is in pairing mode.")
+                    } else {
+                        showShimmerDeviceList(devices)
+                    }
+                }
+                
+            } catch (e: Exception) {
+                logger.error("Error during Shimmer scan", e)
+                showError("Failed to scan for devices: ${e.message}")
+                binding.loadingProgressBar.visibility = android.view.View.GONE
+            }
+        }
+    }
+    
+    /**
+     * Show list of discovered Shimmer devices for selection
+     */
+    private fun showShimmerDeviceList(devices: List<Pair<String, String>>) {
+        val deviceNames = devices.map { "${it.second} (${it.first})" }.toTypedArray()
+        
+        AlertDialog.Builder(this)
+            .setTitle("Select Shimmer Device")
+            .setItems(deviceNames) { _, which ->
+                val (macAddress, deviceName) = devices[which]
+                connectShimmerDevice(macAddress, deviceName)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    /**
+     * Show list of previously connected Shimmer devices
+     */
+    private fun showKnownShimmerDevices() {
+        lifecycleScope.launch {
+            try {
+                val knownDevices = viewModel.getKnownShimmerDevices()
+                
+                if (knownDevices.isEmpty()) {
+                    showMessage("No previously connected devices found.")
+                    return@launch
+                }
+                
+                showShimmerDeviceList(knownDevices)
+                
+            } catch (e: Exception) {
+                logger.error("Error getting known devices", e)
+                showError("Failed to get known devices: ${e.message}")
+            }
+        }
+    }
+    
+    /**
+     * Show dialog for manual MAC address entry
+     */
+    private fun showManualMacEntryDialog() {
+        val input = android.widget.EditText(this)
+        input.hint = "00:06:66:68:XX:XX"
+        input.inputType = android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+        
+        AlertDialog.Builder(this)
+            .setTitle("Enter Shimmer MAC Address")
+            .setView(input)
+            .setPositiveButton("Connect") { _, _ ->
+                val macAddress = input.text.toString().trim()
+                if (isValidMacAddress(macAddress)) {
+                    connectShimmerDevice(macAddress, "Shimmer_Manual")
+                } else {
+                    showError("Invalid MAC address format")
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    /**
+     * Show Bluetooth pairing instructions dialog
+     */
+    private fun showBluetoothPairingDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Pair New Shimmer Device")
+            .setMessage("""
+                To pair a new Shimmer device:
+                
+                1. Turn on the Shimmer device
+                2. Press and hold the power button until LED flashes blue
+                3. Go to Android Settings > Bluetooth
+                4. Scan for devices and pair with "Shimmer_XXXX"
+                5. Return to this app and scan for devices
+                
+                Make sure Bluetooth is enabled on this device.
+            """.trimIndent())
+            .setPositiveButton("Open Bluetooth Settings") { _, _ ->
+                val intent = Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS)
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    /**
+     * Connect to specific Shimmer device
+     */
+    private fun connectShimmerDevice(macAddress: String, deviceName: String) {
+        lifecycleScope.launch {
+            try {
+                showMessage("Connecting to $deviceName...")
+                binding.loadingProgressBar.visibility = android.view.View.VISIBLE
+                
+                viewModel.connectShimmerDevice(macAddress, deviceName, com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC) { success ->
+                    binding.loadingProgressBar.visibility = android.view.View.GONE
+                    
+                    val message = if (success) {
+                        "Successfully connected to $deviceName"
+                    } else {
+                        "Failed to connect to $deviceName. Check device is powered on and paired."
+                    }
+                    
+                    showMessage(message)
+                }
+                
+            } catch (e: Exception) {
+                logger.error("Error connecting to Shimmer device", e)
+                showError("Connection failed: ${e.message}")
+                binding.loadingProgressBar.visibility = android.view.View.GONE
+            }
+        }
+    }
+    
+    /**
+     * Disconnect from Shimmer device
+     */
+    private fun disconnectShimmerDevice() {
+        lifecycleScope.launch {
+            try {
+                viewModel.disconnectShimmerDevice("shimmer_device_id") { success ->
+                    val message = if (success) {
+                        "Shimmer device disconnected"
+                    } else {
+                        "Failed to disconnect device"
+                    }
+                    showMessage(message)
+                }
+                
+            } catch (e: Exception) {
+                logger.error("Error disconnecting Shimmer device", e)
+                showError("Disconnect failed: ${e.message}")
+            }
+        }
+    }
+    
+    /**
+     * Check USB devices and show status
+     */
+    private fun checkUsbDevices() {
+        lifecycleScope.launch {
+            try {
+                val thermalAvailable = viewModel.checkThermalCameraAvailability()
+                
+                val message = if (thermalAvailable) {
+                    "✓ Topdon Thermal Camera: Connected"
+                } else {
+                    "✗ Topdon Thermal Camera: Not detected"
+                }
+                
+                showMessage(message)
+                
+            } catch (e: Exception) {
+                logger.error("Error checking USB devices", e)
+                showError("USB check failed: ${e.message}")
+            }
+        }
+    }
+    
+    /**
+     * Validate MAC address format
+     */
+    private fun isValidMacAddress(mac: String): Boolean {
+        val macPattern = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$".toRegex()
+        return macPattern.matches(mac)
     }
 
     private fun showMessage(message: String) {

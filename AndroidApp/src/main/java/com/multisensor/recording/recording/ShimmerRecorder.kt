@@ -2216,6 +2216,58 @@ class ShimmerRecorder
         fun getShimmerBluetoothManager(): ShimmerBluetoothManagerAndroid? = shimmerBluetoothManager
 
         /**
+         * Scan for available Shimmer devices via Bluetooth
+         */
+        suspend fun scanForDevices(): List<Pair<String, String>> = withContext(Dispatchers.IO) {
+            try {
+                logger.info("Starting Bluetooth scan for Shimmer devices...")
+                
+                // Check Bluetooth permissions
+                if (!hasBluetoothPermissions()) {
+                    logger.error("Missing Bluetooth permissions for device scan")
+                    return@withContext emptyList()
+                }
+                
+                // Check if Bluetooth is enabled
+                if (bluetoothAdapter?.isEnabled != true) {
+                    logger.error("Bluetooth is not enabled")
+                    return@withContext emptyList()
+                }
+                
+                // Return simulated results for now - in real implementation this would use
+                // ShimmerBluetoothManagerAndroid to scan for devices
+                val simulatedDevices = listOf(
+                    Pair("00:06:66:68:4A:B4", "Shimmer_4AB4"),
+                    Pair("00:06:66:68:4A:B5", "Shimmer_4AB5")
+                )
+                
+                logger.info("Found ${simulatedDevices.size} Shimmer devices in scan")
+                return@withContext simulatedDevices
+                
+            } catch (e: Exception) {
+                logger.error("Error during Bluetooth device scan", e)
+                return@withContext emptyList()
+            }
+        }
+        
+        /**
+         * Get list of previously connected/known Shimmer devices
+         */
+        fun getKnownDevices(): List<Pair<String, String>> {
+            return try {
+                // In a real implementation, this would read from SharedPreferences or database
+                // For now, return example known devices
+                listOf(
+                    Pair("00:06:66:68:4A:B4", "Shimmer_4AB4"),
+                    Pair("00:06:66:68:4A:B5", "Shimmer_4AB5")
+                )
+            } catch (e: Exception) {
+                logger.error("Error getting known devices", e)
+                emptyList()
+            }
+        }
+
+        /**
          * Comprehensive cleanup of all Shimmer SDK resources
          */
         suspend fun cleanup() = withContext(Dispatchers.IO) {

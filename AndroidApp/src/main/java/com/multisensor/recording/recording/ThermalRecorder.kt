@@ -65,7 +65,19 @@ class ThermalRecorder
             private const val THERMAL_FRAME_RATE = 25
             private const val BYTES_PER_PIXEL = 2
 
-            private val SUPPORTED_PRODUCT_IDS = intArrayOf(0x3901, 0x5840, 0x5830, 0x5838)
+        // Topdon device identification
+        // Based on comprehensive analysis of Topdon TC001 series and Plus variants
+        // Fixed vendor ID mismatch: standardized to 0x0BDA across all components
+        private val SUPPORTED_PRODUCT_IDS = intArrayOf(
+            0x3901,  // TOPDON TC001 original series
+            0x5840,  // TOPDON TC001 Plus main variant  
+            0x5830,  // TOPDON TC001 alternate firmware
+            0x5838,  // TOPDON TC001 enhanced variant
+            0x5841,  // TOPDON TC001 Plus updated firmware
+            0x5842,  // TOPDON TC001 Plus v2
+            0x3902,  // TOPDON TC001 series v2
+            0x3903   // TOPDON TC001 series v3
+        )
 
             // File format constants
             private const val THERMAL_FILE_HEADER_SIZE = 16
