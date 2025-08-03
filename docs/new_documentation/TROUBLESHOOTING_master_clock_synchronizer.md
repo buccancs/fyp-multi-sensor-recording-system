@@ -4,6 +4,7 @@
 
 - [Overview](#overview)
 - [Quick Diagnostic Checklist](#quick-diagnostic-checklist)
+  - [Emergency 5-Minute Diagnosis](#emergency-5-minute-diagnosis)
 - [Common Issues and Solutions](#common-issues-and-solutions)
   - [Synchronization Problems](#synchronization-problems)
   - [Network Connectivity Issues](#network-connectivity-issues)
@@ -19,8 +20,10 @@
   - [Log Analysis](#log-analysis)
 - [Recovery Procedures](#recovery-procedures)
   - [Automatic Recovery](#automatic-recovery)
+    - [Self-Healing System Implementation](#self-healing-system-implementation)
   - [Manual Recovery Steps](#manual-recovery-steps)
   - [Emergency Procedures](#emergency-procedures)
+    - [Complete System Recovery](#complete-system-recovery)
 - [Preventive Maintenance](#preventive-maintenance)
   - [Regular Health Checks](#regular-health-checks)
   - [System Optimization](#system-optimization)

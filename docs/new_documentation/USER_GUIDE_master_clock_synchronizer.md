@@ -36,6 +36,17 @@
   - [Network Environment](#network-environment)
   - [Session Management](#session-management)
 - [Frequently Asked Questions](#frequently-asked-questions)
+- [Advanced Configuration for Research Scenarios](#advanced-configuration-for-research-scenarios)
+  - [Laboratory Research Setup](#laboratory-research-setup)
+  - [Field Research Configuration](#field-research-configuration)
+  - [Clinical Study Configuration](#clinical-study-configuration)
+- [Advanced Troubleshooting and Optimization](#advanced-troubleshooting-and-optimization)
+  - [Performance Optimization Strategies](#performance-optimization-strategies)
+  - [Advanced Diagnostic Procedures](#advanced-diagnostic-procedures)
+  - [Recovery Strategies](#recovery-strategies)
+- [Data Validation and Analysis Integration](#data-validation-and-analysis-integration)
+  - [Post-Recording Data Validation](#post-recording-data-validation)
+- [Extended FAQ and Advanced Topics](#extended-faq-and-advanced-topics)
 
 ## Overview
 
