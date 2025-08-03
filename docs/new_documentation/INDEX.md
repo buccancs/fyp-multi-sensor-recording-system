@@ -110,6 +110,22 @@ The documentation is organized into comprehensive categories addressing differen
 **Audience**: Distributed Systems Engineers  
 **Purpose**: Device coordination and temporal synchronization
 
+### [Master Clock Synchronizer](README_master_clock_synchronizer.md)
+**Audience**: Developers, System Engineers  
+**Purpose**: Core timing system for precise synchronization across all devices
+
+**Extended Documentation**:
+- [Advanced Configuration & Extensions](ADVANCED_master_clock_synchronizer.md) - Multi-environment deployment, custom device integration, security patterns
+- [Performance Benchmarking Guide](BENCHMARKING_master_clock_synchronizer.md) - Comprehensive performance analysis, optimization strategies, real-world benchmarks
+- [Troubleshooting & Diagnostics](TROUBLESHOOTING_master_clock_synchronizer.md) - Issue resolution, diagnostic tools, recovery procedures
+
+**Key Contents**:
+- High-precision timing algorithms implementation
+- Clock drift compensation and detection mechanisms
+- NTP integration architecture and network time synchronization
+- Synchronization quality monitoring with real-time metrics
+- PC master clock authority and device coordination protocols
+
 ### [Networking Protocol](README_networking_protocol.md)
 **Audience**: Network Engineers, Protocol Developers  
 **Purpose**: Communication protocol design and implementation
@@ -173,6 +189,7 @@ The documentation is organized into comprehensive categories addressing differen
 
 #### System Protocols
 - [Multi-Device Synchronization Protocol](PROTOCOL_Multi_Device_Synchronization.md)
+- [Master Clock Synchronizer Protocol](PROTOCOL_master_clock_synchronizer.md)
 - [Networking Protocol Specification](PROTOCOL_networking_protocol.md)
 - [Session Management Protocol](PROTOCOL_session_management.md)
 - [UI State Management Protocol](PROTOCOL_ui_state_management.md)
@@ -200,6 +217,7 @@ The documentation is organized into comprehensive categories addressing differen
 - [Shimmer3 GSR+ Guide](USER_GUIDE_shimmer3_gsr_plus.md)
 - [Python Desktop Controller Guide](USER_GUIDE_python_desktop_controller.md)
 - [Multi-Device Synchronization Guide](USER_GUIDE_Multi_Device_Synchronization.md)
+- [Master Clock Synchronizer Guide](USER_GUIDE_master_clock_synchronizer.md)
 - [Networking Protocol Guide](USER_GUIDE_networking_protocol.md)
 - [Session Management Guide](USER_GUIDE_session_management.md)
 - [UI Navigation Guide](USER_GUIDE_ui_navigation.md)
