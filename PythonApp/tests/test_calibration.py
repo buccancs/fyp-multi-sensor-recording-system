@@ -250,7 +250,7 @@ def test_calibration_with_synthetic_data(
     # Check specific values
     assert rms_error < calibration_tester.test_data.error_threshold
     assert camera_matrix.shape == (3, 3)
-    assert len(dist_coeffs) >= 4
+    assert dist_coeffs.size >= 4  # Check total number of elements, not just rows
 
 
 @pytest.mark.integration
