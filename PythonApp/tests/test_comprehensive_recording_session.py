@@ -50,11 +50,22 @@ try:
     from network.device_server import JsonSocketServer, RemoteDevice
     from session.session_manager import SessionManager
     from utils.logging_config import get_logger, AppLogger
-    from tests.test_device_simulator import DeviceSimulator
     APP_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Some app components not available: {e}")
     APP_COMPONENTS_AVAILABLE = False
+
+# Import DeviceSimulator from tests
+try:
+    from test_device_simulator import DeviceSimulator
+    DEVICE_SIMULATOR_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: DeviceSimulator not available: {e}")
+    DEVICE_SIMULATOR_AVAILABLE = False
+    # Create a dummy base class
+    class DeviceSimulator:
+        def __init__(self, device_id, host="127.0.0.1", port=9000):
+            pass
 
 # Try to import additional testing utilities
 try:
@@ -138,7 +149,6 @@ class HealthMonitor:
             "last_heartbeat": self.last_heartbeat,
             "silence_duration": time.time() - self.last_heartbeat
         }
-
 
 class EnhancedDeviceSimulator(DeviceSimulator):
     """Enhanced device simulator with realistic GSR sensor data and improved communication."""

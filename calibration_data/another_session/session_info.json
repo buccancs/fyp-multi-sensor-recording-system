@@ -1,10 +1,10 @@
 {
   "session_name": "another_session",
-  "session_folder": "calibration_data\\another_session",
+  "session_folder": "calibration_data/another_session",
   "device_ids": [
     "device_3"
   ],
-  "start_time": "2025-07-30T05:14:10.520516",
+  "start_time": "2025-08-02T23:59:27.629785",
   "pattern_type": "chessboard",
   "pattern_size": [
     9,
