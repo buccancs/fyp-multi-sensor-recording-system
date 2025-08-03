@@ -428,6 +428,49 @@ class MainViewModel
         }
 
         /**
+         * Check if RAW stage 3 capture is available on this device.
+         * Returns availability status with detailed device capability information.
+         * 
+         * @return true if RAW stage 3 capture is fully supported, false otherwise
+         */
+        fun checkRawStage3Availability(): Boolean {
+            return try {
+                logger.info("Checking RAW stage 3 capture availability...")
+                val isAvailable = cameraRecorder.isRawStage3Available()
+                
+                updateUiState { currentState ->
+                    val statusMessage = if (isAvailable) {
+                        "RAW Stage 3 capture: AVAILABLE"
+                    } else {
+                        "RAW Stage 3 capture: NOT AVAILABLE"
+                    }
+                    
+                    currentState.copy(
+                        statusText = statusMessage
+                    )
+                }
+                
+                if (isAvailable) {
+                    logger.info("✓ RAW Stage 3 capture is available on this device")
+                } else {
+                    logger.warning("✗ RAW Stage 3 capture is NOT available on this device")
+                }
+                
+                isAvailable
+            } catch (e: Exception) {
+                logger.error("Error checking RAW stage 3 availability", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = "Error checking RAW stage 3 availability",
+                        errorMessage = "Failed to check RAW capabilities: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+                false
+            }
+        }
+
+        /**
          * Run calibration process using real CalibrationCaptureManager
          */
         fun runCalibration() {

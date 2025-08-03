@@ -15,7 +15,9 @@ import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.SystemHealthStatus
 import com.multisensor.recording.ui.SettingsActivity
+import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Streamlined Material Design 3 Dashboard
@@ -31,6 +33,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    
+    @Inject
+    lateinit var logger: Logger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -184,9 +189,38 @@ class MainActivity : AppCompatActivity() {
             // Update status overlay
             binding.cameraStatusOverlay.text = "Initializing camera..."
             
+            // Check RAW stage 3 availability after initialization
+            checkRawStage3Availability()
+            
         } catch (e: Exception) {
             showError("Failed to initialize camera: ${e.message}")
             binding.cameraStatusOverlay.text = "Camera Error"
+        }
+    }
+
+    /**
+     * Check and display RAW stage 3 capture availability
+     */
+    private fun checkRawStage3Availability() {
+        lifecycleScope.launch {
+            try {
+                val isAvailable = viewModel.checkRawStage3Availability()
+                
+                val message = if (isAvailable) {
+                    "✓ RAW Stage 3 Capture: AVAILABLE"
+                } else {
+                    "✗ RAW Stage 3 Capture: NOT AVAILABLE"
+                }
+                
+                // Show status in a toast for immediate user feedback
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                
+                logger.info("RAW Stage 3 availability check completed: $isAvailable")
+                
+            } catch (e: Exception) {
+                logger.error("Error during RAW stage 3 availability check", e)
+                Toast.makeText(this@MainActivity, "Error checking RAW capabilities", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -1891,6 +1891,128 @@ class CameraRecorder
         }
 
         /**
+         * Check if RAW stage 3 capture is available on this device.
+         * Validates Samsung S21/S22 optimized RAW sensor capabilities including:
+         * - LEVEL_3 or FULL camera hardware support
+         * - RAW_SENSOR capability and format support  
+         * - Samsung-specific manual sensor controls (for optimal stage 3 extraction)
+         * - Adequate sensor resolution for professional RAW processing
+         * 
+         * @return true if RAW stage 3 capture is fully supported, false otherwise
+         */
+        fun isRawStage3Available(): Boolean {
+            return try {
+                val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+                
+                logger.info("Checking RAW stage 3 capture availability...")
+                
+                // Samsung S21/S22 device detection for enhanced validation
+                val deviceModel = android.os.Build.MODEL.uppercase()
+                val isSamsungS21S22 = deviceModel.contains("SM-G99") || deviceModel.contains("S21") || deviceModel.contains("S22")
+                
+                if (isSamsungS21S22) {
+                    logger.info("Samsung S21/S22 device detected: $deviceModel - Enhanced RAW validation")
+                }
+
+                for (cameraId in cameraManager.cameraIdList) {
+                    val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+
+                    // Check if this is a back camera (primary camera for RAW capture)
+                    val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                    if (facing != CameraCharacteristics.LENS_FACING_BACK) {
+                        continue
+                    }
+
+                    // Check hardware level - CRITICAL for stage 3 RAW extraction
+                    val hardwareLevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
+                    val isLevel3 = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
+                    val isFullOrBetter = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL || isLevel3
+
+                    if (!isFullOrBetter) {
+                        logger.debug("Camera $cameraId: Hardware level insufficient for stage 3 RAW")
+                        continue
+                    }
+
+                    // Check for RAW capability - ESSENTIAL for stage 3 RAW extraction
+                    val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+                    val hasRawCapability = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
+                    val hasBackwardCompatibility = 
+                        capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
+
+                    if (!hasRawCapability) {
+                        logger.debug("Camera $cameraId: No RAW capability - stage 3 extraction not supported")
+                        continue
+                    }
+
+                    if (!hasBackwardCompatibility) {
+                        logger.debug("Camera $cameraId: No backward compatibility")
+                        continue
+                    }
+
+                    // Verify RAW sensor sizes are available
+                    val streamConfigMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                    val rawSizes = streamConfigMap?.getOutputSizes(ImageFormat.RAW_SENSOR)
+                    val hasRawSizes = rawSizes?.isNotEmpty() == true
+
+                    if (!hasRawSizes) {
+                        logger.debug("Camera $cameraId: No RAW sensor sizes available - stage 3 extraction not possible")
+                        continue
+                    }
+
+                    // Samsung S21/S22 enhanced validation for optimal stage 3 RAW
+                    var samsungOptimal = true
+                    if (isSamsungS21S22) {
+                        val hasManualSensor = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
+                        val hasManualPostProcessing = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING) == true
+                        
+                        if (!hasManualSensor) {
+                            logger.warning("Camera $cameraId: No manual sensor control - stage 3 RAW may be limited on Samsung")
+                            samsungOptimal = false
+                        }
+                        if (!hasManualPostProcessing) {
+                            logger.warning("Camera $cameraId: No manual post-processing - advanced RAW features limited on Samsung")
+                            samsungOptimal = false
+                        }
+
+                        // Check sensor resolution for Samsung devices
+                        val maxRawSize = rawSizes?.maxByOrNull { it.width * it.height }
+                        val megapixels = maxRawSize?.let { (it.width * it.height) / 1_000_000 } ?: 0
+                        
+                        if (megapixels < 12) {
+                            logger.warning("Camera $cameraId: RAW sensor below expected Samsung S21/S22 resolution (${megapixels}MP)")
+                            samsungOptimal = false
+                        }
+                    }
+
+                    // This camera supports RAW stage 3 capture
+                    val levelName = when (hardwareLevel) {
+                        CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> "LEVEL_3"
+                        CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> "FULL"
+                        else -> "OTHER($hardwareLevel)"
+                    }
+
+                    val samsungStatus = if (isSamsungS21S22) {
+                        if (samsungOptimal) " [SAMSUNG_OPTIMAL]" else " [SAMSUNG_BASIC]"
+                    } else ""
+
+                    logger.info("RAW stage 3 capture AVAILABLE: Camera $cameraId ($levelName)$samsungStatus")
+                    logger.info("RAW sensor sizes: ${rawSizes?.size}, Max resolution: ${rawSizes?.maxByOrNull { it.width * it.height }?.let { "${it.width}x${it.height}" }}")
+
+                    return true
+                }
+
+                // No suitable camera found
+                logger.warning("RAW stage 3 capture NOT AVAILABLE: No camera with required capabilities found")
+                logger.info("Requirements: Back camera + LEVEL_3/FULL hardware + RAW capability + RAW sensor sizes")
+                
+                false
+            } catch (e: Exception) {
+                logger.error("Error checking RAW stage 3 availability", e)
+                false
+            }
+        }
+
+        /**
          * Cleanup resources
          */
         private fun cleanup() {
