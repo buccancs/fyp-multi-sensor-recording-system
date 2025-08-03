@@ -87,6 +87,82 @@ class MainActivity : AppCompatActivity() {
                 showError("Recording control failed: ${e.message}")
             }
         }
+        
+        // Setup preview layout switcher
+        setupPreviewLayoutSwitcher()
+    }
+
+    private fun setupPreviewLayoutSwitcher() {
+        var currentPreviewMode = PreviewMode.DUAL
+        
+        binding.previewLayoutToggle.setOnClickListener {
+            try {
+                currentPreviewMode = when (currentPreviewMode) {
+                    PreviewMode.DUAL -> PreviewMode.RGB_ONLY
+                    PreviewMode.RGB_ONLY -> PreviewMode.THERMAL_ONLY
+                    PreviewMode.THERMAL_ONLY -> PreviewMode.DUAL
+                }
+                
+                switchPreviewLayout(currentPreviewMode)
+                
+            } catch (e: Exception) {
+                showError("Failed to switch preview layout: ${e.message}")
+            }
+        }
+    }
+    
+    private fun switchPreviewLayout(mode: PreviewMode) {
+        try {
+            logger.info("Switching to preview mode: $mode")
+            
+            // Hide all layouts first
+            binding.dualPreviewLayout.visibility = android.view.View.GONE
+            binding.singleRgbLayout.visibility = android.view.View.GONE
+            binding.singleThermalLayout.visibility = android.view.View.GONE
+            
+            when (mode) {
+                PreviewMode.DUAL -> {
+                    binding.dualPreviewLayout.visibility = android.view.View.VISIBLE
+                    binding.previewLayoutToggle.text = "Dual View"
+                    binding.previewLayoutToggle.setIconResource(R.drawable.ic_view_module)
+                    
+                    // Reinitialize camera surfaces if needed
+                    val cameraTextureView = binding.cameraPreview
+                    val thermalSurfaceView = binding.thermalPreview
+                    viewModel.switchPreviewSurfaces(cameraTextureView, thermalSurfaceView)
+                }
+                
+                PreviewMode.RGB_ONLY -> {
+                    binding.singleRgbLayout.visibility = android.view.View.VISIBLE
+                    binding.previewLayoutToggle.text = "RGB Only"
+                    binding.previewLayoutToggle.setIconResource(R.drawable.ic_videocam)
+                    
+                    // Use fullscreen texture view for RGB
+                    val cameraTextureView = binding.cameraPreviewFullscreen
+                    viewModel.switchPreviewSurfaces(cameraTextureView, null)
+                }
+                
+                PreviewMode.THERMAL_ONLY -> {
+                    binding.singleThermalLayout.visibility = android.view.View.VISIBLE
+                    binding.previewLayoutToggle.text = "Thermal Only"
+                    binding.previewLayoutToggle.setIconResource(R.drawable.ic_thermostat)
+                    
+                    // Use fullscreen surface view for thermal
+                    val thermalSurfaceView = binding.thermalPreviewFullscreen
+                    viewModel.switchPreviewSurfaces(null, thermalSurfaceView)
+                }
+            }
+            
+            logger.info("Preview layout switched to: $mode")
+            
+        } catch (e: Exception) {
+            logger.error("Failed to switch preview layout", e)
+            showError("Failed to switch preview layout: ${e.message}")
+        }
+    }
+    
+    enum class PreviewMode {
+        DUAL, RGB_ONLY, THERMAL_ONLY
     }
 
     private fun setupQuickActions() {
@@ -296,54 +372,44 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCameraStatusOverlay(uiState: MainUiState) {
-        // Update RGB camera status overlay
-        when {
-            uiState.isLoadingPermissions -> {
-                binding.cameraStatusOverlay.text = "Initializing camera..."
-                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
+        // Update RGB camera status overlay for both dual and single view
+        val rgbStatusText = when {
+            uiState.isCameraInitialized -> {
+                if (uiState.isCameraRecording) "Recording..." else "Ready"
             }
-            uiState.isInitialized && uiState.errorMessage == null -> {
-                // Camera is working - hide overlay to show live preview
-                binding.cameraStatusOverlay.text = ""
-                binding.cameraStatusOverlay.visibility = android.view.View.GONE
-            }
-            uiState.errorMessage?.contains("camera", ignoreCase = true) == true -> {
-                binding.cameraStatusOverlay.text = "Camera\nError"
-                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            !uiState.isInitialized -> {
-                binding.cameraStatusOverlay.text = "Camera\nDisconnected"
-                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            else -> {
-                binding.cameraStatusOverlay.text = "Camera\n[Live]"
-                binding.cameraStatusOverlay.visibility = android.view.View.GONE
-            }
+            uiState.isCameraInitializing -> "Initializing..."
+            else -> "Camera Error"
         }
-
-        // Update thermal camera status overlay
-        when {
-            uiState.isLoadingPermissions -> {
-                binding.thermalStatusOverlay.text = "Initializing thermal camera..."
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+        
+        binding.cameraStatusOverlay.text = rgbStatusText
+        binding.cameraStatusOverlay.visibility = if (uiState.isCameraInitialized) android.view.View.GONE else android.view.View.VISIBLE
+        
+        // Update fullscreen RGB status overlay
+        try {
+            binding.cameraStatusOverlayFullscreen.text = rgbStatusText
+            binding.cameraStatusOverlayFullscreen.visibility = if (uiState.isCameraInitialized) android.view.View.GONE else android.view.View.VISIBLE
+        } catch (e: Exception) {
+            // Ignore if fullscreen view not inflated yet
+        }
+        
+        // Update thermal camera status overlay for both dual and single view
+        val thermalStatusText = when {
+            uiState.isThermalInitialized -> {
+                if (uiState.isThermalRecording) "Recording..." else "Ready"
             }
-            uiState.isThermalConnected && uiState.thermalPreviewAvailable -> {
-                // Thermal camera is working - hide overlay to show live preview
-                binding.thermalStatusOverlay.text = ""
-                binding.thermalStatusOverlay.visibility = android.view.View.GONE
-            }
-            uiState.errorMessage?.contains("thermal", ignoreCase = true) == true -> {
-                binding.thermalStatusOverlay.text = "Thermal\nError"
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            !uiState.isThermalConnected -> {
-                binding.thermalStatusOverlay.text = "Thermal\nDisconnected"
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            else -> {
-                binding.thermalStatusOverlay.text = "Thermal\n[Live]"
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
+            uiState.isThermalInitializing -> "Initializing..."
+            else -> "Thermal Camera Error"
+        }
+        
+        binding.thermalStatusOverlay.text = thermalStatusText
+        binding.thermalStatusOverlay.visibility = if (uiState.isThermalInitialized) android.view.View.GONE else android.view.View.VISIBLE
+        
+        // Update fullscreen thermal status overlay
+        try {
+            binding.thermalStatusOverlayFullscreen.text = thermalStatusText
+            binding.thermalStatusOverlayFullscreen.visibility = if (uiState.isThermalInitialized) android.view.View.GONE else android.view.View.VISIBLE
+        } catch (e: Exception) {
+            // Ignore if fullscreen view not inflated yet
         }
     }
     

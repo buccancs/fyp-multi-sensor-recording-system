@@ -1418,6 +1418,106 @@ class MainViewModel
         }
 
         /**
+         * Switch camera preview surfaces for different layout modes
+         * 
+         * @param textureView TextureView for RGB camera (null to disable RGB preview)
+         * @param surfaceView SurfaceView for thermal camera (null to disable thermal preview) 
+         */
+        fun switchPreviewSurfaces(textureView: TextureView?, surfaceView: SurfaceView?) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Switching preview surfaces - RGB: ${textureView != null}, Thermal: ${surfaceView != null}")
+                    
+                    // Update status during switching
+                    updateUiState { currentState ->
+                        currentState.copy(statusText = "Switching preview layout...")
+                    }
+                    
+                    // Reinitialize camera recorder with new TextureView if provided
+                    if (textureView != null) {
+                        logger.debug("Reinitializing camera with new TextureView")
+                        val cameraInitialized = cameraRecorder.initialize(textureView)
+                        
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                isCameraInitialized = cameraInitialized,
+                                isCameraInitializing = false
+                            )
+                        }
+                        
+                        if (!cameraInitialized) {
+                            logger.warning("Failed to reinitialize camera with new TextureView")
+                        } else {
+                            logger.info("Camera reinitialize successful with new TextureView")
+                        }
+                    }
+                    
+                    // Reinitialize thermal recorder with new SurfaceView if provided
+                    if (surfaceView != null) {
+                        logger.debug("Reinitializing thermal camera with new SurfaceView")
+                        
+                        // Stop existing thermal preview first
+                        thermalRecorder.stopPreview()
+                        
+                        // Reinitialize with new surface
+                        val thermalInitialized = thermalRecorder.initialize(surfaceView)
+                        
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                isThermalInitialized = thermalInitialized,
+                                isThermalInitializing = false,
+                                isThermalConnected = thermalInitialized
+                            )
+                        }
+                        
+                        if (thermalInitialized) {
+                            // Restart thermal preview with new surface
+                            val previewStarted = thermalRecorder.startPreview()
+                            
+                            updateUiState { currentState ->
+                                currentState.copy(
+                                    thermalPreviewAvailable = previewStarted
+                                )
+                            }
+                            
+                            if (previewStarted) {
+                                logger.info("Thermal camera preview restarted successfully with new SurfaceView")
+                            } else {
+                                logger.warning("Failed to restart thermal camera preview with new SurfaceView")
+                            }
+                        } else {
+                            logger.warning("Failed to reinitialize thermal camera with new SurfaceView")
+                        }
+                    }
+                    
+                    // Update final status
+                    val statusMessage = buildString {
+                        append("Preview layout switched - ")
+                        if (textureView != null) append("RGB: Active, ")
+                        else append("RGB: Disabled, ")
+                        if (surfaceView != null) append("Thermal: Active")
+                        else append("Thermal: Disabled")
+                    }
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(statusText = statusMessage)
+                    }
+                    
+                    logger.info("Preview surface switching completed")
+                    
+                } catch (e: Exception) {
+                    logger.error("Failed to switch preview surfaces", e)
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Error switching preview layout",
+                            errorMessage = "Preview switching failed: ${e.message}"
+                        )
+                    }
+                }
+            }
+        }
+
+        /**
          * Update system state - placeholder for system state updates
          */
         private fun updateSystemState() {
