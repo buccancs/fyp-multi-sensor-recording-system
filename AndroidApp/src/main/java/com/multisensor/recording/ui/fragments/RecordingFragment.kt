@@ -10,10 +10,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.databinding.FragmentRecordingBinding
+import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Recording Fragment
@@ -27,6 +29,9 @@ class RecordingFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: MainViewModel by activityViewModels()
+    
+    @Inject
+    lateinit var cameraRecorder: CameraRecorder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +46,7 @@ class RecordingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         setupUI()
+        setupCameraPreview()
         observeViewModel()
     }
 
@@ -57,6 +63,36 @@ class RecordingFragment : Fragment() {
             
             pauseRecordingButton.setOnClickListener {
                 viewModel.pauseRecording()
+            }
+        }
+    }
+
+    private fun setupCameraPreview() {
+        lifecycleScope.launch {
+            try {
+                // Initialize CameraRecorder with the TextureView
+                val textureView = binding.rgbCameraPreview
+                val initialized = cameraRecorder.initialize(textureView)
+                
+                if (initialized) {
+                    // Show camera preview and hide placeholder
+                    binding.rgbCameraPreview.visibility = View.VISIBLE
+                    binding.previewPlaceholderText.visibility = View.GONE
+                } else {
+                    // Keep placeholder visible if camera initialization fails
+                    binding.rgbCameraPreview.visibility = View.GONE
+                    binding.previewPlaceholderText.apply {
+                        visibility = View.VISIBLE
+                        text = "Camera initialization failed"
+                    }
+                }
+            } catch (e: Exception) {
+                // Handle initialization error
+                binding.rgbCameraPreview.visibility = View.GONE
+                binding.previewPlaceholderText.apply {
+                    visibility = View.VISIBLE
+                    text = "Camera preview unavailable: ${e.message}"
+                }
             }
         }
     }
