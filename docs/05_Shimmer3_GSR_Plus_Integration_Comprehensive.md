@@ -1,22 +1,22 @@
-# Shimmer3 GSR+ Integration: Comprehensive Technical Documentation
+\chapter{Shimmer3 GSR+ Integration: Comprehensive Technical Documentation}
 
-## Abstract
+\section{Abstract}
 
 This document provides a comprehensive technical analysis of the Shimmer3 GSR+ Integration within the Multi-Sensor Recording System. The integration encompasses both direct PC-based connections and Android-mediated communications, enabling comprehensive physiological data collection synchronized with multi-modal sensor streams. The system implements sophisticated signal processing algorithms, real-time quality assessment, and seamless integration with the master synchronization framework to provide research-grade physiological monitoring capabilities.
 
-## 1. Introduction
+\section{1. Introduction}
 
-### 1.1 Shimmer3 GSR+ Overview
+\subsection{1.1 Shimmer3 GSR+ Overview}
 
 The Shimmer3 GSR+ represents a state-of-the-art wearable sensor platform designed for high-precision physiological data collection. The device integrates galvanic skin response (GSR) sensors, accelerometry, and additional physiological monitoring capabilities in a compact, wireless package suitable for unobtrusive research applications.
 
-### 1.2 Integration Architecture
+\subsection{1.2 Integration Architecture}
 
 The Multi-Sensor Recording System implements a dual-path integration strategy for Shimmer3 devices:
 - **Direct PC Integration**: Bluetooth connections managed through the PC controller using PyShimmer library
 - **Android-Mediated Integration**: Shimmer devices connected via Android applications with data relayed to PC master
 
-### 1.3 Technical Scope
+\subsection{1.3 Technical Scope}
 
 This documentation covers:
 - Shimmer3 GSR+ hardware specifications and capabilities
@@ -26,9 +26,9 @@ This documentation covers:
 - Data quality assessment and validation
 - Synchronization with multi-sensor recording framework
 
-## 2. Hardware Specifications
+\section{2. Hardware Specifications}
 
-### 2.1 Shimmer3 GSR+ Technical Specifications
+\subsection{2.1 Shimmer3 GSR+ Technical Specifications}
 
 **Core Processing Unit:**
 - **Microcontroller**: TI MSP430F5438A (16-bit, 25 MHz)
@@ -54,7 +54,7 @@ This documentation covers:
 - **Data Rate**: Up to 921.6 kbps
 - **Power Management**: Intelligent power optimization
 
-### 2.2 Signal Characteristics
+\subsection{2.2 Signal Characteristics}
 
 **GSR Signal Properties:**
 - **Frequency Range**: DC to 10 Hz (primary physiological content)
@@ -68,9 +68,9 @@ This documentation covers:
 - **Buffer Size**: 2048 samples maximum
 - **Transmission Latency**: <100 ms typical
 
-## 3. System Architecture
+\section{3. System Architecture}
 
-### 3.1 Dual Integration Architecture
+\subsection{3.1 Dual Integration Architecture}
 
 The Shimmer3 integration implements a sophisticated dual-path architecture supporting both direct PC connections and Android-mediated communications:
 
@@ -96,7 +96,7 @@ The Shimmer3 integration implements a sophisticated dual-path architecture suppo
     └──────────────┘    └──────────────┘
 ```
 
-### 3.2 Connection Management
+\subsection{3.2 Connection Management}
 
 The system implements sophisticated connection management supporting multiple Shimmer devices across different connection types:
 
@@ -146,9 +146,9 @@ class ShimmerStatus:
     connection_uptime: float = 0.0
 ```
 
-## 4. Direct PC Integration
+\section{4. Direct PC Integration}
 
-### 4.1 PyShimmer Library Integration
+\subsection{4.1 PyShimmer Library Integration}
 
 The system integrates with Shimmer devices through the PyShimmer library, providing direct Bluetooth connectivity:
 
@@ -266,7 +266,7 @@ class ShimmerDirectConnection:
         reception_thread.start()
 ```
 
-### 4.2 Device Discovery and Pairing
+\subsection{4.2 Device Discovery and Pairing}
 
 The system implements comprehensive device discovery and pairing mechanisms:
 
@@ -360,9 +360,9 @@ class ShimmerDeviceDiscovery:
         return None
 ```
 
-## 5. Android-Mediated Integration
+\section{5. Android-Mediated Integration}
 
-### 5.1 Android Shimmer Bridge
+\subsection{5.1 Android Shimmer Bridge}
 
 The system supports Shimmer devices connected through Android applications, with data relayed to the PC master:
 
@@ -479,7 +479,7 @@ class AndroidShimmerBridge:
         self.data_manager.store_sample(processed_data, quality_metrics)
 ```
 
-### 5.2 Data Synchronization
+\subsection{5.2 Data Synchronization}
 
 The Android-mediated integration implements sophisticated timestamp synchronization:
 
@@ -548,9 +548,9 @@ class AndroidShimmerTimeSynchronizer:
         return cached_offset + drift_compensation
 ```
 
-## 6. Real-Time Signal Processing
+\section{6. Real-Time Signal Processing}
 
-### 6.1 GSR Signal Processing Pipeline
+\subsection{6.1 GSR Signal Processing Pipeline}
 
 The system implements a comprehensive signal processing pipeline for GSR data:
 
@@ -682,7 +682,7 @@ class GSRSignalProcessor:
         )
 ```
 
-### 6.2 Artifact Detection and Quality Assessment
+\subsection{6.2 Artifact Detection and Quality Assessment}
 
 The system implements sophisticated artifact detection and signal quality assessment:
 
@@ -770,9 +770,9 @@ class GSRArtifactDetector:
             return "Unusable"
 ```
 
-## 7. Data Management and Storage
+\section{7. Data Management and Storage}
 
-### 7.1 Shimmer Data Storage Architecture
+\subsection{7.1 Shimmer Data Storage Architecture}
 
 The system implements a comprehensive data storage architecture for Shimmer data:
 
@@ -921,7 +921,7 @@ class ShimmerDataManager:
             self.logger.error(f"Failed to flush buffers for {device_id}: {e}")
 ```
 
-### 7.2 Data Export and Analysis
+\subsection{7.2 Data Export and Analysis}
 
 The system provides comprehensive data export and analysis capabilities:
 
@@ -1013,9 +1013,9 @@ class ShimmerDataAnalyzer:
             return ExportResult(success=False, error=str(e))
 ```
 
-## 8. Integration with Master Synchronization
+\section{8. Integration with Master Synchronization}
 
-### 8.1 Synchronization Framework Integration
+\subsection{8.1 Synchronization Framework Integration}
 
 The Shimmer3 integration seamlessly integrates with the master synchronization framework:
 
@@ -1091,7 +1091,7 @@ class ShimmerSynchronizationIntegration:
                     self.logger.error(f"Error stopping Shimmer recording for {device_id}: {e}")
 ```
 
-### 8.2 Cross-Modal Data Synchronization
+\subsection{8.2 Cross-Modal Data Synchronization}
 
 The system provides sophisticated cross-modal synchronization between Shimmer data and other sensor modalities:
 
@@ -1176,9 +1176,9 @@ class CrossModalSynchronizer:
         )
 ```
 
-## 9. Quality Assurance and Validation
+\section{9. Quality Assurance and Validation}
 
-### 9.1 Comprehensive Quality Assessment
+\subsection{9.1 Comprehensive Quality Assessment}
 
 The system implements comprehensive quality assessment for Shimmer data:
 
@@ -1253,7 +1253,7 @@ class ShimmerQualityAssessment:
         return weighted_sum / total_weight if total_weight > 0 else 0.0
 ```
 
-### 9.2 Automated Validation
+\subsection{9.2 Automated Validation}
 
 The system provides automated validation capabilities for Shimmer data integrity:
 
@@ -1311,7 +1311,7 @@ class ShimmerDataValidator:
         )
 ```
 
-## 10. Conclusion
+\section{10. Conclusion}
 
 The Shimmer3 GSR+ Integration represents a comprehensive solution for incorporating professional-grade physiological sensors into the Multi-Sensor Recording System. Through its dual integration architecture, sophisticated signal processing pipelines, and seamless synchronization with the master coordination framework, the system enables high-quality physiological data collection synchronized with multi-modal sensor streams.
 
@@ -1326,7 +1326,7 @@ Key technical achievements include:
 
 The system demonstrates the successful integration of specialized physiological sensors into a broader multi-modal research platform while maintaining the precision, reliability, and ease of use required for advanced research applications.
 
-## References
+\section{References}
 
 1. Shimmer Research Ltd. (2023). Shimmer3 GSR+ User Manual. Shimmer Research Documentation.
 
@@ -1344,20 +1344,20 @@ The system demonstrates the successful integration of specialized physiological 
 
 8. Posada-Quintero, H. F., & Chon, K. H. (2020). Innovations in electrodermal activity data collection and signal processing: A systematic review. Sensors, 20(2), 479.
 
-## Appendices
+\section{Appendices}
 
-### Appendix A: Shimmer3 GSR+ Technical Specifications
+\subsection{Appendix A: Shimmer3 GSR+ Technical Specifications}
 
 Complete hardware and software specifications for Shimmer3 GSR+ devices.
 
-### Appendix B: Signal Processing Algorithm Details
+\subsection{Appendix B: Signal Processing Algorithm Details}
 
 Mathematical specifications and implementation details for all signal processing algorithms.
 
-### Appendix C: Quality Assessment Metrics
+\subsection{Appendix C: Quality Assessment Metrics}
 
 Comprehensive documentation of all quality assessment metrics and validation procedures.
 
-### Appendix D: Integration API Reference
+\subsection{Appendix D: Integration API Reference}
 
 Complete API documentation for Shimmer integration interfaces and methods.

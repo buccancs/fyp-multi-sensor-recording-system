@@ -1,16 +1,16 @@
-# Python Desktop Controller: Comprehensive Technical Documentation
+\chapter{Python Desktop Controller: Comprehensive Technical Documentation}
 
-## Abstract
+\section{Abstract}
 
 This document provides a comprehensive technical analysis of the Python Desktop Controller, the central orchestration component of the Multi-Sensor Recording System. The Python Desktop Controller serves as the master coordinator, managing device synchronization, session orchestration, network communication, and user interface integration. Built using PyQt5 and implementing sophisticated architectural patterns, the controller provides researchers with a powerful, intuitive platform for managing complex multi-modal data collection experiments.
 
-## 1. Introduction
+\section{1. Introduction}
 
-### 1.1 System Role and Scope
+\subsection{1.1 System Role and Scope}
 
 The Python Desktop Controller functions as the central nervous system of the Multi-Sensor Recording System, providing centralized coordination for all connected devices including Android smartphones, USB webcams, thermal cameras, and physiological sensors. The controller implements a modular, service-oriented architecture that separates concerns while maintaining tight integration across all system components.
 
-### 1.2 Technical Architecture Overview
+\subsection{1.2 Technical Architecture Overview}
 
 The controller employs a sophisticated multi-layered architecture combining:
 - **Model-View-Controller (MVC)** patterns for UI organization
@@ -19,7 +19,7 @@ The controller employs a sophisticated multi-layered architecture combining:
 - **Command Pattern** for operation encapsulation and undo/redo functionality
 - **Factory Pattern** for dynamic component creation
 
-### 1.3 Research Applications
+\subsection{1.3 Research Applications}
 
 The Python Desktop Controller enables researchers to:
 - Orchestrate synchronized multi-device recording sessions
@@ -28,9 +28,9 @@ The Python Desktop Controller enables researchers to:
 - Analyze and visualize collected data
 - Manage large-scale research datasets
 
-## 2. Application Architecture
+\section{2. Application Architecture}
 
-### 2.1 Architectural Overview
+\subsection{2.1 Architectural Overview}
 
 The Python Desktop Controller implements a layered architecture designed for maintainability, testability, and extensibility:
 
@@ -62,7 +62,7 @@ The Python Desktop Controller implements a layered architecture designed for mai
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 Core Application Class
+\subsection{2.2 Core Application Class}
 
 The main application class serves as the dependency injection container and service coordinator:
 
@@ -111,7 +111,7 @@ class Application(QObject):
             raise
 ```
 
-### 2.3 Service Layer Architecture
+\subsection{2.3 Service Layer Architecture}
 
 The service layer implements the core business logic through interconnected services:
 
@@ -190,9 +190,9 @@ class RecordingService:
             return RecordingResult(success=False, error=str(e))
 ```
 
-## 3. User Interface Architecture
+\section{3. User Interface Architecture}
 
-### 3.1 PyQt5 Implementation
+\subsection{3.1 PyQt5 Implementation}
 
 The Python Desktop Controller provides two UI modes: a simplified interface for basic operations and a comprehensive interface for advanced research configurations.
 
@@ -309,7 +309,7 @@ class SimplifiedMainWindow(QMainWindow):
         layout.addWidget(controls_group)
 ```
 
-### 3.2 Web Dashboard Integration
+\subsection{3.2 Web Dashboard Integration}
 
 The system includes an optional web-based dashboard for remote monitoring and control:
 
@@ -374,7 +374,7 @@ class WebDashboard:
             emit('status_update', status)
 ```
 
-### 3.3 Real-Time UI Updates
+\subsection{3.3 Real-Time UI Updates}
 
 The UI implements sophisticated real-time update mechanisms using Qt's signal-slot system:
 
@@ -408,9 +408,9 @@ class UIUpdateManager(QObject):
         self.sync_quality_updated.connect(widget.on_sync_quality_updated)
 ```
 
-## 4. Session Management Integration
+\section{4. Session Management Integration}
 
-### 4.1 Session Lifecycle Management
+\subsection{4.1 Session Lifecycle Management}
 
 The Python Desktop Controller orchestrates the complete session lifecycle from initialization to data finalization:
 
@@ -480,7 +480,7 @@ class SessionController:
         return result
 ```
 
-### 4.2 Device Coordination
+\subsection{4.2 Device Coordination}
 
 The controller manages complex device coordination scenarios:
 
@@ -549,9 +549,9 @@ class DeviceCoordinator:
         )
 ```
 
-## 5. Network Communication Management
+\section{5. Network Communication Management}
 
-### 5.1 JSON Protocol Implementation
+\subsection{5.1 JSON Protocol Implementation}
 
 The controller implements a comprehensive JSON-based communication protocol for Android device coordination:
 
@@ -636,7 +636,7 @@ class MessageProtocolManager:
             )
 ```
 
-### 5.2 Asynchronous Communication
+\subsection{5.2 Asynchronous Communication}
 
 The system implements sophisticated asynchronous communication patterns:
 
@@ -723,9 +723,9 @@ class AsyncCommunicationManager:
             self.logger.info(f"Client disconnected: {connection_id}")
 ```
 
-## 6. Configuration Management
+\section{6. Configuration Management}
 
-### 6.1 Hierarchical Configuration System
+\subsection{6.1 Hierarchical Configuration System}
 
 The controller implements a sophisticated configuration management system:
 
@@ -827,7 +827,7 @@ class ConfigurationManager:
         self._load_configuration()
 ```
 
-### 6.2 Device-Specific Configurations
+\subsection{6.2 Device-Specific Configurations}
 
 The system manages complex device-specific configuration scenarios:
 
@@ -913,9 +913,9 @@ class DeviceConfigurationManager:
             return False
 ```
 
-## 7. Error Handling and Recovery
+\section{7. Error Handling and Recovery}
 
-### 7.1 Comprehensive Error Management
+\subsection{7.1 Comprehensive Error Management}
 
 The controller implements sophisticated error handling and recovery mechanisms:
 
@@ -1009,7 +1009,7 @@ class ErrorManager:
             )
 ```
 
-### 7.2 Automatic Recovery Mechanisms
+\subsection{7.2 Automatic Recovery Mechanisms}
 
 The system implements intelligent automatic recovery for common failure scenarios:
 
@@ -1101,9 +1101,9 @@ class RecoveryCoordinator:
         )
 ```
 
-## 8. Performance Monitoring and Optimization
+\section{8. Performance Monitoring and Optimization}
 
-### 8.1 System Performance Monitoring
+\subsection{8.1 System Performance Monitoring}
 
 The controller includes comprehensive performance monitoring:
 
@@ -1192,7 +1192,7 @@ class PerformanceMonitor:
         )
 ```
 
-### 8.2 Adaptive Resource Management
+\subsection{8.2 Adaptive Resource Management}
 
 The system implements adaptive resource management based on performance metrics:
 
@@ -1261,9 +1261,9 @@ class AdaptiveResourceManager:
         )
 ```
 
-## 9. Data Analytics and Visualization
+\section{9. Data Analytics and Visualization}
 
-### 9.1 Real-Time Data Visualization
+\subsection{9.1 Real-Time Data Visualization}
 
 The controller provides comprehensive real-time data visualization capabilities:
 
@@ -1390,7 +1390,7 @@ class DataVisualizationManager:
         plot_data['figure'].canvas.draw()
 ```
 
-### 9.2 Session Analytics
+\subsection{9.2 Session Analytics}
 
 The system provides comprehensive analytics for recording sessions:
 
@@ -1444,7 +1444,7 @@ class SessionAnalyticsEngine:
         )
 ```
 
-## 10. Conclusion
+\section{10. Conclusion}
 
 The Python Desktop Controller represents a sophisticated orchestration platform that effectively coordinates the complex multi-sensor recording ecosystem. Through its modular architecture, comprehensive error handling, and advanced user interface capabilities, the controller provides researchers with a powerful tool for managing complex data collection experiments.
 
@@ -1459,7 +1459,7 @@ Key technical achievements include:
 
 The system demonstrates the successful integration of multiple complex subsystems into a cohesive, user-friendly platform suitable for advanced research applications while maintaining the flexibility and extensibility required for future enhancements.
 
-## References
+\section{References}
 
 1. Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional.
 
@@ -1477,20 +1477,20 @@ The system demonstrates the successful integration of multiple complex subsystem
 
 8. Hunt, A., & Thomas, D. (1999). The Pragmatic Programmer: From Journeyman to Master. Addison-Wesley Professional.
 
-## Appendices
+\section{Appendices}
 
-### Appendix A: API Reference
+\subsection{Appendix A: API Reference}
 
 Complete documentation of all public APIs and service interfaces.
 
-### Appendix B: Configuration Schema
+\subsection{Appendix B: Configuration Schema}
 
 Detailed specification of all configuration parameters and validation rules.
 
-### Appendix C: Performance Benchmarks
+\subsection{Appendix C: Performance Benchmarks}
 
 Comprehensive performance test results across various system configurations.
 
-### Appendix D: Deployment Guide
+\subsection{Appendix D: Deployment Guide}
 
 Installation, configuration, and deployment procedures for research environments.

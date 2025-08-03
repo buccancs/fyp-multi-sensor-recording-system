@@ -1,16 +1,16 @@
-# Camera Recording System (CameraRecorder): Comprehensive Technical Documentation
+\chapter{Camera Recording System (CameraRecorder): Comprehensive Technical Documentation}
 
-## Abstract
+\section{Abstract}
 
 This document presents a comprehensive technical analysis of the Camera Recording System implemented within the Multi-Sensor Recording System. The CameraRecorder component encompasses both PC-based dual webcam capture and Android mobile camera recording, providing synchronized high-quality video acquisition across multiple devices. The system implements advanced synchronization algorithms, adaptive quality control, and real-time preprocessing pipelines to ensure temporal alignment and optimal data quality for multi-modal research applications.
 
-## 1. Introduction
+\section{1. Introduction}
 
-### 1.1 System Overview
+\subsection{1.1 System Overview}
 
 The Camera Recording System serves as the primary visual data acquisition component of the Multi-Sensor Recording System, orchestrating the simultaneous capture of high-resolution video streams from multiple camera sources. The system integrates PC-connected USB webcams and Android smartphone cameras into a unified recording framework with microsecond-precision temporal synchronization.
 
-### 1.2 Technical Scope
+\subsection{1.2 Technical Scope}
 
 The Camera Recording System encompasses:
 - **Dual PC Webcam Capture**: Synchronized Logitech Brio 4K camera recording
@@ -19,7 +19,7 @@ The Camera Recording System encompasses:
 - **Real-time Processing**: Live video preprocessing and quality optimization
 - **Adaptive Control**: Dynamic quality adjustment based on system performance
 
-### 1.3 Research Applications
+\subsection{1.3 Research Applications}
 
 The system enables sophisticated research methodologies requiring:
 - Multi-perspective video analysis
@@ -27,9 +27,9 @@ The system enables sophisticated research methodologies requiring:
 - High-temporal-resolution event capture
 - Cross-device video correlation analysis
 
-## 2. System Architecture
+\section{2. System Architecture}
 
-### 2.1 Architectural Overview
+\subsection{2.1 Architectural Overview}
 
 The Camera Recording System implements a hierarchical architecture with the PC serving as the master coordinator for all camera devices. The system maintains strict temporal synchronization while providing flexible configuration and adaptive quality control.
 
@@ -49,7 +49,7 @@ The Camera Recording System implements a hierarchical architecture with the PC s
     └──────────────┘    └──────────────┘    └──────────────┘
 ```
 
-### 2.2 Component Integration
+\subsection{2.2 Component Integration}
 
 The Camera Recording System integrates seamlessly with other system components:
 
@@ -58,7 +58,7 @@ The Camera Recording System integrates seamlessly with other system components:
 **Network Protocol**: Enables Android camera synchronization via JSON messaging
 **Storage Manager**: Handles multi-camera file organization and metadata
 
-### 2.3 Threading Architecture
+\subsection{2.3 Threading Architecture}
 
 The system employs a sophisticated multi-threaded architecture for optimal performance:
 
@@ -71,9 +71,9 @@ class DualWebcamCapture:
         self.processing_pool = ThreadPoolExecutor(max_workers=4)
 ```
 
-## 3. PC Webcam Recording System
+\section{3. PC Webcam Recording System}
 
-### 3.1 Dual Logitech Brio Integration
+\subsection{3.1 Dual Logitech Brio Integration}
 
 The PC webcam system specifically targets Logitech Brio 4K cameras for their superior image quality and reliable USB connectivity.
 
@@ -110,7 +110,7 @@ class DualWebcamCapture:
         self._initialize_cameras()
 ```
 
-### 3.2 Advanced Synchronization Algorithms
+\subsection{3.2 Advanced Synchronization Algorithms}
 
 The dual webcam system implements sophisticated synchronization algorithms to ensure frame-level temporal alignment.
 
@@ -152,7 +152,7 @@ class AdaptiveSynchronizer:
             return self.drift_compensation.compensate_frames(frame1_data, frame2_data)
 ```
 
-### 3.3 Camera Configuration and Control
+\subsection{3.3 Camera Configuration and Control}
 
 The system provides comprehensive camera configuration and control capabilities:
 
@@ -183,7 +183,7 @@ class CameraConfiguration:
         camera.set(cv2.CAP_PROP_FOURCC, self.codec)
 ```
 
-### 3.4 Real-Time Quality Monitoring
+\subsection{3.4 Real-Time Quality Monitoring}
 
 The dual webcam system continuously monitors recording quality and adjusts parameters dynamically:
 
@@ -209,9 +209,9 @@ class QualityMetrics:
         return (frame_rate_score + drop_score + sync_score) / 3.0
 ```
 
-## 4. Android Camera Integration
+\section{4. Android Camera Integration}
 
-### 4.1 Mobile Camera System Architecture
+\subsection{4.1 Mobile Camera System Architecture}
 
 The Android camera component provides high-quality mobile video recording with seamless integration into the PC-coordinated system.
 
@@ -244,7 +244,7 @@ class CameraRecorder @Inject constructor(
 }
 ```
 
-### 4.2 Synchronized Recording Protocol
+\subsection{4.2 Synchronized Recording Protocol}
 
 The Android camera system coordinates with the PC master controller through JSON messaging:
 
@@ -281,7 +281,7 @@ class RecordingCoordinator @Inject constructor(
 }
 ```
 
-### 4.3 Mobile Camera Configuration
+\subsection{4.3 Mobile Camera Configuration}
 
 The Android camera system provides extensive configuration options for research applications:
 
@@ -301,9 +301,9 @@ data class CameraConfiguration(
 )
 ```
 
-## 5. Advanced Processing Pipeline
+\section{5. Advanced Processing Pipeline}
 
-### 5.1 Real-Time Preprocessing
+\subsection{5.1 Real-Time Preprocessing}
 
 The Camera Recording System implements a sophisticated preprocessing pipeline for real-time video enhancement and analysis.
 
@@ -350,7 +350,7 @@ class CVPreprocessingPipeline:
         )
 ```
 
-### 5.2 ROI Detection and Tracking
+\subsection{5.2 ROI Detection and Tracking}
 
 The system implements advanced Region of Interest (ROI) detection for automated subject tracking:
 
@@ -383,7 +383,7 @@ class AdvancedROIDetector:
         return face_regions
 ```
 
-### 5.3 Physiological Signal Extraction
+\subsection{5.3 Physiological Signal Extraction}
 
 The preprocessing pipeline includes real-time physiological signal extraction from video data:
 
@@ -434,9 +434,9 @@ class PhysiologicalSignalExtractor:
         return PPGSignal(raw_value=0.0, filtered_value=0.0, heart_rate=0.0, signal_quality=0.0)
 ```
 
-## 6. Quality Control and Adaptation
+\section{6. Quality Control and Adaptation}
 
-### 6.1 Adaptive Frame Rate Control
+\subsection{6.1 Adaptive Frame Rate Control}
 
 The system implements sophisticated adaptive frame rate control to optimize performance under varying conditions:
 
@@ -480,7 +480,7 @@ class AdaptiveFrameRateController:
         return self.current_frame_rate
 ```
 
-### 6.2 Dynamic Quality Optimization
+\subsection{6.2 Dynamic Quality Optimization}
 
 The system continuously optimizes recording quality based on available resources and research requirements:
 
@@ -521,9 +521,9 @@ class QualityOptimizer:
         return optimized_config
 ```
 
-## 7. File Management and Storage
+\section{7. File Management and Storage}
 
-### 7.1 Multi-Camera File Organization
+\subsection{7.1 Multi-Camera File Organization}
 
 The Camera Recording System implements a sophisticated file organization strategy for multi-camera recordings:
 
@@ -560,7 +560,7 @@ class FileNamingConvention:
         return f"{session_id}_{data_type}_metadata.json"
 ```
 
-### 7.2 Synchronized Metadata Generation
+\subsection{7.2 Synchronized Metadata Generation}
 
 The system generates comprehensive metadata for each recording session:
 
@@ -598,9 +598,9 @@ class RecordingMetadata:
     physiological_signals: Optional[Dict]
 ```
 
-## 8. Performance Optimization
+\section{8. Performance Optimization}
 
-### 8.1 Multi-Threading Architecture
+\subsection{8.1 Multi-Threading Architecture}
 
 The Camera Recording System employs sophisticated multi-threading for optimal performance:
 
@@ -637,7 +637,7 @@ class CameraThreadManager:
         self.processing_thread.start()
 ```
 
-### 8.2 Memory Management
+\subsection{8.2 Memory Management}
 
 The system implements comprehensive memory management for sustained operation:
 
@@ -675,9 +675,9 @@ class MemoryManager:
             self.reduce_buffer_sizes()
 ```
 
-## 9. Integration with Synchronization System
+\section{9. Integration with Synchronization System}
 
-### 9.1 Master Clock Integration
+\subsection{9.1 Master Clock Integration}
 
 The Camera Recording System integrates seamlessly with the Master Clock Synchronizer:
 
@@ -710,7 +710,7 @@ class CameraSyncIntegration:
         threading.Timer(start_delay, self._execute_synchronized_start).start()
 ```
 
-### 9.2 Network Protocol Integration
+\subsection{9.2 Network Protocol Integration}
 
 The system coordinates with Android devices through the established JSON protocol:
 
@@ -742,9 +742,9 @@ class AndroidCameraCoordinator:
         return self.pc_server.send_message(device_id, command)
 ```
 
-## 10. Quality Assurance and Validation
+\section{10. Quality Assurance and Validation}
 
-### 10.1 Automated Quality Assessment
+\subsection{10.1 Automated Quality Assessment}
 
 The system implements comprehensive automated quality assessment:
 
@@ -778,7 +778,7 @@ class QualityAssessmentFramework:
         )
 ```
 
-### 10.2 Synchronization Validation
+\subsection{10.2 Synchronization Validation}
 
 The system provides detailed validation of inter-camera synchronization:
 
@@ -825,9 +825,9 @@ class SynchronizationValidator:
         )
 ```
 
-## 11. Error Handling and Recovery
+\section{11. Error Handling and Recovery}
 
-### 11.1 Fault Tolerance Architecture
+\subsection{11.1 Fault Tolerance Architecture}
 
 The Camera Recording System implements comprehensive fault tolerance:
 
@@ -868,7 +868,7 @@ class CameraErrorRecovery:
             )
 ```
 
-### 11.2 Data Integrity Protection
+\subsection{11.2 Data Integrity Protection}
 
 The system ensures data integrity through multiple protection mechanisms:
 
@@ -900,9 +900,9 @@ class DataIntegrityProtector:
             self.handle_integrity_failure(integrity_check)
 ```
 
-## 12. Future Enhancements
+\section{12. Future Enhancements}
 
-### 12.1 Advanced Computer Vision Integration
+\subsection{12.1 Advanced Computer Vision Integration}
 
 **Planned Enhancements:**
 - **Object Detection**: Real-time object detection and tracking
@@ -910,7 +910,7 @@ class DataIntegrityProtector:
 - **Scene Analysis**: Intelligent scene understanding and annotation
 - **Emotion Recognition**: Facial emotion analysis integration
 
-### 12.2 Machine Learning Integration
+\subsection{12.2 Machine Learning Integration}
 
 **AI-Powered Features:**
 - **Predictive Quality Control**: ML-based quality prediction and optimization
@@ -918,7 +918,7 @@ class DataIntegrityProtector:
 - **Smart Compression**: Intelligent compression based on content analysis
 - **Anomaly Detection**: Automated detection of recording anomalies
 
-### 12.3 Cloud Integration
+\subsection{12.3 Cloud Integration}
 
 **Cloud-Based Capabilities:**
 - **Remote Monitoring**: Cloud-based recording session monitoring
@@ -926,7 +926,7 @@ class DataIntegrityProtector:
 - **Collaborative Research**: Multi-institution data sharing platforms
 - **Real-time Streaming**: Live streaming capabilities for remote observation
 
-## 13. Conclusion
+\section{13. Conclusion}
 
 The Camera Recording System represents a sophisticated integration of PC-based dual webcam capture and Android mobile camera recording within a unified synchronization framework. The system's advanced algorithms for temporal alignment, adaptive quality control, and real-time processing enable high-precision multi-modal data collection for research applications.
 
@@ -939,7 +939,7 @@ Key technical achievements include:
 
 The system demonstrates the feasibility of creating professional-grade camera recording systems using consumer hardware while maintaining the precision and reliability required for scientific research applications.
 
-## References
+\section{References}
 
 1. OpenCV Development Team. (2023). OpenCV Documentation. OpenCV Foundation.
 
@@ -957,20 +957,20 @@ The system demonstrates the feasibility of creating professional-grade camera re
 
 8. IEEE Standards Committee. (2020). IEEE Standard for Video Compression and Coding. IEEE Std 802.11-2020.
 
-## Appendices
+\section{Appendices}
 
-### Appendix A: Camera Configuration Specifications
+\subsection{Appendix A: Camera Configuration Specifications}
 
 Complete technical specifications for all supported camera models and their optimal configurations.
 
-### Appendix B: Synchronization Algorithm Details
+\subsection{Appendix B: Synchronization Algorithm Details}
 
 Mathematical specifications and implementation details for all synchronization algorithms.
 
-### Appendix C: Performance Benchmarks
+\subsection{Appendix C: Performance Benchmarks}
 
 Comprehensive performance test results across various hardware configurations and recording scenarios.
 
-### Appendix D: Troubleshooting Guide
+\subsection{Appendix D: Troubleshooting Guide}
 
 Common camera recording issues and their resolution procedures for system administrators and researchers.

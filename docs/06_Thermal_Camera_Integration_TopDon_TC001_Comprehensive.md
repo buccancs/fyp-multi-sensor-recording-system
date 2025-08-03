@@ -1,20 +1,20 @@
-# Thermal Camera Integration (TopDon TC001): Comprehensive Technical Documentation
+\chapter{Thermal Camera Integration (TopDon TC001): Comprehensive Technical Documentation}
 
-## Abstract
+\section{Abstract}
 
 This document provides a comprehensive technical analysis of the TopDon TC001 Thermal Camera Integration within the Multi-Sensor Recording System. The integration encompasses Android-based thermal imaging capture, real-time thermal data processing, and synchronization with the multi-modal recording framework. The system implements advanced thermal image processing algorithms, temperature calibration procedures, and seamless integration with smartphone cameras to provide research-grade thermal imaging capabilities for physiological and environmental monitoring applications.
 
-## 1. Introduction
+\section{1. Introduction}
 
-### 1.1 TopDon TC001 Overview
+\subsection{1.1 TopDon TC001 Overview}
 
 The TopDon TC001 represents a consumer-grade thermal imaging camera designed for mobile integration with Android smartphones. Despite its consumer origins, the device provides sufficient resolution and accuracy for research applications involving thermal monitoring, physiological assessment, and environmental data collection when properly calibrated and integrated.
 
-### 1.2 Integration Architecture
+\subsection{1.2 Integration Architecture}
 
 The thermal camera integration operates exclusively through Android smartphone connections, utilizing the TopDon SDK for device communication and data acquisition. The system implements sophisticated thermal image processing, temperature calibration, and synchronization with the PC master controller to enable coordinated multi-modal data collection.
 
-### 1.3 Technical Scope
+\subsection{1.3 Technical Scope}
 
 This documentation covers:
 - TopDon TC001 hardware specifications and capabilities
@@ -24,9 +24,9 @@ This documentation covers:
 - Integration with multi-sensor recording framework
 - Thermal data quality assessment and validation
 
-## 2. Hardware Specifications
+\section{2. Hardware Specifications}
 
-### 2.1 TopDon TC001 Technical Specifications
+\subsection{2.1 TopDon TC001 Technical Specifications}
 
 **Thermal Sensor:**
 - **Detector Type**: Uncooled microbolometer
@@ -60,7 +60,7 @@ This documentation covers:
 - **Power**: Powered via smartphone connection
 - **Compatibility**: Android 6.0+ with USB OTG support
 
-### 2.2 Image Quality Characteristics
+\subsection{2.2 Image Quality Characteristics}
 
 **Thermal Image Properties:**
 - **Output Format**: 16-bit raw thermal data + 8-bit RGB visualization
@@ -74,9 +74,9 @@ This documentation covers:
 - **User Calibration**: Emissivity adjustment capability
 - **Temperature References**: Internal temperature sensors for drift compensation
 
-## 3. Android SDK Integration
+\section{3. Android SDK Integration}
 
-### 3.1 TopDon SDK Architecture
+\subsection{3.1 TopDon SDK Architecture}
 
 The thermal camera integration utilizes the TopDon SDK for comprehensive device communication and control:
 
@@ -189,7 +189,7 @@ class ThermalRecorder @Inject constructor(
 }
 ```
 
-### 3.2 Real-Time Thermal Processing
+\subsection{3.2 Real-Time Thermal Processing}
 
 The system implements sophisticated real-time thermal image processing:
 
@@ -342,7 +342,7 @@ class ThermalImageProcessor {
 }
 ```
 
-### 3.3 Temperature Calibration System
+\subsection{3.3 Temperature Calibration System}
 
 The system implements sophisticated temperature calibration for research-grade accuracy:
 
@@ -500,9 +500,9 @@ class ThermalCalibrationManager {
 }
 ```
 
-## 4. Integration with Recording Framework
+\section{4. Integration with Recording Framework}
 
-### 4.1 Synchronized Thermal Recording
+\subsection{4.1 Synchronized Thermal Recording}
 
 The thermal camera integrates with the master recording framework for synchronized data collection:
 
@@ -594,7 +594,7 @@ class ThermalRecordingCoordinator @Inject constructor(
 }
 ```
 
-### 4.2 Data Format and Storage
+\subsection{4.2 Data Format and Storage}
 
 The system implements comprehensive data storage for thermal recordings:
 
@@ -742,9 +742,9 @@ class ThermalDataManager {
 }
 ```
 
-## 5. Advanced Thermal Processing
+\section{5. Advanced Thermal Processing}
 
-### 5.1 Real-Time Temperature Analysis
+\subsection{5.1 Real-Time Temperature Analysis}
 
 The system implements sophisticated real-time temperature analysis capabilities:
 
@@ -934,7 +934,7 @@ class ThermalAnalysisEngine {
 }
 ```
 
-### 5.2 Quality Assessment and Validation
+\subsection{5.2 Quality Assessment and Validation}
 
 The system implements comprehensive quality assessment for thermal data:
 
@@ -1069,9 +1069,9 @@ class ThermalQualityAssessment {
 }
 ```
 
-## 6. Integration with Multi-Sensor Framework
+\section{6. Integration with Multi-Sensor Framework}
 
-### 6.1 Cross-Modal Synchronization
+\subsection{6.1 Cross-Modal Synchronization}
 
 The thermal camera integrates with the broader multi-sensor synchronization framework:
 
@@ -1140,7 +1140,7 @@ class ThermalSynchronizationIntegrator {
 }
 ```
 
-### 6.2 Data Export and Analysis Integration
+\subsection{6.2 Data Export and Analysis Integration}
 
 The system provides integrated data export and analysis capabilities:
 
@@ -1220,9 +1220,9 @@ class ThermalAnalysisIntegration {
 }
 ```
 
-## 7. Performance Optimization
+\section{7. Performance Optimization}
 
-### 7.1 Real-Time Processing Optimization
+\subsection{7.1 Real-Time Processing Optimization}
 
 The system implements comprehensive performance optimization for real-time thermal processing:
 
@@ -1280,7 +1280,7 @@ class ThermalPerformanceOptimizer {
 }
 ```
 
-## 8. Conclusion
+\section{8. Conclusion}
 
 The TopDon TC001 Thermal Camera Integration represents a comprehensive solution for incorporating affordable thermal imaging capabilities into the Multi-Sensor Recording System. Through sophisticated Android SDK integration, advanced thermal processing algorithms, and seamless synchronization with the broader recording framework, the system enables research-grade thermal data collection despite the consumer-grade origins of the hardware.
 
@@ -1295,7 +1295,7 @@ Key technical achievements include:
 
 The system demonstrates the successful integration of consumer thermal imaging hardware into professional research applications while maintaining the accuracy, reliability, and ease of use required for scientific data collection.
 
-## References
+\section{References}
 
 1. TopDon Technology. (2023). TC001 Thermal Camera Technical Documentation. TopDon Inc.
 
@@ -1313,20 +1313,20 @@ The system demonstrates the successful integration of consumer thermal imaging h
 
 8. Shastri, D., Merla, A., Tsiamyrtzis, P., & Pavlidis, I. (2009). Imaging facial signs of neurophysiological responses. IEEE Transactions on Biomedical Engineering, 56(2), 477-484.
 
-## Appendices
+\section{Appendices}
 
-### Appendix A: TopDon TC001 Calibration Procedures
+\subsection{Appendix A: TopDon TC001 Calibration Procedures}
 
 Detailed calibration procedures for research-grade temperature accuracy.
 
-### Appendix B: Thermal Processing Algorithm Specifications
+\subsection{Appendix B: Thermal Processing Algorithm Specifications}
 
 Mathematical specifications for all thermal processing algorithms.
 
-### Appendix C: Integration API Reference
+\subsection{Appendix C: Integration API Reference}
 
 Complete API documentation for thermal camera integration interfaces.
 
-### Appendix D: Performance Optimization Guidelines
+\subsection{Appendix D: Performance Optimization Guidelines}
 
 Comprehensive guidelines for optimizing thermal processing performance.
