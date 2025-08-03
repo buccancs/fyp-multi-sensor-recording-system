@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         app:cardElevation="4dp"
-        app:cardCornerRadius="12dp">
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/md_theme_surface"
+        style="@style/Widget.App.CardView">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +43,8 @@
                     android:layout_weight="1"
                     android:layout_marginStart="12dp"
                     android:text="Recording Controls"
-                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                    android:textSize="18sp"
+                    android:textColor="@color/md_theme_on_surface"
                     android:textStyle="bold" />
 
                 <TextView
@@ -49,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ready to Record"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textSize="14sp"
                     android:textColor="@color/textColorSecondary" />
 
             </LinearLayout>
@@ -61,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="No active session"
-                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textSize="12sp"
                 android:textColor="@color/textColorSecondary" />
 
             <!-- Recording Controls -->
@@ -78,18 +81,25 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     android:text="Start Recording"
-                    app:icon="@drawable/ic_recording" />
+                    android:backgroundTint="@color/md_theme_primary"
+                    android:textColor="@color/md_theme_on_primary"
+                    app:icon="@drawable/ic_recording"
+                    style="@style/Widget.Material3.Button" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/stopRecordingButton"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:text="Stop Recording"
                     android:enabled="false"
-                    app:icon="@drawable/ic_stop" />
+                    android:backgroundTint="@android:color/transparent"
+                    android:textColor="@color/md_theme_primary"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="1dp"
+                    app:icon="@drawable/ic_stop"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
 
             </LinearLayout>
 
@@ -103,7 +113,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:cardElevation="4dp"
-        app:cardCornerRadius="12dp">
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/md_theme_surface"
+        style="@style/Widget.App.CardView">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,7 +127,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Live Data Preview"
-                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textSize="18sp"
+                android:textColor="@color/md_theme_on_surface"
                 android:textStyle="bold" />
 
             <!-- Preview Content Area -->
@@ -132,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Recording preview will appear here"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textSize="14sp"
                     android:textColor="@color/textColorSecondary" />
 
                 <!-- Add actual preview components here as needed -->
@@ -152,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Duration: 00:00:00"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textSize="12sp"
                     android:textColor="@color/textColorSecondary" />
 
                 <TextView
@@ -161,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Size: 0 MB"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textSize="12sp"
                     android:textColor="@color/textColorSecondary"
                     android:gravity="end" />
 
