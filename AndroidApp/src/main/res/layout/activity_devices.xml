@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/md_theme_primary"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
         app:titleTextColor="@color/md_theme_on_primary"
         app:subtitleTextColor="@color/md_theme_on_primary" />
 

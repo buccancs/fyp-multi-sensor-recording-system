@@ -79,8 +79,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Start Recording"
+                    android:layout_marginEnd="4dp"
+                    android:text="Start"
                     android:backgroundTint="@color/md_theme_primary"
                     android:textColor="@color/md_theme_on_primary"
                     app:icon="@drawable/ic_recording"
@@ -91,14 +91,29 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text="Stop Recording"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="Stop"
                     android:enabled="false"
                     android:backgroundTint="@android:color/transparent"
                     android:textColor="@color/md_theme_primary"
                     app:strokeColor="@color/md_theme_primary"
                     app:strokeWidth="1dp"
                     app:icon="@drawable/ic_stop"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pauseRecordingButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:text="Pause"
+                    android:enabled="false"
+                    android:backgroundTint="@android:color/transparent"
+                    android:textColor="@color/md_theme_secondary"
+                    app:strokeColor="@color/md_theme_secondary"
+                    app:strokeWidth="1dp"
                     style="@style/Widget.Material3.Button.OutlinedButton" />
 
             </LinearLayout>
@@ -160,7 +175,7 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/recordingDurationText"
+                    android:id="@+id/sessionDurationText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -169,7 +184,7 @@
                     android:textColor="@color/textColorSecondary" />
 
                 <TextView
-                    android:id="@+id/recordingFileSizeText"
+                    android:id="@+id/currentFileSizeText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -14,7 +14,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+        android:background="?attr/colorPrimary"
         app:elevation="@dimen/elevation_card">
 
         <com.google.android.material.appbar.MaterialToolbar

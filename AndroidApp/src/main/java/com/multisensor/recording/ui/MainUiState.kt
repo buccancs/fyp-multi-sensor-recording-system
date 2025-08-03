@@ -97,6 +97,22 @@ data class MainUiState(
     val isCalibratingCamera: Boolean = false,
     val isCalibratingThermal: Boolean = false,
     val isCalibratingShimmer: Boolean = false,
+    val isCalibrating: Boolean = false,
+    val calibrationComplete: Boolean = false,
+    
+    // Recording State Extensions
+    val isPaused: Boolean = false,
+    val sessionDuration: String = "00:00:00",
+    val currentFileSize: String = "0 MB",
+    
+    // File Management
+    val storageUsagePercent: Int = 0,
+    val totalSessions: Int = 0,
+    val totalDataSize: String = "0 MB",
+    val hasCurrentSession: Boolean = false,
+    
+    // System Health
+    val systemHealth: com.multisensor.recording.ui.SystemHealthStatus = com.multisensor.recording.ui.SystemHealthStatus(),
     
     // System validation
     val isValidating: Boolean = false,
@@ -169,16 +185,4 @@ data class MainUiState(
         get() = if (storageTotal > 0) {
             ((storageUsed * 100) / storageTotal).toInt()
         } else 0
-}
-
-/**
- * System health status enumeration
- */
-enum class SystemHealthStatus {
-    INITIALIZING,
-    READY,
-    PARTIAL_CONNECTION,
-    DISCONNECTED,
-    RECORDING,
-    ERROR
 }

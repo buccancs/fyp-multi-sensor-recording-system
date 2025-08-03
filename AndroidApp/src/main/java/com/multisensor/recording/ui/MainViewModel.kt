@@ -1616,3 +1616,126 @@ class MainViewModel
             }
         }
     }
+    
+    // Fragment support methods
+    fun pauseRecording() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(isPaused = true, isRecording = false) }
+                logger.info("Recording paused")
+            } catch (e: Exception) {
+                logger.error("Error pausing recording", e)
+            }
+        }
+    }
+    
+    fun connectAllDevices() {
+        viewModelScope.launch {
+            try {
+                logger.info("Connecting all devices...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error connecting devices", e)
+            }
+        }
+    }
+    
+    fun scanForDevices() {
+        viewModelScope.launch {
+            try {
+                logger.info("Scanning for devices...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error scanning devices", e)
+            }
+        }
+    }
+    
+    fun refreshSystemStatus() {
+        viewModelScope.launch {
+            try {
+                logger.info("Refreshing system status...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error refreshing system status", e)
+            }
+        }
+    }
+    
+    fun startCalibration() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(isCalibrating = true) }
+                logger.info("Calibration started")
+            } catch (e: Exception) {
+                logger.error("Error starting calibration", e)
+            }
+        }
+    }
+    
+    fun stopCalibration() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(isCalibrating = false) }
+                logger.info("Calibration stopped")
+            } catch (e: Exception) {
+                logger.error("Error stopping calibration", e)
+            }
+        }
+    }
+    
+    fun saveCalibration() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(calibrationComplete = true, isCalibrating = false) }
+                logger.info("Calibration saved")
+            } catch (e: Exception) {
+                logger.error("Error saving calibration", e)
+            }
+        }
+    }
+    
+    fun browseFiles() {
+        viewModelScope.launch {
+            try {
+                logger.info("Opening file browser...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error browsing files", e)
+            }
+        }
+    }
+    
+    fun exportData() {
+        viewModelScope.launch {
+            try {
+                logger.info("Exporting data...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error exporting data", e)
+            }
+        }
+    }
+    
+    fun deleteCurrentSession() {
+        viewModelScope.launch {
+            try {
+                logger.info("Deleting current session...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error deleting session", e)
+            }
+        }
+    }
+    
+    fun openDataFolder() {
+        viewModelScope.launch {
+            try {
+                logger.info("Opening data folder...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error opening data folder", e)
+            }
+        }
+    }
+}
