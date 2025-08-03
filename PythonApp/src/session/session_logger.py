@@ -21,6 +21,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List
 
+# Import modern logging system for integration
+from utils.logging_config import get_logger
+
 
 class SessionLogger(QObject):
     """
@@ -54,13 +57,14 @@ class SessionLogger(QObject):
         self.events: List[Dict] = []
         self.session_start_time: Optional[datetime] = None
         self.lock = threading.Lock()  # Thread safety for logging operations
+        
+        # Initialize integrated logger for session events
+        self.logger = get_logger(__name__)
 
         # Ensure base directory exists
         self.base_sessions_dir.mkdir(parents=True, exist_ok=True)
 
-        print(
-            f"[DEBUG_LOG] SessionLogger initialized with base directory: {self.base_sessions_dir}"
-        )
+        self.logger.info(f"SessionLogger initialized with base directory: {self.base_sessions_dir}")
 
     def start_session(
         self, session_name: Optional[str] = None, devices: Optional[List[Dict]] = None
@@ -77,9 +81,7 @@ class SessionLogger(QObject):
         """
         with self.lock:
             if self.current_session:
-                print(
-                    "[DEBUG_LOG] Warning: Starting new session while another is active. Ending previous session."
-                )
+                self.logger.warning("Starting new session while another is active. Ending previous session.")
                 self.end_session()
 
             # Generate session ID and timestamp
@@ -133,7 +135,7 @@ class SessionLogger(QObject):
             self.log_entry_added.emit(ui_message)
             self.session_started.emit(session_id)
 
-            print(f"[DEBUG_LOG] Session started: {session_id} at {session_folder}")
+            self.logger.info(f"Session started: {session_id} at {session_folder}")
 
             return {
                 "session_id": session_id,
@@ -151,9 +153,7 @@ class SessionLogger(QObject):
             details (Dict, optional): Additional event-specific details
         """
         if not self.current_session:
-            print(
-                f"[DEBUG_LOG] Warning: Attempted to log event '{event_type}' with no active session"
-            )
+            self.logger.warning(f"Attempted to log event '{event_type}' with no active session")
             return
 
         with self.lock:
@@ -190,7 +190,7 @@ class SessionLogger(QObject):
                 )
                 self.error_logged.emit(error_type, error_message)
 
-            print(f"[DEBUG_LOG] Event logged: {event_type} - {ui_message}")
+            self.logger.debug(f"Event logged: {event_type} - {ui_message}")
 
     def log_device_connected(
         self,
@@ -305,7 +305,7 @@ class SessionLogger(QObject):
             Dict: Final session information, or None if no active session
         """
         if not self.current_session:
-            print("[DEBUG_LOG] No active session to end")
+            self.logger.debug("No active session to end")
             return None
 
         with self.lock:
@@ -338,9 +338,7 @@ class SessionLogger(QObject):
             self.events = []
             self.session_start_time = None
 
-            print(
-                f"[DEBUG_LOG] Session ended: {session_id} (duration: {duration:.1f}s)"
-            )
+            self.logger.info(f"Session ended: {session_id} (duration: {duration:.1f}s)")
 
             return completed_session
 
@@ -364,7 +362,7 @@ class SessionLogger(QObject):
                 f.flush()  # Force write to disk
                 os.fsync(f.fileno())  # Ensure OS writes to disk
         except Exception as e:
-            print(f"[DEBUG_LOG] Error writing session log to disk: {e}")
+            self.logger.error(f"Error writing session log to disk: {e}")
 
     def _format_event_for_ui(self, event_entry: Dict) -> str:
         """Format event entry for human-readable UI display."""

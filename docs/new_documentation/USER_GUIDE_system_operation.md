@@ -125,6 +125,107 @@ graph TB
    ./gradlew :PythonApp:runDesktopApp
    ```
 
+## Step-by-Step Recording Workflow
+
+### Complete Recording Session Guide
+
+Follow this numbered sequential workflow for conducting a complete multi-sensor recording session:
+
+#### Phase 1: System Preparation (5-10 minutes)
+
+1. **Power On All Hardware**
+   - Turn on the PC and ensure USB webcams are connected
+   - Power on all Android smartphones
+   - Activate Shimmer3 GSR+ sensors (green LED should be blinking)
+   - Attach thermal cameras to smartphones if using them
+
+2. **Launch Applications**
+   - Start the Python Desktop Controller application on PC
+   - Open the Multi-Sensor Recording app on each Android device
+   - Verify all applications are running without errors
+
+3. **Establish Network Connections**
+   - Ensure all devices are connected to the same WiFi network
+   - Note the PC's IP address displayed in the desktop controller
+   - Connect each Android device to the PC controller
+   - Verify connection status shows "Connected" for all devices
+
+4. **Verify Device Recognition**
+   - Check that USB webcams appear in the PC controller's device list
+   - Confirm Android devices are listed with unique identifiers
+   - Ensure Shimmer3 sensors show as "Paired" and "Streaming" on mobile devices
+
+#### Phase 2: Session Configuration (2-3 minutes)
+
+5. **Create New Recording Session**
+   - Click "New Session" in the desktop controller
+   - Enter descriptive session name (e.g., "Stress_Test_Subject_01_2024")
+   - Set recording duration or select manual stop mode
+
+6. **Configure Recording Parameters**
+   - Set video resolution for USB webcams (recommended: 1080p @ 30fps)
+   - Configure Android camera settings (4K video + RAW if needed)
+   - Enable thermal recording if thermal cameras are attached
+   - Set GSR sampling rate (recommended: 128 Hz)
+
+7. **Perform System Synchronization**
+   - Click "Synchronize All Devices" in the desktop controller
+   - Wait for confirmation that all devices are time-synchronized
+   - Verify sync status indicators show green checkmarks
+
+#### Phase 3: Recording Execution (Variable duration)
+
+8. **Prepare Recording Environment**
+   - Position participants and equipment in recording setup
+   - Ensure adequate lighting for cameras
+   - Check that GSR electrodes are properly attached to participants
+   - Verify clear line of sight for thermal cameras
+
+9. **Start Coordinated Recording**
+   - Click "Start Recording" on the desktop controller
+   - Confirm that recording has begun on all connected devices
+   - Monitor real-time data streams and quality indicators
+   - Watch for any error messages or connection issues
+
+10. **Monitor Recording Progress**
+    - Keep an eye on storage space indicators
+    - Monitor GSR signal quality (should show stable readings)
+    - Check video stream quality and frame rate stability
+    - Note any anomalies or interruptions in the session log
+
+11. **Stop Recording Session**
+    - Click "Stop Recording" in the desktop controller when ready
+    - Wait for all devices to confirm recording has stopped
+    - Allow time for data transfer from mobile devices to PC
+    - Verify that all data files have been created successfully
+
+#### Phase 4: Data Validation and Export (2-5 minutes)
+
+12. **Verify Data Integrity**
+    - Review session summary showing all recorded data streams
+    - Check file sizes and durations match expected values
+    - Open sample data files to confirm proper formatting
+    - Look for any missing time segments or corrupted files
+
+13. **Export and Archive Data**
+    - Select desired export format (CSV, MATLAB, or Raw)
+    - Choose export destination folder
+    - Click "Export Session Data" and wait for completion
+    - Create backup copies of important sessions
+
+14. **Session Cleanup**
+    - Disconnect GSR sensors and power them off
+    - Disconnect thermal cameras from smartphones
+    - Save session metadata and notes for future reference
+    - Clean up any temporary files if needed
+
+### Expected Workflow Duration
+
+- **Setup and Configuration**: 7-13 minutes
+- **Recording Session**: Variable (typically 10-60 minutes)
+- **Data Export and Cleanup**: 2-5 minutes
+- **Total Session Time**: 19-78 minutes (excluding actual recording duration)
+
 ---
 
 ## System Setup and Installation

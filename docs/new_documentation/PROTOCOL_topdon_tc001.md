@@ -482,7 +482,24 @@ class ThermalProcessingThreads {
 
 ## 4. Network Messaging
 
-### 4.1 Inter-Device Communication
+### 4.1 JSON Message Protocol Specifications
+
+All thermal camera messages follow standardized JSON protocols with specific field requirements for integration with the multi-sensor recording system.
+
+#### Standard Message Fields
+
+Every thermal camera message must include these required fields:
+
+| Field Name | Data Type | Required | Description |
+|------------|-----------|----------|-------------|
+| `message_type` | String | Yes | Type identifier for thermal messages |
+| `timestamp` | Long | Yes | Unix timestamp in microseconds |
+| `sequence_id` | Integer | Yes | Sequential message identifier |
+| `device_id` | String | Yes | Unique thermal camera device ID |
+| `frame_data` | Object | No | Thermal frame information (for data messages) |
+| `metadata` | Object | No | Additional message-specific metadata |
+
+### 4.2 Inter-Device Communication
 
 For multi-sensor synchronization, thermal data is shared via JSON messages over TCP/UDP.
 

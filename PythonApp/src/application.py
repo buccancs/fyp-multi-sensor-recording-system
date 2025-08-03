@@ -1,9 +1,11 @@
 """application class for multi-sensor recording system"""
 
-import logging
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QObject
+
+# Import modern logging system
+from utils.logging_config import get_logger
 
 # Import backend services
 from network.device_server import JsonSocketServer
@@ -21,7 +23,7 @@ class Application(QObject):
     
     def __init__(self, use_simplified_ui=True):
         super().__init__()
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
         self.use_simplified_ui = use_simplified_ui
         self.session_manager = None
         self.json_server = None
@@ -94,10 +96,9 @@ class Application(QObject):
 
 def main():
     """application entry point"""
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    # Modern logging is auto-initialized in logging_config.py
+    logger = get_logger(__name__)
+    
     qt_app = QApplication(sys.argv)
     try:
         # Use simplified UI by default for cleaner navigation
@@ -106,7 +107,7 @@ def main():
         qt_app.aboutToQuit.connect(app.cleanup)
         sys.exit(qt_app.exec_())
     except Exception as e:
-        logging.error(f"application failed: {e}")
+        logger.error(f"application failed: {e}")
         sys.exit(1)
 
 
