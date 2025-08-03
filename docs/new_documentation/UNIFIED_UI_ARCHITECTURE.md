@@ -354,9 +354,13 @@ graph TB
 
 ### Web Interface UI
 
-The web interface provides lightweight remote monitoring and control capabilities, enabling distributed research setups and remote collaboration.
+The web interface represents a sophisticated implementation of modern web application principles, providing lightweight remote monitoring and control capabilities that enable distributed research setups and remote collaboration scenarios. This platform demonstrates the successful application of Progressive Web Application (PWA) methodologies (Osmani, 2017) to research computing environments, delivering near-native user experiences through web technologies while maintaining broad compatibility across different computing devices and platforms.
+
+The web interface design philosophy embraces responsive web design principles (Marcotte, 2010) that ensure optimal user experiences across diverse screen sizes and input modalities. This approach recognizes that research environments often involve heterogeneous device ecosystems where users may need to access system controls through tablets, smartphones, or traditional desktop computers depending on their physical location and operational requirements.
 
 #### Web Architecture Components
+
+The web interface architecture implements a layered approach that separates presentation logic from communication logic while providing robust real-time capabilities. This design reflects established patterns in modern web application development (Simpson, 2014) while addressing the specific requirements of research system monitoring and control.
 
 ```mermaid
 graph TB
@@ -411,25 +415,15 @@ graph TB
 
 #### Web Interface Features
 
-**1. Real-time Dashboard**
-- **Technology**: HTML5, CSS3, JavaScript with WebSocket communication
-- **Features**: Live device status, session monitoring, system health indicators
-- **Responsive Design**: Mobile-friendly interface for tablet and smartphone access
+The web interface functionality demonstrates the successful integration of contemporary web technologies to create research-grade user experiences that rival native application capabilities. The implementation leverages HTML5, CSS3, and modern JavaScript frameworks to deliver responsive, accessible interfaces that maintain professional presentation standards while accommodating the real-time data requirements typical of research applications.
 
-**2. Remote Control Capabilities**
-- **Session Control**: Start/stop recording sessions remotely
-- **Device Management**: Monitor connection status and device health
-- **Configuration**: Remote parameter adjustment and system configuration
+**Real-time Dashboard** capabilities implement WebSocket-based communication protocols that provide immediate updates about device status, session monitoring, and system health indicators. This approach ensures that remote researchers receive immediate feedback about system status changes, enabling proactive management of research sessions regardless of physical location. The responsive design implementation ensures mobile-friendly interfaces that accommodate tablet and smartphone access scenarios, recognizing that research environments often require mobile access to system controls.
 
-**3. Data Preview and Monitoring**
-- **Live Streams**: Real-time preview of camera feeds and sensor data
-- **Session Progress**: Recording progress, data volume, timing information
-- **Alerts**: System alerts, error notifications, status changes
+**Remote Control Capabilities** provide comprehensive session management functionality that enables distributed research operations. Users can initiate and terminate recording sessions remotely while maintaining full visibility into device connectivity and operational status. The device management interface provides real-time monitoring of connection status and device health metrics, ensuring that users can identify and address potential issues before they impact data collection quality. Configuration management capabilities enable remote parameter adjustment and system configuration, supporting dynamic adaptation to changing experimental requirements.
 
-**4. Integration Architecture**
-- **Backend Bridge**: Python integration layer for seamless communication
-- **API Endpoints**: RESTful API for control operations and data retrieval
-- **Event Streaming**: Server-sent events for real-time updates
+**Data Preview and Monitoring** features provide real-time access to camera feeds and sensor data streams, enabling remote quality assessment and monitoring during data collection sessions. Session progress indicators provide comprehensive information about recording duration, data volume accumulation, and timing synchronization, ensuring that researchers maintain awareness of collection progress. The alert system delivers immediate notifications about system alerts, error conditions, and status changes, ensuring that critical issues receive prompt attention regardless of user location.
+
+**Integration Architecture** demonstrates sophisticated backend communication strategies that ensure seamless coordination with the Python desktop controller. The backend bridge implementation provides transparent integration with the Python ecosystem while maintaining clean separation between web presentation logic and core system functionality. RESTful API endpoints provide standardized interfaces for control operations and data retrieval, ensuring consistency with contemporary web service patterns. Server-sent events enable efficient real-time updates that minimize network overhead while providing immediate user feedback about system status changes.
 
 ## Cross-Platform Integration
 
@@ -1085,24 +1079,21 @@ class ErrorHandler {
 
 ## Performance Considerations
 
+Performance optimization in multi-platform research systems requires careful consideration of the unique constraints and capabilities of each platform while maintaining consistent user experiences across all interfaces. This approach reflects contemporary understanding of performance engineering principles (Harchol-Balter, 2013) applied to distributed user interface systems where performance bottlenecks in any single platform can impact the overall research workflow effectiveness.
+
 ### Cross-Platform Performance Optimization
 
-**Memory Management:**
-- **Android**: Lifecycle-aware components with proper cleanup
-- **Desktop**: Efficient PyQt object management and garbage collection
-- **Web**: DOM optimization and memory leak prevention
+The performance optimization strategy implements a holistic approach that addresses resource management, rendering efficiency, and network utilization across all platforms. This comprehensive approach recognizes that research applications often involve sustained operation under demanding conditions where performance degradation can compromise data collection quality or user productivity.
 
-**Rendering Performance:**
-- **Android**: Hardware acceleration for smooth animations
-- **Desktop**: Optimized paint events and update regions
-- **Web**: CSS transforms and RequestAnimationFrame usage
+**Memory Management** strategies reflect platform-specific best practices while maintaining architectural consistency across the system. Android implementations utilize lifecycle-aware components that ensure proper resource cleanup during configuration changes and background transitions, addressing the memory constraints typical of mobile environments (Android Developers, 2021). Desktop implementations leverage efficient PyQt object management combined with proactive garbage collection strategies that prevent memory accumulation during extended research sessions. Web implementations emphasize DOM optimization and memory leak prevention through careful event handler management and object lifecycle control, ensuring stable operation during long-duration remote monitoring sessions.
 
-**Network Performance:**
-- Adaptive quality streaming based on network conditions
-- Compression and caching strategies
-- Connection pooling and keep-alive optimization
+**Rendering Performance** optimizations address the visual responsiveness requirements essential for real-time research applications. Android implementations utilize hardware acceleration capabilities to ensure smooth animations and responsive user interactions, particularly important for touch-based interfaces where perceived latency directly impacts user experience quality. Desktop implementations optimize paint events and update regions to minimize computational overhead during real-time data visualization, ensuring that complex plotting operations do not interfere with user interface responsiveness. Web implementations leverage CSS transforms and RequestAnimationFrame APIs to achieve native-like animation performance while maintaining compatibility across different browser implementations.
+
+**Network Performance** optimizations implement adaptive strategies that accommodate the variable networking conditions common in research environments. Adaptive quality streaming mechanisms adjust data transmission rates based on real-time network condition assessment, ensuring optimal performance across different connectivity scenarios. Compression and caching strategies minimize bandwidth utilization while maintaining data integrity requirements. Connection pooling and keep-alive optimization reduce connection establishment overhead while supporting sustained data transfer requirements typical of multi-sensor research sessions.
 
 ### Platform-Specific Optimizations
+
+Each platform implementation incorporates optimization strategies that leverage platform-specific capabilities while maintaining consistency with overall system architecture. These optimizations reflect deep understanding of platform performance characteristics combined with careful attention to research application requirements.
 
 **Android Optimizations:**
 ```kotlin
@@ -1888,6 +1879,8 @@ Google Android Team. (2021). *Android Architecture Components*. Android Develope
 
 Google Material Design Team. (2021). *Material Design Guidelines*. Google. Retrieved from https://material.io/design
 
+Harchol-Balter, M. (2013). *Performance Modeling and Design of Computer Systems: Queueing Theory in Action*. Cambridge University Press.
+
 Johnson, J. (2010). *Designing with the Mind in Mind: Simple Guide to Understanding User Interface Design Rules*. Morgan Kaufmann.
 
 Johnson, R., & Vlissides, J. (1995). *Design Patterns CD: Elements of Reusable Object-Oriented Software*. Addison-Wesley.
@@ -1923,6 +1916,8 @@ Rosenfeld, L., Morville, P., & Arango, J. (2015). *Information Architecture: For
 Seffah, A., & Javahery, H. (Eds.). (2004). *Multiple User Interfaces: Cross-Platform Applications and Context-Aware Interfaces*. John Wiley & Sons.
 
 Shapiro, M., Preguiça, N., Baquero, C., & Zawirski, M. (2011). Conflict-free replicated data types. In *Stabilization, Safety, and Security of Distributed Systems* (pp. 386-400). Springer.
+
+Simpson, K. (2014). *You Don't Know JS: Async & Performance*. O'Reilly Media.
 
 Star, S. L., & Ruhleder, K. (1996). Steps toward an ecology of infrastructure: Design and access for large information spaces. *Information Systems Research*, 7(1), 111-134.
 
