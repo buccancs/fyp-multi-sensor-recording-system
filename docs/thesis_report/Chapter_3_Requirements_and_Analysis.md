@@ -75,11 +75,17 @@
 
 ---
 
+This comprehensive chapter establishes the systematic foundation for the Multi-Sensor Recording System through rigorous requirements engineering methodology and detailed analytical assessment. The requirements analysis follows established software engineering principles while addressing the unique challenges of research-grade physiological measurement systems that must maintain scientific rigor across diverse experimental contexts.
+
+The chapter presents a comprehensive stakeholder analysis encompassing research scientists, study participants, technical personnel, and institutional oversight bodies, each with distinct requirements that must be systematically balanced to achieve optimal system performance. Through detailed functional and non-functional requirements specification, use case analysis, and systematic validation methodology, this chapter establishes the complete technical and operational foundation that guides all subsequent design and implementation decisions.
+
 ## Problem Statement
 
 ### Current Physiological Measurement Landscape Analysis
 
-The following comparative analysis illustrates the fundamental limitations of traditional GSR measurement approaches compared to the proposed contactless system:
+The physiological measurement research domain has experienced significant methodological stagnation due to fundamental limitations inherent in traditional contact-based sensor technologies. Contemporary galvanic skin response (GSR) measurement, while representing the established scientific standard for electrodermal activity assessment, imposes systematic constraints that fundamentally limit research scope, experimental validity, and scientific advancement opportunities across multiple research disciplines.
+
+The following comparative analysis illustrates the fundamental limitations of traditional GSR measurement approaches compared to the proposed contactless system architecture:
 
 **Table 3.1: Comparative Analysis of Physiological Measurement Approaches**
 

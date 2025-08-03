@@ -89,9 +89,15 @@
 
 ---
 
+This comprehensive chapter presents the detailed design and implementation of the Multi-Sensor Recording System, demonstrating how established software engineering principles and distributed systems theory have been systematically applied to create a novel contactless physiological measurement platform. The architectural design represents a sophisticated synthesis of distributed computing patterns, real-time systems engineering, and research software development methodologies specifically tailored for physiological measurement applications.
+
+The chapter provides comprehensive technical analysis of design decisions, implementation strategies, and architectural patterns that enable the system to achieve research-grade measurement precision while maintaining the scalability, reliability, and maintainability required for long-term research applications. Through detailed examination of system components, communication protocols, and integration mechanisms, this chapter demonstrates how theoretical computer science principles translate into practical research capabilities.
+
 ## System Architecture Overview
 
-The Multi-Sensor Recording System employs a sophisticated distributed architecture specifically engineered to address the complex challenges of synchronized multi-modal data collection in research environments while maintaining scientific rigor and operational reliability essential for conducting high-quality physiological measurement research. The architectural design represents a systematic balance between technical requirements for precise coordination across heterogeneous devices and practical needs for system reliability, scalability, and maintainability.
+The Multi-Sensor Recording System architecture represents a sophisticated distributed computing solution specifically engineered to address the complex technical challenges inherent in synchronized multi-modal data collection while maintaining the scientific rigor and operational reliability essential for conducting high-quality physiological measurement research. The architectural design demonstrates a systematic balance between technical requirements for precise coordination across heterogeneous devices and practical considerations for system reliability, scalability, and long-term maintainability in diverse research environments.
+
+The system architecture draws upon established distributed systems patterns while introducing specialized adaptations required for physiological measurement applications that must coordinate consumer-grade mobile devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance, data integrity, and temporal precision as fundamental requirements that cannot be compromised for convenience or performance optimization.
 
 ### Current Implementation Architecture
 
