@@ -462,3 +462,35 @@ This introduction references the comprehensive Multi-Sensor Recording System whi
 
 **Supporting Technical Documentation:**
 Available in `docs/new_documentation/` directory with component-specific README, USER_GUIDE, and PROTOCOL documents for all system components including Android Mobile Application, Python Desktop Controller, Multi-Device Synchronization, Camera Recording System, Session Management, Hardware Integration, Testing Framework, and Networking Protocol components.
+
+## Code Implementation References
+
+The following source code files provide concrete implementation of the concepts introduced in this chapter:
+
+**Core System Architecture:**
+```
+# PythonApp/src/application.py                    - Main application entry point and service orchestration
+# PythonApp/src/enhanced_main_with_web.py         - Enhanced application launcher with web interface
+# AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt - Android application main activity
+```
+
+**Session Management and Coordination:**
+```
+# PythonApp/src/session/session_manager.py        - Central session coordination and management
+# PythonApp/src/session/session_synchronizer.py  - Multi-device synchronization implementation
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt - Device connection management
+```
+
+**Multi-Sensor Integration:**
+```
+# PythonApp/src/shimmer_manager.py                - GSR sensor management and control
+# PythonApp/src/webcam/webcam_capture.py          - Camera recording implementation  
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt - Android GSR recording
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt - Thermal camera integration
+```
+
+**Network Communication Protocol:**
+```
+# PythonApp/src/network/device_server.py          - JSON socket server for device communication
+# protocol/                                       - Communication protocol specifications
+```

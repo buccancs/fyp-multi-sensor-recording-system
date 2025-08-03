@@ -2100,3 +2100,180 @@ class SensorCoordinationFramework @Inject constructor(
 ```
 
 This code listing demonstrates the sophisticated technical implementation underlying the Multi-Sensor Recording System, showcasing advanced algorithms for synchronization, multi-modal processing, and mobile sensor coordination that enable research-grade contactless physiological measurement capabilities.
+
+## Comprehensive Code Implementation References
+
+This appendix provides complete reference to all major code components implementing the Multi-Sensor Recording System:
+
+### Python Desktop Controller Implementation
+
+**Core Application Architecture:**
+```
+# PythonApp/src/application.py                           - Main application class and service orchestration
+# PythonApp/src/enhanced_main_with_web.py                - Enhanced application with web interface integration
+# PythonApp/launch_dual_webcam.py                        - Dual webcam system launcher
+```
+
+**Session Management and Coordination:**
+```
+# PythonApp/src/session/session_manager.py               - Central session coordination and management
+# PythonApp/src/session/session_synchronizer.py          - Multi-device synchronization implementation
+# PythonApp/src/session/session_logger.py               - Comprehensive session logging system
+# PythonApp/src/session/session_recovery.py             - Session recovery and fault tolerance
+```
+
+**Camera and Computer Vision:**
+```
+# PythonApp/src/webcam/webcam_capture.py                 - Single camera recording implementation
+# PythonApp/src/webcam/dual_webcam_capture.py            - Multi-camera synchronization system
+# PythonApp/src/webcam/cv_preprocessing_pipeline.py      - Computer vision processing pipeline
+# PythonApp/src/webcam/advanced_sync_algorithms.py       - Advanced synchronization algorithms
+```
+
+**Calibration System:**
+```
+# PythonApp/src/calibration/calibration_manager.py       - Calibration system coordination
+# PythonApp/src/calibration/calibration_processor.py     - Signal processing for calibration
+# PythonApp/src/calibration/calibration_result.py        - Calibration result management
+# PythonApp/src/calibration/calibration.py               - Core calibration algorithms
+# PythonApp/src/real_time_calibration_feedback.py        - Real-time calibration feedback system
+```
+
+**Sensor Management:**
+```
+# PythonApp/src/shimmer_manager.py                       - Shimmer GSR sensor management and control
+# PythonApp/src/web_launcher.py                          - Web interface launcher for sensor control
+```
+
+**Network Communication:**
+```
+# PythonApp/src/network/device_server.py                 - JSON socket server for device communication
+```
+
+**Configuration Management:**
+```
+# PythonApp/src/config/webcam_config.py                  - Camera configuration management
+```
+
+**User Interface:**
+```
+# PythonApp/src/gui/main_controller.py                   - Main GUI controller
+# PythonApp/src/gui/main_window.py                       - Main application window
+# PythonApp/src/gui/simplified_main_window.py            - Simplified user interface
+# PythonApp/src/gui/stimulus_controller.py               - Stimulus presentation controller
+# PythonApp/src/gui/dual_webcam_main_window.py           - Dual webcam interface
+```
+
+**Production and Quality Assurance:**
+```
+# PythonApp/src/production/deployment_automation.py      - Automated deployment system
+# PythonApp/src/production/performance_benchmark.py      - Performance benchmarking framework
+# PythonApp/src/production/phase4_validator.py           - System validation framework
+# PythonApp/src/production/security_scanner.py           - Security validation and scanning
+```
+
+**Utility Systems:**
+```
+# PythonApp/src/utils/logging_config.py                  - Advanced logging configuration
+```
+
+### Android Mobile Application Implementation
+
+**Core Application:**
+```
+# AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt - Main application activity
+```
+
+**Recording System:**
+```
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt - GSR sensor recording
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt - Thermal camera integration
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt - Device connection management
+# AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceConfiguration.kt - Device configuration
+# AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceStatusTracker.kt - Device health monitoring
+# AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt - Dynamic recording control
+# AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt - Data validation
+# AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerDevice.kt - Shimmer device interface
+```
+
+**Session Management:**
+```
+# AndroidApp/src/main/java/com/multisensor/recording/recording/session/ - Session management components
+```
+
+**Calibration System:**
+```
+# AndroidApp/src/main/java/com/multisensor/recording/calibration/ - Mobile calibration components
+```
+
+**User Interface:**
+```
+# AndroidApp/src/main/java/com/multisensor/recording/ui/FileViewActivity.kt - File management interface
+# AndroidApp/src/main/java/com/multisensor/recording/ui/NetworkConfigActivity.kt - Network configuration
+# AndroidApp/src/main/java/com/multisensor/recording/ui/util/UIUtils.kt - UI utility functions
+# AndroidApp/src/main/java/com/multisensor/recording/ui/util/NavigationUtils.kt - Navigation utilities
+# AndroidApp/src/main/java/com/multisensor/recording/ui/components/ - UI component library
+```
+
+**Performance Optimization:**
+```
+# AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt - Network optimization
+# AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt - Power management
+```
+
+### Testing Infrastructure
+
+**Python Testing Framework:**
+```
+# PythonApp/test_integration_logging.py                  - Integration testing framework
+# PythonApp/run_quick_recording_session_test.py          - Session management testing
+# PythonApp/test_hardware_sensor_simulation.py          - Hardware simulation testing
+# PythonApp/test_dual_webcam_integration.py             - Multi-camera integration testing
+# PythonApp/test_dual_webcam_system.py                   - Dual webcam system testing
+# PythonApp/test_advanced_dual_webcam_system.py         - Advanced system integration testing
+# PythonApp/comprehensive_test_summary.py               - Test result aggregation
+# PythonApp/create_final_summary.py                     - Test reporting framework
+```
+
+**Android Testing Suite:**
+```
+# AndroidApp/src/test/java/com/multisensor/recording/recording/ - Recording system tests
+# AndroidApp/src/test/java/com/multisensor/recording/calibration/ - Calibration testing
+# AndroidApp/src/test/java/com/multisensor/recording/ui/ - User interface testing
+# AndroidApp/src/test/java/com/multisensor/recording/performance/ - Performance testing
+```
+
+### Protocol and Communication
+
+**Protocol Specifications:**
+```
+# protocol/ - Communication protocol documentation and specifications
+```
+
+### Configuration and Build System
+
+**Project Configuration:**
+```
+# pyproject.toml - Python project configuration
+# build.gradle - Android build configuration
+# settings.gradle - Gradle settings
+# environment.yml - Conda environment specification
+```
+
+**Quality Assurance Configuration:**
+```
+# .pre-commit-config.yaml - Pre-commit hooks configuration
+# pytest.ini - Python testing configuration
+# codecov.yml - Code coverage configuration
+# qodana.yaml - Code quality analysis configuration
+# detekt.yml - Kotlin code analysis configuration
+```
+
+### Data and Calibration
+
+**Calibration Data:**
+```
+# calibration_data/ - Calibration reference data and algorithms
+```
+
+This comprehensive code reference provides complete coverage of all system components, enabling researchers and developers to understand, extend, and maintain the Multi-Sensor Recording System implementation.
