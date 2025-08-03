@@ -97,6 +97,22 @@ data class MainUiState(
     val isCalibratingCamera: Boolean = false,
     val isCalibratingThermal: Boolean = false,
     val isCalibratingShimmer: Boolean = false,
+    val isCalibrating: Boolean = false,
+    val calibrationComplete: Boolean = false,
+    
+    // Recording State Extensions
+    val isPaused: Boolean = false,
+    val sessionDuration: String = "00:00:00",
+    val currentFileSize: String = "0 MB",
+    
+    // File Management
+    val storageUsagePercent: Int = 0,
+    val totalSessions: Int = 0,
+    val totalDataSize: String = "0 MB",
+    val hasCurrentSession: Boolean = false,
+    
+    // System Health
+    val systemHealth: com.multisensor.recording.ui.SystemHealthStatus = com.multisensor.recording.ui.SystemHealthStatus(),
     
     // System validation
     val isValidating: Boolean = false,
@@ -153,14 +169,13 @@ data class MainUiState(
      * Overall system health status for dashboard display
      */
     val systemHealthStatus: SystemHealthStatus
-        get() = when {
-            !isInitialized -> SystemHealthStatus.INITIALIZING
-            errorMessage != null -> SystemHealthStatus.ERROR
-            isRecording -> SystemHealthStatus.RECORDING
-            isPcConnected && (isShimmerConnected || isThermalConnected) && isCameraConnected -> SystemHealthStatus.READY
-            isPcConnected && isCameraConnected -> SystemHealthStatus.PARTIAL_CONNECTION
-            else -> SystemHealthStatus.DISCONNECTED
-        }
+        get() = SystemHealthStatus(
+            pcConnection = if (isPcConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            shimmerConnection = if (isShimmerConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            thermalCamera = if (isThermalConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            networkConnection = if (isNetworkConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            rgbCamera = if (isCameraConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED
+        )
     
     /**
      * Storage usage percentage for progress bar
@@ -169,16 +184,4 @@ data class MainUiState(
         get() = if (storageTotal > 0) {
             ((storageUsed * 100) / storageTotal).toInt()
         } else 0
-}
-
-/**
- * System health status enumeration
- */
-enum class SystemHealthStatus {
-    INITIALIZING,
-    READY,
-    PARTIAL_CONNECTION,
-    DISCONNECTED,
-    RECORDING,
-    ERROR
 }

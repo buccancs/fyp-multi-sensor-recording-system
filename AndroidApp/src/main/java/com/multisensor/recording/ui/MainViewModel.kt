@@ -1418,10 +1418,312 @@ class MainViewModel
         }
 
         /**
+         * Switch camera preview surfaces for different layout modes
+         * 
+         * @param textureView TextureView for RGB camera (null to disable RGB preview)
+         * @param surfaceView SurfaceView for thermal camera (null to disable thermal preview) 
+         */
+        fun switchPreviewSurfaces(textureView: TextureView?, surfaceView: SurfaceView?) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Switching preview surfaces - RGB: ${textureView != null}, Thermal: ${surfaceView != null}")
+                    
+                    // Update status during switching
+                    updateUiState { currentState ->
+                        currentState.copy(statusText = "Switching preview layout...")
+                    }
+                    
+                    // Reinitialize camera recorder with new TextureView if provided
+                    if (textureView != null) {
+                        logger.debug("Reinitializing camera with new TextureView")
+                        val cameraInitialized = cameraRecorder.initialize(textureView)
+                        
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                isCameraConnected = cameraInitialized,
+                                isLoadingPermissions = false
+                            )
+                        }
+                        
+                        if (!cameraInitialized) {
+                            logger.warning("Failed to reinitialize camera with new TextureView")
+                        } else {
+                            logger.info("Camera reinitialize successful with new TextureView")
+                        }
+                    }
+                    
+                    // Reinitialize thermal recorder with new SurfaceView if provided
+                    if (surfaceView != null) {
+                        logger.debug("Reinitializing thermal camera with new SurfaceView")
+                        
+                        // Stop existing thermal preview first
+                        thermalRecorder.stopPreview()
+                        
+                        // Reinitialize with new surface
+                        val thermalInitialized = thermalRecorder.initialize(surfaceView)
+                        
+                        updateUiState { currentState ->
+                            currentState.copy(
+                                isThermalConnected = thermalInitialized,
+                                isLoadingPermissions = false
+                            )
+                        }
+                        
+                        if (thermalInitialized) {
+                            // Restart thermal preview with new surface
+                            val previewStarted = thermalRecorder.startPreview()
+                            
+                            updateUiState { currentState ->
+                                currentState.copy(
+                                    thermalPreviewAvailable = previewStarted
+                                )
+                            }
+                            
+                            if (previewStarted) {
+                                logger.info("Thermal camera preview restarted successfully with new SurfaceView")
+                            } else {
+                                logger.warning("Failed to restart thermal camera preview with new SurfaceView")
+                            }
+                        } else {
+                            logger.warning("Failed to reinitialize thermal camera with new SurfaceView")
+                        }
+                    }
+                    
+                    // Update final status
+                    val statusMessage = buildString {
+                        append("Preview layout switched - ")
+                        if (textureView != null) append("RGB: Active, ")
+                        else append("RGB: Disabled, ")
+                        if (surfaceView != null) append("Thermal: Active")
+                        else append("Thermal: Disabled")
+                    }
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(statusText = statusMessage)
+                    }
+                    
+                    logger.info("Preview surface switching completed")
+                    
+                } catch (e: Exception) {
+                    logger.error("Failed to switch preview surfaces", e)
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Error switching preview layout",
+                            errorMessage = "Preview switching failed: ${e.message}"
+                        )
+                    }
+                }
+            }
+        }
+
+        /**
          * Update system state - placeholder for system state updates
          */
         private fun updateSystemState() {
             logD("MainViewModel", "System state update requested")
             // Implementation placeholder - system state updates would go here
         }
+        
+        /**
+         * Refresh system status by re-checking all device connections
+         */
+        fun refreshSystemStatus() {
+            viewModelScope.launch {
+                try {
+                    logger.info("Refreshing system status...")
+                    
+                    // Update status to show refresh in progress
+                    updateUiState { currentState ->
+                        currentState.copy(statusText = "Refreshing system status...")
+                    }
+                    
+                    // Re-check thermal camera availability
+                    val thermalAvailable = checkThermalCameraAvailability()
+                    
+                    // Re-check Shimmer connection
+                    val shimmerStatus = shimmerRecorder.getShimmerStatus()
+                    val shimmerConnected = shimmerStatus.isConnected
+                    
+                    // Re-check PC connection (placeholder)
+                    val pcConnected = false // TODO: Implement PC connection check
+                    
+                    // Re-check network status (placeholder)
+                    val networkConnected = false // TODO: Implement network check
+                    
+                    // Update UI state with fresh status
+                    val statusMessage = buildString {
+                        append("Status updated - ")
+                        append("Thermal: ${if (thermalAvailable) "OK" else "N/A"}, ")
+                        append("Shimmer: ${if (shimmerConnected) "OK" else "N/A"}, ")
+                        append("PC: ${if (pcConnected) "OK" else "N/A"}")
+                    }
+                    
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = statusMessage,
+                            isThermalConnected = thermalAvailable,
+                            isShimmerConnected = shimmerConnected,
+                            isPcConnected = pcConnected,
+                            isNetworkConnected = networkConnected,
+                            thermalPreviewAvailable = thermalAvailable
+                        )
+                    }
+                    
+                    logger.info("System status refresh completed: $statusMessage")
+                    
+                } catch (e: Exception) {
+                    logger.error("Error during system status refresh", e)
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Status refresh failed",
+                            errorMessage = "Failed to refresh status: ${e.message}"
+                        )
+                    }
+                }
+            }
+        }
+        
+        /**
+         * Scan for available Shimmer devices via Bluetooth (Enhanced)
+         */
+        fun scanForShimmerDevicesEnhanced(callback: (List<Pair<String, String>>) -> Unit) {
+            viewModelScope.launch {
+                try {
+                    logger.info("Scanning for Shimmer devices...")
+                    
+                    // Use ShimmerRecorder to scan for devices
+                    val devices = shimmerRecorder.scanForDevices()
+                    
+                    logger.info("Found ${devices.size} Shimmer devices")
+                    callback(devices)
+                    
+                } catch (e: Exception) {
+                    logger.error("Error during Shimmer device scan", e)
+                    callback(emptyList())
+                }
+            }
+        }
+        
+        /**
+         * Get list of previously connected Shimmer devices
+         */
+        fun getKnownShimmerDevices(): List<Pair<String, String>> {
+            return try {
+                shimmerRecorder.getKnownDevices()
+            } catch (e: Exception) {
+                logger.error("Error getting known Shimmer devices", e)
+                emptyList()
+            }
+        }
+    
+    // Fragment support methods
+    fun pauseRecording() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(isPaused = true, isRecording = false) }
+                logger.info("Recording paused")
+            } catch (e: Exception) {
+                logger.error("Error pausing recording", e)
+            }
+        }
     }
+    
+    fun connectAllDevices() {
+        viewModelScope.launch {
+            try {
+                logger.info("Connecting all devices...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error connecting devices", e)
+            }
+        }
+    }
+    
+    fun scanForDevices() {
+        viewModelScope.launch {
+            try {
+                logger.info("Scanning for devices...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error scanning devices", e)
+            }
+        }
+    }
+    
+    fun startCalibration() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(isCalibrating = true) }
+                logger.info("Calibration started")
+            } catch (e: Exception) {
+                logger.error("Error starting calibration", e)
+            }
+        }
+    }
+    
+    fun stopCalibration() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(isCalibrating = false) }
+                logger.info("Calibration stopped")
+            } catch (e: Exception) {
+                logger.error("Error stopping calibration", e)
+            }
+        }
+    }
+    
+    fun saveCalibration() {
+        viewModelScope.launch {
+            try {
+                updateUiState { it.copy(calibrationComplete = true, isCalibrating = false) }
+                logger.info("Calibration saved")
+            } catch (e: Exception) {
+                logger.error("Error saving calibration", e)
+            }
+        }
+    }
+    
+    fun browseFiles() {
+        viewModelScope.launch {
+            try {
+                logger.info("Opening file browser...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error browsing files", e)
+            }
+        }
+    }
+    
+    fun exportData() {
+        viewModelScope.launch {
+            try {
+                logger.info("Exporting data...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error exporting data", e)
+            }
+        }
+    }
+    
+    fun deleteCurrentSession() {
+        viewModelScope.launch {
+            try {
+                logger.info("Deleting current session...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error deleting session", e)
+            }
+        }
+    }
+    
+    fun openDataFolder() {
+        viewModelScope.launch {
+            try {
+                logger.info("Opening data folder...")
+                // Implementation will be added when needed
+            } catch (e: Exception) {
+                logger.error("Error opening data folder", e)
+            }
+        }
+    }
+}

@@ -43,5 +43,46 @@
         <!-- Status bar -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
+        
+        <!-- Add explicit toolbar theme and component styles -->
+        <item name="toolbarStyle">@style/Widget.Material3.Toolbar</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.Material3.Dark.ActionBar</item>
+        
+        <!-- Ensure all Material Design components have proper defaults -->
+        <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
+        <item name="materialButtonStyle">@style/Widget.Material3.Button</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Material3.HeadlineSmall</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall</item>
+        
+        <!-- Enhanced Material CardView defaults for compatibility -->
+        <item name="cardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardMaxElevation">8dp</item>
+        <item name="cardBackgroundColor">@color/md_theme_surface</item>
+        <item name="cardForegroundColor">@color/md_theme_on_surface</item>
+    </style>
+    
+    <!-- Fallback theme for compatibility -->
+    <style name="Theme.MultiSensorRecording.Fallback" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Fallback to AppCompat colors if Material3 fails -->
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorPrimaryDark">@color/md_theme_primary_container</item>
+        <item name="colorAccent">@color/md_theme_secondary</item>
+        <item name="android:textColorPrimary">@color/md_theme_on_surface</item>
+        <item name="android:textColorSecondary">@color/md_theme_on_surface_variant</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+    
+    <!-- Enhanced MaterialCardView style for maximum compatibility -->
+    <style name="Widget.App.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/md_theme_surface</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardMaxElevation">8dp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="rippleColor">@color/md_theme_primary</item>
     </style>
 </resources>

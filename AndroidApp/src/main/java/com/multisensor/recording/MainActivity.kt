@@ -5,12 +5,22 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
-import com.multisensor.recording.databinding.ActivityMainBinding
+import kotlinx.coroutines.delay
+import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.SystemHealthStatus
@@ -20,19 +30,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Streamlined Material Design 3 Dashboard
+ * Fragment-Based Material Design 3 MainActivity
  * 
- * Minimalist research data collection interface:
- * - Single-screen dashboard with organized sections
- * - Live video preview and recording controls at top
- * - System status and quick actions below
- * - Optimized for one-handed field operation
+ * Proper fragment-based architecture with Navigation Component:
+ * - Navigation drawer for main sections
+ * - Bottom navigation for quick access
+ * - Fragment container for different screens
+ * - Shared ViewModel across fragments
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainFragmentsBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var appBarConfiguration: AppBarConfiguration
     
     @Inject
     lateinit var logger: Logger
@@ -42,402 +53,131 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         
         // Initialize binding and ViewModel
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
         try {
             viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+            
+            setupNavigation()
+            setupUI()
+            observeViewModel()
+            
+            logger.info("MainActivity initialized with fragment architecture")
+            
         } catch (e: Exception) {
-            showError("Failed to initialize app: ${e.message}")
-            return
+            logger.error("Error during MainActivity initialization", e)
+            showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
         }
+    }
 
-        setupUI()
-        observeViewModel()
-        initializeCamera()
+    private fun setupNavigation() {
+        setSupportActionBar(binding.toolbar)
+        
+        val navController = findNavController(R.id.nav_host_fragment)
+        
+        // Setup app bar configuration
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_recording, R.id.nav_devices, 
+                R.id.nav_calibration, R.id.nav_files
+            ),
+            binding.drawerLayout
+        )
+        
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        
+        // Setup navigation drawer
+        binding.navView.setupWithNavController(navController)
+        
+        // Setup bottom navigation
+        binding.bottomNavigation.setupWithNavController(navController)
+        
+        // Handle navigation menu item clicks
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
+                }
+                R.id.nav_network_config -> {
+                    // Start NetworkConfigActivity when it exists
+                    showToast("Network Config - Coming Soon")
+                    true
+                }
+                R.id.nav_shimmer_config -> {
+                    // Start ShimmerConfigActivity when it exists
+                    showToast("Shimmer Config - Coming Soon")
+                    true
+                }
+                R.id.nav_diagnostics -> {
+                    // Start DiagnosticsActivity when it exists
+                    showToast("Diagnostics - Coming Soon")
+                    true
+                }
+                R.id.nav_about -> {
+                    // Start AboutActivity when it exists
+                    showToast("About - Coming Soon")
+                    true
+                }
+                else -> {
+                    // Handle fragment navigation
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    navController.navigate(menuItem.itemId)
+                    binding.drawerLayout.closeDrawers()
+                    true
+                }
+            }
+        }
     }
 
     private fun setupUI() {
-        // Setup toolbar
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = "Multi-Sensor Recording"
-        
-        // Setup recording controls
-        setupRecordingControls()
-        
-        // Setup quick actions
-        setupQuickActions()
-        
-        // Setup FAB for settings
-        setupFloatingActionButton()
-        
-        // Setup toolbar menu
-        setupToolbarMenu()
-    }
-
-    private fun setupRecordingControls() {
-        binding.recordButton.setOnClickListener {
-            try {
-                if (viewModel.uiState.value.isRecording) {
-                    viewModel.stopRecording()
-                } else {
-                    viewModel.startRecording()
-                }
-            } catch (e: Exception) {
-                showError("Recording control failed: ${e.message}")
+        // Setup drawer toggle
+        binding.toolbar.setNavigationOnClickListener {
+            if (binding.drawerLayout.isDrawerOpen(binding.navView)) {
+                binding.drawerLayout.closeDrawer(binding.navView)
+            } else {
+                binding.drawerLayout.openDrawer(binding.navView)
             }
         }
-    }
-
-    private fun setupQuickActions() {
-        // Calibration
-        binding.calibrationButton.setOnClickListener {
-            try {
-                val intent = Intent(this, com.multisensor.recording.ui.CalibrationActivity::class.java)
-                startActivity(intent)
-            } catch (e: Exception) {
-                showError("Failed to open calibration: ${e.message}")
-            }
-        }
-        
-        // Files management
-        binding.filesButton.setOnClickListener {
-            try {
-                val intent = Intent(this, com.multisensor.recording.ui.FileViewActivity::class.java)
-                startActivity(intent)
-            } catch (e: Exception) {
-                showError("Failed to open files: ${e.message}")
-            }
-        }
-        
-        // Device settings
-        binding.devicesButton.setOnClickListener {
-            try {
-                val intent = Intent(this, com.multisensor.recording.ui.DevicesActivity::class.java)
-                startActivity(intent)
-            } catch (e: Exception) {
-                showError("Failed to open device management: ${e.message}")
-            }
-        }
-        
-        // Transfer files to PC
-        binding.transferButton.setOnClickListener {
-            try {
-                viewModel.transferFilesToPC()
-                showMessage("File transfer started")
-            } catch (e: Exception) {
-                showError("Failed to start file transfer: ${e.message}")
-            }
-        }
-    }
-
-    private fun setupFloatingActionButton() {
-        binding.settingsFab.setOnClickListener {
-            try {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            } catch (e: Exception) {
-                showError("Failed to open settings: ${e.message}")
-            }
-        }
-    }
-
-    private fun setupToolbarMenu() {
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_settings -> {
-                    navigateToActivity(SettingsActivity::class.java)
-                    true
-                }
-                R.id.action_diagnostics -> {
-                    navigateToActivity(com.multisensor.recording.ui.DiagnosticsActivity::class.java)
-                    true
-                }
-                R.id.action_about -> {
-                    navigateToActivity(com.multisensor.recording.ui.AboutActivity::class.java)
-                    true
-                }
-                else -> false
-            }
-        }
-        
-        binding.toolbar.inflateMenu(R.menu.main_toolbar_menu)
     }
 
     private fun observeViewModel() {
-        try {
-            // Observe UI state changes using StateFlow
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.uiState.collect { uiState ->
-                        updateUI(uiState)
-                    }
-                }
-            }
-            
-        } catch (e: Exception) {
-            showError("Failed to setup monitoring: ${e.message}")
-        }
-    }
-
-    private fun initializeCamera() {
-        try {
-            // Initialize camera system with TextureView
-            val cameraTextureView = binding.cameraPreview
-            val thermalSurfaceView = binding.thermalPreview
-            
-            viewModel.initializeSystem(cameraTextureView, thermalSurfaceView)
-            
-            // Update status overlays
-            binding.cameraStatusOverlay.text = "Initializing camera..."
-            binding.thermalStatusOverlay.text = "Initializing thermal camera..."
-            
-            // Check RAW stage 3 availability after initialization
-            checkRawStage3Availability()
-            
-            // Check thermal camera availability and update UI
-            checkThermalCameraAvailability()
-            
-        } catch (e: Exception) {
-            showError("Failed to initialize camera: ${e.message}")
-            binding.cameraStatusOverlay.text = "Camera Error"
-            binding.thermalStatusOverlay.text = "Thermal Error"
-        }
-    }
-
-    /**
-     * Check and display RAW stage 3 capture availability
-     */
-    private fun checkRawStage3Availability() {
         lifecycleScope.launch {
-            try {
-                val isAvailable = viewModel.checkRawStage3Availability()
-                
-                val message = if (isAvailable) {
-                    "✓ RAW Stage 3 Capture: AVAILABLE"
-                } else {
-                    "✗ RAW Stage 3 Capture: NOT AVAILABLE"
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    updateUI(state)
                 }
-                
-                // Show status in a toast for immediate user feedback
-                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
-                
-                logger.info("RAW Stage 3 availability check completed: $isAvailable")
-                
-            } catch (e: Exception) {
-                logger.error("Error during RAW stage 3 availability check", e)
-                Toast.makeText(this@MainActivity, "Error checking RAW capabilities", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    /**
-     * Check thermal camera availability and notify user
-     */
-    private fun checkThermalCameraAvailability() {
-        lifecycleScope.launch {
-            try {
-                val isAvailable = viewModel.checkThermalCameraAvailability()
-                
-                val message = if (isAvailable) {
-                    "✓ Topdon Thermal Camera: AVAILABLE"
-                } else {
-                    "✗ Topdon Thermal Camera: NOT AVAILABLE"
-                }
-                
-                // Show status in a toast for immediate user feedback
-                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
-                
-                logger.info("Thermal camera availability check completed: $isAvailable")
-                
-            } catch (e: Exception) {
-                logger.error("Error during thermal camera availability check", e)
-                Toast.makeText(this@MainActivity, "Error checking thermal camera", Toast.LENGTH_SHORT).show()
-            }
+    private fun updateUI(state: MainUiState) {
+        // Update toolbar title based on current state
+        binding.toolbar.title = when {
+            state.isRecording -> "Recording - ${state.sessionDuration}"
+            state.isCalibrating -> "Calibrating..."
+            else -> "Multi-Sensor Recording"
         }
-    }
-
-    private fun updateUI(uiState: MainUiState) {
-        // Update recording controls
-        updateRecordingControls(uiState)
         
-        // Update device status indicators
-        updateDeviceStatusIndicators(uiState)
-        
-        // Update camera status overlay
-        updateCameraStatusOverlay(uiState)
-        
-        // Update storage info
-        updateStorageInfo(uiState)
-        
-        // Update toolbar subtitle
-        updateToolbarSubtitle(uiState)
+        // Update system status in drawer header if needed
+        // This could be implemented when nav_header_md3 is enhanced
     }
 
-    private fun updateRecordingControls(uiState: MainUiState) {
-        // Record button
-        binding.recordButton.isEnabled = uiState.canStartRecording || uiState.canStopRecording
-        binding.recordButton.text = if (uiState.isRecording) "Stop Recording" else "Start Recording"
-        
-        // Recording status
-        binding.recordingStatus.text = when {
-            uiState.isRecording -> "Recording in progress..."
-            uiState.canStartRecording -> "Ready to record"
-            else -> "Cannot record - check connections"
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun updateDeviceStatusIndicators(uiState: MainUiState) {
-        // Update device status chips with connection status
-        updateStatusChip(binding.pcStatusChip, "PC", uiState.isPcConnected)
-        updateStatusChip(binding.shimmerStatusChip, "Shimmer", uiState.isShimmerConnected)
-        updateStatusChip(binding.thermalStatusChip, "Thermal", uiState.isThermalConnected)
-        updateStatusChip(binding.networkStatusChip, "Network", uiState.isNetworkConnected)
+    private fun showErrorDialog(title: String, message: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
-    private fun updateCameraStatusOverlay(uiState: MainUiState) {
-        // Update RGB camera status overlay
-        when {
-            uiState.isLoadingPermissions -> {
-                binding.cameraStatusOverlay.text = "Initializing camera..."
-                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            uiState.isInitialized && uiState.errorMessage == null -> {
-                // Camera is working - hide overlay to show live preview
-                binding.cameraStatusOverlay.text = ""
-                binding.cameraStatusOverlay.visibility = android.view.View.GONE
-            }
-            uiState.errorMessage?.contains("camera", ignoreCase = true) == true -> {
-                binding.cameraStatusOverlay.text = "Camera\nError"
-                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            !uiState.isInitialized -> {
-                binding.cameraStatusOverlay.text = "Camera\nDisconnected"
-                binding.cameraStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            else -> {
-                binding.cameraStatusOverlay.text = "Camera\n[Live]"
-                binding.cameraStatusOverlay.visibility = android.view.View.GONE
-            }
-        }
-
-        // Update thermal camera status overlay
-        when {
-            uiState.isLoadingPermissions -> {
-                binding.thermalStatusOverlay.text = "Initializing thermal camera..."
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            uiState.isThermalConnected && uiState.thermalPreviewAvailable -> {
-                // Thermal camera is working - hide overlay to show live preview
-                binding.thermalStatusOverlay.text = ""
-                binding.thermalStatusOverlay.visibility = android.view.View.GONE
-            }
-            uiState.errorMessage?.contains("thermal", ignoreCase = true) == true -> {
-                binding.thermalStatusOverlay.text = "Thermal\nError"
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            !uiState.isThermalConnected -> {
-                binding.thermalStatusOverlay.text = "Thermal\nDisconnected"
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-            else -> {
-                binding.thermalStatusOverlay.text = "Thermal\n[Live]"
-                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
-            }
-        }
-    }
-    
-    private fun updateStatusChip(chip: com.google.android.material.chip.Chip, deviceName: String, isConnected: Boolean) {
-        chip.text = "$deviceName: ${if (isConnected) "Connected" else "Disconnected"}"
-        chip.isChecked = isConnected
-    }
-
-    private fun updateStorageInfo(uiState: MainUiState) {
-        val usedPercentage = uiState.storageUsagePercentage
-        binding.storageProgress.progress = usedPercentage
-        binding.storageLabel.text = "${formatBytes(uiState.storageAvailable)} available (${uiState.sessionCount} sessions)"
-    }
-
-    private fun updateToolbarSubtitle(uiState: MainUiState) {
-        val connectedDevices = listOfNotNull(
-            if (uiState.isPcConnected) "PC" else null,
-            if (uiState.isShimmerConnected) "Shimmer" else null,
-            if (uiState.isThermalConnected) "Thermal" else null,
-            if (uiState.isGsrConnected) "GSR" else null
-        )
-        
-        binding.toolbar.subtitle = when {
-            uiState.isRecording -> "● Recording..."
-            connectedDevices.isNotEmpty() -> "${connectedDevices.size} devices connected"
-            else -> "No devices connected"
-        }
-    }
-
-    private fun formatDuration(durationMs: Long): String {
-        val seconds = durationMs / 1000
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        return when {
-            hours > 0 -> String.format("%d:%02d:%02d", hours, minutes % 60, seconds % 60)
-            else -> String.format("%d:%02d", minutes, seconds % 60)
-        }
-    }
-
-    private fun navigateToActivity(activityClass: Class<*>) {
-        try {
-            startActivity(Intent(this, activityClass))
-        } catch (e: Exception) {
-            showError("Navigation failed: ${e.message}")
-        }
-    }
-
-    private fun runDiagnostics() {
-        try {
-            val currentState = viewModel.uiState.value
-            val diagnosticInfo = buildString {
-                appendLine("=== SYSTEM DIAGNOSTICS ===")
-                appendLine("App Version: ${BuildConfig.VERSION_NAME}")
-                appendLine("PC Connected: ${currentState.isPcConnected}")
-                appendLine("Shimmer Connected: ${currentState.isShimmerConnected}")
-                appendLine("Thermal Connected: ${currentState.isThermalConnected}")
-                appendLine("GSR Connected: ${currentState.isGsrConnected}")
-                appendLine("Network Connected: ${currentState.isNetworkConnected}")
-                appendLine("Recording Active: ${currentState.isRecording}")
-                appendLine("System Status: ${currentState.systemHealthStatus}")
-                appendLine("Permissions OK: ${checkPermissions()}")
-                appendLine("Storage Available: ${formatBytes(currentState.storageAvailable)}")
-                appendLine("========================")
-            }
-            
-            showMessage("Diagnostics completed - check logs for details")
-            android.util.Log.i("DiagnosticsMD3", diagnosticInfo)
-            
-        } catch (e: Exception) {
-            showError("Diagnostics failed: ${e.message}")
-        }
-    }
-
-    private fun formatBytes(bytes: Long): String {
-        return when {
-            bytes >= 1024 * 1024 * 1024 -> String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0))
-            bytes >= 1024 * 1024 -> String.format("%.1f MB", bytes / (1024.0 * 1024.0))
-            bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
-            else -> "$bytes B"
-        }
-    }
-
-    private fun checkPermissions(): Boolean {
-        // Simple permission check - can be expanded
-        return checkSelfPermission(android.Manifest.permission.CAMERA) == 
-               android.content.pm.PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun showMessage(message: String) {
+    private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showError(error: String) {
-        Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
-        android.util.Log.e("MainActivityMD3", error)
     }
 }

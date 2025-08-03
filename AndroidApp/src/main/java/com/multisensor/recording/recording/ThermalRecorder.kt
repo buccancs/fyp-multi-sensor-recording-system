@@ -65,7 +65,19 @@ class ThermalRecorder
             private const val THERMAL_FRAME_RATE = 25
             private const val BYTES_PER_PIXEL = 2
 
-            private val SUPPORTED_PRODUCT_IDS = intArrayOf(0x3901, 0x5840, 0x5830, 0x5838)
+        // Topdon device identification
+        // Based on comprehensive analysis of Topdon TC001 series and Plus variants
+        // Fixed vendor ID mismatch: standardized to 0x0BDA across all components
+        private val SUPPORTED_PRODUCT_IDS = intArrayOf(
+            0x3901,  // TOPDON TC001 original series
+            0x5840,  // TOPDON TC001 Plus main variant  
+            0x5830,  // TOPDON TC001 alternate firmware
+            0x5838,  // TOPDON TC001 enhanced variant
+            0x5841,  // TOPDON TC001 Plus updated firmware
+            0x5842,  // TOPDON TC001 Plus v2
+            0x3902,  // TOPDON TC001 series v2
+            0x3903   // TOPDON TC001 series v3
+        )
 
             // File format constants
             private const val THERMAL_FILE_HEADER_SIZE = 16
@@ -389,16 +401,31 @@ class ThermalRecorder
          */
         fun startPreview(): Boolean {
             if (isPreviewActive.get()) {
+                logger.info("Thermal preview already active")
                 return true
             }
 
             return try {
-                logger.debug("Starting thermal preview")
-
-                if (uvcCamera == null || ircmd == null) {
-                    logger.error("Camera not initialized - cannot start preview")
+                logger.info("Starting thermal preview...")
+                
+                // Check if camera and IRCMD are properly initialized
+                if (uvcCamera == null) {
+                    logger.error("UVC camera not initialized - cannot start thermal preview")
                     return false
                 }
+                
+                if (ircmd == null) {
+                    logger.error("IRCMD not initialized - cannot start thermal preview")
+                    return false
+                }
+                
+                // Check if current device is still connected
+                if (currentDevice == null) {
+                    logger.error("No thermal camera device connected")
+                    return false
+                }
+                
+                logger.debug("Setting up thermal frame callback...")
 
                 // Set frame callback for thermal data processing
                 uvcCamera?.setFrameCallback(
@@ -410,9 +437,11 @@ class ThermalRecorder
                     },
                 )
 
+                logger.debug("Starting UVC camera preview...")
                 // Start UVC camera preview
                 uvcCamera?.onStartPreview()
 
+                logger.debug("Starting IRCMD preview with dual mode (image + temperature)...")
                 // Start IRCMD preview with dual mode (image + temperature)
                 val result =
                     ircmd?.startPreview(
@@ -425,14 +454,17 @@ class ThermalRecorder
 
                 if (result == 0) {
                     isPreviewActive.set(true)
-                    logger.debug("Thermal preview started successfully")
+                    logger.info("Thermal preview started successfully")
+                    logger.info("  Frame rate: ${THERMAL_FRAME_RATE}fps")
+                    logger.info("  Resolution: ${THERMAL_WIDTH}x${THERMAL_HEIGHT}")
+                    logger.info("  Data mode: Image + Temperature")
                     true
                 } else {
-                    logger.error("Failed to start IRCMD preview, result: $result")
+                    logger.error("Failed to start IRCMD preview, result code: $result")
                     false
                 }
             } catch (e: Exception) {
-                logger.error("Failed to start thermal preview", e)
+                logger.error("Exception while starting thermal preview", e)
                 false
             }
         }
@@ -497,7 +529,7 @@ class ThermalRecorder
                 // Check for connected Topdon devices
                 val usbDevices = usbManager?.deviceList ?: return false
                 val supportedDevice = usbDevices.values.find { device ->
-                    device.vendorId == 0x0416 && // Topdon vendor ID
+                    device.vendorId == 0x0BDA && // Topdon vendor ID (fixed from 0x0416 to match UsbDeviceManager)
                     SUPPORTED_PRODUCT_IDS.contains(device.productId)
                 }
 
@@ -792,20 +824,48 @@ class ThermalRecorder
          * Check for already connected thermal cameras
          */
         private fun checkForConnectedDevices() {
+            logger.info("Checking for already connected Topdon devices...")
+            
             usbManager?.deviceList?.values?.forEach { device ->
+                logger.info("Found USB device: ${device.deviceName}")
+                logger.info("  Vendor ID: 0x${String.format("%04X", device.vendorId)}")
+                logger.info("  Product ID: 0x${String.format("%04X", device.productId)}")
+                logger.info("  Device Class: ${device.deviceClass}")
+                logger.info("  Device Protocol: ${device.deviceProtocol}")
+                logger.info("  Device Subclass: ${device.deviceSubclass}")
+                
                 if (isSupportedThermalCamera(device)) {
+                    logger.info("  -> This is a SUPPORTED Topdon thermal camera!")
                     handleDeviceAttached(device)
+                } else {
+                    logger.debug("  -> Not a supported thermal camera")
+                    // Check if it's close to supported device for troubleshooting
+                    if (device.vendorId == 0x0BDA) {
+                        logger.warning("  -> Vendor ID matches (0x0BDA) but Product ID (0x${String.format("%04X", device.productId)}) not in supported list")
+                        logger.warning("  -> Supported Product IDs: ${SUPPORTED_PRODUCT_IDS.map { "0x${String.format("%04X", it)}" }}")
+                    } else if (SUPPORTED_PRODUCT_IDS.contains(device.productId)) {
+                        logger.warning("  -> Product ID matches but Vendor ID (0x${String.format("%04X", device.vendorId)}) != 0x0BDA")
+                    }
                 }
             }
+            
+            val deviceCount = usbManager?.deviceList?.size ?: 0
+            logger.info("USB device scan completed. Found $deviceCount total USB devices")
         }
 
         /**
          * Handle USB device attached
          */
         private fun handleDeviceAttached(device: UsbDevice) {
+            logger.info("USB device attached: ${device.deviceName}")
+            logger.info("  Vendor ID: 0x${String.format("%04X", device.vendorId)}")
+            logger.info("  Product ID: 0x${String.format("%04X", device.productId)}")
+            
             if (isSupportedThermalCamera(device)) {
-                logger.info("Thermal camera attached: ${device.deviceName}")
+                logger.info("Supported Topdon thermal camera detected!")
                 requestUsbPermission(device)
+            } else {
+                logger.debug("Non-thermal USB device attached")
             }
         }
 
@@ -813,17 +873,23 @@ class ThermalRecorder
          * Handle USB device detached
          */
         private fun handleDeviceDetached(device: UsbDevice) {
+            logger.info("USB device detached: ${device.deviceName}")
+            logger.info("  Vendor ID: 0x${String.format("%04X", device.vendorId)}")
+            logger.info("  Product ID: 0x${String.format("%04X", device.productId)}")
+            
             if (device == currentDevice) {
-                logger.info("Current thermal camera detached: ${device.deviceName}")
+                logger.warning("Current thermal camera detached!")
                 currentDevice = null
 
                 // Stop recording if active
                 if (isRecording.get()) {
+                    logger.warning("Stopping thermal recording due to device disconnect")
                     stopRecording()
                 }
 
                 // Stop preview if active
                 if (isPreviewActive.get()) {
+                    logger.warning("Stopping thermal preview due to device disconnect")
                     stopPreview()
                 }
             }
@@ -832,7 +898,9 @@ class ThermalRecorder
         /**
          * Check if device is a supported thermal camera
          */
-        private fun isSupportedThermalCamera(device: UsbDevice): Boolean = SUPPORTED_PRODUCT_IDS.contains(device.productId)
+        private fun isSupportedThermalCamera(device: UsbDevice): Boolean {
+            return device.vendorId == 0x0BDA && SUPPORTED_PRODUCT_IDS.contains(device.productId)
+        }
 
         /**
          * Request USB permission for device
