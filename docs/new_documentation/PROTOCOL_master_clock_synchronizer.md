@@ -812,4 +812,514 @@ Example:
 [2022-02-14 12:00:00.123] [INFO] [MasterClockSync] [Samsung_Galaxy_S21] - Device synchronized with quality 0.92
 ```
 
+---
+
+## Advanced Integration Patterns
+
+### Custom Device Integration
+
+**Device Adapter Interface:**
+```python
+class CustomDeviceAdapter:
+    """Base adapter for integrating custom devices with synchronization system."""
+    
+    def __init__(self, device_id: str, device_type: str):
+        self.device_id = device_id
+        self.device_type = device_type
+        self.last_sync_time = 0.0
+        self.sync_quality = 0.0
+    
+    def register_with_synchronizer(self, synchronizer: MasterClockSynchronizer):
+        """Register custom device with the synchronization system."""
+        sync_status = SyncStatus(
+            device_id=self.device_id,
+            device_type=self.device_type,
+            is_synchronized=False,
+            time_offset_ms=0.0,
+            last_sync_time=time.time(),
+            sync_quality=0.0,
+            recording_active=False,
+            frame_count=0
+        )
+        synchronizer.connected_devices[self.device_id] = sync_status
+        
+        # Add callback for sync events
+        synchronizer.add_sync_status_callback(self._on_sync_status_update)
+    
+    def _on_sync_status_update(self, device_status: Dict[str, SyncStatus]):
+        """Handle synchronization status updates."""
+        if self.device_id in device_status:
+            status = device_status[self.device_id]
+            self.sync_quality = status.sync_quality
+            self.last_sync_time = status.last_sync_time
+            
+            # Custom device-specific sync handling
+            self.handle_sync_update(status)
+    
+    def handle_sync_update(self, status: SyncStatus):
+        """Override in subclass for device-specific sync handling."""
+        pass
+    
+    def send_timestamp_update(self, synchronizer: MasterClockSynchronizer):
+        """Send timestamp update to synchronizer."""
+        timestamp_msg = JsonMessage(type="timestamp_update")
+        timestamp_msg.timestamp = time.time()
+        timestamp_msg.device_id = self.device_id
+        timestamp_msg.device_type = self.device_type
+        
+        # Send via appropriate communication channel
+        return synchronizer.pc_server.send_message(self.device_id, timestamp_msg)
+```
+
+**Example: Physiological Sensor Integration:**
+```python
+class ShimmerSensorAdapter(CustomDeviceAdapter):
+    """Adapter for Shimmer physiological sensors."""
+    
+    def __init__(self, device_id: str, serial_port: str):
+        super().__init__(device_id, "shimmer_sensor")
+        self.serial_port = serial_port
+        self.sensor_connection = None
+        self.recording_active = False
+    
+    def connect_sensor(self):
+        """Connect to Shimmer sensor via serial."""
+        try:
+            import serial
+            self.sensor_connection = serial.Serial(self.serial_port, 115200)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to connect to Shimmer sensor: {e}")
+            return False
+    
+    def handle_sync_update(self, status: SyncStatus):
+        """Handle sync updates for Shimmer sensor."""
+        if status.sync_quality > 0.8 and self.sensor_connection:
+            # Send timestamp calibration to sensor
+            calibration_command = f"TIMESTAMP:{status.last_sync_time}\n"
+            self.sensor_connection.write(calibration_command.encode())
+    
+    def start_recording(self, session_id: str):
+        """Start recording with synchronized timestamp."""
+        if self.sensor_connection and not self.recording_active:
+            start_command = f"START_RECORD:{session_id}:{time.time()}\n"
+            self.sensor_connection.write(start_command.encode())
+            self.recording_active = True
+    
+    def stop_recording(self):
+        """Stop recording."""
+        if self.sensor_connection and self.recording_active:
+            stop_command = f"STOP_RECORD:{time.time()}\n"
+            self.sensor_connection.write(stop_command.encode())
+            self.recording_active = False
+```
+
+### Advanced Callback Patterns
+
+**Synchronization Event Handler:**
+```python
+class SyncEventHandler:
+    """Advanced event handling for synchronization events."""
+    
+    def __init__(self):
+        self.event_history = []
+        self.quality_alerts = []
+        self.performance_metrics = {}
+    
+    def handle_device_connected(self, device_id: str, device_info: dict):
+        """Handle device connection events."""
+        event = {
+            'timestamp': time.time(),
+            'event_type': 'device_connected',
+            'device_id': device_id,
+            'device_info': device_info
+        }
+        self.event_history.append(event)
+        
+        # Initialize performance tracking for new device
+        self.performance_metrics[device_id] = {
+            'connection_time': time.time(),
+            'sync_attempts': 0,
+            'successful_syncs': 0,
+            'quality_history': []
+        }
+    
+    def handle_sync_quality_change(self, device_id: str, old_quality: float, new_quality: float):
+        """Handle significant sync quality changes."""
+        quality_change = abs(new_quality - old_quality)
+        
+        if quality_change > 0.2:  # Significant change threshold
+            alert = {
+                'timestamp': time.time(),
+                'device_id': device_id,
+                'old_quality': old_quality,
+                'new_quality': new_quality,
+                'change_magnitude': quality_change,
+                'alert_level': 'high' if quality_change > 0.4 else 'medium'
+            }
+            self.quality_alerts.append(alert)
+            
+            # Update performance metrics
+            if device_id in self.performance_metrics:
+                self.performance_metrics[device_id]['quality_history'].append({
+                    'timestamp': time.time(),
+                    'quality': new_quality,
+                    'change_from_previous': quality_change
+                })
+    
+    def generate_performance_report(self) -> dict:
+        """Generate comprehensive performance report."""
+        report = {
+            'total_devices': len(self.performance_metrics),
+            'total_events': len(self.event_history),
+            'quality_alerts': len(self.quality_alerts),
+            'device_performance': {}
+        }
+        
+        for device_id, metrics in self.performance_metrics.items():
+            quality_history = metrics['quality_history']
+            if quality_history:
+                avg_quality = np.mean([q['quality'] for q in quality_history])
+                quality_stability = 1.0 - np.std([q['quality'] for q in quality_history])
+            else:
+                avg_quality = 0.0
+                quality_stability = 0.0
+            
+            report['device_performance'][device_id] = {
+                'average_quality': avg_quality,
+                'quality_stability': quality_stability,
+                'sync_success_rate': (metrics['successful_syncs'] / 
+                                    max(metrics['sync_attempts'], 1)),
+                'uptime_hours': (time.time() - metrics['connection_time']) / 3600
+            }
+        
+        return report
+```
+
+### High-Availability Configuration
+
+**Redundant Synchronization Setup:**
+```python
+class RedundantSynchronizer:
+    """High-availability synchronizer with redundancy."""
+    
+    def __init__(self, primary_ports: dict, backup_ports: dict):
+        self.primary_sync = MasterClockSynchronizer(
+            ntp_port=primary_ports['ntp'],
+            pc_server_port=primary_ports['pc_server']
+        )
+        self.backup_sync = MasterClockSynchronizer(
+            ntp_port=backup_ports['ntp'],
+            pc_server_port=backup_ports['pc_server']
+        )
+        
+        self.active_synchronizer = self.primary_sync
+        self.failover_threshold = 0.5  # Quality threshold for failover
+        self.monitoring_active = False
+    
+    def start_with_redundancy(self):
+        """Start primary synchronizer with backup ready."""
+        if not self.primary_sync.start():
+            logger.warning("Primary synchronizer failed, starting backup")
+            if self.backup_sync.start():
+                self.active_synchronizer = self.backup_sync
+                return True
+            return False
+        
+        # Start monitoring for failover conditions
+        self.monitoring_active = True
+        threading.Thread(target=self._monitor_health, daemon=True).start()
+        return True
+    
+    def _monitor_health(self):
+        """Monitor synchronizer health and trigger failover if needed."""
+        while self.monitoring_active:
+            try:
+                # Check overall sync quality
+                devices = self.active_synchronizer.get_connected_devices()
+                if devices:
+                    avg_quality = np.mean([d.sync_quality for d in devices.values()])
+                    
+                    if avg_quality < self.failover_threshold:
+                        logger.warning(f"Quality degraded to {avg_quality:.2f}, initiating failover")
+                        self._initiate_failover()
+                
+                time.sleep(5.0)  # Check every 5 seconds
+                
+            except Exception as e:
+                logger.error(f"Health monitoring error: {e}")
+                time.sleep(1.0)
+    
+    def _initiate_failover(self):
+        """Switch to backup synchronizer."""
+        if self.active_synchronizer == self.primary_sync:
+            logger.info("Failing over to backup synchronizer")
+            
+            # Stop primary
+            self.primary_sync.stop()
+            
+            # Start backup
+            if self.backup_sync.start():
+                self.active_synchronizer = self.backup_sync
+                logger.info("Failover completed successfully")
+            else:
+                logger.error("Backup synchronizer failed to start")
+                # Attempt to restart primary
+                if self.primary_sync.start():
+                    logger.info("Primary synchronizer restarted")
+```
+
+### Performance Monitoring Integration
+
+**Metrics Collection System:**
+```python
+class SyncMetricsCollector:
+    """Collect and analyze synchronization performance metrics."""
+    
+    def __init__(self, synchronizer: MasterClockSynchronizer):
+        self.synchronizer = synchronizer
+        self.metrics_history = []
+        self.collection_interval = 1.0  # Collect metrics every second
+        self.is_collecting = False
+        
+        # Performance counters
+        self.counters = {
+            'sync_attempts': 0,
+            'successful_syncs': 0,
+            'failed_syncs': 0,
+            'quality_degradations': 0,
+            'device_reconnections': 0
+        }
+    
+    def start_collection(self):
+        """Start metrics collection."""
+        self.is_collecting = True
+        threading.Thread(target=self._collect_metrics, daemon=True).start()
+    
+    def stop_collection(self):
+        """Stop metrics collection."""
+        self.is_collecting = False
+    
+    def _collect_metrics(self):
+        """Continuous metrics collection loop."""
+        while self.is_collecting:
+            try:
+                current_metrics = self._gather_current_metrics()
+                self.metrics_history.append(current_metrics)
+                
+                # Keep only last hour of metrics (3600 samples)
+                if len(self.metrics_history) > 3600:
+                    self.metrics_history = self.metrics_history[-3600:]
+                
+                time.sleep(self.collection_interval)
+                
+            except Exception as e:
+                logger.error(f"Metrics collection error: {e}")
+                time.sleep(1.0)
+    
+    def _gather_current_metrics(self) -> dict:
+        """Gather current system metrics."""
+        devices = self.synchronizer.get_connected_devices()
+        sessions = self.synchronizer.get_active_sessions()
+        
+        return {
+            'timestamp': time.time(),
+            'device_count': len(devices),
+            'active_sessions': len(sessions),
+            'avg_sync_quality': np.mean([d.sync_quality for d in devices.values()]) if devices else 0.0,
+            'min_sync_quality': min([d.sync_quality for d in devices.values()]) if devices else 0.0,
+            'max_sync_quality': max([d.sync_quality for d in devices.values()]) if devices else 0.0,
+            'total_frame_count': sum([d.frame_count for d in devices.values()]),
+            'cpu_usage': self._get_cpu_usage(),
+            'memory_usage': self._get_memory_usage(),
+            'network_latency': self._measure_network_latency()
+        }
+    
+    def generate_performance_analysis(self, time_window_minutes: int = 60) -> dict:
+        """Generate performance analysis for specified time window."""
+        cutoff_time = time.time() - (time_window_minutes * 60)
+        recent_metrics = [m for m in self.metrics_history if m['timestamp'] > cutoff_time]
+        
+        if not recent_metrics:
+            return {'error': 'No metrics available for specified time window'}
+        
+        return {
+            'time_window_minutes': time_window_minutes,
+            'sample_count': len(recent_metrics),
+            'avg_device_count': np.mean([m['device_count'] for m in recent_metrics]),
+            'avg_sync_quality': np.mean([m['avg_sync_quality'] for m in recent_metrics]),
+            'quality_stability': 1.0 - np.std([m['avg_sync_quality'] for m in recent_metrics]),
+            'peak_frame_count': max([m['total_frame_count'] for m in recent_metrics]),
+            'avg_cpu_usage': np.mean([m['cpu_usage'] for m in recent_metrics]),
+            'avg_memory_usage': np.mean([m['memory_usage'] for m in recent_metrics]),
+            'avg_network_latency': np.mean([m['network_latency'] for m in recent_metrics]),
+            'performance_trend': self._calculate_performance_trend(recent_metrics)
+        }
+    
+    def _get_cpu_usage(self) -> float:
+        """Get current CPU usage percentage."""
+        try:
+            import psutil
+            return psutil.cpu_percent(interval=0.1)
+        except ImportError:
+            return 0.0
+    
+    def _get_memory_usage(self) -> float:
+        """Get current memory usage in MB."""
+        try:
+            import psutil
+            process = psutil.Process()
+            return process.memory_info().rss / 1024 / 1024  # Convert to MB
+        except ImportError:
+            return 0.0
+    
+    def _measure_network_latency(self) -> float:
+        """Measure current network latency."""
+        # Simplified latency measurement
+        start_time = time.time()
+        # Simulate network test (replace with actual network ping)
+        time.sleep(0.001)  # 1ms simulated latency
+        return (time.time() - start_time) * 1000  # Return in milliseconds
+    
+    def _calculate_performance_trend(self, metrics: list) -> str:
+        """Calculate performance trend over time."""
+        if len(metrics) < 10:
+            return "insufficient_data"
+        
+        quality_values = [m['avg_sync_quality'] for m in metrics]
+        
+        # Simple trend calculation using linear regression
+        x = np.arange(len(quality_values))
+        slope = np.polyfit(x, quality_values, 1)[0]
+        
+        if slope > 0.01:
+            return "improving"
+        elif slope < -0.01:
+            return "degrading"
+        else:
+            return "stable"
+```
+
+---
+
+## Extended Configuration Schema
+
+### Complete Configuration Reference
+
+```python
+COMPLETE_CONFIG_SCHEMA = {
+    "synchronization": {
+        "sync_tolerance_ms": {
+            "type": "float",
+            "default": 50.0,
+            "min": 5.0,
+            "max": 200.0,
+            "description": "Maximum allowed time difference for synchronization"
+        },
+        "sync_interval": {
+            "type": "float", 
+            "default": 5.0,
+            "min": 0.5,
+            "max": 30.0,
+            "description": "Interval between synchronization checks in seconds"
+        },
+        "quality_threshold": {
+            "type": "float",
+            "default": 0.8,
+            "min": 0.0,
+            "max": 1.0,
+            "description": "Minimum sync quality for recording"
+        }
+    },
+    "networking": {
+        "ntp_port": {
+            "type": "int",
+            "default": 8889,
+            "min": 1024,
+            "max": 65535,
+            "description": "Port for NTP time server"
+        },
+        "pc_server_port": {
+            "type": "int",
+            "default": 9000,
+            "min": 1024,
+            "max": 65535,
+            "description": "Port for Android device communication"
+        },
+        "connection_timeout": {
+            "type": "float",
+            "default": 10.0,
+            "min": 1.0,
+            "max": 60.0,
+            "description": "Timeout for device connections"
+        },
+        "max_retry_attempts": {
+            "type": "int",
+            "default": 3,
+            "min": 1,
+            "max": 10,
+            "description": "Maximum retry attempts for failed operations"
+        }
+    },
+    "performance": {
+        "thread_pool_size": {
+            "type": "int",
+            "default": 5,
+            "min": 2,
+            "max": 20,
+            "description": "Size of thread pool for concurrent operations"
+        },
+        "max_device_count": {
+            "type": "int",
+            "default": 10,
+            "min": 1,
+            "max": 50,
+            "description": "Maximum number of connected devices"
+        },
+        "enable_performance_monitoring": {
+            "type": "bool",
+            "default": True,
+            "description": "Enable performance monitoring and metrics collection"
+        }
+    },
+    "logging": {
+        "log_level": {
+            "type": "string",
+            "default": "INFO",
+            "options": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+            "description": "Logging level for synchronizer"
+        },
+        "enable_detailed_logging": {
+            "type": "bool",
+            "default": False,
+            "description": "Enable detailed logging for compliance/debugging"
+        },
+        "log_rotation_size_mb": {
+            "type": "int",
+            "default": 100,
+            "min": 10,
+            "max": 1000,
+            "description": "Log file rotation size in MB"
+        }
+    },
+    "security": {
+        "enable_device_authentication": {
+            "type": "bool",
+            "default": False,
+            "description": "Require device authentication for connections"
+        },
+        "allowed_device_list": {
+            "type": "list",
+            "default": [],
+            "description": "List of allowed device IDs (empty = allow all)"
+        },
+        "enable_encryption": {
+            "type": "bool",
+            "default": False,
+            "description": "Enable encryption for device communication"
+        }
+    }
+}
+```
+
 This protocol specification provides the complete technical contract for all interactions with the Master Clock Synchronizer component, ensuring consistent and reliable integration across the entire Bucika GSR system.

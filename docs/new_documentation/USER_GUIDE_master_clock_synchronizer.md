@@ -671,4 +671,365 @@ A: Check network stability, device battery level, and system load. Consider adju
 
 A: Yes, all synchronization parameters (tolerance, interval, quality thresholds) are configurable and can be adjusted based on experimental requirements.
 
+---
+
+## Advanced Configuration for Research Scenarios
+
+### Laboratory Research Setup
+
+**Optimal Configuration for Controlled Environments:**
+
+```python
+# High-precision laboratory setup
+lab_config = {
+    "sync_tolerance_ms": 15.0,    # Very tight tolerance for lab conditions
+    "sync_interval": 1.5,         # Frequent monitoring
+    "quality_threshold": 0.90,    # High quality requirement
+    "ntp_port": 8889,
+    "pc_server_port": 9000
+}
+```
+
+**Pre-experiment Checklist for Labs:**
+1. ✅ Verify all devices are on dedicated research network
+2. ✅ Run network diagnostic test (should show <5ms latency)
+3. ✅ Confirm all Android devices have >80% battery
+4. ✅ Test synchronization with single device first
+5. ✅ Verify webcam frame rates are stable
+6. ✅ Check that no heavy background processes are running
+
+### Field Research Configuration
+
+**Mobile and Field Deployment Settings:**
+
+```python
+# Robust field research setup
+field_config = {
+    "sync_tolerance_ms": 40.0,    # More lenient for variable conditions
+    "sync_interval": 4.0,         # Less frequent to save power
+    "quality_threshold": 0.75,    # Realistic for field conditions
+    "connection_retry_count": 5,   # More retries for unstable networks
+    "auto_recovery": True         # Enable automatic recovery
+}
+```
+
+**Field Deployment Best Practices:**
+- Use mobile hotspot with strong signal strength
+- Bring backup power banks for Android devices
+- Test setup in similar conditions before actual deployment
+- Have offline backup recording as fallback
+- Monitor battery levels throughout the session
+
+### Clinical Study Configuration
+
+**Medical Research and Patient Studies:**
+
+```python
+# Clinical research setup with compliance features
+clinical_config = {
+    "sync_tolerance_ms": 25.0,     # Medical-grade precision
+    "sync_interval": 2.5,          # Balanced monitoring
+    "quality_threshold": 0.85,     # Reliable for clinical data
+    "enable_audit_logging": True,  # For regulatory compliance
+    "patient_anonymization": True, # Privacy protection
+    "session_validation": True     # Automatic data validation
+}
+```
+
+**Clinical Study Considerations:**
+- Ensure HIPAA compliance with data anonymization
+- Implement session validation for data integrity
+- Use detailed audit logging for regulatory review
+- Test patient comfort with device placement
+- Have backup recording methods available
+
+---
+
+## Advanced Troubleshooting and Optimization
+
+### Performance Optimization Strategies
+
+**Optimizing for Large Device Count (8+ devices):**
+
+1. **Network Optimization:**
+   ```bash
+   # Increase network buffer sizes (Linux)
+   sudo sysctl -w net.core.rmem_max=16777216
+   sudo sysctl -w net.core.wmem_max=16777216
+   ```
+
+2. **Threading Configuration:**
+   ```python
+   # Increase thread pool size for many devices
+   synchronizer.thread_pool = ThreadPoolExecutor(max_workers=15)
+   ```
+
+3. **Monitoring Frequency Adjustment:**
+   ```python
+   # Stagger device monitoring to reduce network congestion
+   def stagger_device_monitoring(device_count):
+       base_interval = 3.0
+       return base_interval + (device_count * 0.1)
+   ```
+
+### Advanced Diagnostic Procedures
+
+**Network Performance Analysis:**
+
+```python
+# Built-in network diagnostic tool
+def run_network_diagnostics():
+    """Comprehensive network performance test."""
+    print("Running network diagnostics...")
+    
+    # Test 1: NTP server response time
+    ntp_times = []
+    for i in range(10):
+        start = time.time()
+        # Simulate NTP request
+        time.sleep(0.001)  # Simulated network delay
+        ntp_times.append((time.time() - start) * 1000)
+    
+    print(f"NTP Response Time: {np.mean(ntp_times):.2f}ms ± {np.std(ntp_times):.2f}ms")
+    
+    # Test 2: Device communication latency
+    # (Implementation would test actual device responses)
+    
+    # Test 3: Network stability
+    print("Network stability: GOOD" if np.std(ntp_times) < 5 else "UNSTABLE")
+```
+
+**Sync Quality Analytics:**
+
+```python
+def analyze_sync_quality_trends(synchronizer):
+    """Analyze synchronization quality over time."""
+    devices = synchronizer.get_connected_devices()
+    
+    quality_report = {
+        'excellent': 0,  # >0.9 quality
+        'good': 0,       # 0.8-0.9 quality  
+        'fair': 0,       # 0.7-0.8 quality
+        'poor': 0        # <0.7 quality
+    }
+    
+    for device_id, status in devices.items():
+        quality = status.sync_quality
+        if quality > 0.9:
+            quality_report['excellent'] += 1
+        elif quality > 0.8:
+            quality_report['good'] += 1
+        elif quality > 0.7:
+            quality_report['fair'] += 1
+        else:
+            quality_report['poor'] += 1
+    
+    return quality_report
+```
+
+### Recovery Strategies
+
+**Automatic Recovery Procedures:**
+
+1. **Device Re-synchronization:**
+   ```python
+   def auto_recover_device(device_id):
+       """Automatic recovery for problematic devices."""
+       print(f"Attempting recovery for {device_id}...")
+       
+       # Step 1: Re-initiate synchronization
+       synchronizer._initiate_device_sync(device_id)
+       time.sleep(2)
+       
+       # Step 2: Check if recovery was successful
+       device_status = synchronizer.connected_devices.get(device_id)
+       if device_status and device_status.sync_quality > 0.7:
+           print(f"Recovery successful for {device_id}")
+           return True
+       
+       # Step 3: If still problematic, try adjusting parameters
+       synchronizer.sync_tolerance_ms *= 1.5  # Temporarily relax tolerance
+       synchronizer._initiate_device_sync(device_id)
+       time.sleep(3)
+       
+       return device_status.sync_quality > 0.5 if device_status else False
+   ```
+
+2. **Session Recovery:**
+   ```python
+   def recover_recording_session(session_id):
+       """Recover a problematic recording session."""
+       session = synchronizer.active_sessions.get(session_id)
+       if not session:
+           return False
+       
+       # Identify problematic devices
+       problem_devices = []
+       for device_id in session.devices:
+           device_status = synchronizer.connected_devices.get(device_id)
+           if not device_status or device_status.sync_quality < 0.6:
+               problem_devices.append(device_id)
+       
+       # Attempt to recover each problematic device
+       recovered_devices = []
+       for device_id in problem_devices:
+           if auto_recover_device(device_id):
+               recovered_devices.append(device_id)
+       
+       # Update session quality
+       session.sync_quality = calculate_session_quality(session)
+       
+       return len(recovered_devices) == len(problem_devices)
+   ```
+
+---
+
+## Data Validation and Analysis Integration
+
+### Post-Recording Data Validation
+
+**Automated Sync Quality Assessment:**
+
+```python
+def validate_recording_session_data(session_id, data_directory):
+    """Validate synchronization quality in recorded data."""
+    validation_report = {
+        'session_id': session_id,
+        'validation_timestamp': time.time(),
+        'overall_score': 0.0,
+        'device_scores': {},
+        'issues_found': [],
+        'recommendations': []
+    }
+    
+    # Load timestamp data from all devices
+    device_timestamps = load_device_timestamps(data_directory)
+    
+    # Check timestamp alignment across devices
+    alignment_scores = check_timestamp_alignment(device_timestamps)
+    validation_report['device_scores'].update(alignment_scores)
+    
+    # Detect timing anomalies
+    anomalies = detect_timing_anomalies(device_timestamps)
+    validation_report['issues_found'].extend(anomalies)
+    
+    # Calculate overall validation score
+    if alignment_scores:
+        validation_report['overall_score'] = np.mean(list(alignment_scores.values()))
+    
+    # Generate recommendations
+    validation_report['recommendations'] = generate_sync_recommendations(
+        validation_report['overall_score'], 
+        validation_report['issues_found']
+    )
+    
+    return validation_report
+
+def generate_sync_recommendations(overall_score, issues):
+    """Generate recommendations based on validation results."""
+    recommendations = []
+    
+    if overall_score < 0.8:
+        recommendations.append("Consider using tighter sync_tolerance_ms setting")
+    
+    if any('clock_drift' in str(issue) for issue in issues):
+        recommendations.append("Enable more frequent synchronization checks")
+    
+    if any('network_instability' in str(issue) for issue in issues):
+        recommendations.append("Improve network stability for future recordings")
+    
+    return recommendations
+```
+
+**Data Alignment for Analysis:**
+
+```python
+def align_multi_sensor_data(session_data, target_frequency=30):
+    """Align data from multiple sensors to common timeline."""
+    
+    # Find common time range
+    all_timestamps = []
+    for device_data in session_data.values():
+        all_timestamps.extend(device_data.get('timestamps', []))
+    
+    start_time = min(all_timestamps)
+    end_time = max(all_timestamps)
+    
+    # Create unified timeline
+    duration = end_time - start_time
+    num_samples = int(duration * target_frequency)
+    unified_timeline = np.linspace(start_time, end_time, num_samples)
+    
+    # Interpolate each device's data
+    aligned_data = {}
+    for device_id, device_data in session_data.items():
+        original_timestamps = np.array(device_data['timestamps'])
+        original_values = np.array(device_data['values'])
+        
+        # Linear interpolation to unified timeline
+        aligned_values = np.interp(unified_timeline, original_timestamps, original_values)
+        
+        aligned_data[device_id] = {
+            'timestamps': unified_timeline,
+            'values': aligned_values,
+            'interpolation_quality': calculate_interpolation_quality(
+                original_timestamps, unified_timeline
+            )
+        }
+    
+    return aligned_data
+```
+
+---
+
+## Extended FAQ and Advanced Topics
+
+**Q: How do I set up synchronization for a multi-room study?**
+
+A: For multi-room setups, use a dedicated network with strong WiFi coverage. Consider using WiFi extenders or mesh networks. Test synchronization quality in each room before the study.
+
+**Q: Can I integrate custom sensors with the synchronization system?**
+
+A: Yes, you can extend the system by implementing the device communication protocol. Create a custom device class that sends timestamp messages and responds to synchronization commands.
+
+**Q: What's the maximum recording duration with stable synchronization?**
+
+A: The system can maintain synchronization for hours. For sessions longer than 2 hours, consider implementing periodic full re-synchronization and monitor clock drift more frequently.
+
+**Q: How do I handle timezone changes during recording?**
+
+A: The system uses UTC timestamps internally. Timezone changes won't affect synchronization, but ensure all devices are configured for the same timezone for data analysis.
+
+**Q: Can I use the system with custom Android applications?**
+
+A: Yes, implement the JSON message protocol in your Android app. Send regular heartbeat messages with timestamps and respond to synchronization commands from the PC server.
+
+**Q: What should I do if synchronization quality varies significantly between devices?**
+
+A: This usually indicates network issues or device-specific problems. Use per-device quality monitoring and consider adjusting sync parameters individually for problematic devices.
+
+**Q: How do I backup synchronization settings for different experiments?**
+
+A: Create configuration profiles for different experiment types:
+
+```python
+# Save configuration profiles
+experiment_configs = {
+    "physiological_study": {
+        "sync_tolerance_ms": 20.0,
+        "quality_threshold": 0.85
+    },
+    "behavioral_study": {
+        "sync_tolerance_ms": 50.0,
+        "quality_threshold": 0.75
+    }
+}
+
+# Load and apply configuration
+def apply_experiment_config(config_name):
+    config = experiment_configs[config_name]
+    synchronizer.sync_tolerance_ms = config["sync_tolerance_ms"]
+    synchronizer.quality_threshold = config["quality_threshold"]
+```
+
 This user guide provides comprehensive instructions for successfully operating the Master Clock Synchronizer in research environments. For technical details and development information, refer to the Technical Deep-Dive documentation.

@@ -114,6 +114,11 @@ The documentation is organized into comprehensive categories addressing differen
 **Audience**: Developers, System Engineers  
 **Purpose**: Core timing system for precise synchronization across all devices
 
+**Extended Documentation**:
+- [Advanced Configuration & Extensions](ADVANCED_master_clock_synchronizer.md) - Multi-environment deployment, custom device integration, security patterns
+- [Performance Benchmarking Guide](BENCHMARKING_master_clock_synchronizer.md) - Comprehensive performance analysis, optimization strategies, real-world benchmarks
+- [Troubleshooting & Diagnostics](TROUBLESHOOTING_master_clock_synchronizer.md) - Issue resolution, diagnostic tools, recovery procedures
+
 **Key Contents**:
 - High-precision timing algorithms implementation
 - Clock drift compensation and detection mechanisms
