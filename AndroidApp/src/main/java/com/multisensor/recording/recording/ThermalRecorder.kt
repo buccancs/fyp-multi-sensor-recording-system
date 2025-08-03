@@ -806,15 +806,15 @@ class ThermalRecorder
                     addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
                 }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val flags =
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        Context.RECEIVER_NOT_EXPORTED
-                    } else {
-                        0
-                    }
-                context.registerReceiver(usbPermissionReceiver, filter, flags)
+            // For API 33+ (Android 13), RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED is required
+            // Since this is an internal receiver for USB permission handling, use RECEIVER_NOT_EXPORTED
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(usbPermissionReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // API 26+ supports flag parameter
+                context.registerReceiver(usbPermissionReceiver, filter, 0)
             } else {
+                // API < 26 doesn't support flag parameter
                 @Suppress("UnspecifiedRegisterReceiverFlag")
                 context.registerReceiver(usbPermissionReceiver, filter)
             }
