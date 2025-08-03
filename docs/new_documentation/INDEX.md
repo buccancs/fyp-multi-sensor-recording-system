@@ -110,6 +110,22 @@ The documentation is organized into comprehensive categories addressing differen
 **Audience**: Distributed Systems Engineers  
 **Purpose**: Device coordination and temporal synchronization
 
+### [Master Clock Synchronizer](README_master_clock_synchronizer.md)
+**Audience**: Developers, System Engineers  
+**Purpose**: Core timing system for precise synchronization across all devices
+
+**Extended Documentation**:
+- [Advanced Configuration & Extensions](ADVANCED_master_clock_synchronizer.md) - Multi-environment deployment, custom device integration, security patterns
+- [Performance Benchmarking Guide](BENCHMARKING_master_clock_synchronizer.md) - Comprehensive performance analysis, optimization strategies, real-world benchmarks
+- [Troubleshooting & Diagnostics](TROUBLESHOOTING_master_clock_synchronizer.md) - Issue resolution, diagnostic tools, recovery procedures
+
+**Key Contents**:
+- High-precision timing algorithms implementation
+- Clock drift compensation and detection mechanisms
+- NTP integration architecture and network time synchronization
+- Synchronization quality monitoring with real-time metrics
+- PC master clock authority and device coordination protocols
+
 ### [Networking Protocol](README_networking_protocol.md)
 **Audience**: Network Engineers, Protocol Developers  
 **Purpose**: Communication protocol design and implementation
@@ -118,9 +134,21 @@ The documentation is organized into comprehensive categories addressing differen
 **Audience**: Developers, Data Engineers  
 **Purpose**: Session lifecycle and data organization
 
-### [UI Architecture](README_ui_architecture.md)
-**Audience**: UI/UX Developers, Frontend Engineers  
-**Purpose**: User interface design and interaction patterns
+### [Unified UI Architecture](UNIFIED_UI_ARCHITECTURE.md) 🆕
+**Audience**: UI/UX Developers, Frontend Engineers, System Architects  
+**Purpose**: Comprehensive UI architecture covering PC, Web, and Android platforms
+
+**Key Features**:
+- Unified cross-platform design principles and patterns
+- Platform-specific implementation details for Android, Python Desktop, and Web
+- State management and synchronization across all platforms
+- Cross-platform communication protocols and integration patterns
+- Performance optimization and security considerations
+- Comprehensive testing strategies and troubleshooting guides
+
+### [UI Architecture (Android-focused)](README_ui_architecture.md)
+**Audience**: Android Developers  
+**Purpose**: Detailed Android-specific UI architecture and patterns
 
 ### [Testing and QA Framework](README_testing_qa_framework.md)
 **Audience**: QA Engineers, Test Automation Specialists  
@@ -161,6 +189,7 @@ The documentation is organized into comprehensive categories addressing differen
 
 #### System Protocols
 - [Multi-Device Synchronization Protocol](PROTOCOL_Multi_Device_Synchronization.md)
+- [Master Clock Synchronizer Protocol](PROTOCOL_master_clock_synchronizer.md)
 - [Networking Protocol Specification](PROTOCOL_networking_protocol.md)
 - [Session Management Protocol](PROTOCOL_session_management.md)
 - [UI State Management Protocol](PROTOCOL_ui_state_management.md)
@@ -188,6 +217,7 @@ The documentation is organized into comprehensive categories addressing differen
 - [Shimmer3 GSR+ Guide](USER_GUIDE_shimmer3_gsr_plus.md)
 - [Python Desktop Controller Guide](USER_GUIDE_python_desktop_controller.md)
 - [Multi-Device Synchronization Guide](USER_GUIDE_Multi_Device_Synchronization.md)
+- [Master Clock Synchronizer Guide](USER_GUIDE_master_clock_synchronizer.md)
 - [Networking Protocol Guide](USER_GUIDE_networking_protocol.md)
 - [Session Management Guide](USER_GUIDE_session_management.md)
 - [UI Navigation Guide](USER_GUIDE_ui_navigation.md)
