@@ -601,6 +601,35 @@ class CalibrationManager:
             print(f"[ERROR] Exception during calibration workflow: {e}")
             return results
 
+    # Backward compatibility methods for tests
+    @property
+    def pattern_size(self):
+        """Backward compatibility property for pattern size."""
+        return self.chessboard_size
+
+    def detect_pattern(self, image, pattern_type='chessboard'):
+        """
+        Backward compatibility method for pattern detection.
+        
+        Args:
+            image: Input image
+            pattern_type: Type of pattern to detect
+            
+        Returns:
+            tuple: (found, corners) where found is bool and corners is array
+        """
+        return self.detect_calibration_pattern(image, pattern_type)
+
+    def save_calibration(self, device_id, filename):
+        """
+        Backward compatibility method for saving calibration.
+        
+        Args:
+            device_id: Device identifier (unused in this implementation)
+            filename: Output filename
+        """
+        return self.save_calibration_data(filename)
+
 
 def create_calibration_pattern_points(pattern_size: Tuple[int, int], square_size: float) -> np.ndarray:
     """

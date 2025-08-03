@@ -659,6 +659,62 @@ class CalibrationManager:
             "is_capturing": self.is_capturing,
         }
 
+    # Backward compatibility methods for tests
+    @property
+    def pattern_size(self):
+        """Backward compatibility property for pattern size."""
+        return self.chessboard_size
+
+    def detect_pattern(self, image, pattern_type='chessboard'):
+        """
+        Backward compatibility method for pattern detection.
+        
+        Args:
+            image: Input image
+            pattern_type: Type of pattern to detect
+            
+        Returns:
+            tuple: (found, corners) where found is bool and corners is array
+        """
+        if pattern_type == 'chessboard':
+            success, corners = self.processor.detect_chessboard_corners(
+                image, self.chessboard_size
+            )
+            return success, corners
+        elif pattern_type == 'circles':
+            success, corners = self.processor.detect_circles_grid(
+                image, self.chessboard_size
+            )
+            return success, corners
+        else:
+            return False, None
+
+    def save_calibration(self, device_id, filename):
+        """
+        Backward compatibility method for saving calibration.
+        
+        Args:
+            device_id: Device identifier
+            filename: Output filename
+        """
+        result = self.calibration_results.get(device_id)
+        if result:
+            # Save the calibration result to the specified file
+            import json
+            data = {
+                'camera_matrix': result.camera_matrix.tolist(),
+                'distortion_coefficients': result.distortion_coefficients.tolist(),
+                'rms_error': result.rms_error,
+                'image_size': result.image_size
+            }
+            if result.homography_matrix is not None:
+                data['homography_matrix'] = result.homography_matrix.tolist()
+            
+            with open(filename, 'w') as f:
+                json.dump(data, f, indent=2)
+            return True
+        return False
+
 
 if __name__ == "__main__":
     # Test calibration manager
