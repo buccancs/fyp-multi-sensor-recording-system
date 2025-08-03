@@ -374,40 +374,40 @@ class MainActivity : AppCompatActivity() {
     private fun updateCameraStatusOverlay(uiState: MainUiState) {
         // Update RGB camera status overlay for both dual and single view
         val rgbStatusText = when {
-            uiState.isCameraInitialized -> {
-                if (uiState.isCameraRecording) "Recording..." else "Ready"
+            uiState.isCameraConnected -> {
+                if (uiState.isRecording) "Recording..." else "Ready"
             }
-            uiState.isCameraInitializing -> "Initializing..."
+            uiState.isLoadingPermissions -> "Initializing..."
             else -> "Camera Error"
         }
         
         binding.cameraStatusOverlay.text = rgbStatusText
-        binding.cameraStatusOverlay.visibility = if (uiState.isCameraInitialized) android.view.View.GONE else android.view.View.VISIBLE
+        binding.cameraStatusOverlay.visibility = if (uiState.isCameraConnected) android.view.View.GONE else android.view.View.VISIBLE
         
         // Update fullscreen RGB status overlay
         try {
             binding.cameraStatusOverlayFullscreen.text = rgbStatusText
-            binding.cameraStatusOverlayFullscreen.visibility = if (uiState.isCameraInitialized) android.view.View.GONE else android.view.View.VISIBLE
+            binding.cameraStatusOverlayFullscreen.visibility = if (uiState.isCameraConnected) android.view.View.GONE else android.view.View.VISIBLE
         } catch (e: Exception) {
             // Ignore if fullscreen view not inflated yet
         }
         
         // Update thermal camera status overlay for both dual and single view
         val thermalStatusText = when {
-            uiState.isThermalInitialized -> {
-                if (uiState.isThermalRecording) "Recording..." else "Ready"
+            uiState.isThermalConnected -> {
+                if (uiState.isRecording) "Recording..." else "Ready"
             }
-            uiState.isThermalInitializing -> "Initializing..."
+            uiState.isLoadingPermissions -> "Initializing..."
             else -> "Thermal Camera Error"
         }
         
         binding.thermalStatusOverlay.text = thermalStatusText
-        binding.thermalStatusOverlay.visibility = if (uiState.isThermalInitialized) android.view.View.GONE else android.view.View.VISIBLE
+        binding.thermalStatusOverlay.visibility = if (uiState.isThermalConnected) android.view.View.GONE else android.view.View.VISIBLE
         
         // Update fullscreen thermal status overlay
         try {
             binding.thermalStatusOverlayFullscreen.text = thermalStatusText
-            binding.thermalStatusOverlayFullscreen.visibility = if (uiState.isThermalInitialized) android.view.View.GONE else android.view.View.VISIBLE
+            binding.thermalStatusOverlayFullscreen.visibility = if (uiState.isThermalConnected) android.view.View.GONE else android.view.View.VISIBLE
         } catch (e: Exception) {
             // Ignore if fullscreen view not inflated yet
         }

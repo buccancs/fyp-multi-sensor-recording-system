@@ -1440,8 +1440,8 @@ class MainViewModel
                         
                         updateUiState { currentState ->
                             currentState.copy(
-                                isCameraInitialized = cameraInitialized,
-                                isCameraInitializing = false
+                                isCameraConnected = cameraInitialized,
+                                isLoadingPermissions = false
                             )
                         }
                         
@@ -1464,9 +1464,8 @@ class MainViewModel
                         
                         updateUiState { currentState ->
                             currentState.copy(
-                                isThermalInitialized = thermalInitialized,
-                                isThermalInitializing = false,
-                                isThermalConnected = thermalInitialized
+                                isThermalConnected = thermalInitialized,
+                                isLoadingPermissions = false
                             )
                         }
                         
