@@ -169,14 +169,13 @@ data class MainUiState(
      * Overall system health status for dashboard display
      */
     val systemHealthStatus: SystemHealthStatus
-        get() = when {
-            !isInitialized -> SystemHealthStatus.INITIALIZING
-            errorMessage != null -> SystemHealthStatus.ERROR
-            isRecording -> SystemHealthStatus.RECORDING
-            isPcConnected && (isShimmerConnected || isThermalConnected) && isCameraConnected -> SystemHealthStatus.READY
-            isPcConnected && isCameraConnected -> SystemHealthStatus.PARTIAL_CONNECTION
-            else -> SystemHealthStatus.DISCONNECTED
-        }
+        get() = SystemHealthStatus(
+            pcConnection = if (isPcConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            shimmerConnection = if (isShimmerConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            thermalCamera = if (isThermalConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            networkConnection = if (isNetworkConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED,
+            rgbCamera = if (isCameraConnected) SystemHealthStatus.HealthStatus.CONNECTED else SystemHealthStatus.HealthStatus.DISCONNECTED
+        )
     
     /**
      * Storage usage percentage for progress bar

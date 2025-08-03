@@ -1615,7 +1615,6 @@ class MainViewModel
                 emptyList()
             }
         }
-    }
     
     // Fragment support methods
     fun pauseRecording() {
@@ -1647,17 +1646,6 @@ class MainViewModel
                 // Implementation will be added when needed
             } catch (e: Exception) {
                 logger.error("Error scanning devices", e)
-            }
-        }
-    }
-    
-    fun refreshSystemStatus() {
-        viewModelScope.launch {
-            try {
-                logger.info("Refreshing system status...")
-                // Implementation will be added when needed
-            } catch (e: Exception) {
-                logger.error("Error refreshing system status", e)
             }
         }
     }
