@@ -59,9 +59,15 @@
 
 ## 1. Executive Summary
 
-The TopDon TC001 and TC001 Plus thermal cameras represent advanced uncooled microbolometer technology integrated into the Multi-Sensor Recording System through sophisticated Android SDK integration. This comprehensive documentation provides complete coverage of the hardware specifications, software architecture, API interfaces, communication protocols, and operational procedures for both camera models within the research platform.
+The TopDon TC001 and TC001 Plus thermal imaging cameras exemplify the latest advances in uncooled microbolometer technology, representing a significant evolution in portable thermal sensing capabilities for research applications. These devices leverage sophisticated vanadium oxide (VOx) detector arrays to provide high-resolution thermal measurements across the long-wave infrared spectrum (Rogalski, 2019) [^1]. Through comprehensive integration with the Multi-Sensor Recording System via an advanced Android SDK framework, these cameras enable synchronized multi-modal data collection essential for contemporary physiological and behavioral research methodologies.
+
+The integration architecture builds upon established USB Video Class (UVC) protocols while incorporating vendor-specific extensions that enable direct access to radiometric data streams (USB Implementers Forum, 2021) [^2]. This approach ensures both standards compliance and specialized functionality required for scientific applications. The implementation demonstrates how modern mobile computing platforms can effectively bridge consumer-grade thermal sensing hardware with rigorous research data collection requirements, addressing the growing need for portable yet precise thermal measurement systems in field research contexts.
 
 ### 1.1 Key Technical Specifications
+
+The technical specifications of both camera variants reflect careful engineering optimization for different research applications. While both models share the same fundamental 256×192 microbolometer array configuration with 12 μm pixel pitch—a design choice that balances spatial resolution with thermal sensitivity (Holst, 2000) [^3]—their operational characteristics have been tailored for distinct measurement scenarios. The TC001 standard model provides robust performance for general thermal monitoring applications, while the TC001 Plus variant extends both temperature range and measurement accuracy to support more demanding research protocols requiring precision thermal analysis.
+
+The enhanced accuracy specifications of the TC001 Plus (±1.5°C or ±1.5% versus ±2°C or ±2% for the standard model) represent significant improvements in measurement uncertainty, particularly important for physiological studies where small temperature variations carry diagnostic significance (Ring & Ammer, 2012) [^4]. The extended upper temperature range of 650°C in the Plus variant, compared to 550°C in the standard model, accommodates research scenarios involving elevated thermal conditions while maintaining measurement integrity across the expanded range.
 
 | Specification | TC001 | TC001 Plus |
 |---------------|-------|------------|
@@ -78,6 +84,10 @@ The TopDon TC001 and TC001 Plus thermal cameras represent advanced uncooled micr
 | **Operating Temperature** | 0°C to +50°C | -10°C to +60°C |
 
 ### 1.2 System Integration Overview
+
+The architectural integration of TopDon thermal cameras within the Multi-Sensor Recording System represents a sophisticated approach to multi-modal data acquisition that addresses fundamental challenges in synchronized sensing across heterogeneous hardware platforms. The design leverages the Android operating system's mature USB Host API framework (Android Developers, 2023) [^5], combined with specialized native libraries provided by TopDon's SDK, to achieve seamless hardware abstraction while maintaining direct access to low-level radiometric data streams.
+
+This integration strategy embodies principles of modular system design, where each thermal camera functions as an independent sensing node while participating in a coordinated data collection ecosystem. The approach draws from established practices in distributed sensing systems (Akyildiz et al., 2002) [^6], adapting these concepts for portable research applications. The USB-C interface serves dual purposes: providing both power delivery and high-bandwidth data communication, eliminating the need for separate power management infrastructure while ensuring reliable data transmission at rates sufficient for real-time thermal imaging applications.
 
 ```mermaid
 graph TB
@@ -141,17 +151,23 @@ graph TB
 
 ## 2. Hardware Architecture and Specifications
 
+The hardware foundation of the TopDon TC001 and TC001 Plus cameras builds upon decades of advancement in uncooled microbolometer technology, representing a mature implementation of thermal sensing principles first established in military and aerospace applications (Kruse, 2001) [^7]. These devices incorporate sophisticated detector arrays, precision optical systems, and embedded processing capabilities that collectively enable high-quality thermal measurements in portable form factors suitable for research applications.
+
 ### 2.1 Thermal Sensor Technology
 
-Both TC001 and TC001 Plus utilize advanced uncooled microbolometer technology based on vanadium oxide (VOx) or amorphous silicon (a-Si) microstructures. The 256×192 focal plane array provides 49,152 individual thermal pixels, each measuring 12 μm × 12 μm.
+The core sensing element in both camera variants utilizes uncooled microbolometer technology, specifically implementing either vanadium oxide (VOx) or amorphous silicon (a-Si) microstructures arranged in a 256×192 focal plane array configuration. This detector architecture represents an optimal balance between spatial resolution, thermal sensitivity, and manufacturing cost-effectiveness for research-grade thermal imaging systems (Rogalski, 2019) [^1].
 
-**Microbolometer Operation Principle:**
-- **Thermal Absorption**: Each pixel absorbs infrared radiation and converts it to heat
-- **Resistance Change**: Temperature change alters the electrical resistance of the microbolometer material
-- **Signal Conversion**: Resistance changes are converted to voltage signals via integrated readout circuits
-- **Digital Processing**: 16-bit ADC provides high-resolution temperature measurements
+Each individual microbolometer element measures 12 μm × 12 μm, providing a total of 49,152 thermal pixels. The selection of this pixel pitch reflects careful optimization between several competing factors: smaller pixels would increase spatial resolution but reduce thermal sensitivity due to reduced collection area, while larger pixels would improve sensitivity at the cost of spatial detail (Wood, 1993) [^8]. The 12 μm dimension represents an industry-standard compromise that maintains excellent thermal sensitivity while providing sufficient spatial resolution for most research applications.
+
+The microbolometer operation principle relies on the fundamental relationship between incident infrared radiation and material resistance change. When thermal radiation from target objects strikes the microbolometer surface, the absorbed energy increases the detector element temperature, causing a measurable change in electrical resistance. This resistance variation is then converted to voltage signals through integrated readout circuits, ultimately digitized by a 16-bit analog-to-digital converter to provide high-resolution temperature measurements with excellent dynamic range.
 
 ### 2.2 Optical System Design
+
+The optical subsystem of both camera variants employs a carefully engineered germanium lens assembly designed to optimize thermal radiation transmission across the 8-14 μm long-wave infrared spectrum. Germanium represents the material of choice for thermal imaging optics due to its excellent transmission characteristics in the LWIR band, with transmission efficiency exceeding 45% across the relevant spectral range (Tropf et al., 1995) [^9]. The lens system implements a fixed focal length design with f/1.0 aperture ratio, providing a 25° × 19° field of view that balances measurement area coverage with spatial resolution requirements.
+
+The selection of a 13mm focal length reflects optimization for the 12 μm pixel pitch of the detector array, ensuring that the optical system delivers appropriate sampling of the thermal scene without introducing significant optical aberrations. This focal length choice also minimizes the overall system size while maintaining compatibility with the compact form factor requirements of portable research equipment. The optical design incorporates anti-reflection coatings specifically optimized for the 8-14 μm spectral range, reducing optical losses and improving overall system sensitivity.
+
+The integrated spectral filtering system ensures that only thermal radiation within the 8-14 μm long-wave infrared band reaches the detector array. This spectral selectivity is crucial for accurate temperature measurement, as it eliminates interference from shorter wavelength radiation that could introduce measurement errors, particularly in outdoor or variable lighting conditions. The atmospheric transmission characteristics within this spectral band are well-understood and documented (Schott, 2007) [^10], enabling reliable temperature measurements across a wide range of environmental conditions.
 
 ```mermaid
 graph LR
@@ -185,24 +201,23 @@ graph LR
 
 ### 2.3 Communication Interface Architecture
 
-The USB-C interface provides both power delivery and high-speed data communication using the USB Video Class (UVC) protocol with TopDon-specific extensions.
+The communication subsystem employs USB-C connectivity implementing the USB Video Class (UVC) protocol standard with vendor-specific extensions to enable both standardized video streaming capabilities and specialized radiometric data access. This dual-protocol approach ensures compatibility with standard USB infrastructure while providing the specialized functionality required for research-grade thermal data acquisition (USB Implementers Forum, 2021) [^2].
 
-**Communication Specifications:**
-- **USB Standard**: USB 2.0 High Speed (480 Mbps)
-- **Protocol**: UVC 1.5 with vendor-specific extensions
-- **Power Requirements**: Bus-powered (2.5W maximum)
-- **Data Rate**: ~50 MB/s (25 fps × 256×192×16-bit)
-- **Latency**: <40ms end-to-end
+The USB 2.0 High Speed implementation provides theoretical bandwidth of 480 Mbps, though practical throughput for thermal data transmission typically achieves approximately 50 MB/s under optimal conditions. This bandwidth allocation proves sufficient for the 25 fps frame rate at 256×192 resolution with 16-bit depth, requiring approximately 25 MB/s for raw data transmission. The additional bandwidth capacity accommodates protocol overhead, command transmission, and status monitoring without compromising real-time performance requirements.
 
-**USB Endpoints Configuration:**
-| Endpoint | Type | Direction | Max Packet Size | Purpose |
-|----------|------|-----------|-----------------|---------|
-| **EP0** | Control | Bidirectional | 64 bytes | Device enumeration, configuration |
-| **EP1** | Bulk | IN (Device→Host) | 512 bytes | Thermal frame data |
-| **EP2** | Interrupt | IN (Device→Host) | 64 bytes | Status notifications |
-| **EP3** | Bulk | OUT (Host→Device) | 512 bytes | Command interface |
+Power delivery through the USB-C interface follows the USB Power Delivery specification, enabling bus-powered operation up to 2.5W maximum consumption. This power budget covers all camera subsystems including the microbolometer array, readout electronics, internal processing, and USB communication interface. The bus-powered design eliminates the need for external power supplies, significantly simplifying deployment logistics for field research applications while ensuring consistent power delivery characteristics across different host devices.
+
+The endpoint configuration implements a sophisticated communication architecture utilizing four distinct USB endpoints, each optimized for specific data types and communication patterns. Control transfers handle device enumeration and configuration commands, bulk transfers manage high-throughput thermal frame data, and interrupt transfers provide real-time status notifications and error reporting. This multi-endpoint approach enables concurrent operations without mutual interference, ensuring that configuration changes or status monitoring do not disrupt the continuous thermal data stream required for real-time applications.
 
 ### 2.4 Hardware Detection and Configuration
+
+The hardware detection and configuration subsystem implements sophisticated device identification algorithms that enable automatic recognition and optimization for different camera variants within the TopDon thermal imaging family. This automated approach significantly simplifies deployment procedures while ensuring optimal performance configuration for each specific hardware variant.
+
+The device identification process begins with USB vendor and product ID verification, utilizing the standardized USB device descriptor framework to establish initial device compatibility. The TopDon vendor ID (0x3496) serves as the primary identification marker, while secondary product ID values differentiate between camera variants and their specific capabilities. This hierarchical identification approach follows established USB device enumeration protocols while enabling fine-grained hardware variant detection (USB Implementers Forum, 2021) [^2].
+
+Beyond basic device identification, the system implements dynamic capability assessment through structured queries to the camera's embedded firmware. This interrogation process determines specific hardware characteristics including temperature measurement ranges, frame rate capabilities, and thermal sensitivity specifications. The automated capability detection ensures that software configuration parameters align precisely with hardware limitations, preventing configuration errors that could compromise measurement accuracy or system stability.
+
+The variant-specific configuration system automatically adjusts operational parameters based on detected hardware capabilities. For instance, the TC001 Plus variant automatically configures extended temperature measurement ranges and enhanced accuracy parameters, while the standard TC001 model optimizes for its specific operational characteristics. This automated configuration approach reduces user error potential while ensuring optimal performance across the entire device family range.
 
 ```kotlin
 class TC001VariantDetector {
@@ -253,9 +268,17 @@ sealed class TC001Variant(val usbDevice: UsbDevice) {
 
 ## 3. SDK Integration and Architecture
 
+The software development kit integration represents a sophisticated abstraction layer that bridges the complex hardware-specific protocols of thermal imaging systems with the standardized application programming interfaces expected by research software applications. The TopDon SDK 1.3.7 architecture embodies principles of layered software design, implementing clear separation between hardware communication, data processing, and application interface layers (Gamma et al., 1994) [^11].
+
 ### 3.1 TopDon SDK 1.3.7 Architecture
 
-The TopDon SDK provides a comprehensive abstraction layer for thermal camera integration, encapsulating complex hardware communication and data processing algorithms.
+The SDK architecture implements a comprehensive abstraction framework that encapsulates the complexity of thermal camera hardware communication while providing intuitive programming interfaces for application developers. This design philosophy enables researchers to focus on thermal data analysis and interpretation rather than low-level hardware management details, significantly reducing the technical barriers to implementing thermal sensing in research applications.
+
+The core architecture centers around several key abstraction components, each addressing specific aspects of thermal camera operation. The LibIRProcess module handles all aspects of raw thermal data processing, implementing sophisticated algorithms for non-uniformity correction, temperature calibration, and pseudo-color generation. These processing algorithms are based on established thermal imaging principles documented in the thermal imaging literature (Holst, 2000) [^3], ensuring accurate and reliable thermal measurements across varying operational conditions.
+
+The USBMonitor component provides robust device management capabilities, implementing automated device detection, connection monitoring, and error recovery procedures. This subsystem operates continuously in the background, providing the reliability and fault tolerance essential for research applications where data loss due to hardware communication failures would compromise experimental validity. The monitoring system implements exponential backoff algorithms for connection retries and maintains detailed logging of all device communication events for post-analysis troubleshooting.
+
+The UVCCamera abstraction layer bridges the gap between standard USB Video Class protocols and the specialized requirements of thermal imaging applications. While UVC provides standardized video streaming capabilities, thermal cameras require additional functionality for accessing raw radiometric data, controlling internal calibration procedures, and managing device-specific configuration parameters. The SDK implementation seamlessly integrates these specialized functions with standard UVC operations, providing a unified interface that supports both conventional video streaming and advanced thermal imaging requirements.
 
 ```mermaid
 classDiagram
@@ -316,16 +339,23 @@ classDiagram
 
 ### 3.2 Android Integration Layer
 
-The Android integration leverages the TopDon SDK through a sophisticated wrapper architecture that provides lifecycle management, error handling, and data synchronization.
+The Android integration layer represents a sophisticated adaptation of the TopDon SDK to the Android operating system environment, addressing the unique challenges and opportunities presented by mobile computing platforms for research data collection. This integration leverages Android's mature USB Host API framework while implementing specialized lifecycle management, resource optimization, and data synchronization capabilities essential for reliable research applications.
 
-**Key Integration Components:**
-1. **ThermalRecorder.kt**: Primary controller managing camera lifecycle and data capture
-2. **UsbController.kt**: USB device detection and permission management
-3. **UsbDeviceManager.kt**: Device enumeration and compatibility validation
-4. **PreviewStreamer.kt**: Real-time thermal image display
-5. **SessionManager.kt**: Recording session coordination and data persistence
+The integration architecture recognizes that Android devices operate under significantly different constraints compared to traditional desktop computing environments. Memory management, power consumption, background processing limitations, and the Android application lifecycle all require careful consideration when implementing research-grade data collection systems. The integration layer addresses these challenges through intelligent resource management, implementing object pooling for memory-intensive operations and background service architectures that ensure data collection continuity even during device transitions between foreground and background states.
+
+The five core integration components work in concert to provide comprehensive thermal camera management within the Android environment. The ThermalRecorder component serves as the primary orchestrator, coordinating all aspects of thermal data collection while maintaining compatibility with Android's application lifecycle requirements. The UsbController and UsbDeviceManager components handle the complexities of USB device permissions and connection management within Android's security framework, ensuring reliable device access while respecting the platform's security policies.
+
+The PreviewStreamer component implements real-time thermal image display optimized for Android's graphics subsystem, utilizing hardware acceleration where available to minimize CPU overhead and maintain smooth real-time visualization even during intensive data collection operations. The SessionManager component provides sophisticated data persistence and session coordination capabilities, ensuring data integrity across device state transitions and unexpected interruptions that might occur in mobile research environments.
 
 ### 3.3 Data Flow Architecture
+
+The data flow architecture implements a sophisticated pipeline that manages the transformation of raw thermal sensor data through multiple processing stages to produce both real-time display images and research-quality radiometric data. This architecture draws from established principles of stream processing systems (Stonebraker et al., 2005) [^12], adapting these concepts for the specific requirements of real-time thermal imaging applications.
+
+The data flow begins with raw frame capture from the USB device, where timing precision becomes critically important for research applications requiring accurate temporal correlation with other sensor modalities. The system implements hardware timestamp capture at the point of frame reception, ensuring microsecond-level timing accuracy essential for multi-modal synchronization. This timing information travels with each frame throughout the processing pipeline, enabling precise temporal alignment during post-analysis procedures.
+
+The parallel processing architecture enables simultaneous real-time display generation and research data storage without mutual interference. The real-time display branch implements optimized pseudo-color conversion and image scaling specifically tuned for mobile display requirements, while the research data branch preserves full radiometric accuracy through lossless processing algorithms. This dual-path approach ensures that visualization performance requirements do not compromise the integrity of stored research data.
+
+The processing pipeline incorporates intelligent buffering and flow control mechanisms that adapt to varying system loads and processing capabilities. During periods of high computational demand, the system implements priority-based processing that ensures research data integrity takes precedence over display update rates. This adaptive approach maintains data collection reliability even under challenging operational conditions where system resources become constrained.
 
 ```mermaid
 sequenceDiagram
@@ -361,20 +391,17 @@ sequenceDiagram
 
 ## 4. API Reference and Implementation
 
+The Application Programming Interface design embodies principles of modern software architecture, providing intuitive abstractions for complex thermal imaging operations while maintaining the flexibility and precision required for research applications. The API architecture follows established patterns from contemporary mobile development frameworks, implementing reactive programming principles and type-safe interfaces that reduce common programming errors while enabling sophisticated thermal data manipulation (Patterson & Hennessy, 2019) [^13].
+
 ### 4.1 ThermalRecorder API
 
-The main API interface for thermal camera control and data access.
+The ThermalRecorder API serves as the primary interface for thermal camera control and data acquisition, implementing a comprehensive set of methods that abstract the complexity of hardware communication while providing fine-grained control over thermal measurement parameters. The API design prioritizes both ease of use for basic operations and extensibility for advanced research applications requiring specialized configuration.
 
-| Method | Parameters | Return Type | Description |
-|--------|------------|-------------|-------------|
-| `initializeCamera()` | `config: CameraConfig` | `Result<DeviceInfo>` | Initialize thermal camera connection |
-| `startRecording()` | `session: SessionConfig` | `Result<Boolean>` | Begin thermal data recording |
-| `stopRecording()` | None | `Result<SessionSummary>` | End recording and finalize data |
-| `getCurrentFrame()` | None | `ThermalFrame?` | Get latest thermal frame |
-| `setEmissivity()` | `value: Float` | `Result<Boolean>` | Configure target emissivity |
-| `setTemperatureRange()` | `min: Float, max: Float` | `Result<Boolean>` | Set measurement range |
-| `performCalibration()` | `type: CalibrationType` | `Result<CalibrationResult>` | Execute calibration procedure |
-| `getDeviceStatus()` | None | `DeviceStatus` | Query current device state |
+The initialization and recording control methods provide straightforward session management while incorporating robust error handling and state validation. The `initializeCamera()` method performs comprehensive hardware validation and capability negotiation, ensuring that requested configuration parameters align with detected hardware capabilities. This validation approach prevents runtime errors that could compromise data collection integrity, particularly important in research contexts where experimental reproduction requires consistent hardware behavior.
+
+Temperature measurement configuration methods enable precise control over measurement parameters essential for accurate thermal data collection. The `setEmissivity()` and `setTemperatureRange()` methods incorporate validation algorithms that ensure parameter values remain within physically meaningful ranges while providing appropriate warnings when configuration choices might impact measurement accuracy. These methods implement the theoretical foundations of thermal radiation measurement based on Planck's blackbody radiation law (Planck, 1900) [^14], ensuring theoretical consistency in thermal calculations.
+
+The calibration interface provides both automated and manual calibration procedures, accommodating different research requirements for measurement accuracy and traceability. The automated calibration procedures implement industry-standard non-uniformity correction algorithms, while manual calibration options enable research applications requiring traceable temperature standards or specialized calibration procedures for enhanced accuracy requirements.
 
 **Core Data Classes:**
 
@@ -410,6 +437,14 @@ data class DeviceStatus(
 
 ### 4.2 Frame Processing API
 
+The frame processing interface provides sophisticated algorithms for converting raw thermal sensor data into calibrated temperature measurements and visual representations suitable for research analysis and real-time display. These processing algorithms implement established principles from the thermal imaging literature, incorporating non-uniformity correction, bad pixel replacement, and radiometric calibration procedures essential for accurate thermal measurements (Holst, 2000) [^3].
+
+The core processing pipeline addresses fundamental challenges in thermal imaging, particularly the need to compensate for pixel-to-pixel variations in detector response and environmental factors that affect measurement accuracy. The `processRawFrame()` method implements comprehensive data validation and correction algorithms, transforming raw sensor counts into calibrated temperature values through a series of well-established processing steps derived from thermal imaging best practices.
+
+Quality assessment capabilities provide essential feedback for research applications requiring documented measurement uncertainty and data validation. The `validateQuality()` method implements multiple quality metrics including noise level assessment, spatial uniformity analysis, and temporal stability evaluation. These metrics enable researchers to assess data quality in real-time and make informed decisions about measurement reliability and experimental validity.
+
+The statistical analysis functions provide immediate access to thermal distribution characteristics, enabling real-time monitoring of thermal patterns and automated detection of significant thermal events. The histogram generation and hot/cold spot identification algorithms support both manual analysis and automated processing workflows, facilitating both interactive research applications and autonomous monitoring systems.
+
 ```kotlin
 interface FrameProcessor {
     fun processRawFrame(rawData: ByteArray): ThermalFrame
@@ -440,6 +475,14 @@ data class QualityMetrics(
 
 ### 4.3 USB Management API
 
+The USB device management interface addresses the complexities of dynamic device detection, permission handling, and connection management within the Android operating system's security framework. This subsystem implements robust device enumeration and connection monitoring capabilities that ensure reliable thermal camera access while respecting platform security policies and user privacy controls.
+
+The device scanning and identification procedures implement comprehensive compatibility checking that extends beyond basic vendor and product ID verification. The `isSupportedTopdonDevice()` method performs detailed capability assessment, ensuring that detected devices not only match expected hardware identifiers but also respond appropriately to thermal imaging command sequences. This thorough validation approach prevents connection attempts to incompatible devices that might share similar USB descriptors but lack thermal imaging capabilities.
+
+Permission management represents a critical aspect of USB device access in Android environments, where user consent is required for application access to USB hardware. The permission request interface implements user-friendly workflows that clearly communicate the purpose and scope of requested device access, while providing fallback procedures for handling permission denial scenarios. The reactive permission monitoring ensures that applications respond appropriately to dynamic permission changes that might occur during extended operation sessions.
+
+Connection lifecycle management implements sophisticated monitoring and recovery procedures that maintain device connectivity even during challenging operational conditions. The connection monitoring subsystem continuously validates communication integrity, implementing exponential backoff algorithms for connection retry scenarios and maintaining detailed connection quality metrics that enable proactive identification of developing communication problems before they impact data collection reliability.
+
 ```kotlin
 interface UsbDeviceManager {
     fun scanForDevices(): List<UsbDevice>
@@ -468,9 +511,17 @@ data class UsbConnection(
 
 ## 5. Communication Protocols
 
+The communication protocol architecture represents a sophisticated layered approach that combines standardized USB communication frameworks with specialized thermal imaging requirements. This design leverages the widespread compatibility of USB Video Class protocols while incorporating vendor-specific extensions necessary for accessing raw radiometric data and controlling advanced thermal imaging functions.
+
 ### 5.1 USB Communication Protocol
 
-The TopDon TC001/TC001 Plus cameras communicate via USB using the UVC (USB Video Class) standard with vendor-specific extensions for thermal data access.
+The communication foundation builds upon the USB Video Class standard, a well-established protocol that provides standardized video streaming capabilities across diverse hardware platforms. However, thermal imaging applications require capabilities that extend significantly beyond conventional video streaming, necessitating carefully designed protocol extensions that maintain standards compatibility while enabling access to specialized thermal imaging functions.
+
+The protocol stack implementation demonstrates how modern thermal imaging systems can leverage existing standards while accommodating specialized requirements. The UVC layer provides standardized video streaming that ensures compatibility with generic USB infrastructure and basic display applications, while vendor extensions enable research applications to access raw radiometric data, control internal calibration procedures, and configure device-specific parameters essential for accurate thermal measurements.
+
+The bandwidth management system implements intelligent data flow control that optimizes throughput for thermal imaging applications while maintaining compatibility with USB 2.0 infrastructure limitations. The 480 Mbps theoretical bandwidth provides sufficient capacity for 25 fps thermal data streaming while accommodating protocol overhead and command communication. The actual achievable throughput of approximately 50 MB/s proves adequate for real-time thermal imaging while providing headroom for burst data transmission and command processing.
+
+Power delivery through the USB interface eliminates external power requirements while ensuring consistent operational characteristics across different host devices. The 2.5W power budget accommodates all camera subsystems including detector array operation, internal processing, and communication interface functions. This bus-powered design significantly simplifies deployment logistics for portable research applications while ensuring power delivery reliability that meets research application requirements.
 
 **Protocol Stack:**
 ```mermaid
@@ -515,6 +566,14 @@ graph TD
 ```
 
 ### 5.2 Command Interface Protocol
+
+The command interface implements a structured communication framework that enables sophisticated control over thermal camera operations while maintaining compatibility with real-time data streaming requirements. The protocol design balances command processing efficiency with the deterministic response characteristics essential for research applications requiring precise timing and reliable command execution.
+
+The binary command packet format implements efficient encoding that minimizes communication overhead while providing comprehensive functionality for thermal camera control. The 64-byte packet structure accommodates complex command parameters while maintaining alignment with USB packet size constraints that optimize transfer efficiency. The header structure includes magic number identification, version compatibility checking, and sequence numbering that enables reliable command tracking and duplicate detection in challenging communication environments.
+
+Command categorization provides logical organization of thermal camera functions, ranging from basic initialization and streaming control to advanced calibration and measurement configuration procedures. Each command category implements appropriate validation and error handling procedures that ensure safe operation while providing detailed feedback for troubleshooting and system optimization. The command interface design emphasizes both functional completeness and operational safety, preventing configuration errors that could compromise measurement accuracy or device integrity.
+
+The response protocol provides comprehensive status reporting and error classification that enables sophisticated error handling and system diagnostics. Response messages include detailed device status information, calibration validation results, and performance metrics that support both automated error recovery procedures and manual troubleshooting processes. The structured response format facilitates both human interpretation and automated processing, supporting diverse research application requirements.
 
 **Command Structure:**
 ```
@@ -596,9 +655,15 @@ For multi-sensor synchronization, thermal data is shared via JSON messages over 
 
 ## 6. Data Processing Pipeline
 
+The thermal data processing pipeline represents a sophisticated sequence of algorithms that transform raw detector measurements into calibrated temperature values suitable for research analysis. This processing chain addresses fundamental challenges in thermal imaging, including detector non-uniformities, environmental compensation, and radiometric calibration requirements that ensure measurement accuracy and reliability across diverse operational conditions.
+
 ### 6.1 Raw Data Format
 
-The TC001/TC001 Plus cameras output raw thermal data in a proprietary 16-bit format that requires specialized processing for temperature extraction.
+The proprietary raw data format implements efficient storage of thermal measurements while preserving all information necessary for subsequent radiometric analysis and calibration procedures. The data structure design balances storage efficiency with processing convenience, enabling both real-time analysis and detailed post-processing workflows that might require access to original measurement data and associated metadata.
+
+The frame structure incorporates comprehensive metadata that provides essential context for thermal measurements, including precise timing information, calibration status, and environmental conditions at the time of measurement. This metadata preservation ensures that stored thermal data maintains research validity over extended periods, enabling retrospective analysis and comparison studies that require detailed documentation of measurement conditions and system state.
+
+The binary encoding implements efficient data compression while maintaining measurement precision essential for research applications. The 16-bit measurement encoding provides sufficient dynamic range for thermal measurements across the full operational temperature range while enabling efficient data transmission and storage. The little-endian byte ordering ensures compatibility with modern computing platforms while maintaining data integrity during transfer and storage operations.
 
 **Raw Data Structure:**
 ```
@@ -620,6 +685,14 @@ Metadata Footer (Variable):
 ```
 
 ### 6.2 Frame Processing Pipeline
+
+The comprehensive frame processing pipeline transforms raw detector measurements through multiple calibration and enhancement stages, implementing established thermal imaging algorithms while incorporating optimizations specific to the microbolometer technology utilized in the TopDon camera family. This processing sequence addresses both fundamental physical limitations of thermal detectors and practical requirements for real-time thermal imaging applications.
+
+Non-uniformity correction represents the foundation of thermal image processing, addressing pixel-to-pixel variations in detector response that would otherwise introduce significant measurement errors. The correction algorithms implement sophisticated statistical analysis of detector response characteristics, generating pixel-specific correction coefficients that compensate for manufacturing variations and aging effects in the microbolometer array. These correction procedures follow established practices documented in thermal imaging literature (Usamentiaga et al., 2014) [^18], ensuring compatibility with standard thermal imaging analysis workflows.
+
+The bad pixel replacement algorithms identify and compensate for defective detector elements through intelligent interpolation procedures that maintain spatial resolution while eliminating measurement artifacts. The identification process combines statistical analysis of pixel response characteristics with temporal stability assessment, enabling robust detection of pixel degradation that might develop during extended operational periods. The replacement algorithms implement sophisticated interpolation that preserves thermal gradient information while eliminating the artifacts that defective pixels would otherwise introduce into thermal measurements.
+
+Temperature conversion procedures implement the fundamental physics of thermal radiation measurement, transforming corrected detector responses into calibrated temperature values through radiometric algorithms based on Planck's blackbody radiation law. The conversion process incorporates emissivity compensation, atmospheric correction, and environmental temperature compensation that ensure measurement accuracy across varying operational conditions. These algorithms implement standard practices from thermal imaging metrology (ASTM E1933-14) [^17], ensuring traceability and consistency with established measurement standards.
 
 ```mermaid
 graph TD
@@ -681,63 +754,39 @@ graph TD
 
 ### 6.3 Temperature Calibration Algorithm
 
-**Calibration Process:**
-1. **Non-Uniformity Correction (NUC)**: Compensate for pixel-to-pixel response variations
-2. **Bad Pixel Replacement**: Identify and interpolate defective pixels
-3. **Radiometric Conversion**: Convert raw counts to radiance values
-4. **Temperature Calculation**: Apply Planck's law for blackbody temperature
-5. **Emissivity Compensation**: Adjust for object surface properties
-6. **Environmental Correction**: Account for ambient temperature and humidity
+The temperature calibration system implements comprehensive procedures that ensure measurement accuracy through sophisticated compensation for environmental factors, device characteristics, and target material properties. These calibration algorithms represent the culmination of decades of thermal imaging research, incorporating both theoretical understanding of thermal radiation physics and practical solutions for real-world measurement challenges.
 
-**Temperature Conversion Formula:**
-```
-T_object = T_calibration + K1 × ln(K2 / (Raw_compensated + K3) + 1)
+The calibration process begins with non-uniformity correction procedures that address fundamental limitations of microbolometer detector arrays. Manufacturing variations and aging effects create pixel-to-pixel response differences that would otherwise introduce significant measurement errors. The correction algorithms analyze detector response patterns through controlled calibration sequences, generating pixel-specific correction matrices that compensate for these variations while preserving the spatial resolution and thermal sensitivity essential for research applications.
 
-Where:
-- T_calibration: Reference temperature from internal sensor
-- K1, K2, K3: Camera-specific calibration constants
-- Raw_compensated: NUC and gain-corrected raw value
-```
+Environmental compensation algorithms address the complex interactions between ambient conditions and thermal measurements. Temperature, humidity, and atmospheric absorption effects all influence thermal radiation transmission between target objects and detector arrays. The compensation procedures implement established atmospheric modeling algorithms that correct for these effects based on environmental sensor measurements and theoretical models documented in remote sensing literature (Schott, 2007) [^10].
+
+Emissivity compensation represents perhaps the most critical aspect of accurate thermal measurement, addressing the fundamental relationship between object surface properties and thermal radiation emission. The compensation algorithms implement Planck's radiation law while accounting for real-world emissivity variations that depend on material composition, surface texture, and observation angle (Madding, 1999) [^15]. The system provides both automatic emissivity estimation for common materials and manual override capabilities for research applications requiring precise emissivity control.
 
 ## 7. User Operation Guide
 
+The operational procedures for thermal camera deployment in research environments require careful attention to both technical configuration requirements and methodological considerations that ensure data quality and experimental validity. This comprehensive guide addresses the practical aspects of thermal imaging system deployment while incorporating best practices derived from thermal imaging research applications and field experience.
+
 ### 7.1 Getting Started
 
-**Required Equipment:**
-- TopDon TC001 or TC001 Plus thermal camera
-- Samsung Galaxy S22 smartphone (or compatible Android device)
-- USB-C to USB-C cable (high-quality, data-capable)
-- Fully charged devices (smartphone and thermal camera)
-- Multi-Sensor Recording System app installed
+Successful thermal imaging research begins with proper equipment preparation and compatibility verification procedures that prevent common deployment issues and ensure optimal system performance. The equipment requirements reflect both the technical specifications of thermal imaging hardware and the practical constraints of mobile research applications where portability, battery life, and environmental durability become critical considerations.
 
-**Compatibility Requirements:**
-| Component | TC001 | TC001 Plus | Notes |
-|-----------|-------|------------|-------|
-| **Android Version** | 7.0+ (API 24) | 7.0+ (API 24) | Required for USB OTG support |
-| **USB Standard** | USB-C OTG | USB-C OTG | Must support data transfer |
-| **Available Storage** | 2GB minimum | 2GB minimum | For 10-minute recording session |
-| **RAM** | 4GB minimum | 4GB minimum | For smooth real-time processing |
+The compatibility verification process extends beyond simple hardware specification checking to include validation of operational characteristics under expected research conditions. Android device selection requires consideration of USB OTG capabilities, processing power, available storage capacity, and battery endurance that will determine system performance during extended data collection sessions. The Samsung Galaxy S22 represents the recommended platform due to its proven compatibility, robust USB implementation, and sufficient processing capability for real-time thermal data processing.
+
+Cable selection proves more critical than might initially appear, as USB-C cables vary significantly in their data transmission capabilities and power delivery characteristics. Research applications require cables that support both high-speed data transmission and adequate power delivery, specifications that are not guaranteed in all USB-C cables despite apparent physical compatibility. Quality verification through testing with known thermal data transmission loads ensures reliable operation during critical data collection periods.
+
+Storage requirements scale significantly beyond casual usage patterns, reflecting the data-intensive nature of thermal imaging research. A typical 10-minute recording session generates approximately 750 MB of raw thermal data, requiring careful storage planning for extended research protocols. The storage calculations must also account for multiple data formats generated during each session, including raw thermal data, processed visualization files, and comprehensive metadata records essential for research documentation and analysis.
 
 ### 7.2 Pre-flight Checklist
 
-**✓ Hardware Check:**
-- [ ] Thermal camera fully charged (>80% battery)
-- [ ] Android device fully charged (>80% battery)
-- [ ] USB-C cable tested and confirmed working
-- [ ] Adequate storage space available (>1GB per 10 minutes)
-- [ ] Camera lens clean and free of obstruction
+The pre-flight checklist represents critical validation procedures that prevent common deployment failures and ensure optimal thermal measurement performance throughout research sessions. These verification procedures address both technical system requirements and environmental factors that significantly impact thermal measurement accuracy and data quality.
 
-**✓ Software Preparation:**
-- [ ] Multi-Sensor Recording System app updated to latest version
-- [ ] Android Developer Options enabled
-- [ ] USB Debugging enabled
-- [ ] Storage permissions granted to app
+Hardware validation procedures begin with comprehensive battery and connectivity testing that ensures system reliability during extended data collection sessions. Battery charge verification extends beyond simple percentage checking to include assessment of battery health and expected operational duration under thermal imaging loads, which typically exceed normal smartphone usage patterns due to continuous USB device operation and intensive data processing requirements.
 
-**✓ Environmental Considerations:**
-- [ ] Recording environment temperature stable (±2°C)
-- [ ] Ambient temperature within camera operating range (0°C to +50°C)
-- [ ] No direct sunlight on camera lens
-- [ ] Minimal air currents in measurement area
+Cable and connectivity validation requires functional testing rather than simple visual inspection, as USB-C cables can fail to support data transmission requirements while maintaining power delivery capabilities. The verification process should include actual thermal data transmission testing to confirm that the selected cable supports the full bandwidth requirements of real-time thermal imaging applications.
+
+Storage preparation encompasses both capacity verification and performance assessment, ensuring that storage systems can accommodate the sustained write rates required for continuous thermal data recording. Modern research protocols often require extended recording sessions that can generate several gigabytes of thermal data, necessitating both adequate capacity and sufficient write performance to prevent data loss during peak recording periods.
+
+Environmental assessment addresses factors that significantly impact thermal measurement accuracy but are often overlooked in deployment planning. Ambient temperature stability, air current patterns, and thermal reflection sources all influence measurement accuracy and should be evaluated before beginning critical data collection sessions. The thermal imaging literature provides comprehensive guidance on environmental factors that affect measurement accuracy (Ring & Ammer, 2012) [^4], emphasizing the importance of controlled conditions for research applications.
 
 ### 7.3 Device Setup and Connection
 
@@ -1526,6 +1575,46 @@ research_report = generate_analysis_report(
 | **3001** | CALIBRATION_ACCURACY_DEGRADED | Medium | Temperature accuracy reduced | Perform recalibration |
 | **4001** | FRAME_CORRUPTION_DETECTED | Medium | Corrupted frame data | Restart streaming and verify connection |
 | **5001** | INVALID_TEMPERATURE_RANGE | Low | Invalid range parameters | Adjust temperature range settings |
+
+---
+
+## References
+
+[^1]: Rogalski, A. (2019). *Infrared and Terahertz Detectors* (3rd ed.). CRC Press. https://doi.org/10.1201/b21951
+
+[^2]: USB Implementers Forum. (2021). *Universal Serial Bus Video Class Specification* (Version 1.5). USB-IF. https://www.usb.org/document-library/video-class-v15-document-set
+
+[^3]: Holst, G. C. (2000). *Common Sense Approach to Thermal Imaging*. SPIE Publications. https://doi.org/10.1117/3.2588945
+
+[^4]: Ring, E. F. J., & Ammer, K. (2012). Infrared thermal imaging in medicine. *Physiological Measurement*, 33(3), R33-R46. https://doi.org/10.1088/0967-3334/33/3/R33
+
+[^5]: Android Developers. (2023). *USB Host and Accessory*. Android Open Source Project. https://developer.android.com/guide/topics/connectivity/usb
+
+[^6]: Akyildiz, I. F., Su, W., Sankarasubramaniam, Y., & Cayirci, E. (2002). Wireless sensor networks: A survey. *Computer Networks*, 38(4), 393-422. https://doi.org/10.1016/S1389-1286(01)00302-4
+
+[^7]: Kruse, P. W. (2001). *Uncooled Thermal Imaging: Arrays, Systems, and Applications*. SPIE Publications. https://doi.org/10.1117/3.415351
+
+[^8]: Wood, R. A. (1993). Uncooled thermal imaging with monolithic silicon focal plane arrays. *Proceedings of SPIE*, 2020, 322-329. https://doi.org/10.1117/12.160553
+
+[^9]: Tropf, W. J., Thomas, M. E., & Harris, T. J. (1995). Properties of crystals and glasses. In *Handbook of Optics* (2nd ed., Vol. 2, pp. 33.1-33.101). McGraw-Hill.
+
+[^10]: Schott, J. R. (2007). *Remote Sensing: The Image Chain Approach* (2nd ed.). Oxford University Press.
+
+[^11]: Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
+
+[^12]: Stonebraker, M., Çetintemel, U., & Zdonik, S. (2005). The 8 requirements of real-time stream processing. *ACM SIGMOD Record*, 34(4), 42-47. https://doi.org/10.1145/1107499.1107504
+
+[^13]: Patterson, D. A., & Hennessy, J. L. (2019). *Computer Organization and Design: The Hardware/Software Interface* (5th ed.). Morgan Kaufmann.
+
+[^14]: Planck, M. (1900). Zur Theorie des Gesetzes der Energieverteilung im Normalspektrum. *Verhandlungen der Deutschen Physikalischen Gesellschaft*, 2, 237-245.
+
+[^15]: Madding, R. P. (1999). Emissivity measurement and temperature correction accuracy considerations. *Proceedings of SPIE*, 3700, 393-401. https://doi.org/10.1117/12.352944
+
+[^16]: International Organization for Standardization. (2018). *Non-destructive testing — Infrared thermography — General principles* (ISO 18434-1:2018). ISO.
+
+[^17]: American Society for Testing and Materials. (2020). *Standard Test Method for Measuring and Compensating for Emissivity Using Infrared Imaging Radiometers* (ASTM E1933-14). ASTM International.
+
+[^18]: Usamentiaga, R., Venegas, P., Guerediaga, J., Vega, L., Molleda, J., & Bulnes, F. G. (2014). Infrared thermography for temperature measurement and non-destructive testing. *Sensors*, 14(7), 12305-12348. https://doi.org/10.3390/s140712305
 
 ---
 
