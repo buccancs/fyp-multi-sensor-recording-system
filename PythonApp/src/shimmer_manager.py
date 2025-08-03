@@ -19,6 +19,7 @@ Date: 2025-01-16 (Enhanced for rock-solid integration)
 """
 
 import csv
+import logging
 import os
 import queue
 import sys

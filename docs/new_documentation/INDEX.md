@@ -134,9 +134,21 @@ The documentation is organized into comprehensive categories addressing differen
 **Audience**: Developers, Data Engineers  
 **Purpose**: Session lifecycle and data organization
 
-### [UI Architecture](README_ui_architecture.md)
-**Audience**: UI/UX Developers, Frontend Engineers  
-**Purpose**: User interface design and interaction patterns
+### [Unified UI Architecture](UNIFIED_UI_ARCHITECTURE.md) 🆕
+**Audience**: UI/UX Developers, Frontend Engineers, System Architects  
+**Purpose**: Comprehensive UI architecture covering PC, Web, and Android platforms
+
+**Key Features**:
+- Unified cross-platform design principles and patterns
+- Platform-specific implementation details for Android, Python Desktop, and Web
+- State management and synchronization across all platforms
+- Cross-platform communication protocols and integration patterns
+- Performance optimization and security considerations
+- Comprehensive testing strategies and troubleshooting guides
+
+### [UI Architecture (Android-focused)](README_ui_architecture.md)
+**Audience**: Android Developers  
+**Purpose**: Detailed Android-specific UI architecture and patterns
 
 ### [Testing and QA Framework](README_testing_qa_framework.md)
 **Audience**: QA Engineers, Test Automation Specialists  
