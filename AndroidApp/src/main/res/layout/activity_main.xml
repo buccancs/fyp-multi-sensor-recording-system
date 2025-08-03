@@ -78,19 +78,21 @@
                         app:layout_constraintWidth_percent="0.48"
                         app:layout_constraintDimensionRatio="16:9">
 
-                        <androidx.camera.view.PreviewView
+                        <TextureView
                             android:id="@+id/cameraPreview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
 
                         <TextView
+                            android:id="@+id/cameraStatusOverlay"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Camera\n[Live]"
+                            android:text="Initializing Camera..."
                             android:gravity="center"
                             android:textSize="12sp"
                             android:background="?attr/colorSurfaceVariant"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:visibility="visible" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -107,14 +109,21 @@
                         app:layout_constraintWidth_percent="0.48"
                         app:layout_constraintDimensionRatio="16:9">
 
+                        <SurfaceView
+                            android:id="@+id/thermalPreview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
                         <TextView
+                            android:id="@+id/thermalStatusOverlay"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Thermal\n[Live]"
+                            android:text="Initializing Thermal Camera..."
                             android:gravity="center"
                             android:textSize="12sp"
                             android:background="?attr/colorSurfaceVariant"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:visibility="visible" />
 
                     </androidx.cardview.widget.CardView>
 
