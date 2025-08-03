@@ -184,17 +184,24 @@ class MainActivity : AppCompatActivity() {
         try {
             // Initialize camera system with TextureView
             val cameraTextureView = binding.cameraPreview
-            viewModel.initializeSystem(cameraTextureView)
+            val thermalSurfaceView = binding.thermalPreview
             
-            // Update status overlay
+            viewModel.initializeSystem(cameraTextureView, thermalSurfaceView)
+            
+            // Update status overlays
             binding.cameraStatusOverlay.text = "Initializing camera..."
+            binding.thermalStatusOverlay.text = "Initializing thermal camera..."
             
             // Check RAW stage 3 availability after initialization
             checkRawStage3Availability()
             
+            // Check thermal camera availability and update UI
+            checkThermalCameraAvailability()
+            
         } catch (e: Exception) {
             showError("Failed to initialize camera: ${e.message}")
             binding.cameraStatusOverlay.text = "Camera Error"
+            binding.thermalStatusOverlay.text = "Thermal Error"
         }
     }
 
@@ -220,6 +227,32 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 logger.error("Error during RAW stage 3 availability check", e)
                 Toast.makeText(this@MainActivity, "Error checking RAW capabilities", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Check thermal camera availability and notify user
+     */
+    private fun checkThermalCameraAvailability() {
+        lifecycleScope.launch {
+            try {
+                val isAvailable = viewModel.checkThermalCameraAvailability()
+                
+                val message = if (isAvailable) {
+                    "✓ Topdon Thermal Camera: AVAILABLE"
+                } else {
+                    "✗ Topdon Thermal Camera: NOT AVAILABLE"
+                }
+                
+                // Show status in a toast for immediate user feedback
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                
+                logger.info("Thermal camera availability check completed: $isAvailable")
+                
+            } catch (e: Exception) {
+                logger.error("Error during thermal camera availability check", e)
+                Toast.makeText(this@MainActivity, "Error checking thermal camera", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -263,7 +296,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCameraStatusOverlay(uiState: MainUiState) {
-        // Show/hide camera status overlay based on initialization state
+        // Update RGB camera status overlay
         when {
             uiState.isLoadingPermissions -> {
                 binding.cameraStatusOverlay.text = "Initializing camera..."
@@ -285,6 +318,31 @@ class MainActivity : AppCompatActivity() {
             else -> {
                 binding.cameraStatusOverlay.text = "Camera\n[Live]"
                 binding.cameraStatusOverlay.visibility = android.view.View.GONE
+            }
+        }
+
+        // Update thermal camera status overlay
+        when {
+            uiState.isLoadingPermissions -> {
+                binding.thermalStatusOverlay.text = "Initializing thermal camera..."
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            uiState.isThermalConnected && uiState.thermalPreviewAvailable -> {
+                // Thermal camera is working - hide overlay to show live preview
+                binding.thermalStatusOverlay.text = ""
+                binding.thermalStatusOverlay.visibility = android.view.View.GONE
+            }
+            uiState.errorMessage?.contains("thermal", ignoreCase = true) == true -> {
+                binding.thermalStatusOverlay.text = "Thermal\nError"
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            !uiState.isThermalConnected -> {
+                binding.thermalStatusOverlay.text = "Thermal\nDisconnected"
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
+            }
+            else -> {
+                binding.thermalStatusOverlay.text = "Thermal\n[Live]"
+                binding.thermalStatusOverlay.visibility = android.view.View.VISIBLE
             }
         }
     }

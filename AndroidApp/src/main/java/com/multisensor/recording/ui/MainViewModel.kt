@@ -1,5 +1,6 @@
 package com.multisensor.recording.ui
 
+import android.view.SurfaceView
 import android.view.TextureView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -67,7 +68,7 @@ class MainViewModel
          * Initialize the recording system components with TextureView for camera preview
          * Refactored to use centralized UiState pattern
          */
-        fun initializeSystem(textureView: TextureView) {
+        fun initializeSystem(textureView: TextureView, thermalSurfaceView: SurfaceView? = null) {
             viewModelScope.launch {
                 try {
                     logger.info("Initializing recording system with TextureView...")
@@ -105,10 +106,18 @@ class MainViewModel
                         }
                     }
 
-                    // Initialize thermal recorder
-                    val thermalInitialized = thermalRecorder.initialize()
+                    // Initialize thermal recorder with SurfaceView for preview
+                    val thermalInitialized = thermalRecorder.initialize(thermalSurfaceView)
                     if (!thermalInitialized) {
                         logger.warning("Thermal camera not available")
+                    } else {
+                        // Start thermal preview if initialization successful
+                        val previewStarted = thermalRecorder.startPreview()
+                        if (previewStarted) {
+                            logger.info("Thermal camera preview started successfully")
+                        } else {
+                            logger.warning("Failed to start thermal camera preview")
+                        }
                     }
 
                     // Initialize Shimmer recorder
@@ -463,6 +472,50 @@ class MainViewModel
                     currentState.copy(
                         statusText = "Error checking RAW stage 3 availability",
                         errorMessage = "Failed to check RAW capabilities: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+                false
+            }
+        }
+
+        /**
+         * Check if Topdon thermal camera is available for preview.
+         * Returns availability status with device connection information.
+         * 
+         * @return true if Topdon thermal camera is connected and available, false otherwise
+         */
+        fun checkThermalCameraAvailability(): Boolean {
+            return try {
+                logger.info("Checking Topdon thermal camera availability...")
+                val isAvailable = thermalRecorder.isThermalCameraAvailable()
+                
+                updateUiState { currentState ->
+                    val statusMessage = if (isAvailable) {
+                        "Topdon thermal camera: AVAILABLE"
+                    } else {
+                        "Topdon thermal camera: NOT AVAILABLE"
+                    }
+                    
+                    currentState.copy(
+                        statusText = statusMessage,
+                        thermalPreviewAvailable = isAvailable
+                    )
+                }
+                
+                if (isAvailable) {
+                    logger.info("✓ Topdon thermal camera is available")
+                } else {
+                    logger.warning("✗ Topdon thermal camera is NOT available")
+                }
+                
+                isAvailable
+            } catch (e: Exception) {
+                logger.error("Error checking thermal camera availability", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = "Error checking thermal camera availability",
+                        errorMessage = "Failed to check thermal camera: ${e.message}",
                         showErrorDialog = true
                     )
                 }
