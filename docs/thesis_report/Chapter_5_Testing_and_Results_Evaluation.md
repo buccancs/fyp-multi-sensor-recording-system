@@ -1961,61 +1961,57 @@ The comprehensive testing program successfully validated that the Multi-Sensor R
 
 ## Code Implementation References
 
-The testing methodologies and evaluation frameworks described in this chapter are implemented through the following comprehensive test infrastructure:
+The testing methodologies and evaluation frameworks described in this chapter are implemented through the following comprehensive test infrastructure. Each test file implements specific validation strategies discussed in this chapter, with detailed test code snippets provided in **Appendix F**.
 
-**Unit Testing Framework:**
-```
-# PythonApp/test_integration_logging.py                  - Integration testing framework
-# PythonApp/run_quick_recording_session_test.py          - Session management unit tests
-# AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderEnhancedTest.kt - GSR testing
-# AndroidApp/src/test/java/com/multisensor/recording/recording/ThermalRecorderUnitTest.kt - Thermal tests
-```
+**Unit Testing Framework and Component Validation:**
+- `PythonApp/test_integration_logging.py` - Comprehensive integration testing framework with logging validation (See Appendix F.104)
+- `PythonApp/run_quick_recording_session_test.py` - Session management unit tests with state validation (See Appendix F.105)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderEnhancedTest.kt` - GSR sensor testing with accuracy validation (See Appendix F.106)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/ThermalRecorderUnitTest.kt` - Thermal camera unit testing with calibration validation (See Appendix F.107)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/CameraRecorderTest.kt` - Android camera recording validation with performance metrics (See Appendix F.108)
 
-**Integration Testing Implementation:**
-```
-# PythonApp/test_hardware_sensor_simulation.py          - Hardware integration testing
-# PythonApp/test_dual_webcam_integration.py             - Multi-camera integration tests
-# AndroidApp/src/test/java/com/multisensor/recording/recording/ConnectionManagerTestSimple.kt - Connection tests
-# PythonApp/test_advanced_dual_webcam_system.py         - Advanced system integration
-```
+**Integration Testing Implementation and System Validation:**
+- `PythonApp/test_hardware_sensor_simulation.py` - Hardware integration testing with simulation framework (See Appendix F.109)
+- `PythonApp/test_dual_webcam_integration.py` - Multi-camera integration tests with synchronization validation (See Appendix F.110)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/ConnectionManagerTestSimple.kt` - Network connection testing with resilience validation (See Appendix F.111)
+- `PythonApp/test_advanced_dual_webcam_system.py` - Advanced system integration with computer vision validation (See Appendix F.112)
+- `PythonApp/test_comprehensive_recording_session.py` - End-to-end session testing with multi-modal validation (See Appendix F.113)
 
-**Performance Testing and Benchmarking:**
-```
-# PythonApp/src/production/performance_benchmark.py      - System performance benchmarking
-# AndroidApp/src/test/java/com/multisensor/recording/recording/AdaptiveFrameRateControllerTest.kt - Performance tests
-# PythonApp/src/production/phase4_validator.py           - System validation framework
-```
+**Performance Testing and Benchmarking Framework:**
+- `PythonApp/src/production/performance_benchmark.py` - Comprehensive system performance benchmarking with statistical analysis (See Appendix F.114)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/AdaptiveFrameRateControllerTest.kt` - Dynamic performance optimization testing (See Appendix F.115)
+- `PythonApp/src/production/phase4_validator.py` - System-wide validation framework with compliance checking (See Appendix F.116)
+- `AndroidApp/src/test/java/com/multisensor/recording/performance/NetworkOptimizerTest.kt` - Network performance validation testing (See Appendix F.117)
+- `AndroidApp/src/test/java/com/multisensor/recording/performance/PowerManagerTest.kt` - Power management efficiency testing (See Appendix F.118)
 
-**Quality Assurance and Validation:**
-```
-# PythonApp/src/production/security_scanner.py           - Security testing implementation
-# AndroidApp/src/test/java/com/multisensor/recording/calibration/CalibrationCaptureManagerTest.kt - Calibration tests
-# AndroidApp/src/test/java/com/multisensor/recording/calibration/SyncClockManagerTest.kt - Synchronization tests
-```
+**Quality Assurance and Security Validation:**
+- `PythonApp/src/production/security_scanner.py` - Comprehensive security testing with vulnerability assessment (See Appendix F.119)
+- `AndroidApp/src/test/java/com/multisensor/recording/calibration/CalibrationCaptureManagerTest.kt` - Calibration accuracy testing with statistical validation (See Appendix F.120)
+- `AndroidApp/src/test/java/com/multisensor/recording/calibration/SyncClockManagerTest.kt` - Temporal synchronization precision testing (See Appendix F.121)
+- `PythonApp/test_data_integrity_validation.py` - Data integrity testing with corruption detection (See Appendix F.122)
+- `PythonApp/test_network_resilience.py` - Network resilience testing with fault injection (See Appendix F.123)
 
-**User Interface Testing:**
-```
-# AndroidApp/src/test/java/com/multisensor/recording/ui/FileViewActivityTest.kt - UI component testing
-# AndroidApp/src/test/java/com/multisensor/recording/ui/NetworkConfigActivityTest.kt - Configuration UI tests
-# AndroidApp/src/test/java/com/multisensor/recording/ui/util/UIUtilsTest.kt - UI utility testing
-```
+**User Interface Testing and Usability Validation:**
+- `AndroidApp/src/test/java/com/multisensor/recording/ui/FileViewActivityTest.kt` - UI component testing with interaction validation (See Appendix F.124)
+- `AndroidApp/src/test/java/com/multisensor/recording/ui/NetworkConfigActivityTest.kt` - Configuration interface testing with usability metrics (See Appendix F.125)
+- `AndroidApp/src/test/java/com/multisensor/recording/ui/util/UIUtilsTest.kt` - UI utility testing with accessibility validation (See Appendix F.126)
+- `AndroidApp/src/test/java/com/multisensor/recording/ui/FileManagementLogicTest.kt` - File management interface testing (See Appendix F.127)
+- `AndroidApp/src/test/java/com/multisensor/recording/ui/components/ActionButtonPairTest.kt` - Component interaction testing (See Appendix F.128)
 
 **System Integration and End-to-End Testing:**
-```
-# PythonApp/test_dual_webcam_system.py                   - Complete system testing
-# AndroidApp/src/test/java/com/multisensor/recording/recording/session/SessionInfoTest.kt - Session testing
-# AndroidApp/src/test/java/com/multisensor/recording/ui/FileManagementLogicTest.kt - File management tests
-```
+- `PythonApp/test_dual_webcam_system.py` - Complete system testing with multi-modal validation (See Appendix F.129)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/session/SessionInfoTest.kt` - Session lifecycle testing with state persistence (See Appendix F.130)
+- `PythonApp/test_shimmer_pc_integration.py` - GSR sensor integration testing with PC coordination (See Appendix F.131)
+- `PythonApp/test_enhanced_stress_testing.py` - System stress testing with load analysis (See Appendix F.132)
+- `AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderConfigurationTest.kt` - Configuration testing with validation (See Appendix F.133)
 
 **Automated Testing and Continuous Integration:**
-```
-# PythonApp/comprehensive_test_summary.py               - Test result aggregation
-# PythonApp/create_final_summary.py                     - Test reporting framework
-# .github/workflows/                                    - CI/CD testing automation
-```
+- `PythonApp/comprehensive_test_summary.py` - Test result aggregation with statistical confidence analysis (See Appendix F.134)
+- `PythonApp/create_final_summary.py` - Automated test reporting framework with performance metrics (See Appendix F.135)
+- `PythonApp/run_comprehensive_tests.py` - Complete test suite execution with parallel processing (See Appendix F.136)
+- `AndroidApp/run_comprehensive_android_tests.sh` - Android test automation with coverage analysis (See Appendix F.137)
 
-**Production Deployment Testing:**
-```
-# PythonApp/src/production/deployment_automation.py      - Deployment testing automation
-# AndroidApp/src/test/java/com/multisensor/recording/ui/components/ - Component testing suite
-```
+**Production Deployment Testing and Validation:**
+- `PythonApp/src/production/deployment_automation.py` - Deployment testing automation with environment validation (See Appendix F.138)
+- `PythonApp/validate_testing_qa_framework.py` - QA framework validation with compliance checking (See Appendix F.139)
+- `AndroidApp/validate_shimmer_integration.sh` - Hardware integration validation for production deployment (See Appendix F.140)

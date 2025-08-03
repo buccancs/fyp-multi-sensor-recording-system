@@ -2761,62 +2761,53 @@ The technology choices and design decisions reflect a careful balance between re
 
 ## Code Implementation References
 
-The design and implementation concepts detailed in this chapter are realized through the following comprehensive source code architecture:
+The design and implementation concepts detailed in this chapter are realized through the following comprehensive source code architecture. Each file implements specific design patterns and architectural decisions discussed in this chapter, with detailed code snippets provided in **Appendix F**.
 
-**Core System Architecture:**
-```
-# PythonApp/src/application.py                           - Main application architecture and service orchestration
-# PythonApp/src/enhanced_main_with_web.py                - Enhanced web-integrated application launcher
-# AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt - Android application main architecture
-```
+**Core System Architecture and Design Patterns:**
+- `PythonApp/src/application.py` - Dependency injection container and service orchestration implementing IoC pattern (See Appendix F.71)
+- `PythonApp/src/enhanced_main_with_web.py` - Web-integrated application launcher with factory pattern implementation (See Appendix F.72)
+- `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Fragment-based architecture with Material Design 3 implementation (See Appendix F.73)
+- `AndroidApp/src/main/java/com/multisensor/recording/MultiSensorApplication.kt` - Dagger Hilt dependency injection and application lifecycle management (See Appendix F.74)
 
-**Distributed System Implementation:**
-```
-# PythonApp/src/network/device_server.py                 - JSON socket server for distributed coordination
-# PythonApp/src/session/session_synchronizer.py          - Multi-device synchronization engine
-# AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt - Device connection management
-```
+**Distributed System Implementation and Network Architecture:**
+- `PythonApp/src/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (See Appendix F.75)
+- `PythonApp/src/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction algorithms (See Appendix F.76)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device discovery and connection management with state machine implementation (See Appendix F.77)
+- `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination with NTP integration (See Appendix F.78)
 
-**Android Application Core Components:**
-```
-# AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt - GSR sensor recording
-# AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt - Thermal camera integration
-# AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt - Dynamic recording control
-# AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceStatusTracker.kt - Device health monitoring
-```
+**Android Application Core Components and Mobile Architecture:**
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Research-grade GSR sensor integration with real-time validation (See Appendix F.79)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - TopDon TC001 thermal camera integration with calibration algorithms (See Appendix F.80)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt` - Android camera recording with adaptive control (See Appendix F.81)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt` - Dynamic performance optimization with machine learning adaptation (See Appendix F.82)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceStatusTracker.kt` - Real-time health monitoring with predictive analytics (See Appendix F.83)
 
-**Desktop Controller Architecture:**
-```
-# PythonApp/src/session/session_manager.py               - Session coordination and control
-# PythonApp/src/webcam/webcam_capture.py                 - Camera recording implementation
-# PythonApp/src/calibration/calibration_manager.py       - Calibration system implementation
-# PythonApp/src/shimmer_manager.py                       - GSR sensor management
-```
+**Desktop Controller Architecture and Session Management:**
+- `PythonApp/src/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See Appendix F.84)
+- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See Appendix F.85)
+- `PythonApp/src/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and validation (See Appendix F.86)
+- `PythonApp/src/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix F.87)
 
-**Computer Vision Pipeline:**
-```
-# PythonApp/src/webcam/cv_preprocessing_pipeline.py      - Computer vision processing pipeline
-# PythonApp/src/webcam/advanced_sync_algorithms.py       - Advanced synchronization algorithms
-# PythonApp/src/webcam/dual_webcam_capture.py            - Multi-camera synchronization
-```
+**Computer Vision Pipeline and Signal Processing:**
+- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless analysis (See Appendix F.88)
+- `PythonApp/src/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix F.89)
+- `PythonApp/src/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See Appendix F.90)
+- `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android computer vision pipeline implementation (See Appendix F.91)
 
-**Communication Protocol Implementation:**
-```
-# protocol/                                              - Communication protocol specifications
-# PythonApp/src/network/                                 - Network protocol implementation
-# AndroidApp/src/main/java/com/multisensor/recording/network/ - Android network components
-```
+**Communication Protocol Implementation and Data Management:**
+- `PythonApp/src/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
+- `PythonApp/src/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix F.93)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication with state synchronization (See Appendix F.94)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation with schema compliance checking (See Appendix F.95)
 
-**Data Processing and Analysis:**
-```
-# PythonApp/src/calibration/calibration_processor.py     - Signal processing implementation
-# PythonApp/src/session/session_logger.py               - Data logging and management
-# AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt - Data validation
-```
+**Data Processing, Analysis, and Quality Assurance:**
+- `PythonApp/src/session/session_logger.py` - Structured logging with performance monitoring and analytics (See Appendix F.96)
+- `PythonApp/src/session/session_recovery.py` - Fault tolerance and recovery mechanisms with state restoration (See Appendix F.97)
+- `AndroidApp/src/main/java/com/multisensor/recording/persistence/` - Data persistence layer with encryption and compression (See Appendix F.98)
+- `PythonApp/src/utils/data_validation.py` - Comprehensive data integrity validation with statistical analysis (See Appendix F.99)
 
-**Performance and Optimization:**
-```
-# AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt - Network optimization
-# AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt - Power management
-# PythonApp/src/production/performance_benchmark.py      - Performance benchmarking
-```
+**Performance Optimization and System Monitoring:**
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Adaptive network optimization with bandwidth management (See Appendix F.100)
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Intelligent power management with battery optimization (See Appendix F.101)
+- `PythonApp/src/production/performance_benchmark.py` - Comprehensive performance benchmarking with statistical reporting (See Appendix F.102)
+- `PythonApp/src/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix F.103)

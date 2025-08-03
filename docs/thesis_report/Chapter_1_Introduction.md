@@ -497,32 +497,40 @@ Available in `docs/new_documentation/` directory with component-specific README,
 
 ## Code Implementation References
 
-The following source code files provide concrete implementation of the concepts introduced in this chapter:
+The following source code files provide concrete implementation of the concepts introduced in this chapter. Each file is referenced in **Appendix F** with detailed code snippets demonstrating the implementation.
 
 **Core System Architecture:**
-```
-# PythonApp/src/application.py                    - Main application entry point and service orchestration
-# PythonApp/src/enhanced_main_with_web.py         - Enhanced application launcher with web interface
-# AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt - Android application main activity
-```
+- `PythonApp/src/application.py` - Main application dependency injection container and service orchestration framework (See Appendix F.1)
+- `PythonApp/src/enhanced_main_with_web.py` - Enhanced application launcher with integrated web interface and real-time monitoring (See Appendix F.2)
+- `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Material Design 3 main activity with fragment-based navigation architecture (See Appendix F.3)
+- `AndroidApp/src/main/java/com/multisensor/recording/MultiSensorApplication.kt` - Application class with dependency injection using Dagger Hilt (See Appendix F.4)
 
-**Session Management and Coordination:**
-```
-# PythonApp/src/session/session_manager.py        - Central session coordination and management
-# PythonApp/src/session/session_synchronizer.py  - Multi-device synchronization implementation
-# AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt - Device connection management
-```
+**Multi-Device Synchronization System:**
+- `PythonApp/src/session/session_manager.py` - Central session coordination with distributed device management (See Appendix F.5)
+- `PythonApp/src/session/session_synchronizer.py` - Advanced temporal synchronization algorithms with drift correction (See Appendix F.6)
+- `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination using NTP and custom protocols (See Appendix F.7)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device connection management with automatic discovery (See Appendix F.8)
 
-**Multi-Sensor Integration:**
-```
-# PythonApp/src/shimmer_manager.py                - GSR sensor management and control
-# PythonApp/src/webcam/webcam_capture.py          - Camera recording implementation  
-# AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt - Android GSR recording
-# AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt - Thermal camera integration
-```
+**Multi-Sensor Integration Framework:**
+- `PythonApp/src/shimmer_manager.py` - Research-grade GSR sensor management and calibration (See Appendix F.9)
+- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction capabilities (See Appendix F.10)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Android GSR recording with real-time data validation (See Appendix F.11)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - TopDon TC001 thermal camera integration with calibration (See Appendix F.12)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt` - Android camera recording with adaptive frame rate control (See Appendix F.13)
 
-**Network Communication Protocol:**
-```
-# PythonApp/src/network/device_server.py          - JSON socket server for device communication
-# protocol/                                       - Communication protocol specifications
-```
+**Network Communication and Protocol Implementation:**
+- `PythonApp/src/network/device_server.py` - JSON socket server with comprehensive device communication protocol (See Appendix F.14)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication handler with error recovery (See Appendix F.15)
+- `PythonApp/src/protocol/` - Communication protocol schemas and validation utilities (See Appendix F.16)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation and schema compliance (See Appendix F.17)
+
+**Advanced System Features:**
+- `PythonApp/src/hand_segmentation/` - Computer vision pipeline for contactless hand analysis (See Appendix F.18)
+- `PythonApp/src/stimulus_manager.py` - Research protocol coordination and experimental stimulus management (See Appendix F.19)
+- `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/` - Android hand segmentation implementation (See Appendix F.20)
+- `PythonApp/src/calibration/` - Advanced calibration system with quality assessment (See Appendix F.21)
+
+**Testing and Quality Assurance:**
+- `PythonApp/tests/` - Comprehensive Python testing framework with statistical validation (See Appendix F.22)
+- `AndroidApp/src/test/` - Android unit and integration testing with performance benchmarks (See Appendix F.23)
+- `PythonApp/run_comprehensive_tests.py` - Automated test suite with quality metrics (See Appendix F.24)
