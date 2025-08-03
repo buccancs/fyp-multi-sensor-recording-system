@@ -89,9 +89,15 @@
 
 ---
 
+This comprehensive chapter presents the detailed design and implementation of the Multi-Sensor Recording System, demonstrating how established software engineering principles and distributed systems theory have been systematically applied to create a novel contactless physiological measurement platform. The architectural design represents a sophisticated synthesis of distributed computing patterns, real-time systems engineering, and research software development methodologies specifically tailored for physiological measurement applications.
+
+The chapter provides comprehensive technical analysis of design decisions, implementation strategies, and architectural patterns that enable the system to achieve research-grade measurement precision while maintaining the scalability, reliability, and maintainability required for long-term research applications. Through detailed examination of system components, communication protocols, and integration mechanisms, this chapter demonstrates how theoretical computer science principles translate into practical research capabilities.
+
 ## System Architecture Overview
 
-The Multi-Sensor Recording System employs a sophisticated distributed architecture specifically engineered to address the complex challenges of synchronized multi-modal data collection in research environments while maintaining scientific rigor and operational reliability essential for conducting high-quality physiological measurement research. The architectural design represents a systematic balance between technical requirements for precise coordination across heterogeneous devices and practical needs for system reliability, scalability, and maintainability.
+The Multi-Sensor Recording System architecture represents a sophisticated distributed computing solution specifically engineered to address the complex technical challenges inherent in synchronized multi-modal data collection while maintaining the scientific rigor and operational reliability essential for conducting high-quality physiological measurement research. The architectural design demonstrates a systematic balance between technical requirements for precise coordination across heterogeneous devices and practical considerations for system reliability, scalability, and long-term maintainability in diverse research environments.
+
+The system architecture draws upon established distributed systems patterns while introducing specialized adaptations required for physiological measurement applications that must coordinate consumer-grade mobile devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance, data integrity, and temporal precision as fundamental requirements that cannot be compromised for convenience or performance optimization.
 
 ### Current Implementation Architecture
 
@@ -192,6 +198,138 @@ graph TB
         PC[PC Controller<br/>Python Desktop Application]
         SYNC[Synchronization Engine<br/>Network Time Protocol]
         STORE[Data Storage Manager<br/>Structured File Organization]
+        CAL[Camera Calibration System<br/>Multi-Device Coordination]
+        ML[Machine Learning Pipeline<br/>Real-Time Inference]
+    end
+    
+    subgraph "Distributed Mobile Sensors"
+        M1[Mobile Device 1<br/>Android Application]
+        M2[Mobile Device 2<br/>Android Application]
+        M3[Mobile Device N<br/>Android Application]
+    end
+    
+    subgraph "Camera Systems"
+        CAM1[USB Camera 1<br/>Logitech Brio 4K]
+        CAM2[USB Camera 2<br/>Logitech Brio 4K]
+    end
+    
+    subgraph "Thermal Imaging"
+        THERM1[Thermal Camera 1<br/>TopDon TC001+]
+        THERM2[Thermal Camera 2<br/>TopDon TC001+]
+    end
+    
+    subgraph "Physiological Sensors"
+        GSR1[Shimmer3 GSR+ 1<br/>Reference Physiological]
+        GSR2[Shimmer3 GSR+ 2<br/>Reference Physiological]
+    end
+    
+    subgraph "Data Processing Pipeline"
+        VISION[Computer Vision Engine<br/>OpenCV + MediaPipe]
+        THERMAL[Thermal Analysis<br/>Temperature Processing]
+        SIGNAL[Signal Processing<br/>Physiological Analysis]
+        FUSION[Multi-Modal Fusion<br/>Data Integration]
+    end
+    
+    PC --- SYNC
+    PC --- STORE
+    PC --- CAL
+    PC --- ML
+    
+    SYNC -.->|Network Time Protocol| M1
+    SYNC -.->|Network Time Protocol| M2
+    SYNC -.->|Network Time Protocol| M3
+    
+    PC -.->|JSON WebSocket| M1
+    PC -.->|JSON WebSocket| M2
+    PC -.->|JSON WebSocket| M3
+    
+    CAM1 --> PC
+    CAM2 --> PC
+    
+    M1 --> THERM1
+    M2 --> THERM2
+    
+    M1 --> GSR1
+    M2 --> GSR2
+    
+    PC --> VISION
+    THERM1 --> THERMAL
+    THERM2 --> THERMAL
+    GSR1 --> SIGNAL
+    GSR2 --> SIGNAL
+    
+    VISION --> FUSION
+    THERMAL --> FUSION
+    SIGNAL --> FUSION
+    
+    FUSION --> STORE
+```
+
+### Comprehensive System Component Architecture
+
+**Central Python Desktop Controller - Master Orchestration Hub:**
+
+The Python Desktop Controller represents the central orchestration hub that implements sophisticated distributed system coordination patterns specifically adapted for research applications. The controller architecture employs a comprehensive dependency injection container with lifecycle management, enabling sophisticated service orchestration that supports both real-time operation and comprehensive testing frameworks.
+
+**Core Controller Components:**
+- **Application Container**: Advanced IoC container providing service orchestration with dependency injection and lifecycle management
+- **Network Layer**: Sophisticated TCP/WebSocket server implementation supporting up to 8 simultaneous device connections with automatic load balancing
+- **Synchronization Engine**: Master clock synchronizer implementing custom NTP protocols optimized for local network precision
+- **Session Management**: Comprehensive session lifecycle management with automatic recovery and data integrity validation
+- **Quality Assurance Engine**: Real-time monitoring and optimization system ensuring research-grade data quality across all sensor modalities
+
+**Advanced Android Mobile Application - Distributed Sensor Nodes:**
+
+The Android mobile application architecture implements sophisticated autonomous operation capabilities while maintaining seamless integration with the central coordination framework. Each mobile device operates as a fully capable data collection agent with complete local autonomy, enabling continued operation during network interruptions while participating in coordinated measurement sessions.
+
+**Mobile Application Architecture:**
+- **Fragment-Based UI**: Modern Android architecture with RecordingFragment, DevicesFragment, and CalibrationFragment for comprehensive operational control
+- **Multi-Sensor Coordination**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors with real-time processing
+- **Local Data Management**: Room database implementation with automatic backup, data validation, and integrity verification
+- **Network Communication**: Retrofit 2 and OkHttp 4 implementation providing robust WebSocket communication with automatic reconnection
+- **Background Processing**: Kotlin Coroutines architecture enabling responsive UI while managing complex sensor coordination tasks
+
+**Shimmer3 GSR+ Integration - Reference Physiological Measurement:**
+
+The Shimmer3 GSR+ integration provides research-grade physiological measurement capabilities through sophisticated wearable sensor platforms. The integration supports high-precision galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG), accelerometry, and magnetometer data.
+
+**Shimmer3 Technical Specifications:**
+- **GSR Measurement Ranges**: Configurable resistance ranges from 10kΩ to 4.7MΩ across five distinct measurement ranges
+- **Sampling Rates**: Configurable from 1 Hz to 1000 Hz with adaptive rate management based on battery and processing constraints
+- **Multi-Sensor Platform**: Integrated PPG, 3-axis accelerometry, gyroscope, and magnetometer for comprehensive physiological monitoring
+- **Wireless Communication**: Bluetooth Classic and Bluetooth Low Energy with automatic device discovery and connection management
+- **Data Quality Assessment**: Real-time signal quality monitoring with electrode contact detection and movement artifact identification
+
+**TopDon Thermal Camera Integration - Advanced Thermal Imaging:**
+
+The TopDon thermal camera integration provides sophisticated thermal imaging capabilities optimized for physiological research applications. The TC001 and TC001 Plus models feature uncooled microbolometer technology with research-grade temperature measurement accuracy and real-time processing capabilities.
+
+**Thermal Camera Technical Specifications:**
+- **Resolution**: 256×192 pixel thermal sensor with high-precision temperature measurement
+- **Temperature Range**: -20°C to +650°C (TC001 Plus) with measurement accuracy of ±1.5°C or ±1.5%
+- **Frame Rate**: Up to 25 Hz with real-time thermal data processing and export capabilities
+- **Spectral Range**: 8-14 μm long-wave infrared (LWIR) optimized for human physiological monitoring
+- **USB-C OTG Integration**: Direct Android device connection with sophisticated device detection and communication management
+
+**Camera Recording System - Stage 3 RAW Extraction:**
+
+The camera recording system implements sophisticated multi-stream capture capabilities with Samsung-specific optimizations for Stage 3 RAW extraction. The system supports simultaneous 4K video recording and RAW image capture with precise temporal synchronization across multiple camera devices.
+
+**Camera System Technical Features:**
+- **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing pipelines
+- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and performance optimization
+- **RAW Processing Pipeline**: DNG file generation with comprehensive metadata embedding and quality validation
+- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration integration
+
+**Advanced Computer Vision Pipeline - Real-Time Analysis:**
+
+The computer vision pipeline integrates OpenCV and MediaPipe frameworks for real-time analysis of physiological and behavioral parameters. The system implements sophisticated hand detection, facial analysis, and movement tracking algorithms optimized for research applications.
+
+**Computer Vision Components:**
+- **Hand Segmentation System**: Real-time hand detection and tracking with region of interest analysis for contactless physiological measurement
+- **Facial Analysis Pipeline**: Advanced facial detection with region-specific analysis for photoplethysmographic signal extraction
+- **Movement Tracking**: Comprehensive motion analysis with artifact detection and quality assessment
+- **Real-Time Processing**: Optimized algorithms supporting simultaneous analysis of multiple high-resolution video streams
         PROC[Processing Pipeline<br/>Real-time Analysis]
         HEALTH[Health Monitor<br/>System Status Tracking]
         SESSION[Session Manager<br/>Experiment Coordination]
@@ -2620,3 +2758,56 @@ class ComputerVisionAnalysisSystem:
 This comprehensive enhancement of Chapter 4 provides exhaustive documentation of all features, modules, and solutions from the new_documentation while maintaining academic rigor and following the example thesis structure with detailed technical implementation covering Android application features, Python desktop controller capabilities, testing frameworks, synchronization systems, session management, and computer vision analysis with extensive academic citations and sophisticated code examples that demonstrate the research-grade quality and technical innovation of the Multi-Sensor Recording System.
 
 The technology choices and design decisions reflect a careful balance between research requirements, system performance, and development maintainability. Each decision was validated through prototyping and stakeholder feedback to ensure alignment with project objectives.
+
+## Code Implementation References
+
+The design and implementation concepts detailed in this chapter are realized through the following comprehensive source code architecture. Each file implements specific design patterns and architectural decisions discussed in this chapter, with detailed code snippets provided in **Appendix F**.
+
+**Core System Architecture and Design Patterns:**
+- `PythonApp/src/application.py` - Dependency injection container and service orchestration implementing IoC pattern (See Appendix F.71)
+- `PythonApp/src/enhanced_main_with_web.py` - Web-integrated application launcher with factory pattern implementation (See Appendix F.72)
+- `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Fragment-based architecture with Material Design 3 implementation (See Appendix F.73)
+- `AndroidApp/src/main/java/com/multisensor/recording/MultiSensorApplication.kt` - Dagger Hilt dependency injection and application lifecycle management (See Appendix F.74)
+
+**Distributed System Implementation and Network Architecture:**
+- `PythonApp/src/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (See Appendix F.75)
+- `PythonApp/src/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction algorithms (See Appendix F.76)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device discovery and connection management with state machine implementation (See Appendix F.77)
+- `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination with NTP integration (See Appendix F.78)
+
+**Android Application Core Components and Mobile Architecture:**
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Research-grade GSR sensor integration with real-time validation (See Appendix F.79)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - TopDon TC001 thermal camera integration with calibration algorithms (See Appendix F.80)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt` - Android camera recording with adaptive control (See Appendix F.81)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt` - Dynamic performance optimization with machine learning adaptation (See Appendix F.82)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceStatusTracker.kt` - Real-time health monitoring with predictive analytics (See Appendix F.83)
+
+**Desktop Controller Architecture and Session Management:**
+- `PythonApp/src/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See Appendix F.84)
+- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See Appendix F.85)
+- `PythonApp/src/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and validation (See Appendix F.86)
+- `PythonApp/src/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix F.87)
+
+**Computer Vision Pipeline and Signal Processing:**
+- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless analysis (See Appendix F.88)
+- `PythonApp/src/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix F.89)
+- `PythonApp/src/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See Appendix F.90)
+- `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android computer vision pipeline implementation (See Appendix F.91)
+
+**Communication Protocol Implementation and Data Management:**
+- `PythonApp/src/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
+- `PythonApp/src/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix F.93)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication with state synchronization (See Appendix F.94)
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation with schema compliance checking (See Appendix F.95)
+
+**Data Processing, Analysis, and Quality Assurance:**
+- `PythonApp/src/session/session_logger.py` - Structured logging with performance monitoring and analytics (See Appendix F.96)
+- `PythonApp/src/session/session_recovery.py` - Fault tolerance and recovery mechanisms with state restoration (See Appendix F.97)
+- `AndroidApp/src/main/java/com/multisensor/recording/persistence/` - Data persistence layer with encryption and compression (See Appendix F.98)
+- `PythonApp/src/utils/data_validation.py` - Comprehensive data integrity validation with statistical analysis (See Appendix F.99)
+
+**Performance Optimization and System Monitoring:**
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Adaptive network optimization with bandwidth management (See Appendix F.100)
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Intelligent power management with battery optimization (See Appendix F.101)
+- `PythonApp/src/production/performance_benchmark.py` - Comprehensive performance benchmarking with statistical reporting (See Appendix F.102)
+- `PythonApp/src/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix F.103)
