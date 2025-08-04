@@ -139,4 +139,7 @@ htmlcov/
 *.swp
 *.swo
 *~
-.vscode/settings.json
+.vscode/settings.json# Temporary files from diagram generation
+/tmp/mermaid_config.json
+/tmp/puppeteer_config.json
+*.mmd
