@@ -2,31 +2,33 @@
 
 ## Table of Contents
 
-1. [Background and Motivation](#background-and-motivation)
-   - 1.1. [Evolution of Physiological Measurement in Research](#evolution-of-physiological-measurement-in-research)
-   - 1.2. [Contactless Measurement: A Paradigm Shift](#contactless-measurement-a-paradigm-shift)
-   - 1.3. [Multi-Modal Sensor Integration Requirements](#multi-modal-sensor-integration-requirements)
-   - 1.4. [Research Community Needs and Technological Gaps](#research-community-needs-and-technological-gaps)
-   - 1.5. [System Innovation and Technical Motivation](#system-innovation-and-technical-motivation)
-2. [Research Problem and Objectives](#research-problem-and-objectives)
-   - 2.1. [Problem Context and Significance](#problem-context-and-significance)
-     - 2.1.1. [Current Limitations in Physiological Measurement Systems](#current-limitations-in-physiological-measurement-systems)
-     - 2.1.2. [Technical Challenges in Multi-Device Coordination](#technical-challenges-in-multi-device-coordination)
-     - 2.1.3. [Research Methodology Constraints and Innovation Opportunities](#research-methodology-constraints-and-innovation-opportunities)
-   - 2.2. [Aim and Specific Objectives](#aim-and-specific-objectives)
-     - 2.2.1. [Primary Research Aim](#primary-research-aim)
-     - 2.2.2. [Technical Development Objectives](#technical-development-objectives)
-     - 2.2.3. [Research Methodology Objectives](#research-methodology-objectives)
-     - 2.2.4. [Community Impact and Accessibility Objectives](#community-impact-and-accessibility-objectives)
-3. [Thesis Structure and Scope](#thesis-structure-and-scope)
-   - 3.1. [Comprehensive Thesis Organization](#comprehensive-thesis-organization)
-   - 3.2. [Research Scope and Boundaries](#research-scope-and-boundaries)
-   - 3.3. [Academic Contributions and Innovation Framework](#academic-contributions-and-innovation-framework)
-   - 3.4. [Methodology and Validation Approach](#methodology-and-validation-approach)
+1.1. [Motivation and Research Context](#11-motivation-and-research-context)
+   - Evolution of Physiological Measurement in Research
+   - Contactless Measurement: A Paradigm Shift
+   - Multi-Modal Sensor Integration Requirements
+   - Research Community Needs and Technological Gaps
+   - System Innovation and Technical Motivation
+
+1.2. [Research Problem and Objectives](#12-research-problem-and-objectives)
+   - Problem Context and Significance
+     - Current Limitations in Physiological Measurement Systems
+     - Technical Challenges in Multi-Device Coordination
+     - Research Methodology Constraints and Innovation Opportunities
+   - Aim and Specific Objectives
+     - Primary Research Aim
+     - Technical Development Objectives
+     - Research Methodology Objectives
+     - Community Impact and Accessibility Objectives
+
+1.3. [Thesis Outline](#13-thesis-outline)
+   - Comprehensive Thesis Organization
+   - Research Scope and Boundaries
+   - Academic Contributions and Innovation Framework
+   - Methodology and Validation Approach
 
 ---
 
-## Background and Motivation
+## 1.1 Motivation and Research Context
 
 The landscape of physiological measurement research has undergone significant transformation over the past decade, driven by advances in consumer electronics, computer vision algorithms, and distributed computing architectures. Traditional approaches to physiological measurement, particularly in the domain of stress and emotional response research, have relied heavily on invasive contact-based sensors that impose significant constraints on experimental design, participant behavior, and data quality. The Multi-Sensor Recording System emerges from the recognition that these traditional constraints fundamentally limit our ability to understand natural human physiological responses in realistic environments.
 
@@ -148,7 +150,7 @@ These technical innovations demonstrate that research-grade reliability and accu
 
 ---
 
-## Research Problem and Objectives
+## 1.2 Research Problem and Objectives
 
 ### Problem Context and Significance
 
@@ -296,7 +298,7 @@ Establish foundation capabilities that enable new research paradigms and investi
 
 ---
 
-## Thesis Structure and Scope
+## 1.3 Thesis Outline
 
 ### Comprehensive Thesis Organization
 
