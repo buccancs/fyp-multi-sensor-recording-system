@@ -1,10 +1,10 @@
 # Multi-Sensor Recording System for Contactless GSR Prediction Research
 ## Master's Thesis Report
 
-**Author:** Computer Science Master's Student  
-**Date:** 2024  
-**Institution:** University Research Program  
-**Research Area:** Multi-Sensor Recording System for Contactless GSR Prediction  
+**Author:** Computer Science Master's Student
+**Date:** 2024
+**Institution:** University Research Program
+**Research Area:** Multi-Sensor Recording System for Contactless GSR Prediction
 
 ---
 
@@ -23,57 +23,57 @@ The research contributes novel technical innovations to the field of distributed
 ## Table of Contents
 
 **Chapter 1. Introduction**
-- 1.1 Motivation and Research Context  
-- 1.2 Research Problem and Objectives  
-- 1.3 Thesis Structure and Scope  
+- 1.1 Motivation and Research Context
+- 1.2 Research Problem and Objectives
+- 1.3 Thesis Structure and Scope
 
 **Chapter 2. Background and Literature Review**
-- 2.1 Emotion Analysis Applications  
-- 2.2 Rationale for Contactless Physiological Measurement  
-- 2.3 Definitions of "Stress" (Scientific vs. Colloquial)  
-- 2.4 Cortisol vs. GSR as Stress Indicators  
-- 2.5 GSR Physiology and Measurement Limitations  
-- 2.6 Thermal Cues of Stress in Humans  
-- 2.7 RGB vs. Thermal Imaging (Machine Learning Hypothesis)  
-- 2.8 Sensor Device Selection Rationale  
+- 2.1 Emotion Analysis Applications
+- 2.2 Rationale for Contactless Physiological Measurement
+- 2.3 Definitions of "Stress" (Scientific vs. Colloquial)
+- 2.4 Cortisol vs. GSR as Stress Indicators
+- 2.5 GSR Physiology and Measurement Limitations
+- 2.6 Thermal Cues of Stress in Humans
+- 2.7 RGB vs. Thermal Imaging (Machine Learning Hypothesis)
+- 2.8 Sensor Device Selection Rationale
 
 **Chapter 3. Requirements**
-- 3.1 Problem Statement and Research Context  
-- 3.2 Requirements Engineering Approach  
-- 3.3 Functional Requirements Overview  
-- 3.4 Non-Functional Requirements  
-- 3.5 Use Case Scenarios  
-- 3.6 System Analysis (Architecture & Data Flow)  
-- 3.7 Data Requirements and Management  
+- 3.1 Problem Statement and Research Context
+- 3.2 Requirements Engineering Approach
+- 3.3 Functional Requirements Overview
+- 3.4 Non-Functional Requirements
+- 3.5 Use Case Scenarios
+- 3.6 System Analysis (Architecture & Data Flow)
+- 3.7 Data Requirements and Management
 
 **Chapter 4. Design and Implementation**
-- 4.1 System Architecture Overview  
-- 4.2 Android Application Design and Sensor Integration  
-- 4.3 Desktop Controller Design and Functionality  
-- 4.4 Communication Protocol and Synchronization Mechanism  
-- 4.5 Data Processing Pipeline  
-- 4.6 Implementation Challenges and Solutions  
+- 4.1 System Architecture Overview
+- 4.2 Android Application Design and Sensor Integration
+- 4.3 Desktop Controller Design and Functionality
+- 4.4 Communication Protocol and Synchronization Mechanism
+- 4.5 Data Processing Pipeline
+- 4.6 Implementation Challenges and Solutions
 
 **Chapter 5. Evaluation and Testing**
-- 5.1 Testing Strategy Overview  
-- 5.2 Unit Testing (Android and PC Components)  
-- 5.3 Integration Testing (Multi-Device Synchronization & Networking)  
-- 5.4 System Performance Evaluation  
-- 5.5 Results Analysis and Discussion  
+- 5.1 Testing Strategy Overview
+- 5.2 Unit Testing (Android and PC Components)
+- 5.3 Integration Testing (Multi-Device Synchronization & Networking)
+- 5.4 System Performance Evaluation
+- 5.5 Results Analysis and Discussion
 
 **Chapter 6. Conclusions**
-- 6.1 Achievements and Technical Contributions  
-- 6.2 Evaluation of Objectives and Outcomes  
-- 6.3 Limitations of the Study  
-- 6.4 Future Work and Extensions  
+- 6.1 Achievements and Technical Contributions
+- 6.2 Evaluation of Objectives and Outcomes
+- 6.3 Limitations of the Study
+- 6.4 Future Work and Extensions
 
 **Appendices**
-- Appendix A: System Manual  
-- Appendix B: User Manual  
-- Appendix C: Supporting Documentation  
-- Appendix D: Test Reports  
-- Appendix E: Evaluation Data  
-- Appendix F: Code Listings  
+- Appendix A: System Manual
+- Appendix B: User Manual
+- Appendix C: Supporting Documentation
+- Appendix D: Test Reports
+- Appendix E: Evaluation Data
+- Appendix F: Code Listings
 
 ---
 
@@ -773,7 +773,7 @@ The Topdon TC001 thermal camera was selected for contactless thermal measurement
 The combination of Shimmer3 GSR+ sensors and Topdon TC001 thermal cameras provides an optimal platform for contactless physiological measurement research by combining validated reference measurement capability with cost-effective contactless sensing. This hardware combination enables:
 
 - Simultaneous collection of reference GSR data and contactless thermal data for algorithm training and validation
-- Multi-device deployment for studying group interactions and social physiological responses  
+- Multi-device deployment for studying group interactions and social physiological responses
 - Comprehensive data collection covering multiple physiological modalities
 - Cost-effective scalability for research laboratory deployment
 - Integration with existing research protocols and analysis procedures
@@ -797,7 +797,7 @@ The physiological measurement research domain has experienced significant method
 **Table 3.1: Comparative Analysis of Physiological Measurement Approaches**
 
 | Characteristic | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor |
-|---|---|---|
+|---|---|---|---|
 | **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
 | **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
 | **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
@@ -1512,37 +1512,37 @@ The synchronization engine ensures temporal alignment across all data modalities
 These implementation challenges and their solutions demonstrate the innovative engineering approaches required to bridge the gap between research requirements and practical implementation constraints while maintaining scientific rigor and system reliability.
 
 ---
-    
+
     subgraph "Stationary Sensors"
         W1[USB Webcam 1<br/>4K Video Capture]
         W2[USB Webcam 2<br/>4K Video Capture]
     end
-    
+
     subgraph "Specialized Hardware"
         T1[Thermal Camera 1<br/>TopDon TC001]
         T2[Thermal Camera 2<br/>TopDon TC001]
         S1[Shimmer3 GSR+ 1<br/>Physiological Reference]
         S2[Shimmer3 GSR+ 2<br/>Physiological Reference]
     end
-    
+
     PC --> SESSION
     PC --> SYNC
     PC --> STORE
     PC --> QA
-    
+
     SYNC -.->|WebSocket Control| A1
     SYNC -.->|WebSocket Control| A2
     SYNC -.->|WebSocket Control| A3
-    
+
     W1 -->|USB 3.0| PC
     W2 -->|USB 3.0| PC
-    
+
     T1 -->|USB-C| A1
     T2 -->|USB-C| A2
-    
+
     S1 -.->|Bluetooth| A1
     S2 -.->|Bluetooth| A2
-    
+
     A1 -.->|Preview Stream| PC
     A2 -.->|Preview Stream| PC
     A3 -.->|Preview Stream| PC
