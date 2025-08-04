@@ -11,6 +11,7 @@
      - 4.2.1. [Application Architecture and Component Design](#421-application-architecture-and-component-design)
      - 4.2.2. [Multi-Threading and Performance Optimization](#422-multi-threading-and-performance-optimization)
      - 4.2.3. [Resource Management and Power Optimization](#423-resource-management-and-power-optimization)
+     - 4.2.4. [Camera Recording Implementation](#424-camera-recording-implementation)
    - 4.3. [Android Application Sensor Integration](#43-android-application-sensor-integration)
      - 4.3.1. [Thermal Camera Integration (Topdon)](#431-thermal-camera-integration-topdon)
      - 4.3.2. [GSR Sensor Integration (Shimmer)](#432-gsr-sensor-integration-shimmer)
@@ -493,6 +494,104 @@ class PowerOptimizationManager @Inject constructor(
 - **Adaptive Quality Management**: Dynamic adjustment of recording quality parameters based on available system resources and session requirements
 - **Thermal Management**: Comprehensive thermal monitoring with automatic performance scaling to prevent device overheating during intensive recording sessions
 - **Storage Optimization**: Intelligent data compression and local storage management with automatic cleanup and archival procedures
+
+### 4.2.4 Camera Recording Implementation
+
+The Android application implements sophisticated camera recording capabilities through the Camera2 API, providing professional-grade video capture with simultaneous RAW image capture for research applications requiring both high-quality video documentation and detailed frame analysis capabilities.
+
+**Camera Recording Technical Specifications:**
+- **Video Recording**: Support for 4K@30fps, 1080p@60fps with H.264/H.265 encoding
+- **RAW Image Capture**: Simultaneous DNG capture with full sensor resolution and metadata
+- **Manual Controls**: Exposure time, ISO, focus, white balance for consistent research conditions
+- **Multi-Stream Configuration**: Parallel video and still capture with independent quality settings
+- **Synchronization**: Microsecond-level coordination with other sensor modalities
+
+**Camera Recording Implementation:**
+
+```kotlin
+class CameraRecorder @Inject constructor(
+    private val cameraManager: CameraManager,
+    private val configValidator: CameraConfigValidator
+) {
+    private var mediaRecorder: MediaRecorder? = null
+    private var imageReader: ImageReader? = null
+    private var captureSession: CameraCaptureSession? = null
+    
+    suspend fun startRecording(config: CameraConfiguration): Result<Unit> {
+        return withContext(Dispatchers.Main) {
+            try {
+                // Validate configuration parameters
+                configValidator.validate(config)
+                
+                // Setup dual capture: video + RAW images
+                setupMediaRecorder(config)
+                setupImageReader(config)
+                
+                // Create capture session with multiple targets
+                val surfaces = listOf(
+                    mediaRecorder!!.surface,
+                    imageReader!!.surface
+                )
+                
+                cameraDevice.createCaptureSession(
+                    surfaces,
+                    object : CameraCaptureSession.StateCallback() {
+                        override fun onConfigured(session: CameraCaptureSession) {
+                            captureSession = session
+                            startCapture()
+                        }
+                        override fun onConfigureFailed(session: CameraCaptureSession) {
+                            throw CaptureSessionException("Failed to configure capture session")
+                        }
+                    },
+                    backgroundHandler
+                )
+                
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+    
+    private fun setupMediaRecorder(config: CameraConfiguration) {
+        mediaRecorder = MediaRecorder().apply {
+            setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            setVideoSize(config.videoWidth, config.videoHeight)
+            setVideoFrameRate(config.frameRate)
+            setVideoBitRate(config.bitRate)
+            setOutputFile(config.outputPath)
+            prepare()
+        }
+    }
+    
+    private fun setupImageReader(config: CameraConfiguration) {
+        imageReader = ImageReader.newInstance(
+            config.imageWidth,
+            config.imageHeight,
+            ImageFormat.RAW_SENSOR,
+            MAX_IMAGES
+        ).apply {
+            setOnImageAvailableListener({ reader ->
+                val image = reader.acquireLatestImage()
+                processRawImage(image)
+                image.close()
+            }, backgroundHandler)
+        }
+    }
+}
+```
+
+**Advanced Camera Features:**
+
+- **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing pipelines
+- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and performance optimization
+- **RAW Processing Pipeline**: DNG file generation with comprehensive metadata embedding and quality validation
+- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration integration
+
+The camera recording system provides comprehensive error handling, quality validation, and performance monitoring to ensure reliable data collection throughout extended research sessions while maintaining optimal battery efficiency and thermal management.
 
 ## 4.3 Android Application Sensor Integration
 
