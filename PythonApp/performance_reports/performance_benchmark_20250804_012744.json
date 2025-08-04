@@ -1,0 +1,160 @@
+{
+  "system_info": {
+    "platform": "Linux-6.11.0-1018-azure-x86_64-with-glibc2.39",
+    "python_version": "3.12.3",
+    "cpu_count": 4,
+    "total_memory_gb": 15.620681762695312,
+    "available_memory_gb": 14.44156265258789,
+    "timestamp": "2025-08-04T01:26:40.723948"
+  },
+  "benchmark_summary": {
+    "total_tests": 8,
+    "successful_tests": 8,
+    "failed_tests": 0,
+    "success_rate": 1.0
+  },
+  "performance_statistics": {
+    "duration": {
+      "mean": 8.001491487000017,
+      "median": 1.0153346825000256,
+      "min": 0.056270915000027344,
+      "max": 57.10028954399996
+    },
+    "memory_usage_mb": {
+      "mean": 310.94921875,
+      "median": 89.62109375,
+      "min": 25.6875,
+      "max": 1086.33984375
+    },
+    "cpu_usage_percent": {
+      "mean": 72.45,
+      "median": 99.8,
+      "min": 4.8,
+      "max": 106.6
+    },
+    "throughput_ops_per_sec": {
+      "mean": 271106.95676758874,
+      "median": 916.3808208127568,
+      "min": 3.502609624519639,
+      "max": 1145461.015309922
+    }
+  },
+  "detailed_results": [
+    {
+      "test_name": "memory_allocation",
+      "duration_seconds": 0.18921626000002334,
+      "memory_usage_mb": 1025.9765625,
+      "cpu_usage_percent": 100.4,
+      "throughput_ops_per_sec": 528.5246581408597,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "allocated_blocks": 100,
+        "block_size_mb": 10,
+        "peak_memory_mb": 1025.9765625
+      }
+    },
+    {
+      "test_name": "cpu_intensive",
+      "duration_seconds": 0.8730151390000174,
+      "memory_usage_mb": 25.6875,
+      "cpu_usage_percent": 99.6,
+      "throughput_ops_per_sec": 1145461.015309922,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "iterations": 1000000,
+        "final_result": 1.6666641666656378e+17
+      }
+    },
+    {
+      "test_name": "file_io",
+      "duration_seconds": 0.056270915000027344,
+      "memory_usage_mb": 28.4375,
+      "cpu_usage_percent": 106.6,
+      "throughput_ops_per_sec": 1777.2309277697295,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "files_written": 50,
+        "files_read": 50,
+        "file_size_mb": 1,
+        "total_data_mb": 50
+      }
+    },
+    {
+      "test_name": "network_simulation",
+      "duration_seconds": 1.1576542260000338,
+      "memory_usage_mb": 28.4375,
+      "cpu_usage_percent": 8.6,
+      "throughput_ops_per_sec": 863.8175168495684,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "messages_processed": 1000,
+        "message_size_bytes": 1146
+      }
+    },
+    {
+      "test_name": "json_processing",
+      "duration_seconds": 57.10028954399996,
+      "memory_usage_mb": 113.47265625,
+      "cpu_usage_percent": 100.0,
+      "throughput_ops_per_sec": 3.502609624519639,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "operations": 200,
+        "json_size_bytes": 1245260,
+        "recordings_count": 50
+      }
+    },
+    {
+      "test_name": "concurrent_operations",
+      "duration_seconds": 0.20641278599998714,
+      "memory_usage_mb": 92.546875,
+      "cpu_usage_percent": 4.8,
+      "throughput_ops_per_sec": 968.9441247759453,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "workers": 10,
+        "work_per_worker": 20,
+        "total_operations": 200
+      }
+    },
+    {
+      "test_name": "memory_stress",
+      "duration_seconds": 2.4664576680000323,
+      "memory_usage_mb": 1086.33984375,
+      "cpu_usage_percent": 59.2,
+      "throughput_ops_per_sec": 202.72030227666113,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "allocations": 500,
+        "cycles": 10,
+        "block_size_mb": 20,
+        "peak_memory_mb": 1086.33984375
+      }
+    },
+    {
+      "test_name": "multithreading",
+      "duration_seconds": 1.9626153580000505,
+      "memory_usage_mb": 86.6953125,
+      "cpu_usage_percent": 100.4,
+      "throughput_ops_per_sec": 1019049.8986913506,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "num_tasks": 20,
+        "iterations_per_task": 100000,
+        "total_operations": 2000000,
+        "worker_threads": 4
+      }
+    }
+  ],
+  "recommendations": [
+    "Low throughput detected (min: 3.5 ops/sec). Consider optimizing slow operations or implementing caching."
+  ]
+}

@@ -1,0 +1,18 @@
+=== Performance Benchmark Summary ===
+
+System: Linux-6.11.0-1018-azure-x86_64-with-glibc2.39
+Python: 3.12.3
+CPU Cores: 4
+Memory: 15.6GB
+
+Tests Run: 8
+Success Rate: 100.0%
+
+Performance Statistics:
+  Average Duration: 8.00s
+  Average Memory: 310.9MB
+  Average CPU: 72.5%
+  Average Throughput: 271107.0 ops/sec
+
+Recommendations:
+  - Low throughput detected (min: 3.5 ops/sec). Consider optimizing slow operations or implementing caching.
