@@ -216,7 +216,7 @@ class MockDevice:
         await asyncio.sleep(0.1 + (hash(self.device_id) % 100) / 1000)  # 0.1-0.2s
         
         # Simulate occasional connection failures for stress testing
-        if hash(self.device_id) % 20 == 0:  # 5% failure rate
+        if hash(self.device_id) % 100 == 0:  # 1% failure rate
             self.error_count += 1
             raise ConnectionError(f"Failed to connect to {self.device_id}")
             

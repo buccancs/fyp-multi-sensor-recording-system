@@ -6,977 +6,977 @@ Duration: 5.22s
 Exit Code: 0
 
 === STDOUT ===
-23:23:41 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
-23:23:41 [[32mINFO[0m] AppLogger: Log level: INFO
-23:23:41 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
-23:23:41 [[32mINFO[0m] AppLogger: Console output: True
-23:23:41 [[32mINFO[0m] AppLogger: File output: True
-23:23:41 [[32mINFO[0m] AppLogger: Structured logging: True
-23:23:41 [[36mDEBUG[0m] asyncio: Using selector: EpollSelector
-23:23:41 [[32mINFO[0m] __main__: Starting Focused Recording Session Test...
-23:23:41 [[32mINFO[0m] __main__: FocusedRecordingSessionTest initialized in /tmp/focused_recording_test_8qatklq2
-23:23:41 [[32mINFO[0m] __main__: ================================================================================
-23:23:41 [[32mINFO[0m] __main__: FOCUSED RECORDING SESSION TEST - START
-23:23:41 [[32mINFO[0m] __main__: ================================================================================
-23:23:41 [[32mINFO[0m] __main__: Setting up focused test environment...
-23:23:41 [[32mINFO[0m] session.session_manager: session manager initialized with base directory: /tmp/focused_recording_test_8qatklq2/recordings
-23:23:41 [[32mINFO[0m] __main__: MockTcpServer initialized on localhost:9000
-23:23:41 [[32mINFO[0m] __main__: MockTcpServer started on localhost:9000
-23:23:41 [[32mINFO[0m] __main__: MockAndroidApp phone_1 initialized
-23:23:41 [[32mINFO[0m] __main__: MockAndroidApp phone_2 initialized
-23:23:41 [[32mINFO[0m] __main__: Test environment setup completed
-23:23:41 [[32mINFO[0m] __main__: === Testing File Operations ===
-23:23:41 [[31mERROR[0m] __main__: ❌ No session directories created
-23:23:41 [[32mINFO[0m] __main__: === Testing Logging Validation ===
-23:23:41 [[36mDEBUG[0m] validation_test: Debug message for validation
-23:23:41 [[32mINFO[0m] validation_test: Info message for validation
-23:23:41 [[33mWARNING[0m] validation_test: Warning message for validation
-23:23:41 [[31mERROR[0m] validation_test: Error message for validation
-23:23:41 [[31mERROR[0m] validation_test: Caught test exception
+06:39:31 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+06:39:31 [[32mINFO[0m] AppLogger: Log level: INFO
+06:39:31 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+06:39:31 [[32mINFO[0m] AppLogger: Console output: True
+06:39:31 [[32mINFO[0m] AppLogger: File output: True
+06:39:31 [[32mINFO[0m] AppLogger: Structured logging: True
+06:39:31 [[36mDEBUG[0m] asyncio: Using selector: EpollSelector
+06:39:31 [[32mINFO[0m] __main__: Starting Focused Recording Session Test...
+06:39:31 [[32mINFO[0m] __main__: FocusedRecordingSessionTest initialized in /tmp/focused_recording_test_hpm7d35l
+06:39:31 [[32mINFO[0m] __main__: ================================================================================
+06:39:31 [[32mINFO[0m] __main__: FOCUSED RECORDING SESSION TEST - START
+06:39:31 [[32mINFO[0m] __main__: ================================================================================
+06:39:31 [[32mINFO[0m] __main__: Setting up focused test environment...
+06:39:31 [[32mINFO[0m] session.session_manager: session manager initialized with base directory: /tmp/focused_recording_test_hpm7d35l/recordings
+06:39:31 [[32mINFO[0m] __main__: MockTcpServer initialized on localhost:9000
+06:39:31 [[32mINFO[0m] __main__: MockTcpServer started on localhost:9000
+06:39:31 [[32mINFO[0m] __main__: MockAndroidApp phone_1 initialized
+06:39:31 [[32mINFO[0m] __main__: MockAndroidApp phone_2 initialized
+06:39:31 [[32mINFO[0m] __main__: Test environment setup completed
+06:39:31 [[32mINFO[0m] __main__: === Testing File Operations ===
+06:39:31 [[31mERROR[0m] __main__: ❌ No session directories created
+06:39:31 [[32mINFO[0m] __main__: === Testing Logging Validation ===
+06:39:31 [[36mDEBUG[0m] validation_test: Debug message for validation
+06:39:31 [[32mINFO[0m] validation_test: Info message for validation
+06:39:31 [[33mWARNING[0m] validation_test: Warning message for validation
+06:39:31 [[31mERROR[0m] validation_test: Error message for validation
+06:39:31 [[31mERROR[0m] validation_test: Caught test exception
 Traceback (most recent call last):
   File "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/test_focused_recording_session.py", line 776, in test_logging_validation
     raise ValueError("Test exception for validation")
 ValueError: Test exception for validation
-23:23:41 [[32mINFO[0m] __main__: ✅ Logging validation: 3 log files, 131215 bytes
-23:23:41 [[32mINFO[0m] __main__: === Testing Error Handling ===
-23:23:41 [[32mINFO[0m] session.session_manager: creating new session with name: invalid/session\name
-23:23:41 [[32mINFO[0m] session.session_manager: session created: invalid_session_name_20250802_232341
-23:23:41 [[36mDEBUG[0m] __main__: Invalid session name handled gracefully
-23:23:41 [[36mDEBUG[0m] __main__: Device disconnection properly detected
-23:23:41 [[32mINFO[0m] __main__: ✅ Error handling test: 2/2 scenarios handled
-23:23:41 [[32mINFO[0m] __main__: === Testing PC-Android Connections ===
-23:23:41 [[32mINFO[0m] __main__: MockTcpServer: Client connected from 127.0.0.1:48264
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: device_connected
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_connected
-23:23:41 [[32mINFO[0m] __main__: MockTcpServer: Client connected from 127.0.0.1:48276
-23:23:41 [[32mINFO[0m] __main__: MockAndroidApp phone_1 connected to PC
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: device_connected
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_connected
-23:23:41 [[32mINFO[0m] __main__: MockAndroidApp phone_2 connected to PC
-23:23:41 [[32mINFO[0m] __main__: ✅ All 2 devices connected successfully
-23:23:41 [[32mINFO[0m] __main__: PC-Android Connection: ✅ PASS
-23:23:41 [[32mINFO[0m] __main__: === Testing Recording Session Coordination ===
-23:23:41 [[32mINFO[0m] __main__: Creating recording session...
-23:23:41 [[32mINFO[0m] session.session_manager: creating new session with name: focused_test_session
-23:23:41 [[32mINFO[0m] session.session_manager: session created: focused_test_session_20250802_232341
-23:23:41 [[32mINFO[0m] __main__: Created session: focused_test_session_20250802_232341
-23:23:41 [[32mINFO[0m] __main__: Starting coordinated recording...
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: recording_started
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: recording_started
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_started
-23:23:41 [[32mINFO[0m] __main__: MockAndroidApp phone_1 started recording
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_started
-23:23:41 [[32mINFO[0m] __main__: MockAndroidApp phone_2 started recording
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:41 [[32mINFO[0m] __main__: Recording for 3.0 seconds...
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:41 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: device_status
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_status
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: device_status
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_status
-23:23:42 [[36mDEBUG[0m] __main__: Recording progress: 1/3 seconds
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:42 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_status
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: device_status
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: device_status
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_status
-23:23:43 [[36mDEBUG[0m] __main__: Recording progress: 2/3 seconds
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:43 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: device_status
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: device_status
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_status
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_status
-23:23:44 [[36mDEBUG[0m] __main__: Recording progress: 3/3 seconds
-23:23:44 [[32mINFO[0m] __main__: Stopping coordinated recording...
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: recording_stopped
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: recording_stopped
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_stopped
-23:23:44 [[32mINFO[0m] __main__: MockAndroidApp phone_1 stopped recording
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_stopped
-23:23:44 [[32mINFO[0m] __main__: MockAndroidApp phone_2 stopped recording
-23:23:44 [[32mINFO[0m] __main__: Session files created: ['session_metadata.json']
-23:23:44 [[32mINFO[0m] __main__: ✅ Recording session completed successfully
-23:23:44 [[32mINFO[0m] __main__:    Devices started: 2/2
-23:23:44 [[32mINFO[0m] __main__:    Devices stopped: 2/2
-23:23:44 [[32mINFO[0m] __main__:    Network messages: 186
-23:23:44 [[32mINFO[0m] __main__: Recording Session Coordination: ✅ PASS
-23:23:44 [[32mINFO[0m] __main__: === Testing Sensor Data Simulation ===
-23:23:44 [[32mINFO[0m] session.session_manager: creating new session with name: sensor_test_session
-23:23:44 [[32mINFO[0m] session.session_manager: session created: sensor_test_session_20250802_232344
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: recording_started
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_started
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: recording_started
-23:23:44 [[32mINFO[0m] __main__: MockAndroidApp phone_1 started recording
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_started
-23:23:44 [[32mINFO[0m] __main__: MockAndroidApp phone_2 started recording
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:44 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:45 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_stopped
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: recording_stopped
-23:23:46 [[32mINFO[0m] __main__: MockAndroidApp phone_1 stopped recording
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: recording_stopped
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_stopped
-23:23:46 [[32mINFO[0m] __main__: MockAndroidApp phone_2 stopped recording
-23:23:46 [[32mINFO[0m] __main__: ✅ Sensor simulation test: 3/3 sensors working
-23:23:46 [[32mINFO[0m] __main__: Sensor Data Simulation: ✅ PASS
-23:23:46 [[32mINFO[0m] __main__: === Testing Network Communication ===
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: ping
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: ping
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: ping
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: ping
-23:23:46 [[36mDEBUG[0m] __main__: Message 'ping': 2/2 successful
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: get_status
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: get_status
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: get_status
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: get_status
-23:23:46 [[36mDEBUG[0m] __main__: Message 'get_status': 2/2 successful
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: sync_clock
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48264: sync_clock
-23:23:46 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:48276: sync_clock
-23:23:46 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: sync_clock
-23:23:46 [[36mDEBUG[0m] __main__: Message 'sync_clock': 2/2 successful
-23:23:46 [[32mINFO[0m] __main__: ✅ Network communication test: 6/6 messages sent
-23:23:46 [[32mINFO[0m] __main__: Network Communication: ✅ PASS
-23:23:46 [[32mINFO[0m] __main__: File Operations: ❌ FAIL
-23:23:46 [[32mINFO[0m] __main__: Logging Validation: ✅ PASS
-23:23:46 [[32mINFO[0m] __main__: Error Handling: ✅ PASS
-23:23:46 [[32mINFO[0m] __main__: ================================================================================
-23:23:46 [[32mINFO[0m] __main__: ✅ FOCUSED RECORDING SESSION TEST - SUCCESS
-23:23:46 [[32mINFO[0m] __main__: Tests Passed: 6/7
-23:23:46 [[32mINFO[0m] __main__: Success Rate: 85.7%
-23:23:46 [[32mINFO[0m] __main__: Duration: 5.13 seconds
-23:23:46 [[32mINFO[0m] __main__: ================================================================================
-23:23:46 [[32mINFO[0m] __main__: Cleaning up test resources...
-23:23:46 [[32mINFO[0m] __main__: MockAndroidApp phone_1 disconnected
-23:23:46 [[33mWARNING[0m] __main__: Client 127.0.0.1:48264 error: [Errno 104] Connection reset by peer
-23:23:46 [[32mINFO[0m] __main__: MockAndroidApp phone_2 disconnected
-23:23:46 [[33mWARNING[0m] __main__: Client 127.0.0.1:48276 error: [Errno 104] Connection reset by peer
-23:23:46 [[32mINFO[0m] __main__: MockTcpServer: Client 127.0.0.1:48264 disconnected
-23:23:46 [[32mINFO[0m] __main__: MockTcpServer stopped
-23:23:46 [[32mINFO[0m] __main__: MockTcpServer: Client 127.0.0.1:48276 disconnected
-23:23:46 [[32mINFO[0m] __main__: Cleanup completed
+06:39:31 [[32mINFO[0m] __main__: ✅ Logging validation: 3 log files, 1052209 bytes
+06:39:31 [[32mINFO[0m] __main__: === Testing Error Handling ===
+06:39:31 [[32mINFO[0m] session.session_manager: creating new session with name: invalid/session\name
+06:39:31 [[32mINFO[0m] session.session_manager: session created: invalid_session_name_20250804_063931
+06:39:31 [[36mDEBUG[0m] __main__: Invalid session name handled gracefully
+06:39:31 [[36mDEBUG[0m] __main__: Device disconnection properly detected
+06:39:31 [[32mINFO[0m] __main__: ✅ Error handling test: 2/2 scenarios handled
+06:39:31 [[32mINFO[0m] __main__: === Testing PC-Android Connections ===
+06:39:31 [[32mINFO[0m] __main__: MockTcpServer: Client connected from 127.0.0.1:53154
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_connected
+06:39:31 [[32mINFO[0m] __main__: MockAndroidApp phone_1 connected to PC
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: device_connected
+06:39:31 [[32mINFO[0m] __main__: MockTcpServer: Client connected from 127.0.0.1:53162
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_connected
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: device_connected
+06:39:31 [[32mINFO[0m] __main__: MockAndroidApp phone_2 connected to PC
+06:39:31 [[32mINFO[0m] __main__: ✅ All 2 devices connected successfully
+06:39:31 [[32mINFO[0m] __main__: PC-Android Connection: ✅ PASS
+06:39:31 [[32mINFO[0m] __main__: === Testing Recording Session Coordination ===
+06:39:31 [[32mINFO[0m] __main__: Creating recording session...
+06:39:31 [[32mINFO[0m] session.session_manager: creating new session with name: focused_test_session
+06:39:31 [[32mINFO[0m] session.session_manager: session created: focused_test_session_20250804_063931
+06:39:31 [[32mINFO[0m] __main__: Created session: focused_test_session_20250804_063931
+06:39:31 [[32mINFO[0m] __main__: Starting coordinated recording...
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_started
+06:39:31 [[32mINFO[0m] __main__: MockAndroidApp phone_1 started recording
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: recording_started
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: recording_started
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_started
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:31 [[32mINFO[0m] __main__: MockAndroidApp phone_2 started recording
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:31 [[32mINFO[0m] __main__: Recording for 3.0 seconds...
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:31 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: device_status
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_status
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: device_status
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_status
+06:39:32 [[36mDEBUG[0m] __main__: Recording progress: 1/3 seconds
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:32 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: device_status
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: device_status
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_status
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_status
+06:39:33 [[36mDEBUG[0m] __main__: Recording progress: 2/3 seconds
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:33 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: device_status
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: device_status
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: device_status
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: device_status
+06:39:34 [[36mDEBUG[0m] __main__: Recording progress: 3/3 seconds
+06:39:34 [[32mINFO[0m] __main__: Stopping coordinated recording...
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_stopped
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: recording_stopped
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: recording_stopped
+06:39:34 [[32mINFO[0m] __main__: MockAndroidApp phone_1 stopped recording
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_stopped
+06:39:34 [[32mINFO[0m] __main__: MockAndroidApp phone_2 stopped recording
+06:39:34 [[32mINFO[0m] __main__: Session files created: ['session_metadata.json']
+06:39:34 [[32mINFO[0m] __main__: ✅ Recording session completed successfully
+06:39:34 [[32mINFO[0m] __main__:    Devices started: 2/2
+06:39:34 [[32mINFO[0m] __main__:    Devices stopped: 2/2
+06:39:34 [[32mINFO[0m] __main__:    Network messages: 186
+06:39:34 [[32mINFO[0m] __main__: Recording Session Coordination: ✅ PASS
+06:39:34 [[32mINFO[0m] __main__: === Testing Sensor Data Simulation ===
+06:39:34 [[32mINFO[0m] session.session_manager: creating new session with name: sensor_test_session
+06:39:34 [[32mINFO[0m] session.session_manager: session created: sensor_test_session_20250804_063934
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: recording_started
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: recording_started
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_started
+06:39:34 [[32mINFO[0m] __main__: MockAndroidApp phone_1 started recording
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_started
+06:39:34 [[32mINFO[0m] __main__: MockAndroidApp phone_2 started recording
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:34 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:35 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:35 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: camera_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: thermal_frame
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: gsr_sample
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: recording_stopped
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: recording_stopped
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: recording_stopped
+06:39:36 [[32mINFO[0m] __main__: MockAndroidApp phone_1 stopped recording
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: recording_stopped
+06:39:36 [[32mINFO[0m] __main__: MockAndroidApp phone_2 stopped recording
+06:39:36 [[32mINFO[0m] __main__: ✅ Sensor simulation test: 3/3 sensors working
+06:39:36 [[32mINFO[0m] __main__: Sensor Data Simulation: ✅ PASS
+06:39:36 [[32mINFO[0m] __main__: === Testing Network Communication ===
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: ping
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: ping
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: ping
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: ping
+06:39:36 [[36mDEBUG[0m] __main__: Message 'ping': 2/2 successful
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: get_status
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: get_status
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: get_status
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: get_status
+06:39:36 [[36mDEBUG[0m] __main__: Message 'get_status': 2/2 successful
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53154: sync_clock
+06:39:36 [[36mDEBUG[0m] __main__: MockTcpServer received from 127.0.0.1:53162: sync_clock
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_1 sent: sync_clock
+06:39:36 [[36mDEBUG[0m] __main__: MockAndroidApp phone_2 sent: sync_clock
+06:39:36 [[36mDEBUG[0m] __main__: Message 'sync_clock': 2/2 successful
+06:39:36 [[32mINFO[0m] __main__: ✅ Network communication test: 6/6 messages sent
+06:39:36 [[32mINFO[0m] __main__: Network Communication: ✅ PASS
+06:39:36 [[32mINFO[0m] __main__: File Operations: ❌ FAIL
+06:39:36 [[32mINFO[0m] __main__: Logging Validation: ✅ PASS
+06:39:36 [[32mINFO[0m] __main__: Error Handling: ✅ PASS
+06:39:36 [[32mINFO[0m] __main__: ================================================================================
+06:39:36 [[32mINFO[0m] __main__: ✅ FOCUSED RECORDING SESSION TEST - SUCCESS
+06:39:36 [[32mINFO[0m] __main__: Tests Passed: 6/7
+06:39:36 [[32mINFO[0m] __main__: Success Rate: 85.7%
+06:39:36 [[32mINFO[0m] __main__: Duration: 5.13 seconds
+06:39:36 [[32mINFO[0m] __main__: ================================================================================
+06:39:36 [[32mINFO[0m] __main__: Cleaning up test resources...
+06:39:36 [[33mWARNING[0m] __main__: Client 127.0.0.1:53154 error: [Errno 104] Connection reset by peer
+06:39:36 [[32mINFO[0m] __main__: MockAndroidApp phone_1 disconnected
+06:39:36 [[32mINFO[0m] __main__: MockTcpServer: Client 127.0.0.1:53154 disconnected
+06:39:36 [[33mWARNING[0m] __main__: Client 127.0.0.1:53162 error: [Errno 104] Connection reset by peer
+06:39:36 [[32mINFO[0m] __main__: MockAndroidApp phone_2 disconnected
+06:39:36 [[32mINFO[0m] __main__: MockTcpServer: Client 127.0.0.1:53162 disconnected
+06:39:36 [[32mINFO[0m] __main__: MockTcpServer stopped
+06:39:36 [[32mINFO[0m] __main__: Cleanup completed
 
 ============================================================
 📊 FOCUSED RECORDING SESSION TEST SUMMARY
@@ -991,7 +991,7 @@ ValueError: Test exception for validation
 ❌ ERRORS (1):
   • No session directories
 ============================================================
-23:23:46 [[32mINFO[0m] __main__: Test results saved to: /tmp/focused_recording_test_8qatklq2/focused_test_results.json
+06:39:36 [[32mINFO[0m] __main__: Test results saved to: /tmp/focused_recording_test_hpm7d35l/focused_test_results.json
 
 === STDERR ===
 /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/test_focused_recording_session.py:833: RuntimeWarning: coroutine 'MockAndroidApp._send_message' was never awaited

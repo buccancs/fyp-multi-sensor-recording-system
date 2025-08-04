@@ -2,55 +2,55 @@
 Category: Data Quality
 Description: Data corruption detection, checksum validation, and recovery testing with file integrity checks
 Success: True
-Duration: 147.72s
+Duration: 147.07s
 Exit Code: 0
 
 === STDOUT ===
-23:26:55 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
-23:26:55 [[32mINFO[0m] AppLogger: Log level: INFO
-23:26:55 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
-23:26:55 [[32mINFO[0m] AppLogger: Console output: True
-23:26:55 [[32mINFO[0m] AppLogger: File output: True
-23:26:55 [[32mINFO[0m] AppLogger: Structured logging: True
-23:26:55 [[32mINFO[0m] __main__: ================================================================================
-23:26:55 [[32mINFO[0m] __main__: 🔍 DATA INTEGRITY VALIDATION SUITE - MULTI-SENSOR RECORDING SYSTEM
-23:26:55 [[32mINFO[0m] __main__: ================================================================================
-23:26:55 [[32mINFO[0m] __main__: Data integrity test directory: /tmp/data_integrity_test_fygqjayl
-23:26:55 [[32mINFO[0m] __main__: 🧪 Testing data integrity under corruption scenarios...
-23:28:54 [[32mINFO[0m] __main__: Generated 9 test data files
-23:29:21 [[32mINFO[0m] __main__: Applied corruption: {'random_corruption': 3, 'header_corruption': 3, 'truncation': 3}
-23:29:22 [[32mINFO[0m] __main__: ✅ Data integrity corruption test completed:
-23:29:22 [[32mINFO[0m] __main__:    Files Tested: 9
-23:29:22 [[32mINFO[0m] __main__:    Files Corrupted: 9
-23:29:22 [[32mINFO[0m] __main__:    Checksum Mismatches: 9
-23:29:22 [[32mINFO[0m] __main__:    Data Loss: 5793 bytes
-23:29:22 [[32mINFO[0m] __main__:    Detection Success: True
-23:29:22 [[32mINFO[0m] __main__: 
+06:42:44 [[32mINFO[0m] AppLogger: === Multi-Sensor Recording System Logging Initialized ===
+06:42:44 [[32mINFO[0m] AppLogger: Log level: INFO
+06:42:44 [[32mINFO[0m] AppLogger: Log directory: /home/runner/work/bucika_gsr/bucika_gsr/PythonApp/logs
+06:42:44 [[32mINFO[0m] AppLogger: Console output: True
+06:42:44 [[32mINFO[0m] AppLogger: File output: True
+06:42:44 [[32mINFO[0m] AppLogger: Structured logging: True
+06:42:44 [[32mINFO[0m] __main__: ================================================================================
+06:42:44 [[32mINFO[0m] __main__: 🔍 DATA INTEGRITY VALIDATION SUITE - MULTI-SENSOR RECORDING SYSTEM
+06:42:44 [[32mINFO[0m] __main__: ================================================================================
+06:42:44 [[32mINFO[0m] __main__: Data integrity test directory: /tmp/data_integrity_test_kvwmvbza
+06:42:44 [[32mINFO[0m] __main__: 🧪 Testing data integrity under corruption scenarios...
+06:44:43 [[32mINFO[0m] __main__: Generated 9 test data files
+06:45:10 [[32mINFO[0m] __main__: Applied corruption: {'random_corruption': 3, 'header_corruption': 3, 'truncation': 3}
+06:45:11 [[32mINFO[0m] __main__: ✅ Data integrity corruption test completed:
+06:45:11 [[32mINFO[0m] __main__:    Files Tested: 9
+06:45:11 [[32mINFO[0m] __main__:    Files Corrupted: 9
+06:45:11 [[32mINFO[0m] __main__:    Checksum Mismatches: 9
+06:45:11 [[32mINFO[0m] __main__:    Data Loss: 5793 bytes
+06:45:11 [[32mINFO[0m] __main__:    Detection Success: True
+06:45:11 [[32mINFO[0m] __main__: 
 ================================================================================
-23:29:22 [[32mINFO[0m] __main__: 📊 DATA INTEGRITY VALIDATION RESULTS
-23:29:22 [[32mINFO[0m] __main__: ================================================================================
-23:29:22 [[32mINFO[0m] __main__: 📈 SUCCESS RATE: 100.0% (1/1 tests)
-23:29:22 [[32mINFO[0m] __main__: ⏱️  TOTAL DURATION: 147.4 seconds
-23:29:22 [[32mINFO[0m] __main__: 
+06:45:11 [[32mINFO[0m] __main__: 📊 DATA INTEGRITY VALIDATION RESULTS
+06:45:11 [[32mINFO[0m] __main__: ================================================================================
+06:45:11 [[32mINFO[0m] __main__: 📈 SUCCESS RATE: 100.0% (1/1 tests)
+06:45:11 [[32mINFO[0m] __main__: ⏱️  TOTAL DURATION: 146.8 seconds
+06:45:11 [[32mINFO[0m] __main__: 
 🔍 DETAILED DATA INTEGRITY RESULTS:
-23:29:22 [[32mINFO[0m] __main__:   ✅ PASSED: Data Integrity Under Corruption
-23:29:22 [[32mINFO[0m] __main__:     Duration: 147.4s
-23:29:22 [[32mINFO[0m] __main__:     Files Tested: 9
-23:29:22 [[32mINFO[0m] __main__:     Corruptions Detected: 9
-23:29:22 [[32mINFO[0m] __main__:     Checksum Mismatches: 9
-23:29:22 [[32mINFO[0m] __main__:     Data Loss: 5793 bytes
-23:29:22 [[32mINFO[0m] __main__: 
+06:45:11 [[32mINFO[0m] __main__:   ✅ PASSED: Data Integrity Under Corruption
+06:45:11 [[32mINFO[0m] __main__:     Duration: 146.8s
+06:45:11 [[32mINFO[0m] __main__:     Files Tested: 9
+06:45:11 [[32mINFO[0m] __main__:     Corruptions Detected: 9
+06:45:11 [[32mINFO[0m] __main__:     Checksum Mismatches: 9
+06:45:11 [[32mINFO[0m] __main__:     Data Loss: 5793 bytes
+06:45:11 [[32mINFO[0m] __main__: 
 🎯 DATA INTEGRITY TESTING ACHIEVEMENTS:
-23:29:22 [[32mINFO[0m] __main__:   ✨ File corruption detection and validation completed
-23:29:22 [[32mINFO[0m] __main__:   ✨ Checksum verification for all data types validated
-23:29:22 [[32mINFO[0m] __main__:   ✨ File format integrity validation implemented
-23:29:22 [[32mINFO[0m] __main__:   ✨ Data loss quantification and reporting established
-23:29:22 [[32mINFO[0m] __main__:   ✨ Multi-format data validation (video, thermal, GSR, metadata)
-23:29:22 [[32mINFO[0m] __main__:   ✨ Comprehensive corruption scenario testing completed
-23:29:22 [[32mINFO[0m] __main__: 
+06:45:11 [[32mINFO[0m] __main__:   ✨ File corruption detection and validation completed
+06:45:11 [[32mINFO[0m] __main__:   ✨ Checksum verification for all data types validated
+06:45:11 [[32mINFO[0m] __main__:   ✨ File format integrity validation implemented
+06:45:11 [[32mINFO[0m] __main__:   ✨ Data loss quantification and reporting established
+06:45:11 [[32mINFO[0m] __main__:   ✨ Multi-format data validation (video, thermal, GSR, metadata)
+06:45:11 [[32mINFO[0m] __main__:   ✨ Comprehensive corruption scenario testing completed
+06:45:11 [[32mINFO[0m] __main__: 
 💾 Data integrity test results saved to: test_results/data_integrity_test_results.json
-23:29:22 [[32mINFO[0m] __main__: 
+06:45:11 [[32mINFO[0m] __main__: 
 🎉 ALL DATA INTEGRITY TESTS PASSED!
-23:29:22 [[32mINFO[0m] __main__: Cleaned up test directory: /tmp/data_integrity_test_fygqjayl
+06:45:11 [[32mINFO[0m] __main__: Cleaned up test directory: /tmp/data_integrity_test_kvwmvbza
 
 === STDERR ===

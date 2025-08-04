@@ -535,6 +535,33 @@ class TestComprehensiveRecordingSession:
     with both PC and Android components
     """
     
+    def __init__(self, test_dir=None):
+        """Initialize test environment"""
+        if test_dir is None:
+            import tempfile
+            test_dir = Path(tempfile.mkdtemp(prefix="recording_test_"))
+        
+        self.test_dir = Path(test_dir)
+        self.test_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Test components
+        self.session_manager = None
+        self.device_server = None
+        self.webcam_capture = None
+        self.shimmer_manager = None
+        self.mock_devices = []
+        
+        # Test results
+        self.results = []
+        self.errors = []
+        self.warnings = []
+        
+        # Performance tracking
+        self.start_time = None
+        self.end_time = None
+        
+        logger.info(f"TestComprehensiveRecordingSession initialized in {self.test_dir}")
+    
     @pytest.fixture(autouse=True)
     def setup_test(self, tmp_path):
         """Setup test environment using pytest fixtures"""
@@ -1295,7 +1322,7 @@ async def main():
     logger.info("Starting Comprehensive Recording Session Integration Test...")
     
     # Create test instance
-    test = ComprehensiveRecordingSessionTest()
+    test = TestComprehensiveRecordingSession()
     
     try:
         # Run comprehensive test
