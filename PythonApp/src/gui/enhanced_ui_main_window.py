@@ -56,6 +56,15 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
+try:
+    from utils.fake_data_generator import get_fake_data_generator, generate_realistic_device_status_text
+except ImportError:
+    # Fallback if fake data generator is not available
+    def get_fake_data_generator():
+        return None
+    def generate_realistic_device_status_text():
+        return "Device data generator not available"
+
 
 class ModernButton(QPushButton):
     """Custom button with modern styling inspired by PsychoPy"""
@@ -194,10 +203,16 @@ class EnhancedMainWindow(QMainWindow):
         self.session_manager = None
         self.recording_active = False
         
+        # Initialize fake data generator for realistic display
+        self.fake_data = get_fake_data_generator()
+        
         # Setup UI
         self.setup_styling()
         self.setup_ui()
         self.setup_connections()
+        
+        # Start realistic updates
+        self.setup_realistic_updates()
         
         logger.info("Enhanced Main Window initialized")
     
@@ -343,38 +358,35 @@ class EnhancedMainWindow(QMainWindow):
         devices_group = ModernGroupBox("Connected Devices")
         devices_layout = QVBoxLayout(devices_group)
         
-        # Device list
-        self.device_indicators = {}
-        devices = [
-            ("Shimmer GSR", "disconnected"),
-            ("Webcam", "connected"),
-            ("Audio Input", "connected"),
-            ("Thermal Camera", "disconnected")
-        ]
+        # Create scrollable device list with realistic data
+        self.device_status_text = QTextEdit()
+        self.device_status_text.setMaximumHeight(200)
+        self.device_status_text.setReadOnly(True)
+        self.device_status_text.setStyleSheet("""
+            QTextEdit {
+                background-color: #f9f8f7;
+                border: 1px solid #d1d1d1;
+                font-family: 'Consolas', 'Monaco', monospace;
+                font-size: 9pt;
+                color: #323130;
+            }
+        """)
+        self.update_device_status_display()
+        devices_layout.addWidget(self.device_status_text)
         
-        for device_name, status in devices:
-            device_widget = QWidget()
-            device_layout = QHBoxLayout(device_widget)
-            device_layout.setContentsMargins(0, 0, 0, 0)
-            
-            # Status indicator
-            indicator = StatusIndicator(status)
-            self.device_indicators[device_name] = indicator
-            device_layout.addWidget(indicator)
-            
-            # Device name
-            name_label = QLabel(device_name)
-            name_label.setFont(QFont("Segoe UI", 9))
-            device_layout.addWidget(name_label)
-            
-            device_layout.addStretch()
-            
-            # Connection button
-            connect_btn = ModernButton("Connect" if status == "disconnected" else "Disconnect")
-            connect_btn.clicked.connect(lambda checked, name=device_name: self.toggle_device_connection(name))
-            device_layout.addWidget(connect_btn)
-            
-            devices_layout.addWidget(device_widget)
+        # Device action buttons
+        device_buttons_layout = QHBoxLayout()
+        
+        refresh_devices_btn = ModernButton("Refresh Devices")
+        refresh_devices_btn.clicked.connect(self.refresh_device_status)
+        device_buttons_layout.addWidget(refresh_devices_btn)
+        
+        device_diagnostics_btn = ModernButton("Device Diagnostics")
+        device_diagnostics_btn.clicked.connect(self.show_device_diagnostics)
+        device_buttons_layout.addWidget(device_diagnostics_btn)
+        
+        device_buttons_layout.addStretch()
+        devices_layout.addLayout(device_buttons_layout)
         
         layout.addWidget(devices_group)
         
@@ -542,7 +554,7 @@ class EnhancedMainWindow(QMainWindow):
         monitoring_group = ModernGroupBox("System Monitor")
         monitoring_layout = QVBoxLayout(monitoring_group)
         
-        # Performance indicators
+        # Performance indicators with real-time labels
         perf_layout = QGridLayout()
         
         perf_layout.addWidget(QLabel("CPU:"), 0, 0)
@@ -551,11 +563,39 @@ class EnhancedMainWindow(QMainWindow):
         self.cpu_progress.setValue(25)
         perf_layout.addWidget(self.cpu_progress, 0, 1)
         
+        self.cpu_label = QLabel("25%")
+        self.cpu_label.setFont(QFont("Consolas", 8))
+        perf_layout.addWidget(self.cpu_label, 0, 2)
+        
         perf_layout.addWidget(QLabel("Memory:"), 1, 0)
         self.memory_progress = QProgressBar()
         self.memory_progress.setMaximum(100)
         self.memory_progress.setValue(45)
         perf_layout.addWidget(self.memory_progress, 1, 1)
+        
+        self.memory_label = QLabel("45%")
+        self.memory_label.setFont(QFont("Consolas", 8))
+        perf_layout.addWidget(self.memory_label, 1, 2)
+        
+        perf_layout.addWidget(QLabel("Disk:"), 2, 0)
+        self.disk_progress = QProgressBar()
+        self.disk_progress.setMaximum(100)
+        self.disk_progress.setValue(55)
+        perf_layout.addWidget(self.disk_progress, 2, 1)
+        
+        self.disk_label = QLabel("55%")
+        self.disk_label.setFont(QFont("Consolas", 8))
+        perf_layout.addWidget(self.disk_label, 2, 2)
+        
+        perf_layout.addWidget(QLabel("Network:"), 3, 0)
+        self.network_progress = QProgressBar()
+        self.network_progress.setMaximum(100)
+        self.network_progress.setValue(15)
+        perf_layout.addWidget(self.network_progress, 3, 1)
+        
+        self.network_label = QLabel("15 MB/s")
+        self.network_label.setFont(QFont("Consolas", 8))
+        perf_layout.addWidget(self.network_label, 3, 2)
         
         monitoring_layout.addLayout(perf_layout)
         
@@ -567,7 +607,16 @@ class EnhancedMainWindow(QMainWindow):
         
         self.log_text = QTextEdit()
         self.log_text.setMaximumHeight(200)
-        self.log_text.setText("System initialized successfully\nReady for recording session\n")
+        self.log_text.setStyleSheet("""
+            QTextEdit {
+                background-color: #1e1e1e;
+                color: #d4d4d4;
+                border: 1px solid #444;
+                font-family: 'Consolas', 'Monaco', monospace;
+                font-size: 9pt;
+            }
+        """)
+        self.populate_realistic_logs()
         logs_layout.addWidget(self.log_text)
         
         layout.addWidget(logs_group)
@@ -720,11 +769,27 @@ class EnhancedMainWindow(QMainWindow):
         self.log_message("Recording session stopped")
     
     def update_monitoring(self):
-        """Update system monitoring displays"""
-        import random
-        # Simulate CPU and memory usage
-        self.cpu_progress.setValue(random.randint(20, 60))
-        self.memory_progress.setValue(random.randint(30, 70))
+        """Update system monitoring displays with realistic data"""
+        if self.fake_data:
+            metrics = self.fake_data.get_system_metrics()
+            
+            # Update progress bars and labels
+            self.cpu_progress.setValue(int(metrics.cpu_usage))
+            self.cpu_label.setText(f"{metrics.cpu_usage:.1f}%")
+            
+            self.memory_progress.setValue(int(metrics.memory_usage))
+            self.memory_label.setText(f"{metrics.memory_usage:.1f}%")
+            
+            self.disk_progress.setValue(int(metrics.disk_usage))
+            self.disk_label.setText(f"{metrics.disk_usage:.1f}%")
+            
+            self.network_progress.setValue(int(min(100, metrics.network_activity)))
+            self.network_label.setText(f"{metrics.network_activity:.1f} MB/s")
+        else:
+            # Fallback to simple random values
+            import random
+            self.cpu_progress.setValue(random.randint(20, 60))
+            self.memory_progress.setValue(random.randint(30, 70))
         
         if self.recording_active:
             # Update recording duration and size
@@ -744,6 +809,90 @@ class EnhancedMainWindow(QMainWindow):
         """Add message to system log"""
         timestamp = datetime.now().strftime("[%H:%M:%S]")
         self.log_text.append(f"{timestamp} {message}")
+    
+    def setup_realistic_updates(self):
+        """Setup timers for realistic data updates"""
+        # Timer for system monitoring updates
+        self.monitoring_timer = QTimer()
+        self.monitoring_timer.timeout.connect(self.update_monitoring)
+        self.monitoring_timer.start(2000)  # Update every 2 seconds
+        
+        # Timer for device status updates
+        self.device_timer = QTimer()
+        self.device_timer.timeout.connect(self.update_device_status_display)
+        self.device_timer.start(5000)  # Update every 5 seconds
+        
+        # Timer for log updates
+        self.log_timer = QTimer()
+        self.log_timer.timeout.connect(self.add_realistic_log_entry)
+        self.log_timer.start(10000)  # Update every 10 seconds
+    
+    def update_device_status_display(self):
+        """Update device status display with realistic data"""
+        if self.fake_data:
+            devices = self.fake_data.get_device_list()
+            device_lines = []
+            
+            for device in devices:
+                storage_pct = (device.storage_available / device.storage_total) * 100
+                status_icon = "🟢" if device.status == "connected" else "🔴" if device.status == "disconnected" else "🟡"
+                
+                device_line = (
+                    f"{status_icon} {device.device_name}\n"
+                    f"    Status: {device.status.title()} | "
+                    f"Battery: {device.battery_level:.0f}% | "
+                    f"Storage: {storage_pct:.0f}% | "
+                    f"Temp: {device.temperature:.1f}°C\n"
+                    f"    Connection: {device.connection_quality.title()} | "
+                    f"Type: {device.device_type.replace('_', ' ').title()}\n"
+                )
+                device_lines.append(device_line)
+            
+            self.device_status_text.setText("\n".join(device_lines))
+        else:
+            self.device_status_text.setText("Device data generator not available")
+    
+    def refresh_device_status(self):
+        """Manually refresh device status"""
+        self.update_device_status_display()
+        self.log_message("Device status refreshed")
+    
+    def show_device_diagnostics(self):
+        """Show detailed device diagnostics"""
+        if self.fake_data:
+            devices = self.fake_data.get_device_list()
+            diagnostics_text = "DEVICE DIAGNOSTICS REPORT\n" + "="*50 + "\n\n"
+            
+            for device in devices:
+                diagnostics_text += f"Device: {device.device_name}\n"
+                diagnostics_text += f"ID: {device.device_id}\n"
+                diagnostics_text += f"Type: {device.device_type}\n"
+                diagnostics_text += f"Status: {device.status}\n"
+                diagnostics_text += f"Battery: {device.battery_level:.1f}%\n"
+                diagnostics_text += f"Storage: {device.storage_available:.0f}/{device.storage_total:.0f} MB\n"
+                diagnostics_text += f"Temperature: {device.temperature:.1f}°C\n"
+                diagnostics_text += f"Connection Quality: {device.connection_quality}\n"
+                diagnostics_text += f"Last Seen: {device.last_seen.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                diagnostics_text += "-" * 30 + "\n"
+            
+            QMessageBox.information(self, "Device Diagnostics", diagnostics_text)
+        else:
+            QMessageBox.information(self, "Device Diagnostics", "Device diagnostics not available")
+    
+    def populate_realistic_logs(self):
+        """Populate log text with realistic entries"""
+        if self.fake_data:
+            logs = self.fake_data.get_realistic_log_entries(15)
+            self.log_text.setText("\n".join(logs))
+        else:
+            self.log_text.setText("[00:00:00] System initialized successfully\n[00:00:01] Ready for recording session")
+    
+    def add_realistic_log_entry(self):
+        """Add a new realistic log entry"""
+        if self.fake_data:
+            new_logs = self.fake_data.get_realistic_log_entries(1)
+            if new_logs:
+                self.log_text.append(new_logs[0])
     
     # Menu actions
     def new_session(self):
