@@ -4647,33 +4647,71 @@ The Python Desktop Controller Application successfully demonstrates that researc
 
 ## References
 
-Boucsein, W. (2012). *Electrodermal Activity* (2nd ed.). Springer Science+Business Media. https://doi.org/10.1007/978-1-4614-1126-0
+### Physiological Measurement and Biometric Research
 
-Bronfenbrenner, U. (1977). Toward an experimental ecology of human development. *American Psychologist*, 32(7), 513-531. https://doi.org/10.1037/0003-066X.32.7.513
+Boucsein, W. (2012). *Electrodermal Activity* (2nd ed.). Springer Science+Business Media. https://doi.org/10.1007/978-1-4614-1126-0
 
 Critchley, H. D. (2002). Electrodermal responses: What happens in the brain. *The Neuroscientist*, 8(2), 132-142. https://doi.org/10.1177/107385840200800209
 
-Cummins, N., Epps, J., Breakspear, M., & Goecke, R. (2015). An investigation of depressed speech detection: Features and normalization. In *Proceedings of the Annual Conference of the International Speech Communication Association* (pp. 2997-3001). ISCA.
-
 Fairclough, S. H. (2009). Fundamentals of physiological computing. *Interacting with Computers*, 21(1-2), 133-145. https://doi.org/10.1016/j.intcom.2008.10.011
-
-Fielding, R. T., & Taylor, R. N. (2002). Principled design of the modern Web architecture. *ACM Transactions on Internet Technology*, 2(2), 115-150. https://doi.org/10.1145/514183.514185
 
 Kandel, E. R., Schwartz, J. H., Jessell, T. M., Siegelbaum, S. A., & Hudspeth, A. J. (2012). *Principles of Neural Science* (5th ed.). McGraw-Hill Education.
 
 Kreibig, S. D. (2010). Autonomic nervous system activity in emotion: A review. *Biological Psychology*, 84(3), 394-421. https://doi.org/10.1016/j.biopsycho.2010.03.010
 
-Liu, J. W. S. (2000). *Real-Time Systems*. Prentice Hall.
-
-Norman, D. A. (2013). *The Design of Everyday Things: Revised and Expanded Edition*. Basic Books.
-
-Orne, M. T. (1962). On the social psychology of the psychological experiment: With particular reference to demand characteristics and their implications. *American Psychologist*, 17(11), 776-783. https://doi.org/10.1037/h0043424
-
 Picard, R. W. (2000). *Affective Computing*. MIT Press.
 
 Stern, R. M., Ray, W. J., & Quigley, K. S. (2001). *Psychophysiological Recording* (2nd ed.). Oxford University Press.
 
+### Distributed Systems and Network Architecture
+
+Fielding, R. T., & Taylor, R. N. (2002). Principled design of the modern Web architecture. *ACM Transactions on Internet Technology*, 2(2), 115-150. https://doi.org/10.1145/514183.514185
+
+Liu, J. W. S. (2000). *Real-Time Systems*. Prentice Hall.
+
 Tanenbaum, A. S., & van Steen, M. (2016). *Distributed Systems: Principles and Paradigms* (3rd ed.). Pearson.
+
+### Software Engineering and Development Methodologies
+
+Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
+
+Hunt, A., & Thomas, D. (1999). *The Pragmatic Programmer: From Journeyman to Master*. Addison-Wesley Professional.
+
+Martin, R. C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall.
+
+McConnell, S. (2004). *Code Complete: A Practical Handbook of Software Construction, Second Edition*. Microsoft Press.
+
+### Python Development and Computer Vision
+
+Lutz, M. (2013). *Learning Python, 5th Edition*. O'Reilly Media.
+
+Python Software Foundation. (2023). *Python 3.11 Documentation*. https://docs.python.org/3/
+
+Ramalho, L. (2015). *Fluent Python: Clear, Concise, and Effective Programming*. O'Reilly Media.
+
+VanderPlas, J. (2016). *Python Data Science Handbook: Essential Tools for Working with Data*. O'Reilly Media.
+
+### Human-Computer Interaction and User Experience
+
+Norman, D. A. (2013). *The Design of Everyday Things: Revised and Expanded Edition*. Basic Books.
+
+### Research Methodology and Experimental Design
+
+Bronfenbrenner, U. (1977). Toward an experimental ecology of human development. *American Psychologist*, 32(7), 513-531. https://doi.org/10.1037/0003-066X.32.7.513
+
+Cummins, N., Epps, J., Breakspear, M., & Goecke, R. (2015). An investigation of depressed speech detection: Features and normalization. In *Proceedings of the Annual Conference of the International Speech Communication Association* (pp. 2997-3001). ISCA.
+
+Orne, M. T. (1962). On the social psychology of the psychological experiment: With particular reference to demand characteristics and their implications. *American Psychologist*, 17(11), 776-783. https://doi.org/10.1037/h0043424
+
+### Implementation Code References
+
+The Python Desktop Controller implements concepts from this documentation through the following key source files:
+
+- `PythonApp/src/application.py` - Main application framework implementing dependency injection patterns [Gamma1994]
+- `PythonApp/src/session/session_manager.py` - Session management implementing distributed coordination principles [Tanenbaum2016]
+- `PythonApp/src/webcam/webcam_capture.py` - Computer vision pipeline implementing real-time processing [VanderPlas2016]
+- `PythonApp/src/shimmer_manager.py` - Physiological sensor integration implementing research measurement standards [Boucsein2012]
+- `PythonApp/src/network/device_server.py` - Network communication implementing distributed system patterns [Fielding2002]
 
 Through comprehensive technical innovation, rigorous validation, and extensive documentation, this project contributes significantly to both the immediate research community and the broader goals of advancing scientific measurement methodologies for the benefit of diverse research applications and educational endeavors.
 

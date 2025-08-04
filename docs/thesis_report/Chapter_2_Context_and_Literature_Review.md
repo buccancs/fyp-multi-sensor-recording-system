@@ -182,7 +182,7 @@ This comprehensive chapter provides detailed analysis of both the technical foun
 - Machine learning approaches to RGB versus thermal imaging analysis
 - Systematic rationale for sensor device selection (Shimmer3 GSR+ and Topdon thermal cameras)
 
-The background analysis demonstrates how established theoretical principles from multiple scientific domains converge to enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System through implementations in `AndroidApp/src/main/java/com/multisensor/recording/` and `PythonApp/src/`. Through comprehensive literature survey and systematic technology evaluation, this chapter establishes the research foundation that enables the novel contributions presented in subsequent chapters while providing the technical justification for architectural and implementation decisions based on proven software engineering principles [Gamma1994, Martin2008].
+The background analysis demonstrates how established theoretical principles from multiple scientific domains converge to enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System through implementations in `AndroidApp/src/main/java/com/multisensor/recording/` and `PythonApp/src/`. Through comprehensive literature survey and systematic technology evaluation [Kitchenham2007; Webster2002], this chapter establishes the research foundation that enables the novel contributions presented in subsequent chapters while providing the technical justification for architectural and implementation decisions based on proven software engineering principles [Gamma1994; Martin2008; Fowler2002]. The distributed coordination approach is implemented through `PythonApp/src/session/session_manager.py` following established patterns from distributed systems research [Lamport1978; Chandy1985; Birman2007].
 
 **Chapter Organization and Academic Contributions:**
 
@@ -943,6 +943,8 @@ Al-Khalidi, F. Q., Saatchi, R., Burke, D., Elphick, H., & Tan, S. (2011). Respir
 
 Benedek, M., & Kaernbach, C. (2010). A continuous measure of phasic electrodermal activity. *Journal of Neuroscience Methods*, 190(1), 80-91.
 
+Birman, K. (2007). *Reliable Distributed Systems: Technologies, Web Services, and Applications*. Springer Science & Business Media.
+
 Boucsein, W. (2012). *Electrodermal activity*. Springer Science & Business Media.
 
 Bradley, M. M., & Lang, P. J. (2000). Measuring emotion: Behavior, feeling, and physiology. *Cognitive neuroscience of emotion*, 25, 49-59.
@@ -950,6 +952,8 @@ Bradley, M. M., & Lang, P. J. (2000). Measuring emotion: Behavior, feeling, and 
 Burns, A., Greene, B. R., McGrath, M. J., O'Shea, T. J., Kuris, B., Ayer, S. M., ... & Cionca, V. (2010). SHIMMER™–A wireless sensor platform for noninvasive biomedical research. *IEEE Sensors Journal*, 10(9), 1527-1534.
 
 Cannon, W. B. (1932). *The wisdom of the body*. W.W. Norton & Company.
+
+Chandy, K. M., & Lamport, L. (1985). Distributed snapshots: determining global states of distributed systems. *ACM Transactions on Computer Systems*, 3(1), 63-75.
 
 Chrousos, G. P. (2009). Stress and disorders of the stress system. *Nature Reviews Endocrinology*, 5(7), 374-381.
 
@@ -965,7 +969,11 @@ Drummond, P. D. (1997). The effect of adrenergic blockade on blushing and facial
 
 Edelberg, R. (1971). Electrical properties of the skin. *Methods in psychobiology*, 1, 1-53.
 
+Fowler, M. (2002). *Patterns of Enterprise Application Architecture*. Addison-Wesley Professional.
+
 Fowles, D. C., Christie, M. J., Edelberg, R., Grings, W. W., Lykken, D. T., & Venables, P. H. (1981). Publication recommendations for electrodermal measurements. *Psychophysiology*, 18(3), 232-239.
+
+Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
 
 Healey, J. A., & Picard, R. W. (2005). Detecting stress during real-world driving tasks using physiological sensors. *IEEE Transactions on intelligent transportation systems*, 6(2), 156-166.
 
@@ -975,11 +983,15 @@ Hernández, J., McDuff, D., Benavides, X., Amores, J., Maes, P., & Picard, R. (2
 
 Ioannou, S., Gallese, V., & Merla, A. (2014). Thermal infrared imaging in psychophysiology: potentialities and limits. *Psychophysiology*, 51(10), 951-963.
 
+Kitchenham, B. (2007). Guidelines for performing systematic literature reviews in software engineering. *Technical Report EBSE 2007-001*, Keele University and Durham University Joint Report.
+
 Kosonogov, V., De Zorzi, L., Honore, J., Martínez-Velázquez, E. S., Nandrino, J. L., Martinez-Selva, J. M., & Sequeira, H. (2017). Facial thermal variations: A new marker of emotional arousal. *PloS one*, 12(9), e0183592.
 
 Kreibig, S. D. (2010). Autonomic nervous system activity in emotion: A review. *Biological psychology*, 84(3), 394-421.
 
 Kudielka, B. M., Hellhammer, D. H., & Wüst, S. (2009). Why do we respond so differently? Reviewing determinants of human salivary cortisol responses to challenge. *Psychoneuroendocrinology*, 34(1), 2-18.
+
+Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. *Communications of the ACM*, 21(7), 558-565.
 
 Lazarus, R. S., & Folkman, S. (1984). *Stress, appraisal, and coping*. Springer publishing company.
 
@@ -990,6 +1002,8 @@ Loewenstein, G., & Lerner, J. S. (2003). The role of affect in decision making. 
 Lupien, S. J., McEwen, B. S., Gunnar, M. R., & Heim, C. (2009). Effects of stress throughout the lifespan on the brain, behaviour and cognition. *Nature reviews neuroscience*, 10(6), 434-445.
 
 Lykken, D. T., & Venables, P. H. (1971). Direct measurement of skin conductance: a proposal for standardization. *Psychophysiology*, 8(5), 656-672.
+
+Martin, R. C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall.
 
 McDuff, D., Gontarek, S., & Picard, R. W. (2014). Remote detection of photoplethysmographic systolic and diastolic peaks using a digital camera. *IEEE Transactions on Biomedical Engineering*, 61(12), 2948-2954.
 
@@ -1020,4 +1034,6 @@ Sharma, N., & Gedeon, T. (2012). Objective measures, sensors and computational t
 Venables, P. H., & Christie, M. J. (1980). Electrodermal activity. *Techniques in psychophysiology*, 54, 3-67.
 
 Verkruysse, W., Svaasand, L. O., & Nelson, J. S. (2008). Remote plethysmographic imaging using ambient light. *Optics express*, 16(26), 21434-21445.
+
+Webster, J., & Watson, R. T. (2002). Analyzing the past to prepare for the future: Writing a literature review. *MIS quarterly*, xiii-xxiii.
 - `PythonApp/comprehensive_test_summary.py` - Statistical analysis and confidence interval calculations for research validation (See Appendix F.44)
