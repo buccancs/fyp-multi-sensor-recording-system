@@ -17,15 +17,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 
-/**
- * Base class for unit tests providing common setup and utilities
- * 
- * Features:
- * - MockK setup and cleanup
- * - Coroutine test dispatcher management
- * - Architecture components instant task execution
- * - Logger mocking for consistent test output
- */
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class BaseUnitTest {
 
@@ -49,7 +40,5 @@ abstract class BaseUnitTest {
     }
 
     private fun setupLogger() {
-        // Logger is injected via Hilt, no need to mock static methods
-        // Individual tests should mock Logger instances as needed
     }
 }

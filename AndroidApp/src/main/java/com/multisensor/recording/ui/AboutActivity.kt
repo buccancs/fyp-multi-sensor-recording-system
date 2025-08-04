@@ -16,17 +16,6 @@ import com.multisensor.recording.databinding.ActivityAboutBinding
 import com.multisensor.recording.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * About Activity - App Information and System Details
- * 
- * Provides comprehensive information about:
- * - App version and build information
- * - License information and open source credits
- * - Developer information and contact details
- * - System specifications and hardware info
- * - Legal information and privacy policy
- * - Links to documentation and support
- */
 @AndroidEntryPoint
 class AboutActivity : AppCompatActivity() {
 
@@ -36,10 +25,10 @@ class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         try {
             viewModel = ViewModelProvider(this)[AboutViewModel::class.java]
         } catch (e: Exception) {
@@ -52,7 +41,6 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Setup toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -60,24 +48,21 @@ class AboutActivity : AppCompatActivity() {
             title = "About"
             subtitle = "Multi-Sensor Recording System"
         }
-        
+
         setupAppInfo()
         setupLinks()
         setupSystemInfo()
     }
 
     private fun setupAppInfo() {
-        // Display basic app information
         binding.appVersionText.text = "Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         binding.buildTypeText.text = "Build: ${BuildConfig.BUILD_TYPE}"
         binding.buildTimeText.text = "Built: ${viewModel.getBuildDate()}"
-        
-        // App description
+
         binding.appDescriptionText.text = getString(com.multisensor.recording.R.string.app_description)
     }
 
     private fun setupLinks() {
-        // GitHub repository link
         binding.githubLinkButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr"))
@@ -86,8 +71,7 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open GitHub: ${e.message}")
             }
         }
-        
-        // Documentation link
+
         binding.documentationLinkButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/wiki"))
@@ -96,8 +80,7 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open documentation: ${e.message}")
             }
         }
-        
-        // Support email
+
         binding.supportEmailButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -106,7 +89,7 @@ class AboutActivity : AppCompatActivity() {
                     putExtra(Intent.EXTRA_SUBJECT, "Multi-Sensor Recording App Support")
                     putExtra(Intent.EXTRA_TEXT, "Please describe your issue or question:")
                 }
-                
+
                 if (intent.resolveActivity(packageManager) != null) {
                     startActivity(intent)
                 } else {
@@ -116,8 +99,7 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open email: ${e.message}")
             }
         }
-        
-        // License information
+
         binding.licenseLinkButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/LICENSE"))
@@ -126,8 +108,7 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open license: ${e.message}")
             }
         }
-        
-        // Privacy policy
+
         binding.privacyPolicyButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/PRIVACY.md"))
@@ -139,7 +120,6 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun setupSystemInfo() {
-        // System info will be populated by ViewModel
         binding.refreshSystemInfoButton.setOnClickListener {
             try {
                 viewModel.refreshSystemInfo()
@@ -188,15 +168,13 @@ class AboutActivity : AppCompatActivity() {
         binding.processorInfoText.text = "Processor: ${uiState.processorInfo}"
         binding.screenResolutionText.text = "Screen: ${uiState.screenResolution}"
         binding.screenDensityText.text = "Density: ${uiState.screenDensity} DPI"
-        
-        // Camera info
+
         if (uiState.cameraInfo.isNotEmpty()) {
             binding.cameraInfoText.text = "Cameras:\n${uiState.cameraInfo.joinToString("\n") { "• $it" }}"
         } else {
             binding.cameraInfoText.text = "Camera information unavailable"
         }
-        
-        // Sensor info
+
         if (uiState.sensorInfo.isNotEmpty()) {
             binding.sensorInfoText.text = "Sensors:\n${uiState.sensorInfo.joinToString("\n") { "• $it" }}"
         } else {
@@ -207,7 +185,7 @@ class AboutActivity : AppCompatActivity() {
     private fun updateLegalInfo(uiState: AboutUiState) {
         binding.copyrightText.text = uiState.copyrightInfo
         binding.licenseText.text = uiState.licenseInfo
-        
+
         if (uiState.thirdPartyLicenses.isNotEmpty()) {
             binding.thirdPartyLicensesText.text = "Third-party Libraries:\n${uiState.thirdPartyLicenses.joinToString("\n") { "• $it" }}"
         } else {
@@ -226,7 +204,7 @@ class AboutActivity : AppCompatActivity() {
                 append("\n")
             }
         }
-        
+
         if (uiState.contributors.isNotEmpty()) {
             binding.contributorsText.text = buildString {
                 append("Contributors:\n")
@@ -237,7 +215,7 @@ class AboutActivity : AppCompatActivity() {
         } else {
             binding.contributorsText.text = "Special thanks to all contributors"
         }
-        
+
         if (uiState.acknowledgments.isNotEmpty()) {
             binding.acknowledgementsText.text = buildString {
                 append("Acknowledgments:\n")

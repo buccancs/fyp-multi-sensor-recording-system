@@ -21,17 +21,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-/**
- * Enhanced ViewModel for MainActivity with improved error handling,
- * performance optimizations, and better user experience.
- * 
- * Key improvements:
- * - Better error handling with user-friendly messages
- * - Battery monitoring for better power management
- * - Performance optimizations for UI updates
- * - Enhanced accessibility features
- * - Memory leak prevention
- */
 @HiltViewModel
 class MainViewModelEnhanced @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -41,28 +30,22 @@ class MainViewModelEnhanced @Inject constructor(
     private val sessionManager: SessionManager,
     private val logger: Logger,
 ) : ViewModel() {
-    
-    // Centralized UI State using StateFlow
+
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
-    // Background monitoring jobs
     private var batteryMonitoringJob: Job? = null
     private var connectionMonitoringJob: Job? = null
     private var recordingStatusJob: Job? = null
 
-    // Performance optimization: debounce frequent updates
     private var lastStatusUpdate = 0L
-    private val statusUpdateThrottle = 500L // 500ms throttle
+    private val statusUpdateThrottle = 500L
 
     init {
         logger.info("Enhanced MainViewModel initialized with performance optimizations")
         startBackgroundMonitoring()
     }
 
-    /**
-     * Update UI state in a thread-safe manner with throttling for performance
-     */
     private fun updateUiState(update: (MainUiState) -> MainUiState) {
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastStatusUpdate > statusUpdateThrottle) {
@@ -71,43 +54,32 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Force update UI state without throttling (for critical updates)
-     */
     private fun forceUpdateUiState(update: (MainUiState) -> MainUiState) {
         _uiState.value = update(_uiState.value)
         lastStatusUpdate = System.currentTimeMillis()
     }
 
-    /**
-     * Start background monitoring jobs for system health
-     */
     private fun startBackgroundMonitoring() {
-        // Monitor battery level for power management
         batteryMonitoringJob = viewModelScope.launch {
             while (true) {
                 updateBatteryStatus()
-                delay(30000) // Update every 30 seconds
+                delay(30000)
             }
         }
 
-        // Monitor connection status
         connectionMonitoringJob = viewModelScope.launch {
             while (true) {
                 updateConnectionStatus()
-                delay(5000) // Update every 5 seconds
+                delay(5000)
             }
         }
     }
 
-    /**
-     * Enhanced initialization with better error handling
-     */
     fun initializeSystemEnhanced(textureView: android.view.TextureView) {
         viewModelScope.launch {
             try {
                 logger.info("Starting enhanced system initialization...")
-                
+
                 forceUpdateUiState { currentState ->
                     currentState.copy(
                         statusText = "Initializing system components...",
@@ -117,12 +89,10 @@ class MainViewModelEnhanced @Inject constructor(
                     )
                 }
 
-                // Initialize components with detailed error handling
                 val cameraResult = initializeCameraWithErrorHandling(textureView)
                 val thermalResult = initializeThermalWithErrorHandling()
                 val shimmerResult = initializeShimmerWithErrorHandling()
 
-                // Update final status
                 val statusMessage = buildString {
                     append("System Status - ")
                     append("Camera: ${if (cameraResult.success) "✓" else "✗"}")
@@ -130,7 +100,7 @@ class MainViewModelEnhanced @Inject constructor(
                     append(", Shimmer: ${if (shimmerResult.success) "✓" else "✗"}")
                 }
 
-                val hasErrors = !cameraResult.success || 
+                val hasErrors = !cameraResult.success ||
                                (!thermalResult.success && thermalResult.required) ||
                                (!shimmerResult.success && shimmerResult.required)
 
@@ -148,7 +118,7 @@ class MainViewModelEnhanced @Inject constructor(
 
             } catch (exception: Exception) {
                 logger.error("System initialization failed with exception", exception)
-                
+
                 forceUpdateUiState { currentState ->
                     currentState.copy(
                         statusText = "Initialization failed",
@@ -162,9 +132,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Initialize camera with detailed error handling
-     */
     private suspend fun initializeCameraWithErrorHandling(textureView: android.view.TextureView): InitializationResult {
         return try {
             val success = cameraRecorder.initialize(textureView)
@@ -179,9 +146,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Initialize thermal camera with error handling
-     */
     private suspend fun initializeThermalWithErrorHandling(): InitializationResult {
         return try {
             val success = thermalRecorder.initialize()
@@ -196,9 +160,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Initialize Shimmer sensor with error handling
-     */
     private suspend fun initializeShimmerWithErrorHandling(): InitializationResult {
         return try {
             val success = shimmerRecorder.initialize()
@@ -213,9 +174,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Enhanced battery monitoring with power management recommendations
-     */
     private fun updateBatteryStatus() {
         try {
             val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
@@ -236,7 +194,6 @@ class MainViewModelEnhanced @Inject constructor(
                 )
             }
 
-            // Show low battery warning for recording apps
             if (batteryLevel < 20 && !isCharging && _uiState.value.isRecording) {
                 showLowBatteryWarning()
             }
@@ -246,18 +203,12 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Monitor connection status to external devices
-     */
     private fun updateConnectionStatus() {
         try {
-            // Check PC connection status (placeholder - no method available)
             val isPcConnected = false
-            
-            // Check Shimmer connection status  
+
             val isShimmerConnected = shimmerRecorder.getShimmerStatus().isConnected
-            
-            // Check thermal camera connection (no method available)
+
             val isThermalConnected = false
 
             updateUiState { currentState ->
@@ -273,13 +224,9 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Enhanced recording start with validation and error handling
-     */
     fun startRecordingEnhanced() {
         viewModelScope.launch {
             try {
-                // Pre-recording validation
                 val validationResult = validateRecordingConditions()
                 if (!validationResult.isValid) {
                     showErrorMessage("Cannot start recording", validationResult.errorMessage)
@@ -293,18 +240,15 @@ class MainViewModelEnhanced @Inject constructor(
                     )
                 }
 
-                // Create new session
                 val sessionId = sessionManager.createNewSession()
-                
-                // Create SessionInfo object  
+
                 val sessionInfo = SessionInfo(
                     sessionId = sessionId,
                     startTime = System.currentTimeMillis()
                 )
-                
-                // Start recording with timeout protection
+
                 val recordingStarted = sessionId.isNotEmpty()
-                
+
                 if (recordingStarted) {
                     forceUpdateUiState { currentState ->
                         currentState.copy(
@@ -322,10 +266,9 @@ class MainViewModelEnhanced @Inject constructor(
                             )
                         )
                     }
-                    
-                    // Start recording status monitoring
+
                     startRecordingStatusMonitoring()
-                    
+
                     logger.info("Enhanced recording started successfully: ${sessionInfo.sessionId}")
                 } else {
                     throw Exception("Failed to start recording session")
@@ -333,7 +276,7 @@ class MainViewModelEnhanced @Inject constructor(
 
             } catch (exception: Exception) {
                 logger.error("Failed to start enhanced recording", exception)
-                
+
                 forceUpdateUiState { currentState ->
                     currentState.copy(
                         isRecording = false,
@@ -346,9 +289,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Enhanced recording stop with proper cleanup
-     */
     fun stopRecordingEnhanced() {
         viewModelScope.launch {
             try {
@@ -359,11 +299,9 @@ class MainViewModelEnhanced @Inject constructor(
                     )
                 }
 
-                // Stop the recording session
                 sessionManager.finalizeCurrentSession()
                 val sessionStopped = true
-                
-                // Stop monitoring jobs
+
                 recordingStatusJob?.cancel()
                 recordingStatusJob = null
 
@@ -377,7 +315,7 @@ class MainViewModelEnhanced @Inject constructor(
                             currentSessionInfo = null
                         )
                     }
-                    
+
                     logger.info("Enhanced recording stopped successfully")
                 } else {
                     throw Exception("Failed to stop recording session properly")
@@ -385,7 +323,7 @@ class MainViewModelEnhanced @Inject constructor(
 
             } catch (exception: Exception) {
                 logger.error("Failed to stop enhanced recording", exception)
-                
+
                 forceUpdateUiState { currentState ->
                     currentState.copy(
                         isRecording = false,
@@ -398,16 +336,13 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Start monitoring recording status for duration and health
-     */
     private fun startRecordingStatusMonitoring() {
         recordingStatusJob = viewModelScope.launch {
             while (_uiState.value.isRecording) {
                 val sessionInfo = sessionManager.getCurrentSession()
                 if (sessionInfo != null) {
                     val duration = System.currentTimeMillis() - sessionInfo.startTime
-                    
+
                     updateUiState { currentState ->
                         currentState.copy(
                             recordingDuration = duration,
@@ -417,43 +352,34 @@ class MainViewModelEnhanced @Inject constructor(
                         )
                     }
                 }
-                delay(1000) // Update every second
+                delay(1000)
             }
         }
     }
 
-    /**
-     * Validate conditions before starting recording
-     */
     private fun validateRecordingConditions(): ValidationResult {
         val state = _uiState.value
-        
+
         return when {
             !state.isInitialized -> ValidationResult(false, "System not initialized")
             state.isRecording -> ValidationResult(false, "Recording already in progress")
-            state.batteryLevel < 15 && state.batteryStatus != BatteryStatus.CHARGING -> 
+            state.batteryLevel < 15 && state.batteryStatus != BatteryStatus.CHARGING ->
                 ValidationResult(false, "Battery level too low (${state.batteryLevel}%). Please charge device.")
-            !state.isPcConnected && !state.showManualControls -> 
+            !state.isPcConnected && !state.showManualControls ->
                 ValidationResult(false, "PC connection required for recording")
             else -> ValidationResult(true, "Ready to record")
         }
     }
 
-    /**
-     * Get count of connected devices for session info
-     */
     private fun getConnectedDeviceCount(): Int {
         val state = _uiState.value
-        var count = 1 // Always have the main camera
+        var count = 1
         if (state.isThermalConnected) count++
         if (state.isShimmerConnected) count++
         if (state.isPcConnected) count++
         return count
     }
 
-    /**
-     * Show low battery warning
-     */
     private fun showLowBatteryWarning() {
         forceUpdateUiState { currentState ->
             currentState.copy(
@@ -463,9 +389,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Show error message to user
-     */
     private fun showErrorMessage(title: String, message: String) {
         forceUpdateUiState { currentState ->
             currentState.copy(
@@ -475,9 +398,6 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Clear error dialog
-     */
     fun clearErrorDialog() {
         forceUpdateUiState { currentState ->
             currentState.copy(
@@ -487,20 +407,17 @@ class MainViewModelEnhanced @Inject constructor(
         }
     }
 
-    /**
-     * Generate comprehensive error message for initialization failures
-     */
     private fun getInitializationErrorMessage(
         camera: InitializationResult,
         thermal: InitializationResult,
         shimmer: InitializationResult
     ): String {
         val errors = mutableListOf<String>()
-        
+
         if (!camera.success) errors.add("Camera: ${camera.message}")
         if (!thermal.success && thermal.required) errors.add("Thermal: ${thermal.message}")
         if (!shimmer.success && shimmer.required) errors.add("Shimmer: ${shimmer.message}")
-        
+
         return if (errors.isNotEmpty()) {
             "Initialization errors:\n${errors.joinToString("\n")}"
         } else {
@@ -510,25 +427,18 @@ class MainViewModelEnhanced @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        // Clean up background jobs to prevent memory leaks
         batteryMonitoringJob?.cancel()
         connectionMonitoringJob?.cancel()
         recordingStatusJob?.cancel()
         logger.info("Enhanced MainViewModel cleared and resources cleaned up")
     }
 
-    /**
-     * Data class for initialization results
-     */
     private data class InitializationResult(
         val success: Boolean,
         val message: String,
         val required: Boolean = false
     )
 
-    /**
-     * Data class for validation results
-     */
     private data class ValidationResult(
         val isValid: Boolean,
         val errorMessage: String

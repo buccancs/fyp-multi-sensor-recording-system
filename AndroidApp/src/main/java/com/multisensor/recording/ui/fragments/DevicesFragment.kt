@@ -16,17 +16,12 @@ import com.multisensor.recording.ui.SystemHealthStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-/**
- * Devices Fragment
- * 
- * Handles device connection management and status monitoring
- */
 @AndroidEntryPoint
 class DevicesFragment : Fragment() {
 
     private var _binding: FragmentDevicesBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -40,22 +35,21 @@ class DevicesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupUI()
         observeViewModel()
     }
 
     private fun setupUI() {
         binding.apply {
-            // Device connection buttons
             connectDevicesButton.setOnClickListener {
                 viewModel.connectAllDevices()
             }
-            
+
             scanDevicesButton.setOnClickListener {
                 viewModel.scanForDevices()
             }
-            
+
             refreshDevicesButton.setOnClickListener {
                 viewModel.refreshSystemStatus()
             }
@@ -74,28 +68,27 @@ class DevicesFragment : Fragment() {
 
     private fun updateUI(state: MainUiState) {
         binding.apply {
-            // Update device status indicators
             pcConnectionStatus.text = when (state.systemHealth.pcConnection) {
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.CONNECTED -> "PC: Connected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.DISCONNECTED -> "PC: Disconnected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.ERROR -> "PC: Error"
                 else -> "PC: Unknown"
             }
-            
+
             shimmerConnectionStatus.text = when (state.systemHealth.shimmerConnection) {
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.CONNECTED -> "Shimmer: Connected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.DISCONNECTED -> "Shimmer: Disconnected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.ERROR -> "Shimmer: Error"
                 else -> "Shimmer: Unknown"
             }
-            
+
             thermalConnectionStatus.text = when (state.systemHealth.thermalCamera) {
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.CONNECTED -> "Thermal: Connected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.DISCONNECTED -> "Thermal: Disconnected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.ERROR -> "Thermal: Error"
                 else -> "Thermal: Unknown"
             }
-            
+
             networkConnectionStatus.text = when (state.systemHealth.networkConnection) {
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.CONNECTED -> "Network: Connected"
                 com.multisensor.recording.ui.SystemHealthStatus.HealthStatus.DISCONNECTED -> "Network: Disconnected"

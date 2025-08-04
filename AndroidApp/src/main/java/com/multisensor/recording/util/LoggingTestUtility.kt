@@ -6,18 +6,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-/**
- * Comprehensive Logging Test Utility for Phase 1 Validation
- * 
- * Tests all Android logging functionality and validates integration.
- */
 object LoggingTestUtility {
-    
+
     private const val TAG = "LoggingTestUtility"
-    
+
     fun runComprehensiveLoggingTest(context: Context) {
         AppLogger.logMethodEntry(TAG, "runComprehensiveLoggingTest", "Starting comprehensive logging test")
-        
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 testBasicLogging()
@@ -25,15 +20,15 @@ object LoggingTestUtility {
                 testPerformanceLogging(context)
                 testMemoryLogging(context)
                 testStateChangeLogging()
-                
+
                 AppLogger.i(TAG, "✅ All Android logging tests PASSED")
-                
+
             } catch (e: Exception) {
                 AppLogger.e(TAG, "❌ Android logging tests FAILED", e)
             }
         }
     }
-    
+
     private fun testBasicLogging() {
         AppLogger.d(TAG, "Debug message test")
         AppLogger.i(TAG, "Info message test")
@@ -41,7 +36,7 @@ object LoggingTestUtility {
         AppLogger.e(TAG, "Error message test")
         AppLogger.v(TAG, "Verbose message test")
     }
-    
+
     private fun testSpecializedLogging() {
         AppLogger.logLifecycle(TAG, "test_lifecycle", "Testing lifecycle logging")
         AppLogger.logNetwork(TAG, "test_request", "http://test.example.com", "200 OK")
@@ -50,45 +45,42 @@ object LoggingTestUtility {
         AppLogger.logFile(TAG, "test_file", "test.mp4", 1024L)
         AppLogger.logStateChange(TAG, "test_state", "IDLE", "RECORDING")
     }
-    
+
     private fun testPerformanceLogging(context: Context) {
         AppLogger.startTiming(TAG, "test_operation")
-        
-        // Simulate some work
+
         Thread.sleep(100)
-        
+
         AppLogger.endTiming(TAG, "test_operation")
         AppLogger.logMemoryUsage(TAG, "After performance test")
     }
-    
+
     private fun testMemoryLogging(context: Context) {
         AppLogger.logMemoryUsage(TAG, "Memory test start")
-        
-        // Simulate memory allocation
+
         val testData = IntArray(1000) { it }
-        
+
         AppLogger.logMemoryUsage(TAG, "Memory test end")
     }
-    
+
     private fun testStateChangeLogging() {
         val states = listOf("INITIALIZING", "READY", "RECORDING", "PROCESSING", "COMPLETE")
-        
+
         for (i in 0 until states.size - 1) {
             AppLogger.logStateChange(TAG, "test_component", states[i], states[i + 1])
             Thread.sleep(50)
         }
     }
-    
+
     fun validateLoggingIntegration(): Boolean {
         AppLogger.logMethodEntry(TAG, "validateLoggingIntegration", "Validating logging integration")
-        
+
         return try {
-            // Test that all logging methods are available
             AppLogger.i(TAG, "Logging integration validation")
             AppLogger.logMethodEntry(TAG, "test", "test")
             AppLogger.startTiming(TAG, "validation")
             AppLogger.endTiming(TAG, "validation")
-            
+
             true
         } catch (e: Exception) {
             AppLogger.e(TAG, "Logging integration validation failed", e)

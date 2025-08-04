@@ -1,21 +1,21 @@
 version: "1.0"
 
-#-------------------------------------------------------------------------------#
-#        Qodana analysis is configured by the qodana.yaml file            #
-#    https://www.jetbrains.com/help/qodana/qodana-yaml.html     #
-#-------------------------------------------------------------------------------#
 
-# Specify the inspection profile for code analysis.
-# 'qodana.recommended' is the standard profile for a balance of inspections.
+
+
+
+
+
+
 profile:
   name: qodana.recommended
 
-# Specify the linter for a multi-language project.
-# The JVM linter includes support for Kotlin, Java, and Python.
+
+
 linter: jetbrains/qodana-jvm:2025.1
 
-# (Optional) Force-enable specific inspections if they are not in the profile.
-# Most of these are already included in 'qodana.recommended'.
+
+
 include:
   - name: PythonUnreachableCode
   - name: PyUnusedLocal
@@ -97,7 +97,7 @@ include:
   - name: YAMLUnresolvedAlias
   - name: YAMLSchemaValidation
 
-# Exclude specific directories and files from the analysis.
+
 exclude:
   - name: All
     paths:
@@ -107,7 +107,7 @@ exclude:
       - .gradle/
       - node_modules/
       - .idea/
-      - # Python-specific exclusions
+      -
       - __pycache__/
       - venv/
       - env/

@@ -1,11 +1,5 @@
 package com.multisensor.recording.recording
 
-/**
- * Configuration settings for a Shimmer3 GSR+ device.
- *
- * This data class encapsulates all configurable parameters for a Shimmer device
- * including sensor channels, sampling rates, and hardware-specific settings.
- */
 data class DeviceConfiguration(
     val samplingRate: Double = DEFAULT_SAMPLING_RATE,
     val enabledSensors: Set<SensorChannel> = setOf(SensorChannel.GSR, SensorChannel.PPG),
@@ -18,15 +12,13 @@ data class DeviceConfiguration(
     val bufferSize: Int = DEFAULT_BUFFER_SIZE,
 ) {
     companion object {
-        // Default configuration values matching Shimmer3 GSR+ specifications
-        const val DEFAULT_SAMPLING_RATE = 51.2 // Hz
-        const val DEFAULT_GSR_RANGE = 4 // GSR range setting (4.7kΩ)
-        const val DEFAULT_ACCEL_RANGE = 2 // ±2g
-        const val DEFAULT_GYRO_RANGE = 250 // ±250°/s
-        const val DEFAULT_MAG_RANGE = 1 // ±1.3 Gauss
-        const val DEFAULT_BUFFER_SIZE = 100 // Number of samples to buffer
+        const val DEFAULT_SAMPLING_RATE = 51.2
+        const val DEFAULT_GSR_RANGE = 4
+        const val DEFAULT_ACCEL_RANGE = 2
+        const val DEFAULT_GYRO_RANGE = 250
+        const val DEFAULT_MAG_RANGE = 1
+        const val DEFAULT_BUFFER_SIZE = 100
 
-        // Shimmer sensor bitmask constants (matching Shimmer SDK)
         const val SENSOR_GSR = 0x04
         const val SENSOR_PPG = 0x4000
         const val SENSOR_ACCEL = 0x80
@@ -35,9 +27,6 @@ data class DeviceConfiguration(
         const val SENSOR_ECG = 0x10
         const val SENSOR_EMG = 0x08
 
-        /**
-         * Create a default configuration for Shimmer3 GSR+
-         */
         fun createDefault(): DeviceConfiguration =
             DeviceConfiguration(
                 samplingRate = DEFAULT_SAMPLING_RATE,
@@ -46,9 +35,6 @@ data class DeviceConfiguration(
                 accelRange = DEFAULT_ACCEL_RANGE,
             )
 
-        /**
-         * Create a high-performance configuration with all sensors enabled
-         */
         fun createHighPerformance(): DeviceConfiguration =
             DeviceConfiguration(
                 samplingRate = 128.0,
@@ -59,9 +45,6 @@ data class DeviceConfiguration(
                 bufferSize = 200,
             )
 
-        /**
-         * Create a low-power configuration with minimal sensors
-         */
         fun createLowPower(): DeviceConfiguration =
             DeviceConfiguration(
                 samplingRate = 25.6,
@@ -71,9 +54,6 @@ data class DeviceConfiguration(
             )
     }
 
-    /**
-     * Available sensor channels on Shimmer3 GSR+
-     */
     enum class SensorChannel(
         val displayName: String,
         val bitmask: Int,
@@ -97,57 +77,29 @@ data class DeviceConfiguration(
         ;
 
         companion object {
-            /**
-             * Get sensor channels that are typically available on Shimmer3 GSR+
-             */
             fun getGSRPlusChannels(): Set<SensorChannel> = setOf(GSR, PPG, ACCEL, GYRO, MAG)
 
-            /**
-             * Get individual axis channels for 3D sensors
-             */
             fun getAccelChannels(): Set<SensorChannel> = setOf(ACCEL_X, ACCEL_Y, ACCEL_Z)
             fun getGyroChannels(): Set<SensorChannel> = setOf(GYRO_X, GYRO_Y, GYRO_Z)
             fun getMagChannels(): Set<SensorChannel> = setOf(MAG_X, MAG_Y, MAG_Z)
 
-            /**
-             * Get all available individual sensor channels
-             */
-            fun getAllIndividualChannels(): Set<SensorChannel> = 
+            fun getAllIndividualChannels(): Set<SensorChannel> =
                 setOf(GSR, PPG, ECG, EMG) + getAccelChannels() + getGyroChannels() + getMagChannels()
         }
     }
 
-    /**
-     * Calculate the sensor bitmask for enabled sensors
-     */
     fun getSensorBitmask(): Int = enabledSensors.fold(0) { acc, sensor -> acc or sensor.bitmask }
 
-    /**
-     * Get the number of enabled sensor channels
-     */
     fun getEnabledChannelCount(): Int = enabledSensors.size
 
-    /**
-     * Check if a specific sensor is enabled
-     */
     fun isSensorEnabled(sensor: SensorChannel): Boolean = sensor in enabledSensors
 
-    /**
-     * Get estimated data rate in samples per second
-     */
     fun getEstimatedDataRate(): Double = samplingRate * getEnabledChannelCount()
 
-    /**
-     * Get estimated bandwidth in bytes per second (rough calculation)
-     */
     fun getEstimatedBandwidth(): Int {
-        // Each sample is roughly 8 bytes (timestamp + value), plus overhead
         return (getEstimatedDataRate() * 10).toInt()
     }
 
-    /**
-     * Validate configuration parameters
-     */
     fun validate(): List<String> {
         val errors = mutableListOf<String>()
 
@@ -174,14 +126,8 @@ data class DeviceConfiguration(
         return errors
     }
 
-    /**
-     * Create a copy with modified sensor channels
-     */
     fun withSensors(sensors: Set<SensorChannel>): DeviceConfiguration = copy(enabledSensors = sensors)
 
-    /**
-     * Create a copy with modified sampling rate
-     */
     fun withSamplingRate(rate: Double): DeviceConfiguration = copy(samplingRate = rate)
 
     override fun toString(): String =

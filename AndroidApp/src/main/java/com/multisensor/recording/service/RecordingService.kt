@@ -35,11 +35,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Foreground service responsible for managing multi-sensor recording sessions.
- * This service ensures recording continues even when the app is in the background
- * and provides a persistent notification to the user.
- */
 @AndroidEntryPoint
 class RecordingService : Service() {
     @Inject
@@ -90,9 +85,6 @@ class RecordingService : Service() {
         private const val CHANNEL_NAME = "Recording Service"
     }
 
-    /**
-     * Data class representing comprehensive device status information
-     */
     data class DeviceStatusInfo(
         val isRecording: Boolean,
         val currentSessionId: String?,
@@ -138,32 +130,23 @@ class RecordingService : Service() {
         createNotificationChannel()
 
 
-        // Initialize JSON Socket Client and Command Processor
         initializeJsonCommunication()
 
-        // Inject PreviewStreamer into CameraRecorder (method injection for scoping compatibility)
         cameraRecorder.setPreviewStreamer(previewStreamer)
 
-        // Initialize Adaptive Frame Rate Control
         initializeAdaptiveFrameRateControl()
 
         logger.info("RecordingService initialization complete")
     }
 
-    /**
-     * Initialize adaptive frame rate control system for 
-     */
     private fun initializeAdaptiveFrameRateControl() {
         try {
             logger.info("[DEBUG_LOG] Initializing adaptive frame rate control system")
 
-            // Get network configuration for monitoring
             val serverConfig = networkConfiguration.getServerConfiguration()
 
-            // Start network quality monitoring
             networkQualityMonitor.startMonitoring(serverConfig.serverIp, serverConfig.legacyPort)
 
-            // Set up adaptive frame rate controller with PreviewStreamer integration
             adaptiveFrameRateController.addListener(
                 object : AdaptiveFrameRateController.FrameRateChangeListener {
                     override fun onFrameRateChanged(
@@ -180,7 +163,6 @@ class RecordingService : Service() {
                 },
             )
 
-            // Start the adaptive frame rate controller
             adaptiveFrameRateController.start()
 
             logger.info("[DEBUG_LOG] Adaptive frame rate control system initialized successfully")
@@ -189,20 +171,14 @@ class RecordingService : Service() {
         }
     }
 
-    /**
-     * Initialize JSON-based communication system for 
-     */
     private fun initializeJsonCommunication() {
         try {
-            // Connect CommandProcessor to JsonSocketClient
             commandProcessor.setSocketClient(jsonSocketClient)
 
-            // Set command callback for JsonSocketClient
             jsonSocketClient.setCommandCallback { message ->
                 commandProcessor.processCommand(message)
             }
 
-            // Configure and start JSON socket connection using NetworkConfiguration
             val serverConfig = networkConfiguration.getServerConfiguration()
             jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
             jsonSocketClient.connect()
@@ -231,11 +207,10 @@ class RecordingService : Service() {
             }
         }
 
-        return START_STICKY // Restart service if killed by system
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        // This service doesn't support binding
         return null
     }
 
@@ -243,17 +218,14 @@ class RecordingService : Service() {
         super.onDestroy()
         logger.info("RecordingService destroyed")
 
-        // Ensure recording is stopped
         if (isRecording) {
             serviceScope.launch {
                 stopRecordingInternal()
             }
         }
 
-        // Stop preview streaming
         previewStreamer.stopStreaming()
 
-        // Stop adaptive frame rate control system ()
         try {
             adaptiveFrameRateController.stop()
             networkQualityMonitor.stopMonitoring()
@@ -263,31 +235,23 @@ class RecordingService : Service() {
         }
 
 
-        // Stop JSON socket connection (port 9000)
         jsonSocketClient.disconnect()
 
-        // Cancel all coroutines
         serviceScope.cancel()
 
         logger.info("RecordingService cleanup complete")
     }
 
-    /**
-     * Broadcast current recording status to all connected clients
-     */
     private fun broadcastCurrentStatus() {
         serviceScope.launch {
             try {
                 logger.info("Broadcasting current status - Recording: $isRecording, Session: $currentSessionId")
 
-                // Gather comprehensive status information
                 val statusInfo = gatherStatusInformation()
 
 
-                // Broadcast via JSON socket connection ()
                 broadcastStatusViaJsonSocket(statusInfo)
 
-                // Send local broadcast for UI updates
                 sendLocalStatusBroadcast(statusInfo)
 
                 logger.info("Status broadcast completed successfully")
@@ -297,29 +261,21 @@ class RecordingService : Service() {
         }
     }
 
-    /**
-     * Gather comprehensive status information
-     */
     private suspend fun gatherStatusInformation(): DeviceStatusInfo =
         try {
             DeviceStatusInfo(
                 isRecording = isRecording,
                 currentSessionId = currentSessionId,
                 recordingStartTime = if (isRecording) System.currentTimeMillis() else null,
-                // Camera status
                 cameraStatus = getCameraStatus(),
                 thermalStatus = getThermalStatus(),
                 shimmerStatus = getShimmerStatus(),
-                // Device information
                 batteryLevel = getBatteryLevel(),
                 availableStorage = getAvailableStorage(),
                 deviceTemperature = getDeviceTemperature(),
-                // Network status
                 networkConfig = networkConfiguration.getConfigurationSummary(),
                 connectionStatus = getConnectionStatus(),
-                // Preview streaming status
                 previewStreamingActive = previewStreamer.getStreamingStats().isStreaming,
-                // System information
                 timestamp = System.currentTimeMillis(),
                 deviceModel = android.os.Build.MODEL,
                 androidVersion = android.os.Build.VERSION.RELEASE,
@@ -330,12 +286,8 @@ class RecordingService : Service() {
         }
 
 
-    /**
-     * Broadcast status via JSON socket connection
-     */
     private fun broadcastStatusViaJsonSocket(statusInfo: DeviceStatusInfo) {
         try {
-            // Send status update via JSON socket client
             jsonSocketClient.sendStatusUpdate(
                 battery = statusInfo.batteryLevel,
                 storage = statusInfo.availableStorage,
@@ -349,9 +301,6 @@ class RecordingService : Service() {
         }
     }
 
-    /**
-     * Send local broadcast for UI updates
-     */
     private fun sendLocalStatusBroadcast(statusInfo: DeviceStatusInfo) {
         try {
             val intent =
@@ -372,9 +321,6 @@ class RecordingService : Service() {
     }
 
 
-    /**
-     * Get camera recording status
-     */
     private fun getCameraStatus(): String =
         try {
             if (isRecording) "recording" else "ready"
@@ -382,9 +328,6 @@ class RecordingService : Service() {
             "error"
         }
 
-    /**
-     * Get thermal camera status
-     */
     private fun getThermalStatus(): String =
         try {
             val status = thermalRecorder.getThermalCameraStatus()
@@ -399,12 +342,8 @@ class RecordingService : Service() {
             "error"
         }
 
-    /**
-     * Get Shimmer sensor status
-     */
     private fun getShimmerStatus(): String =
         try {
-            // Get actual Shimmer status from ShimmerRecorder
             val status = shimmerRecorder.getShimmerStatus()
             when {
                 !status.isAvailable -> "unavailable"
@@ -417,9 +356,6 @@ class RecordingService : Service() {
             "error"
         }
 
-    /**
-     * Get device battery level
-     */
     private fun getBatteryLevel(): Int? =
         try {
             val batteryManager = getSystemService(Context.BATTERY_SERVICE) as android.os.BatteryManager
@@ -428,9 +364,6 @@ class RecordingService : Service() {
             null
         }
 
-    /**
-     * Get available storage space
-     */
     private fun getAvailableStorage(): String? =
         try {
             val externalDir = getExternalFilesDir(null)
@@ -446,21 +379,13 @@ class RecordingService : Service() {
             null
         }
 
-    /**
-     * Get device temperature (if available)
-     */
     private fun getDeviceTemperature(): Double? =
         try {
-            // Android doesn't provide easy access to device temperature
-            // This would require thermal management APIs or hardware-specific implementations
             null
         } catch (e: Exception) {
             null
         }
 
-    /**
-     * Get network connection status
-     */
     private fun getConnectionStatus(): String =
         try {
             val jsonConnected = jsonSocketClient.isConnected()
@@ -480,14 +405,11 @@ class RecordingService : Service() {
             try {
                 logger.info("Starting recording session...")
 
-                // Create new session
                 currentSessionId = sessionManager.createNewSession()
                 logger.info("Created session: $currentSessionId")
 
-                // Start foreground service with notification
                 startForeground(NOTIFICATION_ID, createRecordingNotification())
 
-                // Initialize and start all recorders
                 val cameraSessionInfo = cameraRecorder.startSession(recordVideo = true, captureRaw = false)
                 val thermalStarted = thermalRecorder.startRecording(currentSessionId!!)
                 val shimmerStarted = shimmerRecorder.startRecording(currentSessionId!!)
@@ -495,7 +417,6 @@ class RecordingService : Service() {
                 if (cameraSessionInfo != null) {
                     isRecording = true
 
-                    // Start preview streaming
                     previewStreamer.startStreaming()
 
                     logger.info("Recording started successfully")
@@ -528,15 +449,12 @@ class RecordingService : Service() {
         try {
             logger.info("Stopping recording session...")
 
-            // Stop all recorders
             cameraRecorder.stopSession()
             thermalRecorder.stopRecording()
             shimmerRecorder.stopRecording()
 
-            // Stop preview streaming
             previewStreamer.stopStreaming()
 
-            // Finalize session
             currentSessionId?.let { sessionId ->
                 sessionManager.finalizeCurrentSession()
                 logger.info("Session finalized: $sessionId")
@@ -545,10 +463,8 @@ class RecordingService : Service() {
             isRecording = false
             currentSessionId = null
 
-            // Update notification
             updateNotification("Recording stopped")
 
-            // Stop foreground service after a delay to show final notification
             kotlinx.coroutines.delay(2000)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 stopForeground(STOP_FOREGROUND_REMOVE)

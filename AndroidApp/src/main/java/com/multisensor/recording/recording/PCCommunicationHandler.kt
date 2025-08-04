@@ -12,24 +12,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-/**
- * Handles robust PC communication for Shimmer3 GSR+ devices.
- * 
- * This class provides rock-solid PC connectivity including:
- * - Device pairing and discovery for PC connections
- * - Real-time data streaming to PC applications
- * - Bidirectional command/control communication
- * - File transfer capabilities
- * - Network protocol handling
- * - Connection state management
- */
 class PCCommunicationHandler(
     private val logger: Logger
 ) {
-    
-    /**
-     * PC connection states
-     */
+
     enum class PCConnectionState {
         DISCONNECTED,
         CONNECTING,
@@ -38,21 +24,15 @@ class PCCommunicationHandler(
         ERROR,
         PAIRING
     }
-    
-    /**
-     * Data streaming modes to PC
-     */
+
     enum class StreamingMode {
         NONE,
-        REAL_TIME,      // Live streaming as data arrives
-        BUFFERED,       // Batched streaming for efficiency
-        ON_DEMAND,      // Stream on PC request
-        FILE_TRANSFER   // File-based transfer
+        REAL_TIME,
+        BUFFERED,
+        ON_DEMAND,
+        FILE_TRANSFER
     }
-    
-    /**
-     * PC communication configuration
-     */
+
     data class PCConfiguration(
         val serverPort: Int = 8080,
         val maxConnections: Int = 5,
@@ -61,12 +41,9 @@ class PCCommunicationHandler(
         val connectionTimeout: Long = 30000L,
         val enableFileTransfer: Boolean = true,
         val enableRealTimeStreaming: Boolean = true,
-        val dataFormat: String = "JSON" // JSON, CSV, BINARY
+        val dataFormat: String = "JSON"
     )
-    
-    /**
-     * PC connection information
-     */
+
     data class PCConnection(
         val connectionId: String,
         val clientSocket: Socket,
@@ -77,10 +54,7 @@ class PCCommunicationHandler(
         val isAuthenticated: Boolean = false,
         val streamingMode: StreamingMode = StreamingMode.NONE
     )
-    
-    /**
-     * Commands that can be sent from PC
-     */
+
     sealed class PCCommand {
         data class StartStreaming(val deviceIds: List<String>, val mode: StreamingMode) : PCCommand()
         data class StopStreaming(val deviceIds: List<String>) : PCCommand()
@@ -91,10 +65,7 @@ class PCCommunicationHandler(
         object GetStatus : PCCommand()
         data class Authenticate(val token: String) : PCCommand()
     }
-    
-    /**
-     * Responses sent to PC
-     */
+
     sealed class PCResponse {
         data class DeviceList(val devices: List<Map<String, Any>>) : PCResponse()
         data class DeviceInfo(val deviceId: String, val info: Map<String, Any>) : PCResponse()
@@ -104,47 +75,38 @@ class PCCommunicationHandler(
         data class Success(val message: String) : PCResponse()
         data class FileData(val filename: String, val data: ByteArray) : PCResponse()
     }
-    
-    // Configuration and state
+
     private val config = PCConfiguration()
     private val _connectionState = MutableStateFlow(PCConnectionState.DISCONNECTED)
     val connectionState: StateFlow<PCConnectionState> = _connectionState.asStateFlow()
-    
-    // Network components
+
     private var serverSocket: ServerSocket? = null
     private val activeConnections = ConcurrentHashMap<String, PCConnection>()
     private val streamingQueues = ConcurrentHashMap<String, ConcurrentLinkedQueue<String>>()
-    
-    // Coroutine management
+
     private val communicationScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val isRunning = AtomicBoolean(false)
-    
-    // Statistics
+
     private val bytesTransferred = AtomicLong(0L)
     private val commandsProcessed = AtomicLong(0L)
     private val activeStreams = AtomicLong(0L)
-    
-    /**
-     * Start PC communication server
-     */
+
     suspend fun startServer(port: Int = config.serverPort): Boolean = withContext(Dispatchers.IO) {
         try {
             if (isRunning.compareAndSet(false, true)) {
                 logger.info("Starting PC communication server on port $port")
-                
+
                 serverSocket = ServerSocket(port)
                 _connectionState.value = PCConnectionState.CONNECTING
-                
-                // Start accepting connections
+
                 communicationScope.launch {
                     acceptConnections()
                 }
-                
-                // Start heartbeat monitoring
+
                 communicationScope.launch {
                     monitorConnections()
                 }
-                
+
                 _connectionState.value = PCConnectionState.CONNECTED
                 logger.info("PC communication server started successfully")
                 true
@@ -159,18 +121,14 @@ class PCCommunicationHandler(
             false
         }
     }
-    
-    /**
-     * Stop PC communication server
-     */
+
     suspend fun stopServer() = withContext(Dispatchers.IO) {
         try {
             if (isRunning.compareAndSet(true, false)) {
                 logger.info("Stopping PC communication server")
-                
+
                 _connectionState.value = PCConnectionState.DISCONNECTED
-                
-                // Close all active connections
+
                 activeConnections.values.forEach { connection ->
                     try {
                         connection.clientSocket.close()
@@ -179,14 +137,12 @@ class PCCommunicationHandler(
                     }
                 }
                 activeConnections.clear()
-                
-                // Close server socket
+
                 serverSocket?.close()
                 serverSocket = null
-                
-                // Cancel coroutines
+
                 communicationScope.cancel()
-                
+
                 _connectionState.value = PCConnectionState.DISCONNECTED
                 logger.info("PC communication server stopped")
             }
@@ -194,13 +150,10 @@ class PCCommunicationHandler(
             logger.error("Error stopping PC communication server", e)
         }
     }
-    
-    /**
-     * Stream sensor data to connected PCs
-     */
+
     suspend fun streamSensorData(deviceId: String, sensorSample: SensorSample) {
         if (!isRunning.get()) return
-        
+
         try {
             val jsonData = sensorSample.toJsonString()
             val response = PCResponse.StreamingData(deviceId, mapOf(
@@ -210,8 +163,7 @@ class PCCommunicationHandler(
                 "battery" to sensorSample.batteryLevel,
                 "sequence" to sensorSample.sequenceNumber
             ))
-            
-            // Send to all connected PCs that are streaming this device
+
             activeConnections.values.forEach { connection ->
                 if (connection.streamingMode != StreamingMode.NONE) {
                     sendResponse(connection, response)
@@ -222,13 +174,10 @@ class PCCommunicationHandler(
             logger.error("Error streaming sensor data to PC", e)
         }
     }
-    
-    /**
-     * Send device list to PC
-     */
+
     suspend fun sendDeviceList(connectionId: String, devices: List<ShimmerDevice>) {
         val connection = activeConnections[connectionId] ?: return
-        
+
         val deviceList = devices.map { device ->
             mapOf(
                 "deviceId" to device.deviceId,
@@ -241,23 +190,18 @@ class PCCommunicationHandler(
                 "lastSeen" to device.lastSampleTime
             )
         }
-        
+
         val response = PCResponse.DeviceList(deviceList)
         sendResponse(connection, response)
     }
-    
-    /**
-     * Handle device pairing requests from PC
-     */
+
     suspend fun handlePairingRequest(deviceId: String, pairingCode: String): Boolean {
         return try {
             logger.info("Processing PC pairing request for device $deviceId")
-            
-            // Validate pairing code (implement your security logic here)
+
             val isValidCode = validatePairingCode(pairingCode)
-            
+
             if (isValidCode) {
-                // Mark device as paired with PC
                 notifyDevicePairedWithPC(deviceId, true)
                 logger.info("Device $deviceId successfully paired with PC")
                 true
@@ -270,22 +214,19 @@ class PCCommunicationHandler(
             false
         }
     }
-    
-    /**
-     * Transfer file to PC
-     */
+
     suspend fun transferFile(connectionId: String, file: File) {
         val connection = activeConnections[connectionId] ?: return
-        
+
         try {
             logger.info("Transferring file to PC: ${file.name}")
-            
+
             val fileData = file.readBytes()
             val response = PCResponse.FileData(file.name, fileData)
-            
+
             sendResponse(connection, response)
             bytesTransferred.addAndGet(fileData.size.toLong())
-            
+
             logger.info("File transfer completed: ${file.name} (${fileData.size} bytes)")
         } catch (e: Exception) {
             logger.error("Error transferring file to PC", e)
@@ -293,10 +234,7 @@ class PCCommunicationHandler(
             sendResponse(connection, errorResponse)
         }
     }
-    
-    /**
-     * Get PC communication statistics
-     */
+
     fun getStatistics(): Map<String, Any> = mapOf(
         "isRunning" to isRunning.get(),
         "connectionState" to _connectionState.value.name,
@@ -306,17 +244,14 @@ class PCCommunicationHandler(
         "activeStreams" to activeStreams.get(),
         "serverPort" to config.serverPort
     )
-    
-    /**
-     * Accept incoming PC connections
-     */
+
     private suspend fun acceptConnections() {
         while (isRunning.get()) {
             try {
                 val clientSocket = serverSocket?.accept()
                 if (clientSocket != null) {
                     logger.info("New PC connection from: ${clientSocket.remoteSocketAddress}")
-                    
+
                     val connectionId = generateConnectionId()
                     val connection = PCConnection(
                         connectionId = connectionId,
@@ -326,10 +261,9 @@ class PCCommunicationHandler(
                         connectedAt = System.currentTimeMillis(),
                         clientAddress = clientSocket.remoteSocketAddress.toString()
                     )
-                    
+
                     activeConnections[connectionId] = connection
-                    
-                    // Handle this connection in a separate coroutine
+
                     communicationScope.launch {
                         handleConnection(connection)
                     }
@@ -343,24 +277,19 @@ class PCCommunicationHandler(
             }
         }
     }
-    
-    /**
-     * Handle individual PC connection
-     */
+
     private suspend fun handleConnection(connection: PCConnection) {
         try {
             logger.debug("Handling PC connection: ${connection.connectionId}")
-            
+
             while (isRunning.get() && !connection.clientSocket.isClosed) {
                 try {
-                    // Read command from PC
                     val commandJson = connection.inputStream.readUTF()
                     val command = parseCommand(commandJson)
-                    
-                    // Process command
+
                     processCommand(connection, command)
                     commandsProcessed.incrementAndGet()
-                    
+
                 } catch (e: EOFException) {
                     logger.debug("PC connection closed: ${connection.connectionId}")
                     break
@@ -371,7 +300,6 @@ class PCCommunicationHandler(
                 }
             }
         } finally {
-            // Cleanup connection
             activeConnections.remove(connection.connectionId)
             try {
                 connection.clientSocket.close()
@@ -381,10 +309,7 @@ class PCCommunicationHandler(
             logger.info("PC connection closed: ${connection.connectionId}")
         }
     }
-    
-    /**
-     * Process PC commands
-     */
+
     private suspend fun processCommand(connection: PCConnection, command: PCCommand) {
         when (command) {
             is PCCommand.StartStreaming -> {
@@ -413,48 +338,46 @@ class PCCommunicationHandler(
             }
         }
     }
-    
-    // Command handlers
+
     private suspend fun handleStartStreaming(connection: PCConnection, command: PCCommand.StartStreaming) {
         logger.info("Starting streaming to PC for devices: ${command.deviceIds}")
-        
+
         val updatedConnection = connection.copy(streamingMode = command.mode)
         activeConnections[connection.connectionId] = updatedConnection
         activeStreams.incrementAndGet()
-        
+
         val response = PCResponse.Success("Streaming started for devices: ${command.deviceIds}")
         sendResponse(connection, response)
     }
-    
+
     private suspend fun handleStopStreaming(connection: PCConnection, command: PCCommand.StopStreaming) {
         logger.info("Stopping streaming to PC for devices: ${command.deviceIds}")
-        
+
         val updatedConnection = connection.copy(streamingMode = StreamingMode.NONE)
         activeConnections[connection.connectionId] = updatedConnection
         activeStreams.decrementAndGet()
-        
+
         val response = PCResponse.Success("Streaming stopped for devices: ${command.deviceIds}")
         sendResponse(connection, response)
     }
-    
+
     private suspend fun handleListDevices(connection: PCConnection) {
-        // This would be called by the main ShimmerRecorder to provide device list
         val response = PCResponse.Success("Device list request received")
         sendResponse(connection, response)
     }
-    
+
     private suspend fun handleGetStatus(connection: PCConnection) {
         val status = getStatistics()
         val response = PCResponse.Status(status)
         sendResponse(connection, response)
     }
-    
+
     private suspend fun handleAuthenticate(connection: PCConnection, command: PCCommand.Authenticate) {
         val isValid = validateAuthToken(command.token)
         if (isValid) {
             val updatedConnection = connection.copy(isAuthenticated = true)
             activeConnections[connection.connectionId] = updatedConnection
-            
+
             val response = PCResponse.Success("Authentication successful")
             sendResponse(connection, response)
         } else {
@@ -462,29 +385,22 @@ class PCCommunicationHandler(
             sendResponse(connection, response)
         }
     }
-    
-    // Additional command handlers would be implemented here...
+
     private suspend fun handleConfigureDevice(connection: PCConnection, command: PCCommand.ConfigureDevice) {
-        // Implementation for device configuration
         val response = PCResponse.Success("Device configuration request received")
         sendResponse(connection, response)
     }
-    
+
     private suspend fun handleRequestDeviceInfo(connection: PCConnection, command: PCCommand.RequestDeviceInfo) {
-        // Implementation for device info request
         val response = PCResponse.Success("Device info request received")
         sendResponse(connection, response)
     }
-    
+
     private suspend fun handleRequestFileTransfer(connection: PCConnection, command: PCCommand.RequestFileTransfer) {
-        // Implementation for file transfer request
         val response = PCResponse.Success("File transfer request received")
         sendResponse(connection, response)
     }
-    
-    /**
-     * Send response to PC
-     */
+
     private suspend fun sendResponse(connection: PCConnection, response: PCResponse) {
         try {
             val json = serializeResponse(response)
@@ -494,26 +410,21 @@ class PCCommunicationHandler(
             logger.error("Error sending response to PC", e)
         }
     }
-    
-    /**
-     * Monitor PC connections for health and timeouts
-     */
+
     private suspend fun monitorConnections() {
         while (isRunning.get()) {
             try {
                 val currentTime = System.currentTimeMillis()
                 val connectionsToRemove = mutableListOf<String>()
-                
+
                 activeConnections.forEach { (connectionId, connection) ->
                     val connectionAge = currentTime - connection.connectedAt
-                    
-                    // Check for timeout
+
                     if (connectionAge > config.connectionTimeout && !connection.isAuthenticated) {
                         connectionsToRemove.add(connectionId)
                         logger.warning("PC connection timeout: $connectionId")
                     }
-                    
-                    // Send heartbeat
+
                     if (connectionAge % config.heartbeatInterval == 0L) {
                         try {
                             val heartbeat = PCResponse.Success("heartbeat")
@@ -524,31 +435,27 @@ class PCCommunicationHandler(
                         }
                     }
                 }
-                
-                // Remove timed out connections
+
                 connectionsToRemove.forEach { connectionId ->
                     activeConnections.remove(connectionId)?.let { connection ->
                         try {
                             connection.clientSocket.close()
                         } catch (e: Exception) {
-                            // Ignore
                         }
                     }
                 }
-                
+
                 delay(config.heartbeatInterval)
             } catch (e: Exception) {
                 logger.error("Error monitoring PC connections", e)
-                delay(5000) // Wait before retrying
+                delay(5000)
             }
         }
     }
-    
-    // Utility methods
+
     private fun generateConnectionId(): String = "PC_${System.currentTimeMillis()}_${(1000..9999).random()}"
-    
+
     private fun parseCommand(json: String): PCCommand {
-        // Simple JSON parsing - in production, use a proper JSON library
         return when {
             json.contains("StartStreaming") -> PCCommand.StartStreaming(emptyList(), StreamingMode.REAL_TIME)
             json.contains("StopStreaming") -> PCCommand.StopStreaming(emptyList())
@@ -557,9 +464,8 @@ class PCCommunicationHandler(
             else -> PCCommand.GetStatus
         }
     }
-    
+
     private fun serializeResponse(response: PCResponse): String {
-        // Simple JSON serialization - in production, use a proper JSON library
         return when (response) {
             is PCResponse.Success -> """{"type":"success","message":"${response.message}"}"""
             is PCResponse.Error -> """{"type":"error","message":"${response.message}","code":${response.code}}"""
@@ -567,25 +473,19 @@ class PCCommunicationHandler(
             else -> """{"type":"response","message":"Response sent"}"""
         }
     }
-    
+
     private fun validatePairingCode(code: String): Boolean {
-        // Implement your pairing code validation logic
         return code.isNotEmpty() && code.length >= 4
     }
-    
+
     private fun validateAuthToken(token: String): Boolean {
-        // Implement your authentication token validation logic
         return token.isNotEmpty()
     }
-    
+
     private fun notifyDevicePairedWithPC(deviceId: String, paired: Boolean) {
-        // This would notify the main system that a device is now paired with PC
         logger.info("Device $deviceId PC pairing status: $paired")
     }
-    
-    /**
-     * Cleanup all PC communication resources
-     */
+
     fun cleanup() {
         runBlocking {
             stopServer()

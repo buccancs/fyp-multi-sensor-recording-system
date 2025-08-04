@@ -16,10 +16,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
 
-/**
- * Unit tests for CalibrationCaptureManager
- * Tests calibration capture coordination, file management, and sync integration
- */
 @RunWith(RobolectricTestRunner::class)
 class CalibrationCaptureManagerTest {
     private lateinit var mockContext: Context
@@ -42,7 +38,6 @@ class CalibrationCaptureManagerTest {
         testDispatcher = StandardTestDispatcher()
         Dispatchers.setMain(testDispatcher)
 
-        // Mock external files directory
         val mockExternalDir = mockk<File>(relaxed = true)
         every { mockContext.getExternalFilesDir(any()) } returns mockExternalDir
         every { mockExternalDir.exists() } returns true
@@ -98,12 +93,10 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing successful dual camera capture")
 
-            // Mock successful camera captures
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } returns true
             coEvery { mockThermalRecorder.captureCalibrationImage(any()) } returns true
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute calibration capture
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = "test_dual_001",
@@ -112,14 +105,12 @@ class CalibrationCaptureManagerTest {
                     highResolution = true,
                 )
 
-            // Verify results
             assertTrue("Capture should be successful", result.success)
             assertEquals("Calibration ID should match", "test_dual_001", result.calibrationId)
             assertNotNull("RGB file path should be set", result.rgbFilePath)
             assertNotNull("Thermal file path should be set", result.thermalFilePath)
             assertNull("Error message should be null", result.errorMessage)
 
-            // Verify camera recorder calls
             coVerify { mockCameraRecorder.captureCalibrationImage(any()) }
             coVerify { mockThermalRecorder.captureCalibrationImage(any()) }
             verify { mockSyncClockManager.getSyncedTimestamp(any()) }
@@ -132,11 +123,9 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing RGB-only capture")
 
-            // Mock successful RGB capture
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } returns true
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute RGB-only calibration capture
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = "test_rgb_001",
@@ -145,13 +134,11 @@ class CalibrationCaptureManagerTest {
                     highResolution = true,
                 )
 
-            // Verify results
             assertTrue("Capture should be successful", result.success)
             assertEquals("Calibration ID should match", "test_rgb_001", result.calibrationId)
             assertNotNull("RGB file path should be set", result.rgbFilePath)
             assertNull("Thermal file path should be null", result.thermalFilePath)
 
-            // Verify only RGB camera was called
             coVerify { mockCameraRecorder.captureCalibrationImage(any()) }
             coVerify(exactly = 0) { mockThermalRecorder.captureCalibrationImage(any()) }
 
@@ -163,11 +150,9 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing thermal-only capture")
 
-            // Mock successful thermal capture
             coEvery { mockThermalRecorder.captureCalibrationImage(any()) } returns true
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute thermal-only calibration capture
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = "test_thermal_001",
@@ -176,13 +161,11 @@ class CalibrationCaptureManagerTest {
                     highResolution = false,
                 )
 
-            // Verify results
             assertTrue("Capture should be successful", result.success)
             assertEquals("Calibration ID should match", "test_thermal_001", result.calibrationId)
             assertNull("RGB file path should be null", result.rgbFilePath)
             assertNotNull("Thermal file path should be set", result.thermalFilePath)
 
-            // Verify only thermal camera was called
             coVerify(exactly = 0) { mockCameraRecorder.captureCalibrationImage(any()) }
             coVerify { mockThermalRecorder.captureCalibrationImage(any()) }
 
@@ -194,12 +177,10 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing camera failure handling")
 
-            // Mock camera failure
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } returns false
             coEvery { mockThermalRecorder.captureCalibrationImage(any()) } returns true
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute calibration capture with camera failure
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = "test_failure_001",
@@ -207,7 +188,6 @@ class CalibrationCaptureManagerTest {
                     captureThermal = true,
                 )
 
-            // Verify failure is handled correctly
             assertFalse("Capture should fail when RGB camera fails", result.success)
             assertEquals("Calibration ID should still be set", "test_failure_001", result.calibrationId)
 
@@ -219,11 +199,9 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing exception handling")
 
-            // Mock exception during capture
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } throws RuntimeException("Camera error")
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute calibration capture with exception
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = "test_exception_001",
@@ -231,7 +209,6 @@ class CalibrationCaptureManagerTest {
                     captureThermal = false,
                 )
 
-            // Verify exception is handled gracefully
             assertFalse("Capture should fail when exception occurs", result.success)
             assertNotNull("Error message should be set", result.errorMessage)
             assertTrue("Error message should contain exception info", result.errorMessage!!.contains("Camera error"))
@@ -244,11 +221,9 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing auto-generated calibration ID")
 
-            // Mock successful capture
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } returns true
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute capture without providing calibration ID
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = null,
@@ -256,7 +231,6 @@ class CalibrationCaptureManagerTest {
                     captureThermal = false,
                 )
 
-            // Verify auto-generated ID
             assertTrue("Capture should be successful", result.success)
             assertNotNull("Calibration ID should be auto-generated", result.calibrationId)
             assertTrue("ID should start with 'calib_'", result.calibrationId.startsWith("calib_"))
@@ -273,11 +247,9 @@ class CalibrationCaptureManagerTest {
             val testTimestamp = 1234567890L
             val syncedTimestamp = 1234567990L
 
-            // Mock sync clock manager
             every { mockSyncClockManager.getSyncedTimestamp(testTimestamp) } returns syncedTimestamp
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } returns true
 
-            // Execute capture
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
                     calibrationId = "test_sync_001",
@@ -285,11 +257,9 @@ class CalibrationCaptureManagerTest {
                     captureThermal = false,
                 )
 
-            // Verify sync integration
             assertTrue("Capture should be successful", result.success)
             assertEquals("Synced timestamp should be used", syncedTimestamp, result.syncedTimestamp)
 
-            // Verify sync clock manager was called
             verify { mockSyncClockManager.getSyncedTimestamp(any()) }
 
             println("[DEBUG_LOG] Sync timestamp integration test passed")
@@ -299,10 +269,8 @@ class CalibrationCaptureManagerTest {
     fun testCalibrationStatistics() {
         println("[DEBUG_LOG] Testing calibration statistics")
 
-        // Get initial statistics
         val stats = calibrationCaptureManager.getCalibrationStatistics()
 
-        // Verify statistics structure
         assertNotNull("Statistics should not be null", stats)
         assertTrue("Total sessions should be non-negative", stats.totalSessions >= 0)
         assertTrue("Complete sessions should be non-negative", stats.completeSessions >= 0)
@@ -343,7 +311,6 @@ class CalibrationCaptureManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing concurrent capture operations")
 
-            // Mock successful captures with delays
             coEvery { mockCameraRecorder.captureCalibrationImage(any()) } coAnswers {
                 delay(50)
                 true
@@ -354,7 +321,6 @@ class CalibrationCaptureManagerTest {
             }
             every { mockSyncClockManager.getSyncedTimestamp(any()) } returns System.currentTimeMillis()
 
-            // Execute concurrent captures
             val startTime = System.currentTimeMillis()
             val result =
                 calibrationCaptureManager.captureCalibrationImages(
@@ -364,7 +330,6 @@ class CalibrationCaptureManagerTest {
                 )
             val endTime = System.currentTimeMillis()
 
-            // Verify concurrent execution (should be faster than sequential)
             assertTrue("Capture should be successful", result.success)
             val totalTime = endTime - startTime
             assertTrue("Concurrent execution should be faster than 80ms (50+30)", totalTime < 80)

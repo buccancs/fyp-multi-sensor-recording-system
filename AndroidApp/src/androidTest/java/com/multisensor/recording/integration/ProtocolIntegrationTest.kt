@@ -16,13 +16,6 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
-/**
- * Android Instrumentation Tests for Protocol Communication.
- *
- * This test class implements the Android instrumentation test hooks described
- * for exercising communication logic and state management.
- * It simulates the PC-server side within the Android test environment.
- */
 @RunWith(AndroidJUnit4::class)
 class ProtocolIntegrationTest {
     private lateinit var schemaManager: SchemaManager
@@ -37,14 +30,11 @@ class ProtocolIntegrationTest {
 
     @Test
     fun testSchemaManagerLoading() {
-        // Test that schema manager loads successfully
         assertTrue("Schema should be loaded", schemaManager.isSchemaLoaded)
 
-        // Test that valid message types are available
         val validTypes = schemaManager.validMessageTypes
         assertTrue("Should have valid message types", validTypes.isNotEmpty())
 
-        // Check for expected message types
         val expectedTypes =
             setOf(
                 "start_record",
@@ -64,7 +54,6 @@ class ProtocolIntegrationTest {
 
     @Test
     fun testCommonConstantsAccess() {
-        // Test that CommonConstants provides expected configuration values
         val host = CommonConstants.Network.HOST
         val port = CommonConstants.Network.PORT
 
@@ -72,8 +61,7 @@ class ProtocolIntegrationTest {
         assertTrue("Host should not be empty", host.isNotEmpty())
         assertTrue("Port should be positive", port > 0)
         assertTrue("Port should be valid", port <= 65535)
-        
-        // Test other constants are accessible
+
         assertTrue("Protocol version should be positive", CommonConstants.PROTOCOL_VERSION > 0)
         assertNotNull("App version should not be null", CommonConstants.APP_VERSION)
         assertTrue("Frame rate should be positive", CommonConstants.Devices.FRAME_RATE > 0)
@@ -81,7 +69,6 @@ class ProtocolIntegrationTest {
 
     @Test
     fun testMessageValidation() {
-        // Test valid message validation
         val validStartMessage =
             JSONObject().apply {
                 put("type", "start_record")
@@ -94,12 +81,10 @@ class ProtocolIntegrationTest {
             schemaManager.validateMessage(validStartMessage),
         )
 
-        // Test invalid message rejection
         val invalidMessage =
             JSONObject().apply {
                 put("type", "start_record")
                 put("timestamp", System.currentTimeMillis())
-                // Missing required session_id
             }
 
         assertFalse(
@@ -110,7 +95,6 @@ class ProtocolIntegrationTest {
 
     @Test
     fun testMessageCreation() {
-        // Test creating different message types
         val startMessage = schemaManager.createMessage("start_record")
         assertEquals("start_record", startMessage.getString("type"))
         assertTrue("Should have timestamp", startMessage.has("timestamp"))
@@ -129,13 +113,11 @@ class ProtocolIntegrationTest {
         val latch = CountDownLatch(1)
         var receivedMessage: JSONObject? = null
 
-        // Set up mock connection to receive messages
         mockConnectionManager.onMessageReceived = { message ->
             receivedMessage = message
             latch.countDown()
         }
 
-        // Simulate sending a message
         val testMessage =
             schemaManager.createMessage("device_status").apply {
                 put("device_id", "test_device")
@@ -146,7 +128,6 @@ class ProtocolIntegrationTest {
 
         mockConnectionManager.sendMessage(testMessage)
 
-        // Wait for message to be processed
         assertTrue(
             "Should receive message within timeout",
             latch.await(5, TimeUnit.SECONDS),
@@ -161,10 +142,8 @@ class ProtocolIntegrationTest {
     fun testRecordingStateTransitions() {
         val stateManager = MockRecordingStateManager()
 
-        // Test initial state
         assertEquals(RecordingState.IDLE, stateManager.currentState)
 
-        // Test start recording transition
         val startMessage =
             schemaManager.createMessage("start_record").apply {
                 put("session_id", "test_session")
@@ -173,7 +152,6 @@ class ProtocolIntegrationTest {
         stateManager.handleMessage(startMessage)
         assertEquals(RecordingState.RECORDING, stateManager.currentState)
 
-        // Test stop recording transition
         val stopMessage =
             schemaManager.createMessage("stop_record").apply {
                 put("session_id", "test_session")
@@ -188,32 +166,26 @@ class ProtocolIntegrationTest {
         val messageCollector = mutableListOf<JSONObject>()
         val stateManager = MockRecordingStateManager()
 
-        // Set up message collection
         stateManager.onMessageGenerated = { message ->
             messageCollector.add(message)
         }
 
-        // Start recording
         val startMessage =
             schemaManager.createMessage("start_record").apply {
                 put("session_id", "test_session")
             }
         stateManager.handleMessage(startMessage)
 
-        // Simulate some time for message generation
         Thread.sleep(1000)
 
-        // Stop recording
         val stopMessage =
             schemaManager.createMessage("stop_record").apply {
                 put("session_id", "test_session")
             }
         stateManager.handleMessage(stopMessage)
 
-        // Verify messages were generated
         assertTrue("Should have generated messages", messageCollector.isNotEmpty())
 
-        // Check for expected message types
         val messageTypes = messageCollector.map { it.getString("type") }.toSet()
         assertTrue("Should generate preview frames", messageTypes.contains("preview_frame"))
         assertTrue("Should generate device status", messageTypes.contains("device_status"))
@@ -228,7 +200,6 @@ class ProtocolIntegrationTest {
             messageCollector.add(message)
         }
 
-        // Start calibration
         val calibrationStart =
             schemaManager.createMessage("calibration_start").apply {
                 put("pattern_type", "chessboard")
@@ -243,10 +214,8 @@ class ProtocolIntegrationTest {
 
         stateManager.handleMessage(calibrationStart)
 
-        // Wait for calibration to complete
         Thread.sleep(2000)
 
-        // Check for calibration result
         val calibrationResults =
             messageCollector.filter {
                 it.getString("type") == "calibration_result"
@@ -262,35 +231,29 @@ class ProtocolIntegrationTest {
     fun testErrorHandling() {
         val stateManager = MockRecordingStateManager()
 
-        // Test handling stop without start
         val stopMessage =
             schemaManager.createMessage("stop_record").apply {
                 put("session_id", "nonexistent_session")
             }
 
-        // Should handle gracefully without crashing
         stateManager.handleMessage(stopMessage)
         assertEquals(RecordingState.IDLE, stateManager.currentState)
 
-        // Test handling invalid message
         val invalidMessage =
             JSONObject().apply {
                 put("type", "unknown_type")
                 put("timestamp", System.currentTimeMillis())
             }
 
-        // Should handle gracefully
         stateManager.handleMessage(invalidMessage)
         assertEquals(RecordingState.IDLE, stateManager.currentState)
     }
 
     @Test
     fun testConfigSchemaConsistency() {
-        // Test that calibration constants match schema expectations
         val patternRows = CommonConstants.Calibration.PATTERN_ROWS
         val patternCols = CommonConstants.Calibration.PATTERN_COLS
 
-        // Create calibration message using constants values
         val calibrationMessage =
             schemaManager.createMessage("calibration_start").apply {
                 put("pattern_type", CommonConstants.Calibration.PATTERN_TYPE)
@@ -303,7 +266,6 @@ class ProtocolIntegrationTest {
                 )
             }
 
-        // Message should validate against schema
         assertTrue(
             "Config-based message should validate",
             schemaManager.validateMessage(calibrationMessage),
@@ -311,17 +273,13 @@ class ProtocolIntegrationTest {
     }
 }
 
-/**
- * Mock connection manager for testing network communication without real sockets.
- */
 class MockConnectionManager {
     var onMessageReceived: ((JSONObject) -> Unit)? = null
     private val messageQueue = mutableListOf<JSONObject>()
 
     fun sendMessage(message: JSONObject) {
-        // Simulate message transmission
         thread {
-            Thread.sleep(10) // Simulate network delay
+            Thread.sleep(10)
             onMessageReceived?.invoke(message)
         }
     }
@@ -329,9 +287,6 @@ class MockConnectionManager {
     fun getReceivedMessages(): List<JSONObject> = messageQueue.toList()
 }
 
-/**
- * Mock recording state manager for testing state transitions.
- */
 enum class RecordingState {
     IDLE,
     RECORDING,
@@ -374,7 +329,6 @@ class MockRecordingStateManager {
         thread {
             var frameId = 0
             while (currentState == RecordingState.RECORDING) {
-                // Generate preview frame
                 val previewFrame =
                     JSONObject().apply {
                         put("type", "preview_frame")
@@ -386,7 +340,6 @@ class MockRecordingStateManager {
                     }
                 onMessageGenerated?.invoke(previewFrame)
 
-                // Generate device status
                 val deviceStatus =
                     JSONObject().apply {
                         put("type", "device_status")
@@ -398,14 +351,14 @@ class MockRecordingStateManager {
                     }
                 onMessageGenerated?.invoke(deviceStatus)
 
-                Thread.sleep(100) // 10 FPS simulation
+                Thread.sleep(100)
             }
         }
     }
 
     private fun startCalibrationProcess() {
         thread {
-            Thread.sleep(1500) // Simulate calibration time
+            Thread.sleep(1500)
 
             val calibrationResult =
                 JSONObject().apply {

@@ -7,11 +7,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * ThermalCameraSettings manages thermal camera configuration and preferences.
- * Provides centralized access to thermal camera settings and ensures they are
- * applied consistently during recording sessions.
- */
 @Singleton
 class ThermalCameraSettings
     @Inject
@@ -21,7 +16,6 @@ class ThermalCameraSettings
         private val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         companion object {
-            // Preference keys
             private const val KEY_THERMAL_ENABLED = "enable_thermal_recording"
             private const val KEY_THERMAL_FRAME_RATE = "thermal_frame_rate"
             private const val KEY_THERMAL_COLOR_PALETTE = "thermal_color_palette"
@@ -33,7 +27,6 @@ class ThermalCameraSettings
             private const val KEY_THERMAL_USB_PRIORITY = "thermal_usb_priority"
             private const val KEY_THERMAL_DATA_FORMAT = "thermal_data_format"
 
-            // Default values
             private const val DEFAULT_FRAME_RATE = 25
             private const val DEFAULT_COLOR_PALETTE = "iron"
             private const val DEFAULT_TEMP_RANGE = "auto"
@@ -42,9 +35,6 @@ class ThermalCameraSettings
             private const val DEFAULT_DATA_FORMAT = "radiometric"
         }
 
-        /**
-         * Data class representing thermal camera configuration
-         */
         data class ThermalConfig(
             val isEnabled: Boolean,
             val frameRate: Int,
@@ -57,9 +47,6 @@ class ThermalCameraSettings
             val usbPriority: Boolean,
             val dataFormat: String,
         ) {
-            /**
-             * Get display name for temperature range
-             */
             fun getTemperatureRangeDisplay(): String =
                 when (temperatureRange) {
                     "auto" -> "Auto Range"
@@ -71,9 +58,6 @@ class ThermalCameraSettings
                     else -> temperatureRange
                 }
 
-            /**
-             * Get display name for color palette
-             */
             fun getColorPaletteDisplay(): String =
                 when (colorPalette) {
                     "iron" -> "Iron"
@@ -85,31 +69,22 @@ class ThermalCameraSettings
                     else -> colorPalette
                 }
 
-            /**
-             * Get temperature range values in Celsius
-             */
             fun getTemperatureRangeValues(): Pair<Float, Float>? =
                 when (temperatureRange) {
                     "-20_150" -> Pair(-20f, 150f)
                     "0_100" -> Pair(0f, 100f)
                     "15_45" -> Pair(15f, 45f)
                     "20_40" -> Pair(20f, 40f)
-                    else -> null // Auto or custom ranges
+                    else -> null
                 }
 
-            /**
-             * Convert temperature from Celsius to selected units
-             */
             fun convertTemperature(celsius: Float): Float =
                 when (temperatureUnits) {
                     "fahrenheit" -> celsius * 9f / 5f + 32f
                     "kelvin" -> celsius + 273.15f
-                    else -> celsius // Celsius
+                    else -> celsius
                 }
 
-            /**
-             * Get temperature unit symbol
-             */
             fun getTemperatureUnitSymbol(): String =
                 when (temperatureUnits) {
                     "fahrenheit" -> "°F"
@@ -117,25 +92,13 @@ class ThermalCameraSettings
                     else -> "°C"
                 }
 
-            /**
-             * Check if radiometric data should be saved
-             */
             fun shouldSaveRadiometricData(): Boolean = dataFormat == "radiometric" || dataFormat == "combined"
 
-            /**
-             * Check if visual data should be saved
-             */
             fun shouldSaveVisualData(): Boolean = dataFormat == "visual" || dataFormat == "combined"
 
-            /**
-             * Check if raw sensor data should be saved
-             */
             fun shouldSaveRawData(): Boolean = dataFormat == "raw"
         }
 
-        /**
-         * Get current thermal camera configuration
-         */
         fun getCurrentConfig(): ThermalConfig =
             ThermalConfig(
                 isEnabled = prefs.getBoolean(KEY_THERMAL_ENABLED, true),
@@ -150,9 +113,6 @@ class ThermalCameraSettings
                 dataFormat = prefs.getString(KEY_THERMAL_DATA_FORMAT, DEFAULT_DATA_FORMAT) ?: DEFAULT_DATA_FORMAT,
             )
 
-        /**
-         * Update thermal camera configuration
-         */
         fun updateConfig(config: ThermalConfig) {
             prefs.edit().apply {
                 putBoolean(KEY_THERMAL_ENABLED, config.isEnabled)
@@ -169,68 +129,32 @@ class ThermalCameraSettings
             }
         }
 
-        /**
-         * Check if thermal recording is enabled
-         */
         fun isThermalRecordingEnabled(): Boolean = prefs.getBoolean(KEY_THERMAL_ENABLED, true)
 
-        /**
-         * Get thermal frame rate
-         */
         fun getFrameRate(): Int = prefs.getString(KEY_THERMAL_FRAME_RATE, DEFAULT_FRAME_RATE.toString())?.toIntOrNull() ?: DEFAULT_FRAME_RATE
 
-        /**
-         * Get thermal color palette
-         */
         fun getColorPalette(): String = prefs.getString(KEY_THERMAL_COLOR_PALETTE, DEFAULT_COLOR_PALETTE) ?: DEFAULT_COLOR_PALETTE
 
-        /**
-         * Get thermal emissivity
-         */
         fun getEmissivity(): Float = prefs.getString(KEY_THERMAL_EMISSIVITY, DEFAULT_EMISSIVITY.toString())?.toFloatOrNull() ?: DEFAULT_EMISSIVITY
 
-        /**
-         * Check if USB priority mode is enabled
-         */
         fun isUsbPriorityEnabled(): Boolean = prefs.getBoolean(KEY_THERMAL_USB_PRIORITY, true)
 
-        /**
-         * Check if auto-calibration is enabled
-         */
         fun isAutoCalibrationEnabled(): Boolean = prefs.getBoolean(KEY_THERMAL_AUTO_CALIBRATION, true)
 
-        /**
-         * Check if high-resolution mode is enabled
-         */
         fun isHighResolutionEnabled(): Boolean = prefs.getBoolean(KEY_THERMAL_HIGH_RESOLUTION, false)
 
-        /**
-         * Get thermal data format
-         */
         fun getDataFormat(): String = prefs.getString(KEY_THERMAL_DATA_FORMAT, DEFAULT_DATA_FORMAT) ?: DEFAULT_DATA_FORMAT
 
-        /**
-         * Get temperature units
-         */
         fun getTemperatureUnits(): String = prefs.getString(KEY_THERMAL_TEMP_UNITS, DEFAULT_TEMP_UNITS) ?: DEFAULT_TEMP_UNITS
 
-        /**
-         * Register preference change listener
-         */
         fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
             prefs.registerOnSharedPreferenceChangeListener(listener)
         }
 
-        /**
-         * Unregister preference change listener
-         */
         fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
             prefs.unregisterOnSharedPreferenceChangeListener(listener)
         }
 
-        /**
-         * Generate configuration summary for logging
-         */
         fun getConfigSummary(): String {
             val config = getCurrentConfig()
             return buildString {
@@ -249,9 +173,6 @@ class ThermalCameraSettings
             }
         }
 
-        /**
-         * Export configuration to string for session metadata
-         */
         fun exportConfigToString(): String {
             val config = getCurrentConfig()
             return "thermal_enabled=${config.isEnabled}," +

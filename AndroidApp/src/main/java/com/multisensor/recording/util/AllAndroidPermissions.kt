@@ -3,54 +3,34 @@ package com.multisensor.recording.util
 import android.Manifest
 import android.os.Build
 
-/**
- * Comprehensive list of all Android permissions that can be requested.
- * This class provides a complete bundle of all available Android permissions
- * for applications that need to request all permissions at once.
- */
 object AllAndroidPermissions {
-    /**
-     * Get all available Android permissions based on the current API level
-     */
     fun getAllPermissions(): Array<String> {
         val permissions = mutableListOf<String>()
 
-        // Core permissions
         permissions.addAll(getCorePermissions())
 
-        // Location permissions
         permissions.addAll(getLocationPermissions())
 
-        // Storage permissions
         permissions.addAll(getStoragePermissions())
 
-        // Camera and microphone permissions
         permissions.addAll(getCameraAndAudioPermissions())
 
-        // Communication permissions
         permissions.addAll(getCommunicationPermissions())
 
-        // Bluetooth permissions
         permissions.addAll(getBluetoothPermissions())
 
-        // Network permissions
         permissions.addAll(getNetworkPermissions())
 
-        // System permissions
         permissions.addAll(getSystemPermissions())
 
-        // Sensor permissions
         permissions.addAll(getSensorPermissions())
 
-        // Device admin permissions
         permissions.addAll(getDeviceAdminPermissions())
 
-        // Media permissions (API 33+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.addAll(getMediaPermissions())
         }
 
-        // Notification permissions (API 33+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.addAll(getNotificationPermissions())
         }
@@ -249,13 +229,9 @@ object AllAndroidPermissions {
         return permissions
     }
 
-    /**
-     * Get permissions that are considered dangerous and require runtime permission
-     */
     fun getDangerousPermissions(): Array<String> {
         val dangerousPermissions = mutableListOf<String>()
 
-        // Location (foreground only - background location handled separately to avoid XXPermissions restriction)
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -263,10 +239,7 @@ object AllAndroidPermissions {
             ),
         )
 
-        // Note: ACCESS_BACKGROUND_LOCATION is excluded to prevent XXPermissions library restriction
-        // Background location permissions are handled separately through PermissionTool's three-phase system
 
-        // Storage
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -274,7 +247,6 @@ object AllAndroidPermissions {
             ),
         )
 
-        // Camera and Audio
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.CAMERA,
@@ -282,7 +254,6 @@ object AllAndroidPermissions {
             ),
         )
 
-        // Phone
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.READ_PHONE_STATE,
@@ -301,7 +272,6 @@ object AllAndroidPermissions {
             dangerousPermissions.add(Manifest.permission.ANSWER_PHONE_CALLS)
         }
 
-        // SMS
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.SEND_SMS,
@@ -312,7 +282,6 @@ object AllAndroidPermissions {
             ),
         )
 
-        // Contacts
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.READ_CONTACTS,
@@ -321,7 +290,6 @@ object AllAndroidPermissions {
             ),
         )
 
-        // Calendar
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.READ_CALENDAR,
@@ -329,7 +297,6 @@ object AllAndroidPermissions {
             ),
         )
 
-        // Sensors
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             dangerousPermissions.add(Manifest.permission.BODY_SENSORS)
         }
@@ -338,12 +305,10 @@ object AllAndroidPermissions {
             dangerousPermissions.add(Manifest.permission.BODY_SENSORS_BACKGROUND)
         }
 
-        // Activity Recognition
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dangerousPermissions.add(Manifest.permission.ACTIVITY_RECOGNITION)
         }
 
-        // Media (API 33+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             dangerousPermissions.addAll(
                 listOf(
@@ -354,7 +319,6 @@ object AllAndroidPermissions {
             )
         }
 
-        // Notifications (API 33+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             dangerousPermissions.add(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -362,9 +326,6 @@ object AllAndroidPermissions {
         return dangerousPermissions.toTypedArray()
     }
 
-    /**
-     * Get a human-readable description for permission groups
-     */
     fun getPermissionGroupDescriptions(): Map<String, String> =
         mapOf(
             "Location" to "Access device location for GPS and network-based positioning",

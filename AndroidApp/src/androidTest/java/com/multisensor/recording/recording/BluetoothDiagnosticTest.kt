@@ -12,9 +12,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Diagnostic test to investigate Bluetooth device discovery issues
- */
 @RunWith(AndroidJUnit4::class)
 class BluetoothDiagnosticTest {
     @get:Rule
@@ -43,20 +40,17 @@ class BluetoothDiagnosticTest {
     fun testBluetoothDeviceDiscovery() {
         println("[DEBUG_LOG] === Bluetooth Device Discovery Diagnostic ===")
 
-        // Check Bluetooth availability
         val bluetoothAvailable = bluetoothAdapter != null
         val bluetoothEnabled = bluetoothAdapter?.isEnabled == true
 
         println("[DEBUG_LOG] Bluetooth adapter available: $bluetoothAvailable")
         println("[DEBUG_LOG] Bluetooth enabled: $bluetoothEnabled")
 
-        // Use assertions to make the results visible in test output
         assert(bluetoothAvailable) { "Bluetooth adapter should be available" }
         assert(bluetoothEnabled) { "Bluetooth should be enabled for device discovery" }
 
         if (bluetoothEnabled) {
             try {
-                // Get all paired devices
                 val pairedDevices = bluetoothAdapter.bondedDevices
                 val deviceCount = pairedDevices?.size ?: 0
 
@@ -68,7 +62,6 @@ class BluetoothDiagnosticTest {
                     println("[DEBUG_LOG] $info")
                     deviceInfo.add(info)
 
-                    // Check if this device matches my Shimmer criteria
                     val isShimmerDevice =
                         device.name?.contains("Shimmer", ignoreCase = true) == true ||
                             device.name?.contains("RN42", ignoreCase = true) == true
@@ -76,7 +69,6 @@ class BluetoothDiagnosticTest {
                     println("[DEBUG_LOG]   ---")
                 }
 
-                // Apply my filtering logic
                 val shimmerDevices =
                     pairedDevices
                         ?.filter { device ->
@@ -90,16 +82,13 @@ class BluetoothDiagnosticTest {
                     println("[DEBUG_LOG]   Shimmer device: $address")
                 }
 
-                // Create assertion messages that will be visible in test output
                 val summary = "Found $deviceCount total paired devices, $shimmerCount Shimmer devices"
                 println("[DEBUG_LOG] Summary: $summary")
 
-                // If no Shimmer devices found, provide guidance
                 if (shimmerCount == 0) {
                     val guidance = "No Shimmer devices found. Check: 1) Device is paired with PIN 1234, 2) Device name contains 'Shimmer' or 'RN42', 3) Device is properly bonded"
                     println("[DEBUG_LOG] Guidance: $guidance")
 
-                    // Don't fail the test, but provide diagnostic info
                     println("[DEBUG_LOG] This is expected if no Shimmer device is properly paired")
                 }
             } catch (e: SecurityException) {

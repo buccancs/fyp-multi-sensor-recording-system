@@ -9,14 +9,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
 
-/**
- * Base class for instrumented tests with Hilt dependency injection
- * 
- * Features:
- * - Hilt testing setup
- * - Android instrumentation context
- * - Common test utilities
- */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 abstract class BaseInstrumentedTest {

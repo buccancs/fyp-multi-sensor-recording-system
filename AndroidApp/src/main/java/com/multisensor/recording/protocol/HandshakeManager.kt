@@ -7,29 +7,16 @@ import org.json.JSONObject
 import java.io.OutputStream
 import java.net.Socket
 
-/**
- * HandshakeManager for Android - handles initial handshake with version checking.
- *
- * This class implements the handshake protocol described in to ensure
- * compatibility between Android and Python applications by exchanging protocol
- * version information at connection start.
- */
 class HandshakeManager(
     private val context: Context,
 ) {
     companion object {
         private const val TAG = "HandshakeManager"
-        private const val HANDSHAKE_TIMEOUT_MS = 10000L // 10 seconds
+        private const val HANDSHAKE_TIMEOUT_MS = 10000L
     }
 
     private val schemaManager = SchemaManager.getInstance(context)
 
-    /**
-     * Send handshake message to the server.
-     *
-     * @param socket Connected socket to send handshake through
-     * @return true if handshake was sent successfully, false otherwise
-     */
     fun sendHandshake(socket: Socket): Boolean =
         try {
             val handshakeMessage = createHandshakeMessage()
@@ -39,7 +26,7 @@ class HandshakeManager(
 
             val outputStream = socket.getOutputStream()
             outputStream.write(messageJson.toByteArray())
-            outputStream.write('\n'.code) // Add newline delimiter
+            outputStream.write('\n'.code)
             outputStream.flush()
 
             Log.i(TAG, "Handshake sent successfully")
@@ -49,15 +36,8 @@ class HandshakeManager(
             false
         }
 
-    /**
-     * Process received handshake acknowledgment.
-     *
-     * @param ackMessage JSON object containing handshake acknowledgment
-     * @return true if handshake is compatible, false otherwise
-     */
     fun processHandshakeAck(ackMessage: JSONObject): Boolean {
         return try {
-            // Validate the message against schema
             if (!schemaManager.validateMessage(ackMessage)) {
                 Log.e(TAG, "Invalid handshake acknowledgment format")
                 return false
@@ -77,7 +57,6 @@ class HandshakeManager(
                 Log.w(TAG, "Protocol version mismatch detected!")
                 Log.w(TAG, "Server message: $message")
 
-                // Log detailed version information for debugging
                 if (serverProtocolVersion != CommonConstants.PROTOCOL_VERSION) {
                     Log.w(TAG, "Version mismatch: Android v${CommonConstants.PROTOCOL_VERSION}, Server v$serverProtocolVersion")
                     Log.w(TAG, "Consider updating both applications to the same version")
@@ -98,11 +77,6 @@ class HandshakeManager(
         }
     }
 
-    /**
-     * Create handshake message with device information.
-     *
-     * @return JSONObject containing handshake message
-     */
     private fun createHandshakeMessage(): JSONObject =
         schemaManager.createMessage("handshake").apply {
             put("protocol_version", CommonConstants.PROTOCOL_VERSION)
@@ -111,11 +85,6 @@ class HandshakeManager(
             put("device_type", "android")
         }
 
-    /**
-     * Get a human-readable device name.
-     *
-     * @return Device name string
-     */
     private fun getDeviceName(): String =
         try {
             val manufacturer = android.os.Build.MANUFACTURER
@@ -125,35 +94,13 @@ class HandshakeManager(
             "Android Device"
         }
 
-    /**
-     * Check if two protocol versions are compatible.
-     *
-     * Currently implements exact version matching, but could be extended
-     * to support backward compatibility rules in the future.
-     *
-     * @param clientVersion Client protocol version
-     * @param serverVersion Server protocol version
-     * @return true if versions are compatible
-     */
     fun areVersionsCompatible(
         clientVersion: Int,
         serverVersion: Int,
     ): Boolean {
-        // For now, require exact version match
-        // In the future, this could implement more sophisticated compatibility rules
         return clientVersion == serverVersion
     }
 
-    /**
-     * Create a handshake acknowledgment message.
-     *
-     * This is used when the Android device acts as a server receiving handshakes.
-     *
-     * @param clientProtocolVersion Protocol version from client handshake
-     * @param compatible Whether the versions are compatible
-     * @param message Optional message about compatibility status
-     * @return JSONObject containing handshake acknowledgment
-     */
     fun createHandshakeAck(
         clientProtocolVersion: Int,
         compatible: Boolean,

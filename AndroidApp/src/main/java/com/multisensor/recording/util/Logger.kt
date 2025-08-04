@@ -15,10 +15,6 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Centralized logging utility for the Multi-Sensor Recording System.
- * Provides both logcat and file-based logging with different log levels.
- */
 @Singleton
 class Logger
     @Inject
@@ -33,7 +29,7 @@ class Logger
         companion object {
             private const val TAG = "MultiSensorRecording"
             private const val LOG_FOLDER = "logs"
-            private const val MAX_LOG_FILES = 7 // Keep logs for 7 days
+            private const val MAX_LOG_FILES = 7
             private const val LOG_FILE_EXTENSION = ".log"
         }
 
@@ -51,9 +47,6 @@ class Logger
             initializeFileLogging()
         }
 
-        /**
-         * Log verbose message
-         */
         fun verbose(
             message: String,
             throwable: Throwable? = null,
@@ -61,9 +54,6 @@ class Logger
             log(LogLevel.VERBOSE, message, throwable)
         }
 
-        /**
-         * Log debug message
-         */
         fun debug(
             message: String,
             throwable: Throwable? = null,
@@ -71,9 +61,6 @@ class Logger
             log(LogLevel.DEBUG, message, throwable)
         }
 
-        /**
-         * Log info message
-         */
         fun info(
             message: String,
             throwable: Throwable? = null,
@@ -81,9 +68,6 @@ class Logger
             log(LogLevel.INFO, message, throwable)
         }
 
-        /**
-         * Log warning message
-         */
         fun warning(
             message: String,
             throwable: Throwable? = null,
@@ -91,9 +75,6 @@ class Logger
             log(LogLevel.WARNING, message, throwable)
         }
 
-        /**
-         * Log error message
-         */
         fun error(
             message: String,
             throwable: Throwable? = null,
@@ -101,9 +82,6 @@ class Logger
             log(LogLevel.ERROR, message, throwable)
         }
 
-        /**
-         * Core logging method
-         */
         private fun log(
             level: LogLevel,
             message: String,
@@ -112,7 +90,6 @@ class Logger
             val timestamp = dateFormat.format(Date())
             val logMessage = "[$timestamp] ${level.name}: $message"
 
-            // Log to Android logcat
             when (level) {
                 LogLevel.VERBOSE -> Log.v(TAG, message, throwable)
                 LogLevel.DEBUG -> Log.d(TAG, message, throwable)
@@ -121,7 +98,6 @@ class Logger
                 LogLevel.ERROR -> Log.e(TAG, message, throwable)
             }
 
-            // Log to file (async)
             try {
                 writeToFile(logMessage, throwable)
             } catch (e: Exception) {
@@ -129,9 +105,6 @@ class Logger
             }
         }
 
-        /**
-         * Write log message to file
-         */
         private fun writeToFile(
             message: String,
             throwable: Throwable?,
@@ -142,7 +115,6 @@ class Logger
                 fileWriter?.let { writer ->
                     writer.appendLine(message)
 
-                    // Include stack trace if throwable is provided
                     throwable?.let { t ->
                         writer.appendLine("Exception: ${t.javaClass.simpleName}: ${t.message}")
                         t.stackTrace.forEach { element ->
@@ -157,39 +129,28 @@ class Logger
             }
         }
 
-        /**
-         * Ensure log file exists and is current
-         */
         private fun ensureLogFileExists() {
             val today = fileDateFormat.format(Date())
             val expectedFileName = "multisensor_$today$LOG_FILE_EXTENSION"
 
-            // Check if I need to create a new log file
             if (currentLogFile?.name != expectedFileName) {
-                // Close current file writer
                 fileWriter?.close()
 
-                // Create new log file
                 val logDir = File(context.filesDir, LOG_FOLDER)
                 if (!logDir.exists()) {
                     logDir.mkdirs()
                 }
 
                 currentLogFile = File(logDir, expectedFileName)
-                fileWriter = FileWriter(currentLogFile, true) // Append mode
+                fileWriter = FileWriter(currentLogFile, true)
 
-                // Clean up old log files
                 cleanupOldLogFiles(logDir)
 
-                // Write session start marker
                 fileWriter?.appendLine("=== Log session started: ${dateFormat.format(Date())} ===")
                 fileWriter?.flush()
             }
         }
 
-        /**
-         * Clean up old log files to prevent storage bloat
-         */
         private fun cleanupOldLogFiles(logDir: File) {
             try {
                 val logFiles =
@@ -198,7 +159,6 @@ class Logger
                             name.startsWith("multisensor_") && name.endsWith(LOG_FILE_EXTENSION)
                         }?.sortedByDescending { it.lastModified() }
 
-                // Keep only the most recent MAX_LOG_FILES files
                 logFiles?.drop(MAX_LOG_FILES)?.forEach { file ->
                     if (file.delete()) {
                         Log.d(TAG, "Deleted old log file: ${file.name}")
@@ -209,14 +169,8 @@ class Logger
             }
         }
 
-        /**
-         * Get current log file path
-         */
         fun getCurrentLogFilePath(): String? = currentLogFile?.absolutePath
 
-        /**
-         * Get all available log files
-         */
         fun getAvailableLogFiles(): List<File> {
             val logDir = File(context.filesDir, LOG_FOLDER)
             return logDir
@@ -225,9 +179,6 @@ class Logger
                 }?.sortedByDescending { it.lastModified() } ?: emptyList()
         }
 
-        /**
-         * Export logs to external storage for sharing
-         */
         suspend fun exportLogs(targetDirectory: File): List<File> =
             withContext(Dispatchers.IO) {
                 val exportedFiles = mutableListOf<File>()
@@ -251,17 +202,12 @@ class Logger
                 exportedFiles
             }
 
-        /**
-         * Clear all log files
-         */
         suspend fun clearLogs() =
             withContext(Dispatchers.IO) {
                 try {
-                    // Close current file writer
                     fileWriter?.close()
                     fileWriter = null
 
-                    // Delete all log files
                     val logDir = File(context.filesDir, LOG_FOLDER)
                     val deletedCount =
                         logDir
@@ -271,7 +217,6 @@ class Logger
 
                     currentLogFile = null
 
-                    // Reinitialize logging
                     initializeFileLogging()
 
                     info("Cleared $deletedCount log files")
@@ -280,9 +225,6 @@ class Logger
                 }
             }
 
-        /**
-         * Get log statistics
-         */
         fun getLogStatistics(): LogStatistics {
             val logFiles = getAvailableLogFiles()
             val totalSize = logFiles.sumOf { it.length() }
@@ -298,9 +240,6 @@ class Logger
             )
         }
 
-        /**
-         * Data class for log statistics
-         */
         data class LogStatistics(
             val fileCount: Int,
             val totalSizeBytes: Long,
@@ -309,9 +248,6 @@ class Logger
             val currentLogFile: String?,
         )
 
-        /**
-         * Initialize file logging
-         */
         private fun initializeFileLogging() {
             try {
                 ensureLogFileExists()
@@ -320,9 +256,6 @@ class Logger
             }
         }
 
-        /**
-         * Log system information for debugging
-         */
         fun logSystemInfo() {
             info("=== System Information ===")
             info("Android Version: ${android.os.Build.VERSION.RELEASE} (API ${android.os.Build.VERSION.SDK_INT})")
@@ -333,9 +266,6 @@ class Logger
             info("=== End System Information ===")
         }
 
-        /**
-         * Get app version
-         */
         private fun getAppVersion(): String =
             try {
                 val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
@@ -350,9 +280,6 @@ class Logger
                 "Unknown"
             }
 
-        /**
-         * Get available memory in MB
-         */
         private fun getAvailableMemory(): Long =
             try {
                 val runtime = Runtime.getRuntime()
@@ -361,9 +288,6 @@ class Logger
                 -1
             }
 
-        /**
-         * Get available storage in MB
-         */
         private fun getAvailableStorage(): Long =
             try {
                 context.filesDir.freeSpace / (1024 * 1024)
@@ -371,9 +295,6 @@ class Logger
                 -1
             }
 
-        /**
-         * Cleanup resources
-         */
         fun cleanup() {
             try {
                 info("Logger cleanup initiated")

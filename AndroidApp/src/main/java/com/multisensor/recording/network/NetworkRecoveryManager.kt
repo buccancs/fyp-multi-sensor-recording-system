@@ -16,19 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Network Recovery Manager for Multi-Sensor Recording System - Phase 2 Implementation
- * 
- * Implements robust error recovery and reconnection logic as specified in Phase 2 roadmap:
- * - Handle connection loss scenarios
- * - Attempt automatic reconnection with exponential backoff
- * - Preserve session state across disconnects
- * - Network quality monitoring and adaptation
- * 
- * Author: Multi-Sensor Recording System Team
- * Date: 2025-01-27
- * Phase: 2 - Cross-Platform Integration
- */
 
 data class NetworkConnectionState(
     val isConnected: Boolean = false,
@@ -71,78 +58,65 @@ class NetworkRecoveryManager @Inject constructor(
         private const val BASE_RETRY_DELAY_MS = 1000L
         private const val MAX_RETRY_DELAY_MS = 30000L
         private const val NETWORK_TIMEOUT_MS = 10000L
-        private const val SESSION_PRESERVATION_TIMEOUT_MS = 300000L // 5 minutes
+        private const val SESSION_PRESERVATION_TIMEOUT_MS = 300000L
     }
 
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    
-    // State management
+
     private val _connectionState = MutableStateFlow(NetworkConnectionState())
     val connectionState: StateFlow<NetworkConnectionState> = _connectionState.asStateFlow()
-    
+
     private val _sessionPreservationState = MutableStateFlow<SessionPreservationState?>(null)
     val sessionPreservationState: StateFlow<SessionPreservationState?> = _sessionPreservationState.asStateFlow()
-    
-    // Recovery control
+
     private val isRecovering = AtomicBoolean(false)
     private val reconnectAttempts = AtomicInteger(0)
     private var recoveryJob: Job? = null
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
-    
-    // Session preservation
+
     private val preservedSessions = ConcurrentHashMap<String, SessionPreservationState>()
     private var currentSessionId: String? = null
-    
-    // Statistics
+
     private var totalConnectionLosses = 0
     private var totalRecoveryAttempts = 0
     private var successfulRecoveries = 0
-    
+
     init {
         setupNetworkCallback()
         startNetworkMonitoring()
     }
 
-    /**
-     * Handle connection loss scenario with automatic recovery initiation.
-     */
     fun handleConnectionLoss() {
         val currentTime = System.currentTimeMillis()
-        
-        // Update connection state
+
         val currentState = _connectionState.value
         _connectionState.value = currentState.copy(
             isConnected = false,
             lastDisconnectedTime = currentTime
         )
-        
-        // Preserve current session if recording is active
+
         preserveCurrentSession()
-        
-        // Start recovery process if not already running
+
         if (!isRecovering.get()) {
             startRecoveryProcess()
         }
-        
+
         totalConnectionLosses++
         AppLogger.logNetwork(TAG, "Connection loss detected, starting recovery process")
     }
 
-    /**
-     * Attempt reconnection with intelligent retry strategy.
-     */
     fun attemptReconnection(): Boolean {
         if (isRecovering.get()) {
             AppLogger.logNetwork(TAG, "Recovery already in progress")
             return false
         }
-        
+
         val attempts = reconnectAttempts.incrementAndGet()
         totalRecoveryAttempts++
-        
+
         AppLogger.logNetwork(TAG, "Attempting reconnection #$attempts")
-        
+
         return try {
             val strategy = determineRecoveryStrategy(attempts)
             executeRecoveryStrategy(strategy)
@@ -152,9 +126,6 @@ class NetworkRecoveryManager @Inject constructor(
         }
     }
 
-    /**
-     * Preserve session state during disconnection.
-     */
     fun preserveSessionState(
         sessionId: String,
         recordingActive: Boolean,
@@ -170,58 +141,45 @@ class NetworkRecoveryManager @Inject constructor(
             pendingData = pendingData,
             connectionLostTime = currentTime
         )
-        
+
         preservedSessions[sessionId] = preservationState
         _sessionPreservationState.value = preservationState
         currentSessionId = sessionId
-        
+
         AppLogger.i(TAG, "Session state preserved for $sessionId")
     }
 
-    /**
-     * Restore preserved session state after reconnection.
-     */
     fun restoreSessionState(sessionId: String): SessionPreservationState? {
         val preservedState = preservedSessions[sessionId]
-        
+
         if (preservedState != null) {
             val timeSinceDisconnect = System.currentTimeMillis() - preservedState.connectionLostTime
-            
+
             if (timeSinceDisconnect < SESSION_PRESERVATION_TIMEOUT_MS) {
                 AppLogger.i(TAG, "Restored session state for $sessionId (${timeSinceDisconnect}ms offline)")
                 return preservedState
             } else {
-                // Session too old, remove it
                 preservedSessions.remove(sessionId)
                 AppLogger.logNetwork(TAG, "Session $sessionId expired, removed from preservation")
             }
         }
-        
+
         return null
     }
 
-    /**
-     * Get current network quality assessment.
-     */
     fun getCurrentNetworkQuality(): NetworkQuality {
         return _connectionState.value.quality
     }
 
-    /**
-     * Check if currently connected to network.
-     */
     fun isConnected(): Boolean {
         return _connectionState.value.isConnected
     }
 
-    /**
-     * Get recovery statistics.
-     */
     fun getRecoveryStatistics(): Map<String, Any> {
         val successRate = if (totalRecoveryAttempts > 0) {
             (successfulRecoveries.toFloat() / totalRecoveryAttempts * 100).toInt()
         } else 0
-        
+
         return mapOf(
             "total_connection_losses" to totalConnectionLosses,
             "total_recovery_attempts" to totalRecoveryAttempts,
@@ -234,18 +192,12 @@ class NetworkRecoveryManager @Inject constructor(
         )
     }
 
-    /**
-     * Force manual recovery attempt.
-     */
     fun forceRecovery(): Boolean {
         AppLogger.logNetwork(TAG, "Manual recovery forced")
-        reconnectAttempts.set(0) // Reset attempts for manual recovery
+        reconnectAttempts.set(0)
         return attemptReconnection()
     }
 
-    /**
-     * Clean up resources.
-     */
     fun cleanup() {
         recoveryJob?.cancel()
         networkCallback?.let { connectivityManager.unregisterNetworkCallback(it) }
@@ -280,7 +232,7 @@ class NetworkRecoveryManager @Inject constructor(
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
             .build()
-        
+
         networkCallback?.let { callback ->
             connectivityManager.registerNetworkCallback(request, callback)
         }
@@ -288,25 +240,22 @@ class NetworkRecoveryManager @Inject constructor(
 
     private fun handleNetworkAvailable(network: Network) {
         val currentTime = System.currentTimeMillis()
-        
-        // Test actual connectivity
+
         coroutineScope.launch {
             val quality = testNetworkQuality(network)
-            
+
             _connectionState.value = _connectionState.value.copy(
                 isConnected = true,
                 quality = quality,
                 lastConnectedTime = currentTime,
                 networkType = getNetworkType(network)
             )
-            
-            // If I was recovering, mark as successful
+
             if (isRecovering.getAndSet(false)) {
                 successfulRecoveries++
                 reconnectAttempts.set(0)
                 AppLogger.logNetwork(TAG, "Recovery successful, connection restored")
-                
-                // Attempt to restore session if available
+
                 restoreActiveSession()
             }
         }
@@ -326,17 +275,16 @@ class NetworkRecoveryManager @Inject constructor(
             capabilities.linkDownstreamBandwidthKbps > 0 -> NetworkQuality.POOR
             else -> NetworkQuality.UNKNOWN
         }
-        
+
         _connectionState.value = _connectionState.value.copy(quality = quality)
     }
 
     private fun preserveCurrentSession() {
         currentSessionId?.let { sessionId ->
-            // This would integrate with SessionManager to get current state
             preserveSessionState(
                 sessionId = sessionId,
-                recordingActive = true, // Would get from actual session
-                fileCount = 0, // Would get from actual session
+                recordingActive = true,
+                fileCount = 0,
                 pendingData = emptyList()
             )
         }
@@ -344,25 +292,24 @@ class NetworkRecoveryManager @Inject constructor(
 
     private fun startRecoveryProcess() {
         if (isRecovering.getAndSet(true)) {
-            return // Already recovering
+            return
         }
-        
+
         recoveryJob = coroutineScope.launch {
             while (isRecovering.get() && reconnectAttempts.get() < MAX_RECONNECT_ATTEMPTS) {
                 val success = attemptReconnection()
-                
+
                 if (success) {
-                    break // Recovery successful
+                    break
                 }
-                
-                // Calculate delay for next attempt
+
                 val attempts = reconnectAttempts.get()
                 val delay = calculateRetryDelay(attempts)
-                
+
                 AppLogger.logNetwork(TAG, "Recovery attempt $attempts failed, retrying in ${delay}ms")
                 delay(delay)
             }
-            
+
             if (reconnectAttempts.get() >= MAX_RECONNECT_ATTEMPTS) {
                 AppLogger.e(TAG, "Maximum recovery attempts reached, manual intervention required")
                 isRecovering.set(false)
@@ -382,22 +329,18 @@ class NetworkRecoveryManager @Inject constructor(
     private fun executeRecoveryStrategy(strategy: RecoveryStrategy): Boolean {
         return when (strategy) {
             RecoveryStrategy.IMMEDIATE_RETRY -> {
-                // Direct reconnection attempt
                 jsonSocketClient.reconnect()
             }
-            
+
             RecoveryStrategy.EXPONENTIAL_BACKOFF -> {
-                // Reconnect with network quality adjustment
                 jsonSocketClient.reconnect()
             }
-            
+
             RecoveryStrategy.PROGRESSIVE_DEGRADATION -> {
-                // Try with reduced functionality
                 jsonSocketClient.reconnectWithReducedCapabilities()
             }
-            
+
             RecoveryStrategy.MANUAL_INTERVENTION -> {
-                // Notify user intervention required
                 AppLogger.e(TAG, "Manual intervention required for network recovery")
                 false
             }
@@ -405,7 +348,6 @@ class NetworkRecoveryManager @Inject constructor(
     }
 
     private fun calculateRetryDelay(attempts: Int): Long {
-        // Exponential backoff with jitter
         val baseDelay = BASE_RETRY_DELAY_MS * (1 shl (attempts - 1).coerceAtMost(5))
         val jitter = (Math.random() * 0.1 * baseDelay).toLong()
         return (baseDelay + jitter).coerceAtMost(MAX_RETRY_DELAY_MS)
@@ -413,9 +355,7 @@ class NetworkRecoveryManager @Inject constructor(
 
     private suspend fun testNetworkQuality(network: Network): NetworkQuality {
         return withTimeoutOrNull(NETWORK_TIMEOUT_MS) {
-            // Implement actual network quality test
-            // This would test latency, bandwidth, packet loss
-            NetworkQuality.GOOD // Placeholder
+            NetworkQuality.GOOD
         } ?: NetworkQuality.POOR
     }
 
@@ -433,17 +373,12 @@ class NetworkRecoveryManager @Inject constructor(
         currentSessionId?.let { sessionId ->
             val preservedState = restoreSessionState(sessionId)
             if (preservedState != null) {
-                // Notify that session should be restored
                 AppLogger.i(TAG, "Active session restored: $sessionId")
-                // This would integrate with SessionManager to actually restore the session
             }
         }
     }
 }
 
-/**
- * Extension functions for JsonSocketClient to support recovery operations.
- */
 fun JsonSocketClient.reconnect(): Boolean {
     return try {
         disconnect()
@@ -456,8 +391,6 @@ fun JsonSocketClient.reconnect(): Boolean {
 
 fun JsonSocketClient.reconnectWithReducedCapabilities(): Boolean {
     return try {
-        // Implement reduced capability reconnection
-        // This might use lower quality settings, reduced message frequency, etc.
         reconnect()
     } catch (e: Exception) {
         false

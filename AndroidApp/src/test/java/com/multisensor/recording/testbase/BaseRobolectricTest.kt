@@ -22,17 +22,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/**
- * Base class for Robolectric tests requiring Android components
- * 
- * Features:
- * - Robolectric Android environment
- * - Application context access
- * - MockK setup and cleanup
- * - Coroutine test dispatcher management
- * - Architecture components instant task execution
- * - Logger mocking for consistent test output
- */
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [30])
@@ -60,7 +49,5 @@ abstract class BaseRobolectricTest {
     }
 
     private fun setupLogger() {
-        // Logger is injected via Hilt, no need to mock static methods
-        // Individual tests should mock Logger instances as needed
     }
 }

@@ -14,17 +14,6 @@ import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityDevicesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * Devices Management Activity - Device Connection and Configuration
- * 
- * Provides centralized management for all connected devices:
- * - PC connection status and management
- * - Shimmer device connection and configuration
- * - Thermal camera connection and settings
- * - Network connectivity management
- * - GSR sensor monitoring
- * - Device diagnostics and troubleshooting
- */
 @AndroidEntryPoint
 class DevicesActivity : AppCompatActivity() {
 
@@ -34,10 +23,10 @@ class DevicesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityDevicesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         try {
             viewModel = ViewModelProvider(this)[DevicesViewModel::class.java]
         } catch (e: Exception) {
@@ -50,7 +39,6 @@ class DevicesActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Setup toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -58,14 +46,13 @@ class DevicesActivity : AppCompatActivity() {
             title = "Device Management"
             subtitle = "Monitor and configure all devices"
         }
-        
+
         setupDeviceControls()
         setupConfigurationButtons()
         setupDiagnosticButtons()
     }
 
     private fun setupDeviceControls() {
-        // PC Connection
         binding.pcConnectButton.setOnClickListener {
             try {
                 val currentState = viewModel.uiState.value
@@ -78,8 +65,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("PC connection failed: ${e.message}")
             }
         }
-        
-        // Shimmer Connection
+
         binding.shimmerConnectButton.setOnClickListener {
             try {
                 val currentState = viewModel.uiState.value
@@ -92,8 +78,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Shimmer connection failed: ${e.message}")
             }
         }
-        
-        // Thermal Connection
+
         binding.thermalConnectButton.setOnClickListener {
             try {
                 val currentState = viewModel.uiState.value
@@ -106,8 +91,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Thermal connection failed: ${e.message}")
             }
         }
-        
-        // Network Connection
+
         binding.networkConnectButton.setOnClickListener {
             try {
                 val currentState = viewModel.uiState.value
@@ -120,8 +104,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Network connection failed: ${e.message}")
             }
         }
-        
-        // Refresh all devices
+
         binding.refreshAllButton.setOnClickListener {
             try {
                 viewModel.refreshAllDevices()
@@ -133,7 +116,6 @@ class DevicesActivity : AppCompatActivity() {
     }
 
     private fun setupConfigurationButtons() {
-        // Shimmer Configuration
         binding.shimmerConfigButton.setOnClickListener {
             try {
                 val intent = Intent(this, ShimmerConfigActivity::class.java)
@@ -142,8 +124,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Failed to open Shimmer config: ${e.message}")
             }
         }
-        
-        // Network Configuration
+
         binding.networkConfigButton.setOnClickListener {
             try {
                 val intent = Intent(this, NetworkConfigActivity::class.java)
@@ -152,8 +133,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Failed to open network config: ${e.message}")
             }
         }
-        
-        // General Settings
+
         binding.generalSettingsButton.setOnClickListener {
             try {
                 val intent = Intent(this, SettingsActivity::class.java)
@@ -165,7 +145,6 @@ class DevicesActivity : AppCompatActivity() {
     }
 
     private fun setupDiagnosticButtons() {
-        // Test PC Connection
         binding.testPcButton.setOnClickListener {
             try {
                 viewModel.testPcConnection()
@@ -174,8 +153,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("PC test failed: ${e.message}")
             }
         }
-        
-        // Test Shimmer Connection
+
         binding.testShimmerButton.setOnClickListener {
             try {
                 viewModel.testShimmerConnection()
@@ -184,8 +162,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Shimmer test failed: ${e.message}")
             }
         }
-        
-        // Test Thermal Connection
+
         binding.testThermalButton.setOnClickListener {
             try {
                 viewModel.testThermalConnection()
@@ -194,8 +171,7 @@ class DevicesActivity : AppCompatActivity() {
                 showError("Thermal test failed: ${e.message}")
             }
         }
-        
-        // Test Network Connection
+
         binding.testNetworkButton.setOnClickListener {
             try {
                 viewModel.testNetworkConnection()
@@ -228,7 +204,6 @@ class DevicesActivity : AppCompatActivity() {
     }
 
     private fun updateConnectionStatus(uiState: DevicesUiState) {
-        // PC Connection Status
         updateConnectionIndicator(
             binding.pcStatusIndicator,
             binding.pcStatusText,
@@ -236,8 +211,7 @@ class DevicesActivity : AppCompatActivity() {
             "PC Connected",
             "PC Disconnected"
         )
-        
-        // Shimmer Connection Status
+
         updateConnectionIndicator(
             binding.shimmerStatusIndicator,
             binding.shimmerStatusText,
@@ -245,8 +219,7 @@ class DevicesActivity : AppCompatActivity() {
             "Shimmer Connected",
             "Shimmer Disconnected"
         )
-        
-        // Thermal Connection Status
+
         updateConnectionIndicator(
             binding.thermalStatusIndicator,
             binding.thermalStatusText,
@@ -254,8 +227,7 @@ class DevicesActivity : AppCompatActivity() {
             "Thermal Connected",
             "Thermal Disconnected"
         )
-        
-        // Network Connection Status
+
         updateConnectionIndicator(
             binding.networkStatusIndicator,
             binding.networkStatusText,
@@ -263,8 +235,7 @@ class DevicesActivity : AppCompatActivity() {
             "Network Connected",
             "Network Disconnected"
         )
-        
-        // GSR Connection Status
+
         updateConnectionIndicator(
             binding.gsrStatusIndicator,
             binding.gsrStatusText,
@@ -295,7 +266,6 @@ class DevicesActivity : AppCompatActivity() {
     }
 
     private fun updateDeviceDetails(uiState: DevicesUiState) {
-        // PC Details
         binding.pcDetailsText.text = buildString {
             if (uiState.isPcConnected) {
                 appendLine("IP Address: ${uiState.pcIpAddress}")
@@ -306,8 +276,7 @@ class DevicesActivity : AppCompatActivity() {
                 append("Not connected")
             }
         }
-        
-        // Shimmer Details
+
         binding.shimmerDetailsText.text = buildString {
             if (uiState.isShimmerConnected) {
                 appendLine("MAC Address: ${uiState.shimmerMacAddress}")
@@ -319,8 +288,7 @@ class DevicesActivity : AppCompatActivity() {
                 append("Not connected")
             }
         }
-        
-        // Thermal Details
+
         binding.thermalDetailsText.text = buildString {
             if (uiState.isThermalConnected) {
                 appendLine("Model: ${uiState.thermalCameraModel}")
@@ -332,8 +300,7 @@ class DevicesActivity : AppCompatActivity() {
                 append("Not connected")
             }
         }
-        
-        // Network Details
+
         binding.networkDetailsText.text = buildString {
             if (uiState.isNetworkConnected) {
                 appendLine("WiFi SSID: ${uiState.networkSsid}")
@@ -344,8 +311,7 @@ class DevicesActivity : AppCompatActivity() {
                 append("Not connected")
             }
         }
-        
-        // GSR Details
+
         binding.gsrDetailsText.text = buildString {
             if (uiState.isGsrConnected) {
                 appendLine("Current Value: ${uiState.gsrCurrentValue}")
@@ -359,28 +325,24 @@ class DevicesActivity : AppCompatActivity() {
     }
 
     private fun updateConnectionButtons(uiState: DevicesUiState) {
-        // Update button text and state based on connection status
         binding.pcConnectButton.text = if (uiState.isPcConnected) "Disconnect PC" else "Connect PC"
         binding.pcConnectButton.isEnabled = !uiState.isConnecting
-        
+
         binding.shimmerConnectButton.text = if (uiState.isShimmerConnected) "Disconnect Shimmer" else "Connect Shimmer"
         binding.shimmerConnectButton.isEnabled = !uiState.isConnecting
-        
+
         binding.thermalConnectButton.text = if (uiState.isThermalConnected) "Disconnect Thermal" else "Connect Thermal"
         binding.thermalConnectButton.isEnabled = !uiState.isConnecting
-        
+
         binding.networkConnectButton.text = if (uiState.isNetworkConnected) "Disconnect Network" else "Connect Network"
         binding.networkConnectButton.isEnabled = !uiState.isConnecting
-        
-        // Disable configuration buttons when connecting
+
         binding.shimmerConfigButton.isEnabled = !uiState.isConnecting
         binding.networkConfigButton.isEnabled = !uiState.isConnecting
         binding.generalSettingsButton.isEnabled = !uiState.isConnecting
-        
-        // Refresh button
+
         binding.refreshAllButton.isEnabled = !uiState.isConnecting
-        
-        // Test buttons
+
         binding.testPcButton.isEnabled = uiState.isPcConnected && !uiState.isTesting
         binding.testShimmerButton.isEnabled = uiState.isShimmerConnected && !uiState.isTesting
         binding.testThermalButton.isEnabled = uiState.isThermalConnected && !uiState.isTesting

@@ -12,10 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
-/**
- * Unit tests for AdaptiveFrameRateController
- * Tests adaptive frame rate logic, hysteresis, manual override, and listener functionality
- */
 @RunWith(RobolectricTestRunner::class)
 class AdaptiveFrameRateControllerTest {
     private lateinit var mockNetworkQualityMonitor: NetworkQualityMonitor
@@ -70,13 +66,11 @@ class AdaptiveFrameRateControllerTest {
     fun testStartAndStopController() {
         println("[DEBUG_LOG] Testing start and stop controller")
 
-        // Test starting controller
         adaptiveFrameRateController.start()
 
         verify { mockLogger.info("[DEBUG_LOG] Starting AdaptiveFrameRateController - Initial frame rate: 2.0fps") }
         verify { mockNetworkQualityMonitor.addListener(adaptiveFrameRateController) }
 
-        // Test stopping controller
         adaptiveFrameRateController.stop()
 
         verify { mockLogger.info("[DEBUG_LOG] Stopping AdaptiveFrameRateController") }
@@ -89,7 +83,6 @@ class AdaptiveFrameRateControllerTest {
     fun testDoubleStartPrevention() {
         println("[DEBUG_LOG] Testing double start prevention")
 
-        // Start controller twice
         adaptiveFrameRateController.start()
         adaptiveFrameRateController.start()
 
@@ -104,14 +97,11 @@ class AdaptiveFrameRateControllerTest {
 
         val mockListener = mockk<AdaptiveFrameRateController.FrameRateChangeListener>(relaxed = true)
 
-        // Add listener
         adaptiveFrameRateController.addListener(mockListener)
 
-        // Verify immediate notification with current state
         verify { mockListener.onFrameRateChanged(2.0f, "Initial state") }
         verify { mockListener.onAdaptationModeChanged(true) }
 
-        // Remove listener
         adaptiveFrameRateController.removeListener(mockListener)
 
         println("[DEBUG_LOG] Listener registration test passed")
@@ -124,11 +114,9 @@ class AdaptiveFrameRateControllerTest {
         val mockListener = mockk<AdaptiveFrameRateController.FrameRateChangeListener>(relaxed = true)
         adaptiveFrameRateController.addListener(mockListener)
 
-        // Set manual frame rate
         val manualFrameRate = 1.5f
         adaptiveFrameRateController.setManualFrameRate(manualFrameRate)
 
-        // Verify adaptive mode is disabled
         assertFalse("Adaptive mode should be disabled", adaptiveFrameRateController.isAdaptiveModeEnabled())
         assertEquals("Frame rate should be set to manual value", manualFrameRate, adaptiveFrameRateController.getCurrentFrameRate(), 0.1f)
 
@@ -146,17 +134,13 @@ class AdaptiveFrameRateControllerTest {
         val mockListener = mockk<AdaptiveFrameRateController.FrameRateChangeListener>(relaxed = true)
         adaptiveFrameRateController.addListener(mockListener)
 
-        // First disable adaptive mode
         adaptiveFrameRateController.setManualFrameRate(1.0f)
 
-        // Mock current quality
         val mockQuality = NetworkQualityMonitor.NetworkQuality(4, 75, 1500.0)
         every { mockNetworkQualityMonitor.getCurrentQuality() } returns mockQuality
 
-        // Enable adaptive mode
         adaptiveFrameRateController.enableAdaptiveMode()
 
-        // Verify adaptive mode is enabled
         assertTrue("Adaptive mode should be enabled", adaptiveFrameRateController.isAdaptiveModeEnabled())
 
         verify { mockListener.onAdaptationModeChanged(true) }
@@ -169,15 +153,12 @@ class AdaptiveFrameRateControllerTest {
     fun testFrameRateBoundaryValues() {
         println("[DEBUG_LOG] Testing frame rate boundary values")
 
-        // Test minimum boundary
-        adaptiveFrameRateController.setManualFrameRate(0.05f) // Below minimum
+        adaptiveFrameRateController.setManualFrameRate(0.05f)
         assertTrue("Frame rate should be clamped to minimum", adaptiveFrameRateController.getCurrentFrameRate() >= 0.1f)
 
-        // Test maximum boundary
-        adaptiveFrameRateController.setManualFrameRate(15.0f) // Above maximum
+        adaptiveFrameRateController.setManualFrameRate(15.0f)
         assertTrue("Frame rate should be clamped to maximum", adaptiveFrameRateController.getCurrentFrameRate() <= 10.0f)
 
-        // Test negative value
         adaptiveFrameRateController.setManualFrameRate(-1.0f)
         assertTrue("Negative frame rate should be handled", adaptiveFrameRateController.getCurrentFrameRate() > 0)
 
@@ -190,20 +171,18 @@ class AdaptiveFrameRateControllerTest {
 
         adaptiveFrameRateController.start()
 
-        // Test different quality scores
         val qualityMappings =
             mapOf(
-                1 to 0.5f, // Poor
-                2 to 1.0f, // Fair
-                3 to 2.0f, // Good
-                4 to 3.0f, // Excellent
-                5 to 5.0f, // Perfect
+                1 to 0.5f,
+                2 to 1.0f,
+                3 to 2.0f,
+                4 to 3.0f,
+                5 to 5.0f,
             )
 
         qualityMappings.forEach { (qualityScore, expectedFrameRate) ->
             val quality = NetworkQualityMonitor.NetworkQuality(qualityScore, 100, 1000.0)
 
-            // Simulate network quality change
             adaptiveFrameRateController.onNetworkQualityChanged(quality)
 
             println("[DEBUG_LOG] Quality $qualityScore should map to ${expectedFrameRate}fps")
@@ -249,7 +228,6 @@ class AdaptiveFrameRateControllerTest {
     fun testResetStatistics() {
         println("[DEBUG_LOG] Testing reset statistics")
 
-        // Reset statistics
         adaptiveFrameRateController.resetStatistics()
 
         verify { mockLogger.info("[DEBUG_LOG] Adaptation statistics reset") }
@@ -275,10 +253,8 @@ class AdaptiveFrameRateControllerTest {
                 override fun onAdaptationModeChanged(isAdaptive: Boolean): Unit = throw RuntimeException("Test exception")
             }
 
-        // Add faulty listener
         adaptiveFrameRateController.addListener(faultyListener)
 
-        // Verify errors are logged but don't crash the system
         verify { mockLogger.error("Error notifying frame rate change listener", any<Exception>()) }
         verify { mockLogger.error("Error notifying adaptation mode change listener", any<Exception>()) }
 
@@ -293,15 +269,13 @@ class AdaptiveFrameRateControllerTest {
         val mockListener = mockk<AdaptiveFrameRateController.FrameRateChangeListener>(relaxed = true)
         adaptiveFrameRateController.addListener(mockListener)
 
-        // Simulate small quality changes that should not trigger adaptation
         val quality1 = NetworkQualityMonitor.NetworkQuality(3, 150, 800.0)
-        val quality2 = NetworkQualityMonitor.NetworkQuality(3, 160, 850.0) // Small change
+        val quality2 = NetworkQualityMonitor.NetworkQuality(3, 160, 850.0)
 
         adaptiveFrameRateController.onNetworkQualityChanged(quality1)
         Thread.sleep(100)
         adaptiveFrameRateController.onNetworkQualityChanged(quality2)
 
-        // Should not trigger multiple adaptations due to hysteresis
         println("[DEBUG_LOG] Hysteresis should prevent rapid frame rate changes")
         println("[DEBUG_LOG] Hysteresis logic test passed")
     }
@@ -310,13 +284,10 @@ class AdaptiveFrameRateControllerTest {
     fun testAdaptiveControllerInInactiveState() {
         println("[DEBUG_LOG] Testing adaptive controller in inactive state")
 
-        // Don't start the controller
         val quality = NetworkQualityMonitor.NetworkQuality(5, 50, 2000.0)
 
-        // Network quality change should be ignored when inactive
         adaptiveFrameRateController.onNetworkQualityChanged(quality)
 
-        // Frame rate should remain at default
         assertEquals("Frame rate should remain at default when inactive", 2.0f, adaptiveFrameRateController.getCurrentFrameRate(), 0.1f)
 
         println("[DEBUG_LOG] Adaptive controller in inactive state test passed")
@@ -329,22 +300,17 @@ class AdaptiveFrameRateControllerTest {
         val listener1 = mockk<AdaptiveFrameRateController.FrameRateChangeListener>(relaxed = true)
         val listener2 = mockk<AdaptiveFrameRateController.FrameRateChangeListener>(relaxed = true)
 
-        // Add multiple listeners concurrently
         adaptiveFrameRateController.addListener(listener1)
         adaptiveFrameRateController.addListener(listener2)
 
-        // Start and stop controller
         adaptiveFrameRateController.start()
         adaptiveFrameRateController.stop()
 
-        // Set manual frame rate
         adaptiveFrameRateController.setManualFrameRate(1.5f)
 
-        // Enable adaptive mode
         every { mockNetworkQualityMonitor.getCurrentQuality() } returns NetworkQualityMonitor.NetworkQuality(3, 100, 1000.0)
         adaptiveFrameRateController.enableAdaptiveMode()
 
-        // All operations should complete without errors
         assertTrue("Concurrent operations should work", true)
 
         println("[DEBUG_LOG] Concurrent operations test passed")

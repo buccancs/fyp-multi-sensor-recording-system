@@ -3,29 +3,16 @@ package com.multisensor.recording.network
 import org.json.JSONException
 import org.json.JSONObject
 
-/**
- * JSON message protocol for Network Communication Client.
- * Defines message types and structures for bidirectional communication between Android and PC.
- *
- * Based on 2_6_milestone.md specifications for JSON socket communication.
- */
 
-/**
- * Base class for all JSON messages with common type field
- */
 abstract class JsonMessage {
     abstract val type: String
 
     companion object {
-        /**
-         * Parse incoming JSON message and return appropriate message object
-         */
         fun fromJson(jsonString: String): JsonMessage? =
             try {
                 val jsonObject = JSONObject(jsonString)
                 val messageType = jsonObject.getString("type")
 
-                // Parse to specific message type based on type field
                 when (messageType) {
                     "start_record" -> StartRecordCommand.fromJson(jsonObject)
                     "stop_record" -> StopRecordCommand.fromJson(jsonObject)
@@ -44,29 +31,19 @@ abstract class JsonMessage {
                     "file_info" -> FileInfoMessage.fromJson(jsonObject)
                     "file_chunk" -> FileChunkMessage.fromJson(jsonObject)
                     "file_end" -> FileEndMessage.fromJson(jsonObject)
-                    else -> null // Unknown message type
+                    else -> null
                 }
             } catch (e: JSONException) {
-                null // Invalid JSON
+                null
             }
 
-        /**
-         * Convert message object to JSON string
-         */
         fun toJson(message: JsonMessage): String = message.toJsonObject().toString()
     }
 
-    /**
-     * Convert message to JSONObject - to be implemented by subclasses
-     */
     abstract fun toJsonObject(): JSONObject
 }
 
-// ========== PC-to-Phone Command Messages ==========
 
-/**
- * Command to start recording session
- */
 data class StartRecordCommand(
     override val type: String = "start_record",
     val session_id: String,
@@ -94,9 +71,6 @@ data class StartRecordCommand(
     }
 }
 
-/**
- * Command to stop current recording session
- */
 data class StopRecordCommand(
     override val type: String = "stop_record",
 ) : JsonMessage() {
@@ -110,9 +84,6 @@ data class StopRecordCommand(
     }
 }
 
-/**
- * Command to capture calibration images - Enhanced for 
- */
 data class CaptureCalibrationCommand(
     override val type: String = "capture_calibration",
     val calibration_id: String? = null,
@@ -140,9 +111,6 @@ data class CaptureCalibrationCommand(
     }
 }
 
-/**
- * Command to set stimulus time for synchronization
- */
 data class SetStimulusTimeCommand(
     override val type: String = "set_stimulus_time",
     val time: Long,
@@ -161,9 +129,6 @@ data class SetStimulusTimeCommand(
     }
 }
 
-/**
- * Command to trigger LED flash sync signal - 
- */
 data class FlashSyncCommand(
     override val type: String = "flash_sync",
     val duration_ms: Long = 200,
@@ -185,9 +150,6 @@ data class FlashSyncCommand(
     }
 }
 
-/**
- * Command to trigger audio beep sync signal - 
- */
 data class BeepSyncCommand(
     override val type: String = "beep_sync",
     val frequency_hz: Int = 1000,
@@ -215,9 +177,6 @@ data class BeepSyncCommand(
     }
 }
 
-/**
- * Command to synchronize device clock with PC reference time - 
- */
 data class SyncTimeCommand(
     override val type: String = "sync_time",
     val pc_timestamp: Long,
@@ -239,9 +198,6 @@ data class SyncTimeCommand(
     }
 }
 
-/**
- * Command to request file transfer from device - 
- */
 data class SendFileCommand(
     override val type: String = "send_file",
     val filepath: String,
@@ -263,13 +219,10 @@ data class SendFileCommand(
     }
 }
 
-/**
- * Command to acknowledge file receipt - 
- */
 data class FileReceivedCommand(
     override val type: String = "file_received",
     val name: String,
-    val status: String, // "ok" or "error"
+    val status: String,
 ) : JsonMessage() {
     override fun toJsonObject(): JSONObject =
         JSONObject().apply {
@@ -287,11 +240,7 @@ data class FileReceivedCommand(
     }
 }
 
-// ========== Phone-to-PC Messages ==========
 
-/**
- * Device introduction message sent on connection
- */
 data class HelloMessage(
     override val type: String = "hello",
     val device_id: String,
@@ -319,14 +268,11 @@ data class HelloMessage(
     }
 }
 
-/**
- * Live preview frame message
- */
 data class PreviewFrameMessage(
     override val type: String = "preview_frame",
-    val cam: String, // "rgb" or "thermal"
+    val cam: String,
     val timestamp: Long,
-    val image: String, // base64 encoded image data
+    val image: String,
 ) : JsonMessage() {
     override fun toJsonObject(): JSONObject =
         JSONObject().apply {
@@ -346,9 +292,6 @@ data class PreviewFrameMessage(
     }
 }
 
-/**
- * Sensor data update message
- */
 data class SensorDataMessage(
     override val type: String = "sensor_data",
     val timestamp: Long,
@@ -382,9 +325,6 @@ data class SensorDataMessage(
     }
 }
 
-/**
- * Device status update message
- */
 data class StatusMessage(
     override val type: String = "status",
     val battery: Int? = null,
@@ -415,13 +355,10 @@ data class StatusMessage(
     }
 }
 
-/**
- * Acknowledgment/response message
- */
 data class AckMessage(
     override val type: String = "ack",
     val cmd: String,
-    val status: String, // "ok" or "error"
+    val status: String,
     val message: String? = null,
 ) : JsonMessage() {
     override fun toJsonObject(): JSONObject =
@@ -442,9 +379,6 @@ data class AckMessage(
     }
 }
 
-/**
- * File information message - 
- */
 data class FileInfoMessage(
     override val type: String = "file_info",
     val name: String,
@@ -466,13 +400,10 @@ data class FileInfoMessage(
     }
 }
 
-/**
- * File chunk data message - 
- */
 data class FileChunkMessage(
     override val type: String = "file_chunk",
     val seq: Int,
-    val data: String, // Base64 encoded chunk data
+    val data: String,
 ) : JsonMessage() {
     override fun toJsonObject(): JSONObject =
         JSONObject().apply {
@@ -490,9 +421,6 @@ data class FileChunkMessage(
     }
 }
 
-/**
- * File transfer end marker message - 
- */
 data class FileEndMessage(
     override val type: String = "file_end",
     val name: String,

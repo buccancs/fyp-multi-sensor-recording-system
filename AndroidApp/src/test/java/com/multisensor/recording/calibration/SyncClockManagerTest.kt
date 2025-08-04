@@ -12,10 +12,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import kotlin.math.abs
 
-/**
- * Unit tests for SyncClockManager
- * Tests clock synchronization, offset calculation, and time conversion functionality
- */
 @RunWith(RobolectricTestRunner::class)
 class SyncClockManagerTest {
     private lateinit var mockLogger: Logger
@@ -84,7 +80,7 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing successful clock synchronization")
 
-            val pcTimestamp = System.currentTimeMillis() + 2000L // PC is 2 seconds ahead
+            val pcTimestamp = System.currentTimeMillis() + 2000L
             val syncId = "test_sync_001"
 
             val success = syncClockManager.synchronizeWithPc(pcTimestamp, syncId)
@@ -111,7 +107,7 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing clock synchronization with negative offset")
 
-            val pcTimestamp = System.currentTimeMillis() - 1500L // PC is 1.5 seconds behind
+            val pcTimestamp = System.currentTimeMillis() - 1500L
             val syncId = "test_sync_002"
 
             val success = syncClockManager.synchronizeWithPc(pcTimestamp, syncId)
@@ -131,7 +127,7 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing invalid PC timestamp handling")
 
-            val invalidTimestamp = -1000L // Invalid negative timestamp
+            val invalidTimestamp = -1000L
             val syncId = "test_sync_invalid"
 
             val success = syncClockManager.synchronizeWithPc(invalidTimestamp, syncId)
@@ -152,7 +148,7 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing synced timestamp calculation")
 
-            val pcTimestamp = System.currentTimeMillis() + 3000L // PC is 3 seconds ahead
+            val pcTimestamp = System.currentTimeMillis() + 3000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_003")
 
             val deviceTime = System.currentTimeMillis()
@@ -162,7 +158,7 @@ class SyncClockManagerTest {
             assertTrue(
                 "Offset should be approximately 3000ms",
                 abs((syncedTime - deviceTime) - 3000L) < 100L,
-            ) // Allow 100ms tolerance
+            )
 
             println("[DEBUG_LOG] Synced timestamp calculation test passed")
         }
@@ -185,7 +181,7 @@ class SyncClockManagerTest {
             assertTrue(
                 "Time difference should be approximately 1000ms",
                 abs((currentSyncedTime - currentDeviceTime) - 1000L) < 200L,
-            ) // Allow 200ms tolerance
+            )
 
             println("[DEBUG_LOG] Current synced time test passed")
         }
@@ -215,9 +211,6 @@ class SyncClockManagerTest {
 
             assertTrue("Sync should be valid initially", syncClockManager.isSyncValid())
 
-            // Mock time passage beyond validity duration
-            // Note: In real implementation, I would need to mock System.currentTimeMillis()
-            // For this test, I verify the logic conceptually
             val syncStatus = syncClockManager.getSyncStatus()
             assertTrue("Sync age should be small initially", syncStatus.syncAge < 1000L)
 
@@ -229,13 +222,11 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing synchronization reset")
 
-            // First synchronize
             val pcTimestamp = System.currentTimeMillis() + 2000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_006")
 
             assertTrue("Should be synchronized before reset", syncClockManager.isSyncValid())
 
-            // Reset synchronization
             syncClockManager.resetSync()
 
             val syncStatus = syncClockManager.getSyncStatus()
@@ -255,7 +246,7 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing device to PC time conversion")
 
-            val pcTimestamp = System.currentTimeMillis() + 5000L // PC is 5 seconds ahead
+            val pcTimestamp = System.currentTimeMillis() + 5000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_007")
 
             val deviceTime = System.currentTimeMillis()
@@ -275,7 +266,7 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing PC to device time conversion")
 
-            val pcTimestamp = System.currentTimeMillis() + 3000L // PC is 3 seconds ahead
+            val pcTimestamp = System.currentTimeMillis() + 3000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_008")
 
             val pcTime = System.currentTimeMillis() + 3000L
@@ -318,12 +309,12 @@ class SyncClockManagerTest {
             println("[DEBUG_LOG] Testing network latency estimation")
 
             val pcTimestamp = System.currentTimeMillis()
-            val requestSentTime = System.currentTimeMillis() - 100L // Request sent 100ms ago
+            val requestSentTime = System.currentTimeMillis() - 100L
 
             val estimatedLatency = syncClockManager.estimateNetworkLatency(pcTimestamp, requestSentTime)
 
             assertTrue("Estimated latency should be positive", estimatedLatency >= 0)
-            assertTrue("Estimated latency should be reasonable", estimatedLatency < 1000L) // Less than 1 second
+            assertTrue("Estimated latency should be reasonable", estimatedLatency < 1000L)
 
             verify { mockLogger.debug(match { it.contains("Network latency estimation") }) }
             verify { mockLogger.debug(match { it.contains("Round-trip time") }) }
@@ -337,12 +328,10 @@ class SyncClockManagerTest {
         runTest {
             println("[DEBUG_LOG] Testing sync health validation")
 
-            // Test unsynchronized state
             var isHealthy = syncClockManager.validateSyncHealth()
             assertFalse("Should not be healthy when unsynchronized", isHealthy)
             verify { mockLogger.warning("Clock synchronization not established") }
 
-            // Test synchronized state
             val pcTimestamp = System.currentTimeMillis() + 2000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_010")
 
@@ -359,7 +348,6 @@ class SyncClockManagerTest {
 
             val jobs = mutableListOf<Job>()
 
-            // Launch multiple synchronization operations concurrently
             repeat(5) { index ->
                 val job =
                     launch {
@@ -369,10 +357,8 @@ class SyncClockManagerTest {
                 jobs.add(job)
             }
 
-            // Wait for all operations to complete
             jobs.joinAll()
 
-            // Verify final state is consistent
             val syncStatus = syncClockManager.getSyncStatus()
             assertTrue("Should be synchronized after concurrent operations", syncStatus.isSynchronized)
             assertTrue("Should have valid sync after concurrent operations", syncClockManager.isSyncValid())

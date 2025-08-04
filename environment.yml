@@ -1,5 +1,5 @@
-# Multi-Sensor Recording System - Python Environment
-# Updated January 2025 with latest stable compatible versions
+
+
 
 name: gsr-env
 
@@ -8,38 +8,38 @@ channels:
   - defaults
 
 dependencies:
-  # Core Python - flexible version to avoid conflicts
+
   - python>=3.9,<3.13
 
-  # GUI Framework - Latest stable PyQt5
+
   - pyqt=5.15.*
-  
-  # Computer Vision and Image Processing - Latest compatible versions
+
+
   - opencv
   - pillow
-  - numpy>=1.26.0,<2.0.0  # Keep v1.x for OpenCV compatibility
+  - numpy>=1.26.0,<2.0.0
   - scipy
 
-  # Data Analysis and Visualisation
+
   - matplotlib
   - pandas
 
-  # Network Communication
+
   - requests
   - websockets
 
-  # Testing Framework - Enhanced testing stack
+
   - pytest
   - pytest-cov
 
-  # Code Quality Tools - Latest stable
+
   - flake8
   - black
 
-  # Development Tools
+
   - pip
 
-  # Pip dependencies - Latest versions
+
   - pip:
     - pytest-mock
     - pytest-qt

@@ -10,11 +10,8 @@ import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.Image
 import android.media.ImageReader
 import android.media.MediaRecorder
-// DngCreator import - conditionally import based on API availability
 import androidx.annotation.RequiresApi
 import android.os.Build
-// DngCreator only available from API 21+
-// import android.media.DngCreator
 import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
@@ -48,10 +45,6 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-/**
- * enhanced camera recorder with camera2 api
- * supports preview + 4k video + raw capture
- */
 @Singleton
 class CameraRecorder
     @Inject
@@ -66,9 +59,6 @@ class CameraRecorder
 
         private var previewStreamer: PreviewStreamer? = null
 
-        /**
-         * set preview streamer for live streaming
-         */
         fun setPreviewStreamer(streamer: PreviewStreamer) {
             previewStreamer = streamer
             logger.info("PreviewStreamer injected into CameraRecorder")
@@ -87,28 +77,24 @@ class CameraRecorder
         private val cameraLock = Semaphore(1)
         private val cameraDispatcher = Dispatchers.IO.limitedParallelism(1)
 
-        // Session management
         private var currentSessionInfo: SessionInfo? = null
         private var lastRawCaptureResult: TotalCaptureResult? = null
         private var rawCaptureCount = 0
 
-        // Camera configuration
         private var cameraId: String? = null
-        private var videoSize: Size = Size(3840, 2160) // 4K UHD
+        private var videoSize: Size = Size(3840, 2160)
         private var previewSize: Size? = null
         private var rawSize: Size? = null
 
-        // State flags
         private var isInitialized = false
         private var isSessionActive = false
 
         companion object {
             private const val THREAD_NAME = "CameraRecorder"
             private const val VIDEO_FRAME_RATE = 30
-            private const val VIDEO_BIT_RATE = 10_000_000 // 10 Mbps for 4K
+            private const val VIDEO_BIT_RATE = 10_000_000
             private const val CAMERA_LOCK_TIMEOUT_MS = 2500L
 
-            // Orientation mapping for video recording
             private val ORIENTATIONS =
                 mapOf(
                     android.view.Surface.ROTATION_0 to 90,
@@ -118,13 +104,6 @@ class CameraRecorder
                 )
         }
 
-        /**
-         * Initialize the camera recorder with TextureView for live preview.
-         * Prepares the camera (selecting appropriate camera and outputs) and binds TextureView.
-         *
-         * @param textureView TextureView for live preview display
-         * @return true if initialization successful, false otherwise
-         */
         suspend fun initialize(textureView: TextureView): Boolean =
             withContext(cameraDispatcher) {
                 try {
@@ -141,13 +120,10 @@ class CameraRecorder
                             return@withContext true
                         }
 
-                        // Store TextureView reference
                         this@CameraRecorder.textureView = textureView
 
-                        // Start background thread
                         startBackgroundThread()
 
-                        // Setup camera
                         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
                         cameraId = selectBestCamera(cameraManager)
 
@@ -156,11 +132,9 @@ class CameraRecorder
                             return@withContext false
                         }
 
-                        // Get camera characteristics and configure sizes
                         cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId!!)
                         configureCameraSizes(cameraCharacteristics!!)
 
-                        // Setup TextureView surface
                         setupTextureViewSurface()
 
                         isInitialized = true
@@ -180,14 +154,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Start a capture session based on flags to record 4K video, capture RAW images, or both.
-         * Configures outputs (MediaRecorder, ImageReader) accordingly and begins camera preview.
-         *
-         * @param recordVideo Enable 4K video recording
-         * @param captureRaw Enable RAW image capture
-         * @return SessionInfo object with session details, or null if failed
-         */
         suspend fun startSession(
             recordVideo: Boolean,
             captureRaw: Boolean,
@@ -210,7 +176,6 @@ class CameraRecorder
                             return@withContext currentSessionInfo
                         }
 
-                        // Generate session ID and create SessionInfo
                         val sessionId = "Session_${System.currentTimeMillis()}"
                         val sessionInfo =
                             SessionInfo(
@@ -225,43 +190,35 @@ class CameraRecorder
 
                         logger.info("Starting camera session: ${sessionInfo.getSummary()}")
 
-                        // Open camera
                         if (!openCamera()) {
                             sessionInfo.markError("Failed to open camera")
                             logger.error("Failed to open camera")
                             return@withContext null
                         }
 
-                        // Setup outputs based on flags
                         val surfaces = mutableListOf<Surface>()
 
-                        // Always include preview surface
                         previewSurface?.let { surfaces.add(it) }
 
-                        // Setup MediaRecorder if video recording enabled
                         if (recordVideo) {
                             setupMediaRecorder(sessionInfo)
                             mediaRecorder?.surface?.let { surfaces.add(it) }
                         }
 
-                        // Setup Preview ImageReader for streaming (always enabled)
                         setupPreviewImageReader()
                         previewImageReader?.surface?.let { surfaces.add(it) }
 
-                        // Setup RAW ImageReader if RAW capture enabled
                         if (captureRaw) {
                             setupRawImageReader(sessionInfo)
                             rawImageReader?.surface?.let { surfaces.add(it) }
                         }
 
-                        // Create capture session with configured surfaces
                         if (!createCaptureSession(surfaces)) {
                             sessionInfo.markError("Failed to create capture session")
                             logger.error("Failed to create capture session")
                             return@withContext null
                         }
 
-                        // Start video recording if enabled
                         if (recordVideo) {
                             try {
                                 mediaRecorder?.start()
@@ -273,7 +230,6 @@ class CameraRecorder
                             }
                         }
 
-                        // Store session info and mark as active
                         currentSessionInfo = sessionInfo
                         isSessionActive = true
                         rawCaptureCount = 0
@@ -285,18 +241,11 @@ class CameraRecorder
                     }
                 } catch (e: Exception) {
                     logger.error("Failed to start camera session", e)
-                    // Cleanup on failure
                     stopSession()
                     null
                 }
             }
 
-        /**
-         * Stop any ongoing recording, flush pending captures, and release camera resources.
-         * Ensures video is finalized and RAW images (if any) are saved.
-         *
-         * @return SessionInfo of the stopped session, or null if no active session
-         */
         suspend fun stopSession(): SessionInfo? =
             withContext(cameraDispatcher) {
                 try {
@@ -314,7 +263,6 @@ class CameraRecorder
                         val sessionInfo = currentSessionInfo
                         logger.info("Stopping camera session: ${sessionInfo?.getSummary()}")
 
-                        // Stop MediaRecorder if video was recording
                         if (sessionInfo?.videoEnabled == true) {
                             try {
                                 mediaRecorder?.stop()
@@ -333,10 +281,8 @@ class CameraRecorder
                             }
                         }
 
-                        // Flush pending RAW captures
                         if (sessionInfo?.rawEnabled == true) {
                             try {
-                                // Allow time for any pending RAW captures to complete
                                 kotlinx.coroutines.delay(100)
                                 logger.info("RAW capture completed. Total images: ${sessionInfo.getRawImageCount()}")
                             } catch (e: Exception) {
@@ -345,7 +291,6 @@ class CameraRecorder
                             }
                         }
 
-                        // Close capture session
                         try {
                             captureSession?.close()
                             captureSession = null
@@ -354,7 +299,6 @@ class CameraRecorder
                             logger.warning("Error closing capture session", e)
                         }
 
-                        // Close camera device
                         try {
                             cameraDevice?.close()
                             cameraDevice = null
@@ -363,7 +307,6 @@ class CameraRecorder
                             logger.warning("Error closing camera device", e)
                         }
 
-                        // Close image readers
                         try {
                             rawImageReader?.close()
                             rawImageReader = null
@@ -380,7 +323,6 @@ class CameraRecorder
                             logger.warning("Error closing Preview ImageReader", e)
                         }
 
-                        // Release preview surface
                         try {
                             previewSurface?.release()
                             previewSurface = null
@@ -389,10 +331,8 @@ class CameraRecorder
                             logger.warning("Error releasing preview surface", e)
                         }
 
-                        // Mark session as completed
                         sessionInfo?.markCompleted()
 
-                        // Reset state
                         isSessionActive = false
                         currentSessionInfo = null
                         lastRawCaptureResult = null
@@ -410,12 +350,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Manually trigger a RAW capture during an active session (only if RAW is enabled).
-         * Allows capturing a RAW_SENSOR frame on-demand while video is recording.
-         *
-         * @return true if RAW capture was triggered successfully, false otherwise
-         */
         suspend fun captureRawImage(): Boolean =
             withContext(cameraDispatcher) {
                 try {
@@ -437,19 +371,16 @@ class CameraRecorder
 
                     logger.info("Triggering manual RAW capture...")
 
-                    // Create RAW capture request using STILL_CAPTURE template for high quality
                     val rawCaptureRequest =
                         cameraDevice
                             ?.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
                             ?.apply {
                                 addTarget(rawImageReader!!.surface)
 
-                                // Set capture controls for optimal RAW quality
                                 set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
                                 set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                                 set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
 
-                                // Optional: Add preview surface to keep preview synchronized
                                 previewSurface?.let { addTarget(it) }
                             }?.build()
 
@@ -458,7 +389,6 @@ class CameraRecorder
                         return@withContext false
                     }
 
-                    // Submit RAW capture request with callback to handle metadata
                     val captureCallback =
                         object : CameraCaptureSession.CaptureCallback() {
                             override fun onCaptureCompleted(
@@ -466,7 +396,6 @@ class CameraRecorder
                                 request: CaptureRequest,
                                 result: TotalCaptureResult,
                             ) {
-                                // Store capture result for DNG metadata
                                 lastRawCaptureResult = result
                                 logger.debug("RAW capture metadata received")
                             }
@@ -492,16 +421,11 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Capture calibration image for device synchronization and alignment.
-         * Creates a high-quality JPEG image suitable for calibration purposes.
-         */
         suspend fun captureCalibrationImage(outputPath: String): Boolean =
             withContext(Dispatchers.IO) {
                 return@withContext try {
                     logger.info("Starting calibration image capture to: $outputPath")
 
-                    // Verify camera is ready
                     val camera = cameraDevice
                     val session = captureSession
                     if (camera == null || session == null) {
@@ -509,7 +433,6 @@ class CameraRecorder
                         return@withContext false
                     }
 
-                    // Create ImageReader for calibration capture (high quality JPEG)
                     val calibrationImageReader =
                         ImageReader.newInstance(
                             videoSize.width,
@@ -529,7 +452,6 @@ class CameraRecorder
                                 val bytes = ByteArray(buffer.remaining())
                                 buffer.get(bytes)
 
-                                // Save to file
                                 val outputFile = File(outputPath)
                                 outputFile.parentFile?.mkdirs()
                                 FileOutputStream(outputFile).use { it.write(bytes) }
@@ -545,19 +467,16 @@ class CameraRecorder
                         }
                     }, backgroundHandler)
 
-                    // Create capture request for calibration
                     val calibrationRequest =
                         camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE).apply {
                             addTarget(calibrationImageReader.surface)
 
-                            // Set high quality capture parameters
                             set(CaptureRequest.JPEG_QUALITY, 95.toByte())
                             set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
                             set(CaptureRequest.CONTROL_AF_MODE, CameraMetadata.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                             set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON)
                         }
 
-                    // Capture the calibration image
                     session.capture(
                         calibrationRequest.build(),
                         object : CameraCaptureSession.CaptureCallback() {
@@ -581,7 +500,6 @@ class CameraRecorder
                         backgroundHandler,
                     )
 
-                    // Wait for capture completion (timeout after 5 seconds)
                     val acquired = captureSemaphore.tryAcquire(5, TimeUnit.SECONDS)
                     calibrationImageReader.close()
 
@@ -597,10 +515,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Setup TextureView surface for live preview with proper lifecycle management.
-         * Handles SurfaceTextureListener callbacks and configures preview surface.
-         */
         private suspend fun setupTextureViewSurface() =
             withContext(Dispatchers.Main) {
                 try {
@@ -612,14 +526,12 @@ class CameraRecorder
 
                     logger.info("Setting up TextureView surface...")
 
-                    // Check if SurfaceTexture is already available
                     if (textureView.isAvailable) {
                         logger.debug("SurfaceTexture already available")
                         textureView.surfaceTexture?.let { configureSurfaceTexture(it) }
                     } else {
                         logger.debug("Waiting for SurfaceTexture to become available")
 
-                        // Set up SurfaceTextureListener to wait for surface availability
                         textureView.surfaceTextureListener =
                             object : TextureView.SurfaceTextureListener {
                                 override fun onSurfaceTextureAvailable(
@@ -637,7 +549,6 @@ class CameraRecorder
                                     height: Int,
                                 ) {
                                     logger.debug("SurfaceTexture size changed: ${width}x$height")
-                                    // Handle orientation changes or view resizing
                                     configureTransform(width, height)
                                 }
 
@@ -645,11 +556,10 @@ class CameraRecorder
                                     logger.debug("SurfaceTexture destroyed")
                                     previewSurface?.release()
                                     previewSurface = null
-                                    return true // Let TextureView release the SurfaceTexture
+                                    return true
                                 }
 
                                 override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-                                    // Called for each frame - not needed for my implementation
                                 }
                             }
                     }
@@ -658,9 +568,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Configure SurfaceTexture with proper buffer size and create preview Surface.
-         */
         private fun configureSurfaceTexture(surfaceTexture: SurfaceTexture) {
             try {
                 val previewSize = this.previewSize
@@ -669,25 +576,18 @@ class CameraRecorder
                     return
                 }
 
-                // Set buffer size to match preview resolution
                 surfaceTexture.setDefaultBufferSize(previewSize.width, previewSize.height)
 
-                // Create Surface for camera preview
                 previewSurface = Surface(surfaceTexture)
 
                 logger.info("Preview surface configured: ${previewSize.width}x${previewSize.height}")
 
-                // Configure transform matrix for proper orientation
                 textureView?.let { configureTransform(it.width, it.height) }
             } catch (e: Exception) {
                 logger.error("Failed to configure SurfaceTexture", e)
             }
         }
 
-        /**
-         * Configure transform matrix for TextureView to handle orientation and aspect ratio.
-         * Based on Google Camera2 sample implementation.
-         */
         private fun configureTransform(
             viewWidth: Int,
             viewHeight: Int,
@@ -696,7 +596,6 @@ class CameraRecorder
                 val textureView = this.textureView ?: return
                 val previewSize = this.previewSize ?: return
 
-                // Get device rotation
                 val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     (context as? android.app.Activity)?.display?.rotation
                         ?: android.view.Surface.ROTATION_0
@@ -734,19 +633,14 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Select the best camera for recording with Samsung S21/S22 optimization and stage 3 RAW capability.
-         * Prioritizes LEVEL_3 hardware with enhanced RAW sensor capabilities for Samsung devices.
-         */
         private fun selectBestCamera(cameraManager: CameraManager): String? {
             try {
                 logger.info("Selecting best camera with Samsung S21/S22 RAW capability and LEVEL_3 support...")
-                
-                // Samsung S21/S22 device detection for specialized handling
+
                 val deviceModel = android.os.Build.MODEL.uppercase()
                 val isSamsungS21S22 = deviceModel.contains("SM-G99") || deviceModel.contains("SM-G99") ||
                         deviceModel.contains("S21") || deviceModel.contains("S22")
-                
+
                 if (isSamsungS21S22) {
                     logger.info("Samsung S21/S22 device detected: $deviceModel - Applying optimizations")
                 }
@@ -754,18 +648,15 @@ class CameraRecorder
                 for (cameraId in cameraManager.cameraIdList) {
                     val characteristics = cameraManager.getCameraCharacteristics(cameraId)
 
-                    // Prefer back camera for main recording
                     val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
                     if (facing != CameraCharacteristics.LENS_FACING_BACK) {
                         continue
                     }
 
-                    // Check hardware level - CRITICAL for Samsung S21/S22 LEVEL_3 capabilities
                     val hardwareLevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
                     val isLevel3 = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
                     val isFullOrBetter = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL || isLevel3
 
-                    // For Samsung S21/S22, strongly prefer LEVEL_3 for stage 3 RAW extraction
                     if (isSamsungS21S22 && !isLevel3) {
                         logger.debug("Camera $cameraId: Not LEVEL_3 - may not support optimal Samsung RAW features")
                     }
@@ -775,13 +666,11 @@ class CameraRecorder
                         continue
                     }
 
-                    // Check for RAW capability - ESSENTIAL for stage 3 RAW extraction
                     val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
                     val hasRawCapability = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
                     val hasBackwardCompatibility =
                         capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
-                    
-                    // Samsung S21/S22 specific capability validation
+
                     val hasManualSensor = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
                     val hasManualPostProcessing = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING) == true
 
@@ -795,7 +684,6 @@ class CameraRecorder
                         continue
                     }
 
-                    // Samsung S21/S22 enhanced validation for stage 3 RAW
                     if (isSamsungS21S22) {
                         if (!hasManualSensor) {
                             logger.warning("Camera $cameraId: No manual sensor control - stage 3 RAW may be limited")
@@ -805,7 +693,6 @@ class CameraRecorder
                         }
                     }
 
-                    // Verify 4K video support
                     val streamConfigMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                     val videoSizes = streamConfigMap?.getOutputSizes(MediaRecorder::class.java)
                     val supports4K = videoSizes?.any { it.width >= 3840 && it.height >= 2160 } == true
@@ -815,7 +702,6 @@ class CameraRecorder
                         continue
                     }
 
-                    // Enhanced RAW sensor validation for Samsung S21/S22 stage 3 extraction
                     val rawSizes = streamConfigMap?.getOutputSizes(ImageFormat.RAW_SENSOR)
                     val hasRawSizes = rawSizes?.isNotEmpty() == true
 
@@ -824,20 +710,17 @@ class CameraRecorder
                         continue
                     }
 
-                    // Samsung S21/S22 specific RAW capabilities validation
                     if (isSamsungS21S22 && rawSizes != null) {
                         val maxRawSize = rawSizes.maxByOrNull { it.width * it.height }
                         val megapixels = maxRawSize?.let { (it.width * it.height) / 1_000_000 } ?: 0
-                        
+
                         logger.info("Samsung device RAW sensor: ${maxRawSize?.width}x${maxRawSize?.height} (${megapixels}MP)")
-                        
-                        // Samsung S21/S22 typically have 12MP+ main sensors for optimal stage 3 RAW
+
                         if (megapixels < 12) {
                             logger.warning("Camera $cameraId: RAW sensor below expected Samsung S21/S22 resolution")
                         }
                     }
 
-                    // Validate Samsung specific color filter array for proper RAW processing
                     val colorFilterArrangement = characteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT)
                     if (isSamsungS21S22 && colorFilterArrangement != null) {
                         val cfaName = when (colorFilterArrangement) {
@@ -850,7 +733,6 @@ class CameraRecorder
                         logger.info("Samsung device CFA pattern: $cfaName (required for proper RAW demosaicing)")
                     }
 
-                    // This camera meets all requirements including Samsung S21/S22 stage 3 RAW
                     val levelName =
                         when (hardwareLevel) {
                             CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> "LEVEL_3"
@@ -862,7 +744,7 @@ class CameraRecorder
                     logger.info("Selected camera: $cameraId (back camera, $levelName, RAW capable, 4K support)$samsungOptimized")
                     logger.info("RAW sizes available: ${rawSizes?.size}")
                     logger.info("Video sizes available: ${videoSizes?.size}")
-                    
+
                     if (isSamsungS21S22) {
                         logger.info("Stage 3 RAW extraction capabilities: Manual sensor=$hasManualSensor, Manual post-processing=$hasManualPostProcessing")
                     }
@@ -870,7 +752,6 @@ class CameraRecorder
                     return cameraId
                 }
 
-                // If no camera meets all requirements, try with relaxed constraints
                 logger.warning("No camera found with all requirements, trying with relaxed constraints...")
 
                 for (cameraId in cameraManager.cameraIdList) {
@@ -897,10 +778,6 @@ class CameraRecorder
             return null
         }
 
-        /**
-         * Configure camera sizes for video, preview, and RAW capture.
-         * Ensures optimal sizes for 4K video, efficient preview, and maximum quality RAW.
-         */
         private fun configureCameraSizes(characteristics: CameraCharacteristics) {
             val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
             if (map == null) {
@@ -910,35 +787,32 @@ class CameraRecorder
 
             logger.info("Configuring camera sizes for multi-stream capture...")
 
-            // Configure 4K video size (3840x2160) - primary requirement
             val videoSizes = map.getOutputSizes(MediaRecorder::class.java)
             videoSize = videoSizes?.find { it.width == 3840 && it.height == 2160 }
-                ?: videoSizes?.find { it.width >= 3840 && it.height >= 2160 } // Accept higher if available
-                ?: videoSizes?.maxByOrNull { it.width * it.height } // Fallback to highest available
-                ?: Size(1920, 1080) // Final fallback to 1080p
+                ?: videoSizes?.find { it.width >= 3840 && it.height >= 2160 }
+                ?: videoSizes?.maxByOrNull { it.width * it.height }
+                ?: Size(1920, 1080)
 
             logger.info("Video recording size: ${videoSize.width}x${videoSize.height}")
 
-            // Configure preview size - should match video aspect ratio but be smaller for efficiency
             val previewSizes = map.getOutputSizes(SurfaceTexture::class.java)
             val videoAspectRatio = videoSize.width.toFloat() / videoSize.height.toFloat()
 
             previewSize = previewSizes
                 ?.filter { size ->
                     val aspectRatio = size.width.toFloat() / size.height.toFloat()
-                    Math.abs(aspectRatio - videoAspectRatio) < 0.1f // Allow small aspect ratio difference
+                    Math.abs(aspectRatio - videoAspectRatio) < 0.1f
                 }?.filter { size ->
-                    size.width <= 1920 && size.height <= 1080 // Limit preview size for performance
-                }?.maxByOrNull { it.width * it.height } // Choose largest matching size
-                ?: previewSizes?.find { it.width == 1920 && it.height == 1080 } // 1080p fallback
-                ?: previewSizes?.find { it.width == 1280 && it.height == 720 } // 720p fallback
-                ?: Size(1280, 720) // Final fallback
+                    size.width <= 1920 && size.height <= 1080
+                }?.maxByOrNull { it.width * it.height }
+                ?: previewSizes?.find { it.width == 1920 && it.height == 1080 }
+                ?: previewSizes?.find { it.width == 1280 && it.height == 720 }
+                ?: Size(1280, 720)
 
             logger.info("Preview size: ${previewSize?.width}x${previewSize?.height}")
 
-            // Configure RAW size - use maximum sensor resolution for best quality
             val rawSizes = map.getOutputSizes(ImageFormat.RAW_SENSOR)
-            rawSize = rawSizes?.maxByOrNull { it.width * it.height } // Maximum available RAW resolution
+            rawSize = rawSizes?.maxByOrNull { it.width * it.height }
 
             if (rawSize != null) {
                 logger.info(
@@ -948,7 +822,6 @@ class CameraRecorder
                 logger.warning("No RAW sizes available - RAW capture will be disabled")
             }
 
-            // Verify stream combination compatibility
             verifyStreamCombination(map)
 
             logger.info("Camera sizes configured successfully")
@@ -957,13 +830,8 @@ class CameraRecorder
             logger.info("  RAW: ${rawSize?.width ?: 0}x${rawSize?.height ?: 0}")
         }
 
-        /**
-         * Verify that the configured stream combination is supported by the camera.
-         * Based on Camera2 API stream combination guarantees.
-         */
         private fun verifyStreamCombination(map: StreamConfigurationMap) {
             try {
-                // Check if simultaneous video + preview + RAW is supported
                 val videoSizes = map.getOutputSizes(MediaRecorder::class.java)
                 val previewSizes = map.getOutputSizes(SurfaceTexture::class.java)
                 val rawSizes = map.getOutputSizes(ImageFormat.RAW_SENSOR)
@@ -987,17 +855,12 @@ class CameraRecorder
                     logger.warning("Selected RAW size may not be supported")
                 }
 
-                // For LEVEL_3 devices, simultaneous RAW + video + preview should be guaranteed
-                // For FULL devices, it may work but not guaranteed
                 logger.info("Stream combination should be supported on LEVEL_3 hardware")
             } catch (e: Exception) {
                 logger.warning("Could not verify stream combination", e)
             }
         }
 
-        /**
-         * Open the camera device
-         */
         private suspend fun openCamera(): Boolean =
             suspendCancellableCoroutine { continuation ->
                 try {
@@ -1040,13 +903,8 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Setup MediaRecorder for 4K video recording with H.264 encoding (no audio).
-         * Generates file path based on SessionInfo and configures orientation.
-         */
         private fun setupMediaRecorder(sessionInfo: SessionInfo) {
             try {
-                // Generate video file path
                 val videoFile = generateVideoFilePath(sessionInfo.sessionId)
                 sessionInfo.videoFilePath = videoFile.absolutePath
 
@@ -1059,27 +917,21 @@ class CameraRecorder
                     @Suppress("DEPRECATION")
                     MediaRecorder()
                 }.apply {
-                        // Video source from camera surface
                         setVideoSource(MediaRecorder.VideoSource.SURFACE)
 
-                        // No audio source - video only as specified
 
-                        // Output format and file
                         setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                         setOutputFile(videoFile.absolutePath)
 
-                        // Video encoder settings
                         setVideoEncoder(MediaRecorder.VideoEncoder.H264)
                         setVideoSize(videoSize.width, videoSize.height)
                         setVideoFrameRate(VIDEO_FRAME_RATE)
                         setVideoEncodingBitRate(VIDEO_BIT_RATE)
 
-                        // Orientation hint for proper playback
                         val orientationHint = getOrientationHint()
                         setOrientationHint(orientationHint)
                         logger.debug("Orientation hint set to: $orientationHint degrees")
 
-                        // Prepare MediaRecorder - this makes getSurface() available
                         prepare()
                     }
 
@@ -1096,16 +948,11 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Generate video file path based on session ID.
-         * Uses app-specific storage to avoid permission requirements.
-         */
         private fun generateVideoFilePath(sessionId: String): File {
             val moviesDir =
                 context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-                    ?: context.filesDir // Fallback to internal storage
+                    ?: context.filesDir
 
-            // Ensure directory exists
             if (!moviesDir.exists()) {
                 moviesDir.mkdirs()
             }
@@ -1113,10 +960,6 @@ class CameraRecorder
             return File(moviesDir, "$sessionId.mp4")
         }
 
-        /**
-         * Get orientation hint for video recording based on device rotation.
-         * Ensures recorded video has correct orientation metadata.
-         */
         private fun getOrientationHint(): Int =
             try {
                 val activity = context as? android.app.Activity
@@ -1127,27 +970,21 @@ class CameraRecorder
                     activity?.windowManager?.defaultDisplay?.rotation ?: android.view.Surface.ROTATION_0
                 }
 
-                ORIENTATIONS[rotation] ?: 90 // Default to 90 degrees for portrait
+                ORIENTATIONS[rotation] ?: 90
             } catch (e: Exception) {
                 logger.warning("Could not determine device rotation, using default orientation", e)
-                90 // Default orientation hint
+                90
             }
 
-        /**
-         * Setup Preview ImageReader for live streaming to PC.
-         * Uses JPEG format with lower resolution for network efficiency.
-         */
         private fun setupPreviewImageReader() {
             try {
                 logger.info("Setting up Preview ImageReader for streaming...")
 
-                // Use smaller resolution for streaming (640x480 default from PreviewStreamer)
                 val streamWidth = 640
                 val streamHeight = 480
 
                 logger.info("Preview streaming resolution: ${streamWidth}x$streamHeight")
 
-                // Create ImageReader for JPEG format with capacity for 2 images
                 previewImageReader =
                     ImageReader
                         .newInstance(
@@ -1168,70 +1005,52 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Handle Preview image available callback for streaming.
-         * Passes RGB frames to PreviewStreamer for network transmission.
-         */
         private fun handlePreviewImageAvailable(reader: ImageReader) {
             var image: Image? = null
             try {
-                image = reader.acquireLatestImage() // Use latest to avoid backlog
+                image = reader.acquireLatestImage()
                 if (image == null) {
                     logger.debug("No preview image available")
                     return
                 }
 
-                // Pass image to PreviewStreamer for processing and transmission (if available)
                 previewStreamer?.onRgbFrameAvailable(image)
-                
-                // Process frame for hand segmentation if enabled
+
                 processFrameForHandSegmentation(image)
-                
+
             } catch (e: Exception) {
                 logger.error("Error handling preview image", e)
                 image?.close()
             }
-            // Note: PreviewStreamer is responsible for closing the image
         }
-        
-        /**
-         * Process camera frame for hand segmentation
-         */
+
         private fun processFrameForHandSegmentation(image: Image) {
             try {
-                // Check if hand segmentation is active
                 val status = handSegmentationManager.getStatus()
                 if (!status.isEnabled || !status.isRealTimeProcessing) {
                     return
                 }
-                
-                // Convert Image to Bitmap for hand segmentation processing
+
                 val bitmap = convertImageToBitmap(image)
                 if (bitmap != null) {
-                    // Process frame asynchronously to avoid blocking camera pipeline
                     handSegmentationManager.processFrame(bitmap, System.currentTimeMillis())
                 }
-                
+
             } catch (e: Exception) {
                 logger.warning("Error processing frame for hand segmentation", e)
             }
         }
-        
-        /**
-         * Convert Camera2 Image to Bitmap for hand segmentation processing
-         */
+
         private fun convertImageToBitmap(image: Image): Bitmap? {
             return try {
                 when (image.format) {
                     ImageFormat.JPEG -> {
-                        // JPEG format - direct conversion
                         val buffer = image.planes[0].buffer
                         val bytes = ByteArray(buffer.remaining())
                         buffer.get(bytes)
                         BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                     }
                     ImageFormat.YUV_420_888 -> {
-                        // YUV format - convert to RGB
                         convertYuv420ToBitmap(image)
                     }
                     else -> {
@@ -1244,31 +1063,28 @@ class CameraRecorder
                 null
             }
         }
-        
-        /**
-         * Convert YUV_420_888 Image to RGB Bitmap
-         */
+
         private fun convertYuv420ToBitmap(image: Image): Bitmap? {
             return try {
                 val yBuffer = image.planes[0].buffer
                 val uBuffer = image.planes[1].buffer
                 val vBuffer = image.planes[2].buffer
-                
+
                 val ySize = yBuffer.remaining()
                 val uSize = uBuffer.remaining()
                 val vSize = vBuffer.remaining()
-                
+
                 val nv21 = ByteArray(ySize + uSize + vSize)
-                
+
                 yBuffer.get(nv21, 0, ySize)
                 vBuffer.get(nv21, ySize, vSize)
                 uBuffer.get(nv21, ySize + vSize, uSize)
-                
+
                 val yuvImage = YuvImage(nv21, ImageFormat.NV21, image.width, image.height, null)
                 val out = ByteArrayOutputStream()
                 yuvImage.compressToJpeg(Rect(0, 0, image.width, image.height), 80, out)
                 val imageBytes = out.toByteArray()
-                
+
                 BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             } catch (e: Exception) {
                 logger.warning("Error converting YUV to bitmap", e)
@@ -1276,10 +1092,6 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Setup RAW ImageReader with DngCreator for professional RAW processing.
-         * Handles RAW_SENSOR format with full metadata embedding.
-         */
         private fun setupRawImageReader(sessionInfo: SessionInfo) {
             try {
                 val rawSize = this.rawSize
@@ -1292,7 +1104,6 @@ class CameraRecorder
                 logger.info("Setting up RAW ImageReader for DNG processing...")
                 logger.info("RAW resolution: ${rawSize.width}x${rawSize.height}")
 
-                // Create ImageReader for RAW_SENSOR format with capacity for 2 images
                 rawImageReader =
                     ImageReader
                         .newInstance(
@@ -1314,10 +1125,6 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Handle RAW image available callback with DNG processing.
-         * Uses DngCreator to save professional RAW images with full metadata.
-         */
         private fun handleRawImageAvailable(
             reader: ImageReader,
             sessionInfo: SessionInfo,
@@ -1330,7 +1137,6 @@ class CameraRecorder
                     return
                 }
 
-                // Get capture result metadata for DNG creation
                 val captureResult = lastRawCaptureResult
                 if (captureResult == null) {
                     logger.warning("No capture result available for RAW image")
@@ -1345,7 +1151,6 @@ class CameraRecorder
                     return
                 }
 
-                // Process RAW image on IO dispatcher to avoid blocking camera thread
                 CoroutineScope(Dispatchers.IO).launch {
                     processRawImageToDng(image, captureResult, cameraCharacteristics, sessionInfo)
                 }
@@ -1356,11 +1161,6 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Process Samsung S21/S22 optimized RAW image to DNG file with enhanced stage 3 metadata.
-         * Enhanced for Samsung camera characteristics and proper RAW sensor data extraction.
-         * Runs on IO dispatcher for optimal performance.
-         */
         private suspend fun processRawImageToDng(
             image: Image,
             captureResult: TotalCaptureResult,
@@ -1370,25 +1170,20 @@ class CameraRecorder
             var outputStream: FileOutputStream? = null
 
             try {
-                // Generate DNG file path
                 rawCaptureCount++
                 val dngFile = generateRawFilePath(sessionInfo.sessionId, rawCaptureCount)
 
                 logger.info("Processing Samsung-optimized RAW image to DNG: ${dngFile.name}")
-                
-                // Samsung S21/S22 device detection for enhanced processing
+
                 val deviceModel = android.os.Build.MODEL.uppercase()
                 val isSamsungS21S22 = deviceModel.contains("SM-G99") || deviceModel.contains("S21") || deviceModel.contains("S22")
 
-                // Log Samsung specific RAW characteristics for stage 3 validation
                 if (isSamsungS21S22) {
                     logSamsungRawCharacteristics(image, captureResult, characteristics)
                 }
 
-                // Check if DngCreator is available (API 21+) and handle via reflection for compatibility
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     try {
-                        // Use reflection to avoid compile-time dependency on DngCreator
                         val dngCreatorClass = Class.forName("android.media.DngCreator")
                         val constructor = dngCreatorClass.getConstructor(
                             CameraCharacteristics::class.java,
@@ -1396,29 +1191,24 @@ class CameraRecorder
                         )
                         val dngCreator = constructor.newInstance(characteristics, captureResult)
 
-                        // Enhanced Samsung S21/S22 specific DNG metadata configuration
                         configureSamsungDngMetadata(dngCreator, dngCreatorClass, characteristics, captureResult, isSamsungS21S22)
 
-                        // Create output stream and write DNG with enhanced metadata
                         outputStream = FileOutputStream(dngFile)
-                        val writeImageMethod = dngCreatorClass.getMethod("writeImage", 
+                        val writeImageMethod = dngCreatorClass.getMethod("writeImage",
                             java.io.OutputStream::class.java, Image::class.java)
                         writeImageMethod.invoke(dngCreator, outputStream, image)
 
-                        // Close DngCreator
                         val closeMethod = dngCreatorClass.getMethod("close")
                         closeMethod.invoke(dngCreator)
 
-                        // Update session info with successful Samsung-optimized processing
                         sessionInfo.addRawFile(dngFile.absolutePath)
                         logger.info("Samsung-optimized DNG file created successfully: ${dngFile.absolutePath}")
                         logger.debug("Total RAW images in session: ${sessionInfo.getRawImageCount()}")
-                        
-                        // Log Samsung stage 3 RAW validation
+
                         if (isSamsungS21S22) {
                             validateSamsungStage3Raw(dngFile, image, captureResult)
                         }
-                        
+
                     } catch (e: ClassNotFoundException) {
                         logger.warning("DngCreator class not found - likely a build environment issue")
                         sessionInfo.markError("DNG processing: DngCreator class not available")
@@ -1434,10 +1224,8 @@ class CameraRecorder
                 logger.error("Failed to process Samsung RAW image to DNG", e)
                 sessionInfo.markError("Samsung DNG processing failed: ${e.message}")
             } finally {
-                // Clean up resources
                 try {
                     outputStream?.close()
-                    // DngCreator is closed in the reflection block above
                     image.close()
                 } catch (e: Exception) {
                     logger.warning("Error closing Samsung DNG resources", e)
@@ -1445,10 +1233,6 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Configure Samsung S21/S22 specific DNG metadata for optimal stage 3 RAW processing.
-         * Enhances DNG metadata with Samsung camera characteristics and capture parameters.
-         */
         private fun configureSamsungDngMetadata(
             dngCreator: Any,
             dngCreatorClass: Class<*>,
@@ -1457,7 +1241,6 @@ class CameraRecorder
             isSamsungDevice: Boolean
         ) {
             try {
-                // Set orientation if available
                 val sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
                 if (sensorOrientation != null) {
                     val setOrientationMethod = dngCreatorClass.getMethod("setOrientation", Int::class.java)
@@ -1465,9 +1248,7 @@ class CameraRecorder
                     logger.debug("DNG orientation set to: $sensorOrientation degrees")
                 }
 
-                // Samsung specific DNG enhancements
                 if (isSamsungDevice) {
-                    // Set GPS location if available (Samsung cameras often have GPS integration)
                     val gpsLocation = captureResult.get(CaptureResult.JPEG_GPS_LOCATION)
                     if (gpsLocation != null) {
                         try {
@@ -1479,7 +1260,6 @@ class CameraRecorder
                         }
                     }
 
-                    // Enhanced thumbnail for Samsung DNG files (if supported)
                     try {
                         val thumbnail = captureResult.get(CaptureResult.JPEG_THUMBNAIL_QUALITY)
                         if (thumbnail != null && thumbnail > 0) {
@@ -1496,10 +1276,6 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Log Samsung S21/S22 specific RAW characteristics for stage 3 validation.
-         * Provides detailed logging of Samsung camera sensor properties.
-         */
         private fun logSamsungRawCharacteristics(
             image: Image,
             captureResult: TotalCaptureResult,
@@ -1507,21 +1283,18 @@ class CameraRecorder
         ) {
             try {
                 logger.info("=== Samsung S21/S22 Stage 3 RAW Characteristics ===")
-                
-                // Image properties
+
                 logger.info("RAW Image: ${image.width}x${image.height}, Format: ${image.format}")
                 logger.info("Planes: ${image.planes.size}")
-                
-                // Samsung sensor characteristics
+
                 val activeArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
                 val pixelArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)
                 val physicalSize = characteristics.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE)
-                
+
                 logger.info("Active Array: ${activeArraySize?.width()}x${activeArraySize?.height()}")
                 logger.info("Pixel Array: ${pixelArraySize?.width}x${pixelArraySize?.height}")
                 logger.info("Physical Size: ${physicalSize?.width}mm x ${physicalSize?.height}mm")
-                
-                // Color Filter Array - critical for Samsung RAW demosaicing
+
                 val colorFilterArrangement = characteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT)
                 val cfaPattern = when (colorFilterArrangement) {
                     CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_RGGB -> "RGGB (Samsung Standard)"
@@ -1531,31 +1304,25 @@ class CameraRecorder
                     else -> "Unknown/Mono"
                 }
                 logger.info("CFA Pattern: $cfaPattern")
-                
-                // Capture parameters for stage 3 validation
+
                 val sensitivity = captureResult.get(CaptureResult.SENSOR_SENSITIVITY)
                 val exposureTime = captureResult.get(CaptureResult.SENSOR_EXPOSURE_TIME)
                 val frameDuration = captureResult.get(CaptureResult.SENSOR_FRAME_DURATION)
-                
+
                 logger.info("Capture - ISO: $sensitivity, Exposure: ${exposureTime?.let { it / 1000000 }}ms")
                 logger.info("Frame Duration: ${frameDuration?.let { it / 1000000 }}ms")
-                
-                // Samsung specific noise model (critical for stage 3 RAW)
+
                 val noiseProfile = captureResult.get(CaptureResult.SENSOR_NOISE_PROFILE)
                 if (noiseProfile != null) {
                     logger.info("Samsung Noise Profile: ${noiseProfile.size} coefficients available")
                 }
-                
+
                 logger.info("===============================================")
             } catch (e: Exception) {
                 logger.warning("Error logging Samsung RAW characteristics", e)
             }
         }
 
-        /**
-         * Validate Samsung S21/S22 stage 3 RAW extraction success.
-         * Ensures proper RAW data integrity and Samsung compliance.
-         */
         private fun validateSamsungStage3Raw(
             dngFile: File,
             image: Image,
@@ -1563,61 +1330,53 @@ class CameraRecorder
         ) {
             try {
                 logger.info("=== Samsung S21/S22 Stage 3 RAW Validation ===")
-                
-                // File validation
+
                 val fileSize = dngFile.length()
-                val expectedMinSize = (image.width * image.height * 2) // 16-bit RAW minimum
+                val expectedMinSize = (image.width * image.height * 2)
                 logger.info("DNG File: ${dngFile.name}, Size: ${fileSize / 1024}KB")
-                
+
                 if (fileSize < expectedMinSize) {
                     logger.warning("DNG file size appears small - possible data loss")
                 } else {
                     logger.info("DNG file size validation: PASSED")
                 }
-                
-                // RAW data plane validation
+
                 image.planes.forEachIndexed { index, plane ->
                     val pixelStride = plane.pixelStride
                     val rowStride = plane.rowStride
                     val bufferSize = plane.buffer.remaining()
-                    
+
                     logger.info("Plane $index: PixelStride=$pixelStride, RowStride=$rowStride, BufferSize=${bufferSize / 1024}KB")
                 }
-                
-                // Samsung stage 3 specific validation
+
                 val timestamp = image.timestamp
                 val captureTimestamp = captureResult.get(CaptureResult.SENSOR_TIMESTAMP)
-                
+
                 logger.info("Image Timestamp: $timestamp")
                 logger.info("Capture Timestamp: $captureTimestamp")
-                
+
                 if (timestamp > 0 && captureTimestamp != null) {
                     logger.info("Samsung stage 3 RAW timestamp validation: PASSED")
                 } else {
                     logger.warning("Samsung stage 3 RAW timestamp validation: FAILED")
                 }
-                
+
                 logger.info("Samsung Stage 3 RAW Extraction: COMPLETED")
                 logger.info("============================================")
-                
+
             } catch (e: Exception) {
                 logger.warning("Error during Samsung stage 3 RAW validation", e)
             }
         }
 
-        /**
-         * Generate RAW file path based on session ID and capture index.
-         * Uses app-specific storage for DNG files.
-         */
         private fun generateRawFilePath(
             sessionId: String,
             index: Int,
         ): File {
             val picturesDir =
                 context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    ?: context.filesDir // Fallback to internal storage
+                    ?: context.filesDir
 
-            // Ensure directory exists
             if (!picturesDir.exists()) {
                 picturesDir.mkdirs()
             }
@@ -1625,10 +1384,6 @@ class CameraRecorder
             return File(picturesDir, "${sessionId}_RAW_$index.dng")
         }
 
-        /**
-         * Create camera capture session with specified surfaces for multi-stream configuration.
-         * Supports simultaneous Preview + Video + RAW capture based on enabled features.
-         */
         private suspend fun createCaptureSession(surfaces: List<Surface>): Boolean =
             suspendCancellableCoroutine { continuation ->
                 try {
@@ -1646,7 +1401,6 @@ class CameraRecorder
                                 captureSession = session
                                 logger.info("Capture session configured successfully")
 
-                                // Start repeating request for preview and video
                                 startRepeatingRequest(surfaces)
 
                                 continuation.resume(true)
@@ -1659,7 +1413,6 @@ class CameraRecorder
                             }
                         }
 
-                    // Create session with provided surfaces
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         val outputConfigurations = surfaces.map { OutputConfiguration(it) }
                         val sessionConfig = SessionConfiguration(
@@ -1680,10 +1433,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Start repeating capture request for preview and video recording.
-         * Uses appropriate template based on session configuration.
-         */
         private fun startRepeatingRequest(surfaces: List<Surface>) {
             try {
                 val sessionInfo = currentSessionInfo
@@ -1692,19 +1441,17 @@ class CameraRecorder
                     return
                 }
 
-                // Choose template based on session configuration
                 val template =
                     if (sessionInfo.videoEnabled) {
-                        CameraDevice.TEMPLATE_RECORD // Optimized for video recording with steady frame rate
+                        CameraDevice.TEMPLATE_RECORD
                     } else {
-                        CameraDevice.TEMPLATE_PREVIEW // Optimized for low latency preview
+                        CameraDevice.TEMPLATE_PREVIEW
                     }
 
                 logger.debug("Creating repeating request with template: ${if (sessionInfo.videoEnabled) "RECORD" else "PREVIEW"}")
 
                 val requestBuilder =
                     cameraDevice!!.createCaptureRequest(template).apply {
-                        // Add surfaces based on what's available and enabled
                         surfaces.forEach { surface ->
                             when {
                                 surface == previewSurface -> {
@@ -1719,26 +1466,20 @@ class CameraRecorder
                                     addTarget(surface)
                                     logger.debug("Added video recording surface to repeating request")
                                 }
-                                // Note: RAW surface is NOT added to repeating request
-                                // RAW captures are done on-demand via captureRawImage()
                             }
                         }
 
-                        // Set capture controls for optimal quality
                         set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
 
                         if (sessionInfo.videoEnabled) {
-                            // Video recording settings - prioritize steady frame rate
                             set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO)
                             set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
                         } else {
-                            // Preview-only settings - prioritize low latency
                             set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                             set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
                         }
                     }
 
-                // Start repeating request
                 captureSession!!.setRepeatingRequest(requestBuilder.build(), null, backgroundHandler)
 
                 logger.info("Repeating request started successfully")
@@ -1748,17 +1489,11 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Start background thread for camera operations
-         */
         private fun startBackgroundThread() {
             backgroundThread = HandlerThread(THREAD_NAME).also { it.start() }
             backgroundHandler = Handler(backgroundThread!!.looper)
         }
 
-        /**
-         * Stop background thread
-         */
         private fun stopBackgroundThread() {
             backgroundThread?.quitSafely()
             try {
@@ -1770,16 +1505,11 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Trigger LED flash sync signal
-         * Uses camera flashlight for multi-device synchronization
-         */
         suspend fun triggerFlashSync(durationMs: Long = 200): Boolean =
             withContext(Dispatchers.IO) {
                 return@withContext try {
                     logger.info("[DEBUG_LOG] Triggering LED flash sync signal (${durationMs}ms)")
 
-                    // Check if camera and session are available
                     val camera = cameraDevice
                     val session = captureSession
                     if (camera == null || session == null) {
@@ -1787,7 +1517,6 @@ class CameraRecorder
                         return@withContext false
                     }
 
-                    // Check if flash is available
                     val currentCameraId = cameraId
                     if (currentCameraId == null) {
                         logger.error("Camera ID not available for flash sync")
@@ -1802,17 +1531,14 @@ class CameraRecorder
                         return@withContext false
                     }
 
-                    // Turn on flash
                     val flashOnSuccess = setFlashMode(true)
                     if (!flashOnSuccess) {
                         logger.error("Failed to turn on flash")
                         return@withContext false
                     }
 
-                    // Keep flash on for specified duration
                     delay(durationMs)
 
-                    // Turn off flash
                     val flashOffSuccess = setFlashMode(false)
                     if (!flashOffSuccess) {
                         logger.warning("Failed to turn off flash - may remain on")
@@ -1822,7 +1548,6 @@ class CameraRecorder
                     true
                 } catch (e: Exception) {
                     logger.error("Failed to trigger flash sync", e)
-                    // Ensure flash is turned off in case of error
                     try {
                         setFlashMode(false)
                     } catch (cleanupException: Exception) {
@@ -1832,9 +1557,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Set camera flash mode on/off
-         */
         private suspend fun setFlashMode(flashOn: Boolean): Boolean =
             withContext(Dispatchers.IO) {
                 return@withContext try {
@@ -1844,13 +1566,10 @@ class CameraRecorder
                         return@withContext false
                     }
 
-                    // Create capture request with flash mode
                     val requestBuilder =
                         camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW).apply {
-                            // Add preview surface if available
                             previewSurface?.let { addTarget(it) }
 
-                            // Set flash mode
                             if (flashOn) {
                                 set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
                                 set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH)
@@ -1860,7 +1579,6 @@ class CameraRecorder
                             }
                         }
 
-                    // Apply flash setting
                     session.setRepeatingRequest(requestBuilder.build(), null, backgroundHandler)
 
                     logger.debug("Flash mode set to: ${if (flashOn) "ON" else "OFF"}")
@@ -1871,9 +1589,6 @@ class CameraRecorder
                 }
             }
 
-        /**
-         * Check if camera flash is available
-         */
         fun isFlashAvailable(): Boolean {
             return try {
                 val currentCameraId = cameraId
@@ -1890,26 +1605,15 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Check if RAW stage 3 capture is available on this device.
-         * Validates Samsung S21/S22 optimized RAW sensor capabilities including:
-         * - LEVEL_3 or FULL camera hardware support
-         * - RAW_SENSOR capability and format support  
-         * - Samsung-specific manual sensor controls (for optimal stage 3 extraction)
-         * - Adequate sensor resolution for professional RAW processing
-         * 
-         * @return true if RAW stage 3 capture is fully supported, false otherwise
-         */
         fun isRawStage3Available(): Boolean {
             return try {
                 val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-                
+
                 logger.info("Checking RAW stage 3 capture availability...")
-                
-                // Samsung S21/S22 device detection for enhanced validation
+
                 val deviceModel = android.os.Build.MODEL.uppercase()
                 val isSamsungS21S22 = deviceModel.contains("SM-G99") || deviceModel.contains("S21") || deviceModel.contains("S22")
-                
+
                 if (isSamsungS21S22) {
                     logger.info("Samsung S21/S22 device detected: $deviceModel - Enhanced RAW validation")
                 }
@@ -1917,13 +1621,11 @@ class CameraRecorder
                 for (cameraId in cameraManager.cameraIdList) {
                     val characteristics = cameraManager.getCameraCharacteristics(cameraId)
 
-                    // Check if this is a back camera (primary camera for RAW capture)
                     val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
                     if (facing != CameraCharacteristics.LENS_FACING_BACK) {
                         continue
                     }
 
-                    // Check hardware level - CRITICAL for stage 3 RAW extraction
                     val hardwareLevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
                     val isLevel3 = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
                     val isFullOrBetter = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL || isLevel3
@@ -1933,10 +1635,9 @@ class CameraRecorder
                         continue
                     }
 
-                    // Check for RAW capability - ESSENTIAL for stage 3 RAW extraction
                     val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
                     val hasRawCapability = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
-                    val hasBackwardCompatibility = 
+                    val hasBackwardCompatibility =
                         capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
 
                     if (!hasRawCapability) {
@@ -1949,7 +1650,6 @@ class CameraRecorder
                         continue
                     }
 
-                    // Verify RAW sensor sizes are available
                     val streamConfigMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                     val rawSizes = streamConfigMap?.getOutputSizes(ImageFormat.RAW_SENSOR)
                     val hasRawSizes = rawSizes?.isNotEmpty() == true
@@ -1959,12 +1659,11 @@ class CameraRecorder
                         continue
                     }
 
-                    // Samsung S21/S22 enhanced validation for optimal stage 3 RAW
                     var samsungOptimal = true
                     if (isSamsungS21S22) {
                         val hasManualSensor = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
                         val hasManualPostProcessing = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING) == true
-                        
+
                         if (!hasManualSensor) {
                             logger.warning("Camera $cameraId: No manual sensor control - stage 3 RAW may be limited on Samsung")
                             samsungOptimal = false
@@ -1974,17 +1673,15 @@ class CameraRecorder
                             samsungOptimal = false
                         }
 
-                        // Check sensor resolution for Samsung devices
                         val maxRawSize = rawSizes?.maxByOrNull { it.width * it.height }
                         val megapixels = maxRawSize?.let { (it.width * it.height) / 1_000_000 } ?: 0
-                        
+
                         if (megapixels < 12) {
                             logger.warning("Camera $cameraId: RAW sensor below expected Samsung S21/S22 resolution (${megapixels}MP)")
                             samsungOptimal = false
                         }
                     }
 
-                    // This camera supports RAW stage 3 capture
                     val levelName = when (hardwareLevel) {
                         CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> "LEVEL_3"
                         CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> "FULL"
@@ -2001,10 +1698,9 @@ class CameraRecorder
                     return true
                 }
 
-                // No suitable camera found
                 logger.warning("RAW stage 3 capture NOT AVAILABLE: No camera with required capabilities found")
                 logger.info("Requirements: Back camera + LEVEL_3/FULL hardware + RAW capability + RAW sensor sizes")
-                
+
                 false
             } catch (e: Exception) {
                 logger.error("Error checking RAW stage 3 availability", e)
@@ -2012,9 +1708,6 @@ class CameraRecorder
             }
         }
 
-        /**
-         * Cleanup resources
-         */
         private fun cleanup() {
             stopBackgroundThread()
             isInitialized = false

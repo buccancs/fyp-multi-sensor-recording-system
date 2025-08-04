@@ -2,10 +2,6 @@ package com.multisensor.recording.testfixtures
 
 import com.multisensor.recording.network.NetworkQualityMonitor.NetworkQuality
 
-/**
- * Test data factory for network and recording related objects
- * Provides consistent test data creation with sensible defaults
- */
 object NetworkTestFactory {
 
     fun createNetworkQuality(
@@ -39,9 +35,6 @@ object NetworkTestFactory {
     }
 }
 
-/**
- * Test data factory for recording statistics
- */
 object RecordingTestFactory {
 
     fun createMockRecordingStatistics(
@@ -51,7 +44,7 @@ object RecordingTestFactory {
         audioEnabled: Boolean = false,
         thermalEnabled: Boolean = true,
         framesRecorded: Int = 1800,
-        dataSize: Long = 1024 * 1024 * 100, // 100MB
+        dataSize: Long = 1024 * 1024 * 100,
         averageFrameRate: Double = 60.0,
         droppedFrames: Int = 0
     ): Map<String, Any> {
@@ -71,18 +64,18 @@ object RecordingTestFactory {
 
     fun createLongMockRecordingStatistics(): Map<String, Any> {
         return createMockRecordingStatistics(
-            duration = 300000L, // 5 minutes
+            duration = 300000L,
             framesRecorded = 18000,
-            dataSize = 1024 * 1024 * 1024, // 1GB
+            dataSize = 1024 * 1024 * 1024,
             averageFrameRate = 60.0
         )
     }
 
     fun createShortMockRecordingStatistics(): Map<String, Any> {
         return createMockRecordingStatistics(
-            duration = 5000L, // 5 seconds
+            duration = 5000L,
             framesRecorded = 300,
-            dataSize = 1024 * 1024 * 10, // 10MB
+            dataSize = 1024 * 1024 * 10,
             averageFrameRate = 60.0
         )
     }
@@ -90,8 +83,8 @@ object RecordingTestFactory {
     fun createProblematicMockRecordingStatistics(): Map<String, Any> {
         return createMockRecordingStatistics(
             duration = 30000L,
-            framesRecorded = 1500, // Missing frames
-            averageFrameRate = 50.0, // Lower than expected
+            framesRecorded = 1500,
+            averageFrameRate = 50.0,
             droppedFrames = 300
         )
     }

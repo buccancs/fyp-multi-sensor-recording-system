@@ -1,16 +1,16 @@
-# gradle/libs.versions.toml
-# Gradle Version Catalog for Multi-Sensor Recording System
-# This file centralizes all dependency versions for better maintainability
+
+
+
 
 [versions]
-# Kotlin & Coroutines - Updated to latest
+
 cardviewVersion = "1.0.0"
 detektFormatting = "1.23.6"
 kotlin = "2.0.20"
 coroutines = "1.8.1"
 ksp = "2.0.20-1.0.24"
 
-# AndroidX & Google - Updated to latest
+
 coreKtx = "1.13.1"
 appcompat = "1.7.0"
 ktlint = "1.0.1"
@@ -22,18 +22,18 @@ camera = "1.3.4"
 activityKtx = "1.9.1"
 fragmentKtx = "1.8.2"
 
-# Dependency Injection
+
 hilt = "2.52"
 
-# Room Database - Phase 3 State Persistence
+
 preferenceKtx = "1.2.1"
 room = "2.6.1"
 
-# Networking
+
 okhttp = "4.12.0"
 moshi = "1.15.1"
 
-# Testing - Updated to latest stable versions
+
 junit = "4.13.2"
 androidxTestExtJunit = "1.2.1"
 androidxTestCore = "1.6.1"
@@ -45,7 +45,7 @@ mockk = "1.13.12"
 robolectric = "4.13"
 truth = "1.4.4"
 uiautomator = "2.3.0"
-# Enhanced testing frameworks
+
 junitJupiter = "5.11.3"
 testng = "7.10.2"
 jacoco = "0.8.12"
@@ -54,57 +54,57 @@ xxpermissions = "20.0"
 annotation = "1.9.1"
 
 [libraries]
-# AndroidX & Google - Core UI Components
+
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 
-# AndroidX - Lifecycle Components
+
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 
-# AndroidX - Camera Components
+
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camera" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 
-# AndroidX - Activity & Fragment
+
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 
-# Coroutines
+
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardviewVersion" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektFormatting" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-# Networking
+
 ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 
-# JSON Parsing
+
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
-# Dependency Injection (Hilt)
+
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
-# Room Database Libraries - Phase 3 State Persistence
+
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
-# Unit Testing
+
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTestCore" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExtJunit" }
@@ -116,7 +116,7 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 google-truth = { module = "com.google.truth:truth", version.ref = "truth" }
 
-# Integration Testing (Espresso)
+
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espresso" }
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
@@ -124,7 +124,7 @@ uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = 
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 
-# Enhanced Testing Libraries
+
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiter" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiter" }
@@ -134,23 +134,23 @@ kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotlinTest" }
 
 [bundles]
-# Core UI Components
+
 core-ui = [
     "androidx-core-ktx",
-    "androidx-appcompat", 
+    "androidx-appcompat",
     "androidx-material",
     "androidx-constraintlayout"
 ]
 
-# Architecture Components
+
 lifecycle = [
     "androidx-lifecycle-viewmodel-ktx",
-    "androidx-lifecycle-livedata-ktx", 
+    "androidx-lifecycle-livedata-ktx",
     "androidx-lifecycle-service",
     "androidx-lifecycle-process"
 ]
 
-# Camera Components
+
 camera = [
     "androidx-camera-core",
     "androidx-camera-camera2",
@@ -158,13 +158,13 @@ camera = [
     "androidx-camera-view"
 ]
 
-# Activity & Fragment Extensions
+
 activity-fragment = [
     "androidx-activity-ktx",
     "androidx-fragment-ktx"
 ]
 
-# Networking & Serialization
+
 networking = [
     "okhttp",
     "okhttp-logging-interceptor",
@@ -172,13 +172,13 @@ networking = [
     "moshi-kotlin"
 ]
 
-# Room Database - Phase 3 State Persistence
+
 room = [
     "room-runtime",
     "room-ktx"
 ]
 
-# Unit Testing
+
 unit-testing = [
     "junit",
     "kotlinx-coroutines-test",
@@ -191,7 +191,7 @@ unit-testing = [
     "google-truth"
 ]
 
-# Integration Testing
+
 integration-testing = [
     "androidx-test-ext-junit",
     "espresso-core",
@@ -204,11 +204,11 @@ integration-testing = [
     "kotlinx-coroutines-test"
 ]
 
-# Enhanced unit testing with performance monitoring
+
 enhanced-unit-testing = [
     "junit",
     "junit-jupiter-api",
-    "junit-jupiter-engine", 
+    "junit-jupiter-engine",
     "junit-jupiter-params",
     "kotest-runner-junit5",
     "kotest-assertions-core",
@@ -223,7 +223,7 @@ enhanced-unit-testing = [
     "google-truth"
 ]
 
-# Enhanced integration testing with stress testing
+
 enhanced-integration-testing = [
     "androidx-test-ext-junit",
     "espresso-core",

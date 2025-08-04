@@ -13,14 +13,9 @@ import io.mockk.*
 import kotlinx.coroutines.test.runTest
 import org.robolectric.annotation.Config
 
-/**
- * Comprehensive unit tests for ShimmerRecorder configuration methods using modern Kotlin syntax
- * Tests device configuration, sensor channel setup, and sampling rate management
- * Ensures 100% test coverage with idiomatic Kotlin testing patterns
- */
 @Config(sdk = [28])
 class ShimmerRecorderConfigurationTest : FunSpec({
-    
+
     val mockContext: Context = mockk(relaxed = true)
     val mockSessionManager: SessionManager = mockk(relaxed = true)
     val mockLogger: Logger = mockk(relaxed = true)
@@ -67,7 +62,6 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.connectDevices(deviceAddresses)
 
-            // Note: In simulation mode, this may return true or false depending on implementation
             result shouldNotBe null
             verify { mockLogger.info(any()) }
         }
@@ -86,7 +80,6 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.setEnabledChannels(deviceId, channels)
 
-            // Note: Result depends on whether device is connected in simulation
             result shouldNotBe null
             verify { mockLogger.info(any()) }
         }
@@ -110,7 +103,6 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.setEnabledChannels(deviceId, emptyChannels)
 
-            // Should handle empty channels gracefully
             result shouldNotBe null
             verify { mockLogger.info(any()) }
         }
@@ -173,7 +165,6 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             shimmerRecorder.stopRecording()
 
-            // Should not throw exceptions
             verify { mockLogger.info(any()) }
         }
     }
@@ -182,7 +173,6 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             val readings = shimmerRecorder.getCurrentReadings()
 
-            // Readings may be empty if no data is available
             if (readings.isNotEmpty()) {
                 readings.values.forEach { sensorSample ->
                     (sensorSample.systemTimestamp > 0L) shouldBe true
@@ -207,7 +197,6 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             shimmerRecorder.cleanup()
 
-            // Should not throw exceptions
             verify { mockLogger.info(any()) }
         }
     }

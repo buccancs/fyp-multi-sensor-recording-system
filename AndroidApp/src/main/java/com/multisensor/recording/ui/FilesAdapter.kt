@@ -12,10 +12,6 @@ import com.multisensor.recording.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * RecyclerView adapter for displaying files within a recording session.
- * Refactored to use ListAdapter for better performance and automatic animations.
- */
 class FilesAdapter(
     private val onFileClick: (FileItem) -> Unit,
 ) : ListAdapter<FileItem, FilesAdapter.FileViewHolder>(FileItemDiffCallback()) {
@@ -51,20 +47,15 @@ class FilesAdapter(
         private val fileMetadataText: TextView = itemView.findViewById(R.id.file_metadata_text)
 
         fun bind(fileItem: FileItem) {
-            // Set file name
             fileNameText.text = fileItem.file.name
 
-            // Set file type and icon
             fileTypeText.text = fileItem.type.displayName
             fileIconImageView.setImageResource(getFileTypeIcon(fileItem.type))
 
-            // Set file size
             fileSizeText.text = formatFileSize(fileItem.file.length())
 
-            // Set modification date
             fileModifiedText.text = dateFormatter.format(Date(fileItem.file.lastModified()))
 
-            // Set metadata if available
             if (fileItem.metadata.isNotEmpty()) {
                 fileMetadataText.text = fileItem.metadata
                 fileMetadataText.visibility = View.VISIBLE
@@ -72,12 +63,10 @@ class FilesAdapter(
                 fileMetadataText.visibility = View.GONE
             }
 
-            // Set click listener
             itemView.setOnClickListener {
                 onFileClick(fileItem)
             }
 
-            // Set background based on file type
             itemView.setBackgroundResource(getFileTypeBackground(fileItem.type))
         }
 
@@ -105,9 +94,6 @@ class FilesAdapter(
     }
 }
 
-/**
- * DiffUtil.ItemCallback for efficiently calculating list differences.
- */
 class FileItemDiffCallback : DiffUtil.ItemCallback<FileItem>() {
     override fun areItemsTheSame(oldItem: FileItem, newItem: FileItem): Boolean {
         return oldItem.file.absolutePath == newItem.file.absolutePath

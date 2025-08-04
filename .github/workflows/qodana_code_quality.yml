@@ -1,190 +1,190 @@
-## Enhanced Code Quality Analysis with Qodana
-## Multi-language static analysis for Python and Kotlin/Android
-#
-#name: Code Quality Analysis
-#
-#on:
-#  workflow_dispatch:
-#  pull_request:
-#    branches: [master, dev]
-#  push:
-#    branches: [master, dev]
-#  schedule:
-#    # Run weekly comprehensive analysis
-#    - cron: '0 3 * * 1'
-#
-#env:
-#  JAVA_VERSION: '17'
-#  PYTHON_VERSION: '3.9'
-#
-#jobs:
-#  # Enhanced path-based filtering
-#  changes:
-#    runs-on: ubuntu-latest
-#    outputs:
-#      android: ${{ steps.changes.outputs.android }}
-#      python: ${{ steps.changes.outputs.python }}
-#      config: ${{ steps.changes.outputs.config }}
-#      gradle: ${{ steps.changes.outputs.gradle }}
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: dorny/paths-filter@v2
-#        id: changes
-#        with:
-#          filters: |
-#            android:
-#              - 'AndroidApp/**'
-#              - 'gradle/libs.versions.toml'
-#              - '*.gradle'
-#              - '*.gradle.kts'
-#            python:
-#              - 'PythonApp/**'
-#              - 'environment.yml'
-#              - 'test-requirements.txt'
-#            gradle:
-#              - 'build.gradle'
-#              - 'settings.gradle'
-#              - 'gradle/**'
-#            config:
-#              - 'qodana.yaml'
-#              - '.github/workflows/qodana_code_quality.yml'
-#
-#  # Comprehensive multi-language code quality analysis
-#  qodana-analysis:
-#    name: Multi-Language Code Quality Analysis
-#    runs-on: ubuntu-latest
-#    needs: changes
-#    if: ${{ needs.changes.outputs.android == 'true' || needs.changes.outputs.python == 'true' || needs.changes.outputs.config == 'true' || needs.changes.outputs.gradle == 'true' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-#    permissions:
-#      contents: write
-#      pull-requests: write
-#      checks: write
-#      security-events: write
-#      actions: read
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
-#      # Set up Java for Android/Kotlin analysis
-#      - name: Set up JDK ${{ env.JAVA_VERSION }}
-#        uses: actions/setup-java@v4
-#        with:
-#          java-version: ${{ env.JAVA_VERSION }}
-#          distribution: 'temurin'
-#
-#      # Set up Python environment for Python analysis
-#      - name: Set up Python ${{ env.PYTHON_VERSION }}
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ env.PYTHON_VERSION }}
-#
-#      # Install Python dependencies for better analysis context
-#      - name: Install Python dependencies
-#        if: needs.changes.outputs.python == 'true'
-#        run: |
-#          python -m pip install --upgrade pip
-#          pip install flake8 pytest mypy black bandit
-#          if [ -f PythonApp/requirements.txt ]; then pip install -r PythonApp/requirements.txt; fi
-#          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
-#
-#      # Setup Gradle for Android/Kotlin analysis
-#      - name: Setup Gradle
-#        uses: gradle/actions/setup-gradle@v3
-#        with:
-#          cache-disabled: false
-#          cache-read-only: true
-#
-#      # Grant permissions to gradlew
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#
-#      # Cache Qodana analysis results
-#      - name: Cache Qodana results
-#        uses: actions/cache@v4
-#        with:
-#          path: |
-#            ~/.qodana_cache
-#            ${{ runner.temp }}/qodana/cache
-#          key: ${{ runner.os }}-qodana-${{ github.sha }}
-#          restore-keys: |
-#            ${{ runner.os }}-qodana-
-#
-#      # Run comprehensive Qodana analysis
-#      - name: 'Qodana Scan - Multi-Language Analysis'
-#        uses: JetBrains/qodana-action@v2024.2
-#        with:
-#          args: --baseline,qodana.sarif.json,--save-report,--report-dir,${{ runner.temp }}/qodana/results
-#          results-dir: ${{ runner.temp }}/qodana/results
-#          upload-result: true
-#          artifact-name: qodana-report-${{ github.run_number }}
-#          cache-dir: ${{ runner.temp }}/qodana/cache
-#        env:
-#          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-#
-#      # Upload results to GitHub Security tab
-#      - name: Upload Qodana results to GitHub Security
-#        uses: github/codeql-action/upload-sarif@v3
-#        if: always()
-#        with:
-#          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
-#          category: 'qodana'
-#
-#      # Generate and upload quality gate report
-#      - name: Generate quality gate report
-#        if: always()
-#        run: |
-#          echo "# Code Quality Analysis Report" > quality-report.md
-#          echo "" >> quality-report.md
-#          echo "## Analysis Summary" >> quality-report.md
-#          echo "- **Commit**: ${{ github.sha }}" >> quality-report.md
-#          echo "- **Branch**: ${{ github.ref_name }}" >> quality-report.md
-#          echo "- **Timestamp**: $(date -Iseconds)" >> quality-report.md
-#          echo "" >> quality-report.md
-#
-#          # Add summary if results exist
-#          if [ -f "${{ runner.temp }}/qodana/results/qodana.sarif.json" ]; then
-#            echo "✅ Qodana analysis completed successfully" >> quality-report.md
-#            echo "📊 Detailed results available in artifacts" >> quality-report.md
-#          else
-#            echo "⚠️ Qodana analysis completed with issues" >> quality-report.md
-#          fi
-#
-#          echo "" >> quality-report.md
-#          echo "## Quality Gates" >> quality-report.md
-#          echo "- Code coverage threshold: 70%" >> quality-report.md
-#          echo "- Security vulnerabilities: 0 critical, <5 high" >> quality-report.md
-#          echo "- Code duplications: <5%" >> quality-report.md
-#          echo "- Maintainability rating: A or B" >> quality-report.md
-#
-#      # Upload comprehensive results as artifacts
-#      - name: Upload Qodana results and reports
-#        uses: actions/upload-artifact@v4
-#        if: always()
-#        with:
-#          name: qodana-analysis-report-${{ github.run_number }}
-#          path: |
-#            ${{ runner.temp }}/qodana/results/
-#            quality-report.md
-#          retention-days: 30
-#
-#      # Comment quality results on PR (if it's a PR)
-#      - name: Comment PR with quality results
-#        uses: actions/github-script@v7
-#        if: github.event_name == 'pull_request' && always()
-#        with:
-#          script: |
-#            const fs = require('fs');
-#            try {
-#              const report = fs.readFileSync('quality-report.md', 'utf8');
-#              github.rest.issues.createComment({
-#                issue_number: context.issue.number,
-#                owner: context.repo.owner,
-#                repo: context.repo.repo,
-#                body: report
-#              });
-#            } catch (error) {
-#              console.log('Could not read quality report:', error);
-#            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

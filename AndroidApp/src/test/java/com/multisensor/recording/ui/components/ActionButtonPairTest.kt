@@ -8,33 +8,28 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-/**
- * Unit tests for ActionButtonPair component using modern Kotlin syntax
- * Ensures proper functionality and styling of button pairs
- */
 class ActionButtonPairTest : DescribeSpec({
-    
+
     val context: Context = ApplicationProvider.getApplicationContext()
     lateinit var actionButtonPair: ActionButtonPair
-    
+
     beforeEach {
         actionButtonPair = ActionButtonPair(context)
     }
-    
+
     describe("ActionButtonPair initialization") {
-        
+
         it("should initialize correctly") {
             actionButtonPair shouldNotBe null
             actionButtonPair.childCount shouldBe 2
-            
-            // Verify both children are buttons
+
             actionButtonPair.getChildAt(0).shouldBeInstanceOf<Button>()
             actionButtonPair.getChildAt(1).shouldBeInstanceOf<Button>()
         }
     }
-    
+
     describe("ActionButtonPair button configuration") {
-        
+
         it("should set button text and styles correctly") {
             actionButtonPair.setButtons(
                 "Start Recording",
@@ -42,24 +37,24 @@ class ActionButtonPairTest : DescribeSpec({
                 ActionButtonPair.ButtonStyle.PRIMARY,
                 ActionButtonPair.ButtonStyle.SECONDARY
             )
-            
+
             val leftButton = actionButtonPair.getLeftButton()
             val rightButton = actionButtonPair.getRightButton()
-            
+
             leftButton.text shouldBe "Start Recording"
             rightButton.text shouldBe "Stop Recording"
         }
-        
+
         it("should set buttons with default styles") {
             actionButtonPair.setButtons("Connect", "Disconnect")
-            
+
             val leftButton = actionButtonPair.getLeftButton()
             val rightButton = actionButtonPair.getRightButton()
-            
+
             leftButton.text shouldBe "Connect"
             rightButton.text shouldBe "Disconnect"
         }
-        
+
         it("should handle all button style combinations") {
             val styles = arrayOf(
                 ActionButtonPair.ButtonStyle.PRIMARY,
@@ -67,67 +62,64 @@ class ActionButtonPairTest : DescribeSpec({
                 ActionButtonPair.ButtonStyle.NEUTRAL,
                 ActionButtonPair.ButtonStyle.WARNING
             )
-            
+
             for (leftStyle in styles) {
                 for (rightStyle in styles) {
                     actionButtonPair.setButtons("Left", "Right", leftStyle, rightStyle)
-                    // Verify buttons are set (color verification would require more complex setup)
                     actionButtonPair.getLeftButton().text shouldBe "Left"
                     actionButtonPair.getRightButton().text shouldBe "Right"
                 }
             }
         }
     }
-    
+
     describe("ActionButtonPair click listener functionality") {
-        
+
         it("should handle click listeners correctly") {
             var leftClicked = false
             var rightClicked = false
-            
+
             val leftListener = android.view.View.OnClickListener { leftClicked = true }
             val rightListener = android.view.View.OnClickListener { rightClicked = true }
-            
+
             actionButtonPair.setOnClickListeners(leftListener, rightListener)
-            
-            // Simulate clicks
+
             actionButtonPair.getLeftButton().performClick()
             actionButtonPair.getRightButton().performClick()
-            
+
             leftClicked shouldBe true
             rightClicked shouldBe true
         }
-        
+
         it("should handle null click listeners gracefully") {
             actionButtonPair.setOnClickListeners(null, null)
-            
-            // Should not throw exception
+
             actionButtonPair.getLeftButton().performClick()
             actionButtonPair.getRightButton().performClick()
         }
     }
-    
+
     describe("ActionButtonPair button state management") {
-        
+
         it("should enable and disable buttons correctly") {
             actionButtonPair.setButtonsEnabled(true, false)
-            
+
             actionButtonPair.getLeftButton().isEnabled shouldBe true
             actionButtonPair.getRightButton().isEnabled shouldBe false
-            
+
             actionButtonPair.setButtonsEnabled(false, true)
-            
+
             actionButtonPair.getLeftButton().isEnabled shouldBe false
             actionButtonPair.getRightButton().isEnabled shouldBe true
         }
     }
-    
+
     describe("ActionButtonPair component structure") {
-        
+
         it("should provide correct button references") {
             val leftButton = actionButtonPair.getLeftButton()
             val rightButton = actionButtonPair.getRightButton()
-            
+
             leftButton shouldNotBe null
             rightButton shouldNotBe null
             leftButton.shouldBeInstanceOf<Button>()
@@ -135,61 +127,57 @@ class ActionButtonPairTest : DescribeSpec({
             leftButton shouldBe actionButtonPair.getChildAt(0)
             rightButton shouldBe actionButtonPair.getChildAt(1)
         }
-        
+
         it("should have horizontal layout orientation") {
             actionButtonPair.orientation shouldBe android.widget.LinearLayout.HORIZONTAL
         }
-        
+
         it("should have correct button layout parameters") {
             val leftButton = actionButtonPair.getLeftButton()
             val rightButton = actionButtonPair.getRightButton()
-            
+
             val leftParams = leftButton.layoutParams as android.widget.LinearLayout.LayoutParams
             val rightParams = rightButton.layoutParams as android.widget.LinearLayout.LayoutParams
-            
-            // Both buttons should have equal weight
+
             leftParams.weight shouldBe 1f
             rightParams.weight shouldBe 1f
-            
-            // Width should be 0 (for weight distribution)
+
             leftParams.width shouldBe 0
             rightParams.width shouldBe 0
         }
     }
-    
+
     describe("ActionButtonPair usage scenarios") {
-        
+
         it("should handle recording button scenario correctly") {
             actionButtonPair.setButtons("Start Recording", "Stop Recording")
-            actionButtonPair.setButtonsEnabled(true, false) // Initially only start is enabled
-            
+            actionButtonPair.setButtonsEnabled(true, false)
+
             var recordingStarted = false
             var recordingStopped = false
-            
+
             actionButtonPair.setOnClickListeners(
-                { 
+                {
                     recordingStarted = true
-                    actionButtonPair.setButtonsEnabled(false, true) // Switch to stop enabled
+                    actionButtonPair.setButtonsEnabled(false, true)
                 },
-                { 
+                {
                     recordingStopped = true
-                    actionButtonPair.setButtonsEnabled(true, false) // Switch back to start enabled
+                    actionButtonPair.setButtonsEnabled(true, false)
                 }
             )
-            
-            // Simulate start recording
+
             actionButtonPair.getLeftButton().performClick()
             recordingStarted shouldBe true
             actionButtonPair.getLeftButton().isEnabled shouldBe false
             actionButtonPair.getRightButton().isEnabled shouldBe true
-            
-            // Simulate stop recording
+
             actionButtonPair.getRightButton().performClick()
             recordingStopped shouldBe true
             actionButtonPair.getLeftButton().isEnabled shouldBe true
             actionButtonPair.getRightButton().isEnabled shouldBe false
         }
-        
+
         it("should handle connect/disconnect scenario correctly") {
             actionButtonPair.setButtons(
                 "Connect",
@@ -197,33 +185,32 @@ class ActionButtonPairTest : DescribeSpec({
                 ActionButtonPair.ButtonStyle.PRIMARY,
                 ActionButtonPair.ButtonStyle.SECONDARY
             )
-            
+
             var connected = false
-            
+
             actionButtonPair.setOnClickListeners(
-                { 
+                {
                     connected = true
                     actionButtonPair.setButtonsEnabled(false, true)
                 },
-                { 
+                {
                     connected = false
                     actionButtonPair.setButtonsEnabled(true, false)
                 }
             )
-            
-            // Test connection flow
+
             actionButtonPair.getLeftButton().performClick()
             connected shouldBe true
-            
+
             actionButtonPair.getRightButton().performClick()
             connected shouldBe false
         }
-        
+
         it("should handle multiple style changes correctly") {
             actionButtonPair.setButtons("Test1", "Test2", ActionButtonPair.ButtonStyle.PRIMARY, ActionButtonPair.ButtonStyle.SECONDARY)
             actionButtonPair.setButtons("Test3", "Test4", ActionButtonPair.ButtonStyle.NEUTRAL, ActionButtonPair.ButtonStyle.WARNING)
             actionButtonPair.setButtons("Test5", "Test6", ActionButtonPair.ButtonStyle.WARNING, ActionButtonPair.ButtonStyle.PRIMARY)
-            
+
             actionButtonPair.getLeftButton().text shouldBe "Test5"
             actionButtonPair.getRightButton().text shouldBe "Test6"
         }

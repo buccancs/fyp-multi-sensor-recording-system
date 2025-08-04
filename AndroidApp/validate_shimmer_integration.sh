@@ -1,12 +1,9 @@
 #!/bin/bash
 
-# Shimmer3 GSR+ Integration Validation Script
-# This script validates the Shimmer SDK integration and checks for common issues
 
 echo "=== Shimmer3 GSR+ Integration Validation ==="
 echo ""
 
-# Check if we're in the AndroidApp directory
 if [ ! -f "build.gradle" ]; then
     echo "❌ Error: Please run this script from the AndroidApp directory"
     exit 1
@@ -14,7 +11,6 @@ fi
 
 echo "🔍 Checking Shimmer SDK libraries..."
 
-# Check for Shimmer library files
 LIBS_DIR="src/main/libs"
 SHIMMER_LIBS=(
     "shimmerandroidinstrumentdriver-3.2.3_beta.aar"
@@ -34,7 +30,6 @@ done
 echo ""
 echo "🔍 Checking Shimmer-related Java/Kotlin files..."
 
-# Check for main Shimmer implementation files
 SHIMMER_FILES=(
     "src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt"
     "src/main/java/com/multisensor/recording/recording/ShimmerDevice.kt"
@@ -56,7 +51,6 @@ done
 echo ""
 echo "🔍 Checking Shimmer imports in source files..."
 
-# Check for proper Shimmer SDK imports
 if grep -r "com.shimmerresearch" src/main/java/ > /dev/null 2>&1; then
     echo "✅ Shimmer SDK imports found"
     echo "   Imports detected:"
@@ -68,7 +62,6 @@ fi
 echo ""
 echo "🔍 Checking build.gradle dependencies..."
 
-# Check build.gradle for Shimmer dependencies
 if grep -q "shimmer" build.gradle; then
     echo "✅ Shimmer dependencies found in build.gradle"
     echo "   Dependencies:"
@@ -80,12 +73,10 @@ fi
 echo ""
 echo "🔍 Checking for Bluetooth permissions..."
 
-# Check AndroidManifest.xml for Bluetooth permissions
 MANIFEST_FILE="src/main/AndroidManifest.xml"
 if [ -f "$MANIFEST_FILE" ]; then
     echo "✅ AndroidManifest.xml found"
-    
-    # Check for required Bluetooth permissions
+
     BLUETOOTH_PERMISSIONS=(
         "android.permission.BLUETOOTH"
         "android.permission.BLUETOOTH_ADMIN"
@@ -94,7 +85,7 @@ if [ -f "$MANIFEST_FILE" ]; then
         "android.permission.ACCESS_FINE_LOCATION"
         "android.permission.ACCESS_COARSE_LOCATION"
     )
-    
+
     for permission in "${BLUETOOTH_PERMISSIONS[@]}"; do
         if grep -q "$permission" "$MANIFEST_FILE"; then
             echo "   ✅ $permission"
@@ -109,7 +100,6 @@ fi
 echo ""
 echo "🔍 Checking test files..."
 
-# Check for test files
 TEST_FILES=(
     "src/test/java/com/multisensor/recording/recording/ShimmerRecorderConfigurationTest.kt"
     "src/test/java/com/multisensor/recording/recording/ShimmerRecorderEnhancedTest.kt"
@@ -136,7 +126,6 @@ fi
 echo ""
 echo "🔍 Analyzing code quality..."
 
-# Check for TODOs and FIXMEs in Shimmer files
 TODO_COUNT=$(grep -r "TODO\|FIXME" src/main/java/ | grep -i shimmer | wc -l)
 if [ "$TODO_COUNT" -gt 0 ]; then
     echo "⚠️  Found $TODO_COUNT TODO/FIXME items in Shimmer code"
@@ -149,11 +138,10 @@ fi
 echo ""
 echo "🔍 Feature completeness check..."
 
-# Check for key features in ShimmerRecorder
 SHIMMER_RECORDER="src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt"
 if [ -f "$SHIMMER_RECORDER" ]; then
     echo "Checking ShimmerRecorder.kt for key features:"
-    
+
     FEATURES=(
         "scanAndPairDevices" "Device scanning"
         "connectSingleDevice" "Single device connection"
@@ -166,8 +154,8 @@ if [ -f "$SHIMMER_RECORDER" ]; then
         "getDeviceInformation" "Device information"
         "enableClockSync" "Clock synchronization"
     )
-    
-    for ((i=0; i<${#FEATURES[@]}; i+=2)); do
+
+    for ((i=0; i<${
         method="${FEATURES[i]}"
         description="${FEATURES[i+1]}"
         if grep -q "$method" "$SHIMMER_RECORDER"; then
@@ -183,11 +171,9 @@ fi
 echo ""
 echo "=== Validation Summary ==="
 
-# Count successful checks
 TOTAL_CHECKS=0
 PASSED_CHECKS=0
 
-# This is a simplified count - in a real script you'd track each check
 echo "📊 Integration Status:"
 echo "   • Shimmer SDK Libraries: Integrated"
 echo "   • Core Implementation: Complete"

@@ -15,13 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * CalibrationCaptureManager coordinates synchronized capture from RGB and thermal cameras
- * for calibration and sync features.
- *
- * This manager ensures both cameras capture images in quick succession with matching
- * identifiers for later calibration processing.
- */
 @Singleton
 class CalibrationCaptureManager
     @Inject
@@ -37,7 +30,7 @@ class CalibrationCaptureManager
             private const val CALIBRATION_DIR = "calibration"
             private const val RGB_SUFFIX = "_rgb.jpg"
             private const val THERMAL_SUFFIX = "_thermal.png"
-            private const val MAX_CAPTURE_DELAY_MS = 100L // Maximum delay between RGB and thermal capture
+            private const val MAX_CAPTURE_DELAY_MS = 100L
         }
 
         private val captureCounter = AtomicInteger(0)
@@ -54,9 +47,6 @@ class CalibrationCaptureManager
             val errorMessage: String? = null,
         )
 
-        /**
-         * Captures synchronized calibration images from both RGB and thermal cameras
-         */
         suspend fun captureCalibrationImages(
             calibrationId: String? = null,
             captureRgb: Boolean = true,
@@ -74,7 +64,6 @@ class CalibrationCaptureManager
                 logger.info("[DEBUG_LOG] Thermal settings - Enabled: ${currentThermalConfig.isEnabled}, Format: ${currentThermalConfig.dataFormat}")
 
                 try {
-                    // Ensure calibration directory exists
                     val calibrationDir = getCalibrationDirectory()
                     if (!calibrationDir.exists()) {
                         calibrationDir.mkdirs()
@@ -84,7 +73,6 @@ class CalibrationCaptureManager
                     var thermalFilePath: String? = null
                     val captureJobs = mutableListOf<Deferred<String?>>()
 
-                    // Start RGB capture if requested
                     if (captureRgb) {
                         val rgbJob =
                             async {
@@ -93,20 +81,17 @@ class CalibrationCaptureManager
                         captureJobs.add(rgbJob)
                     }
 
-                    // Start thermal capture if requested (with minimal delay for synchronization)
                     if (captureThermal) {
                         val thermalJob =
                             async {
-                                delay(10) // Small delay to ensure thermal capture happens after RGB setup
+                                delay(10)
                                 captureThermalImage(actualCalibrationId, syncedTimestamp)
                             }
                         captureJobs.add(thermalJob)
                     }
 
-                    // Wait for all captures to complete
                     val results = captureJobs.awaitAll()
 
-                    // Process results
                     if (captureRgb && captureThermal) {
                         rgbFilePath = results[0]
                         thermalFilePath = results[1]
@@ -152,9 +137,6 @@ class CalibrationCaptureManager
                 }
             }
 
-        /**
-         * Captures RGB calibration image
-         */
         private suspend fun captureRgbImage(
             calibrationId: String,
             highResolution: Boolean,
@@ -167,7 +149,6 @@ class CalibrationCaptureManager
 
                     logger.info("[DEBUG_LOG] Capturing RGB calibration image: $fileName (highRes: $highResolution, syncTime: $syncedTimestamp)")
 
-                    // Use CameraRecorder's calibration capture method
                     val success = cameraRecorder.captureCalibrationImage(filePath)
 
                     if (success) {
@@ -183,9 +164,6 @@ class CalibrationCaptureManager
                 }
             }
 
-        /**
-         * Captures thermal calibration image
-         */
         private suspend fun captureThermalImage(
             calibrationId: String,
             syncedTimestamp: Long,
@@ -197,7 +175,6 @@ class CalibrationCaptureManager
 
                     logger.info("[DEBUG_LOG] Capturing thermal calibration image: $fileName (syncTime: $syncedTimestamp)")
 
-                    // Use ThermalRecorder's calibration capture method
                     val success = thermalRecorder.captureCalibrationImage(filePath)
 
                     if (success) {
@@ -213,29 +190,20 @@ class CalibrationCaptureManager
                 }
             }
 
-        /**
-         * Generates a unique calibration ID
-         */
         private fun generateCalibrationId(): String {
             val timestamp = dateFormat.format(Date())
             val counter = captureCounter.incrementAndGet()
             return "calib_${timestamp}_${String.format("%03d", counter)}"
         }
 
-        /**
-         * Gets the calibration directory, creating it if necessary
-         */
         private fun getCalibrationDirectory(): File {
             val externalDir =
                 context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    ?: context.filesDir // Fallback to internal storage
+                    ?: context.filesDir
 
             return File(externalDir, CALIBRATION_DIR)
         }
 
-        /**
-         * Lists all calibration capture sessions
-         */
         fun getCalibrationSessions(): List<CalibrationSession> {
             val calibrationDir = getCalibrationDirectory()
             if (!calibrationDir.exists()) {
@@ -269,9 +237,6 @@ class CalibrationCaptureManager
             return sessions.values.sortedByDescending { it.timestamp }
         }
 
-        /**
-         * Deletes a calibration session and its associated files
-         */
         fun deleteCalibrationSession(calibrationId: String): Boolean =
             try {
                 val calibrationDir = getCalibrationDirectory()
@@ -293,9 +258,6 @@ class CalibrationCaptureManager
                 false
             }
 
-        /**
-         * Gets calibration statistics
-         */
         fun getCalibrationStatistics(): CalibrationStatistics {
             val sessions = getCalibrationSessions()
             val totalSessions = sessions.size

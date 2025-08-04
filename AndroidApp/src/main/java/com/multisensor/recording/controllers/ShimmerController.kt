@@ -30,28 +30,13 @@ import javax.inject.Singleton
 
 
 
-/**
- * Controller responsible for handling all Shimmer device integration logic.
- * Extracted from MainActivity to improve separation of concerns and testability.
- * Works in coordination with ShimmerManager for comprehensive Shimmer device handling.
- * 
- * Enhanced with:
- * - Device state persistence across app restarts ✓
- * - Support for multiple simultaneous Shimmer devices ✓ 
- * - Comprehensive error handling with retry mechanisms ✓
- * 
- * ✓ Comprehensive unit tests implemented (35+ test scenarios)
- */
 @Singleton
 class ShimmerController @Inject constructor(
     private val shimmerManager: ShimmerManager,
     private val shimmerDeviceStateRepository: ShimmerDeviceStateRepository,
     private val shimmerErrorHandler: ShimmerErrorHandler
 ) {
-    
-    /**
-     * Interface for Shimmer device-related callbacks to the UI layer
-     */
+
     interface ShimmerCallback {
         fun onDeviceSelected(address: String, name: String)
         fun onDeviceSelectionCancelled()
@@ -62,47 +47,36 @@ class ShimmerController @Inject constructor(
         fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT)
         fun runOnUiThread(action: () -> Unit)
     }
-    
+
     private var callback: ShimmerCallback? = null
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
     private var preferredBtType: ShimmerBluetoothManagerAndroid.BT_TYPE = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
-    
-    // Coroutine scope for persistence operations
+
     private val persistenceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    
-    // Multiple device support - track connected devices by address
+
     private val connectedDevices = mutableMapOf<String, ShimmerDeviceState>()
     private val connectionRetryAttempts = mutableMapOf<String, Int>()
     private val maxRetryAttempts = 3
-    
-    /**
-     * Set the callback for Shimmer device events
-     */
+
     fun setCallback(callback: ShimmerCallback) {
         this.callback = callback
-        
-        // Initialize by loading saved device states
+
         loadSavedDeviceStates()
     }
-    
-    /**
-     * Load saved device states from persistence on initialization
-     */
+
     private fun loadSavedDeviceStates() {
         persistenceScope.launch {
             try {
                 val savedStates = shimmerDeviceStateRepository.getAllDeviceStates()
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] Loaded ${savedStates.size} saved device states")
-                
-                // Update internal state with saved devices
+
                 withContext(Dispatchers.Main) {
                     savedStates.forEach { deviceState ->
                         connectedDevices[deviceState.deviceAddress] = deviceState
                         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Restored device: ${deviceState.deviceName} (${deviceState.deviceAddress})")
                     }
-                    
-                    // Attempt auto-reconnection for devices that had auto-reconnect enabled
+
                     attemptAutoReconnection()
                 }
             } catch (e: Exception) {
@@ -110,26 +84,21 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Attempt auto-reconnection for devices that were previously connected
-     */
+
     private fun attemptAutoReconnection() {
         persistenceScope.launch {
             try {
                 val autoReconnectDevices = shimmerDeviceStateRepository.getAutoReconnectDevices()
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] Found ${autoReconnectDevices.size} devices for auto-reconnection")
-                
+
                 autoReconnectDevices.forEach { deviceState ->
                     if (connectionRetryAttempts.getOrDefault(deviceState.deviceAddress, 0) < maxRetryAttempts) {
                         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Attempting auto-reconnection to ${deviceState.deviceName}")
-                        
+
                         withContext(Dispatchers.Main) {
                             callback?.updateStatusText("Auto-reconnecting to ${deviceState.deviceName}...")
                         }
-                        
-                        // Simulate connection attempt (would use actual ViewModel methods)
-                        // For now, just update the UI
+
                         withContext(Dispatchers.Main) {
                             callback?.updateStatusText("Auto-reconnection attempted for ${deviceState.deviceName}")
                         }
@@ -140,36 +109,29 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Show Bluetooth connection type selection dialog (BLE vs Classic)
-     * Following the official bluetoothManagerExample pattern
-     */
+
     fun showBtTypeConnectionOption(context: Context) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Showing Bluetooth type selection dialog")
-        
+
         val alertDialog = AlertDialog.Builder(context).create()
         alertDialog.setCancelable(false)
         alertDialog.setMessage("Choose preferred Bluetooth type")
-        
+
         alertDialog.setButton(Dialog.BUTTON_POSITIVE, "BT CLASSIC") { _, _ ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] User selected BT CLASSIC")
             preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
             connectSelectedShimmerDevice()
         }
-        
+
         alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "BLE") { _, _ ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] User selected BLE")
             preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BLE
             connectSelectedShimmerDevice()
         }
-        
+
         alertDialog.show()
     }
-    
-    /**
-     * Connect to the selected Shimmer device using the chosen connection type
-     */
+
     private fun connectSelectedShimmerDevice() {
         selectedShimmerAddress?.let { address ->
             selectedShimmerName?.let { name ->
@@ -177,24 +139,18 @@ class ShimmerController @Inject constructor(
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] - Address: $address")
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] - Name: $name")
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] - Connection Type: $preferredBtType")
-                
-                // Update UI to show connection attempt
+
                 callback?.updateStatusText("Connecting to $name ($preferredBtType)...")
-                
-                // Enhanced connection handling with better status feedback
-                // Note: Actual ViewModel/ShimmerRecorder integration will be completed in future iteration
+
                 try {
                     android.util.Log.d("ShimmerController", "[DEBUG_LOG] Initiating connection process...")
-                    
-                    // Store connection attempt details for status tracking
+
                     callback?.showToast("Attempting connection to $name via $preferredBtType", android.widget.Toast.LENGTH_SHORT)
-                    
-                    // For now, update status to reflect the connection attempt
+
                     callback?.updateStatusText("Connection initiated for $name")
-                    
-                    // Notify callback of connection attempt
+
                     callback?.onDeviceSelected(address, name)
-                    
+
                     android.util.Log.d("ShimmerController", "[DEBUG_LOG] Connection process initiated successfully")
                 } catch (e: Exception) {
                     android.util.Log.e("ShimmerController", "[DEBUG_LOG] Connection initiation failed: ${e.message}")
@@ -206,13 +162,10 @@ class ShimmerController @Inject constructor(
             callback?.onShimmerError("No Shimmer device selected for connection")
         }
     }
-    
-    /**
-     * Launch ShimmerBluetoothDialog for device selection using Activity Result API
-     */
+
     fun launchShimmerDeviceDialog(activity: Activity, launcher: ActivityResultLauncher<Intent>) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Launching Shimmer device selection dialog")
-        
+
         try {
             val intent = Intent(activity, ShimmerBluetoothDialog::class.java)
             launcher.launch(intent)
@@ -221,35 +174,27 @@ class ShimmerController @Inject constructor(
             callback?.onShimmerError("Failed to launch device selection dialog: ${e.message}")
         }
     }
-    
-    /**
-     * Enhanced device selection with connection type support and persistence
-     */
+
     fun handleDeviceSelectionResult(address: String?, name: String?) {
         if (address != null && name != null) {
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Device selected: $name ($address)")
             selectedShimmerAddress = address
             selectedShimmerName = name
-            
-            // Store selection for future use and save to persistence
+
             callback?.runOnUiThread {
                 callback?.updateStatusText("Device selected: $name")
                 callback?.showToast("Selected: $name")
             }
-            
-            // Save device state to persistence
+
             saveDeviceState(address, name, preferredBtType, false)
-            
+
             callback?.onDeviceSelected(address, name)
         } else {
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Device selection cancelled")
             callback?.onDeviceSelectionCancelled()
         }
     }
-    
-    /**
-     * Save device state to persistence
-     */
+
     private fun saveDeviceState(
         address: String,
         name: String,
@@ -262,9 +207,8 @@ class ShimmerController @Inject constructor(
         persistenceScope.launch {
             try {
                 val existingState = shimmerDeviceStateRepository.getDeviceState(address)
-                
+
                 val deviceState = if (existingState != null) {
-                    // Update existing state
                     existingState.copy(
                         deviceName = name,
                         connectionType = connectionType,
@@ -276,7 +220,6 @@ class ShimmerController @Inject constructor(
                         lastUpdated = System.currentTimeMillis()
                     )
                 } else {
-                    // Create new state
                     ShimmerDeviceState(
                         deviceAddress = address,
                         deviceName = name,
@@ -286,18 +229,17 @@ class ShimmerController @Inject constructor(
                         enabledSensors = enabledSensors,
                         samplingRate = samplingRate,
                         gsrRange = gsrRange,
-                        autoReconnectEnabled = true, // Enable auto-reconnect by default
-                        preferredConnectionOrder = connectedDevices.size // Set order based on current count
+                        autoReconnectEnabled = true,
+                        preferredConnectionOrder = connectedDevices.size
                     )
                 }
-                
+
                 shimmerDeviceStateRepository.saveDeviceState(deviceState)
-                
-                // Update local cache
+
                 withContext(Dispatchers.Main) {
                     connectedDevices[address] = deviceState
                 }
-                
+
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] Device state saved: $name ($address)")
             } catch (e: Exception) {
                 android.util.Log.e("ShimmerController", "[DEBUG_LOG] Failed to save device state: ${e.message}")
@@ -305,9 +247,6 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Connect to selected Shimmer device with enhanced error handling and persistence
-     */
     fun connectToSelectedDevice(viewModel: MainViewModel) {
         selectedShimmerAddress?.let { address ->
             selectedShimmerName?.let { name ->
@@ -317,22 +256,17 @@ class ShimmerController @Inject constructor(
             callback?.onShimmerError("No device selected")
         }
     }
-    
-    /**
-     * Connect to a specific Shimmer device with comprehensive error handling (supports multiple devices)
-     */
+
     fun connectToDevice(address: String, name: String, viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Connecting to device: $name ($address)")
-        
-        // Check if already connected
+
         if (connectedDevices[address]?.isConnected == true) {
             callback?.onShimmerError("Device $name is already connected")
             return
         }
-        
+
         callback?.updateStatusText("Connecting to $name...")
-        
-        // Use error handler for connection with retry logic
+
         persistenceScope.launch {
             val attemptConnection: suspend () -> Boolean = {
                 withContext(Dispatchers.Main) {
@@ -343,9 +277,9 @@ class ShimmerController @Inject constructor(
                     connectionResult
                 }
             }
-            
+
             try {
-                
+
                 val success = shimmerErrorHandler.handleError(
                     deviceAddress = address,
                     deviceName = name,
@@ -355,28 +289,24 @@ class ShimmerController @Inject constructor(
                     connectionType = preferredBtType,
                     onRetry = attemptConnection,
                     onFinalFailure = { strategy ->
-                        // Use callback directly since this is already in the coroutine scope
                         callback?.runOnUiThread {
                             callback?.updateStatusText("Failed to connect to $name")
                             callback?.showToast(strategy.userMessage, Toast.LENGTH_LONG)
                             callback?.onShimmerError(strategy.userMessage)
                         }
-                        
-                        // Generate diagnostic report for persistent failures
+
                         if (strategy.userActionRequired) {
                             generateAndShowDiagnostics(address)
                         }
                     }
                 )
-                
-                // Handle success on main thread
+
                 callback?.runOnUiThread {
                     if (success) {
                         callback?.updateStatusText("Connected to $name")
                         callback?.showToast("Successfully connected to $name")
                         callback?.onConnectionStatusChanged(true)
-                        
-                        // Reset retry attempts and update persistence
+
                         connectionRetryAttempts.remove(address)
                         persistenceScope.launch {
                             shimmerErrorHandler.resetErrorState(address)
@@ -384,36 +314,32 @@ class ShimmerController @Inject constructor(
                         }
                     }
                 }
-                
+
             } catch (e: Exception) {
                 android.util.Log.e("ShimmerController", "[DEBUG_LOG] Connection error for $name: ${e.message}")
-                
+
                 callback?.runOnUiThread {
                     callback?.onShimmerError("Connection error: ${e.message}")
                 }
-                
-                // Log the error
+
                 shimmerDeviceStateRepository.logConnectionAttempt(address, false, e.message, name, preferredBtType)
             }
         }
     }
-    
-    /**
-     * Generate and optionally show diagnostic information
-     */
+
     private fun generateAndShowDiagnostics(address: String) {
         persistenceScope.launch {
             try {
                 val diagnostics = shimmerErrorHandler.generateDiagnosticReport(address)
                 val recommendations = shimmerErrorHandler.checkDeviceHealth(address)
-                
+
                 callback?.runOnUiThread {
                     val message = if (recommendations.isNotEmpty()) {
                         "Connection failed. Suggestions:\n${recommendations.take(3).joinToString("\n")}"
                     } else {
                         "Connection failed. Check device status and try again."
                     }
-                    
+
                     callback?.showToast(message, Toast.LENGTH_LONG)
                     android.util.Log.d("ShimmerController", "[DIAGNOSTICS] $diagnostics")
                 }
@@ -422,16 +348,12 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Update connection status with persistence
-     */
+
     private fun updateConnectionStatus(address: String, name: String, connected: Boolean) {
         persistenceScope.launch {
             try {
                 shimmerDeviceStateRepository.updateConnectionStatus(address, connected, name, preferredBtType)
-                
-                // Update local cache
+
                 val existingState = connectedDevices[address]
                 if (existingState != null) {
                     val updatedState = existingState.copy(
@@ -442,7 +364,7 @@ class ShimmerController @Inject constructor(
                         connectedDevices[address] = updatedState
                     }
                 }
-                
+
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] Connection status updated: $name = $connected")
             } catch (e: Exception) {
                 android.util.Log.e("ShimmerController", "[DEBUG_LOG] Failed to update connection status: ${e.message}")
@@ -450,26 +372,20 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Configure sensor channels for connected device
-     */
     fun configureSensorChannels(viewModel: MainViewModel, enabledChannels: Set<String>) {
         selectedShimmerAddress?.let { deviceId ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Configuring sensors for device: $deviceId")
-            
-            // Convert string channel names to SensorChannel enum
+
             val sensorChannels = enabledChannels.mapNotNull { channelName ->
                 try {
-                    // This would need to be implemented based on actual channel names
-                    // DeviceConfiguration.SensorChannel.valueOf(channelName)
-                    null // Placeholder
+                    null
                 } catch (e: Exception) {
                     null
                 }
             }.toSet()
-            
+
             callback?.updateStatusText("Configuring sensors...")
-            
+
             viewModel.configureShimmerSensors(deviceId, sensorChannels) { success ->
                 callback?.runOnUiThread {
                     if (success) {
@@ -488,15 +404,12 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Update sampling rate for connected device
-     */
     fun setSamplingRate(viewModel: MainViewModel, samplingRate: Double) {
         selectedShimmerAddress?.let { deviceId ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Setting sampling rate to ${samplingRate}Hz for device: $deviceId")
-            
+
             callback?.updateStatusText("Setting sampling rate to ${samplingRate}Hz...")
-            
+
             viewModel.setShimmerSamplingRate(deviceId, samplingRate) { success ->
                 callback?.runOnUiThread {
                     if (success) {
@@ -514,15 +427,12 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Update GSR range for connected device
-     */
     fun setGSRRange(viewModel: MainViewModel, gsrRange: Int) {
         selectedShimmerAddress?.let { deviceId ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Setting GSR range to $gsrRange for device: $deviceId")
-            
+
             callback?.updateStatusText("Setting GSR range to $gsrRange...")
-            
+
             viewModel.setShimmerGSRRange(deviceId, gsrRange) { success ->
                 callback?.runOnUiThread {
                     if (success) {
@@ -540,13 +450,10 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Get real-time device information and data quality metrics
-     */
     fun getDeviceInformation(viewModel: MainViewModel, callback: (deviceInfo: String?) -> Unit) {
         selectedShimmerAddress?.let { deviceId ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting device information for: $deviceId")
-            
+
             viewModel.getShimmerDeviceInfo(deviceId) { deviceInfo ->
                 val infoText = deviceInfo?.getDisplaySummary() ?: "Device information not available"
                 callback(infoText)
@@ -556,13 +463,10 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Get real-time data quality metrics
-     */
     fun getDataQualityMetrics(viewModel: MainViewModel, callback: (metrics: String?) -> Unit) {
         selectedShimmerAddress?.let { deviceId ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting data quality metrics for: $deviceId")
-            
+
             viewModel.getShimmerDataQuality(deviceId) { metrics ->
                 val metricsText = metrics?.getDisplaySummary() ?: "Data quality metrics not available"
                 callback(metricsText)
@@ -572,15 +476,12 @@ class ShimmerController @Inject constructor(
         }
     }
 
-    /**
-     * Disconnect from current device
-     */
     fun disconnectDevice(viewModel: MainViewModel) {
         selectedShimmerAddress?.let { deviceId ->
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Disconnecting from device: $deviceId")
-            
+
             callback?.updateStatusText("Disconnecting...")
-            
+
             viewModel.disconnectShimmerDevice(deviceId) { success ->
                 callback?.runOnUiThread {
                     if (success) {
@@ -599,18 +500,13 @@ class ShimmerController @Inject constructor(
             callback?.onShimmerError("No device connected")
         }
     }
-    
-    /**
-     * Show Shimmer sensor configuration dialog
-     * Requires a connected Shimmer device
-     */
+
     fun showShimmerSensorConfiguration(context: Context, viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Showing Shimmer sensor configuration")
-        
-        // Get connected shimmer device from ViewModel
+
         val shimmerDevice = viewModel.getFirstConnectedShimmerDevice()
         val btManager = viewModel.getShimmerBluetoothManager()
-        
+
         if (shimmerDevice != null && btManager != null) {
             if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
                 try {
@@ -629,18 +525,13 @@ class ShimmerController @Inject constructor(
             android.util.Log.w("ShimmerController", "[DEBUG_LOG] No connected Shimmer device available for configuration")
         }
     }
-    
-    /**
-     * Show Shimmer general configuration dialog
-     * Requires a connected Shimmer device
-     */
+
     fun showShimmerGeneralConfiguration(context: Context, viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Showing Shimmer general configuration")
-        
-        // Get connected shimmer device from ViewModel
+
         val shimmerDevice = viewModel.getFirstConnectedShimmerDevice()
         val btManager = viewModel.getShimmerBluetoothManager()
-        
+
         if (shimmerDevice != null && btManager != null) {
             if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
                 try {
@@ -659,25 +550,20 @@ class ShimmerController @Inject constructor(
             android.util.Log.w("ShimmerController", "[DEBUG_LOG] No connected Shimmer device available for configuration")
         }
     }
-    
-    /**
-     * Start SD logging on connected Shimmer device
-     */
+
     fun startShimmerSDLogging(viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Starting Shimmer SD logging")
-        
-        // Check if any device is currently streaming or logging
+
         if (viewModel.isAnyShimmerDeviceStreaming()) {
             callback?.showToast("Cannot start SD logging - device is streaming")
             return
         }
-        
+
         if (viewModel.isAnyShimmerDeviceSDLogging()) {
             callback?.showToast("SD logging is already active")
             return
         }
-        
-        // Start SD logging via ViewModel wrapper method
+
         viewModel.startShimmerSDLogging { success ->
             callback?.runOnUiThread {
                 if (success) {
@@ -691,20 +577,15 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Stop SD logging on connected Shimmer device
-     */
+
     fun stopShimmerSDLogging(viewModel: MainViewModel) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Stopping Shimmer SD logging")
-        
-        // Check if any device is currently SD logging
+
         if (!viewModel.isAnyShimmerDeviceSDLogging()) {
             callback?.showToast("No SD logging is currently active")
             return
         }
-        
-        // Stop SD logging via ViewModel wrapper method
+
         viewModel.stopShimmerSDLogging { success ->
             callback?.runOnUiThread {
                 if (success) {
@@ -718,13 +599,10 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Handle Shimmer configuration menu action
-     */
+
     fun handleShimmerConfigMenuAction(context: Context) {
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Opening Shimmer Configuration")
-        
+
         try {
             val intent = Intent(context, com.multisensor.recording.ui.ShimmerConfigActivity::class.java)
             context.startActivity(intent)
@@ -733,33 +611,25 @@ class ShimmerController @Inject constructor(
             callback?.onShimmerError("Failed to open Shimmer Configuration: ${e.message}")
         }
     }
-    
-    /**
-     * Get current Shimmer connection status
-     */
+
     fun getConnectionStatus(): String {
         return buildString {
             append("Shimmer Status:\n")
             append("- Selected Device: ${selectedShimmerName ?: "None"}\n")
             append("- Selected Address: ${selectedShimmerAddress ?: "None"}\n")
             append("- Preferred BT Type: $preferredBtType\n")
-            
-            // Enhanced connection status based on current state
+
             val connectionStatus = when {
                 selectedShimmerAddress == null -> "No device selected"
                 selectedShimmerName == null -> "Device address available but name unknown"
                 else -> "Device selected - ready for connection"
             }
             append("- Connection Status: $connectionStatus\n")
-            
-            // Additional status information
+
             append("- Last Action: ${getLastActionDescription()}")
         }
     }
-    
-    /**
-     * Get description of the last action performed
-     */
+
     private fun getLastActionDescription(): String {
         return when {
             selectedShimmerAddress != null && selectedShimmerName != null -> "Device selected successfully"
@@ -767,77 +637,52 @@ class ShimmerController @Inject constructor(
             else -> "Awaiting device selection"
         }
     }
-    
-    /**
-     * Reset Shimmer controller state
-     */
+
     fun resetState() {
         selectedShimmerAddress = null
         selectedShimmerName = null
         preferredBtType = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Shimmer controller state reset")
     }
-    
-    /**
-     * Get selected device information
-     */
+
     fun getSelectedDeviceInfo(): Pair<String?, String?> {
         return Pair(selectedShimmerAddress, selectedShimmerName)
     }
-    
-    /**
-     * Get preferred Bluetooth type
-     */
+
     fun getPreferredBtType(): ShimmerBluetoothManagerAndroid.BT_TYPE {
         return preferredBtType
     }
-    
-    /**
-     * Set preferred Bluetooth type
-     */
+
     fun setPreferredBtType(btType: ShimmerBluetoothManagerAndroid.BT_TYPE) {
         preferredBtType = btType
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Preferred BT type set to: $btType")
     }
-    
-    // ========== Multiple Device Support Methods ==========
-    
-    /**
-     * Get all connected devices
-     */
+
+
     fun getConnectedDevices(): List<ShimmerDeviceState> {
         return connectedDevices.values.filter { it.isConnected }
     }
-    
-    /**
-     * Get device count
-     */
+
     fun getConnectedDeviceCount(): Int {
         return connectedDevices.values.count { it.isConnected }
     }
-    
-    /**
-     * Disconnect all devices
-     */
+
     fun disconnectAllDevices(viewModel: MainViewModel) {
         val connectedDeviceList = getConnectedDevices()
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Disconnecting ${connectedDeviceList.size} devices")
-        
+
         connectedDeviceList.forEach { deviceState ->
             disconnectSpecificDevice(deviceState.deviceAddress, viewModel)
         }
     }
-    
-    /**
-     * Disconnect specific device
-     */
+
     fun disconnectSpecificDevice(deviceAddress: String, viewModel: MainViewModel) {
         val deviceState = connectedDevices[deviceAddress]
         if (deviceState?.isConnected == true) {
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Disconnecting device: ${deviceState.deviceName}")
-            
+
             callback?.updateStatusText("Disconnecting ${deviceState.deviceName}...")
-            
+
             viewModel.disconnectShimmerDevice(deviceAddress) { success ->
                 callback?.runOnUiThread {
                     if (success) {
@@ -853,22 +698,15 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Get device state by address
-     */
+
     fun getDeviceState(address: String): ShimmerDeviceState? {
         return connectedDevices[address]
     }
-    
-    /**
-     * Enable/disable auto-reconnect for a device
-     */
+
     fun setAutoReconnectEnabled(address: String, enabled: Boolean) {
         persistenceScope.launch {
             shimmerDeviceStateRepository.setAutoReconnectEnabled(address, enabled)
-            
-            // Update local cache
+
             val existingState = connectedDevices[address]
             if (existingState != null) {
                 val updatedState = existingState.copy(autoReconnectEnabled = enabled)
@@ -878,15 +716,11 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Set device connection priority
-     */
+
     fun setDeviceConnectionPriority(address: String, priority: Int) {
         persistenceScope.launch {
             shimmerDeviceStateRepository.setDeviceConnectionPriority(address, priority)
-            
-            // Update local cache
+
             val existingState = connectedDevices[address]
             if (existingState != null) {
                 val updatedState = existingState.copy(preferredConnectionOrder = priority)
@@ -896,17 +730,14 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Get connection diagnostic information
-     */
+
     fun getConnectionDiagnostics(): String {
         return buildString {
             append("=== Shimmer Connection Diagnostics ===\n")
             append("Connected devices: ${getConnectedDeviceCount()}\n")
             append("Total tracked devices: ${connectedDevices.size}\n")
             append("Active retry attempts: ${connectionRetryAttempts.size}\n\n")
-            
+
             connectedDevices.values.forEach { device ->
                 append("Device: ${device.deviceName}\n")
                 append("  Address: ${device.deviceAddress}\n")
@@ -919,14 +750,11 @@ class ShimmerController @Inject constructor(
             }
         }
     }
-    
-    /**
-     * Get device management status for UI
-     */
+
     fun getDeviceManagementStatus(): String {
         val connectedCount = getConnectedDeviceCount()
         val totalCount = connectedDevices.size
-        
+
         return when {
             connectedCount == 0 && totalCount == 0 -> "No devices configured"
             connectedCount == 0 -> "$totalCount device(s) configured, none connected"
@@ -934,19 +762,12 @@ class ShimmerController @Inject constructor(
             else -> "$connectedCount devices connected"
         }
     }
-    
-    // ========== Persistence and State Management ==========
-    
-    /**
-     * Export device configurations for backup
-     */
+
+
     suspend fun exportDeviceConfigurations(): List<ShimmerDeviceState> {
         return shimmerDeviceStateRepository.getAllDeviceStates()
     }
-    
-    /**
-     * Clean up old device data
-     */
+
     fun cleanupOldDeviceData() {
         persistenceScope.launch {
             try {

@@ -18,16 +18,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.inject.Inject
 
-/**
- * JSON Socket Client for Network Communication.
- * Implements length-prefixed JSON message protocol for bidirectional communication with PC server.
- *
- * Based on 2_6_milestone.md specifications:
- * - TCP connection to PC server on port 9000
- * - Length-prefixed framing (4-byte length header + JSON payload)
- * - Auto-reconnection with retry logic
- * - Command processing and acknowledgment system
- */
 @ServiceScoped
 class JsonSocketClient
     @Inject
@@ -41,22 +31,17 @@ class JsonSocketClient
         private var isConnected = false
         private var shouldReconnect = true
 
-        // Connection configuration
-        private var serverIp: String = "192.168.1.100" // Default IP, configurable
-        private var serverPort: Int = 9000 // specifies port 9000
+        private var serverIp: String = "192.168.1.100"
+        private var serverPort: Int = 9000
 
-        // Callback for incoming commands
         private var commandCallback: ((JsonMessage) -> Unit)? = null
 
         companion object {
             private const val RECONNECT_DELAY_MS = 5000L
             private const val CONNECTION_TIMEOUT_MS = 10000
-            private const val LENGTH_HEADER_SIZE = 4 // 4-byte length prefix
+            private const val LENGTH_HEADER_SIZE = 4
         }
 
-        /**
-         * Configure server connection details
-         */
         fun configure(
             ip: String,
             port: Int = 9000,
@@ -66,16 +51,10 @@ class JsonSocketClient
             logger.info("JsonSocketClient configured for $ip:$port")
         }
 
-        /**
-         * Set callback for incoming command messages
-         */
         fun setCommandCallback(callback: (JsonMessage) -> Unit) {
             commandCallback = callback
         }
 
-        /**
-         * Start connection to PC server with auto-reconnect
-         */
         fun connect() {
             if (isConnected) {
                 logger.warning("JsonSocketClient already connected")
@@ -92,20 +71,15 @@ class JsonSocketClient
             logger.info("JsonSocketClient connection started")
         }
 
-        /**
-         * Disconnect from server and stop reconnection attempts
-         */
         fun disconnect() {
             logger.info("Disconnecting JsonSocketClient...")
             shouldReconnect = false
 
             try {
-                // Close socket resources
                 outputStream?.close()
                 inputStream?.close()
                 socket?.close()
 
-                // Cancel coroutines
                 connectionScope?.cancel()
 
                 isConnected = false
@@ -120,9 +94,6 @@ class JsonSocketClient
             }
         }
 
-        /**
-         * Send JSON message to PC server using length-prefixed framing
-         */
         fun sendMessage(message: JsonMessage) {
             if (!isConnected) {
                 logger.warning("Cannot send message - not connected to server")
@@ -134,7 +105,6 @@ class JsonSocketClient
                     val jsonString = JsonMessage.toJson(message)
                     val jsonBytes = jsonString.toByteArray(Charsets.UTF_8)
 
-                    // Create length-prefixed message
                     val lengthHeader =
                         ByteBuffer
                             .allocate(LENGTH_HEADER_SIZE)
@@ -142,7 +112,6 @@ class JsonSocketClient
                             .putInt(jsonBytes.size)
                             .array()
 
-                    // Send length header followed by JSON payload
                     outputStream?.write(lengthHeader)
                     outputStream?.write(jsonBytes)
                     outputStream?.flush()
@@ -155,9 +124,6 @@ class JsonSocketClient
             }
         }
 
-        /**
-         * Send device introduction message on connection
-         */
         fun sendHelloMessage(
             deviceId: String,
             capabilities: List<String>,
@@ -170,9 +136,6 @@ class JsonSocketClient
             sendMessage(helloMessage)
         }
 
-        /**
-         * Send acknowledgment message for received command
-         */
         fun sendAck(
             commandType: String,
             success: Boolean,
@@ -187,9 +150,6 @@ class JsonSocketClient
             sendMessage(ackMessage)
         }
 
-        /**
-         * Send device status update
-         */
         fun sendStatusUpdate(
             battery: Int?,
             storage: String?,
@@ -207,9 +167,6 @@ class JsonSocketClient
             sendMessage(statusMessage)
         }
 
-        /**
-         * Connection with retry logic
-         */
         private suspend fun connectWithRetry() {
             while (shouldReconnect && !isConnected) {
                 try {
@@ -227,7 +184,6 @@ class JsonSocketClient
 
                     logger.info("Connected to PC server at $serverIp:$serverPort")
 
-                    // Send hello message to introduce this device
                     sendHelloMessage(
                         deviceId =
                             android.os.Build.MODEL + "_" +
@@ -235,7 +191,6 @@ class JsonSocketClient
                         capabilities = listOf("rgb_video", "thermal", "shimmer"),
                     )
 
-                    // Start listening for incoming messages
                     startMessageListener()
                 } catch (e: Exception) {
                     logger.error("Connection failed: ${e.message}")
@@ -249,13 +204,9 @@ class JsonSocketClient
             }
         }
 
-        /**
-         * Listen for incoming messages with length-prefixed framing
-         */
         private suspend fun startMessageListener() {
             try {
                 while (isConnected && shouldReconnect) {
-                    // Read 4-byte length header
                     val lengthHeader = ByteArray(LENGTH_HEADER_SIZE)
                     var bytesRead = 0
 
@@ -267,18 +218,16 @@ class JsonSocketClient
                         bytesRead += read
                     }
 
-                    // Parse message length
                     val messageLength =
                         ByteBuffer
                             .wrap(lengthHeader)
                             .order(ByteOrder.BIG_ENDIAN)
                             .int
 
-                    if (messageLength <= 0 || messageLength > 1024 * 1024) { // Max 1MB message
+                    if (messageLength <= 0 || messageLength > 1024 * 1024) {
                         throw IOException("Invalid message length: $messageLength")
                     }
 
-                    // Read JSON payload
                     val messageBytes = ByteArray(messageLength)
                     bytesRead = 0
 
@@ -290,7 +239,6 @@ class JsonSocketClient
                         bytesRead += read
                     }
 
-                    // Parse and process JSON message
                     val jsonString = String(messageBytes, Charsets.UTF_8)
                     val message = JsonMessage.fromJson(jsonString)
 
@@ -307,9 +255,6 @@ class JsonSocketClient
             }
         }
 
-        /**
-         * Handle connection errors and initiate reconnection
-         */
         private suspend fun handleConnectionError() {
             if (!isConnected) return
 
@@ -328,21 +273,14 @@ class JsonSocketClient
             inputStream = null
             outputStream = null
 
-            // Attempt reconnection if enabled
             if (shouldReconnect) {
                 delay(RECONNECT_DELAY_MS)
                 connectWithRetry()
             }
         }
 
-        /**
-         * Check if currently connected to server
-         */
         fun isConnected(): Boolean = isConnected
 
-        /**
-         * Get current connection information
-         */
         fun getConnectionInfo(): String =
             if (isConnected) {
                 "Connected to $serverIp:$serverPort"
@@ -351,16 +289,12 @@ class JsonSocketClient
             }
     }
 
-    /**
-     * Get device serial number, using modern API where available
-     */
     @SuppressLint("HardwareIds")
     private fun getDeviceSerial(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 Build.getSerial()
             } catch (e: SecurityException) {
-                // Fallback to ANDROID_ID or a default if permission is not granted
                 "UNKNOWN"
             }
         } else {

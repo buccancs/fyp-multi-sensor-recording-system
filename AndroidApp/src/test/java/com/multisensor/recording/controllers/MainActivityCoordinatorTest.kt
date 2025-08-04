@@ -18,15 +18,10 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/**
- * Unit tests for MainActivityCoordinator
- * Tests basic coordinator scenarios and feature controller integration
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class MainActivityCoordinatorTest {
 
-    // Mocked dependencies
     private val mockPermissionController = mockk<PermissionController>(relaxed = true)
     private val mockUsbController = mockk<UsbController>(relaxed = true)
     private val mockShimmerController = mockk<ShimmerController>(relaxed = true)
@@ -37,18 +32,15 @@ class MainActivityCoordinatorTest {
     private val mockUIController = mockk<UIController>(relaxed = true)
     private val mockMenuController = mockk<MenuController>(relaxed = true)
 
-    // Mocked callback and related objects
     private val mockCallback = mockk<MainActivityCoordinator.CoordinatorCallback>(relaxed = true)
     private val mockContext = mockk<Context>(relaxed = true)
     private val mockView = mockk<View>(relaxed = true)
     private val mockTextView = mockk<TextView>(relaxed = true)
 
-    // System under test
     private lateinit var coordinator: MainActivityCoordinator
 
     @Before
     fun setUp() {
-        // Set up callback mock
         every { mockCallback.getContext() } returns mockContext
         every { mockCallback.getBatteryLevelText() } returns mockTextView
         every { mockCallback.getPcConnectionStatus() } returns mockTextView
@@ -56,7 +48,6 @@ class MainActivityCoordinatorTest {
         every { mockCallback.getThermalConnectionStatus() } returns mockTextView
         every { mockCallback.getThermalConnectionIndicator() } returns mockView
 
-        // Create coordinator instance
         coordinator = MainActivityCoordinator(
             mockPermissionController,
             mockUsbController,
@@ -77,10 +68,8 @@ class MainActivityCoordinatorTest {
 
     @Test
     fun `test coordinator initialization`() {
-        // When
         coordinator.initialize(mockCallback)
 
-        // Then - verify all controllers were set up
         verify { mockPermissionController.setCallback(any()) }
         verify { mockUsbController.setCallback(any()) }
         verify { mockShimmerController.setCallback(any()) }
@@ -94,7 +83,6 @@ class MainActivityCoordinatorTest {
 
     @Test
     fun `test coordinated operations`() {
-        // Given
         coordinator.initialize(mockCallback)
         val mockContext = mockk<Context>()
         val mockIntent = mockk<Intent>()
@@ -102,51 +90,38 @@ class MainActivityCoordinatorTest {
         val mockViewModel = mockk<MainViewModel>()
         val mockLifecycleScope = mockk<LifecycleCoroutineScope>()
 
-        // When - test permission check
         coordinator.checkPermissions(mockContext)
 
-        // Then
         verify { mockPermissionController.checkPermissions(mockContext) }
 
-        // When - test USB device intent handling
         coordinator.handleUsbDeviceIntent(mockContext, mockIntent)
 
-        // Then
         verify { mockUsbController.handleUsbDeviceIntent(mockContext, mockIntent) }
 
-        // When - test recording initialization
         coordinator.initializeRecordingSystem(mockContext, mockTextureView, mockViewModel)
 
-        // Then
         verify { mockRecordingController.initializeRecordingSystem(mockContext, mockTextureView, mockViewModel) }
 
-        // When - test recording start
         coordinator.startRecording(mockContext, mockViewModel)
 
-        // Then
         verify { mockRecordingController.startRecording(mockContext, mockViewModel) }
         verify { mockNetworkController.updateStreamingUI(mockContext, true) }
 
-        // When - test recording stop
         coordinator.stopRecording(mockContext, mockViewModel)
 
-        // Then
         verify { mockRecordingController.stopRecording(mockContext, mockViewModel) }
         verify { mockNetworkController.updateStreamingUI(mockContext, false) }
 
-        // When - test calibration
         coordinator.runCalibration(mockLifecycleScope)
 
-        // Then
         verify { mockCalibrationController.runCalibration(mockLifecycleScope) }
     }
 
     @Test
     fun `test system status summary`() {
-        // Given
         coordinator.initialize(mockCallback)
         val mockContext = mockk<Context>()
-        
+
         every { mockPermissionController.getPermissionRetryCount() } returns 2
         every { mockUsbController.getUsbStatusSummary(mockContext) } returns "USB Status: Connected"
         every { mockShimmerController.getConnectionStatus() } returns "Shimmer Status: Connected"
@@ -154,10 +129,8 @@ class MainActivityCoordinatorTest {
         every { mockCalibrationController.getCalibrationStatus() } returns "Calibration Status: Ready"
         every { mockNetworkController.getStreamingStatus() } returns "Network Status: Connected"
 
-        // When
         val statusSummary = coordinator.getSystemStatusSummary(mockContext)
 
-        // Then
         assertNotNull("Status summary should not be null", statusSummary)
         assertTrue("Status summary should contain coordinator info", statusSummary.contains("Coordinator Initialized: true"))
         assertTrue("Status summary should contain permission info", statusSummary.contains("Permission Retries: 2"))
@@ -166,13 +139,10 @@ class MainActivityCoordinatorTest {
 
     @Test
     fun `test reset all states`() {
-        // Given
         coordinator.initialize(mockCallback)
 
-        // When
         coordinator.resetAllStates()
 
-        // Then
         verify { mockPermissionController.resetState() }
         verify { mockShimmerController.resetState() }
         verify { mockRecordingController.resetState() }
@@ -182,29 +152,23 @@ class MainActivityCoordinatorTest {
 
     @Test
     fun `test cleanup`() {
-        // Given
         coordinator.initialize(mockCallback)
 
-        // When
         coordinator.cleanup()
 
-        // Then
         verify { mockCalibrationController.cleanup() }
     }
 
     @Test
     fun `test menu operations`() {
-        // Given
         coordinator.initialize(mockCallback)
         val mockMenu = mockk<android.view.Menu>()
         val mockActivity = mockk<android.app.Activity>()
         val mockMenuItem = mockk<android.view.MenuItem>()
 
-        // When
         val menuCreated = coordinator.createOptionsMenu(mockMenu, mockActivity)
         val menuHandled = coordinator.handleOptionsItemSelected(mockMenuItem)
 
-        // Then
         verify { mockMenuController.createOptionsMenu(mockMenu, mockActivity) }
         verify { mockMenuController.handleOptionsItemSelected(mockMenuItem) }
     }

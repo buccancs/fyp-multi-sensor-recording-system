@@ -1,26 +1,16 @@
-# .flake8 - Flake8 linting configuration
-# Python code linting rules for consistency and quality
 
 [flake8]
-# Maximum line length to match Black formatting
 max-line-length = 88
 
-# Extend default ignores for compatibility with Black
-extend-ignore = 
-    # E203: Whitespace before ':' (conflicts with Black)
+extend-ignore =
     E203,
-    # W503: Line break before binary operator (conflicts with Black)
     W503,
-    # E501: Line too long (handled by Black)
     E501,
-    # F401: Module imported but unused (handled by isort and mypy)
     F401,
 
-# Maximum cyclomatic complexity
 max-complexity = 10
 
-# Files to exclude from linting
-exclude = 
+exclude =
     .git,
     __pycache__,
     .tox,
@@ -40,40 +30,27 @@ exclude =
     *.pyc,
     *.pyo,
 
-# Directories to include
-include = 
+include =
     PythonApp/src/*.py,
     PythonApp/tests/*.py,
 
-# Enable specific error and warning codes
-select = 
-    # Pyflakes
+select =
     F,
-    # pycodestyle errors
     E,
-    # pycodestyle warnings  
     W,
-    # McCabe complexity
     C90,
 
-# Per-file ignores
 per-file-ignores =
-    # Tests can use assert statements and ignore import order
     tests/*:F401,E402,B011
     test_*.py:F401,E402,B011
     *_test.py:F401,E402,B011
-    # Configuration files can have unused imports
     config/*.py:F401
     settings/*.py:F401
 
-# Count errors and warnings
 count = True
 
-# Show source code for each error
 show-source = True
 
-# Show statistics
 statistics = True
 
-# Format for error messages
 format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s

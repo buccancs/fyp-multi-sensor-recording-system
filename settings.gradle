@@ -1,6 +1,4 @@
-// settings.gradle
 
-// The pluginManagement block must be the first statement in the script.
 pluginManagement {
     repositories {
         google()

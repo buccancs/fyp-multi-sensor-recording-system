@@ -10,18 +10,10 @@ import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
 
-/**
- * Utility class for network connectivity operations using modern Android APIs
- * while maintaining backward compatibility.
- */
 object NetworkUtils {
 
     private const val TAG = "NetworkUtils"
 
-    /**
-     * Check if network is connected using modern APIs where available.
-     * Falls back to deprecated APIs for older Android versions.
-     */
     fun isNetworkConnected(context: Context): Boolean {
         return try {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -35,18 +27,15 @@ object NetworkUtils {
         }
     }
 
-    /**
-     * Get network type information using modern APIs.
-     */
     fun getNetworkType(context: Context): String {
         return try {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork = connectivityManager.activeNetwork
             if (activeNetwork == null) return "Disconnected"
-            
+
             val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
             if (networkCapabilities == null) return "Not Connected"
-            
+
             when {
                 !networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) -> "Not Connected"
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "WiFi"
@@ -62,9 +51,6 @@ object NetworkUtils {
         }
     }
 
-    /**
-     * Get cellular network type for modern API versions
-     */
     private fun getCellularNetworkType(context: Context): String {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

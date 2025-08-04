@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
     id 'com.android.application' version '8.7.3' apply false
@@ -8,7 +7,6 @@ plugins {
     id 'com.google.dagger.hilt.android' version '2.52' apply false
 }
 
-// Task to assemble all components (Android + Python tests)
 tasks.register('assembleAll') {
     group = 'build'
     description = 'Builds Android APK and runs Python tests'
@@ -23,19 +21,16 @@ tasks.register('assembleAll') {
     }
 }
 
-// Task to run Python tests via pytest
 tasks.register('pythonTest', Exec) {
     group = 'verification'
     description = 'Runs Python tests using pytest'
 
     workingDir file('PythonApp')
 
-    // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
     def scriptsDir = isWindows ? 'Scripts' : 'bin'
 
-    // Check if conda environment exists, otherwise use system python
     def condaEnvPath = System.getenv('CONDA_PREFIX')
     if (condaEnvPath && file("${condaEnvPath}/${scriptsDir}/${pythonExe}").exists()) {
         commandLine "${condaEnvPath}/${scriptsDir}/${pythonExe}", '-m', 'pytest', 'tests/', '-v'
@@ -45,7 +40,6 @@ tasks.register('pythonTest', Exec) {
         commandLine pythonExe, '-m', 'pytest', 'tests/', '-v'
     }
 
-    // Ignore exit value to prevent build failure if tests don't exist yet
     ignoreExitValue = true
 
     doFirst {
@@ -61,14 +55,12 @@ tasks.register('pythonTest', Exec) {
     }
 }
 
-// Task to set up Python environment
 tasks.register('setupPythonEnv', Exec) {
     group = 'setup'
     description = 'Sets up Python conda environment from environment.yml'
 
     workingDir file('.')
 
-    // Cross-platform conda command detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def condaCmd = isWindows ? 'conda.exe' : 'conda'
 
@@ -89,7 +81,6 @@ tasks.register('setupPythonEnv', Exec) {
     }
 }
 
-// Task to run code quality checks
 tasks.register('codeQuality') {
     group = 'verification'
     description = 'Runs code quality checks for both Android and Python'
@@ -102,14 +93,12 @@ tasks.register('codeQuality') {
     }
 }
 
-// Task to run Python linting
 tasks.register('pythonLint', Exec) {
     group = 'verification'
     description = 'Runs Python linting with flake8'
 
     workingDir file('PythonApp')
 
-    // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
     def scriptsDir = isWindows ? 'Scripts' : 'bin'
@@ -136,7 +125,6 @@ tasks.register('pythonLint', Exec) {
     }
 }
 
-// Task to build release versions
 tasks.register('buildRelease') {
     group = 'build'
     description = 'Builds release versions of all components'
@@ -149,14 +137,12 @@ tasks.register('buildRelease') {
     }
 }
 
-// Task to package Python application
 tasks.register('pythonPackage', Exec) {
     group = 'build'
     description = 'Packages Python application using PyInstaller'
 
     workingDir file('PythonApp')
 
-    // Cross-platform Python executable detection
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
     def scriptsDir = isWindows ? 'Scripts' : 'bin'
@@ -183,23 +169,22 @@ tasks.register('pythonPackage', Exec) {
     }
 }
 
-// Optimized Test Suite Tasks using common configuration
 def createTestTask = { taskName, description, scriptName ->
     tasks.register(taskName, Exec) {
         group = 'testing'
         description = description
         workingDir file('.')
-        
+
         def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
         def pythonExe = isWindows ? 'python.exe' : 'python'
-        
+
         commandLine pythonExe, scriptName
         ignoreExitValue = true
-        
+
         doFirst {
             println "Running ${description}..."
         }
-        
+
         doLast {
             def status = executionResult.get().exitValue == 0 ? "✓ passed" : "⚠ failed (exit code: ${executionResult.get().exitValue})"
             println "${description} ${status}"
@@ -207,29 +192,26 @@ def createTestTask = { taskName, description, scriptName ->
     }
 }
 
-// Create test tasks using the common configuration
 createTestTask('runRecordingFullTest', 'Recording Functionality Full Test Suite', 'test_recording_full_suite.py')
 createTestTask('runDeviceManagementFullTest', 'Device Management Full Test Suite', 'test_device_management_full_suite.py')
 createTestTask('runCalibrationFullTest', 'Calibration Full Test Suite', 'test_calibration_full_suite.py')
 createTestTask('runFileManagementFullTest', 'File Management Full Test Suite', 'test_file_management_full_suite.py')
 createTestTask('runNetworkConnectivityFullTest', 'Network Connectivity Full Test Suite', 'test_network_connectivity_full_suite.py')
 
-// Additional test tasks using the common configuration  
 createTestTask('runAllFullTestSuites', 'All Full Test Suites using orchestrator', 'test_all_full_suites.py')
 createTestTask('runIDEIntegrationTest', 'IDE Integration Test Suite', 'test_ide_integration_suite.py')
 
-// Python UI Test (different working directory)
 tasks.register('runPythonUITest', Exec) {
     group = 'testing'
     description = 'Runs Python UI Integration Test standalone'
     workingDir file('PythonApp')
-    
+
     def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
     def pythonExe = isWindows ? 'python.exe' : 'python'
-    
+
     commandLine pythonExe, 'test_python_ui_integration.py'
     ignoreExitValue = true
-    
+
     doFirst { println "Running Python UI Integration Test..." }
     doLast {
         def status = executionResult.get().exitValue == 0 ? "✓ passed" : "⚠ failed (exit code: ${executionResult.get().exitValue})"
@@ -237,15 +219,14 @@ tasks.register('runPythonUITest', Exec) {
     }
 }
 
-// Android UI Test (different command structure)
 tasks.register('runIDEIntegrationUITest', Exec) {
     group = 'testing'
     description = 'Runs Android IDE Integration UI Test standalone'
     workingDir file('.')
-    
+
     commandLine './gradlew', ':AndroidApp:connectedAndroidTest', '-Pandroid.testInstrumentationRunnerArguments.class=com.multisensor.recording.IDEIntegrationUITest'
     ignoreExitValue = true
-    
+
     doFirst { println "Running Android IDE Integration UI Test..." }
     doLast {
         def status = executionResult.get().exitValue == 0 ? "✓ passed" : "⚠ failed (exit code: ${executionResult.get().exitValue})"
