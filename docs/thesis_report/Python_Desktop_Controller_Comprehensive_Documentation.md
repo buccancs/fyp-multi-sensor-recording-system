@@ -26,7 +26,12 @@
 5. [Data Processing and Management Framework](#data-processing-and-management-framework)
    - 5.1. [File System Data Formats](#file-system-data-formats)
 
-6. [Operational Procedures and User Guide](#operational-procedures-and-user-guide)
+6. [Web-Based Interface and Remote Control](#web-based-interface-and-remote-control)
+   - 6.1. [Web UI Architecture](#web-ui-architecture)
+   - 6.2. [Real-Time Web Dashboard](#real-time-web-dashboard)
+   - 6.3. [Remote Operation Capabilities](#remote-operation-capabilities)
+
+7. [Operational Procedures and User Guide](#operational-procedures-and-user-guide)
    - 6.1. [System Setup and Installation](#system-setup-and-installation)
    - 6.2. [Recording Session Workflow](#recording-session-workflow)
    - 6.3. [Device Management and Configuration](#device-management-and-configuration)
@@ -383,62 +388,62 @@ The central `Application` class serves as the primary dependency injection conta
 ```python
 class Application(QObject):
     """
-    Central application container implementing comprehensive dependency injection
-    and lifecycle management for all system services and components.
+    Central application container implementing dependency injection
+    for backend services and coordinating system lifecycle.
     """
     
-    def __init__(self, use_simplified_ui=True, config_path=None):
+    def __init__(self, use_simplified_ui=True):
         super().__init__()
-        
-        # Configuration management initialization
-        self.config_manager = ConfigurationManager(config_path)
-        self.logger = self._initialize_logging()
-        
-        # Core service instantiation with dependency injection
-        self._initialize_core_services()
-        self._configure_service_dependencies()
-        self._initialize_user_interface(use_simplified_ui)
-        
-        # System lifecycle management
-        self._register_shutdown_handlers()
-        
-    def _initialize_core_services(self):
-        """Initialize all core system services with proper dependency ordering."""
-        # Infrastructure services (no dependencies)
-        self.error_handler = ErrorHandler()
-        self.performance_monitor = PerformanceMonitor()
-        
-        # Business logic services (infrastructure dependencies)
-        self.session_manager = SessionManager(
-            config_manager=self.config_manager,
-            error_handler=self.error_handler
-        )
-        
-        self.calibration_manager = CalibrationManager(
-            config_manager=self.config_manager,
-            session_manager=self.session_manager
-        )
-        
-        # Communication services (business logic dependencies)
-        self.json_server = JsonSocketServer(
-            session_manager=self.session_manager,
-            error_handler=self.error_handler
-        )
-        
-        # Hardware interface services
-        self.webcam_capture = WebcamCapture(
-            config_manager=self.config_manager,
-            session_manager=self.session_manager
-        )
-        
-        # High-level coordination services
-        self.main_controller = MainController(
-            session_manager=self.session_manager,
-            json_server=self.json_server,
-            webcam_capture=self.webcam_capture,
-            calibration_manager=self.calibration_manager,
-            performance_monitor=self.performance_monitor
-        )
+        self.logger = get_logger(__name__)
+        self.use_simplified_ui = use_simplified_ui
+        self.session_manager = None
+        self.json_server = None
+        self.webcam_capture = None
+        self.stimulus_controller = None
+        self.main_controller = None
+        self.main_window = None
+        self._create_services()
+        self.logger.info("application initialized")
+    
+    def _create_services(self):
+        """Create backend services with dependency injection."""
+        try:
+            # Core business logic services
+            self.session_manager = SessionManager()
+            self.json_server = JsonSocketServer(session_manager=self.session_manager)
+            self.webcam_capture = WebcamCapture()
+            
+            # UI coordination (only for traditional interface)
+            self.stimulus_controller = None
+            if not self.use_simplified_ui:
+                self.main_controller = MainController()
+        except Exception as e:
+            self.logger.error(f"failed to create services: {e}")
+            raise
+    
+    def create_main_window(self):
+        """Create main window and complete dependency injection."""
+        try:
+            if self.use_simplified_ui:
+                # Modern simplified interface (default)
+                self.main_window = SimplifiedMainWindow()
+                self.logger.info("Created simplified main window")
+            else:
+                # Traditional interface with full controller pattern
+                self.main_window = MainWindow()
+                self.stimulus_controller = StimulusController(self.main_window)
+                self.main_controller.inject_dependencies(
+                    session_manager=self.session_manager,
+                    json_server=self.json_server,
+                    webcam_capture=self.webcam_capture,
+                    stimulus_controller=self.stimulus_controller
+                )
+                self.main_window.set_controller(self.main_controller)
+                self.logger.info("Created traditional main window")
+            return self.main_window
+        except Exception as e:
+            self.logger.error(f"failed to create main window: {e}")
+            raise
 ```
 
 **Service Lifecycle Management:**
@@ -493,128 +498,154 @@ def shutdown_services(self):
 
 ### Enhanced GUI Framework and User Experience
 
-The graphical user interface employs a modern, component-based architecture inspired by contemporary research software design principles. The interface prioritizes clarity, efficiency, and research workflow optimization while maintaining professional appearance suitable for academic environments.
+The graphical user interface employs a flexible, multi-modal architecture with three distinct interface options designed for different research scenarios and user preferences. The system supports traditional desktop applications, modern enhanced interfaces, and web-based control panels.
 
 **GUI Architecture Overview:**
 
 ```mermaid
 graph TB
-    subgraph "Enhanced Main Window Architecture"
-        subgraph "Window Management"
-            MAIN_WIN[Enhanced Main Window<br/>Central Coordination]
-            LAYOUT[Responsive Layout<br/>Adaptive Components]
-            THEME[Modern Theme Engine<br/>Professional Styling]
-        end
-        
-        subgraph "Tab-Based Organization"
-            REC_TAB[Recording Tab<br/>Session Control]
-            DEV_TAB[Devices Tab<br/>Connection Management]
-            CAL_TAB[Calibration Tab<br/>Camera Setup]
-            FILE_TAB[Files Tab<br/>Data Management]
+    subgraph "Multi-Modal Interface Architecture"
+        subgraph "Interface Options"
+            SIMP_UI[Simplified UI<br/>Default Modern Interface]
+            ENH_UI[Enhanced UI<br/>PsychoPy-Inspired Design]
+            TRAD_UI[Traditional UI<br/>Full-Feature Interface]
+            WEB_UI[Web UI<br/>Browser-Based Control]
         end
         
         subgraph "Common Components"
             MOD_BTN[Modern Button<br/>Styled Interactions]
             STATUS_IND[Status Indicator<br/>Visual Feedback]
-            PROG_BAR[Progress Indicator<br/>Operation Status]
-            CONN_MGR[Connection Manager<br/>Device Controls]
+            DEV_PANEL[Device Panel<br/>Hardware Status]
+            PREV_PANEL[Preview Panel<br/>Live Video]
         end
         
-        subgraph "Real-Time Monitoring"
-            DEV_GRID[Device Status Grid<br/>Multi-Device Overview]
-            PREVIEW[Preview Streams<br/>Live Video Feeds]
-            METRICS[Performance Metrics<br/>System Health]
-            ALERTS[Alert System<br/>Issue Notifications]
+        subgraph "Specialized Features"
+            CALIB_DLG[Calibration Dialog<br/>Camera Setup]
+            SESSION_REV[Session Review<br/>Data Analysis]
+            STIM_CTRL[Stimulus Controller<br/>Experiment Management]
+            CONNECTION_MGR[Connection Manager<br/>Device Control]
         end
         
-        subgraph "Advanced Features"
-            PROFILE[Recording Profiles<br/>Configuration Templates]
-            BATCH[Batch Operations<br/>Multi-Session Support]
-            EXPORT[Export Tools<br/>Data Conversion]
-            BACKUP[Backup Manager<br/>Data Protection]
+        subgraph "Backend Integration"
+            APP_CONT[Application Container<br/>Service Coordination]
+            JSON_SRV[JsonSocketServer<br/>Device Communication]
+            SESSION_MGR[Session Manager<br/>Recording Control]
+            WEBCAM_CAP[Webcam Capture<br/>PC Recording]
         end
     end
     
-    %% Architecture relationships
-    MAIN_WIN --> LAYOUT
-    LAYOUT --> THEME
+    %% Interface relationships
+    SIMP_UI --> MOD_BTN
+    ENH_UI --> STATUS_IND
+    TRAD_UI --> DEV_PANEL
+    WEB_UI --> PREV_PANEL
     
-    MAIN_WIN --> REC_TAB
-    MAIN_WIN --> DEV_TAB
-    MAIN_WIN --> CAL_TAB
-    MAIN_WIN --> FILE_TAB
+    %% Component usage
+    SIMP_UI --> CALIB_DLG
+    ENH_UI --> SESSION_REV
+    TRAD_UI --> STIM_CTRL
+    WEB_UI --> CONNECTION_MGR
     
-    REC_TAB --> MOD_BTN
-    DEV_TAB --> STATUS_IND
-    CAL_TAB --> PROG_BAR
-    FILE_TAB --> CONN_MGR
-    
-    REC_TAB --> DEV_GRID
-    DEV_TAB --> PREVIEW
-    CAL_TAB --> METRICS
-    FILE_TAB --> ALERTS
-    
-    REC_TAB --> PROFILE
-    DEV_TAB --> BATCH
-    CAL_TAB --> EXPORT
-    FILE_TAB --> BACKUP
+    %% Backend connections
+    SIMP_UI --> APP_CONT
+    ENH_UI --> JSON_SRV
+    TRAD_UI --> SESSION_MGR
+    WEB_UI --> WEBCAM_CAP
     
     %% Styling
-    classDef window fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
-    classDef tab fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
-    classDef component fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
-    classDef monitor fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    classDef feature fill:#fce4ec,stroke:#E91E63,stroke-width:2px
+    classDef interface fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+    classDef component fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
+    classDef feature fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+    classDef backend fill:#fff3e0,stroke:#FF9800,stroke-width:2px
     
-    class MAIN_WIN,LAYOUT,THEME window
-    class REC_TAB,DEV_TAB,CAL_TAB,FILE_TAB tab
-    class MOD_BTN,STATUS_IND,PROG_BAR,CONN_MGR component
-    class DEV_GRID,PREVIEW,METRICS,ALERTS monitor
-    class PROFILE,BATCH,EXPORT,BACKUP feature
+    class SIMP_UI,ENH_UI,TRAD_UI,WEB_UI interface
+    class MOD_BTN,STATUS_IND,DEV_PANEL,PREV_PANEL component
+    class CALIB_DLG,SESSION_REV,STIM_CTRL,CONNECTION_MGR feature
+    class APP_CONT,JSON_SRV,SESSION_MGR,WEBCAM_CAP backend
 ```
 
-**Enhanced Main Window Implementation:**
+**Interface Implementation Details:**
+
+**1. Simplified Main Window (Default)**
+
+The simplified interface provides a clean, modern approach optimized for straightforward research workflows:
+
+```python
+class SimplifiedMainWindow(QMainWindow):
+    """
+    Modern simplified interface optimized for efficient research workflows.
+    This is the default interface providing essential functionality with
+    minimal complexity.
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Multi-Sensor Recording System")
+        self.setMinimumSize(1000, 700)
+        
+        # Initialize core components
+        self.device_server = None
+        self.session_manager = None
+        self.recording_active = False
+        
+        # Setup modern styling and interface
+        self.setup_modern_styling()
+        self.create_simplified_interface()
+        self.setup_automatic_connections()
+```
+
+**2. Enhanced UI with PsychoPy-Inspired Design**
+
+The enhanced interface incorporates design principles from PsychoPy for research-focused usability:
 
 ```python
 class EnhancedMainWindow(QMainWindow):
     """
-    Enhanced main window implementing modern UI design principles
-    with comprehensive research workflow support and adaptive layout.
+    Enhanced main window with PsychoPy-inspired design for advanced
+    research applications requiring comprehensive control and monitoring.
     """
     
-    def __init__(self, main_controller):
+    # Signals for component communication
+    device_connected = pyqtSignal(str)
+    recording_started = pyqtSignal()
+    recording_stopped = pyqtSignal()
+    
+    def __init__(self):
         super().__init__()
-        self.main_controller = main_controller
-        self.setWindowTitle("Multi-Sensor Recording System - Desktop Controller")
-        self.setMinimumSize(1200, 800)
+        self.setWindowTitle("Multi-Sensor Recording System - Enhanced Interface")
+        self.setGeometry(100, 100, 1400, 900)
         
-        # Modern styling and theme application
-        self._apply_modern_styling()
-        self._initialize_layout()
-        self._create_tab_interface()
-        self._setup_status_monitoring()
-        self._configure_real_time_updates()
+        # Initialize advanced components
+        self.device_server = None
+        self.session_manager = None
+        self.recording_active = False
         
-    def _create_tab_interface(self):
-        """Create comprehensive tab-based interface for research workflows."""
-        # Recording Tab - Primary research workflow
-        self.recording_tab = RecordingControlTab(self.main_controller)
-        self.tab_widget.addTab(self.recording_tab, "Recording")
+        # Setup professional styling and comprehensive interface
+        self.setup_professional_styling()
+        self.create_enhanced_interface()
+        self.setup_advanced_connections()
+```
+
+**3. Web-Based Interface**
+
+The web interface provides browser-based control for remote operation and integration with web-based research platforms:
+
+```python
+class WebController:
+    """
+    Web-based interface controller providing browser access to
+    system functionality for remote operation and integration.
+    """
+    
+    def __init__(self, app_instance):
+        self.app = app_instance
+        self.flask_app = Flask(__name__)
+        self.socketio = SocketIO(self.flask_app, cors_allowed_origins="*")
         
-        # Devices Tab - Hardware management
-        self.devices_tab = DeviceManagementTab(self.main_controller)
-        self.tab_widget.addTab(self.devices_tab, "Devices")
-        
-        # Calibration Tab - Camera setup and validation
-        self.calibration_tab = CalibrationTab(self.main_controller)
-        self.tab_widget.addTab(self.calibration_tab, "Calibration")
-        
-        # Files Tab - Data management and export
-        self.files_tab = FileManagementTab(self.main_controller)
-        self.tab_widget.addTab(self.files_tab, "Files")
-        
-        # Connect tab change events for context-sensitive updates
-        self.tab_widget.currentChanged.connect(self._on_tab_changed)
+        # Setup web routes and real-time communication
+        self.setup_web_routes()
+        self.setup_websocket_handlers()
+        self.configure_web_interface()
 ```
 
 ### Network Layer and Device Coordination
@@ -695,62 +726,72 @@ The core network server provides robust TCP socket communication with comprehens
 ```python
 class JsonSocketServer(QThread):
     """
-    Advanced TCP socket server implementing JSON-based communication protocol
-    for coordinating distributed Android devices with fault tolerance and QoS management.
+    JSON Socket Server implementing length-prefixed JSON message protocol
+    for bidirectional communication with Android devices on port 9000.
+    
+    Handles multiple device connections using multi-threading and emits
+    PyQt signals for thread-safe GUI integration.
     """
     
     # Signal definitions for observer pattern communication
-    device_connected = pyqtSignal(str, dict)
-    device_disconnected = pyqtSignal(str)
-    device_status_updated = pyqtSignal(str, dict)
-    preview_frame_received = pyqtSignal(str, bytes)
-    recording_started = pyqtSignal(str)
-    recording_stopped = pyqtSignal(str, dict)
-    error_occurred = pyqtSignal(str, str, str)
+    device_connected = pyqtSignal(str, list)         # device_id, capabilities
+    device_disconnected = pyqtSignal(str)            # device_id
+    status_received = pyqtSignal(str, dict)          # device_id, status_data
+    ack_received = pyqtSignal(str, str, bool, str)   # device_id, cmd, success, message
+    preview_frame_received = pyqtSignal(str, str, str)  # device_id, frame_type, base64_data
+    sensor_data_received = pyqtSignal(str, dict)     # device_id, sensor_data
+    notification_received = pyqtSignal(str, str, dict)  # device_id, event_type, event_data
+    error_occurred = pyqtSignal(str, str)            # device_id, error_message
     
-    def __init__(self, session_manager, port=9000, max_connections=8):
-        super().__init__()
-        self.session_manager = session_manager
-        self.port = port
-        self.max_connections = max_connections
+    def __init__(self, host="0.0.0.0", port=9000, use_newline_protocol=False, session_manager=None):
+        """
+        Initialize the JSON Socket Server.
         
-        # Network configuration
+        Args:
+            host (str): Host address to bind to (default: '0.0.0.0' for all interfaces)
+            port (int): Port number to listen on (default: 9000)
+            use_newline_protocol (bool): Use newline-delimited JSON instead of length-prefixed
+            session_manager: Reference to session manager for recording coordination
+        """
+        super().__init__()
+        self.host = host
+        self.port = port
+        self.use_newline_protocol = use_newline_protocol
+        self.session_manager = session_manager
+        
+        # Server state management
         self.server_socket = None
         self.running = False
-        self.connected_devices = {}
-        self.device_threads = {}
+        self.connected_devices = {}  # device_id -> RemoteDevice
+        self.device_handlers = {}    # device_id -> ClientHandler thread
         
-        # Quality of Service management
-        self.qos_manager = QualityOfServiceManager()
-        self.connection_pool = ConnectionPool(max_connections)
-        self.message_router = MessageRouter()
-        
-        # Performance monitoring
-        self.performance_metrics = NetworkPerformanceMetrics()
+        # Network configuration
+        self.max_connections = 8
+        self.connection_timeout = 30
+        self.message_buffer_size = 4096
         
     def start_server(self):
-        """Initialize and start the TCP socket server with comprehensive error handling."""
+        """Initialize and start the TCP socket server."""
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.server_socket.bind(('0.0.0.0', self.port))
+            self.server_socket.bind((self.host, self.port))
             self.server_socket.listen(self.max_connections)
             
             self.running = True
-            logger.info(f"JsonSocketServer started on port {self.port}")
+            logger.info(f"JsonSocketServer started on {self.host}:{self.port}")
             
-            # Start main server loop
+            # Start main server loop in separate thread
             self.start()
+            return True
             
         except socket.error as e:
             logger.error(f"Failed to start server: {e}")
-            self.error_occurred.emit("server", "START_FAILED", str(e))
+            self.error_occurred.emit("server", f"START_FAILED: {str(e)}")
             return False
-        
-        return True
     
     def run(self):
-        """Main server loop handling incoming connections with proper resource management."""
+        """Main server loop handling incoming connections."""
         while self.running and self.server_socket:
             try:
                 # Accept incoming connections with timeout
@@ -772,44 +813,56 @@ class JsonSocketServer(QThread):
                 logger.info(f"New device connection from {address}")
                 
             except socket.timeout:
-                # Timeout is expected for periodic checking
-                continue
+                continue  # Timeout is expected for periodic checking
             except socket.error as e:
                 if self.running:
                     logger.error(f"Server socket error: {e}")
                 break
     
-    def send_command_to_device(self, device_id: str, command: dict) -> bool:
-        """Send command to specific device with retry logic and error handling."""
+    def send_message_to_device(self, device_id: str, message: dict) -> bool:
+        """
+        Send message to specific device with error handling.
+        
+        Args:
+            device_id: Target device identifier
+            message: Message dictionary to send
+            
+        Returns:
+            True if message sent successfully, False otherwise
+        """
         if device_id not in self.connected_devices:
             logger.error(f"Device {device_id} not connected")
             return False
         
-        device_handler = self.device_threads.get(device_id)
+        device_handler = self.device_handlers.get(device_id)
         if not device_handler:
             logger.error(f"No handler found for device {device_id}")
             return False
         
         try:
-            # Add QoS management
-            prioritized_command = self.qos_manager.prioritize_message(command)
-            
-            # Send with retry logic
-            return device_handler.send_message_with_retry(prioritized_command)
-            
+            return device_handler.send_message(message)
         except Exception as e:
-            logger.error(f"Failed to send command to {device_id}: {e}")
-            self.error_occurred.emit(device_id, "SEND_FAILED", str(e))
+            logger.error(f"Failed to send message to {device_id}: {e}")
+            self.error_occurred.emit(device_id, f"SEND_FAILED: {str(e)}")
             return False
     
-    def broadcast_command(self, command: dict, exclude_devices: List[str] = None) -> Dict[str, bool]:
-        """Broadcast command to all connected devices with individual result tracking."""
+    def broadcast_message(self, message: dict, exclude_devices: List[str] = None) -> Dict[str, bool]:
+        """
+        Broadcast message to all connected devices.
+        
+        Args:
+            message: Message dictionary to broadcast
+            exclude_devices: List of device IDs to exclude from broadcast
+            
+        Returns:
+            Dictionary mapping device_id to success status
+        """
         exclude_devices = exclude_devices or []
         results = {}
         
         for device_id in self.connected_devices:
             if device_id not in exclude_devices:
-                results[device_id] = self.send_command_to_device(device_id, command)
+                results[device_id] = self.send_message_to_device(device_id, message)
         
         return results
 ```
@@ -1060,6 +1113,279 @@ The protocol defines comprehensive message types covering device management, ses
 ### USB Device Integration Protocol
 
 The system provides comprehensive USB device management for webcams and other peripherals through native system APIs with cross-platform compatibility.
+
+### Shimmer Sensor Integration Protocol
+
+The Python Desktop Controller includes comprehensive support for Shimmer wireless physiological sensors, representing a significant enhancement to the multi-modal sensing capabilities. The Shimmer integration provides both direct PC connections and Android-mediated connections for maximum flexibility.
+
+**Shimmer Integration Architecture:**
+
+```mermaid
+graph TB
+    subgraph "Shimmer Integration System"
+        subgraph "Connection Types"
+            DIRECT[Direct PC Connection<br/>Bluetooth/USB]
+            ANDROID_MED[Android-Mediated<br/>Network Protocol]
+            HYBRID[Hybrid Mode<br/>Redundant Connections]
+        end
+        
+        subgraph "Shimmer Manager"
+            DISCOVERY[Device Discovery<br/>Bluetooth Scanning]
+            PAIRING[Device Pairing<br/>Authentication]
+            CONFIG[Configuration<br/>Sensor Settings]
+            STREAMING[Data Streaming<br/>Real-time Collection]
+        end
+        
+        subgraph "Data Processing"
+            RAW_DATA[Raw Sensor Data<br/>GSR, Accelerometer, etc.]
+            PROCESSING[Signal Processing<br/>Filtering, Calibration]
+            STORAGE[Data Storage<br/>CSV Format]
+            SYNC[Synchronization<br/>Temporal Alignment]
+        end
+        
+        subgraph "Quality Control"
+            SIGNAL_QC[Signal Quality<br/>Real-time Assessment]
+            ERROR_HANDLE[Error Handling<br/>Connection Recovery]
+            VALIDATION[Data Validation<br/>Integrity Checks]
+            MONITORING[Health Monitoring<br/>Device Status]
+        end
+    end
+    
+    %% Connection flows
+    DIRECT --> DISCOVERY
+    ANDROID_MED --> PAIRING
+    HYBRID --> CONFIG
+    
+    %% Data flow
+    DISCOVERY --> RAW_DATA
+    PAIRING --> PROCESSING
+    CONFIG --> STORAGE
+    STREAMING --> SYNC
+    
+    %% Quality control
+    RAW_DATA --> SIGNAL_QC
+    PROCESSING --> ERROR_HANDLE
+    STORAGE --> VALIDATION
+    SYNC --> MONITORING
+    
+    %% Styling
+    classDef connection fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+    classDef manager fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
+    classDef data fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+    classDef quality fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+    
+    class DIRECT,ANDROID_MED,HYBRID connection
+    class DISCOVERY,PAIRING,CONFIG,STREAMING manager
+    class RAW_DATA,PROCESSING,STORAGE,SYNC data
+    class SIGNAL_QC,ERROR_HANDLE,VALIDATION,MONITORING quality
+```
+
+**Enhanced ShimmerManager Implementation:**
+
+```python
+class ShimmerManager:
+    """
+    Comprehensive Shimmer sensor management for multi-modal physiological recording.
+    
+    Supports both direct PC connections via Bluetooth and Android-mediated
+    connections through the network protocol for maximum deployment flexibility.
+    """
+    
+    def __init__(self, session_manager=None):
+        """Initialize the Shimmer manager with comprehensive configuration."""
+        self.logger = get_logger(__name__)
+        self.session_manager = session_manager
+        
+        # Connection management
+        self.connected_devices = {}
+        self.device_configs = {}
+        self.data_streams = {}
+        
+        # Data collection
+        self.recording_active = False
+        self.data_queues = {}
+        self.csv_writers = {}
+        
+        # Android integration
+        self.android_device_manager = AndroidDeviceManager()
+        self.pc_server = PCServer()
+        
+        # Initialize Shimmer library
+        self._initialize_shimmer_library()
+        
+    def discover_direct_devices(self) -> List[Dict[str, Any]]:
+        """
+        Discover Shimmer devices available for direct PC connection.
+        
+        Returns:
+            List of discovered device information dictionaries
+        """
+        discovered_devices = []
+        
+        try:
+            # Bluetooth device discovery
+            bluetooth_devices = self._scan_bluetooth_devices()
+            
+            for device in bluetooth_devices:
+                if self._is_shimmer_device(device):
+                    device_info = {
+                        'device_id': device['address'],
+                        'device_name': device['name'],
+                        'connection_type': 'bluetooth_direct',
+                        'signal_strength': device.get('rssi', -100),
+                        'device_type': 'shimmer3_gsr_plus',
+                        'capabilities': ['gsr', 'accelerometer', 'temperature']
+                    }
+                    discovered_devices.append(device_info)
+                    
+        except Exception as e:
+            self.logger.error(f"Direct device discovery failed: {e}")
+            
+        return discovered_devices
+    
+    def connect_device(self, device_id: str, connection_type: str = 'auto') -> bool:
+        """
+        Connect to a Shimmer device using specified connection type.
+        
+        Args:
+            device_id: Unique device identifier
+            connection_type: 'direct', 'android', or 'auto'
+            
+        Returns:
+            True if connection successful, False otherwise
+        """
+        try:
+            if connection_type == 'direct':
+                return self._connect_direct_device(device_id)
+            elif connection_type == 'android':
+                return self._connect_android_mediated_device(device_id)
+            elif connection_type == 'auto':
+                # Try direct first, fallback to Android-mediated
+                if self._connect_direct_device(device_id):
+                    return True
+                return self._connect_android_mediated_device(device_id)
+            else:
+                raise ValueError(f"Invalid connection type: {connection_type}")
+                
+        except Exception as e:
+            self.logger.error(f"Failed to connect to device {device_id}: {e}")
+            return False
+    
+    def start_data_collection(self, session_id: str) -> bool:
+        """
+        Start data collection from all connected Shimmer devices.
+        
+        Args:
+            session_id: Recording session identifier
+            
+        Returns:
+            True if data collection started successfully
+        """
+        if not self.connected_devices:
+            self.logger.warning("No Shimmer devices connected")
+            return False
+        
+        try:
+            # Setup data storage
+            self._setup_data_storage(session_id)
+            
+            # Configure and start streaming for each device
+            for device_id, device in self.connected_devices.items():
+                self._configure_device_sensors(device_id)
+                self._start_device_streaming(device_id)
+            
+            self.recording_active = True
+            self.logger.info(f"Shimmer data collection started for session {session_id}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to start data collection: {e}")
+            return False
+    
+    def _setup_data_storage(self, session_id: str):
+        """Setup CSV writers for data storage."""
+        if self.session_manager:
+            session_dir = self.session_manager.get_session_directory(session_id)
+            shimmer_dir = os.path.join(session_dir, 'shimmer')
+            os.makedirs(shimmer_dir, exist_ok=True)
+            
+            for device_id in self.connected_devices:
+                csv_filename = os.path.join(shimmer_dir, f'{device_id}_data.csv')
+                csv_file = open(csv_filename, 'w', newline='')
+                csv_writer = csv.writer(csv_file)
+                
+                # Write header
+                csv_writer.writerow([
+                    'timestamp', 'gsr_raw', 'gsr_resistance', 
+                    'accel_x', 'accel_y', 'accel_z',
+                    'skin_temperature', 'device_temperature'
+                ])
+                
+                self.csv_writers[device_id] = csv_writer
+```
+
+**Data Processing and Quality Control:**
+
+```python
+def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
+    """
+    Process incoming Shimmer sensor data with quality control.
+    
+    Args:
+        device_id: Source device identifier
+        raw_data: Raw sensor data from Shimmer device
+    """
+    try:
+        # Extract sensor values
+        gsr_raw = raw_data.get('gsr_raw', 0)
+        gsr_resistance = self._calculate_gsr_resistance(gsr_raw)
+        
+        accel_data = raw_data.get('accelerometer', {})
+        accel_x = accel_data.get('x', 0)
+        accel_y = accel_data.get('y', 0)
+        accel_z = accel_data.get('z', 0)
+        
+        temperature_data = raw_data.get('temperature', {})
+        skin_temp = temperature_data.get('skin', 0)
+        device_temp = temperature_data.get('device', 0)
+        
+        # Quality assessment
+        signal_quality = self._assess_signal_quality(device_id, raw_data)
+        
+        # Data validation
+        if self._validate_data_integrity(raw_data):
+            # Store processed data
+            processed_data = {
+                'timestamp': datetime.now().isoformat(),
+                'gsr_raw': gsr_raw,
+                'gsr_resistance': gsr_resistance,
+                'accel_x': accel_x,
+                'accel_y': accel_y,
+                'accel_z': accel_z,
+                'skin_temperature': skin_temp,
+                'device_temperature': device_temp,
+                'signal_quality': signal_quality
+            }
+            
+            # Write to CSV
+            if device_id in self.csv_writers:
+                self.csv_writers[device_id].writerow([
+                    processed_data['timestamp'],
+                    processed_data['gsr_raw'],
+                    processed_data['gsr_resistance'],
+                    processed_data['accel_x'],
+                    processed_data['accel_y'],
+                    processed_data['accel_z'],
+                    processed_data['skin_temperature'],
+                    processed_data['device_temperature']
+                ])
+            
+            # Emit real-time data signal
+            self.data_received.emit(device_id, processed_data)
+        
+    except Exception as e:
+        self.logger.error(f"Error processing Shimmer data from {device_id}: {e}")
+```
 
 **Webcam Device Discovery and Configuration:**
 
@@ -1408,6 +1734,309 @@ recordings/
 }
 ```
 
+
+---
+
+## Web-Based Interface and Remote Control
+
+The Python Desktop Controller includes a comprehensive web-based interface that enables remote operation, monitoring, and control of the multi-sensor recording system through standard web browsers. This capability significantly extends the system's operational flexibility for distributed research scenarios and remote collaboration.
+
+### Web UI Architecture
+
+The web interface employs a modern Flask-based architecture with real-time WebSocket communication for live data streaming and responsive control:
+
+```mermaid
+graph TB
+    subgraph "Web Interface Architecture"
+        subgraph "Frontend Components"
+            DASHBOARD[Web Dashboard<br/>Real-time Monitoring]
+            CONTROL[Device Control Panel<br/>Remote Operation]
+            STREAMING[Live Video Streams<br/>Multi-device Preview]
+            SETTINGS[Configuration Interface<br/>System Settings]
+        end
+        
+        subgraph "Backend Services"
+            FLASK_APP[Flask Application<br/>HTTP Server]
+            SOCKETIO[Socket.IO Server<br/>Real-time Communication]
+            WEB_CTRL[Web Controller<br/>Interface Coordination]
+            API_LAYER[REST API Layer<br/>System Integration]
+        end
+        
+        subgraph "Integration Layer"
+            APP_BRIDGE[Application Bridge<br/>Desktop Integration]
+            JSON_SRV[JsonSocketServer<br/>Device Communication]
+            SESSION_MGR[Session Manager<br/>Recording Control]
+            DATA_MGR[Data Manager<br/>File Operations]
+        end
+        
+        subgraph "Client Access"
+            BROWSER[Web Browser<br/>Any Device]
+            MOBILE[Mobile Access<br/>Tablet/Phone]
+            REMOTE[Remote Access<br/>External Networks]
+        end
+    end
+    
+    %% Frontend to Backend connections
+    DASHBOARD --> FLASK_APP
+    CONTROL --> SOCKETIO
+    STREAMING --> WEB_CTRL
+    SETTINGS --> API_LAYER
+    
+    %% Backend to Integration connections
+    FLASK_APP --> APP_BRIDGE
+    SOCKETIO --> JSON_SRV
+    WEB_CTRL --> SESSION_MGR
+    API_LAYER --> DATA_MGR
+    
+    %% Client connections
+    BROWSER --> DASHBOARD
+    MOBILE --> CONTROL
+    REMOTE --> STREAMING
+    
+    %% Styling
+    classDef frontend fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+    classDef backend fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
+    classDef integration fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+    classDef client fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+    
+    class DASHBOARD,CONTROL,STREAMING,SETTINGS frontend
+    class FLASK_APP,SOCKETIO,WEB_CTRL,API_LAYER backend
+    class APP_BRIDGE,JSON_SRV,SESSION_MGR,DATA_MGR integration
+    class BROWSER,MOBILE,REMOTE client
+```
+
+**Web Controller Implementation:**
+
+```python
+class WebController:
+    """
+    Comprehensive web interface controller providing browser-based access
+    to the multi-sensor recording system with real-time monitoring and control.
+    """
+    
+    def __init__(self, app_instance):
+        """Initialize web controller with desktop application integration."""
+        self.app = app_instance
+        self.flask_app = Flask(__name__)
+        self.socketio = SocketIO(self.flask_app, cors_allowed_origins="*")
+        
+        # Web server configuration
+        self.host = "0.0.0.0"
+        self.port = 5000
+        self.debug_mode = False
+        
+        # Integration references
+        self.session_manager = app_instance.session_manager
+        self.json_server = app_instance.json_server
+        self.webcam_capture = app_instance.webcam_capture
+        
+        # Setup web interface
+        self.setup_web_routes()
+        self.setup_websocket_handlers()
+        self.setup_real_time_updates()
+        
+    def setup_web_routes(self):
+        """Configure HTTP routes for web interface."""
+        
+        @self.flask_app.route('/')
+        def dashboard():
+            """Main dashboard interface."""
+            return render_template('dashboard.html', 
+                                 system_status=self.get_system_status(),
+                                 connected_devices=self.get_connected_devices())
+        
+        @self.flask_app.route('/api/devices')
+        def api_devices():
+            """REST API endpoint for device information."""
+            devices = {}
+            if self.json_server:
+                devices = {
+                    device_id: device.get_device_info()
+                    for device_id, device in self.json_server.connected_devices.items()
+                }
+            return jsonify(devices)
+        
+        @self.flask_app.route('/api/recording/start', methods=['POST'])
+        def api_start_recording():
+            """REST API endpoint to start recording session."""
+            try:
+                session_data = request.get_json()
+                session_id = self.session_manager.create_session(
+                    session_data.get('session_name', 'web_session'),
+                    session_data.get('researcher_id', 'web_user')
+                )
+                
+                # Start recording on all connected devices
+                if self.json_server:
+                    start_command = {
+                        'command': 'start_recording',
+                        'session_id': session_id,
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    results = self.json_server.broadcast_message(start_command)
+                    
+                return jsonify({
+                    'success': True,
+                    'session_id': session_id,
+                    'device_results': results
+                })
+                
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)}), 500
+        
+        @self.flask_app.route('/api/recording/stop', methods=['POST'])
+        def api_stop_recording():
+            """REST API endpoint to stop recording session."""
+            try:
+                if self.json_server:
+                    stop_command = {
+                        'command': 'stop_recording',
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    results = self.json_server.broadcast_message(stop_command)
+                    
+                return jsonify({
+                    'success': True,
+                    'device_results': results
+                })
+                
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)}), 500
+    
+    def setup_websocket_handlers(self):
+        """Configure WebSocket handlers for real-time communication."""
+        
+        @self.socketio.on('connect')
+        def handle_connect():
+            """Handle new WebSocket connection."""
+            logger.info(f"Web client connected: {request.sid}")
+            emit('connection_status', {'status': 'connected'})
+            
+            # Send initial system state
+            emit('system_update', {
+                'connected_devices': self.get_connected_devices(),
+                'recording_status': self.get_recording_status(),
+                'system_health': self.get_system_health()
+            })
+        
+        @self.socketio.on('disconnect')
+        def handle_disconnect():
+            """Handle WebSocket disconnection."""
+            logger.info(f"Web client disconnected: {request.sid}")
+        
+        @self.socketio.on('device_command')
+        def handle_device_command(data):
+            """Handle device command from web interface."""
+            try:
+                device_id = data.get('device_id')
+                command = data.get('command')
+                parameters = data.get('parameters', {})
+                
+                if self.json_server and device_id:
+                    message = {
+                        'command': command,
+                        'parameters': parameters,
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    success = self.json_server.send_message_to_device(device_id, message)
+                    
+                    emit('command_result', {
+                        'device_id': device_id,
+                        'command': command,
+                        'success': success
+                    })
+                    
+            except Exception as e:
+                emit('error', {'message': str(e)})
+```
+
+### Real-Time Web Dashboard
+
+The web dashboard provides comprehensive real-time monitoring and control capabilities:
+
+**Dashboard Features:**
+
+```python
+class WebDashboard:
+    """
+    Real-time web dashboard providing comprehensive system monitoring
+    and control capabilities through web browsers.
+    """
+    
+    def get_dashboard_data(self):
+        """Compile comprehensive dashboard data for web interface."""
+        return {
+            'system_overview': {
+                'total_devices': len(self.get_connected_devices()),
+                'recording_active': self.is_recording_active(),
+                'uptime': self.get_system_uptime(),
+                'cpu_usage': psutil.cpu_percent(),
+                'memory_usage': psutil.virtual_memory().percent,
+                'disk_usage': psutil.disk_usage('/').percent
+            },
+            'device_status': {
+                device_id: {
+                    'name': device.device_name,
+                    'connection_quality': device.get_connection_quality(),
+                    'battery_level': device.status.get('battery_level'),
+                    'recording_status': device.status.get('recording_status'),
+                    'last_seen': device.last_seen
+                }
+                for device_id, device in self.get_connected_devices().items()
+            },
+            'session_information': {
+                'current_session': self.session_manager.current_session,
+                'session_duration': self.get_session_duration(),
+                'data_volume': self.get_data_volume(),
+                'quality_metrics': self.get_quality_metrics()
+            },
+            'recent_events': self.get_recent_events(limit=50),
+            'performance_metrics': self.get_performance_metrics()
+        }
+```
+
+### Remote Operation Capabilities
+
+The web interface enables comprehensive remote operation including:
+
+1. **Remote Recording Control**: Start/stop recording sessions from any web browser
+2. **Device Management**: Monitor and control individual device settings
+3. **Live Video Streaming**: View live preview streams from connected cameras
+4. **System Monitoring**: Real-time system health and performance monitoring
+5. **Session Management**: Create, monitor, and manage recording sessions
+6. **Data Access**: Browse and download recorded data files
+7. **Configuration Management**: Adjust system settings and device configurations
+
+**Security and Access Control:**
+
+```python
+class WebSecurityManager:
+    """Security management for web interface access."""
+    
+    def __init__(self):
+        self.authorized_ips = set()
+        self.session_tokens = {}
+        self.access_log = []
+    
+    def authenticate_request(self, request):
+        """Authenticate incoming web requests."""
+        client_ip = request.remote_addr
+        
+        # Log access attempt
+        self.access_log.append({
+            'timestamp': datetime.now().isoformat(),
+            'ip_address': client_ip,
+            'user_agent': request.headers.get('User-Agent'),
+            'endpoint': request.endpoint
+        })
+        
+        # Check IP authorization
+        if self.authorized_ips and client_ip not in self.authorized_ips:
+            logger.warning(f"Unauthorized access attempt from {client_ip}")
+            return False
+        
+        return True
+```
 
 ---
 
@@ -1884,45 +2513,50 @@ class BatchSessionManager:
 
 ## Testing and Validation Framework
 
-The Python Desktop Controller implements a comprehensive testing strategy specifically designed for research software validation, ensuring reliability, accuracy, and reproducibility essential for scientific measurement applications.
+The Python Desktop Controller implements a comprehensive testing strategy specifically designed for research software validation, ensuring reliability, accuracy, and reproducibility essential for scientific measurement applications. The current implementation includes over 75 test files covering all system components.
 
 ### Comprehensive Testing Strategy
 
-The testing framework employs multiple validation layers addressing both technical functionality and research-specific requirements.
+The testing framework employs multiple validation layers addressing both technical functionality and research-specific requirements with extensive automation and continuous integration support.
 
 **Multi-Layered Testing Architecture:**
 
 ```mermaid
 graph TB
-    subgraph "Testing Framework Architecture"
+    subgraph "Comprehensive Testing Framework"
         subgraph "Unit Testing Layer"
             COMP_TEST[Component Tests<br/>Individual Function Validation]
             SER_TEST[Service Tests<br/>Business Logic Verification]
             UTIL_TEST[Utility Tests<br/>Helper Function Validation]
+            SHIMMER_TEST[Shimmer Tests<br/>Sensor Integration Validation]
         end
         
         subgraph "Integration Testing Layer"
             INTER_TEST[Interface Tests<br/>Component Interaction]
             NET_TEST[Network Tests<br/>Communication Validation]
             DATA_TEST[Data Flow Tests<br/>Pipeline Verification]
+            WEB_TEST[Web Interface Tests<br/>Browser Integration]
         end
         
         subgraph "System Testing Layer"
             E2E_TEST[End-to-End Tests<br/>Complete Workflow]
             PERF_TEST[Performance Tests<br/>Resource Utilization]
             STRESS_TEST[Stress Tests<br/>Load Validation]
+            CALIB_TEST[Calibration Tests<br/>OpenCV Integration]
         end
         
         subgraph "Research-Specific Testing"
             ACC_TEST[Accuracy Tests<br/>Measurement Precision]
             SYNC_TEST[Synchronization Tests<br/>Timing Validation]
             QUAL_TEST[Quality Tests<br/>Data Integrity]
+            SESSION_TEST[Session Tests<br/>Recording Validation]
         end
         
-        subgraph "Validation Reporting"
-            COV_REP[Coverage Reports<br/>Test Completeness]
-            PERF_REP[Performance Reports<br/>Benchmark Results]
-            QUAL_REP[Quality Reports<br/>Research Compliance]
+        subgraph "Automated Testing Infrastructure"
+            CI_PIPELINE[CI Pipeline<br/>GitHub Actions]
+            TEST_RUNNER[Enhanced Test Runner<br/>Comprehensive Reporting]
+            COVERAGE[Coverage Analysis<br/>Code Quality Metrics]
+            BENCH_SUITE[Benchmark Suite<br/>Performance Tracking]
         end
     end
     
@@ -1930,314 +2564,270 @@ graph TB
     COMP_TEST --> INTER_TEST
     SER_TEST --> NET_TEST
     UTIL_TEST --> DATA_TEST
+    SHIMMER_TEST --> WEB_TEST
     
     INTER_TEST --> E2E_TEST
     NET_TEST --> PERF_TEST
     DATA_TEST --> STRESS_TEST
+    WEB_TEST --> CALIB_TEST
     
     E2E_TEST --> ACC_TEST
     PERF_TEST --> SYNC_TEST
     STRESS_TEST --> QUAL_TEST
+    CALIB_TEST --> SESSION_TEST
     
-    ACC_TEST --> COV_REP
-    SYNC_TEST --> PERF_REP
-    QUAL_TEST --> QUAL_REP
+    ACC_TEST --> CI_PIPELINE
+    SYNC_TEST --> TEST_RUNNER
+    QUAL_TEST --> COVERAGE
+    SESSION_TEST --> BENCH_SUITE
     
     %% Styling
     classDef unit fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef integration fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef system fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef research fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    classDef reporting fill:#fce4ec,stroke:#E91E63,stroke-width:2px
+    classDef automation fill:#fce4ec,stroke:#E91E63,stroke-width:2px
     
-    class COMP_TEST,SER_TEST,UTIL_TEST unit
-    class INTER_TEST,NET_TEST,DATA_TEST integration
-    class E2E_TEST,PERF_TEST,STRESS_TEST system
-    class ACC_TEST,SYNC_TEST,QUAL_TEST research
-    class COV_REP,PERF_REP,QUAL_REP reporting
+    class COMP_TEST,SER_TEST,UTIL_TEST,SHIMMER_TEST unit
+    class INTER_TEST,NET_TEST,DATA_TEST,WEB_TEST integration
+    class E2E_TEST,PERF_TEST,STRESS_TEST,CALIB_TEST system
+    class ACC_TEST,SYNC_TEST,QUAL_TEST,SESSION_TEST research
+    class CI_PIPELINE,TEST_RUNNER,COVERAGE,BENCH_SUITE automation
 ```
 
-**Test Execution Framework:**
+**Enhanced Test Execution Framework:**
 
 ```python
-class ComprehensiveTestSuite:
+class EnhancedTestRunner:
     """
-    Comprehensive testing framework for research software validation
-    with performance monitoring and quality assessment.
+    Comprehensive test runner with detailed reporting and analysis
+    supporting over 75 test files across all system components.
     """
     
     def __init__(self):
-        self.test_runner = TestRunner()
-        self.performance_monitor = PerformanceMonitor()
-        self.coverage_analyzer = CoverageAnalyzer()
-        self.quality_assessor = QualityAssessor()
-        
-    def execute_full_test_suite(self):
-        """
-        Execute complete test suite with comprehensive validation
-        and detailed reporting for research compliance.
-        """
-        test_results = {
-            "execution_timestamp": datetime.now().isoformat(),
-            "test_environment": self._get_environment_info(),
-            "test_categories": {},
-            "overall_results": {},
-            "compliance_assessment": {}
+        self.results = {}
+        self.start_time = None
+        self.end_time = None
+        self.test_categories = {
+            'calibration': 'tests.test_calibration_comprehensive',
+            'shimmer': 'tests.test_shimmer_comprehensive',
+            'integration': 'tests.test_system_integration',
+            'recording_session': 'tests.test_comprehensive_recording_session',
+            'network_resilience': 'tests.test_network_resilience',
+            'ui_integration': 'tests.test_enhanced_ui_implementation',
+            'dual_webcam': 'tests.test_dual_webcam_system',
+            'stress_testing': 'tests.test_enhanced_stress_testing'
         }
         
-        # Unit Tests - Component validation
-        test_results["test_categories"]["unit_tests"] = self._run_unit_tests()
+    def run_comprehensive_test_suite(self):
+        """
+        Execute complete test suite with detailed reporting and
+        performance analysis across all system components.
+        """
+        self.start_time = datetime.now()
+        logger.info("=== Starting Comprehensive Test Suite ===")
         
-        # Integration Tests - System interaction
-        test_results["test_categories"]["integration_tests"] = self._run_integration_tests()
+        # Test execution results
+        test_results = {
+            'execution_timestamp': self.start_time.isoformat(),
+            'test_environment': self._get_test_environment(),
+            'test_categories': {},
+            'overall_metrics': {},
+            'performance_benchmarks': {},
+            'coverage_analysis': {},
+            'research_validation': {}
+        }
         
-        # System Tests - End-to-end validation
-        test_results["test_categories"]["system_tests"] = self._run_system_tests()
+        # Execute test categories
+        for category, module_path in self.test_categories.items():
+            logger.info(f"Running {category} tests...")
+            try:
+                category_results = self._run_test_category(category, module_path)
+                test_results['test_categories'][category] = category_results
+                
+            except Exception as e:
+                logger.error(f"Failed to run {category} tests: {e}")
+                test_results['test_categories'][category] = {
+                    'success': False,
+                    'error': str(e),
+                    'tests_run': 0,
+                    'failures': 1
+                }
         
-        # Research-Specific Tests - Scientific validation
-        test_results["test_categories"]["research_tests"] = self._run_research_tests()
+        # Performance benchmarking
+        test_results['performance_benchmarks'] = self._run_performance_benchmarks()
         
-        # Performance Analysis
-        test_results["performance_analysis"] = self._analyze_performance()
+        # Coverage analysis
+        test_results['coverage_analysis'] = self._analyze_test_coverage()
         
-        # Coverage Assessment
-        test_results["coverage_analysis"] = self._assess_test_coverage()
-        
-        # Quality Validation
-        test_results["quality_validation"] = self._validate_research_quality()
+        # Research-specific validation
+        test_results['research_validation'] = self._run_research_validation()
         
         # Generate comprehensive report
-        self._generate_validation_report(test_results)
+        self.end_time = datetime.now()
+        test_results['total_duration'] = (self.end_time - self.start_time).total_seconds()
+        test_results['overall_metrics'] = self._calculate_overall_metrics(test_results)
         
+        self._generate_comprehensive_report(test_results)
         return test_results
     
-    def _run_research_tests(self):
-        """Execute research-specific validation tests for scientific compliance."""
-        research_tests = {
-            "synchronization_accuracy": self._test_synchronization_precision(),
-            "measurement_accuracy": self._test_measurement_precision(),
-            "data_integrity": self._test_data_integrity(),
-            "temporal_consistency": self._test_temporal_consistency(),
-            "cross_device_coordination": self._test_device_coordination(),
-            "quality_metrics": self._test_quality_metrics()
-        }
+    def _run_test_category(self, category: str, module_path: str):
+        """Execute tests for a specific category with detailed metrics."""
+        category_start = time.time()
         
-        return research_tests
-    
-    def _test_synchronization_precision(self):
-        """
-        Validate synchronization accuracy across all connected devices
-        with statistical analysis and confidence intervals.
-        """
-        precision_results = {
-            "test_description": "Multi-device synchronization precision validation",
-            "target_precision_ms": 5.0,
-            "test_iterations": 100,
-            "measurements": [],
-            "statistical_analysis": {}
-        }
-        
-        for iteration in range(precision_results["test_iterations"]):
-            # Simulate synchronized recording start
-            sync_command = {
-                "message_type": "start_recording",
-                "timestamp": time.time(),
-                "sync_timestamp": time.time() + 5.0  # 5 second delay
+        try:
+            # Dynamic test discovery and execution
+            if category == 'calibration':
+                from tests.test_calibration_comprehensive import run_calibration_tests
+                results = run_calibration_tests()
+                
+            elif category == 'shimmer':
+                from tests.test_shimmer_comprehensive import run_shimmer_tests
+                results = run_shimmer_tests()
+                
+            elif category == 'integration':
+                from tests.test_system_integration import run_integration_tests
+                results = run_integration_tests()
+                
+            elif category == 'recording_session':
+                from tests.test_comprehensive_recording_session import run_comprehensive_recording_session_test
+                results = run_comprehensive_recording_session_test()
+                
+            else:
+                # Generic test runner for other categories
+                results = self._run_generic_tests(module_path)
+            
+            category_duration = time.time() - category_start
+            
+            return {
+                'success': True,
+                'duration': category_duration,
+                'tests_run': results.get('tests_run', 0),
+                'failures': results.get('failures', 0),
+                'errors': results.get('errors', 0),
+                'skipped': results.get('skipped', 0),
+                'details': results.get('details', [])
             }
             
-            # Measure actual synchronization accuracy
-            device_responses = self._send_sync_command(sync_command)
-            precision_measurement = self._calculate_sync_precision(device_responses)
-            precision_results["measurements"].append(precision_measurement)
-        
-        # Statistical analysis
-        measurements = np.array(precision_results["measurements"])
-        precision_results["statistical_analysis"] = {
-            "mean_precision_ms": float(np.mean(measurements)),
-            "std_deviation_ms": float(np.std(measurements)),
-            "min_precision_ms": float(np.min(measurements)),
-            "max_precision_ms": float(np.max(measurements)),
-            "percentile_95_ms": float(np.percentile(measurements, 95)),
-            "target_achieved": float(np.mean(measurements)) <= precision_results["target_precision_ms"]
-        }
-        
-        return precision_results
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e),
+                'duration': time.time() - category_start,
+                'tests_run': 0,
+                'failures': 1
+            }
 ```
 
 ### Performance Analysis and Benchmarking
 
-The system includes comprehensive performance monitoring and benchmarking capabilities designed to validate research-grade operation under diverse conditions.
-
-**Performance Metrics Framework:**
+The system includes comprehensive performance monitoring and benchmarking capabilities designed to validate research-grade operation under diverse conditions:
 
 ```python
-class PerformanceMonitor:
+class PerformanceBenchmarkSuite:
     """
-    Comprehensive performance monitoring system for research software
-    validation with real-time metrics and historical analysis.
+    Comprehensive performance benchmarking for research software validation
+    with automated threshold checking and regression detection.
     """
     
-    def __init__(self):
-        self.metrics_collector = MetricsCollector()
-        self.baseline_metrics = self._load_baseline_metrics()
-        self.performance_thresholds = self._load_performance_thresholds()
-        
-    def monitor_recording_session_performance(self, session_id):
-        """
-        Monitor comprehensive performance metrics during recording session
-        with real-time validation and alert generation.
-        """
-        performance_data = {
-            "session_id": session_id,
-            "monitoring_start": datetime.now().isoformat(),
-            "real_time_metrics": [],
-            "device_performance": {},
-            "network_performance": {},
-            "system_performance": {},
-            "quality_metrics": {}
+    def run_performance_benchmarks(self):
+        """Execute comprehensive performance benchmark suite."""
+        benchmark_results = {
+            'system_performance': self._benchmark_system_performance(),
+            'network_performance': self._benchmark_network_performance(),
+            'device_coordination': self._benchmark_device_coordination(),
+            'data_processing': self._benchmark_data_processing(),
+            'synchronization_accuracy': self._benchmark_synchronization(),
+            'memory_efficiency': self._benchmark_memory_usage(),
+            'scalability_limits': self._benchmark_scalability()
         }
         
-        monitoring_active = True
-        while monitoring_active:
-            # Collect real-time metrics
-            current_metrics = {
-                "timestamp": datetime.now().isoformat(),
-                "system_metrics": self._collect_system_metrics(),
-                "device_metrics": self._collect_device_metrics(),
-                "network_metrics": self._collect_network_metrics(),
-                "quality_metrics": self._collect_quality_metrics()
-            }
-            
-            performance_data["real_time_metrics"].append(current_metrics)
-            
-            # Validate against thresholds
-            alerts = self._validate_performance_thresholds(current_metrics)
-            if alerts:
-                self._handle_performance_alerts(alerts)
-            
-            time.sleep(1.0)  # 1-second monitoring interval
-            
-            # Check if session is still active
-            monitoring_active = self._is_session_active(session_id)
+        # Validate against research requirements
+        benchmark_results['validation_summary'] = self._validate_benchmarks(benchmark_results)
         
-        # Post-session analysis
-        performance_data["analysis_results"] = self._analyze_session_performance(
-            performance_data["real_time_metrics"]
-        )
-        
-        return performance_data
+        return benchmark_results
     
-    def _collect_system_metrics(self):
-        """Collect comprehensive system performance metrics."""
-        return {
-            "cpu_usage_percent": psutil.cpu_percent(interval=0.1),
-            "memory_usage": {
-                "total_gb": psutil.virtual_memory().total / (1024**3),
-                "available_gb": psutil.virtual_memory().available / (1024**3),
-                "used_percent": psutil.virtual_memory().percent
-            },
-            "disk_usage": {
-                "total_gb": psutil.disk_usage('/').total / (1024**3),
-                "free_gb": psutil.disk_usage('/').free / (1024**3),
-                "used_percent": (psutil.disk_usage('/').used / psutil.disk_usage('/').total) * 100
-            },
-            "network_io": {
-                "bytes_sent": psutil.net_io_counters().bytes_sent,
-                "bytes_recv": psutil.net_io_counters().bytes_recv,
-                "packets_sent": psutil.net_io_counters().packets_sent,
-                "packets_recv": psutil.net_io_counters().packets_recv
-            },
-            "process_metrics": {
-                "thread_count": threading.active_count(),
-                "open_files": len(psutil.Process().open_files()),
-                "memory_rss_mb": psutil.Process().memory_info().rss / (1024**2)
-            }
+    def _benchmark_synchronization(self):
+        """Benchmark temporal synchronization accuracy."""
+        sync_results = {
+            'target_precision_ms': 5.0,
+            'test_iterations': 1000,
+            'measurements': [],
+            'statistical_analysis': {}
         }
+        
+        for iteration in range(sync_results['test_iterations']):
+            # Simulate multi-device synchronization
+            start_time = time.time_ns()
+            
+            # Coordination delay measurement
+            coordination_delay = self._measure_coordination_delay()
+            sync_results['measurements'].append(coordination_delay / 1_000_000)  # Convert to ms
+        
+        # Statistical analysis
+        measurements = np.array(sync_results['measurements'])
+        sync_results['statistical_analysis'] = {
+            'mean_precision_ms': float(np.mean(measurements)),
+            'std_deviation_ms': float(np.std(measurements)),
+            'min_precision_ms': float(np.min(measurements)),
+            'max_precision_ms': float(np.max(measurements)),
+            'percentile_95_ms': float(np.percentile(measurements, 95)),
+            'percentile_99_ms': float(np.percentile(measurements, 99)),
+            'target_achieved': float(np.mean(measurements)) <= sync_results['target_precision_ms']
+        }
+        
+        return sync_results
 ```
 
 ### Research-Specific Validation
 
-The validation framework includes specialized tests ensuring compliance with scientific measurement standards and research methodology requirements.
-
-**Data Integrity Validation:**
+The validation framework includes specialized tests ensuring compliance with scientific measurement standards:
 
 ```python
-class DataIntegrityValidator:
+class ResearchValidationSuite:
     """
-    Comprehensive data integrity validation for research applications
-    with cryptographic verification and statistical quality assessment.
+    Research-specific validation ensuring scientific measurement compliance
+    and academic research standards adherence.
     """
     
-    def validate_session_data_integrity(self, session_path):
-        """
-        Perform comprehensive data integrity validation for research session
-        including file verification, temporal consistency, and content validation.
-        """
+    def validate_research_compliance(self):
+        """Comprehensive research compliance validation."""
         validation_results = {
-            "session_path": session_path,
-            "validation_timestamp": datetime.now().isoformat(),
-            "file_integrity": {},
-            "temporal_integrity": {},
-            "content_integrity": {},
-            "cross_device_consistency": {},
-            "overall_integrity_score": 0.0
+            'measurement_accuracy': self._validate_measurement_accuracy(),
+            'data_integrity': self._validate_data_integrity(),
+            'temporal_precision': self._validate_temporal_precision(),
+            'reproducibility': self._validate_reproducibility(),
+            'quality_metrics': self._validate_quality_metrics(),
+            'documentation_completeness': self._validate_documentation()
         }
         
-        # File-level integrity validation
-        validation_results["file_integrity"] = self._validate_file_integrity(session_path)
-        
-        # Temporal consistency validation
-        validation_results["temporal_integrity"] = self._validate_temporal_consistency(session_path)
-        
-        # Content validation
-        validation_results["content_integrity"] = self._validate_content_integrity(session_path)
-        
-        # Cross-device consistency
-        validation_results["cross_device_consistency"] = self._validate_cross_device_consistency(session_path)
-        
-        # Calculate overall integrity score
-        validation_results["overall_integrity_score"] = self._calculate_integrity_score(validation_results)
+        # Overall compliance score
+        validation_results['compliance_score'] = self._calculate_compliance_score(validation_results)
         
         return validation_results
     
-    def _validate_temporal_consistency(self, session_path):
-        """
-        Validate temporal consistency across all recorded data streams
-        with microsecond precision analysis.
-        """
-        temporal_validation = {
-            "timestamp_analysis": {},
-            "synchronization_analysis": {},
-            "drift_analysis": {},
-            "consistency_score": 0.0
+    def _validate_data_integrity(self):
+        """Validate data integrity across recording sessions."""
+        integrity_tests = {
+            'checksum_validation': self._test_checksum_integrity(),
+            'format_compliance': self._test_format_compliance(),
+            'metadata_completeness': self._test_metadata_completeness(),
+            'cross_device_consistency': self._test_cross_device_consistency(),
+            'temporal_alignment': self._test_temporal_alignment()
         }
         
-        # Load all timestamp data
-        device_timestamps = self._load_device_timestamps(session_path)
+        # Calculate integrity score
+        passed_tests = sum(1 for test in integrity_tests.values() if test.get('passed', False))
+        total_tests = len(integrity_tests)
+        integrity_score = (passed_tests / total_tests) * 100
         
-        # Analyze timestamp consistency
-        for device_id, timestamps in device_timestamps.items():
-            # Convert to numpy array for analysis
-            ts_array = np.array([pd.to_datetime(ts).timestamp() for ts in timestamps])
-            
-            # Calculate timing statistics
-            time_diffs = np.diff(ts_array)
-            expected_interval = 1.0 / 30.0  # 30 FPS expected
-            
-            temporal_validation["timestamp_analysis"][device_id] = {
-                "total_frames": len(timestamps),
-                "mean_interval": float(np.mean(time_diffs)),
-                "std_interval": float(np.std(time_diffs)),
-                "expected_interval": expected_interval,
-                "timing_accuracy": float(np.abs(np.mean(time_diffs) - expected_interval)),
-                "dropped_frames": int(np.sum(time_diffs > (expected_interval * 1.5))),
-                "timing_consistency_score": self._calculate_timing_consistency(time_diffs, expected_interval)
-            }
-        
-        # Cross-device synchronization analysis
-        temporal_validation["synchronization_analysis"] = self._analyze_cross_device_sync(device_timestamps)
-        
-        return temporal_validation
+        return {
+            'tests': integrity_tests,
+            'integrity_score': integrity_score,
+            'passed_tests': passed_tests,
+            'total_tests': total_tests,
+            'meets_research_standards': integrity_score >= 95.0
+        }
 ```
 
 
