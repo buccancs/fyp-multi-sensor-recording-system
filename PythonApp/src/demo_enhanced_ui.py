@@ -40,7 +40,7 @@ def create_enhanced_ui_demo():
     
     # Take screenshot
     screenshot = window.grab()
-    screenshot_path = "/tmp/enhanced_ui_psychopy_inspired.png"
+    screenshot_path = "../../images/ui/enhanced_ui_psychopy_inspired.png"
     screenshot.save(screenshot_path)
     print(f"Enhanced UI screenshot saved to: {screenshot_path}")
     
@@ -59,7 +59,7 @@ def create_enhanced_ui_demo():
     
     # Take another screenshot showing active state
     screenshot_active = window.grab()
-    screenshot_active_path = "/tmp/enhanced_ui_active_state.png"
+    screenshot_active_path = "../../images/ui/enhanced_ui_active_state.png"
     screenshot_active.save(screenshot_active_path)
     print(f"Active state screenshot saved to: {screenshot_active_path}")
     
