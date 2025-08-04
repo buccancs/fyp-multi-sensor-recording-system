@@ -1,39 +1,40 @@
 # Multi-Sensor Recording System - Architecture Diagrams (4K Enhanced)
 
-This document provides a comprehensive visual overview of the multi-sensor recording system architecture through professionally styled, high-resolution diagrams. Each diagram has been enhanced following Mermaid documentation best practices and generated at 4K resolution for maximum clarity and professional presentation.
+This document provides a comprehensive visual overview of the multi-sensor recording system architecture through professionally styled, high-resolution diagrams. Each diagram has been enhanced with improved visual design, removing orange backgrounds, reducing icon usage, and implementing black text for optimal readability.
 
 ## Architecture Overview
 
 The multi-sensor recording system follows a **PC master-controller** architecture with **offline-first local recording** capabilities, using a **JSON socket protocol** for standardized communication between components.
 
-## Visual Quality & Design Principles
+## Visual Quality & Design Improvements
 
 **🎨 Enhanced Visual Design:**
-- **4K Ultra-High Resolution**: All diagrams now rendered at 3840+ pixel width for crisp display
-- **Professional Color Scheme**: Blue primary (#2E86AB), purple secondary (#A23B72), and orange tertiary (#F18F01)
-- **Mermaid Best Practices Applied**: Following official Mermaid documentation guidelines for clarity and consistency
-- **Improved Typography**: Enhanced font rendering and spacing for better readability
-- **Structured Visual Hierarchy**: Clear information flow and logical component grouping
+- **4K Ultra-High Resolution**: All diagrams rendered at 4000+ pixel width for crisp display
+- **Professional Color Scheme**: Clean blue primary (#2E86AB), purple secondary (#A23B72), and neutral gray accents
+- **Improved Readability**: Black text throughout for better contrast and professional appearance
+- **Reduced Visual Clutter**: Minimal use of icons, focusing on clear component labeling
+- **Mermaid Best Practices Applied**: Following official Mermaid documentation guidelines for clarity
 
 **📐 Technical Specifications:**
-- Resolution: 4K (3840x2160+) with 2x scaling factor
+- Resolution: 4K+ (4000+ pixel width) with 2x scaling factor
 - Format: PNG with optimized compression
 - Color depth: 8-bit RGB for universal compatibility
-- Background: Professional white with subtle accent colors
+- Background: Clean white with neutral accent colors
+- Text: Black for optimal readability and professional presentation
 
 ## Diagram Collection
 
 ### 1. Table of Contents
 ![Table of Contents](diagrams/01_table_of_contents.png)
-*Enhanced documentation structure overview with improved visual hierarchy and professional styling. Resolution: 7648x712 (4K)*
+*Documentation structure overview with clean typography and professional styling. No decorative icons, black text for optimal readability. Resolution: 7380x670 (4K+)*
 
 ### 2. Hardware Setup Architecture
 ![Hardware Setup Architecture](diagrams/02_hardware_setup_architecture.png)
-*Comprehensive physical device connectivity diagram featuring Samsung S22 devices, thermal cameras, GSR sensors, USB webcams, and network infrastructure with power management. Enhanced with detailed component specifications and connection protocols. Resolution: 5996x2394 (4K)*
+*Physical device connectivity diagram with clear component labeling. Enhanced readability through black text and neutral color scheme. Resolution: 6652x2918 (4K+)*
 
 ### 3. Android App Architecture
 ![Android App Architecture](diagrams/03_android_app_architecture.png)
-*Enhanced 4-layer clean architecture (Presentation, Domain, Data, Infrastructure) with detailed component interactions, improved visual grouping, and professional styling. Resolution: 5118x3360 (4K)*
+*4-layer clean architecture with improved visual clarity. Professional styling with black text and reduced visual clutter. Resolution: 4K+*
 
 ### 4. PC App Architecture
 ![PC App Architecture](diagrams/04_pc_app_architecture.png)
