@@ -375,4 +375,39 @@ This thesis report provides high-level academic analysis and evaluation. For det
 - Testing Framework: `README_testing_qa_framework.md`, `USER_GUIDE_testing_qa_framework.md`, `PROTOCOL_testing_qa_framework.md`
 - Networking Protocol: `README_networking_protocol.md`, `USER_GUIDE_networking_protocol.md`, `PROTOCOL_networking_protocol.md`
 
+## Implementation Code References
+
+The thesis report documentation is backed by comprehensive implementation code across the repository:
+
+**Android Implementation References:**
+- `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Main application entry point with Material Design 3 interface
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - GSR sensor integration with research-grade validation
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - Thermal camera integration with TopDon TC001 support
+- `AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt` - RGB camera recording with adaptive frame rate control
+
+**Python Implementation References:**
+- `PythonApp/src/main.py` - Desktop controller application with comprehensive session management
+- `PythonApp/src/session/session_manager.py` - Multi-device coordination and synchronization framework
+- `PythonApp/src/webcam/webcam_capture.py` - Computer vision pipeline with Stage 3 RAW extraction
+- `PythonApp/src/shimmer_manager.py` - GSR sensor management with protocol abstraction
+- `PythonApp/src/network/device_server.py` - JSON socket communication protocol implementation
+
+## References
+
+[Boucsein2012] Boucsein, W. "Electrodermal Activity, 2nd Edition." Springer Science & Business Media, 2012.
+
+[Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. "Design Patterns: Elements of Reusable Object-Oriented Software." Addison-Wesley Professional, 1994.
+
+[Healey2005] Healey, J. A., & Picard, R. W. "Detecting stress during real-world driving tasks using physiological sensors." IEEE Transactions on Intelligent Transportation Systems, 6(2), 156-166, 2005.
+
+[Lamport1978] Lamport, L. "Time, clocks, and the ordering of events in a distributed system." Communications of the ACM, 21(7), 558-565, 1978.
+
+[Martin2008] Martin, R. C. "Clean Code: A Handbook of Agile Software Craftsmanship." Prentice Hall, 2008.
+
+[McDuff2016] McDuff, D., Gontarek, S., & Picard, R. W. "Remote detection of photoplethysmographic systolic and diastolic peaks using a digital camera." IEEE Transactions on Biomedical Engineering, 61(12), 2948-2954, 2016.
+
+[Picard1997] Picard, R. W. "Affective Computing." MIT Press, 1997.
+
+[Sommerville2015] Sommerville, I. "Software Engineering, 10th Edition." Pearson, 2015.
+
 Each component follows the established documentation pattern with technical deep-dive (README), practical user guide (USER_GUIDE), and data contract specification (PROTOCOL) documents.

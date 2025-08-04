@@ -504,4 +504,40 @@ The conclusions and evaluations presented in this chapter are supported by evide
 - Computer vision innovation with contactless analysis and advanced algorithm implementation
 - Adaptive control innovation with machine learning optimization and real-time adaptation
 
+## References
+
+[Basili1994] Basili, V. R., Caldiera, G., & Rombach, H. D. "The goal question metric approach." Encyclopedia of Software Engineering, 2, 528-532, 1994.
+
+[Boehm1988] Boehm, B. W. "A spiral model of software development and enhancement." Computer, 21(5), 61-72, 1988.
+
+[Brooks1987] Brooks, F. P. "No silver bullet: Essence and accidents of software engineering." Computer, 20(4), 10-19, 1987.
+
+[Card1990] Card, D. N., & Glass, R. L. "Measuring Software Design Quality." Prentice Hall, 1990.
+
+[Cockburn2006] Cockburn, A. "Agile Software Development: The Cooperative Game, 2nd Edition." Addison-Wesley Professional, 2006.
+
+[Demarco2013] DeMarco, T., & Lister, T. "Peopleware: Productive Projects and Teams, 3rd Edition." Addison-Wesley Professional, 2013.
+
+[Fenton2014] Fenton, N., & Bieman, J. "Software Metrics: A Rigorous and Practical Approach, 3rd Edition." CRC Press, 2014.
+
+[Glass2002] Glass, R. L. "Facts and Fallacies of Software Engineering." Addison-Wesley Professional, 2002.
+
+[Jones2008] Jones, C. "Applied Software Measurement: Global Analysis of Productivity and Quality, 3rd Edition." McGraw-Hill Osborne Media, 2008.
+
+[Kan2002] Kan, S. H. "Metrics and Models in Software Quality Engineering, 2nd Edition." Addison-Wesley Professional, 2002.
+
+[Kitchenham2007] Kitchenham, B. "Guidelines for performing systematic literature reviews in software engineering." Technical Report EBSE 2007-001, Keele University and Durham University Joint Report, 2007.
+
+[Kruchten2000] Kruchten, P. "The Rational Unified Process: An Introduction, 2nd Edition." Addison-Wesley Professional, 2000.
+
+[McConnell2006] McConnell, S. "Software Estimation: Demystifying the Black Art." Microsoft Press, 2006.
+
+[Pressman2014] Pressman, R., & Maxim, B. "Software Engineering: A Practitioner's Approach, 8th Edition." McGraw-Hill Education, 2014.
+
+[Royce1970] Royce, W. W. "Managing the development of large software systems." Proceedings of IEEE WESCON, 26(8), 1-9, 1970.
+
+[Sommerville2015] Sommerville, I. "Software Engineering, 10th Edition." Pearson, 2015.
+
+[Wohlin2012] Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. "Experimentation in Software Engineering." Springer Science & Business Media, 2012.
+
 These implementation references provide concrete evidence supporting the achievements and contributions presented in this conclusion, demonstrating the systematic approach to research software development that enables both technical excellence and practical research impact.

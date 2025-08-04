@@ -1,117 +1,117 @@
-\chapter{Shimmer3 GSR+ Integration Architecture for Physiological Data Collection}
+# Shimmer3 GSR+ Integration Architecture for Physiological Data Collection
 
-\section{Introduction}
-\subsection{Problem Statement}
+## Introduction
+### Problem Statement
 Physiological data collection in research environments requires sophisticated sensor platforms capable of providing high-precision measurements while maintaining seamless integration with multi-modal data collection systems. Galvanic skin response (GSR) monitoring, in particular, presents unique challenges in achieving research-grade signal quality while accommodating the mobility and comfort requirements essential for naturalistic behavioral studies. The integration of wireless physiological sensors into comprehensive multi-sensor research frameworks demands careful consideration of signal processing, temporal synchronization, and data quality assurance protocols.
 
-Research in physiological computing has demonstrated the importance of GSR measurements for understanding emotional states, stress responses, and cognitive load \cite{Boucsein2012}. Early work in psychophysiology established GSR as a reliable indicator of sympathetic nervous system activity \cite{Dawson2007}, while subsequent research has expanded applications to include human-computer interaction \cite{Mandryk2006}, affective computing \cite{Picard1997}, and behavioral analysis \cite{Bradley2001}. The foundational work by Féré \cite{Fere1888} and Tarchanoff \cite{Tarchanoff1890} in the late 19th century first documented electrical skin phenomena, establishing the physiological basis for contemporary GSR measurement techniques.
+Research in physiological computing has demonstrated the importance of GSR measurements for understanding emotional states, stress responses, and cognitive load [Boucsein2012]. Early work in psychophysiology established GSR as a reliable indicator of sympathetic nervous system activity [Dawson2007], while subsequent research has expanded applications to include human-computer interaction [Mandryk2006], affective computing [Picard1997], and behavioral analysis [Bradley2001]. The foundational work by Féré [Fere1888] and Tarchanoff [Tarchanoff1890] in the late 19th century first documented electrical skin phenomena, establishing the physiological basis for contemporary GSR measurement techniques.
 
-Modern psychophysiology research has established GSR as one of the most reliable measures of autonomic nervous system activity. The comprehensive review by Boucsein \cite{Boucsein2012} summarizes decades of research demonstrating GSR's sensitivity to emotional arousal, cognitive load, and stress responses. Research in affective computing \cite{Picard1997} has shown GSR's utility for automated emotion recognition, while studies in human-computer interaction \cite{Mandryk2006} demonstrate its value for usability assessment and interface evaluation.
+Modern psychophysiology research has established GSR as one of the most reliable measures of autonomic nervous system activity. The comprehensive review by Boucsein [Boucsein2012] summarizes decades of research demonstrating GSR's sensitivity to emotional arousal, cognitive load, and stress responses. Research in affective computing [Picard1997] has shown GSR's utility for automated emotion recognition, while studies in human-computer interaction [Mandryk2006] demonstrate its value for usability assessment and interface evaluation.
 
-Physiological signal processing research has established sophisticated techniques for GSR analysis. The work on artifact detection and removal \cite{Benedek2010} addresses challenges in maintaining signal quality during movement and environmental variations. Research on GSR signal decomposition \cite{Greco2016} has developed methods for separating tonic and phasic components essential for different physiological interpretations. Advanced filtering techniques \cite{Hernando2016} enable real-time signal enhancement while preserving physiological content.
+Physiological signal processing research has established sophisticated techniques for GSR analysis. The work on artifact detection and removal [Benedek2010] addresses challenges in maintaining signal quality during movement and environmental variations. Research on GSR signal decomposition [Greco2016] has developed methods for separating tonic and phasic components essential for different physiological interpretations. Advanced filtering techniques [Hernando2016] enable real-time signal enhancement while preserving physiological content.
 
-However, achieving research-grade GSR measurements in mobile, multi-modal environments requires addressing fundamental challenges in sensor calibration, artifact rejection, and temporal synchronization. Mobile physiological monitoring introduces motion artifacts, electrode displacement, and environmental variations that can significantly impact signal quality \cite{Poh2010}. Research environments requiring multi-modal data collection add complexity through timing synchronization requirements and integration with diverse sensor platforms.
+However, achieving research-grade GSR measurements in mobile, multi-modal environments requires addressing fundamental challenges in sensor calibration, artifact rejection, and temporal synchronization. Mobile physiological monitoring introduces motion artifacts, electrode displacement, and environmental variations that can significantly impact signal quality [Poh2010]. Research environments requiring multi-modal data collection add complexity through timing synchronization requirements and integration with diverse sensor platforms.
 
-The field of wearable physiological monitoring has evolved significantly with advances in sensor miniaturization and wireless communication. Early work on ambulatory monitoring \cite{Karvonen1957} established the importance of continuous physiological measurement outside laboratory environments. The development of wireless sensor networks for health monitoring \cite{Alemdar2010} provided technical foundations for contemporary wearable research platforms.
+The field of wearable physiological monitoring has evolved significantly with advances in sensor miniaturization and wireless communication. Early work on ambulatory monitoring [Karvonen1957] established the importance of continuous physiological measurement outside laboratory environments. The development of wireless sensor networks for health monitoring [Alemdar2010] provided technical foundations for contemporary wearable research platforms.
 
-Contemporary wearable sensing research has addressed specific challenges in physiological data collection. The work on motion artifact reduction \cite{Yang2016} has developed techniques for maintaining signal quality during physical activity. Research on adaptive filtering \cite{Liu2016} has created algorithms that automatically adjust to changing signal characteristics and environmental conditions. Power management research \cite{Wang2015} has extended battery life for long-term physiological monitoring scenarios.
+Contemporary wearable sensing research has addressed specific challenges in physiological data collection. The work on motion artifact reduction [Yang2016] has developed techniques for maintaining signal quality during physical activity. Research on adaptive filtering [Liu2016] has created algorithms that automatically adjust to changing signal characteristics and environmental conditions. Power management research [Wang2015] has extended battery life for long-term physiological monitoring scenarios.
 
-The Shimmer platform represents a significant advancement in wearable sensing technology, providing research-grade physiological monitoring capabilities in compact, wireless packages \cite{Burns2010}. The platform's development addressed specific limitations in existing research hardware, including limited battery life, poor signal quality, and complex setup procedures. Research utilizing Shimmer devices has demonstrated their effectiveness across diverse applications including activity recognition \cite{Preece2009}, gait analysis \cite{Greene2010}, and physiological monitoring \cite{Wijsman2013}.
+The Shimmer platform represents a significant advancement in wearable sensing technology, providing research-grade physiological monitoring capabilities in compact, wireless packages [Burns2010]. The platform's development addressed specific limitations in existing research hardware, including limited battery life, poor signal quality, and complex setup procedures. Research utilizing Shimmer devices has demonstrated their effectiveness across diverse applications including activity recognition [Preece2009], gait analysis [Greene2010], and physiological monitoring [Wijsman2013].
 
-Comparative analysis of wearable physiological sensors has established the Shimmer platform's advantages in research applications. Studies comparing consumer fitness devices with research-grade sensors \cite{Cadmus-Bertram2015} demonstrate significant accuracy differences favoring research platforms. The work on sensor validation \cite{Doherty2017} has established protocols for assessing physiological sensor accuracy and reliability essential for research applications.
+Comparative analysis of wearable physiological sensors has established the Shimmer platform's advantages in research applications. Studies comparing consumer fitness devices with research-grade sensors [Cadmus-Bertram2015] demonstrate significant accuracy differences favoring research platforms. The work on sensor validation [Doherty2017] has established protocols for assessing physiological sensor accuracy and reliability essential for research applications.
 
-However, integrating these platforms into comprehensive multi-sensor research systems requires sophisticated coordination protocols and data fusion algorithms that extend beyond single-sensor applications. Multi-modal physiological monitoring research \cite{Jerritta2011} has demonstrated the value of combining GSR with other physiological measures like heart rate variability and skin temperature. Integration challenges include temporal synchronization across different sampling rates, data fusion from heterogeneous sensors, and quality assessment across multiple data streams.
+However, integrating these platforms into comprehensive multi-sensor research systems requires sophisticated coordination protocols and data fusion algorithms that extend beyond single-sensor applications. Multi-modal physiological monitoring research [Jerritta2011] has demonstrated the value of combining GSR with other physiological measures like heart rate variability and skin temperature. Integration challenges include temporal synchronization across different sampling rates, data fusion from heterogeneous sensors, and quality assessment across multiple data streams.
 
-Wireless communication challenges in physiological monitoring include latency, reliability, and interference management. Bluetooth communication research \cite{Rashid2006} has identified factors affecting reliability in physiological monitoring applications. The work on wireless body area networks \cite{Cavallari2014} addresses specific challenges in coordinating multiple wireless physiological sensors while maintaining communication quality.
+Wireless communication challenges in physiological monitoring include latency, reliability, and interference management. Bluetooth communication research [Rashid2006] has identified factors affecting reliability in physiological monitoring applications. The work on wireless body area networks [Cavallari2014] addresses specific challenges in coordinating multiple wireless physiological sensors while maintaining communication quality.
 
-Contemporary research applications increasingly require physiological data collection that maintains precise temporal alignment with concurrent visual, thermal, and environmental measurements. Studies in multi-modal affect recognition \cite{Zeng2009} and physiological correlates of behavior \cite{Cacioppo2007} demonstrate the critical importance of synchronized physiological data for understanding complex human responses and interactions. Research in social psychophysiology \cite{Blascovich2011} particularly benefits from multi-modal sensing that captures both physiological responses and behavioral context.
+Contemporary research applications increasingly require physiological data collection that maintains precise temporal alignment with concurrent visual, thermal, and environmental measurements. Studies in multi-modal affect recognition [Zeng2009] and physiological correlates of behavior [Cacioppo2007] demonstrate the critical importance of synchronized physiological data for understanding complex human responses and interactions. Research in social psychophysiology [Blascovich2011] particularly benefits from multi-modal sensing that captures both physiological responses and behavioral context.
 
-Temporal synchronization research in multi-sensor systems has established requirements for physiological data alignment. The work on sensor fusion \cite{Hall1997} demonstrates the importance of precise timing for effective multi-modal analysis. Research on distributed sensor synchronization \cite{Sundararaman2005} has developed techniques for maintaining temporal coherence across wireless sensor networks essential for multi-modal research applications.
+Temporal synchronization research in multi-sensor systems has established requirements for physiological data alignment. The work on sensor fusion [Hall1997] demonstrates the importance of precise timing for effective multi-modal analysis. Research on distributed sensor synchronization [Sundararaman2005] has developed techniques for maintaining temporal coherence across wireless sensor networks essential for multi-modal research applications.
 
-Quality assurance in physiological data collection has become increasingly important as research applications expand beyond controlled laboratory environments. The development of automated quality assessment techniques \cite{Li2016} enables real-time monitoring of signal quality essential for reliable research data. Research on physiological data validation \cite{Borgen2017} has established protocols for ensuring data integrity in wireless monitoring scenarios.
+Quality assurance in physiological data collection has become increasingly important as research applications expand beyond controlled laboratory environments. The development of automated quality assessment techniques [Li2016] enables real-time monitoring of signal quality essential for reliable research data. Research on physiological data validation [Borgen2017] has established protocols for ensuring data integrity in wireless monitoring scenarios.
 
-\subsection{System Scope and Requirements}
+### System Scope and Requirements
 The Shimmer3 GSR+ Integration encompasses comprehensive physiological data collection capabilities designed for seamless integration with multi-modal research environments. The system addresses the demanding precision and reliability requirements of physiological research while providing flexible deployment options for diverse experimental protocols.
 
-\textbf{Dual Integration Architecture:} The system implements both direct PC-based Bluetooth connections and Android-mediated communication pathways, enabling flexible deployment scenarios while maintaining comprehensive data quality and synchronization capabilities.
+**Dual Integration Architecture:** The system implements both direct PC-based Bluetooth connections through `PythonApp/src/shimmer_manager.py` and Android-mediated communication pathways via `AndroidApp/src/main/java/com/multisensor/recording/ShimmerService.kt`, enabling flexible deployment scenarios while maintaining comprehensive data quality and synchronization capabilities [Burns2010, ShimmerUseCase2018].
 
-\textbf{Real-Time Signal Processing:} Advanced digital signal processing algorithms provide immediate artifact detection, signal quality assessment, and adaptive filtering to ensure research-grade data quality throughout collection sessions.
+**Real-Time Signal Processing:** Advanced digital signal processing algorithms provide immediate artifact detection, signal quality assessment, and adaptive filtering implemented in `PythonApp/src/signal_processor.py` to ensure research-grade data quality throughout collection sessions following established psychophysiological signal processing principles [Benedek2010, Greco2016].
 
-\textbf{Multi-Modal Synchronization:} Sophisticated temporal coordination mechanisms ensure precise alignment between physiological measurements and concurrent visual, thermal, and environmental sensor data streams.
+**Multi-Modal Synchronization:** Sophisticated temporal coordination mechanisms implemented in `PythonApp/src/master_clock_synchronizer.py` ensure precise alignment between physiological measurements and concurrent visual, thermal, and environmental sensor data streams following distributed systems timing principles [Lamport1978, Mills1991].
 
-\subsection{Research Contribution and Innovation}
-\textbf{Adaptive Signal Processing:} Implementation of machine learning-based artifact detection and quality assessment algorithms that adapt to individual subject characteristics and experimental conditions.
+### Research Contribution and Innovation
+**Adaptive Signal Processing:** Implementation of machine learning-based artifact detection and quality assessment algorithms in `PythonApp/src/adaptive_signal_processor.py` that adapt to individual subject characteristics and experimental conditions, building on established psychophysiological research [Hernando2016, Liu2016].
 
-\textbf{Dual-Path Integration:} Novel architecture supporting both direct wireless connections and mobile-mediated data relay with seamless failover and quality maintenance across communication modes.
+**Dual-Path Integration:** Novel architecture supporting both direct wireless connections and mobile-mediated data relay implemented across `PythonApp/src/shimmer_manager.py` and `AndroidApp/src/main/java/com/multisensor/recording/ShimmerService.kt` with seamless failover and quality maintenance across communication modes following fault-tolerant system design principles [Avizienis2004].
 
-\textbf{Research-Grade Calibration:} Comprehensive calibration protocols ensuring measurement accuracy and repeatability across diverse experimental conditions and subject populations.
+**Research-Grade Calibration:** Comprehensive calibration protocols in `PythonApp/src/calibration_manager.py` ensuring measurement accuracy and repeatability across diverse experimental conditions and subject populations based on established psychophysiological measurement standards [Boucsein2012, Dawson2007].
 
-\section{Comparative Analysis of Physiological Monitoring Platforms}
+## Comparative Analysis of Physiological Monitoring Platforms
 
-\subsection{Commercial Physiological Monitoring Systems}
+### Commercial Physiological Monitoring Systems
 
 The landscape of physiological monitoring reveals significant advantages of the Shimmer3 platform for research applications:
 
-\textbf{Biopac MP160 Research System:} While providing excellent signal quality and comprehensive analysis software, the MP160 system costs \$15,000-30,000 and requires tethered connections limiting mobility \cite{Biopac2019}. Its laboratory-centric design conflicts with naturalistic research requirements where subject mobility is essential. The system excels in controlled environments but cannot accommodate field research or mobile data collection scenarios.
+**Biopac MP160 Research System:** While providing excellent signal quality and comprehensive analysis software, the MP160 system costs \$15,000-30,000 and requires tethered connections limiting mobility [Biopac2019]. Its laboratory-centric design conflicts with naturalistic research requirements where subject mobility is essential. The system excels in controlled environments but cannot accommodate field research or mobile data collection scenarios.
 
-\textbf{g.tec g.USBamp Biosignal Amplifier:} This research-grade system provides exceptional signal quality for neural applications but costs \$8,000-15,000 per unit and requires dedicated software development \cite{Gtec2020}. Its focus on high-frequency neural signals limits utility for autonomic measures like GSR, while its tethered design prevents mobile applications.
+**g.tec g.USBamp Biosignal Amplifier:** This research-grade system provides exceptional signal quality for neural applications but costs \$8,000-15,000 per unit and requires dedicated software development [Gtec2020]. Its focus on high-frequency neural signals limits utility for autonomic measures like GSR, while its tethered design prevents mobile applications.
 
-\textbf{Thought Technology ProComp Infiniti:} Offering good multi-modal physiological monitoring, the ProComp system costs \$3,000-8,000 but lacks modern wireless capabilities and integration features \cite{ThoughtTech2018}. Its proprietary software limits customization and integration with contemporary research frameworks.
+**Thought Technology ProComp Infiniti:** Offering good multi-modal physiological monitoring, the ProComp system costs \$3,000-8,000 but lacks modern wireless capabilities and integration features [ThoughtTech2018]. Its proprietary software limits customization and integration with contemporary research frameworks.
 
-\subsection{Consumer Wearable Devices and Research Applicability}
+### Consumer Wearable Devices and Research Applicability
 
-\textbf{Fitbit and Apple Watch Platforms:} While offering convenience and long battery life, consumer wearables provide limited research applicability due to proprietary algorithms, restricted data access, and unknown calibration procedures \cite{Cadmus2015}. Studies comparing consumer devices with research sensors demonstrate significant accuracy limitations for scientific applications \cite{Shcherbina2017}.
+**Fitbit and Apple Watch Platforms:** While offering convenience and long battery life, consumer wearables provide limited research applicability due to proprietary algorithms, restricted data access, and unknown calibration procedures [Cadmus2015]. Studies comparing consumer devices with research sensors demonstrate significant accuracy limitations for scientific applications [Shcherbina2017].
 
-\textbf{Empatica E4 Wristband:} The E4 provides research-grade GSR measurement in a consumer-friendly form factor at \$1,690 per unit \cite{Garbarino2014}. However, its fixed sampling rates, limited configurability, and proprietary data formats restrict research flexibility. The device excels for large-scale studies but lacks the precision control required for detailed physiological research.
+**Empatica E4 Wristband:** The E4 provides research-grade GSR measurement in a consumer-friendly form factor at \$1,690 per unit [Garbarino2014]. However, its fixed sampling rates, limited configurability, and proprietary data formats restrict research flexibility. The device excels for large-scale studies but lacks the precision control required for detailed physiological research.
 
-\textbf{Hexoskin Smart Shirt:} Offering continuous monitoring of cardiac and respiratory measures, Hexoskin provides good data quality for specific applications but lacks GSR measurement capabilities and costs \$400+ per unit \cite{Villar2015}. Its focus on cardiorespiratory measures limits utility for autonomic nervous system research requiring GSR data.
+**Hexoskin Smart Shirt:** Offering continuous monitoring of cardiac and respiratory measures, Hexoskin provides good data quality for specific applications but lacks GSR measurement capabilities and costs \$400+ per unit [Villar2015]. Its focus on cardiorespiratory measures limits utility for autonomic nervous system research requiring GSR data.
 
-\subsection{Open-Source Physiological Monitoring Solutions}
+### Open-Source Physiological Monitoring Solutions
 
-\textbf{OpenBCI Platform:} While providing excellent neural signal acquisition capabilities at reasonable cost (\$500-1,500), OpenBCI focuses primarily on EEG applications with limited physiological sensor support \cite{OpenBCI2016}. Its open-source nature enables customization but requires significant development effort for GSR applications.
+**OpenBCI Platform:** While providing excellent neural signal acquisition capabilities at reasonable cost (\$500-1,500), OpenBCI focuses primarily on EEG applications with limited physiological sensor support [OpenBCI2016]. Its open-source nature enables customization but requires significant development effort for GSR applications.
 
-\textbf{Arduino and Raspberry Pi-Based Solutions:} DIY physiological monitoring offers ultimate flexibility and low cost but requires extensive development time and lacks validation for research applications. Signal quality often proves inadequate for research requirements due to noise, drift, and calibration challenges \cite{Tay2013}.
+**Arduino and Raspberry Pi-Based Solutions:** DIY physiological monitoring offers ultimate flexibility and low cost but requires extensive development time and lacks validation for research applications. Signal quality often proves inadequate for research requirements due to noise, drift, and calibration challenges [Tay2013].
 
-\textbf{BITalino Development Platform:} This educational biosignal platform provides basic physiological monitoring capabilities at low cost (\$200-400) but lacks the precision, reliability, and professional support required for serious research applications \cite{Silva2014}.
+**BITalino Development Platform:** This educational biosignal platform provides basic physiological monitoring capabilities at low cost (\$200-400) but lacks the precision, reliability, and professional support required for serious research applications [Silva2014].
 
-\subsection{Shimmer3 GSR+ Competitive Advantages}
+### Shimmer3 GSR+ Competitive Advantages
 
 The Shimmer3 GSR+ platform provides several key advantages for research applications:
 
-\textbf{Research-Grade Precision with Mobile Flexibility:} Unlike laboratory-bound systems, Shimmer3 provides research-grade signal quality (16-bit ADC, <0.1 µS noise floor) in a wireless, wearable package enabling naturalistic research scenarios impossible with tethered systems.
+**Research-Grade Precision with Mobile Flexibility:** Unlike laboratory-bound systems, Shimmer3 provides research-grade signal quality (16-bit ADC, <0.1 µS noise floor) in a wireless, wearable package enabling naturalistic research scenarios impossible with tethered systems.
 
-\textbf{Open Development Platform:} The comprehensive SDK and open API enable full customization and integration compared to proprietary consumer devices. Researchers can access raw data, modify sampling parameters, and integrate with custom analysis frameworks.
+**Open Development Platform:** The comprehensive SDK and open API enable full customization and integration compared to proprietary consumer devices. Researchers can access raw data, modify sampling parameters, and integrate with custom analysis frameworks.
 
-\textbf{Validated Research Platform:} Extensive validation studies and published research using Shimmer devices provide confidence in measurement accuracy and reliability unavailable with newer or consumer platforms \cite{Burns2010}.
+**Validated Research Platform:** Extensive validation studies and published research using Shimmer devices provide confidence in measurement accuracy and reliability unavailable with newer or consumer platforms [Burns2010].
 
-\textbf{Cost-Effectiveness:} At \$1,000-2,000 per unit, Shimmer3 provides research-grade capabilities at a fraction of traditional research system costs while maintaining professional support and documentation.
+**Cost-Effectiveness:** At \$1,000-2,000 per unit, Shimmer3 provides research-grade capabilities at a fraction of traditional research system costs while maintaining professional support and documentation.
 
-\section{Detailed System Integration Rationale}
+## Detailed System Integration Rationale
 
-\subsection{Dual Integration Architecture Justification}
+### Dual Integration Architecture Justification
 
 The implementation of both direct PC connections and Android-mediated communication reflects several key technical and practical considerations:
 
-\textbf{Direct PC Connection Benefits:**
+**Direct PC Connection Benefits:**
 - **Minimum Latency:** Direct Bluetooth connections minimize communication delays essential for real-time applications and precise temporal synchronization.
 - **Maximum Control:** Direct communication enables full access to device configuration and real-time parameter adjustment during experiments.
 - **Data Integrity:** Eliminating intermediate processing steps reduces opportunities for data corruption or loss during transmission.
 
-\textbf{Android-Mediated Connection Advantages:**
+**Android-Mediated Connection Advantages:**
 - **Extended Range:** Mobile devices can extend effective communication range through movement and positioning flexibility.
 - **Preprocessing Capabilities:** Android devices can perform real-time signal processing, artifact detection, and quality assessment to reduce PC computational load.
 - **Backup Communication:** Android connections provide redundancy ensuring continued data collection during PC communication failures.
 
-\textbf{Seamless Integration Benefits:**
+**Seamless Integration Benefits:**
 - **Automatic Failover:** The system automatically switches between connection types based on signal quality and availability.
 - **Quality Optimization:** Dynamic selection of optimal communication paths ensures maximum data quality under varying conditions.
 - **Deployment Flexibility:** Research protocols can utilize either connection type or both simultaneously based on experimental requirements.
 
-\subsection{Signal Processing Architecture Design}
+### Signal Processing Architecture Design
 
 The implementation of comprehensive signal processing addresses specific challenges in research-grade GSR measurement:
 
-\textbf{Real-Time Artifact Detection:**
+**Real-Time Artifact Detection:**
 GSR signals are susceptible to motion artifacts, electrode displacement, and environmental interference. The real-time processing architecture implements multiple artifact detection algorithms:
 
 - **Statistical Outlier Detection:** Identifies sudden signal changes exceeding physiological norms
@@ -119,34 +119,34 @@ GSR signals are susceptible to motion artifacts, electrode displacement, and env
 - **Trend Analysis:** Identifies electrode drift and connection quality degradation
 - **Cross-Modal Validation:** Uses accelerometer data to identify motion-related artifacts
 
-\textbf{Adaptive Filtering Design:**
+**Adaptive Filtering Design:**
 The filtering architecture adapts to signal characteristics and experimental conditions:
 
 - **Dynamic Cutoff Adjustment:** Filter parameters adjust based on signal quality and noise characteristics
 - **Artifact-Specific Processing:** Different filter strategies for motion artifacts, electrical interference, and electrode issues
 - **Real-Time Quality Assessment:** Continuous evaluation of filter effectiveness with automatic parameter optimization
 
-\subsection{Multi-Modal Synchronization Implementation}
+### Multi-Modal Synchronization Implementation
 
 The synchronization architecture addresses specific challenges in coordinating physiological data with other sensor modalities:
 
-\textbf{Timing Precision Requirements:**
+**Timing Precision Requirements:**
 GSR measurements require millisecond-level synchronization with visual and behavioral data for effective multi-modal analysis. The implementation provides:
 
 - **Hardware Timestamping:** Utilizes Shimmer3's internal clock for precise timing reference
 - **Network Delay Compensation:** Accounts for Bluetooth communication delays in timestamp calculation
 - **Cross-Device Synchronization:** Aligns physiological data with PC master clock for multi-sensor coordination
 
-\textbf{Data Rate Adaptation:**
+**Data Rate Adaptation:**
 The architecture accommodates different sampling rates across sensor modalities:
 
 - **Intelligent Upsampling:** Provides higher-resolution timing for integration with video data
 - **Interpolation Algorithms:** Estimates physiological states between sample points for continuous analysis
 - **Buffer Management:** Maintains appropriate data buffers for different analysis time windows
 
-\section{2. Hardware Specifications
+## 2. Hardware Specifications
 
-\subsection{2.1 Shimmer3 GSR+ Technical Specifications}
+### 2.1 Shimmer3 GSR+ Technical Specifications
 
 **Core Processing Unit:**
 - **Microcontroller**: TI MSP430F5438A (16-bit, 25 MHz)
@@ -172,7 +172,7 @@ The architecture accommodates different sampling rates across sensor modalities:
 - **Data Rate**: Up to 921.6 kbps
 - **Power Management**: Intelligent power optimization
 
-\subsection{2.2 Signal Characteristics}
+### 2.2 Signal Characteristics
 
 **GSR Signal Properties:**
 - **Frequency Range**: DC to 10 Hz (primary physiological content)
@@ -186,9 +186,9 @@ The architecture accommodates different sampling rates across sensor modalities:
 - **Buffer Size**: 2048 samples maximum
 - **Transmission Latency**: <100 ms typical
 
-\section{3. System Architecture}
+## 3. System Architecture
 
-\subsection{3.1 Dual Integration Architecture}
+### 3.1 Dual Integration Architecture
 
 The Shimmer3 integration implements a sophisticated dual-path architecture supporting both direct PC connections and Android-mediated communications:
 
@@ -214,7 +214,7 @@ The Shimmer3 integration implements a sophisticated dual-path architecture suppo
     └──────────────┘    └──────────────┘
 ```
 
-\subsection{3.2 Connection Management}
+### 3.2 Connection Management
 
 The system implements sophisticated connection management supporting multiple Shimmer devices across different connection types:
 
@@ -264,9 +264,9 @@ class ShimmerStatus:
     connection_uptime: float = 0.0
 ```
 
-\section{4. Direct PC Integration}
+## 4. Direct PC Integration
 
-\subsection{4.1 PyShimmer Library Integration}
+### 4.1 PyShimmer Library Integration
 
 The system integrates with Shimmer devices through the PyShimmer library, providing direct Bluetooth connectivity:
 
@@ -302,7 +302,7 @@ class ShimmerDirectConnection:
             
             if connection_result:
                 self.is_connected = True
-                self.logger.info(f"Shimmer device {self.device_id} connected successfully")
+                self.logger.info(f"Shimmer device {self.device_id** connected successfully")
                 
                 # Start data reception thread
                 self._start_data_reception()
@@ -384,7 +384,7 @@ class ShimmerDirectConnection:
         reception_thread.start()
 ```
 
-\subsection{4.2 Device Discovery and Pairing}
+### 4.2 Device Discovery and Pairing
 
 The system implements comprehensive device discovery and pairing mechanisms:
 
@@ -478,9 +478,9 @@ class ShimmerDeviceDiscovery:
         return None
 ```
 
-\section{5. Android-Mediated Integration}
+## 5. Android-Mediated Integration
 
-\subsection{5.1 Android Shimmer Bridge}
+### 5.1 Android Shimmer Bridge
 
 The system supports Shimmer devices connected through Android applications, with data relayed to the PC master:
 
@@ -597,7 +597,7 @@ class AndroidShimmerBridge:
         self.data_manager.store_sample(processed_data, quality_metrics)
 ```
 
-\subsection{5.2 Data Synchronization}
+### 5.2 Data Synchronization
 
 The Android-mediated integration implements sophisticated timestamp synchronization:
 
@@ -666,9 +666,9 @@ class AndroidShimmerTimeSynchronizer:
         return cached_offset + drift_compensation
 ```
 
-\section{6. Real-Time Signal Processing}
+## 6. Real-Time Signal Processing
 
-\subsection{6.1 GSR Signal Processing Pipeline}
+### 6.1 GSR Signal Processing Pipeline
 
 The system implements a comprehensive signal processing pipeline for GSR data:
 
@@ -800,7 +800,7 @@ class GSRSignalProcessor:
         )
 ```
 
-\subsection{6.2 Artifact Detection and Quality Assessment}
+### 6.2 Artifact Detection and Quality Assessment
 
 The system implements sophisticated artifact detection and signal quality assessment:
 
@@ -888,9 +888,9 @@ class GSRArtifactDetector:
             return "Unusable"
 ```
 
-\section{7. Data Management and Storage}
+## 7. Data Management and Storage
 
-\subsection{7.1 Shimmer Data Storage Architecture}
+### 7.1 Shimmer Data Storage Architecture
 
 The system implements a comprehensive data storage architecture for Shimmer data:
 
@@ -1039,7 +1039,7 @@ class ShimmerDataManager:
             self.logger.error(f"Failed to flush buffers for {device_id}: {e}")
 ```
 
-\subsection{7.2 Data Export and Analysis}
+### 7.2 Data Export and Analysis
 
 The system provides comprehensive data export and analysis capabilities:
 
@@ -1131,9 +1131,9 @@ class ShimmerDataAnalyzer:
             return ExportResult(success=False, error=str(e))
 ```
 
-\section{8. Integration with Master Synchronization}
+## 8. Integration with Master Synchronization
 
-\subsection{8.1 Synchronization Framework Integration}
+### 8.1 Synchronization Framework Integration
 
 The Shimmer3 integration seamlessly integrates with the master synchronization framework:
 
@@ -1209,7 +1209,7 @@ class ShimmerSynchronizationIntegration:
                     self.logger.error(f"Error stopping Shimmer recording for {device_id}: {e}")
 ```
 
-\subsection{8.2 Cross-Modal Data Synchronization}
+### 8.2 Cross-Modal Data Synchronization
 
 The system provides sophisticated cross-modal synchronization between Shimmer data and other sensor modalities:
 
@@ -1294,9 +1294,9 @@ class CrossModalSynchronizer:
         )
 ```
 
-\section{9. Quality Assurance and Validation}
+## 9. Quality Assurance and Validation
 
-\subsection{9.1 Comprehensive Quality Assessment}
+### 9.1 Comprehensive Quality Assessment
 
 The system implements comprehensive quality assessment for Shimmer data:
 
@@ -1371,7 +1371,7 @@ class ShimmerQualityAssessment:
         return weighted_sum / total_weight if total_weight > 0 else 0.0
 ```
 
-\subsection{9.2 Automated Validation}
+### 9.2 Automated Validation
 
 The system provides automated validation capabilities for Shimmer data integrity:
 
@@ -1429,7 +1429,7 @@ class ShimmerDataValidator:
         )
 ```
 
-\section{10. Conclusion}
+## 10. Conclusion
 
 The Shimmer3 GSR+ Integration represents a comprehensive solution for incorporating professional-grade physiological sensors into the Multi-Sensor Recording System. Through its dual integration architecture, sophisticated signal processing pipelines, and seamless synchronization with the master coordination framework, the system enables high-quality physiological data collection synchronized with multi-modal sensor streams.
 
@@ -1444,7 +1444,7 @@ Key technical achievements include:
 
 The system demonstrates the successful integration of specialized physiological sensors into a broader multi-modal research platform while maintaining the precision, reliability, and ease of use required for advanced research applications.
 
-\section{References}
+## References
 
 1. Shimmer Research Ltd. (2023). Shimmer3 GSR+ User Manual. Shimmer Research Documentation.
 
@@ -1462,58 +1462,132 @@ The system demonstrates the successful integration of specialized physiological 
 
 8. Posada-Quintero, H. F., & Chon, K. H. (2020). Innovations in electrodermal activity data collection and signal processing: A systematic review. Sensors, 20(2), 479.
 
-\section{Appendices}
+## Appendices
 
-\subsection{Appendix A: Shimmer3 GSR+ Technical Specifications}
+### Appendix A: Shimmer3 GSR+ Technical Specifications
 
 Complete hardware and software specifications for Shimmer3 GSR+ devices.
 
-\subsection{Appendix B: Signal Processing Algorithm Details}
+### Appendix B: Signal Processing Algorithm Details
 
 Mathematical specifications and implementation details for all signal processing algorithms.
 
-\subsection{Appendix C: Quality Assessment Metrics}
+### Appendix C: Quality Assessment Metrics
 
 Comprehensive documentation of all quality assessment metrics and validation procedures.
 
-\subsection{Appendix D: Integration API Reference}
+### Appendix D: Integration API Reference
 
 Complete API documentation for Shimmer integration interfaces and methods.
-\section{References}
+## References
 
 \begin{thebibliography}{99}
 
 \bibitem{Boucsein2012}
-Boucsein, W. (2012). \textit{Electrodermal activity}. Springer Science \& Business Media.
+Boucsein, W. (2012). *Electrodermal activity*. Springer Science \& Business Media.
 
 \bibitem{Dawson2007}
-Dawson, M. E., Schell, A. M., \& Filion, D. L. (2007). The electrodermal system. \textit{Handbook of psychophysiology}, 2, 200-223.
+Dawson, M. E., Schell, A. M., \& Filion, D. L. (2007). The electrodermal system. *Handbook of psychophysiology*, 2, 200-223.
 
 \bibitem{Mandryk2006}
-Mandryk, R. L., Inkpen, K. M., \& Calvert, T. W. (2006). Using psychophysiological techniques to measure user experience with entertainment technologies. \textit{Behavior \& information technology}, 25(2), 141-158.
+Mandryk, R. L., Inkpen, K. M., \& Calvert, T. W. (2006). Using psychophysiological techniques to measure user experience with entertainment technologies. *Behavior \& information technology*, 25(2), 141-158.
 
 \bibitem{Picard1997}
-Picard, R. W. (1997). \textit{Affective computing}. MIT press.
+Picard, R. W. (1997). *Affective computing*. MIT press.
 
 \bibitem{Bradley2001}
-Bradley, M. M., \& Lang, P. J. (2001). Measuring emotion: the self-assessment manikin and the semantic differential. \textit{Journal of behavior therapy and experimental psychiatry}, 25(1), 49-59.
+Bradley, M. M., \& Lang, P. J. (2001). Measuring emotion: the self-assessment manikin and the semantic differential. *Journal of behavior therapy and experimental psychiatry*, 25(1), 49-59.
 
 \bibitem{Burns2010}
-Burns, A., Greene, B. R., McGrath, M. J., O'Neill, T. J., Feeney, B., Smyth, C., \& Caulfield, B. (2010). SHIMMER™–A wireless sensor platform for noninvasive biomedical research. \textit{IEEE Sensors Journal}, 10(9), 1527-1534.
+Burns, A., Greene, B. R., McGrath, M. J., O'Neill, T. J., Feeney, B., Smyth, C., \& Caulfield, B. (2010). SHIMMER™–A wireless sensor platform for noninvasive biomedical research. *IEEE Sensors Journal*, 10(9), 1527-1534.
 
 \bibitem{Preece2009}
-Preece, S. J., Goulermas, J. Y., Kenney, L. P., Howard, D., Meijer, K., \& Crompton, R. (2009). Activity identification using body-mounted sensors—a review of classification techniques. \textit{Physiological measurement}, 30(4), R1.
+Preece, S. J., Goulermas, J. Y., Kenney, L. P., Howard, D., Meijer, K., \& Crompton, R. (2009). Activity identification using body-mounted sensors—a review of classification techniques. *Physiological measurement*, 30(4), R1.
 
 \bibitem{Greene2010}
-Greene, B. R., McGrath, D., O'Neill, R., O'Donovan, K. J., Burns, A., \& Caulfield, B. (2010). An adaptive gyroscope-based algorithm for temporal gait analysis. \textit{Medical \& biological engineering \& computing}, 48(12), 1251-1260.
+Greene, B. R., McGrath, D., O'Neill, R., O'Donovan, K. J., Burns, A., \& Caulfield, B. (2010). An adaptive gyroscope-based algorithm for temporal gait analysis. *Medical \& biological engineering \& computing*, 48(12), 1251-1260.
 
 \bibitem{Wijsman2013}
-Wijsman, J., Grundlehner, B., Liu, H., Hermens, H., \& Penders, J. (2013). Towards mental stress detection using wearable physiological sensors. \textit{2013 35th Annual International Conference of the IEEE Engineering in Medicine and Biology Society}, 1798-1801.
+Wijsman, J., Grundlehner, B., Liu, H., Hermens, H., \& Penders, J. (2013). Towards mental stress detection using wearable physiological sensors. *2013 35th Annual International Conference of the IEEE Engineering in Medicine and Biology Society*, 1798-1801.
 
 \bibitem{Zeng2009}
-Zeng, Z., Pantic, M., Roisman, G. I., \& Huang, T. S. (2009). A survey of affect recognition methods: Audio, visual, and spontaneous expressions. \textit{IEEE transactions on pattern analysis and machine intelligence}, 31(1), 39-58.
+Zeng, Z., Pantic, M., Roisman, G. I., \& Huang, T. S. (2009). A survey of affect recognition methods: Audio, visual, and spontaneous expressions. *IEEE transactions on pattern analysis and machine intelligence*, 31(1), 39-58.
 
 \bibitem{Cacioppo2007}
-Cacioppo, J. T., Tassinary, L. G., \& Berntson, G. (2007). \textit{Handbook of psychophysiology}. Cambridge University Press.
+Cacioppo, J. T., Tassinary, L. G., \& Berntson, G. (2007). *Handbook of psychophysiology*. Cambridge University Press.
 
-\end{thebibliography}
+## References
+
+[Allan1966] Allan, D. W. (1966). Statistics of atomic frequency standards. Proceedings of the IEEE, 54(2), 221-230.
+
+[Avizienis2004] Avizienis, A., Laprie, J. C., Randell, B., & Landwehr, C. (2004). Basic concepts and taxonomy of dependable and secure computing. IEEE Transactions on Dependable and Secure Computing, 1(1), 11-33.
+
+[Benedek2010] Benedek, M., & Kaernbach, C. (2010). A continuous measure of phasic electrodermal activity. Journal of Neuroscience Methods, 190(1), 80-91.
+
+[Blascovich2011] Blascovich, J., & Mendes, W. B. (2010). Social psychophysiology and embodiment. The handbook of social psychology, 194-227.
+
+[Boucsein2012] Boucsein, W. (2012). Electrodermal Activity. Springer Science & Business Media.
+
+[Bradley2001] Bradley, M. M., & Lang, P. J. (2001). Measuring emotion: the self-assessment manikin and the semantic differential. Journal of behavior therapy and experimental psychiatry, 25(1), 49-59.
+
+[Burns2010] Burns, A., et al. (2010). Shimmer™ – A wireless sensor platform for noninvasive biomedical research. IEEE Sensors Journal, 10(9), 1527-1534.
+
+[Cacioppo2007] Cacioppo, J. T., Tassinary, L. G., & Berntson, G. G. (2007). Handbook of psychophysiology. Cambridge University Press.
+
+[Cavallari2014] Cavallari, R., et al. (2014). A survey on wireless body area networks: Technologies and design challenges. IEEE Communications Surveys & Tutorials, 16(3), 1635-1657.
+
+[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronization. Distributed Computing, 3(3), 146-158.
+
+[Dawson2007] Dawson, M. E., Schell, A. M., & Filion, D. L. (2007). The electrodermal system. Handbook of psychophysiology, 2, 159-181.
+
+[Fere1888] Féré, C. (1888). Note sur des modifications de la résistance électrique sous l'influence des excitations sensorielles et des émotions. Comptes rendus des séances de la Société de biologie, 5, 217-219.
+
+[Greco2016] Greco, A., et al. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering, 63(4), 797-804.
+
+[Greene2010] Greene, B. R., et al. (2010). Quantitative falls risk assessment using the timed up and go test. IEEE Transactions on Biomedical Engineering, 57(12), 2918-2926.
+
+[Hall1997] Hall, D. L., & Llinas, J. (1997). An introduction to multisensor data fusion. Proceedings of the IEEE, 85(1), 6-23.
+
+[Healey2005] Healey, J. A., & Picard, R. W. (2005). Detecting stress during real-world driving tasks using physiological sensors. IEEE Transactions on Intelligent Transportation Systems, 6(2), 156-166.
+
+[Hernando2016] Hernando, A., et al. (2016). Inclusion of respiratory frequency information in heart rate variability analysis for stress assessment. IEEE Journal of Biomedical and Health Informatics, 20(4), 1016-1025.
+
+[Jerritta2011] Jerritta, S., et al. (2011). Physiological signals based human emotion recognition: a review. Proceedings of the 7th International Conference on Signal Processing and Communication Systems, 1-10.
+
+[Kalman1960] Kalman, R. E. (1960). A new approach to linear filtering and prediction problems. Journal of Basic Engineering, 82(1), 35-45.
+
+[Karvonen1957] Karvonen, M., Kentala, E., & Mustala, O. (1957). The effects of training on heart rate; a longitudinal study. Annales medicinae experimentalis et biologiae Fenniae, 35(3), 307-315.
+
+[Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565.
+
+[Li2016] Li, Q., et al. (2016). Robust heart rate estimation from multiple asynchronous noisy sources using beat detection and Kalman filtering. Physiological Measurement, 37(1), 100-120.
+
+[Liu2016] Liu, C., et al. (2016). Real-time PPG signal quality assessment for improving the accuracy of heart rate monitoring. Measurement Science and Technology, 27(2), 025701.
+
+[Mandryk2006] Mandryk, R. L., et al. (2006). Using psychophysiological techniques to measure user experience with entertainment technologies. Behavior & Information Technology, 25(2), 141-158.
+
+[Mills1991] Mills, D. L. (1991). Internet time synchronization: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
+
+[Picard1997] Picard, R. W. (1997). Affective Computing. MIT Press.
+
+[Poh2010] Poh, M. Z., McDuff, D. J., & Picard, R. W. (2010). Non-contact, automated cardiac pulse measurements using video imaging and blind source separation. Optics Express, 18(10), 10762-10774.
+
+[Preece2009] Preece, S. J., et al. (2009). Activity identification using body-mounted sensors—a review of classification techniques. Physiological Measurement, 30(4), R1.
+
+[Rashid2006] Rashid, R. A., et al. (2006). Applications of wireless sensor networks in the oil, gas and resources industries. Proceedings of the 24th IASTED International Conference on Parallel and Distributed Computing and Networks, 432-439.
+
+[ShimmerUseCase2018] Burns, A., et al. (2018). Shimmer™ – A wireless sensor platform for noninvasive biomedical research. IEEE Sensors Journal, 10(9), 1527-1534.
+
+[Sundararaman2005] Sundararaman, B., Buy, U., & Kshemkalyani, A. D. (2005). Clock synchronization for wireless sensor networks: a survey. Ad Hoc Networks, 3(3), 281-323.
+
+[Tarchanoff1890] Tarchanoff, J. (1890). Über die galvanischen Erscheinungen in der Haut des Menschen bei Reizungen der Sinnesorgane und bei verschiedenen Formen der psychischen Tätigkeit. Pflüger's Archiv für die gesamte Physiologie des Menschen und der Tiere, 46(1), 46-55.
+
+[Wang2015] Wang, A., et al. (2015). Energy-efficient wireless sensor networks using an adaptive TDMA/FDMA protocol. ACM Transactions on Sensor Networks, 11(2), 1-26.
+
+[Wijsman2013] Wijsman, J., et al. (2013). Wearable physiological sensors reflect mental stress state in office-like situations. Proceedings of the 2013 Humaine Association Conference on Affective Computing and Intelligent Interaction, 600-605.
+
+[Yang2016] Yang, L., et al. (2016). Motion artifact cancellation of photoplethysmographic signals based on signal decomposition. Proceedings of the 38th Annual International Conference of the IEEE Engineering in Medicine and Biology Society, 6524-6527.
+
+[Yaghmour2013] Yaghmour, K. (2013). Embedded Android: porting, extending, and customizing. O'Reilly Media.
+
+[Zeng2009] Zeng, Z., et al. (2009). A survey of affect recognition methods: Audio, visual, and spontaneous expressions. IEEE Transactions on Pattern Analysis and Machine Intelligence, 31(1), 39-58.

@@ -460,3 +460,29 @@ The testing and evaluation methodologies described in this chapter are implement
 - Integration with development workflow for continuous quality assurance
 
 The complete implementation provides over 2,000 individual test cases across all testing categories, ensuring comprehensive validation of system functionality, performance, and reliability characteristics essential for research-grade applications.
+
+## References
+
+[Ammann2008] Ammann, P., & Offutt, J. "Introduction to Software Testing." Cambridge University Press, 2008.
+
+[Beck2002] Beck, K. "Test Driven Development: By Example." Addison-Wesley Professional, 2002.
+
+[Beizer1995] Beizer, B. "Black-Box Testing: Techniques for Functional Testing of Software and Systems." John Wiley & Sons, 1995.
+
+[Craig2002] Craig, R. D., & Jaskiel, S. P. "Systematic Software Testing." Artech House, 2002.
+
+[Fowler2013] Fowler, M. "Refactoring: Improving the Design of Existing Code, 2nd Edition." Addison-Wesley Professional, 2013.
+
+[Glenford1979] Myers, G. J. "The Art of Software Testing." John Wiley & Sons, 1979.
+
+[Graham2006] Graham, D., Van Veenendaal, E., Evans, I., & Black, R. "Foundations of Software Testing: ISTQB Certification." Cengage Learning EMEA, 2006.
+
+[IEEE829] IEEE Computer Society. "IEEE Standard for Software and System Test Documentation." IEEE Standard 829-2008, 2008.
+
+[Jones2008] Jones, C., & Bonsignour, O. "The Economics of Software Quality." Addison-Wesley Professional, 2008.
+
+[Kaner2013] Kaner, C., Bach, J., & Pettichord, B. "Lessons Learned in Software Testing." John Wiley & Sons, 2013.
+
+[Osherove2009] Osherove, R. "The Art of Unit Testing: with examples in C#." Manning Publications, 2009.
+
+[Perry2006] Perry, W. E. "Effective Methods for Software Testing, 3rd Edition." John Wiley & Sons, 2006.
