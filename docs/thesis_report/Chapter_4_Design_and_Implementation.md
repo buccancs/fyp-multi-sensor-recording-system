@@ -326,42 +326,179 @@ flowchart TD
 
 ## 4.2 Android Application Design and Sensor Integration
 
-### Comprehensive System Component Architecture
+The Android Mobile Application represents a sophisticated distributed mobile data collection node that implements numerous advanced features and architectural patterns specifically designed for research-grade multi-sensor coordination [CITE - Google Android Developers. (2024). Camera2 API Guide. Android Developer Documentation]. The application architecture follows Clean Architecture principles with comprehensive separation of concerns, enabling maintainable, testable, and extensible code that supports diverse research applications while maintaining scientific rigor and data quality standards.
 
-**Central Python Desktop Controller - Master Orchestration Hub:**
+### 4.2.1 Application Architecture and Component Design
 
-The Python Desktop Controller represents the central orchestration hub that implements sophisticated distributed system coordination patterns specifically adapted for research applications. The controller architecture employs a comprehensive dependency injection container with lifecycle management, enabling sophisticated service orchestration that supports both real-time operation and comprehensive testing frameworks.
+The Android application follows Clean Architecture principles with clear separation between presentation, domain, and data layers. This design ensures maintainability, testability, and flexibility for future enhancements while providing the sophisticated coordination capabilities required for research-grade multi-sensor data collection.
 
-**Core Controller Components:**
-- **Application Container**: Advanced IoC container providing service orchestration with dependency injection and lifecycle management
-- **Network Layer**: Sophisticated TCP/WebSocket server implementation supporting up to 8 simultaneous device connections with automatic load balancing
-- **Synchronization Engine**: Master clock synchronizer implementing custom NTP protocols optimized for local network precision
-- **Session Management**: Comprehensive session lifecycle management with automatic recovery and data integrity validation
-- **Quality Assurance Engine**: Real-time monitoring and optimization system ensuring research-grade data quality across all sensor modalities
+**Figure 4.4: Android Application Architectural Layers**
 
-**Advanced Android Mobile Application - Distributed Sensor Nodes:**
+```mermaid
+graph TD
+    subgraph "Presentation Layer"
+        UI[User Interface<br/>Activities & Fragments]
+        VM[ViewModels<br/>UI State Management]
+        BIND[View Binding<br/>UI Component Access]
+    end
+    
+    subgraph "Domain Layer"
+        UC[Use Cases<br/>Business Logic]
+        REPO[Repository Interfaces<br/>Abstractions]
+        ENTITY[Domain Entities<br/>Data Models]
+    end
+    
+    subgraph "Data Layer"
+        IMPL[Repository Implementations]
+        API[Network API<br/>PC Communication]
+        LOCAL[Local Storage<br/>Session Data]
+        SENSOR[Sensor Managers<br/>Camera, Thermal, GSR]
+    end
+    
+    UI --> VM
+    VM --> UC
+    UC --> REPO
+    REPO --> ENTITY
+    
+    IMPL --> API
+    IMPL --> LOCAL
+    IMPL --> SENSOR
+    
+    REPO -.-> IMPL
+```
 
-The Android mobile application architecture implements sophisticated autonomous operation capabilities while maintaining seamless integration with the central coordination framework. Each mobile device operates as a fully capable data collection agent with complete local autonomy, enabling continued operation during network interruptions while participating in coordinated measurement sessions.
+**Core Application Components:**
 
-**Mobile Application Architecture:**
-- **Fragment-Based UI**: Modern Android architecture with RecordingFragment, DevicesFragment, and CalibrationFragment for comprehensive operational control
-- **Multi-Sensor Coordination**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors with real-time processing
-- **Local Data Management**: Room database implementation with automatic backup, data validation, and integrity verification
-- **Network Communication**: Retrofit 2 and OkHttp 4 implementation providing robust WebSocket communication with automatic reconnection
-- **Background Processing**: Kotlin Coroutines architecture enabling responsive UI while managing complex sensor coordination tasks
+**Fragment-Based UI Architecture**: Modern Android architecture with RecordingFragment, DevicesFragment, and CalibrationFragment for comprehensive operational control, implementing Material Design 3 principles with accessibility compliance and responsive layout management.
 
-**Shimmer3 GSR+ Integration - Reference Physiological Measurement:**
+**Multi-Sensor Coordination Engine**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors with real-time processing, providing coordinated data collection with precise temporal synchronization across all sensor modalities.
 
-The Shimmer3 GSR+ integration provides research-grade physiological measurement capabilities through sophisticated wearable sensor platforms. The integration supports high-precision galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG), accelerometry, and magnetometer data.
+**Local Data Management**: Room database implementation with automatic backup, data validation, and integrity verification, ensuring data persistence and recovery capabilities during network interruptions or application lifecycle events.
 
-**Shimmer3 Technical Specifications:**
-- **GSR Measurement Ranges**: Configurable resistance ranges from 10kΩ to 4.7MΩ across five distinct measurement ranges
-- **Sampling Rates**: Configurable from 1 Hz to 1000 Hz with adaptive rate management based on battery and processing constraints
-- **Multi-Sensor Platform**: Integrated PPG, 3-axis accelerometry, gyroscope, and magnetometer for comprehensive physiological monitoring
-- **Wireless Communication**: Bluetooth Classic and Bluetooth Low Energy with automatic device discovery and connection management
-- **Data Quality Assessment**: Real-time signal quality monitoring with electrode contact detection and movement artifact identification
+**Network Communication Layer**: Retrofit 2 and OkHttp 4 implementation providing robust WebSocket communication with automatic reconnection, comprehensive error handling, and adaptive quality management based on network conditions.
 
-**TopDon Thermal Camera Integration - Advanced Thermal Imaging:**
+### 4.2.2 Multi-Threading and Performance Optimization
+
+The Android application implements sophisticated multi-threading architecture using Kotlin Coroutines that enables responsive user interface operation while managing complex sensor coordination tasks and data processing operations.
+
+**Coroutine-Based Concurrency Architecture:**
+
+```kotlin
+class MultiSensorCoordinator @Inject constructor(
+    private val cameraService: CameraService,
+    private val thermalService: ThermalService,
+    private val shimmerService: ShimmerService,
+    private val networkService: NetworkService
+) {
+    private val coordinatorScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    
+    suspend fun startCoordinatedRecording(sessionConfig: SessionConfiguration): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                // Launch concurrent sensor operations
+                val sensorOperations = listOf(
+                    async { cameraService.startRecording(sessionConfig.cameraConfig) },
+                    async { thermalService.startRecording(sessionConfig.thermalConfig) },
+                    async { shimmerService.startRecording(sessionConfig.shimmerConfig) }
+                )
+                
+                // Start background monitoring
+                launch { monitorSystemPerformance() }
+                launch { manageDataFlow() }
+                launch { maintainNetworkSync() }
+                
+                // Wait for all sensors to initialize
+                val results = sensorOperations.awaitAll()
+                
+                if (results.all { it.isSuccess }) {
+                    Result.success(Unit)
+                } else {
+                    Result.failure(SensorCoordinationException(results))
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+    
+    private suspend fun monitorSystemPerformance() {
+        while (coordinatorScope.isActive) {
+            val performance = SystemPerformanceMonitor.getCurrentMetrics()
+            if (performance.requiresOptimization()) {
+                optimizeResourceAllocation(performance)
+            }
+            delay(PERFORMANCE_MONITORING_INTERVAL)
+        }
+    }
+}
+```
+
+**Performance Optimization Strategies:**
+
+- **Adaptive Resource Management**: Dynamic allocation of computational resources based on real-time system performance assessment and battery level monitoring
+- **Background Processing Optimization**: Intelligent task scheduling that prioritizes critical data collection operations while maintaining responsive user interface
+- **Memory Management**: Comprehensive memory optimization with automatic garbage collection tuning and resource cleanup procedures
+- **Network Optimization**: Adaptive data compression and transmission strategies that optimize bandwidth utilization while maintaining data quality
+
+### 4.2.3 Resource Management and Power Optimization
+
+The Android application implements comprehensive resource management and power optimization strategies specifically designed for extended research sessions that may span several hours of continuous operation.
+
+**Intelligent Power Management System:**
+
+```kotlin
+class PowerOptimizationManager @Inject constructor(
+    private val batteryMonitor: BatteryMonitor,
+    private val performanceController: PerformanceController,
+    private val sensorManager: SensorManager
+) {
+    suspend fun optimizePowerConsumption(): PowerOptimizationResult {
+        val currentBatteryLevel = batteryMonitor.getCurrentLevel()
+        val estimatedSessionDuration = calculateEstimatedDuration()
+        
+        return when {
+            currentBatteryLevel < CRITICAL_BATTERY_THRESHOLD -> {
+                applyCriticalPowerMode()
+            }
+            currentBatteryLevel < LOW_BATTERY_THRESHOLD -> {
+                applyConservativePowerMode()
+            }
+            estimatedSessionDuration > currentBatteryLevel * BATTERY_DURATION_FACTOR -> {
+                applyExtendedSessionMode()
+            }
+            else -> {
+                applyOptimalPerformanceMode()
+            }
+        }
+    }
+    
+    private suspend fun applyCriticalPowerMode(): PowerOptimizationResult {
+        // Reduce sensor sampling rates
+        sensorManager.reduceSamplingRates(CRITICAL_MODE_REDUCTION)
+        
+        // Lower video quality settings
+        performanceController.adjustVideoQuality(VideoQuality.POWER_SAVING)
+        
+        // Minimize background processing
+        performanceController.pauseNonEssentialOperations()
+        
+        return PowerOptimizationResult.criticalMode()
+    }
+}
+```
+
+**Resource Optimization Features:**
+
+- **Battery Life Prediction**: Advanced algorithms that predict battery consumption patterns and recommend optimization strategies for extended session duration
+- **Adaptive Quality Management**: Dynamic adjustment of recording quality parameters based on available system resources and session requirements
+- **Thermal Management**: Comprehensive thermal monitoring with automatic performance scaling to prevent device overheating during intensive recording sessions
+- **Storage Optimization**: Intelligent data compression and local storage management with automatic cleanup and archival procedures
+
+## 4.3 Android Application Sensor Integration
+
+The Android application implements sophisticated sensor integration capabilities that provide research-grade measurement capabilities through advanced hardware coordination and signal processing algorithms. The sensor integration architecture supports both integrated mobile device sensors and external specialized measurement equipment through standardized interfaces and communication protocols.
+
+### 4.3.1 Thermal Camera Integration (Topdon)
 
 The TopDon thermal camera integration provides sophisticated thermal imaging capabilities optimized for physiological research applications. The TC001 and TC001 Plus models feature uncooled microbolometer technology with research-grade temperature measurement accuracy and real-time processing capabilities.
 
@@ -372,25 +509,139 @@ The TopDon thermal camera integration provides sophisticated thermal imaging cap
 - **Spectral Range**: 8-14 μm long-wave infrared (LWIR) optimized for human physiological monitoring
 - **USB-C OTG Integration**: Direct Android device connection with sophisticated device detection and communication management
 
-**Camera Recording System - Stage 3 RAW Extraction:**
+**Thermal Camera Integration Implementation:**
 
-The camera recording system implements sophisticated multi-stream capture capabilities with Samsung-specific optimizations for Stage 3 RAW extraction. The system supports simultaneous 4K video recording and RAW image capture with precise temporal synchronization across multiple camera devices.
+```kotlin
+class ThermalRecorder @Inject constructor(
+    private val usbManager: UsbManager,
+    private val thermalProcessor: ThermalImageProcessor
+) {
+    private var thermalDevice: TopdonDevice? = null
+    private var frameProcessor: ThermalFrameProcessor? = null
+    
+    suspend fun connectDevice(): Result<TopdonDevice> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val availableDevices = usbManager.deviceList.values
+                    .filter { it.vendorId == TOPDON_VENDOR_ID }
+                
+                if (availableDevices.isEmpty()) {
+                    return@withContext Result.failure(
+                        NoThermalDeviceException("No Topdon devices found")
+                    )
+                }
+                
+                val device = availableDevices.first()
+                val connection = usbManager.openDevice(device)
+                
+                thermalDevice = TopdonDevice(device, connection).apply {
+                    initialize()
+                    setFrameCallback { frame ->
+                        processFrame(frame)
+                    }
+                }
+                
+                Result.success(thermalDevice!!)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+    
+    private fun processFrame(frame: ThermalFrame) {
+        frameProcessor?.process(frame) { processedFrame ->
+            // Save frame data and update preview
+            saveFrameData(processedFrame)
+            updatePreview(processedFrame)
+        }
+    }
+}
+```
 
-**Camera System Technical Features:**
-- **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing pipelines
-- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and performance optimization
-- **RAW Processing Pipeline**: DNG file generation with comprehensive metadata embedding and quality validation
-- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration integration
+**Advanced Thermal Analysis Features:**
+- **Temperature Distribution Analysis**: Sophisticated thermal analysis with statistical validation and quality assessment
+- **Thermal Pattern Recognition**: Advanced pattern recognition algorithms with quality assessment and validation
+- **Cross-Modal Registration**: Precise registration between optical and thermal modalities with accuracy validation
+- **Quality Metrics Calculation**: Comprehensive quality assessment with statistical analysis and validation procedures
 
-**Advanced Computer Vision Pipeline - Real-Time Analysis:**
+### 4.3.2 GSR Sensor Integration (Shimmer)
 
-The computer vision pipeline integrates OpenCV and MediaPipe frameworks for real-time analysis of physiological and behavioral parameters. The system implements sophisticated hand detection, facial analysis, and movement tracking algorithms optimized for research applications.
+The Shimmer3 GSR+ integration provides research-grade physiological measurement capabilities through sophisticated wearable sensor platforms. The integration supports high-precision galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG), accelerometry, and magnetometer data.
 
-**Computer Vision Components:**
-- **Hand Segmentation System**: Real-time hand detection and tracking with region of interest analysis for contactless physiological measurement
-- **Facial Analysis Pipeline**: Advanced facial detection with region-specific analysis for photoplethysmographic signal extraction
-- **Movement Tracking**: Comprehensive motion analysis with artifact detection and quality assessment
-- **Real-Time Processing**: Optimized algorithms supporting simultaneous analysis of multiple high-resolution video streams
+**Shimmer3 Technical Specifications:**
+- **GSR Measurement Ranges**: Configurable resistance ranges from 10kΩ to 4.7MΩ across five distinct measurement ranges
+- **Sampling Rates**: Configurable from 1 Hz to 1000 Hz with adaptive rate management based on battery and processing constraints
+- **Multi-Sensor Platform**: Integrated PPG, 3-axis accelerometry, gyroscope, and magnetometer for comprehensive physiological monitoring
+- **Wireless Communication**: Bluetooth Classic and Bluetooth Low Energy with automatic device discovery and connection management
+- **Data Quality Assessment**: Real-time signal quality monitoring with electrode contact detection and movement artifact identification
+
+**Shimmer GSR Integration Implementation:**
+
+```kotlin
+class ShimmerRecorder @Inject constructor(
+    private val bluetoothAdapter: BluetoothAdapter,
+    private val shimmerManager: ShimmerManager
+) {
+    private var connectedShimmers: MutableMap<String, Shimmer> = mutableMapOf()
+    
+    suspend fun discoverAndConnect(): Result<List<Shimmer>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val discoveredDevices = scanForShimmerDevices()
+                val connectionResults = discoveredDevices.map { device ->
+                    async { connectToShimmer(device) }
+                }.awaitAll()
+                
+                val connectedDevices = connectionResults.mapNotNull { it.getOrNull() }
+                connectedShimmers.putAll(connectedDevices.associateBy { it.macAddress })
+                
+                Result.success(connectedDevices)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+    
+    private suspend fun connectToShimmer(device: BluetoothDevice): Result<Shimmer> {
+        return try {
+            val shimmer = shimmerManager.createShimmer(device)
+            shimmer.connect()
+            shimmer.configureSensors(GSR_SENSOR_CONFIG)
+            shimmer.setDataCallback { data ->
+                processGSRData(data)
+            }
+            Result.success(shimmer)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    private fun processGSRData(data: ShimmerData) {
+        // Process and validate GSR data
+        val processedData = SignalProcessor.processGSRSignal(data)
+        
+        // Apply quality assessment
+        val qualityMetrics = QualityAssessor.assessSignalQuality(processedData)
+        
+        // Store data with metadata
+        DataManager.storeGSRData(processedData, qualityMetrics)
+    }
+}
+```
+
+**Physiological Measurement Capabilities:**
+- **High-Precision GSR Measurement**: 24-bit ADC resolution with 0.01 µS measurement accuracy and comprehensive noise filtering algorithms
+- **Adaptive Sampling Rate**: Configurable sampling rates (1Hz to 1024Hz) with automatic optimization based on signal characteristics and battery conservation requirements
+- **Real-Time Signal Processing**: Advanced signal filtering with artifact detection, baseline correction, and statistical quality assessment
+- **Comprehensive Calibration**: Multi-point calibration procedures with temperature compensation and long-term drift correction
+
+**Bluetooth Low Energy Communication:**
+- **Robust Connection Management**: Automatic device discovery with RSSI monitoring and adaptive connection parameter optimization
+- **Data Streaming Optimization**: Adaptive packet size management with error detection and automatic retransmission for reliable data delivery
+- **Battery Status Monitoring**: Continuous battery level monitoring with predictive analysis and low-power mode management
+- **Quality Assessment**: Real-time signal quality analysis with artifact detection and measurement validity assessment
+
+## 4.4 Desktop Controller Design and Functionality
         PROC[Processing Pipeline<br/>Real-time Analysis]
         HEALTH[Health Monitor<br/>System Status Tracking]
         SESSION[Session Manager<br/>Experiment Coordination]
