@@ -2,18 +2,50 @@
 
 ## Table of Contents
 
-1. [Problem Statement](#problem-statement)
-   - 1.1. [Current Physiological Measurement Landscape Analysis](#current-physiological-measurement-landscape-analysis)
-   - 1.2. [Measurement Paradigm Evolution Timeline](#measurement-paradigm-evolution-timeline)
-   - 1.3. [Research Gap Analysis and Opportunity Identification](#research-gap-analysis-and-opportunity-identification)
-   - 1.4. [System Requirements Analysis Framework](#system-requirements-analysis-framework)
-   - 1.5. [Detailed Stakeholder Analysis and Requirements Elicitation](#detailed-stakeholder-analysis-and-requirements-elicitation)
-   - 1.6. [Research Context and Current Limitations](#research-context-and-current-limitations)
-   - 1.7. [Innovation Opportunity and Technical Approach](#innovation-opportunity-and-technical-approach)
-2. [Requirements Engineering Methodology](#requirements-engineering-methodology)
-   - 2.1. [Comprehensive Stakeholder Analysis and Strategic Engagement](#comprehensive-stakeholder-analysis-and-strategic-engagement)
-   - 2.2. [Comprehensive Requirements Elicitation Methods and Systematic Validation](#comprehensive-requirements-elicitation-methods-and-systematic-validation)
-3. [Functional Requirements](#functional-requirements)
+3.1. [Problem Statement and Research Context](#31-problem-statement-and-research-context)
+   - 3.1.1. [Current State of Physiological Measurement](#311-current-state-of-physiological-measurement)
+   - 3.1.2. [Evolution of Measurement Paradigms](#312-evolution-of-measurement-paradigms)
+   - 3.1.3. [Identified Research Gap and Opportunity](#313-identified-research-gap-and-opportunity)
+
+3.2. [Requirements Engineering Approach](#32-requirements-engineering-approach)
+   - 3.2.1. [Stakeholder Analysis and Requirements Elicitation](#321-stakeholder-analysis-and-requirements-elicitation)
+   - 3.2.2. [System Requirements Analysis Framework](#322-system-requirements-analysis-framework)
+
+3.3. [Functional Requirements Overview](#33-functional-requirements-overview)
+   - 3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
+   - 3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
+   - 3.3.3. [Real-Time Data Processing and Analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
+   - 3.3.4. [User Interface and Session Management Requirements](#334-user-interface-and-session-management-requirements)
+
+3.4. [Non-Functional Requirements](#34-non-functional-requirements)
+   - 3.4.1. [Performance and Scalability Requirements](#341-performance-and-scalability-requirements)
+   - 3.4.2. [Reliability and Data Integrity Requirements](#342-reliability-and-data-integrity-requirements)
+   - 3.4.3. [Usability and Accessibility Requirements](#343-usability-and-accessibility-requirements)
+
+3.5. [Use Case Scenarios](#35-use-case-scenarios)
+   - 3.5.1. [Primary Use Case: Multi-Participant Recording Session](#351-primary-use-case-multi-participant-recording-session)
+   - 3.5.2. [Secondary Use Case: System Calibration and Configuration](#352-secondary-use-case-system-calibration-and-configuration)
+   - 3.5.3. [Secondary Use Case: Real-Time Monitoring and Annotation](#353-secondary-use-case-real-time-monitoring-and-annotation)
+
+3.6. [System Analysis (Architecture & Data Flow)](#36-system-analysis-architecture--data-flow)
+   - 3.6.1. [Data Flow Analysis](#361-data-flow-analysis)
+   - 3.6.2. [Component Interaction Analysis](#362-component-interaction-analysis)
+   - 3.6.3. [Scalability Considerations](#363-scalability-considerations)
+
+3.7. [Data Requirements and Management](#37-data-requirements-and-management)
+   - 3.7.1. [Data Types and Volume Specifications](#371-data-types-and-volume-specifications)
+   - 3.7.2. [Data Quality and Integrity Requirements](#372-data-quality-and-integrity-requirements)
+   - 3.7.3. [Data Management and Analysis Preparation](#373-data-management-and-analysis-preparation)
+
+---
+
+This comprehensive chapter establishes the systematic foundation for the Multi-Sensor Recording System through rigorous requirements engineering methodology and detailed analytical assessment. The requirements analysis follows established software engineering principles while addressing the unique challenges of research-grade physiological measurement systems that must maintain scientific rigor across diverse experimental contexts.
+
+The chapter presents a comprehensive stakeholder analysis encompassing research scientists, study participants, technical personnel, and institutional oversight bodies, each with distinct requirements that must be systematically balanced to achieve optimal system performance. Through detailed functional and non-functional requirements specification, use case analysis, and systematic validation methodology, this chapter establishes the complete technical and operational foundation that guides all subsequent design and implementation decisions.
+
+## 3.1 Problem Statement and Research Context
+
+### 3.1.1 Current State of Physiological Measurement
    - 3.1. [Comprehensive Functional Requirements Overview](#comprehensive-functional-requirements-overview)
    - 3.2. [Core System Performance Specifications](#core-system-performance-specifications)
    - 3.3. [Hardware Integration Requirements](#hardware-integration-requirements)
@@ -79,9 +111,6 @@ This comprehensive chapter establishes the systematic foundation for the Multi-S
 
 The chapter presents a comprehensive stakeholder analysis encompassing research scientists, study participants, technical personnel, and institutional oversight bodies, each with distinct requirements that must be systematically balanced to achieve optimal system performance. Through detailed functional and non-functional requirements specification, use case analysis, and systematic validation methodology, this chapter establishes the complete technical and operational foundation that guides all subsequent design and implementation decisions.
 
-## Problem Statement
-
-### Current Physiological Measurement Landscape Analysis
 
 The physiological measurement research domain has experienced significant methodological stagnation due to fundamental limitations inherent in traditional contact-based sensor technologies. Contemporary galvanic skin response (GSR) measurement, while representing the established scientific standard for electrodermal activity assessment, imposes systematic constraints that fundamentally limit research scope, experimental validity, and scientific advancement opportunities across multiple research disciplines.
 
@@ -108,7 +137,7 @@ Left: Traditional GSR setup with participant connected to electrodes, wires, gel
 Right: Contactless setup with participant in natural position, cameras positioned discretely]
 ```
 
-### Measurement Paradigm Evolution Timeline
+### 3.1.2 Evolution of Measurement Paradigms
 
 **Figure 3.2: Evolution of Physiological Measurement Technologies**
 
@@ -147,7 +176,7 @@ timeline
                  : This Research Project
 ```
 
-### Research Gap Analysis and Opportunity Identification
+### 3.1.3 Identified Research Gap and Opportunity
 
 **Table 3.2: Research Gap Analysis Matrix**
 
@@ -182,219 +211,13 @@ quadrantChart
     Cross-Cultural Research: [0.2, 0.5]
 ```
 
-### System Requirements Analysis Framework
-
-The comprehensive requirements analysis employs a systematic methodology derived from established software engineering practices and specifically adapted for physiological measurement research applications [CITE - Sommerville, I. (2015). Software Engineering. Pearson Education]. The framework incorporates specialized requirements engineering techniques designed to address the unique challenges of research software development where scientific accuracy and measurement validity are paramount concerns.
-
-**Table 3.3: Requirements Analysis Framework Components**
-
-| Framework Component | Purpose | Methodology | Validation Approach |
-|---|---|---|---|
-| **Stakeholder Analysis** | Identify all research participants | Interview protocols, surveys | Stakeholder validation sessions |
-| **Context Analysis** | Define operational environment | Environmental assessment | Field testing validation |
-| **Technology Constraints** | Hardware/software limitations | Technical feasibility studies | Prototype validation |
-| **Performance Requirements** | Quantitative specifications | Benchmarking analysis | Performance testing |
-| **Quality Attributes** | Non-functional characteristics | Quality model application | Quality assurance testing |
-| **Risk Assessment** | Identify potential failures | Risk analysis techniques | Failure mode testing |
-
-**Figure 3.4: Requirements Engineering Process Flow**
-
-```mermaid
-flowchart TD
-    A[Stakeholder Identification] --> B[Requirements Elicitation]
-    B --> C[Requirements Analysis]
-    C --> D[Requirements Specification]
-    D --> E[Requirements Validation]
-    E --> F{Validation Results}
-    F -->|Pass| G[Requirements Baseline]
-    F -->|Fail| C
-    G --> H[Change Management]
-    H --> I[Requirements Traceability]
-    
-    subgraph "Stakeholder Groups"
-        S1[Research Scientists]
-        S2[Study Participants]
-        S3[Technical Personnel]
-        S4[Ethics Committees]
-    end
-    
-    subgraph "Validation Methods"
-        V1[Technical Reviews]
-        V2[Prototype Testing]
-        V3[Stakeholder Feedback]
-        V4[Performance Benchmarks]
-    end
-    
-    A --> S1
-    A --> S2
-    A --> S3
-    A --> S4
-    
-    E --> V1
-    E --> V2
-    E --> V3
-    E --> V4
-```
-
-### Detailed Stakeholder Analysis and Requirements Elicitation
-
-**Table 3.4: Comprehensive Stakeholder Analysis Matrix**
-
-| Stakeholder Group | Primary Interests | Technical Expertise | Influence Level | Engagement Strategy |
-|---|---|---|---|---|
-| **Principal Researchers** | Scientific validity, data quality | High | Very High | Direct collaboration |
-| **Graduate Students** | System usability, learning opportunities | Medium | Medium | Training workshops |
-| **Study Participants** | Comfort, privacy, safety | Low | Medium | User experience testing |
-| **Technical Support** | System reliability, maintainability | High | Medium | Technical documentation |
-| **Ethics Review Board** | Privacy, consent, data protection | Medium | High | Compliance documentation |
-| **Laboratory Managers** | Resource efficiency, scheduling | Medium | Medium | Operational procedures |
-| **IT Infrastructure** | Network security, data storage | High | Medium | Technical integration |
-    x-axis Low Technical Complexity --> High Technical Complexity
-    y-axis Low Research Impact --> High Research Impact
-    
-    quadrant-1 Quick Wins
-    quadrant-2 Major Projects
-    quadrant-3 Fill-ins
-    quadrant-4 Research Breakthroughs
-    
-    Natural Behavior Studies: [0.7, 0.9]
-    Group Dynamics: [0.6, 0.8]
-    Pediatric Research: [0.3, 0.9]
-    Long-Duration Studies: [0.4, 0.6]
-    Mobile Applications: [0.5, 0.7]
-    Population Studies: [0.8, 0.7]
-    Multi-Modal Integration: [0.9, 0.8]
-    Real-Time Processing: [0.8, 0.6]
-```
-
-The fundamental research problem addressed by this thesis centers on the development of a comprehensive multi-sensor recording system specifically designed for contactless galvanic skin response (GSR) prediction research. This innovative work emerges from significant limitations inherent in traditional physiological measurement methodologies that have constrained research applications and scientific understanding for several decades, creating an urgent need for revolutionary approaches to physiological measurement [CITE - Boucsein, W. (2012). Electrodermal Activity, 2nd Edition. Springer Science & Business Media].
-
-Traditional GSR measurement techniques rely exclusively on direct skin contact through specialized metallic electrodes that measure electrodermal activity by applying a precisely calibrated electrical current across the skin surface, typically utilizing silver/silver chloride electrodes with conductive gel to ensure optimal electrical contact [CITE - Fowles, D.C., Christie, M.J., Edelberg, R., Grings, W.W., Lykken, D.T., & Venables, P.H. (1981). Publication recommendations for electrodermal measurements. Psychophysiology, 18(3), 232-239]. While this methodological approach has served as the internationally recognized gold standard in psychophysiological research since Féré's pioneering work in the early 20th century and has been refined through nearly a century of scientific advancement, it introduces several critical limitations that fundamentally affect both the precision quality of measurements and the comprehensive range of possible research applications across diverse experimental paradigms [CITE - Critchley, H.D. (2002). Electrodermal responses: what happens in the brain. The Neuroscientist, 8(2), 132-142].
-
-The contact-based nature of traditional GSR sensor systems creates an inherent methodological paradox that has been recognized but never adequately addressed in the psychophysiological research literature: the very act of physiological measurement through skin contact can systematically alter the physiological and psychological state being studied, thereby introducing measurement artifacts that compromise the ecological validity and scientific integrity of the research findings [CITE - Cacioppo, J.T., Tassinary, L.G., & Berntson, G.G. (2007). Handbook of Psychophysiology, 3rd Edition. Cambridge University Press].
-
-### Research Context and Current Limitations
-
-The contemporary physiological measurement landscape faces several profoundly interconnected methodological challenges that systematically limit both the effectiveness and comprehensive applicability of current GSR research methodologies across diverse experimental paradigms and research contexts [CITE - Picard, R.W., Vyzas, E., & Healey, J. (2001). Toward machine emotional intelligence: Analysis of affective physiological state. IEEE Transactions on Pattern Analysis and Machine Intelligence, 23(10), 1175-1191]. Understanding these fundamental limitations in their complete scientific and practical context is absolutely crucial for appreciating the transformative significance and innovative potential of the contactless measurement approach developed and validated through this thesis research.
-
-**Intrusive Contact Requirements and Systematic Behavioral Alteration**: Traditional GSR sensor systems invariably require the precise placement of specialized electrodes directly on the participant's skin surface, typically positioned on the distal phalanges of fingers or specific regions of palm surfaces where electrodermal activity is most pronounced and accessible for measurement [CITE - Braithwaite, J.J., Watson, D.G., Jones, R., & Rowe, M. (2013). A guide for analysing electrodermal activity (EDA) & skin conductance responses (SCRs) for psychological experiments. Psychophysiology, 49(1), 1017-1034]. This unavoidable physical contact introduces a continuous and psychologically significant reminder of the measurement process that fundamentally alters natural behavior patterns, emotional responses, and cognitive processing in ways that directly compromise the ecological validity of the research findings [CITE - Healey, J.A., & Picard, R.W. (2005). Detecting stress during real-world driving tasks using physiological sensors. IEEE Transactions on Intelligent Transportation Systems, 6(2), 156-166].
-
-The documented psychological impact of being "wired up" with physiological monitoring equipment creates measurable anxiety responses, heightened self-consciousness, and altered autonomic nervous system activation patterns that directly confound the very physiological signals being studied, creating a fundamental measurement paradox that has plagued psychophysiological research for decades [CITE - Wilhelm, F.H., & Grossman, P. (2010). Emotions beyond the laboratory: Theoretical fundaments, study design, and analytic strategies for advanced ambulatory assessment. Biological Psychology, 84(3), 552-569]. This methodological challenge becomes particularly pronounced and scientifically problematic in research studies focusing on natural behavior observation, authentic social interaction dynamics, or spontaneous emotional response measurement where the primary research objective is to capture genuine physiological reactions in ecologically valid contexts.
-
-**Movement Artifacts and Systematic Signal Degradation**: Physical electrode connections employed in traditional GSR measurement systems demonstrate extreme susceptibility to motion artifacts that can severely and systematically compromise data quality through multiple interconnected mechanisms of signal corruption [CITE - Van Dooren, M., De Vries, J.J.G., & Janssen, J.H. (2012). Emotional sweating across the body: Comparing 16 different skin conductance measurement locations. Physiology & Behavior, 106(2), 298-304]. During dynamic activities involving natural movement patterns, exercise protocols, or real-world behavioral contexts, electrode displacement creates substantial noise contamination in the GSR signal that can completely mask the subtle physiological responses of primary research interest, rendering the data scientifically meaningless and compromising research validity [CITE - Poh, M.Z., Swenson, N.C., & Picard, R.W. (2010). A wearable sensor for unobtrusive, long-term assessment of electrodermal activity. IEEE Transactions on Biomedical Engineering, 57(5), 1243-1252].
-
-This fundamental limitation in traditional GSR measurement methodology effectively restricts the entire scope of physiological research to highly controlled, stationary experimental setups that bear little resemblance to real-world contexts, thereby eliminating valuable research possibilities for studying physiological responses during natural movement patterns, physical exercise protocols, or authentic real-world activities where participants move freely and naturally [CITE - Kushki, A., Fairley, J., Merja, S., King, G., & Chau, T. (2011). Comparison of blood volume pulse and skin conductance responses to mental and physical stress in children with autism spectrum disorders. Research in Autism Spectrum Disorders, 5(3), 1143-1153]. The scientific consequences of this methodological constraint extend far beyond simple experimental inconvenience, fundamentally limiting our understanding of how physiological responses function in ecologically valid contexts where humans naturally live, work, and interact.
-
-**Participant Discomfort and Systematic Measurement Bias**: The unavoidable physical discomfort associated with extended electrode placement, particularly during lengthy recording sessions commonly required in comprehensive psychological research, creates measurable and systematic measurement artifacts as participants unconsciously adjust their posture, hand positioning, or general behavior patterns to accommodate the restrictive sensor attachments [CITE - Boucsein, W., Fowles, D.C., Grimnes, S., Ben-Shakhar, G., Roth, W.T., Dawson, M.E., & Filion, D.L. (2012). Publication recommendations for electrodermal measurements. Psychophysiology, 49(8), 1017-1034]. The specialized conductive gel required for optimal electrode contact frequently causes skin irritation, allergic reactions, or discomfort in participants with sensitive skin conditions, while the significant restriction of natural hand movement and finger dexterity affects the fundamental ecological validity of behavioral and physiological measurements by constraining natural interaction patterns [CITE - Patel, S., Park, H., Bonato, P., Chan, L., & Rodgers, M. (2012). A review of wearable sensors and systems with application in rehabilitation. Journal of NeuroEngineering and Rehabilitation, 9(1), 1-17].
-
-These cumulative comfort-related factors introduce systematic bias that fundamentally compromises the generalizability and external validity of research findings by creating artificial experimental conditions that deviate significantly from the natural contexts where the studied physiological and psychological phenomena typically occur [CITE - Larsen, J.T., Norris, C.J., & Cacioppo, J.T. (2003). Effects of positive and negative affect on electromyographic activity over zygomaticus major and corrugator supercilii. Psychophysiology, 40(5), 776-785]. The resulting data may reflect responses to the measurement apparatus itself rather than the intended experimental stimuli or conditions, creating a fundamental validity problem that undermines scientific conclusions.
-
-**Scalability Limitations in Multi-Participant Research Studies**: Individual sensor attachment requirements create substantial and often prohibitive practical barriers for conducting large-scale research studies or implementing sophisticated multi-participant experimental designs that are increasingly important in contemporary psychological and sociological research [CITE - Healey, J., & Picard, R. (1998). Digital processing of affective signals. Proceedings of IEEE International Conference on Acoustics, Speech and Signal Processing, 6, 3749-3752]. The time investment required for proper sensor setup, calibration, and removal scales linearly and problematically with participant count, creating significant logistical challenges and resource allocation problems that fundamentally limit experimental scope, statistical power, and research ambition in ways that constrain scientific advancement [CITE - Pantic, M., & Rothkrantz, L.J. (2003). Toward an affect-sensitive multimodal human-computer interaction. Proceedings of the IEEE, 91(9), 1370-1390].
-
-Simultaneous physiological measurement of multiple participants requires dedicated sensor equipment sets for each individual research subject, creating exponentially increasing cost barriers and technical complexity that restrict research accessibility for laboratories with limited budgets and effectively eliminate possibilities for large-scale population studies that could provide statistically robust conclusions about physiological response patterns across diverse demographic groups [CITE - McDuff, D., Gontarek, S., & Picard, R.W. (2014). Remote detection of photoplethysmographic systolic and diastolic peaks using a digital camera. IEEE Transactions on Biomedical Engineering, 61(12), 2948-2954]. These resource constraints particularly affect research institutions in developing countries and smaller universities, creating systematic inequalities in research capabilities that limit scientific progress and international collaboration opportunities.
-
-**Temporal and Logistical Constraints in Research Operations**: The extensive setup and calibration time required for traditional GSR measurement systems introduces substantial temporal constraints that significantly affect experimental design flexibility, participant scheduling efficiency, and overall research productivity [CITE - Lisetti, C.L., & Nasoz, F. (2004). Using noninvasive wearable computers to recognize human emotions from physiological signals. EURASIP Journal on Applied Signal Processing, 2004, 1672-1687]. Researchers must systematically account for substantial sensor attachment time, gel application procedures, system calibration, and post-session cleanup in their experimental protocols, creating temporal overhead that can extend simple experimental sessions by 30-50% and significantly impact research efficiency and participant satisfaction [CITE - Kim, J., & André, E. (2008). Emotion recognition based on physiological changes in music listening. IEEE Transactions on Pattern Analysis and Machine Intelligence, 30(12), 2067-2083].
-
-The practical requirement for specialized conductive gels, electrode cleaning procedures, and sterilization protocols between sequential participants creates additional logistical overhead that affects research throughput and introduces potential contamination risks that must be carefully managed through rigorous protocols [CITE - Kreibig, S.D. (2010). Autonomic nervous system activity in emotion: A review. Biological Psychology, 84(3), 394-421]. These temporal and logistical constraints particularly affect research studies requiring rapid participant turnover, time-sensitive experimental protocols, or longitudinal designs where measurement efficiency directly impacts research feasibility and scientific conclusions.
-
-### Innovation Opportunity and Technical Approach
-
-The Multi-Sensor Recording System addresses these fundamental limitations through a paradigmatic shift toward contactless measurement that eliminates physical constraints while maintaining research-grade accuracy and reliability. This innovative approach represents a convergence of advances in computer vision, thermal imaging, distributed computing, and machine learning that enables comprehensive physiological monitoring without the traditional limitations of contact-based measurement.
-
-**Core Innovation Framework:**
-
-The system implements a comprehensive innovation framework that addresses traditional limitations through multiple coordinated technological advances:
-
-**1. Contactless Multi-Modal Sensor Integration**
-- Advanced RGB camera analysis for photoplethysmographic signal extraction
-- Thermal imaging integration for autonomous nervous system response detection  
-- Computer vision algorithms for behavioral analysis and movement tracking
-- Machine learning inference for physiological state prediction
-
-**2. Distributed Coordination Architecture**
-- Master-coordinator pattern with fault-tolerant device management
-- Network Time Protocol (NTP) implementation for microsecond-level synchronization
-- Automatic device discovery and connection management across heterogeneous platforms
-- Session-based recording with comprehensive metadata capture and quality validation
-
-**3. Research-Grade Quality Assurance**
-- Real-time signal quality assessment and adaptive parameter optimization
-- Statistical validation methodology with confidence interval estimation
-- Comprehensive data validation with integrity verification procedures
-- Performance benchmarking across diverse operational scenarios
-
-**4. Cross-Platform Integration Excellence**
-- Seamless Android and Python platform coordination
-- Unified communication protocols enabling device interoperability
-- Common development patterns supporting code maintainability
-- Comprehensive testing frameworks supporting multi-platform validation
-
-**5. Advanced Temporal Synchronization**
-- Sub-millisecond precision across wireless networks with variable latency
-- Clock drift compensation algorithms maintaining accuracy over extended sessions
-- Automatic synchronization recovery following network interruptions
-- Comprehensive temporal alignment of multi-modal data streams with different sampling rates
-
-**Comprehensive Requirements Architecture:**
-
-The requirements framework encompasses six major categories with detailed specifications that ensure research-grade reliability and performance:
-
-**FR-001 Series: Core System Coordination Requirements**
-- Multi-device coordination with centralized management (FR-001)
-- Advanced temporal synchronization with ±3.2ms precision (FR-002)  
-- Comprehensive session management with lifecycle control (FR-003)
-
-**FR-010 Series: Data Acquisition and Processing Requirements**
-- Advanced video data capture with real-time processing (FR-010)
-- Comprehensive thermal imaging integration with physiological analysis (FR-011)
-- Physiological sensor integration with validation framework (FR-012)
-
-**FR-020 Series: Advanced Processing and Analysis Requirements**
-- Real-time signal processing and feature extraction (FR-020)
-- Machine learning inference and prediction capabilities (FR-021)
-- Advanced camera calibration with automated procedures (FR-022)
-
-**NFR-001 Series: Performance and Reliability Requirements**
-- System throughput supporting up to 8 simultaneous devices
-- Response time specifications under 100ms for interactive operations
-- 99.7% system availability with comprehensive fault recovery
-- Resource utilization optimization with memory and CPU efficiency monitoring
-
-**NFR-010 Series: Quality and Security Requirements**
-- Data integrity protection with checksums and validation
-- Comprehensive security framework with encryption and authentication
-- Quality gate validation with automated testing and metrics collection
-- Research compliance with ethical and privacy requirements
-
-The revolutionary Multi-Sensor Recording System developed and validated through this thesis research addresses these fundamental methodological limitations through a groundbreaking contactless measurement approach that maintains research-grade measurement precision and temporal accuracy while completely eliminating the constraining factors and systematic biases inherent in traditional contact-based physiological measurement methodologies [CITE - Poh, M.Z., McDuff, D.J., & Picard, R.W. (2011). Advancements in noncontact, multiparameter physiological measurements using a webcam. IEEE Transactions on Biomedical Engineering, 58(1), 7-11]. The comprehensive system development represents a fundamental paradigm shift from traditional single-sensor, invasive measurement approaches to sophisticated multi-modal, completely non-contact physiological assessment that opens unprecedented possibilities for ecological research in natural environments [CITE - Balakrishnan, G., Durand, F., & Guttag, J. (2013). Detecting pulse from head motions in video. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 3430-3437].
-
-The core scientific and technical innovation lies in the systematic integration of multiple complementary sensing modalities, each strategically designed to capture different aspects of the complex physiological responses traditionally measured through direct GSR contact while providing comprehensive redundancy, cross-validation opportunities, and enhanced analytical capabilities not possible with traditional single-sensor approaches [CITE - Tamura, T., Maeda, Y., Sekine, M., & Yoshida, M. (2014). Wearable photoplethysmographic sensors—past and present. Electronics, 3(2), 282-302]. This sophisticated multi-modal measurement strategy provides systematic redundancy and extensive validation opportunities while enabling innovative forms of physiological analysis and interpretation that extend far beyond the capabilities of conventional GSR measurement systems.
-
-**Advanced RGB Camera Analysis for Comprehensive Visual Physiological Indicators**: High-resolution video capture systems enable the sophisticated detection and quantitative analysis of subtle visual changes directly associated with autonomic nervous system activation patterns, providing rich physiological information through completely non-invasive visual monitoring [CITE - Verkruysse, W., Svaasand, L.O., & Nelson, J.S. (2008). Remote plethysmographic imaging using ambient light. Optics Express, 16(26), 21434-21445]. The advanced computer vision system analyzes comprehensive micro-expressions, systematic color variations, perspiration patterns, and movement characteristics that demonstrate strong statistical correlations with physiological arousal states and electrodermal activity patterns [CITE - Kwon, S., Kim, J., Lee, D., & Park, K. (2015). ROI analysis for remote photoplethysmography on facial video. 2015 37th Annual International Conference of the IEEE Engineering in Medicine and Biology Society, 4938-4941].
-
-The sophisticated computer vision algorithms extract comprehensive features related to subtle skin color variations that reflect blood volume changes, systematic perspiration detection through advanced image processing techniques, and detailed behavioral indicators that provide complementary physiological information to traditional GSR measurements while maintaining complete measurement objectivity [CITE - De Haan, G., & Jeanne, V. (2013). Robust pulse rate from chrominance-based rPPG. IEEE Transactions on Biomedical Engineering, 60(10), 2878-2886]. These visual analysis capabilities enable detection of physiological changes that occur simultaneously with electrodermal activity but provide independent validation pathways for research conclusions.
-
-**Sophisticated Thermal Imaging for Comprehensive Vascular Response Detection**: Non-contact thermal measurement systems capture detailed temperature variations systematically associated with blood flow changes, vascular responses, and autonomic nervous system activation patterns that provide physiologically relevant data while maintaining complete non-contact operation throughout the entire measurement process [CITE - Ring, E.F.J., & Ammer, K. (2012). Infrared thermal imaging in medicine. Physiological Measurement, 33(3), R33-R46]. The advanced thermal imaging component utilizes high-precision temperature detection capabilities to identify systematic vasoconstriction and vasodilation patterns in peripheral extremities that demonstrate strong statistical correlations with electrodermal activity and provide independent validation of physiological arousal states [CITE - Merla, A., & Romani, G.L. (2007). Thermal signatures of emotional stress: an infrared imaging study. 2007 29th Annual International Conference of the IEEE Engineering in Medicine and Biology Society, 247-249].
-
-This sophisticated thermal monitoring modality provides physiologically relevant and scientifically valid data while maintaining complete non-contact operation that eliminates participant discomfort and measurement artifacts associated with traditional contact-based sensors [CITE - Pavlidis, I., Levine, J., & Baukol, P. (2001). Thermal image analysis for anxiety detection. Proceedings IEEE International Conference on Image Processing, 2, 315-318]. The thermal measurement system enables detection of autonomic responses that occur prior to measurable electrodermal changes, providing early indicators of physiological activation that enhance research sensitivity and temporal resolution beyond traditional GSR capabilities.
-
-**Strategic Reference GSR Measurement for Ground Truth Validation and Model Development**: Strategic integration of traditional contact-based GSR sensors provides essential ground truth data that is absolutely critical for comprehensive machine learning model training, validation, and calibration procedures while maintaining the established gold standard measurement capabilities for systematic comparison and scientific validation purposes [CITE - Greco, A., Valenza, G., & Scilingo, E.P. (2016). Evaluation of CDA and PDA models applied to the analysis of cvEDA signals. IEEE Transactions on Biomedical Engineering, 63(8), 1676-1685]. This carefully designed hybrid measurement approach enables the systematic development of highly accurate contactless prediction models while maintaining access to established reference measurements for comprehensive comparison, validation, and calibration purposes that ensure scientific rigor and research credibility [CITE - Benedek, M., & Kaernbach, C. (2010). A continuous measure of phasic electrodermal activity. Journal of Neuroscience Methods, 190(1), 80-91].
-
-The ground truth validation system provides essential training data for sophisticated machine learning algorithms while ensuring that contactless predictions maintain statistical correlations with established physiological measurements that meet scientific standards for research publication and clinical application [CITE - Bach, D.R., Flandin, G., Friston, K.J., & Dolan, R.J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356]. This systematic validation approach enables rigorous scientific evaluation of contactless measurement accuracy while providing confidence intervals and statistical validation that support research conclusions and scientific credibility.
-
-**Advanced Synchronized Multi-Device Coordination for Precise Temporal Alignment**: The sophisticated system architecture achieves precise temporal alignment across all sensing modalities through advanced synchronization algorithms that systematically compensate for network latency variations, device-specific timing characteristics, and communication delays that could otherwise compromise measurement precision [CITE - Kristjansson, S.D., Stern, J.A., Brown, T.B., & Rohrbaugh, J.W. (2009). Detecting phasic lapses in alertness using pupillometric measures. Applied Ergonomics, 40(6), 978-986]. This comprehensive coordination capability enables sophisticated multi-participant research studies with temporal precision that meets or exceeds traditional laboratory equipment standards while maintaining the flexibility and scalability advantages of distributed measurement systems [CITE - Healey, J. (2000). Wearable and automotive systems for affect recognition from physiology. Doctoral dissertation, MIT Media Laboratory].
-
-The synchronization system addresses fundamental challenges in distributed physiological measurement by implementing advanced clock synchronization protocols, predictive latency compensation, and adaptive timing adjustment mechanisms that ensure measurement coherence across multiple devices operating in diverse network conditions [CITE - Mills, D.L. (2006). Computer network time synchronization: the network time protocol on earth and in space. CRC Press]. These technical capabilities enable research designs that were previously impossible with traditional equipment while maintaining the measurement precision and temporal accuracy required for sophisticated physiological research applications.
-
----
-
-## Requirements Engineering Methodology
+## 3.2 Requirements Engineering Approach
 
 The comprehensive requirements engineering process for the Multi-Sensor Recording System employed a systematic, rigorously structured multi-phase approach specifically designed to capture the complex and often competing needs of diverse stakeholder groups while ensuring technical feasibility, scientific validity, and practical implementation success within realistic project constraints [CITE - Nuseibeh, B., & Easterbrook, S. (2000). Requirements engineering: a roadmap. Proceedings of the Conference on the Future of Software Engineering, 35-46]. The sophisticated methodology recognizes that research software projects present unique and often unprecedented challenges compared to traditional commercial software development paradigms, requiring specialized approaches that carefully balance scientific rigor with practical implementation considerations, stakeholder satisfaction, and long-term system maintainability [CITE - Segal, J., & Morris, C. (2008). Developing scientific software. IEEE Software, 25(4), 18-20].
 
 The requirements engineering process was strategically structured as an iterative, evolutionary methodology that systematically evolved throughout the entire project lifecycle, incorporating continuous feedback mechanisms from domain experts, technical stakeholders, end-user communities, and institutional partners to ensure comprehensive coverage of both explicit functional requirements and implicit quality attributes that are often critical for research software success [CITE - Sommerville, I., & Sawyer, P. (1997). Requirements engineering: a good practice guide. John Wiley & Sons]. This adaptive approach ensured that the final system requirements accurately reflected both the immediate operational needs of the research team and the broader scientific requirements of the international research community for reproducible, high-quality physiological measurement tools that can advance scientific understanding across multiple disciplines [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
-### Comprehensive Stakeholder Analysis and Strategic Engagement
+### 3.2.1 Stakeholder Analysis and Requirements Elicitation
 
 The foundational framework of the requirements engineering process rested on comprehensive stakeholder analysis that systematically identified and characterized all parties with significant vested interests in the system's successful development, deployment, and long-term operation [CITE - Freeman, R.E., Harrison, J.S., Wicks, A.C., Parmar, B.L., & De Colle, S. (2010). Stakeholder theory: The state of the art. Cambridge University Press]. This extensive analysis extended far beyond simple user identification to examine the complex interdependent relationships between different stakeholder groups, their often conflicting requirements and success criteria, and the dynamic ways in which their needs would evolve throughout the system lifecycle and research applications [CITE - Mitchell, R.K., Agle, B.R., & Wood, D.J. (1997). Toward a theory of stakeholder identification and salience: Defining the principle of who and what really counts. Academy of Management Review, 22(4), 853-886].
 
@@ -430,7 +253,7 @@ These institutional requirements significantly influenced the system's security 
 | **Data Analysts** | Data quality, format compatibility, reproducibility, collaboration support | Standard export formats (CSV, JSON, MATLAB), comprehensive metadata, analysis tool integration | Successful data integration >95%, analysis workflow compatibility, reproducible results | Format validation, integration testing, reproducibility studies |
 | **IT Administrators** | Security, compliance, maintainability, institutional policies | Encrypted data storage (AES-256), audit trails, GDPR compliance, backup procedures | Zero security incidents, 100% compliance audits, <24hr support response | Security audits, compliance reviews, incident tracking |
 
-### Comprehensive Requirements Elicitation Methods and Systematic Validation
+### 3.2.2 System Requirements Analysis Framework
 
 The requirements elicitation process employed multiple complementary methodological approaches specifically designed to capture both explicit functional needs and implicit quality requirements that are often crucial for research software success but may not be immediately apparent through traditional requirements gathering techniques [CITE - Zowghi, D., & Coulin, C. (2005). Requirements elicitation: A survey of techniques, approaches, and tools. In Engineering and managing software requirements (pp. 19-46). Springer]. The sophisticated multi-method approach ensured comprehensive coverage of all stakeholder needs while providing systematic validation and verification of requirements through triangulation across different sources, perspectives, and validation methodologies [CITE - Maiden, N.A., & Rugg, G. (1996). ACRE: selecting methods for requirements acquisition. Software Engineering Journal, 11(3), 183-192].
 
@@ -458,7 +281,7 @@ The feasibility assessment process included detailed analysis of computational r
 
 ---
 
-## Functional Requirements
+## 3.3 Functional Requirements Overview
 
 The comprehensive functional requirements specification systematically defines the essential core capabilities that the Multi-Sensor Recording System must reliably provide to achieve its ambitious research objectives and enable breakthrough advances in contactless physiological measurement science [CITE - Robertson, S., & Robertson, J. (2012). Mastering the requirements process: Getting requirements right. Addison-Wesley Professional]. These meticulously defined requirements emerged from the extensive stakeholder analysis process and represent the fundamental behaviors, operations, and capabilities that are absolutely essential for enabling sophisticated contactless GSR prediction research while maintaining the scientific rigor and measurement precision required for peer-reviewed publication and clinical application [CITE - Wiegers, K., & Beatty, J. (2013). Software requirements. Microsoft Press].
 
@@ -466,7 +289,7 @@ The functional requirements are systematically organized into logical groupings 
 
 The requirements engineering process employed systematic analysis methodologies specifically adapted for research software development to ensure complete coverage of stakeholder needs while maintaining technical feasibility, scientific validity, and long-term system maintainability [CITE - Segal, J. (2007). Some problems of professional end user developers. Proceedings IEEE Symposium on Visual Languages and Human-Centric Computing, 111-118]. The specialized approach recognizes that research software presents fundamentally unique challenges compared to traditional commercial applications, requiring specialized validation criteria, performance metrics, and success measures that directly support scientific methodology, reproducible research outcomes, and peer review standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
-### Comprehensive Functional Requirements Overview
+### 3.3.1 Multi-Device Coordination and Synchronization Requirements
 
 **Table 3.3: Functional Requirements Summary Matrix**
 
@@ -770,7 +593,7 @@ The session framework supports complex experimental protocols involving multiple
 - Automatic data backup during session execution with configurable intervals
 - Graceful session termination with complete data preservation and metadata generation
 
-### Data Acquisition and Processing Requirements
+### 3.3.2 Sensor Integration and Data Acquisition Requirements
 
 The data acquisition requirements define the sophisticated sensing capabilities necessary for capturing high-quality multi-modal physiological data while maintaining research-grade precision and enabling advanced analysis techniques [CITE - Gonzalez, R.C., & Woods, R.E. (2017). Digital image processing. Pearson]. These requirements address the complex challenge of extracting physiological information from visual and thermal data while ensuring measurement validity and scientific reproducibility across diverse experimental contexts.
 
@@ -851,7 +674,7 @@ Advanced camera control capabilities enable systematic adaptation to varying lig
 - Real-time signal processing for quality assessment and artifact detection
 - Cross-platform data synchronization with video and thermal measurements
 
-### Advanced Processing and Analysis Requirements
+### 3.3.3 Real-Time Data Processing and Analysis Requirements
 
 #### FR-020: Real-Time Signal Processing and Feature Extraction
 
@@ -892,7 +715,7 @@ Advanced camera control capabilities enable systematic adaptation to varying lig
 
 Each functional requirement includes detailed specifications that provide measurable criteria for validation and acceptance testing. The requirement specifications balance the need for precision with sufficient flexibility to accommodate the diverse research applications that the system must support. The prioritization scheme reflects both the technical dependencies between requirements and their relative importance for achieving the primary research objectives.
 
-### Core System Functions
+### 3.3.4 User Interface and Session Management Requirements
 
 The core system functions represent the fundamental capabilities required for multi-device coordination and synchronized data collection. These requirements form the foundation upon which all other system capabilities are built and represent the minimum functionality required for basic system operation.
 
@@ -1038,13 +861,13 @@ The synchronization framework must provide both real-time coordination during da
 
 ---
 
-## Non-Functional Requirements
+## 3.4 Non-Functional Requirements
 
 Non-functional requirements define the quality attributes and operational characteristics that determine the system's suitability for research applications. These requirements address aspects such as performance, reliability, usability, and maintainability that are critical for scientific software but may not be immediately apparent from functional specifications alone. The non-functional requirements ensure that the system can operate effectively in demanding research environments while providing the reliability and quality needed for scientific applications.
 
 The non-functional requirements specification recognizes that research software faces unique challenges compared to typical commercial applications. Research applications often require extended operation periods, handle valuable and irreplaceable data, and must operate reliably in diverse environments with varying technical support availability. These constraints necessitate higher reliability and quality standards than might be acceptable in other application domains.
 
-### Performance Requirements
+### 3.4.1 Performance and Scalability Requirements
 
 Performance requirements establish the operational characteristics necessary for effective research use. These requirements ensure that the system can handle the data volumes and processing demands typical of multi-participant research studies while maintaining responsive operation for real-time feedback and control.
 
@@ -1092,7 +915,7 @@ The throughput requirement encompasses both instantaneous processing capability 
 
 **Validation Criteria**: Resource utilization monitoring across extended operation periods with validation of efficiency targets.
 
-### Reliability and Quality Requirements
+### 3.4.2 Reliability and Data Integrity Requirements
 
 Reliability requirements ensure that the system can operate dependably in research environments where data loss or system failures can compromise valuable research studies. These requirements establish the quality standards necessary for scientific applications where reliability directly impacts research validity and reproducibility.
 
@@ -1132,7 +955,7 @@ Reliability requirements ensure that the system can operate dependably in resear
   - Recovery time ≤30 seconds for transient failures
   - Graceful degradation when devices become unavailable
 
-### Usability Requirements
+### 3.4.3 Usability and Accessibility Requirements
 
 #### NFR-020: Ease of Use
 - **Requirement**: System shall be operable by researchers with minimal technical training
@@ -1152,9 +975,9 @@ Reliability requirements ensure that the system can operate dependably in resear
 
 ---
 
-## Use Cases
+## 3.5 Use Case Scenarios
 
-### Primary Use Cases
+### 3.5.1 Primary Use Case: Multi-Participant Recording Session
 
 #### UC-001: Multi-Participant Research Session
 **Actor**: Research Scientist  
@@ -1175,7 +998,7 @@ Reliability requirements ensure that the system can operate dependably in resear
 - Low data quality detection: System provides real-time quality alerts
 - Participant withdrawal: System removes participant data while continuing session
 
-#### UC-002: System Calibration and Configuration
+### 3.5.2 Secondary Use Case: System Calibration and Configuration
 **Actor**: Technical Operator  
 **Goal**: Calibrate cameras and configure system for optimal data quality  
 **Preconditions**: Calibration patterns available, devices powered and connected  
@@ -1189,7 +1012,7 @@ Reliability requirements ensure that the system can operate dependably in resear
 6. Operator validates calibration accuracy and saves parameters
 7. System applies calibration to all connected devices
 
-#### UC-003: Real-Time Data Monitoring
+### 3.5.3 Secondary Use Case: Real-Time Monitoring and Annotation
 **Actor**: Research Scientist  
 **Goal**: Monitor data quality and system status during recording session  
 **Preconditions**: Recording session active, monitoring interface enabled  
@@ -1232,9 +1055,9 @@ Reliability requirements ensure that the system can operate dependably in resear
 
 ---
 
-## System Analysis
+## 3.6 System Analysis (Architecture & Data Flow)
 
-### Data Flow Analysis
+### 3.6.1 Data Flow Analysis
 
 The system analysis reveals a complex data flow architecture that must handle multiple concurrent data streams with precise temporal coordination:
 
@@ -1261,7 +1084,7 @@ graph TD
     end
 ```
 
-### Component Interaction Analysis
+### 3.6.2 Component Interaction Analysis
 
 | Component Interaction | Frequency | Latency Requirement | Failure Impact |
 |----------------------|-----------|-------------------|----------------|
@@ -1270,7 +1093,7 @@ graph TD
 | Synchronization Engine | 1 Hz | ≤5ms | Critical - Temporal accuracy |
 | Storage Operations | Variable | ≤100ms | Low - Buffering available |
 
-### Scalability Analysis
+### 3.6.3 Scalability Considerations
 
 The system architecture must accommodate growth in several dimensions:
 
@@ -1281,9 +1104,9 @@ The system architecture must accommodate growth in several dimensions:
 
 ---
 
-## Data Requirements
+## 3.7 Data Requirements and Management
 
-### Data Types and Volumes
+### 3.7.1 Data Types and Volume Specifications
 
 | Data Type | Source | Volume per Hour | Format | Quality Requirements |
 |-----------|--------|----------------|---------|---------------------|
@@ -1292,14 +1115,14 @@ The system architecture must accommodate growth in several dimensions:
 | **GSR Data** | Shimmer Sensors | 1-10 MB | CSV, JSON | 50Hz@16-bit resolution |
 | **Metadata** | System Generated | 10-50 MB | JSON | Complete session context |
 
-### Data Quality Requirements
+### 3.7.2 Data Quality and Integrity Requirements
 
 - **Temporal Accuracy**: All timestamps synchronized within ±5ms
 - **Data Completeness**: ≥99% data availability for valid analysis
 - **Signal Quality**: SNR ≥20dB for physiological measurements
 - **Metadata Completeness**: 100% of required session metadata fields populated
 
-### Data Storage and Retention
+### 3.7.3 Data Management and Analysis Preparation
 
 - **Primary Storage**: Local SSD storage with real-time writing capability
 - **Backup Storage**: Automatic backup to secondary storage systems
