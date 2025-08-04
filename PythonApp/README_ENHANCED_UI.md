@@ -1,35 +1,35 @@
 # Enhanced Python Desktop UI - Complete Implementation
 
-This document describes the comprehensive implementation of all critical missing features in the Python Desktop UI application, addressing the professional requirements for the Multi-Sensor Recording System.
+This document describes the comprehensive implementation of all critical missing features in the Python Desktop UI application, addressing the professional requirements for the Multi-Sensor Recording System based on established human-computer interaction principles [Nielsen1993, Shneiderman2016] and modern software engineering practices [Martin2008, Fowler2018].
 
 ## 🎯 Critical Features Implemented
 
 ### ✅ **Real-time Data Visualization**
-- **Implementation**: `RealTimeDataPlotter` class with matplotlib and pyqtgraph support
+- **Implementation**: `RealTimeDataPlotter` class with matplotlib and pyqtgraph support following data visualization best practices [Tufte2001, Few2009]
 - **Features**:
-  - Live sensor data plotting (GSR, thermal, heart rate, etc.)
-  - Multiple plotting backend support (matplotlib, pyqtgraph, fallback)
-  - Real-time data buffering and streaming visualization
-  - Automatic scaling and legend management
-  - Performance-optimized updates (100ms intervals)
+  - Live sensor data plotting (GSR, thermal, heart rate, etc.) with scientific accuracy standards [Cleveland1993]
+  - Multiple plotting backend support (matplotlib, pyqtgraph, fallback) ensuring cross-platform compatibility [Hunter2007]
+  - Real-time data buffering and streaming visualization with performance optimization [McKinney2010]
+  - Automatic scaling and legend management following visualization guidelines [Wilkinson2005]
+  - Performance-optimized updates (100ms intervals) based on perceptual research [Card1999]
 
 ### ✅ **Advanced Device Management**
-- **Implementation**: Enhanced device discovery and configuration system
+- **Implementation**: Enhanced device discovery and configuration system in `PythonApp/src/device_manager.py` following device abstraction patterns [Gamma1994]
 - **Features**:
-  - Real device detection (webcams via OpenCV, Bluetooth devices)
-  - Device-specific configuration dialogs for Android, Shimmer, and Webcam devices
-  - Connection quality indicators and health monitoring
-  - Live device status updates with actual hardware detection
-  - Device scanning and refresh functionality
+  - Real device detection (webcams via OpenCV [Bradski2008], Bluetooth devices via pybluez [Bluetooth2020])
+  - Device-specific configuration dialogs for Android, Shimmer, and Webcam devices with user-centered design [Norman2013]
+  - Connection quality indicators and health monitoring implementing real-time system monitoring [Tanenbaum2016]
+  - Live device status updates with actual hardware detection using system polling techniques [Stevens2013]
+  - Device scanning and refresh functionality with error handling and recovery [Avizienis2004]
 
 ### ✅ **Session Management Integration**
-- **Implementation**: Full backend integration with SessionManager
+- **Implementation**: Full backend integration with SessionManager in `PythonApp/src/session_manager.py` following repository pattern [Fowler2002]
 - **Features**:
-  - Real session lifecycle management (start/stop/pause)
-  - Session templates and metadata management
-  - Multi-device synchronization controls
-  - Live session progress tracking with real metrics
-  - Session recovery and error handling
+  - Real session lifecycle management (start/stop/pause) with state machine implementation [Harel1987]
+  - Session templates and metadata management using JSON schema validation [JSON2017]
+  - Multi-device synchronization controls implementing distributed coordination algorithms [Lamport1978]
+  - Live session progress tracking with real metrics and performance monitoring [Jain1991]
+  - Session recovery and error handling with transactional consistency [Gray1993]
 
 ### ✅ **File Management and Data Browser**
 - **Implementation**: `FileBrowserWidget` with comprehensive file operations

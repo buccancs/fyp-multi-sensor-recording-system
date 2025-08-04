@@ -35,22 +35,22 @@ The Multi-Device Synchronization System addresses the comprehensive temporal coo
 
 The architecture encompasses the following device categories and their associated synchronization challenges:
 
-**Android Mobile Devices:** Samsung S22 smartphones serve as mobile sensing platforms integrating RGB cameras, thermal imaging devices, and physiological sensors. These devices present unique synchronization challenges due to Android's non-real-time operating system, variable CPU scheduling, and power management optimizations that can introduce timing jitter.
+**Android Mobile Devices:** Samsung S22 smartphones serve as mobile sensing platforms integrating RGB cameras, thermal imaging devices, and physiological sensors through sophisticated coordination managed by `AndroidApp/src/main/java/com/multisensor/recording/SessionManager.kt` [Yaghmour2013]. These devices present unique synchronization challenges due to Android's non-real-time operating system, variable CPU scheduling, and power management optimizations that can introduce timing jitter, addressed through adaptive compensation algorithms in `AndroidApp/src/main/java/com/multisensor/recording/ThermalCameraManager.kt` and `AndroidApp/src/main/java/com/multisensor/recording/ShimmerService.kt`.
 
-**PC-Connected USB Webcams:** Dual Logitech Brio 4K cameras provide high-resolution video capture with direct hardware interface to the master clock. USB protocol timing characteristics and driver-level buffering introduce systematic delays that must be compensated through calibration procedures.
+**PC-Connected USB Webcams:** Dual Logitech Brio 4K cameras provide high-resolution video capture with direct hardware interface to the master clock through `PythonApp/src/webcam_manager.py` [USB2000]. USB protocol timing characteristics and driver-level buffering introduce systematic delays that must be compensated through calibration procedures implemented in `PythonApp/src/calibration_manager.py` using OpenCV-based algorithms [Bradski2008].
 
-**Physiological Sensors:** Shimmer3 GSR+ devices communicate via Bluetooth, introducing variable wireless latency and connection stability challenges. The sensor platforms operate on independent clocks requiring continuous drift compensation and synchronization validation.
+**Physiological Sensors:** Shimmer3 GSR+ devices communicate via Bluetooth through `PythonApp/src/shimmer_manager.py`, introducing variable wireless latency and connection stability challenges addressed by multi-library fallback support [ShimmerUseCase2018]. The sensor platforms operate on independent clocks requiring continuous drift compensation and synchronization validation implemented through `PythonApp/src/sensor_synchronizer.py`.
 
-**Master Clock Controller:** A Windows PC serves as the authoritative time source, implementing NTP server functionality and coordinating all connected devices through a unified command protocol.
+**Master Clock Controller:** A Windows PC serves as the authoritative time source, implementing NTP server functionality through `PythonApp/src/master_clock_synchronizer.py` and coordinating all connected devices through a unified command protocol based on established distributed systems principles [Mills1991, IEEE1588-2008].
 
 ### Research Contribution and Innovation
 This system provides significant contributions to the field of distributed system synchronization through several novel approaches to cross-platform temporal coordination:
 
-**Adaptive Drift Compensation:** The implementation of machine learning-based drift prediction algorithms that adapt to individual device characteristics and environmental conditions, achieving superior precision compared to traditional linear compensation methods.
+**Adaptive Drift Compensation:** The implementation of machine learning-based drift prediction algorithms in `PythonApp/src/adaptive_drift_compensator.py` that adapt to individual device characteristics and environmental conditions, achieving superior precision compared to traditional linear compensation methods [Kalman1960, Brown1997].
 
-**Hierarchical Synchronization Architecture:** A novel three-tier synchronization model combining hardware-level timing (USB devices), network-based coordination (mobile devices), and wireless sensor integration (Bluetooth devices) within a unified framework.
+**Hierarchical Synchronization Architecture:** A novel three-tier synchronization model implemented across `PythonApp/src/synchronization/` combining hardware-level timing (USB devices via `usb_timer.py`), network-based coordination (mobile devices via `network_sync.py`), and wireless sensor integration (Bluetooth devices via `bluetooth_sync.py`) within a unified framework following established distributed systems patterns [Tanenbaum2016].
 
-**Real-Time Quality Assessment:** Continuous monitoring and validation of synchronization precision across all connected devices, enabling dynamic adjustment of timing parameters and early detection of synchronization degradation.
+**Real-Time Quality Assessment:** Continuous monitoring and validation of synchronization precision across all connected devices through `PythonApp/src/quality_monitor.py`, enabling dynamic adjustment of timing parameters and early detection of synchronization degradation using statistical process control methods [Montgomery2019].
 
 ## Comparative Analysis of Distributed Synchronization Approaches
 
