@@ -2028,6 +2028,10 @@ The camera recording system implements advanced Camera2 API integration that pro
 - **Focus Distance Management**: Manual focus control with hyperfocal distance calculation and depth of field optimization for consistent subject tracking and measurement accuracy
 - **White Balance Optimization**: Automatic and manual white balance control with color temperature adjustment (2000K-8000K) ensuring consistent color reproduction across research sessions
 - **Simultaneous Recording Modes**: Concurrent 4K video recording at 30fps with RAW DNG image capture for calibration procedures and quality validation
+- **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing pipelines
+- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and performance optimization
+- **RAW Processing Pipeline**: DNG file generation with comprehensive metadata embedding and quality validation
+- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration integration
 
 **Real-Time Preview and Quality Assessment:**
 - **Live Preview Streaming**: Real-time video preview transmission to desktop controller with adaptive bitrate control and comprehensive quality metrics
