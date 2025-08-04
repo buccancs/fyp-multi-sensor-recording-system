@@ -1,6 +1,7 @@
 import java.time.Duration
 import groovy.json.JsonSlurper
 import io.gitlab.arturbosch.detekt.Detekt
+import java.io.ByteArrayOutputStream
 
 plugins {
     id("com.android.application")
@@ -32,7 +33,14 @@ android {
         resources {
             pickFirsts.add("META-INF/LICENSE.md")
             pickFirsts.add("META-INF/LICENSE-notice.md")
+            pickFirsts.add("META-INF/AL2.0")
+            pickFirsts.add("META-INF/LGPL2.1")
+            pickFirsts.add("win32-x86-64/attach_hotspot_windows.dll")
+            pickFirsts.add("win32-x86/attach_hotspot_windows.dll")
             excludes.add("META-INF/kotlinx-coroutines-core.kotlin_module")
+            excludes.add("META-INF/*.kotlin_module")
+            excludes.add("win32-x86/**")
+            excludes.add("win32-x86-64/**")
         }
         jniLibs {
             useLegacyPackaging = false
@@ -347,10 +355,76 @@ tasks.register("runIDEIntegrationUITest") {
     dependsOn("assembleDebug", "assembleDebugAndroidTest")
     
     doLast {
-        exec {
+        project.exec {
             commandLine("adb", "shell", "am", "instrument", "-w", 
                        "-e", "class", "com.multisensor.recording.IDEIntegrationUITest",
                        "com.multisensor.recording.test/androidx.test.runner.AndroidJUnitRunner")
+        }
+    }
+}
+
+// High-Definition Screenshot Generation Task
+tasks.register("generateHDScreenshots") {
+    group = "documentation"
+    description = "Generate high-definition screenshots of Android application"
+    dependsOn("assembleDevDebug", "assembleDevDebugAndroidTest")
+    
+    doFirst {
+        println("Generating HD screenshots for Android application...")
+        println("Make sure a device or emulator is connected and unlocked")
+        println("Screenshots will be saved to device external storage")
+    }
+    
+    doLast {
+        project.exec {
+            commandLine("adb", "shell", "am", "instrument", "-w", 
+                       "-e", "class", "com.multisensor.recording.ScreenshotAutomationTest",
+                       "com.multisensor.recording.dev.test/androidx.test.runner.AndroidJUnitRunner")
+        }
+        
+        // Create local screenshots directory
+        val screenshotsDir = file("${layout.buildDirectory.get()}/screenshots")
+        screenshotsDir.mkdirs()
+        
+        println("Screenshot generation completed!")
+        println("Local screenshots directory: ${screenshotsDir.absolutePath}")
+        println("Device screenshots location: /sdcard/Android/data/com.multisensor.recording.dev/files/Pictures/screenshots")
+        println("")
+        println("To pull screenshots to your computer, run:")
+        println("  adb pull /sdcard/Android/data/com.multisensor.recording.dev/files/Pictures/screenshots ./screenshots")
+    }
+}
+
+// Simple Screenshot Task (fallback)
+tasks.register("generateSimpleScreenshots") {
+    group = "documentation"
+    description = "Generate basic screenshots using simple test"
+    dependsOn("assembleDevDebug", "assembleDevDebugAndroidTest")
+    
+    doLast {
+        project.exec {
+            commandLine("adb", "shell", "am", "instrument", "-w", 
+                       "-e", "class", "com.multisensor.recording.SimpleScreenshotTest",
+                       "com.multisensor.recording.dev.test/androidx.test.runner.AndroidJUnitRunner")
+        }
+        
+        println("Simple screenshot generation completed!")
+        println("Device screenshots location: /sdcard/Android/data/com.multisensor.recording.dev/files/Pictures/screenshots")
+    }
+}
+
+// Quick Screenshot Task for CI/CD
+tasks.register("generateQuickScreenshots") {
+    group = "documentation"
+    description = "Generate essential screenshots quickly for CI/CD"
+    dependsOn("assembleDevDebug", "assembleDevDebugAndroidTest")
+    
+    doLast {
+        project.exec {
+            commandLine("adb", "shell", "am", "instrument", "-w", 
+                       "-e", "class", "com.multisensor.recording.SimpleScreenshotTest",
+                       "-e", "testMethod", "captureBasicScreenshots",
+                       "com.multisensor.recording.dev.test/androidx.test.runner.AndroidJUnitRunner")
         }
     }
 }
