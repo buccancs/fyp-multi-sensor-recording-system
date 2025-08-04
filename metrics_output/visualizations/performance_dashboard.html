@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Benchmark Dashboard</title>
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1f77b4;
+        }
+        .header h1 {
+            color: #1f77b4;
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .header p {
+            color: #666;
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stat-card h3, .stat-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .file-list {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .file-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-item a {
+            color: #1f77b4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            margin: 20px 0;
+            border-bottom: 2px solid #ddd;
+            border-left: 2px solid #ddd;
+        }
+        .bar {
+            margin: 0 2px;
+            background: linear-gradient(45deg, #1f77b4, #87ceeb);
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            position: relative;
+            flex: 1;
+            min-width: 60px;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            transform: rotate(-45deg);
+            transform-origin: center;
+            font-size: 10px;
+            color: #666;
+            white-space: nowrap;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Performance Benchmark Dashboard</h1>
+            <p>Multi-Sensor Recording System Performance Analysis</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Average Duration</h3>
+                <div class="stat-value">8.00s</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Memory</h3>
+                <div class="stat-value">310.9MB</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average CPU</h3>
+                <div class="stat-value">72.5%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Throughput</h3>
+                <div class="stat-value">271,107</div>
+                <small>ops/sec</small>
+            </div>
+        </div>
+        
+        <div class="chart-container"><h3>Test Duration (seconds)</h3><div class="bar-chart">
+            <div class="bar" style="height: 0.5964755533114994px;">
+                <span>0.19s</span>
+                <div class="bar-label">memory allocation</div>
+            </div>
+            
+            <div class="bar" style="height: 2.7520477790031714px;">
+                <span>0.87s</span>
+                <div class="bar-label">cpu intensive</div>
+            </div>
+            
+            <div class="bar" style="height: 0.17738552257602763px;">
+                <span>0.06s</span>
+                <div class="bar-label">file io</div>
+            </div>
+            
+            <div class="bar" style="height: 3.6493293176637174px;">
+                <span>1.16s</span>
+                <div class="bar-label">network simulation</div>
+            </div>
+            
+            <div class="bar" style="height: 180.0px;">
+                <span>57.10s</span>
+                <div class="bar-label">json processing</div>
+            </div>
+            
+            <div class="bar" style="height: 0.6506849926105466px;">
+                <span>0.21s</span>
+                <div class="bar-label">concurrent operations</div>
+            </div>
+            
+            <div class="bar" style="height: 7.77513360764835px;">
+                <span>2.47s</span>
+                <div class="bar-label">memory stress</div>
+            </div>
+            
+            <div class="bar" style="height: 6.186847164194992px;">
+                <span>1.96s</span>
+                <div class="bar-label">multithreading</div>
+            </div>
+            </div></div><div class="chart-container"><h3>Memory Usage (MB)</h3><div class="bar-chart">
+            <div class="bar" style="height: 169.998166147075px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>1026.0MB</span>
+                <div class="bar-label">memory allocation</div>
+            </div>
+            
+            <div class="bar" style="height: 4.256264765212888px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>25.7MB</span>
+                <div class="bar-label">cpu intensive</div>
+            </div>
+            
+            <div class="bar" style="height: 4.711923280223514px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>28.4MB</span>
+                <div class="bar-label">file io</div>
+            </div>
+            
+            <div class="bar" style="height: 4.711923280223514px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>28.4MB</span>
+                <div class="bar-label">network simulation</div>
+            </div>
+            
+            <div class="bar" style="height: 18.801738924067703px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>113.5MB</span>
+                <div class="bar-label">json processing</div>
+            </div>
+            
+            <div class="bar" style="height: 15.334462411408722px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>92.5MB</span>
+                <div class="bar-label">concurrent operations</div>
+            </div>
+            
+            <div class="bar" style="height: 180.0px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>1086.3MB</span>
+                <div class="bar-label">memory stress</div>
+            </div>
+            
+            <div class="bar" style="height: 14.3648935825935px; background: linear-gradient(45deg, #ff7f0e, #ffb347);">
+                <span>86.7MB</span>
+                <div class="bar-label">multithreading</div>
+            </div>
+            </div></div>
+        
+        <div class="timestamp">
+            Generated on 2025-08-04 04:06:16
+        </div>
+    </div>
+</body>
+</html>

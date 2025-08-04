@@ -139,4 +139,6 @@ htmlcov/
 *.swp
 *.swo
 *~
-.vscode/settings.json
+.vscode/settings.jsonmetrics_output/comprehensive_metrics_dashboard_*.json
+metrics_output/comprehensive_metrics_report_*.md
+metrics_output/metrics_generation_results_*.json

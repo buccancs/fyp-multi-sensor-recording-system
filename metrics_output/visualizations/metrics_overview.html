@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metrics Overview Dashboard</title>
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1f77b4;
+        }
+        .header h1 {
+            color: #1f77b4;
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .header p {
+            color: #666;
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stat-card h3, .stat-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .file-list {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .file-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-item a {
+            color: #1f77b4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #1f77b4;
+        }
+        .metric-item.success {
+            border-left-color: #28a745;
+        }
+        .metric-item.warning {
+            border-left-color: #ffc107;
+        }
+        .metric-item.error {
+            border-left-color: #dc3545;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-success { background-color: #28a745; }
+        .status-warning { background-color: #ffc107; }
+        .status-error { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Metrics Overview Dashboard</h1>
+            <p>Comprehensive metrics analysis for Multi-Sensor Recording System</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Metrics</h3>
+                <div class="stat-value">7</div>
+            </div>
+            <div class="stat-card">
+                <h3>Successful</h3>
+                <div class="stat-value">3</div>
+            </div>
+            <div class="stat-card">
+                <h3>Success Rate</h3>
+                <div class="stat-value">42.9%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Errors</h3>
+                <div class="stat-value">2</div>
+            </div>
+        </div>
+        
+        <h2>📋 Generated Metrics</h2>
+        <div class="metrics-grid">
+            
+            <div class="metric-item success">
+                <h4>✅ Comprehensive Test Summary</h4>
+                <p><span class="status-indicator status-success"></span>Status: success</p>
+                <small>Timestamp: 2025-08-04T04:05:47.222858</small>
+            </div>
+            
+            <div class="metric-item success">
+                <h4>✅ Final Summary</h4>
+                <p><span class="status-indicator status-success"></span>Status: success</p>
+                <small>Timestamp: 2025-08-04T04:05:47.272566</small>
+            </div>
+            
+            <div class="metric-item warning">
+                <h4>⚠️ Test Suite Complete Test Suite</h4>
+                <p><span class="status-indicator status-warning"></span>Status: completed_with_errors</p>
+                <small>Timestamp: 2025-08-04T04:05:59.436134</small>
+            </div>
+            
+            <div class="metric-item warning">
+                <h4>⚠️ Test Suite Comprehensive Tests</h4>
+                <p><span class="status-indicator status-warning"></span>Status: completed_with_errors</p>
+                <small>Timestamp: 2025-08-04T04:05:59.759839</small>
+            </div>
+            
+            <div class="metric-item success">
+                <h4>✅ Test Suite Quick Recording Session</h4>
+                <p><span class="status-indicator status-success"></span>Status: success</p>
+                <small>Timestamp: 2025-08-04T04:06:15.853094</small>
+            </div>
+            
+            <div class="metric-item warning">
+                <h4>⚠️ Phase4 Validation</h4>
+                <p><span class="status-indicator status-warning"></span>Status: completed</p>
+                <small>Timestamp: 2025-08-04T04:06:15.887012</small>
+            </div>
+            
+            <div class="metric-item warning">
+                <h4>⚠️ Security Scan</h4>
+                <p><span class="status-indicator status-warning"></span>Status: completed</p>
+                <small>Timestamp: 2025-08-04T04:06:16.005984</small>
+            </div>
+            
+        </div>
+        
+        <div class="timestamp">
+            Generated on 2025-08-04 04:06:16
+        </div>
+    </div>
+</body>
+</html>

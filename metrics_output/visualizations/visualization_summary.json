@@ -1,0 +1,13 @@
+{
+  "visualization_summary": {
+    "total_visualizations": 0,
+    "successful_visualizations": 0,
+    "dependencies_available": {
+      "matplotlib": false,
+      "plotly": false,
+      "pandas": false
+    },
+    "output_directory": "/home/runner/work/bucika_gsr/bucika_gsr/metrics_output/visualizations",
+    "generated_files": []
+  }
+}

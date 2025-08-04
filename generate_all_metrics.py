@@ -93,6 +93,9 @@ class MetricsOrchestrator:
             # 7. Create Consolidated Dashboard
             await self._create_consolidated_dashboard()
             
+            # 8. Generate Visualizations
+            await self._generate_visualizations()
+            
             # Finalize results
             self._finalize_execution()
             
@@ -686,6 +689,80 @@ class MetricsOrchestrator:
         logger.info(f"Execution Duration: {duration.total_seconds():.2f} seconds")
         logger.info(f"Overall Status: {self.results['summary']['overall_status'].upper()}")
         logger.info("="*80)
+
+
+    async def _generate_visualizations(self):
+        """Generate comprehensive visualizations for all metrics"""
+        logger.info("🎨 Generating Comprehensive Visualizations...")
+        
+        try:
+            # Try the full visualizer first
+            try:
+                from metrics_visualizer import MetricsVisualizer
+                
+                visualizer = MetricsVisualizer(str(self.project_root))
+                viz_results = visualizer.visualize_all_metrics()
+                
+                if viz_results and viz_results.get("generated_visualizations"):
+                    self.results["metrics_generated"]["visualizations"] = {
+                        "status": "success",
+                        "generated_visualizations": len(viz_results.get("generated_visualizations", {})),
+                        "output_directory": str(visualizer.visualizations_dir),
+                        "dashboard_available": "comprehensive_dashboard" in viz_results.get("generated_visualizations", {}),
+                        "visualization_type": "full_featured",
+                        "timestamp": datetime.now().isoformat()
+                    }
+                    
+                    # Add visualization file paths
+                    viz_files = []
+                    for viz_name, viz_data in viz_results.get("generated_visualizations", {}).items():
+                        if viz_data.get("status") == "success":
+                            viz_files.append(viz_data["file_path"])
+                    
+                    if viz_files:
+                        self.results["metrics_generated"]["visualizations"]["visualization_files"] = viz_files
+                    
+                    logger.info(f"  ✅ Generated {len(viz_results.get('generated_visualizations', {}))} full-featured visualizations")
+                    logger.info(f"  📊 Dashboard available at: {visualizer.visualizations_dir}/comprehensive_dashboard.html")
+                    return
+                    
+            except ImportError:
+                logger.info("  ⚠️  Full visualizer dependencies not available, using simple visualizer...")
+            
+            # Fallback to simple visualizer
+            from simple_visualizer import SimpleMetricsVisualizer
+            
+            simple_visualizer = SimpleMetricsVisualizer(str(self.project_root))
+            simple_results = simple_visualizer.create_visualizations()
+            
+            if simple_results and simple_results.get("generated_files"):
+                self.results["metrics_generated"]["visualizations"] = {
+                    "status": "success",
+                    "generated_visualizations": len(simple_results.get("generated_files", [])),
+                    "output_directory": str(simple_visualizer.visualizations_dir),
+                    "dashboard_available": True,
+                    "visualization_type": "simple_html",
+                    "visualization_files": simple_results.get("generated_files", []),
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                logger.info(f"  ✅ Generated {len(simple_results.get('generated_files', []))} simple HTML visualizations")
+                logger.info(f"  📊 Main dashboard available at: {simple_visualizer.visualizations_dir}/index.html")
+                
+            else:
+                logger.warning("  ⚠️  Simple visualization generation returned no results")
+                self.results["errors"].append({
+                    "type": "visualization_warning",
+                    "message": "Simple visualization generation returned no results"
+                })
+                
+        except Exception as e:
+            logger.error(f"  ❌ Error generating visualizations: {e}")
+            self.results["errors"].append({
+                "type": "visualization_exception",
+                "message": str(e),
+                "traceback": traceback.format_exc()
+            })
 
 
 async def main():
