@@ -4,212 +4,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metrics Overview Dashboard</title>
+    <title>System Metrics Overview Report</title>
     <style>
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            padding: 30px;
+            background-color: #ffffff;
+            line-height: 1.6;
+            color: #333;
         }
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
-            background-color: #f8f9fa;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            background-color: #ffffff;
+            border: 1px solid #ddd;
             padding: 40px;
         }
         .header {
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 20px;
-            border-bottom: 3px solid #1f77b4;
+            border-bottom: 2px solid #333;
         }
         .header h1 {
-            color: #1f77b4;
-            margin: 0;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .header p {
-            color: #666;
-            margin: 10px 0 0 0;
-            font-size: 1.2em;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .stat-card h3, .stat-card h4 {
+            color: #333;
             margin: 0 0 10px 0;
-            font-size: 1.1em;
+            font-size: 1.8em;
+            font-weight: normal;
         }
-        .stat-value {
-            font-size: 2.2em;
+        .header h2 {
+            color: #555;
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+        .header p, .report-meta {
+            color: #666;
+            margin: 5px 0;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        .executive-summary {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .executive-summary h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
             font-weight: bold;
-            margin: 10px 0;
+            color: #333;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        .summary-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+        }
+        .metric-label {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            width: 40%;
+        }
+        .metric-value {
+            text-align: right;
+            font-family: 'Courier New', monospace;
         }
         .section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+        }
+        .section h2, .section h3 {
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
         .section h2 {
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            font-size: 1.3em;
         }
+        .section h3 {
+            font-size: 1.1em;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        .data-table th, .data-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .data-table td.numeric {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+        .navigation-section {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .nav-link {
+            display: block;
+            color: #0066cc;
+            text-decoration: none;
+            margin: 5px 0;
+            padding: 5px 0;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .figure-caption {
+            font-size: 0.85em;
+            font-style: italic;
+            text-align: center;
+            margin: 10px 0;
+            color: #666;
+        }
+        .chart-container {
+            margin: 25px 0;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #fafafa;
+        }
+        .chart-container h4 {
+            margin: 0 0 15px 0;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            border-bottom: 1px solid #333;
+            border-left: 1px solid #333;
+            padding: 10px;
+            background-color: white;
+        }
+        .bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            max-width: 120px;
+            background: #666;
+            position: relative;
+            margin: 0 2px;
+        }
+        .bar span {
+            position: absolute;
+            top: -25px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+        .bar-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            margin-top: 10px;
+            font-size: 0.7em;
+            color: #333;
+            max-width: 15px;
+            text-align: center;
+        }
+        .timestamp, .footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-style: italic;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-success { background-color: #28a745; }
+        .status-warning { background-color: #ffc107; }
+        .status-error { background-color: #dc3545; }
         .file-list {
             background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            padding: 15px;
         }
         .file-item {
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
         .file-item:last-child {
             border-bottom: none;
         }
         .file-item a {
-            color: #1f77b4;
+            color: #0066cc;
             text-decoration: none;
-            font-weight: 500;
         }
         .file-item a:hover {
             text-decoration: underline;
         }
-        .timestamp {
-            color: #666;
-            font-size: 0.9em;
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-        }
         
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .metric-item {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-left: 4px solid #1f77b4;
-        }
-        .metric-item.success {
-            border-left-color: #28a745;
-        }
-        .metric-item.warning {
-            border-left-color: #ffc107;
-        }
-        .metric-item.error {
-            border-left-color: #dc3545;
-        }
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        .status-success { background-color: #28a745; }
-        .status-warning { background-color: #ffc107; }
-        .status-error { background-color: #dc3545; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📊 Metrics Overview Dashboard</h1>
-            <p>Comprehensive metrics analysis for Multi-Sensor Recording System</p>
+            <h1>System Metrics Overview</h1>
+            <h2>Multi-Sensor Recording System Comprehensive Analysis</h2>
+            <p class="report-meta">Generated: 2025-08-04 05:20:23</p>
         </div>
         
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Metrics</h3>
-                <div class="stat-value">7</div>
-            </div>
-            <div class="stat-card">
-                <h3>Successful</h3>
-                <div class="stat-value">3</div>
-            </div>
-            <div class="stat-card">
-                <h3>Success Rate</h3>
-                <div class="stat-value">42.9%</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Errors</h3>
-                <div class="stat-value">2</div>
-            </div>
+        <div class="executive-summary">
+            <h3>Metrics Generation Summary</h3>
+            <table class="summary-table">
+                <tr>
+                    <td class="metric-label">Total Metrics Generated</td>
+                    <td class="metric-value">7</td>
+                </tr>
+                <tr>
+                    <td class="metric-label">Successful Metrics</td>
+                    <td class="metric-value">3</td>
+                </tr>
+                <tr>
+                    <td class="metric-label">Failed Metrics</td>
+                    <td class="metric-value">2</td>
+                </tr>
+                <tr>
+                    <td class="metric-label">Success Rate</td>
+                    <td class="metric-value">42.9%</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Detailed Metrics Analysis</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Metric Category</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                <tr>
+                    <td>Comprehensive Test Summary</td>
+                    <td><span class="status-indicator status-success"></span>Success</td>
+                    <td>2025-08-04T05:14:23.241528</td>
+                </tr>
+            
+                <tr>
+                    <td>Final Summary</td>
+                    <td><span class="status-indicator status-success"></span>Success</td>
+                    <td>2025-08-04T05:14:23.273181</td>
+                </tr>
+            
+                <tr>
+                    <td>Test Suite Complete Test Suite</td>
+                    <td><span class="status-indicator status-warning"></span>Unknown</td>
+                    <td>2025-08-04T05:14:35.461947</td>
+                </tr>
+            
+                <tr>
+                    <td>Test Suite Comprehensive Tests</td>
+                    <td><span class="status-indicator status-warning"></span>Unknown</td>
+                    <td>2025-08-04T05:14:35.889261</td>
+                </tr>
+            
+                <tr>
+                    <td>Test Suite Quick Recording Session</td>
+                    <td><span class="status-indicator status-success"></span>Success</td>
+                    <td>2025-08-04T05:14:51.982170</td>
+                </tr>
+            
+                <tr>
+                    <td>Phase4 Validation</td>
+                    <td><span class="status-indicator status-warning"></span>Unknown</td>
+                    <td>2025-08-04T05:14:52.016238</td>
+                </tr>
+            
+                <tr>
+                    <td>Security Scan</td>
+                    <td><span class="status-indicator status-warning"></span>Unknown</td>
+                    <td>2025-08-04T05:14:52.129745</td>
+                </tr>
+            
+                </tbody>
+            </table>
         </div>
         
-        <h2>📋 Generated Metrics</h2>
-        <div class="metrics-grid">
-            
-            <div class="metric-item success">
-                <h4>✅ Comprehensive Test Summary</h4>
-                <p><span class="status-indicator status-success"></span>Status: success</p>
-                <small>Timestamp: 2025-08-04T05:14:23.241528</small>
-            </div>
-            
-            <div class="metric-item success">
-                <h4>✅ Final Summary</h4>
-                <p><span class="status-indicator status-success"></span>Status: success</p>
-                <small>Timestamp: 2025-08-04T05:14:23.273181</small>
-            </div>
-            
-            <div class="metric-item warning">
-                <h4>⚠️ Test Suite Complete Test Suite</h4>
-                <p><span class="status-indicator status-warning"></span>Status: completed_with_errors</p>
-                <small>Timestamp: 2025-08-04T05:14:35.461947</small>
-            </div>
-            
-            <div class="metric-item warning">
-                <h4>⚠️ Test Suite Comprehensive Tests</h4>
-                <p><span class="status-indicator status-warning"></span>Status: completed_with_errors</p>
-                <small>Timestamp: 2025-08-04T05:14:35.889261</small>
-            </div>
-            
-            <div class="metric-item success">
-                <h4>✅ Test Suite Quick Recording Session</h4>
-                <p><span class="status-indicator status-success"></span>Status: success</p>
-                <small>Timestamp: 2025-08-04T05:14:51.982170</small>
-            </div>
-            
-            <div class="metric-item warning">
-                <h4>⚠️ Phase4 Validation</h4>
-                <p><span class="status-indicator status-warning"></span>Status: completed</p>
-                <small>Timestamp: 2025-08-04T05:14:52.016238</small>
-            </div>
-            
-            <div class="metric-item warning">
-                <h4>⚠️ Security Scan</h4>
-                <p><span class="status-indicator status-warning"></span>Status: completed</p>
-                <small>Timestamp: 2025-08-04T05:14:52.129745</small>
-            </div>
-            
-        </div>
-        
-        <div class="timestamp">
-            Generated on 2025-08-04 05:14:52
+        <div class="footer">
+            Comprehensive metrics analysis report for Multi-Sensor Recording System.
+            Generated on 2025-08-04 05:20:23.
         </div>
     </div>
 </body>
