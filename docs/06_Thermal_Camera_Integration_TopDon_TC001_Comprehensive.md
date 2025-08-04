@@ -1,142 +1,142 @@
-\chapter{Thermal Camera Integration Architecture for Multi-Spectral Research Applications}
+# Thermal Camera Integration Architecture for Multi-Spectral Research Applications
 
-\section{Introduction}
-\subsection{Problem Statement}
+## Introduction
+### Problem Statement
 Thermal imaging integration in research environments presents unique challenges in achieving precise temperature measurement while maintaining seamless coordination with multi-modal sensor systems. Consumer-grade thermal cameras, while accessible and cost-effective, require sophisticated calibration and integration protocols to achieve research-grade accuracy and reliability. The integration of thermal imaging capabilities into comprehensive multi-sensor research frameworks demands careful consideration of temperature calibration, temporal synchronization, and data quality assurance while addressing the inherent limitations of consumer thermal imaging hardware.
 
-Research in thermal imaging has demonstrated its effectiveness across diverse applications including medical diagnostics \cite{Ring2007}, building diagnostics \cite{Balaras2002}, and physiological monitoring \cite{Perpetuini2021}. Early work in infrared thermography established fundamental principles for non-contact temperature measurement \cite{Gaussorgues1994}, while subsequent research has expanded applications to include human thermal comfort assessment \cite{Chaudhuri2012} and emotional state recognition \cite{Kosonogov2017}. The development of uncooled microbolometer technology \cite{Kruse2001} revolutionized thermal imaging accessibility, enabling miniaturization and cost reduction essential for consumer applications.
+Research in thermal imaging has demonstrated its effectiveness across diverse applications including medical diagnostics [Ring2007], building diagnostics [Balaras2002], and physiological monitoring [Perpetuini2021]. Early work in infrared thermography established fundamental principles for non-contact temperature measurement [Gaussorgues1994], while subsequent research has expanded applications to include human thermal comfort assessment [Chaudhuri2012] and emotional state recognition [Kosonogov2017]. The development of uncooled microbolometer technology [Kruse2001] revolutionized thermal imaging accessibility, enabling miniaturization and cost reduction essential for consumer applications.
 
-Historical development of thermal imaging began with military applications during World War II \cite{Lloyd1975}, evolving through medical applications in the 1960s \cite{Lawson1957} to contemporary consumer and research implementations. The transition from cooled to uncooled thermal detectors \cite{Rogalski2003} significantly reduced costs and complexity, enabling integration into mobile devices and consumer applications.
+Historical development of thermal imaging began with military applications during World War II [Lloyd1975], evolving through medical applications in the 1960s [Lawson1957] to contemporary consumer and research implementations. The transition from cooled to uncooled thermal detectors [Rogalski2003] significantly reduced costs and complexity, enabling integration into mobile devices and consumer applications.
 
-Thermal physiology research has established the importance of non-contact temperature measurement for understanding human health and behavior. Studies on facial thermal patterns \cite{Kosonogov2017} demonstrate correlations between emotional states and facial temperature distributions. Research in thermal comfort \cite{Fanger1970} has quantified relationships between ambient temperature, human thermal response, and behavioral adaptation. Medical thermography research \cite{Ammer2003} has validated thermal imaging for various diagnostic applications including circulation assessment and inflammation detection.
+Thermal physiology research has established the importance of non-contact temperature measurement for understanding human health and behavior. Studies on facial thermal patterns [Kosonogov2017] demonstrate correlations between emotional states and facial temperature distributions. Research in thermal comfort [Fanger1970] has quantified relationships between ambient temperature, human thermal response, and behavioral adaptation. Medical thermography research [Ammer2003] has validated thermal imaging for various diagnostic applications including circulation assessment and inflammation detection.
 
-However, achieving research-grade thermal measurements using consumer devices requires addressing fundamental challenges in calibration accuracy, temporal precision, and integration with heterogeneous sensor platforms. Consumer thermal cameras typically prioritize cost and ease of use over absolute accuracy and calibration traceability required for research applications \cite{Vollmer2017}. Temperature measurement accuracy depends on proper emissivity settings, environmental compensation, and calibration reference standards often unavailable in consumer applications \cite{Minkina2009}.
+However, achieving research-grade thermal measurements using consumer devices requires addressing fundamental challenges in calibration accuracy, temporal precision, and integration with heterogeneous sensor platforms. Consumer thermal cameras typically prioritize cost and ease of use over absolute accuracy and calibration traceability required for research applications [Vollmer2017]. Temperature measurement accuracy depends on proper emissivity settings, environmental compensation, and calibration reference standards often unavailable in consumer applications [Minkina2009].
 
-Thermal imaging standardization efforts have established requirements for research-grade thermal measurement. The ASTM E1543 standard \cite{ASTM2020} defines test methods for infrared thermal imaging cameras, while ISO 18434-1 \cite{ISO2008} provides guidelines for thermal imaging in condition monitoring applications. These standards establish accuracy requirements and calibration procedures essential for research applications but challenging to implement with consumer hardware.
+Thermal imaging standardization efforts have established requirements for research-grade thermal measurement. The ASTM E1543 standard [ASTM2020] defines test methods for infrared thermal imaging cameras, while ISO 18434-1 [ISO2008] provides guidelines for thermal imaging in condition monitoring applications. These standards establish accuracy requirements and calibration procedures essential for research applications but challenging to implement with consumer hardware.
 
-The TopDon TC001 thermal camera represents an emerging class of mobile-integrated thermal imaging devices that provide accessible thermal sensing capabilities for research applications. While consumer-focused in design, these devices offer sufficient resolution and accuracy for many research scenarios when properly calibrated and integrated \cite{Herbert2019}. The integration of thermal imaging with smartphones \cite{Vidas2012} has opened new possibilities for mobile thermal sensing while introducing challenges in calibration, synchronization, and data quality assurance.
+The TopDon TC001 thermal camera represents an emerging class of mobile-integrated thermal imaging devices that provide accessible thermal sensing capabilities for research applications. While consumer-focused in design, these devices offer sufficient resolution and accuracy for many research scenarios when properly calibrated and integrated [Herbert2019]. The integration of thermal imaging with smartphones [Vidas2012] has opened new possibilities for mobile thermal sensing while introducing challenges in calibration, synchronization, and data quality assurance.
 
-Comparative analysis of consumer thermal cameras reveals significant variability in accuracy and reliability. Studies comparing consumer devices with research-grade thermal cameras \cite{Bauer2018} demonstrate accuracy differences requiring careful calibration for research applications. The FLIR One series \cite{FLIR2019}, Seek Thermal cameras \cite{Seek2018}, and TopDon thermal cameras each present different advantages and limitations for research integration.
+Comparative analysis of consumer thermal cameras reveals significant variability in accuracy and reliability. Studies comparing consumer devices with research-grade thermal cameras [Bauer2018] demonstrate accuracy differences requiring careful calibration for research applications. The FLIR One series [FLIR2019], Seek Thermal cameras [Seek2018], and TopDon thermal cameras each present different advantages and limitations for research integration.
 
-However, adapting consumer thermal cameras for research applications requires sophisticated software integration, calibration protocols, and quality assurance mechanisms that extend beyond typical consumer use cases. Research applications require traceable calibration procedures, uncertainty quantification, and integration with other sensor modalities unavailable in consumer thermal imaging software \cite{Maldague2001}.
+However, adapting consumer thermal cameras for research applications requires sophisticated software integration, calibration protocols, and quality assurance mechanisms that extend beyond typical consumer use cases. Research applications require traceable calibration procedures, uncertainty quantification, and integration with other sensor modalities unavailable in consumer thermal imaging software [Maldague2001].
 
-Mobile thermal imaging research has addressed specific challenges in smartphone-based thermal sensing. Studies on mobile thermal imaging applications \cite{Vollmer2018} demonstrate potential for research applications while highlighting limitations in accuracy and calibration. Research on thermal image processing algorithms \cite{Chrzanowski2010} has developed techniques for enhancing consumer thermal camera data quality through advanced signal processing.
+Mobile thermal imaging research has addressed specific challenges in smartphone-based thermal sensing. Studies on mobile thermal imaging applications [Vollmer2018] demonstrate potential for research applications while highlighting limitations in accuracy and calibration. Research on thermal image processing algorithms [Chrzanowski2010] has developed techniques for enhancing consumer thermal camera data quality through advanced signal processing.
 
-Contemporary research applications increasingly require thermal data collection that maintains precise temporal alignment with concurrent visual, physiological, and environmental measurements. Studies in thermal physiology \cite{Hardy1970}, stress response analysis \cite{Kosonogov2017}, and human-computer interaction \cite{Pavlidis2007} demonstrate the critical importance of synchronized thermal data for understanding complex physiological and behavioral responses.
+Contemporary research applications increasingly require thermal data collection that maintains precise temporal alignment with concurrent visual, physiological, and environmental measurements. Studies in thermal physiology [Hardy1970], stress response analysis [Kosonogov2017], and human-computer interaction [Pavlidis2007] demonstrate the critical importance of synchronized thermal data for understanding complex physiological and behavioral responses.
 
-Multi-modal thermal sensing research has established the value of combining thermal imaging with other sensor modalities. Studies combining thermal and visible spectrum imaging \cite{Davis2007} demonstrate enhanced analysis capabilities compared to single-modality approaches. Research on thermal-physiological correlations \cite{Ioannou2014} shows the importance of synchronized thermal and physiological data for understanding autonomic nervous system responses.
+Multi-modal thermal sensing research has established the value of combining thermal imaging with other sensor modalities. Studies combining thermal and visible spectrum imaging [Davis2007] demonstrate enhanced analysis capabilities compared to single-modality approaches. Research on thermal-physiological correlations [Ioannou2014] shows the importance of synchronized thermal and physiological data for understanding autonomic nervous system responses.
 
-Thermal image processing research has developed sophisticated algorithms for extracting physiological information from thermal imagery. Work on facial thermal analysis \cite{Shastri2012} has established methods for extracting respiratory rate, pulse rate, and stress indicators from thermal facial images. Research on thermal-based emotion recognition \cite{Wang2019} demonstrates the potential for automated affective state assessment using thermal imaging data.
+Thermal image processing research has developed sophisticated algorithms for extracting physiological information from thermal imagery. Work on facial thermal analysis [Shastri2012] has established methods for extracting respiratory rate, pulse rate, and stress indicators from thermal facial images. Research on thermal-based emotion recognition [Wang2019] demonstrates the potential for automated affective state assessment using thermal imaging data.
 
-Quality assurance in thermal imaging research requires careful attention to environmental factors, calibration procedures, and measurement uncertainty. Research on thermal imaging accuracy \cite{Bagavathiappan2013} has identified key factors affecting measurement precision including ambient temperature, relative humidity, and object emissivity. Studies on thermal imaging standardization \cite{Usamentiaga2014} provide guidelines for ensuring measurement reliability in research applications.
+Quality assurance in thermal imaging research requires careful attention to environmental factors, calibration procedures, and measurement uncertainty. Research on thermal imaging accuracy [Bagavathiappan2013] has identified key factors affecting measurement precision including ambient temperature, relative humidity, and object emissivity. Studies on thermal imaging standardization [Usamentiaga2014] provide guidelines for ensuring measurement reliability in research applications.
 
-\subsection{System Scope and Requirements}
+### System Scope and Requirements
 The TopDon TC001 Thermal Camera Integration encompasses comprehensive thermal imaging capabilities designed for seamless integration with multi-modal research systems. The system addresses the demanding accuracy and synchronization requirements of thermal research while leveraging accessible consumer thermal imaging hardware.
 
-\textbf{Android-Based Integration:} The system operates exclusively through Android smartphone platforms, utilizing native SDK integration for device communication and leveraging mobile computational capabilities for real-time thermal data processing.
+**Android-Based Integration:** The system operates exclusively through Android smartphone platforms, utilizing native SDK integration for device communication and leveraging mobile computational capabilities for real-time thermal data processing.
 
-\textbf{Research-Grade Calibration:} Advanced calibration protocols ensure temperature measurement accuracy through environmental compensation, reference target validation, and systematic error correction procedures.
+**Research-Grade Calibration:** Advanced calibration protocols ensure temperature measurement accuracy through environmental compensation, reference target validation, and systematic error correction procedures.
 
-\textbf{Multi-Modal Synchronization:} Sophisticated temporal coordination mechanisms ensure precise alignment between thermal measurements and concurrent visual, physiological, and environmental sensor data streams.
+**Multi-Modal Synchronization:** Sophisticated temporal coordination mechanisms ensure precise alignment between thermal measurements and concurrent visual, physiological, and environmental sensor data streams.
 
-\subsection{Research Contribution and Innovation}
-\textbf{Consumer-to-Research Adaptation:} Novel protocols for adapting consumer thermal imaging hardware to research-grade applications through comprehensive calibration and quality assurance mechanisms.
+### Research Contribution and Innovation
+**Consumer-to-Research Adaptation:** Novel protocols for adapting consumer thermal imaging hardware to research-grade applications through comprehensive calibration and quality assurance mechanisms.
 
-\textbf{Mobile Thermal Processing:} Advanced real-time thermal image processing algorithms optimized for mobile platforms while maintaining research-grade precision and reliability.
+**Mobile Thermal Processing:** Advanced real-time thermal image processing algorithms optimized for mobile platforms while maintaining research-grade precision and reliability.
 
-\textbf{Multi-Spectral Coordination:} Innovative integration protocols enabling precise temporal alignment between thermal and visible spectrum imaging for comprehensive multi-spectral analysis.
+**Multi-Spectral Coordination:** Innovative integration protocols enabling precise temporal alignment between thermal and visible spectrum imaging for comprehensive multi-spectral analysis.
 
-\section{Comparative Analysis of Thermal Imaging Solutions}
+## Comparative Analysis of Thermal Imaging Solutions
 
-\subsection{Professional Research Thermal Cameras}
+### Professional Research Thermal Cameras
 
 The thermal imaging landscape reveals significant cost and complexity advantages for consumer-integrated solutions in research applications:
 
-\textbf{FLIR Research Cameras (A6xx/T6xx Series):} Professional FLIR thermal cameras provide exceptional accuracy (±1°C) and resolution (640×480+) but cost \$15,000-50,000 per unit \cite{FLIR2020}. Their research-grade calibration and comprehensive software suite make them ideal for precision thermal research but prohibitive for many research budgets. The systems require dedicated PCs and specialized training, limiting accessibility for multi-disciplinary research teams.
+**FLIR Research Cameras (A6xx/T6xx Series):** Professional FLIR thermal cameras provide exceptional accuracy (±1°C) and resolution (640×480+) but cost \$15,000-50,000 per unit [FLIR2020]. Their research-grade calibration and comprehensive software suite make them ideal for precision thermal research but prohibitive for many research budgets. The systems require dedicated PCs and specialized training, limiting accessibility for multi-disciplinary research teams.
 
-\textbf{Optris PI Series Research Cameras:} These German-manufactured research cameras offer excellent precision and calibration traceability but cost \$8,000-25,000 per unit \cite{Optris2019}. Their industrial design and comprehensive SDK enable sophisticated integration but require significant development resources and expertise. The systems excel in controlled laboratory environments but lack the mobility and ease of use required for field research.
+**Optris PI Series Research Cameras:** These German-manufactured research cameras offer excellent precision and calibration traceability but cost \$8,000-25,000 per unit [Optris2019]. Their industrial design and comprehensive SDK enable sophisticated integration but require significant development resources and expertise. The systems excel in controlled laboratory environments but lack the mobility and ease of use required for field research.
 
-\textbf{Xenics Thermal Cameras:} High-end thermal imaging systems providing exceptional sensitivity and resolution at \$20,000-80,000 per unit \cite{Xenics2018}. Their cooled detector technology achieves superior performance but requires complex setup and maintenance procedures incompatible with mobile research scenarios.
+**Xenics Thermal Cameras:** High-end thermal imaging systems providing exceptional sensitivity and resolution at \$20,000-80,000 per unit [Xenics2018]. Their cooled detector technology achieves superior performance but requires complex setup and maintenance procedures incompatible with mobile research scenarios.
 
-\subsection{Consumer Mobile Thermal Cameras}
+### Consumer Mobile Thermal Cameras
 
-\textbf{FLIR One Pro Series:} The FLIR One Pro provides good thermal imaging capabilities at \$400-600 per unit with smartphone integration \cite{FLIR2019}. However, its iOS/Android app limitations, proprietary data formats, and restricted SDK access limit research applicability. The device excels for simple thermal documentation but lacks the calibration and integration capabilities required for research applications.
+**FLIR One Pro Series:** The FLIR One Pro provides good thermal imaging capabilities at \$400-600 per unit with smartphone integration [FLIR2019]. However, its iOS/Android app limitations, proprietary data formats, and restricted SDK access limit research applicability. The device excels for simple thermal documentation but lacks the calibration and integration capabilities required for research applications.
 
-\textbf{Seek Thermal Cameras:} Offering cost-effective thermal imaging at \$200-500 per unit, Seek cameras provide basic thermal sensing capabilities \cite{Seek2018}. Their limited resolution (206×156), basic SDK, and minimal calibration features restrict research utility. The devices serve educational and basic documentation purposes but cannot achieve research-grade precision.
+**Seek Thermal Cameras:** Offering cost-effective thermal imaging at \$200-500 per unit, Seek cameras provide basic thermal sensing capabilities [Seek2018]. Their limited resolution (206×156), basic SDK, and minimal calibration features restrict research utility. The devices serve educational and basic documentation purposes but cannot achieve research-grade precision.
 
-\textbf{Cat S60/S61 Integrated Thermal Phones:} These rugged smartphones with integrated FLIR thermal cameras provide convenience but severely limited customization and research capabilities \cite{CAT2018}. Their proprietary thermal processing and restricted access to raw thermal data eliminate research applicability despite good integration convenience.
+**Cat S60/S61 Integrated Thermal Phones:** These rugged smartphones with integrated FLIR thermal cameras provide convenience but severely limited customization and research capabilities [CAT2018]. Their proprietary thermal processing and restricted access to raw thermal data eliminate research applicability despite good integration convenience.
 
-\subsection{DIY and Open-Source Thermal Solutions}
+### DIY and Open-Source Thermal Solutions
 
-\textbf{Lepton-Based DIY Systems:} FLIR Lepton modules enable custom thermal camera development at \$200-800 per module but require extensive hardware and software development \cite{FLIR2016}. While offering ultimate customization, development time and complexity often exceed research project timelines and budgets.
+**Lepton-Based DIY Systems:** FLIR Lepton modules enable custom thermal camera development at \$200-800 per module but require extensive hardware and software development [FLIR2016]. While offering ultimate customization, development time and complexity often exceed research project timelines and budgets.
 
-\textbf{MLX90640 Thermal Arrays:} Low-cost thermal sensor arrays at \$50-100 provide basic thermal sensing but with extremely limited resolution (32×24) and accuracy unsuitable for detailed thermal research \cite{Melexis2018}.
+**MLX90640 Thermal Arrays:** Low-cost thermal sensor arrays at \$50-100 provide basic thermal sensing but with extremely limited resolution (32×24) and accuracy unsuitable for detailed thermal research [Melexis2018].
 
-\subsection{TopDon TC001 Competitive Advantages}
+### TopDon TC001 Competitive Advantages
 
 The TopDon TC001 provides several key advantages for research applications:
 
-\textbf{Research-Adequate Performance at Consumer Prices:} At \$300-500 per unit, the TC001 provides sufficient resolution (256×192) and accuracy (±2°C) for many research applications while remaining accessible to research budgets. This cost-effectiveness enables multi-camera deployments impossible with professional systems.
+**Research-Adequate Performance at Consumer Prices:** At \$300-500 per unit, the TC001 provides sufficient resolution (256×192) and accuracy (±2°C) for many research applications while remaining accessible to research budgets. This cost-effectiveness enables multi-camera deployments impossible with professional systems.
 
-\textbf{Complete SDK Access:} Unlike consumer cameras with restricted APIs, the TC001 provides comprehensive SDK access enabling full customization and integration with research frameworks. Raw thermal data access enables advanced processing and calibration procedures.
+**Complete SDK Access:** Unlike consumer cameras with restricted APIs, the TC001 provides comprehensive SDK access enabling full customization and integration with research frameworks. Raw thermal data access enables advanced processing and calibration procedures.
 
-\textbf{Mobile Integration Convenience:} Smartphone integration provides built-in display, processing, storage, and networking capabilities, eliminating the need for dedicated thermal imaging hardware and reducing system complexity.
+**Mobile Integration Convenience:** Smartphone integration provides built-in display, processing, storage, and networking capabilities, eliminating the need for dedicated thermal imaging hardware and reducing system complexity.
 
-\textbf{Research-Adaptable Platform:} The combination of adequate hardware specifications and complete software access enables adaptation to research requirements through custom calibration, processing, and integration procedures.
+**Research-Adaptable Platform:** The combination of adequate hardware specifications and complete software access enables adaptation to research requirements through custom calibration, processing, and integration procedures.
 
-\section{Technical Integration Rationale and Design Decisions}
+## Technical Integration Rationale and Design Decisions
 
-\subsection{Android Platform Selection Justification}
+### Android Platform Selection Justification
 
 The exclusive focus on Android integration reflects several technical and practical considerations:
 
-\textbf{USB OTG Capabilities:} Android's mature USB On-The-Go support enables direct hardware communication with thermal cameras without requiring proprietary communication protocols. This capability provides low-latency access to thermal data essential for real-time applications.
+**USB OTG Capabilities:** Android's mature USB On-The-Go support enables direct hardware communication with thermal cameras without requiring proprietary communication protocols. This capability provides low-latency access to thermal data essential for real-time applications.
 
-\textbf{NDK Processing Power:} Android's Native Development Kit enables high-performance thermal image processing using optimized C/C++ libraries. This capability supports real-time thermal analysis and calibration procedures requiring intensive computation.
+**NDK Processing Power:** Android's Native Development Kit enables high-performance thermal image processing using optimized C/C++ libraries. This capability supports real-time thermal analysis and calibration procedures requiring intensive computation.
 
-\textbf{Hardware Diversity:} Android's broad hardware support enables thermal camera integration across diverse smartphone platforms, providing flexibility for different research requirements and budgets.
+**Hardware Diversity:** Android's broad hardware support enables thermal camera integration across diverse smartphone platforms, providing flexibility for different research requirements and budgets.
 
-\textbf{Research Application Ecosystem:} Android's open development environment facilitates integration with other research applications and sensor platforms essential for multi-modal research scenarios.
+**Research Application Ecosystem:** Android's open development environment facilitates integration with other research applications and sensor platforms essential for multi-modal research scenarios.
 
-\subsection{Calibration Architecture Design}
+### Calibration Architecture Design
 
 The implementation of research-grade calibration addresses specific limitations in consumer thermal cameras:
 
-\textbf{Environmental Compensation Algorithms:**
+**Environmental Compensation Algorithms:**
 Consumer thermal cameras often lack sophisticated environmental compensation. The calibration architecture implements:
 
 - **Ambient Temperature Correction:** Automatic adjustment for ambient temperature variations affecting measurement accuracy
 - **Humidity Compensation:** Correction for atmospheric water vapor effects on thermal transmission
 - **Distance Correction:** Adjustment for measurement distance effects on apparent temperature
 
-\textbf{Reference Target Validation:**
+**Reference Target Validation:**
 Research applications require traceable calibration references:
 
 - **Blackbody Reference Integration:** Support for calibrated blackbody references for absolute temperature validation
 - **Multi-Point Calibration:** Implementation of multiple temperature reference points for improved accuracy across measurement ranges
 - **Drift Monitoring:** Continuous assessment of calibration stability with automatic recalibration triggers
 
-\subsection{Multi-Modal Synchronization Implementation}
+### Multi-Modal Synchronization Implementation
 
 The synchronization architecture addresses specific challenges in coordinating thermal imaging with other research sensors:
 
-\textbf{Frame Rate Synchronization:**
+**Frame Rate Synchronization:**
 Thermal cameras typically operate at 25 Hz while other sensors may operate at different rates:
 
 - **Timestamp Interpolation:** Accurate estimation of thermal states between sample points for alignment with higher-rate sensors
 - **Buffer Management:** Appropriate data buffering to accommodate different sensor timing characteristics
 - **Quality Assessment:** Monitoring of synchronization precision with automatic optimization
 
-\textbf{Spatial Registration:**
+**Spatial Registration:**
 Multi-spectral analysis requires precise spatial alignment between thermal and visible imagery:
 
 - **Calibration Matrix Computation:** Automatic calculation of transformation matrices for thermal-visible alignment
 - **Real-Time Registration:** Continuous spatial alignment monitoring and correction during data collection
 - **Quality Validation:** Assessment of registration accuracy with feedback for optimization
 
-\section{2. Hardware Specifications
+## 2. Hardware Specifications
 
-\subsection{2.1 TopDon TC001 Technical Specifications}
+### 2.1 TopDon TC001 Technical Specifications
 
 **Thermal Sensor:**
 - **Detector Type**: Uncooled microbolometer
@@ -170,7 +170,7 @@ Multi-spectral analysis requires precise spatial alignment between thermal and v
 - **Power**: Powered via smartphone connection
 - **Compatibility**: Android 6.0+ with USB OTG support
 
-\subsection{2.2 Image Quality Characteristics}
+### 2.2 Image Quality Characteristics
 
 **Thermal Image Properties:**
 - **Output Format**: 16-bit raw thermal data + 8-bit RGB visualization
@@ -184,9 +184,9 @@ Multi-spectral analysis requires precise spatial alignment between thermal and v
 - **User Calibration**: Emissivity adjustment capability
 - **Temperature References**: Internal temperature sensors for drift compensation
 
-\section{3. Android SDK Integration}
+## 3. Android SDK Integration
 
-\subsection{3.1 TopDon SDK Architecture}
+### 3.1 TopDon SDK Architecture
 
 The thermal camera integration utilizes the TopDon SDK for comprehensive device communication and control:
 
@@ -221,7 +221,7 @@ class ThermalRecorder @Inject constructor(
             if (thermalDevice != null) {
                 initializeUVCCamera(thermalDevice)
                 true
-            } else {
+            ** else {
                 logger.logE("ThermalRecorder", "TopDon TC001 device not found")
                 false
             }
@@ -299,7 +299,7 @@ class ThermalRecorder @Inject constructor(
 }
 ```
 
-\subsection{3.2 Real-Time Thermal Processing}
+### 3.2 Real-Time Thermal Processing
 
 The system implements sophisticated real-time thermal image processing:
 
@@ -452,7 +452,7 @@ class ThermalImageProcessor {
 }
 ```
 
-\subsection{3.3 Temperature Calibration System}
+### 3.3 Temperature Calibration System
 
 The system implements sophisticated temperature calibration for research-grade accuracy:
 
@@ -610,9 +610,9 @@ class ThermalCalibrationManager {
 }
 ```
 
-\section{4. Integration with Recording Framework}
+## 4. Integration with Recording Framework
 
-\subsection{4.1 Synchronized Thermal Recording}
+### 4.1 Synchronized Thermal Recording
 
 The thermal camera integrates with the master recording framework for synchronized data collection:
 
@@ -704,7 +704,7 @@ class ThermalRecordingCoordinator @Inject constructor(
 }
 ```
 
-\subsection{4.2 Data Format and Storage}
+### 4.2 Data Format and Storage
 
 The system implements comprehensive data storage for thermal recordings:
 
@@ -852,9 +852,9 @@ class ThermalDataManager {
 }
 ```
 
-\section{5. Advanced Thermal Processing}
+## 5. Advanced Thermal Processing
 
-\subsection{5.1 Real-Time Temperature Analysis}
+### 5.1 Real-Time Temperature Analysis
 
 The system implements sophisticated real-time temperature analysis capabilities:
 
@@ -1044,7 +1044,7 @@ class ThermalAnalysisEngine {
 }
 ```
 
-\subsection{5.2 Quality Assessment and Validation}
+### 5.2 Quality Assessment and Validation
 
 The system implements comprehensive quality assessment for thermal data:
 
@@ -1179,9 +1179,9 @@ class ThermalQualityAssessment {
 }
 ```
 
-\section{6. Integration with Multi-Sensor Framework}
+## 6. Integration with Multi-Sensor Framework
 
-\subsection{6.1 Cross-Modal Synchronization}
+### 6.1 Cross-Modal Synchronization
 
 The thermal camera integrates with the broader multi-sensor synchronization framework:
 
@@ -1250,7 +1250,7 @@ class ThermalSynchronizationIntegrator {
 }
 ```
 
-\subsection{6.2 Data Export and Analysis Integration}
+### 6.2 Data Export and Analysis Integration
 
 The system provides integrated data export and analysis capabilities:
 
@@ -1330,9 +1330,9 @@ class ThermalAnalysisIntegration {
 }
 ```
 
-\section{7. Performance Optimization}
+## 7. Performance Optimization
 
-\subsection{7.1 Real-Time Processing Optimization}
+### 7.1 Real-Time Processing Optimization
 
 The system implements comprehensive performance optimization for real-time thermal processing:
 
@@ -1390,7 +1390,7 @@ class ThermalPerformanceOptimizer {
 }
 ```
 
-\section{8. Conclusion}
+## 8. Conclusion
 
 The TopDon TC001 Thermal Camera Integration represents a comprehensive solution for incorporating affordable thermal imaging capabilities into the Multi-Sensor Recording System. Through sophisticated Android SDK integration, advanced thermal processing algorithms, and seamless synchronization with the broader recording framework, the system enables research-grade thermal data collection despite the consumer-grade origins of the hardware.
 
@@ -1405,7 +1405,7 @@ Key technical achievements include:
 
 The system demonstrates the successful integration of consumer thermal imaging hardware into professional research applications while maintaining the accuracy, reliability, and ease of use required for scientific data collection.
 
-\section{References}
+## References
 
 1. TopDon Technology. (2023). TC001 Thermal Camera Technical Documentation. TopDon Inc.
 
@@ -1423,52 +1423,52 @@ The system demonstrates the successful integration of consumer thermal imaging h
 
 8. Shastri, D., Merla, A., Tsiamyrtzis, P., & Pavlidis, I. (2009). Imaging facial signs of neurophysiological responses. IEEE Transactions on Biomedical Engineering, 56(2), 477-484.
 
-\section{Appendices}
+## Appendices
 
-\subsection{Appendix A: TopDon TC001 Calibration Procedures}
+### Appendix A: TopDon TC001 Calibration Procedures
 
 Detailed calibration procedures for research-grade temperature accuracy.
 
-\subsection{Appendix B: Thermal Processing Algorithm Specifications}
+### Appendix B: Thermal Processing Algorithm Specifications
 
 Mathematical specifications for all thermal processing algorithms.
 
-\subsection{Appendix C: Integration API Reference}
+### Appendix C: Integration API Reference
 
 Complete API documentation for thermal camera integration interfaces.
 
-\subsection{Appendix D: Performance Optimization Guidelines}
+### Appendix D: Performance Optimization Guidelines
 
 Comprehensive guidelines for optimizing thermal processing performance.
-\section{References}
+## References
 
 \begin{thebibliography}{99}
 
 \bibitem{Ring2007}
-Ring, E. F. J., \& Ammer, K. (2012). Infrared thermal imaging in medicine. \textit{Physiological measurement}, 33(3), R33.
+Ring, E. F. J., \& Ammer, K. (2012). Infrared thermal imaging in medicine. *Physiological measurement*, 33(3), R33.
 
 \bibitem{Balaras2002}
-Balaras, C. A., \& Argiriou, A. A. (2002). Infrared thermography for building diagnostics. \textit{Energy and buildings}, 34(2), 171-183.
+Balaras, C. A., \& Argiriou, A. A. (2002). Infrared thermography for building diagnostics. *Energy and buildings*, 34(2), 171-183.
 
 \bibitem{Perpetuini2021}
-Perpetuini, D., Cardone, D., \& Merla, A. (2021). Thermal signature of fear conditioning in mild traumatic brain injury. \textit{IEEE Transactions on Neural Systems and Rehabilitation Engineering}, 29, 1582-1593.
+Perpetuini, D., Cardone, D., \& Merla, A. (2021). Thermal signature of fear conditioning in mild traumatic brain injury. *IEEE Transactions on Neural Systems and Rehabilitation Engineering*, 29, 1582-1593.
 
 \bibitem{Gaussorgues1994}
-Gaussorgues, G. (1994). \textit{Infrared thermography}. Springer Science \& Business Media.
+Gaussorgues, G. (1994). *Infrared thermography*. Springer Science \& Business Media.
 
 \bibitem{Chaudhuri2012}
-Chaudhuri, T., Soh, Y. C., Li, H., \& Xie, L. (2012). A feedforward neural network based indoor-climate control framework for thermal comfort and energy saving in buildings. \textit{Applied energy}, 248, 44-53.
+Chaudhuri, T., Soh, Y. C., Li, H., \& Xie, L. (2012). A feedforward neural network based indoor-climate control framework for thermal comfort and energy saving in buildings. *Applied energy*, 248, 44-53.
 
 \bibitem{Kosonogov2017}
-Kosonogov, V., De Zorzi, L., Honore, J., Martínez-Velázquez, E. S., Nandrino, J. L., Martinez-Selva, J. M., \& Sequeira, H. (2017). Facial thermal variations: A new marker of emotional arousal. \textit{PloS one}, 12(9), e0183592.
+Kosonogov, V., De Zorzi, L., Honore, J., Martínez-Velázquez, E. S., Nandrino, J. L., Martinez-Selva, J. M., \& Sequeira, H. (2017). Facial thermal variations: A new marker of emotional arousal. *PloS one*, 12(9), e0183592.
 
 \bibitem{Herbert2019}
-Herbert, L., Thwaites, J., Galpin, A., \& Mitchell, L. (2019). Thermal imaging for heart rate estimation in exercise. \textit{Computers in biology and medicine}, 111, 103058.
+Herbert, L., Thwaites, J., Galpin, A., \& Mitchell, L. (2019). Thermal imaging for heart rate estimation in exercise. *Computers in biology and medicine*, 111, 103058.
 
 \bibitem{Hardy1970}
-Hardy, J. D., Gagge, A. P., \& Stolwijk, J. A. J. (1970). Physiological and behavioral temperature regulation. \textit{Charles C Thomas Publisher}.
+Hardy, J. D., Gagge, A. P., \& Stolwijk, J. A. J. (1970). Physiological and behavioral temperature regulation. *Charles C Thomas Publisher*.
 
 \bibitem{Pavlidis2007}
-Pavlidis, I., Dowdall, J., Sun, N., Puri, C., Fei, J., \& Garbey, M. (2007). Interacting with human physiology. \textit{Computer Vision and Image Understanding}, 108(1-2), 150-170.
+Pavlidis, I., Dowdall, J., Sun, N., Puri, C., Fei, J., \& Garbey, M. (2007). Interacting with human physiology. *Computer Vision and Image Understanding*, 108(1-2), 150-170.
 
 \end{thebibliography}
