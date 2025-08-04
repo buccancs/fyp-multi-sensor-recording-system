@@ -72,7 +72,7 @@ class DeviceSimulator:
                 name="Shimmer3 GSR Unit #1",
                 mac_address="00:06:66:7A:12:34",
                 ip_address=None,
-                battery_level=85,
+                battery_level=82,
                 signal_quality="Excellent",
                 is_connected=True,
                 is_recording=True,
@@ -80,39 +80,7 @@ class DeviceSimulator:
                 last_seen=datetime.now() - timedelta(seconds=2),
                 sensor_capabilities=["GSR", "PPG_A13", "Internal ADC A12", "Internal ADC A13"],
                 sampling_rate=128,
-                data_samples_count=12450
-            ),
-            FakeDevice(
-                device_id="shimmer_002", 
-                device_type=DeviceType.SHIMMER_ECG,
-                name="Shimmer3 ECG Unit #2",
-                mac_address="00:06:66:7A:56:78",
-                ip_address=None,
-                battery_level=92,
-                signal_quality="Good",
-                is_connected=True,
-                is_recording=True,
-                firmware_version="BoilerPlate 0.11.2",
-                last_seen=datetime.now() - timedelta(seconds=1),
-                sensor_capabilities=["ECG RA-LL", "ECG LA-LL", "9DoF", "Gyroscope", "Wide Range Accelerometer"],
-                sampling_rate=512,
-                data_samples_count=98600
-            ),
-            FakeDevice(
-                device_id="shimmer_003",
-                device_type=DeviceType.SHIMMER_GSR,
-                name="Shimmer3 GSR Unit #3", 
-                mac_address="00:06:66:7A:9A:BC",
-                ip_address=None,
-                battery_level=67,
-                signal_quality="Fair",
-                is_connected=True,
-                is_recording=False,
-                firmware_version="BoilerPlate 0.11.1",
-                last_seen=datetime.now() - timedelta(seconds=5),
-                sensor_capabilities=["GSR", "PPG_A13", "Internal ADC A12"],
-                sampling_rate=128,
-                data_samples_count=0
+                data_samples_count=15680
             )
         ]
         return shimmer_devices
@@ -123,46 +91,31 @@ class DeviceSimulator:
             FakeDevice(
                 device_id="android_001",
                 device_type=DeviceType.ANDROID_PHONE,
-                name="Samsung Galaxy S23 (Participant 1)",
+                name="Samsung Galaxy S22 (Participant 1)",
                 mac_address="AC:37:43:77:89:AB",
                 ip_address="192.168.1.101",
-                battery_level=78,
+                battery_level=74,
                 signal_quality="Excellent",
                 is_connected=True,
                 is_recording=True,
                 firmware_version="Android 14, App v2.4.1",
                 last_seen=datetime.now() - timedelta(seconds=3),
                 sensor_capabilities=["Front Camera", "Rear Camera", "Accelerometer", "Gyroscope", "Magnetometer", "Light Sensor"],
-                data_samples_count=8420
+                data_samples_count=9240
             ),
             FakeDevice(
                 device_id="android_002",
-                device_type=DeviceType.ANDROID_TABLET,
-                name="iPad Pro 12.9 (Experimenter)",
+                device_type=DeviceType.ANDROID_PHONE,
+                name="Samsung Galaxy S22 (Participant 2)",
                 mac_address="14:7D:DA:A1:23:45",
                 ip_address="192.168.1.102", 
-                battery_level=95,
-                signal_quality="Excellent",
+                battery_level=89,
+                signal_quality="Good",
                 is_connected=True,
                 is_recording=False,
-                firmware_version="iPadOS 17.1, App v2.4.1",
+                firmware_version="Android 14, App v2.4.1",
                 last_seen=datetime.now() - timedelta(seconds=1),
-                sensor_capabilities=["Front Camera", "Rear Camera", "Touch Interface", "Apple Pencil"],
-                data_samples_count=0
-            ),
-            FakeDevice(
-                device_id="android_003",
-                device_type=DeviceType.ANDROID_PHONE,
-                name="Google Pixel 8 (Participant 2)",
-                mac_address="B8:27:EB:CC:DD:EE",
-                ip_address="192.168.1.103",
-                battery_level=45,
-                signal_quality="Good",
-                is_connected=False,
-                is_recording=False,
-                firmware_version="Android 14, App v2.3.8",
-                last_seen=datetime.now() - timedelta(minutes=2),
-                sensor_capabilities=["Front Camera", "Rear Camera", "Accelerometer", "Gyroscope"],
+                sensor_capabilities=["Front Camera", "Rear Camera", "Accelerometer", "Gyroscope", "Magnetometer", "Light Sensor"],
                 data_samples_count=0
             )
         ]
@@ -174,47 +127,32 @@ class DeviceSimulator:
             FakeDevice(
                 device_id="webcam_001",
                 device_type=DeviceType.USB_WEBCAM,
-                name="Logitech C920 HD Pro (Facial)",
+                name="Logitech Brio 4K (Facial)",
                 mac_address=None,
                 ip_address=None,
                 battery_level=None,
                 signal_quality="Excellent",
                 is_connected=True,
                 is_recording=True,
-                firmware_version="USB 2.0, 1920x1080@30fps",
+                firmware_version="USB 3.0, 3840x2160@30fps",
                 last_seen=datetime.now() - timedelta(seconds=1),
-                sensor_capabilities=["Video Recording", "Audio Recording", "Auto Focus"],
+                sensor_capabilities=["4K Video Recording", "HDR", "Auto Focus", "Face Detection"],
                 data_samples_count=27000  # 30fps * 15min * 60s
             ),
             FakeDevice(
                 device_id="webcam_002", 
                 device_type=DeviceType.USB_WEBCAM,
-                name="Microsoft LifeCam HD-3000 (Overview)",
+                name="Logitech Brio 4K (Overview)",
                 mac_address=None,
                 ip_address=None,
                 battery_level=None,
                 signal_quality="Good",
                 is_connected=True,
                 is_recording=True,
-                firmware_version="USB 2.0, 1280x720@30fps",
+                firmware_version="USB 3.0, 1920x1080@60fps",
                 last_seen=datetime.now() - timedelta(seconds=2),
-                sensor_capabilities=["Video Recording", "Audio Recording"],
-                data_samples_count=27000
-            ),
-            FakeDevice(
-                device_id="webcam_003",
-                device_type=DeviceType.NETWORK_CAMERA,
-                name="Axis P1365 Network Camera (Lab Wide)",
-                mac_address="00:40:8C:12:34:56",
-                ip_address="192.168.1.201",
-                battery_level=None,
-                signal_quality="Excellent", 
-                is_connected=True,
-                is_recording=False,
-                firmware_version="AXIS OS 10.12, H.264",
-                last_seen=datetime.now() - timedelta(seconds=4),
-                sensor_capabilities=["Video Recording", "Pan/Tilt", "Night Vision", "Motion Detection"],
-                data_samples_count=0
+                sensor_capabilities=["4K Video Recording", "HDR", "Auto Focus", "Wide Field of View"],
+                data_samples_count=54000  # 60fps * 15min * 60s
             )
         ]
         return webcam_devices
@@ -237,8 +175,8 @@ class DeviceSimulator:
                 "duration_minutes": 15.3,
                 "status": "Recording",
                 "data_quality": "Excellent",
-                "devices_active": 5,
-                "total_samples": 146470
+                "devices_active": 4,  # 1 Shimmer + 2 Samsung + 1 active Brio
+                "total_samples": 105920  # Updated based on new device counts
             },
             "recent_sessions": [
                 {

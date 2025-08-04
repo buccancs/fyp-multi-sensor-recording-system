@@ -1,0 +1,50 @@
+{
+  "configuration_summary": {
+    "shimmer_devices": 1,
+    "android_devices": 2,
+    "webcam_devices": 2,
+    "total_devices": 5,
+    "active_devices": 4
+  },
+  "device_details": {
+    "shimmer_devices": [
+      {
+        "name": "Shimmer3 GSR Unit #1",
+        "battery": 82,
+        "recording": true,
+        "sampling_rate": 128,
+        "samples": 15680
+      }
+    ],
+    "android_devices": [
+      {
+        "name": "Samsung Galaxy S22 (Participant 1)",
+        "battery": 74,
+        "recording": true,
+        "ip": "192.168.1.101",
+        "samples": 9240
+      },
+      {
+        "name": "Samsung Galaxy S22 (Participant 2)",
+        "battery": 89,
+        "recording": false,
+        "ip": "192.168.1.102",
+        "samples": 0
+      }
+    ],
+    "webcam_devices": [
+      {
+        "name": "Logitech Brio 4K (Facial)",
+        "recording": true,
+        "resolution": "USB 3.0, 3840x2160@30fps",
+        "frames": 27000
+      },
+      {
+        "name": "Logitech Brio 4K (Overview)",
+        "recording": true,
+        "resolution": "USB 3.0, 1920x1080@60fps",
+        "frames": 54000
+      }
+    ]
+  }
+}

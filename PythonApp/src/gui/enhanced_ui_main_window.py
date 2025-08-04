@@ -24,7 +24,7 @@ from PyQt5.QtWidgets import (
     QGroupBox, QLabel, QPushButton, QProgressBar, QSlider, QComboBox,
     QTextEdit, QTabWidget, QFrame, QSplitter, QToolBar, QStatusBar,
     QMenuBar, QAction, QMessageBox, QFileDialog, QSpacerItem, QSizePolicy,
-    QApplication
+    QApplication, QSpinBox, QCheckBox, QLineEdit
 )
 
 # Import basic components (avoiding problematic multimedia ones)
