@@ -1,0 +1,1402 @@
+{
+  "timestamp": "2025-08-04T05:40:50.505621",
+  "project_root": "/home/runner/work/bucika_gsr/bucika_gsr",
+  "analyses": {
+    "documentation_coverage": {
+      "total_md_files": 100,
+      "documentation_categories": {
+        "thesis_report": [
+          {
+            "path": "docs/thesis_report/Chapter_3_Requirements_and_Analysis.md",
+            "word_count": 17723,
+            "last_modified": "2025-08-04T05:33:48.647085"
+          },
+          {
+            "path": "docs/thesis_report/README.md",
+            "word_count": 5191,
+            "last_modified": "2025-08-04T05:33:48.650085"
+          },
+          {
+            "path": "docs/thesis_report/Chapter_7_Appendices.md",
+            "word_count": 12659,
+            "last_modified": "2025-08-04T05:33:48.649085"
+          },
+          {
+            "path": "docs/thesis_report/Chapter_2_Context_and_Literature_Review.md",
+            "word_count": 10315,
+            "last_modified": "2025-08-04T05:33:48.647085"
+          },
+          {
+            "path": "docs/thesis_report/Chapter_4_Design_and_Implementation.md",
+            "word_count": 15433,
+            "last_modified": "2025-08-04T05:33:48.648085"
+          },
+          {
+            "path": "docs/thesis_report/Python_Desktop_Controller_Comprehensive_Documentation.md",
+            "word_count": 12216,
+            "last_modified": "2025-08-04T05:33:48.650085"
+          },
+          {
+            "path": "docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md",
+            "word_count": 11843,
+            "last_modified": "2025-08-04T05:33:48.648085"
+          },
+          {
+            "path": "docs/thesis_report/Chapter_6_Conclusions_and_Evaluation.md",
+            "word_count": 14991,
+            "last_modified": "2025-08-04T05:33:48.649085"
+          },
+          {
+            "path": "docs/thesis_report/Chapter_1_Introduction.md",
+            "word_count": 6651,
+            "last_modified": "2025-08-04T05:33:48.646085"
+          }
+        ],
+        "api_documentation": [
+          {
+            "path": "docs/new_documentation/PROTOCOL_system_api_reference.md",
+            "word_count": 1117,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/new_documentation/session-management-quick-reference.md",
+            "word_count": 866,
+            "last_modified": "2025-08-04T05:33:48.646085"
+          }
+        ],
+        "user_guides": [
+          {
+            "path": "docs/LOGGING_MIGRATION_GUIDE.md",
+            "word_count": 818,
+            "last_modified": "2025-08-04T05:33:48.635085"
+          },
+          {
+            "path": "docs/SHIMMER3_GSR_PLUS_COMPREHENSIVE_GUIDE.md",
+            "word_count": 4941,
+            "last_modified": "2025-08-04T05:33:48.637085"
+          },
+          {
+            "path": ".junie/guidelines.md",
+            "word_count": 84,
+            "last_modified": "2025-08-04T05:33:48.373085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md",
+            "word_count": 2597,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_networking_protocol.md",
+            "word_count": 2915,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_shimmer_manager.md",
+            "word_count": 3040,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_python_desktop_controller.md",
+            "word_count": 2353,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_topdon_tc001.md",
+            "word_count": 3241,
+            "last_modified": "2025-08-04T05:33:48.646085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_session_management.md",
+            "word_count": 2734,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md",
+            "word_count": 3008,
+            "last_modified": "2025-08-04T05:33:48.644085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md",
+            "word_count": 1937,
+            "last_modified": "2025-08-04T05:33:48.644085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_system_operation.md",
+            "word_count": 2867,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_testing_qa_framework.md",
+            "word_count": 2445,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_CameraRecorder.md",
+            "word_count": 2546,
+            "last_modified": "2025-08-04T05:33:48.644085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_master_clock_synchronizer.md",
+            "word_count": 4329,
+            "last_modified": "2025-08-04T05:33:48.645085"
+          },
+          {
+            "path": "docs/new_documentation/USER_GUIDE_ui_navigation.md",
+            "word_count": 1909,
+            "last_modified": "2025-08-04T05:33:48.646085"
+          }
+        ],
+        "technical_specs": [],
+        "testing_docs": [
+          {
+            "path": "docs/TESTING_QA_FRAMEWORK.md",
+            "word_count": 6756,
+            "last_modified": "2025-08-04T05:33:48.637085"
+          },
+          {
+            "path": "docs/08_Testing_QA_Framework_Comprehensive.md",
+            "word_count": 4693,
+            "last_modified": "2025-08-04T05:33:48.634085"
+          },
+          {
+            "path": "test_results/ide_integration_summary_20250802_061716.md",
+            "word_count": 417,
+            "last_modified": "2025-08-04T05:33:48.653085"
+          },
+          {
+            "path": "docs/new_documentation/README_testing_qa_framework.md",
+            "word_count": 2299,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          },
+          {
+            "path": "docs/new_documentation/TESTING_FRAMEWORK_INDEX.md",
+            "word_count": 1304,
+            "last_modified": "2025-08-04T05:33:48.643085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_testing_qa_framework.md",
+            "word_count": 3535,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/testing/IDE_INTEGRATION_TEST_DOCUMENTATION.md",
+            "word_count": 1386,
+            "last_modified": "2025-08-04T05:33:48.646085"
+          }
+        ],
+        "readme_files": [
+          {
+            "path": "VISUALIZATION_README.md",
+            "word_count": 689,
+            "last_modified": "2025-08-04T05:33:48.629085"
+          },
+          {
+            "path": "README.md",
+            "word_count": 7743,
+            "last_modified": "2025-08-04T05:33:48.629085"
+          },
+          {
+            "path": "PythonApp/README_ENHANCED_UI.md",
+            "word_count": 1206,
+            "last_modified": "2025-08-04T05:33:48.544085"
+          },
+          {
+            "path": "docs/README.md",
+            "word_count": 4573,
+            "last_modified": "2025-08-04T05:33:48.636085"
+          },
+          {
+            "path": "docs/README_Development_and_Validation_Tools.md",
+            "word_count": 7356,
+            "last_modified": "2025-08-04T05:33:48.636085"
+          },
+          {
+            "path": "PythonApp/src/web_ui/README.md",
+            "word_count": 3055,
+            "last_modified": "2025-08-04T05:33:48.578085"
+          },
+          {
+            "path": "docs/new_documentation/README_topdon_tc001.md",
+            "word_count": 2689,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          },
+          {
+            "path": "docs/new_documentation/README_python_desktop_controller.md",
+            "word_count": 2225,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_shimmer3_gsr_plus.md",
+            "word_count": 2631,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_system_architecture.md",
+            "word_count": 1666,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          },
+          {
+            "path": "docs/new_documentation/README.md",
+            "word_count": 1181,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/README_technical_implementation.md",
+            "word_count": 1973,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          },
+          {
+            "path": "docs/new_documentation/README_project_context.md",
+            "word_count": 2152,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_design_patterns.md",
+            "word_count": 2315,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_master_clock_synchronizer.md",
+            "word_count": 3930,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_Android_Mobile_Application.md",
+            "word_count": 3110,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/README_Multi_Device_Synchronization.md",
+            "word_count": 2463,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/README_academic_research.md",
+            "word_count": 2102,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/README_shimmer_manager.md",
+            "word_count": 3012,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          },
+          {
+            "path": "docs/new_documentation/README_ui_architecture.md",
+            "word_count": 1707,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          },
+          {
+            "path": "docs/new_documentation/README_CameraRecorder.md",
+            "word_count": 1749,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/README_networking_protocol.md",
+            "word_count": 3338,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_computer_vision.md",
+            "word_count": 2556,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/README_session_management.md",
+            "word_count": 2634,
+            "last_modified": "2025-08-04T05:33:48.641085"
+          },
+          {
+            "path": "docs/new_documentation/README_validation_methodology.md",
+            "word_count": 1962,
+            "last_modified": "2025-08-04T05:33:48.642085"
+          }
+        ],
+        "other": [
+          {
+            "path": "METRICS_GENERATION_SUMMARY.md",
+            "word_count": 830,
+            "last_modified": "2025-08-04T05:33:48.498085"
+          },
+          {
+            "path": "PythonApp/DUAL_WEBCAM_IMPLEMENTATION.md",
+            "word_count": 1129,
+            "last_modified": "2025-08-04T05:33:48.498085"
+          },
+          {
+            "path": "docs/10_Hand_Segmentation_System_Comprehensive.md",
+            "word_count": 4722,
+            "last_modified": "2025-08-04T05:33:48.635085"
+          },
+          {
+            "path": "docs/05_Shimmer3_GSR_Plus_Integration_Comprehensive.md",
+            "word_count": 6221,
+            "last_modified": "2025-08-04T05:33:48.633085"
+          },
+          {
+            "path": "docs/07_UI_Architecture_Comprehensive.md",
+            "word_count": 5623,
+            "last_modified": "2025-08-04T05:33:48.634085"
+          },
+          {
+            "path": "docs/09_Stimulus_Management_System_Comprehensive.md",
+            "word_count": 4736,
+            "last_modified": "2025-08-04T05:33:48.634085"
+          },
+          {
+            "path": "docs/01_Multi_Device_Synchronization_System_Comprehensive.md",
+            "word_count": 7492,
+            "last_modified": "2025-08-04T05:33:48.632085"
+          },
+          {
+            "path": "docs/CAMERA_RECORDING_SYSTEM_AND_STAGE3_RAW_EXTRACTION.md",
+            "word_count": 5460,
+            "last_modified": "2025-08-04T05:33:48.635085"
+          },
+          {
+            "path": "docs/03_Camera_Recording_System_Comprehensive.md",
+            "word_count": 5979,
+            "last_modified": "2025-08-04T05:33:48.633085"
+          },
+          {
+            "path": "docs/Multi_Device_Synchronization_System.md",
+            "word_count": 5484,
+            "last_modified": "2025-08-04T05:33:48.636085"
+          },
+          {
+            "path": "docs/04_Python_Desktop_Controller_Comprehensive.md",
+            "word_count": 6062,
+            "last_modified": "2025-08-04T05:33:48.633085"
+          },
+          {
+            "path": "docs/02_Android_Mobile_Application_Comprehensive.md",
+            "word_count": 5078,
+            "last_modified": "2025-08-04T05:33:48.632085"
+          },
+          {
+            "path": "docs/NETWORKING_PROTOCOL_COMPREHENSIVE.md",
+            "word_count": 6473,
+            "last_modified": "2025-08-04T05:33:48.636085"
+          },
+          {
+            "path": "docs/11_Master_Clock_Synchronizer_Comprehensive.md",
+            "word_count": 4514,
+            "last_modified": "2025-08-04T05:33:48.635085"
+          },
+          {
+            "path": "docs/06_Thermal_Camera_Integration_TopDon_TC001_Comprehensive.md",
+            "word_count": 6347,
+            "last_modified": "2025-08-04T05:33:48.634085"
+          },
+          {
+            "path": "docs/ANDROID_MOBILE_APPLICATION_COMPREHENSIVE_REPORT.md",
+            "word_count": 8106,
+            "last_modified": "2025-08-04T05:33:48.635085"
+          },
+          {
+            "path": ".github/copilot-instructions.md",
+            "word_count": 151,
+            "last_modified": "2025-08-04T05:33:48.371085"
+          },
+          {
+            "path": "metrics_output/comprehensive_metrics_report_20250804_012914.md",
+            "word_count": 229,
+            "last_modified": "2025-08-04T05:33:48.651085"
+          },
+          {
+            "path": "docs/new_documentation/BENCHMARKING_master_clock_synchronizer.md",
+            "word_count": 1940,
+            "last_modified": "2025-08-04T05:33:48.637085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_shimmer_manager.md",
+            "word_count": 2954,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/new_documentation/TROUBLESHOOTING_master_clock_synchronizer.md",
+            "word_count": 2648,
+            "last_modified": "2025-08-04T05:33:48.644085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_networking_protocol.md",
+            "word_count": 3687,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_functional_requirements_specification.md",
+            "word_count": 1773,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/UNIFIED_UI_ARCHITECTURE.md",
+            "word_count": 9747,
+            "last_modified": "2025-08-04T05:33:48.644085"
+          },
+          {
+            "path": "docs/new_documentation/SESSION_MANAGEMENT_COMPREHENSIVE.md",
+            "word_count": 7309,
+            "last_modified": "2025-08-04T05:33:48.643085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_topdon_tc001.md",
+            "word_count": 2845,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_python_desktop_controller.md",
+            "word_count": 2141,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_cicd_pipeline_enhancement.md",
+            "word_count": 1462,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/COMPREHENSIVE_SHIMMER_PC_INTEGRATION.md",
+            "word_count": 6684,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_Android_Mobile_Application.md",
+            "word_count": 2571,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/INDEX.md",
+            "word_count": 1407,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_CameraRecorder.md",
+            "word_count": 2485,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_data_models_and_file_organization.md",
+            "word_count": 1291,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_ui_state_management.md",
+            "word_count": 2866,
+            "last_modified": "2025-08-04T05:33:48.640085"
+          },
+          {
+            "path": "docs/new_documentation/SYNCHRONIZATION_COMPREHENSIVE_REPORT.md",
+            "word_count": 7545,
+            "last_modified": "2025-08-04T05:33:48.643085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_master_clock_synchronizer.md",
+            "word_count": 4682,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_session_management.md",
+            "word_count": 2236,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          },
+          {
+            "path": "docs/new_documentation/ADVANCED_master_clock_synchronizer.md",
+            "word_count": 2811,
+            "last_modified": "2025-08-04T05:33:48.637085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md",
+            "word_count": 3007,
+            "last_modified": "2025-08-04T05:33:48.638085"
+          },
+          {
+            "path": "docs/new_documentation/TOPDON_TC001_COMPREHENSIVE_DOCUMENTATION.md",
+            "word_count": 12052,
+            "last_modified": "2025-08-04T05:33:48.643085"
+          },
+          {
+            "path": "docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md",
+            "word_count": 2871,
+            "last_modified": "2025-08-04T05:33:48.639085"
+          }
+        ]
+      },
+      "coverage_metrics": {
+        "total_documentation_words": 414826,
+        "thesis_documentation_words": 107022,
+        "thesis_coverage_percentage": 25.79925077020245,
+        "average_document_length": 4148.26,
+        "documentation_density": 1149.1024930747922
+      },
+      "quality_assessment": {
+        "comprehensive_readme": true,
+        "thesis_chapters_present": true,
+        "api_documentation_available": true,
+        "user_guides_available": true,
+        "testing_documentation": true
+      },
+      "completeness_analysis": {}
+    },
+    "test_coverage": {
+      "test_files": [
+        "PythonApp/run_quick_recording_session_test.py",
+        "PythonApp/tests/test_framework.py",
+        "tools/validation/test_automated_file_collection.py",
+        "tools/validation/validate_latency_features.py",
+        "PythonApp/test_dual_webcam_system.py",
+        "PythonApp/tests/test_recording_full_suite.py",
+        "PythonApp/tests/test_json_socket_server.py",
+        "PythonApp/tests/test_summary.py",
+        "tools/validate_data_schemas.py",
+        "PythonApp/tests/test_calibration_components.py",
+        "PythonApp/tests/test_lightweight.py",
+        "PythonApp/tests/test_integration_end_to_end.py",
+        "PythonApp/test_hardware_sensor_simulation.py",
+        "PythonApp/tests/test_calibration_manager.py",
+        "PythonApp/tests/test_shimmer_manager.py",
+        "PythonApp/run_comprehensive_tests.py",
+        "PythonApp/tests/test_comprehensive_recording_session.py",
+        "PythonApp/tests/test_integration_comprehensive.py",
+        "PythonApp/tests/test_network_protocol_integration.py",
+        "PythonApp/tests/test_calibration_dialog.py",
+        "PythonApp/test_python_ui_integration.py",
+        "PythonApp/test_advanced_dual_webcam_system.py",
+        "tools/validation/test_comprehensive_logging.py",
+        "PythonApp/test_calibration_implementation.py",
+        "PythonApp/validate_testing_qa_framework.py",
+        "PythonApp/tests/test_integration_phase2.py",
+        "PythonApp/tests/test_device_simulator.py",
+        "PythonApp/tests/test_all_full_suites.py",
+        "PythonApp/tests/test_calibration.py",
+        "PythonApp/tests/test_device_client.py",
+        "PythonApp/tests/test_file_management_full_suite.py",
+        "PythonApp/test_shimmer_pc_integration.py",
+        "PythonApp/tests/test_enhanced_stimulus_presentation.py",
+        "PythonApp/tests/test_latency_measurement.py",
+        "PythonApp/test_shimmer_implementation.py",
+        "PythonApp/tests/test_shimmer_comprehensive.py",
+        "PythonApp/tests/test_enhanced_logging.py",
+        "PythonApp/tests/test_ntp_time_server.py",
+        "PythonApp/src/test_hand_segmentation.py",
+        "PythonApp/tests/test_phase3_configuration_manager.py",
+        "tools/validation/test_session_directory_integration.py",
+        "PythonApp/test_focused_recording_session.py",
+        "PythonApp/src/test_real_web_integration.py",
+        "PythonApp/tests/test_enhanced_networking.py",
+        "PythonApp/test_enhanced_ui_implementation.py",
+        "PythonApp/tests/test_python_android_integration.py",
+        "PythonApp/test_network_resilience.py",
+        "PythonApp/tests/test_stimulus_manager.py",
+        "PythonApp/test_logging.py",
+        "PythonApp/tests/test_network_connectivity_full_suite.py",
+        "PythonApp/tests/test_system_integration.py",
+        "PythonApp/test_python_desktop_controller_documentation.py",
+        "PythonApp/test_enhanced_stress_testing.py",
+        "PythonApp/tests/test_pc_android_integration.py",
+        "PythonApp/tests/test_stimulus_presentation.py",
+        "tools/validation/test_android_hand_integration.py",
+        "PythonApp/tests/test_simple_networking.py",
+        "PythonApp/validate_python_desktop_controller_docs.py",
+        "PythonApp/tests/test_config_schema_integrity.py",
+        "PythonApp/tests/test_session_logger.py",
+        "PythonApp/test_comprehensive_recording_session.py",
+        "PythonApp/test_simplified_integration.py",
+        "PythonApp/test_data_integrity_validation.py",
+        "PythonApp/tests/test_ide_integration_suite.py",
+        "PythonApp/run_complete_test_suite.py",
+        "PythonApp/test_basic_integration.py",
+        "PythonApp/tests/test_calibration_full_suite.py",
+        "PythonApp/tests/test_button_functionality.py",
+        "PythonApp/tests/test_file_transfer_integration.py",
+        "PythonApp/tests/test_calibration_processor.py",
+        "PythonApp/tests/test_hardware_failure_recovery.py",
+        "PythonApp/test_dual_webcam_integration.py",
+        "PythonApp/tests/test_calibration_comprehensive.py",
+        "PythonApp/tests/test_unit_core.py",
+        "PythonApp/run_recording_session_test.py",
+        "PythonApp/test_integration_logging.py",
+        "PythonApp/tests/test_device_management_full_suite.py",
+        "PythonApp/tests/test_common_components.py",
+        "PythonApp/test_enhanced_ui_structure.py",
+        "PythonApp/tests/test_main.py"
+      ],
+      "test_categories": {
+        "unit_tests": [
+          {
+            "path": "PythonApp/tests/test_unit_core.py",
+            "line_count": 76,
+            "test_function_count": 5,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          }
+        ],
+        "integration_tests": [
+          {
+            "path": "PythonApp/run_quick_recording_session_test.py",
+            "line_count": 402,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.569085"
+          },
+          {
+            "path": "PythonApp/tests/test_framework.py",
+            "line_count": 948,
+            "test_function_count": 6,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "tools/validation/test_automated_file_collection.py",
+            "line_count": 205,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.654085"
+          },
+          {
+            "path": "PythonApp/tests/test_recording_full_suite.py",
+            "line_count": 1396,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/tests/test_json_socket_server.py",
+            "line_count": 441,
+            "test_function_count": 13,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_summary.py",
+            "line_count": 89,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration_components.py",
+            "line_count": 268,
+            "test_function_count": 18,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_lightweight.py",
+            "line_count": 62,
+            "test_function_count": 5,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_integration_end_to_end.py",
+            "line_count": 134,
+            "test_function_count": 2,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/test_hardware_sensor_simulation.py",
+            "line_count": 1105,
+            "test_function_count": 2,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration_manager.py",
+            "line_count": 793,
+            "test_function_count": 35,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_shimmer_manager.py",
+            "line_count": 511,
+            "test_function_count": 18,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/run_comprehensive_tests.py",
+            "line_count": 630,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.568085"
+          },
+          {
+            "path": "PythonApp/tests/test_comprehensive_recording_session.py",
+            "line_count": 1016,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_integration_comprehensive.py",
+            "line_count": 64,
+            "test_function_count": 4,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_network_protocol_integration.py",
+            "line_count": 130,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration_dialog.py",
+            "line_count": 576,
+            "test_function_count": 19,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/test_python_ui_integration.py",
+            "line_count": 761,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "tools/validation/test_comprehensive_logging.py",
+            "line_count": 203,
+            "test_function_count": 4,
+            "last_modified": "2025-08-04T05:33:48.654085"
+          },
+          {
+            "path": "PythonApp/test_calibration_implementation.py",
+            "line_count": 178,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.580085"
+          },
+          {
+            "path": "PythonApp/tests/test_integration_phase2.py",
+            "line_count": 663,
+            "test_function_count": 6,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_device_simulator.py",
+            "line_count": 540,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_all_full_suites.py",
+            "line_count": 396,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration.py",
+            "line_count": 456,
+            "test_function_count": 9,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_device_client.py",
+            "line_count": 719,
+            "test_function_count": 27,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_file_management_full_suite.py",
+            "line_count": 52,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/test_shimmer_pc_integration.py",
+            "line_count": 420,
+            "test_function_count": 4,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/tests/test_enhanced_stimulus_presentation.py",
+            "line_count": 767,
+            "test_function_count": 10,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_latency_measurement.py",
+            "line_count": 385,
+            "test_function_count": 10,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/test_shimmer_implementation.py",
+            "line_count": 146,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/tests/test_shimmer_comprehensive.py",
+            "line_count": 454,
+            "test_function_count": 18,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/tests/test_enhanced_logging.py",
+            "line_count": 417,
+            "test_function_count": 18,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_ntp_time_server.py",
+            "line_count": 483,
+            "test_function_count": 19,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/src/test_hand_segmentation.py",
+            "line_count": 350,
+            "test_function_count": 14,
+            "last_modified": "2025-08-04T05:33:48.577085"
+          },
+          {
+            "path": "PythonApp/tests/test_phase3_configuration_manager.py",
+            "line_count": 110,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "tools/validation/test_session_directory_integration.py",
+            "line_count": 216,
+            "test_function_count": 4,
+            "last_modified": "2025-08-04T05:33:48.654085"
+          },
+          {
+            "path": "PythonApp/test_focused_recording_session.py",
+            "line_count": 1003,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/src/test_real_web_integration.py",
+            "line_count": 264,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.577085"
+          },
+          {
+            "path": "PythonApp/tests/test_enhanced_networking.py",
+            "line_count": 647,
+            "test_function_count": 13,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/test_enhanced_ui_implementation.py",
+            "line_count": 318,
+            "test_function_count": 8,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/tests/test_python_android_integration.py",
+            "line_count": 399,
+            "test_function_count": 8,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/test_network_resilience.py",
+            "line_count": 594,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/tests/test_stimulus_manager.py",
+            "line_count": 479,
+            "test_function_count": 20,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/test_logging.py",
+            "line_count": 67,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/tests/test_network_connectivity_full_suite.py",
+            "line_count": 52,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_system_integration.py",
+            "line_count": 571,
+            "test_function_count": 6,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/test_python_desktop_controller_documentation.py",
+            "line_count": 225,
+            "test_function_count": 10,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/test_enhanced_stress_testing.py",
+            "line_count": 620,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/tests/test_pc_android_integration.py",
+            "line_count": 838,
+            "test_function_count": 7,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          },
+          {
+            "path": "PythonApp/tests/test_stimulus_presentation.py",
+            "line_count": 373,
+            "test_function_count": 6,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "tools/validation/test_android_hand_integration.py",
+            "line_count": 157,
+            "test_function_count": 2,
+            "last_modified": "2025-08-04T05:33:48.654085"
+          },
+          {
+            "path": "PythonApp/tests/test_simple_networking.py",
+            "line_count": 610,
+            "test_function_count": 8,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/tests/test_config_schema_integrity.py",
+            "line_count": 585,
+            "test_function_count": 32,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_session_logger.py",
+            "line_count": 563,
+            "test_function_count": 12,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/test_comprehensive_recording_session.py",
+            "line_count": 1337,
+            "test_function_count": 2,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/test_simplified_integration.py",
+            "line_count": 369,
+            "test_function_count": 14,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/test_data_integrity_validation.py",
+            "line_count": 842,
+            "test_function_count": 4,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/tests/test_ide_integration_suite.py",
+            "line_count": 928,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/test_basic_integration.py",
+            "line_count": 73,
+            "test_function_count": 1,
+            "last_modified": "2025-08-04T05:33:48.580085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration_full_suite.py",
+            "line_count": 52,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_button_functionality.py",
+            "line_count": 109,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_file_transfer_integration.py",
+            "line_count": 413,
+            "test_function_count": 12,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration_processor.py",
+            "line_count": 63,
+            "test_function_count": 3,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/tests/test_hardware_failure_recovery.py",
+            "line_count": 300,
+            "test_function_count": 7,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/test_dual_webcam_integration.py",
+            "line_count": 345,
+            "test_function_count": 11,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/tests/test_calibration_comprehensive.py",
+            "line_count": 379,
+            "test_function_count": 10,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/run_recording_session_test.py",
+            "line_count": 749,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.569085"
+          },
+          {
+            "path": "PythonApp/test_integration_logging.py",
+            "line_count": 228,
+            "test_function_count": 2,
+            "last_modified": "2025-08-04T05:33:48.582085"
+          },
+          {
+            "path": "PythonApp/tests/test_device_management_full_suite.py",
+            "line_count": 52,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.626085"
+          },
+          {
+            "path": "PythonApp/tests/test_common_components.py",
+            "line_count": 365,
+            "test_function_count": 16,
+            "last_modified": "2025-08-04T05:33:48.625085"
+          },
+          {
+            "path": "PythonApp/test_enhanced_ui_structure.py",
+            "line_count": 302,
+            "test_function_count": 2,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/tests/test_main.py",
+            "line_count": 205,
+            "test_function_count": 12,
+            "last_modified": "2025-08-04T05:33:48.627085"
+          }
+        ],
+        "system_tests": [
+          {
+            "path": "PythonApp/test_dual_webcam_system.py",
+            "line_count": 430,
+            "test_function_count": 9,
+            "last_modified": "2025-08-04T05:33:48.581085"
+          },
+          {
+            "path": "PythonApp/test_advanced_dual_webcam_system.py",
+            "line_count": 603,
+            "test_function_count": 23,
+            "last_modified": "2025-08-04T05:33:48.580085"
+          },
+          {
+            "path": "PythonApp/run_complete_test_suite.py",
+            "line_count": 570,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.568085"
+          }
+        ],
+        "performance_tests": [],
+        "validation_tests": [
+          {
+            "path": "tools/validation/validate_latency_features.py",
+            "line_count": 236,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.655085"
+          },
+          {
+            "path": "tools/validate_data_schemas.py",
+            "line_count": 324,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.654085"
+          },
+          {
+            "path": "PythonApp/validate_testing_qa_framework.py",
+            "line_count": 173,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          },
+          {
+            "path": "PythonApp/validate_python_desktop_controller_docs.py",
+            "line_count": 283,
+            "test_function_count": 0,
+            "last_modified": "2025-08-04T05:33:48.628085"
+          }
+        ]
+      },
+      "coverage_metrics": {
+        "total_test_files": 80,
+        "total_test_functions": 558,
+        "total_test_lines": 34657,
+        "test_to_code_ratio": 0.22160664819944598,
+        "average_tests_per_file": 6.975,
+        "test_coverage_estimate": 73.86888273314867
+      },
+      "test_quality": {
+        "comprehensive_test_suite": true,
+        "multiple_test_types": true,
+        "performance_testing": false,
+        "validation_framework": true,
+        "system_testing": true
+      }
+    },
+    "code_quality": {
+      "file_statistics": {
+        "total_code_files": 361,
+        "total_code_lines": 159099,
+        "file_types": {
+          ".java": {
+            "count": 1,
+            "total_lines": 336,
+            "average_lines": 336.0
+          },
+          ".kt": {
+            "count": 190,
+            "total_lines": 74384,
+            "average_lines": 391.4947368421053
+          },
+          ".py": {
+            "count": 170,
+            "total_lines": 84379,
+            "average_lines": 496.34705882352944
+          }
+        },
+        "average_file_size": 440.7174515235457
+      },
+      "language_distribution": {
+        "Java": {
+          "lines": 336,
+          "files": 1,
+          "percentage": 0.21118925951765882
+        },
+        "Kotlin": {
+          "lines": 74384,
+          "files": 190,
+          "percentage": 46.753279404647415
+        },
+        "Python": {
+          "lines": 84379,
+          "files": 170,
+          "percentage": 53.03553133583492
+        }
+      },
+      "architecture_analysis": {
+        "total_directories": 142,
+        "directory_depth": 9,
+        "modular_structure": true
+      },
+      "complexity_metrics": {},
+      "quality_indicators": {
+        "multi_language_support": true,
+        "modular_structure": true,
+        "comprehensive_codebase": true,
+        "balanced_distribution": true
+      }
+    },
+    "research_progress": {
+      "thesis_chapters": {
+        "Chapter_3_Requirements_and_Analysis.md": {
+          "word_count": 17723,
+          "section_count": 75,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.647085"
+        },
+        "Chapter_7_Appendices.md": {
+          "word_count": 12659,
+          "section_count": 115,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.649085"
+        },
+        "Chapter_2_Context_and_Literature_Review.md": {
+          "word_count": 10315,
+          "section_count": 49,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.647085"
+        },
+        "Chapter_4_Design_and_Implementation.md": {
+          "word_count": 15433,
+          "section_count": 88,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.648085"
+        },
+        "Chapter_5_Testing_and_Results_Evaluation.md": {
+          "word_count": 11843,
+          "section_count": 49,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.648085"
+        },
+        "Chapter_6_Conclusions_and_Evaluation.md": {
+          "word_count": 14991,
+          "section_count": 137,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.649085"
+        },
+        "Chapter_1_Introduction.md": {
+          "word_count": 6651,
+          "section_count": 31,
+          "completion_estimate": 100,
+          "last_modified": "2025-08-04T05:33:48.646085"
+        }
+      },
+      "implementation_milestones": {
+        "android_application": true,
+        "python_controller": true,
+        "documentation_system": true,
+        "testing_framework": false,
+        "metrics_system": false
+      },
+      "testing_progress": {
+        "test_coverage_score": 73.86888273314867,
+        "test_types_implemented": 4,
+        "testing_framework_mature": true
+      },
+      "documentation_progress": {
+        "documentation_coverage_score": 25.79925077020245,
+        "thesis_documentation_complete": true,
+        "comprehensive_documentation": true
+      },
+      "overall_completion": {
+        "average_completion": 66.55604450111703,
+        "implementation_completion": 100.0,
+        "testing_completion": 73.86888273314867,
+        "documentation_completion": 25.79925077020245,
+        "thesis_readiness": false
+      }
+    },
+    "academic_benchmarks": {
+      "performance_metrics": {
+        "benchmark_tests_available": true,
+        "performance_data_quality": "high",
+        "statistical_rigor": true,
+        "reproducible_results": true
+      },
+      "research_quality_indicators": {
+        "code_documentation_ratio": 0.2770083102493075,
+        "test_code_ratio": 0.22160664819944598,
+        "systematic_methodology": true,
+        "comprehensive_evaluation": true
+      },
+      "academic_standards": {
+        "reproducible_research": true,
+        "open_source_compliance": true,
+        "documented_methodology": true,
+        "peer_review_ready": false
+      },
+      "publication_metrics": {
+        "thesis_word_count": 107022,
+        "publication_readiness_score": 100,
+        "academic_rigor_score": 85,
+        "novelty_indicators": [
+          "multi_sensor_coordination",
+          "contactless_measurement",
+          "distributed_architecture"
+        ]
+      }
+    },
+    "system_health": {
+      "system_reliability": {
+        "logging_system_active": false,
+        "test_automation": true,
+        "error_tracking": true,
+        "monitoring_capabilities": true
+      },
+      "maintenance_indicators": {
+        "recent_activity": 699,
+        "active_development": true,
+        "code_freshness_score": 100,
+        "maintenance_burden": "medium"
+      },
+      "performance_health": {
+        "performance_monitoring": true,
+        "metrics_generation": true,
+        "automated_reporting": true,
+        "performance_trends": "stable"
+      },
+      "sustainability_metrics": {
+        "codebase_size_manageable": false,
+        "documentation_sustainability": true,
+        "testing_sustainability": true,
+        "long_term_viability_score": 90
+      }
+    },
+    "data_flow": {
+      "architecture_components": {
+        "total_components": 3,
+        "component_list": [
+          "AndroidApp",
+          "PythonApp",
+          "Documentation"
+        ],
+        "multi_platform": true,
+        "distributed_architecture": true
+      },
+      "data_pathways": {
+        "android_to_python": true,
+        "sensor_data_collection": true,
+        "data_synchronization": true,
+        "metrics_pipeline": true
+      },
+      "integration_points": {
+        "build_system_integration": true,
+        "cross_platform_communication": true,
+        "data_export_capabilities": true,
+        "visualization_pipeline": true
+      },
+      "flow_complexity": {
+        "complexity_score": 100,
+        "integration_complexity": "medium",
+        "data_flow_clarity": "high",
+        "maintainability": "high"
+      }
+    },
+    "requirements_traceability": {
+      "requirements_documentation": {
+        "requirements_files": [
+          "docs/new_documentation/PROTOCOL_functional_requirements_specification.md",
+          "docs/new_documentation/PROTOCOL_functional_requirements_specification.md"
+        ],
+        "formal_requirements": true,
+        "requirements_coverage": "partial"
+      },
+      "implementation_mapping": {
+        "android_implementation": true,
+        "python_implementation": true,
+        "documentation_implementation": true,
+        "testing_implementation": true,
+        "metrics_implementation": true
+      },
+      "test_coverage_mapping": {
+        "unit_testing": true,
+        "integration_testing": true,
+        "system_testing": true,
+        "performance_testing": false,
+        "validation_testing": true
+      },
+      "traceability_matrix": {
+        "requirements_to_implementation": 100.0,
+        "implementation_to_tests": 80.0,
+        "overall_traceability_score": 90.0,
+        "traceability_completeness": "high"
+      }
+    }
+  },
+  "summary": {
+    "total_analyses_completed": 8,
+    "academic_readiness_level": "Ready",
+    "overall_health": "Good",
+    "recommendation": "Continue development and documentation for thesis completion"
+  },
+  "academic_readiness": {
+    "thesis_completeness": {
+      "word_count_adequacy": true,
+      "chapter_structure": true,
+      "comprehensive_documentation": true,
+      "completion_percentage": 66.55604450111703
+    },
+    "research_quality": {
+      "systematic_methodology": true,
+      "comprehensive_testing": true,
+      "performance_evaluation": false,
+      "code_quality_standards": true
+    },
+    "academic_standards": {
+      "reproducible_research": true,
+      "open_source_compliance": true,
+      "peer_review_ready": false,
+      "novelty_contribution": true
+    },
+    "publication_score": {
+      "overall_readiness": 629.6337041759753,
+      "thesis_completion_score": 1738.9011125279258,
+      "research_quality_score": 75.0,
+      "academic_standards_score": 75.0,
+      "publication_ready": true,
+      "readiness_level": "Ready"
+    }
+  }
+}

@@ -316,6 +316,83 @@ class SimpleMetricsVisualizer:
         
         return html if html else "<tr><td colspan='3'>No metrics data available</td></tr>"
 
+    def _get_comprehensive_analysis_data(self) -> Optional[Dict[str, Any]]:
+        """Try to load comprehensive analysis data if available"""
+        try:
+            # Look for the most recent comprehensive analysis results
+            analysis_files = list(self.metrics_output_dir.glob("comprehensive_analysis_results_*.json"))
+            if analysis_files:
+                latest_analysis = max(analysis_files, key=os.path.getctime)
+                with open(latest_analysis, 'r') as f:
+                    return json.load(f)
+        except Exception as e:
+            logger.debug(f"Could not load comprehensive analysis data: {e}")
+        return None
+    
+    def _create_comprehensive_metrics_section(self, comp_data: Dict[str, Any]) -> str:
+        """Create comprehensive metrics section if data is available"""
+        if not comp_data:
+            return ""
+        
+        analyses = comp_data.get("analyses", {})
+        academic_readiness = comp_data.get("academic_readiness", {})
+        
+        # Get key metrics
+        doc_coverage = analyses.get("documentation_coverage", {}).get("coverage_metrics", {})
+        test_coverage = analyses.get("test_coverage", {}).get("coverage_metrics", {})
+        code_quality = analyses.get("code_quality", {}).get("file_statistics", {})
+        publication_score = academic_readiness.get("publication_score", {})
+        
+        return f"""
+        <div class="section">
+            <h2>Advanced Academic Analysis Summary</h2>
+            <div class="executive-summary">
+                <h3>Repository Analysis Metrics</h3>
+                <table class="summary-table">
+                    <tr>
+                        <td class="metric-label">Total Code Files</td>
+                        <td class="metric-value">{code_quality.get('total_code_files', 0)}</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">Lines of Code</td>
+                        <td class="metric-value">{code_quality.get('total_code_lines', 0):,}</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">Documentation Files</td>
+                        <td class="metric-value">{doc_coverage.get('total_documentation_words', 0):,} words</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">Test Coverage Estimate</td>
+                        <td class="metric-value">{test_coverage.get('test_coverage_estimate', 0):.1f}%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">Publication Readiness</td>
+                        <td class="metric-value">{publication_score.get('overall_readiness', 0):.1f}%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">Academic Status</td>
+                        <td class="metric-value">{publication_score.get('readiness_level', 'Unknown')}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="navigation-section">
+                <h3>Detailed Analysis Reports</h3>
+                <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+                    Comprehensive academic analysis has been performed on the repository. 
+                    The following detailed reports are available:
+                </p>
+                
+                <div style="margin-left: 20px;">
+                    <p><strong>📚 Documentation Coverage:</strong> {analyses.get('documentation_coverage', {}).get('total_md_files', 0)} files analyzed</p>
+                    <p><strong>🧪 Test Analysis:</strong> {test_coverage.get('total_test_files', 0)} test files identified</p>
+                    <p><strong>🔧 Code Quality:</strong> {len(analyses.get('code_quality', {}).get('language_distribution', {}))} programming languages</p>
+                    <p><strong>🎓 Research Progress:</strong> {comp_data.get('summary', {}).get('academic_readiness_level', 'Unknown')} readiness level</p>
+                </div>
+            </div>
+        </div>
+        """
+
     def _create_metrics_list_html(self, generated_metrics: Dict[str, Any]) -> str:
         """Create HTML list of generated metrics (legacy method)"""
         html = ""
@@ -357,6 +434,9 @@ class SimpleMetricsVisualizer:
         success_rate = 55.6  # From latest test run
         avg_memory = 310.9 if self.performance_data else 0
         total_tests = 8 if self.performance_data else 0
+        
+        # Try to get comprehensive analysis data
+        comprehensive_data = self._get_comprehensive_analysis_data()
         
         dashboard_html = f"""
 <!DOCTYPE html>
@@ -414,8 +494,16 @@ class SimpleMetricsVisualizer:
                     Comprehensive overview of all generated metrics with success rates, 
                     error tracking, and system health indicators.
                 </p>
+                
+                <a href="./comprehensive_analysis.html" class="nav-link">📊 Comprehensive Repository Analysis</a>
+                <p style="margin-left: 20px; color: #666; font-size: 0.9em;">
+                    Advanced academic analysis including documentation coverage, test analysis, 
+                    code quality metrics, and publication readiness assessment.
+                </p>
             </div>
         </div>
+
+        {self._create_comprehensive_metrics_section(comprehensive_data) if comprehensive_data else ""}
 
         <div class="section">
             <h2>Data Source Information</h2>

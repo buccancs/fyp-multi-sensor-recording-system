@@ -96,6 +96,9 @@ class MetricsOrchestrator:
             # 8. Generate Visualizations
             await self._generate_visualizations()
             
+            # 9. Run Comprehensive Repository Analysis
+            await self._run_comprehensive_analysis()
+            
             # Finalize results
             self._finalize_execution()
             
@@ -760,6 +763,54 @@ class MetricsOrchestrator:
             logger.error(f"  ❌ Error generating visualizations: {e}")
             self.results["errors"].append({
                 "type": "visualization_exception",
+                "message": str(e),
+                "traceback": traceback.format_exc()
+            })
+
+
+    async def _run_comprehensive_analysis(self):
+        """Run comprehensive repository analysis for academic thesis"""
+        logger.info("🔬 Running Comprehensive Repository Analysis...")
+        
+        try:
+            # Try to import and run the comprehensive analyzer
+            try:
+                from comprehensive_thesis_analyzer import ComprehensiveThesisAnalyzer
+                
+                analyzer = ComprehensiveThesisAnalyzer(str(self.project_root))
+                analysis_results = analyzer.run_comprehensive_analysis()
+                
+                if analysis_results and analysis_results.get("analyses"):
+                    self.results["metrics_generated"]["comprehensive_analysis"] = {
+                        "status": "success",
+                        "analyses_completed": len(analysis_results.get("analyses", {})),
+                        "academic_readiness": analysis_results.get("academic_readiness", {}).get("publication_score", {}).get("readiness_level", "Unknown"),
+                        "overall_completion": analysis_results.get("analyses", {}).get("research_progress", {}).get("overall_completion", {}).get("average_completion", 0),
+                        "output_files": ["comprehensive_analysis.html"],
+                        "timestamp": datetime.now().isoformat()
+                    }
+                    
+                    logger.info(f"  ✅ Comprehensive analysis completed - {len(analysis_results.get('analyses', {}))} analyses")
+                    logger.info(f"  🎓 Academic readiness: {analysis_results.get('academic_readiness', {}).get('publication_score', {}).get('readiness_level', 'Unknown')}")
+                    
+                else:
+                    logger.warning("  ⚠️  Comprehensive analysis returned no results")
+                    self.results["errors"].append({
+                        "type": "comprehensive_analysis_warning",
+                        "message": "Comprehensive analysis returned no results"
+                    })
+                    
+            except ImportError:
+                logger.warning("  ⚠️  Comprehensive thesis analyzer not available")
+                self.results["errors"].append({
+                    "type": "missing_analyzer",
+                    "message": "Comprehensive thesis analyzer module not found"
+                })
+                
+        except Exception as e:
+            logger.error(f"  ❌ Error running comprehensive analysis: {e}")
+            self.results["errors"].append({
+                "type": "comprehensive_analysis_exception",
                 "message": str(e),
                 "traceback": traceback.format_exc()
             })
