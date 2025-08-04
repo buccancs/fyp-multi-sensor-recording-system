@@ -195,6 +195,15 @@ class PreviewPanel(QTabWidget):
         self.stop_btn.clicked.connect(self.stop_media)
         controls_buttons.addWidget(self.stop_btn)
 
+        # Queue control buttons
+        self.prev_btn = QPushButton("Previous")
+        self.prev_btn.clicked.connect(self.play_previous)
+        controls_buttons.addWidget(self.prev_btn)
+
+        self.next_btn = QPushButton("Next")
+        self.next_btn.clicked.connect(self.play_next)
+        controls_buttons.addWidget(self.next_btn)
+
         # Speed control
         speed_layout = QHBoxLayout()
         speed_layout.addWidget(QLabel("Speed:"))
@@ -259,11 +268,16 @@ class PreviewPanel(QTabWidget):
         self.current_file_path = None
         self.is_playing = False
         self.slider_being_dragged = False
+        
+        # Initialize playback queue
+        self.playback_queue = []
+        self.current_queue_index = -1
 
         # Connect media player signals
         self.media_player.positionChanged.connect(self.update_position)
         self.media_player.durationChanged.connect(self.update_duration)
         self.media_player.stateChanged.connect(self.update_play_button)
+        self.media_player.mediaStatusChanged.connect(self.on_media_status_changed)
 
         # Store widget reference
         playback_widget.session_list = self.session_list
@@ -272,6 +286,9 @@ class PreviewPanel(QTabWidget):
 
         # Initialize with available sessions
         self.refresh_session_list()
+        
+        # Auto-populate queue with videos and start playback
+        self.auto_populate_queue_and_start()
 
         return playback_widget
 
@@ -505,23 +522,42 @@ class PreviewPanel(QTabWidget):
             logger.error(f"Error displaying session info: {e}")
 
     def on_file_double_clicked(self, item):
-        """Handle double-click on a file to start playback."""
+        """Handle double-click on a file to add to queue and start playback."""
         try:
             file_path = item.data(Qt.UserRole)
             if not file_path or not os.path.exists(file_path):
                 logger.warning(f"File not found: {file_path}")
                 return
-                
-            # Load and play the media file
-            media_content = QMediaContent(QUrl.fromLocalFile(file_path))
-            self.media_player.setMedia(media_content)
-            self.current_file_path = file_path
             
-            # Start playback
+            # Add to queue if not already there
+            file_name = os.path.basename(file_path)
+            session_name = os.path.basename(os.path.dirname(file_path))
+            
+            # Check if file already in queue
+            already_in_queue = any(video['path'] == file_path for video in self.playback_queue)
+            
+            if not already_in_queue:
+                video_info = {
+                    'path': file_path,
+                    'name': file_name,
+                    'session': session_name
+                }
+                self.playback_queue.append(video_info)
+                logger.info(f"Added to queue: {file_name}")
+            
+            # Find the video in queue and play it
+            for i, video in enumerate(self.playback_queue):
+                if video['path'] == file_path:
+                    self.current_queue_index = i
+                    break
+                    
+            # Load and play the media file
+            self.load_video(file_path)
             self.media_player.play()
             self.is_playing = True
+            self.update_queue_info()
             
-            logger.info(f"Started playback of: {os.path.basename(file_path)}")
+            logger.info(f"Started playback of: {file_name}")
             
         except Exception as e:
             logger.error(f"Error starting playback: {e}")
@@ -632,3 +668,141 @@ class PreviewPanel(QTabWidget):
         if 0 <= device_index < len(self.thermal_labels):
             return self.thermal_labels[device_index]
         return None
+
+    # Queue management methods
+    def auto_populate_queue_and_start(self):
+        """Auto-populate the playback queue with 5 videos and start playing a random one."""
+        try:
+            # Collect all video files from all sessions
+            all_videos = []
+            recordings_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "recordings")
+            
+            if os.path.exists(recordings_path):
+                video_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.webm']
+                
+                for item in os.listdir(recordings_path):
+                    item_path = os.path.join(recordings_path, item)
+                    if os.path.isdir(item_path) and item.startswith("session_"):
+                        # Look for video files in this session
+                        for file_name in os.listdir(item_path):
+                            file_path = os.path.join(item_path, file_name)
+                            if os.path.isfile(file_path):
+                                _, ext = os.path.splitext(file_name.lower())
+                                if ext in video_extensions:
+                                    all_videos.append({
+                                        'path': file_path,
+                                        'name': file_name,
+                                        'session': item
+                                    })
+            
+            if all_videos:
+                # Populate queue with up to 5 videos
+                import random
+                selected_videos = random.sample(all_videos, min(5, len(all_videos)))
+                self.playback_queue = selected_videos
+                
+                # Auto-select random video to start playing
+                random_index = random.randint(0, len(self.playback_queue) - 1)
+                self.current_queue_index = random_index
+                
+                # Load and start playing the random video
+                video_info = self.playback_queue[self.current_queue_index]
+                self.load_video(video_info['path'])
+                
+                # Update session info to show queue
+                self.update_queue_info()
+                
+                logger.info(f"Auto-loaded queue with {len(self.playback_queue)} videos, starting with: {video_info['name']}")
+            else:
+                logger.warning("No video files found for auto-queue population")
+                
+        except Exception as e:
+            logger.error(f"Error auto-populating queue: {e}")
+
+    def load_video(self, file_path):
+        """Load a video file into the media player."""
+        try:
+            if not os.path.exists(file_path):
+                logger.warning(f"Video file not found: {file_path}")
+                return
+                
+            media_content = QMediaContent(QUrl.fromLocalFile(file_path))
+            self.media_player.setMedia(media_content)
+            self.current_file_path = file_path
+            
+            logger.info(f"Loaded video: {os.path.basename(file_path)}")
+            
+        except Exception as e:
+            logger.error(f"Error loading video: {e}")
+
+    def play_next(self):
+        """Play the next video in the queue."""
+        try:
+            if not self.playback_queue:
+                return
+                
+            self.current_queue_index = (self.current_queue_index + 1) % len(self.playback_queue)
+            video_info = self.playback_queue[self.current_queue_index]
+            self.load_video(video_info['path'])
+            self.media_player.play()
+            self.update_queue_info()
+            
+            logger.info(f"Playing next: {video_info['name']}")
+            
+        except Exception as e:
+            logger.error(f"Error playing next video: {e}")
+
+    def play_previous(self):
+        """Play the previous video in the queue."""
+        try:
+            if not self.playback_queue:
+                return
+                
+            self.current_queue_index = (self.current_queue_index - 1) % len(self.playback_queue)
+            video_info = self.playback_queue[self.current_queue_index]
+            self.load_video(video_info['path'])
+            self.media_player.play()
+            self.update_queue_info()
+            
+            logger.info(f"Playing previous: {video_info['name']}")
+            
+        except Exception as e:
+            logger.error(f"Error playing previous video: {e}")
+
+    def update_queue_info(self):
+        """Update the session info display to show queue information."""
+        try:
+            if not self.playback_queue:
+                return
+                
+            info_text = "PLAYBACK QUEUE\n"
+            info_text += "=" * 40 + "\n\n"
+            
+            for i, video_info in enumerate(self.playback_queue):
+                marker = "▶ " if i == self.current_queue_index else "  "
+                info_text += f"{marker}[{i+1}] {video_info['name']}\n"
+                info_text += f"    Session: {video_info['session']}\n"
+                info_text += f"    Path: {video_info['path']}\n\n"
+            
+            info_text += f"Currently Playing: {self.current_queue_index + 1}/{len(self.playback_queue)}\n"
+            info_text += f"Queue Length: {len(self.playback_queue)} videos\n\n"
+            
+            info_text += "CONTROLS:\n"
+            info_text += "• Next: Skip to next video in queue\n"
+            info_text += "• Previous: Go to previous video in queue\n"
+            info_text += "• Double-click file list: Add to queue and play\n"
+            
+            self.session_info_text.setText(info_text)
+            
+        except Exception as e:
+            logger.error(f"Error updating queue info: {e}")
+
+    def on_media_status_changed(self, status):
+        """Handle media status changes to auto-play next video when current one ends."""
+        try:
+            if status == QMediaPlayer.EndOfMedia and self.playback_queue:
+                # Auto-play next video when current one ends
+                self.play_next()
+                
+        except Exception as e:
+            logger.error(f"Error handling media status change: {e}")

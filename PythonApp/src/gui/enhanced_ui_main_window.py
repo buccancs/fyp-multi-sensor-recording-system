@@ -428,26 +428,31 @@ class EnhancedMainWindow(QMainWindow):
         layout = QVBoxLayout(panel)
         layout.setSpacing(12)
         
-        # Video preview area
-        preview_group = ModernGroupBox("Video Preview")
-        preview_layout = QVBoxLayout(preview_group)
-        
-        # Preview area (placeholder)
-        self.preview_label = QLabel("Video Preview Area")
-        self.preview_label.setAlignment(Qt.AlignCenter)
-        self.preview_label.setMinimumHeight(400)
-        self.preview_label.setStyleSheet("""
-            QLabel {
-                border: 2px dashed #d1d1d1;
-                background-color: #f9f8f7;
-                font-size: 16px;
-                color: #605e5c;
-                border-radius: 4px;
-            }
-        """)
-        preview_layout.addWidget(self.preview_label)
-        
-        layout.addWidget(preview_group)
+        # Video preview area with tabs (including playback)
+        try:
+            self.preview_panel = PreviewPanel(self)
+            layout.addWidget(self.preview_panel)
+        except Exception as e:
+            logger.warning(f"Could not create preview panel: {e}")
+            # Fallback to basic preview
+            preview_group = ModernGroupBox("Video Preview")
+            preview_layout = QVBoxLayout(preview_group)
+            
+            # Preview area (placeholder)
+            self.preview_label = QLabel("Video Preview Area")
+            self.preview_label.setAlignment(Qt.AlignCenter)
+            self.preview_label.setMinimumHeight(400)
+            self.preview_label.setStyleSheet("""
+                QLabel {
+                    border: 2px dashed #d1d1d1;
+                    background-color: #f9f8f7;
+                    font-size: 16px;
+                    color: #605e5c;
+                    border-radius: 4px;
+                }
+            """)
+            preview_layout.addWidget(self.preview_label)
+            layout.addWidget(preview_group)
         
         # Stimulus controls
         controls_group = ModernGroupBox("Stimulus Controls")
