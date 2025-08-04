@@ -9,7 +9,6 @@ build-backend = "setuptools.build_meta"
 name = "thermal-recording-system"
 version = "1.0.0"
 description = "Multi-Sensor Synchronized Recording System"
-readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
