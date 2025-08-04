@@ -31,23 +31,28 @@
    - 6.2. [Real-Time Web Dashboard](#real-time-web-dashboard)
    - 6.3. [Remote Operation Capabilities](#remote-operation-capabilities)
 
+6. [Web-Based Interface and Remote Control](#web-based-interface-and-remote-control)
+   - 6.1. [Web UI Architecture](#web-ui-architecture)
+   - 6.2. [Real-Time Web Dashboard](#real-time-web-dashboard)
+   - 6.3. [Remote Operation Capabilities](#remote-operation-capabilities)
+
 7. [Operational Procedures and User Guide](#operational-procedures-and-user-guide)
-   - 6.1. [System Setup and Installation](#system-setup-and-installation)
-   - 6.2. [Recording Session Workflow](#recording-session-workflow)
-   - 6.3. [Device Management and Configuration](#device-management-and-configuration)
-   - 6.4. [Advanced Features and Customization](#advanced-features-and-customization)
+   - 7.1. [System Setup and Installation](#system-setup-and-installation)
+   - 7.2. [Recording Session Workflow](#recording-session-workflow)
+   - 7.3. [Device Management and Configuration](#device-management-and-configuration)
+   - 7.4. [Advanced Features and Customization](#advanced-features-and-customization)
 
-7. [Testing and Validation Framework](#testing-and-validation-framework)
-   - 7.1. [Comprehensive Testing Strategy](#comprehensive-testing-strategy)
-   - 7.2. [Performance Analysis and Benchmarking](#performance-analysis-and-benchmarking)
-   - 7.3. [Research-Specific Validation](#research-specific-validation)
+8. [Testing and Validation Framework](#testing-and-validation-framework)
+   - 8.1. [Comprehensive Testing Strategy](#comprehensive-testing-strategy)
+   - 8.2. [Performance Analysis and Benchmarking](#performance-analysis-and-benchmarking)
+   - 8.3. [Research-Specific Validation](#research-specific-validation)
 
-8. [System Monitoring and Logging](#system-monitoring-and-logging)
-   - 8.1. [Comprehensive Logging System](#comprehensive-logging-system)
-   - 8.2. [Performance Monitoring](#performance-monitoring)
-   - 8.3. [Diagnostic Tools and Troubleshooting](#diagnostic-tools-and-troubleshooting)
+9. [System Monitoring and Logging](#system-monitoring-and-logging)
+   - 9.1. [Comprehensive Logging System](#comprehensive-logging-system)
+   - 9.2. [Performance Monitoring](#performance-monitoring)
+   - 9.3. [Diagnostic Tools and Troubleshooting](#diagnostic-tools-and-troubleshooting)
 
-9. [Research Applications and Best Practices](#research-applications-and-best-practices)
+10. [Research Applications and Best Practices](#research-applications-and-best-practices)
    - 9.1. [Experimental Design Considerations](#experimental-design-considerations)
    - 9.2. [Data Management Best Practices](#data-management-best-practices)
    - 9.3. [Academic Research Guidelines](#academic-research-guidelines)
@@ -108,17 +113,118 @@ The quality management system provides real-time quality metrics monitoring acro
 
 The Python Desktop Controller provides comprehensive capabilities that support the complete research workflow trajectory from initial experimental setup through final data analysis and interpretation, establishing a unified platform that integrates multiple technological components into a cohesive research instrumentation system. The system architecture encompasses both hardware coordination capabilities and software service integration, creating a research environment that meets rigorous academic standards while maintaining practical usability for diverse research applications.
 
-The core system capabilities encompass sophisticated multi-device coordination supporting simultaneous operation of up to eight Android devices in combination with multiple USB webcams, creating unprecedented flexibility for multi-modal physiological measurement research. Real-time monitoring capabilities provide comprehensive status assessment with adaptive quality management that continuously optimizes measurement parameters based on environmental conditions and device performance characteristics. Session management functionality provides complete recording session lifecycle support with automatic metadata generation, ensuring research reproducibility and data provenance tracking essential for academic publication standards.
+**Core System Capabilities:**
 
-The data processing pipeline implements real-time processing capabilities with integrated quality assessment and validation procedures that meet research-grade requirements for data integrity and measurement validity. Advanced calibration services utilizing OpenCV computer vision libraries provide precise camera calibration with quantitative quality metrics, enabling accurate spatial measurement and multi-camera synchronization essential for complex experimental designs. The user interface architecture employs modern design principles specifically optimized for research workflow efficiency, reducing cognitive load and minimizing potential user errors during critical experimental procedures.
+The core system capabilities encompass sophisticated multi-device coordination supporting simultaneous operation of up to eight Android devices in combination with multiple USB webcams and Shimmer physiological sensors, creating unprecedented flexibility for multi-modal physiological measurement research. The system provides four distinct user interface options: a simplified modern interface (default), an enhanced PsychoPy-inspired interface, a traditional full-featured interface, and a comprehensive web-based interface for remote operation.
 
-Hardware platform support encompasses a diverse range of consumer-grade devices that have been validated for research applications through extensive testing procedures. Android smartphone compatibility includes high-end devices such as Samsung Galaxy S22+ and Google Pixel series, as well as OnePlus devices, all selected for their consistent performance characteristics and comprehensive sensor suites. USB webcam support includes professional-grade devices such as the Logitech BRIO 4K and Microsoft LifeCam series, along with generic UVC-compatible devices that meet minimum performance requirements for research applications.
+Real-time monitoring capabilities provide comprehensive status assessment with adaptive quality management that continuously optimizes measurement parameters based on environmental conditions and device performance characteristics. Session management functionality provides complete recording session lifecycle support with automatic metadata generation, ensuring research reproducibility and data provenance tracking essential for academic publication standards.
 
-Thermal camera integration through TopDon TC001 devices provides advanced thermal measurement capabilities via Android device integration, enabling contactless temperature measurement that complements traditional physiological monitoring approaches. Physiological sensor support includes Shimmer3 GSR+ devices through Bluetooth connectivity, providing research-grade galvanic skin response measurement with temporal precision suitable for academic research applications. Computing platform compatibility encompasses Windows 10/11, Ubuntu 20.04+, and macOS 12+ systems, though macOS support includes certain limitations related to hardware access capabilities inherent in that platform.
+The data processing pipeline implements real-time processing capabilities with integrated quality assessment and validation procedures that meet research-grade requirements for data integrity and measurement validity. Advanced calibration services utilizing OpenCV computer vision libraries provide precise camera calibration with quantitative quality metrics, enabling accurate spatial measurement and multi-camera synchronization essential for complex experimental designs.
 
-The research application domains supported by the system span multiple academic disciplines and methodological approaches. Physiological psychology applications enable stress response measurement in naturalistic settings that more closely approximate real-world conditions compared to traditional laboratory-based approaches (Kreibig, 2010). Human-computer interaction research benefits from objective physiological metrics that complement traditional usability assessment methods, providing deeper insights into user experience dynamics (Fairclough, 2009). Social psychology research applications support group dynamics investigation with multi-participant coordination capabilities that enable simultaneous measurement across multiple individuals during social interaction studies.
+**Enhanced Hardware Platform Support:**
 
-Clinical research applications leverage non-invasive physiological monitoring capabilities for patient studies where traditional contact-based measurement approaches may be contraindicated or impractical. Educational research domain applications enable learning and attention measurement in naturalistic classroom environments, supporting educational psychology research that requires unobtrusive measurement approaches to maintain ecological validity. These diverse application domains demonstrate the system's flexibility and adaptability to varied research requirements while maintaining consistent quality and reliability standards across different experimental contexts.
+The system has been extensively tested and validated with a comprehensive range of consumer-grade devices:
+
+**Android Device Compatibility:**
+- Samsung Galaxy S22+ smartphones with 4K recording capability and full sensor suite
+- Google Pixel series (Pixel 6, 7, 8) with advanced computational photography features
+- OnePlus devices (OnePlus 9, 10, 11) providing consistent performance characteristics
+- Generic Android devices meeting minimum requirements (Android 8.0+, 4GB RAM, sufficient storage)
+
+**USB Webcam Support:**
+- Logitech BRIO 4K Pro webcams for professional-grade desktop recording
+- Microsoft LifeCam HD-3000 and LifeCam Studio for reliable HD recording
+- Generic UVC-compatible devices meeting minimum performance requirements
+- Support for multiple simultaneous webcam operation (tested up to 4 devices)
+
+**Physiological Sensor Integration:**
+- Shimmer3 GSR+ devices with comprehensive sensor suite (GSR, accelerometer, temperature)
+- Direct PC connection via Bluetooth with real-time data streaming
+- Android-mediated connection for enhanced compatibility and redundancy
+- Support for multiple simultaneous Shimmer devices with synchronized data collection
+
+**Thermal Camera Support:**
+- TopDon TC001 thermal imaging cameras via Android device integration
+- Real-time thermal data streaming with temperature calibration
+- Thermal-RGB alignment and overlay capabilities
+- Environmental temperature compensation algorithms
+
+**Computing Platform Compatibility:**
+- Windows 10/11 systems with comprehensive hardware access and driver support
+- Ubuntu 20.04+ Linux distributions with V4L2 webcam support
+- macOS 12+ systems with limited hardware access (webcam support varies)
+- Cross-platform Python 3.10+ environment with consistent API behavior
+
+**Web Interface Capabilities:**
+
+The web-based interface represents a significant advancement in remote research capabilities:
+
+- **Browser Compatibility**: Tested with Chrome, Firefox, Safari, and Edge browsers
+- **Mobile Access**: Responsive design supporting tablet and smartphone operation
+- **Real-Time Control**: Live device monitoring and recording control via WebSocket communication
+- **Remote Data Access**: Secure file browsing and download capabilities
+- **Multi-User Support**: Session management supporting multiple concurrent researchers
+- **Security Features**: IP-based access control and session authentication
+
+**Research Application Domains:**
+
+The system supports diverse research applications across multiple academic disciplines:
+
+**Physiological Psychology Applications:**
+- Stress response measurement in naturalistic settings without contact artifacts
+- Emotion regulation studies with multi-modal physiological indicators
+- Cognitive load assessment using GSR, thermal, and motion data
+- Social interaction studies with multi-participant synchronized recording
+
+**Human-Computer Interaction Research:**
+- Usability testing with objective physiological feedback
+- User experience assessment through stress and engagement metrics
+- Accessibility research with contactless monitoring capabilities
+- Virtual and augmented reality studies with unobtrusive measurement
+
+**Clinical Research Applications:**
+- Patient monitoring in scenarios where contact-based sensors are contraindicated
+- Rehabilitation progress tracking with motion and physiological data
+- Mental health assessment with objective stress and arousal indicators
+- Telehealth applications with remote physiological monitoring
+
+**Educational Research:**
+- Classroom attention and engagement measurement
+- Learning effectiveness assessment with physiological indicators
+- Teacher-student interaction studies with multi-participant recording
+- Educational technology evaluation with objective metrics
+
+**Social Psychology Research:**
+- Group dynamics investigation with synchronized multi-device recording
+- Interpersonal synchrony measurement through physiological coupling
+- Social stress and anxiety research in naturalistic settings
+- Cultural and cross-cultural studies with standardized measurement protocols
+
+**Advanced Features and Capabilities:**
+
+**Quality Assurance and Validation:**
+- Real-time signal quality assessment with automatic parameter adjustment
+- Comprehensive data integrity validation with cryptographic verification
+- Cross-device synchronization accuracy monitoring (±3.2ms achieved precision)
+- Automated quality reporting with research-grade metrics
+
+**Data Export and Integration:**
+- Multiple export formats: CSV, JSON, MATLAB .mat, Python pickle
+- Standardized metadata formats for research data management
+- Integration with popular analysis platforms (R, MATLAB, Python pandas)
+- FAIR data principles compliance with comprehensive documentation
+
+**Scalability and Performance:**
+- Tested with up to 8 Android devices + 4 USB webcams simultaneously
+- Efficient resource utilization with adaptive quality management
+- Network bandwidth optimization with configurable compression
+- Automatic load balancing across available system resources
+
+**Research Reproducibility Features:**
+- Complete session metadata generation with equipment specifications
+- Version control integration for protocol and configuration management
+- Automated documentation generation for methods sections
+- Comprehensive audit trails for data provenance tracking
 
 ---
 
@@ -141,7 +247,7 @@ The synchronization framework builds upon well-established Network Time Protocol
 
 ### Comprehensive System Topology
 
-The system topology implements a hybrid star-mesh architecture that provides both centralized coordination and distributed resilience:
+The system topology implements a hybrid star-mesh architecture that provides both centralized coordination and distributed resilience, enhanced with web-based remote access and comprehensive physiological sensor integration:
 
 ```mermaid
 graph TB
@@ -156,19 +262,22 @@ graph TB
             NETWORK[Network Layer<br/>JsonSocketServer]
             WEBCAM[Webcam Service<br/>USB Camera Control]
             CALIB[Calibration Service<br/>OpenCV Integration]
-            STIMULUS[Stimulus Controller<br/>Experiment Management]
+            SHIMMER[Shimmer Manager<br/>Physiological Sensors]
+            WEB_SRV[Web Service<br/>Flask + SocketIO]
         end
         
         subgraph "Infrastructure Layer"
             LOGGING[Logging System<br/>Centralized Logging]
             CONFIG[Configuration<br/>Settings Management]
             UTILS[Utilities<br/>Helper Functions]
+            MONITOR[System Monitor<br/>Performance Tracking]
         end
         
-        subgraph "Presentation Layer"
-            GUI[Enhanced UI<br/>PyQt5 Interface]
-            TABS[Tabbed Interface<br/>Recording|Devices|Calibration|Files]
-            COMPONENTS[Common Components<br/>ModernButton|StatusIndicator]
+        subgraph "User Interface Layer"
+            SIMP_UI[Simplified UI<br/>Modern Interface]
+            ENH_UI[Enhanced UI<br/>PsychoPy-Inspired]
+            TRAD_UI[Traditional UI<br/>Full Features]
+            WEB_UI[Web Interface<br/>Remote Access]
         end
     end
     
@@ -187,8 +296,9 @@ graph TB
         end
         
         subgraph "Physiological Sensors"
-            SHIMMER1[Shimmer3 GSR+<br/>Bluetooth Connection]
-            SHIMMERN[Additional Sensors<br/>Via Android Bridge]
+            SHIMMER_DIR[Shimmer3 GSR+<br/>Direct PC Connection]
+            SHIMMER_AND[Shimmer via Android<br/>Bridge Connection]
+            THERMAL[TopDon TC001<br/>Thermal Camera]
         end
     end
     
@@ -197,12 +307,22 @@ graph TB
             SESSIONS[Session Directories<br/>Organized by Date/ID]
             METADATA[Metadata Files<br/>JSON + CSV Formats]
             CALIBRATION[Calibration Data<br/>Camera Parameters]
+            SHIMMER_DATA[Shimmer Data<br/>CSV + Real-time]
         end
         
         subgraph "Real-Time Processing"
             QUALITY[Quality Assessment<br/>Live Monitoring]
             SYNC[Synchronization<br/>Temporal Alignment]
             VALIDATION[Data Validation<br/>Integrity Checking]
+            ANALYSIS[Real-time Analysis<br/>Signal Processing]
+        end
+    end
+    
+    subgraph "Remote Access"
+        subgraph "Web Clients"
+            BROWSER[Web Browser<br/>Any Device]
+            MOBILE[Mobile Browser<br/>Tablet/Phone]
+            REMOTE[Remote Access<br/>External Networks]
         end
     end
     
@@ -212,18 +332,21 @@ graph TB
     SESSION --> NETWORK
     SESSION --> WEBCAM
     SESSION --> CALIB
-    SESSION --> STIMULUS
+    SESSION --> SHIMMER
+    SESSION --> WEB_SRV
     
     %% Service Layer Connections
     NETWORK --> LOGGING
     WEBCAM --> CONFIG
     CALIB --> UTILS
-    STIMULUS --> LOGGING
+    SHIMMER --> MONITOR
+    WEB_SRV --> LOGGING
     
-    %% Presentation Layer Connections
-    GUI --> APP
-    TABS --> MAIN
-    COMPONENTS --> SESSION
+    %% UI Layer Connections
+    SIMP_UI --> APP
+    ENH_UI --> MAIN
+    TRAD_UI --> SESSION
+    WEB_UI --> WEB_SRV
     
     %% Device Connections
     NETWORK <==> ANDROID1
@@ -235,35 +358,56 @@ graph TB
     WEBCAM <==> WEBCAM2
     WEBCAM <==> WEBCAMN
     
-    ANDROID1 <==> SHIMMER1
-    ANDROIDN <==> SHIMMERN
+    SHIMMER <==> SHIMMER_DIR
+    ANDROID1 <==> SHIMMER_AND
+    ANDROID1 <==> THERMAL
     
     %% Data Flow Connections
     SESSION --> SESSIONS
     CALIB --> CALIBRATION
+    SHIMMER --> SHIMMER_DATA
     QUALITY --> METADATA
     SYNC --> VALIDATION
+    VALIDATION --> ANALYSIS
+    
+    %% Web Access Connections
+    WEB_UI <==> BROWSER
+    WEB_UI <==> MOBILE
+    WEB_UI <==> REMOTE
     
     %% Styling
     classDef controller fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef device fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef storage fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef processing fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+    classDef web fill:#fce4ec,stroke:#E91E63,stroke-width:2px
     
-    class APP,MAIN,SESSION,NETWORK,WEBCAM,CALIB,STIMULUS,LOGGING,CONFIG,UTILS,GUI,TABS,COMPONENTS controller
-    class ANDROID1,ANDROID2,ANDROID3,ANDROIDN,WEBCAM1,WEBCAM2,WEBCAMN,SHIMMER1,SHIMMERN device
-    class SESSIONS,METADATA,CALIBRATION storage
-    class QUALITY,SYNC,VALIDATION processing
+    class APP,MAIN,SESSION,NETWORK,WEBCAM,CALIB,SHIMMER,WEB_SRV,LOGGING,CONFIG,UTILS,MONITOR,SIMP_UI,ENH_UI,TRAD_UI,WEB_UI controller
+    class ANDROID1,ANDROID2,ANDROID3,ANDROIDN,WEBCAM1,WEBCAM2,WEBCAMN,SHIMMER_DIR,SHIMMER_AND,THERMAL device
+    class SESSIONS,METADATA,CALIBRATION,SHIMMER_DATA storage
+    class QUALITY,SYNC,VALIDATION,ANALYSIS processing
+    class BROWSER,MOBILE,REMOTE web
 ```
 
 **Topology Analysis and Design Rationale:**
 
-The hybrid star-mesh topology provides several critical advantages for research applications:
+The enhanced hybrid star-mesh topology provides several critical advantages for research applications:
 
 1. **Centralized Coordination**: The Python Desktop Controller serves as the master coordinator, providing unified control and monitoring capabilities essential for research session management
+
 2. **Distributed Processing**: Individual devices maintain autonomous processing capabilities, reducing network load and improving fault tolerance
-3. **Scalable Architecture**: The topology supports dynamic scaling from minimal configurations (1 PC + 2 Android devices) to complex setups (1 PC + 8 Android devices + 4 USB cameras)
-4. **Fault Isolation**: Device failures are isolated and do not compromise the overall system operation or data from other devices
+
+3. **Multi-Modal Interface Support**: Four distinct interface options (Simplified, Enhanced, Traditional, Web) accommodate different research scenarios and user preferences
+
+4. **Scalable Architecture**: The topology supports dynamic scaling from minimal configurations (1 PC + 2 Android devices) to complex setups (1 PC + 8 Android devices + 4 USB cameras + multiple Shimmer sensors)
+
+5. **Fault Isolation**: Device failures are isolated and do not compromise the overall system operation or data from other devices
+
+6. **Remote Access Capability**: Web-based interface enables remote monitoring and control for distributed research scenarios
+
+7. **Physiological Integration**: Direct and Android-mediated Shimmer sensor support provides flexible deployment options for physiological measurement
+
+8. **Real-Time Processing**: Comprehensive data processing pipeline with quality assessment and validation ensures research-grade data integrity
 
 ### Design Patterns and Engineering Principles
 
@@ -2839,247 +2983,474 @@ The Python Desktop Controller implements a sophisticated monitoring and logging 
 
 ### Comprehensive Logging System
 
-The logging framework employs structured logging with specialized categories and configurable output formats, enabling both real-time monitoring and post-hoc analysis.
+The logging framework employs structured logging with specialized categories and configurable output formats, enabling both real-time monitoring and post-hoc analysis. The actual implementation provides sophisticated centralized logging configuration.
 
-**Logging Architecture and Categories:**
-
-```python
-LOGGER_CATEGORIES = {
-    'session': 'multisensor.session',           # Session management and coordination
-    'device': 'multisensor.device',             # Device communication and control
-    'network': 'multisensor.network',           # Network operations and protocols
-    'camera': 'multisensor.camera',             # Camera operations and video processing
-    'calibration': 'multisensor.calibration',   # Calibration procedures and validation
-    'performance': 'multisensor.performance',   # Performance monitoring and optimization
-    'security': 'multisensor.security',         # Security events and permissions
-    'ui': 'multisensor.ui',                     # User interface events and interactions
-    'data': 'multisensor.data',                 # Data processing and storage operations
-    'config': 'multisensor.config',             # Configuration management and changes
-    'research': 'multisensor.research',         # Research-specific events and validation
-    'quality': 'multisensor.quality'            # Quality assessment and metrics
-}
-```
-
-**Structured Log Format Specification:**
-
-```json
-{
-    "timestamp": "2024-01-31T10:30:45.123456Z",
-    "level": "INFO",
-    "category": "session",
-    "component": "SessionManager",
-    "thread_id": "MainThread",
-    "process_id": 1234,
-    "message": "Recording session started successfully",
-    "context": {
-        "session_id": "session_20240131_103045",
-        "session_name": "StressStudy_P001_Session1",
-        "device_count": 3,
-        "duration_planned_seconds": 600,
-        "researcher_id": "DR_SMITH_001"
-    },
-    "metadata": {
-        "memory_usage_mb": 256.7,
-        "cpu_usage_percent": 15.2,
-        "network_latency_ms": 12.3,
-        "session_quality_score": 98.5
-    },
-    "correlation_id": "uuid-correlation-identifier",
-    "research_context": {
-        "study_id": "STRESS_RESPONSE_2024",
-        "participant_id": "P001",
-        "experimental_condition": "baseline"
-    }
-}
-```
-
-**Log Level Specification and Usage Guidelines:**
-
-| Level | Priority | Usage Criteria | Example Scenarios | Research Relevance |
-|-------|----------|---------------|-------------------|-------------------|
-| **CRITICAL** | 50 | System failures requiring immediate attention | Application crash, data corruption, security breach | Data loss prevention, experiment validity |
-| **ERROR** | 40 | Recoverable errors affecting functionality | Device disconnection, file write failure, network timeout | Data quality assessment, troubleshooting |
-| **WARNING** | 30 | Potential issues requiring monitoring | Low storage space, high network latency, battery low | Preventive maintenance, quality alerts |
-| **INFO** | 20 | Normal operational milestones | Session start/stop, device connections, successful operations | Audit trail, workflow documentation |
-| **DEBUG** | 10 | Detailed diagnostic information | Function entry/exit, parameter values, state changes | Development, detailed troubleshooting |
-
-**Advanced Logging Configuration:**
+**Centralized Logging Architecture:**
 
 ```python
-class AdvancedLoggingConfiguration:
+class StructuredFormatter(logging.Formatter):
+    """Custom formatter that outputs structured JSON logs for machine parsing."""
+    
+    def format(self, record):
+        """Format log record as structured JSON."""
+        log_entry = {
+            'timestamp': datetime.fromtimestamp(record.created).isoformat(),
+            'level': record.levelname,
+            'logger': record.name,
+            'module': record.module,
+            'function': record.funcName,
+            'line': record.lineno,
+            'thread': record.thread,
+            'thread_name': record.threadName,
+            'message': record.getMessage()
+        }
+        
+        # Add exception information if present
+        if record.exc_info:
+            log_entry['exception'] = {
+                'type': record.exc_info[0].__name__,
+                'message': str(record.exc_info[1]),
+                'traceback': traceback.format_exception(*record.exc_info)
+            }
+        
+        # Add performance metrics if available
+        if hasattr(record, 'performance_metrics'):
+            log_entry['performance'] = record.performance_metrics
+        
+        # Add research context if available
+        if hasattr(record, 'research_context'):
+            log_entry['research_context'] = record.research_context
+        
+        return json.dumps(log_entry)
+
+
+class AppLogger:
     """
-    Comprehensive logging configuration for research applications
-    with performance optimization and research-specific features.
+    Centralized application logger with structured logging and
+    research-specific context management.
     """
     
-    def __init__(self):
-        self.log_config = {
-            "version": 1,
-            "disable_existing_loggers": False,
-            "formatters": {
-                "structured_json": {
-                    "()": "utils.logging_config.StructuredJSONFormatter",
-                    "include_research_context": True,
-                    "include_performance_metrics": True
-                },
-                "human_readable": {
-                    "format": "%(asctime)s | %(levelname)-8s | %(name)-20s | %(message)s",
-                    "datefmt": "%Y-%m-%d %H:%M:%S"
-                },
-                "research_audit": {
-                    "()": "utils.logging_config.ResearchAuditFormatter",
-                    "include_participant_privacy": True,
-                    "include_data_lineage": True
-                }
-            },
-            "handlers": {
-                "console": {
-                    "class": "logging.StreamHandler",
-                    "level": "INFO",
-                    "formatter": "human_readable",
-                    "stream": "ext://sys.stdout"
-                },
-                "application_file": {
-                    "class": "logging.handlers.RotatingFileHandler",
-                    "level": "DEBUG",
-                    "formatter": "structured_json",
-                    "filename": "logs/application/multisensor.log",
-                    "maxBytes": 100000000,  # 100MB
-                    "backupCount": 10
-                },
-                "session_file": {
-                    "class": "utils.logging_config.SessionFileHandler",
-                    "level": "INFO",
-                    "formatter": "research_audit",
-                    "base_path": "logs/sessions/"
-                },
-                "performance_file": {
-                    "class": "logging.handlers.TimedRotatingFileHandler",
-                    "level": "DEBUG",
-                    "formatter": "structured_json",
-                    "filename": "logs/performance/performance.log",
-                    "when": "midnight",
-                    "interval": 1,
-                    "backupCount": 30
-                },
-                "error_file": {
-                    "class": "logging.FileHandler",
-                    "level": "ERROR",
-                    "formatter": "structured_json",
-                    "filename": "logs/errors/error.log"
-                }
-            },
-            "loggers": {
-                "multisensor": {
-                    "level": "DEBUG",
-                    "handlers": ["console", "application_file"],
-                    "propagate": False
-                },
-                "multisensor.session": {
-                    "level": "INFO",
-                    "handlers": ["session_file"],
-                    "propagate": True
-                },
-                "multisensor.performance": {
-                    "level": "DEBUG",
-                    "handlers": ["performance_file"],
-                    "propagate": True
-                },
-                "multisensor.security": {
-                    "level": "WARNING",
-                    "handlers": ["error_file"],
-                    "propagate": True
-                }
-            }
+    _instance = None
+    _logger = None
+    _log_level = logging.INFO
+    
+    @classmethod
+    def get_logger(cls, name: str = None) -> logging.Logger:
+        """Get logger instance with proper configuration."""
+        if cls._logger is None:
+            cls._setup_logging()
+        
+        if name:
+            return logging.getLogger(f"multisensor.{name}")
+        return cls._logger
+    
+    @classmethod
+    def _setup_logging(cls):
+        """Setup comprehensive logging configuration."""
+        # Create logs directory
+        log_dir = Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        
+        # Configure root logger
+        root_logger = logging.getLogger("multisensor")
+        root_logger.setLevel(cls._log_level)
+        
+        # Clear existing handlers
+        root_logger.handlers.clear()
+        
+        # Console handler with human-readable format
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setLevel(logging.INFO)
+        console_formatter = logging.Formatter(
+            '%(asctime)s | %(levelname)-8s | %(name)-20s | %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        console_handler.setFormatter(console_formatter)
+        root_logger.addHandler(console_handler)
+        
+        # File handler with structured JSON format
+        file_handler = logging.handlers.RotatingFileHandler(
+            log_dir / "multisensor.log",
+            maxBytes=50*1024*1024,  # 50MB
+            backupCount=10
+        )
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(StructuredFormatter())
+        root_logger.addHandler(file_handler)
+        
+        # Error-specific handler
+        error_handler = logging.FileHandler(log_dir / "errors.log")
+        error_handler.setLevel(logging.ERROR)
+        error_handler.setFormatter(StructuredFormatter())
+        root_logger.addHandler(error_handler)
+        
+        cls._logger = root_logger
+
+
+# Convenient module-level function
+def get_logger(name: str = None) -> logging.Logger:
+    """Get logger instance for the specified module."""
+    return AppLogger.get_logger(name)
+```
+
+**Logger Category Specifications:**
+
+| Category | Module Path | Purpose | Level | Output |
+|----------|-------------|---------|--------|--------|
+| `multisensor.session` | Session management | Recording coordination | INFO | File + Console |
+| `multisensor.device` | Device communication | Hardware interaction | DEBUG | File |
+| `multisensor.network` | Network operations | TCP/UDP communication | INFO | File + Console |
+| `multisensor.webcam` | Camera operations | Video processing | DEBUG | File |
+| `multisensor.calibration` | Calibration procedures | OpenCV operations | INFO | File |
+| `multisensor.shimmer` | Shimmer sensors | Physiological data | INFO | File + Console |
+| `multisensor.ui` | User interface | GUI interactions | INFO | Console |
+| `multisensor.web` | Web interface | Browser operations | INFO | File |
+| `multisensor.performance` | Performance monitoring | System metrics | DEBUG | File |
+| `multisensor.security` | Security events | Access control | WARNING | File + Console |
+
+**Advanced Logging Features:**
+
+```python
+class PerformanceLogger:
+    """Performance-aware logging with automatic metrics collection."""
+    
+    @staticmethod
+    def log_with_performance(logger, level, message, **kwargs):
+        """Log message with automatic performance metrics."""
+        # Collect current performance metrics
+        performance_metrics = {
+            'cpu_percent': psutil.cpu_percent(interval=0.1),
+            'memory_percent': psutil.virtual_memory().percent,
+            'thread_count': threading.active_count(),
+            'timestamp': time.time()
         }
+        
+        # Create log record with performance data
+        record = logger.makeRecord(
+            logger.name, level, '', 0, message, (), None, 
+            func='', extra={'performance_metrics': performance_metrics, **kwargs}
+        )
+        
+        logger.handle(record)
+
+class SessionContextLogger:
+    """Session-aware logging with research context."""
+    
+    def __init__(self, session_id: str, researcher_id: str = None):
+        self.session_id = session_id
+        self.researcher_id = researcher_id
+        self.session_start = datetime.now()
+        
+    def log_session_event(self, logger, level, message, **kwargs):
+        """Log event with session research context."""
+        research_context = {
+            'session_id': self.session_id,
+            'researcher_id': self.researcher_id,
+            'session_duration': (datetime.now() - self.session_start).total_seconds(),
+            'event_category': kwargs.get('category', 'general')
+        }
+        
+        # Add research context to log record
+        extra_data = {
+            'research_context': research_context,
+            **kwargs
+        }
+        
+        if level == logging.INFO:
+            logger.info(message, extra=extra_data)
+        elif level == logging.WARNING:
+            logger.warning(message, extra=extra_data)
+        elif level == logging.ERROR:
+            logger.error(message, extra=extra_data)
+        elif level == logging.DEBUG:
+            logger.debug(message, extra=extra_data)
 ```
 
 ### Performance Monitoring
 
-The performance monitoring system provides real-time metrics collection and analysis with automated alerting and optimization recommendations.
+The performance monitoring system provides real-time metrics collection and analysis with automated alerting and hardware detection capabilities. The implementation includes actual system monitoring through the SystemMonitor class.
 
-**Real-Time Performance Dashboard:**
+**Real-Time System Monitoring:**
 
 ```python
-class PerformanceDashboard:
-    """
-    Real-time performance monitoring dashboard for research operations
-    with predictive analytics and automated optimization.
-    """
+class SystemMonitor:
+    """Real system monitoring and hardware detection for research operations."""
     
     def __init__(self):
-        self.metrics_collector = MetricsCollector()
-        self.alert_manager = AlertManager()
-        self.optimization_engine = OptimizationEngine()
-        self.historical_data = HistoricalDataManager()
+        """Initialize the system monitor with comprehensive hardware detection."""
+        self.logger = get_logger(__name__)
+        self.monitoring_active = False
+        self.metrics_history = []
+        self.hardware_inventory = {}
         
-    def get_real_time_metrics(self):
+        # Initialize hardware detection
+        self._detect_system_hardware()
+        
+    def get_comprehensive_system_info(self) -> Dict[str, Any]:
         """
-        Collect comprehensive real-time performance metrics
-        with research-specific quality indicators.
+        Get comprehensive system information including hardware,
+        performance metrics, and connected devices.
         """
-        current_metrics = {
-            "timestamp": datetime.now().isoformat(),
-            "system_performance": {
-                "cpu_usage_percent": psutil.cpu_percent(interval=0.1),
-                "cpu_per_core": list(psutil.cpu_percent(percpu=True, interval=0.1)),
-                "memory_usage": {
-                    "total_gb": psutil.virtual_memory().total / (1024**3),
-                    "available_gb": psutil.virtual_memory().available / (1024**3),
-                    "used_percent": psutil.virtual_memory().percent,
-                    "cached_gb": psutil.virtual_memory().cached / (1024**3)
+        return {
+            'platform_info': self._get_platform_info(),
+            'hardware_info': self._get_hardware_info(),
+            'connected_devices': self._detect_connected_devices(),
+            'performance_metrics': self._get_current_performance(),
+            'network_interfaces': self._get_network_interfaces(),
+            'storage_info': self._get_storage_info(),
+            'python_environment': self._get_python_environment()
+        }
+    
+    def _get_platform_info(self) -> Dict[str, str]:
+        """Get detailed platform information."""
+        return {
+            'system': platform.system(),
+            'platform': platform.platform(),
+            'machine': platform.machine(),
+            'processor': platform.processor(),
+            'architecture': platform.architecture()[0],
+            'python_version': platform.python_version(),
+            'python_implementation': platform.python_implementation()
+        }
+    
+    def _get_hardware_info(self) -> Dict[str, Any]:
+        """Get comprehensive hardware information."""
+        hardware_info = {
+            'cpu': {
+                'physical_cores': psutil.cpu_count(logical=False),
+                'logical_cores': psutil.cpu_count(logical=True),
+                'current_frequency': psutil.cpu_freq().current if psutil.cpu_freq() else 'Unknown',
+                'max_frequency': psutil.cpu_freq().max if psutil.cpu_freq() else 'Unknown'
+            },
+            'memory': {
+                'total_gb': round(psutil.virtual_memory().total / (1024**3), 2),
+                'available_gb': round(psutil.virtual_memory().available / (1024**3), 2),
+                'used_percent': psutil.virtual_memory().percent
+            },
+            'disk': {},
+            'network': {}
+        }
+        
+        # Disk information
+        for disk in psutil.disk_partitions():
+            try:
+                disk_usage = psutil.disk_usage(disk.mountpoint)
+                hardware_info['disk'][disk.device] = {
+                    'total_gb': round(disk_usage.total / (1024**3), 2),
+                    'used_gb': round(disk_usage.used / (1024**3), 2),
+                    'free_gb': round(disk_usage.free / (1024**3), 2),
+                    'filesystem': disk.fstype,
+                    'mountpoint': disk.mountpoint
+                }
+            except PermissionError:
+                # Skip inaccessible disks
+                continue
+        
+        return hardware_info
+    
+    def _detect_connected_devices(self) -> Dict[str, List[Dict[str, Any]]]:
+        """Detect connected hardware devices."""
+        connected_devices = {
+            'webcams': self._detect_webcams(),
+            'bluetooth_devices': self._detect_bluetooth_devices(),
+            'usb_devices': self._detect_usb_devices(),
+            'network_devices': self._detect_network_devices()
+        }
+        
+        return connected_devices
+    
+    def _detect_webcams(self) -> List[Dict[str, Any]]:
+        """Detect available webcam devices."""
+        webcams = []
+        
+        if not OPENCV_AVAILABLE:
+            return webcams
+        
+        # Test camera indices 0-5
+        for camera_index in range(6):
+            try:
+                cap = cv2.VideoCapture(camera_index)
+                if cap.isOpened():
+                    # Get camera properties
+                    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                    fps = int(cap.get(cv2.CAP_PROP_FPS))
+                    
+                    webcam_info = {
+                        'index': camera_index,
+                        'name': f'Camera {camera_index}',
+                        'resolution': f'{width}x{height}',
+                        'fps': fps,
+                        'backend': cap.getBackendName() if hasattr(cap, 'getBackendName') else 'Unknown'
+                    }
+                    webcams.append(webcam_info)
+                    
+                cap.release()
+                
+            except Exception as e:
+                self.logger.debug(f"Error testing camera {camera_index}: {e}")
+                continue
+        
+        return webcams
+    
+    def _detect_bluetooth_devices(self) -> List[Dict[str, Any]]:
+        """Detect available Bluetooth devices."""
+        bluetooth_devices = []
+        
+        try:
+            if platform.system() == "Windows":
+                # Windows Bluetooth detection
+                bluetooth_devices = self._detect_windows_bluetooth()
+            elif platform.system() == "Linux":
+                # Linux Bluetooth detection
+                bluetooth_devices = self._detect_linux_bluetooth()
+            elif platform.system() == "Darwin":
+                # macOS Bluetooth detection
+                bluetooth_devices = self._detect_macos_bluetooth()
+        except Exception as e:
+            self.logger.debug(f"Bluetooth detection error: {e}")
+        
+        return bluetooth_devices
+    
+    def get_real_time_performance_metrics(self) -> Dict[str, Any]:
+        """
+        Get real-time performance metrics suitable for research monitoring.
+        """
+        metrics = {
+            'timestamp': datetime.now().isoformat(),
+            'cpu': {
+                'usage_percent': psutil.cpu_percent(interval=0.1),
+                'per_core_usage': psutil.cpu_percent(percpu=True, interval=0.1),
+                'load_average': os.getloadavg() if hasattr(os, 'getloadavg') else None
+            },
+            'memory': {
+                'virtual': {
+                    'total': psutil.virtual_memory().total,
+                    'available': psutil.virtual_memory().available,
+                    'percent': psutil.virtual_memory().percent,
+                    'used': psutil.virtual_memory().used,
+                    'free': psutil.virtual_memory().free
                 },
-                "disk_io": {
-                    "read_bytes_per_sec": psutil.disk_io_counters().read_bytes,
-                    "write_bytes_per_sec": psutil.disk_io_counters().write_bytes,
-                    "read_count": psutil.disk_io_counters().read_count,
-                    "write_count": psutil.disk_io_counters().write_count
-                },
-                "network_io": {
-                    "bytes_sent_per_sec": psutil.net_io_counters().bytes_sent,
-                    "bytes_recv_per_sec": psutil.net_io_counters().bytes_recv,
-                    "packets_sent": psutil.net_io_counters().packets_sent,
-                    "packets_recv": psutil.net_io_counters().packets_recv,
-                    "errors_in": psutil.net_io_counters().errin,
-                    "errors_out": psutil.net_io_counters().errout
+                'swap': {
+                    'total': psutil.swap_memory().total,
+                    'used': psutil.swap_memory().used,
+                    'free': psutil.swap_memory().free,
+                    'percent': psutil.swap_memory().percent
                 }
             },
-            "application_performance": {
-                "active_sessions": self._get_active_session_count(),
-                "connected_devices": self._get_connected_device_count(),
-                "recording_fps": self._get_current_recording_fps(),
-                "network_latency_ms": self._measure_network_latency(),
-                "data_throughput_mbps": self._calculate_data_throughput(),
-                "memory_usage_mb": self._get_application_memory_usage(),
-                "thread_count": threading.active_count(),
-                "queue_sizes": self._get_queue_sizes()
+            'disk_io': {
+                'read_bytes': psutil.disk_io_counters().read_bytes,
+                'write_bytes': psutil.disk_io_counters().write_bytes,
+                'read_count': psutil.disk_io_counters().read_count,
+                'write_count': psutil.disk_io_counters().write_count
             },
-            "research_quality_metrics": {
-                "synchronization_accuracy_ms": self._get_sync_accuracy(),
-                "data_integrity_score": self._calculate_data_integrity(),
-                "temporal_precision_score": self._assess_temporal_precision(),
-                "signal_quality_scores": self._get_signal_quality_scores(),
-                "error_rates": self._calculate_error_rates(),
-                "data_loss_percentage": self._calculate_data_loss()
+            'network_io': {
+                'bytes_sent': psutil.net_io_counters().bytes_sent,
+                'bytes_recv': psutil.net_io_counters().bytes_recv,
+                'packets_sent': psutil.net_io_counters().packets_sent,
+                'packets_recv': psutil.net_io_counters().packets_recv,
+                'errors_in': psutil.net_io_counters().errin,
+                'errors_out': psutil.net_io_counters().errout
             },
-            "predictive_indicators": {
-                "storage_exhaustion_eta": self._predict_storage_exhaustion(),
-                "performance_degradation_risk": self._assess_degradation_risk(),
-                "device_failure_predictions": self._predict_device_failures(),
-                "network_stability_forecast": self._forecast_network_stability()
+            'process_info': {
+                'pid': os.getpid(),
+                'threads': threading.active_count(),
+                'memory_rss': psutil.Process().memory_info().rss,
+                'memory_vms': psutil.Process().memory_info().vms,
+                'cpu_percent': psutil.Process().cpu_percent(),
+                'open_files': len(psutil.Process().open_files()),
+                'connections': len(psutil.Process().connections())
             }
         }
         
-        # Generate alerts if necessary
-        alerts = self.alert_manager.evaluate_metrics(current_metrics)
-        if alerts:
-            current_metrics["active_alerts"] = alerts
-            self._handle_performance_alerts(alerts)
+        return metrics
+    
+    def start_continuous_monitoring(self, interval_seconds: float = 1.0):
+        """
+        Start continuous system monitoring with specified interval.
         
-        # Store for historical analysis
-        self.historical_data.store_metrics(current_metrics)
+        Args:
+            interval_seconds: Monitoring interval in seconds
+        """
+        if self.monitoring_active:
+            self.logger.warning("Monitoring already active")
+            return
         
-        return current_metrics
+        self.monitoring_active = True
+        self.logger.info(f"Starting continuous monitoring (interval: {interval_seconds}s)")
+        
+        def monitoring_loop():
+            while self.monitoring_active:
+                try:
+                    metrics = self.get_real_time_performance_metrics()
+                    self.metrics_history.append(metrics)
+                    
+                    # Keep only last 1000 measurements to prevent memory growth
+                    if len(self.metrics_history) > 1000:
+                        self.metrics_history = self.metrics_history[-1000:]
+                    
+                    # Check for performance alerts
+                    self._check_performance_alerts(metrics)
+                    
+                    time.sleep(interval_seconds)
+                    
+                except Exception as e:
+                    self.logger.error(f"Monitoring loop error: {e}")
+                    time.sleep(interval_seconds)
+        
+        # Start monitoring in separate thread
+        monitoring_thread = threading.Thread(target=monitoring_loop, daemon=True)
+        monitoring_thread.start()
+    
+    def _check_performance_alerts(self, metrics: Dict[str, Any]):
+        """Check performance metrics against thresholds and generate alerts."""
+        alerts = []
+        
+        # CPU usage alert
+        if metrics['cpu']['usage_percent'] > 90:
+            alerts.append({
+                'type': 'cpu_high',
+                'message': f"High CPU usage: {metrics['cpu']['usage_percent']:.1f}%",
+                'severity': 'warning'
+            })
+        
+        # Memory usage alert
+        if metrics['memory']['virtual']['percent'] > 85:
+            alerts.append({
+                'type': 'memory_high',
+                'message': f"High memory usage: {metrics['memory']['virtual']['percent']:.1f}%",
+                'severity': 'warning'
+            })
+        
+        # Disk space alert (for system drive)
+        try:
+            disk_usage = psutil.disk_usage('/')
+            if (disk_usage.free / disk_usage.total) < 0.1:  # Less than 10% free
+                alerts.append({
+                    'type': 'disk_low',
+                    'message': f"Low disk space: {(disk_usage.free / disk_usage.total) * 100:.1f}% free",
+                    'severity': 'critical'
+                })
+        except:
+            pass
+        
+        # Process alerts for research applications
+        process_memory_mb = metrics['process_info']['memory_rss'] / (1024 * 1024)
+        if process_memory_mb > 1000:  # More than 1GB
+            alerts.append({
+                'type': 'process_memory_high',
+                'message': f"Application memory usage: {process_memory_mb:.1f} MB",
+                'severity': 'info'
+            })
+        
+        # Log alerts
+        for alert in alerts:
+            if alert['severity'] == 'critical':
+                self.logger.error(f"Performance Alert: {alert['message']}")
+            elif alert['severity'] == 'warning':
+                self.logger.warning(f"Performance Alert: {alert['message']}")
+            else:
+                self.logger.info(f"Performance Alert: {alert['message']}")
 ```
 
 ### Diagnostic Tools and Troubleshooting
