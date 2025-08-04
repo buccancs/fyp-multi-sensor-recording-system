@@ -16,38 +16,538 @@
     
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --light-bg: #ecf0f1;
-            --dark-bg: #34495e;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --card-gradient: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
         }
         
         body {
-            background-color: var(--light-bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1a202c;
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-bg));
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
         
         .navbar-brand {
             font-weight: bold;
             color: white !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
         }
         
         .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px 20px 0 0 !important;
+            font-weight: 600;
+            color: #1a202c;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 12px 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+        
+        .btn-success {
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-warning {
+            background: var(--warning-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-danger {
+            background: var(--danger-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .status-recording {
+            background: #ef4444;
+            color: #ef4444;
+        }
+        
+        .status-playing {
+            background: #10b981;
+            color: #10b981;
+        }
+        
+        .status-paused {
+            background: #f59e0b;
+            color: #f59e0b;
+        }
+        
+        .status-stopped {
+            background: #6b7280;
+            color: #6b7280;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        
+        .playback-controls {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .video-preview {
+            background: #000;
+            border-radius: 12px;
+            aspect-ratio: 16/9;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            height: 40px;
+            position: relative;
+            margin: 16px 0;
+        }
+        
+        .timeline-progress {
+            background: var(--primary-gradient);
+            height: 100%;
+            border-radius: 8px;
+            width: 35%;
+            transition: width 0.3s ease;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #1a202c;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .list-group-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #1a202c;
+            backdrop-filter: blur(10px);
+        }
+        
+        .list-group-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+        }
+        
+        .marker-item {
+            border-left: 4px solid #667eea;
+            padding-left: 12px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-video me-2"></i>Multi-Sensor Recording
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/devices">
+                            <i class="fas fa-mobile-alt me-1"></i>Devices
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sessions">
+                            <i class="fas fa-folder me-1"></i>Sessions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/playback">
+                            <i class="fas fa-play me-1"></i>Playback
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/files">
+                            <i class="fas fa-file me-1"></i>Files
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">
+                            <i class="fas fa-cog me-1"></i>Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="row">
+            <!-- Playback Controls -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-play-circle me-2"></i>Playback Controls</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Media Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Media File</label>
+                            <select class="form-control mb-2" id="mediaSelect">
+                                <option>experiment_2025_01_15_session_001.mp4</option>
+                                <option>calibration_video_thermal_rgb.avi</option>
+                                <option>participant_P001_stimulus_001.mov</option>
+                                <option>training_session_overview.mp4</option>
+                            </select>
+                            <button class="btn btn-primary btn-sm w-100" id="loadMediaBtn">
+                                <i class="fas fa-folder-open me-1"></i>Browse Files
+                            </button>
+                        </div>
+                        
+                        <!-- Playback Speed -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Playback Speed</label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range me-3" min="25" max="200" value="100" id="speedSlider">
+                                <span id="speedDisplay" class="badge bg-primary">1.0x</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Playback Options -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Options</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="loopCheck">
+                                <label class="form-check-label" for="loopCheck">Loop playback</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="timestampsCheck" checked>
+                                <label class="form-check-label" for="timestampsCheck">Show timestamps</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="markersCheck" checked>
+                                <label class="form-check-label" for="markersCheck">Show event markers</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event Markers -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-bookmark me-2"></i>Event Markers</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush" style="max-height: 200px; overflow-y: auto;">
+                            <div class="list-group-item marker-item">
+                                <small class="text-muted">00:02:15</small><br>
+                                Stimulus Start
+                            </div>
+                            <div class="list-group-item marker-item">
+                                <small class="text-muted">00:02:18</small><br>
+                                Participant Response
+                            </div>
+                            <div class="list-group-item marker-item">
+                                <small class="text-muted">00:04:32</small><br>
+                                Calibration Point
+                            </div>
+                            <div class="list-group-item marker-item">
+                                <small class="text-muted">00:07:45</small><br>
+                                Stimulus End
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-sm w-100 mt-2" id="addMarkerBtn">
+                            <i class="fas fa-plus me-1"></i>Add Marker
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Preview and Timeline -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-video me-2"></i>Video Preview</h5>
+                        <div>
+                            <span class="status-indicator status-paused"></span>
+                            <span class="fw-semibold">Paused</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Video Preview Area -->
+                        <div class="video-preview mb-3">
+                            <div class="d-flex align-items-center justify-content-center h-100">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-play-circle fa-4x mb-3 opacity-50"></i>
+                                    <h4>experiment_2025_01_15_session_001.mp4</h4>
+                                    <p class="mb-0">1920x1080 • 30fps • 15:32 duration</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline -->
+                        <div class="timeline">
+                            <div class="timeline-progress"></div>
+                            <div class="position-absolute top-50 start-0 translate-middle-y ms-2">
+                                <small class="text-white fw-semibold">05:23</small>
+                            </div>
+                            <div class="position-absolute top-50 end-0 translate-middle-y me-2">
+                                <small class="text-white opacity-75">15:32</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Playback Controls -->
+                        <div class="playback-controls">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button class="btn btn-outline-light me-3" id="skipBackBtn">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button class="btn btn-success btn-lg me-3" id="playPauseBtn">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="btn btn-outline-light me-3" id="skipForwardBtn">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                                <button class="btn btn-danger" id="stopBtn">
+                                    <i class="fas fa-stop"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Session Synchronization -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-sync me-2"></i>Session Sync</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Sync Status -->
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="status-indicator status-playing"></span>
+                                <span class="fw-semibold">Time synchronized</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="h3 mb-0 font-monospace" id="syncTime">00:05:23.125</div>
+                                <small class="text-muted">Session Time</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Device Sync Status -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Device Status</label>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>GSR Unit #1</span>
+                                    <span class="status-indicator status-playing"></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>ECG Unit #2</span>
+                                    <span class="status-indicator status-playing"></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>Samsung Galaxy</span>
+                                    <span class="status-indicator status-paused"></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>iPad Pro</span>
+                                    <span class="status-indicator status-playing"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Export Controls -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" id="exportVideoBtn">
+                                <i class="fas fa-download me-1"></i>Export Video
+                            </button>
+                            <button class="btn btn-success" id="exportDataBtn">
+                                <i class="fas fa-file-csv me-1"></i>Export Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize playback functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const speedSlider = document.getElementById('speedSlider');
+            const speedDisplay = document.getElementById('speedDisplay');
+            const syncTime = document.getElementById('syncTime');
+            
+            let isPlaying = false;
+            let currentTime = 5 * 60 + 23; // 5:23 in seconds
+            
+            // Play/Pause functionality
+            playPauseBtn.addEventListener('click', function() {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    this.innerHTML = '<i class="fas fa-pause"></i>';
+                    this.className = 'btn btn-warning btn-lg me-3';
+                } else {
+                    this.innerHTML = '<i class="fas fa-play"></i>';
+                    this.className = 'btn btn-success btn-lg me-3';
+                }
+            });
+            
+            // Speed slider
+            speedSlider.addEventListener('input', function() {
+                const speed = this.value / 100;
+                speedDisplay.textContent = speed.toFixed(1) + 'x';
+            });
+            
+            // Update sync time display
+            function updateSyncTime() {
+                if (isPlaying) {
+                    currentTime += 0.125; // Update every 125ms
+                }
+                const minutes = Math.floor(currentTime / 60);
+                const seconds = Math.floor(currentTime % 60);
+                const milliseconds = Math.floor((currentTime % 1) * 1000);
+                
+                syncTime.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            }
+            
+            // Update time every 125ms
+            setInterval(updateSyncTime, 125);
+            
+            // Add marker functionality
+            document.getElementById('addMarkerBtn').addEventListener('click', function() {
+                const description = prompt('Enter marker description:');
+                if (description) {
+                    const markerList = document.querySelector('.list-group');
+                    const newMarker = document.createElement('div');
+                    newMarker.className = 'list-group-item marker-item';
+                    newMarker.innerHTML = `
+                        <small class="text-muted">${syncTime.textContent.substring(0, 8)}</small><br>
+                        ${description}
+                    `;
+                    markerList.appendChild(newMarker);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             transition: all 0.3s ease;

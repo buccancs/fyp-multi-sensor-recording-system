@@ -14,40 +14,815 @@
     
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --light-bg: #ecf0f1;
-            --dark-bg: #34495e;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --card-gradient: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
         }
         
         body {
-            background-color: var(--light-bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1a202c;
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-bg));
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
         
         .navbar-brand {
             font-weight: bold;
             color: white !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
         }
         
         .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px 20px 0 0 !important;
+            font-weight: 600;
+            color: #1a202c;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
             border: none;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            font-weight: 600;
+            padding: 12px 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+        
+        .btn-success {
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-warning {
+            background: var(--warning-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-danger {
+            background: var(--danger-gradient);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #1a202c;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            color: #1a202c;
+        }
+        
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .form-check-input:focus {
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.4);
+        }
+        
+        .form-range::-webkit-slider-thumb {
+            background: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+        
+        .form-range::-moz-range-thumb {
+            background: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
         }
         
         .settings-nav {
-            background-color: #f8f9fa;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 20px;
+        }
+        
+        .settings-nav .nav-link {
+            color: #1a202c !important;
+            font-weight: 500;
             border-radius: 8px;
+            margin: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: none;
+        }
+        
+        .settings-nav .nav-link.active {
+            background: var(--primary-gradient);
+            color: white !important;
+        }
+        
+        .alert {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .alert-success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .alert-warning {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .alert-info {
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-video me-2"></i>Multi-Sensor Recording
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/devices">
+                            <i class="fas fa-mobile-alt me-1"></i>Devices
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sessions">
+                            <i class="fas fa-folder me-1"></i>Sessions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/playback">
+                            <i class="fas fa-play me-1"></i>Playback
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/files">
+                            <i class="fas fa-file me-1"></i>Files
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/settings">
+                            <i class="fas fa-cog me-1"></i>Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="row">
+            <!-- Settings Navigation -->
+            <div class="col-md-3">
+                <div class="settings-nav">
+                    <div class="nav flex-column nav-pills p-3" role="tablist">
+                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#device-settings" role="tab">
+                            <i class="fas fa-mobile-alt me-2"></i>Device Configuration
+                        </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recording-settings" role="tab">
+                            <i class="fas fa-record-vinyl me-2"></i>Recording Settings
+                        </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#display-settings" role="tab">
+                            <i class="fas fa-desktop me-2"></i>Display Settings
+                        </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#network-settings" role="tab">
+                            <i class="fas fa-network-wired me-2"></i>Network Settings
+                        </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#export-settings" role="tab">
+                            <i class="fas fa-download me-2"></i>Export Settings
+                        </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#system-settings" role="tab">
+                            <i class="fas fa-cogs me-2"></i>System Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Content -->
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <!-- Device Configuration -->
+                    <div class="tab-pane fade show active" id="device-settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-mobile-alt me-2"></i>Device Configuration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Server Port</label>
+                                            <input type="number" class="form-control" value="8080" min="1000" max="65535">
+                                            <div class="form-text">Port for device connections (1000-65535)</div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Connection Timeout (seconds)</label>
+                                            <input type="number" class="form-control" value="30" min="5" max="300">
+                                            <div class="form-text">Timeout for device connections</div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Max Concurrent Devices</label>
+                                            <select class="form-select">
+                                                <option value="5">5 devices</option>
+                                                <option value="10" selected>10 devices</option>
+                                                <option value="20">20 devices</option>
+                                                <option value="50">50 devices</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Auto-Connection Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="autoConnect">
+                                                <label class="form-check-label" for="autoConnect">
+                                                    Auto-connect to known devices
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="autoReconnect">
+                                                <label class="form-check-label" for="autoReconnect">
+                                                    Auto-reconnect on connection loss
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="deviceNotifications">
+                                                <label class="form-check-label" for="deviceNotifications">
+                                                    Show device connection notifications
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <strong>Current Status:</strong> Server running on port 8080 with 6 connected devices
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recording Settings -->
+                    <div class="tab-pane fade" id="recording-settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-record-vinyl me-2"></i>Recording Configuration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Output Directory</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="./recordings" readonly>
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fas fa-folder-open"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Video Quality</label>
+                                            <select class="form-select">
+                                                <option value="low">Low (480p)</option>
+                                                <option value="medium">Medium (720p)</option>
+                                                <option value="high" selected>High (1080p)</option>
+                                                <option value="ultra">Ultra (4K)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Sample Rate (Hz)</label>
+                                            <input type="range" class="form-range" min="10" max="1000" value="100" id="sampleRateSlider">
+                                            <div class="d-flex justify-content-between">
+                                                <small>10 Hz</small>
+                                                <span id="sampleRateValue" class="fw-semibold">100 Hz</span>
+                                                <small>1000 Hz</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Recording Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="compressRecordings">
+                                                <label class="form-check-label" for="compressRecordings">
+                                                    Compress recordings to save space
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="createBackups">
+                                                <label class="form-check-label" for="createBackups">
+                                                    Create backup copies
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="addTimestamps">
+                                                <label class="form-check-label" for="addTimestamps">
+                                                    Add timestamps to filenames
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="autoStopOnError">
+                                                <label class="form-check-label" for="autoStopOnError">
+                                                    Auto-stop recording on errors
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            <strong>Storage Space:</strong> 2.3 GB remaining on selected drive
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Display Settings -->
+                    <div class="tab-pane fade" id="display-settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-desktop me-2"></i>Display Configuration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">UI Theme</label>
+                                            <select class="form-select">
+                                                <option value="modern" selected>Modern (Default)</option>
+                                                <option value="dark">Dark</option>
+                                                <option value="light">Light</option>
+                                                <option value="high-contrast">High Contrast</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Preview Resolution</label>
+                                            <select class="form-select">
+                                                <option value="640x480">640x480</option>
+                                                <option value="800x600">800x600</option>
+                                                <option value="1024x768">1024x768</option>
+                                                <option value="1280x720" selected>1280x720</option>
+                                                <option value="1920x1080">1920x1080</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Preview FPS</label>
+                                            <input type="number" class="form-control" value="30" min="10" max="60">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Display Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="fullscreenStimulus">
+                                                <label class="form-check-label" for="fullscreenStimulus">
+                                                    Use fullscreen for stimulus presentation
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="showDataOverlay">
+                                                <label class="form-check-label" for="showDataOverlay">
+                                                    Show data overlay on preview
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showFPS">
+                                                <label class="form-check-label" for="showFPS">
+                                                    Show FPS counter
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="smoothAnimations">
+                                                <label class="form-check-label" for="smoothAnimations">
+                                                    Enable smooth animations
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Network Settings -->
+                    <div class="tab-pane fade" id="network-settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-network-wired me-2"></i>Network Configuration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Network Interface</label>
+                                            <select class="form-select">
+                                                <option value="auto" selected>Auto-detect</option>
+                                                <option value="wifi">Wi-Fi (192.168.1.100)</option>
+                                                <option value="ethernet">Ethernet (192.168.0.100)</option>
+                                                <option value="localhost">Localhost (127.0.0.1)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Buffer Size (MB)</label>
+                                            <input type="number" class="form-control" value="64" min="16" max="512">
+                                            <div class="form-text">Network buffer for data transmission</div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Compression Level</label>
+                                            <input type="range" class="form-range" min="0" max="9" value="6" id="compressionSlider">
+                                            <div class="d-flex justify-content-between">
+                                                <small>None</small>
+                                                <span id="compressionValue" class="fw-semibold">Medium</span>
+                                                <small>Maximum</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Security Settings</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="enableSSL">
+                                                <label class="form-check-label" for="enableSSL">
+                                                    Enable SSL/TLS encryption
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="requireAuth">
+                                                <label class="form-check-label" for="requireAuth">
+                                                    Require device authentication
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="logConnections">
+                                                <label class="form-check-label" for="logConnections">
+                                                    Log all connection attempts
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="alert alert-success">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            <strong>Network Status:</strong> Connected and operational
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Export Settings -->
+                    <div class="tab-pane fade" id="export-settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-download me-2"></i>Export Configuration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Default Export Format</label>
+                                            <select class="form-select">
+                                                <option value="csv" selected>CSV (Comma Separated Values)</option>
+                                                <option value="json">JSON (JavaScript Object Notation)</option>
+                                                <option value="hdf5">HDF5 (Hierarchical Data Format)</option>
+                                                <option value="matlab">MATLAB (.mat files)</option>
+                                                <option value="excel">Excel (.xlsx files)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Video Export Format</label>
+                                            <select class="form-select">
+                                                <option value="mp4" selected>MP4 (H.264)</option>
+                                                <option value="avi">AVI (Uncompressed)</option>
+                                                <option value="mov">MOV (QuickTime)</option>
+                                                <option value="webm">WebM (VP9)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Export Directory</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="./exports" readonly>
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fas fa-folder-open"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Export Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="includeMetadata">
+                                                <label class="form-check-label" for="includeMetadata">
+                                                    Include metadata in export
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="includeTimestamps">
+                                                <label class="form-check-label" for="includeTimestamps">
+                                                    Include timestamps
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="separateDevices">
+                                                <label class="form-check-label" for="separateDevices">
+                                                    Separate files per device
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="compressExports">
+                                                <label class="form-check-label" for="compressExports">
+                                                    Compress exported files
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- System Settings -->
+                    <div class="tab-pane fade" id="system-settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>System Configuration</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Log Level</label>
+                                            <select class="form-select">
+                                                <option value="debug">Debug (Verbose)</option>
+                                                <option value="info" selected>Info (Normal)</option>
+                                                <option value="warning">Warning (Errors only)</option>
+                                                <option value="error">Error (Critical only)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Auto-save Interval (minutes)</label>
+                                            <input type="number" class="form-control" value="5" min="1" max="60">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Memory Usage Limit (%)</label>
+                                            <input type="range" class="form-range" min="50" max="95" value="80" id="memorySlider">
+                                            <div class="d-flex justify-content-between">
+                                                <small>50%</small>
+                                                <span id="memoryValue" class="fw-semibold">80%</span>
+                                                <small>95%</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">System Options</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="startWithSystem">
+                                                <label class="form-check-label" for="startWithSystem">
+                                                    Start with system boot
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="checkUpdates">
+                                                <label class="form-check-label" for="checkUpdates">
+                                                    Check for updates automatically
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked id="sendUsageStats">
+                                                <label class="form-check-label" for="sendUsageStats">
+                                                    Send anonymous usage statistics
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-warning" id="clearCacheBtn">
+                                                <i class="fas fa-trash me-2"></i>Clear Cache
+                                            </button>
+                                            <button class="btn btn-danger" id="resetAllBtn">
+                                                <i class="fas fa-undo me-2"></i>Reset All Settings
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button class="btn btn-success me-2" id="saveAllBtn">
+                                    <i class="fas fa-save me-2"></i>Save All Settings
+                                </button>
+                                <button class="btn btn-warning me-2" id="exportConfigBtn">
+                                    <i class="fas fa-download me-2"></i>Export Configuration
+                                </button>
+                                <button class="btn btn-primary" id="importConfigBtn">
+                                    <i class="fas fa-upload me-2"></i>Import Configuration
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary" id="restoreDefaultsBtn">
+                                    <i class="fas fa-undo me-2"></i>Restore Defaults
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize settings functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample rate slider
+            const sampleRateSlider = document.getElementById('sampleRateSlider');
+            const sampleRateValue = document.getElementById('sampleRateValue');
+            
+            sampleRateSlider.addEventListener('input', function() {
+                sampleRateValue.textContent = this.value + ' Hz';
+            });
+            
+            // Compression slider
+            const compressionSlider = document.getElementById('compressionSlider');
+            const compressionValue = document.getElementById('compressionValue');
+            const compressionLabels = ['None', 'Low', 'Low', 'Medium', 'Medium', 'Medium', 'High', 'High', 'Very High', 'Maximum'];
+            
+            compressionSlider.addEventListener('input', function() {
+                compressionValue.textContent = compressionLabels[this.value];
+            });
+            
+            // Memory slider
+            const memorySlider = document.getElementById('memorySlider');
+            const memoryValue = document.getElementById('memoryValue');
+            
+            memorySlider.addEventListener('input', function() {
+                memoryValue.textContent = this.value + '%';
+            });
+            
+            // Save all settings
+            document.getElementById('saveAllBtn').addEventListener('click', function() {
+                // Show success message
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success mt-3';
+                alert.innerHTML = '<i class="fas fa-check-circle me-2"></i>All settings saved successfully!';
+                document.querySelector('.main-content').appendChild(alert);
+                
+                // Remove alert after 3 seconds
+                setTimeout(() => {
+                    alert.remove();
+                }, 3000);
+            });
+            
+            // Reset all settings
+            document.getElementById('resetAllBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all settings to defaults? This action cannot be undone.')) {
+                    // Reset form values
+                    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    document.querySelectorAll('select').forEach(select => {
+                        select.selectedIndex = 0;
+                    });
+                    
+                    alert('Settings have been reset to defaults.');
+                }
+            });
+            
+            // Clear cache
+            document.getElementById('clearCacheBtn').addEventListener('click', function() {
+                if (confirm('Clear all cached data? This may improve performance.')) {
+                    alert('Cache cleared successfully.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
             padding: 0;
         }
         
