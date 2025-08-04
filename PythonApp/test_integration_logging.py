@@ -1,228 +1,185 @@
-#!/usr/bin/env python3
-"""
-Integration test for comprehensive logging across the Multi-Sensor Recording System
-
-This test simulates a typical application workflow to verify that logging
-is working correctly across all components and modules.
-"""
-
 import sys
 import os
 from pathlib import Path
-
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
-
+sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from utils.logging_config import get_logger, AppLogger
-
-# Import modules conditionally to handle missing dependencies gracefully
 try:
     from session.session_manager import SessionManager
 except ImportError as e:
-    print(f"Warning: Could not import SessionManager: {e}")
+    print(f'Warning: Could not import SessionManager: {e}')
     SessionManager = None
-
 try:
     from calibration.calibration_manager import CalibrationManager
 except ImportError as e:
-    print(f"Warning: Could not import CalibrationManager: {e}")
+    print(f'Warning: Could not import CalibrationManager: {e}')
     CalibrationManager = None
-
 try:
     from network.device_server import JsonSocketServer
 except ImportError as e:
-    print(f"Warning: Could not import JsonSocketServer: {e}")
+    print(f'Warning: Could not import JsonSocketServer: {e}')
     JsonSocketServer = None
-
 try:
     from webcam.webcam_capture import WebcamCapture
 except ImportError as e:
-    print(f"Warning: Could not import WebcamCapture: {e}")
+    print(f'Warning: Could not import WebcamCapture: {e}')
     WebcamCapture = None
-
 try:
     from config.webcam_config import WebcamConfiguration, VideoCodec, Resolution
 except ImportError as e:
-    print(f"Warning: Could not import WebcamConfiguration: {e}")
+    print(f'Warning: Could not import WebcamConfiguration: {e}')
     WebcamConfiguration = VideoCodec = Resolution = None
-
 try:
     from error_handling.recovery_manager import RecoveryManager
 except ImportError as e:
-    print(f"Warning: Could not import RecoveryManager: {e}")
+    print(f'Warning: Could not import RecoveryManager: {e}')
     RecoveryManager = None
 
+
 def test_comprehensive_logging():
-    """Test logging across all system components."""
-    
-    # Set up logging with DEBUG level for comprehensive testing
-    AppLogger.set_level("DEBUG")
-    logger = get_logger("IntegrationTest")
-    
-    logger.info("=== Multi-Sensor Recording System - Comprehensive Logging Integration Test ===")
-    
+    AppLogger.set_level('DEBUG')
+    logger = get_logger('IntegrationTest')
+    logger.info(
+        '=== Multi-Sensor Recording System - Comprehensive Logging Integration Test ==='
+        )
     try:
-        # Test 1: Session Management Logging
-        logger.info("Testing Session Management logging...")
+        logger.info('Testing Session Management logging...')
         if SessionManager:
             try:
-                session_manager = SessionManager("test_recordings")
-                session_info = session_manager.create_session("integration_test_session")
+                session_manager = SessionManager('test_recordings')
+                session_info = session_manager.create_session(
+                    'integration_test_session')
                 logger.info(f"Session created: {session_info['session_id']}")
             except Exception as e:
-                logger.warning(f"Session management test failed: {e}")
+                logger.warning(f'Session management test failed: {e}')
         else:
-            logger.warning("Session management test skipped - module not available")
-        
-        # Test 2: Calibration System Logging (skip if OpenCV not available)
-        logger.info("Testing Calibration System logging...")
+            logger.warning(
+                'Session management test skipped - module not available')
+        logger.info('Testing Calibration System logging...')
         if CalibrationManager:
             try:
-                calibration_manager = CalibrationManager("test_calibration")
-                calibration_session = calibration_manager.start_calibration_session(
-                    ["device1", "device2"], 
-                    "test_calibration_session"
-                )
-                logger.info(f"Calibration session started: {calibration_session['session_name']}")
+                calibration_manager = CalibrationManager('test_calibration')
+                calibration_session = (calibration_manager.
+                    start_calibration_session(['device1', 'device2'],
+                    'test_calibration_session'))
+                logger.info(
+                    f"Calibration session started: {calibration_session['session_name']}"
+                    )
             except Exception as e:
-                logger.warning(f"Calibration test failed: {e}")
+                logger.warning(f'Calibration test failed: {e}')
         else:
-            logger.warning("Calibration test skipped - module not available")
-        
-        # Test 3: Network Server Logging
-        logger.info("Testing Network Server logging...")
+            logger.warning('Calibration test skipped - module not available')
+        logger.info('Testing Network Server logging...')
         if JsonSocketServer:
             try:
-                server = JsonSocketServer(port=9001)  # Use different port for testing
-                logger.info("Network server instance created")
+                server = JsonSocketServer(port=9001)
+                logger.info('Network server instance created')
             except Exception as e:
-                logger.warning(f"Network server test failed: {e}")
+                logger.warning(f'Network server test failed: {e}')
         else:
-            logger.warning("Network server test skipped - module not available")
-        
-        # Test 4: Webcam Configuration Logging
-        logger.info("Testing Webcam Configuration logging...")
+            logger.warning('Network server test skipped - module not available'
+                )
+        logger.info('Testing Webcam Configuration logging...')
         if WebcamConfiguration and VideoCodec and Resolution:
             try:
-                webcam_config = WebcamConfiguration(
-                    camera_index=0,
-                    resolution=Resolution.HD_720P,
-                    framerate=30.0,
-                    codec=VideoCodec.MP4V
-                )
-                logger.info(f"Webcam config created: {webcam_config.camera_index}@{webcam_config.resolution.value}")
+                webcam_config = WebcamConfiguration(camera_index=0,
+                    resolution=Resolution.HD_720P, framerate=30.0, codec=
+                    VideoCodec.MP4V)
+                logger.info(
+                    f'Webcam config created: {webcam_config.camera_index}@{webcam_config.resolution.value}'
+                    )
             except Exception as e:
-                logger.warning(f"Webcam config test failed: {e}")
+                logger.warning(f'Webcam config test failed: {e}')
         else:
-            logger.warning("Webcam config test skipped - module not available")
-        
-        # Test 5: Error Recovery System Logging
-        logger.info("Testing Error Recovery System logging...")
+            logger.warning('Webcam config test skipped - module not available')
+        logger.info('Testing Error Recovery System logging...')
         if RecoveryManager:
             try:
                 recovery_manager = RecoveryManager()
-                logger.info("Recovery manager initialized")
+                logger.info('Recovery manager initialized')
             except Exception as e:
-                logger.warning(f"Recovery manager test failed: {e}")
+                logger.warning(f'Recovery manager test failed: {e}')
         else:
-            logger.warning("Recovery manager test skipped - module not available")
-        
-        # Test 6: Exception handling with logging
-        logger.info("Testing exception handling with logging...")
+            logger.warning(
+                'Recovery manager test skipped - module not available')
+        logger.info('Testing exception handling with logging...')
         try:
-            raise ValueError("Test exception for logging verification")
+            raise ValueError('Test exception for logging verification')
         except Exception as e:
-            logger.error("Successfully caught and logged test exception", exc_info=True)
-        
-        # Test 7: Different log levels
-        logger.debug("Debug message - detailed troubleshooting info")
-        logger.info("Info message - general application flow")
-        logger.warning("Warning message - potential issue detected")
-        logger.error("Error message - recoverable error occurred")
-        logger.critical("Critical message - serious system issue")
-        
-        # Test 8: Performance timing
-        logger.info("Testing performance timing...")
+            logger.error('Successfully caught and logged test exception',
+                exc_info=True)
+        logger.debug('Debug message - detailed troubleshooting info')
+        logger.info('Info message - general application flow')
+        logger.warning('Warning message - potential issue detected')
+        logger.error('Error message - recoverable error occurred')
+        logger.critical('Critical message - serious system issue')
+        logger.info('Testing performance timing...')
         import time
         start_time = time.time()
-        time.sleep(0.1)  # Simulate work
+        time.sleep(0.1)
         end_time = time.time()
-        logger.info(f"Operation completed in {(end_time - start_time)*1000:.1f}ms")
-        
-        # Test 9: Memory usage reporting
+        logger.info(
+            f'Operation completed in {(end_time - start_time) * 1000:.1f}ms')
         try:
             import psutil
             process = psutil.Process()
             memory_info = process.memory_info()
-            logger.info(f"Memory usage: RSS={memory_info.rss // 1024 // 1024}MB, VMS={memory_info.vms // 1024 // 1024}MB")
+            logger.info(
+                f'Memory usage: RSS={memory_info.rss // 1024 // 1024}MB, VMS={memory_info.vms // 1024 // 1024}MB'
+                )
         except ImportError:
-            logger.warning("psutil not available - skipping memory usage test")
-        
-        # Test 10: Log file verification
+            logger.warning('psutil not available - skipping memory usage test')
         log_dir = AppLogger.get_log_dir()
         if log_dir and log_dir.exists():
-            log_files = list(log_dir.glob("*.log"))
-            logger.info(f"Log files generated: {[f.name for f in log_files]}")
-            
-            # Check file sizes
+            log_files = list(log_dir.glob('*.log'))
+            logger.info(f'Log files generated: {[f.name for f in log_files]}')
             for log_file in log_files:
                 size = log_file.stat().st_size
-                logger.info(f"Log file {log_file.name}: {size} bytes")
+                logger.info(f'Log file {log_file.name}: {size} bytes')
         else:
-            logger.warning("Log directory not found or not accessible")
-        
-        logger.info("=== Comprehensive Logging Integration Test - SUCCESS ===")
-        
+            logger.warning('Log directory not found or not accessible')
+        logger.info('=== Comprehensive Logging Integration Test - SUCCESS ===')
     except Exception as e:
-        logger.error(f"Integration test failed: {e}", exc_info=True)
+        logger.error(f'Integration test failed: {e}', exc_info=True)
         return False
-    
     return True
 
+
 def test_log_rotation():
-    """Test log file rotation functionality."""
-    logger = get_logger("RotationTest")
-    
-    logger.info("Testing log rotation by generating many log entries...")
-    
-    # Generate many log entries to test rotation
+    logger = get_logger('RotationTest')
+    logger.info('Testing log rotation by generating many log entries...')
     for i in range(100):
-        logger.info(f"Log entry {i+1}: Testing log rotation functionality with detailed messages")
-        logger.debug(f"Debug entry {i+1}: Additional debugging information for entry {i+1}")
-        
+        logger.info(
+            f'Log entry {i + 1}: Testing log rotation functionality with detailed messages'
+            )
+        logger.debug(
+            f'Debug entry {i + 1}: Additional debugging information for entry {i + 1}'
+            )
         if i % 20 == 0:
-            logger.warning(f"Milestone log entry {i+1}")
-    
-    logger.info("Log rotation test completed")
+            logger.warning(f'Milestone log entry {i + 1}')
+    logger.info('Log rotation test completed')
+
 
 def main():
-    """Main test runner."""
-    print("Starting Multi-Sensor Recording System Logging Integration Test...")
-    
-    # Run comprehensive logging test
+    print('Starting Multi-Sensor Recording System Logging Integration Test...')
     success = test_comprehensive_logging()
-    
     if success:
-        print("✅ Comprehensive logging test PASSED")
+        print('✅ Comprehensive logging test PASSED')
     else:
-        print("❌ Comprehensive logging test FAILED")
+        print('❌ Comprehensive logging test FAILED')
         return 1
-    
-    # Run log rotation test
     test_log_rotation()
-    print("✅ Log rotation test completed")
-    
-    print("\n" + "="*60)
-    print("📋 TEST SUMMARY:")
-    print("✅ Centralized logging configuration")
-    print("✅ Multiple module logging integration") 
-    print("✅ Different log levels and formatting")
-    print("✅ Exception handling with stack traces")
-    print("✅ Performance and memory logging")
-    print("✅ Log file creation and rotation")
-    print("="*60)
-    
+    print('✅ Log rotation test completed')
+    print('\n' + '=' * 60)
+    print('📋 TEST SUMMARY:')
+    print('✅ Centralized logging configuration')
+    print('✅ Multiple module logging integration')
+    print('✅ Different log levels and formatting')
+    print('✅ Exception handling with stack traces')
+    print('✅ Performance and memory logging')
+    print('✅ Log file creation and rotation')
+    print('=' * 60)
     return 0
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     sys.exit(main())
