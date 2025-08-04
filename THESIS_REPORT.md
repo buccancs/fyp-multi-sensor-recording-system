@@ -1513,41 +1513,6 @@ These implementation challenges and their solutions demonstrate the innovative e
 
 ---
 
-    subgraph "Stationary Sensors"
-        W1[USB Webcam 1<br/>4K Video Capture]
-        W2[USB Webcam 2<br/>4K Video Capture]
-    end
-
-    subgraph "Specialized Hardware"
-        T1[Thermal Camera 1<br/>TopDon TC001]
-        T2[Thermal Camera 2<br/>TopDon TC001]
-        S1[Shimmer3 GSR+ 1<br/>Physiological Reference]
-        S2[Shimmer3 GSR+ 2<br/>Physiological Reference]
-    end
-
-    PC --> SESSION
-    PC --> SYNC
-    PC --> STORE
-    PC --> QA
-
-    SYNC -.->|WebSocket Control| A1
-    SYNC -.->|WebSocket Control| A2
-    SYNC -.->|WebSocket Control| A3
-
-    W1 -->|USB 3.0| PC
-    W2 -->|USB 3.0| PC
-
-    T1 -->|USB-C| A1
-    T2 -->|USB-C| A2
-
-    S1 -.->|Bluetooth| A1
-    S2 -.->|Bluetooth| A2
-
-    A1 -.->|Preview Stream| PC
-    A2 -.->|Preview Stream| PC
-    A3 -.->|Preview Stream| PC
-```
-
 The system topology implements a hybrid star-mesh architecture where the PC controller serves as the central coordination hub while mobile devices maintain direct connections to their associated sensors. This design provides centralized control simplicity while enabling distributed processing and fault tolerance.
 
 ### 4.2 Android Application Design and Sensor Integration
