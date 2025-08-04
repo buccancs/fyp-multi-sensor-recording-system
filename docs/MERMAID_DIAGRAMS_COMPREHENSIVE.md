@@ -1609,3 +1609,1079 @@ flowchart TD
     
     FEEDBACK_COL --> END([✅ Export Complete])
 ```
+
+## Layer Architecture
+
+Comprehensive multi-layer system architecture showing the complete architectural stack from hardware to application layers.
+
+```mermaid
+graph TB
+    subgraph "Multi-Layer System Architecture"
+        subgraph "Application Layer"
+            subgraph "User Interface Applications"
+                ANDROID_UI[📱 Android Mobile App<br/>🎬 Recording Interface<br/>👁️ Preview Display<br/>⚙️ Configuration Controls]
+                PC_UI[💻 PC Desktop Controller<br/>🖥️ PyQt5 Interface<br/>📊 Multi-device Monitoring<br/>🎛️ Central Control Panel]
+                WEB_UI[🌐 Web Interface<br/>🔗 Browser-based Control<br/>📊 Real-time Dashboard<br/>📈 Analytics Visualization]
+            end
+            
+            subgraph "Application Services"
+                SESSION_APP[📋 Session Management App<br/>🎬 Recording Orchestration<br/>⏱️ Timing Coordination<br/>📊 State Management]
+                CALIB_APP[🎯 Calibration Application<br/>📐 Geometric Calibration<br/>🌡️ Thermal Calibration<br/>✅ Quality Assessment]
+                EXPORT_APP[📤 Export Application<br/>📦 Data Packaging<br/>🗜️ Compression Service<br/>📋 Documentation Generator]
+            end
+        end
+        
+        subgraph "Business Logic Layer"
+            subgraph "Core Business Services"
+                RECORD_SERV[🎬 Recording Service<br/>📹 Multi-stream Coordination<br/>⏱️ Synchronization Logic<br/>📊 Quality Monitoring]
+                DEVICE_SERV[📱 Device Management Service<br/>🔗 Connection Management<br/>📊 Status Monitoring<br/>⚙️ Configuration Service]
+                DATA_SERV[📊 Data Processing Service<br/>🔄 Stream Processing<br/>📈 Real-time Analysis<br/>💾 Storage Coordination]
+            end
+            
+            subgraph "Integration Services"
+                SENSOR_INT[📊 Sensor Integration<br/>📈 GSR Processing<br/>🌡️ Thermal Processing<br/>📷 Camera Processing]
+                NETWORK_INT[🌐 Network Integration<br/>📡 Socket Communication<br/>🔄 Protocol Management<br/>📊 Quality Management]
+                STORAGE_INT[💾 Storage Integration<br/>📁 File Management<br/>🔄 Backup Coordination<br/>📋 Metadata Management]
+            end
+        end
+        
+        subgraph "Service Layer"
+            subgraph "Communication Services"
+                SOCKET_SERV[🔌 Socket Service<br/>📡 TCP/UDP Communication<br/>🔄 Connection Management<br/>📊 Protocol Handling]
+                STREAM_SERV[📡 Streaming Service<br/>🎞️ Video Streaming<br/>📊 Data Streaming<br/>⚡ Real-time Delivery]
+                SYNC_SERV[⏱️ Synchronization Service<br/>🕰️ Clock Management<br/>📊 Offset Calculation<br/>🎯 Precision Control]
+            end
+            
+            subgraph "Data Services"
+                FILE_SERV[📁 File Service<br/>💾 Storage Management<br/>📋 Naming Convention<br/>🗂️ Organization Logic]
+                META_SERV[📋 Metadata Service<br/>📄 JSON Processing<br/>⚙️ Configuration Management<br/>📊 Schema Validation]
+                BACKUP_SERV[💾 Backup Service<br/>🔄 Replication Logic<br/>✅ Integrity Verification<br/>📦 Archive Management]
+            end
+            
+            subgraph "Processing Services"
+                IMAGE_SERV[🖼️ Image Processing Service<br/>📊 Format Conversion<br/>🎨 Enhancement Algorithms<br/>📐 Geometric Operations]
+                VIDEO_SERV[🎞️ Video Processing Service<br/>🗜️ Encoding/Decoding<br/>📊 Quality Control<br/>⏱️ Frame Synchronization]
+                SIGNAL_SERV[📈 Signal Processing Service<br/>🔍 Filtering Algorithms<br/>📊 Feature Extraction<br/>📈 Statistical Analysis]
+            end
+        end
+        
+        subgraph "Data Access Layer"
+            subgraph "Data Repositories"
+                SESSION_REPO[📋 Session Repository<br/>📄 Session Data Access<br/>🔍 Query Interface<br/>📊 CRUD Operations]
+                DEVICE_REPO[📱 Device Repository<br/>⚙️ Configuration Storage<br/>📊 Status Persistence<br/>🔗 Relationship Management]
+                CALIB_REPO[🎯 Calibration Repository<br/>📐 Parameter Storage<br/>📊 Quality Metrics<br/>📋 Validation Records]
+            end
+            
+            subgraph "File System Abstraction"
+                LOCAL_FS[💾 Local File System<br/>📁 Direct File Access<br/>📊 Performance Optimized<br/>🔒 Security Controlled]
+                NETWORK_FS[🌐 Network File System<br/>📡 Remote Access<br/>🔄 Synchronization<br/>📊 Distributed Storage]
+                CLOUD_FS[☁️ Cloud File System<br/>🌐 Cloud Integration<br/>📦 Scalable Storage<br/>🔒 Encrypted Access]
+            end
+            
+            subgraph "Database Abstraction"
+                CONFIG_DB[⚙️ Configuration Database<br/>📋 Settings Storage<br/>🔍 Query Interface<br/>🔄 Transaction Support]
+                LOG_DB[📝 Logging Database<br/>📊 Event Storage<br/>🔍 Search Interface<br/>📈 Analytics Support]
+                META_DB[📋 Metadata Database<br/>📄 Schema Management<br/>🔗 Relationship Mapping<br/>📊 Validation Rules]
+            end
+        end
+        
+        subgraph "Infrastructure Layer"
+            subgraph "Hardware Abstraction"
+                CAM_HAL[📷 Camera HAL<br/>📸 Camera2 API<br/>🎥 Video Capture<br/>⚙️ Device Control]
+                USB_HAL[🔌 USB HAL<br/>📹 Webcam Interface<br/>🌡️ Thermal Camera<br/>⚡ Power Management]
+                BT_HAL[📶 Bluetooth HAL<br/>📡 BLE Communication<br/>📊 Shimmer Protocol<br/>🔗 Pairing Management]
+            end
+            
+            subgraph "Operating System Interface"
+                ANDROID_OS[📱 Android OS Interface<br/>🔐 Permission Management<br/>⚡ Resource Management<br/>📊 System Services]
+                WINDOWS_OS[💻 Windows OS Interface<br/>🔧 Driver Management<br/>📊 Performance Monitoring<br/>🔒 Security Services]
+                LINUX_OS[🐧 Linux OS Interface<br/>⚡ Real-time Support<br/>📊 Process Management<br/>🔧 System Optimization]
+            end
+            
+            subgraph "Network Infrastructure"
+                NET_STACK[🌐 Network Stack<br/>📡 TCP/IP Implementation<br/>🔒 Security Protocols<br/>📊 Quality Management]
+                WIFI_INT[📶 WiFi Interface<br/>📡 802.11ac/ax Support<br/>📊 QoS Management<br/>🔒 Security Enforcement]
+                ETH_INT[🔗 Ethernet Interface<br/>🚀 Gigabit Support<br/>⚡ Low Latency<br/>📊 Performance Monitoring]
+            end
+        end
+        
+        subgraph "Hardware Layer"
+            subgraph "Computing Hardware"
+                MOBILE_HW[📱 Mobile Hardware<br/>🔧 Samsung S22<br/>⚡ ARM Processor<br/>💾 Storage + Memory]
+                PC_HW[💻 PC Hardware<br/>🖥️ Intel/AMD Processor<br/>💾 High-speed Storage<br/>📊 Performance Optimized]
+                NET_HW[🌐 Network Hardware<br/>📡 WiFi Router/Switch<br/>🔗 Gigabit Infrastructure<br/>⚡ Low Latency Design]
+            end
+            
+            subgraph "Sensor Hardware"
+                CAM_HW[📷 Camera Hardware<br/>📸 Samsung S22 Cameras<br/>📹 Logitech Brio 4K<br/>🎯 High Resolution Sensors]
+                THERMAL_HW[🌡️ Thermal Hardware<br/>🔧 TopDon TC001<br/>📊 256x192 Resolution<br/>🌡️ Calibrated Sensors]
+                GSR_HW[📊 GSR Hardware<br/>🔧 Shimmer3 GSR+<br/>📡 Bluetooth LE<br/>⚡ High-frequency Sampling]
+            end
+            
+            subgraph "Support Hardware"
+                POWER_HW[⚡ Power Hardware<br/>🔋 UPS Systems<br/>🔌 Fast Chargers<br/>⚡ Power Management]
+                STORAGE_HW[💾 Storage Hardware<br/>🚀 NVMe SSDs<br/>📦 Backup Systems<br/>📊 High Throughput]
+                COOLING_HW[🌡️ Cooling Hardware<br/>❄️ Temperature Control<br/>🌪️ Ventilation Systems<br/>📊 Thermal Management]
+            end
+        end
+    end
+    
+    %% Layer Connections
+    ANDROID_UI --> SESSION_APP
+    PC_UI --> CALIB_APP
+    WEB_UI --> EXPORT_APP
+    
+    SESSION_APP --> RECORD_SERV
+    CALIB_APP --> DEVICE_SERV
+    EXPORT_APP --> DATA_SERV
+    
+    RECORD_SERV --> SENSOR_INT
+    DEVICE_SERV --> NETWORK_INT
+    DATA_SERV --> STORAGE_INT
+    
+    SENSOR_INT --> SOCKET_SERV
+    NETWORK_INT --> STREAM_SERV
+    STORAGE_INT --> SYNC_SERV
+    
+    SOCKET_SERV --> FILE_SERV
+    STREAM_SERV --> META_SERV
+    SYNC_SERV --> BACKUP_SERV
+    
+    FILE_SERV --> IMAGE_SERV
+    META_SERV --> VIDEO_SERV
+    BACKUP_SERV --> SIGNAL_SERV
+    
+    IMAGE_SERV --> SESSION_REPO
+    VIDEO_SERV --> DEVICE_REPO
+    SIGNAL_SERV --> CALIB_REPO
+    
+    SESSION_REPO --> LOCAL_FS
+    DEVICE_REPO --> NETWORK_FS
+    CALIB_REPO --> CLOUD_FS
+    
+    LOCAL_FS --> CONFIG_DB
+    NETWORK_FS --> LOG_DB
+    CLOUD_FS --> META_DB
+    
+    CONFIG_DB --> CAM_HAL
+    LOG_DB --> USB_HAL
+    META_DB --> BT_HAL
+    
+    CAM_HAL --> ANDROID_OS
+    USB_HAL --> WINDOWS_OS
+    BT_HAL --> LINUX_OS
+    
+    ANDROID_OS --> NET_STACK
+    WINDOWS_OS --> WIFI_INT
+    LINUX_OS --> ETH_INT
+    
+    NET_STACK --> MOBILE_HW
+    WIFI_INT --> PC_HW
+    ETH_INT --> NET_HW
+    
+    MOBILE_HW --> CAM_HW
+    PC_HW --> THERMAL_HW
+    NET_HW --> GSR_HW
+    
+    CAM_HW --> POWER_HW
+    THERMAL_HW --> STORAGE_HW
+    GSR_HW --> COOLING_HW
+```
+
+## Software Architecture of Android
+
+Clean architecture implementation for the Android application showing layers, patterns, and component interactions.
+
+```mermaid
+graph TB
+    subgraph "Android Clean Architecture Implementation"
+        subgraph "Presentation Layer (UI)"
+            subgraph "Activities & Fragments"
+                MAIN_ACT[🏠 MainActivity<br/>📋 Single Activity Pattern<br/>🧭 Navigation Host<br/>⚡ Lifecycle Management]
+                
+                subgraph "Feature Fragments"
+                    REC_FRAG[🎬 RecordingFragment<br/>📹 Recording Controls<br/>📊 Real-time Status<br/>🎛️ Session Management]
+                    DEV_FRAG[📱 DevicesFragment<br/>🔗 Device Connections<br/>📊 Status Monitoring<br/>⚙️ Configuration Panel]
+                    CAL_FRAG[🎯 CalibrationFragment<br/>📐 Calibration Workflow<br/>✅ Quality Assessment<br/>📊 Progress Tracking]
+                    FILE_FRAG[📁 FilesFragment<br/>📂 Session Management<br/>📤 Export Controls<br/>📊 Storage Overview]
+                end
+            end
+            
+            subgraph "ViewModels (MVVM)"
+                MAIN_VM[🧠 MainViewModel<br/>📊 Global State<br/>🔄 Event Coordination<br/>📋 Shared Data]
+                REC_VM[🎬 RecordingViewModel<br/>📹 Recording State<br/>⏱️ Timer Management<br/>📊 Progress Tracking]
+                DEV_VM[📱 DevicesViewModel<br/>🔗 Connection State<br/>📊 Device Status<br/>⚙️ Configuration State]
+                CAL_VM[🎯 CalibrationViewModel<br/>📐 Calibration State<br/>📊 Quality Metrics<br/>✅ Validation Status]
+            end
+            
+            subgraph "UI Components & Utils"
+                UI_CTRL[🎨 UIController<br/>✅ Component Validation<br/>🎨 Theme Management<br/>♿ Accessibility Support]
+                NAV_UTIL[🧭 NavigationUtils<br/>📱 Fragment Navigation<br/>🔄 State Preservation<br/>📊 Route Management]
+                UI_UTIL[🛠️ UIUtils<br/>🎨 Styling Utilities<br/>📊 Status Indicators<br/>⚡ Animation Helpers]
+            end
+        end
+        
+        subgraph "Domain Layer (Business Logic)"
+            subgraph "Use Cases (Interactors)"
+                REC_UC[🎬 Recording Use Cases<br/>📹 StartRecording<br/>🛑 StopRecording<br/>⏸️ PauseRecording]
+                DEV_UC[📱 Device Use Cases<br/>🔗 ConnectDevice<br/>📊 MonitorStatus<br/>⚙️ ConfigureDevice]
+                CAL_UC[🎯 Calibration Use Cases<br/>📐 RunCalibration<br/>✅ ValidateQuality<br/>💾 SaveResults]
+                SYNC_UC[⏱️ Sync Use Cases<br/>🕰️ SynchronizeClocks<br/>📊 AlignTimestamps<br/>🎯 MaintainPrecision]
+            end
+            
+            subgraph "Domain Models"
+                SESSION_MODEL[📋 Session<br/>🆔 Unique Identifier<br/>⏱️ Timing Information<br/>📊 Quality Metrics]
+                DEVICE_MODEL[📱 Device<br/>🔗 Connection Info<br/>📊 Capability Profile<br/>⚙️ Configuration State]
+                SENSOR_MODEL[📊 SensorSample<br/>📈 Data Values<br/>⏱️ Timestamp<br/>✅ Quality Indicators]
+                CALIB_MODEL[🎯 Calibration<br/>📐 Parameters<br/>📊 Quality Score<br/>✅ Validation Results]
+            end
+            
+            subgraph "Domain Services"
+                SYNC_SERV[⏱️ SynchronizationService<br/>🕰️ Time Management<br/>📊 Offset Calculation<br/>🎯 Precision Control]
+                QUALITY_SERV[✅ QualityService<br/>📊 Signal Assessment<br/>🚨 Anomaly Detection<br/>📈 Performance Metrics]
+                CONFIG_SERV[⚙️ ConfigurationService<br/>📋 Settings Management<br/>✅ Validation Logic<br/>🔄 Change Propagation]
+            end
+        end
+        
+        subgraph "Data Layer"
+            subgraph "Repositories (Implementation)"
+                SESSION_REPO[📋 SessionRepository<br/>💾 Local Storage<br/>☁️ Remote Sync<br/>🔄 Cache Management]
+                DEVICE_REPO[📱 DeviceRepository<br/>📊 Device Data<br/>⚙️ Configuration Storage<br/>📈 Status History]
+                CALIB_REPO[🎯 CalibrationRepository<br/>📐 Parameter Storage<br/>📊 Quality Database<br/>✅ Validation Cache]
+                MEDIA_REPO[🎞️ MediaRepository<br/>📹 Video Storage<br/>📸 Image Management<br/>🗜️ Compression Handling]
+            end
+            
+            subgraph "Data Sources"
+                subgraph "Local Data Sources"
+                    ROOM_DB[💾 Room Database<br/>📊 SQLite Backend<br/>🔍 Type Converters<br/>📋 Migration Support]
+                    SHARED_PREF[⚙️ SharedPreferences<br/>📋 Configuration Storage<br/>⚡ Fast Access<br/>🔄 Reactive Updates]
+                    FILE_STORAGE[📁 File Storage<br/>💾 Internal/External<br/>📂 Directory Management<br/>🔒 Security Control]
+                end
+                
+                subgraph "Remote Data Sources"
+                    PC_API[💻 PC API Service<br/>🌐 Socket Communication<br/>📡 Real-time Updates<br/>🔄 Auto Reconnection]
+                    SHIMMER_API[📊 Shimmer API<br/>📶 Bluetooth Interface<br/>📈 Data Streaming<br/>⚙️ Configuration Control]
+                    THERMAL_API[🌡️ Thermal API<br/>🔌 USB-C Interface<br/>📊 Raw Data Access<br/>🎯 Calibration Control]
+                end
+                
+                subgraph "Hardware Data Sources"
+                    CAMERA_DS[📷 Camera Data Source<br/>📸 Camera2 API<br/>🎥 Video Capture<br/>📊 Frame Processing]
+                    SENSOR_DS[📊 Sensor Data Source<br/>📈 Raw Sensor Data<br/>⚡ High-frequency Sampling<br/>🔄 Buffer Management]
+                    NETWORK_DS[🌐 Network Data Source<br/>📡 Socket Connections<br/>📊 Stream Management<br/>🔄 Protocol Handling]
+                end
+            end
+        end
+        
+        subgraph "Infrastructure Layer"
+            subgraph "Framework & Platform"
+                ANDROID_FW[📱 Android Framework<br/>🔐 Permission System<br/>⚡ Lifecycle Management<br/>📊 System Services]
+                CAMERA2_FW[📷 Camera2 Framework<br/>📸 Low-level Control<br/>🎥 Concurrent Capture<br/>⚙️ Hardware Abstraction]
+                BT_FW[📶 Bluetooth Framework<br/>📡 BLE Support<br/>🔗 Connection Management<br/>📊 Service Discovery]
+            end
+            
+            subgraph "Third-party Libraries"
+                HILT_DI[💉 Hilt Dependency Injection<br/>🔧 Component Management<br/>📋 Scope Control<br/>🧪 Testing Support]
+                COROUTINES[⚡ Kotlin Coroutines<br/>🔄 Async Programming<br/>🧵 Thread Management<br/>📊 Flow Operators]
+                OKHTTP[🌐 OkHttp<br/>📡 Network Communication<br/>🔄 Connection Pooling<br/>📊 Interceptor Support]
+            end
+            
+            subgraph "Hardware Abstraction"
+                HAL_CAMERA[📷 Camera HAL<br/>🔧 Device Adaptation<br/>📊 Capability Mapping<br/>⚙️ Control Translation]
+                HAL_USB[🔌 USB HAL<br/>🔧 OTG Management<br/>⚡ Power Control<br/>📊 Device Enumeration]
+                HAL_BT[📶 Bluetooth HAL<br/>🔧 Protocol Adaptation<br/>📡 Signal Management<br/>🔗 Pairing Control]
+            end
+        end
+        
+        subgraph "Cross-Cutting Concerns"
+            subgraph "Logging & Monitoring"
+                LOGGER[📝 Logging System<br/>📊 Structured Logging<br/>🔍 Debug Support<br/>📈 Performance Tracking]
+                CRASH_REPORT[🚨 Crash Reporting<br/>📊 Error Analytics<br/>🔧 Debug Information<br/>📈 Stability Metrics]
+                PERF_MON[📊 Performance Monitor<br/>⚡ Resource Tracking<br/>📈 Memory Usage<br/>🔋 Battery Impact]
+            end
+            
+            subgraph "Security & Privacy"
+                ENCRYPT[🔒 Encryption Service<br/>🛡️ Data Protection<br/>🔐 Key Management<br/>🔒 Secure Storage]
+                PERM_MGR[🔐 Permission Manager<br/>📋 Runtime Permissions<br/>✅ Access Control<br/>🚨 Security Enforcement]
+                PRIVACY[👤 Privacy Protection<br/>📊 Data Anonymization<br/>🔒 Secure Communication<br/>📋 Consent Management]
+            end
+            
+            subgraph "Configuration & Settings"
+                CONFIG_MGR[⚙️ Configuration Manager<br/>📋 Settings Hierarchy<br/>✅ Validation Rules<br/>🔄 Dynamic Updates]
+                THEME_MGR[🎨 Theme Manager<br/>🌙 Dark/Light Mode<br/>🎨 Color Schemes<br/>♿ Accessibility Themes]
+                LOCALE_MGR[🌍 Localization Manager<br/>📋 Multi-language Support<br/>🌐 Regional Settings<br/>📄 Resource Management]
+            end
+        end
+    end
+    
+    %% Architecture Flow Connections
+    MAIN_ACT --> REC_FRAG
+    MAIN_ACT --> DEV_FRAG
+    MAIN_ACT --> CAL_FRAG
+    MAIN_ACT --> FILE_FRAG
+    
+    REC_FRAG --> REC_VM
+    DEV_FRAG --> DEV_VM
+    CAL_FRAG --> CAL_VM
+    FILE_FRAG --> MAIN_VM
+    
+    REC_VM --> UI_CTRL
+    DEV_VM --> NAV_UTIL
+    CAL_VM --> UI_UTIL
+    
+    REC_VM --> REC_UC
+    DEV_VM --> DEV_UC
+    CAL_VM --> CAL_UC
+    MAIN_VM --> SYNC_UC
+    
+    REC_UC --> SESSION_MODEL
+    DEV_UC --> DEVICE_MODEL
+    CAL_UC --> SENSOR_MODEL
+    SYNC_UC --> CALIB_MODEL
+    
+    REC_UC --> SYNC_SERV
+    DEV_UC --> QUALITY_SERV
+    CAL_UC --> CONFIG_SERV
+    
+    SESSION_MODEL --> SESSION_REPO
+    DEVICE_MODEL --> DEVICE_REPO
+    SENSOR_MODEL --> CALIB_REPO
+    CALIB_MODEL --> MEDIA_REPO
+    
+    SESSION_REPO --> ROOM_DB
+    DEVICE_REPO --> SHARED_PREF
+    CALIB_REPO --> FILE_STORAGE
+    
+    MEDIA_REPO --> PC_API
+    SESSION_REPO --> SHIMMER_API
+    DEVICE_REPO --> THERMAL_API
+    
+    PC_API --> CAMERA_DS
+    SHIMMER_API --> SENSOR_DS
+    THERMAL_API --> NETWORK_DS
+    
+    CAMERA_DS --> ANDROID_FW
+    SENSOR_DS --> CAMERA2_FW
+    NETWORK_DS --> BT_FW
+    
+    ANDROID_FW --> HILT_DI
+    CAMERA2_FW --> COROUTINES
+    BT_FW --> OKHTTP
+    
+    HILT_DI --> HAL_CAMERA
+    COROUTINES --> HAL_USB
+    OKHTTP --> HAL_BT
+    
+    HAL_CAMERA --> LOGGER
+    HAL_USB --> ENCRYPT
+    HAL_BT --> CONFIG_MGR
+    
+    LOGGER --> CRASH_REPORT
+    ENCRYPT --> PERM_MGR
+    CONFIG_MGR --> THEME_MGR
+    
+    CRASH_REPORT --> PERF_MON
+    PERM_MGR --> PRIVACY
+    THEME_MGR --> LOCALE_MGR
+```
+
+## Software Architecture of PC App
+
+Component-based architecture visualization for the Python desktop controller application.
+
+```mermaid
+graph TB
+    subgraph "Python Desktop Application Architecture"
+        subgraph "Application Framework Layer"
+            subgraph "Entry Points"
+                MAIN_APP[🚀 application.py<br/>📋 Main Entry Point<br/>🔄 Event Loop Management<br/>⚡ Application Lifecycle]
+                CLI_APP[📋 main.py<br/>💻 Command Line Interface<br/>🔧 Script Execution<br/>📊 Batch Processing]
+                WEB_APP[🌐 enhanced_main_with_web.py<br/>🔗 Web Interface<br/>📊 REST API Server<br/>🌐 Browser Integration]
+            end
+            
+            subgraph "GUI Framework"
+                PYQT5_FW[🖼️ PyQt5 Framework<br/>🎨 Widget System<br/>📊 Event Handling<br/>🎛️ Layout Management]
+                MAIN_WIN[🏠 MainWindow<br/>📋 Tab Container<br/>🎛️ Menu System<br/>📊 Status Bar]
+                TAB_MGR[📑 Tab Manager<br/>🔄 Tab Switching<br/>📊 State Persistence<br/>🎯 Content Organization]
+            end
+        end
+        
+        subgraph "Presentation Layer"
+            subgraph "Feature Tabs"
+                REC_TAB[🎬 Recording Tab<br/>📹 Recording Controls<br/>📊 Session Status<br/>⏱️ Progress Monitoring]
+                DEV_TAB[📱 Devices Tab<br/>🔗 Device Management<br/>📊 Connection Status<br/>⚙️ Configuration Panel]
+                CAL_TAB[🎯 Calibration Tab<br/>📐 Calibration Workflow<br/>✅ Quality Assessment<br/>📊 Results Display]
+                FILE_TAB[📁 Files Tab<br/>📂 Session Browser<br/>📤 Export Controls<br/>📊 Storage Management]
+            end
+            
+            subgraph "Common UI Components"
+                MOD_BTN[🔘 ModernButton<br/>🎨 Styled Buttons<br/>⚡ Hover Effects<br/>🎯 Action Handlers]
+                STATUS_IND[🚥 StatusIndicator<br/>📊 Visual Status<br/>🎨 Color Coding<br/>⚡ Real-time Updates]
+                PROGRESS_IND[📊 ProgressIndicator<br/>📈 Progress Bars<br/>⏱️ Time Estimates<br/>🎯 Completion Status]
+                CONN_MGR_UI[🔗 ConnectionManagerUI<br/>📱 Device Controls<br/>📊 Status Display<br/>⚙️ Settings Panel]
+            end
+        end
+        
+        subgraph "Business Logic Layer"
+            subgraph "Core Managers"
+                SESSION_MGR[📋 SessionManager<br/>🎬 Session Orchestration<br/>📊 Multi-device Coordination<br/>⏱️ Timing Control]
+                DEVICE_MGR[📱 DeviceManager<br/>🔗 Connection Management<br/>📊 Status Monitoring<br/>⚙️ Configuration Control]
+                DATA_MGR[📊 DataManager<br/>🔄 Stream Processing<br/>💾 Storage Coordination<br/>📈 Real-time Analysis]
+            end
+            
+            subgraph "Specialized Systems"
+                WEBCAM_SYS[📹 WebcamSystem<br/>📷 USB Camera Control<br/>🎥 Dual Camera Support<br/>⚙️ Settings Management]
+                CALIB_SYS[🎯 CalibrationSystem<br/>📐 OpenCV Integration<br/>✅ Quality Assessment<br/>📊 Result Management]
+                SHIMMER_SYS[📊 ShimmerSystem<br/>📶 Bluetooth Management<br/>📈 Data Processing<br/>🔄 Multi-library Support]
+            end
+            
+            subgraph "Processing Components"
+                IMG_PROC[🖼️ ImageProcessor<br/>📊 Format Conversion<br/>🎨 Enhancement Algorithms<br/>📐 Geometric Operations]
+                VID_PROC[🎞️ VideoProcessor<br/>🗜️ Encoding/Decoding<br/>📊 Quality Control<br/>⏱️ Synchronization]
+                SIG_PROC[📈 SignalProcessor<br/>🔍 Filtering<br/>📊 Feature Extraction<br/>📈 Statistical Analysis]
+            end
+        end
+        
+        subgraph "Service Layer"
+            subgraph "Communication Services"
+                NET_COMM[🌐 NetworkCommunication<br/>📡 Socket Management<br/>🔄 Protocol Handling<br/>📊 Quality Monitoring]
+                STREAM_SERV[📡 StreamingService<br/>🎞️ Video Streaming<br/>📊 Data Streaming<br/>⚡ Real-time Delivery]
+                SYNC_SERV[⏱️ SynchronizationService<br/>🕰️ Clock Management<br/>📊 Offset Calculation<br/>🎯 Precision Control]
+            end
+            
+            subgraph "Hardware Services"
+                USB_SERV[🔌 USBService<br/>📹 Webcam Interface<br/>🔍 Device Detection<br/>⚡ Power Management]
+                BT_SERV[📶 BluetoothService<br/>📡 Device Discovery<br/>🔗 Connection Management<br/>📊 Protocol Handling]
+                FILE_SERV[📁 FileService<br/>💾 Storage Management<br/>📋 Organization Logic<br/>🔄 Backup Coordination]
+            end
+            
+            subgraph "Processing Services"
+                OPENCV_SERV[👁️ OpenCVService<br/>📐 Computer Vision<br/>🎯 Calibration Algorithms<br/>📊 Image Analysis]
+                NUMPY_SERV[🧮 NumPyService<br/>📊 Numerical Computing<br/>📈 Array Processing<br/>📊 Mathematical Operations]
+                PANDAS_SERV[📊 PandasService<br/>📋 Data Manipulation<br/>📈 Statistical Analysis<br/>📊 Export Functions]
+            end
+        end
+        
+        subgraph "Data Access Layer"
+            subgraph "Storage Abstraction"
+                LOCAL_STORE[💾 LocalStorage<br/>📁 File System Access<br/>📂 Directory Management<br/>🔒 Security Control]
+                CONFIG_STORE[⚙️ ConfigurationStorage<br/>📋 Settings Persistence<br/>✅ Validation<br/>🔄 Change Notification]
+                CACHE_STORE[🚀 CacheStorage<br/>⚡ Fast Access<br/>💾 Memory Management<br/>🔄 Invalidation Logic]
+            end
+            
+            subgraph "Data Repositories"
+                SESSION_REPO[📋 SessionRepository<br/>📄 Session Data<br/>🔍 Query Interface<br/>📊 CRUD Operations]
+                DEVICE_REPO[📱 DeviceRepository<br/>⚙️ Device Configuration<br/>📊 Status History<br/>🔗 Relationship Management]
+                CALIB_REPO[🎯 CalibrationRepository<br/>📐 Parameter Storage<br/>📊 Quality Database<br/>✅ Validation Records]
+            end
+            
+            subgraph "External Interfaces"
+                JSON_ADAPTER[📄 JSONAdapter<br/>📊 Serialization<br/>📋 Schema Validation<br/>🔄 Format Conversion]
+                CSV_ADAPTER[📊 CSVAdapter<br/>📈 Data Export<br/>📋 Column Mapping<br/>📊 Format Optimization]
+                BINARY_ADAPTER[📦 BinaryAdapter<br/>💾 Binary Data<br/>🔍 Format Detection<br/>📊 Compression Handling]
+            end
+        end
+        
+        subgraph "Infrastructure Layer"
+            subgraph "System Integration"
+                LOG_SYS[📝 LoggingSystem<br/>📊 Structured Logging<br/>🔍 Debug Support<br/>📈 Performance Tracking]
+                CONFIG_SYS[⚙️ ConfigurationSystem<br/>📋 Settings Management<br/>✅ Validation<br/>🔄 Dynamic Updates]
+                ERROR_SYS[🚨 ErrorSystem<br/>🔧 Exception Handling<br/>📝 Error Logging<br/>🔄 Recovery Mechanisms]
+            end
+            
+            subgraph "Threading & Concurrency"
+                THREAD_POOL[🧵 ThreadPool<br/>⚡ Worker Threads<br/>📊 Load Balancing<br/>🔄 Task Scheduling]
+                ASYNC_MGR[⚡ AsyncManager<br/>🔄 Async Operations<br/>📊 Future Management<br/>⏱️ Timeout Handling]
+                QUEUE_MGR[📋 QueueManager<br/>🔄 Message Queues<br/>📊 Priority Handling<br/>⚡ Flow Control]
+            end
+            
+            subgraph "Resource Management"
+                MEM_MGR[💾 MemoryManager<br/>📊 Memory Monitoring<br/>🔄 Garbage Collection<br/>⚡ Optimization]
+                RESOURCE_MGR[🔧 ResourceManager<br/>📊 Resource Tracking<br/>🔒 Lock Management<br/>⚡ Cleanup Coordination]
+                PERF_MON[📊 PerformanceMonitor<br/>📈 Metrics Collection<br/>⚡ Real-time Monitoring<br/>📊 Reporting]
+            end
+        end
+        
+        subgraph "External Dependencies"
+            subgraph "Python Libraries"
+                PYQT5[🖼️ PyQt5<br/>🎨 GUI Framework<br/>📊 Event System<br/>🎛️ Widget Library]
+                OPENCV[👁️ OpenCV<br/>📐 Computer Vision<br/>🎯 Image Processing<br/>📊 Calibration Algorithms]
+                NUMPY[🧮 NumPy<br/>📊 Numerical Computing<br/>📈 Array Operations<br/>📊 Mathematical Functions]
+            end
+            
+            subgraph "System Libraries"
+                PYSERIAL[📡 PySerial<br/>🔌 Serial Communication<br/>📶 Port Management<br/>⚙️ Configuration Control]
+                BLUETOOTH[📶 Bluetooth<br/>📡 Device Discovery<br/>🔗 Connection Management<br/>📊 Protocol Support]
+                REQUESTS[🌐 Requests<br/>📡 HTTP Communication<br/>🔄 Session Management<br/>📊 Error Handling]
+            end
+            
+            subgraph "Optional Libraries"
+                PYSHIMMER[📊 PyShimmer<br/>📶 Shimmer Protocol<br/>📈 Data Streaming<br/>⚙️ Device Control]
+                PYBLUEZ[📶 PyBluez<br/>📡 Bluetooth LE<br/>🔗 Low-level Access<br/>📊 Device Management]
+                WEBSOCKETS[🔌 WebSockets<br/>📡 Real-time Communication<br/>🔄 Bidirectional Streaming<br/>⚡ Low Latency]
+            end
+        end
+    end
+    
+    %% Component Connections
+    MAIN_APP --> PYQT5_FW
+    CLI_APP --> MAIN_WIN
+    WEB_APP --> TAB_MGR
+    
+    PYQT5_FW --> REC_TAB
+    MAIN_WIN --> DEV_TAB
+    TAB_MGR --> CAL_TAB
+    
+    REC_TAB --> MOD_BTN
+    DEV_TAB --> STATUS_IND
+    CAL_TAB --> PROGRESS_IND
+    FILE_TAB --> CONN_MGR_UI
+    
+    MOD_BTN --> SESSION_MGR
+    STATUS_IND --> DEVICE_MGR
+    PROGRESS_IND --> DATA_MGR
+    
+    SESSION_MGR --> WEBCAM_SYS
+    DEVICE_MGR --> CALIB_SYS
+    DATA_MGR --> SHIMMER_SYS
+    
+    WEBCAM_SYS --> IMG_PROC
+    CALIB_SYS --> VID_PROC
+    SHIMMER_SYS --> SIG_PROC
+    
+    IMG_PROC --> NET_COMM
+    VID_PROC --> STREAM_SERV
+    SIG_PROC --> SYNC_SERV
+    
+    NET_COMM --> USB_SERV
+    STREAM_SERV --> BT_SERV
+    SYNC_SERV --> FILE_SERV
+    
+    USB_SERV --> OPENCV_SERV
+    BT_SERV --> NUMPY_SERV
+    FILE_SERV --> PANDAS_SERV
+    
+    OPENCV_SERV --> LOCAL_STORE
+    NUMPY_SERV --> CONFIG_STORE
+    PANDAS_SERV --> CACHE_STORE
+    
+    LOCAL_STORE --> SESSION_REPO
+    CONFIG_STORE --> DEVICE_REPO
+    CACHE_STORE --> CALIB_REPO
+    
+    SESSION_REPO --> JSON_ADAPTER
+    DEVICE_REPO --> CSV_ADAPTER
+    CALIB_REPO --> BINARY_ADAPTER
+    
+    JSON_ADAPTER --> LOG_SYS
+    CSV_ADAPTER --> CONFIG_SYS
+    BINARY_ADAPTER --> ERROR_SYS
+    
+    LOG_SYS --> THREAD_POOL
+    CONFIG_SYS --> ASYNC_MGR
+    ERROR_SYS --> QUEUE_MGR
+    
+    THREAD_POOL --> MEM_MGR
+    ASYNC_MGR --> RESOURCE_MGR
+    QUEUE_MGR --> PERF_MON
+    
+    MEM_MGR --> PYQT5
+    RESOURCE_MGR --> OPENCV
+    PERF_MON --> NUMPY
+    
+    PYQT5 --> PYSERIAL
+    OPENCV --> BLUETOOTH
+    NUMPY --> REQUESTS
+    
+    PYSERIAL --> PYSHIMMER
+    BLUETOOTH --> PYBLUEZ
+    REQUESTS --> WEBSOCKETS
+```
+
+## Software Installation Flow
+
+Comprehensive flowchart showing the complete software installation and configuration process.
+
+```mermaid
+flowchart TD
+    START([🚀 Installation Start])
+    
+    subgraph "Pre-Installation Checks"
+        SYS_REQ[📋 System Requirements Check<br/>💻 OS Compatibility<br/>💾 Storage Space<br/>🔧 Hardware Requirements]
+        JAVA_CHECK[☕ Java Version Check<br/>📋 Java 17/21 Detection<br/>⚙️ JAVA_HOME Validation<br/>🔧 Path Configuration]
+        PYTHON_CHECK[🐍 Python Check<br/>📋 Python 3.8+ Detection<br/>⚙️ Virtual Environment<br/>📦 Package Manager]
+    end
+    
+    subgraph "Dependency Installation"
+        CONDA_INSTALL[🐍 Conda Installation<br/>📦 Miniconda Download<br/>⚙️ Environment Setup<br/>📋 Channel Configuration]
+        ANDROID_SDK[📱 Android SDK Setup<br/>📦 SDK Manager<br/>🔧 Build Tools<br/>📋 Platform Components]
+        GIT_SETUP[📂 Git Configuration<br/>📦 Git Installation<br/>🔧 Credential Setup<br/>📋 Repository Access]
+    end
+    
+    subgraph "Project Setup"
+        REPO_CLONE[📂 Repository Clone<br/>📦 Source Code Download<br/>🔧 Submodule Initialization<br/>📋 Branch Selection]
+        ENV_CREATE[🐍 Environment Creation<br/>📦 Conda Environment<br/>📋 Dependencies Install<br/>⚙️ Package Versions]
+        GRADLE_SETUP[🔧 Gradle Configuration<br/>📦 Wrapper Download<br/>⚙️ Build Settings<br/>📋 Module Configuration]
+    end
+    
+    subgraph "Automated Setup Scripts"
+        WIN_SETUP[🪟 Windows Setup<br/>📜 setup_dev_env.ps1<br/>⚡ Automated Configuration<br/>✅ Validation Checks]
+        LINUX_SETUP[🐧 Linux Setup<br/>📜 setup.sh<br/>⚡ Package Installation<br/>🔧 Environment Config]
+        PYTHON_SETUP[🐍 Python Setup<br/>📜 setup.py<br/>📦 Universal Installer<br/>⚙️ Cross-platform Support]
+    end
+    
+    subgraph "Development Environment"
+        IDE_CONFIG[💻 IDE Configuration<br/>📋 Android Studio<br/>🔧 Project Import<br/>⚙️ SDK Configuration]
+        PYTHON_IDE[🐍 Python IDE Setup<br/>📋 PyCharm/VSCode<br/>🔧 Interpreter Config<br/>📦 Plugin Installation]
+        DEBUG_SETUP[🐛 Debug Configuration<br/>📋 Breakpoint Setup<br/>🔧 Logging Config<br/>📊 Profiling Tools]
+    end
+    
+    subgraph "Build Validation"
+        GRADLE_BUILD[🔨 Gradle Build<br/>📦 Project Compilation<br/>🔧 Dependency Resolution<br/>✅ Build Verification]
+        ANDROID_BUILD[📱 Android Build<br/>📦 APK Generation<br/>🔧 Signing Configuration<br/>✅ Installation Test]
+        PYTHON_BUILD[🐍 Python Build<br/>📦 Package Installation<br/>🔧 Import Verification<br/>✅ Runtime Test]
+    end
+    
+    subgraph "Hardware Configuration"
+        USB_CONFIG[🔌 USB Configuration<br/>📱 Device Detection<br/>🔧 Driver Installation<br/>📋 Permission Setup]
+        BT_CONFIG[📶 Bluetooth Configuration<br/>📡 Adapter Detection<br/>🔧 Service Setup<br/>📋 Pairing Verification]
+        CAMERA_CONFIG[📷 Camera Configuration<br/>🎥 Device Enumeration<br/>🔧 Driver Verification<br/>⚙️ Settings Validation]
+    end
+    
+    subgraph "Network Configuration"
+        WIFI_CONFIG[📶 WiFi Configuration<br/>🌐 Network Setup<br/>🔧 Security Settings<br/>📊 Quality Testing]
+        FIREWALL_CONFIG[🛡️ Firewall Configuration<br/>🚫 Port Rules<br/>🔧 Exception Setup<br/>📋 Security Policy]
+        QOS_CONFIG[📊 QoS Configuration<br/>⚡ Traffic Prioritization<br/>🔧 Bandwidth Allocation<br/>📈 Performance Optimization]
+    end
+    
+    subgraph "Testing & Validation"
+        UNIT_TEST[🧪 Unit Testing<br/>📋 Test Execution<br/>✅ Pass Verification<br/>📊 Coverage Report]
+        INTEGRATION_TEST[🔗 Integration Testing<br/>📱 Device Communication<br/>🔧 Component Interaction<br/>✅ End-to-end Validation]
+        HARDWARE_TEST[🔧 Hardware Testing<br/>📷 Camera Functionality<br/>📊 Sensor Validation<br/>🌐 Network Connectivity]
+    end
+    
+    subgraph "Documentation & Training"
+        DOC_INSTALL[📖 Documentation Install<br/>📋 User Guides<br/>🔧 API Documentation<br/>📊 Reference Materials]
+        TUTORIAL_SETUP[🎓 Tutorial Setup<br/>📋 Sample Projects<br/>🔧 Example Code<br/>📊 Learning Resources]
+        SUPPORT_SETUP[🆘 Support Setup<br/>📞 Contact Information<br/>🔧 Troubleshooting Guide<br/>📋 FAQ Resources]
+    end
+    
+    subgraph "Post-Installation"
+        CONFIG_BACKUP[💾 Configuration Backup<br/>📦 Settings Export<br/>🔧 Profile Creation<br/>📋 Recovery Setup]
+        UPDATE_SETUP[🔄 Update Configuration<br/>📦 Auto-update Setup<br/>🔧 Version Tracking<br/>📋 Notification Setup]
+        MONITORING_SETUP[📊 Monitoring Setup<br/>📈 Performance Tracking<br/>🔧 Health Checks<br/>📋 Alert Configuration]
+    end
+    
+    %% Installation Flow
+    START --> SYS_REQ
+    SYS_REQ --> JAVA_CHECK
+    JAVA_CHECK --> PYTHON_CHECK
+    
+    PYTHON_CHECK --> CONDA_INSTALL
+    CONDA_INSTALL --> ANDROID_SDK
+    ANDROID_SDK --> GIT_SETUP
+    
+    GIT_SETUP --> REPO_CLONE
+    REPO_CLONE --> ENV_CREATE
+    ENV_CREATE --> GRADLE_SETUP
+    
+    GRADLE_SETUP --> WIN_SETUP
+    GRADLE_SETUP --> LINUX_SETUP
+    GRADLE_SETUP --> PYTHON_SETUP
+    
+    WIN_SETUP --> IDE_CONFIG
+    LINUX_SETUP --> PYTHON_IDE
+    PYTHON_SETUP --> DEBUG_SETUP
+    
+    IDE_CONFIG --> GRADLE_BUILD
+    PYTHON_IDE --> ANDROID_BUILD
+    DEBUG_SETUP --> PYTHON_BUILD
+    
+    GRADLE_BUILD --> USB_CONFIG
+    ANDROID_BUILD --> BT_CONFIG
+    PYTHON_BUILD --> CAMERA_CONFIG
+    
+    USB_CONFIG --> WIFI_CONFIG
+    BT_CONFIG --> FIREWALL_CONFIG
+    CAMERA_CONFIG --> QOS_CONFIG
+    
+    WIFI_CONFIG --> UNIT_TEST
+    FIREWALL_CONFIG --> INTEGRATION_TEST
+    QOS_CONFIG --> HARDWARE_TEST
+    
+    UNIT_TEST --> DOC_INSTALL
+    INTEGRATION_TEST --> TUTORIAL_SETUP
+    HARDWARE_TEST --> SUPPORT_SETUP
+    
+    DOC_INSTALL --> CONFIG_BACKUP
+    TUTORIAL_SETUP --> UPDATE_SETUP
+    SUPPORT_SETUP --> MONITORING_SETUP
+    
+    CONFIG_BACKUP --> SUCCESS([✅ Installation Complete])
+    UPDATE_SETUP --> SUCCESS
+    MONITORING_SETUP --> SUCCESS
+```
+
+## System Architecture Deployment Flow
+
+Detailed deployment architecture showing the complete system deployment and operational workflow.
+
+```mermaid
+flowchart TD
+    START([🚀 Deployment Start])
+    
+    subgraph "Infrastructure Preparation"
+        HW_SETUP[🔧 Hardware Setup<br/>💻 PC Configuration<br/>📱 Mobile Device Setup<br/>🌐 Network Infrastructure]
+        NET_CONFIG[🌐 Network Configuration<br/>📡 WiFi Setup<br/>🔗 Ethernet Configuration<br/>🛡️ Security Settings]
+        POWER_SETUP[⚡ Power Management<br/>🔋 UPS Configuration<br/>🔌 Charging Stations<br/>⚡ Power Distribution]
+    end
+    
+    subgraph "Software Deployment"
+        subgraph "PC Deployment"
+            PC_OS[💻 PC OS Preparation<br/>🪟 Windows Configuration<br/>⚙️ System Updates<br/>🔧 Driver Installation]
+            PC_PYTHON[🐍 Python Environment<br/>📦 Conda Installation<br/>📋 Package Dependencies<br/>⚙️ Virtual Environment]
+            PC_APP[📱 PC Application<br/>📦 Source Code Deploy<br/>🔧 Configuration Setup<br/>✅ Functionality Test]
+        end
+        
+        subgraph "Android Deployment"
+            AND_PREP[📱 Android Preparation<br/>⚙️ Developer Options<br/>🔧 USB Debugging<br/>📋 Permission Setup]
+            APK_INSTALL[📦 APK Installation<br/>📱 Application Deploy<br/>⚙️ Configuration Setup<br/>✅ Functionality Test]
+            AND_CONFIG[⚙️ Android Configuration<br/>📋 App Permissions<br/>🔧 System Settings<br/>📊 Performance Tuning]
+        end
+    end
+    
+    subgraph "Hardware Integration"
+        SENSOR_SETUP[📊 Sensor Integration<br/>📶 Shimmer3 Pairing<br/>🌡️ Thermal Camera Setup<br/>📷 Camera Configuration]
+        USB_SETUP[🔌 USB Device Setup<br/>📹 Webcam Installation<br/>🔧 Driver Configuration<br/>⚙️ Settings Optimization]
+        BT_SETUP[📶 Bluetooth Setup<br/>📡 Device Discovery<br/>🔗 Pairing Process<br/>📋 Connection Validation]
+    end
+    
+    subgraph "System Configuration"
+        SYNC_CONFIG[⏱️ Synchronization Config<br/>🕰️ Clock Setup<br/>📊 Offset Calibration<br/>🎯 Precision Testing]
+        CALIB_CONFIG[🎯 Calibration Config<br/>📐 Camera Calibration<br/>🌡️ Thermal Calibration<br/>✅ Quality Validation]
+        QUAL_CONFIG[📊 Quality Config<br/>📈 Thresholds Setup<br/>🚨 Alert Configuration<br/>📋 Monitoring Rules]
+    end
+    
+    subgraph "Network Deployment"
+        NET_SECURITY[🔒 Network Security<br/>🛡️ Firewall Rules<br/>🔐 Access Control<br/>📋 Security Policies]
+        QOS_DEPLOY[📊 QoS Deployment<br/>⚡ Traffic Prioritization<br/>📈 Bandwidth Management<br/>🎯 Latency Optimization]
+        MON_DEPLOY[📊 Monitoring Deployment<br/>📈 Performance Tracking<br/>🚨 Alert Systems<br/>📋 Logging Configuration]
+    end
+    
+    subgraph "Testing & Validation"
+        UNIT_DEPLOY[🧪 Unit Testing<br/>📋 Component Tests<br/>✅ Functionality Validation<br/>📊 Coverage Analysis]
+        INT_DEPLOY[🔗 Integration Testing<br/>📱 Multi-device Testing<br/>🌐 Network Validation<br/>✅ End-to-end Testing]
+        PERF_DEPLOY[⚡ Performance Testing<br/>📊 Load Testing<br/>⏱️ Response Time<br/>📈 Resource Usage]
+    end
+    
+    subgraph "Data Management Deployment"
+        STORAGE_DEPLOY[💾 Storage Deployment<br/>📁 Directory Structure<br/>🔄 Backup Configuration<br/>📊 Capacity Planning]
+        BACKUP_DEPLOY[📦 Backup Deployment<br/>🔄 Automated Backup<br/>☁️ Cloud Integration<br/>✅ Recovery Testing]
+        ARCHIVE_DEPLOY[📚 Archive Deployment<br/>📦 Long-term Storage<br/>🔍 Search Configuration<br/>📋 Retention Policies]
+    end
+    
+    subgraph "Security Deployment"
+        AUTH_DEPLOY[🔐 Authentication Deploy<br/>👤 User Management<br/>🔑 Access Control<br/>📋 Permission Matrix]
+        ENCRYPT_DEPLOY[🔒 Encryption Deploy<br/>🛡️ Data Protection<br/>🔐 Key Management<br/>📋 Security Protocols]
+        AUDIT_DEPLOY[📋 Audit Deployment<br/>📝 Activity Logging<br/>🔍 Security Monitoring<br/>📊 Compliance Tracking]
+    end
+    
+    subgraph "Monitoring & Maintenance"
+        HEALTH_MON[💓 Health Monitoring<br/>📊 System Health<br/>🚨 Alert Configuration<br/>📈 Performance Metrics]
+        LOG_DEPLOY[📝 Logging Deployment<br/>📋 Centralized Logging<br/>🔍 Log Analysis<br/>📊 Retention Policies]
+        UPDATE_DEPLOY[🔄 Update Deployment<br/>📦 Version Management<br/>🔄 Auto-update Config<br/>📋 Rollback Procedures]
+    end
+    
+    subgraph "Training & Documentation"
+        USER_TRAIN[👥 User Training<br/>📖 Operation Manual<br/>🎓 Training Sessions<br/>📋 Certification Process]
+        ADMIN_TRAIN[👨‍💼 Admin Training<br/>🔧 System Management<br/>🚨 Troubleshooting<br/>📋 Maintenance Procedures]
+        DOC_DEPLOY[📖 Documentation Deploy<br/>📋 User Guides<br/>🔧 Technical Docs<br/>📞 Support Resources]
+    end
+    
+    subgraph "Go-Live Preparation"
+        FINAL_TEST[✅ Final Testing<br/>🧪 Acceptance Testing<br/>📊 Performance Validation<br/>✅ Sign-off Process]
+        CUTOVER[🔄 System Cutover<br/>⚡ Go-Live Execution<br/>📊 Status Monitoring<br/>🚨 Incident Response]
+        SUPPORT_ACT[🆘 Support Activation<br/>📞 Help Desk Setup<br/>🚨 Escalation Procedures<br/>📋 Support Documentation]
+    end
+    
+    %% Deployment Flow
+    START --> HW_SETUP
+    HW_SETUP --> NET_CONFIG
+    NET_CONFIG --> POWER_SETUP
+    
+    POWER_SETUP --> PC_OS
+    POWER_SETUP --> AND_PREP
+    
+    PC_OS --> PC_PYTHON
+    PC_PYTHON --> PC_APP
+    
+    AND_PREP --> APK_INSTALL
+    APK_INSTALL --> AND_CONFIG
+    
+    PC_APP --> SENSOR_SETUP
+    AND_CONFIG --> USB_SETUP
+    
+    SENSOR_SETUP --> BT_SETUP
+    USB_SETUP --> BT_SETUP
+    
+    BT_SETUP --> SYNC_CONFIG
+    SYNC_CONFIG --> CALIB_CONFIG
+    CALIB_CONFIG --> QUAL_CONFIG
+    
+    QUAL_CONFIG --> NET_SECURITY
+    NET_SECURITY --> QOS_DEPLOY
+    QOS_DEPLOY --> MON_DEPLOY
+    
+    MON_DEPLOY --> UNIT_DEPLOY
+    UNIT_DEPLOY --> INT_DEPLOY
+    INT_DEPLOY --> PERF_DEPLOY
+    
+    PERF_DEPLOY --> STORAGE_DEPLOY
+    STORAGE_DEPLOY --> BACKUP_DEPLOY
+    BACKUP_DEPLOY --> ARCHIVE_DEPLOY
+    
+    ARCHIVE_DEPLOY --> AUTH_DEPLOY
+    AUTH_DEPLOY --> ENCRYPT_DEPLOY
+    ENCRYPT_DEPLOY --> AUDIT_DEPLOY
+    
+    AUDIT_DEPLOY --> HEALTH_MON
+    HEALTH_MON --> LOG_DEPLOY
+    LOG_DEPLOY --> UPDATE_DEPLOY
+    
+    UPDATE_DEPLOY --> USER_TRAIN
+    USER_TRAIN --> ADMIN_TRAIN
+    ADMIN_TRAIN --> DOC_DEPLOY
+    
+    DOC_DEPLOY --> FINAL_TEST
+    FINAL_TEST --> CUTOVER
+    CUTOVER --> SUPPORT_ACT
+    
+    SUPPORT_ACT --> SUCCESS([✅ Deployment Complete])
+```
+
+## Testing Architecture
+
+Comprehensive testing framework architecture showing all testing layers, methodologies, and validation processes.
+
+```mermaid
+graph TB
+    subgraph "Comprehensive Testing Architecture"
+        subgraph "Testing Strategy Layer"
+            TEST_STRATEGY[📋 Testing Strategy<br/>🎯 Test Planning<br/>📊 Coverage Goals<br/>✅ Quality Gates]
+            TEST_PYRAMID[📊 Test Pyramid<br/>🧪 Unit Tests (70%)<br/>🔗 Integration Tests (20%)<br/>🎭 E2E Tests (10%)]
+            RISK_ANALYSIS[⚠️ Risk Analysis<br/>🎯 Critical Paths<br/>📊 Impact Assessment<br/>🔍 Vulnerability Testing]
+        end
+        
+        subgraph "Unit Testing Layer"
+            subgraph "Android Unit Tests"
+                AND_UNIT[📱 Android Unit Tests<br/>🧪 JUnit 4/5<br/>🔧 Mockito Framework<br/>📊 Robolectric Testing]
+                VM_TESTS[🧠 ViewModel Tests<br/>📊 State Testing<br/>🔄 Event Validation<br/>📋 Data Flow Tests]
+                REPO_TESTS[📚 Repository Tests<br/>💾 Data Access Tests<br/>🔄 Cache Validation<br/>📊 Error Handling]
+            end
+            
+            subgraph "Python Unit Tests"
+                PY_UNIT[🐍 Python Unit Tests<br/>🧪 PyTest Framework<br/>🔧 Mock Objects<br/>📊 Fixture Management]
+                FUNC_TESTS[⚙️ Function Tests<br/>📊 Algorithm Validation<br/>🧮 Math Operations<br/>📈 Signal Processing]
+                CLASS_TESTS[🏗️ Class Tests<br/>📋 Object Behavior<br/>🔄 State Management<br/>📊 Interface Compliance]
+            end
+        end
+        
+        subgraph "Integration Testing Layer"
+            subgraph "Component Integration"
+                COMP_INT[🔗 Component Integration<br/>📱 Android Components<br/>💻 Python Modules<br/>🔄 Interface Testing]
+                DATA_INT[📊 Data Integration<br/>💾 Database Testing<br/>📁 File System Tests<br/>🔄 Serialization Tests]
+                NET_INT[🌐 Network Integration<br/>📡 Socket Testing<br/>🔄 Protocol Validation<br/>📊 Communication Tests]
+            end
+            
+            subgraph "System Integration"
+                DEV_INT[📱 Device Integration<br/>🔗 Multi-device Tests<br/>📊 Status Sync Tests<br/>⚙️ Configuration Tests]
+                SENSOR_INT[📊 Sensor Integration<br/>📈 Data Flow Tests<br/>⏱️ Timing Validation<br/>📊 Quality Tests]
+                CALIB_INT[🎯 Calibration Integration<br/>📐 Algorithm Tests<br/>✅ Quality Validation<br/>📊 Accuracy Tests]
+            end
+        end
+        
+        subgraph "End-to-End Testing Layer"
+            subgraph "User Journey Testing"
+                USER_FLOW[👤 User Flow Tests<br/>🎬 Recording Workflow<br/>📊 Session Management<br/>📤 Export Process]
+                SCENARIO_TEST[🎭 Scenario Testing<br/>📋 Use Case Validation<br/>🔄 Workflow Testing<br/>✅ Acceptance Criteria]
+                REGRESSION_TEST[🔄 Regression Testing<br/>📊 Feature Validation<br/>🚨 Bug Prevention<br/>📈 Quality Maintenance]
+            end
+            
+            subgraph "System Testing"
+                PERF_TEST[⚡ Performance Testing<br/>📊 Load Testing<br/>⏱️ Response Time<br/>📈 Throughput Testing]
+                STRESS_TEST[💪 Stress Testing<br/>🔥 Resource Limits<br/>📊 Breaking Points<br/>🚨 Failure Recovery]
+                COMPAT_TEST[🔄 Compatibility Testing<br/>📱 Device Compatibility<br/>💻 OS Compatibility<br/>🌐 Browser Testing]
+            end
+        end
+        
+        subgraph "Specialized Testing"
+            subgraph "Hardware Testing"
+                HW_TEST[🔧 Hardware Testing<br/>📷 Camera Functionality<br/>📊 Sensor Validation<br/>🔌 USB Testing]
+                SENSOR_TEST[📊 Sensor Testing<br/>📈 GSR Validation<br/>🌡️ Thermal Testing<br/>📱 Camera Testing]
+                SYNC_TEST[⏱️ Sync Testing<br/>🕰️ Clock Accuracy<br/>📊 Timestamp Precision<br/>🎯 Alignment Testing]
+            end
+            
+            subgraph "Security Testing"
+                SEC_TEST[🔒 Security Testing<br/>🛡️ Penetration Testing<br/>🔐 Encryption Validation<br/>👤 Access Control]
+                PRIV_TEST[🔒 Privacy Testing<br/>📊 Data Protection<br/>🚫 Information Leakage<br/>📋 Compliance Testing]
+                AUTH_TEST[🔐 Authentication Testing<br/>👤 User Validation<br/>🔑 Access Rights<br/>📋 Permission Testing]
+            end
+        end
+        
+        subgraph "Quality Assurance Framework"
+            subgraph "Automated Testing"
+                CI_PIPELINE[🔄 CI/CD Pipeline<br/>🚀 Automated Builds<br/>🧪 Test Execution<br/>📊 Result Reporting]
+                TEST_AUTO[🤖 Test Automation<br/>📋 Script Generation<br/>🔄 Execution Framework<br/>📊 Result Analysis]
+                SCHED_TEST[⏰ Scheduled Testing<br/>🔄 Nightly Builds<br/>📊 Regression Runs<br/>📈 Trend Analysis]
+            end
+            
+            subgraph "Quality Metrics"
+                COV_METRICS[📊 Coverage Metrics<br/>📈 Code Coverage<br/>🎯 Branch Coverage<br/>📋 Function Coverage]
+                QUAL_METRICS[✅ Quality Metrics<br/>📊 Defect Density<br/>⏱️ Test Execution Time<br/>📈 Pass Rate]
+                PERF_METRICS[⚡ Performance Metrics<br/>📊 Response Time<br/>💾 Memory Usage<br/>🔋 Battery Impact]
+            end
+        end
+        
+        subgraph "Test Data Management"
+            TEST_DATA[📊 Test Data<br/>📋 Data Generation<br/>🔄 Data Refresh<br/>🔒 Data Security]
+            MOCK_SERV[🎭 Mock Services<br/>📡 Service Simulation<br/>🔄 Response Mocking<br/>📊 Behavior Testing]
+            ENV_MGT[🌍 Environment Management<br/>⚙️ Test Environments<br/>📊 Configuration Control<br/>🔄 Environment Reset]
+        end
+        
+        subgraph "Test Reporting & Analysis"
+            REPORT_GEN[📄 Report Generation<br/>📊 Test Results<br/>📈 Trend Analysis<br/>📋 Summary Reports]
+            DEFECT_TRACK[🐛 Defect Tracking<br/>📋 Bug Management<br/>🔄 Status Tracking<br/>📊 Resolution Analysis]
+            METRICS_DASH[📊 Metrics Dashboard<br/>📈 Real-time Monitoring<br/>🎯 KPI Tracking<br/>📋 Quality Indicators]
+        end
+        
+        subgraph "Testing Tools & Infrastructure"
+            subgraph "Testing Frameworks"
+                JUNIT[🧪 JUnit<br/>📱 Android Testing<br/>🔧 Test Annotations<br/>📊 Assertion Library]
+                PYTEST[🐍 PyTest<br/>💻 Python Testing<br/>🔧 Fixture Framework<br/>📊 Plugin Ecosystem]
+                SELENIUM[🌐 Selenium<br/>🖥️ UI Testing<br/>🔄 Browser Automation<br/>📊 Cross-browser Testing]
+            end
+            
+            subgraph "Support Tools"
+                MOCKITO[🎭 Mockito<br/>🔧 Mock Framework<br/>📱 Android Mocking<br/>🧪 Test Doubles]
+                WIREMOCK[📡 WireMock<br/>🌐 HTTP Mocking<br/>🔄 Service Simulation<br/>📊 Request Validation]
+                TESTNG[🧪 TestNG<br/>📊 Test Organization<br/>🔄 Parallel Execution<br/>📋 Configuration Management]
+            end
+        end
+    end
+    
+    %% Testing Architecture Connections
+    TEST_STRATEGY --> TEST_PYRAMID
+    TEST_PYRAMID --> RISK_ANALYSIS
+    
+    RISK_ANALYSIS --> AND_UNIT
+    RISK_ANALYSIS --> PY_UNIT
+    
+    AND_UNIT --> VM_TESTS
+    VM_TESTS --> REPO_TESTS
+    
+    PY_UNIT --> FUNC_TESTS
+    FUNC_TESTS --> CLASS_TESTS
+    
+    REPO_TESTS --> COMP_INT
+    CLASS_TESTS --> DATA_INT
+    
+    COMP_INT --> NET_INT
+    DATA_INT --> DEV_INT
+    NET_INT --> SENSOR_INT
+    
+    DEV_INT --> CALIB_INT
+    SENSOR_INT --> USER_FLOW
+    CALIB_INT --> SCENARIO_TEST
+    
+    USER_FLOW --> REGRESSION_TEST
+    SCENARIO_TEST --> PERF_TEST
+    REGRESSION_TEST --> STRESS_TEST
+    
+    PERF_TEST --> COMPAT_TEST
+    STRESS_TEST --> HW_TEST
+    COMPAT_TEST --> SENSOR_TEST
+    
+    HW_TEST --> SYNC_TEST
+    SENSOR_TEST --> SEC_TEST
+    SYNC_TEST --> PRIV_TEST
+    
+    SEC_TEST --> AUTH_TEST
+    PRIV_TEST --> CI_PIPELINE
+    AUTH_TEST --> TEST_AUTO
+    
+    CI_PIPELINE --> SCHED_TEST
+    TEST_AUTO --> COV_METRICS
+    SCHED_TEST --> QUAL_METRICS
+    
+    COV_METRICS --> PERF_METRICS
+    QUAL_METRICS --> TEST_DATA
+    PERF_METRICS --> MOCK_SERV
+    
+    TEST_DATA --> ENV_MGT
+    MOCK_SERV --> REPORT_GEN
+    ENV_MGT --> DEFECT_TRACK
+    
+    REPORT_GEN --> METRICS_DASH
+    DEFECT_TRACK --> JUNIT
+    METRICS_DASH --> PYTEST
+    
+    JUNIT --> SELENIUM
+    PYTEST --> MOCKITO
+    SELENIUM --> WIREMOCK
+    
+    MOCKITO --> TESTNG
+    WIREMOCK --> TESTNG
+```
+
+---
+
+## Conclusion
+
+This comprehensive collection of 18 mermaid diagrams provides a complete architectural visualization of the Multi-Sensor Recording System, covering every aspect from hardware setup to testing frameworks. The diagrams are designed to support the thesis work on "Multi-Sensor Recording System" and follow a component-first documentation approach that explains both the rationale ("why") and implementation details ("how").
+
+### Diagram Categories
+
+**System Architecture (4 diagrams):**
+- Hardware Setup Architecture
+- Android App Architecture  
+- PC App Architecture
+- Complete Data Flow Architecture
+
+**Communication & Synchronization (2 diagrams):**
+- Synchronization Flow
+- Networking Architecture
+
+**Data Management (4 diagrams):**
+- Data Collection Flow
+- Session Management Flow
+- Data File System Architecture
+- Data Export Workflow
+
+**Technical Implementation (4 diagrams):**
+- Individual Sensor Integration
+- Camera2 Image Processing Flow
+- Layer Architecture
+- Software Architecture of Android
+
+**Deployment & Operations (4 diagrams):**
+- Software Architecture of PC App
+- Software Installation Flow
+- System Architecture Deployment Flow
+- Testing Architecture
+
+### Key Architectural Principles
+
+All diagrams consistently reference the established architecture:
+- **PC master-controller**: Centralized coordination and timing control
+- **Offline-first local recording**: Data integrity and reliability focus
+- **JSON socket protocol**: Standardized communication across devices
+- **Component-first design**: Modular, maintainable, and testable architecture
+
+### Usage Guidelines
+
+These diagrams serve as:
+- **Design Reference**: For understanding system architecture and component relationships
+- **Implementation Guide**: For developers working on specific components
+- **Documentation Standard**: For maintaining consistent architectural documentation
+- **Academic Resource**: For thesis documentation and research presentation
+
+Each diagram includes detailed component descriptions, connection types, and architectural patterns that support both high-level understanding and detailed implementation work.
