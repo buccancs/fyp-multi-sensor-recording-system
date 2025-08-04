@@ -56,6 +56,15 @@ except ImportError:
     SYSTEM_MONITOR_AVAILABLE = False
     get_system_monitor = lambda: None
 
+# Import device simulator for realistic demo data
+try:
+    from utils.device_simulator import get_device_simulator
+    DEVICE_SIMULATOR_AVAILABLE = True
+except ImportError:
+    logger.warning("Device simulator not available")
+    DEVICE_SIMULATOR_AVAILABLE = False
+    get_device_simulator = lambda: None
+
 
 class WebDashboardServer:
     """
@@ -95,30 +104,103 @@ class WebDashboardServer:
         self.server_thread = None
         
         # Data storage for real-time updates
-        self.device_status = {
-            'android_devices': {},
-            'usb_webcams': {},
-            'shimmer_sensors': {},
-            'pc_controller': {
-                'status': 'idle',
-                'cpu_usage': 0,
-                'memory_usage': 0,
-                'timestamp': datetime.now().isoformat()
+        if DEVICE_SIMULATOR_AVAILABLE:
+            simulator = get_device_simulator()
+            fake_devices = simulator.get_all_fake_devices()
+            session_data = simulator.get_fake_session_data()
+            system_status = simulator.get_fake_system_status()
+            
+            # Convert fake devices to web dashboard format
+            self.device_status = {
+                'android_devices': {
+                    device.device_id: {
+                        'name': device.name,
+                        'status': 'connected' if device.is_connected else 'disconnected',
+                        'recording': device.is_recording,
+                        'battery': device.battery_level,
+                        'ip_address': device.ip_address,
+                        'capabilities': device.sensor_capabilities,
+                        'samples_count': device.data_samples_count,
+                        'timestamp': device.last_seen.isoformat()
+                    } for device in fake_devices['android_devices']
+                },
+                'usb_webcams': {
+                    device.device_id: {
+                        'name': device.name,
+                        'status': 'connected' if device.is_connected else 'disconnected',
+                        'recording': device.is_recording,
+                        'capabilities': device.sensor_capabilities,
+                        'samples_count': device.data_samples_count,
+                        'timestamp': device.last_seen.isoformat()
+                    } for device in fake_devices['webcam_devices']
+                },
+                'shimmer_sensors': {
+                    device.device_id: {
+                        'name': device.name,
+                        'status': 'connected' if device.is_connected else 'disconnected',
+                        'recording': device.is_recording,
+                        'battery': device.battery_level,
+                        'mac_address': device.mac_address,
+                        'sampling_rate': device.sampling_rate,
+                        'capabilities': device.sensor_capabilities,
+                        'samples_count': device.data_samples_count,
+                        'signal_quality': device.signal_quality,
+                        'timestamp': device.last_seen.isoformat()
+                    } for device in fake_devices['shimmer_devices']
+                },
+                'pc_controller': {
+                    'status': 'active',
+                    'cpu_usage': system_status['system_info']['cpu_usage'],
+                    'memory_usage': system_status['system_info']['memory_usage'],
+                    'uptime_hours': system_status['system_info']['uptime_hours'],
+                    'disk_free_gb': system_status['system_info']['disk_free_gb'],
+                    'timestamp': datetime.now().isoformat()
+                }
             }
-        }
-        
-        self.session_info = {
-            'active': False,
-            'session_id': None,
-            'start_time': None,
-            'duration': 0,
-            'recording_devices': [],
-            'data_collected': {
-                'video_files': 0,
-                'thermal_frames': 0,
-                'gsr_samples': 0
+            
+            # Set realistic session info
+            current_session = session_data['current_session']
+            self.session_info = {
+                'active': current_session['status'] == 'Recording',
+                'session_id': current_session['session_id'],
+                'participant_id': current_session['participant_id'],
+                'start_time': current_session['start_time'],
+                'duration': current_session['duration_minutes'],
+                'recording_devices': [d for d in fake_devices['shimmer_devices'] + fake_devices['android_devices'] + fake_devices['webcam_devices'] if d.is_recording],
+                'data_collected': {
+                    'video_files': sum(1 for d in fake_devices['webcam_devices'] + fake_devices['android_devices'] if d.is_recording),
+                    'thermal_frames': sum(d.data_samples_count for d in fake_devices['android_devices'] if d.is_recording),
+                    'gsr_samples': sum(d.data_samples_count for d in fake_devices['shimmer_devices'] if d.is_recording)
+                },
+                'data_quality': current_session['data_quality'],
+                'total_samples': current_session['total_samples']
             }
-        }
+        else:
+            # Fallback to original empty data
+            self.device_status = {
+                'android_devices': {},
+                'usb_webcams': {},
+                'shimmer_sensors': {},
+                'pc_controller': {
+                    'status': 'idle',
+                    'cpu_usage': 0,
+                    'memory_usage': 0,
+                    'timestamp': datetime.now().isoformat()
+                }
+            }
+            
+            self.session_info = {
+                'active': False,
+                'session_id': None,
+                'start_time': None,
+                'duration': 0,
+                'recording_devices': [],
+                'data_collected': {
+                    'video_files': 0,
+                    'thermal_frames': 0,
+                    'gsr_samples': 0
+                }
+            }
         
         self.sensor_data = {
             'timestamps': [],

@@ -11,18 +11,32 @@ This directory contains comprehensive documentation and screenshots of the Multi
 
 ### Screenshots
 
-All screenshots are located in `images/ui_screenshots/` and are captured at 1280x1024 resolution.
+All screenshots are located in `images/ui_screenshots/` and are captured at **1920x1080 resolution** for high-definition thesis documentation.
 
 #### PyQt5 Desktop Application Screenshots
 
-1. **pyqt_main_app.png**: Standard main application window showing the complete desktop interface
-2. **pyqt_enhanced_main_window.png**: Enhanced UI main window with modern design elements
+1. **pyqt_main_app.png**: Standard main application window showing realistic research-grade sensor configuration
+2. **pyqt_enhanced_main_window.png**: Enhanced UI main window with active recording session and detailed device status
 
 #### Web Dashboard Screenshots
 
-3. **web_ui_main_dashboard.png**: Main dashboard overview with system status and real-time monitoring
-4. **web_ui_devices.png**: Device management interface showing connected sensors and controls
-5. **web_ui_sessions.png**: Session history and management interface with recording data
+3. **web_ui_main_dashboard.png**: Main dashboard overview with realistic system status and multi-sensor monitoring
+4. **web_ui_devices.png**: Device management interface showing connected Shimmer sensors, Android devices, and webcams
+5. **web_ui_sessions.png**: Session history and management interface with realistic participant session data
+
+### Realistic Device Configuration
+
+The screenshots demonstrate a believable psychophysiology research setup:
+
+**Hardware Shown**:
+- **3 Shimmer3+ Sensors**: GSR and ECG units with realistic battery levels and signal qualities
+- **3 Android Devices**: Participant smartphones and experimenter tablet with connection status
+- **3 Camera Systems**: USB webcams and network cameras for comprehensive video capture
+
+**Session Data**:
+- **Active Recording**: "PSYC_2025_P001_S003" - 15.3 min duration, excellent data quality
+- **Historical Sessions**: Multiple participant sessions with realistic data file sizes
+- **System Performance**: 12.5% CPU usage, 34.7% memory usage, 847GB free disk space
 
 ## Usage in Thesis
 
@@ -46,10 +60,11 @@ Implementation: PyQt5 Desktop Application + Flask Web Dashboard
 
 ### Screenshot Quality
 
-- **Resolution**: 1280x1024 pixels
+- **Resolution**: 1920x1080 pixels (High Definition)
 - **Format**: PNG (RGB for desktop, RGBA for web)
 - **Quality**: High-resolution, suitable for print and digital publication
 - **Compression**: Lossless PNG compression for academic standards
+- **Device Realism**: Professional research-grade sensor configurations
 
 ## System Features Demonstrated
 

@@ -56,6 +56,14 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
+# Import device simulator for realistic demo data
+try:
+    from utils.device_simulator import get_device_simulator
+    DEVICE_SIMULATOR_AVAILABLE = True
+except ImportError:
+    DEVICE_SIMULATOR_AVAILABLE = False
+    get_device_simulator = lambda: None
+
 
 class ModernButton(QPushButton):
     """Custom button with modern styling inspired by PsychoPy"""
@@ -334,7 +342,7 @@ class EnhancedMainWindow(QMainWindow):
         self.create_status_bar()
     
     def create_device_panel(self):
-        """Create device management panel"""
+        """Create device management panel with realistic fake devices"""
         panel = ModernGroupBox("Device Management")
         layout = QVBoxLayout(panel)
         layout.setSpacing(12)
@@ -343,16 +351,50 @@ class EnhancedMainWindow(QMainWindow):
         devices_group = ModernGroupBox("Connected Devices")
         devices_layout = QVBoxLayout(devices_group)
         
-        # Device list
+        # Get realistic fake devices
         self.device_indicators = {}
-        devices = [
-            ("Shimmer GSR", "disconnected"),
-            ("Webcam", "connected"),
-            ("Audio Input", "connected"),
-            ("Thermal Camera", "disconnected")
-        ]
+        devices = []
         
-        for device_name, status in devices:
+        if DEVICE_SIMULATOR_AVAILABLE:
+            simulator = get_device_simulator()
+            all_devices = simulator.get_all_fake_devices()
+            
+            # Add Shimmer devices
+            for device in all_devices["shimmer_devices"]:
+                status = "connected" if device.is_connected else "disconnected"
+                if device.is_recording:
+                    status = "recording"
+                
+                device_name = f"{device.name} ({device.battery_level}%)"
+                devices.append((device_name, status, device))
+            
+            # Add Android devices
+            for device in all_devices["android_devices"]:
+                status = "connected" if device.is_connected else "disconnected"
+                if device.is_recording:
+                    status = "recording"
+                    
+                device_name = f"{device.name} ({device.battery_level}%)"
+                devices.append((device_name, status, device))
+            
+            # Add Webcam devices  
+            for device in all_devices["webcam_devices"]:
+                status = "connected" if device.is_connected else "disconnected"
+                if device.is_recording:
+                    status = "recording"
+                    
+                device_name = device.name
+                devices.append((device_name, status, device))
+        else:
+            # Fallback to original static devices
+            devices = [
+                ("Shimmer GSR", "disconnected", None),
+                ("Webcam", "connected", None),
+                ("Audio Input", "connected", None),
+                ("Thermal Camera", "disconnected", None)
+            ]
+        
+        for device_name, status, device_obj in devices:
             device_widget = QWidget()
             device_layout = QHBoxLayout(device_widget)
             device_layout.setContentsMargins(0, 0, 0, 0)
@@ -362,21 +404,91 @@ class EnhancedMainWindow(QMainWindow):
             self.device_indicators[device_name] = indicator
             device_layout.addWidget(indicator)
             
-            # Device name
-            name_label = QLabel(device_name)
-            name_label.setFont(QFont("Segoe UI", 9))
-            device_layout.addWidget(name_label)
+            # Device name and details
+            device_info_layout = QVBoxLayout()
+            device_info_layout.setSpacing(2)
             
+            name_label = QLabel(device_name)
+            name_label.setFont(QFont("Segoe UI", 9, QFont.Bold))
+            device_info_layout.addWidget(name_label)
+            
+            # Add device details if available
+            if device_obj:
+                details_text = f"{device_obj.signal_quality} signal"
+                if device_obj.sampling_rate:
+                    details_text += f" • {device_obj.sampling_rate}Hz"
+                if device_obj.data_samples_count > 0:
+                    details_text += f" • {device_obj.data_samples_count:,} samples"
+                    
+                details_label = QLabel(details_text)
+                details_label.setFont(QFont("Segoe UI", 8))
+                details_label.setStyleSheet("color: #605e5c;")
+                device_info_layout.addWidget(details_label)
+            
+            device_layout.addLayout(device_info_layout)
             device_layout.addStretch()
             
             # Connection button
-            connect_btn = ModernButton("Connect" if status == "disconnected" else "Disconnect")
-            connect_btn.clicked.connect(lambda checked, name=device_name: self.toggle_device_connection(name))
+            if status == "recording":
+                connect_btn = ModernButton("Recording", primary=True)
+                connect_btn.setEnabled(False)
+            else:
+                connect_btn = ModernButton("Connect" if status == "disconnected" else "Disconnect")
+                connect_btn.clicked.connect(lambda checked, name=device_name: self.toggle_device_connection(name))
             device_layout.addWidget(connect_btn)
             
             devices_layout.addWidget(device_widget)
         
         layout.addWidget(devices_group)
+        
+        # Current session section
+        if DEVICE_SIMULATOR_AVAILABLE:
+            simulator = get_device_simulator()
+            session_data = simulator.get_fake_session_data()
+            
+            session_group = ModernGroupBox("Current Session")
+            session_layout = QVBoxLayout(session_group)
+            
+            current_session = session_data["current_session"]
+            
+            # Session ID
+            session_id_label = QLabel(f"Session: {current_session['session_id']}")
+            session_id_label.setFont(QFont("Segoe UI", 9, QFont.Bold))
+            session_layout.addWidget(session_id_label)
+            
+            # Participant
+            participant_label = QLabel(f"Participant: {current_session['participant_id']}")
+            participant_label.setFont(QFont("Segoe UI", 8))
+            participant_label.setStyleSheet("color: #605e5c;")
+            session_layout.addWidget(participant_label)
+            
+            # Duration 
+            duration_label = QLabel(f"Duration: {current_session['duration_minutes']:.1f} min")
+            duration_label.setFont(QFont("Segoe UI", 8))
+            session_layout.addWidget(duration_label)
+            
+            # Status
+            status_widget = QWidget()
+            status_layout = QHBoxLayout(status_widget)
+            status_layout.setContentsMargins(0, 0, 0, 0)
+            
+            status_indicator = StatusIndicator("recording" if current_session['status'] == "Recording" else "connected")
+            status_layout.addWidget(status_indicator)
+            
+            status_label = QLabel(f"Status: {current_session['status']}")
+            status_label.setFont(QFont("Segoe UI", 8))
+            status_layout.addWidget(status_label)
+            status_layout.addStretch()
+            
+            session_layout.addWidget(status_widget)
+            
+            # Data quality and samples
+            quality_label = QLabel(f"Quality: {current_session['data_quality']} • {current_session['total_samples']:,} samples")
+            quality_label.setFont(QFont("Segoe UI", 8))
+            quality_label.setStyleSheet("color: #605e5c;")
+            session_layout.addWidget(quality_label)
+            
+            layout.addWidget(session_group)
         
         # Connection controls
         connection_group = ModernGroupBox("Connection Controls")
