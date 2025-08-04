@@ -1,14 +1,31 @@
 # Multi-Sensor Recording System - Thesis Report Index
 
-## Consolidated Thesis Documentation
+## Thesis Documentation Structure
 
-This directory contains the complete Master's thesis documentation for the Multi-Sensor Recording System project, consolidated into a single comprehensive document following academic thesis standards.
+This directory contains the complete Master's thesis documentation for the Multi-Sensor Recording System project, available in both consolidated and individual chapter formats following academic thesis standards.
 
-## Primary Thesis Document
+## Primary Thesis Documents
 
+### Consolidated Thesis
 **[Complete_Comprehensive_Thesis.md](Complete_Comprehensive_Thesis.md)** - The complete consolidated thesis document:
 
-This is the definitive single-file thesis document that incorporates all chapter content into one comprehensive academic report suitable for submission. All individual chapter files have been consolidated to eliminate redundancy and provide a cohesive reading experience.
+This is the definitive single-file thesis document that incorporates all chapter content into one comprehensive academic report suitable for submission and provides a cohesive reading experience.
+
+### Individual Chapter Files
+For detailed review and editing purposes, the thesis is also available as individual chapter files:
+
+- **[Chapter_1_Introduction.md](Chapter_1_Introduction.md)** - Background, motivation, and research objectives
+- **[Chapter_2_Context_and_Literature_Review.md](Chapter_2_Context_and_Literature_Review.md)** - Theoretical foundations and related work  
+- **[Chapter_3_Requirements_and_Analysis.md](Chapter_3_Requirements_and_Analysis.md)** - System requirements and analysis
+- **[Chapter_4_Design_and_Implementation.md](Chapter_4_Design_and_Implementation.md)** - System design and implementation details
+- **[Chapter_5_Testing_and_Results_Evaluation.md](Chapter_5_Testing_and_Results_Evaluation.md)** - Testing methodology and results evaluation
+- **[Chapter_6_Conclusions_and_Evaluation.md](Chapter_6_Conclusions_and_Evaluation.md)** - Conclusions and future work
+- **[Chapter_7_Appendices.md](Chapter_7_Appendices.md)** - Technical appendices and supplementary material
+
+### Additional Thesis Documents
+- **[Complete_Thesis_Report.md](Complete_Thesis_Report.md)** - Alternative complete thesis format
+- **[Master_Thesis_Complete.md](Master_Thesis_Complete.md)** - Additional comprehensive thesis version
+- **[Python_Desktop_Controller_Comprehensive_Documentation.md](Python_Desktop_Controller_Comprehensive_Documentation.md)** - Detailed Python controller documentation
 
 ### ✅ Complete Structure Following Version B Requirements:
 
@@ -113,22 +130,29 @@ This is the definitive single-file thesis document that incorporates all chapter
 ## Navigation Guide
 
 ### For Academic Review
+**Option 1: Consolidated Format**
 1. Open **[Complete_Comprehensive_Thesis.md](Complete_Comprehensive_Thesis.md)** - the complete consolidated thesis
 2. Use the Table of Contents for navigating to specific chapters
 3. Review appendices within the document for technical implementation details
 4. Examine test results and validation data in Chapter 5
 
+**Option 2: Individual Chapter Format**
+1. Start with **[Chapter_1_Introduction.md](Chapter_1_Introduction.md)** for background and objectives
+2. Continue sequentially through **[Chapter_2_Context_and_Literature_Review.md](Chapter_2_Context_and_Literature_Review.md)** through **[Chapter_6_Conclusions_and_Evaluation.md](Chapter_6_Conclusions_and_Evaluation.md)**
+3. Review **[Chapter_7_Appendices.md](Chapter_7_Appendices.md)** for technical specifications
+4. Cross-reference with component documentation in `/docs/new_documentation/`
+
 ### For Technical Implementation
-1. Navigate to **Chapter 4: Design and Implementation** within the consolidated document
-2. Check **Appendices** section for detailed technical specifications
-3. Examine **Chapter 5** for testing methodologies
-4. Reference component documentation in `/docs/new_documentation/`
+1. **Navigate to Chapter 4**: Access either via the consolidated document or **[Chapter_4_Design_and_Implementation.md](Chapter_4_Design_and_Implementation.md)**
+2. **Check Appendices**: Use **[Chapter_7_Appendices.md](Chapter_7_Appendices.md)** for detailed technical specifications
+3. **Examine Testing**: Review **[Chapter_5_Testing_and_Results_Evaluation.md](Chapter_5_Testing_and_Results_Evaluation.md)** for testing methodologies
+4. **Reference Components**: Check component documentation in `/docs/new_documentation/`
 
 ### For Research Application
-1. Review **Chapter 3: Requirements and Analysis** within the consolidated document
-2. Examine **Chapter 2** for theoretical foundations
-3. Check **Chapter 6** for limitations and future work
-4. Review appendices for practical implementation guidance
+1. **Review Requirements**: Access **[Chapter_3_Requirements_and_Analysis.md](Chapter_3_Requirements_and_Analysis.md)** for system requirements
+2. **Examine Foundations**: Review **[Chapter_2_Context_and_Literature_Review.md](Chapter_2_Context_and_Literature_Review.md)** for theoretical background
+3. **Check Conclusions**: Review **[Chapter_6_Conclusions_and_Evaluation.md](Chapter_6_Conclusions_and_Evaluation.md)** for limitations and future work
+4. **Implementation Guidance**: Use **[Chapter_7_Appendices.md](Chapter_7_Appendices.md)** for practical implementation details
 
 ## Compliance with Requirements
 
@@ -155,16 +179,20 @@ This is the definitive single-file thesis document that incorporates all chapter
 ### Academic Submission
 The **Complete_Comprehensive_Thesis.md** file contains the complete consolidated thesis in a single document suitable for academic submission, review, and evaluation. This comprehensive document includes all chapter content merged and expanded for maximum academic completeness.
 
+### Individual Chapter Review  
+For detailed review, editing, or collaborative work, use the individual chapter files (**Chapter_1_Introduction.md** through **Chapter_7_Appendices.md**). These maintain the same content structure while allowing focused work on specific sections.
+
 ### Research Reference
-All thesis content is now consolidated within the single comprehensive document, providing a cohesive reading experience and eliminating redundancy between separate files.
+The thesis content is available in both consolidated format for comprehensive reading and individual chapter format for detailed analysis and reference. Choose the format that best suits your research needs.
 
 ### Technical Implementation
-The appendices section within the comprehensive document provides complete technical details for system reproduction and extension.
+Technical details are available in **Chapter_4_Design_and_Implementation.md** and **Chapter_7_Appendices.md** for individual access, or within the comprehensive document's corresponding sections.
 
 ---
 
-**Document Status**: Complete consolidated thesis with all chapters integrated  
+**Document Status**: Complete thesis available in both consolidated and individual chapter formats  
 **Last Updated**: 2024  
-**Total Size**: 400+ pages equivalent (12,176+ lines)  
+**Total Content**: 400+ pages equivalent  
 **Academic Level**: Master's Thesis in Computer Science  
-**Classification**: Software Engineering, Distributed Systems, Human-Computer Interaction
+**Classification**: Software Engineering, Distributed Systems, Human-Computer Interaction  
+**Formats Available**: Consolidated single document + Individual chapter files
