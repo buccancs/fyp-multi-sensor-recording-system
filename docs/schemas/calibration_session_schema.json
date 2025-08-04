@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Calibration Session Schema",
+  "description": "Schema for camera calibration sessions",
+  "required": [
+    "session_name",
+    "session_folder",
+    "device_ids",
+    "start_time",
+    "pattern_type",
+    "pattern_size",
+    "square_size",
+    "status"
+  ],
+  "properties": {
+    "session_name": {
+      "type": "string",
+      "description": "Name of the calibration session"
+    },
+    "session_folder": {
+      "type": "string",
+      "description": "Path to the session folder"
+    },
+    "device_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of device IDs in the session"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session start timestamp"
+    },
+    "pattern_type": {
+      "type": "string",
+      "enum": ["chessboard", "circles", "asymmetric_circles"],
+      "description": "Type of calibration pattern used"
+    },
+    "pattern_size": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "Pattern size as [width, height] in internal corners"
+    },
+    "square_size": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Size of pattern squares in millimeters"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "completed", "failed", "cancelled"],
+      "description": "Current status of the calibration session"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session end timestamp (optional)"
+    },
+    "calibration_results": {
+      "type": "object",
+      "description": "Calibration results if session is completed",
+      "properties": {
+        "rms_error": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Root mean square reprojection error"
+        },
+        "camera_matrix": {
+          "type": "array",
+          "description": "3x3 camera intrinsic matrix"
+        },
+        "distortion_coefficients": {
+          "type": "array",
+          "description": "Distortion coefficients [k1, k2, p1, p2, k3]"
+        },
+        "image_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of images used for calibration"
+        },
+        "quality_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Calibration quality score (0-1)"
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the session"
+    }
+  }
+}

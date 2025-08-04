@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Session Log Schema",
+  "description": "Schema for session log entries",
+  "required": [
+    "timestamp",
+    "level",
+    "message"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    }
+  }
+}

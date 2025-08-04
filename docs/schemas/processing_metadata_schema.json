@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Processing Metadata Schema",
+  "description": "Schema for data processing metadata",
+  "required": [
+    "processing_timestamp",
+    "input_files",
+    "output_files"
+  ],
+  "properties": {
+    "processing_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "input_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "output_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "processing_parameters": {
+      "type": "object"
+    }
+  }
+}
