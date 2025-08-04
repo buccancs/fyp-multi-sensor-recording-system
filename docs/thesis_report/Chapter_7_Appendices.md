@@ -1941,10 +1941,10 @@ Based on the latest comprehensive test suite execution (from `test_results/compl
 
 **Overall Test Performance:**
 - **Total Test Scenarios**: 7 comprehensive test cases
-- **Successful Tests**: 5 out of 7 (71.4% success rate)
-- **Failed Tests**: 2 (primarily due to missing dependencies)
-- **Total Execution Time**: 271.97 seconds (~4.5 minutes)
-- **Test Execution Date**: August 1, 2025
+- **Successful Tests**: 4 out of 7 (57.1% success rate)
+- **Failed Tests**: 3 (Enhanced Stress Testing, Network Resilience, Comprehensive Recording)
+- **Total Execution Time**: 341.76 seconds (~5.7 minutes)
+- **Test Execution Date**: August 2, 2025 (23:23:41 UTC)
 
 **Test Results Summary:**
 ```
@@ -1952,13 +1952,13 @@ Test Suite Execution Results:
 ╭──────────────────────────────────────────────────────────────╮
 │ Test Name                           │ Duration │ Status        │
 ├─────────────────────────────────────┼──────────┼───────────────┤
-│ Integration Logging Test            │ 0.18s    │ ✓ PASSED     │
+│ Integration Logging Test            │ 0.40s    │ ✓ PASSED     │
 │ Focused Recording Session Test      │ 5.22s    │ ✓ PASSED     │
-│ Hardware Sensor Simulation Test    │ 45.85s   │ ✓ PASSED     │
-│ Enhanced Stress Testing             │ 0.04s    │ ✗ FAILED     │
-│ Network Resilience Testing          │ 104.88s  │ ✓ PASSED     │
-│ Data Integrity Validation          │ 149.16s  │ ✓ PASSED     │
-│ Comprehensive Recording Session     │ 52.29s   │ ✗ FAILED     │
+│ Hardware Sensor Simulation Test    │ 6.30s    │ ✓ PASSED     │
+│ Enhanced Stress Testing             │ 76.73s   │ ✗ FAILED     │
+│ Network Resilience Testing          │ 104.99s  │ ✗ FAILED     │
+│ Data Integrity Validation          │ 147.72s  │ ✓ PASSED     │
+│ Comprehensive Recording Session     │ 0.39s    │ ✗ FAILED     │
 ╰──────────────────────────────────────────────────────────────╯
 ```
 
@@ -1973,10 +1973,10 @@ Network Resilience Validation:
 │ Network Condition    │ Duration │ Messages │ Success Rate   │
 ├──────────────────────┼──────────┼──────────┼────────────────┤
 │ Perfect Network      │ 20.0s    │ 48/48    │ 100%          │
-│ High Latency (500ms) │ 21.5s    │ 40/40    │ 100%          │
-│ Packet Loss (5%)     │ 20.8s    │ 47/48    │ 97.9%         │
+│ High Latency (500ms) │ 21.8s    │ 40/40    │ 100%          │
+│ Packet Loss (5%)     │ 20.8s    │ 43/51    │ 84.3%         │
 │ Limited Bandwidth    │ 21.6s    │ 47/48    │ 97.9%         │
-│ Unstable Connection  │ 20.8s    │ 42/45    │ 93.3%         │
+│ Unstable Connection  │ 20.6s    │ 33/35    │ 94.3%         │
 ╰─────────────────────────────────────────────────────────────╯
 ```
 
@@ -2001,7 +2001,7 @@ Data Integrity Test Results:
 │ Corruptions Detected           │ 9/9 (100% detection rate) │
 │ Checksum Mismatches Identified │ 9/9 (100% accuracy)       │
 │ Data Loss Quantified           │ 5,793 bytes total          │
-│ Test Duration                   │ 148.9 seconds             │
+│ Test Duration                   │ 147.7 seconds             │
 ╰──────────────────────────────────────────────────────────────╯
 ```
 
@@ -2009,8 +2009,8 @@ Data Integrity Test Results:
 
 **Validated System Performance:**
 - **Device Coordination**: Up to 4 simultaneous devices tested and validated
-- **Network Latency Tolerance**: 1ms to 500ms range successfully handled
-- **Message Success Rate**: 93.3% to 100% depending on network conditions
+- **Network Latency Tolerance**: 1ms to 500ms range successfully handled  
+- **Message Success Rate**: 84.3% to 100% depending on network conditions
 - **Data Integrity**: 100% corruption detection across all test scenarios
 - **Cross-Platform Operation**: Android-Python coordination via WebSocket protocol
 - **Connection Recovery**: Automatic reconnection after network interruptions
@@ -2018,36 +2018,26 @@ Data Integrity Test Results:
 #### D.5 Areas Identified for Improvement
 
 **Failed Test Analysis:**
-1. **Enhanced Stress Testing**: Failed due to missing `psutil` dependency
-   - Resolution: Add psutil to requirements.txt
-   - Impact: Resource monitoring capabilities currently unavailable
+1. **Enhanced Stress Testing**: Failed with exit code 1 after 76.73 seconds
+   - Issue: Resource monitoring and concurrent session handling under extreme load
+   - Impact: System performance under maximum stress conditions not fully validated
+   - Next Steps: Optimize memory management and concurrent session handling
 
-2. **Comprehensive Recording Session**: Complex integration scenario issues
-   - Status: Under investigation for integration improvements
+2. **Network Resilience Testing**: Failed with exit code 1 after 104.99 seconds
+   - Issue: Packet loss tolerance exceeded acceptable thresholds (15.7% vs 5% target)
+   - Impact: Performance degradation under high packet loss conditions
+   - Next Steps: Enhance packet loss recovery and retry mechanisms
+
+3. **Comprehensive Recording Session**: Failed with exit code 1 after 0.39 seconds
+   - Issue: Complex integration scenario rapid failure
+   - Impact: End-to-end recording workflow needs refinement
    - Next Steps: Enhanced error handling and dependency management
 
 **Test Framework Enhancements:**
-- Automated dependency verification before test execution
-- Enhanced error reporting for failed test scenarios
-- Extended test coverage for edge cases and error conditions  
-- P99: 94ms
-- P99.9: 98ms
-Maximum observed: 101ms
-
-Response time consistency demonstrates reliable system behavior
-suitable for real-time research applications requiring predictable
-latency characteristics.
-```
-
-**Throughput Analysis:**
-```
-Video Processing Throughput:
-- 1080p@30fps: Consistent 30.2±0.3 fps
-- 4K@30fps: Sustained 29.8±0.5 fps  
-- Thermal@25fps: Stable 25.1±0.2 fps
-
-Multi-device coordination maintains throughput consistency
-across simultaneous recording sessions with up to 8 devices.
+- Improved stress testing with resource monitoring capabilities
+- Enhanced network resilience under extreme packet loss conditions  
+- Better integration test error handling and recovery mechanisms
+- Extended test coverage for edge cases and error conditions
 ```
 
 #### D.2 Reliability and Stress Testing
@@ -2279,10 +2269,27 @@ The code snippets are organized by reference numbers (F.1-F.177) as cited in the
 ### F.1 Core Application Architecture - PythonApp/src/application.py
 
 ```python
-"""Application class for multi-sensor recording system with dependency injection"""
+"""application class for multi-sensor recording system"""
+
+import sys
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import QObject
+
+# Import modern logging system
+from utils.logging_config import get_logger
+
+# Import backend services
+from network.device_server import JsonSocketServer
+from session.session_manager import SessionManager
+from session.session_logger import get_session_logger
+from webcam.webcam_capture import WebcamCapture
+from gui.stimulus_controller import StimulusController
+from gui.main_controller import MainController
+from gui.main_window import MainWindow
+from gui.simplified_main_window import SimplifiedMainWindow
 
 class Application(QObject):
-    """Dependency injection container for backend services"""
+    """dependency injection container for backend services"""
     
     def __init__(self, use_simplified_ui=True):
         super().__init__()
@@ -2291,15 +2298,31 @@ class Application(QObject):
         self.session_manager = None
         self.json_server = None
         self.webcam_capture = None
+        self.stimulus_controller = None
+        self.main_controller = None
+        self.main_window = None
+        
+        # Create backend services with dependency injection
         self._create_services()
         self.logger.info("application initialized")
     
     def _create_services(self):
         """Create backend services with dependency injection"""
         try:
+            # Initialize core services
             self.session_manager = SessionManager()
             self.json_server = JsonSocketServer(session_manager=self.session_manager)
             self.webcam_capture = WebcamCapture()
+            self.stimulus_controller = StimulusController()
+            
+            # Initialize main controller with service dependencies
+            self.main_controller = MainController(
+                session_manager=self.session_manager,
+                json_server=self.json_server,
+                webcam_capture=self.webcam_capture,
+                stimulus_controller=self.stimulus_controller
+            )
+            
         except Exception as e:
             self.logger.error(f"failed to create services: {e}")
             raise
