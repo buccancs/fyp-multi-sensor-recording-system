@@ -1,0 +1,17 @@
+graph TD
+    A[Performance Testing] --> B[Benchmark Execution]
+    B --> C0[memory_allocation]
+    C0 --> D0[0.0s]
+    style C0 fill:#ffcdd2
+    B --> C1[cpu_intensive]
+    C1 --> D1[0.0s]
+    style C1 fill:#c8e6c9
+    B --> C2[file_io_operations]
+    C2 --> D2[0.0s]
+    style C2 fill:#fff9c4
+    B --> C3[network_simulation]
+    C3 --> D3[0.053s]
+    style C3 fill:#fff9c4
+    B --> C4[concurrent_processing]
+    C4 --> D4[0.006s]
+    style C4 fill:#fff9c4
