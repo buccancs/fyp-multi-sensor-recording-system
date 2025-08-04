@@ -25,7 +25,7 @@ The research contributes novel technical innovations to the field of distributed
 **Chapter 1. Introduction**
 - 1.1 Motivation and Research Context  
 - 1.2 Research Problem and Objectives  
-- 1.3 Thesis Outline  
+- 1.3 Thesis Structure and Scope  
 
 **Chapter 2. Background and Literature Review**
 - 2.1 Emotion Analysis Applications  
@@ -797,7 +797,7 @@ The physiological measurement research domain has experienced significant method
 **Table 3.1: Comparative Analysis of Physiological Measurement Approaches**
 
 | Characteristic | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor |
-|---|---|---|---|
+|---|---|---|
 | **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
 | **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
 | **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
