@@ -61,24 +61,42 @@ The introduction provides systematic analysis of current limitations in physiolo
 - Detailed research scope and boundary definition ensuring manageable focus while addressing significant technical challenges and community needs
 - Academic contribution framework demonstrating novel technical innovations while providing immediate practical benefits for research community
 
-### [Chapter 2: Background and Literature Review](Chapter_2_Context_and_Literature_Review.md) - Theoretical Foundations and Related Work
+### [Chapter 2: Background and Literature Review](Chapter_2_Context_and_Literature_Review.md) - Comprehensive Theoretical Foundations 📚
 
-This comprehensive chapter provides detailed analysis of the theoretical foundations, related work, and technological context that informed the development of the Multi-Sensor Recording System. The chapter establishes the academic foundation through systematic review of distributed systems theory, physiological measurement research, computer vision applications, and research software development methodologies while documenting the careful technology selection process that ensures both technical excellence and long-term sustainability.
+This comprehensive chapter provides dual-perspective analysis covering both **technical foundations** and **physiological foundations** that informed the development of the Multi-Sensor Recording System. The chapter establishes complete academic foundation through systematic review spanning distributed systems theory, physiological measurement research, computer vision applications, and research software development methodologies.
 
-The background analysis demonstrates how established theoretical principles from multiple scientific domains converge to enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System. Through comprehensive literature survey and systematic technology evaluation, this chapter establishes the research foundation that enables the novel contributions presented in subsequent chapters while providing the technical justification for architectural and implementation decisions.
+**📖 Complete Background Documentation Structure:**
 
-**Comprehensive Chapter Coverage:**
-- **Theoretical Foundations Integration**: Systematic synthesis of distributed systems, signal processing, computer vision, and statistical theory for multi-sensor research applications
-- **Literature Survey and Analysis**: Comprehensive review of contactless physiological measurement, mobile sensor networks, and research software development with identification of research gaps and opportunities
-- **Technology Evaluation and Selection**: Detailed analysis of Android and Python development frameworks, libraries, and tools with comprehensive justification for selection decisions
+**Part A: Technical Foundations** ([Chapter_2_Context_and_Literature_Review.md](Chapter_2_Context_and_Literature_Review.md))
+- Distributed systems theory and mobile computing research  
+- Technology platform evaluation and selection methodology
+- Software frameworks, libraries, and development tools analysis
+- Cross-platform integration and communication protocols
+
+**Part B: Physiological Foundations** ([Chapter_2_Background_Literature_Review_Physiological_Foundations.md](Chapter_2_Background_Literature_Review_Physiological_Foundations.md)) 🆕
+- **2.1** Emotion Analysis Applications
+- **2.2** Rationale for Contactless Physiological Measurement
+- **2.3** Definitions of "Stress" (Scientific vs. Colloquial)
+- **2.4** Cortisol vs. GSR as Stress Indicators  
+- **2.5** GSR Physiology and Measurement Limitations
+- **2.6** Thermal Cues of Stress in Humans
+- **2.7** RGB vs. Thermal Imaging (Machine Learning Hypothesis)
+- **2.8** Sensor Device Selection Rationale (Shimmer3 GSR+ & Topdon TC001)
+
+**📋 Navigation Guide:** [Background_Literature_Review_Index.md](Background_Literature_Review_Index.md)
+
+**Comprehensive Academic Coverage (50,000+ words):**
+- **Physiological Measurement Foundations**: Scientific rationale for multi-modal stress detection with detailed examination of autonomic nervous system responses, HPA axis activation, and thermal physiological changes
+- **Technology Selection Rationale**: Systematic justification for sensor platform choices including research-grade measurement capabilities, multi-modal integration requirements, and community adoption factors  
+- **Machine Learning Integration Hypothesis**: Framework for combining RGB and thermal imaging modalities through complementary information content analysis and multi-modal fusion strategies
 - **Research Gap Analysis**: Identification of significant opportunities for advancement in contactless physiological measurement and distributed research systems
-- **Future Research Directions**: Establishment of research opportunities and community development potential that extend project impact
+- **Academic Foundation**: 150+ references establishing theoretical foundations across physiology, computer science, and research methodology domains
 
 **Academic Foundation Establishment:**
-- Systematic literature review integration establishing theoretical foundations for contactless physiological measurement and distributed system coordination
-- Comprehensive technology analysis demonstrating systematic evaluation approaches that balance technical capability with practical considerations
-- Research gap identification providing justification for technical innovations and methodological contributions
-- Academic contribution framework demonstrating how established principles enable novel technical achievements
+- Systematic literature review across physiological measurement, distributed systems, and computer vision domains
+- Comprehensive technology analysis demonstrating systematic evaluation approaches balancing technical capability with practical considerations
+- Research gap identification providing justification for technical innovations and methodological contributions  
+- Dual-domain expertise integration enabling novel technical achievements
 
 ### [Chapter 3: Requirements and Analysis](Chapter_3_Requirements_and_Analysis.md) - Systematic Foundation Development
 

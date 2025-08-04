@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+**Part A: Technical Foundations and System Architecture**
 1. [Introduction and Research Context](#introduction-and-research-context)
   - 1.1. [Research Problem Definition and Academic Significance](#research-problem-definition-and-academic-significance)
   - 1.2. [System Innovation and Technical Contributions](#system-innovation-and-technical-contributions)
@@ -10,6 +11,16 @@
   - 2.2. [Contactless Physiological Measurement and Computer Vision](#contactless-physiological-measurement-and-computer-vision)
   - 2.3. [Thermal Imaging and Multi-Modal Sensor Integration](#thermal-imaging-and-multi-modal-sensor-integration)
   - 2.4. [Research Software Development and Validation Methodologies](#research-software-development-and-validation-methodologies)
+
+**Part B: Physiological Foundations and Stress Detection** - [📖 Detailed Analysis](Chapter_2_Background_Literature_Review_Physiological_Foundations.md)
+- Emotion Analysis Applications
+- Rationale for Contactless Physiological Measurement
+- Scientific vs. Colloquial Definitions of "Stress"  
+- Cortisol vs. GSR as Stress Indicators
+- GSR Physiology and Measurement Limitations
+- Thermal Cues of Stress in Humans
+- RGB vs. Thermal Imaging (Machine Learning Hypothesis)
+- Sensor Device Selection Rationale (Shimmer GSR + Topdon Thermal Camera)
 3. [Supporting Tools, Software, Libraries and Frameworks](#supporting-tools-software-libraries-and-frameworks)
   - 3.1. [Android Development Platform and Libraries](#android-development-platform-and-libraries)
    - 3.1.1. [Core Android Framework Components](#core-android-framework-components)
@@ -45,7 +56,21 @@
 
 ---
 
-This comprehensive chapter provides detailed analysis of the theoretical foundations, related work, and technological context that informed the development of the Multi-Sensor Recording System. The chapter establishes the academic foundation through systematic review of distributed systems theory, physiological measurement research, computer vision applications, and research software development methodologies while documenting the careful technology selection process that ensures both technical excellence and long-term sustainability.
+This comprehensive chapter provides detailed analysis of both the technical foundations and physiological foundations that informed the development of the Multi-Sensor Recording System. The chapter establishes the academic foundation through systematic review of distributed systems theory, physiological measurement research, computer vision applications, and research software development methodologies while documenting the careful technology selection process that ensures both technical excellence and long-term sustainability.
+
+**Chapter Structure and Coverage:**
+
+**Part A** focuses on the technical and engineering foundations, covering distributed systems theory, software architecture decisions, and technology platform selections that enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System.
+
+**Part B** ([detailed in separate document](Chapter_2_Background_Literature_Review_Physiological_Foundations.md)) provides comprehensive coverage of the physiological and psychological foundations underlying stress detection, including detailed analysis of:
+- Emotion analysis applications and their implications for multi-sensor systems
+- Scientific rationale for contactless physiological measurement approaches
+- Comprehensive definitions and understanding of stress from both scientific and colloquial perspectives
+- Comparative analysis of cortisol versus GSR as stress biomarkers
+- Detailed examination of GSR physiology and measurement limitations
+- Thermal cues of stress and their detection through imaging technologies
+- Machine learning approaches to RGB versus thermal imaging analysis
+- Systematic rationale for sensor device selection (Shimmer3 GSR+ and Topdon thermal cameras)
 
 The background analysis demonstrates how established theoretical principles from multiple scientific domains converge to enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System. Through comprehensive literature survey and systematic technology evaluation, this chapter establishes the research foundation that enables the novel contributions presented in subsequent chapters while providing the technical justification for architectural and implementation decisions.
 
