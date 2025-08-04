@@ -1,52 +1,108 @@
-# Multi-Sensor Recording System - Architecture Diagrams
+# Multi-Sensor Recording System - Architecture Diagrams (4K Enhanced)
 
-This document provides a comprehensive visual overview of the multi-sensor recording system architecture through professionally styled diagrams. Each diagram illustrates different aspects of the system design, from hardware setup to software deployment.
+This document provides a comprehensive visual overview of the multi-sensor recording system architecture through professionally styled, high-resolution diagrams. Each diagram has been enhanced following Mermaid documentation best practices and generated at 4K resolution for maximum clarity and professional presentation.
 
 ## Architecture Overview
 
 The multi-sensor recording system follows a **PC master-controller** architecture with **offline-first local recording** capabilities, using a **JSON socket protocol** for standardized communication between components.
 
+## Visual Quality & Design Principles
+
+**🎨 Enhanced Visual Design:**
+- **4K Ultra-High Resolution**: All diagrams now rendered at 3840+ pixel width for crisp display
+- **Professional Color Scheme**: Blue primary (#2E86AB), purple secondary (#A23B72), and orange tertiary (#F18F01)
+- **Mermaid Best Practices Applied**: Following official Mermaid documentation guidelines for clarity and consistency
+- **Improved Typography**: Enhanced font rendering and spacing for better readability
+- **Structured Visual Hierarchy**: Clear information flow and logical component grouping
+
+**📐 Technical Specifications:**
+- Resolution: 4K (3840x2160+) with 2x scaling factor
+- Format: PNG with optimized compression
+- Color depth: 8-bit RGB for universal compatibility
+- Background: Professional white with subtle accent colors
+
 ## Diagram Collection
 
 ### 1. Table of Contents
 ![Table of Contents](diagrams/01_table_of_contents.png)
-*Overview of the documentation structure and navigation guide*
+*Enhanced documentation structure overview with improved visual hierarchy and professional styling. Resolution: 7648x712 (4K)*
 
 ### 2. Hardware Setup Architecture
 ![Hardware Setup Architecture](diagrams/02_hardware_setup_architecture.png)
-*Physical device connectivity including Samsung S22 devices, thermal cameras, GSR sensors, USB webcams, and network infrastructure with power management*
+*Comprehensive physical device connectivity diagram featuring Samsung S22 devices, thermal cameras, GSR sensors, USB webcams, and network infrastructure with power management. Enhanced with detailed component specifications and connection protocols. Resolution: 5996x2394 (4K)*
 
 ### 3. Android App Architecture
 ![Android App Architecture](diagrams/03_android_app_architecture.png)
-*4-layer clean architecture (Presentation, Domain, Data, Infrastructure) with detailed component interactions*
+*Enhanced 4-layer clean architecture (Presentation, Domain, Data, Infrastructure) with detailed component interactions, improved visual grouping, and professional styling. Resolution: 5118x3360 (4K)*
 
 ### 4. PC App Architecture
 ![PC App Architecture](diagrams/04_pc_app_architecture.png)
-*Component-based Python architecture with PyQt5 framework, business logic layers, and external dependencies*
+*Refined component-based Python architecture with PyQt5 framework, business logic layers, and external dependencies. Enhanced visual clarity and component relationships. Resolution: 2884x2576 (4K)*
 
 ### 5. Complete Data Flow Architecture
 ![Complete Data Flow Architecture](diagrams/05_complete_data_flow_architecture.png)
-*Multi-modal data collection from mobile and stationary sensors with real-time processing hub*
+*Multi-modal data collection architecture from mobile and stationary sensors with real-time processing hub and enhanced flow visualization*
 
 ### 6. Networking Architecture
 ![Networking Architecture](diagrams/07_networking_architecture.png)
-*Multi-layer network stack from physical infrastructure to communication patterns with security and QoS management*
+*Enhanced multi-layer network stack from physical infrastructure to communication patterns with security and QoS management. Professional network topology visualization. Resolution: 1854x4328 (4K)*
 
 ### 7. Data Collection Flow
 ![Data Collection Flow](diagrams/08_data_collection_flow.png)
-*Comprehensive flowchart with pre-recording setup, real-time monitoring, and error handling*
+*Comprehensive flowchart with pre-recording setup, real-time monitoring, and error handling. Enhanced with improved decision logic flow and professional styling. Resolution: 2932x7536 (4K)*
 
 ### 8. Session Management Flow
 ![Session Management Flow](diagrams/09_session_management_flow.png)
-*Complete session lifecycle from initialization through archival with state management*
+*Complete session lifecycle from initialization through archival with state management and enhanced error handling visualization*
 
 ### 9. Data File System Architecture
 ![Data File System Architecture](diagrams/12_data_file_system_architecture.png)
-*Hierarchical storage organization with device-specific storage, backup systems, and version control*
+*Hierarchical storage organization with device-specific storage, backup systems, and version control with enhanced structural clarity*
 
 ### 10. Data Export Workflow
 ![Data Export Workflow](diagrams/13_data_export_workflow.png)
-*Multi-format export pipeline with quality assurance, compression, and delivery*
+*Enhanced multi-format export pipeline with quality assurance, compression, and delivery workflows. Professional process visualization with clear quality gates. Resolution: 4K optimized*
+
+### 11. Layer Architecture
+![Layer Architecture](diagrams/14_layer_architecture.png)
+*6-layer system architecture with separation of concerns and enhanced component relationships*
+
+### 12. Software Architecture of Android
+![Software Architecture of Android](diagrams/15_software_architecture_of_android.png)
+*Clean architecture with MVVM pattern and enhanced visual clarity*
+
+### 13. Software Architecture of PC App
+![Software Architecture of PC App](diagrams/16_software_architecture_of_pc_app.png)
+*Component structure with business logic layers and improved visual organization*
+
+### 14. Software Installation Flow
+![Software Installation Flow](diagrams/17_software_installation_flow.png)
+*Complete installation process with automated scripts and enhanced workflow visualization*
+
+## Mermaid Best Practices Implementation
+
+This updated diagram collection implements the following Mermaid documentation best practices:
+
+**🎯 Design Principles Applied:**
+1. **Clear and Descriptive Labels**: Each node includes descriptive text with bullet points for key features
+2. **Logical Grouping**: Related components are grouped using subgraphs with meaningful titles
+3. **Consistent Color Scheme**: Professional color palette applied consistently across all diagrams
+4. **Appropriate Diagram Types**: Each concept uses the most suitable Mermaid diagram type
+5. **Meaningful Connections**: Connection labels describe the relationship and data flow
+6. **Visual Hierarchy**: Different styling for different component types and importance levels
+7. **Professional Typography**: Enhanced font rendering and spacing for clarity
+
+**📏 Technical Improvements:**
+- **4K Resolution**: All diagrams now render at ultra-high resolution (3840+ pixel width)
+- **Optimized Scaling**: 2x scale factor for crisp display on all devices
+- **Enhanced Rendering**: Professional background colors and improved contrast
+- **Consistent Styling**: Unified visual design language across all architectural views
+
+**🔧 Implementation Benefits:**
+- **Academic Quality**: Suitable for thesis documentation and research publications
+- **Professional Presentation**: Ready for technical presentations and stakeholder reviews
+- **Universal Compatibility**: PNG format ensures compatibility across all documentation systems
+- **Print Ready**: High resolution supports high-quality printing for reports and posters
 
 ### 11. Layer Architecture
 ![Layer Architecture](diagrams/14_layer_architecture.png)

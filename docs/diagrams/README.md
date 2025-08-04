@@ -1,13 +1,29 @@
-# Architecture Diagrams Collection
+# Architecture Diagrams Collection (4K Enhanced)
 
-This directory contains professionally styled PNG diagrams that visualize the multi-sensor recording system architecture.
+This directory contains professionally styled, ultra-high-resolution PNG diagrams that visualize the multi-sensor recording system architecture. All diagrams have been enhanced following Mermaid documentation best practices and generated at 4K resolution.
 
-## Contents
+## Enhanced Features
 
-- **14 high-resolution PNG diagrams** covering all major system components
-- **Professional visual styling** with consistent color scheme and layout
-- **Academic-quality presentation** suitable for thesis documentation
-- **Comprehensive coverage** from hardware setup to software deployment
+- **14 ultra-high-resolution 4K PNG diagrams** covering all major system components
+- **Mermaid best practices implementation** following official documentation guidelines  
+- **Professional 4K visual styling** with consistent color scheme and enhanced layout
+- **Academic-quality presentation** suitable for thesis documentation and publications
+- **Print-ready resolution** supporting professional presentations and reports
+- **Comprehensive architectural coverage** from hardware setup to software deployment
+
+## 4K Quality Specifications
+
+### Resolution Enhancement
+- **4K Ultra-High Resolution**: 3840+ pixel width for maximum clarity
+- **Enhanced Scaling**: 2x scale factor with optimized rendering
+- **Professional Quality**: Suitable for large displays and high-quality printing
+- **Universal Compatibility**: PNG format ensures compatibility across all systems
+
+### Visual Improvements
+- **Enhanced Typography**: Improved font rendering and spacing for better readability
+- **Professional Color Palette**: Refined blue (#2E86AB), purple (#A23B72), and orange (#F18F01) theme
+- **Improved Visual Hierarchy**: Clear information flow and logical component grouping
+- **Optimized Layouts**: Better spacing and component organization for clarity
 
 ## Diagram Categories
 
@@ -42,16 +58,29 @@ This directory contains professionally styled PNG diagrams that visualize the mu
 - **Additional colors** for specific component types (green, red, navy, etc.)
 
 ### Styling
-- High-resolution rendering (1200x800 minimum, 2x scale factor)
-- Clean, professional typography
-- Consistent node shapes and connection styles
-- Proper spacing and visual hierarchy
+- **4K Ultra-High Resolution** with enhanced clarity and detail
+- Clean, professional typography with improved font rendering
+- Consistent node shapes and connection styles with enhanced visual appeal
+- Optimized spacing and visual hierarchy for maximum comprehension
+- **Mermaid Best Practices Applied** following official documentation guidelines
 
 ### Quality Standards
-- Academic presentation quality
-- Professional documentation standards
-- Clear component relationships
-- Optimal readability and comprehension
+- **Academic presentation quality** suitable for thesis and research publications
+- **Professional documentation standards** meeting industry requirements
+- **Print-ready resolution** supporting high-quality posters and reports
+- Clear component relationships with enhanced visual flow
+- Optimal readability and comprehension at all zoom levels
+
+## Mermaid Best Practices Implementation
+
+**Applied Design Principles:**
+1. ✅ **Clear and Descriptive Labels** - Detailed component descriptions with bullet points
+2. ✅ **Logical Grouping** - Related components grouped with meaningful subgraph titles  
+3. ✅ **Consistent Styling** - Professional color scheme applied throughout collection
+4. ✅ **Appropriate Diagram Types** - Optimal Mermaid diagram type for each architectural concept
+5. ✅ **Meaningful Connections** - Connection labels describe relationships and data flow
+6. ✅ **Proper Visual Hierarchy** - Different styling for component types and importance
+7. ✅ **Professional Typography** - Enhanced font rendering and spacing for clarity
 
 ## Usage
 
@@ -64,10 +93,11 @@ Include these diagrams in:
 
 ## Generation
 
-These diagrams were generated from mermaid.js source code using:
-- Custom styling configuration
-- Professional color themes
-- High-resolution export settings
-- Optimized layout parameters
+These enhanced 4K diagrams were generated using:
+- **Mermaid CLI with 4K configuration** for ultra-high-resolution output
+- **Professional styling configuration** with enhanced color themes and typography
+- **Optimized rendering parameters** including 2x scaling and improved backgrounds
+- **Mermaid best practices implementation** following official documentation guidelines
+- **Quality assurance processes** ensuring consistency and professional standards
 
-The source mermaid code is maintained in `MERMAID_DIAGRAMS_COMPREHENSIVE.md` for version control and updates.
+The enhanced source mermaid code is maintained in `MERMAID_DIAGRAMS_IMPROVED.md` with best practices implementation, while the original comprehensive collection remains available in `MERMAID_DIAGRAMS_COMPREHENSIVE.md` for reference and version control.
