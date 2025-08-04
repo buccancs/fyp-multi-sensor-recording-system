@@ -20,6 +20,9 @@ out/
 ### Kotlin ###
 .kotlin
 
+### Screenshots (temporary) ###
+screenshots/
+
 ### Eclipse ###
 .apt_generated
 .classpath
