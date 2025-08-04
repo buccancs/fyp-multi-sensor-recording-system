@@ -1,0 +1,18 @@
+stateDiagram-v2
+    [*] --> TestExecution
+    TestExecution --> Running
+    
+    Running --> DemoDirect: ❌ 0/5
+    DemoDirect --> [*]
+    Running --> WorkingDemo: ✅ 5/5
+    WorkingDemo --> [*]
+    Running --> RequirementsDemo: ❌ 0/0
+    RequirementsDemo --> [*]
+    Running --> FunctionalRequirements: ❌ 0/0
+    FunctionalRequirements --> [*]
+    Running --> NonfunctionalRequirements: ❌ 0/0
+    NonfunctionalRequirements --> [*]
+    Running --> UseCases: ❌ 0/0
+    UseCases --> [*]
+    Running --> RequirementsComprehensive: ❌ 0/0
+    RequirementsComprehensive --> [*]

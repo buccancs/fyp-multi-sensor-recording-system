@@ -1,0 +1,16 @@
+flowchart LR
+    A[Test Execution Performance] --> B[Duration: 0.25s]
+    A --> C[Total Tests: 10]
+    A --> D[Success Rate: 50.0%]
+    A --> E[Tests/Second: 39.51]
+    
+    B --> B1[Execution Time Analysis]
+    C --> C1[Test Coverage Analysis]
+    D --> D1[Quality Metrics]
+    E --> E1[Performance Baseline]
+    
+    classDef metrics fill:#E6F3FF,stroke:#0066CC,stroke-width:2px
+    classDef analysis fill:#FFF2E6,stroke:#CC6600,stroke-width:2px
+    
+    class B,C,D,E metrics
+    class B1,C1,D1,E1 analysis
