@@ -2172,11 +2172,11 @@ with detailed test code snippets provided in **Appendix F**.
 
 **Performance Testing and Benchmarking Framework:**
 
-- `PythonApp/src/production/performance_benchmark.py` - Comprehensive system performance benchmarking with statistical
+- `PythonApp/production/performance_benchmark.py` - Comprehensive system performance benchmarking with statistical
   analysis (See Appendix F.114)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/AdaptiveFrameRateControllerTest.kt` - Dynamic
   performance optimization testing (See Appendix F.115)
-- `PythonApp/src/production/phase4_validator.py` - System-wide validation framework with compliance checking (See
+- `PythonApp/production/phase4_validator.py` - System-wide validation framework with compliance checking (See
   Appendix F.116)
 - `AndroidApp/src/test/java/com/multisensor/recording/performance/NetworkOptimizerTest.kt` - Network performance
   validation testing (See Appendix F.117)
@@ -2185,7 +2185,7 @@ with detailed test code snippets provided in **Appendix F**.
 
 **Quality Assurance and Security Validation:**
 
-- `PythonApp/src/production/security_scanner.py` - Comprehensive security testing with vulnerability assessment (See
+- `PythonApp/production/security_scanner.py` - Comprehensive security testing with vulnerability assessment (See
   Appendix F.119)
 - `AndroidApp/src/test/java/com/multisensor/recording/calibration/CalibrationCaptureManagerTest.kt` - Calibration
   accuracy testing with statistical validation (See Appendix F.120)
@@ -2227,7 +2227,7 @@ with detailed test code snippets provided in **Appendix F**.
 
 **Production Deployment Testing and Validation:**
 
-- `PythonApp/src/production/deployment_automation.py` - Deployment testing automation with environment validation (See
+- `PythonApp/production/deployment_automation.py` - Deployment testing automation with environment validation (See
   Appendix F.138)
 - `PythonApp/validate_testing_qa_framework.py` - QA framework validation with compliance checking (See Appendix F.139)
 

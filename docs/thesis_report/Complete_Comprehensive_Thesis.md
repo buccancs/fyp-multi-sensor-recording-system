@@ -1023,9 +1023,9 @@ referenced in **Appendix F** with detailed code snippets demonstrating the imple
 
 **Core System Architecture:**
 
-- `PythonApp/src/application.py` - Main application dependency injection container and service orchestration framework (
+- `PythonApp/application.py` - Main application dependency injection container and service orchestration framework (
   See Appendix F.1)
-- `PythonApp/src/enhanced_main_with_web.py` - Enhanced application launcher with integrated web interface and real-time
+- `PythonApp/enhanced_main_with_web.py` - Enhanced application launcher with integrated web interface and real-time
   monitoring (See Appendix F.2)
 - `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Material Design 3 main activity with
   fragment-based navigation architecture (See Appendix F.3)
@@ -1034,19 +1034,19 @@ referenced in **Appendix F** with detailed code snippets demonstrating the imple
 
 **Multi-Device Synchronization System:**
 
-- `PythonApp/src/session/session_manager.py` - Central session coordination with distributed device management (See
+- `PythonApp/session/session_manager.py` - Central session coordination with distributed device management (See
   Appendix F.5)
-- `PythonApp/src/session/session_synchronizer.py` - Advanced temporal synchronization algorithms with drift correction (
+- `PythonApp/session/session_synchronizer.py` - Advanced temporal synchronization algorithms with drift correction (
   See Appendix F.6)
-- `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination using NTP and custom
+- `PythonApp/master_clock_synchronizer.py` - High-precision master clock coordination using NTP and custom
   protocols (See Appendix F.7)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device connection
   management with automatic discovery (See Appendix F.8)
 
 **Multi-Sensor Integration Framework:**
 
-- `PythonApp/src/shimmer_manager.py` - Research-grade GSR sensor management and calibration (See Appendix F.9)
-- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction capabilities (See
+- `PythonApp/shimmer_manager.py` - Research-grade GSR sensor management and calibration (See Appendix F.9)
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction capabilities (See
   Appendix F.10)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Android GSR recording with
   real-time data validation (See Appendix F.11)
@@ -1057,22 +1057,22 @@ referenced in **Appendix F** with detailed code snippets demonstrating the imple
 
 **Network Communication and Protocol Implementation:**
 
-- `PythonApp/src/network/device_server.py` - JSON socket server with comprehensive device communication protocol (See
+- `PythonApp/network/device_server.py` - JSON socket server with comprehensive device communication protocol (See
   Appendix F.14)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication
   handler with error recovery (See Appendix F.15)
-- `PythonApp/src/protocol/` - Communication protocol schemas and validation utilities (See Appendix F.16)
+- `PythonApp/protocol/` - Communication protocol schemas and validation utilities (See Appendix F.16)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation and
   schema compliance (See Appendix F.17)
 
 **Advanced System Features:**
 
-- `PythonApp/src/hand_segmentation/` - Computer vision pipeline for contactless hand analysis (See Appendix F.18)
-- `PythonApp/src/stimulus_manager.py` - Research protocol coordination and experimental stimulus management (See
+- `PythonApp/hand_segmentation/` - Computer vision pipeline for contactless hand analysis (See Appendix F.18)
+- `PythonApp/stimulus_manager.py` - Research protocol coordination and experimental stimulus management (See
   Appendix F.19)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/` - Android hand segmentation implementation (See
   Appendix F.20)
-- `PythonApp/src/calibration/` - Advanced calibration system with quality assessment (See Appendix F.21)
+- `PythonApp/calibration/` - Advanced calibration system with quality assessment (See Appendix F.21)
 
 **Testing and Quality Assurance:**
 
@@ -2212,44 +2212,44 @@ code components. All referenced files include detailed code snippets in **Append
 
 **Computer Vision and Signal Processing (Based on Literature Analysis):**
 
-- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
+- `PythonApp/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
   MediaPipe and OpenCV for contactless analysis (See Appendix F.25)
-- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
   vision research (See Appendix F.26)
-- `PythonApp/src/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
+- `PythonApp/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
   on DSP literature (See Appendix F.27)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android
   implementation of hand analysis algorithms (See Appendix F.28)
 
 **Distributed Systems Architecture (Following Academic Frameworks):**
 
-- `PythonApp/src/network/device_server.py` - Distributed coordination server implementing academic network protocols (
+- `PythonApp/network/device_server.py` - Distributed coordination server implementing academic network protocols (
   See Appendix F.29)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless network coordination
   with automatic discovery protocols (See Appendix F.30)
-- `PythonApp/src/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
+- `PythonApp/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
   algorithms (See Appendix F.31)
-- `PythonApp/src/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
+- `PythonApp/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
   See Appendix F.32)
 
 **Physiological Measurement Systems (Research-Grade Implementation):**
 
-- `PythonApp/src/shimmer_manager.py` - GSR sensor integration following research protocols and academic calibration
+- `PythonApp/shimmer_manager.py` - GSR sensor integration following research protocols and academic calibration
   standards (See Appendix F.33)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Mobile GSR recording with
   research-grade data validation (See Appendix F.34)
-- `PythonApp/src/calibration/calibration_manager.py` - Calibration methodology implementing academic standards for
+- `PythonApp/calibration/calibration_manager.py` - Calibration methodology implementing academic standards for
   physiological measurement (See Appendix F.35)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - Thermal camera integration with
   academic-grade calibration (See Appendix F.36)
 
 **Multi-Modal Data Integration (Academic Data Fusion Approaches):**
 
-- `PythonApp/src/session/session_manager.py` - Multi-modal data coordination implementing academic data fusion
+- `PythonApp/session/session_manager.py` - Multi-modal data coordination implementing academic data fusion
   methodologies (See Appendix F.37)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/SessionInfo.kt` - Session data management with academic
   research protocols (See Appendix F.38)
-- `PythonApp/src/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
+- `PythonApp/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
   principles (See Appendix F.39)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation
   based on academic data integrity standards (See Appendix F.40)
@@ -2260,7 +2260,7 @@ code components. All referenced files include detailed code snippets in **Append
   See Appendix F.41)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/` - Research-grade test suite with statistical
   validation (See Appendix F.42)
-- `PythonApp/src/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
+- `PythonApp/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
   See Appendix F.43)
 - `PythonApp/comprehensive_test_summary.py` - Statistical analysis and confidence interval calculations for research
   validation (See Appendix F.44)
@@ -4367,34 +4367,34 @@ code snippets available in **Appendix F**.
 
 **Functional Requirements Implementation:**
 
-- `PythonApp/src/session/session_manager.py` - Multi-device coordination and session orchestration implementing FR-001 (
+- `PythonApp/session/session_manager.py` - Multi-device coordination and session orchestration implementing FR-001 (
   See Appendix F.45)
-- `PythonApp/src/network/device_server.py` - JSON socket server implementing network communication requirements FR-002 (
+- `PythonApp/network/device_server.py` - JSON socket server implementing network communication requirements FR-002 (
   See Appendix F.46)
-- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera video recording with Stage 3 RAW extraction implementing
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera video recording with Stage 3 RAW extraction implementing
   FR-003 (See Appendix F.47)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Research-grade GSR recording
   implementing FR-004 (See Appendix F.48)
-- `PythonApp/src/calibration/calibration_manager.py` - Comprehensive calibration system implementing FR-005 (See
+- `PythonApp/calibration/calibration_manager.py` - Comprehensive calibration system implementing FR-005 (See
   Appendix F.49)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - TopDon thermal camera integration
   implementing FR-006 (See Appendix F.50)
-- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - Contactless hand analysis implementing FR-007 (See
+- `PythonApp/hand_segmentation/hand_segmentation_processor.py` - Contactless hand analysis implementing FR-007 (See
   Appendix F.51)
 
 **Non-Functional Requirements Implementation:**
 
-- `PythonApp/src/session/session_synchronizer.py` - Microsecond-precision temporal synchronization implementing
+- `PythonApp/session/session_synchronizer.py` - Microsecond-precision temporal synchronization implementing
   NFR-002 (See Appendix F.52)
-- `PythonApp/src/production/security_scanner.py` - Comprehensive security validation implementing NFR-003 (See Appendix
+- `PythonApp/production/security_scanner.py` - Comprehensive security validation implementing NFR-003 (See Appendix
   F.53)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Network performance
   optimization implementing NFR-001 (See Appendix F.54)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Power management and efficiency
   implementing NFR-005 (See Appendix F.55)
-- `PythonApp/src/session/session_recovery.py` - Reliability and fault tolerance mechanisms implementing NFR-004 (See
+- `PythonApp/session/session_recovery.py` - Reliability and fault tolerance mechanisms implementing NFR-004 (See
   Appendix F.56)
-- `PythonApp/src/master_clock_synchronizer.py` - High-precision timing requirements implementing NFR-006 (See Appendix
+- `PythonApp/master_clock_synchronizer.py` - High-precision timing requirements implementing NFR-006 (See Appendix
   F.57)
 
 **Requirements Validation and Testing:**
@@ -4405,24 +4405,24 @@ code snippets available in **Appendix F**.
   See Appendix F.59)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderEnhancedTest.kt` - Android GSR recording
   validation (See Appendix F.60)
-- `PythonApp/src/production/performance_benchmark.py` - Performance requirements validation with quantitative metrics (
+- `PythonApp/production/performance_benchmark.py` - Performance requirements validation with quantitative metrics (
   See Appendix F.61)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/ConnectionManagerTestSimple.kt` - Network connectivity
   requirement testing (See Appendix F.62)
 
 **Configuration and Constraint Management:**
 
-- `PythonApp/src/config/` - Configuration management system enforcing system constraints (See Appendix F.63)
+- `PythonApp/config/` - Configuration management system enforcing system constraints (See Appendix F.63)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceConfiguration.kt` - Device-specific constraint
   validation and management (See Appendix F.64)
-- `PythonApp/src/production/phase4_validator.py` - System-wide constraint validation with compliance checking (See
+- `PythonApp/production/phase4_validator.py` - System-wide constraint validation with compliance checking (See
   Appendix F.65)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt` - Dynamic constraint
   adaptation for performance optimization (See Appendix F.66)
 
 **Requirements Traceability and Quality Assurance:**
 
-- `PythonApp/src/production/deployment_automation.py` - Automated deployment requirement validation with CI/CD
+- `PythonApp/production/deployment_automation.py` - Automated deployment requirement validation with CI/CD
   integration (See Appendix F.67)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data format
   requirement validation (See Appendix F.68)
@@ -7723,9 +7723,9 @@ with detailed code snippets provided in **Appendix F**.
 
 **Core System Architecture and Design Patterns:**
 
-- `PythonApp/src/application.py` - Dependency injection container and service orchestration implementing IoC pattern (
+- `PythonApp/application.py` - Dependency injection container and service orchestration implementing IoC pattern (
   See Appendix F.71)
-- `PythonApp/src/enhanced_main_with_web.py` - Web-integrated application launcher with factory pattern implementation (
+- `PythonApp/enhanced_main_with_web.py` - Web-integrated application launcher with factory pattern implementation (
   See Appendix F.72)
 - `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Fragment-based architecture with Material
   Design 3 implementation (See Appendix F.73)
@@ -7734,13 +7734,13 @@ with detailed code snippets provided in **Appendix F**.
 
 **Distributed System Implementation and Network Architecture:**
 
-- `PythonApp/src/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (
+- `PythonApp/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (
   See Appendix F.75)
-- `PythonApp/src/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction
+- `PythonApp/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction
   algorithms (See Appendix F.76)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device discovery and
   connection management with state machine implementation (See Appendix F.77)
-- `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination with NTP integration (See
+- `PythonApp/master_clock_synchronizer.py` - High-precision master clock coordination with NTP integration (See
   Appendix F.78)
 
 **Android Application Core Components and Mobile Architecture:**
@@ -7758,30 +7758,30 @@ with detailed code snippets provided in **Appendix F**.
 
 **Desktop Controller Architecture and Session Management:**
 
-- `PythonApp/src/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See
+- `PythonApp/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See
   Appendix F.84)
-- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See
   Appendix F.85)
-- `PythonApp/src/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
+- `PythonApp/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
   validation (See Appendix F.86)
-- `PythonApp/src/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
+- `PythonApp/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
   F.87)
 
 **Computer Vision Pipeline and Signal Processing:**
 
-- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless
+- `PythonApp/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless
   analysis (See Appendix F.88)
-- `PythonApp/src/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix
+- `PythonApp/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix
   F.89)
-- `PythonApp/src/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See
+- `PythonApp/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See
   Appendix F.90)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android computer
   vision pipeline implementation (See Appendix F.91)
 
 **Communication Protocol Implementation and Data Management:**
 
-- `PythonApp/src/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
-- `PythonApp/src/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix
+- `PythonApp/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
+- `PythonApp/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix
   F.93)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication
   with state synchronization (See Appendix F.94)
@@ -7790,13 +7790,13 @@ with detailed code snippets provided in **Appendix F**.
 
 **Data Processing, Analysis, and Quality Assurance:**
 
-- `PythonApp/src/session/session_logger.py` - Structured logging with performance monitoring and analytics (See Appendix
+- `PythonApp/session/session_logger.py` - Structured logging with performance monitoring and analytics (See Appendix
   F.96)
-- `PythonApp/src/session/session_recovery.py` - Fault tolerance and recovery mechanisms with state restoration (See
+- `PythonApp/session/session_recovery.py` - Fault tolerance and recovery mechanisms with state restoration (See
   Appendix F.97)
 - `AndroidApp/src/main/java/com/multisensor/recording/persistence/` - Data persistence layer with encryption and
   compression (See Appendix F.98)
-- `PythonApp/src/utils/data_validation.py` - Comprehensive data integrity validation with statistical analysis (See
+- `PythonApp/utils/data_validation.py` - Comprehensive data integrity validation with statistical analysis (See
   Appendix F.99)
 
 **Performance Optimization and System Monitoring:**
@@ -7805,9 +7805,9 @@ with detailed code snippets provided in **Appendix F**.
   with bandwidth management (See Appendix F.100)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Intelligent power management with
   battery optimization (See Appendix F.101)
-- `PythonApp/src/production/performance_benchmark.py` - Comprehensive performance benchmarking with statistical
+- `PythonApp/production/performance_benchmark.py` - Comprehensive performance benchmarking with statistical
   reporting (See Appendix F.102)
-- `PythonApp/src/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix
+- `PythonApp/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix
   F.103)
 
 ---
@@ -10039,11 +10039,11 @@ with detailed test code snippets provided in **Appendix F**.
 
 **Performance Testing and Benchmarking Framework:**
 
-- `PythonApp/src/production/performance_benchmark.py` - Comprehensive system performance benchmarking with statistical
+- `PythonApp/production/performance_benchmark.py` - Comprehensive system performance benchmarking with statistical
   analysis (See Appendix F.114)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/AdaptiveFrameRateControllerTest.kt` - Dynamic
   performance optimization testing (See Appendix F.115)
-- `PythonApp/src/production/phase4_validator.py` - System-wide validation framework with compliance checking (See
+- `PythonApp/production/phase4_validator.py` - System-wide validation framework with compliance checking (See
   Appendix F.116)
 - `AndroidApp/src/test/java/com/multisensor/recording/performance/NetworkOptimizerTest.kt` - Network performance
   validation testing (See Appendix F.117)
@@ -10052,7 +10052,7 @@ with detailed test code snippets provided in **Appendix F**.
 
 **Quality Assurance and Security Validation:**
 
-- `PythonApp/src/production/security_scanner.py` - Comprehensive security testing with vulnerability assessment (See
+- `PythonApp/production/security_scanner.py` - Comprehensive security testing with vulnerability assessment (See
   Appendix F.119)
 - `AndroidApp/src/test/java/com/multisensor/recording/calibration/CalibrationCaptureManagerTest.kt` - Calibration
   accuracy testing with statistical validation (See Appendix F.120)
@@ -10094,7 +10094,7 @@ with detailed test code snippets provided in **Appendix F**.
 
 **Production Deployment Testing and Validation:**
 
-- `PythonApp/src/production/deployment_automation.py` - Deployment testing automation with environment validation (See
+- `PythonApp/production/deployment_automation.py` - Deployment testing automation with environment validation (See
   Appendix F.138)
 - `PythonApp/validate_testing_qa_framework.py` - QA framework validation with compliance checking (See Appendix F.139)
 - `AndroidApp/validate_shimmer_integration.sh` - Hardware integration validation for production deployment (See Appendix
@@ -12398,9 +12398,9 @@ detailed implementation code snippets available in **Appendix F**.
 
 **System Performance and Achievement Validation:**
 
-- `PythonApp/src/production/performance_benchmark.py` - Comprehensive performance measurement with statistical
+- `PythonApp/production/performance_benchmark.py` - Comprehensive performance measurement with statistical
   validation demonstrating system capabilities (See Appendix F.141)
-- `PythonApp/src/production/phase4_validator.py` - System-wide capability validation with quantitative assessment of all
+- `PythonApp/production/phase4_validator.py` - System-wide capability validation with quantitative assessment of all
   functional requirements (See Appendix F.142)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Network performance
   optimization demonstrating efficiency achievements (See Appendix F.143)
@@ -12411,13 +12411,13 @@ detailed implementation code snippets available in **Appendix F**.
 
 **Research Capability Demonstration and Innovation Evidence:**
 
-- `PythonApp/src/session/session_manager.py` - Multi-device coordination achievements with complex state management and
+- `PythonApp/session/session_manager.py` - Multi-device coordination achievements with complex state management and
   distributed control (See Appendix F.146)
-- `PythonApp/src/calibration/calibration_manager.py` - Advanced calibration capabilities with quality assessment and
+- `PythonApp/calibration/calibration_manager.py` - Advanced calibration capabilities with quality assessment and
   research-grade validation (See Appendix F.147)
-- `PythonApp/src/session/session_synchronizer.py` - Temporal synchronization innovations with microsecond precision and
+- `PythonApp/session/session_synchronizer.py` - Temporal synchronization innovations with microsecond precision and
   drift correction (See Appendix F.148)
-- `PythonApp/src/master_clock_synchronizer.py` - High-precision timing coordination demonstrating research-grade
+- `PythonApp/master_clock_synchronizer.py` - High-precision timing coordination demonstrating research-grade
   temporal accuracy (See Appendix F.149)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Research-grade physiological
   measurement with validation and quality control (See Appendix F.150)
@@ -12426,7 +12426,7 @@ detailed implementation code snippets available in **Appendix F**.
 
 - `PythonApp/test_integration_logging.py` - Quality assurance validation with comprehensive testing framework and
   statistical confidence (See Appendix F.151)
-- `PythonApp/src/production/security_scanner.py` - Security achievement validation with vulnerability assessment and
+- `PythonApp/production/security_scanner.py` - Security achievement validation with vulnerability assessment and
   compliance checking (See Appendix F.152)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/` - Comprehensive quality validation with multi-platform
   testing and reliability assessment (See Appendix F.153)
@@ -12437,22 +12437,22 @@ detailed implementation code snippets available in **Appendix F**.
 
 **Innovation and Technical Contribution Validation:**
 
-- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - Computer vision innovation with contactless
+- `PythonApp/hand_segmentation/hand_segmentation_processor.py` - Computer vision innovation with contactless
   analysis and advanced algorithm implementation (See Appendix F.156)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt` - Adaptive control
   innovation with machine learning optimization (See Appendix F.157)
-- `PythonApp/src/webcam/dual_webcam_capture.py` - Multi-camera synchronization innovation with stereo vision and
+- `PythonApp/webcam/dual_webcam_capture.py` - Multi-camera synchronization innovation with stereo vision and
   geometric calibration (See Appendix F.158)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - Thermal imaging innovation with
   advanced calibration and processing (See Appendix F.159)
-- `PythonApp/src/stimulus_manager.py` - Research protocol coordination innovation with experimental control and timing
+- `PythonApp/stimulus_manager.py` - Research protocol coordination innovation with experimental control and timing
   precision (See Appendix F.160)
 
 **Community Impact and Accessibility Achievement:**
 
-- `PythonApp/src/application.py` - Simplified system architecture demonstrating accessibility through dependency
+- `PythonApp/application.py` - Simplified system architecture demonstrating accessibility through dependency
   injection and modular design (See Appendix F.161)
-- `PythonApp/src/enhanced_main_with_web.py` - Web-integrated interface demonstrating user accessibility and ease of
+- `PythonApp/enhanced_main_with_web.py` - Web-integrated interface demonstrating user accessibility and ease of
   use (See Appendix F.162)
 - `AndroidApp/src/main/java/com/multisensor/recording/ui/` - User-friendly interface implementation with Material Design
   3 and accessibility features (See Appendix F.163)
@@ -12463,22 +12463,22 @@ detailed implementation code snippets available in **Appendix F**.
 
 **Deployment and Production Readiness Validation:**
 
-- `PythonApp/src/production/deployment_automation.py` - Production deployment capabilities with automated testing and
+- `PythonApp/production/deployment_automation.py` - Production deployment capabilities with automated testing and
   validation (See Appendix F.166)
-- `PythonApp/src/production/security_scanner.py` - Production security validation with comprehensive vulnerability
+- `PythonApp/production/security_scanner.py` - Production security validation with comprehensive vulnerability
   assessment (See Appendix F.167)
 - `AndroidApp/src/main/java/com/multisensor/recording/MultiSensorApplication.kt` - Production-ready application
   architecture with dependency injection (See Appendix F.168)
-- `PythonApp/src/web_launcher.py` - Web interface production deployment with real-time monitoring capabilities (See
+- `PythonApp/web_launcher.py` - Web interface production deployment with real-time monitoring capabilities (See
   Appendix F.169)
 
 **Future Research Foundation and Extensibility:**
 
-- `PythonApp/src/real_time_calibration_feedback.py` - Advanced feature foundation for future research with real-time
+- `PythonApp/real_time_calibration_feedback.py` - Advanced feature foundation for future research with real-time
   adaptation (See Appendix F.170)
-- `PythonApp/src/webcam/dual_webcam_capture.py` - Multi-camera research capability providing foundation for advanced
+- `PythonApp/webcam/dual_webcam_capture.py` - Multi-camera research capability providing foundation for advanced
   computer vision research (See Appendix F.171)
-- `PythonApp/src/protocol/` - Extensible communication framework enabling future protocol development and integration (
+- `PythonApp/protocol/` - Extensible communication framework enabling future protocol development and integration (
   See Appendix F.172)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/` - Extensible computer vision framework for
   future analysis capabilities (See Appendix F.173)
@@ -12489,7 +12489,7 @@ detailed implementation code snippets available in **Appendix F**.
   experimental design (See Appendix F.174)
 - `PythonApp/test_hardware_sensor_simulation.py` - Research simulation capabilities enabling controlled experimental
   validation (See Appendix F.175)
-- `PythonApp/src/calibration/` - Standardized calibration methodology providing foundation for research
+- `PythonApp/calibration/` - Standardized calibration methodology providing foundation for research
   reproducibility (See Appendix F.176)
 - `AndroidApp/src/test/java/com/multisensor/recording/calibration/` - Mobile calibration framework enabling field
   research capabilities (See Appendix F.177)
@@ -13394,7 +13394,7 @@ sections. Complete source code is available in the project repository.*
 
 ## Chapter 1 References
 
-### F.1 Core Application Architecture - PythonApp/src/application.py
+### F.1 Core Application Architecture - PythonApp/application.py
 
 ```python
 """Application class for multi-sensor recording system with dependency injection"""
@@ -13432,7 +13432,7 @@ class Application(QObject):
             raise
 ```
 
-### F.2 Enhanced Application Launcher - PythonApp/src/enhanced_main_with_web.py
+### F.2 Enhanced Application Launcher - PythonApp/enhanced_main_with_web.py
 
 ```python
 """Enhanced application launcher with web interface integration"""
@@ -13543,7 +13543,7 @@ class MultiSensorApplication : Application() {
 }
 ```
 
-### F.5 Session Manager - PythonApp/src/session/session_manager.py
+### F.5 Session Manager - PythonApp/session/session_manager.py
 
 ```python
 """Session management for multi-sensor recording system"""
@@ -13599,7 +13599,7 @@ class SessionManager:
 
 ## Chapter 2 References (Literature Review Implementation)
 
-### F.25 Hand Segmentation Computer Vision - PythonApp/src/hand_segmentation/hand_segmentation_processor.py
+### F.25 Hand Segmentation Computer Vision - PythonApp/hand_segmentation/hand_segmentation_processor.py
 
 ```python
 """Advanced computer vision pipeline implementing MediaPipe and OpenCV"""
@@ -13659,7 +13659,7 @@ class HandSegmentationProcessor:
 
 ## Chapter 3 References (Requirements Implementation)
 
-### F.45 Multi-Device Coordination - PythonApp/src/session/session_manager.py
+### F.45 Multi-Device Coordination - PythonApp/session/session_manager.py
 
 ```python
 """Multi-device coordination implementing functional requirement FR-001"""
@@ -13703,7 +13703,7 @@ def register_device(self, device_info: Dict) -> bool:
 
 ## Chapter 4 References (Design Implementation)
 
-### F.71 Dependency Injection Architecture - PythonApp/src/application.py
+### F.71 Dependency Injection Architecture - PythonApp/application.py
 
 ```python
 """IoC (Inversion of Control) pattern implementation for system architecture"""
@@ -13801,7 +13801,7 @@ class IntegrationTestFramework(unittest.TestCase):
 
 ## Chapter 6 References (Conclusions Evidence)
 
-### F.141 Performance Benchmarking - PythonApp/src/production/performance_benchmark.py
+### F.141 Performance Benchmarking - PythonApp/production/performance_benchmark.py
 
 ```python
 """Comprehensive performance measurement with statistical validation"""
@@ -14905,7 +14905,7 @@ The code snippets are organized by reference numbers (F.1-F.177) as cited in the
 
 ## F.1-F.24 Chapter 1 Implementation References
 
-### F.1 Core Application Architecture - PythonApp/src/application.py
+### F.1 Core Application Architecture - PythonApp/application.py
 
 ```python
 """Application class for multi-sensor recording system with dependency injection"""
@@ -14934,7 +14934,7 @@ class Application(QObject):
             raise
 ```
 
-### F.5 Session Manager Core - PythonApp/src/session/session_manager.py
+### F.5 Session Manager Core - PythonApp/session/session_manager.py
 
 ```python
 """Session management for multi-sensor recording system"""
@@ -15012,7 +15012,7 @@ class ConnectionManager @Inject constructor(
 
 ## F.25-F.44 Chapter 2 Literature Review Implementation
 
-### F.25 Computer Vision Pipeline - PythonApp/src/hand_segmentation/hand_segmentation_processor.py
+### F.25 Computer Vision Pipeline - PythonApp/hand_segmentation/hand_segmentation_processor.py
 
 ```python
 """Advanced computer vision pipeline implementing MediaPipe and OpenCV"""
@@ -15047,7 +15047,7 @@ class HandSegmentationProcessor:
         return annotated_frame, hand_data
 ```
 
-### F.29 Distributed Systems Server - PythonApp/src/network/device_server.py
+### F.29 Distributed Systems Server - PythonApp/network/device_server.py
 
 ```python
 """Distributed coordination server implementing academic network protocols"""
@@ -15100,7 +15100,7 @@ class JsonSocketServer:
 
 ## F.45-F.70 Chapter 3 Requirements Implementation
 
-### F.45 Multi-Device Coordination (FR-001) - PythonApp/src/session/session_manager.py
+### F.45 Multi-Device Coordination (FR-001) - PythonApp/session/session_manager.py
 
 ```python
 """Multi-device coordination implementing functional requirement FR-001"""
@@ -15136,7 +15136,7 @@ def register_device(self, device_info: Dict) -> bool:
     return True
 ```
 
-### F.52 Temporal Synchronization (NFR-002) - PythonApp/src/session/session_synchronizer.py
+### F.52 Temporal Synchronization (NFR-002) - PythonApp/session/session_synchronizer.py
 
 ```python
 """Microsecond-precision temporal synchronization implementing NFR-002"""
@@ -15188,7 +15188,7 @@ class SessionSynchronizer:
 
 ## F.71-F.103 Chapter 4 Design Implementation
 
-### F.71 IoC Pattern Implementation - PythonApp/src/application.py
+### F.71 IoC Pattern Implementation - PythonApp/application.py
 
 ```python
 """Inversion of Control (IoC) pattern for system architecture"""
@@ -15233,7 +15233,7 @@ class ServiceContainer:
                     service.initialize()
 ```
 
-### F.75 Network Architecture - PythonApp/src/network/device_server.py
+### F.75 Network Architecture - PythonApp/network/device_server.py
 
 ```python
 """Asynchronous JSON socket server with distributed coordination protocols"""
@@ -15336,7 +15336,7 @@ class IntegrationTestFramework(unittest.TestCase):
         })
 ```
 
-### F.114 Performance Benchmarking - PythonApp/src/production/performance_benchmark.py
+### F.114 Performance Benchmarking - PythonApp/production/performance_benchmark.py
 
 ```python
 """System performance benchmarking with statistical reporting"""
@@ -15406,7 +15406,7 @@ class PerformanceBenchmark:
 
 ## F.141-F.177 Chapter 6 Conclusions Evidence
 
-### F.141 System Achievement Validation - PythonApp/src/production/performance_benchmark.py
+### F.141 System Achievement Validation - PythonApp/production/performance_benchmark.py
 
 ```python
 """Performance measurement demonstrating system capability achievements"""

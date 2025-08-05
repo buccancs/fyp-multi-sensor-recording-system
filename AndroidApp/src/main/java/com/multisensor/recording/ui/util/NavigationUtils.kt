@@ -8,16 +8,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.multisensor.recording.R
 
-/**
- * Utility class for navigation operations
- */
+
 object NavigationUtils {
 
     fun navigateToFragment(fragment: Fragment, destinationId: Int) {
         try {
             fragment.findNavController().navigate(destinationId)
         } catch (e: Exception) {
-            // Handle navigation error
+
         }
     }
 

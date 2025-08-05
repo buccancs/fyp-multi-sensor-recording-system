@@ -307,12 +307,12 @@ detection, including detailed analysis of:
 \end{itemize}
 The background analysis demonstrates how established theoretical principles from multiple scientific domains converge to
 enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System through
-implementations in \texttt{AndroidApp/src/main/java/com/multisensor/recording/} and \texttt{PythonApp/src/}. Through comprehensive
+implementations in \texttt{AndroidApp/src/main/java/com/multisensor/recording/} and \texttt{PythonApp/}. Through comprehensive
 literature survey and systematic technology evaluation [Kitchenham2007; Webster2002], this chapter establishes the
 research foundation that enables the novel contributions presented in subsequent chapters while providing the technical
 justification for architectural and implementation decisions based on proven software engineering
 principles [Gamma1994; Martin2008; Fowler2002]. The distributed coordination approach is implemented through
-\texttt{PythonApp/src/session/session\_manager.py} following established patterns from distributed systems
+\texttt{PythonApp/session/session\_manager.py} following established patterns from distributed systems
 research [Lamport1978; Chandy1985; Birman2007].
 
 \textbf{Chapter Organization and Academic Contributions:}
@@ -1922,11 +1922,11 @@ code components. All referenced files include detailed code snippets in \textbf{
 \textbf{Computer Vision and Signal Processing (Based on Literature Analysis):}
 
 \begin{itemize}
-\item `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
+\item `PythonApp/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
   MediaPipe and OpenCV for contactless analysis (See Appendix F.25)
-\item `PythonApp/src/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
+\item `PythonApp/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
   vision research (See Appendix F.26)
-\item `PythonApp/src/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
+\item `PythonApp/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
   on DSP literature (See Appendix F.27)
 \item `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android
   implementation of hand analysis algorithms (See Appendix F.28)
@@ -1935,24 +1935,24 @@ code components. All referenced files include detailed code snippets in \textbf{
 \textbf{Distributed Systems Architecture (Following Academic Frameworks):}
 
 \begin{itemize}
-\item `PythonApp/src/network/device_server.py` - Distributed coordination server implementing academic network protocols (
+\item `PythonApp/network/device_server.py` - Distributed coordination server implementing academic network protocols (
   See Appendix F.29)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless network coordination
   with automatic discovery protocols (See Appendix F.30)
-\item `PythonApp/src/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
+\item `PythonApp/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
   algorithms (See Appendix F.31)
-\item `PythonApp/src/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
+\item `PythonApp/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
   See Appendix F.32)
 
 \end{itemize}
 \textbf{Physiological Measurement Systems (Research-Grade Implementation):}
 
 \begin{itemize}
-\item `PythonApp/src/shimmer_manager.py` - GSR sensor integration following research protocols and academic calibration
+\item `PythonApp/shimmer_manager.py` - GSR sensor integration following research protocols and academic calibration
   standards (See Appendix F.33)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Mobile GSR recording with
   research-grade data validation (See Appendix F.34)
-\item `PythonApp/src/calibration/calibration_manager.py` - Calibration methodology implementing academic standards for
+\item `PythonApp/calibration/calibration_manager.py` - Calibration methodology implementing academic standards for
   physiological measurement (See Appendix F.35)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - Thermal camera integration with
   academic-grade calibration (See Appendix F.36)
@@ -1961,11 +1961,11 @@ code components. All referenced files include detailed code snippets in \textbf{
 \textbf{Multi-Modal Data Integration (Academic Data Fusion Approaches):}
 
 \begin{itemize}
-\item `PythonApp/src/session/session_manager.py` - Multi-modal data coordination implementing academic data fusion
+\item `PythonApp/session/session_manager.py` - Multi-modal data coordination implementing academic data fusion
   methodologies (See Appendix F.37)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/SessionInfo.kt` - Session data management with academic
   research protocols (See Appendix F.38)
-\item `PythonApp/src/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
+\item `PythonApp/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
   principles (See Appendix F.39)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation
   based on academic data integrity standards (See Appendix F.40)
@@ -1978,7 +1978,7 @@ code components. All referenced files include detailed code snippets in \textbf{
   See Appendix F.41)
 \item `AndroidApp/src/test/java/com/multisensor/recording/recording/` - Research-grade test suite with statistical
   validation (See Appendix F.42)
-\item `PythonApp/src/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
+\item `PythonApp/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
   See Appendix F.43)
 
 \end{itemize}

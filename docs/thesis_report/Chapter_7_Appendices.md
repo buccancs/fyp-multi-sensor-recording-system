@@ -964,7 +964,7 @@ SDK components, and validate the complete build system.
 conda activate thermal-env
 
 # Start Python Desktop Controller
-python PythonApp/src/main.py
+python PythonApp/main.py
 
 # Build Android application
 ./gradlew build
@@ -1362,7 +1362,7 @@ sections. Complete source code is available in the project repository.*
 
 ## Chapter 1 References
 
-### G.1 Core Application Architecture - PythonApp/src/application.py
+### G.1 Core Application Architecture - PythonApp/application.py
 
 ```python
 """Application class for multi-sensor recording system with dependency injection"""
@@ -1399,7 +1399,7 @@ class Application(QObject):
             raise
 ```
 
-### G.2 Enhanced Application Launcher - PythonApp/src/enhanced_main_with_web.py
+### G.2 Enhanced Application Launcher - PythonApp/enhanced_main_with_web.py
 
 ```python
 """Enhanced application launcher with web interface integration"""
@@ -1509,7 +1509,7 @@ class MultiSensorApplication : Application() {
 }
 ```
 
-### F.5 Session Manager - PythonApp/src/session/session_manager.py
+### F.5 Session Manager - PythonApp/session/session_manager.py
 
 ```python
 """Session management for multi-sensor recording system"""
@@ -1564,7 +1564,7 @@ class SessionManager:
 
 ## Chapter 2 References (Literature Review Implementation)
 
-### G.25 Hand Segmentation Computer Vision - PythonApp/src/hand_segmentation/hand_segmentation_processor.py
+### G.25 Hand Segmentation Computer Vision - PythonApp/hand_segmentation/hand_segmentation_processor.py
 
 ```python
 """Advanced computer vision pipeline implementing MediaPipe and OpenCV"""
@@ -1623,7 +1623,7 @@ class HandSegmentationProcessor:
 
 ## Chapter 3 References (Requirements Implementation)
 
-### F.45 Multi-Device Coordination - PythonApp/src/session/session_manager.py
+### F.45 Multi-Device Coordination - PythonApp/session/session_manager.py
 
 ```python
 """Multi-device coordination implementing functional requirement FR-001"""
@@ -1666,7 +1666,7 @@ def register_device(self, device_info: Dict) -> bool:
 
 ## Chapter 4 References (Design Implementation)
 
-### F.71 Dependency Injection Architecture - PythonApp/src/application.py
+### F.71 Dependency Injection Architecture - PythonApp/application.py
 
 ```python
 """IoC (Inversion of Control) pattern implementation for system architecture"""
@@ -1762,7 +1762,7 @@ class IntegrationTestFramework(unittest.TestCase):
 
 ## Chapter 6 References (Conclusions Evidence)
 
-### G.141 Performance Benchmarking - PythonApp/src/production/performance_benchmark.py
+### G.141 Performance Benchmarking - PythonApp/production/performance_benchmark.py
 
 ```python
 """Comprehensive performance measurement with statistical validation"""
@@ -2812,7 +2812,7 @@ The code snippets are organized by reference numbers (F.1-F.177) as cited in the
 
 ## F.1-F.24 Chapter 1 Implementation References
 
-### G.1 Core Application Architecture - PythonApp/src/application.py
+### G.1 Core Application Architecture - PythonApp/application.py
 
 ```python
 """application class for multi-sensor recording system"""
@@ -2874,7 +2874,7 @@ class Application(QObject):
             raise
 ```
 
-### F.5 Session Manager Core - PythonApp/src/session/session_manager.py
+### F.5 Session Manager Core - PythonApp/session/session_manager.py
 
 ```python
 """Session management for multi-sensor recording system"""
@@ -2951,7 +2951,7 @@ class ConnectionManager @Inject constructor(
 
 ## F.25-F.44 Chapter 2 Literature Review Implementation
 
-### G.25 Computer Vision Pipeline - PythonApp/src/hand_segmentation/hand_segmentation_processor.py
+### G.25 Computer Vision Pipeline - PythonApp/hand_segmentation/hand_segmentation_processor.py
 
 ```python
 """Advanced computer vision pipeline implementing MediaPipe and OpenCV"""
@@ -2985,7 +2985,7 @@ class HandSegmentationProcessor:
         return annotated_frame, hand_data
 ```
 
-### G.29 Distributed Systems Server - PythonApp/src/network/device_server.py
+### G.29 Distributed Systems Server - PythonApp/network/device_server.py
 
 ```python
 """Distributed coordination server implementing academic network protocols"""
@@ -3037,7 +3037,7 @@ class JsonSocketServer:
 
 ## F.45-F.70 Chapter 3 Requirements Implementation
 
-### F.45 Multi-Device Coordination (FR-001) - PythonApp/src/session/session_manager.py
+### F.45 Multi-Device Coordination (FR-001) - PythonApp/session/session_manager.py
 
 ```python
 """Multi-device coordination implementing functional requirement FR-001"""
@@ -3072,7 +3072,7 @@ def register_device(self, device_info: Dict) -> bool:
     return True
 ```
 
-### F.52 Temporal Synchronization (NFR-002) - PythonApp/src/session/session_synchronizer.py
+### F.52 Temporal Synchronization (NFR-002) - PythonApp/session/session_synchronizer.py
 
 ```python
 """Microsecond-precision temporal synchronization implementing NFR-002"""
@@ -3123,7 +3123,7 @@ class SessionSynchronizer:
 
 ## F.71-F.103 Chapter 4 Design Implementation
 
-### F.71 IoC Pattern Implementation - PythonApp/src/application.py
+### F.71 IoC Pattern Implementation - PythonApp/application.py
 
 ```python
 """Inversion of Control (IoC) pattern for system architecture"""
@@ -3167,7 +3167,7 @@ class ServiceContainer:
                     service.initialize()
 ```
 
-### F.75 Network Architecture - PythonApp/src/network/device_server.py
+### F.75 Network Architecture - PythonApp/network/device_server.py
 
 ```python
 """Asynchronous JSON socket server with distributed coordination protocols"""
@@ -3268,7 +3268,7 @@ class IntegrationTestFramework(unittest.TestCase):
         })
 ```
 
-### G.114 Performance Benchmarking - PythonApp/src/production/performance_benchmark.py
+### G.114 Performance Benchmarking - PythonApp/production/performance_benchmark.py
 
 ```python
 """System performance benchmarking with statistical reporting"""
@@ -3337,7 +3337,7 @@ class PerformanceBenchmark:
 
 ## F.141-F.177 Chapter 6 Conclusions Evidence
 
-### G.141 System Achievement Validation - PythonApp/src/production/performance_benchmark.py
+### G.141 System Achievement Validation - PythonApp/production/performance_benchmark.py
 
 ```python
 """Performance measurement demonstrating system capability achievements"""

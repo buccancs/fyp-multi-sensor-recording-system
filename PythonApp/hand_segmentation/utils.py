@@ -1,13 +1,14 @@
-import numpy as np
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Tuple, Optional, Dict, Any
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 
 class SegmentationMethod(Enum):
-    MEDIAPIPE = 'mediapipe'
-    COLOR_BASED = 'color_based'
-    CONTOUR_BASED = 'contour_based'
+    MEDIAPIPE = "mediapipe"
+    COLOR_BASED = "color_based"
+    CONTOUR_BASED = "contour_based"
 
 
 @dataclass
@@ -16,7 +17,7 @@ class HandRegion:
     mask: Optional[np.ndarray] = None
     landmarks: Optional[List[Tuple[float, float]]] = None
     confidence: float = 0.0
-    hand_label: str = 'Unknown'
+    hand_label: str = "Unknown"
 
 
 @dataclass
@@ -51,9 +52,12 @@ class ProcessingResult:
             self.output_files = {}
 
 
-def create_bounding_box_from_landmarks(landmarks: List[Tuple[float, float]],
-    frame_width: int, frame_height: int, padding: int=20) ->Tuple[int, int,
-    int, int]:
+def create_bounding_box_from_landmarks(
+    landmarks: List[Tuple[float, float]],
+    frame_width: int,
+    frame_height: int,
+    padding: int = 20,
+) -> Tuple[int, int, int, int]:
     if not landmarks:
         return 0, 0, 0, 0
     x_coords = [int(point[0] * frame_width) for point in landmarks]
@@ -69,20 +73,24 @@ def create_bounding_box_from_landmarks(landmarks: List[Tuple[float, float]],
     return min_x, min_y, width, height
 
 
-def crop_frame_to_region(frame: np.ndarray, bbox: Tuple[int, int, int, int]
-    ) ->np.ndarray:
+def crop_frame_to_region(
+    frame: np.ndarray, bbox: Tuple[int, int, int, int]
+) -> np.ndarray:
     x, y, w, h = bbox
-    return frame[y:y + h, x:x + w]
+    return frame[y : y + h, x : x + w]
 
 
-def resize_frame(frame: np.ndarray, target_size: Tuple[int, int]) ->np.ndarray:
+def resize_frame(frame: np.ndarray, target_size: Tuple[int, int]) -> np.ndarray:
     import cv2
+
     return cv2.resize(frame, target_size, interpolation=cv2.INTER_AREA)
 
 
-def create_hand_mask_from_landmarks(landmarks: List[Tuple[float, float]],
-    frame_shape: Tuple[int, int]) ->np.ndarray:
+def create_hand_mask_from_landmarks(
+    landmarks: List[Tuple[float, float]], frame_shape: Tuple[int, int]
+) -> np.ndarray:
     import cv2
+
     height, width = frame_shape[:2]
     mask = np.zeros((height, width), dtype=np.uint8)
     if not landmarks:
@@ -101,12 +109,17 @@ def create_hand_mask_from_landmarks(landmarks: List[Tuple[float, float]],
 def save_processing_metadata(result: ProcessingResult, output_path: str):
     import json
     from datetime import datetime
-    metadata = {'input_video': result.input_video_path, 'output_directory':
-        result.output_directory, 'processed_frames': result.
-        processed_frames, 'detected_hands_count': result.
-        detected_hands_count, 'processing_time': result.processing_time,
-        'output_files': result.output_files, 'success': result.success,
-        'error_message': result.error_message, 'processed_at': datetime.now
-        ().isoformat()}
-    with open(output_path, 'w') as f:
+
+    metadata = {
+        "input_video": result.input_video_path,
+        "output_directory": result.output_directory,
+        "processed_frames": result.processed_frames,
+        "detected_hands_count": result.detected_hands_count,
+        "processing_time": result.processing_time,
+        "output_files": result.output_files,
+        "success": result.success,
+        "error_message": result.error_message,
+        "processed_at": datetime.now().isoformat(),
+    }
+    with open(output_path, "w") as f:
         json.dump(metadata, f, indent=2)

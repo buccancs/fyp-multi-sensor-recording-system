@@ -18,18 +18,20 @@ Milestone: 3.1 - PyQt GUI Scaffolding and Application Framework
 
 import base64
 import os
+
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import (
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
     QAction,
-    QMessageBox,
     QDockWidget,
+    QHBoxLayout,
+    QMainWindow,
+    QMessageBox,
     QPlainTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
+
 from bucika_gsr.network.device_server import JsonSocketServer, create_command_message
 from bucika_gsr.session.session_logger import get_session_logger
 from bucika_gsr.session.session_manager import SessionManager
@@ -106,7 +108,6 @@ class MainWindow(QMainWindow):
         settings_action.triggered.connect(self.show_settings_dialog)
         tools_menu.addAction(settings_action)
 
-        # Add file browser action
         file_browser_action = QAction("File Browser...", self)
         file_browser_action.triggered.connect(self.show_file_browser)
         tools_menu.addAction(file_browser_action)
@@ -315,18 +316,19 @@ class MainWindow(QMainWindow):
         """Show file browser dialog"""
         self.log_message("File browser menu item selected - opening file browser")
         try:
-            # Get recordings directory from session manager if available
+
             recordings_path = "recordings"
-            if hasattr(self.session_manager, 'base_recordings_dir'):
+            if hasattr(self.session_manager, "base_recordings_dir"):
                 recordings_path = self.session_manager.base_recordings_dir
-            
+
             selected_file = show_file_browser(self, recordings_path)
             if selected_file:
                 self.log_message(f"File selected from browser: {selected_file}")
-                # Could add actions here like opening the file or adding to current session
+
                 QMessageBox.information(
-                    self, "File Selected", 
-                    f"Selected file:\n{selected_file}\n\nFile browser functionality is now available!"
+                    self,
+                    "File Selected",
+                    f"Selected file:\n{selected_file}\n\nFile browser functionality is now available!",
                 )
             else:
                 self.log_message("File browser closed without selection")
@@ -448,22 +450,26 @@ class MainWindow(QMainWindow):
             if device_index >= 0:
                 sensor_info = []
 
-                if 'accelerometer' in sensor_data:
-                    acc = sensor_data['accelerometer']
+                if "accelerometer" in sensor_data:
+                    acc = sensor_data["accelerometer"]
                     if isinstance(acc, dict):
-                        sensor_info.append(f"Acc: X={acc.get('x', 0):.2f}, Y={acc.get('y', 0):.2f}, Z={acc.get('z', 0):.2f}")
+                        sensor_info.append(
+                            f"Acc: X={acc.get('x', 0):.2f}, Y={acc.get('y', 0):.2f}, Z={acc.get('z', 0):.2f}"
+                        )
                     else:
                         sensor_info.append(f"Acc: {acc}")
 
-                if 'gyroscope' in sensor_data:
-                    gyro = sensor_data['gyroscope']
+                if "gyroscope" in sensor_data:
+                    gyro = sensor_data["gyroscope"]
                     if isinstance(gyro, dict):
-                        sensor_info.append(f"Gyro: X={gyro.get('x', 0):.2f}, Y={gyro.get('y', 0):.2f}, Z={gyro.get('z', 0):.2f}")
+                        sensor_info.append(
+                            f"Gyro: X={gyro.get('x', 0):.2f}, Y={gyro.get('y', 0):.2f}, Z={gyro.get('z', 0):.2f}"
+                        )
                     else:
                         sensor_info.append(f"Gyro: {gyro}")
 
-                if 'gsr' in sensor_data:
-                    gsr = sensor_data['gsr']
+                if "gsr" in sensor_data:
+                    gsr = sensor_data["gsr"]
                     if isinstance(gsr, (int, float)):
                         sensor_info.append(f"GSR: {gsr:.2f}")
                     elif isinstance(gsr, dict):
@@ -471,8 +477,8 @@ class MainWindow(QMainWindow):
                     else:
                         sensor_info.append(f"GSR: {gsr}")
 
-                if 'temperature' in sensor_data:
-                    temp = sensor_data['temperature']
+                if "temperature" in sensor_data:
+                    temp = sensor_data["temperature"]
                     if isinstance(temp, (int, float)):
                         sensor_info.append(f"Temp: {temp:.1f}°C")
                     else:
@@ -488,7 +494,10 @@ class MainWindow(QMainWindow):
                         sensor_summary = "; ".join(sensor_info[:2])
                         item.setText(f"{current_text} [Sensors: {sensor_summary}]")
 
-                if hasattr(self, 'session_logger') and self.session_logger.is_session_active():
+                if (
+                    hasattr(self, "session_logger")
+                    and self.session_logger.is_session_active()
+                ):
                     sensor_values = {}
                     for key, value in sensor_data.items():
                         if isinstance(value, dict):
@@ -986,21 +995,28 @@ class MainWindow(QMainWindow):
             )
 
             device_index = self.get_device_index(device_id)
-            if device_index >= 0 and hasattr(self.preview_tabs, 'set_thermal_overlay'):
+            if device_index >= 0 and hasattr(self.preview_tabs, "set_thermal_overlay"):
                 self.preview_tabs.set_thermal_overlay(device_index, enabled)
 
                 overlay_status = "enabled" if enabled else "disabled"
-                self.statusBar().showMessage(f"Thermal overlay {overlay_status} for {device_id}")
+                self.statusBar().showMessage(
+                    f"Thermal overlay {overlay_status} for {device_id}"
+                )
 
-                if hasattr(self, 'session_logger') and self.session_logger.is_session_active():
+                if (
+                    hasattr(self, "session_logger")
+                    and self.session_logger.is_session_active()
+                ):
                     self.session_logger.log_calibration_event(
-                        'overlay_toggle',
-                        device_id=device_id,
-                        overlay_enabled=enabled
+                        "overlay_toggle", device_id=device_id, overlay_enabled=enabled
                     )
             else:
-                self.log_message(f"Preview panel overlay not yet implemented for {device_id}")
-                self.statusBar().showMessage("Thermal overlay feature not yet fully implemented")
+                self.log_message(
+                    f"Preview panel overlay not yet implemented for {device_id}"
+                )
+                self.statusBar().showMessage(
+                    "Thermal overlay feature not yet fully implemented"
+                )
 
         except Exception as e:
             self.log_message(f"Error toggling overlay: {str(e)}")
@@ -1011,43 +1027,65 @@ class MainWindow(QMainWindow):
         try:
             self.log_message(f"Calibration completed for {device_id}")
 
-            if hasattr(self, 'session_manager') and self.session_manager.get_current_session():
+            if (
+                hasattr(self, "session_manager")
+                and self.session_manager.get_current_session()
+            ):
                 try:
                     calibration_data = {
-                        'device_id': device_id,
-                        'timestamp': result.get('timestamp') if isinstance(result, dict) else None,
-                        'calibration_type': result.get('type', 'thermal_rgb') if isinstance(result, dict) else 'thermal_rgb',
-                        'result': result,
-                        'status': 'completed'
+                        "device_id": device_id,
+                        "timestamp": (
+                            result.get("timestamp")
+                            if isinstance(result, dict)
+                            else None
+                        ),
+                        "calibration_type": (
+                            result.get("type", "thermal_rgb")
+                            if isinstance(result, dict)
+                            else "thermal_rgb"
+                        ),
+                        "result": result,
+                        "status": "completed",
                     }
 
-                    self.session_manager.add_calibration_result(device_id, calibration_data)
+                    self.session_manager.add_calibration_result(
+                        device_id, calibration_data
+                    )
 
-                    if hasattr(self, 'session_logger') and self.session_logger.is_session_active():
+                    if (
+                        hasattr(self, "session_logger")
+                        and self.session_logger.is_session_active()
+                    ):
                         self.session_logger.log_calibration_event(
-                            'calibration_completed',
+                            "calibration_completed",
                             device_id=device_id,
-                            calibration_type=calibration_data['calibration_type'],
-                            result_summary=str(result)[:100]
+                            calibration_type=calibration_data["calibration_type"],
+                            result_summary=str(result)[:100],
                         )
 
-                    self.statusBar().showMessage(f"Calibration results saved for {device_id}")
+                    self.statusBar().showMessage(
+                        f"Calibration results saved for {device_id}"
+                    )
 
                 except Exception as e:
                     self.log_message(f"Error saving calibration results: {e}")
                     self.statusBar().showMessage(f"Error saving calibration results")
             else:
-                if not hasattr(self, 'calibration_results_cache'):
+                if not hasattr(self, "calibration_results_cache"):
                     self.calibration_results_cache = {}
 
                 self.calibration_results_cache[device_id] = {
-                    'result': result,
-                    'timestamp': self.get_current_timestamp(),
-                    'status': 'completed'
+                    "result": result,
+                    "timestamp": self.get_current_timestamp(),
+                    "status": "completed",
                 }
 
-                self.log_message(f"Calibration results cached for {device_id} (no active session)")
-                self.statusBar().showMessage(f"Calibration completed for {device_id} (cached)")
+                self.log_message(
+                    f"Calibration results cached for {device_id} (no active session)"
+                )
+                self.statusBar().showMessage(
+                    f"Calibration completed for {device_id} (cached)"
+                )
 
         except Exception as e:
             self.log_message(f"Error handling calibration completion: {str(e)}")
@@ -1056,6 +1094,7 @@ class MainWindow(QMainWindow):
     def get_current_timestamp(self):
         """Get current timestamp in ISO format."""
         from datetime import datetime
+
         return datetime.now().isoformat()
 
     def closeEvent(self, event):

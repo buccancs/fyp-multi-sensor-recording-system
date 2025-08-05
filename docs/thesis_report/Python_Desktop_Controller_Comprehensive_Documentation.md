@@ -4958,13 +4958,13 @@ characteristics and their implications. *American Psychologist*, 17(11), 776-783
 
 The Python Desktop Controller implements concepts from this documentation through the following key source files:
 
-- `PythonApp/src/application.py` - Main application framework implementing dependency injection patterns [Gamma1994]
-- `PythonApp/src/session/session_manager.py` - Session management implementing distributed coordination
+- `PythonApp/application.py` - Main application framework implementing dependency injection patterns [Gamma1994]
+- `PythonApp/session/session_manager.py` - Session management implementing distributed coordination
   principles [Tanenbaum2016]
-- `PythonApp/src/webcam/webcam_capture.py` - Computer vision pipeline implementing real-time processing [VanderPlas2016]
-- `PythonApp/src/shimmer_manager.py` - Physiological sensor integration implementing research measurement
+- `PythonApp/webcam/webcam_capture.py` - Computer vision pipeline implementing real-time processing [VanderPlas2016]
+- `PythonApp/shimmer_manager.py` - Physiological sensor integration implementing research measurement
   standards [Boucsein2012]
-- `PythonApp/src/network/device_server.py` - Network communication implementing distributed system
+- `PythonApp/network/device_server.py` - Network communication implementing distributed system
   patterns [Fielding2002]
 
 Through comprehensive technical innovation, rigorous validation, and extensive documentation, this project contributes
