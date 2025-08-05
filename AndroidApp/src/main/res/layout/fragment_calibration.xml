@@ -8,7 +8,6 @@
     android:padding="16dp"
     tools:context=".ui.fragments.CalibrationFragment">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/calibrationTitle"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Calibration Status -->
     <TextView
         android:id="@+id/calibrationStatusText"
         android:layout_width="0dp"
@@ -35,7 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Calibration Controls -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/startCalibrationButton"
         android:layout_width="0dp"
@@ -74,7 +71,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Calibration Preview Area -->
     <TextView
         android:id="@+id/previewLabel"
         android:layout_width="0dp"

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -23,7 +22,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Main Dashboard Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +33,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Recording Section -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/recordingCard"
                 android:layout_width="match_parent"
@@ -57,14 +54,12 @@
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Camera Preview Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginBottom="16dp">
 
-                        <!-- Main Camera Preview -->
                         <FrameLayout
                             android:id="@+id/cameraPreviewContainer"
                             android:layout_width="0dp"
@@ -87,7 +82,6 @@
 
                         </FrameLayout>
 
-                        <!-- Thermal Preview -->
                         <FrameLayout
                             android:id="@+id/thermalPreviewContainer"
                             android:layout_width="0dp"
@@ -107,7 +101,6 @@
 
                     </LinearLayout>
 
-                    <!-- Recording Controls Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -136,7 +129,6 @@
 
                     </LinearLayout>
 
-                    <!-- Recording Status -->
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/recordingStatusText"
                         android:layout_width="match_parent"
@@ -149,7 +141,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- System Status Section -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/systemStatusCard"
                 android:layout_width="match_parent"
@@ -171,7 +162,6 @@
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Overall System Status -->
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/systemStatusText"
                         android:layout_width="match_parent"
@@ -181,21 +171,18 @@
                         android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
 
-                    <!-- Device Connection Grid -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginBottom="16dp">
 
-                        <!-- First Row: PC and Shimmer -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:layout_marginBottom="8dp">
 
-                            <!-- PC Connection -->
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -222,7 +209,6 @@
 
                             </LinearLayout>
 
-                            <!-- Shimmer Connection -->
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -251,13 +237,11 @@
 
                         </LinearLayout>
 
-                        <!-- Second Row: Thermal and Network -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <!-- Thermal Connection -->
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -284,7 +268,6 @@
 
                             </LinearLayout>
 
-                            <!-- Network Status -->
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -317,7 +300,6 @@
 
                     </LinearLayout>
 
-                    <!-- Storage Information -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -365,7 +347,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quick Actions Section -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/quickActionsCard"
                 android:layout_width="match_parent"
@@ -386,7 +367,6 @@
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Calibration Status and Action -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -428,13 +408,11 @@
 
                     </LinearLayout>
 
-                    <!-- Action Buttons Grid -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <!-- First Row: Files and Devices -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -463,7 +441,6 @@
 
                         </LinearLayout>
 
-                        <!-- Second Row: Transfer and Health -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

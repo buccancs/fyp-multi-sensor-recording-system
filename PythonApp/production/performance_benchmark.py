@@ -298,7 +298,7 @@ class PerformanceBenchmarkSuite:
                 operations = 0
                 test_data = {'session_id': 'test_session_123', 'recordings':
                     [{'id': f'recording_{i}', 'timestamp': time.time() + i,
-                    'duration': 120.5 + i, 'file_size': 1024 * 1024 * (i + 
+                    'duration': 120.5 + i, 'file_size': 1024 * 1024 * (i +
                     1), 'metadata': {'camera_settings': {'resolution':
                     '1920x1080', 'fps': 30, 'bitrate': 5000000}, 'sensors':
                     [{'type': 'shimmer', 'id': f'shimmer_{j}', 'data': list

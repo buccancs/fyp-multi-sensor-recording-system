@@ -314,7 +314,7 @@ class WebController:
                     self.device_status_received.emit(device_id, {'type':
                         'android', 'status': 'connected', 'capabilities':
                         device_info.get('capabilities', []), 'battery':
-                        device_info.get('status', {}).get('battery_level', 
+                        device_info.get('status', {}).get('battery_level',
                         0), 'temperature': device_info.get('status', {}).
                         get('temperature', 0), 'recording': device_info.get
                         ('is_recording', False), 'last_heartbeat':

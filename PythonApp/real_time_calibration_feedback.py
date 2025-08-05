@@ -175,7 +175,7 @@ class CalibrationFeedbackProcessor(QThread):
         stats = {'fps': self.frame_count / elapsed_time if elapsed_time > 0
              else 0, 'avg_processing_time_ms': np.mean(self.
             processing_times) if self.processing_times else 0,
-            'quality_trend': np.mean(list(self.quality_history)[-10:]) if 
+            'quality_trend': np.mean(list(self.quality_history)[-10:]) if
             len(self.quality_history) >= 10 else 0}
         return stats
 

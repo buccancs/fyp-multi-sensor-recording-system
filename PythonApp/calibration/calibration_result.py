@@ -55,7 +55,7 @@ class CalibrationResult:
             'thermal_camera': {'calibrated': self.thermal_camera_matrix is not
             None, 'rms_error': self.thermal_rms_error},
             'stereo_calibration': {'available': self.rotation_matrix is not
-            None, 'rms_error': self.stereo_rms_error}, 'overlay_ready': 
+            None, 'rms_error': self.stereo_rms_error}, 'overlay_ready':
             self.homography_matrix is not None, 'quality_assessment': self.
             quality_assessment}
         return summary
@@ -248,14 +248,14 @@ class CalibrationResult:
 if __name__ == '__main__':
     print('[DEBUG_LOG] Testing CalibrationResult...')
     result = CalibrationResult('test_device')
-    result.rgb_camera_matrix = np.array([[800, 0, 320], [0, 800, 240], [0, 
+    result.rgb_camera_matrix = np.array([[800, 0, 320], [0, 800, 240], [0,
         0, 1]], dtype=np.float32)
     result.rgb_distortion_coeffs = np.array([0.1, -0.2, 0.001, 0.002, 0.1],
         dtype=np.float32)
     result.rgb_rms_error = 0.5
     result.thermal_camera_matrix = np.array([[400, 0, 160], [0, 400, 120],
         [0, 0, 1]], dtype=np.float32)
-    result.thermal_distortion_coeffs = np.array([0.2, -0.3, 0.002, 0.003, 
+    result.thermal_distortion_coeffs = np.array([0.2, -0.3, 0.002, 0.003,
         0.2], dtype=np.float32)
     result.thermal_rms_error = 0.8
     result.rotation_matrix = np.eye(3, dtype=np.float32)

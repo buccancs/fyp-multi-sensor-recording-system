@@ -82,16 +82,13 @@ def generate_final_markdown(summary):
 **Execution Completed:** {summary['execution_timestamp']}
 **Status:** {summary['comprehensive_test_execution']['status']}
 
-## 🎯 Problem Statement Compliance
 
 **Requirement:** {summary['problem_statement_compliance']['requirement']}
 **Status:** {summary['problem_statement_compliance']['status']}
 
-## ✅ Key Achievements
 
 {chr(10).join(f'- {achievement}' for achievement in summary['key_achievements'])}
 
-## 📊 Test Execution Summary
 
 - **Total Test Suites Executed:** {summary['test_results_summary']['total_test_suites_executed']}
 - **Successful Test Suites:** {summary['test_results_summary']['successful_test_suites']}
@@ -99,29 +96,23 @@ def generate_final_markdown(summary):
 - **Overall Success Rate:** {summary['test_results_summary']['overall_success_rate']}
 - **Test Output Files Generated:** {summary['test_results_summary']['test_output_files_generated']}
 
-## 🧪 Test Coverage Areas
 
 {chr(10).join(f"- **{area.replace('_', ' ').title()}:** {status}" for area, status in summary['test_coverage_areas'].items())}
 
-## 🏗️ Test Infrastructure Status
 
 {chr(10).join(f"- **{component.replace('_', ' ').title()}:** {status}" for component, status in summary['test_infrastructure_status'].items())}
 
-## 💾 Saved Test Results
 
 - **Location:** {summary['saved_test_results']['location']}
 - **Formats:** {', '.join(summary['saved_test_results']['formats'])}
 - **Accessibility:** {summary['saved_test_results']['accessibility']}
 
-## 🚀 Available Test Commands
 
 {chr(10).join(f"- **{cmd.replace('_', ' ').title()}:** `{command}`" for cmd, command in summary['available_test_commands'].items())}
 
-## 📈 Recommendations for Future
 
 {chr(10).join(f'- {rec}' for rec in summary['recommendations_for_future'])}
 
-## 🔍 Evidence of Compliance
 
 {chr(10).join(f'- ✅ {evidence}' for evidence in summary['problem_statement_compliance']['evidence'])}
 

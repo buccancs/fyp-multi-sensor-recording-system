@@ -155,40 +155,31 @@ android {
     }
 }
 
-//--------------- Configurations & Dependencies ---------------//
-
 dependencies {
-    // Core & UI Components
+
     implementation(libs.bundles.core.ui)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.material)
     implementation("androidx.cardview:cardview:1.0.0")
 
-    // Jetpack Navigation  
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    // Architecture
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.bundles.activity.fragment)
     implementation(libs.xxpermissions)
 
-    // CameraX
     implementation(libs.bundles.camera)
 
-    // Dependency Injection
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    // Room Database
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
-    // Networking
     implementation(libs.bundles.networking)
 
-    // Local SDKs - Main only (tests inherit through main)
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
     implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
     implementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
@@ -198,24 +189,19 @@ dependencies {
     implementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
     implementation(files("src/main/libs/suplib-release.aar"))
 
-    // Unit Test Dependencies
     testImplementation(libs.bundles.enhanced.unit.testing)
     testImplementation(libs.hilt.android.testing)
     kspTest(libs.hilt.compiler)
 
-    // Instrumentation Test Dependencies
     androidTestImplementation(libs.bundles.enhanced.integration.testing)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil("androidx.test:orchestrator:1.5.0")
     kspAndroidTest(libs.hilt.compiler)
 
-    // Code Quality
     val ktlint by configurations.getting
     ktlint(libs.ktlint)
     detektPlugins(libs.detekt.formatting)
 }
-
-//--------------- Custom Tasks & Build Logic ---------------//
 
 val outputDir = file("${layout.buildDirectory.get()}/generated/source/config")
 tasks.register("generateConstants") {
@@ -234,25 +220,25 @@ tasks.register("generateConstants") {
 
         outputDir.mkdirs()
         outputFile.writeText("""
-        // Auto-generated from config.json. Do not edit manually.
+
         package com.multisensor.recording.config
         object CommonConstants {
             const val PROTOCOL_VERSION: Int = ${json["protocol_version"]}
             const val APP_VERSION: String = "${json["version"]}"
-            
+
             object Network {
                 const val HOST: String = "${network["host"]}"
                 const val PORT: Int = ${network["port"]}
                 const val TIMEOUT_SECONDS: Int = ${network["timeout_seconds"]}
             }
-            
+
             object Devices {
                 const val CAMERA_ID: Int = ${devices["camera_id"]}
                 const val FRAME_RATE: Int = ${devices["frame_rate"]}
                 const val RESOLUTION_WIDTH: Int = ${resolution["width"]}
                 const val RESOLUTION_HEIGHT: Int = ${resolution["height"]}
             }
-            
+
             object Calibration {
                 const val PATTERN_TYPE: String = "${calibration["pattern_type"]}"
                 const val PATTERN_ROWS: Int = ${calibration["pattern_rows"]}
@@ -264,7 +250,7 @@ tasks.register("generateConstants") {
         println("Generated CommonConstants.kt from config.json")
     }
 }
-// Mark the generateConstants task as incompatible with the configuration cache
+
 tasks.named("generateConstants") {
     notCompatibleWithConfigurationCache("Task uses script object references which are not cache-compatible.")
 }
@@ -340,15 +326,14 @@ tasks.named("build") {
     finalizedBy("jacocoTestReport")
 }
 
-// IDE Integration Test Task
 tasks.register("runIDEIntegrationUITest") {
     group = "integration-testing"
     description = "Run IDE integration UI test on connected device"
     dependsOn("assembleDebug", "assembleDebugAndroidTest")
-    
+
     doLast {
         exec {
-            commandLine("adb", "shell", "am", "instrument", "-w", 
+            commandLine("adb", "shell", "am", "instrument", "-w",
                        "-e", "class", "com.multisensor.recording.IDEIntegrationUITest",
                        "com.multisensor.recording.test/androidx.test.runner.AndroidJUnitRunner")
         }

@@ -339,7 +339,7 @@ class SessionRecoveryManager(QObject):
                 'recovery_log_size': 0}
             if self.base_sessions_dir.exists():
                 usage = psutil.disk_usage(str(self.base_sessions_dir))
-                stats['disk_usage']['main'] = {'total_gb': usage.total / 
+                stats['disk_usage']['main'] = {'total_gb': usage.total /
                     1024 ** 3, 'used_gb': usage.used / 1024 ** 3, 'free_gb':
                     usage.free / 1024 ** 3}
             if self.backup_dir and self.backup_dir.exists():

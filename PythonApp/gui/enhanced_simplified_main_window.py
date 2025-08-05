@@ -446,7 +446,7 @@ class FileBrowserWidget(QWidget):
         if current_item:
             path = Path(current_item.data(0, Qt.UserRole))
             reply = QMessageBox.question(self, 'Confirm Delete',
-                f'Are you sure you want to delete {path.name}?', 
+                f'Are you sure you want to delete {path.name}?',
                 QMessageBox.Yes | QMessageBox.No)
             if reply == QMessageBox.Yes:
                 try:
@@ -1153,8 +1153,8 @@ Duration: {duration:.1f} seconds"""
                 'Calibration Files (*.json);;All Files (*)')
             if file_path:
                 calibration_data = {'reprojection_error': 0.23,
-                    'camera_matrix': [[800, 0, 320], [0, 800, 240], [0, 0, 
-                    1]], 'distortion_coefficients': [0.1, -0.2, 0.001, 
+                    'camera_matrix': [[800, 0, 320], [0, 800, 240], [0, 0,
+                    1]], 'distortion_coefficients': [0.1, -0.2, 0.001,
                     0.002, 0.3], 'quality': 'Excellent', 'timestamp':
                     datetime.now().isoformat()}
                 with open(file_path, 'w') as f:

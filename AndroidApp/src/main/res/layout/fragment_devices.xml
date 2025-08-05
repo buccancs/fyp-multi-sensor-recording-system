@@ -8,7 +8,6 @@
     android:padding="16dp"
     tools:context=".ui.fragments.DevicesFragment">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/devicesTitle"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Device Connection Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/connectDevicesButton"
         android:layout_width="0dp"
@@ -58,7 +56,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Device Status Section -->
     <TextView
         android:id="@+id/statusSectionTitle"
         android:layout_width="0dp"
@@ -72,7 +69,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Status Indicators -->
     <TextView
         android:id="@+id/pcConnectionStatus"
         android:layout_width="0dp"

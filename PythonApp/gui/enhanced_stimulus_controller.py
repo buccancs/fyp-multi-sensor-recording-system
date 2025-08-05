@@ -95,7 +95,7 @@ class EnhancedTimingLogger:
             experiment_start_time).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3],
             'stimulus_file': video_file, 'stimulus_filename': os.path.
             basename(video_file), 'video_backend': backend,
-            'timing_calibration': {'clock_offset_ms': self.clock_offset * 
+            'timing_calibration': {'clock_offset_ms': self.clock_offset *
             1000, 'precision_test': 'completed'}}, 'events': []}
         with open(self.current_log_file, 'w') as f:
             json.dump(log_data, f, indent=2)

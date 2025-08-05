@@ -7,13 +7,12 @@
     android:orientation="vertical"
     tools:context=".ui.AboutActivity">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        
+
         app:titleTextColor="?attr/colorOnPrimary"
         app:subtitleTextColor="?attr/colorOnPrimary" />
 
@@ -29,7 +28,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- App Information Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,7 +117,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- System Information Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -216,7 +213,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Hardware Information Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -300,7 +296,6 @@
 
                     </LinearLayout>
 
-                    <!-- Camera Information -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -318,7 +313,6 @@
                         android:textAppearance="?attr/textAppearanceBodySmall"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <!-- Sensor Information -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -340,7 +334,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Links Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -432,7 +425,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Legal Information Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -490,7 +482,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Credits Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

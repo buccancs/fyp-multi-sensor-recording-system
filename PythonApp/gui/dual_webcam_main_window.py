@@ -32,9 +32,9 @@ class CameraPreviewWidget(QFrame):
         self.preview_label.setStyleSheet(
             """
             QLabel {
-                background-color: #2b2b2b;
+                background-color:
                 color: white;
-                border: 1px solid #555;
+                border: 1px solid
             }
         """
             )
@@ -179,13 +179,13 @@ class DualWebcamMainWindow(QMainWindow):
         self.record_button.setStyleSheet(
             """
             QPushButton {
-                background-color: #4CAF50;
+                background-color:
                 color: white;
                 font-weight: bold;
                 padding: 10px;
             }
             QPushButton:pressed {
-                background-color: #45a049;
+                background-color:
             }
         """
             )
@@ -326,13 +326,13 @@ class DualWebcamMainWindow(QMainWindow):
                     self.record_button.setStyleSheet(
                         """
                         QPushButton {
-                            background-color: #f44336;
+                            background-color:
                             color: white;
                             font-weight: bold;
                             padding: 10px;
                         }
                         QPushButton:pressed {
-                            background-color: #da190b;
+                            background-color:
                         }
                     """
                         )
@@ -355,13 +355,13 @@ class DualWebcamMainWindow(QMainWindow):
             self.record_button.setStyleSheet(
                 """
                 QPushButton {
-                    background-color: #4CAF50;
+                    background-color:
                     color: white;
                     font-weight: bold;
                     padding: 10px;
                 }
                 QPushButton:pressed {
-                    background-color: #45a049;
+                    background-color:
                 }
             """
                 )

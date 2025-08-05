@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Skeleton Loading for List Items -->
+
 <androidx.constraintlayout.widget.ConstraintLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,7 +7,6 @@
     android:layout_height="72dp"
     android:padding="16dp">
 
-    <!-- Skeleton Avatar -->
     <View
         android:id="@+id/skeletonAvatar"
         android:layout_width="40dp"
@@ -17,7 +16,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Skeleton Title -->
     <View
         android:id="@+id/skeletonTitle"
         android:layout_width="0dp"
@@ -29,7 +27,6 @@
         app:layout_constraintStart_toEndOf="@id/skeletonAvatar"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Skeleton Subtitle -->
     <View
         android:id="@+id/skeletonSubtitle"
         android:layout_width="0dp"

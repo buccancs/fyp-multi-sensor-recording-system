@@ -113,12 +113,12 @@ class SchemaManager:
         return message_types
 
     def create_message(self, message_type: str, **kwargs) ->Dict[str, Any]:
-        message = {'type': message_type, 'timestamp': int(time.time() * 
+        message = {'type': message_type, 'timestamp': int(time.time() *
             1000), **kwargs}
         return message
 
     def get_message_template(self, message_type: str) ->Dict[str, Any]:
-        templates = {'start_record': {'type': 'start_record', 'timestamp': 
+        templates = {'start_record': {'type': 'start_record', 'timestamp':
             0, 'session_id': ''}, 'stop_record': {'type': 'stop_record',
             'timestamp': 0, 'session_id': ''}, 'preview_frame': {'type':
             'preview_frame', 'timestamp': 0, 'frame_id': 0, 'image_data':

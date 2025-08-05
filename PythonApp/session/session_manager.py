@@ -52,7 +52,7 @@ class SessionManager:
             session_id = f"{safe_name}_{timestamp.strftime('%Y%m%d_%H%M%S')}"
         session_folder = self.base_recordings_dir / session_id
         session_folder.mkdir(parents=True, exist_ok=True)
-        session_info = {'session_id': session_id, 'session_name': 
+        session_info = {'session_id': session_id, 'session_name':
             session_name or session_id, 'folder_path': str(session_folder),
             'start_time': timestamp.isoformat(), 'end_time': None,
             'duration': None, 'devices': {}, 'files': {}, 'status': 'active'}
@@ -232,7 +232,7 @@ if __name__ == '__main__':
         'thermal_video'])
     manager.add_file_to_session('pc_webcam', 'webcam_video',
         'webcam_test.mp4', 1024000)
-    manager.add_file_to_session('phone_1', 'rgb_video', 'phone1_rgb.mp4', 
+    manager.add_file_to_session('phone_1', 'rgb_video', 'phone1_rgb.mp4',
         2048000)
     completed = manager.end_session()
     print(

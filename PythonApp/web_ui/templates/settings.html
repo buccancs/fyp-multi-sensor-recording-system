@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Sensor Recording Dashboard - Settings</title>
-    
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Socket.IO for real-time communication -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
-    
+
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -22,76 +21,76 @@
             --light-bg: #ecf0f1;
             --dark-bg: #34495e;
         }
-        
+
         body {
             background-color: var(--light-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .navbar {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-bg));
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .navbar-brand {
             font-weight: bold;
             color: white !important;
         }
-        
+
         .card {
             border: none;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        
+
         .settings-nav {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 0;
         }
-        
+
         .settings-nav .nav-link {
             color: #495057;
             border-radius: 8px;
             margin: 5px;
             transition: all 0.2s;
         }
-        
+
         .settings-nav .nav-link:hover {
             background-color: #e9ecef;
             color: var(--primary-color);
         }
-        
+
         .settings-nav .nav-link.active {
             background-color: var(--primary-color);
             color: white;
         }
-        
+
         .settings-section {
             padding: 20px;
         }
-        
+
         .setting-item {
             border-bottom: 1px solid #f1f3f4;
             padding: 15px 0;
         }
-        
+
         .setting-item:last-child {
             border-bottom: none;
         }
-        
+
         .setting-label {
             font-weight: 500;
             margin-bottom: 5px;
         }
-        
+
         .setting-description {
             color: #6c757d;
             font-size: 0.9em;
             margin-bottom: 10px;
         }
-        
+
         .color-picker {
             width: 50px;
             height: 35px;
@@ -99,14 +98,14 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        
+
         .device-config {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 15px;
             margin: 10px 0;
         }
-        
+
         .status-indicator {
             width: 12px;
             height: 12px;
@@ -114,19 +113,19 @@
             display: inline-block;
             margin-right: 8px;
         }
-        
+
         .status-ok {
             background-color: var(--success-color);
         }
-        
+
         .status-warning {
             background-color: var(--warning-color);
         }
-        
+
         .status-error {
             background-color: var(--danger-color);
         }
-        
+
         .backup-item {
             border: 1px solid #dee2e6;
             border-radius: 8px;
@@ -134,7 +133,7 @@
             margin: 10px 0;
             background-color: #fff;
         }
-        
+
         .real-time-indicator {
             position: fixed;
             top: 70px;
@@ -146,11 +145,11 @@
             font-size: 12px;
             z-index: 1000;
         }
-        
+
         .real-time-indicator.disconnected {
             background: var(--danger-color);
         }
-        
+
         @media (max-width: 768px) {
             .settings-nav {
                 margin-bottom: 20px;
@@ -159,7 +158,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -205,16 +204,15 @@
             </div>
         </div>
     </nav>
-    
-    <!-- Real-time connection indicator -->
+
     <div id="connectionIndicator" class="real-time-indicator">
         <i class="fas fa-wifi me-1"></i>
         <span id="connectionStatus">Connected</span>
     </div>
-    
+
     <div class="container mt-4">
         <div class="row">
-            <!-- Settings Navigation -->
+
             <div class="col-lg-3 col-md-4">
                 <div class="card">
                     <div class="card-header">
@@ -251,8 +249,7 @@
                         </nav>
                     </div>
                 </div>
-                
-                <!-- Quick Actions -->
+
                 <div class="card">
                     <div class="card-header">
                         <h6 class="mb-0">
@@ -275,10 +272,9 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Settings Content -->
+
             <div class="col-lg-9 col-md-8">
-                <!-- General Settings -->
+
                 <div id="generalSection" class="settings-section">
                     <div class="card">
                         <div class="card-header">
@@ -296,7 +292,7 @@
                                     <option value="auto">Auto (system preference)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Language</div>
                                 <div class="setting-description">Select the interface language</div>
@@ -307,14 +303,14 @@
                                     <option value="de">Deutsch</option>
                                 </select>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Auto-save Interval</div>
                                 <div class="setting-description">Automatically save settings every N minutes</div>
                                 <input type="number" class="form-control" id="autosaveInterval" value="5" min="1" max="60" 
                                        onchange="updateSetting('autosaveInterval', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Show Notifications</div>
                                 <div class="setting-description">Display system notifications for important events</div>
@@ -327,8 +323,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Recording Settings -->
+
                 <div id="recordingSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -343,7 +338,7 @@
                                 <input type="number" class="form-control" id="recordingDuration" value="30" min="1" max="240"
                                        onchange="updateSetting('recordingDuration', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Video Quality</div>
                                 <div class="setting-description">Default video recording quality</div>
@@ -353,7 +348,7 @@
                                     <option value="4k">4K Ultra HD</option>
                                 </select>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Audio Recording</div>
                                 <div class="setting-description">Enable audio recording alongside video</div>
@@ -363,7 +358,7 @@
                                     <label class="form-check-label" for="audioRecording">Record audio</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Auto-start Recording</div>
                                 <div class="setting-description">Automatically start recording when all devices are connected</div>
@@ -373,7 +368,7 @@
                                     <label class="form-check-label" for="autoStartRecording">Enable auto-start</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Compression Level</div>
                                 <div class="setting-description">Video compression level (higher = smaller files, lower quality)</div>
@@ -388,8 +383,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Device Settings -->
+
                 <div id="devicesSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -398,7 +392,7 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <!-- Android Device Settings -->
+
                             <div class="device-config">
                                 <h6><i class="fas fa-mobile-alt me-2"></i>Android Devices</h6>
                                 <div class="row">
@@ -421,8 +415,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Shimmer Sensor Settings -->
+
                             <div class="device-config">
                                 <h6><i class="fas fa-heartbeat me-2"></i>Shimmer Sensors</h6>
                                 <div class="row">
@@ -468,8 +461,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- USB Webcam Settings -->
+
                             <div class="device-config">
                                 <h6><i class="fas fa-video me-2"></i>USB Webcams</h6>
                                 <div class="row">
@@ -495,8 +487,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Network Settings -->
+
                 <div id="networkSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -511,21 +502,21 @@
                                 <input type="number" class="form-control" id="serverPort" value="9000" min="1024" max="65535"
                                        onchange="updateSetting('serverPort', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Web Dashboard Port</div>
                                 <div class="setting-description">Port for web dashboard interface</div>
                                 <input type="number" class="form-control" id="webPort" value="5000" min="1024" max="65535"
                                        onchange="updateSetting('webPort', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Connection Timeout</div>
                                 <div class="setting-description">Network connection timeout in seconds</div>
                                 <input type="number" class="form-control" id="connectionTimeout" value="30" min="5" max="300"
                                        onchange="updateSetting('connectionTimeout', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Enable SSL/TLS</div>
                                 <div class="setting-description">Use encrypted connections for security</div>
@@ -535,7 +526,7 @@
                                     <label class="form-check-label" for="enableSSL">Enable SSL/TLS encryption</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Data Compression</div>
                                 <div class="setting-description">Compress network data to reduce bandwidth usage</div>
@@ -548,8 +539,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Calibration Settings -->
+
                 <div id="calibrationSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -567,7 +557,7 @@
                                     <label class="form-check-label" for="autoCalibration">Enable auto-calibration</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Calibration Pattern</div>
                                 <div class="setting-description">Type of calibration pattern to use</div>
@@ -577,14 +567,14 @@
                                     <option value="apriltag">AprilTag</option>
                                 </select>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Pattern Size</div>
                                 <div class="setting-description">Size of calibration pattern squares (mm)</div>
                                 <input type="number" class="form-control" id="patternSize" value="25" min="10" max="100"
                                        onchange="updateSetting('patternSize', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Minimum Calibration Images</div>
                                 <div class="setting-description">Minimum number of images required for calibration</div>
@@ -594,8 +584,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Storage Settings -->
+
                 <div id="storageSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -615,7 +604,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Auto-cleanup</div>
                                 <div class="setting-description">Automatically delete old files to free space</div>
@@ -625,21 +614,21 @@
                                     <label class="form-check-label" for="autoCleanup">Enable auto-cleanup</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Cleanup Threshold</div>
                                 <div class="setting-description">Delete files when disk usage exceeds this percentage</div>
                                 <input type="number" class="form-control" id="cleanupThreshold" value="85" min="50" max="95"
                                        onchange="updateSetting('cleanupThreshold', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">File Retention Period</div>
                                 <div class="setting-description">Keep files for this many days before cleanup</div>
                                 <input type="number" class="form-control" id="retentionPeriod" value="30" min="7" max="365"
                                        onchange="updateSetting('retentionPeriod', this.value)">
                             </div>
-                            
+
                             <div class="alert alert-info">
                                 <h6><i class="fas fa-info-circle me-2"></i>Storage Status</h6>
                                 <div class="row">
@@ -663,8 +652,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Backup & Security Settings -->
+
                 <div id="backupSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -682,7 +670,7 @@
                                     <label class="form-check-label" for="autoBackup">Enable auto-backup</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Backup Interval</div>
                                 <div class="setting-description">How often to create automatic backups</div>
@@ -692,7 +680,7 @@
                                     <option value="monthly">Monthly</option>
                                 </select>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Backup Location</div>
                                 <div class="setting-description">Directory for storing backup files</div>
@@ -704,11 +692,11 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-3">
                                 <h6>Recent Backups</h6>
                                 <div id="backupList">
-                                    <!-- Backup list will be populated here -->
+
                                 </div>
                                 <button class="btn btn-primary me-2" onclick="createBackup()">
                                     <i class="fas fa-save me-1"></i>Create Backup Now
@@ -720,8 +708,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Advanced Settings -->
+
                 <div id="advancedSection" class="settings-section" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -734,7 +721,7 @@
                                 <i class="fas fa-exclamation-triangle me-2"></i>
                                 <strong>Warning:</strong> These settings are for advanced users only. Changing these values may affect system stability.
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Debug Mode</div>
                                 <div class="setting-description">Enable detailed logging for troubleshooting</div>
@@ -744,7 +731,7 @@
                                     <label class="form-check-label" for="debugMode">Enable debug mode</label>
                                 </div>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Log Level</div>
                                 <div class="setting-description">Minimum level for log messages</div>
@@ -755,21 +742,21 @@
                                     <option value="DEBUG">Debug</option>
                                 </select>
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Memory Limit (MB)</div>
                                 <div class="setting-description">Maximum memory usage before cleanup</div>
                                 <input type="number" class="form-control" id="memoryLimit" value="1024" min="512" max="8192"
                                        onchange="updateSetting('memoryLimit', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Worker Threads</div>
                                 <div class="setting-description">Number of worker threads for processing</div>
                                 <input type="number" class="form-control" id="workerThreads" value="4" min="1" max="16"
                                        onchange="updateSetting('workerThreads', this.value)">
                             </div>
-                            
+
                             <div class="setting-item">
                                 <div class="setting-label">Configuration File</div>
                                 <div class="setting-description">Raw configuration in JSON format</div>
@@ -790,8 +777,7 @@
             </div>
         </div>
     </div>
-    
-    <!-- Import Settings Modal -->
+
     <div class="modal fade" id="importModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -819,20 +805,19 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         let currentSettings = {};
         let settingsModified = false;
-        
+
         // Initialize settings
         document.addEventListener('DOMContentLoaded', function() {
             loadSettings();
             loadStorageStatus();
             loadBackupList();
         });
-        
+
         function loadSettings() {
             fetch('/api/settings')
                 .then(response => response.json())
@@ -848,7 +833,7 @@
                     console.error('Error loading settings:', error);
                 });
         }
-        
+
         function populateSettings(settings) {
             // Populate form fields with current settings
             Object.keys(settings).forEach(key => {
@@ -861,40 +846,40 @@
                     }
                 }
             });
-            
+
             // Update raw config textarea
             document.getElementById('rawConfig').value = JSON.stringify(settings, null, 2);
-            
+
             // Update compression display
             updateCompressionDisplay(settings.compressionLevel || 5);
         }
-        
+
         function updateSetting(key, value) {
             currentSettings[key] = value;
             settingsModified = true;
-            
+
             // Auto-save after 2 seconds of inactivity
             clearTimeout(window.autoSaveTimeout);
             window.autoSaveTimeout = setTimeout(() => {
                 saveSettings();
             }, 2000);
         }
-        
+
         function updateShimmerSensors() {
             const sensors = [];
             if (document.getElementById('shimmerGSR').checked) sensors.push('GSR');
             if (document.getElementById('shimmerAccel').checked) sensors.push('Accelerometer');
             if (document.getElementById('shimmerECG').checked) sensors.push('ECG');
-            
+
             updateSetting('shimmerEnabledSensors', sensors);
         }
-        
+
         function updateCompressionDisplay(value) {
             const display = document.getElementById('compressionValue');
             const levels = ['Very Low', 'Low', 'Low-Medium', 'Medium-Low', 'Medium', 'Medium-High', 'High-Medium', 'High', 'Very High', 'Maximum'];
             display.textContent = `${levels[value - 1]} (${value})`;
         }
-        
+
         function updateRawConfig() {
             try {
                 const rawConfig = document.getElementById('rawConfig').value;
@@ -906,7 +891,7 @@
                 alert('Invalid JSON format: ' + error.message);
             }
         }
-        
+
         function formatConfig() {
             try {
                 const rawConfig = document.getElementById('rawConfig').value;
@@ -916,7 +901,7 @@
                 alert('Invalid JSON format: ' + error.message);
             }
         }
-        
+
         function validateConfig() {
             try {
                 const rawConfig = document.getElementById('rawConfig').value;
@@ -926,7 +911,7 @@
                 alert('Invalid JSON format: ' + error.message);
             }
         }
-        
+
         function saveSettings() {
             fetch('/api/settings', {
                 method: 'POST',
@@ -949,11 +934,11 @@
                 showNotification('Error saving settings', 'error');
             });
         }
-        
+
         function saveAllSettings() {
             saveSettings();
         }
-        
+
         function resetToDefaults() {
             if (confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.')) {
                 fetch('/api/settings/reset', {
@@ -974,7 +959,7 @@
                 });
             }
         }
-        
+
         function exportSettings() {
             const dataStr = JSON.stringify(currentSettings, null, 2);
             const dataBlob = new Blob([dataStr], {type: 'application/json'});
@@ -985,46 +970,46 @@
             link.click();
             URL.revokeObjectURL(url);
         }
-        
+
         function importSettings() {
             new bootstrap.Modal(document.getElementById('importModal')).show();
         }
-        
+
         function performImport() {
             const fileInput = document.getElementById('settingsFile');
             const mergeSettings = document.getElementById('mergeSettings').checked;
-            
+
             if (fileInput.files.length === 0) {
                 alert('Please select a settings file');
                 return;
             }
-            
+
             const file = fileInput.files[0];
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 try {
                     const importedSettings = JSON.parse(e.target.result);
-                    
+
                     if (mergeSettings) {
                         currentSettings = {...currentSettings, ...importedSettings};
                     } else {
                         currentSettings = importedSettings;
                     }
-                    
+
                     populateSettings(currentSettings);
                     saveSettings();
-                    
+
                     bootstrap.Modal.getInstance(document.getElementById('importModal')).hide();
                     showNotification('Settings imported successfully', 'success');
                 } catch (error) {
                     alert('Invalid settings file: ' + error.message);
                 }
             };
-            
+
             reader.readAsText(file);
         }
-        
+
         function loadStorageStatus() {
             fetch('/api/settings/storage-status')
                 .then(response => response.json())
@@ -1034,11 +1019,11 @@
                         document.getElementById('totalSpace').textContent = formatBytes(status.total);
                         document.getElementById('usedSpace').textContent = formatBytes(status.used);
                         document.getElementById('freeSpace').textContent = formatBytes(status.free);
-                        
+
                         const usagePercent = (status.used / status.total) * 100;
                         const progressBar = document.getElementById('storageProgressBar');
                         progressBar.style.width = usagePercent + '%';
-                        
+
                         if (usagePercent > 90) {
                             progressBar.className = 'progress-bar bg-danger';
                         } else if (usagePercent > 75) {
@@ -1052,7 +1037,7 @@
                     console.error('Error loading storage status:', error);
                 });
         }
-        
+
         function loadBackupList() {
             fetch('/api/settings/backups')
                 .then(response => response.json())
@@ -1065,15 +1050,15 @@
                     console.error('Error loading backup list:', error);
                 });
         }
-        
+
         function displayBackupList(backups) {
             const backupList = document.getElementById('backupList');
-            
+
             if (backups.length === 0) {
                 backupList.innerHTML = '<p class="text-muted">No backups found</p>';
                 return;
             }
-            
+
             backupList.innerHTML = backups.slice(0, 5).map(backup => `
                 <div class="backup-item">
                     <div class="d-flex justify-content-between align-items-center">
@@ -1094,7 +1079,7 @@
                 </div>
             `).join('');
         }
-        
+
         function createBackup() {
             fetch('/api/settings/backup', {
                 method: 'POST'
@@ -1113,7 +1098,7 @@
                 showNotification('Error creating backup', 'error');
             });
         }
-        
+
         function restoreBackup() {
             // This would open a file picker for backup files
             const input = document.createElement('input');
@@ -1124,7 +1109,7 @@
                 if (file) {
                     const formData = new FormData();
                     formData.append('backup', file);
-                    
+
                     fetch('/api/settings/restore', {
                         method: 'POST',
                         body: formData
@@ -1146,11 +1131,11 @@
             };
             input.click();
         }
-        
+
         function downloadBackup(backupName) {
             window.open(`/api/settings/backup/${backupName}/download`);
         }
-        
+
         function deleteBackup(backupName) {
             if (confirm(`Are you sure you want to delete backup "${backupName}"?`)) {
                 fetch(`/api/settings/backup/${backupName}`, {
@@ -1171,7 +1156,7 @@
                 });
             }
         }
-        
+
         function browseStoragePath() {
             // This would open a directory picker
             fetch('/api/settings/browse-directory', {
@@ -1192,7 +1177,7 @@
                 console.error('Error browsing directory:', error);
             });
         }
-        
+
         function browseBackupPath() {
             // This would open a directory picker
             fetch('/api/settings/browse-directory', {
@@ -1213,24 +1198,24 @@
                 console.error('Error browsing directory:', error);
             });
         }
-        
+
         function showSection(sectionName) {
             // Hide all sections
             document.querySelectorAll('.settings-section').forEach(section => {
                 section.style.display = 'none';
             });
-            
+
             // Show selected section
             document.getElementById(sectionName + 'Section').style.display = 'block';
-            
+
             // Update navigation
             document.querySelectorAll('.settings-nav .nav-link').forEach(link => {
                 link.classList.remove('active');
             });
-            
+
             event.target.classList.add('active');
         }
-        
+
         function showNotification(message, type) {
             // Create notification element
             const notification = document.createElement('div');
@@ -1243,9 +1228,9 @@
                 ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
-            
+
             document.body.appendChild(notification);
-            
+
             // Auto-remove after 5 seconds
             setTimeout(() => {
                 if (notification.parentNode) {
@@ -1253,7 +1238,7 @@
                 }
             }, 5000);
         }
-        
+
         function formatBytes(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -1261,11 +1246,11 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
-        
+
         function formatDate(dateString) {
             return new Date(dateString).toLocaleString();
         }
-        
+
         // Warn user about unsaved changes
         window.addEventListener('beforeunload', function(e) {
             if (settingsModified) {

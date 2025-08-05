@@ -523,7 +523,7 @@ Focus: Simplicity and Cleanliness"""
         if hasattr(self, 'preview_panel'):
             current_status = self.preview_status_indicator.is_connected
             new_status = not current_status
-            self.preview_status_indicator.set_status(new_status, 
+            self.preview_status_indicator.set_status(new_status,
                 'Preview active' if new_status else 'Preview inactive')
             self.status_bar.showMessage(
                 f"Preview {'enabled' if new_status else 'disabled'}")

@@ -265,7 +265,7 @@ class AdvancedROIDetector:
             mean_intensity = np.mean(gray_roi)
             std_intensity = np.std(gray_roi)
             if mean_intensity > 0:
-                self.roi_metrics.illumination_uniformity = 1.0 - min(1.0, 
+                self.roi_metrics.illumination_uniformity = 1.0 - min(1.0,
                     std_intensity / mean_intensity)
             self.roi_metrics.skin_probability = (self.
                 _estimate_skin_probability(roi_region))
@@ -585,7 +585,7 @@ def create_comprehensive_pipeline(camera_indices: List[int]=[0, 1]) ->Dict:
         SignalExtractionMethod.CHROM_METHOD, sampling_rate=30.0,
         signal_length_seconds=10.0)
     pipeline = {'roi_detector': roi_detector, 'signal_extractor':
-        signal_extractor, 'camera_indices': camera_indices, 'initialized': 
+        signal_extractor, 'camera_indices': camera_indices, 'initialized':
         True, 'version': '1.0.0'}
     logger.info('CV preprocessing pipeline created successfully')
     return pipeline

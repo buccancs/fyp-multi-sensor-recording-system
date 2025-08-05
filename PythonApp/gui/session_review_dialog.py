@@ -50,8 +50,7 @@ class SessionReviewDialog(QDialog):
     - File size and duration analysis
     """
 
-    # Signals
-    file_open_requested = pyqtSignal(str)  # File path to open
+    file_open_requested = pyqtSignal(str)
 
     def __init__(self, session_data: Dict, session_folder: str, parent=None):
         """
@@ -73,10 +72,8 @@ class SessionReviewDialog(QDialog):
         self.setModal(True)
         self.resize(900, 700)
 
-        # Initialize UI
         self.init_ui()
 
-        # Load session files and data
         self.load_session_files()
         self.populate_session_info()
         self.populate_file_list()
@@ -90,13 +87,10 @@ class SessionReviewDialog(QDialog):
         """Initialize the user interface."""
         layout = QVBoxLayout(self)
 
-        # Create header with session info
         self.create_header(layout)
 
-        # Create main content area with tabs
         self.create_main_content(layout)
 
-        # Create button bar
         self.create_button_bar(layout)
 
     def create_header(self, parent_layout):
@@ -106,8 +100,8 @@ class SessionReviewDialog(QDialog):
         header_frame.setStyleSheet(
             """
             QFrame {
-                background-color: #f0f0f0;
-                border: 1px solid #cccccc;
+                background-color:
+                border: 1px solid
                 border-radius: 5px;
                 padding: 10px;
             }
@@ -116,7 +110,6 @@ class SessionReviewDialog(QDialog):
 
         header_layout = QVBoxLayout(header_frame)
 
-        # Session title
         session_name = self.session_data.get("session", "Unknown Session")
         title_label = QLabel(f"Session Review: {session_name}")
         title_font = QFont()
@@ -125,7 +118,6 @@ class SessionReviewDialog(QDialog):
         title_label.setFont(title_font)
         header_layout.addWidget(title_label)
 
-        # Session summary line
         start_time = self.session_data.get("start_time", "Unknown")
         duration = self.session_data.get("duration", 0)
         status = self.session_data.get("status", "Unknown")
@@ -147,16 +139,12 @@ class SessionReviewDialog(QDialog):
         """Create main content area with tabbed interface."""
         self.tab_widget = QTabWidget()
 
-        # Files tab
         self.create_files_tab()
 
-        # Statistics tab
         self.create_statistics_tab()
 
-        # Events tab
         self.create_events_tab()
 
-        # Calibration tab (if calibration data exists)
         if self.session_data.get("calibration_files"):
             self.create_calibration_tab()
 
@@ -167,7 +155,6 @@ class SessionReviewDialog(QDialog):
         files_widget = QWidget()
         layout = QHBoxLayout(files_widget)
 
-        # Left side: File list
         left_panel = QGroupBox("Session Files")
         left_layout = QVBoxLayout(left_panel)
 
@@ -176,7 +163,6 @@ class SessionReviewDialog(QDialog):
         self.file_list.currentItemChanged.connect(self.on_file_selection_changed)
         left_layout.addWidget(self.file_list)
 
-        # File action buttons
         file_buttons_layout = QHBoxLayout()
 
         self.open_file_btn = QPushButton("Open File")
@@ -191,7 +177,6 @@ class SessionReviewDialog(QDialog):
         file_buttons_layout.addStretch()
         left_layout.addLayout(file_buttons_layout)
 
-        # Right side: File details
         right_panel = QGroupBox("File Details")
         right_layout = QVBoxLayout(right_panel)
 
@@ -200,7 +185,6 @@ class SessionReviewDialog(QDialog):
         self.file_details.setMaximumHeight(200)
         right_layout.addWidget(self.file_details)
 
-        # Create splitter
         splitter = QSplitter(Qt.Horizontal)
         splitter.addWidget(left_panel)
         splitter.addWidget(right_panel)
@@ -216,13 +200,11 @@ class SessionReviewDialog(QDialog):
         stats_widget = QWidget()
         layout = QVBoxLayout(stats_widget)
 
-        # Session statistics
         stats_group = QGroupBox("Session Statistics")
         stats_layout = QGridLayout(stats_group)
 
         row = 0
 
-        # Basic session info
         stats_layout.addWidget(QLabel("Session ID:"), row, 0)
         stats_layout.addWidget(
             QLabel(self.session_data.get("session", "Unknown")), row, 1
@@ -235,7 +217,6 @@ class SessionReviewDialog(QDialog):
         )
         row += 1
 
-        # Timing information
         start_time = self.session_data.get("start_time", "Unknown")
         end_time = self.session_data.get("end_time", "Unknown")
         duration = self.session_data.get("duration", 0)
@@ -256,7 +237,6 @@ class SessionReviewDialog(QDialog):
         stats_layout.addWidget(QLabel(duration_str), row, 1)
         row += 1
 
-        # Device information
         devices = self.session_data.get("devices", [])
         stats_layout.addWidget(QLabel("Devices:"), row, 0)
         device_count = len(devices)
@@ -269,13 +249,11 @@ class SessionReviewDialog(QDialog):
         stats_layout.addWidget(QLabel(device_info), row, 1)
         row += 1
 
-        # Event statistics
         events = self.session_data.get("events", [])
         stats_layout.addWidget(QLabel("Total Events:"), row, 0)
         stats_layout.addWidget(QLabel(str(len(events))), row, 1)
         row += 1
 
-        # File statistics
         total_files = len(self.session_files)
         total_size = sum(f.get("size", 0) for f in self.session_files if f.get("size"))
         total_size_mb = total_size / (1024 * 1024) if total_size > 0 else 0
@@ -290,12 +268,10 @@ class SessionReviewDialog(QDialog):
 
         layout.addWidget(stats_group)
 
-        # Event type breakdown
         if events:
             event_group = QGroupBox("Event Breakdown")
             event_layout = QGridLayout(event_group)
 
-            # Count event types
             event_counts = {}
             for event in events:
                 event_type = event.get("event", "unknown")
@@ -324,13 +300,11 @@ class SessionReviewDialog(QDialog):
         self.events_list = QListWidget()
         self.events_list.setAlternatingRowColors(True)
 
-        # Populate events
         events = self.session_data.get("events", [])
         for event in events:
             event_text = self.format_event_for_display(event)
             item = QListWidgetItem(event_text)
 
-            # Color code different event types
             event_type = event.get("event", "unknown")
             if event_type == "error":
                 item.setBackground(Qt.red)
@@ -358,7 +332,6 @@ class SessionReviewDialog(QDialog):
         calib_group = QGroupBox("Calibration Results")
         calib_layout = QVBoxLayout(calib_group)
 
-        # List calibration files
         calib_files = self.session_data.get("calibration_files", [])
 
         calib_info = QTextEdit()
@@ -368,7 +341,6 @@ class SessionReviewDialog(QDialog):
         for i, calib_file in enumerate(calib_files, 1):
             info_text += f"{i}. {calib_file}\n"
 
-            # Check if file exists and add details
             file_path = self.session_folder / calib_file
             if file_path.exists():
                 file_size = file_path.stat().st_size
@@ -392,14 +364,12 @@ class SessionReviewDialog(QDialog):
         """Create bottom button bar."""
         button_layout = QHBoxLayout()
 
-        # Export button
         export_btn = QPushButton("Export Session Data")
         export_btn.clicked.connect(self.export_session_data)
         button_layout.addWidget(export_btn)
 
         button_layout.addStretch()
 
-        # Close button
         close_btn = QPushButton("Close")
         close_btn.clicked.connect(self.accept)
         close_btn.setDefault(True)
@@ -415,7 +385,6 @@ class SessionReviewDialog(QDialog):
             print(f"[DEBUG_LOG] Session folder does not exist: {self.session_folder}")
             return
 
-        # Scan session folder for files
         for file_path in self.session_folder.iterdir():
             if file_path.is_file():
                 file_info = {
@@ -427,7 +396,6 @@ class SessionReviewDialog(QDialog):
                 }
                 self.session_files.append(file_info)
 
-        # Sort files by name
         self.session_files.sort(key=lambda x: x["name"])
 
         print(f"[DEBUG_LOG] Loaded {len(self.session_files)} files from session folder")
@@ -449,14 +417,12 @@ class SessionReviewDialog(QDialog):
 
     def populate_session_info(self):
         """Populate session information displays."""
-        # This method can be extended to populate additional session info
 
     def populate_file_list(self):
         """Populate the file list widget."""
         self.file_list.clear()
 
         for file_info in self.session_files:
-            # Create display text
             name = file_info["name"]
             size_mb = file_info["size"] / (1024 * 1024)
             file_type = file_info["type"]
@@ -464,9 +430,8 @@ class SessionReviewDialog(QDialog):
             display_text = f"{name} ({file_type}, {size_mb:.1f} MB)"
 
             item = QListWidgetItem(display_text)
-            item.setData(Qt.UserRole, file_info)  # Store file info in item
+            item.setData(Qt.UserRole, file_info)
 
-            # Add icon based on file type
             if file_type == "Video":
                 item.setIcon(self.style().standardIcon(self.style().SP_MediaPlay))
             elif file_type == "Image":
@@ -486,7 +451,6 @@ class SessionReviewDialog(QDialog):
         event_type = event.get("event", "unknown")
         time_str = event.get("time", "unknown")
 
-        # Use the same formatting logic as SessionLogger
         if event_type == "session_start":
             devices = event.get("devices", [])
             return f"[{time_str}] Session started. Devices: {', '.join(devices) if devices else 'None'}"
@@ -518,7 +482,6 @@ class SessionReviewDialog(QDialog):
             else:
                 return f"[{time_str}] ERROR ({error_type}): {message}"
         else:
-            # Generic formatting
             return f"[{time_str}] {event_type}: {str(event)}"
 
     def on_file_selection_changed(self, current, previous):
@@ -526,7 +489,6 @@ class SessionReviewDialog(QDialog):
         if current:
             self.open_file_btn.setEnabled(True)
 
-            # Show file details
             file_info = current.data(Qt.UserRole)
             if file_info:
                 details_text = f"File: {file_info['name']}\n"
@@ -559,12 +521,11 @@ class SessionReviewDialog(QDialog):
         file_path = file_info["path"]
 
         try:
-            # Open file with default application
             if platform.system() == "Windows":
                 os.startfile(file_path)
-            elif platform.system() == "Darwin":  # macOS
+            elif platform.system() == "Darwin":
                 subprocess.run(["open", file_path])
-            else:  # Linux
+            else:
                 subprocess.run(["xdg-open", file_path])
 
             print(f"[DEBUG_LOG] Opened file: {file_path}")
@@ -583,9 +544,9 @@ class SessionReviewDialog(QDialog):
         try:
             if platform.system() == "Windows":
                 os.startfile(str(self.session_folder))
-            elif platform.system() == "Darwin":  # macOS
+            elif platform.system() == "Darwin":
                 subprocess.run(["open", str(self.session_folder)])
-            else:  # Linux
+            else:
                 subprocess.run(["xdg-open", str(self.session_folder)])
 
             print(f"[DEBUG_LOG] Opened session folder: {self.session_folder}")
@@ -603,14 +564,12 @@ class SessionReviewDialog(QDialog):
     def export_session_data(self):
         """Export session data to a summary file."""
         try:
-            # Create summary data
             summary = {
                 "session_info": self.session_data,
                 "files": self.session_files,
                 "export_time": datetime.now().isoformat(),
             }
 
-            # Save to session folder
             export_path = (
                 self.session_folder
                 / f"{self.session_data.get('session', 'session')}_summary.json"
