@@ -394,7 +394,6 @@ class PermissionControllerTest {
         } catch (e: Exception) {
             fail("Operations should handle SharedPreferences initialization failure gracefully, but got: ${e.message}")
         }
-        }
     }
 
     @Test

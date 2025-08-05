@@ -3,6 +3,7 @@ package com.multisensor.recording.ui
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 class MainUiStateTest : BehaviorSpec({
 
@@ -159,8 +160,8 @@ class MainUiStateTest : BehaviorSpec({
         `when`("system is not initialized") {
             val state = MainUiState(isInitialized = false)
 
-            then("should return INITIALIZING status") {
-                state.systemHealthStatus shouldBe SystemHealthStatus.INITIALIZING
+            then("should return DISCONNECTED overall health status") {
+                state.systemHealthStatus.overallHealth shouldBe SystemHealthStatus.HealthStatus.DISCONNECTED
             }
         }
 
@@ -170,8 +171,8 @@ class MainUiStateTest : BehaviorSpec({
                 errorMessage = "Test error"
             )
 
-            then("should return ERROR status") {
-                state.systemHealthStatus shouldBe SystemHealthStatus.ERROR
+            then("should return DISCONNECTED overall health when has error") {
+                state.systemHealthStatus.overallHealth shouldBe SystemHealthStatus.HealthStatus.DISCONNECTED
             }
         }
 
@@ -182,8 +183,8 @@ class MainUiStateTest : BehaviorSpec({
                 errorMessage = null
             )
 
-            then("should return RECORDING status") {
-                state.systemHealthStatus shouldBe SystemHealthStatus.RECORDING
+            then("should return CONNECTED overall health when recording") {
+                state.systemHealthStatus.overallHealth shouldBe SystemHealthStatus.HealthStatus.CONNECTED
             }
         }
 
@@ -196,8 +197,8 @@ class MainUiStateTest : BehaviorSpec({
                 isShimmerConnected = true
             )
 
-            then("should return READY status") {
-                state.systemHealthStatus shouldBe SystemHealthStatus.READY
+            then("should return CONNECTED overall health when ready") {
+                state.systemHealthStatus.overallHealth shouldBe SystemHealthStatus.HealthStatus.CONNECTED
             }
         }
 
@@ -211,8 +212,8 @@ class MainUiStateTest : BehaviorSpec({
                 isThermalConnected = false
             )
 
-            then("should return PARTIAL_CONNECTION status") {
-                state.systemHealthStatus shouldBe SystemHealthStatus.PARTIAL_CONNECTION
+            then("should return DISCONNECTED overall health for partial connection") {
+                state.systemHealthStatus.overallHealth shouldBe SystemHealthStatus.HealthStatus.DISCONNECTED
             }
         }
 
@@ -226,8 +227,8 @@ class MainUiStateTest : BehaviorSpec({
                 isThermalConnected = false
             )
 
-            then("should return DISCONNECTED status") {
-                state.systemHealthStatus shouldBe SystemHealthStatus.DISCONNECTED
+            then("should return DISCONNECTED overall health when nothing connected") {
+                state.systemHealthStatus.overallHealth shouldBe SystemHealthStatus.HealthStatus.DISCONNECTED
             }
         }
     }
@@ -241,7 +242,7 @@ class MainUiStateTest : BehaviorSpec({
                 statuses shouldContain BatteryStatus.UNKNOWN
                 statuses shouldContain BatteryStatus.CHARGING
                 statuses shouldContain BatteryStatus.DISCHARGING
-                statuses shouldContain BatteryStatus.NOT_CHARGING
+                statuses shouldContain BatteryStatus.LOW
                 statuses shouldContain BatteryStatus.FULL
             }
         }
@@ -251,19 +252,19 @@ class MainUiStateTest : BehaviorSpec({
 
         `when`("creating device info with valid data") {
             val deviceInfo = ShimmerDeviceInfo(
-                deviceName = "Shimmer3-ABC123",
-                macAddress = "00:11:22:33:44:55",
+                deviceId = "Shimmer3-ABC123",
+                batteryLevel = 75,
+                signalStrength = 85,
                 isConnected = true,
-                signalStrength = -65,
-                firmwareVersion = "1.2.3"
+                lastDataReceived = System.currentTimeMillis()
             )
 
             then("should have correct properties") {
-                deviceInfo.deviceName shouldBe "Shimmer3-ABC123"
-                deviceInfo.macAddress shouldBe "00:11:22:33:44:55"
+                deviceInfo.deviceId shouldBe "Shimmer3-ABC123"
+                deviceInfo.batteryLevel shouldBe 75
+                deviceInfo.signalStrength shouldBe 85
                 deviceInfo.isConnected shouldBe true
-                deviceInfo.signalStrength shouldBe -65
-                deviceInfo.firmwareVersion shouldBe "1.2.3"
+                deviceInfo.lastDataReceived shouldNotBe null
             }
         }
     }

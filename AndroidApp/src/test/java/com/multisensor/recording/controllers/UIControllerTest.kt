@@ -139,8 +139,8 @@ class UIControllerTest {
             isStreaming = false,
             isInitialized = true,
             batteryLevel = 75,
-            streamingFrameRate = 30,
-            streamingDataSize = "1.2MB",
+            streamingFrameRate = 30.0,
+            streamingDataSize = 1200000L,
             showPermissionsButton = false,
             errorMessage = null,
             showErrorDialog = false,
@@ -346,7 +346,7 @@ class UIControllerTest {
             statusText = "Test Status",
             isPcConnected = true,
             batteryLevel = 50,
-            shimmerDeviceInfo = ShimmerDeviceInfo("TestDevice", "Test Address", true)
+            shimmerDeviceInfo = ShimmerDeviceInfo("TestDevice", 75, 85, true, System.currentTimeMillis())
         )
 
         uiController.updateUIFromState(testState)
@@ -396,8 +396,8 @@ class UIControllerTest {
         val streamingState = MainUiState(
             statusText = "Test",
             isStreaming = true,
-            streamingFrameRate = 30,
-            streamingDataSize = "1.5MB"
+            streamingFrameRate = 30.0,
+            streamingDataSize = 1500000L
         )
 
         uiController.updateUIFromState(streamingState)
@@ -524,7 +524,7 @@ class UIControllerTest {
         val inconsistentStreamingState = MainUiState(
             statusText = "Test",
             isStreaming = true,
-            streamingFrameRate = 0
+            streamingFrameRate = 0.0
         )
 
         val result = uiController.validateUIState(inconsistentStreamingState)

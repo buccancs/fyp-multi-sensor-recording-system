@@ -20,8 +20,8 @@ object UiStateTestFactory {
         showPermissionsButton: Boolean = false,
         isCalibrationRunning: Boolean = false,
         isStreaming: Boolean = false,
-        streamingFrameRate: Int = 0,
-        streamingDataSize: String = "",
+        streamingFrameRate: Double = 0.0,
+        streamingDataSize: Long = 0L,
         errorMessage: String? = null,
         showErrorDialog: Boolean = false,
         isLoadingRecording: Boolean = false
@@ -93,8 +93,8 @@ object UiStateTestFactory {
     }
 
     fun createStreamingState(
-        frameRate: Int = 30,
-        dataSize: String = "2.5 MB/s"
+        frameRate: Double = 30.0,
+        dataSize: Long = 2500000L
     ): MainUiState {
         return createMainUiState(
             statusText = "Streaming active",

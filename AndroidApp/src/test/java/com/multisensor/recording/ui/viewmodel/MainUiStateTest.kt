@@ -26,8 +26,8 @@ class MainUiStateTest : BaseUnitTest() {
         assertThat(state.showPermissionsButton).isFalse()
         assertThat(state.isCalibrationRunning).isFalse()
         assertThat(state.isStreaming).isFalse()
-        assertThat(state.streamingFrameRate).isEqualTo(0)
-        assertThat(state.streamingDataSize).isEmpty()
+        assertThat(state.streamingFrameRate).isEqualTo(0.0)
+        assertThat(state.streamingDataSize).isEqualTo(0L)
         assertThat(state.errorMessage).isNull()
         assertThat(state.showErrorDialog).isFalse()
         assertThat(state.isLoadingRecording).isFalse()
@@ -82,8 +82,8 @@ class MainUiStateTest : BaseUnitTest() {
 
     @Test
     fun `streaming state should show streaming information`() {
-        val frameRate = 30
-        val dataSize = "2.5 MB/s"
+        val frameRate = 30.0
+        val dataSize = 2500000L
 
         val state = UiStateTestFactory.createStreamingState(frameRate, dataSize)
 
