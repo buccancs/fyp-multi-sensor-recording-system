@@ -1,25 +1,25 @@
 {
   "evaluation_summary": {
-    "start_time": "2025-08-05T21:03:34.017762",
-    "end_time": "2025-08-05T21:04:02.647390",
-    "total_duration_seconds": 28.629628,
+    "start_time": "2025-08-05T21:31:59.472787",
+    "end_time": "2025-08-05T21:32:04.528016",
+    "total_duration_seconds": 5.055229,
     "test_configuration": {
-      "category_filter": null,
+      "category_filter": "foundation",
       "parallel_execution": false,
       "quick_mode": true,
       "output_directory": "evaluation_results"
     }
   },
   "test_results": {
-    "execution_id": "80c79744-5f42-4a3d-9b11-8d10c589c2bb",
+    "execution_id": "421f290a-55dd-44c7-9905-3b83ccd7d9e4",
     "execution_time": {
-      "start": "2025-08-05T21:03:34.018464",
-      "end": "2025-08-05T21:04:02.098660",
-      "total_seconds": 28.080196
+      "start": "2025-08-05T21:31:59.473528",
+      "end": "2025-08-05T21:31:59.527672",
+      "total_seconds": 0.054144
     },
     "statistics": {
-      "total_suites": 3,
-      "total_tests": 10,
+      "total_suites": 2,
+      "total_tests": 6,
       "success_rate": 100.0,
       "quality_score": 0.0,
       "coverage_percentage": 0.0
@@ -34,21 +34,14 @@
         "category": "FOUNDATION",
         "total_tests": 3,
         "success_rate": 100.0,
-        "execution_time": 6.73,
+        "execution_time": 0.04,
         "quality_score": 0.0
       },
       "pc_foundation": {
         "category": "FOUNDATION",
-        "total_tests": 4,
-        "success_rate": 100.0,
-        "execution_time": 9.38,
-        "quality_score": 0.0
-      },
-      "integration_tests": {
-        "category": "INTEGRATION",
         "total_tests": 3,
         "success_rate": 100.0,
-        "execution_time": 11.96,
+        "execution_time": 0.01,
         "quality_score": 0.0
       }
     }
