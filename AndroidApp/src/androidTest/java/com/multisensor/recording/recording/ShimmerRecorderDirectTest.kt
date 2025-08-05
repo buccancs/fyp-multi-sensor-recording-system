@@ -15,9 +15,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
 
-/**
- * Direct test of ShimmerRecorder without MainActivity dependencies
- */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ShimmerRecorderDirectTest {
@@ -58,7 +55,6 @@ class ShimmerRecorderDirectTest {
             println("[DEBUG_LOG] === Direct Shimmer Device Discovery Test ===")
 
             try {
-                // Initialize the ShimmerRecorder
                 println("[DEBUG_LOG] Initializing ShimmerRecorder...")
                 val initialized = shimmerRecorder.initialize()
                 println("[DEBUG_LOG] ShimmerRecorder initialized: $initialized")
@@ -68,7 +64,6 @@ class ShimmerRecorderDirectTest {
                     return@runBlocking
                 }
 
-                // Call scanAndPairDevices directly
                 println("[DEBUG_LOG] Calling scanAndPairDevices()...")
                 val discoveredDevices = shimmerRecorder.scanAndPairDevices()
 
@@ -78,7 +73,6 @@ class ShimmerRecorderDirectTest {
                     println("[DEBUG_LOG] Device $index: $address")
                 }
 
-                // Don't fail the test - just report results
                 if (discoveredDevices.isEmpty()) {
                     println("[DEBUG_LOG] No devices found - this is expected if no Shimmer device is properly paired")
                 } else {

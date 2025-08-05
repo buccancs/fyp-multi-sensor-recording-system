@@ -10,75 +10,54 @@ import kotlinx.coroutines.flow.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-/**
- * Devices UI State
- * 
- * Represents the current state of all connected devices including:
- * - Connection status for all devices
- * - Device details and configuration
- * - Test results and diagnostics
- * - Connection and testing progress
- */
 data class DevicesUiState(
-    // PC Connection
     val isPcConnected: Boolean = false,
     val pcIpAddress: String = "",
     val pcPort: String = "",
     val pcConnectionStatus: String = "",
     val pcLastSeen: String = "",
-    
-    // Shimmer Connection
+
     val isShimmerConnected: Boolean = false,
     val shimmerMacAddress: String = "",
     val shimmerBatteryLevel: Int = 0,
     val shimmerActiveSensors: String = "",
     val shimmerSampleRate: String = "",
     val shimmerLastSeen: String = "",
-    
-    // Thermal Connection
+
     val isThermalConnected: Boolean = false,
     val thermalCameraModel: String = "",
     val thermalCurrentTemp: String = "",
     val thermalResolution: String = "",
     val thermalFrameRate: String = "",
     val thermalLastSeen: String = "",
-    
-    // Network Connection
+
     val isNetworkConnected: Boolean = false,
     val networkSsid: String = "",
     val networkIpAddress: String = "",
     val networkSignalStrength: Int = 0,
     val networkType: String = "",
-    
-    // GSR Connection
+
     val isGsrConnected: Boolean = false,
     val gsrCurrentValue: String = "",
     val gsrRange: String = "",
     val gsrSampleRate: String = "",
     val gsrLastReading: String = "",
-    
-    // Operation Status
+
     val isConnecting: Boolean = false,
     val isTesting: Boolean = false,
     val testResults: List<String> = emptyList()
 ) {
     val totalConnectedDevices: Int get() = listOf(
         isPcConnected,
-        isShimmerConnected, 
+        isShimmerConnected,
         isThermalConnected,
         isNetworkConnected,
         isGsrConnected
     ).count { it }
-    
+
     val allDevicesHealthy: Boolean get() = totalConnectedDevices > 0 && testResults.none { it.contains("FAILED") }
 }
 
-/**
- * Devices ViewModel
- * 
- * Manages device connections, configuration, and diagnostics.
- * Provides reactive UI state updates and handles device operations.
- */
 @HiltViewModel
 class DevicesViewModel @Inject constructor() : ViewModel() {
 
@@ -86,17 +65,12 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<DevicesUiState> = _uiState.asStateFlow()
 
     init {
-        // Initialize device status
         refreshAllDevices()
     }
 
-    /**
-     * Connect to PC
-     */
     fun connectPc() {
         _uiState.value = _uiState.value.copy(isConnecting = true)
-        
-        // Simulate connection process
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(2000)
             _uiState.value = _uiState.value.copy(
@@ -110,9 +84,6 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Disconnect from PC
-     */
     fun disconnectPc() {
         _uiState.value = _uiState.value.copy(
             isPcConnected = false,
@@ -123,13 +94,9 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Connect to Shimmer device
-     */
     fun connectShimmer() {
         _uiState.value = _uiState.value.copy(isConnecting = true)
-        
-        // Simulate connection process
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(3000)
             _uiState.value = _uiState.value.copy(
@@ -144,9 +111,6 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Disconnect from Shimmer device
-     */
     fun disconnectShimmer() {
         _uiState.value = _uiState.value.copy(
             isShimmerConnected = false,
@@ -158,13 +122,9 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Connect to thermal camera
-     */
     fun connectThermal() {
         _uiState.value = _uiState.value.copy(isConnecting = true)
-        
-        // Simulate connection process
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(2500)
             _uiState.value = _uiState.value.copy(
@@ -179,9 +139,6 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Disconnect from thermal camera
-     */
     fun disconnectThermal() {
         _uiState.value = _uiState.value.copy(
             isThermalConnected = false,
@@ -193,13 +150,9 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Connect to network
-     */
     fun connectNetwork() {
         _uiState.value = _uiState.value.copy(isConnecting = true)
-        
-        // Simulate connection process
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(1500)
             _uiState.value = _uiState.value.copy(
@@ -213,9 +166,6 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Disconnect from network
-     */
     fun disconnectNetwork() {
         _uiState.value = _uiState.value.copy(
             isNetworkConnected = false,
@@ -226,19 +176,14 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Refresh all device connections
-     */
     fun refreshAllDevices() {
         _uiState.value = _uiState.value.copy(isConnecting = true)
-        
-        // Simulate refresh process
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(1000)
-            
-            // Update GSR status (simulate automatic detection)
+
             val isGsrDetected = _uiState.value.isShimmerConnected
-            
+
             _uiState.value = _uiState.value.copy(
                 isConnecting = false,
                 isGsrConnected = isGsrDetected,
@@ -250,24 +195,21 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Test PC connection
-     */
     fun testPcConnection() {
         _uiState.value = _uiState.value.copy(isTesting = true)
-        
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(2000)
-            
+
             val testResult = if (_uiState.value.isPcConnected) {
                 "PC Connection Test: PASSED - Latency: 25ms, Bandwidth: 100 Mbps"
             } else {
                 "PC Connection Test: FAILED - No connection established"
             }
-            
+
             val updatedResults = _uiState.value.testResults.toMutableList()
             updatedResults.add("${getCurrentTimestamp()}: $testResult")
-            
+
             _uiState.value = _uiState.value.copy(
                 isTesting = false,
                 testResults = updatedResults
@@ -275,24 +217,21 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Test Shimmer connection
-     */
     fun testShimmerConnection() {
         _uiState.value = _uiState.value.copy(isTesting = true)
-        
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(3000)
-            
+
             val testResult = if (_uiState.value.isShimmerConnected) {
                 "Shimmer Test: PASSED - Battery: ${_uiState.value.shimmerBatteryLevel}%, Signal Quality: Good"
             } else {
                 "Shimmer Test: FAILED - Device not connected"
             }
-            
+
             val updatedResults = _uiState.value.testResults.toMutableList()
             updatedResults.add("${getCurrentTimestamp()}: $testResult")
-            
+
             _uiState.value = _uiState.value.copy(
                 isTesting = false,
                 testResults = updatedResults
@@ -300,24 +239,21 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Test thermal camera connection
-     */
     fun testThermalConnection() {
         _uiState.value = _uiState.value.copy(isTesting = true)
-        
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(2500)
-            
+
             val testResult = if (_uiState.value.isThermalConnected) {
                 "Thermal Camera Test: PASSED - Temperature Range: Valid, Image Quality: Good"
             } else {
                 "Thermal Camera Test: FAILED - Camera not connected"
             }
-            
+
             val updatedResults = _uiState.value.testResults.toMutableList()
             updatedResults.add("${getCurrentTimestamp()}: $testResult")
-            
+
             _uiState.value = _uiState.value.copy(
                 isTesting = false,
                 testResults = updatedResults
@@ -325,24 +261,21 @@ class DevicesViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    /**
-     * Test network connection
-     */
     fun testNetworkConnection() {
         _uiState.value = _uiState.value.copy(isTesting = true)
-        
+
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(1500)
-            
+
             val testResult = if (_uiState.value.isNetworkConnected) {
                 "Network Test: PASSED - Signal: ${_uiState.value.networkSignalStrength}%, Internet: Available"
             } else {
                 "Network Test: FAILED - No network connection"
             }
-            
+
             val updatedResults = _uiState.value.testResults.toMutableList()
             updatedResults.add("${getCurrentTimestamp()}: $testResult")
-            
+
             _uiState.value = _uiState.value.copy(
                 isTesting = false,
                 testResults = updatedResults

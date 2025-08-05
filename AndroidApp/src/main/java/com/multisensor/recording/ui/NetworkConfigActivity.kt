@@ -11,11 +11,6 @@ import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-/**
- * Network Configuration Activity
- * Allows users to configure server IP and port settings
- * Resolves Implementation Gap: Hardcoded IP Configuration
- */
 @AndroidEntryPoint
 class NetworkConfigActivity : AppCompatActivity() {
     @Inject
@@ -75,7 +70,6 @@ class NetworkConfigActivity : AppCompatActivity() {
             val legacyPortText = legacyPortEditText.text.toString().trim()
             val jsonPortText = jsonPortEditText.text.toString().trim()
 
-            // Validate inputs
             if (serverIp.isEmpty()) {
                 showError("Server IP cannot be empty")
                 return
@@ -103,7 +97,6 @@ class NetworkConfigActivity : AppCompatActivity() {
                 return
             }
 
-            // Save configuration
             networkConfiguration.setServerIp(serverIp)
             networkConfiguration.setLegacyPort(legacyPort)
             networkConfiguration.setJsonPort(jsonPort)

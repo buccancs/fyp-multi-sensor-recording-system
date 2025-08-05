@@ -17,26 +17,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-/**
- * Developer information data class
- */
 data class Developer(
     val name: String,
     val role: String = "",
     val email: String = ""
 )
 
-/**
- * About UI State
- * 
- * Represents comprehensive system and app information including:
- * - System specifications and hardware details
- * - App version and build information
- * - Legal information and licenses
- * - Developer credits and acknowledgments
- */
 data class AboutUiState(
-    // System Information
     val androidVersion: String = "",
     val androidApiLevel: String = "",
     val deviceManufacturer: String = "",
@@ -45,8 +32,7 @@ data class AboutUiState(
     val deviceArchitecture: String = "",
     val kernelVersion: String = "",
     val javaVersion: String = "",
-    
-    // Hardware Information
+
     val totalMemory: String = "",
     val availableMemory: String = "",
     val totalStorage: String = "",
@@ -56,27 +42,18 @@ data class AboutUiState(
     val screenDensity: String = "",
     val cameraInfo: List<String> = emptyList(),
     val sensorInfo: List<String> = emptyList(),
-    
-    // Legal Information
+
     val copyrightInfo: String = "",
     val licenseInfo: String = "",
     val thirdPartyLicenses: List<String> = emptyList(),
-    
-    // Credits
+
     val developers: List<Developer> = emptyList(),
     val contributors: List<String> = emptyList(),
     val acknowledgments: List<String> = emptyList(),
-    
-    // Status
+
     val isLoading: Boolean = false
 )
 
-/**
- * About ViewModel
- * 
- * Manages system information collection and app metadata.
- * Provides comprehensive details about the device, app, and credits.
- */
 @HiltViewModel
 class AboutViewModel @Inject constructor(
     @ApplicationContext private val context: Context
@@ -86,17 +63,13 @@ class AboutViewModel @Inject constructor(
     val uiState: StateFlow<AboutUiState> = _uiState.asStateFlow()
 
     init {
-        // Load initial system information
         refreshSystemInfo()
         loadStaticInfo()
     }
 
-    /**
-     * Refresh system information
-     */
     fun refreshSystemInfo() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        
+
         viewModelScope.launch {
             try {
                 val systemInfo = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
@@ -105,7 +78,7 @@ class AboutViewModel @Inject constructor(
                 val hardwareInfo = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
                     collectHardwareInfo()
                 }
-                
+
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     androidVersion = systemInfo.androidVersion,
@@ -133,14 +106,10 @@ class AboutViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Get build date from build configuration
-     */
     fun getBuildDate(): String {
         return try {
             val buildTime = com.multisensor.recording.BuildConfig.BUILD_TIME
             if (buildTime.isNotEmpty()) {
-                // If it's a timestamp, convert it to a readable date
                 val timestamp = buildTime.toLongOrNull()
                 if (timestamp != null) {
                     java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
@@ -162,7 +131,7 @@ class AboutViewModel @Inject constructor(
             Developer("Multi-Sensor Recording Team", "Development Team"),
             Developer("University Research Group", "Academic Supervision")
         )
-        
+
         val contributors = listOf(
             "Android Development Community",
             "Material Design Team",
@@ -170,14 +139,14 @@ class AboutViewModel @Inject constructor(
             "OpenCV Contributors",
             "FLIR Thermal Imaging Community"
         )
-        
+
         val acknowledgments = listOf(
             "University Research Lab for project support",
             "Master's Thesis Supervisor for guidance",
             "Open Source Community for tools and libraries",
             "Research participants for testing and feedback"
         )
-        
+
         val thirdPartyLicenses = listOf(
             "Android Jetpack - Apache License 2.0",
             "Material Design Components - Apache License 2.0",
@@ -188,7 +157,7 @@ class AboutViewModel @Inject constructor(
             "Shimmer for Android - BSD 3-Clause License",
             "OpenCV - Apache License 2.0"
         )
-        
+
         _uiState.value = _uiState.value.copy(
             developers = developers,
             contributors = contributors,
@@ -239,39 +208,36 @@ class AboutViewModel @Inject constructor(
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
         val memInfo = android.app.ActivityManager.MemoryInfo()
         activityManager.getMemoryInfo(memInfo)
-        
+
         val totalMemory = formatBytes(memInfo.totalMem)
         val availableMemory = formatBytes(memInfo.availMem)
-        
+
         val internalDir = context.filesDir
         val totalStorage = formatBytes(internalDir.totalSpace)
         val availableStorage = formatBytes(internalDir.freeSpace)
-        
+
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val displayMetrics = DisplayMetrics()
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Use modern display API for Android 11+
             try {
                 context.display?.getMetrics(displayMetrics)
             } catch (e: Exception) {
-                // Fallback to deprecated method if modern API fails
                 @Suppress("DEPRECATION")
                 windowManager.defaultDisplay.getMetrics(displayMetrics)
             }
         } else {
-            // Fallback for older Android versions
             @Suppress("DEPRECATION")
             windowManager.defaultDisplay.getMetrics(displayMetrics)
         }
-        
+
         val screenResolution = "${displayMetrics.widthPixels} × ${displayMetrics.heightPixels}"
         val screenDensity = displayMetrics.densityDpi.toString()
-        
+
         val processorInfo = getCpuInfo()
         val cameraInfo = getCameraInfo()
         val sensorInfo = getSensorInfo()
-        
+
         return HardwareInfo(
             totalMemory = totalMemory,
             availableMemory = availableMemory,
@@ -292,7 +258,7 @@ class AboutViewModel @Inject constructor(
                 .find { it.startsWith("model name") || it.startsWith("Processor") }
                 ?.substringAfter(":")
                 ?.trim()
-            
+
             modelName ?: "${Build.HARDWARE} (${Build.SUPPORTED_ABIS.joinToString(", ")})"
         } catch (e: Exception) {
             "${Build.HARDWARE} (${Build.SUPPORTED_ABIS.joinToString(", ")})"
@@ -302,11 +268,10 @@ class AboutViewModel @Inject constructor(
     private fun getCameraInfo(): List<String> {
         return try {
             val cameraList = mutableListOf<String>()
-            
-            // Use modern Camera2 API (available since API 21/Android 5.0)
+
             val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
             val cameraIds = cameraManager.cameraIdList
-            
+
             for (cameraId in cameraIds) {
                 val characteristics = cameraManager.getCameraCharacteristics(cameraId)
                 val facing = characteristics.get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
@@ -318,7 +283,7 @@ class AboutViewModel @Inject constructor(
                 }
                 cameraList.add("Camera $cameraId: $facingStr")
             }
-            
+
             if (cameraList.isEmpty()) {
                 listOf("No cameras detected")
             } else {
@@ -333,10 +298,10 @@ class AboutViewModel @Inject constructor(
         return try {
             val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
             val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
-            
+
             sensors.map { sensor ->
                 "${sensor.name} (${sensor.vendor})"
-            }.take(10) // Limit to first 10 sensors to avoid overwhelming the UI
+            }.take(10)
         } catch (e: Exception) {
             listOf("Sensor information unavailable")
         }

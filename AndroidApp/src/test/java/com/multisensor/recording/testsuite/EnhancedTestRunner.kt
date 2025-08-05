@@ -11,34 +11,20 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
-/**
- * Enhanced test runner for Android with comprehensive reporting and performance monitoring.
- * 
- * Provides capabilities similar to the Python comprehensive test suite including:
- * - Performance benchmarking
- * - Memory usage monitoring
- * - Stress testing coordination
- * - Detailed test reporting
- * - Coverage analysis integration
- * 
- * @author Multi-Sensor Recording System
- * @version 1.0.0
- */
 class EnhancedTestRunner : RunListener() {
-    
+
     companion object {
         private const val REPORT_DIR = "test-reports"
         private const val PERFORMANCE_THRESHOLD_MS = 5000L
         private const val MEMORY_THRESHOLD_MB = 100L
-        
-        // Test categorization
+
         private val STRESS_TESTS = setOf(
             "ShimmerRecorderEnhancedTest",
-            "ThermalRecorderIntegrationTest", 
+            "ThermalRecorderIntegrationTest",
             "MultiSensorCoordinationTest",
             "DataFlowIntegrationTest"
         )
-        
+
         private val PERFORMANCE_TESTS = setOf(
             "CalibrationCaptureManagerTest",
             "NetworkQualityMonitorTest",
@@ -46,7 +32,7 @@ class EnhancedTestRunner : RunListener() {
             "SessionManagerTest"
         )
     }
-    
+
     private val testResults = ConcurrentHashMap<String, TestExecutionData>()
     private val performanceMetrics = ConcurrentHashMap<String, PerformanceMetrics>()
     private var suiteStartTime: Long = 0
@@ -54,7 +40,7 @@ class EnhancedTestRunner : RunListener() {
     private var passedTests = 0
     private var failedTests = 0
     private var skippedTests = 0
-    
+
     data class TestExecutionData(
         val testName: String,
         val className: String,
@@ -64,7 +50,7 @@ class EnhancedTestRunner : RunListener() {
         var errorMessage: String? = null,
         var stackTrace: String? = null
     )
-    
+
     data class PerformanceMetrics(
         val executionTimeMs: Long,
         val memoryUsageMB: Long,
@@ -72,19 +58,19 @@ class EnhancedTestRunner : RunListener() {
         val isPerformanceTest: Boolean,
         val category: String
     )
-    
+
     enum class TestStatus {
         RUNNING, PASSED, FAILED, SKIPPED
     }
-    
+
     override fun testRunStarted(description: Description?) {
         super.testRunStarted(description)
         suiteStartTime = System.currentTimeMillis()
         totalTests = description?.testCount() ?: 0
-        
+
         val separator = "=".repeat(100)
         val shortSeparator = "-".repeat(100)
-        
+
         println(separator)
         println("ENHANCED ANDROID MULTI-SENSOR RECORDING SYSTEM TEST SUITE")
         println(separator)
@@ -95,57 +81,53 @@ class EnhancedTestRunner : RunListener() {
         println("Stress testing: ${STRESS_TESTS.size} tests identified")
         println("Performance benchmarks: ${PERFORMANCE_TESTS.size} tests identified")
         println(shortSeparator)
-        
-        // Ensure report directory exists
+
         File(REPORT_DIR).mkdirs()
     }
-    
+
     override fun testStarted(description: Description?) {
         super.testStarted(description)
-        
+
         val testName = description?.methodName ?: "unknown"
         val className = description?.className ?: "unknown"
         val startTime = System.currentTimeMillis()
-        
+
         val testData = TestExecutionData(
             testName = testName,
             className = className,
             startTime = startTime
         )
-        
+
         testResults[getTestKey(description)] = testData
-        
+
         println("🧪 Starting: $className.$testName")
-        
-        // Log test categorization
+
         when {
             isStressTest(className) -> println("   ⚡ STRESS TEST - High intensity validation")
             isPerformanceTest(className) -> println("   📊 PERFORMANCE TEST - Benchmark validation")
             else -> println("   ✅ UNIT TEST - Core functionality validation")
         }
     }
-    
+
     override fun testFinished(description: Description?) {
         super.testFinished(description)
-        
+
         val testKey = getTestKey(description)
         val testData = testResults[testKey] ?: return
-        
+
         val endTime = System.currentTimeMillis()
         val executionTime = endTime - testData.startTime
-        
-        // Update test data
+
         testData.endTime = endTime
         if (testData.status == TestStatus.RUNNING) {
             testData.status = TestStatus.PASSED
             passedTests++
         }
-        
-        // Collect performance metrics
+
         val memoryUsage = getMemoryUsageMB()
         val isStress = isStressTest(testData.className)
         val isPerformance = isPerformanceTest(testData.className)
-        
+
         val metrics = PerformanceMetrics(
             executionTimeMs = executionTime,
             memoryUsageMB = memoryUsage,
@@ -153,10 +135,9 @@ class EnhancedTestRunner : RunListener() {
             isPerformanceTest = isPerformance,
             category = getTestCategory(testData.className)
         )
-        
+
         performanceMetrics[testKey] = metrics
-        
-        // Report test completion
+
         val status = when {
             executionTime > PERFORMANCE_THRESHOLD_MS -> "⚠️ SLOW"
             memoryUsage > MEMORY_THRESHOLD_MB -> "⚠️ HIGH MEMORY"
@@ -164,10 +145,9 @@ class EnhancedTestRunner : RunListener() {
             isPerformance -> "📊 BENCHMARK COMPLETED"
             else -> "✅ PASSED"
         }
-        
+
         println("   $status ${testData.testName} (${executionTime}ms, ${memoryUsage}MB)")
-        
-        // Performance warnings
+
         if (executionTime > PERFORMANCE_THRESHOLD_MS) {
             println("   ⚠️  WARNING: Test exceeded performance threshold (${PERFORMANCE_THRESHOLD_MS}ms)")
         }
@@ -175,58 +155,54 @@ class EnhancedTestRunner : RunListener() {
             println("   ⚠️  WARNING: Test exceeded memory threshold (${MEMORY_THRESHOLD_MB}MB)")
         }
     }
-    
+
     override fun testFailure(failure: Failure?) {
         super.testFailure(failure)
-        
+
         val testKey = getTestKey(failure?.description)
         val testData = testResults[testKey] ?: return
-        
+
         testData.status = TestStatus.FAILED
         testData.errorMessage = failure?.message
         testData.stackTrace = failure?.trace
-        
+
         failedTests++
-        passedTests-- // Subtract the premature increment from testFinished
-        
+        passedTests--
+
         println("   ❌ FAILED: ${testData.testName}")
         println("      Error: ${failure?.message}")
     }
-    
+
     override fun testIgnored(description: Description?) {
         super.testIgnored(description)
-        
+
         val testKey = getTestKey(description)
         val testData = testResults[testKey]
         testData?.status = TestStatus.SKIPPED
-        
+
         skippedTests++
-        
+
         println("   ⏭️ SKIPPED: ${description?.methodName}")
     }
-    
+
     override fun testRunFinished(result: Result?) {
         super.testRunFinished(result)
-        
+
         val suiteEndTime = System.currentTimeMillis()
         val totalExecutionTime = suiteEndTime - suiteStartTime
-        
-        // Generate comprehensive report
+
         generateComprehensiveReport(totalExecutionTime)
-        
-        // Print summary
+
         printTestSummary(totalExecutionTime)
-        
-        // Generate performance analysis
+
         generatePerformanceAnalysis()
-        
-        // Export results to JSON
+
         exportResultsToJson()
     }
-    
+
     private fun generateComprehensiveReport(totalExecutionTime: Long) {
         val reportFile = File(REPORT_DIR, "android_test_report_${formatFileTimestamp()}.html")
-        
+
         val htmlReport = buildString {
             appendLine("<!DOCTYPE html>")
             appendLine("<html><head><title>Android Test Report</title>")
@@ -240,12 +216,11 @@ class EnhancedTestRunner : RunListener() {
             appendLine(".skipped { color: orange; }")
             appendLine(".performance-warning { background-color: #fff3cd; }")
             appendLine("</style></head><body>")
-            
+
             appendLine("<h1>Enhanced Android Test Suite Report</h1>")
             appendLine("<p>Generated: ${formatTimestamp(System.currentTimeMillis())}</p>")
             appendLine("<p>Total Execution Time: ${totalExecutionTime}ms</p>")
-            
-            // Summary statistics
+
             appendLine("<h2>Test Summary</h2>")
             appendLine("<table>")
             appendLine("<tr><th>Status</th><th>Count</th><th>Percentage</th></tr>")
@@ -253,12 +228,11 @@ class EnhancedTestRunner : RunListener() {
             appendLine("<tr class='failed'><td>Failed</td><td>$failedTests</td><td>${(failedTests * 100.0 / totalTests).format(1)}%</td></tr>")
             appendLine("<tr class='skipped'><td>Skipped</td><td>$skippedTests</td><td>${(skippedTests * 100.0 / totalTests).format(1)}%</td></tr>")
             appendLine("</table>")
-            
-            // Performance metrics
+
             appendLine("<h2>Performance Analysis</h2>")
             appendLine("<table>")
             appendLine("<tr><th>Test</th><th>Category</th><th>Execution Time</th><th>Memory Usage</th><th>Status</th></tr>")
-            
+
             performanceMetrics.entries.sortedByDescending { it.value.executionTimeMs }.forEach { entry ->
                 val testData = testResults[entry.key]
                 val metrics = entry.value
@@ -268,9 +242,9 @@ class EnhancedTestRunner : RunListener() {
                     TestStatus.SKIPPED -> "skipped"
                     else -> ""
                 }
-                val performanceClass = if (metrics.executionTimeMs > PERFORMANCE_THRESHOLD_MS || 
+                val performanceClass = if (metrics.executionTimeMs > PERFORMANCE_THRESHOLD_MS ||
                                          metrics.memoryUsageMB > MEMORY_THRESHOLD_MB) "performance-warning" else ""
-                
+
                 appendLine("<tr class='$statusClass $performanceClass'>")
                 appendLine("<td>${testData?.testName ?: "unknown"}</td>")
                 appendLine("<td>${metrics.category}</td>")
@@ -279,15 +253,15 @@ class EnhancedTestRunner : RunListener() {
                 appendLine("<td>${testData?.status ?: "unknown"}</td>")
                 appendLine("</tr>")
             }
-            
+
             appendLine("</table>")
             appendLine("</body></html>")
         }
-        
+
         reportFile.writeText(htmlReport)
         println("📄 Comprehensive HTML report generated: ${reportFile.absolutePath}")
     }
-    
+
     private fun printTestSummary(totalExecutionTime: Long) {
         val separator = "=".repeat(100)
         println("\n$separator")
@@ -299,31 +273,30 @@ class EnhancedTestRunner : RunListener() {
         println("   ❌ Failed: $failedTests (${(failedTests * 100.0 / totalTests).format(1)}%)")
         println("   ⏭️ Skipped: $skippedTests (${(skippedTests * 100.0 / totalTests).format(1)}%)")
         println("   ⏱️ Total Time: ${totalExecutionTime}ms (${(totalExecutionTime / 1000.0).format(2)}s)")
-        
+
         val successRate = (passedTests * 100.0 / (totalTests - skippedTests)).format(1)
         println("   🎯 Success Rate: $successRate%")
-        
-        // Performance insights
+
         val slowTests = performanceMetrics.values.count { it.executionTimeMs > PERFORMANCE_THRESHOLD_MS }
         val memoryIntensiveTests = performanceMetrics.values.count { it.memoryUsageMB > MEMORY_THRESHOLD_MB }
-        
+
         if (slowTests > 0 || memoryIntensiveTests > 0) {
             println("\n⚠️ Performance Warnings:")
             if (slowTests > 0) println("   $slowTests tests exceeded performance threshold (${PERFORMANCE_THRESHOLD_MS}ms)")
             if (memoryIntensiveTests > 0) println("   $memoryIntensiveTests tests exceeded memory threshold (${MEMORY_THRESHOLD_MB}MB)")
         }
-        
+
         println(separator)
     }
-    
+
     private fun generatePerformanceAnalysis() {
         val stressTestMetrics = performanceMetrics.values.filter { it.isStressTest }
         val performanceTestMetrics = performanceMetrics.values.filter { it.isPerformanceTest }
-        
+
         val shortSeparator = "-".repeat(60)
         println("\n📊 PERFORMANCE ANALYSIS")
         println(shortSeparator)
-        
+
         if (stressTestMetrics.isNotEmpty()) {
             val avgStressTime = stressTestMetrics.map { it.executionTimeMs }.average()
             val maxStressTime = stressTestMetrics.maxOfOrNull { it.executionTimeMs } ?: 0
@@ -332,7 +305,7 @@ class EnhancedTestRunner : RunListener() {
             println("   Maximum execution time: ${maxStressTime}ms")
             println("   Tests completed: ${stressTestMetrics.size}")
         }
-        
+
         if (performanceTestMetrics.isNotEmpty()) {
             val avgPerfTime = performanceTestMetrics.map { it.executionTimeMs }.average()
             val maxPerfTime = performanceTestMetrics.maxOfOrNull { it.executionTimeMs } ?: 0
@@ -341,8 +314,7 @@ class EnhancedTestRunner : RunListener() {
             println("   Maximum benchmark time: ${maxPerfTime}ms")
             println("   Benchmarks completed: ${performanceTestMetrics.size}")
         }
-        
-        // Memory analysis
+
         val avgMemory = performanceMetrics.values.map { it.memoryUsageMB }.average()
         val maxMemory = performanceMetrics.values.maxOfOrNull { it.memoryUsageMB } ?: 0
         println("💾 Memory Usage Analysis:")
@@ -350,27 +322,24 @@ class EnhancedTestRunner : RunListener() {
         println("   Peak memory usage: ${maxMemory}MB")
         println("   Memory efficiency: ${if (avgMemory < MEMORY_THRESHOLD_MB) "GOOD" else "NEEDS OPTIMIZATION"}")
     }
-    
+
     private fun exportResultsToJson() {
-        // This would export results to JSON format for CI/CD integration
         val jsonFile = File(REPORT_DIR, "android_test_results_${formatFileTimestamp()}.json")
-        // Implementation would convert testResults and performanceMetrics to JSON
         println("📤 JSON results exported: ${jsonFile.absolutePath}")
     }
-    
-    // Helper methods
+
     private fun getTestKey(description: Description?): String {
         return "${description?.className}.${description?.methodName}"
     }
-    
+
     private fun isStressTest(className: String): Boolean {
         return STRESS_TESTS.any { className.contains(it) }
     }
-    
+
     private fun isPerformanceTest(className: String): Boolean {
         return PERFORMANCE_TESTS.any { className.contains(it) }
     }
-    
+
     private fun getTestCategory(className: String): String {
         return when {
             isStressTest(className) -> "Stress Test"
@@ -381,51 +350,43 @@ class EnhancedTestRunner : RunListener() {
             else -> "General Test"
         }
     }
-    
+
     private fun getMemoryUsageMB(): Long {
         val runtime = Runtime.getRuntime()
         return (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024)
     }
-    
+
     private fun formatTimestamp(timestamp: Long): String {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
     }
-    
+
     private fun formatFileTimestamp(): String {
         return SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
     }
-    
+
     private fun Double.format(digits: Int): String = "%.${digits}f".format(this)
 }
 
-/**
- * Utility for running comprehensive Android test suites with enhanced monitoring.
- */
 object AndroidTestSuiteRunner {
-    
-    /**
-     * Execute comprehensive test suite with performance monitoring.
-     */
+
     fun runComprehensiveTests() {
         println("🚀 Starting Enhanced Android Test Suite...")
-        
-        // This would integrate with JUnit Platform or Android Test Orchestrator
-        // to execute tests with the enhanced runner
-        
+
+
         println("📋 Test Categories:")
         println("   • Unit Tests: Core functionality validation")
-        println("   • Integration Tests: Component interaction validation") 
+        println("   • Integration Tests: Component interaction validation")
         println("   • UI Tests: User interface validation")
         println("   • Stress Tests: High-load scenario validation")
         println("   • Performance Tests: Benchmark validation")
-        
+
         println("\n🔧 Enhanced Features:")
         println("   • Performance monitoring and benchmarking")
         println("   • Memory usage tracking and analysis")
         println("   • Comprehensive HTML and JSON reporting")
         println("   • Stress test coordination")
         println("   • Test categorization and analytics")
-        
+
         println("\n▶️ Execute tests using:")
         println("   ./gradlew testDebugUnitTest")
         println("   ./gradlew connectedDebugAndroidTest")

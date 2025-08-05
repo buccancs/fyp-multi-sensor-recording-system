@@ -33,24 +33,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-/**
- * File View Activity - MVVM-based file browser for multi-sensor recording sessions
- * 
- * Refactored to follow proper MVVM architecture:
- * - Activity is a passive observer of ViewModel state
- * - All business logic moved to FileViewViewModel
- * - Uses StateFlow for reactive UI updates
- * - Forwards user events to ViewModel
- */
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
-    
+
     private val viewModel: FileViewViewModel by viewModels()
-    
+
     @Inject
     lateinit var logger: Logger
 
-    // UI Components
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var filesRecyclerView: RecyclerView
     private lateinit var sessionInfoText: TextView
@@ -60,11 +50,9 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var emptyStateText: TextView
     private lateinit var refreshButton: Button
 
-    // Adapters
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
 
-    // Date formatter
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     companion object {
@@ -135,7 +123,6 @@ class FileViewActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerViews() {
-        // Sessions RecyclerView
         sessionsAdapter = SessionsAdapter { session ->
             viewModel.selectSession(session)
         }
@@ -144,7 +131,6 @@ class FileViewActivity : AppCompatActivity() {
             adapter = sessionsAdapter
         }
 
-        // Files RecyclerView
         filesAdapter = FilesAdapter { fileItem ->
             handleFileClick(fileItem)
         }
@@ -155,7 +141,6 @@ class FileViewActivity : AppCompatActivity() {
     }
 
     private fun setupEventListeners() {
-        // Search functionality
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -164,12 +149,11 @@ class FileViewActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Filter spinner
         val filterOptions = arrayOf("All Files", "Video Files", "RAW Images", "Thermal Data", "Recent Sessions")
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filterOptions)
         filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterSpinner.adapter = filterAdapter
-        
+
         filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.applyFilter(position)
@@ -177,15 +161,11 @@ class FileViewActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Refresh button
         refreshButton.setOnClickListener {
             viewModel.refreshSessions()
         }
     }
 
-    /**
-     * Observe ViewModel UiState using modern StateFlow pattern
-     */
     private fun observeUiState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -196,30 +176,21 @@ class FileViewActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Single function to render the entire UI based on the state
-     */
     private fun render(state: FileViewUiState) {
-        // Loading states
         progressBar.visibility = if (state.isLoadingSessions || state.isLoadingFiles) View.VISIBLE else View.GONE
-        
-        // Empty state
+
         emptyStateText.visibility = if (state.showEmptyState) View.VISIBLE else View.GONE
-        
-        // Update sessions list
+
         sessionsAdapter.submitList(state.sessions)
-        
-        // Update files list
+
         filesAdapter.submitList(state.sessionFiles)
-        
-        // Update session info
+
         state.selectedSession?.let { session ->
             updateSessionInfo(session)
         } ?: run {
             sessionInfoText.text = "No session selected"
         }
-        
-        // Handle error messages
+
         state.errorMessage?.let { error ->
             showError(error)
             viewModel.clearError()
@@ -331,17 +302,4 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun getMimeType(fileType: FileType): String {
         return when (fileType) {
-            FileType.VIDEO -> "video/*"
-            FileType.RAW_IMAGE -> "image/*"
-            FileType.THERMAL_DATA -> "text/plain"
-        }
-    }
-
-    private fun showMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-}
+            FileType.VIDEO -> "video

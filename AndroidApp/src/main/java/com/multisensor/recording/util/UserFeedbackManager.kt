@@ -13,26 +13,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Enhanced user feedback manager for better error handling and user experience.
- * Provides centralized feedback mechanisms including:
- * - User-friendly error messages
- * - Progress indicators
- * - Success notifications
- * - Accessibility support
- */
 @Singleton
 class UserFeedbackManager @Inject constructor(
     private val context: Context
 ) {
 
-    // Shared flow for app-wide feedback events
     private val _feedbackEvents = MutableSharedFlow<FeedbackEvent>()
     val feedbackEvents: SharedFlow<FeedbackEvent> = _feedbackEvents.asSharedFlow()
 
-    /**
-     * Show error message with appropriate styling and actions
-     */
     fun showError(
         view: View,
         message: String,
@@ -52,9 +40,6 @@ class UserFeedbackManager @Inject constructor(
         snackbar.show()
     }
 
-    /**
-     * Show success message with positive styling
-     */
     fun showSuccess(
         view: View,
         message: String,
@@ -66,9 +51,6 @@ class UserFeedbackManager @Inject constructor(
             .show()
     }
 
-    /**
-     * Show warning message with appropriate styling
-     */
     fun showWarning(
         view: View,
         message: String,
@@ -88,9 +70,6 @@ class UserFeedbackManager @Inject constructor(
         snackbar.show()
     }
 
-    /**
-     * Show informational message
-     */
     fun showInfo(
         view: View,
         message: String,
@@ -102,9 +81,6 @@ class UserFeedbackManager @Inject constructor(
             .show()
     }
 
-    /**
-     * Show error dialog with detailed information and actions
-     */
     fun showErrorDialog(
         context: Context,
         title: String,
@@ -126,9 +102,6 @@ class UserFeedbackManager @Inject constructor(
         builder.show()
     }
 
-    /**
-     * Show confirmation dialog for critical actions
-     */
     fun showConfirmationDialog(
         context: Context,
         title: String,
@@ -147,55 +120,46 @@ class UserFeedbackManager @Inject constructor(
             .show()
     }
 
-    /**
-     * Convert technical errors to user-friendly messages
-     */
     fun getUserFriendlyErrorMessage(throwable: Throwable): String {
         return when {
-            throwable.message?.contains("Permission") == true -> 
+            throwable.message?.contains("Permission") == true ->
                 "Permission required. Please grant the necessary permissions to continue."
-            
-            throwable.message?.contains("Camera") == true -> 
+
+            throwable.message?.contains("Camera") == true ->
                 "Camera is not available. Please check if another app is using the camera."
-            
-            throwable.message?.contains("Network") == true || throwable.message?.contains("Connection") == true -> 
+
+            throwable.message?.contains("Network") == true || throwable.message?.contains("Connection") == true ->
                 "Network connection issue. Please check your connection and try again."
-            
-            throwable.message?.contains("Storage") == true || throwable.message?.contains("Space") == true -> 
+
+            throwable.message?.contains("Storage") == true || throwable.message?.contains("Space") == true ->
                 "Insufficient storage space. Please free up space and try again."
-            
-            throwable.message?.contains("Battery") == true -> 
+
+            throwable.message?.contains("Battery") == true ->
                 "Low battery detected. Connect charger for optimal performance."
-            
-            throwable.message?.contains("Bluetooth") == true -> 
+
+            throwable.message?.contains("Bluetooth") == true ->
                 "Bluetooth connection issue. Please check Bluetooth settings and device pairing."
-            
-            throwable.message?.contains("USB") == true -> 
+
+            throwable.message?.contains("USB") == true ->
                 "USB device connection issue. Please check USB cable and device connection."
-            
-            throwable is SecurityException -> 
+
+            throwable is SecurityException ->
                 "Security permission required. Please grant the necessary permissions."
-            
-            throwable is IllegalStateException -> 
+
+            throwable is IllegalStateException ->
                 "Application is in an invalid state. Please restart the app."
-            
-            throwable is OutOfMemoryError -> 
+
+            throwable is OutOfMemoryError ->
                 "Memory is running low. Please close other apps and try again."
-            
+
             else -> throwable.localizedMessage ?: "An unexpected error occurred. Please try again."
         }
     }
 
-    /**
-     * Emit feedback event for app-wide handling
-     */
     suspend fun emitFeedbackEvent(event: FeedbackEvent) {
         _feedbackEvents.emit(event)
     }
 
-    /**
-     * Get system status message based on component states
-     */
     fun getSystemStatusMessage(
         isCameraOk: Boolean,
         isThermalOk: Boolean,
@@ -203,12 +167,12 @@ class UserFeedbackManager @Inject constructor(
         isPcConnected: Boolean
     ): String {
         val issues = mutableListOf<String>()
-        
+
         if (!isCameraOk) issues.add("camera")
         if (!isThermalOk) issues.add("thermal sensor")
         if (!isShimmerOk) issues.add("Shimmer sensor")
         if (!isPcConnected) issues.add("PC connection")
-        
+
         return when {
             issues.isEmpty() -> "All systems ready for recording"
             issues.size == 1 -> "Issue with ${issues[0]}. Some features may be limited."
@@ -217,9 +181,6 @@ class UserFeedbackManager @Inject constructor(
         }
     }
 
-    /**
-     * Get battery status message with recommendations
-     */
     fun getBatteryStatusMessage(level: Int, isCharging: Boolean): String {
         return when {
             isCharging -> "Battery charging ($level%)"
@@ -231,9 +192,6 @@ class UserFeedbackManager @Inject constructor(
         }
     }
 
-    /**
-     * Get recording status message with helpful information
-     */
     fun getRecordingStatusMessage(
         isRecording: Boolean,
         duration: Long,
@@ -249,9 +207,6 @@ class UserFeedbackManager @Inject constructor(
     }
 }
 
-/**
- * Sealed class for different types of feedback events
- */
 sealed class FeedbackEvent {
     data class Error(val message: String, val throwable: Throwable? = null) : FeedbackEvent()
     data class Success(val message: String) : FeedbackEvent()
@@ -260,9 +215,6 @@ sealed class FeedbackEvent {
     data class Progress(val message: String, val isVisible: Boolean) : FeedbackEvent()
 }
 
-/**
- * Extension functions for common feedback scenarios
- */
 fun UserFeedbackManager.showRecordingStarted(view: View, sessionId: String) {
     showSuccess(view, "Recording started - Session: ${sessionId.take(8)}")
 }
@@ -283,11 +235,10 @@ fun UserFeedbackManager.showDeviceDisconnected(view: View, deviceName: String) {
 
 fun UserFeedbackManager.showLowBatteryWarning(view: View, level: Int) {
     showWarning(
-        view, 
+        view,
         "Low battery ($level%). Connect charger for extended recording.",
         "Settings",
         {
-            // Navigate to battery settings
         }
     )
 }
@@ -298,7 +249,6 @@ fun UserFeedbackManager.showPermissionRequired(view: View, permission: String) {
         "Permission required: $permission",
         "Grant",
         {
-            // Trigger permission request
         }
     )
 }

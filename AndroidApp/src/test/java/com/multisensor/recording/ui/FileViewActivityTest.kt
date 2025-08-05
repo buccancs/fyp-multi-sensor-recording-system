@@ -38,7 +38,6 @@ class FileViewActivityTest {
     @Test
     fun `getAllSessions should return list of sessions`() =
         runTest {
-            // Given
             val testSessions =
                 listOf(
                     createTestSessionInfo("session1"),
@@ -46,10 +45,8 @@ class FileViewActivityTest {
                 )
             coEvery { mockSessionManager.getAllSessions() } returns testSessions
 
-            // When
             val result = mockSessionManager.getAllSessions()
 
-            // Then
             assertEquals(2, result.size)
             assertEquals("session1", result[0].sessionId)
             assertEquals("session2", result[1].sessionId)
@@ -59,13 +56,10 @@ class FileViewActivityTest {
     @Test
     fun `deleteAllSessions should return success`() =
         runTest {
-            // Given
             coEvery { mockSessionManager.deleteAllSessions() } returns true
 
-            // When
             val result = mockSessionManager.deleteAllSessions()
 
-            // Then
             assertTrue("Delete all sessions should succeed", result)
             coVerify { mockSessionManager.deleteAllSessions() }
         }
@@ -73,13 +67,10 @@ class FileViewActivityTest {
     @Test
     fun `deleteAllSessions should handle failure`() =
         runTest {
-            // Given
             coEvery { mockSessionManager.deleteAllSessions() } returns false
 
-            // When
             val result = mockSessionManager.deleteAllSessions()
 
-            // Then
             assertFalse("Delete all sessions should fail", result)
             coVerify { mockSessionManager.deleteAllSessions() }
         }
@@ -87,7 +78,6 @@ class FileViewActivityTest {
     @Test
     fun `SessionManager integration should work correctly`() =
         runTest {
-            // Given
             val testSessions =
                 listOf(
                     createTestSessionInfo("session1"),
@@ -95,10 +85,8 @@ class FileViewActivityTest {
                 )
             coEvery { mockSessionManager.getAllSessions() } returns testSessions
 
-            // When
             val sessions = mockSessionManager.getAllSessions()
 
-            // Then
             assertEquals(2, sessions.size)
             assertTrue("Sessions should contain session1", sessions.any { it.sessionId == "session1" })
             assertTrue("Sessions should contain session2", sessions.any { it.sessionId == "session2" })
@@ -106,12 +94,10 @@ class FileViewActivityTest {
 
     @Test
     fun `File operations should handle different file types`() {
-        // Given
         val videoFile = File("/test/video.mp4")
         val rawFile = File("/test/image.dng")
         val thermalFile = File("/test/thermal.bin")
 
-        // When & Then
         assertTrue("Video file should exist in test", videoFile.path.contains("video"))
         assertTrue("RAW file should exist in test", rawFile.path.contains("image"))
         assertTrue("Thermal file should exist in test", thermalFile.path.contains("thermal"))
@@ -119,11 +105,9 @@ class FileViewActivityTest {
 
     @Test
     fun `SessionInfo should be created with correct properties`() {
-        // Given
         val sessionId = "test_session_123"
         val startTime = System.currentTimeMillis()
 
-        // When
         val sessionInfo =
             SessionInfo(sessionId).apply {
                 this.startTime = startTime
@@ -132,7 +116,6 @@ class FileViewActivityTest {
                 this.thermalEnabled = true
             }
 
-        // Then
         assertEquals(sessionId, sessionInfo.sessionId)
         assertEquals(startTime, sessionInfo.startTime)
         assertTrue("Video should be enabled", sessionInfo.videoEnabled)
@@ -142,16 +125,13 @@ class FileViewActivityTest {
 
     @Test
     fun `SessionInfo should track file paths correctly`() {
-        // Given
         val sessionInfo = createTestSessionInfo("test_session")
 
-        // When
         sessionInfo.videoFilePath = "/test/video.mp4"
         sessionInfo.addRawFile("/test/raw1.dng")
         sessionInfo.addRawFile("/test/raw2.dng")
         sessionInfo.setThermalFile("/test/thermal.bin")
 
-        // Then
         assertEquals("/test/video.mp4", sessionInfo.videoFilePath)
         assertEquals(2, sessionInfo.getRawImageCount())
         assertEquals("/test/thermal.bin", sessionInfo.thermalFilePath)

@@ -19,10 +19,6 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manages recording sessions, including file organization, session lifecycle,
- * and data storage coordination.
- */
 @Singleton
 class SessionManager
     @Inject
@@ -30,8 +26,8 @@ class SessionManager
         @ApplicationContext private val context: Context,
         private val logger: Logger,
         private val thermalSettings: ThermalCameraSettings,
-        private val sessionStateDao: SessionStateDao, // Phase 3: State Persistence
-        private val crashRecoveryManager: CrashRecoveryManager, // Phase 3: Crash Recovery
+        private val sessionStateDao: SessionStateDao,
+        private val crashRecoveryManager: CrashRecoveryManager,
     ) {
         private var currentSession: RecordingSession? = null
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
@@ -49,9 +45,6 @@ class SessionManager
             private const val CALIBRATION_FOLDER = "calibration"
         }
 
-        /**
-         * Data class representing a recording session
-         */
         data class RecordingSession(
             val sessionId: String,
             val startTime: Long,
@@ -67,9 +60,6 @@ class SessionManager
             CANCELLED,
         }
 
-        /**
-         * Creates a new recording session with organized folder structure
-         */
         suspend fun createNewSession(): String =
             withContext(Dispatchers.IO) {
                 try {
@@ -78,7 +68,6 @@ class SessionManager
 
                     logger.info("Creating new session: $sessionId")
 
-                    // Create session folder
                     val baseFolder = getBaseRecordingFolder()
                     val sessionFolder = File(baseFolder, sessionId)
 
@@ -86,10 +75,8 @@ class SessionManager
                         throw Exception("Failed to create session folder: ${sessionFolder.absolutePath}")
                     }
 
-                    // Create subfolders
                     createSessionSubfolders(sessionFolder)
 
-                    // Create session object
                     val session =
                         RecordingSession(
                             sessionId = sessionId,
@@ -99,20 +86,17 @@ class SessionManager
 
                     currentSession = session
 
-                    // Phase 3: Persist session state to database
                     val sessionState = SessionState(
                         sessionId = sessionId,
                         recordingState = RecordingState.STARTING,
-                        deviceStates = emptyList(), // Will be updated by recording service
+                        deviceStates = emptyList(),
                         timestamp = System.currentTimeMillis(),
                         startTime = session.startTime
                     )
                     sessionStateDao.insertSessionState(sessionState)
 
-                    // Write session info file
                     writeSessionInfo(session)
 
-                    // Write session configuration file with thermal settings
                     writeSessionConfig(session)
 
                     logger.info("Session created successfully: $sessionId at ${sessionFolder.absolutePath}")
@@ -124,31 +108,20 @@ class SessionManager
                 }
             }
 
-        /**
-         * Gets the current active session
-         */
         fun getCurrentSession(): RecordingSession? = currentSession
-        
-        /**
-         * Get the current session's output directory
-         */
+
         fun getSessionOutputDir(): File? {
             return currentSession?.sessionFolder
         }
-        
-        /**
-         * Add stimulus event to current session
-         */
+
         fun addStimulusEvent(timestamp: Long, eventType: String) {
             currentSession?.let { session ->
                 try {
-                    // Add to session's stimulus events list (we'll need to add this field)
                     logger.info("Adding stimulus event to session ${session.sessionId}: type=$eventType, timestamp=$timestamp")
-                    
-                    // Create stimulus marker file if it doesn't exist
+
                     val stimulusFile = File(session.sessionFolder, "stimulus_events.csv")
                     val isNewFile = !stimulusFile.exists()
-                    
+
                     stimulusFile.appendText(
                         if (isNewFile) {
                             "timestamp_ms,event_type,session_time_ms\n$timestamp,$eventType,${timestamp - session.startTime}\n"
@@ -156,7 +129,7 @@ class SessionManager
                             "$timestamp,$eventType,${timestamp - session.startTime}\n"
                         }
                     )
-                    
+
                     logger.info("Stimulus event recorded in: ${stimulusFile.absolutePath}")
                 } catch (e: Exception) {
                     logger.error("Failed to add stimulus event to session", e)
@@ -164,9 +137,6 @@ class SessionManager
             }
         }
 
-        /**
-         * Finalizes the current session
-         */
         suspend fun finalizeCurrentSession() =
             withContext(Dispatchers.IO) {
                 currentSession?.let { session ->
@@ -176,7 +146,6 @@ class SessionManager
                         session.endTime = System.currentTimeMillis()
                         session.status = SessionStatus.COMPLETED
 
-                        // Phase 3: Update session state in database
                         val existingState = sessionStateDao.getSessionState(session.sessionId)
                         if (existingState != null) {
                             val updatedState = existingState.copy(
@@ -187,10 +156,8 @@ class SessionManager
                             sessionStateDao.updateSessionState(updatedState)
                         }
 
-                        // Update session info file
                         writeSessionInfo(session)
 
-                        // Log session summary
                         logSessionSummary(session)
 
                         logger.info("Session finalized: ${session.sessionId}")
@@ -204,13 +171,10 @@ class SessionManager
                 }
             }
 
-        /**
-         * Phase 3: Initialize crash recovery on app startup
-         */
         suspend fun initializeCrashRecovery() {
             try {
                 logger.info("SessionManager: Initializing crash recovery")
-                
+
                 val needsRecovery = crashRecoveryManager.detectCrashRecovery()
                 if (needsRecovery) {
                     logger.info("SessionManager: Crash recovery needed - starting recovery process")
@@ -218,17 +182,13 @@ class SessionManager
                 } else {
                     logger.info("SessionManager: No crash recovery needed")
                 }
-                
-                // Clean up old sessions periodically
-                crashRecoveryManager.cleanupOldSessions(30) // Keep 30 days
+
+                crashRecoveryManager.cleanupOldSessions(30)
             } catch (e: Exception) {
                 logger.error("SessionManager: Error during crash recovery initialization", e)
             }
         }
 
-        /**
-         * Phase 3: Update session state with device information
-         */
         suspend fun updateSessionDeviceStates(deviceStates: List<DeviceState>) {
             currentSession?.let { session ->
                 try {
@@ -246,9 +206,6 @@ class SessionManager
             }
         }
 
-        /**
-         * Phase 3: Update session recording state
-         */
         suspend fun updateSessionRecordingState(recordingState: RecordingState) {
             currentSession?.let { session ->
                 try {
@@ -266,9 +223,6 @@ class SessionManager
             }
         }
 
-        /**
-         * Gets file paths for different data types in the current session
-         */
         fun getSessionFilePaths(): SessionFilePaths? =
             currentSession?.let { session ->
                 SessionFilePaths(
@@ -284,9 +238,6 @@ class SessionManager
                 )
             }
 
-        /**
-         * Data class containing file paths for a session
-         */
         data class SessionFilePaths(
             val sessionFolder: File,
             val rgbVideoFile: File,
@@ -299,11 +250,7 @@ class SessionManager
             val sessionConfigFile: File,
         )
 
-        /**
-         * Gets the base recording folder, creating it if necessary
-         */
         private fun getBaseRecordingFolder(): File {
-            // Use external storage if available, otherwise use internal storage
             val baseDir =
                 if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
                     File(Environment.getExternalStorageDirectory(), BASE_FOLDER_NAME)
@@ -321,32 +268,23 @@ class SessionManager
             return baseDir
         }
 
-        /**
-         * Creates necessary subfolders for a session
-         */
         private fun createSessionSubfolders(sessionFolder: File) {
-            // Create raw frames folder
             val rawFramesFolder = File(sessionFolder, RAW_FRAMES_FOLDER)
             if (!rawFramesFolder.exists() && !rawFramesFolder.mkdirs()) {
                 logger.warning("Failed to create raw frames folder: ${rawFramesFolder.absolutePath}")
             }
-            
-            // Create thermal data folder
+
             val thermalDataFolder = File(sessionFolder, THERMAL_DATA_FOLDER)
             if (!thermalDataFolder.exists() && !thermalDataFolder.mkdirs()) {
                 logger.warning("Failed to create thermal data folder: ${thermalDataFolder.absolutePath}")
             }
-            
-            // Create calibration folder
+
             val calibrationFolder = File(sessionFolder, CALIBRATION_FOLDER)
             if (!calibrationFolder.exists() && !calibrationFolder.mkdirs()) {
                 logger.warning("Failed to create calibration folder: ${calibrationFolder.absolutePath}")
             }
         }
 
-        /**
-         * Writes session information to a file
-         */
         private fun writeSessionInfo(session: RecordingSession) {
             try {
                 val infoFile = File(session.sessionFolder, SESSION_INFO_FILE)
@@ -381,14 +319,11 @@ class SessionManager
             }
         }
 
-        /**
-         * Writes session configuration including thermal settings
-         */
         private fun writeSessionConfig(session: RecordingSession) {
             try {
                 val configFile = File(session.sessionFolder, SESSION_CONFIG_FILE)
                 val thermalConfig = thermalSettings.getCurrentConfig()
-                
+
                 val configJson = buildString {
                     appendLine("{")
                     appendLine("  \"session_id\": \"${session.sessionId}\",")
@@ -417,7 +352,7 @@ class SessionManager
                     appendLine("  }")
                     appendLine("}")
                 }
-                
+
                 configFile.writeText(configJson)
                 logger.debug("Session configuration written to: ${configFile.absolutePath}")
             } catch (e: Exception) {
@@ -425,9 +360,6 @@ class SessionManager
             }
         }
 
-        /**
-         * Logs a summary of the completed session
-         */
         private fun logSessionSummary(session: RecordingSession) {
             try {
                 val duration = session.endTime?.let { it - session.startTime } ?: 0
@@ -461,9 +393,6 @@ class SessionManager
             }
         }
 
-        /**
-         * Gets available storage space in bytes
-         */
         fun getAvailableStorageSpace(): Long =
             try {
                 val baseFolder = getBaseRecordingFolder()
@@ -473,17 +402,10 @@ class SessionManager
                 0L
             }
 
-        /**
-         * Checks if there's sufficient storage space for recording
-         */
-        fun hasSufficientStorage(requiredSpaceBytes: Long = 1024 * 1024 * 1024): Boolean { // Default 1GB
+        fun hasSufficientStorage(requiredSpaceBytes: Long = 1024 * 1024 * 1024): Boolean {
             return getAvailableStorageSpace() > requiredSpaceBytes
         }
 
-        /**
-         * Get all recorded sessions by scanning the recording directory
-         * Returns a list of SessionInfo objects reconstructed from session folders
-         */
         suspend fun getAllSessions(): List<com.multisensor.recording.recording.SessionInfo> =
             withContext(Dispatchers.IO) {
                 return@withContext try {
@@ -495,7 +417,6 @@ class SessionManager
                         return@withContext emptyList()
                     }
 
-                    // Scan all subdirectories for session folders
                     baseFolder.listFiles()?.forEach { sessionFolder ->
                         if (sessionFolder.isDirectory && sessionFolder.name.startsWith("session_")) {
                             try {
@@ -509,7 +430,6 @@ class SessionManager
                         }
                     }
 
-                    // Sort sessions by start time (newest first)
                     sessions.sortedByDescending { it.startTime }
                 } catch (e: Exception) {
                     logger.error("Failed to get all sessions", e)
@@ -517,16 +437,12 @@ class SessionManager
                 }
             }
 
-        /**
-         * Reconstruct SessionInfo from a session folder
-         */
         private fun reconstructSessionInfo(sessionFolder: File): com.multisensor.recording.recording.SessionInfo? =
             try {
                 val sessionId = sessionFolder.name
 
-                // Try to read session info file first
                 val infoFile = File(sessionFolder, SESSION_INFO_FILE)
-                var startTime = sessionFolder.lastModified() // Fallback to folder creation time
+                var startTime = sessionFolder.lastModified()
                 var endTime = 0L
                 var errorOccurred = false
                 var errorMessage: String? = null
@@ -534,15 +450,11 @@ class SessionManager
                 if (infoFile.exists()) {
                     try {
                         val infoContent = infoFile.readText()
-                        // Parse session info file for more accurate data
                         infoContent.lines().forEach { line ->
                             when {
                                 line.startsWith("Start Time:") -> {
-                                    // Extract timestamp from date string if possible
-                                    // For now, use folder modification time as fallback
                                 }
                                 line.startsWith("End Time:") -> {
-                                    // Extract end time if available
                                 }
                                 line.startsWith("Status: FAILED") -> {
                                     errorOccurred = true
@@ -555,7 +467,6 @@ class SessionManager
                     }
                 }
 
-                // Check for file existence and determine what was recorded
                 val rgbVideoFile = File(sessionFolder, RGB_VIDEO_FILE)
                 val thermalVideoFile = File(sessionFolder, THERMAL_VIDEO_FILE)
                 val rawFramesFolder = File(sessionFolder, RAW_FRAMES_FOLDER)
@@ -565,7 +476,6 @@ class SessionManager
                 val thermalEnabled = thermalVideoFile.exists() && thermalVideoFile.length() > 0
                 val rawEnabled = rawFramesFolder.exists() && (rawFramesFolder.listFiles()?.isNotEmpty() == true)
 
-                // Create SessionInfo object
                 val sessionInfo =
                     com.multisensor.recording.recording.SessionInfo(
                         sessionId = sessionId,
@@ -580,7 +490,6 @@ class SessionManager
                         errorMessage = errorMessage,
                     )
 
-                // Add RAW file paths if they exist
                 if (rawEnabled) {
                     rawFramesFolder.listFiles()?.forEach { rawFile ->
                         if (rawFile.isFile && rawFile.name.endsWith(".dng")) {
@@ -589,14 +498,12 @@ class SessionManager
                     }
                 }
 
-                // Estimate thermal frame count if thermal file exists
                 if (thermalEnabled) {
                     val thermalFileSize = thermalVideoFile.length()
-                    val estimatedFrameCount = thermalFileSize / (256 * 192 * 2 + 8) // Rough estimate
+                    val estimatedFrameCount = thermalFileSize / (256 * 192 * 2 + 8)
                     sessionInfo.updateThermalFrameCount(estimatedFrameCount)
                 }
 
-                // Mark as completed if I have an end time
                 if (endTime > 0) {
                     sessionInfo.markCompleted()
                 }
@@ -608,10 +515,6 @@ class SessionManager
                 null
             }
 
-        /**
-         * Delete all recorded sessions and their data
-         * WARNING: This permanently removes all recording data
-         */
         suspend fun deleteAllSessions(): Boolean =
             withContext(Dispatchers.IO) {
                 return@withContext try {
@@ -625,7 +528,6 @@ class SessionManager
                     var deletedCount = 0
                     var failedCount = 0
 
-                    // Delete all session folders
                     baseFolder.listFiles()?.forEach { sessionFolder ->
                         if (sessionFolder.isDirectory && sessionFolder.name.startsWith("session_")) {
                             try {
@@ -645,7 +547,6 @@ class SessionManager
 
                     logger.info("Session deletion complete - Deleted: $deletedCount, Failed: $failedCount")
 
-                    // Return true if I deleted at least some sessions and had no failures
                     deletedCount > 0 && failedCount == 0
                 } catch (e: Exception) {
                     logger.error("Failed to delete all sessions", e)
@@ -653,13 +554,9 @@ class SessionManager
                 }
             }
 
-        /**
-         * Recursively delete a session folder and all its contents
-         */
         private fun deleteSessionFolder(folder: File): Boolean =
             try {
                 if (folder.isDirectory) {
-                    // Delete all files and subdirectories first
                     folder.listFiles()?.forEach { file ->
                         if (file.isDirectory) {
                             deleteSessionFolder(file)
@@ -668,7 +565,6 @@ class SessionManager
                         }
                     }
                 }
-                // Delete the folder itself
                 folder.delete()
             } catch (e: Exception) {
                 logger.error("Failed to delete folder: ${folder.absolutePath}", e)

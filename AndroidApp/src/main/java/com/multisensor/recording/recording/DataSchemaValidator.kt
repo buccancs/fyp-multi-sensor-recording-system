@@ -5,9 +5,6 @@ import com.shimmerresearch.driver.ObjectCluster
 import com.shimmerresearch.driver.Configuration
 import kotlinx.coroutines.*
 
-/**
- * Simple range class for double values
- */
 data class DoubleRange(
     val start: Double,
     val endInclusive: Double
@@ -15,24 +12,10 @@ data class DoubleRange(
     operator fun contains(value: Double): Boolean = value in start..endInclusive
 }
 
-/**
- * Comprehensive data schema validator for Shimmer3 GSR+ devices.
- * 
- * This class ensures rock-solid preparation for Shimmer device data schemas by:
- * - Validating incoming ObjectCluster data structures
- * - Ensuring data type compatibility
- * - Checking sensor data ranges and validity
- * - Providing schema documentation and mapping
- * - Handling version compatibility
- * - Real-time data validation
- */
 class DataSchemaValidator(
     private val logger: Logger
 ) {
-    
-    /**
-     * Schema definition for a sensor channel
-     */
+
     data class SensorChannelSchema(
         val name: String,
         val displayName: String,
@@ -43,10 +26,7 @@ class DataSchemaValidator(
         val isRequired: Boolean = false,
         val calibrationRequired: Boolean = false
     )
-    
-    /**
-     * Data types supported by Shimmer devices
-     */
+
     enum class DataType {
         DOUBLE,
         FLOAT,
@@ -56,10 +36,7 @@ class DataSchemaValidator(
         STRING,
         BYTE_ARRAY
     }
-    
-    /**
-     * Schema validation result
-     */
+
     data class ValidationResult(
         val isValid: Boolean,
         val errors: List<String> = emptyList(),
@@ -68,10 +45,7 @@ class DataSchemaValidator(
         val missingChannels: Set<String> = emptySet(),
         val extraChannels: Set<String> = emptySet()
     )
-    
-    /**
-     * Device schema configuration
-     */
+
     data class DeviceSchema(
         val deviceType: String,
         val firmwareVersion: String,
@@ -82,14 +56,10 @@ class DataSchemaValidator(
         val dataFormat: String
     ) {
         companion object {
-            /**
-             * Create comprehensive schema for Shimmer3 GSR+
-             */
             fun createShimmer3GSRPlusSchema(): DeviceSchema = DeviceSchema(
                 deviceType = "Shimmer3-GSR+",
                 firmwareVersion = "3.2.3",
                 supportedChannels = mapOf(
-                    // GSR Sensor
                     "GSR_CONDUCTANCE" to SensorChannelSchema(
                         name = "GSR_CONDUCTANCE",
                         displayName = "GSR Conductance",
@@ -100,8 +70,7 @@ class DataSchemaValidator(
                         isRequired = true,
                         calibrationRequired = true
                     ),
-                    
-                    // PPG Sensor
+
                     "PPG_A13" to SensorChannelSchema(
                         name = "INT_EXP_ADC_A13",
                         displayName = "PPG (A13)",
@@ -112,8 +81,7 @@ class DataSchemaValidator(
                         isRequired = false,
                         calibrationRequired = true
                     ),
-                    
-                    // 3-Axis Accelerometer
+
                     "ACCEL_X" to SensorChannelSchema(
                         name = "ACCEL_LN_X",
                         displayName = "Accelerometer X",
@@ -144,8 +112,7 @@ class DataSchemaValidator(
                         isRequired = false,
                         calibrationRequired = true
                     ),
-                    
-                    // 3-Axis Gyroscope
+
                     "GYRO_X" to SensorChannelSchema(
                         name = "GYRO_X",
                         displayName = "Gyroscope X",
@@ -176,8 +143,7 @@ class DataSchemaValidator(
                         isRequired = false,
                         calibrationRequired = true
                     ),
-                    
-                    // 3-Axis Magnetometer
+
                     "MAG_X" to SensorChannelSchema(
                         name = "MAG_X",
                         displayName = "Magnetometer X",
@@ -208,8 +174,7 @@ class DataSchemaValidator(
                         isRequired = false,
                         calibrationRequired = true
                     ),
-                    
-                    // EXG Sensors (ECG/EMG)
+
                     "ECG_LL_RA" to SensorChannelSchema(
                         name = "ECG_LL_RA",
                         displayName = "ECG (LL-RA)",
@@ -230,8 +195,7 @@ class DataSchemaValidator(
                         isRequired = false,
                         calibrationRequired = true
                     ),
-                    
-                    // System channels
+
                     "TIMESTAMP" to SensorChannelSchema(
                         name = "TIMESTAMP",
                         displayName = "Timestamp",
@@ -260,32 +224,24 @@ class DataSchemaValidator(
             )
         }
     }
-    
-    // Schema registry
+
     private val deviceSchemas = mutableMapOf<String, DeviceSchema>()
     private val validationCache = mutableMapOf<String, ValidationResult>()
-    
+
     init {
-        // Register default schemas
         registerDeviceSchema(DeviceSchema.createShimmer3GSRPlusSchema())
     }
-    
-    /**
-     * Register a device schema
-     */
+
     fun registerDeviceSchema(schema: DeviceSchema) {
         deviceSchemas[schema.deviceType] = schema
         logger.info("Registered schema for device type: ${schema.deviceType}")
     }
-    
-    /**
-     * Validate ObjectCluster data against device schema
-     */
+
     suspend fun validateObjectCluster(
         objectCluster: ObjectCluster,
         deviceType: String = "Shimmer3-GSR+"
     ): ValidationResult = withContext(Dispatchers.Default) {
-        
+
         val schema = deviceSchemas[deviceType]
         if (schema == null) {
             return@withContext ValidationResult(
@@ -293,15 +249,14 @@ class DataSchemaValidator(
                 errors = listOf("No schema found for device type: $deviceType")
             )
         }
-        
+
         val errors = mutableListOf<String>()
         val warnings = mutableListOf<String>()
         val validatedChannels = mutableSetOf<String>()
         val missingChannels = mutableSetOf<String>()
         val extraChannels = mutableSetOf<String>()
-        
+
         try {
-            // Check for required channels
             schema.requiredChannels.forEach { requiredChannel ->
                 val channelSchema = schema.supportedChannels[requiredChannel]
                 if (channelSchema != null) {
@@ -318,8 +273,7 @@ class DataSchemaValidator(
                     }
                 }
             }
-            
-            // Validate present channels
+
             schema.supportedChannels.forEach { (channelKey, channelSchema) ->
                 try {
                     val formats = objectCluster.getCollectionOfFormatClusters(channelSchema.name)
@@ -327,17 +281,15 @@ class DataSchemaValidator(
                         val formatCluster = com.shimmerresearch.driver.ObjectCluster.returnFormatCluster(formats, "CAL")
                         if (formatCluster != null) {
                             val value = formatCluster.mData
-                            
-                            // Validate data type
+
                             if (!isValidDataType(value, channelSchema.dataType)) {
                                 errors.add("Invalid data type for ${channelSchema.displayName}: expected ${channelSchema.dataType}")
                             }
-                            
-                            // Validate range
+
                             if (!isValueInRange(value, channelSchema.validRange)) {
                                 warnings.add("Value out of range for ${channelSchema.displayName}: $value (expected ${channelSchema.validRange})")
                             }
-                            
+
                             validatedChannels.add(channelKey)
                         }
                     }
@@ -345,22 +297,19 @@ class DataSchemaValidator(
                     warnings.add("Error validating channel ${channelSchema.displayName}: ${e.message}")
                 }
             }
-            
-            // Check for extra/unknown channels
+
             try {
-                // This would require iterating through all ObjectCluster data
-                // Implementation depends on Shimmer SDK capabilities
                 logger.debug("Channel validation completed for ${validatedChannels.size} channels")
             } catch (e: Exception) {
                 warnings.add("Could not check for extra channels: ${e.message}")
             }
-            
+
         } catch (e: Exception) {
             errors.add("Schema validation failed: ${e.message}")
         }
-        
+
         val isValid = errors.isEmpty() && missingChannels.isEmpty()
-        
+
         val result = ValidationResult(
             isValid = isValid,
             errors = errors,
@@ -369,15 +318,12 @@ class DataSchemaValidator(
             missingChannels = missingChannels,
             extraChannels = extraChannels
         )
-        
+
         logger.debug("Schema validation result for $deviceType: valid=$isValid, errors=${errors.size}, warnings=${warnings.size}")
-        
+
         result
     }
-    
-    /**
-     * Validate sensor sample data
-     */
+
     fun validateSensorSample(
         sensorSample: SensorSample,
         deviceType: String = "Shimmer3-GSR+"
@@ -389,17 +335,15 @@ class DataSchemaValidator(
                 errors = listOf("No schema found for device type: $deviceType")
             )
         }
-        
+
         val errors = mutableListOf<String>()
         val warnings = mutableListOf<String>()
         val validatedChannels = mutableSetOf<String>()
         val missingChannels = mutableSetOf<String>()
-        
-        // Check for required channels in sensor values
+
         schema.requiredChannels.forEach { requiredChannel ->
             val channelSchema = schema.supportedChannels[requiredChannel]
             if (channelSchema != null) {
-                // Map schema channel names to SensorChannel enum
                 val sensorChannel = mapSchemaChannelToSensorChannel(requiredChannel)
                 if (sensorChannel != null) {
                     val value = sensorSample.sensorValues[sensorChannel]
@@ -407,7 +351,6 @@ class DataSchemaValidator(
                         missingChannels.add(requiredChannel)
                         errors.add("Required sensor value missing: $requiredChannel")
                     } else {
-                        // Validate range
                         if (!isValueInRange(value, channelSchema.validRange)) {
                             warnings.add("Sensor value out of range for ${channelSchema.displayName}: $value")
                         }
@@ -416,23 +359,21 @@ class DataSchemaValidator(
                 }
             }
         }
-        
-        // Validate timestamp
+
         if (sensorSample.systemTimestamp <= 0) {
             errors.add("Invalid system timestamp: ${sensorSample.systemTimestamp}")
         }
-        
+
         if (sensorSample.deviceTimestamp <= 0) {
             warnings.add("Invalid device timestamp: ${sensorSample.deviceTimestamp}")
         }
-        
-        // Validate battery level
+
         if (sensorSample.batteryLevel < 0 || sensorSample.batteryLevel > 100) {
             warnings.add("Battery level out of range: ${sensorSample.batteryLevel}%")
         }
-        
+
         val isValid = errors.isEmpty()
-        
+
         return ValidationResult(
             isValid = isValid,
             errors = errors,
@@ -441,13 +382,10 @@ class DataSchemaValidator(
             missingChannels = missingChannels
         )
     }
-    
-    /**
-     * Get schema documentation for a device type
-     */
+
     fun getSchemaDocumentation(deviceType: String): String? {
         val schema = deviceSchemas[deviceType] ?: return null
-        
+
         return buildString {
             appendLine("Schema Documentation for ${schema.deviceType}")
             appendLine("Firmware Version: ${schema.firmwareVersion}")
@@ -456,7 +394,7 @@ class DataSchemaValidator(
             appendLine("Max Simultaneous Channels: ${schema.maxChannelsSimultaneous}")
             appendLine()
             appendLine("Supported Sensor Channels:")
-            
+
             schema.supportedChannels.values.sortedBy { it.name }.forEach { channel ->
                 appendLine("  ${channel.displayName} (${channel.name})")
                 appendLine("    Type: ${channel.dataType}")
@@ -467,43 +405,33 @@ class DataSchemaValidator(
                 appendLine("    Calibration Required: ${if (channel.calibrationRequired) "Yes" else "No"}")
                 appendLine()
             }
-            
+
             appendLine("Required Channels:")
             schema.requiredChannels.forEach { channel ->
                 appendLine("  - $channel")
             }
         }
     }
-    
-    /**
-     * Check if device supports specific channels
-     */
+
     fun supportsChannels(deviceType: String, channelNames: List<String>): Map<String, Boolean> {
         val schema = deviceSchemas[deviceType] ?: return channelNames.associateWith { false }
-        
+
         return channelNames.associateWith { channelName ->
-            schema.supportedChannels.containsKey(channelName) || 
+            schema.supportedChannels.containsKey(channelName) ||
             schema.supportedChannels.values.any { it.name == channelName }
         }
     }
-    
-    /**
-     * Get optimal sampling rate for given channels
-     */
+
     fun getOptimalSamplingRate(deviceType: String, enabledChannels: Set<String>): Double? {
         val schema = deviceSchemas[deviceType] ?: return null
-        
-        // Basic implementation - could be enhanced with more sophisticated logic
+
         return when {
-            enabledChannels.size <= 3 -> schema.samplingRateRange.endInclusive // Max rate for few channels
-            enabledChannels.size <= 6 -> (schema.samplingRateRange.endInclusive * 0.7) // Moderate rate
-            else -> (schema.samplingRateRange.endInclusive * 0.5) // Conservative rate for many channels
+            enabledChannels.size <= 3 -> schema.samplingRateRange.endInclusive
+            enabledChannels.size <= 6 -> (schema.samplingRateRange.endInclusive * 0.7)
+            else -> (schema.samplingRateRange.endInclusive * 0.5)
         }
     }
-    
-    /**
-     * Validate device configuration against schema
-     */
+
     fun validateDeviceConfiguration(
         deviceType: String,
         configuration: DeviceConfiguration
@@ -515,50 +443,46 @@ class DataSchemaValidator(
                 errors = listOf("No schema found for device type: $deviceType")
             )
         }
-        
+
         val errors = mutableListOf<String>()
         val warnings = mutableListOf<String>()
-        
-        // Validate sampling rate
+
         if (!schema.samplingRateRange.contains(configuration.samplingRate)) {
             errors.add("Sampling rate ${configuration.samplingRate}Hz is outside valid range: ${schema.samplingRateRange}")
         }
-        
-        // Validate channel count
+
         if (configuration.enabledSensors.size > schema.maxChannelsSimultaneous) {
             errors.add("Too many channels enabled: ${configuration.enabledSensors.size} (max: ${schema.maxChannelsSimultaneous})")
         }
-        
-        // Check if all enabled sensors are supported
+
         configuration.enabledSensors.forEach { sensorChannel ->
             val channelKey = sensorChannel.name
             if (!schema.supportedChannels.containsKey(channelKey)) {
                 warnings.add("Sensor channel may not be supported: ${sensorChannel.displayName}")
             }
         }
-        
+
         return ValidationResult(
             isValid = errors.isEmpty(),
             errors = errors,
             warnings = warnings
         )
     }
-    
-    // Helper methods
+
     private fun isValidDataType(value: Double, expectedType: DataType): Boolean {
         return when (expectedType) {
-            DataType.DOUBLE, DataType.FLOAT -> true // Double can represent both
+            DataType.DOUBLE, DataType.FLOAT -> true
             DataType.LONG -> value % 1.0 == 0.0 && value >= Long.MIN_VALUE && value <= Long.MAX_VALUE
             DataType.INT -> value % 1.0 == 0.0 && value >= Int.MIN_VALUE && value <= Int.MAX_VALUE
             DataType.BOOLEAN -> value == 0.0 || value == 1.0
             else -> false
         }
     }
-    
+
     private fun isValueInRange(value: Double, range: DoubleRange): Boolean {
         return value >= range.start && value <= range.endInclusive
     }
-    
+
     private fun mapSchemaChannelToSensorChannel(schemaChannel: String): DeviceConfiguration.SensorChannel? {
         return when (schemaChannel) {
             "GSR_CONDUCTANCE" -> DeviceConfiguration.SensorChannel.GSR
@@ -577,37 +501,22 @@ class DataSchemaValidator(
             else -> null
         }
     }
-    
-    /**
-     * Get list of supported device types
-     */
+
     fun getSupportedDeviceTypes(): List<String> = deviceSchemas.keys.toList()
-    
-    /**
-     * Get schema for device type
-     */
+
     fun getDeviceSchema(deviceType: String): DeviceSchema? = deviceSchemas[deviceType]
-    
-    /**
-     * Clear validation cache
-     */
+
     fun clearValidationCache() {
         validationCache.clear()
         logger.debug("Validation cache cleared")
     }
-    
-    /**
-     * Get validation statistics
-     */
+
     fun getValidationStatistics(): Map<String, Any> = mapOf(
         "registeredSchemas" to deviceSchemas.size,
         "supportedDeviceTypes" to deviceSchemas.keys.toList(),
         "cacheSize" to validationCache.size
     )
-    
-    /**
-     * Cleanup resources
-     */
+
     fun cleanup() {
         validationCache.clear()
         logger.info("DataSchemaValidator cleanup completed")

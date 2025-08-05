@@ -16,7 +16,7 @@ class ShimmerConfigViewModel @Inject constructor(
     private val shimmerRecorder: ShimmerRecorder,
     private val logger: Logger,
 ) : ViewModel() {
-    
+
     private val _uiState = MutableStateFlow(ShimmerConfigUiState())
     val uiState: StateFlow<ShimmerConfigUiState> = _uiState.asStateFlow()
 
@@ -36,11 +36,11 @@ class ShimmerConfigViewModel @Inject constructor(
                 logger.info("ShimmerRecorder initialized successfully")
             } catch (e: Exception) {
                 logger.error("Error initializing ShimmerRecorder", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         errorMessage = "Error initializing shimmer: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -63,12 +63,12 @@ class ShimmerConfigViewModel @Inject constructor(
 
     fun scanForDevices() {
         viewModelScope.launch {
-            _uiState.update { 
+            _uiState.update {
                 it.copy(
-                    isScanning = true, 
+                    isScanning = true,
                     connectionStatus = "Scanning...",
                     errorMessage = null
-                ) 
+                )
             }
             try {
                 val devices = shimmerRecorder.scanAndPairDevices()
@@ -76,7 +76,7 @@ class ShimmerConfigViewModel @Inject constructor(
                     ShimmerDeviceItem(
                         name = "Shimmer Device",
                         macAddress = address,
-                        rssi = -50, // Default RSSI since I don't have actual scan data
+                        rssi = -50,
                         isConnectable = true
                     )
                 }
@@ -90,13 +90,13 @@ class ShimmerConfigViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 logger.error("Error scanning for devices", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         isScanning = false,
                         connectionStatus = "Scan failed",
                         errorMessage = "Error scanning: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -105,17 +105,17 @@ class ShimmerConfigViewModel @Inject constructor(
     fun connectToDevice() {
         val selectedDevice = _uiState.value.selectedDevice ?: return
         viewModelScope.launch {
-            _uiState.update { 
+            _uiState.update {
                 it.copy(
                     isLoadingConnection = true,
                     connectionStatus = "Connecting...",
                     errorMessage = null
-                ) 
+                )
             }
             try {
                 val connected = shimmerRecorder.connectDevices(listOf(selectedDevice.macAddress))
                 if (connected) {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             isDeviceConnected = true,
                             isLoadingConnection = false,
@@ -124,27 +124,27 @@ class ShimmerConfigViewModel @Inject constructor(
                             deviceMacAddress = selectedDevice.macAddress,
                             showConfigurationPanel = true,
                             showRecordingControls = true
-                        ) 
+                        )
                     }
                 } else {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             isLoadingConnection = false,
                             connectionStatus = "Connection failed",
                             errorMessage = "Failed to connect to ${selectedDevice.name}",
                             showErrorDialog = true
-                        ) 
+                        )
                     }
                 }
             } catch (e: Exception) {
                 logger.error("Error connecting", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         isLoadingConnection = false,
                         connectionStatus = "Connection error",
                         errorMessage = "Connection error: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -176,11 +176,11 @@ class ShimmerConfigViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 logger.error("Error disconnecting from device", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         errorMessage = "Disconnect error: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -191,28 +191,28 @@ class ShimmerConfigViewModel @Inject constructor(
             try {
                 val started = shimmerRecorder.startStreaming()
                 if (started) {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             isRecording = true,
                             connectionStatus = "Recording",
                             errorMessage = null
-                        ) 
+                        )
                     }
                 } else {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             errorMessage = "Failed to start streaming",
                             showErrorDialog = true
-                        ) 
+                        )
                     }
                 }
             } catch (e: Exception) {
                 logger.error("Error starting streaming", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         errorMessage = "Streaming error: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -223,28 +223,28 @@ class ShimmerConfigViewModel @Inject constructor(
             try {
                 val stopped = shimmerRecorder.stopStreaming()
                 if (stopped) {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             isRecording = false,
                             connectionStatus = "Connected",
                             errorMessage = null
-                        ) 
+                        )
                     }
                 } else {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             errorMessage = "Failed to stop streaming",
                             showErrorDialog = true
-                        ) 
+                        )
                     }
                 }
             } catch (e: Exception) {
                 logger.error("Error stopping streaming", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         errorMessage = "Stop streaming error: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -255,11 +255,11 @@ class ShimmerConfigViewModel @Inject constructor(
             try {
                 val status = shimmerRecorder.getShimmerStatus()
                 val readings = shimmerRecorder.getCurrentReadings()
-                
+
                 _uiState.update {
                     it.copy(
                         batteryLevel = status.batteryLevel ?: -1,
-                        signalStrength = if (status.isConnected) -50 else -100, // Simulated signal strength
+                        signalStrength = if (status.isConnected) -50 else -100,
                         dataPacketsReceived = it.dataPacketsReceived + if (readings != null) 1 else 0,
                         recordingDuration = if (it.isRecording) it.recordingDuration + STATUS_UPDATE_INTERVAL_MS else 0L
                     )
@@ -275,20 +275,17 @@ class ShimmerConfigViewModel @Inject constructor(
     }
 
     fun updateSensorConfiguration(enabledSensors: Set<String>) {
-        _uiState.update { 
+        _uiState.update {
             it.copy(
                 enabledSensors = enabledSensors,
                 isConfiguring = true
-            ) 
+            )
         }
-        
+
         viewModelScope.launch {
             try {
-                // Apply sensor configuration to device if connected
                 if (_uiState.value.isDeviceConnected) {
-                    // Implement actual sensor configuration update
                     val sensorChannels = enabledSensors.mapNotNull { sensorName ->
-                        // Convert string sensor names to SensorChannel enum values
                         try {
                             com.multisensor.recording.recording.DeviceConfiguration.SensorChannel.valueOf(sensorName.uppercase())
                         } catch (e: IllegalArgumentException) {
@@ -296,28 +293,28 @@ class ShimmerConfigViewModel @Inject constructor(
                             null
                         }
                     }.toSet()
-                    
+
                     val result = _uiState.value.selectedDevice?.let { device ->
                         shimmerRecorder.setEnabledChannels(device.macAddress, sensorChannels)
                     } ?: false
-                    
+
                     if (!result) {
                         logger.warning("Failed to update sensor configuration")
                     } else {
                         logger.info("Sensor configuration updated successfully")
                     }
-                    
-                    delay(500) // Allow time for configuration to apply
+
+                    delay(500)
                 }
                 _uiState.update { it.copy(isConfiguring = false) }
             } catch (e: Exception) {
                 logger.error("Error updating sensor configuration", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         isConfiguring = false,
                         errorMessage = "Configuration error: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
@@ -325,75 +322,66 @@ class ShimmerConfigViewModel @Inject constructor(
 
     fun updateSamplingRate(samplingRate: Int) {
         _uiState.update { it.copy(samplingRate = samplingRate) }
-        
+
         viewModelScope.launch {
             try {
-                // Apply sampling rate to device if connected
                 if (_uiState.value.isDeviceConnected) {
-                    // Implement actual sampling rate update
                     val result = _uiState.value.selectedDevice?.let { device ->
                         shimmerRecorder.setSamplingRate(device.macAddress, samplingRate.toDouble())
                     } ?: false
-                    
+
                     if (!result) {
                         logger.warning("Failed to update sampling rate")
                     } else {
                         logger.info("Sampling rate updated to ${samplingRate}Hz")
                     }
-                    
-                    delay(200) // Allow time for configuration to apply
+
+                    delay(200)
                 }
             } catch (e: Exception) {
                 logger.error("Error updating sampling rate", e)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         errorMessage = "Sampling rate error: ${e.message}",
                         showErrorDialog = true
-                    ) 
+                    )
                 }
             }
         }
     }
 
     fun updateBluetoothState(isEnabled: Boolean, hasPermission: Boolean) {
-        _uiState.update { 
+        _uiState.update {
             it.copy(
                 isBluetoothEnabled = isEnabled,
                 hasBluetoothPermission = hasPermission
-            ) 
+            )
         }
     }
 
     fun onErrorMessageShown() {
-        _uiState.update { 
+        _uiState.update {
             it.copy(
                 errorMessage = null,
                 showErrorDialog = false
-            ) 
+            )
         }
     }
 
-    /**
-     * Apply configuration preset
-     */
     fun applyConfigurationPreset(presetName: String) {
         logger.info("Applying configuration preset: $presetName")
-        
+
         val (enabledSensors, samplingRate) = when (presetName) {
             "Default" -> {
-                // Standard GSR+ configuration
                 Pair(setOf("GSR", "PPG", "ACCEL"), 256)
             }
             "High Performance" -> {
-                // All sensors enabled with high sampling rate
                 Pair(setOf("GSR", "PPG", "ACCEL", "GYRO", "MAG", "ECG"), 512)
             }
             "Low Power" -> {
-                // Minimal sensors with low sampling rate
                 Pair(setOf("GSR", "PPG"), 128)
             }
             "Custom" -> {
-                // Keep current configuration
                 return
             }
             else -> {
@@ -401,22 +389,17 @@ class ShimmerConfigViewModel @Inject constructor(
                 return
             }
         }
-        
-        // Update UI state with preset configuration
-        _uiState.update { 
+
+        _uiState.update {
             it.copy(
                 enabledSensors = enabledSensors,
                 samplingRate = samplingRate
-            ) 
+            )
         }
-        
-        // Apply the preset configuration to the device
+
         updateSensorConfiguration(enabledSensors)
         updateSamplingRate(samplingRate)
     }
 
-    /**
-     * Get available configuration presets
-     */
     fun getAvailablePresets(): List<String> = listOf("Default", "High Performance", "Low Power", "Custom")
 }

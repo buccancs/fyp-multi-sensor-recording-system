@@ -2,10 +2,6 @@ package com.multisensor.recording.testfixtures
 
 import com.multisensor.recording.recording.SessionInfo
 
-/**
- * Test data factory for SessionInfo objects
- * Provides consistent test data creation with sensible defaults
- */
 object SessionInfoTestFactory {
 
     fun createSessionInfo(
@@ -82,7 +78,7 @@ object SessionInfoTestFactory {
             videoResolution = "1920x1080",
             rawResolution = "1920x1080",
             thermalResolution = "256x192",
-            thermalFrameCount = 1800 // 30 seconds * 60 fps
+            thermalFrameCount = 1800
         )
     }
 

@@ -12,21 +12,13 @@ import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Enhanced error handling and recovery system for Shimmer device connections
- * Implements comprehensive error handling patterns with retry mechanisms
- * and intelligent recovery strategies.
- */
 @Singleton
 class ShimmerErrorHandler @Inject constructor(
     private val shimmerDeviceStateRepository: ShimmerDeviceStateRepository
 ) {
-    
+
     private val errorHandlingScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    
-    /**
-     * Error types for classification and specific handling
-     */
+
     enum class ShimmerErrorType {
         CONNECTION_TIMEOUT,
         BLUETOOTH_DISABLED,
@@ -41,42 +33,30 @@ class ShimmerErrorHandler @Inject constructor(
         FIRMWARE_INCOMPATIBLE,
         UNKNOWN_ERROR
     }
-    
-    /**
-     * Error handling strategy
-     */
+
     data class ErrorHandlingStrategy(
         val shouldRetry: Boolean,
-        val retryDelay: Long, // milliseconds
+        val retryDelay: Long,
         val maxRetries: Int,
         val userActionRequired: Boolean,
         val userMessage: String,
         val technicalMessage: String
     )
-    
-    /**
-     * Connection retry configuration
-     */
+
     data class RetryConfiguration(
         val maxAttempts: Int = 3,
-        val initialDelay: Long = 1000L, // 1 second
-        val maxDelay: Long = 30000L, // 30 seconds
+        val initialDelay: Long = 1000L,
+        val maxDelay: Long = 30000L,
         val backoffMultiplier: Double = 2.0,
         val retryOnBluetoothDisabled: Boolean = false,
         val retryOnPermissionDenied: Boolean = false
     )
-    
-    /**
-     * Active retry operations
-     */
+
     private val activeRetries = mutableMapOf<String, RetryConfiguration>()
-    
-    /**
-     * Classify error and determine handling strategy
-     */
+
     fun classifyError(exception: Throwable?, errorMessage: String?): ShimmerErrorType {
         val message = errorMessage?.lowercase() ?: exception?.message?.lowercase() ?: ""
-        
+
         return when {
             message.contains("timeout") || message.contains("connection timed out") -> ShimmerErrorType.CONNECTION_TIMEOUT
             message.contains("bluetooth") && message.contains("disabled") -> ShimmerErrorType.BLUETOOTH_DISABLED
@@ -92,21 +72,18 @@ class ShimmerErrorHandler @Inject constructor(
             else -> ShimmerErrorType.UNKNOWN_ERROR
         }
     }
-    
-    /**
-     * Get error handling strategy for error type
-     */
+
     fun getErrorHandlingStrategy(errorType: ShimmerErrorType, attemptNumber: Int = 1): ErrorHandlingStrategy {
         return when (errorType) {
             ShimmerErrorType.CONNECTION_TIMEOUT -> ErrorHandlingStrategy(
                 shouldRetry = attemptNumber <= 3,
-                retryDelay = (1000L * attemptNumber * 2), // Progressive delay
+                retryDelay = (1000L * attemptNumber * 2),
                 maxRetries = 3,
                 userActionRequired = false,
                 userMessage = "Connection timeout. Retrying in ${1 * attemptNumber * 2} seconds...",
                 technicalMessage = "Bluetooth connection timeout after ${attemptNumber} attempts"
             )
-            
+
             ShimmerErrorType.BLUETOOTH_DISABLED -> ErrorHandlingStrategy(
                 shouldRetry = false,
                 retryDelay = 0L,
@@ -115,7 +92,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Please enable Bluetooth and try again",
                 technicalMessage = "Bluetooth is disabled on device"
             )
-            
+
             ShimmerErrorType.BLUETOOTH_PERMISSION_DENIED -> ErrorHandlingStrategy(
                 shouldRetry = false,
                 retryDelay = 0L,
@@ -124,16 +101,16 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Bluetooth permission required. Please grant permission in settings",
                 technicalMessage = "Bluetooth permission denied by user"
             )
-            
+
             ShimmerErrorType.DEVICE_NOT_FOUND -> ErrorHandlingStrategy(
                 shouldRetry = attemptNumber <= 2,
-                retryDelay = 5000L, // 5 seconds
+                retryDelay = 5000L,
                 maxRetries = 2,
                 userActionRequired = false,
                 userMessage = "Device not found. Make sure it's powered on and in range",
                 technicalMessage = "Shimmer device not discoverable via Bluetooth"
             )
-            
+
             ShimmerErrorType.DEVICE_ALREADY_CONNECTED -> ErrorHandlingStrategy(
                 shouldRetry = false,
                 retryDelay = 0L,
@@ -142,7 +119,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Device is already connected",
                 technicalMessage = "Device connection already established"
             )
-            
+
             ShimmerErrorType.CONFIGURATION_FAILED -> ErrorHandlingStrategy(
                 shouldRetry = attemptNumber <= 2,
                 retryDelay = 3000L,
@@ -151,7 +128,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Configuration failed. Retrying...",
                 technicalMessage = "Sensor configuration command failed"
             )
-            
+
             ShimmerErrorType.STREAMING_ERROR -> ErrorHandlingStrategy(
                 shouldRetry = attemptNumber <= 1,
                 retryDelay = 2000L,
@@ -160,7 +137,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Streaming error occurred. Attempting to restart...",
                 technicalMessage = "Data streaming interrupted"
             )
-            
+
             ShimmerErrorType.SD_LOGGING_ERROR -> ErrorHandlingStrategy(
                 shouldRetry = attemptNumber <= 1,
                 retryDelay = 2000L,
@@ -169,7 +146,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "SD logging error. Check SD card and retry...",
                 technicalMessage = "SD card logging operation failed"
             )
-            
+
             ShimmerErrorType.BATTERY_LOW -> ErrorHandlingStrategy(
                 shouldRetry = false,
                 retryDelay = 0L,
@@ -178,7 +155,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Device battery is low. Please charge before continuing",
                 technicalMessage = "Device battery level below operational threshold"
             )
-            
+
             ShimmerErrorType.SIGNAL_WEAK -> ErrorHandlingStrategy(
                 shouldRetry = false,
                 retryDelay = 0L,
@@ -187,7 +164,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Weak signal. Move closer to device or check interference",
                 technicalMessage = "Bluetooth signal strength below reliable threshold"
             )
-            
+
             ShimmerErrorType.FIRMWARE_INCOMPATIBLE -> ErrorHandlingStrategy(
                 shouldRetry = false,
                 retryDelay = 0L,
@@ -196,7 +173,7 @@ class ShimmerErrorHandler @Inject constructor(
                 userMessage = "Device firmware is incompatible. Please update firmware",
                 technicalMessage = "Firmware version not supported by application"
             )
-            
+
             ShimmerErrorType.UNKNOWN_ERROR -> ErrorHandlingStrategy(
                 shouldRetry = attemptNumber <= 1,
                 retryDelay = 5000L,
@@ -207,10 +184,7 @@ class ShimmerErrorHandler @Inject constructor(
             )
         }
     }
-    
-    /**
-     * Handle error with automatic retry if appropriate
-     */
+
     suspend fun handleError(
         deviceAddress: String,
         deviceName: String,
@@ -223,32 +197,30 @@ class ShimmerErrorHandler @Inject constructor(
     ): Boolean {
         val errorType = classifyError(exception, errorMessage)
         val strategy = getErrorHandlingStrategy(errorType, attemptNumber)
-        
+
         android.util.Log.e("ShimmerErrorHandler", "[ERROR] Device: $deviceName ($deviceAddress)")
         android.util.Log.e("ShimmerErrorHandler", "[ERROR] Type: $errorType, Attempt: $attemptNumber")
         android.util.Log.e("ShimmerErrorHandler", "[ERROR] Message: ${errorMessage ?: exception?.message}")
-        
-        // Log error to persistence
+
         shimmerDeviceStateRepository.logConnectionAttempt(
-            deviceAddress, 
-            false, 
+            deviceAddress,
+            false,
             strategy.technicalMessage,
             deviceName,
             connectionType
         )
-        
+
         if (strategy.shouldRetry && attemptNumber <= strategy.maxRetries) {
             android.util.Log.d("ShimmerErrorHandler", "[RETRY] Scheduling retry in ${strategy.retryDelay}ms")
-            
+
             delay(strategy.retryDelay)
-            
+
             return try {
                 android.util.Log.d("ShimmerErrorHandler", "[RETRY] Attempting retry $attemptNumber for $deviceName")
                 onRetry()
             } catch (retryException: Exception) {
                 android.util.Log.e("ShimmerErrorHandler", "[RETRY] Retry failed: ${retryException.message}")
-                
-                // Recursively handle retry failure
+
                 handleError(
                     deviceAddress,
                     deviceName,
@@ -266,36 +238,29 @@ class ShimmerErrorHandler @Inject constructor(
             return false
         }
     }
-    
-    /**
-     * Check device health and suggest actions
-     */
+
     suspend fun checkDeviceHealth(deviceAddress: String): List<String> {
         val recommendations = mutableListOf<String>()
-        
+
         try {
             val deviceState = shimmerDeviceStateRepository.getDeviceState(deviceAddress)
             if (deviceState != null) {
-                // Battery level check
                 if (deviceState.batteryLevel in 1..20) {
                     recommendations.add("Battery level is low (${deviceState.batteryLevel}%). Consider charging.")
                 }
-                
-                // Signal strength check
+
                 if (deviceState.signalStrength < -80) {
                     recommendations.add("Signal strength is weak. Move closer to device or reduce interference.")
                 }
-                
-                // Connection history check
+
                 val recentHistory = shimmerDeviceStateRepository.getConnectionHistory(deviceAddress, 10)
                 val recentFailures = recentHistory.count { !it.success }
                 if (recentFailures > 3) {
                     recommendations.add("Multiple recent connection failures detected. Check device status.")
                 }
-                
-                // Long time since last connection
+
                 val timeSinceLastConnection = System.currentTimeMillis() - deviceState.lastConnectedTimestamp
-                if (timeSinceLastConnection > 24 * 60 * 60 * 1000) { // 24 hours
+                if (timeSinceLastConnection > 24 * 60 * 60 * 1000) {
                     recommendations.add("Device hasn't been connected recently. Verify it's powered on.")
                 }
             }
@@ -303,25 +268,22 @@ class ShimmerErrorHandler @Inject constructor(
             android.util.Log.e("ShimmerErrorHandler", "Failed to check device health: ${e.message}")
             recommendations.add("Unable to check device health. Check connection.")
         }
-        
+
         return recommendations
     }
-    
-    /**
-     * Generate diagnostic report for troubleshooting
-     */
+
     suspend fun generateDiagnosticReport(deviceAddress: String): String {
         return try {
             val deviceState = shimmerDeviceStateRepository.getDeviceState(deviceAddress)
             val connectionHistory = shimmerDeviceStateRepository.getConnectionHistory(deviceAddress, 20)
             val healthRecommendations = checkDeviceHealth(deviceAddress)
-            
+
             buildString {
                 append("=== Shimmer Device Diagnostic Report ===\n")
                 append("Device: ${deviceState?.deviceName ?: "Unknown"}\n")
                 append("Address: $deviceAddress\n")
                 append("Generated: ${java.util.Date()}\n\n")
-                
+
                 append("=== Device State ===\n")
                 if (deviceState != null) {
                     append("Connected: ${deviceState.isConnected}\n")
@@ -335,7 +297,7 @@ class ShimmerErrorHandler @Inject constructor(
                 } else {
                     append("No device state found\n\n")
                 }
-                
+
                 append("=== Recent Connection History ===\n")
                 if (connectionHistory.isNotEmpty()) {
                     connectionHistory.take(10).forEach { history ->
@@ -348,7 +310,7 @@ class ShimmerErrorHandler @Inject constructor(
                 } else {
                     append("No connection history found\n")
                 }
-                
+
                 append("\n=== Health Recommendations ===\n")
                 if (healthRecommendations.isNotEmpty()) {
                     healthRecommendations.forEach { recommendation ->
@@ -362,13 +324,9 @@ class ShimmerErrorHandler @Inject constructor(
             "Failed to generate diagnostic report: ${e.message}"
         }
     }
-    
-    /**
-     * Reset error state for device (clear retry counters, etc.)
-     */
+
     suspend fun resetErrorState(deviceAddress: String) {
         activeRetries.remove(deviceAddress)
-        // Reset connection attempts using the repository method
         try {
             val deviceState = shimmerDeviceStateRepository.getDeviceState(deviceAddress)
             if (deviceState != null) {

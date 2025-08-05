@@ -11,10 +11,6 @@ import com.multisensor.recording.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * RecyclerView adapter for displaying recording sessions in the file browser.
- * Refactored to use ListAdapter for better performance and automatic animations.
- */
 class SessionsAdapter(
     private val onSessionClick: (SessionItem) -> Unit,
 ) : ListAdapter<SessionItem, SessionsAdapter.SessionViewHolder>(SessionItemDiffCallback()) {
@@ -53,10 +49,8 @@ class SessionsAdapter(
             sessionDateText.text = dateFormatter.format(Date(session.startTime))
             sessionDurationText.text = session.formattedDuration
 
-            // Status indicator
             sessionStatusText.text = session.status.name
 
-            // File count and device summary
             val fileCount =
                 buildString {
                     append("${session.fileCount} file")
@@ -68,12 +62,10 @@ class SessionsAdapter(
                 }
             sessionFilesText.text = fileCount
 
-            // Set click listener
             itemView.setOnClickListener {
                 onSessionClick(session)
             }
 
-            // Visual feedback for selection
             itemView.setBackgroundResource(
                 if (session.status == SessionStatus.CORRUPTED) {
                     R.drawable.session_item_error_background
@@ -85,9 +77,6 @@ class SessionsAdapter(
     }
 }
 
-/**
- * DiffUtil.ItemCallback for efficiently calculating list differences.
- */
 class SessionItemDiffCallback : DiffUtil.ItemCallback<SessionItem>() {
     override fun areItemsTheSame(oldItem: SessionItem, newItem: SessionItem): Boolean {
         return oldItem.sessionId == newItem.sessionId

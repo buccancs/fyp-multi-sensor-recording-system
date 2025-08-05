@@ -1,5 +1,5 @@
-# Detekt Configuration for Kotlin Code Analysis
-# Static analysis tool for Kotlin code quality and style checking
+
+
 
 build:
   maxIssues: 0
@@ -20,7 +20,7 @@ processors:
   active: true
   exclude:
     - 'DetektProgressListener'
-  
+
 console-reports:
   active: true
   exclude:

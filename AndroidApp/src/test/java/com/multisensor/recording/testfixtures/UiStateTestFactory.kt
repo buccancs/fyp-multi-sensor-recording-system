@@ -3,10 +3,6 @@ package com.multisensor.recording.testfixtures
 import com.multisensor.recording.ui.BatteryStatus
 import com.multisensor.recording.ui.MainUiState
 
-/**
- * Test data factory for UI state objects
- * Provides consistent test data creation with sensible defaults
- */
 object UiStateTestFactory {
 
     fun createMainUiState(

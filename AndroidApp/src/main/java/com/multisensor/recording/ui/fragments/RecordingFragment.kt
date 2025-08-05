@@ -17,19 +17,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Recording Fragment
- * 
- * Handles recording controls, camera preview, and recording status
- */
 @AndroidEntryPoint
 class RecordingFragment : Fragment() {
 
     private var _binding: FragmentRecordingBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: MainViewModel by activityViewModels()
-    
+
     @Inject
     lateinit var cameraRecorder: CameraRecorder
 
@@ -44,7 +39,7 @@ class RecordingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupUI()
         setupCameraPreview()
         observeViewModel()
@@ -52,15 +47,14 @@ class RecordingFragment : Fragment() {
 
     private fun setupUI() {
         binding.apply {
-            // Recording controls
             startRecordingButton.setOnClickListener {
                 viewModel.startRecording()
             }
-            
+
             stopRecordingButton.setOnClickListener {
                 viewModel.stopRecording()
             }
-            
+
             pauseRecordingButton.setOnClickListener {
                 viewModel.pauseRecording()
             }
@@ -70,16 +64,13 @@ class RecordingFragment : Fragment() {
     private fun setupCameraPreview() {
         lifecycleScope.launch {
             try {
-                // Initialize CameraRecorder with the TextureView
                 val textureView = binding.rgbCameraPreview
                 val initialized = cameraRecorder.initialize(textureView)
-                
+
                 if (initialized) {
-                    // Show camera preview and hide placeholder
                     binding.rgbCameraPreview.visibility = View.VISIBLE
                     binding.previewPlaceholderText.visibility = View.GONE
                 } else {
-                    // Keep placeholder visible if camera initialization fails
                     binding.rgbCameraPreview.visibility = View.GONE
                     binding.previewPlaceholderText.apply {
                         visibility = View.VISIBLE
@@ -87,7 +78,6 @@ class RecordingFragment : Fragment() {
                     }
                 }
             } catch (e: Exception) {
-                // Handle initialization error
                 binding.rgbCameraPreview.visibility = View.GONE
                 binding.previewPlaceholderText.apply {
                     visibility = View.VISIBLE
@@ -109,19 +99,16 @@ class RecordingFragment : Fragment() {
 
     private fun updateUI(state: MainUiState) {
         binding.apply {
-            // Update recording status
             recordingStatusText.text = when {
                 state.isRecording -> "Recording in progress..."
                 state.isPaused -> "Recording paused"
                 else -> "Ready to record"
             }
-            
-            // Update button states
+
             startRecordingButton.isEnabled = !state.isRecording && !state.isPaused
             stopRecordingButton.isEnabled = state.isRecording || state.isPaused
             pauseRecordingButton.isEnabled = state.isRecording
-            
-            // Update session info
+
             sessionDurationText.text = state.sessionDuration
             currentFileSizeText.text = state.currentFileSize
         }

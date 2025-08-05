@@ -24,17 +24,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Shimmer Device Configuration Activity
- * Provides comprehensive UI for shimmer device settings based on ShimmerAndroidInstrumentDriver patterns
- * Features: device discovery, pairing, sensor configuration, real-time monitoring
- */
 @AndroidEntryPoint
 class ShimmerConfigActivity : AppCompatActivity() {
-    // ViewModel is now the source of logic and state
     private val viewModel: ShimmerConfigViewModel by viewModels()
 
-    // UI Components
     private lateinit var deviceStatusText: TextView
     private lateinit var batteryLevelText: TextView
     private lateinit var samplingRateSpinner: Spinner
@@ -52,7 +45,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
     @Inject
     lateinit var logger: Logger
 
-    // Bluetooth permissions
     private val bluetoothPermissions =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             arrayOf(
@@ -81,7 +73,7 @@ class ShimmerConfigActivity : AppCompatActivity() {
         setupClickListeners()
         setupSpinners()
         setupSensorCheckboxes()
-        observeViewModelState() // The new core of the UI logic
+        observeViewModelState()
         checkBluetoothPermissions()
 
         logger.info("ShimmerConfigActivity created")
@@ -106,7 +98,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
         realTimeDataText = findViewById(R.id.real_time_data_text)
         progressBar = findViewById(R.id.progress_bar)
 
-        // Initialize sensor checkboxes map
         sensorCheckboxes =
             mapOf(
                 SensorChannel.GSR to findViewById(R.id.checkbox_gsr),
@@ -118,11 +109,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
                 SensorChannel.EMG to findViewById(R.id.checkbox_emg),
             )
 
-        // Initial UI state will be set by the ViewModel observer
     }
 
     private fun setupClickListeners() {
-        // Listeners now call ViewModel methods
         connectButton.setOnClickListener { viewModel.connectToDevice() }
         disconnectButton.setOnClickListener { viewModel.disconnectFromDevice() }
         scanButton.setOnClickListener { viewModel.scanForDevices() }
@@ -136,7 +125,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
             }
         }
 
-        // Sensor checkbox listeners
         sensorCheckboxes.forEach { (channel, checkbox) ->
             checkbox.setOnCheckedChangeListener { _, _ ->
                 val enabledSensors = sensorCheckboxes.filter { it.value.isChecked }.keys.map { it.name }.toSet()
@@ -147,10 +135,8 @@ class ShimmerConfigActivity : AppCompatActivity() {
 
     private fun observeViewModelState() {
         lifecycleScope.launch {
-            // This coroutine will automatically cancel and restart with the activity's lifecycle
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    // Update the entire UI from the single state object
                     render(state)
                 }
             }
@@ -158,21 +144,17 @@ class ShimmerConfigActivity : AppCompatActivity() {
     }
 
     private fun render(state: ShimmerConfigUiState) {
-        // Update button states
         connectButton.isEnabled = state.canConnectToDevice
         disconnectButton.isEnabled = state.canDisconnectDevice
         startStreamingButton.isEnabled = state.canStartRecording
         stopStreamingButton.isEnabled = state.canStopRecording
         scanButton.isEnabled = state.canStartScan
 
-        // Update progress bar
         progressBar.visibility = if (state.isScanning || state.isLoadingConnection) View.VISIBLE else View.GONE
 
-        // Update text views
         deviceStatusText.text = "Status: ${state.connectionStatus}"
         batteryLevelText.text = if (state.batteryLevel >= 0) "Battery: ${state.batteryLevel}%" else "Battery: Unknown"
 
-        // Update device list
         val deviceNames = state.availableDevices.map { "${it.name} (${it.macAddress})" }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, deviceNames)
         deviceListView.adapter = adapter
@@ -181,12 +163,10 @@ class ShimmerConfigActivity : AppCompatActivity() {
             deviceListView.setItemChecked(state.selectedDeviceIndex, true)
         }
 
-        // Update sensor checkboxes enabled state
         sensorCheckboxes.values.forEach { checkbox ->
             checkbox.isEnabled = state.isDeviceConnected && !state.isConfiguring
         }
 
-        // Update real-time data display
         if (state.isRecording && state.dataPacketsReceived > 0) {
             val duration = state.recordingDuration / 1000
             realTimeDataText.text = "Recording: ${duration}s\nPackets: ${state.dataPacketsReceived}\nSignal: ${state.signalStrength} dBm"
@@ -196,7 +176,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
             realTimeDataText.text = "No device connected"
         }
 
-        // Handle error messages
         state.errorMessage?.let { message ->
             if (state.showErrorDialog) {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -204,20 +183,18 @@ class ShimmerConfigActivity : AppCompatActivity() {
             }
         }
 
-        // Update UI panel visibility
-        findViewById<View>(R.id.configuration_section)?.visibility = 
+        findViewById<View>(R.id.configuration_section)?.visibility =
             if (state.showConfigurationPanel) View.VISIBLE else View.GONE
-        findViewById<View>(R.id.streaming_section)?.visibility = 
+        findViewById<View>(R.id.streaming_section)?.visibility =
             if (state.showRecordingControls) View.VISIBLE else View.GONE
     }
 
     private fun setupSpinners() {
-        // Sampling rate spinner
         val samplingRates = arrayOf("25.6 Hz", "51.2 Hz", "128.0 Hz", "256.0 Hz", "512.0 Hz")
         val samplingRateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, samplingRates)
         samplingRateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         samplingRateSpinner.adapter = samplingRateAdapter
-        samplingRateSpinner.setSelection(1) // Default to 51.2 Hz
+        samplingRateSpinner.setSelection(1)
 
         samplingRateSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -236,7 +213,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-        // Configuration preset spinner
         val presets = viewModel.getAvailablePresets().toTypedArray()
         val presetAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, presets)
         presetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -250,7 +226,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
                     position: Int,
                     id: Long,
                 ) {
-                    // Apply configuration preset using ViewModel
                     val selectedPreset = presets[position]
                     viewModel.applyConfigurationPreset(selectedPreset)
                 }
@@ -260,7 +235,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
     }
 
     private fun setupSensorCheckboxes() {
-        // Set default configuration (GSR, PPG, ACCEL enabled)
         sensorCheckboxes[SensorChannel.GSR]?.isChecked = true
         sensorCheckboxes[SensorChannel.PPG]?.isChecked = true
         sensorCheckboxes[SensorChannel.ACCEL]?.isChecked = true
@@ -290,7 +264,6 @@ class ShimmerConfigActivity : AppCompatActivity() {
             val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
             if (allGranted) {
                 logger.info("Bluetooth permissions granted by user.")
-                // The ViewModel will handle initialization, no direct call needed here.
             } else {
                 Toast.makeText(this, "Bluetooth permissions are required for shimmer device functionality", Toast.LENGTH_LONG).show()
             }

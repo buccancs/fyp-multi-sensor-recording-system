@@ -15,17 +15,12 @@ import com.multisensor.recording.ui.MainUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-/**
- * Files Fragment
- * 
- * Handles file management, browsing, and export functionality
- */
 @AndroidEntryPoint
 class FilesFragment : Fragment() {
 
     private var _binding: FragmentFilesBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -39,26 +34,25 @@ class FilesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupUI()
         observeViewModel()
     }
 
     private fun setupUI() {
         binding.apply {
-            // File management buttons
             browseFilesButton.setOnClickListener {
                 viewModel.browseFiles()
             }
-            
+
             exportDataButton.setOnClickListener {
                 viewModel.exportData()
             }
-            
+
             deleteSessionButton.setOnClickListener {
                 viewModel.deleteCurrentSession()
             }
-            
+
             openFolderButton.setOnClickListener {
                 viewModel.openDataFolder()
             }
@@ -77,15 +71,12 @@ class FilesFragment : Fragment() {
 
     private fun updateUI(state: MainUiState) {
         binding.apply {
-            // Update storage info
             storageUsageText.text = "Storage: ${state.storageUsagePercent}% used"
             storageProgressBar.progress = state.storageUsagePercent
-            
-            // Update session info
+
             totalSessionsText.text = "Total Sessions: ${state.totalSessions}"
             totalDataSizeText.text = "Total Data: ${state.totalDataSize}"
-            
-            // Update button states based on available data
+
             deleteSessionButton.isEnabled = state.hasCurrentSession
             exportDataButton.isEnabled = state.totalSessions > 0
         }

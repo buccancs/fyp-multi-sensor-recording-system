@@ -15,17 +15,6 @@ import com.multisensor.recording.databinding.ActivityDiagnosticsBinding
 import com.multisensor.recording.ui.DiagnosticsHealthStatus
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * Diagnostics Activity - System Health Dashboard
- * 
- * Provides comprehensive system diagnostics including:
- * - System health dashboard with real-time metrics
- * - Performance monitoring and metrics display
- * - Error logs viewer with filtering and search
- * - Network connectivity tests and results
- * - Device communication tests
- * - Diagnostics report generation and export
- */
 @AndroidEntryPoint
 class DiagnosticsActivity : AppCompatActivity() {
 
@@ -35,10 +24,10 @@ class DiagnosticsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityDiagnosticsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         try {
             viewModel = ViewModelProvider(this)[DiagnosticsViewModel::class.java]
         } catch (e: Exception) {
@@ -51,7 +40,6 @@ class DiagnosticsActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Setup toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -59,13 +47,12 @@ class DiagnosticsActivity : AppCompatActivity() {
             title = "System Diagnostics"
             subtitle = "Monitor system health and performance"
         }
-        
+
         setupDiagnosticActions()
         setupReportActions()
     }
 
     private fun setupDiagnosticActions() {
-        // Run diagnostics (using existing button)
         binding.runDiagnosticsButton.setOnClickListener {
             try {
                 viewModel.runFullSystemDiagnostic()
@@ -74,8 +61,7 @@ class DiagnosticsActivity : AppCompatActivity() {
                 showError("Diagnostic failed: ${e.message}")
             }
         }
-        
-        // Test network connectivity (using existing button)
+
         binding.testNetworkButton.setOnClickListener {
             try {
                 viewModel.testNetworkConnectivity()
@@ -87,7 +73,6 @@ class DiagnosticsActivity : AppCompatActivity() {
     }
 
     private fun setupReportActions() {
-        // Export diagnostic data (using existing button)
         binding.exportLogsButton.setOnClickListener {
             try {
                 viewModel.exportDiagnosticData()
@@ -118,25 +103,21 @@ class DiagnosticsActivity : AppCompatActivity() {
     }
 
     private fun updateSystemHealth(uiState: DiagnosticsUiState) {
-        // Update status chips based on system health
         updateStatusChips(uiState)
-        
-        // Update performance details
+
         binding.performanceDetails.text = buildString {
             append("• Frame Rate: ${uiState.currentFrameRate} FPS\n")
             append("• CPU Usage: ${uiState.cpuUsagePercent}%\n")
             append("• Memory Usage: ${uiState.memoryUsagePercent}%\n")
             append("• Network: ↓${uiState.networkDownload} ↑${uiState.networkUpload}")
         }
-        
-        // Update network details
+
         binding.networkDetails.text = buildString {
             append("• Connection Status: Connected\n")
             append("• Network Tests: ${uiState.networkTestResults.size} completed\n")
             append("• Device Tests: ${uiState.deviceTestResults.size} completed")
         }
-        
-        // Update device info details
+
         binding.deviceInfoDetails.text = buildString {
             append("• Connected Devices: ${uiState.connectedDevicesCount}\n")
             append("• Active Processes: ${uiState.activeProcessesCount}\n")
@@ -146,26 +127,21 @@ class DiagnosticsActivity : AppCompatActivity() {
     }
 
     private fun updateStatusChips(uiState: DiagnosticsUiState) {
-        // Update CPU status chip
         binding.cpuStatusChip.text = "CPU: ${uiState.cpuUsagePercent}%"
         binding.cpuStatusChip.isSelected = uiState.cpuUsagePercent < 80
-        
-        // Update memory status chip
+
         binding.memoryStatusChip.text = "Memory: ${uiState.memoryUsagePercent}%"
         binding.memoryStatusChip.isSelected = uiState.memoryUsagePercent < 90
-        
-        // Update storage status chip
+
         binding.storageStatusChip.text = "Storage: ${uiState.storageUsagePercent}%"
         binding.storageStatusChip.isSelected = uiState.storageUsagePercent < 85
     }
 
     private fun updateButtons(uiState: DiagnosticsUiState) {
-        // Disable buttons during tests
         binding.runDiagnosticsButton.isEnabled = !uiState.isRunningDiagnostic
         binding.testNetworkButton.isEnabled = !uiState.isTestingNetwork
         binding.exportLogsButton.isEnabled = !uiState.isExportingData
-        
-        // Update button text for active operations
+
         binding.runDiagnosticsButton.text = if (uiState.isRunningDiagnostic) "Running Tests..." else "Run Tests"
         binding.exportLogsButton.text = if (uiState.isExportingData) "Exporting..." else "Export Logs"
     }

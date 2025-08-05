@@ -15,17 +15,12 @@ import com.multisensor.recording.ui.MainUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-/**
- * Calibration Fragment
- * 
- * Handles camera calibration process and settings
- */
 @AndroidEntryPoint
 class CalibrationFragment : Fragment() {
 
     private var _binding: FragmentCalibrationBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -39,22 +34,21 @@ class CalibrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupUI()
         observeViewModel()
     }
 
     private fun setupUI() {
         binding.apply {
-            // Calibration controls
             startCalibrationButton.setOnClickListener {
                 viewModel.startCalibration()
             }
-            
+
             stopCalibrationButton.setOnClickListener {
                 viewModel.stopCalibration()
             }
-            
+
             saveCalibrationButton.setOnClickListener {
                 viewModel.saveCalibration()
             }
@@ -73,14 +67,12 @@ class CalibrationFragment : Fragment() {
 
     private fun updateUI(state: MainUiState) {
         binding.apply {
-            // Update calibration status
             calibrationStatusText.text = when {
                 state.isCalibrating -> "Calibration in progress..."
                 state.calibrationComplete -> "Calibration complete"
                 else -> "Ready for calibration"
             }
-            
-            // Update button states
+
             startCalibrationButton.isEnabled = !state.isCalibrating
             stopCalibrationButton.isEnabled = state.isCalibrating
             saveCalibrationButton.isEnabled = state.calibrationComplete

@@ -4,17 +4,11 @@ import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Represents a single sensor sample from a Shimmer3 GSR+ device.
- *
- * This data class encapsulates all sensor readings from a single timestamp,
- * including device timing information and calibrated sensor values.
- */
 data class SensorSample(
     val deviceId: String,
-    val deviceTimestamp: Long, // Device's internal timestamp (ms)
-    val systemTimestamp: Long = System.currentTimeMillis(), // Android system timestamp (ms)
-    val sessionTimestamp: Long = 0L, // Session-relative timestamp (ms)
+    val deviceTimestamp: Long,
+    val systemTimestamp: Long = System.currentTimeMillis(),
+    val sessionTimestamp: Long = 0L,
     val sensorValues: Map<SensorChannel, Double> = emptyMap(),
     val batteryLevel: Int = 0,
     val sequenceNumber: Long = 0L,
@@ -22,9 +16,6 @@ data class SensorSample(
     companion object {
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
-        /**
-         * Create a sample with GSR, PPG, and Accelerometer data (typical Shimmer3 GSR+ configuration)
-         */
         fun createGSRPlusSample(
             deviceId: String,
             deviceTimestamp: Long,
@@ -40,8 +31,7 @@ data class SensorSample(
                 mapOf(
                     SensorChannel.GSR to gsrConductance,
                     SensorChannel.PPG to ppgValue,
-                    SensorChannel.ACCEL to accelX, // Note: This simplifies 3-axis accel to single value
-                    // In real implementation, I might need separate channels for X, Y, Z
+                    SensorChannel.ACCEL to accelX,
                 )
 
             return SensorSample(
@@ -53,9 +43,6 @@ data class SensorSample(
             )
         }
 
-        /**
-         * Create a sample with all available sensor channels
-         */
         fun createFullSample(
             deviceId: String,
             deviceTimestamp: Long,
@@ -77,9 +64,9 @@ data class SensorSample(
                 mapOf(
                     SensorChannel.GSR to gsrConductance,
                     SensorChannel.PPG to ppgValue,
-                    SensorChannel.ACCEL to accelX, // Simplified - in real implementation might need separate channels
-                    SensorChannel.GYRO to gyroX, // Simplified - in real implementation might need separate channels
-                    SensorChannel.MAG to magX, // Simplified - in real implementation might need separate channels
+                    SensorChannel.ACCEL to accelX,
+                    SensorChannel.GYRO to gyroX,
+                    SensorChannel.MAG to magX,
                 )
 
             return SensorSample(
@@ -91,9 +78,6 @@ data class SensorSample(
             )
         }
 
-        /**
-         * Create a simulated sample for testing purposes
-         */
         fun createSimulatedSample(
             deviceId: String,
             sequenceNumber: Long,
@@ -102,18 +86,17 @@ data class SensorSample(
             val currentTime = System.currentTimeMillis()
             val sensorValues = mutableMapOf<SensorChannel, Double>()
 
-            // Generate realistic simulated values
             enabledSensors.forEach { sensor ->
                 val value =
                     when (sensor) {
-                        SensorChannel.GSR -> 2.0 + Math.sin(sequenceNumber * 0.1) * 0.5 // 1.5-2.5 µS
-                        SensorChannel.PPG -> 512.0 + Math.sin(sequenceNumber * 0.2) * 100.0 // Heart rate simulation
-                        SensorChannel.ACCEL -> if (sequenceNumber % 3 == 0L) 9.8 else 0.1 // Gravity + small movements
-                        SensorChannel.GYRO -> Math.sin(sequenceNumber * 0.05) * 10.0 // Small rotations
-                        SensorChannel.MAG -> 25.0 + Math.sin(sequenceNumber * 0.03) * 5.0 // Magnetic field
-                        SensorChannel.ECG -> Math.sin(sequenceNumber * 0.3) * 0.5 // ECG simulation
-                        SensorChannel.EMG -> Math.random() * 0.1 // EMG noise
-                        else -> 0.0 // Default value for other sensors
+                        SensorChannel.GSR -> 2.0 + Math.sin(sequenceNumber * 0.1) * 0.5
+                        SensorChannel.PPG -> 512.0 + Math.sin(sequenceNumber * 0.2) * 100.0
+                        SensorChannel.ACCEL -> if (sequenceNumber % 3 == 0L) 9.8 else 0.1
+                        SensorChannel.GYRO -> Math.sin(sequenceNumber * 0.05) * 10.0
+                        SensorChannel.MAG -> 25.0 + Math.sin(sequenceNumber * 0.03) * 5.0
+                        SensorChannel.ECG -> Math.sin(sequenceNumber * 0.3) * 0.5
+                        SensorChannel.EMG -> Math.random() * 0.1
+                        else -> 0.0
                     }
                 sensorValues[sensor] = value
             }
@@ -122,35 +105,20 @@ data class SensorSample(
                 deviceId = deviceId,
                 deviceTimestamp = currentTime,
                 sensorValues = sensorValues,
-                batteryLevel = (80 + (sequenceNumber % 20)).toInt(), // Simulate battery 80-99%
+                batteryLevel = (80 + (sequenceNumber % 20)).toInt(),
                 sequenceNumber = sequenceNumber,
             )
         }
     }
 
-    /**
-     * Get sensor value for a specific channel
-     */
     fun getSensorValue(channel: SensorChannel): Double? = sensorValues[channel]
 
-    /**
-     * Check if a sensor channel has data in this sample
-     */
     fun hasSensorData(channel: SensorChannel): Boolean = channel in sensorValues
 
-    /**
-     * Get all available sensor channels in this sample
-     */
     fun getAvailableChannels(): Set<SensorChannel> = sensorValues.keys
 
-    /**
-     * Get the number of sensor channels with data
-     */
     fun getChannelCount(): Int = sensorValues.size
 
-    /**
-     * Convert to CSV format string with enhanced sensor support
-     */
     fun toCsvString(includeHeader: Boolean = false): String {
         val header =
             if (includeHeader) {
@@ -191,9 +159,6 @@ data class SensorSample(
         return header + values
     }
 
-    /**
-     * Convert to JSON format string for network streaming
-     */
     fun toJsonString(): String {
         val sensorData =
             sensorValues.entries.joinToString(",") { (channel, value) ->
@@ -211,32 +176,17 @@ data class SensorSample(
         }""".replace("\n", "").replace("  ", "")
     }
 
-    /**
-     * Get a human-readable timestamp
-     */
     fun getFormattedTimestamp(): String = dateFormat.format(Date(systemTimestamp))
 
-    /**
-     * Calculate time difference from another sample (in milliseconds)
-     */
     fun getTimeDifference(other: SensorSample): Long = Math.abs(this.systemTimestamp - other.systemTimestamp)
 
-    /**
-     * Check if this sample is within a time window of another sample
-     */
     fun isWithinTimeWindow(
         other: SensorSample,
         windowMs: Long,
     ): Boolean = getTimeDifference(other) <= windowMs
 
-    /**
-     * Create a copy with updated session timestamp
-     */
     fun withSessionTimestamp(sessionStart: Long): SensorSample = copy(sessionTimestamp = systemTimestamp - sessionStart)
 
-    /**
-     * Validate sample data
-     */
     fun validate(): List<String> {
         val errors = mutableListOf<String>()
 
@@ -260,7 +210,6 @@ data class SensorSample(
             errors.add("Battery level must be between 0 and 100")
         }
 
-        // Validate sensor value ranges
         sensorValues.forEach { (channel, value) ->
             when (channel) {
                 SensorChannel.GSR -> {
@@ -279,7 +228,6 @@ data class SensorSample(
                     }
                 }
                 else -> {
-                    // Other sensors - basic range check
                     if (!value.isFinite()) {
                         errors.add("${channel.name} value is not finite: $value")
                     }

@@ -1,13 +1,6 @@
 package com.multisensor.recording.recording
 
-/**
- * Data models for Shimmer sensor recording functionality.
- * Extracted from ShimmerRecorder.kt for better code organization.
- */
 
-/**
- * Data class representing real-time data quality metrics
- */
 data class DataQualityMetrics(
     val deviceId: String,
     val samplesAnalyzed: Int,
@@ -17,27 +10,21 @@ data class DataQualityMetrics(
     val dataLossPercentage: Double,
     val lastSampleTimestamp: Long,
     val connectionStability: String,
-    val signalStrength: Int, // Signal strength in dBm
+    val signalStrength: Int,
     val errorCount: Int
 )
 
-/**
- * Data class representing Shimmer sensor status
- */
 data class ShimmerStatus(
     val isAvailable: Boolean,
     val isConnected: Boolean,
     val isRecording: Boolean,
     val samplingRate: Int,
-    val batteryLevel: Int? = null, // Battery percentage
+    val batteryLevel: Int? = null,
     val deviceId: String,
     val connectionTime: Long? = null,
     val lastDataReceived: Long? = null
 )
 
-/**
- * Data class representing a Shimmer sensor sample
- */
 data class ShimmerSample(
     val timestamp: Long,
     val systemTime: String,
@@ -59,9 +46,6 @@ data class ShimmerSample(
     val sequenceNumber: Long
 )
 
-/**
- * Data class representing comprehensive device information
- */
 data class DeviceInformation(
     val deviceId: String,
     val macAddress: String,
@@ -78,9 +62,6 @@ data class DeviceInformation(
     val capabilities: List<String>
 )
 
-/**
- * Data class representing sensor configuration
- */
 data class SensorConfiguration(
     val gsrRange: Int,
     val accelerometerRange: Int,
@@ -91,9 +72,6 @@ data class SensorConfiguration(
     val calibrationData: Map<String, Double>
 )
 
-/**
- * Enum representing connection states
- */
 enum class ShimmerConnectionState {
     DISCONNECTED,
     CONNECTING,
@@ -104,9 +82,6 @@ enum class ShimmerConnectionState {
     ERROR
 }
 
-/**
- * Enum representing data quality levels
- */
 enum class DataQuality {
     EXCELLENT,
     GOOD,

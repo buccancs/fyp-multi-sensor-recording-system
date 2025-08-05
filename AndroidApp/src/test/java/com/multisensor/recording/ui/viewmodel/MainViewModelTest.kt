@@ -18,9 +18,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-/**
- * Comprehensive tests for MainViewModel using modern test architecture with mocked dependencies
- */
 class MainViewModelTest : BaseUnitTest() {
 
     private lateinit var viewModel: MainViewModel
@@ -33,12 +30,11 @@ class MainViewModelTest : BaseUnitTest() {
     @Before
     override fun setUp() {
         super.setUp()
-        
-        // Set up mock behavior
+
         every { mockLogger.info(any()) } returns Unit
         every { mockLogger.debug(any()) } returns Unit
         every { mockLogger.error(any()) } returns Unit
-        
+
         viewModel = MainViewModel(
             mockCameraRecorder,
             mockThermalRecorder,
@@ -50,10 +46,8 @@ class MainViewModelTest : BaseUnitTest() {
 
     @Test
     fun `should initialize with default UI state`() = runTest {
-        // When
         val initialState = viewModel.uiState.first()
 
-        // Then
         assertThat(initialState).isNotNull()
         assertThat(initialState.isInitialized).isTrue()
         assertThat(initialState.isRecording).isFalse()
@@ -62,10 +56,8 @@ class MainViewModelTest : BaseUnitTest() {
 
     @Test
     fun `should provide UI state as StateFlow`() = runTest {
-        // When
         val stateFlow = viewModel.uiState
-        
-        // Then
+
         assertThat(stateFlow).isNotNull()
         val currentState = stateFlow.first()
         assertThat(currentState).isInstanceOf(MainUiState::class.java)
@@ -73,35 +65,26 @@ class MainViewModelTest : BaseUnitTest() {
 
     @Test
     fun `should start recording when requested`() = runTest {
-        // Given
         coEvery { mockSessionManager.createNewSession() } returns "test-session-123"
-        
-        // When
+
         viewModel.startRecording()
-        
-        // Then verify recording started
-        // (This would require exposing more state or using additional mocking)
+
         assertThat(viewModel).isNotNull()
     }
 
     @Test
     fun `should handle errors gracefully`() = runTest {
-        // Given
         val errorMessage = "Test error occurred"
-        
-        // When
+
         viewModel.clearError()
-        
-        // Then verify error handling
+
         assertThat(viewModel).isNotNull()
     }
 
     @Test
     fun `should manage device connection states`() = runTest {
-        // When
         val initialState = viewModel.uiState.first()
-        
-        // Then verify device states are tracked
+
         assertThat(initialState.isPcConnected).isFalse()
         assertThat(initialState.isShimmerConnected).isFalse()
         assertThat(initialState.isThermalConnected).isFalse()
@@ -109,29 +92,23 @@ class MainViewModelTest : BaseUnitTest() {
 
     @Test
     fun `should provide recording configuration options`() = runTest {
-        // When
         viewModel.setRecordVideoEnabled(true)
         viewModel.setCaptureRawEnabled(true)
-        
-        // Then verify configuration methods exist and can be called
+
         assertThat(viewModel).isNotNull()
     }
 
     @Test
     fun `should handle calibration operations`() = runTest {
-        // When
         viewModel.runCalibration()
-        
-        // Then verify calibration can be initiated
+
         assertThat(viewModel).isNotNull()
     }
 
     @Test
     fun `should support raw image capture`() = runTest {
-        // When
         viewModel.captureRawImage()
-        
-        // Then verify raw capture functionality
+
         assertThat(viewModel).isNotNull()
     }
 }

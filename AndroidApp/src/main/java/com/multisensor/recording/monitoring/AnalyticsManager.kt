@@ -1,4 +1,3 @@
-// Phase 4: Production Readiness - Analytics and Monitoring System
 package com.multisensor.recording.monitoring
 
 import android.content.Context
@@ -17,16 +16,6 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Phase 4 Production Analytics Manager
- * 
- * Provides comprehensive monitoring and analytics for production deployment including:
- * - Session metrics tracking
- * - Error event reporting
- * - Performance monitoring
- * - User behavior analytics
- * - Production health monitoring
- */
 @Singleton
 class AnalyticsManager @Inject constructor(
     @ApplicationContext private val context: Context
@@ -36,10 +25,9 @@ class AnalyticsManager @Inject constructor(
         private const val TAG = "AnalyticsManager"
         private const val ANALYTICS_FILE = "analytics_data.json"
         private const val MAX_EVENTS_PER_SESSION = 1000
-        private const val FLUSH_INTERVAL_MS = 30_000L // 30 seconds
+        private const val FLUSH_INTERVAL_MS = 30_000L
         private const val MAX_FILE_SIZE_MB = 5
-        
-        // Constants that would normally come from CommonConstants
+
         private const val APP_VERSION = "1.0.0"
         private const val PROTOCOL_VERSION = 1
         private const val HEARTBEAT_INTERVAL = 5
@@ -48,16 +36,16 @@ class AnalyticsManager @Inject constructor(
 
     private val analyticsScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val eventQueue = ConcurrentHashMap<String, MutableList<AnalyticsEvent>>()
-    
+
     private val _sessionMetrics = MutableStateFlow(SessionMetrics())
     val sessionMetrics: StateFlow<SessionMetrics> = _sessionMetrics.asStateFlow()
-    
+
     private val _systemHealth = MutableStateFlow(SystemHealth())
     val systemHealth: StateFlow<SystemHealth> = _systemHealth.asStateFlow()
-    
+
     private var currentSessionId: String? = null
     private var sessionStartTime: Long = 0
-    
+
     private val analyticsFile: File by lazy {
         File(context.filesDir, ANALYTICS_FILE)
     }
@@ -67,34 +55,28 @@ class AnalyticsManager @Inject constructor(
         startHealthMonitoring()
     }
 
-    /**
-     * Start a new analytics session
-     */
     fun startSession(sessionId: String) {
         currentSessionId = sessionId
         sessionStartTime = System.currentTimeMillis()
-        
+
         trackEvent(SessionEvent.SESSION_STARTED, mapOf(
             "session_id" to sessionId,
             "app_version" to APP_VERSION,
             "protocol_version" to PROTOCOL_VERSION
         ))
-        
+
         Log.i(TAG, "Analytics session started: $sessionId")
     }
 
-    /**
-     * End the current analytics session
-     */
     fun endSession() {
         currentSessionId?.let { sessionId ->
             val duration = System.currentTimeMillis() - sessionStartTime
-            
+
             trackEvent(SessionEvent.SESSION_ENDED, mapOf(
                 "session_id" to sessionId,
                 "duration_ms" to duration
             ))
-            
+
             updateSessionMetrics { metrics ->
                 metrics.copy(
                     totalSessions = metrics.totalSessions + 1,
@@ -103,19 +85,16 @@ class AnalyticsManager @Inject constructor(
                 )
             }
         }
-        
+
         currentSessionId = null
         sessionStartTime = 0
-        
+
         Log.i(TAG, "Analytics session ended")
     }
 
-    /**
-     * Track session metrics
-     */
     fun trackSessionMetrics(metrics: SessionMetrics) {
         _sessionMetrics.value = metrics
-        
+
         trackEvent(MetricEvent.SESSION_METRICS, mapOf(
             "recording_count" to metrics.recordingCount,
             "total_data_size_mb" to metrics.totalDataSizeMB,
@@ -124,9 +103,6 @@ class AnalyticsManager @Inject constructor(
         ))
     }
 
-    /**
-     * Report error events for production monitoring
-     */
     fun reportErrorEvent(error: ErrorEvent) {
         trackEvent(ErrorEventType.ERROR_OCCURRED, mapOf(
             "error_type" to error.type,
@@ -136,23 +112,20 @@ class AnalyticsManager @Inject constructor(
             "session_id" to (currentSessionId ?: "unknown"),
             "timestamp" to System.currentTimeMillis()
         ))
-        
+
         updateSessionMetrics { metrics ->
             metrics.copy(errorCount = metrics.errorCount + 1)
         }
-        
+
         Log.e(TAG, "Error reported: ${error.type} - ${error.message}")
     }
 
-    /**
-     * Monitor performance metrics
-     */
     fun monitorPerformanceMetrics() {
         analyticsScope.launch {
             while (true) {
                 try {
                     val performance = collectPerformanceMetrics()
-                    
+
                     trackEvent(MetricEvent.PERFORMANCE_METRICS, mapOf(
                         "memory_usage_mb" to performance.memoryUsageMB,
                         "cpu_usage_percent" to performance.cpuUsagePercent,
@@ -160,21 +133,18 @@ class AnalyticsManager @Inject constructor(
                         "storage_available_mb" to performance.storageAvailableMB,
                         "network_speed_mbps" to performance.networkSpeedMbps
                     ))
-                    
+
                     updateSystemHealth(performance)
-                    
+
                 } catch (e: Exception) {
                     Log.e(TAG, "Error collecting performance metrics", e)
                 }
-                
+
                 delay(HEARTBEAT_INTERVAL * 1000L)
             }
         }
     }
 
-    /**
-     * Track user interactions and behavior
-     */
     fun trackUserInteraction(interaction: UserInteraction) {
         trackEvent(UserEvent.USER_INTERACTION, mapOf(
             "action" to interaction.action,
@@ -184,9 +154,6 @@ class AnalyticsManager @Inject constructor(
         ))
     }
 
-    /**
-     * Track network events and quality
-     */
     fun trackNetworkEvent(event: NetworkEvent) {
         trackEvent(NetworkEventType.NETWORK_EVENT, mapOf(
             "event_type" to event.type,
@@ -197,9 +164,6 @@ class AnalyticsManager @Inject constructor(
         ))
     }
 
-    /**
-     * Generic event tracking
-     */
     private fun trackEvent(eventType: AnalyticsEventType, parameters: Map<String, Any>) {
         val event = AnalyticsEvent(
             type = eventType.eventName,
@@ -207,23 +171,19 @@ class AnalyticsManager @Inject constructor(
             timestamp = System.currentTimeMillis(),
             sessionId = currentSessionId
         )
-        
+
         val sessionEvents = eventQueue.getOrPut(currentSessionId ?: "global") { mutableListOf() }
-        
+
         synchronized(sessionEvents) {
             if (sessionEvents.size < MAX_EVENTS_PER_SESSION) {
                 sessionEvents.add(event)
             } else {
-                // Remove oldest event if queue is full
                 sessionEvents.removeAt(0)
                 sessionEvents.add(event)
             }
         }
     }
 
-    /**
-     * Flush analytics data to storage periodically
-     */
     private fun startPeriodicFlush() {
         analyticsScope.launch {
             while (true) {
@@ -233,46 +193,36 @@ class AnalyticsManager @Inject constructor(
         }
     }
 
-    /**
-     * Start system health monitoring
-     */
     private fun startHealthMonitoring() {
         analyticsScope.launch {
             monitorPerformanceMetrics()
         }
     }
 
-    /**
-     * Flush all events to persistent storage
-     */
     private suspend fun flushToStorage() {
         withContext(Dispatchers.IO) {
             try {
                 val allEvents = mutableListOf<AnalyticsEvent>()
-                
+
                 eventQueue.forEach { (_, events) ->
                     synchronized(events) {
                         allEvents.addAll(events)
                         events.clear()
                     }
                 }
-                
+
                 if (allEvents.isNotEmpty()) {
                     appendEventsToFile(allEvents)
                 }
-                
-                // Check file size and rotate if necessary
+
                 rotateFileIfNeeded()
-                
+
             } catch (e: Exception) {
                 Log.e(TAG, "Error flushing analytics data", e)
             }
         }
     }
 
-    /**
-     * Append events to analytics file
-     */
     private fun appendEventsToFile(events: List<AnalyticsEvent>) {
         try {
             val jsonArray = JSONObject().apply {
@@ -280,34 +230,28 @@ class AnalyticsManager @Inject constructor(
                 put("flush_timestamp", System.currentTimeMillis())
                 put("app_version", APP_VERSION)
             }
-            
+
             analyticsFile.appendText(jsonArray.toString() + "\n")
-            
+
         } catch (e: Exception) {
             Log.e(TAG, "Error writing analytics events to file", e)
         }
     }
 
-    /**
-     * Rotate analytics file if it exceeds size limit
-     */
     private fun rotateFileIfNeeded() {
         if (analyticsFile.exists() && analyticsFile.length() > MAX_FILE_SIZE_MB * 1024 * 1024) {
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val backupFile = File(context.filesDir, "analytics_data_$timestamp.json")
-            
+
             analyticsFile.renameTo(backupFile)
             Log.i(TAG, "Analytics file rotated to: ${backupFile.name}")
         }
     }
 
-    /**
-     * Collect current performance metrics
-     */
     private fun collectPerformanceMetrics(): PerformanceMetrics {
         val runtime = Runtime.getRuntime()
         val memoryUsed = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024)
-        
+
         return PerformanceMetrics(
             memoryUsageMB = memoryUsed.toDouble(),
             cpuUsagePercent = getCpuUsage(),
@@ -318,13 +262,11 @@ class AnalyticsManager @Inject constructor(
     }
 
     private fun getCpuUsage(): Double {
-        // Simplified CPU usage estimation
         return Runtime.getRuntime().availableProcessors().toDouble() * 10.0
     }
 
     private fun getBatteryLevel(): Int {
-        // Battery level would be obtained from BatteryManager
-        return 85 // Placeholder
+        return 85
     }
 
     private fun getAvailableStorage(): Double {
@@ -332,8 +274,7 @@ class AnalyticsManager @Inject constructor(
     }
 
     private fun getNetworkSpeed(): Double {
-        // Network speed would be measured through actual network tests
-        return 50.0 // Placeholder
+        return 50.0
     }
 
     private fun updateSessionMetrics(update: (SessionMetrics) -> SessionMetrics) {
@@ -342,20 +283,17 @@ class AnalyticsManager @Inject constructor(
 
     private fun updateSystemHealth(performance: PerformanceMetrics) {
         val health = SystemHealth(
-            isHealthy = performance.memoryUsageMB < BUFFER_SIZE && 
+            isHealthy = performance.memoryUsageMB < BUFFER_SIZE &&
                        performance.batteryLevel > 20,
             memoryPressure = performance.memoryUsageMB > 1000,
             lowBattery = performance.batteryLevel < 30,
             storageWarning = performance.storageAvailableMB < 100,
             lastUpdateTime = System.currentTimeMillis()
         )
-        
+
         _systemHealth.value = health
     }
 
-    /**
-     * Get analytics summary for export
-     */
     fun getAnalyticsSummary(): String {
         val summary = JSONObject().apply {
             put("session_metrics", _sessionMetrics.value.toJson())
@@ -363,27 +301,23 @@ class AnalyticsManager @Inject constructor(
             put("current_session", currentSessionId)
             put("export_timestamp", System.currentTimeMillis())
         }
-        
+
         return summary.toString(2)
     }
 
-    /**
-     * Clear all analytics data (for testing/privacy)
-     */
     fun clearAnalyticsData() {
         eventQueue.clear()
         if (analyticsFile.exists()) {
             analyticsFile.delete()
         }
-        
+
         _sessionMetrics.value = SessionMetrics()
         _systemHealth.value = SystemHealth()
-        
+
         Log.i(TAG, "Analytics data cleared")
     }
 }
 
-// Data Classes for Analytics
 
 data class SessionMetrics(
     val recordingCount: Int = 0,
@@ -465,7 +399,6 @@ data class AnalyticsEvent(
     }
 }
 
-// Event Type Enums
 
 interface AnalyticsEventType {
     val eventName: String

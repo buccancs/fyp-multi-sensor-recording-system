@@ -1,15 +1,14 @@
-# pyproject.toml - Modern Python project configuration
-# Configuration for tools: Black, isort, mypy, bandit, coverage
+
+
 
 [build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "thermal-recording-system"
+name = "bucika-gsr"
 version = "1.0.0"
 description = "Multi-Sensor Synchronized Recording System"
-readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
@@ -26,10 +25,14 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 
+[project.scripts]
+bucika-gsr = "bucika_gsr.main:main"
+bucika-gsr-demo = "bucika_gsr.demo_enhanced_ui:main"
+
 dependencies = [
     "PyQt5>=5.15.11",
     "opencv-python>=4.12.0",
-    "numpy>=1.26.0,<2.0.0",  # Keep v1.x for OpenCV compatibility
+    "numpy>=1.26.0,<2.0.0",
     "matplotlib>=3.10.0",
     "requests>=2.32.0",
     "pillow>=10.4.0",
@@ -50,16 +53,16 @@ dev = [
     "flake8>=7.3.0",
 ]
 shimmer = [
-    "pyshimmer>=1.0.0",  # Optional Shimmer SDK
-    "pybluez>=0.23",     # Optional Bluetooth support
-    "bleak>=0.22.0",     # Modern async Bluetooth
+    "pyshimmer>=1.0.0",
+    "pybluez>=0.23",
+    "bleak>=0.22.0",
 ]
 calibration = [
-    "opencv-contrib-python>=4.12.0",  # Extended OpenCV features
+    "opencv-contrib-python>=4.12.0",
 ]
 android = [
-    "adb-shell>=0.5.0",   # Android device communication
-    "pure-python-adb>=0.3.0",  # Pure Python ADB implementation
+    "adb-shell>=0.5.0",
+    "pure-python-adb>=0.3.0",
 ]
 
 [project.urls]
@@ -67,14 +70,18 @@ Homepage = "https://github.com/buccancs/bucika_gsr"
 Repository = "https://github.com/buccancs/bucika_gsr.git"
 Issues = "https://github.com/buccancs/bucika_gsr/issues"
 
-# Black code formatting configuration
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bucika_gsr*"]
+
+
 [tool.black]
 line-length = 88
 target-version = ['py39', 'py310', 'py311']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
-  # directories
+
   \.eggs
   | \.git
   | \.hg
@@ -88,16 +95,16 @@ extend-exclude = '''
 )/
 '''
 
-# isort import sorting configuration
+
 [tool.isort]
 profile = "black"
 multi_line_output = 3
 line_length = 88
-known_first_party = ["thermal_recording"]
+known_first_party = ["bucika_gsr"]
 known_third_party = ["PyQt5", "cv2", "numpy", "matplotlib", "requests"]
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 
-# MyPy type checking configuration
+
 [tool.mypy]
 python_version = "3.9"
 warn_return_any = true
@@ -114,7 +121,7 @@ warn_unreachable = true
 strict_equality = true
 show_error_codes = true
 
-# Ignore missing imports for external libraries
+
 [[tool.mypy.overrides]]
 module = [
     "cv2.*",
@@ -124,17 +131,17 @@ module = [
 ]
 ignore_missing_imports = true
 
-# Bandit security linting configuration
+
 [tool.bandit]
 exclude_dirs = ["tests", "test_*", "*/tests/*"]
-skips = ["B101", "B601"]  # Skip assert_used and shell=True warnings for tests
+skips = ["B101", "B601"]
 
 [tool.bandit.assert_used]
 skips = ["*_test.py", "test_*.py"]
 
-# Coverage configuration
+
 [tool.coverage.run]
-source = ["PythonApp/src"]
+source = ["bucika_gsr"]
 omit = [
     "*/tests/*",
     "*/test_*",
@@ -167,21 +174,21 @@ precision = 2
 [tool.coverage.html]
 directory = "htmlcov"
 
-# Pytest configuration (alternative to pytest.ini)
+
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = [
     "-ra",
     "--strict-markers",
     "--strict-config",
-    "--cov=PythonApp/src",
+    "--cov=bucika_gsr",
     "--cov-report=html:htmlcov",
     "--cov-report=xml:coverage.xml",
     "--cov-report=term-missing:skip-covered",
     "--cov-fail-under=50",
     "--junitxml=junit.xml",
 ]
-testpaths = ["PythonApp/tests", "PythonApp/src/tests"]
+testpaths = ["tests"]
 markers = [
     "slow: marks tests as slow",
     "integration: marks tests as integration tests",

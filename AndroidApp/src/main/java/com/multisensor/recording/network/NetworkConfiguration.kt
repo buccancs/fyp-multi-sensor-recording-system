@@ -6,12 +6,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Network Configuration Manager for Implementation Gap Resolution.
- * Manages dynamic server IP configuration to replace hardcoded values.
- *
- * Provides configurable network settings with persistent storage and default values.
- */
 @Singleton
 class NetworkConfiguration
     @Inject
@@ -24,7 +18,6 @@ class NetworkConfiguration
             private const val KEY_LEGACY_PORT = "legacy_port"
             private const val KEY_JSON_PORT = "json_port"
 
-            // Default configuration values
             private const val DEFAULT_SERVER_IP = "192.168.1.100"
             private const val DEFAULT_LEGACY_PORT = 8080
             private const val DEFAULT_JSON_PORT = 9000
@@ -34,14 +27,8 @@ class NetworkConfiguration
             context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         }
 
-        /**
-         * Get configured server IP address
-         */
         fun getServerIp(): String = sharedPreferences.getString(KEY_SERVER_IP, DEFAULT_SERVER_IP) ?: DEFAULT_SERVER_IP
 
-        /**
-         * Set server IP address
-         */
         fun setServerIp(ip: String) {
             sharedPreferences.edit().apply {
                 putString(KEY_SERVER_IP, ip)
@@ -49,14 +36,8 @@ class NetworkConfiguration
             }
         }
 
-        /**
-         * Get legacy socket port (compatibility)
-         */
         fun getLegacyPort(): Int = sharedPreferences.getInt(KEY_LEGACY_PORT, DEFAULT_LEGACY_PORT)
 
-        /**
-         * Set legacy socket port
-         */
         fun setLegacyPort(port: Int) {
             sharedPreferences.edit().apply {
                 putInt(KEY_LEGACY_PORT, port)
@@ -64,14 +45,8 @@ class NetworkConfiguration
             }
         }
 
-        /**
-         * Get JSON socket port ()
-         */
         fun getJsonPort(): Int = sharedPreferences.getInt(KEY_JSON_PORT, DEFAULT_JSON_PORT)
 
-        /**
-         * Set JSON socket port
-         */
         fun setJsonPort(port: Int) {
             sharedPreferences.edit().apply {
                 putInt(KEY_JSON_PORT, port)
@@ -79,9 +54,6 @@ class NetworkConfiguration
             }
         }
 
-        /**
-         * Get complete server configuration
-         */
         fun getServerConfiguration(): ServerConfiguration =
             ServerConfiguration(
                 serverIp = getServerIp(),
@@ -89,9 +61,6 @@ class NetworkConfiguration
                 jsonPort = getJsonPort(),
             )
 
-        /**
-         * Update complete server configuration
-         */
         fun updateServerConfiguration(config: ServerConfiguration) {
             sharedPreferences.edit().apply {
                 putString(KEY_SERVER_IP, config.serverIp)
@@ -101,9 +70,6 @@ class NetworkConfiguration
             }
         }
 
-        /**
-         * Reset to default configuration
-         */
         fun resetToDefaults() {
             sharedPreferences.edit().apply {
                 putString(KEY_SERVER_IP, DEFAULT_SERVER_IP)
@@ -113,17 +79,11 @@ class NetworkConfiguration
             }
         }
 
-        /**
-         * Check if configuration has been customized
-         */
         fun isCustomConfiguration(): Boolean =
             getServerIp() != DEFAULT_SERVER_IP ||
                 getLegacyPort() != DEFAULT_LEGACY_PORT ||
                 getJsonPort() != DEFAULT_JSON_PORT
 
-        /**
-         * Validate IP address format
-         */
         fun isValidIpAddress(ip: String): Boolean {
             return try {
                 val parts = ip.split(".")
@@ -138,41 +98,23 @@ class NetworkConfiguration
             }
         }
 
-        /**
-         * Validate port number
-         */
         fun isValidPort(port: Int): Boolean = port in 1024..65535
 
-        /**
-         * Get configuration summary for logging
-         */
         fun getConfigurationSummary(): String {
             val config = getServerConfiguration()
             return "NetworkConfig[IP=${config.serverIp}, Legacy=${config.legacyPort}, JSON=${config.jsonPort}]"
         }
     }
 
-/**
- * Data class representing complete server configuration
- */
 data class ServerConfiguration(
     val serverIp: String,
     val legacyPort: Int,
     val jsonPort: Int,
 ) {
-    /**
-     * Get legacy socket address
-     */
     fun getLegacyAddress(): String = "$serverIp:$legacyPort"
 
-    /**
-     * Get JSON socket address
-     */
     fun getJsonAddress(): String = "$serverIp:$jsonPort"
 
-    /**
-     * Validate configuration
-     */
     fun isValid(): Boolean {
         val networkConfig = NetworkConfiguration::class.java.newInstance()
         return networkConfig.isValidIpAddress(serverIp) &&

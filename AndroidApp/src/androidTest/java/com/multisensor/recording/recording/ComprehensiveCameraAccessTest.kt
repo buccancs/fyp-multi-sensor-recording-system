@@ -31,20 +31,6 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-/**
- * Comprehensive Camera Access Test Suite
- *
- * This test suite extends existing camera tests to provide comprehensive coverage of:
- * - RGB camera access and permissions
- * - IR camera recognition and access
- * - File writing functionality verification
- * - All camera-related permissions testing
- *
- * Requirements:
- * - Run on Samsung device with USB-C OTG support
- * - Topdon thermal camera connected for IR tests
- * - All permissions granted
- */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ComprehensiveCameraAccessTest {
@@ -84,13 +70,10 @@ class ComprehensiveCameraAccessTest {
         hiltRule.inject()
         context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        // Launch activity using ActivityScenario
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
 
-        // Create ThermalRecorder instance
         thermalRecorder = ThermalRecorder(context, sessionManager, logger, thermalSettings)
 
-        // Create TextureView on UI thread
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
             activityScenario.onActivity { activity ->
                 textureView = TextureView(activity)
@@ -98,7 +81,6 @@ class ComprehensiveCameraAccessTest {
             }
         }
 
-        // Wait for TextureView to be ready
         Thread.sleep(1000)
 
         println("[DEBUG_LOG] Comprehensive camera test setup complete")
@@ -108,13 +90,11 @@ class ComprehensiveCameraAccessTest {
     fun cleanup() =
         runBlocking {
             try {
-                // Stop any active sessions
                 currentSession = cameraRecorder.stopSession()
                 thermalRecorder.cleanup()
 
                 delay(500)
 
-                // Close ActivityScenario
                 if (::activityScenario.isInitialized) {
                     activityScenario.close()
                 }
@@ -125,10 +105,6 @@ class ComprehensiveCameraAccessTest {
             }
         }
 
-    /**
-     * Test 1: Comprehensive Permission Verification
-     * Verify all camera-related permissions are granted and accessible
-     */
     @Test
     fun test1_comprehensivePermissionVerification() {
         println("[DEBUG_LOG] Starting comprehensive permission verification...")
@@ -149,7 +125,6 @@ class ComprehensiveCameraAccessTest {
             println("[DEBUG_LOG] Permission $permission: ${if (granted) "GRANTED" else "DENIED"}")
         }
 
-        // Verify all critical permissions are granted
         assertTrue("[DEBUG_LOG] CAMERA permission not granted", permissionResults[Manifest.permission.CAMERA] == true)
         assertTrue("[DEBUG_LOG] RECORD_AUDIO permission not granted", permissionResults[Manifest.permission.RECORD_AUDIO] == true)
         assertTrue(
@@ -160,16 +135,11 @@ class ComprehensiveCameraAccessTest {
         println("[DEBUG_LOG] All required permissions verified successfully")
     }
 
-    /**
-     * Test 2: RGB Camera Access and Functionality
-     * Comprehensive test of RGB camera initialization, preview, and recording
-     */
     @Test
     fun test2_rgbCameraAccessAndFunctionality() =
         runBlocking {
             println("[DEBUG_LOG] Starting RGB camera access and functionality test...")
 
-            // Initialize RGB camera
             val initResult =
                 withTimeout(10000) {
                     cameraRecorder.initialize(textureView)
@@ -177,7 +147,6 @@ class ComprehensiveCameraAccessTest {
             assertTrue("[DEBUG_LOG] RGB camera initialization failed", initResult)
             println("[DEBUG_LOG] RGB camera initialized successfully")
 
-            // Wait for surface availability
             val surfaceAvailableLatch = CountDownLatch(1)
             InstrumentationRegistry.getInstrumentation().runOnMainSync {
                 if (textureView.isAvailable) {
@@ -211,20 +180,16 @@ class ComprehensiveCameraAccessTest {
                 surfaceAvailableLatch.await(10, TimeUnit.SECONDS),
             )
 
-            // Test preview functionality
-            delay(2000) // Allow preview to stabilize
+            delay(2000)
             println("[DEBUG_LOG] RGB camera preview active and stable")
 
-            // Test recording functionality
             val sessionId = "rgb_test_${System.currentTimeMillis()}"
             currentSession = cameraRecorder.startSession(recordVideo = true, captureRaw = false)
             assertNotNull("[DEBUG_LOG] Failed to start RGB recording session", currentSession)
             println("[DEBUG_LOG] RGB recording session started: ${currentSession?.sessionId}")
 
-            // Record for 5 seconds
             delay(5000)
 
-            // Stop recording
             val finalSession = cameraRecorder.stopSession()
             assertNotNull("[DEBUG_LOG] Failed to stop RGB recording session", finalSession)
             println("[DEBUG_LOG] RGB recording completed. Duration: ${finalSession?.getDurationMs()}ms")
@@ -232,16 +197,11 @@ class ComprehensiveCameraAccessTest {
             currentSession = finalSession
         }
 
-    /**
-     * Test 3: IR Camera Recognition and Access
-     * Test IR camera detection, initialization, and basic functionality
-     */
     @Test
     fun test3_irCameraRecognitionAndAccess() =
         runBlocking {
             println("[DEBUG_LOG] Starting IR camera recognition and access test...")
 
-            // Check USB manager for connected devices
             val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
             val deviceList = usbManager.deviceList
             println("[DEBUG_LOG] Connected USB devices: ${deviceList.size}")
@@ -253,15 +213,12 @@ class ComprehensiveCameraAccessTest {
                 println("[DEBUG_LOG] - Device Name: ${device.deviceName}")
             }
 
-            // Initialize thermal recorder
             val thermalInitResult = thermalRecorder.initialize()
             println("[DEBUG_LOG] Thermal recorder initialization result: $thermalInitResult")
 
-            // Wait for USB device detection and permission handling
             println("[DEBUG_LOG] Waiting for IR camera detection (15 seconds)...")
             delay(15000)
 
-            // Check thermal camera status
             val status = thermalRecorder.getThermalCameraStatus()
             println("[DEBUG_LOG] IR Camera Status:")
             println("[DEBUG_LOG] - Available: ${status.isAvailable}")
@@ -273,11 +230,9 @@ class ComprehensiveCameraAccessTest {
             if (status.isAvailable) {
                 println("[DEBUG_LOG] IR camera detected and recognized successfully!")
 
-                // Test preview functionality
                 val previewResult = thermalRecorder.startPreview()
                 assertTrue("[DEBUG_LOG] Failed to start IR camera preview", previewResult)
 
-                // Let preview run for 3 seconds
                 delay(3000)
 
                 val previewStatus = thermalRecorder.getThermalCameraStatus()
@@ -285,7 +240,6 @@ class ComprehensiveCameraAccessTest {
                 println("[DEBUG_LOG] - Preview active: ${previewStatus.isPreviewActive}")
                 println("[DEBUG_LOG] - Frame count: ${previewStatus.frameCount}")
 
-                // Stop preview
                 thermalRecorder.stopPreview()
                 println("[DEBUG_LOG] IR camera preview test completed successfully")
             } else {
@@ -294,15 +248,9 @@ class ComprehensiveCameraAccessTest {
                 println("[DEBUG_LOG] 2. USB permissions were granted")
                 println("[DEBUG_LOG] 3. Camera is a supported Topdon model (TC001/Plus)")
 
-                // This is not a failure if no IR camera is connected
-                // but I log it for manual verification
             }
         }
 
-    /**
-     * Test 4: File Writing Functionality Verification
-     * Test file creation, writing, and verification for both RGB and IR cameras
-     */
     @Test
     fun test4_fileWritingFunctionalityVerification() =
         runBlocking {
@@ -311,35 +259,27 @@ class ComprehensiveCameraAccessTest {
             val testSessionId = "file_test_${System.currentTimeMillis()}"
             val baseDir = File(context.getExternalFilesDir(null), "test_recordings")
 
-            // Ensure test directory exists
             if (!baseDir.exists()) {
                 baseDir.mkdirs()
             }
             assertTrue("[DEBUG_LOG] Failed to create test directory", baseDir.exists())
             println("[DEBUG_LOG] Test directory created: ${baseDir.absolutePath}")
 
-            // Test RGB camera file writing
             println("[DEBUG_LOG] Testing RGB camera file writing...")
 
-            // Initialize RGB camera
             val rgbInitResult = cameraRecorder.initialize(textureView)
             assertTrue("[DEBUG_LOG] RGB camera initialization failed", rgbInitResult)
 
-            // Wait for surface
             delay(2000)
 
-            // Start recording session
             currentSession = cameraRecorder.startSession(recordVideo = true, captureRaw = true)
             assertNotNull("[DEBUG_LOG] Failed to start RGB recording session", currentSession)
 
-            // Record for 3 seconds
             delay(3000)
 
-            // Stop recording
             val finalSession = cameraRecorder.stopSession()
             assertNotNull("[DEBUG_LOG] Failed to stop RGB recording session", finalSession)
 
-            // Verify files were created
             val sessionDir = File(baseDir, finalSession?.sessionId ?: "unknown")
             if (sessionDir.exists()) {
                 val files = sessionDir.listFiles()
@@ -350,11 +290,10 @@ class ComprehensiveCameraAccessTest {
                 }
             }
 
-            // Test IR camera file writing (if available)
             println("[DEBUG_LOG] Testing IR camera file writing...")
 
             val thermalInitResult = thermalRecorder.initialize()
-            delay(10000) // Wait for device detection
+            delay(10000)
 
             val thermalStatus = thermalRecorder.getThermalCameraStatus()
             if (thermalStatus.isAvailable) {
@@ -364,13 +303,11 @@ class ComprehensiveCameraAccessTest {
                 val recordingResult = thermalRecorder.startRecording(thermalSessionId)
 
                 if (recordingResult) {
-                    // Record for 5 seconds
                     delay(5000)
 
                     val stopResult = thermalRecorder.stopRecording()
                     assertTrue("[DEBUG_LOG] Failed to stop IR recording", stopResult)
 
-                    // Check for thermal recording files
                     val thermalDir = File(baseDir, thermalSessionId)
                     if (thermalDir.exists()) {
                         val thermalFiles = thermalDir.listFiles()
@@ -388,46 +325,36 @@ class ComprehensiveCameraAccessTest {
             println("[DEBUG_LOG] File writing functionality verification completed")
         }
 
-    /**
-     * Test 5: Concurrent Camera Access Test
-     * Test simultaneous RGB and IR camera access and recording
-     */
     @Test
     fun test5_concurrentCameraAccessTest() =
         runBlocking {
             println("[DEBUG_LOG] Starting concurrent camera access test...")
 
-            // Initialize both cameras
             val rgbInitResult = cameraRecorder.initialize(textureView)
             assertTrue("[DEBUG_LOG] RGB camera initialization failed", rgbInitResult)
 
             val thermalInitResult = thermalRecorder.initialize()
-            delay(10000) // Wait for thermal camera detection
+            delay(10000)
 
             val thermalStatus = thermalRecorder.getThermalCameraStatus()
 
             if (thermalStatus.isAvailable) {
                 println("[DEBUG_LOG] Both cameras available, testing concurrent access...")
 
-                // Wait for RGB surface
                 delay(2000)
 
-                // Start RGB recording
                 val rgbSessionId = "concurrent_rgb_${System.currentTimeMillis()}"
                 currentSession = cameraRecorder.startSession(recordVideo = true, captureRaw = false)
                 assertNotNull("[DEBUG_LOG] Failed to start RGB session", currentSession)
 
-                // Start thermal recording
                 val thermalSessionId = "concurrent_thermal_${System.currentTimeMillis()}"
                 val thermalRecordingResult = thermalRecorder.startRecording(thermalSessionId)
                 assertTrue("[DEBUG_LOG] Failed to start thermal recording", thermalRecordingResult)
 
                 println("[DEBUG_LOG] Both cameras recording concurrently...")
 
-                // Record for 5 seconds
                 delay(5000)
 
-                // Stop both recordings
                 val rgbFinalSession = cameraRecorder.stopSession()
                 val thermalStopResult = thermalRecorder.stopRecording()
 
@@ -442,7 +369,6 @@ class ComprehensiveCameraAccessTest {
             } else {
                 println("[DEBUG_LOG] IR camera not available, testing RGB only...")
 
-                // Test RGB camera alone
                 delay(2000)
                 currentSession = cameraRecorder.startSession(recordVideo = true, captureRaw = true)
                 assertNotNull("[DEBUG_LOG] Failed to start RGB-only session", currentSession)
@@ -456,17 +382,12 @@ class ComprehensiveCameraAccessTest {
             }
         }
 
-    /**
-     * Test 6: Device-Specific Hardware Verification
-     * Verify device capabilities and hardware features
-     */
     @Test
     fun test6_deviceSpecificHardwareVerification() {
         println("[DEBUG_LOG] Starting device-specific hardware verification...")
 
         val packageManager = context.packageManager
 
-        // Check camera hardware features
         val hasCamera = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
         val hasCameraFront = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)
         val hasCameraFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
@@ -480,12 +401,10 @@ class ComprehensiveCameraAccessTest {
 
         assertTrue("[DEBUG_LOG] Device does not have camera hardware", hasCamera)
 
-        // Check USB host support
         val hasUsbHost = packageManager.hasSystemFeature(PackageManager.FEATURE_USB_HOST)
         println("[DEBUG_LOG] - USB Host: $hasUsbHost")
         assertTrue("[DEBUG_LOG] Device does not support USB host mode", hasUsbHost)
 
-        // Check storage capabilities
         val externalFilesDir = context.getExternalFilesDir(null)
         val internalFilesDir = context.filesDir
 
@@ -494,7 +413,6 @@ class ComprehensiveCameraAccessTest {
         println("[DEBUG_LOG] - Internal files dir: ${internalFilesDir.absolutePath}")
         println("[DEBUG_LOG] - External storage available: ${externalFilesDir != null}")
 
-        // Verify storage is writable
         if (externalFilesDir != null) {
             val testFile = File(externalFilesDir, "test_write.tmp")
             try {

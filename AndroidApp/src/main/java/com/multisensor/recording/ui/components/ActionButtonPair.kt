@@ -6,16 +6,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 
-/**
- * Reusable action button pair component that consolidates redundant UI patterns.
- * Displays two buttons side by side with consistent styling.
- * 
- * Replaces multiple instances of button pairs used for:
- * - Start/Stop recording buttons
- * - Connect/Disconnect buttons  
- * - Reset/Save configuration buttons
- * - Other action pairs throughout the app
- */
 class ActionButtonPair @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -26,50 +16,45 @@ class ActionButtonPair @JvmOverloads constructor(
     private val rightButton: Button
 
     enum class ButtonStyle {
-        PRIMARY,    // Green background
-        SECONDARY,  // Red background  
-        NEUTRAL,    // Gray background
-        WARNING     // Orange background
+        PRIMARY,
+        SECONDARY,
+        NEUTRAL,
+        WARNING
     }
 
     init {
         orientation = HORIZONTAL
-        
-        // Create left button
+
         leftButton = Button(context).apply {
             layoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f).apply {
-                marginEnd = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6 // 8dp
+                marginEnd = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6
             }
             setTextColor(ContextCompat.getColor(context, android.R.color.white))
             setPadding(
-                resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4, // 12dp
+                resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4
             )
         }
-        
-        // Create right button
+
         rightButton = Button(context).apply {
             layoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f).apply {
-                marginStart = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6 // 8dp
+                marginStart = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6
             }
             setTextColor(ContextCompat.getColor(context, android.R.color.white))
             setPadding(
-                resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4, // 12dp
+                resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4
             )
         }
-        
+
         addView(leftButton)
         addView(rightButton)
     }
 
-    /**
-     * Configure the button pair with text and styles
-     */
     fun setButtons(
         leftText: String,
         rightText: String,
@@ -78,14 +63,11 @@ class ActionButtonPair @JvmOverloads constructor(
     ) {
         leftButton.text = leftText
         rightButton.text = rightText
-        
+
         leftButton.backgroundTintList = ContextCompat.getColorStateList(context, getColorForStyle(leftStyle))
         rightButton.backgroundTintList = ContextCompat.getColorStateList(context, getColorForStyle(rightStyle))
     }
 
-    /**
-     * Set click listeners for the buttons
-     */
     fun setOnClickListeners(
         leftClickListener: OnClickListener?,
         rightClickListener: OnClickListener?
@@ -94,17 +76,11 @@ class ActionButtonPair @JvmOverloads constructor(
         rightButton.setOnClickListener(rightClickListener)
     }
 
-    /**
-     * Enable/disable buttons
-     */
     fun setButtonsEnabled(leftEnabled: Boolean, rightEnabled: Boolean) {
         leftButton.isEnabled = leftEnabled
         rightButton.isEnabled = rightEnabled
     }
 
-    /**
-     * Get references to individual buttons for advanced customization
-     */
     fun getLeftButton(): Button = leftButton
     fun getRightButton(): Button = rightButton
 

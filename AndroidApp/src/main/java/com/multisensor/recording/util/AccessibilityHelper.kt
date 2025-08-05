@@ -11,10 +11,6 @@ import androidx.core.view.accessibility.AccessibilityViewCommand
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Accessibility helper for improved app usability for users with disabilities.
- * Provides enhanced accessibility features for the multi-sensor recording app.
- */
 @Singleton
 class AccessibilityHelper @Inject constructor(
     private val context: Context
@@ -22,21 +18,12 @@ class AccessibilityHelper @Inject constructor(
 
     private val accessibilityManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
 
-    /**
-     * Check if accessibility services are enabled
-     */
     val isAccessibilityEnabled: Boolean
         get() = accessibilityManager.isEnabled
 
-    /**
-     * Check if touch exploration is enabled (TalkBack)
-     */
     val isTouchExplorationEnabled: Boolean
         get() = accessibilityManager.isTouchExplorationEnabled
 
-    /**
-     * Set up accessibility for recording status indicators
-     */
     fun setupRecordingStatusAccessibility(
         view: View,
         isRecording: Boolean,
@@ -70,13 +57,9 @@ class AccessibilityHelper @Inject constructor(
             }
         })
 
-        // Announce status changes
         announceForAccessibility(view, statusText)
     }
 
-    /**
-     * Set up accessibility for connection status indicators
-     */
     fun setupConnectionStatusAccessibility(
         view: View,
         deviceName: String,
@@ -86,7 +69,7 @@ class AccessibilityHelper @Inject constructor(
         val statusText = buildString {
             append(deviceName)
             append(if (isConnected) " connected" else " disconnected")
-            
+
             signalStrength?.let { strength ->
                 append(". Signal strength: ")
                 append(when {
@@ -100,8 +83,7 @@ class AccessibilityHelper @Inject constructor(
         }
 
         view.contentDescription = statusText
-        
-        // Set up role information
+
         ViewCompat.setAccessibilityDelegate(view, object : androidx.core.view.AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(
                 host: View,
@@ -110,7 +92,7 @@ class AccessibilityHelper @Inject constructor(
                 super.onInitializeAccessibilityNodeInfo(host, info)
                 info.contentDescription = statusText
                 info.roleDescription = "Device status indicator"
-                
+
                 if (isConnected) {
                     info.addAction(
                         AccessibilityNodeInfoCompat.AccessibilityActionCompat(
@@ -123,9 +105,6 @@ class AccessibilityHelper @Inject constructor(
         })
     }
 
-    /**
-     * Set up accessibility for battery status
-     */
     fun setupBatteryStatusAccessibility(
         view: View,
         batteryLevel: Int,
@@ -148,7 +127,7 @@ class AccessibilityHelper @Inject constructor(
         }
 
         view.contentDescription = statusText
-        
+
         ViewCompat.setAccessibilityDelegate(view, object : androidx.core.view.AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(
                 host: View,
@@ -161,9 +140,6 @@ class AccessibilityHelper @Inject constructor(
         })
     }
 
-    /**
-     * Set up accessibility for camera preview
-     */
     fun setupCameraPreviewAccessibility(
         view: View,
         isActive: Boolean,
@@ -176,7 +152,7 @@ class AccessibilityHelper @Inject constructor(
         }
 
         view.contentDescription = statusText
-        
+
         ViewCompat.setAccessibilityDelegate(view, object : androidx.core.view.AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(
                 host: View,
@@ -185,7 +161,7 @@ class AccessibilityHelper @Inject constructor(
                 super.onInitializeAccessibilityNodeInfo(host, info)
                 info.contentDescription = statusText
                 info.roleDescription = "Camera preview"
-                
+
                 if (isActive) {
                     info.addAction(
                         AccessibilityNodeInfoCompat.AccessibilityActionCompat(
@@ -198,9 +174,6 @@ class AccessibilityHelper @Inject constructor(
         })
     }
 
-    /**
-     * Set up accessibility for control buttons with enhanced descriptions
-     */
     fun setupControlButtonAccessibility(
         view: View,
         actionDescription: String,
@@ -218,7 +191,7 @@ class AccessibilityHelper @Inject constructor(
         }
 
         view.contentDescription = statusText
-        
+
         ViewCompat.setAccessibilityDelegate(view, object : androidx.core.view.AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(
                 host: View,
@@ -227,7 +200,7 @@ class AccessibilityHelper @Inject constructor(
                 super.onInitializeAccessibilityNodeInfo(host, info)
                 info.contentDescription = statusText
                 info.isEnabled = isEnabled
-                
+
                 if (isEnabled) {
                     info.addAction(
                         AccessibilityNodeInfoCompat.AccessibilityActionCompat(
@@ -240,18 +213,12 @@ class AccessibilityHelper @Inject constructor(
         })
     }
 
-    /**
-     * Announce important status changes to accessibility services
-     */
     fun announceForAccessibility(view: View, message: String) {
         if (isAccessibilityEnabled) {
             view.announceForAccessibility(message)
         }
     }
 
-    /**
-     * Send accessibility event for important state changes
-     */
     fun sendAccessibilityEvent(view: View, eventType: Int, message: String) {
         if (isAccessibilityEnabled) {
             val event = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -266,51 +233,34 @@ class AccessibilityHelper @Inject constructor(
         }
     }
 
-    /**
-     * Announce recording state changes
-     */
     fun announceRecordingStateChange(view: View, isRecording: Boolean, sessionId: String? = null) {
         val message = if (isRecording) {
             "Recording started" + (sessionId?.let { " for session ${it.take(8)}" } ?: "")
         } else {
             "Recording stopped"
         }
-        
+
         announceForAccessibility(view, message)
         sendAccessibilityEvent(view, AccessibilityEvent.TYPE_ANNOUNCEMENT, message)
     }
 
-    /**
-     * Announce device connection changes
-     */
     fun announceConnectionChange(view: View, deviceName: String, isConnected: Boolean) {
         val message = "$deviceName ${if (isConnected) "connected" else "disconnected"}"
         announceForAccessibility(view, message)
         sendAccessibilityEvent(view, AccessibilityEvent.TYPE_ANNOUNCEMENT, message)
     }
 
-    /**
-     * Announce system errors with context
-     */
     fun announceError(view: View, errorMessage: String) {
         val message = "Error: $errorMessage"
         announceForAccessibility(view, message)
         sendAccessibilityEvent(view, AccessibilityEvent.TYPE_ANNOUNCEMENT, message)
     }
 
-    /**
-     * Set up accessibility live region for dynamic content
-     */
     fun setupLiveRegion(view: View, mode: Int = ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE) {
-        // ViewCompat.setAccessibilityLiveRegion is the appropriate method to use
-        // even if marked as deprecated, it's still the recommended approach
         @Suppress("DEPRECATION")
         ViewCompat.setAccessibilityLiveRegion(view, mode)
     }
 
-    /**
-     * Add accessibility hints for complex interactions
-     */
     fun addAccessibilityHint(view: View, hint: String) {
         ViewCompat.setAccessibilityDelegate(view, object : androidx.core.view.AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(
@@ -323,9 +273,6 @@ class AccessibilityHelper @Inject constructor(
         })
     }
 
-    /**
-     * Set up accessibility for progress indicators
-     */
     fun setupProgressAccessibility(
         view: View,
         progressType: String,
@@ -333,7 +280,7 @@ class AccessibilityHelper @Inject constructor(
         maxValue: Int = 100
     ) {
         val statusText = "$progressType: $currentValue of $maxValue"
-        
+
         ViewCompat.setAccessibilityDelegate(view, object : androidx.core.view.AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(
                 host: View,
@@ -354,9 +301,6 @@ class AccessibilityHelper @Inject constructor(
         })
     }
 
-    /**
-     * Check if user prefers reduced animations (for accessibility)
-     */
     fun shouldReduceAnimations(): Boolean {
         return try {
             val scale = android.provider.Settings.Global.getFloat(
@@ -370,22 +314,15 @@ class AccessibilityHelper @Inject constructor(
         }
     }
 
-    /**
-     * Get recommended timeout for accessibility interactions
-     */
     fun getAccessibilityTimeout(): Long {
         return if (isTouchExplorationEnabled) {
-            // Longer timeout for users with accessibility services
-            10000L // 10 seconds
+            10000L
         } else {
-            5000L // 5 seconds
+            5000L
         }
     }
 }
 
-/**
- * Extension functions for common accessibility operations
- */
 fun View.setAccessibilityDescription(description: String) {
     this.contentDescription = description
 }

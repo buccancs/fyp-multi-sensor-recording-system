@@ -1,5 +1,5 @@
-# Codecov Configuration
-# Enhanced coverage reporting configuration for multi-language project
+
+
 
 coverage:
   precision: 2

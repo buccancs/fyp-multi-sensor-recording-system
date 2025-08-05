@@ -13,16 +13,6 @@ import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityCalibrationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * Calibration Activity - Comprehensive Calibration Interface
- * 
- * Provides calibration interfaces for:
- * - Camera calibration (stereo and intrinsic)
- * - Thermal camera calibration 
- * - Shimmer device calibration
- * - System validation and diagnostics
- * - Calibration data management
- */
 @AndroidEntryPoint
 class CalibrationActivity : AppCompatActivity() {
 
@@ -32,10 +22,10 @@ class CalibrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityCalibrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         try {
             viewModel = ViewModelProvider(this)[CalibrationViewModel::class.java]
         } catch (e: Exception) {
@@ -48,7 +38,6 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Setup toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -56,7 +45,7 @@ class CalibrationActivity : AppCompatActivity() {
             title = "System Calibration"
             subtitle = "Configure and validate sensors"
         }
-        
+
         setupCameraCalibration()
         setupThermalCalibration()
         setupShimmerCalibration()
@@ -64,7 +53,6 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun setupCameraCalibration() {
-        // Start camera calibration
         binding.calibrateCameraButton.setOnClickListener {
             try {
                 viewModel.startCameraCalibration()
@@ -73,8 +61,7 @@ class CalibrationActivity : AppCompatActivity() {
                 showError("Camera calibration failed: ${e.message}")
             }
         }
-        
-        // Reset camera calibration
+
         binding.resetCameraCalibrationButton.setOnClickListener {
             try {
                 viewModel.resetCameraCalibration()
@@ -86,7 +73,6 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun setupThermalCalibration() {
-        // Start thermal calibration
         binding.calibrateThermalButton.setOnClickListener {
             try {
                 viewModel.startThermalCalibration()
@@ -95,8 +81,7 @@ class CalibrationActivity : AppCompatActivity() {
                 showError("Thermal calibration failed: ${e.message}")
             }
         }
-        
-        // Reset thermal calibration
+
         binding.resetThermalCalibrationButton.setOnClickListener {
             try {
                 viewModel.resetThermalCalibration()
@@ -108,7 +93,6 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun setupShimmerCalibration() {
-        // Start Shimmer calibration
         binding.calibrateShimmerButton.setOnClickListener {
             try {
                 viewModel.startShimmerCalibration()
@@ -117,8 +101,7 @@ class CalibrationActivity : AppCompatActivity() {
                 showError("Shimmer calibration failed: ${e.message}")
             }
         }
-        
-        // Reset Shimmer calibration
+
         binding.resetShimmerCalibrationButton.setOnClickListener {
             try {
                 viewModel.resetShimmerCalibration()
@@ -130,7 +113,6 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun setupCalibrationData() {
-        // Save calibration data
         binding.saveCalibrationButton.setOnClickListener {
             try {
                 viewModel.saveCalibrationData()
@@ -139,8 +121,7 @@ class CalibrationActivity : AppCompatActivity() {
                 showError("Save failed: ${e.message}")
             }
         }
-        
-        // Load calibration data
+
         binding.loadCalibrationButton.setOnClickListener {
             try {
                 viewModel.loadCalibrationData()
@@ -149,8 +130,7 @@ class CalibrationActivity : AppCompatActivity() {
                 showError("Load failed: ${e.message}")
             }
         }
-        
-        // Export calibration data
+
         binding.exportCalibrationButton.setOnClickListener {
             try {
                 viewModel.exportCalibrationData()
@@ -159,8 +139,7 @@ class CalibrationActivity : AppCompatActivity() {
                 showError("Export failed: ${e.message}")
             }
         }
-        
-        // Run system validation
+
         binding.validateSystemButton.setOnClickListener {
             try {
                 viewModel.validateSystem()
@@ -186,19 +165,14 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun updateUI(uiState: CalibrationUiState) {
-        // Update camera calibration status
         updateCameraCalibrationStatus(uiState)
-        
-        // Update thermal calibration status  
+
         updateThermalCalibrationStatus(uiState)
-        
-        // Update Shimmer calibration status
+
         updateShimmerCalibrationStatus(uiState)
-        
-        // Update progress indicators
+
         updateProgressIndicators(uiState)
-        
-        // Update calibration data status
+
         updateCalibrationDataStatus(uiState)
     }
 
@@ -208,11 +182,10 @@ class CalibrationActivity : AppCompatActivity() {
             uiState.isCameraCalibrated -> "✓ Calibrated"
             else -> "Not calibrated"
         }
-        
+
         binding.calibrateCameraButton.isEnabled = !uiState.isCameraCalibrating && uiState.canStartCalibration
         binding.resetCameraCalibrationButton.isEnabled = uiState.isCameraCalibrated
-        
-        // Update camera calibration details
+
         if (uiState.isCameraCalibrated) {
             binding.cameraCalibrationDetails.text = buildString {
                 appendLine("Intrinsic Parameters: ✓")
@@ -233,11 +206,10 @@ class CalibrationActivity : AppCompatActivity() {
             uiState.isThermalCalibrated -> "✓ Calibrated"
             else -> "Not calibrated"
         }
-        
+
         binding.calibrateThermalButton.isEnabled = !uiState.isThermalCalibrating && uiState.canStartCalibration
         binding.resetThermalCalibrationButton.isEnabled = uiState.isThermalCalibrated
-        
-        // Update thermal calibration details
+
         if (uiState.isThermalCalibrated) {
             binding.thermalCalibrationDetails.text = buildString {
                 appendLine("Temperature Range: ${uiState.thermalTempRange}")
@@ -256,11 +228,10 @@ class CalibrationActivity : AppCompatActivity() {
             uiState.isShimmerCalibrated -> "✓ Calibrated"
             else -> "Not calibrated"
         }
-        
+
         binding.calibrateShimmerButton.isEnabled = !uiState.isShimmerCalibrating && uiState.canStartCalibration
         binding.resetShimmerCalibrationButton.isEnabled = uiState.isShimmerCalibrated
-        
-        // Update Shimmer calibration details
+
         if (uiState.isShimmerCalibrated) {
             binding.shimmerCalibrationDetails.text = buildString {
                 appendLine("Device MAC: ${uiState.shimmerMacAddress}")
@@ -274,42 +245,37 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     private fun updateProgressIndicators(uiState: CalibrationUiState) {
-        // Overall calibration progress
         val overallProgress = listOf(
             if (uiState.isCameraCalibrated) 1 else 0,
             if (uiState.isThermalCalibrated) 1 else 0,
             if (uiState.isShimmerCalibrated) 1 else 0
         ).sum() * 100 / 3
-        
+
         binding.overallProgressBar.progress = overallProgress
         binding.overallProgressText.text = "Overall Progress: $overallProgress%"
-        
-        // Individual progress bars
+
         binding.cameraProgressBar.progress = if (uiState.isCameraCalibrating) uiState.cameraCalibrationProgress else if (uiState.isCameraCalibrated) 100 else 0
         binding.thermalProgressBar.progress = if (uiState.isThermalCalibrating) uiState.thermalCalibrationProgress else if (uiState.isThermalCalibrated) 100 else 0
         binding.shimmerProgressBar.progress = if (uiState.isShimmerCalibrating) uiState.shimmerCalibrationProgress else if (uiState.isShimmerCalibrated) 100 else 0
     }
 
     private fun updateCalibrationDataStatus(uiState: CalibrationUiState) {
-        // Enable/disable data management buttons
         val hasCalibrationData = uiState.isCameraCalibrated || uiState.isThermalCalibrated || uiState.isShimmerCalibrated
-        
+
         val isAnyCalibrating = uiState.isCameraCalibrating || uiState.isThermalCalibrating || uiState.isShimmerCalibrating
-        
+
         binding.saveCalibrationButton.isEnabled = hasCalibrationData && !isAnyCalibrating
         binding.exportCalibrationButton.isEnabled = hasCalibrationData && !isAnyCalibrating
         binding.loadCalibrationButton.isEnabled = !isAnyCalibrating
         binding.validateSystemButton.isEnabled = hasCalibrationData && !isAnyCalibrating && !uiState.isValidating
-        
-        // Update validation status
+
         binding.validationStatus.text = when {
             uiState.isValidating -> "Validating system..."
             uiState.isSystemValid -> "✓ System validation passed"
             uiState.validationErrors.isNotEmpty() -> "⚠ Validation issues found"
             else -> "System not validated"
         }
-        
-        // Show validation errors if any
+
         if (uiState.validationErrors.isNotEmpty()) {
             binding.validationDetails.text = "Issues:\n${uiState.validationErrors.joinToString("\n• ", "• ")}"
         } else {

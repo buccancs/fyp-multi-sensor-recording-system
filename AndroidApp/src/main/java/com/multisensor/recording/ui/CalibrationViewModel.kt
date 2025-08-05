@@ -9,25 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-/**
- * Calibration UI State
- * 
- * Represents the current state of system calibration including:
- * - Camera calibration status and progress
- * - Thermal calibration status and progress  
- * - Shimmer calibration status and progress
- * - System validation results
- * - Calibration data management status
- */
 data class CalibrationUiState(
-    // Camera Calibration
     val isCameraCalibrated: Boolean = false,
     val isCameraCalibrating: Boolean = false,
     val cameraCalibrationProgress: Int = 0,
     val cameraCalibrationError: Double = 0.0,
     val cameraCalibrationDate: String = "",
-    
-    // Thermal Calibration
+
     val isThermalCalibrated: Boolean = false,
     val isThermalCalibrating: Boolean = false,
     val thermalCalibrationProgress: Int = 0,
@@ -35,8 +23,7 @@ data class CalibrationUiState(
     val thermalEmissivity: String = "",
     val thermalColorPalette: String = "",
     val thermalCalibrationDate: String = "",
-    
-    // Shimmer Calibration
+
     val isShimmerCalibrated: Boolean = false,
     val isShimmerCalibrating: Boolean = false,
     val shimmerCalibrationProgress: Int = 0,
@@ -44,24 +31,16 @@ data class CalibrationUiState(
     val shimmerSensorConfig: String = "",
     val shimmerSamplingRate: String = "",
     val shimmerCalibrationDate: String = "",
-    
-    // System Validation
+
     val isValidating: Boolean = false,
     val isSystemValid: Boolean = false,
     val validationErrors: List<String> = emptyList(),
-    
-    // General Status
+
     val canStartCalibration: Boolean = true
 ) {
     val isAnyCalibrating get() = isCameraCalibrating || isThermalCalibrating || isShimmerCalibrating || isValidating
 }
 
-/**
- * Calibration ViewModel
- * 
- * Manages calibration operations for all sensors and system validation.
- * Provides reactive UI state updates and handles calibration workflows.
- */
 @HiltViewModel
 class CalibrationViewModel @Inject constructor() : ViewModel() {
 
@@ -69,53 +48,36 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<CalibrationUiState> = _uiState.asStateFlow()
 
     init {
-        // Initialize with current calibration status
         loadCalibrationStatus()
     }
 
-    /**
-     * Start camera calibration process
-     */
     fun startCameraCalibration() {
         _uiState.value = _uiState.value.copy(
             isCameraCalibrating = true,
             cameraCalibrationProgress = 0
         )
-        
-        // Simulate calibration process
-        // In real implementation, this would interface with camera calibration service
+
         simulateCameraCalibration()
     }
 
-    /**
-     * Start thermal camera calibration process
-     */
     fun startThermalCalibration() {
         _uiState.value = _uiState.value.copy(
             isThermalCalibrating = true,
             thermalCalibrationProgress = 0
         )
-        
-        // Simulate calibration process
+
         simulateThermalCalibration()
     }
 
-    /**
-     * Start Shimmer device calibration process
-     */
     fun startShimmerCalibration() {
         _uiState.value = _uiState.value.copy(
             isShimmerCalibrating = true,
             shimmerCalibrationProgress = 0
         )
-        
-        // Simulate calibration process
+
         simulateShimmerCalibration()
     }
 
-    /**
-     * Reset camera calibration data
-     */
     fun resetCameraCalibration() {
         _uiState.value = _uiState.value.copy(
             isCameraCalibrated = false,
@@ -124,9 +86,6 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Reset thermal calibration data
-     */
     fun resetThermalCalibration() {
         _uiState.value = _uiState.value.copy(
             isThermalCalibrated = false,
@@ -137,9 +96,6 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Reset Shimmer calibration data
-     */
     fun resetShimmerCalibration() {
         _uiState.value = _uiState.value.copy(
             isShimmerCalibrated = false,
@@ -150,47 +106,29 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    /**
-     * Save calibration data to persistent storage
-     */
     fun saveCalibrationData() {
-        // In real implementation, this would save to SharedPreferences or database
         android.util.Log.i("CalibrationVM", "Saving calibration data...")
     }
 
-    /**
-     * Load calibration data from persistent storage
-     */
     fun loadCalibrationData() {
-        // In real implementation, this would load from SharedPreferences or database
         android.util.Log.i("CalibrationVM", "Loading calibration data...")
         loadCalibrationStatus()
     }
 
-    /**
-     * Export calibration data to external file
-     */
     fun exportCalibrationData() {
-        // In real implementation, this would export to JSON/XML file
         android.util.Log.i("CalibrationVM", "Exporting calibration data...")
     }
 
-    /**
-     * Validate entire system with current calibration
-     */
     fun validateSystem() {
         _uiState.value = _uiState.value.copy(
             isValidating = true,
             validationErrors = emptyList()
         )
-        
-        // Simulate validation process
+
         simulateSystemValidation()
     }
 
     private fun loadCalibrationStatus() {
-        // In real implementation, load from persistent storage
-        // For demo purposes, simulate some calibration data
         _uiState.value = _uiState.value.copy(
             isCameraCalibrated = false,
             isThermalCalibrated = false,
@@ -200,7 +138,6 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun simulateCameraCalibration() {
-        // Simulate calibration progress
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             for (progress in 0..100 step 10) {
                 kotlinx.coroutines.delay(200)
@@ -208,8 +145,7 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
                     cameraCalibrationProgress = progress
                 )
             }
-            
-            // Complete calibration
+
             _uiState.value = _uiState.value.copy(
                 isCameraCalibrating = false,
                 isCameraCalibrated = true,
@@ -222,7 +158,6 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun simulateThermalCalibration() {
-        // Simulate calibration progress
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             for (progress in 0..100 step 15) {
                 kotlinx.coroutines.delay(150)
@@ -230,8 +165,7 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
                     thermalCalibrationProgress = progress
                 )
             }
-            
-            // Complete calibration
+
             _uiState.value = _uiState.value.copy(
                 isThermalCalibrating = false,
                 isThermalCalibrated = true,
@@ -246,7 +180,6 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun simulateShimmerCalibration() {
-        // Simulate calibration progress
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             for (progress in 0..100 step 20) {
                 kotlinx.coroutines.delay(100)
@@ -254,8 +187,7 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
                     shimmerCalibrationProgress = progress
                 )
             }
-            
-            // Complete calibration
+
             _uiState.value = _uiState.value.copy(
                 isShimmerCalibrating = false,
                 isShimmerCalibrated = true,
@@ -270,24 +202,22 @@ class CalibrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun simulateSystemValidation() {
-        // Simulate validation process
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             kotlinx.coroutines.delay(2000)
-            
+
             val errors = mutableListOf<String>()
             val currentState = _uiState.value
-            
-            // Check if all components are calibrated
+
             if (!currentState.isCameraCalibrated) {
                 errors.add("Camera not calibrated")
             }
             if (!currentState.isThermalCalibrated) {
-                errors.add("Thermal camera not calibrated") 
+                errors.add("Thermal camera not calibrated")
             }
             if (!currentState.isShimmerCalibrated) {
                 errors.add("Shimmer device not calibrated")
             }
-            
+
             _uiState.value = _uiState.value.copy(
                 isValidating = false,
                 isSystemValid = errors.isEmpty(),

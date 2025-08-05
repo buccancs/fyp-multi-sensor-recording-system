@@ -13,12 +13,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
-/**
- * ViewModel for FileViewActivity that manages UI state and coordinates
- * file browsing, session management, and file operations.
- * 
- * Follows MVVM pattern with centralized StateFlow-based UI state management.
- */
 @HiltViewModel
 class FileViewViewModel @Inject constructor(
     private val sessionManager: SessionManager,
@@ -33,16 +27,10 @@ class FileViewViewModel @Inject constructor(
         loadInitialData()
     }
 
-    /**
-     * Load initial data when ViewModel is created
-     */
     fun loadInitialData() {
         loadSessions()
     }
 
-    /**
-     * Load all recording sessions
-     */
     fun loadSessions() {
         viewModelScope.launch {
             try {
@@ -54,7 +42,7 @@ class FileViewViewModel @Inject constructor(
                 val sessionItems = sessionInfos.map { sessionInfo ->
                     convertToSessionItem(sessionInfo)
                 }
-                
+
                 logger.info("Loaded ${sessionItems.size} sessions")
 
                 updateUiState { currentState ->
@@ -77,9 +65,6 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Convert SessionInfo to SessionItem
-     */
     private fun convertToSessionItem(sessionInfo: SessionInfo): SessionItem {
         val deviceTypes = mutableListOf<String>()
         if (sessionInfo.videoEnabled) deviceTypes.add("camera")
@@ -98,7 +83,7 @@ class FileViewViewModel @Inject constructor(
 
         return SessionItem(
             sessionId = sessionInfo.sessionId,
-            name = sessionInfo.sessionId, // Use sessionId as name for now
+            name = sessionInfo.sessionId,
             startTime = sessionInfo.startTime,
             endTime = sessionInfo.endTime,
             duration = sessionInfo.getDurationMs(),
@@ -109,40 +94,31 @@ class FileViewViewModel @Inject constructor(
         )
     }
 
-    /**
-     * Calculate total size of session files
-     */
     private fun calculateSessionSize(sessionInfo: SessionInfo): Long {
         var totalSize = 0L
-        
+
         sessionInfo.videoFilePath?.let { path ->
             val file = File(path)
             if (file.exists()) totalSize += file.length()
         }
-        
+
         sessionInfo.thermalFilePath?.let { path ->
             val file = File(path)
             if (file.exists()) totalSize += file.length()
         }
-        
+
         sessionInfo.rawFilePaths.forEach { path ->
             val file = File(path)
             if (file.exists()) totalSize += file.length()
         }
-        
+
         return totalSize
     }
 
-    /**
-     * Refresh sessions list
-     */
     fun refreshSessions() {
         loadSessions()
     }
 
-    /**
-     * Select a session by index and load its files
-     */
     fun selectSession(sessionItem: SessionItem) {
         val sessionIndex = _uiState.value.sessions.indexOf(sessionItem)
         if (sessionIndex >= 0) {
@@ -153,9 +129,6 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Load files for the selected session
-     */
     private fun loadSessionFiles(sessionItem: SessionItem) {
         viewModelScope.launch {
             try {
@@ -163,10 +136,9 @@ class FileViewViewModel @Inject constructor(
                     currentState.copy(isLoadingFiles = true)
                 }
 
-                // Find the original SessionInfo to get file paths
                 val sessionInfos = sessionManager.getAllSessions()
                 val sessionInfo = sessionInfos.find { it.sessionId == sessionItem.sessionId }
-                
+
                 if (sessionInfo == null) {
                     updateUiState { currentState ->
                         currentState.copy(
@@ -178,8 +150,7 @@ class FileViewViewModel @Inject constructor(
                 }
 
                 val files = mutableListOf<FileItem>()
-                
-                // Add video file if exists
+
                 sessionInfo.videoFilePath?.let { videoPath ->
                     val videoFile = File(videoPath)
                     if (videoFile.exists()) {
@@ -193,8 +164,7 @@ class FileViewViewModel @Inject constructor(
                         )
                     }
                 }
-                
-                // Add thermal file if exists
+
                 sessionInfo.thermalFilePath?.let { thermalPath ->
                     val thermalFile = File(thermalPath)
                     if (thermalFile.exists()) {
@@ -208,8 +178,7 @@ class FileViewViewModel @Inject constructor(
                         )
                     }
                 }
-                
-                // Add RAW files
+
                 sessionInfo.rawFilePaths.forEach { rawPath ->
                     val rawFile = File(rawPath)
                     if (rawFile.exists()) {
@@ -246,9 +215,6 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Filter sessions based on search query
-     */
     fun onSearchQueryChanged(query: String) {
         val currentState = _uiState.value
         val filteredSessions = if (query.isBlank()) {
@@ -270,15 +236,12 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Apply filter to sessions
-     */
     fun applyFilter(filterIndex: Int) {
         val currentState = _uiState.value
         val filteredSessions = when (filterIndex) {
-            0 -> currentState.sessions // All sessions
-            1 -> currentState.sessions.filter { it.duration > 0 } // Sessions with recordings
-            2 -> currentState.sessions.sortedByDescending { it.startTime } // Recent first
+            0 -> currentState.sessions
+            1 -> currentState.sessions.filter { it.duration > 0 }
+            2 -> currentState.sessions.sortedByDescending { it.startTime }
             else -> currentState.sessions
         }
 
@@ -290,20 +253,16 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Delete a specific file
-     */
     fun deleteFile(fileItem: FileItem) {
         viewModelScope.launch {
             try {
                 if (fileItem.file.exists() && fileItem.file.delete()) {
                     logger.info("Deleted file: ${fileItem.file.name}")
-                    
-                    // Refresh the current session's files
+
                     _uiState.value.selectedSession?.let { session ->
                         loadSessionFiles(session)
                     }
-                    
+
                     updateUiState { currentState ->
                         currentState.copy(successMessage = "File deleted successfully")
                     }
@@ -321,9 +280,6 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Delete all sessions
-     */
     fun deleteAllSessions() {
         viewModelScope.launch {
             try {
@@ -357,27 +313,18 @@ class FileViewViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Clear error message
-     */
     fun clearError() {
         updateUiState { currentState ->
             currentState.copy(errorMessage = null)
         }
     }
 
-    /**
-     * Clear success message
-     */
     fun clearSuccess() {
         updateUiState { currentState ->
             currentState.copy(successMessage = null)
         }
     }
 
-    /**
-     * Thread-safe state update helper
-     */
     private fun updateUiState(update: (FileViewUiState) -> FileViewUiState) {
         _uiState.value = update(_uiState.value)
     }

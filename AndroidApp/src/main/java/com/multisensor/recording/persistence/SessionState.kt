@@ -5,13 +5,6 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 
-/**
- * Phase 3: State Persistence System
- * SessionState entity for Room database persistence
- *
- * Implements the Phase 3 requirement for session state persistence
- * to enable crash recovery and session restoration capabilities.
- */
 @Entity(tableName = "session_state")
 @TypeConverters(DeviceStateListConverter::class)
 data class SessionState(
@@ -29,9 +22,6 @@ data class SessionState(
     val errorMessage: String? = null
 )
 
-/**
- * Recording state enumeration
- */
 enum class RecordingState {
     IDLE,
     STARTING,
@@ -41,9 +31,6 @@ enum class RecordingState {
     FAILED
 }
 
-/**
- * Device state data class
- */
 data class DeviceState(
     val deviceId: String,
     val deviceType: String,
@@ -52,13 +39,9 @@ data class DeviceState(
     val status: String = "unknown"
 )
 
-/**
- * Type converter for List<DeviceState> to store in Room database
- */
 class DeviceStateListConverter {
     @TypeConverter
     fun fromDeviceStateList(value: List<DeviceState>): String {
-        // Simple JSON serialization - in production could use Moshi or Gson
         return value.joinToString("|") { "${it.deviceId},${it.deviceType},${it.connected},${it.batteryLevel},${it.status}" }
     }
 
@@ -69,7 +52,7 @@ class DeviceStateListConverter {
             val parts = deviceString.split(",")
             DeviceState(
                 deviceId = parts[0],
-                deviceType = parts[1], 
+                deviceType = parts[1],
                 connected = parts[2].toBoolean(),
                 batteryLevel = parts[3].toInt(),
                 status = parts[4]

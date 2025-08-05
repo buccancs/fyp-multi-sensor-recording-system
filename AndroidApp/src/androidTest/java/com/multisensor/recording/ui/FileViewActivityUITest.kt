@@ -41,10 +41,8 @@ class FileViewActivityUITest {
     fun setUp() {
         hiltRule.inject()
 
-        // Create test session data
         createTestSessions()
 
-        // Launch the activity
         val intent = Intent(ApplicationProvider.getApplicationContext(), FileViewActivity::class.java)
         activityScenario = ActivityScenario.launch(intent)
 
@@ -55,7 +53,6 @@ class FileViewActivityUITest {
     fun tearDown() {
         try {
             activityScenario.close()
-            // Clean up test sessions
             kotlinx.coroutines.runBlocking {
                 sessionManager.deleteAllSessions()
             }
@@ -66,7 +63,6 @@ class FileViewActivityUITest {
 
     @Test
     fun testActivityLaunchesSuccessfully() {
-        // Verify that the activity launches and displays the main components
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
 
@@ -81,16 +77,13 @@ class FileViewActivityUITest {
 
     @Test
     fun testSearchFunctionality() {
-        // Test search functionality
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
             .perform(typeText("test"))
 
-        // Verify search input is accepted
         onView(withId(R.id.search_edit_text))
             .check(matches(withText("test")))
 
-        // Clear search
         onView(withId(R.id.search_edit_text))
             .perform(clearText())
 
@@ -99,13 +92,10 @@ class FileViewActivityUITest {
 
     @Test
     fun testFilterSpinner() {
-        // Test filter spinner functionality
         onView(withId(R.id.filter_spinner))
             .check(matches(isDisplayed()))
             .perform(click())
 
-        // The spinner should open (I can't easily test the dropdown items in Espresso)
-        // But I can verify the spinner is clickable and responds
         onView(withId(R.id.filter_spinner))
             .check(matches(isClickable()))
 
@@ -114,7 +104,6 @@ class FileViewActivityUITest {
 
     @Test
     fun testSessionInfoDisplay() {
-        // Test that session info is displayed
         onView(withId(R.id.session_info_text))
             .check(matches(isDisplayed()))
 
@@ -129,18 +118,14 @@ class FileViewActivityUITest {
 
     @Test
     fun testEmptyStateHandling() {
-        // Clear all sessions first
         kotlinx.coroutines.runBlocking {
             sessionManager.deleteAllSessions()
         }
 
-        // Restart activity to see empty state
         activityScenario.close()
         val intent = Intent(ApplicationProvider.getApplicationContext(), FileViewActivity::class.java)
         activityScenario = ActivityScenario.launch(intent)
 
-        // Check if empty state is handled properly
-        // The RecyclerViews should still be displayed even if empty
         onView(withId(R.id.sessions_recycler_view))
             .check(matches(isDisplayed()))
 
@@ -152,12 +137,10 @@ class FileViewActivityUITest {
 
     @Test
     fun testRefreshButton() {
-        // Test that refresh button is available
         onView(withId(R.id.refresh_button))
             .check(matches(isDisplayed()))
             .perform(click())
 
-        // Verify refresh action works (activity should still be displayed)
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
 
@@ -166,7 +149,6 @@ class FileViewActivityUITest {
 
     @Test
     fun testRecyclerViewInteractions() {
-        // Test that RecyclerViews are scrollable and interactive
         onView(withId(R.id.sessions_recycler_view))
             .check(matches(isDisplayed()))
             .perform(swipeUp())
@@ -180,14 +162,11 @@ class FileViewActivityUITest {
 
     @Test
     fun testActivityRotation() {
-        // Test that activity handles rotation properly
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
 
-        // Simulate rotation by recreating activity
         activityScenario.recreate()
 
-        // Verify activity is still functional after rotation
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
 
@@ -199,15 +178,12 @@ class FileViewActivityUITest {
 
     @Test
     fun testBackNavigation() {
-        // Test back navigation
         onView(withId(R.id.search_edit_text))
             .check(matches(isDisplayed()))
 
-        // Press back button (this should close the activity)
         androidx.test.espresso.Espresso
             .pressBack()
 
-        // Activity should be finishing
         activityScenario.onActivity { activity ->
             assert(activity.isFinishing || activity.isDestroyed)
         }
@@ -218,13 +194,11 @@ class FileViewActivityUITest {
     private fun createTestSessions() {
         try {
             kotlinx.coroutines.runBlocking {
-                // Create a few test sessions
                 val session1Id = sessionManager.createNewSession()
                 val session2Id = sessionManager.createNewSession()
 
                 logger.info("[DEBUG_LOG] Created test sessions: $session1Id, $session2Id")
 
-                // Finalize sessions to make them available for viewing
                 sessionManager.finalizeCurrentSession()
             }
         } catch (e: Exception) {

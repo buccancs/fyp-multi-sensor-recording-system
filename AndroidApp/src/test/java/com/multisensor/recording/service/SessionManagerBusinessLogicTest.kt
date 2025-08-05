@@ -10,10 +10,6 @@ import org.junit.Test
 import java.io.File
 import java.io.IOException
 
-/**
- * Non-Android unit tests for SessionManager business logic
- * Tests data classes, enums, and core logic without requiring Robolectric
- */
 class SessionManagerBusinessLogicTest {
     private lateinit var mockLogger: Logger
     private lateinit var tempDir: File
@@ -21,20 +17,17 @@ class SessionManagerBusinessLogicTest {
     @Before
     fun setup() {
         mockLogger = mockk(relaxed = true)
-        // Create a temporary directory for testing
         tempDir = createTempDir("session_test")
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        // Clean up temp directory
         tempDir.deleteRecursively()
     }
 
     @Test
     fun `SessionStatus enum should have all expected values`() {
-        // Test all enum values exist
         val expectedValues =
             setOf(
                 SessionManager.SessionStatus.ACTIVE,
@@ -46,18 +39,15 @@ class SessionManagerBusinessLogicTest {
         val actualValues = SessionManager.SessionStatus.values().toSet()
         assertEquals(expectedValues, actualValues)
 
-        // Test enum count
         assertEquals(4, SessionManager.SessionStatus.values().size)
     }
 
     @Test
     fun `RecordingSession should initialize with correct default values`() {
-        // Given
         val sessionId = "test_session_123"
         val startTime = System.currentTimeMillis()
         val sessionFolder = File(tempDir, "session_folder")
 
-        // When
         val session =
             SessionManager.RecordingSession(
                 sessionId = sessionId,
@@ -65,7 +55,6 @@ class SessionManagerBusinessLogicTest {
                 sessionFolder = sessionFolder,
             )
 
-        // Then
         assertEquals(sessionId, session.sessionId)
         assertEquals(startTime, session.startTime)
         assertEquals(sessionFolder, session.sessionFolder)
@@ -75,13 +64,11 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `RecordingSession should allow setting endTime and status`() {
-        // Given
         val sessionId = "test_session_456"
         val startTime = System.currentTimeMillis()
-        val endTime = startTime + 60000 // 1 minute later
+        val endTime = startTime + 60000
         val sessionFolder = File(tempDir, "session_folder")
 
-        // When
         val session =
             SessionManager.RecordingSession(
                 sessionId = sessionId,
@@ -91,7 +78,6 @@ class SessionManagerBusinessLogicTest {
                 status = SessionManager.SessionStatus.COMPLETED,
             )
 
-        // Then
         assertEquals(sessionId, session.sessionId)
         assertEquals(startTime, session.startTime)
         assertEquals(endTime, session.endTime)
@@ -100,7 +86,6 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `SessionFilePaths should create all required file paths`() {
-        // Given
         val sessionFolder = File(tempDir, "test_session")
         val rgbVideoFile = File(sessionFolder, "rgb_video.mp4")
         val thermalVideoFile = File(sessionFolder, "thermal_video.mp4")
@@ -111,7 +96,6 @@ class SessionManagerBusinessLogicTest {
         val calibrationFolder = File(sessionFolder, "calibration")
         val sessionConfigFile = File(sessionFolder, "session_config.json")
 
-        // When
         val filePaths =
             SessionManager.SessionFilePaths(
                 sessionFolder = sessionFolder,
@@ -125,7 +109,6 @@ class SessionManagerBusinessLogicTest {
                 sessionConfigFile = sessionConfigFile,
             )
 
-        // Then
         assertEquals(sessionFolder, filePaths.sessionFolder)
         assertEquals(rgbVideoFile, filePaths.rgbVideoFile)
         assertEquals(thermalVideoFile, filePaths.thermalVideoFile)
@@ -139,7 +122,6 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `SessionFilePaths should have correct file extensions`() {
-        // Given
         val sessionFolder = File(tempDir, "test_session")
         val rgbVideoFile = File(sessionFolder, "rgb_video.mp4")
         val thermalVideoFile = File(sessionFolder, "thermal_video.mp4")
@@ -150,7 +132,6 @@ class SessionManagerBusinessLogicTest {
         val calibrationFolder = File(sessionFolder, "calibration")
         val sessionConfigFile = File(sessionFolder, "session_config.json")
 
-        // When
         val filePaths =
             SessionManager.SessionFilePaths(
                 sessionFolder = sessionFolder,
@@ -164,7 +145,6 @@ class SessionManagerBusinessLogicTest {
                 sessionConfigFile = sessionConfigFile,
             )
 
-        // Then
         assertTrue("RGB video should be MP4", filePaths.rgbVideoFile.name.endsWith(".mp4"))
         assertTrue("Thermal video should be MP4", filePaths.thermalVideoFile.name.endsWith(".mp4"))
         assertTrue("Shimmer data should be CSV", filePaths.shimmerDataFile.name.endsWith(".csv"))
@@ -175,7 +155,6 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `session duration calculation should work correctly`() {
-        // Given
         val startTime = 1000L
         val endTime = 5000L
         val sessionFolder = File(tempDir, "session_folder")
@@ -189,19 +168,15 @@ class SessionManagerBusinessLogicTest {
                 status = SessionManager.SessionStatus.COMPLETED,
             )
 
-        // When
         val duration = session.endTime!! - session.startTime
 
-        // Then
         assertEquals(4000L, duration)
     }
 
     @Test
     fun `session should be active by default`() {
-        // Given
         val sessionFolder = File(tempDir, "session_folder")
 
-        // When
         val session =
             SessionManager.RecordingSession(
                 sessionId = "test_session",
@@ -209,18 +184,15 @@ class SessionManagerBusinessLogicTest {
                 sessionFolder = sessionFolder,
             )
 
-        // Then
         assertEquals(SessionManager.SessionStatus.ACTIVE, session.status)
         assertNull(session.endTime)
     }
 
     @Test
     fun `session folder path should be valid`() {
-        // Given
         val sessionId = "test_session_789"
         val sessionFolder = File(tempDir, sessionId)
 
-        // When
         val session =
             SessionManager.RecordingSession(
                 sessionId = sessionId,
@@ -228,7 +200,6 @@ class SessionManagerBusinessLogicTest {
                 sessionFolder = sessionFolder,
             )
 
-        // Then
         assertTrue(
             "Session folder path should contain session ID",
             session.sessionFolder.name.contains(sessionId),
@@ -238,15 +209,12 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `file operations should handle directory creation`() {
-        // Given
         val sessionFolder = File(tempDir, "new_session")
         val rawFramesFolder = File(sessionFolder, "raw_frames")
 
-        // When
         sessionFolder.mkdirs()
         rawFramesFolder.mkdirs()
 
-        // Then
         assertTrue("Session folder should exist", sessionFolder.exists())
         assertTrue("Session folder should be directory", sessionFolder.isDirectory)
         assertTrue("Raw frames folder should exist", rawFramesFolder.exists())
@@ -255,15 +223,11 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `storage space validation logic should work`() {
-        // Given
-        val requiredSpace = 1024L * 1024L * 100L // 100 MB
+        val requiredSpace = 1024L * 1024L * 100L
         val availableSpace = tempDir.freeSpace
 
-        // When
         val hasSufficientSpace = availableSpace >= requiredSpace
 
-        // Then
-        // This test depends on actual disk space, so I just verify the logic works
         assertTrue("Available space should be non-negative", availableSpace >= 0)
         assertEquals(
             "Logic should match expected result",
@@ -274,11 +238,9 @@ class SessionManagerBusinessLogicTest {
 
     @Test
     fun `session ID should be unique and non-empty`() {
-        // Given
         val sessionIds = mutableSetOf<String>()
         val sessionFolder = File(tempDir, "session_folder")
 
-        // When - Create multiple sessions
         repeat(10) {
             val sessionId = "session_${System.currentTimeMillis()}_$it"
             sessionIds.add(sessionId)
@@ -290,12 +252,10 @@ class SessionManagerBusinessLogicTest {
                     sessionFolder = sessionFolder,
                 )
 
-            // Then
             assertNotNull("Session ID should not be null", session.sessionId)
             assertTrue("Session ID should not be empty", session.sessionId.isNotEmpty())
         }
 
-        // All session IDs should be unique
         assertEquals("All session IDs should be unique", 10, sessionIds.size)
     }
 }
