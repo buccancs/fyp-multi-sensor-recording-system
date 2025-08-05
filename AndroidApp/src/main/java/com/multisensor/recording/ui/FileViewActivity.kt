@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -318,9 +319,9 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun getMimeType(fileType: FileType): String {
         return when (fileType) {
-            FileType.VIDEO -> "video"
-            FileType.RAW_IMAGE -> "image"
-            FileType.THERMAL_DATA -> "thermal"
+            FileType.VIDEO -> "video/mp4"
+            FileType.RAW_IMAGE -> "image/*"
+            FileType.THERMAL_DATA -> "application/octet-stream"
         }
     }
 
@@ -328,7 +329,8 @@ class FileViewActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    private fun showError(error: String) {
+        Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
+        android.util.Log.e("FileViewActivity", error)
     }
 }
