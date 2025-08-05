@@ -1061,7 +1061,7 @@ SDK components, and validate the complete build system.
 conda activate thermal-env
 
 # Start Python Desktop Controller
-python PythonApp/src/main.py
+python PythonApp/main.py
 
 # Build Android application
 ./gradlew build
@@ -1491,7 +1491,7 @@ sections. Complete source code is available in the project repository.*
 
 \subsection{Chapter 1 References}
 
-\subsubsection{G.1 Core Application Architecture - PythonApp/src/application.py}
+\subsubsection{G.1 Core Application Architecture - PythonApp/application.py}
 
 \begin{verbatim}
 """Application class for multi-sensor recording system with dependency injection"""
@@ -1528,7 +1528,7 @@ class Application(QObject):
             raise
 \end{verbatim}
 
-\subsubsection{G.2 Enhanced Application Launcher - PythonApp/src/enhanced_main_with_web.py}
+\subsubsection{G.2 Enhanced Application Launcher - PythonApp/enhanced_main_with_web.py}
 
 \begin{verbatim}
 """Enhanced application launcher with web interface integration"""
@@ -1638,7 +1638,7 @@ class MultiSensorApplication : Application() {
 }
 \end{verbatim}
 
-\subsubsection{F.5 Session Manager - PythonApp/src/session/session_manager.py}
+\subsubsection{F.5 Session Manager - PythonApp/session/session_manager.py}
 
 \begin{verbatim}
 """Session management for multi-sensor recording system"""
@@ -1693,7 +1693,7 @@ class SessionManager:
 
 \subsection{Chapter 2 References (Literature Review Implementation)}
 
-\subsubsection{G.25 Hand Segmentation Computer Vision - PythonApp/src/hand_segmentation/hand_segmentation_processor.py}
+\subsubsection{G.25 Hand Segmentation Computer Vision - PythonApp/hand_segmentation/hand_segmentation_processor.py}
 
 \begin{verbatim}
 """Advanced computer vision pipeline implementing MediaPipe and OpenCV"""
@@ -1752,7 +1752,7 @@ class HandSegmentationProcessor:
 
 \subsection{Chapter 3 References (Requirements Implementation)}
 
-\subsubsection{F.45 Multi-Device Coordination - PythonApp/src/session/session_manager.py}
+\subsubsection{F.45 Multi-Device Coordination - PythonApp/session/session_manager.py}
 
 \begin{verbatim}
 """Multi-device coordination implementing functional requirement FR-001"""
@@ -1795,7 +1795,7 @@ def register_device(self, device_info: Dict) -> bool:
 
 \subsection{Chapter 4 References (Design Implementation)}
 
-\subsubsection{F.71 Dependency Injection Architecture - PythonApp/src/application.py}
+\subsubsection{F.71 Dependency Injection Architecture - PythonApp/application.py}
 
 \begin{verbatim}
 """IoC (Inversion of Control) pattern implementation for system architecture"""
@@ -1891,7 +1891,7 @@ class IntegrationTestFramework(unittest.TestCase):
 
 \subsection{Chapter 6 References (Conclusions Evidence)}
 
-\subsubsection{G.141 Performance Benchmarking - PythonApp/src/production/performance_benchmark.py}
+\subsubsection{G.141 Performance Benchmarking - PythonApp/production/performance_benchmark.py}
 
 \begin{verbatim}
 """Comprehensive performance measurement with statistical validation"""
@@ -2953,7 +2953,7 @@ The code snippets are organized by reference numbers (F.1-F.177) as cited in the
 
 \subsection{F.1-F.24 Chapter 1 Implementation References}
 
-\subsubsection{G.1 Core Application Architecture - PythonApp/src/application.py}
+\subsubsection{G.1 Core Application Architecture - PythonApp/application.py}
 
 \begin{verbatim}
 """application class for multi-sensor recording system"""
@@ -3015,7 +3015,7 @@ class Application(QObject):
             raise
 \end{verbatim}
 
-\subsubsection{F.5 Session Manager Core - PythonApp/src/session/session_manager.py}
+\subsubsection{F.5 Session Manager Core - PythonApp/session/session_manager.py}
 
 \begin{verbatim}
 """Session management for multi-sensor recording system"""
@@ -3092,7 +3092,7 @@ class ConnectionManager @Inject constructor(
 
 \subsection{F.25-F.44 Chapter 2 Literature Review Implementation}
 
-\subsubsection{G.25 Computer Vision Pipeline - PythonApp/src/hand_segmentation/hand_segmentation_processor.py}
+\subsubsection{G.25 Computer Vision Pipeline - PythonApp/hand_segmentation/hand_segmentation_processor.py}
 
 \begin{verbatim}
 """Advanced computer vision pipeline implementing MediaPipe and OpenCV"""
@@ -3126,7 +3126,7 @@ class HandSegmentationProcessor:
         return annotated_frame, hand_data
 \end{verbatim}
 
-\subsubsection{G.29 Distributed Systems Server - PythonApp/src/network/device_server.py}
+\subsubsection{G.29 Distributed Systems Server - PythonApp/network/device_server.py}
 
 \begin{verbatim}
 """Distributed coordination server implementing academic network protocols"""
@@ -3178,7 +3178,7 @@ class JsonSocketServer:
 
 \subsection{F.45-F.70 Chapter 3 Requirements Implementation}
 
-\subsubsection{F.45 Multi-Device Coordination (FR-001) - PythonApp/src/session/session_manager.py}
+\subsubsection{F.45 Multi-Device Coordination (FR-001) - PythonApp/session/session_manager.py}
 
 \begin{verbatim}
 """Multi-device coordination implementing functional requirement FR-001"""
@@ -3213,7 +3213,7 @@ def register_device(self, device_info: Dict) -> bool:
     return True
 \end{verbatim}
 
-\subsubsection{F.52 Temporal Synchronization (NFR-002) - PythonApp/src/session/session_synchronizer.py}
+\subsubsection{F.52 Temporal Synchronization (NFR-002) - PythonApp/session/session_synchronizer.py}
 
 \begin{verbatim}
 """Microsecond-precision temporal synchronization implementing NFR-002"""
@@ -3264,7 +3264,7 @@ class SessionSynchronizer:
 
 \subsection{F.71-F.103 Chapter 4 Design Implementation}
 
-\subsubsection{F.71 IoC Pattern Implementation - PythonApp/src/application.py}
+\subsubsection{F.71 IoC Pattern Implementation - PythonApp/application.py}
 
 \begin{verbatim}
 """Inversion of Control (IoC) pattern for system architecture"""
@@ -3308,7 +3308,7 @@ class ServiceContainer:
                     service.initialize()
 \end{verbatim}
 
-\subsubsection{F.75 Network Architecture - PythonApp/src/network/device_server.py}
+\subsubsection{F.75 Network Architecture - PythonApp/network/device_server.py}
 
 \begin{verbatim}
 """Asynchronous JSON socket server with distributed coordination protocols"""
@@ -3409,7 +3409,7 @@ class IntegrationTestFramework(unittest.TestCase):
         })
 \end{verbatim}
 
-\subsubsection{G.114 Performance Benchmarking - PythonApp/src/production/performance_benchmark.py}
+\subsubsection{G.114 Performance Benchmarking - PythonApp/production/performance_benchmark.py}
 
 \begin{verbatim}
 """System performance benchmarking with statistical reporting"""
@@ -3478,7 +3478,7 @@ class PerformanceBenchmark:
 
 \subsection{F.141-F.177 Chapter 6 Conclusions Evidence}
 
-\subsubsection{G.141 System Achievement Validation - PythonApp/src/production/performance_benchmark.py}
+\subsubsection{G.141 System Achievement Validation - PythonApp/production/performance_benchmark.py}
 
 \begin{verbatim}
 """Performance measurement demonstrating system capability achievements"""

@@ -66,7 +66,7 @@ relied heavily on invasive contact-based sensors that impose significant constra
 behavior, and data quality [Boucsein2012; Healey2005]. The Multi-Sensor Recording System emerges from the recognition
 that these traditional constraints fundamentally limit our ability to understand natural human physiological responses
 in realistic environments [McDuff2016; Poh2010], as implemented through the coordinated architecture in
-\texttt{AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt} and \texttt{PythonApp/src/main.py}.
+\texttt{AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt} and \texttt{PythonApp/main.py}.
 
 \subsubsection{Evolution of Physiological Measurement in Research}
 
@@ -78,7 +78,7 @@ findings [Brewer2000; Campbell1957]. Participants were typically constrained to 
 electrodes attached to their skin, creating an artificial research environment that could itself influence the
 physiological responses being measured [Healey2005; Picard1997], as addressed by the contactless measurement approach
 implemented in \texttt{AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt} and
-\texttt{PythonApp/src/webcam/webcam\_capture.py}.
+\texttt{PythonApp/webcam/webcam\_capture.py}.
 
 The introduction of wireless sensors and mobile computing platforms began to address some mobility
 constraints [Shimmer2015; EmpaticaE4], enabling researchers to conduct studies outside traditional laboratory
@@ -89,7 +89,7 @@ that the awareness of physiological monitoring can significantly alter participa
 responses [Hawthorne1939; Observer2010], creating a measurement observer effect that compromises data validity,
 addressed in this system through the contactless integration approach implemented in
 \texttt{AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt} and
-\texttt{PythonApp/src/shimmer\_manager.py}.
+\texttt{PythonApp/shimmer\_manager.py}.
 
 \textbf{Key Historical Limitations:}
 
@@ -353,7 +353,7 @@ well-funded institutions with dedicated technical support staff.
 The proprietary nature of most commercial systems prevents customization for novel research applications and limits
 educational applications that could train the next generation of researchers in advanced physiological measurement
 techniques [NI2019]. This system addresses accessibility through automated setup and user-friendly interfaces
-implemented in \texttt{PythonApp/src/main.py} and comprehensive documentation following software engineering best
+implemented in \texttt{PythonApp/main.py} and comprehensive documentation following software engineering best
 practices [McConnell2004].
 
 \paragraph{Technical Challenges in Multi-Device Coordination}
@@ -929,9 +929,9 @@ referenced in \textbf{Appendix F} with detailed code snippets demonstrating the 
 \textbf{Core System Architecture:}
 
 \begin{itemize}
-\item `PythonApp/src/application.py` - Main application dependency injection container and service orchestration framework (
+\item `PythonApp/application.py` - Main application dependency injection container and service orchestration framework (
   See Appendix F.1)
-\item `PythonApp/src/enhanced_main_with_web.py` - Enhanced application launcher with integrated web interface and real-time
+\item `PythonApp/enhanced_main_with_web.py` - Enhanced application launcher with integrated web interface and real-time
   monitoring (See Appendix F.2)
 \item `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Material Design 3 main activity with
   fragment-based navigation architecture (See Appendix F.3)
@@ -942,11 +942,11 @@ referenced in \textbf{Appendix F} with detailed code snippets demonstrating the 
 \textbf{Multi-Device Synchronization System:}
 
 \begin{itemize}
-\item `PythonApp/src/session/session_manager.py` - Central session coordination with distributed device management (See
+\item `PythonApp/session/session_manager.py` - Central session coordination with distributed device management (See
   Appendix F.5)
-\item `PythonApp/src/session/session_synchronizer.py` - Advanced temporal synchronization algorithms with drift correction (
+\item `PythonApp/session/session_synchronizer.py` - Advanced temporal synchronization algorithms with drift correction (
   See Appendix F.6)
-\item `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination using NTP and custom
+\item `PythonApp/master_clock_synchronizer.py` - High-precision master clock coordination using NTP and custom
   protocols (See Appendix F.7)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device connection
   management with automatic discovery (See Appendix F.8)
@@ -955,8 +955,8 @@ referenced in \textbf{Appendix F} with detailed code snippets demonstrating the 
 \textbf{Multi-Sensor Integration Framework:}
 
 \begin{itemize}
-\item `PythonApp/src/shimmer_manager.py` - Research-grade GSR sensor management and calibration (See Appendix F.9)
-\item `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction capabilities (See
+\item `PythonApp/shimmer_manager.py` - Research-grade GSR sensor management and calibration (See Appendix F.9)
+\item `PythonApp/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction capabilities (See
   Appendix F.10)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Android GSR recording with
   real-time data validation (See Appendix F.11)
@@ -969,11 +969,11 @@ referenced in \textbf{Appendix F} with detailed code snippets demonstrating the 
 \textbf{Network Communication and Protocol Implementation:}
 
 \begin{itemize}
-\item `PythonApp/src/network/device_server.py` - JSON socket server with comprehensive device communication protocol (See
+\item `PythonApp/network/device_server.py` - JSON socket server with comprehensive device communication protocol (See
   Appendix F.14)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication
   handler with error recovery (See Appendix F.15)
-\item `PythonApp/src/protocol/` - Communication protocol schemas and validation utilities (See Appendix F.16)
+\item `PythonApp/protocol/` - Communication protocol schemas and validation utilities (See Appendix F.16)
 \item `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation and
   schema compliance (See Appendix F.17)
 
@@ -981,12 +981,12 @@ referenced in \textbf{Appendix F} with detailed code snippets demonstrating the 
 \textbf{Advanced System Features:}
 
 \begin{itemize}
-\item `PythonApp/src/hand_segmentation/` - Computer vision pipeline for contactless hand analysis (See Appendix F.18)
-\item `PythonApp/src/stimulus_manager.py` - Research protocol coordination and experimental stimulus management (See
+\item `PythonApp/hand_segmentation/` - Computer vision pipeline for contactless hand analysis (See Appendix F.18)
+\item `PythonApp/stimulus_manager.py` - Research protocol coordination and experimental stimulus management (See
   Appendix F.19)
 \item `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/` - Android hand segmentation implementation (See
   Appendix F.20)
-\item `PythonApp/src/calibration/` - Advanced calibration system with quality assessment (See Appendix F.21)
+\item `PythonApp/calibration/` - Advanced calibration system with quality assessment (See Appendix F.21)
 
 \end{itemize}
 \textbf{Testing and Quality Assurance:}
