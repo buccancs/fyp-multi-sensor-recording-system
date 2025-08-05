@@ -303,13 +303,13 @@ graph TB
             direction TB
             
             subgraph MAIN_UI ["Main Application Windows"]
-                MW["MainWindow<br/>• Primary Application Window<br/>• Menu Bar & Toolbar<br/>• Status Bar Management<br/>• Central Widget Coordination"]
+                MW["MainWindow<br/>• Primary Application Window<br/>• Menu Bar and Toolbar<br/>• Status Bar Management<br/>• Central Widget Coordination"]
                 DW["DeviceWindow<br/>• Device Management Interface<br/>• Real-time Status Display<br/>• Connection Control Panel<br/>• Health Monitoring Dashboard"]
                 RW["RecordingWindow<br/>• Recording Control Interface<br/>• Live Preview Management<br/>• Session Configuration<br/>• Progress Monitoring"]
                 CW["CalibrationWindow<br/>• Sensor Calibration Interface<br/>• Validation Controls<br/>• Configuration Management<br/>• Quality Assurance Tools"]
             end
             
-            subgraph WIDGETS ["🧩 Custom Widgets & Components"]
+            subgraph WIDGETS ["🧩 Custom Widgets and Components"]
                 PW["PreviewWidget<br/>• Live Video Preview<br/>• Multi-stream Display<br/>• Real-time Rendering<br/>• Quality Controls"]
                 SW["StatusWidget<br/>• System Status Display<br/>• Performance Metrics<br/>• Alert Management<br/>• Health Indicators"]
                 LW["LogWidget<br/>• Application Logging<br/>• Event History<br/>• Debug Information<br/>• Error Tracking"]
@@ -335,12 +335,12 @@ graph TB
             end
         end
         
-        subgraph DATA_LAYER ["Data Access Layer - Storage & Communication"]
+        subgraph DATA_LAYER ["Data Access Layer - Storage and Communication"]
             direction TB
             
             subgraph COMMUNICATION ["Communication Services"]
                 SocketServer["SocketServer<br/>• TCP Socket Management<br/>• Client Connection Handling<br/>• Protocol Implementation<br/>• Message Routing"]
-                CommandProcessor["CommandProcessor<br/>• Command Parsing & Validation<br/>• Response Generation<br/>• Error Handling<br/>• Protocol Compliance"]
+                CommandProcessor["CommandProcessor<br/>• Command Parsing and Validation<br/>• Response Generation<br/>• Error Handling<br/>• Protocol Compliance"]
                 DataStreamer["DataStreamer<br/>• Real-time Data Streaming<br/>• Multi-client Broadcasting<br/>• Quality of Service<br/>• Buffer Management"]
             end
             
@@ -357,7 +357,7 @@ graph TB
             end
         end
         
-        subgraph EXTERNAL ["External Dependencies & Platform Integration"]
+        subgraph EXTERNAL ["External Dependencies and Platform Integration"]
             direction TB
             
             subgraph FRAMEWORKS ["Framework Dependencies"]
@@ -462,7 +462,7 @@ graph TD
         subgraph STATIONARY_SOURCES ["Stationary Data Sources"]
             direction LR
             
-            BRIO1["Logitech Brio 4K<br/>• Primary USB Camera<br/>• 4K @ 30fps Recording<br/>• Auto-focus & HDR<br/>• Wide Field of View"]
+            BRIO1["Logitech Brio 4K<br/>• Primary USB Camera<br/>• 4K @ 30fps Recording<br/>• Auto-focus and HDR<br/>• Wide Field of View"]
             BRIO2["Logitech Brio 4K<br/>• Secondary USB Camera<br/>• 4K @ 30fps Recording<br/>• Fixed Position<br/>• Detail Capture"]
         end
         
@@ -501,13 +501,13 @@ graph TD
                 PC_STORAGE["PC Primary Storage<br/>• High-speed NVMe SSD<br/>• Master Data Repository<br/>• Real-time Writing<br/>• Performance Optimization"]
             end
             
-            subgraph BACKUP_TIER ["Backup & Archive Tier"]
+            subgraph BACKUP_TIER ["Backup and Archive Tier"]
                 BACKUP_STORAGE["Backup Storage<br/>• Redundant Data Copies<br/>• Automated Backup<br/>• Version Control<br/>• Disaster Recovery"]
                 ARCHIVE_STORAGE["Archive Storage<br/>• Long-term Retention<br/>• Compressed Storage<br/>• Metadata Indexing<br/>• Research Database"]
             end
         end
         
-        subgraph EXPORT ["Data Export & Analysis Pipeline"]
+        subgraph EXPORT ["Data Export and Analysis Pipeline"]
             direction LR
             
             EXPORT_ENGINE["Export Engine<br/>• Multi-format Export<br/>• Quality Assurance<br/>• Compression Optimization<br/>• Delivery Management"]
@@ -636,7 +636,7 @@ graph TB
             end
         end
         
-        subgraph MONITORING ["Network Monitoring & Management"]
+        subgraph MONITORING ["Network Monitoring and Management"]
             direction TB
             
             subgraph PERFORMANCE [" Performance Monitoring"]
@@ -644,7 +644,7 @@ graph TB
                 BANDWIDTH_MONITOR["Bandwidth Monitor<br/>• Throughput Measurement<br/>• Utilization Tracking<br/>• Capacity Planning<br/>• Traffic Analysis"]
             end
             
-            subgraph RELIABILITY ["Reliability & Recovery"]
+            subgraph RELIABILITY ["Reliability and Recovery"]
                 CONNECTION_POOL["Connection Pool Manager<br/>• Connection Reuse<br/>• Pool Size Management<br/>• Health Checking<br/>• Resource Optimization"]
                 FAILOVER_MGMT["Failover Management<br/>• Automatic Recovery<br/>• Redundant Paths<br/>• Service Continuity<br/>• Graceful Degradation"]
             end
@@ -713,7 +713,7 @@ flowchart TD
     START([Data Collection Process Start]) --> INIT_CHECK{🔍 System Initialization Check}
     
     %% Initialization and Setup Phase
-    INIT_CHECK -->|System Ready| DEVICE_DISCOVERY[Device Discovery & Connection]
+    INIT_CHECK -->|System Ready| DEVICE_DISCOVERY[Device Discovery and Connection]
     INIT_CHECK -->|❌ System Not Ready| ERROR_INIT[❌ Initialization Error]
     ERROR_INIT --> RETRY_INIT{Retry Initialization?}
     RETRY_INIT -->|Yes| INIT_CHECK
@@ -734,7 +734,7 @@ flowchart TD
     PARTIAL_MODE -->|No| ABORT
     
     %% Calibration and Configuration Phase
-    DEVICE_CHECK -->|All Connected| CALIBRATION[Sensor Calibration & Configuration]
+    DEVICE_CHECK -->|All Connected| CALIBRATION[Sensor Calibration and Configuration]
     CALIBRATION --> SYNC_SETUP[Clock Synchronization Setup]
     SYNC_SETUP --> QUALITY_CHECK[Quality Assurance Check]
     QUALITY_CHECK --> CALIB_VALID{Calibration Valid?}
@@ -754,7 +754,7 @@ flowchart TD
     START_RECORDING --> PARALLEL_RECORDING[Parallel Data Collection]
     
     %% Parallel Recording Streams
-    PARALLEL_RECORDING --> ANDROID_REC[Android Video & Thermal Recording]
+    PARALLEL_RECORDING --> ANDROID_REC[Android Video and Thermal Recording]
     PARALLEL_RECORDING --> GSR_REC[GSR Data Streaming]
     PARALLEL_RECORDING --> USB_REC[USB Camera Recording]
     PARALLEL_RECORDING --> MONITORING[Real-time Monitoring]
@@ -843,7 +843,7 @@ flowchart TD
     %% Session Initialization
     SESSION_REQ --> VALIDATE_REQ{Validate Request Parameters?}
     VALIDATE_REQ -->|❌ Invalid| REQ_ERROR[❌ Request Validation Error]
-    REQ_ERROR --> ERROR_RESPONSE[📨 Error Response & Logging]
+    REQ_ERROR --> ERROR_RESPONSE[📨 Error Response and Logging]
     ERROR_RESPONSE --> END_ERROR([❌ Session Creation Failed])
     
     VALIDATE_REQ -->|Valid| GEN_SESSION_ID[🆔 Generate Unique Session ID]
@@ -1042,7 +1042,7 @@ graph TB
             METADATA_DIR --> QUALITY_REPORT["quality_report.json<br/>• Data Quality Assessment<br/>• Validation Results<br/>• Error Analysis<br/>• Recommendations"]
         end
         
-        subgraph BACKUP_STRATEGY ["Backup & Recovery Strategy"]
+        subgraph BACKUP_STRATEGY ["Backup and Recovery Strategy"]
             direction TB
             
             BACKUP --> LOCAL_BACKUP["Local Backup<br/>• Real-time Mirroring<br/>• RAID Configuration<br/>• Instant Recovery<br/>• Hardware Redundancy"]
@@ -1054,7 +1054,7 @@ graph TB
             ARCHIVE_BACKUP --> COMPRESSION["Data Compression<br/>• Space Optimization<br/>• Format Preservation<br/>• Integrity Checking<br/>• Quality Retention"]
         end
         
-        subgraph ACCESS_CONTROL ["Access Control & Security"]
+        subgraph ACCESS_CONTROL ["Access Control and Security"]
             direction LR
             
             PERMISSIONS["Permission Management<br/>• Role-based Access<br/>• User Authentication<br/>• Operation Logging<br/>• Security Auditing"]
@@ -1117,7 +1117,7 @@ flowchart TD
         QUALITY_SET[Quality Settings<br/>Compression Level<br/>Metadata Inclusion<br/>Validation Options]
     end
     
-    subgraph "Data Validation & Integrity"
+    subgraph "Data Validation and Integrity"
         INTEGRITY_CHECK[Integrity Verification<br/>File Completeness<br/>Checksum Validation<br/>Corruption Detection]
         SYNC_VALIDATE[Synchronization Validation<br/>Timestamp Consistency<br/>Alignment Quality<br/>Precision Metrics]
         QUALITY_ASSESS[Quality Assessment<br/>Signal Quality<br/>Calibration Accuracy<br/>Completeness Score]
@@ -1167,7 +1167,7 @@ flowchart TD
         QUALITY_REPORT[Quality Report<br/>Export Summary<br/>Quality Metrics<br/>⚠️ Known Issues]
     end
     
-    subgraph "Delivery & Distribution"
+    subgraph "Delivery and Distribution"
         EXPORT_DELIVERY[Export Delivery<br/>Local Storage<br/>Cloud Upload<br/>Email Notification]
         ACCESS_SETUP[Access Setup<br/>User Permissions<br/>Access Documentation<br/>Security Briefing]
         BACKUP_EXPORT[Export Backup<br/>Archive Storage<br/>Version Control<br/>Backup Verification]
@@ -1417,7 +1417,7 @@ Clean architecture implementation for the Android application showing layers, pa
 graph TB
     subgraph "Android Clean Architecture Implementation"
         subgraph "Presentation Layer (UI)"
-            subgraph "Activities & Fragments"
+            subgraph "Activities and Fragments"
                 MAIN_ACT[🏠 MainActivity<br/>Single Activity Pattern<br/>🧭 Navigation Host<br/>Lifecycle Management]
                 
                 subgraph "Feature Fragments"
@@ -1435,7 +1435,7 @@ graph TB
                 CAL_VM[CalibrationViewModel<br/>Calibration State<br/>Quality Metrics<br/>Validation Status]
             end
             
-            subgraph "UI Components & Utils"
+            subgraph "UI Components and Utils"
                 UI_CTRL[UIController<br/>Component Validation<br/>Theme Management<br/>♿ Accessibility Support]
                 NAV_UTIL[🧭 NavigationUtils<br/>Fragment Navigation<br/>State Preservation<br/>Route Management]
                 UI_UTIL[🛠️ UIUtils<br/>Styling Utilities<br/>Status Indicators<br/>Animation Helpers]
@@ -1494,7 +1494,7 @@ graph TB
         end
         
         subgraph "Infrastructure Layer"
-            subgraph "Framework & Platform"
+            subgraph "Framework and Platform"
                 ANDROID_FW[Android Framework<br/>Permission System<br/>Lifecycle Management<br/>System Services]
                 CAMERA2_FW[📷 Camera2 Framework<br/>📸 Low-level Control<br/>🎥 Concurrent Capture<br/>Hardware Abstraction]
                 BT_FW[📶 Bluetooth Framework<br/>📡 BLE Support<br/>Connection Management<br/>Service Discovery]
@@ -1514,19 +1514,19 @@ graph TB
         end
         
         subgraph "Cross-Cutting Concerns"
-            subgraph "Logging & Monitoring"
+            subgraph "Logging and Monitoring"
                 LOGGER[Logging System<br/>Structured Logging<br/>Debug Support<br/>Performance Tracking]
                 CRASH_REPORT[Crash Reporting<br/>Error Analytics<br/>Debug Information<br/>Stability Metrics]
                 PERF_MON[Performance Monitor<br/>Resource Tracking<br/>Memory Usage<br/>🔋 Battery Impact]
             end
             
-            subgraph "Security & Privacy"
+            subgraph "Security and Privacy"
                 ENCRYPT[Encryption Service<br/>Data Protection<br/>Key Management<br/>Secure Storage]
                 PERM_MGR[Permission Manager<br/>Runtime Permissions<br/>Access Control<br/>Security Enforcement]
                 PRIVACY[Privacy Protection<br/>Data Anonymization<br/>Secure Communication<br/>Consent Management]
             end
             
-            subgraph "Configuration & Settings"
+            subgraph "Configuration and Settings"
                 CONFIG_MGR[Configuration Manager<br/>Settings Hierarchy<br/>Validation Rules<br/>Dynamic Updates]
                 THEME_MGR[Theme Manager<br/>🌙 Dark/Light Mode<br/>Color Schemes<br/>♿ Accessibility Themes]
                 LOCALE_MGR[🌍 Localization Manager<br/>Multi-language Support<br/>🌐 Regional Settings<br/>Resource Management]
@@ -1709,7 +1709,7 @@ graph TB
                 ERROR_SYS[ErrorSystem<br/>Exception Handling<br/>Error Logging<br/>Recovery Mechanisms]
             end
             
-            subgraph "Threading & Concurrency"
+            subgraph "Threading and Concurrency"
                 THREAD_POOL[🧵 ThreadPool<br/>Worker Threads<br/>Load Balancing<br/>Task Scheduling]
                 ASYNC_MGR[AsyncManager<br/>Async Operations<br/>Future Management<br/>Timeout Handling]
                 QUEUE_MGR[QueueManager<br/>Message Queues<br/>Priority Handling<br/>Flow Control]
@@ -1874,13 +1874,13 @@ flowchart TD
         QOS_CONFIG[QoS Configuration<br/>Traffic Prioritization<br/>Bandwidth Allocation<br/>Performance Optimization]
     end
     
-    subgraph "Testing & Validation"
+    subgraph "Testing and Validation"
         UNIT_TEST[Unit Testing<br/>Test Execution<br/>Pass Verification<br/>Coverage Report]
         INTEGRATION_TEST[Integration Testing<br/>Device Communication<br/>Component Interaction<br/>End-to-end Validation]
         HARDWARE_TEST[Hardware Testing<br/>📷 Camera Functionality<br/>Sensor Validation<br/>🌐 Network Connectivity]
     end
     
-    subgraph "Documentation & Training"
+    subgraph "Documentation and Training"
         DOC_INSTALL[Documentation Install<br/>User Guides<br/>API Documentation<br/>Reference Materials]
         TUTORIAL_SETUP[🎓 Tutorial Setup<br/>Sample Projects<br/>Example Code<br/>Learning Resources]
         SUPPORT_SETUP[🆘 Support Setup<br/>Contact Information<br/>Troubleshooting Guide<br/>FAQ Resources]
