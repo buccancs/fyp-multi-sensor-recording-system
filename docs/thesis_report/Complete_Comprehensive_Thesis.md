@@ -1480,23 +1480,7 @@ flowchart TD
 | **Ethics Review Board** | Privacy, consent, data protection | Medium | High | Compliance documentation |
 | **Laboratory Managers** | Resource efficiency, scheduling | Medium | Medium | Operational procedures |
 | **IT Infrastructure** | Network security, data storage | High | Medium | Technical integration |
-    x-axis Low Technical Complexity --> High Technical Complexity
-    y-axis Low Research Impact --> High Research Impact
-    
-    quadrant-1 Quick Wins
-    quadrant-2 Major Projects
-    quadrant-3 Fill-ins
-    quadrant-4 Research Breakthroughs
-    
-    Natural Behavior Studies: [0.7, 0.9]
-    Group Dynamics: [0.6, 0.8]
-    Pediatric Research: [0.3, 0.9]
-    Long-Duration Studies: [0.4, 0.6]
-    Mobile Applications: [0.5, 0.7]
-    Population Studies: [0.8, 0.7]
-    Multi-Modal Integration: [0.9, 0.8]
-    Real-Time Processing: [0.8, 0.6]
-```
+
 
 The fundamental research problem addressed by this thesis centers on the development of a comprehensive multi-sensor recording system specifically designed for contactless galvanic skin response (GSR) prediction research. This innovative work emerges from significant limitations inherent in traditional physiological measurement methodologies that have constrained research applications and scientific understanding for several decades, creating an urgent need for revolutionary approaches to physiological measurement [CITE - Boucsein, W. (2012). Electrodermal Activity, 2nd Edition. Springer Science & Business Media].
 
@@ -1854,7 +1838,9 @@ graph TB
 | **FR-006** | Session Management | System shall manage experimental sessions with automated protocols | <10 minutes setup time, 99% session completion rate | Time-motion studies and success rate analysis |
 | **FR-008** | Quality Assessment | System shall perform real-time quality assessment and alerts | >95% accurate quality detection, <2s alert latency | Validation against expert quality assessments |
 | **FR-012** | System Monitoring | System shall monitor health and performance with alerts | 100% critical event detection, <5s alert response | Fault injection testing and monitoring validation |
-    
+
+```mermaid
+graph TB
     FR010 --> FR001
     FR001 --> FR002
     FR002 --> FR003
@@ -3172,7 +3158,7 @@ graph TB
     style NODE2 fill:#f57c00,color:#ffffff
     style NODE3 fill:#c62828,color:#ffffff
     style NODE4 fill:#6a1b9a,color:#ffffff
-```
+
     S2 -.-> A2
     T1 -.-> A1
     T2 -.-> A2
@@ -5717,9 +5703,6 @@ The continuous integration framework provides automated testing execution with c
 - **Pull Request Validation**: Comprehensive testing including cross-platform integration and performance regression analysis
 - **Release Candidate Testing**: Full system validation including stress testing, security scanning, and scientific validation
 - **Production Deployment Testing**: Comprehensive system validation in production-like environments with real hardware integration
-    style ACCURACY fill:#e1f5fe
-    style SCIENTIFIC fill:#f3e5f5
-```
 
 **Table 5.2: Test Coverage Analysis by Component**
 
@@ -5763,10 +5746,6 @@ graph LR
     style H fill:#ffeb3b
     style I fill:#2e7d32
     style J fill:#8bc34a
-```
-    
-    ACCURACY --> SCIENTIFIC
-    SYNCHRONIZATION --> SCIENTIFIC
 ```
 
 **Foundation Testing Layer Validation**: The foundation layer provides detailed validation of individual components and modules that form the building blocks of system functionality. This layer focuses on verifying correct implementation of algorithms, data structures, and basic functionality while establishing confidence in the fundamental correctness of system components.
@@ -5957,45 +5936,7 @@ Version control integration ensures that all testing artifacts including test co
 **Resource Optimization and Scheduling**: The framework implements intelligent resource scheduling that optimizes utilization of testing resources while minimizing test execution time and ensuring comprehensive coverage. Scheduling includes parallel test execution optimization, resource conflict resolution, and priority-based scheduling that accommodates both routine testing and urgent validation requirements.
 
 Resource optimization includes dynamic load balancing that distributes testing workload across available resources while maintaining test isolation and preventing interference between concurrent test executions. The system provides comprehensive resource utilization monitoring and optimization recommendations that improve testing efficiency.
-        SCHEDULER[Test Scheduler]
-        REPORTER[Result Reporter]
-        ANALYZER[Data Analyzer]
-    end
-    
-    subgraph "Android Testing Framework"
-        AUNIT[Android Unit Tests<br/>JUnit + Mockito]
-        AINTEGRATION[Android Integration Tests<br/>Espresso + Robolectric]
-        AINSTRUMENT[Instrumented Tests<br/>Device Testing]
-    end
-    
-    subgraph "Python Testing Framework"
-        PUNIT[Python Unit Tests<br/>pytest + mock]
-        PINTEGRATION[Python Integration Tests<br/>pytest-asyncio]
-        PSYSTEM[System Tests<br/>End-to-End Validation]
-    end
-    
-    subgraph "Specialized Testing Tools"
-        NETWORK[Network Simulation<br/>Latency & Packet Loss]
-        LOAD[Load Testing<br/>Device Scaling]
-        MONITOR[Resource Monitoring<br/>Performance Metrics]
-    end
-    
-    COORDINATOR --> SCHEDULER
-    SCHEDULER --> REPORTER
-    REPORTER --> ANALYZER
-    
-    COORDINATOR --> AUNIT
-    COORDINATOR --> AINTEGRATION
-    COORDINATOR --> AINSTRUMENT
-    
-    COORDINATOR --> PUNIT
-    COORDINATOR --> PINTEGRATION
-    COORDINATOR --> PSYSTEM
-    
-    PSYSTEM --> NETWORK
-    PSYSTEM --> LOAD
-    PSYSTEM --> MONITOR
-```
+
 
 ### Test Environment Management
 

@@ -446,7 +446,9 @@ graph TB
 | **FR-006** | Session Management | System shall manage experimental sessions with automated protocols | <10 minutes setup time, 99% session completion rate | Time-motion studies and success rate analysis |
 | **FR-008** | Quality Assessment | System shall perform real-time quality assessment and alerts | >95% accurate quality detection, <2s alert latency | Validation against expert quality assessments |
 | **FR-012** | System Monitoring | System shall monitor health and performance with alerts | 100% critical event detection, <5s alert response | Fault injection testing and monitoring validation |
-    
+
+```mermaid
+graph TB   
     FR010 --> FR001
     FR001 --> FR002
     FR002 --> FR003

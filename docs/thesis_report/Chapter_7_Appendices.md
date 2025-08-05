@@ -1582,35 +1582,6 @@ class PerformanceBenchmark:
         self.logger.info(f"Benchmarked {operation_name}: {metrics.mean_time:.4f}s avg, {metrics.success_rate:.2%} success")
         return metrics
 ```
-        """
-        Calculates and applies timing offset correction for a device.
-        Returns the measured offset in milliseconds.
-        """
-        timestamps = []
-        for _ in range(10):  # Multiple samples for accuracy
-            local_time = time.time_ns()
-            device_time = await self.get_device_timestamp(device_id)
-            reference_time = await self.get_reference_timestamp()
-            
-            offset = (reference_time - device_time) / 1_000_000  # Convert to ms
-            timestamps.append(offset)
-            
-        # Statistical analysis for robust offset calculation
-        median_offset = np.median(timestamps)
-        std_deviation = np.std(timestamps)
-        
-        # Filter outliers beyond 2 standard deviations
-        filtered_offsets = [t for t in timestamps 
-                          if abs(t - median_offset) <= 2 * std_deviation]
-        
-        final_offset = np.mean(filtered_offsets)
-        self.device_offsets[device_id] = final_offset
-        
-        # Log synchronization quality metrics
-        self.log_sync_quality(device_id, final_offset, std_deviation)
-        
-        return final_offset
-```
 
 **Listing F.2: Real-time Quality Assessment (Android/Kotlin)**
 

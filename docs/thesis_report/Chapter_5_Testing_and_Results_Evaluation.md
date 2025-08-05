@@ -283,7 +283,7 @@ The continuous integration framework provides automated testing execution with c
 - **Production Deployment Testing**: Comprehensive system validation in production-like environments with real hardware integration
     style ACCURACY fill:#e1f5fe
     style SCIENTIFIC fill:#f3e5f5
-```
+
 
 **Table 5.2: Test Coverage Analysis by Component**
 
@@ -327,10 +327,6 @@ graph LR
     style H fill:#ffeb3b
     style I fill:#2e7d32
     style J fill:#8bc34a
-```
-    
-    ACCURACY --> SCIENTIFIC
-    SYNCHRONIZATION --> SCIENTIFIC
 ```
 
 **Foundation Testing Layer Validation**: The foundation layer provides detailed validation of individual components and modules that form the building blocks of system functionality. This layer focuses on verifying correct implementation of algorithms, data structures, and basic functionality while establishing confidence in the fundamental correctness of system components.
@@ -521,6 +517,10 @@ Version control integration ensures that all testing artifacts including test co
 **Resource Optimization and Scheduling**: The framework implements intelligent resource scheduling that optimizes utilization of testing resources while minimizing test execution time and ensuring comprehensive coverage. Scheduling includes parallel test execution optimization, resource conflict resolution, and priority-based scheduling that accommodates both routine testing and urgent validation requirements.
 
 Resource optimization includes dynamic load balancing that distributes testing workload across available resources while maintaining test isolation and preventing interference between concurrent test executions. The system provides comprehensive resource utilization monitoring and optimization recommendations that improve testing efficiency.
+
+```mermaid
+graph TB
+    subgraph "Base"
         SCHEDULER[Test Scheduler]
         REPORTER[Result Reporter]
         ANALYZER[Data Analyzer]

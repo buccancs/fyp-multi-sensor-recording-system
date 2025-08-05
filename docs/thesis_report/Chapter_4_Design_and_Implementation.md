@@ -741,67 +741,6 @@ class ShimmerRecorder @Inject constructor(
 - **Quality Assessment**: Real-time signal quality analysis with artifact detection and measurement validity assessment
 
 ## 4.4 Desktop Controller Design and Functionality
-        PROC[Processing Pipeline<br/>Real-time Analysis]
-        HEALTH[Health Monitor<br/>System Status Tracking]
-        SESSION[Session Manager<br/>Experiment Coordination]
-    end
-    
-    subgraph "Mobile Data Collection Network"
-        A1[Android Device 1<br/>Samsung Galaxy S22]
-        A2[Android Device 2<br/>Samsung Galaxy S22]
-        A3[Android Device 3<br/>Samsung Galaxy S22]
-        A4[Android Device 4<br/>Samsung Galaxy S22]
-    end
-    
-    subgraph "Sensor Hardware Ecosystem"
-        S1[Shimmer3 GSR+ Sensor 1] 
-        S2[Shimmer3 GSR+ Sensor 2]
-        T1[Topdon TC001 Thermal Camera 1]
-        T2[Topdon TC001 Thermal Camera 2]
-        W1[USB Webcam 1<br/>Logitech C920]
-        W2[USB Webcam 2<br/>Logitech C920]
-    end
-    
-    subgraph "Data Flow Architecture"
-        LOCAL_BUFFER[Local Data Buffers]
-        NETWORK_SYNC[Network Synchronization]
-        CENTRAL_STORAGE[Centralized Storage]
-    end
-    
-    PC --> SYNC
-    PC --> STORE
-    PC --> PROC
-    PC --> HEALTH
-    PC --> SESSION
-    
-    SESSION <--> A1
-    SESSION <--> A2
-    SESSION <--> A3
-    SESSION <--> A4
-    
-    S1 -.-> A1
-    S2 -.-> A2
-    T1 -.-> A3
-    T2 -.-> A4
-    W1 --> PC
-    W2 --> PC
-    
-    A1 --> LOCAL_BUFFER
-    A2 --> LOCAL_BUFFER
-    A3 --> LOCAL_BUFFER
-    A4 --> LOCAL_BUFFER
-    
-    LOCAL_BUFFER --> NETWORK_SYNC
-    NETWORK_SYNC --> CENTRAL_STORAGE
-    
-    style PC fill:#e1f5fe
-    style SYNC fill:#fff3e0
-    style SESSION fill:#f3e5f5
-    style A1 fill:#e8f5e8
-    style A2 fill:#e8f5e8
-    style A3 fill:#e8f5e8
-    style A4 fill:#e8f5e8
-```
 
 **Table 4.1: System Component Specifications**
 
@@ -956,32 +895,6 @@ graph TB
     MASTER --> THERMAL_EXT
     MASTER --> GSR_EXT
     MASTER --> WEBCAM
-    
-    style MASTER fill:#1565c0,color:#ffffff
-    style NODE1 fill:#2e7d32,color:#ffffff
-    style NODE2 fill:#f57c00,color:#ffffff
-    style NODE3 fill:#c62828,color:#ffffff
-    style NODE4 fill:#6a1b9a,color:#ffffff
-```
-    S2 -.-> A2
-    T1 -.-> A1
-    T2 -.-> A2
-    W1 -.-> PC
-    W2 -.-> PC
-    
-    A1 --> LOCAL_BUFFER
-    A2 --> LOCAL_BUFFER
-    A3 --> LOCAL_BUFFER
-    A4 --> LOCAL_BUFFER
-    
-    LOCAL_BUFFER --> NETWORK_SYNC
-    NETWORK_SYNC --> CENTRAL_STORAGE
-    
-    SYNC --> NETWORK_SYNC
-    HEALTH --> A1
-    HEALTH --> A2
-    HEALTH --> A3
-    HEALTH --> A4
 ```
 
 The topology design accommodates horizontal scaling through the simple addition of mobile devices without requiring architectural modifications or complex reconfiguration procedures. Each mobile device integrates into the coordination network through standardized protocols and interfaces, while the central coordination hub dynamically adapts to accommodate varying device counts and configurations.
@@ -1133,14 +1046,6 @@ The recovery implementation prioritizes data integrity over operational continui
 **Graceful Degradation Strategies**: When complete recovery is not possible, the system implements graceful degradation strategies that maintain partial functionality while providing clear indication of operational limitations. Degradation strategies prioritize core data collection functionality while temporarily suspending advanced features that require full system coordination.
 
 The degradation implementation includes dynamic quality assessment that adjusts operational parameters based on available system resources and capabilities. The system maintains comprehensive documentation of degradation events and their impact on data quality, enabling informed decisions about data analysis approaches and quality considerations.
-    COORD <--> AGENT2
-    COORD <--> AGENT3
-    COORD <--> AGENT4
-    
-    AGENT1 <-.-> AGENT2
-    AGENT2 <-.-> AGENT3
-    AGENT3 <-.-> AGENT4
-```
 
 ### Communication Architecture
 
