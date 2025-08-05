@@ -1,5 +1,15 @@
 # Chapter 7: Appendices
 
+This comprehensive appendix provides complete technical documentation, user guides, and supporting materials that supplement the main thesis content while following academic standards for thesis documentation (Turabian, 2018; University of Chicago Press, 2017). The appendices include all necessary technical details for system reproduction, operation, and future development while providing comprehensive reference materials for academic evaluation and community adoption (Booth et al., 2016).
+
+The appendix structure follows systematic documentation methodology adapted for research software applications (Wilson et al., 2014), ensuring that all technical implementation details, validation results, and operational procedures are comprehensively documented to support reproducibility and independent validation.
+
+![Data Export Workflow](../diagrams/13_data_export_workflow.png)
+*Figure 7.1: Data Export Workflow - Comprehensive data processing and export pipeline showing integration with research analysis tools and data format specifications*
+
+![Software Installation Flow](../diagrams/17_software_installation_flow.png)
+*Figure 7.2: Software Installation Flow - Step-by-step installation and configuration process for multi-platform deployment supporting diverse research environments*
+
 ## Table of Contents
 
 1. [Appendix A: System Manual](#appendix-a-system-manual)
