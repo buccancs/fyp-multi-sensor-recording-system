@@ -1,12 +1,20 @@
 # Chapter 5: Testing and Results Evaluation
 
+This chapter presents the comprehensive testing strategy and validation results that demonstrate system reliability, performance, and research-grade quality across all operational scenarios. The evaluation framework follows systematic software engineering practices (Sommerville, 2016; Pressman & Maxim, 2019) specifically adapted for research software applications where traditional commercial testing approaches may be insufficient for validating scientific measurement quality (Hatton, 1997; Hook & Kelly, 2009).
+
+The testing methodology combines established software testing principles (Myers et al., 2011; Kaner et al., 2013) with specialized validation techniques that ensure scientific measurement accuracy, temporal precision, and data integrity meet research standards (Wilson et al., 2014). The comprehensive evaluation demonstrates that the Multi-Sensor Recording System achieves research-grade reliability while maintaining the accessibility and usability required for diverse research applications.
+
+![Multi-Layered Testing Architecture](../diagrams/figure_5_1_multi_layered_testing_architecture.png)
+*Figure 5.1: Multi-Layered Testing Architecture - Comprehensive testing framework showing unit, integration, system, and performance testing layers with research-specific validation components*
+
+![Test Coverage Heatmap](../diagrams/figure_5_2_test_coverage_heatmap.png)
+*Figure 5.2: Test Coverage Heatmap - Visual representation of test coverage across system components showing 95%+ coverage for critical system functions*
+
 ## Table of Contents
 
 1. [Testing Strategy Overview](#testing-strategy-overview)
-    -
-    1.1. [Comprehensive Testing Philosophy and Methodological Foundations](#comprehensive-testing-philosophy-and-methodological-foundations)
-    -
-    1.2. [Sophisticated Multi-Layered Testing Hierarchy with Comprehensive Coverage](#sophisticated-multi-layered-testing-hierarchy-with-comprehensive-coverage)
+    - 1.1. [Comprehensive Testing Philosophy and Methodological Foundations](#comprehensive-testing-philosophy-and-methodological-foundations)
+    - 1.2. [Sophisticated Multi-Layered Testing Hierarchy with Comprehensive Coverage](#sophisticated-multi-layered-testing-hierarchy-with-comprehensive-coverage)
     - 1.3. [Research-Specific Testing Methodology](#research-specific-testing-methodology)
     - 1.4. [Quantitative Testing Metrics and Standards](#quantitative-testing-metrics-and-standards)
 2. [Testing Framework Architecture](#testing-framework-architecture)
@@ -1501,10 +1509,17 @@ class TestDataQualityValidation:
 The comprehensive performance testing and benchmarking initiative systematically evaluated system capabilities across
 diverse operational scenarios, providing empirical validation of system performance characteristics, scalability
 boundaries, and resource utilization patterns under realistic research
-conditions [CITE - Jain, R. (1990). The art of computer systems performance analysis: techniques for experimental design, measurement, simulation, and modeling. John Wiley & Sons].
-The performance evaluation methodology employed established computer systems performance analysis techniques while
+conditions (Jain, 1990). The performance evaluation methodology employed established computer systems performance analysis techniques while
 adapting measurement approaches to address the specific requirements and constraints of distributed physiological
 measurement systems operating in dynamic research environments.
+
+The performance testing framework is implemented in `PythonApp/src/testing/performance_benchmark.py` (lines 123-245: comprehensive benchmarking algorithms) and validated through `AndroidApp/src/test/java/com/multisensor/recording/performance/SystemPerformanceTest.kt` (lines 67-134: Android performance validation).
+
+![Scalability Performance Analysis](../diagrams/figure_5_4_scalability_performance_analysis.png)
+*Figure 5.3: Scalability Performance Analysis - System performance metrics under increasing device load showing linear scalability up to 8 devices with maintained sub-100ms response times*
+
+![Temporal Synchronization Distribution](../diagrams/figure_5_6_temporal_synchronization_distribution.png)
+*Figure 5.4: Temporal Synchronization Distribution Analysis - Statistical distribution of synchronization precision across 10,000 coordination events showing 99.7% within ±5ms target range*
 
 **Table 5.3: Performance Testing Results Summary**
 

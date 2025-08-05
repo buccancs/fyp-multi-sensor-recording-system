@@ -1,10 +1,26 @@
 # Chapter 4: Design and Implementation
 
+This comprehensive chapter presents the detailed design and implementation of the Multi-Sensor Recording System,
+demonstrating how established software engineering principles (Martin, 2008; Fowler, 2018) and distributed systems
+theory (Tanenbaum & Van Steen, 2016; Coulouris et al., 2011) have been systematically applied to create a novel contactless physiological
+measurement platform. The architectural design represents a sophisticated synthesis of distributed computing
+patterns (Gamma et al., 1994), real-time systems engineering (Liu, 2000), and research software development
+methodologies (Wilson et al., 2014) specifically tailored for physiological measurement applications.
+
+The chapter provides comprehensive technical analysis of design decisions, implementation strategies, and architectural
+patterns that enable the system to achieve research-grade measurement precision while maintaining the scalability,
+reliability, and maintainability required for long-term research applications (McConnell, 2004). Through detailed
+examination of system components implemented in `AndroidApp/src/main/java/com/multisensor/recording/` and
+`PythonApp/src/`, communication protocols, and integration mechanisms, this chapter demonstrates how theoretical
+computer science principles translate into practical research capabilities (Brooks, 1995).
+
+![Multi-Sensor System Architecture](../diagrams/figure_4_1_multi_sensor_system_architecture.png)
+*Figure 4.1: Multi-Sensor System Architecture - Complete system overview showing PC master controller coordination with Android devices, sensor integration, and real-time data processing pipeline*
+
 ## Table of Contents
 
 4. [Design and Implementation](#design-and-implementation)
-    -
-    4.1. [System Architecture Overview (PC–Android System Design)](#41-system-architecture-overview-pc-android-system-design)
+    - 4.1. [System Architecture Overview (PC–Android System Design)](#41-system-architecture-overview-pc-android-system-design)
         - 4.1.1. [Architectural Principles and Design Philosophy](#411-architectural-principles-and-design-philosophy)
         - 4.1.2. [Network Architecture and Communication Design](#412-network-architecture-and-communication-design)
         - 4.1.3. [Data Flow Architecture](#413-data-flow-architecture)
@@ -14,14 +30,13 @@
         - 4.2.3. [Resource Management and Power Optimization](#423-resource-management-and-power-optimization)
         - 4.2.4. [Camera Recording Implementation](#424-camera-recording-implementation)
     - 4.3. [Android Application Sensor Integration](#43-android-application-sensor-integration)
-        - 4.3.1. [Thermal Camera Integration (Topdon)](#431-thermal-camera-integration-topdon)
+        - 4.3.1. [Thermal Camera Integration (TopDon)](#431-thermal-camera-integration-topdon)
         - 4.3.2. [GSR Sensor Integration (Shimmer)](#432-gsr-sensor-integration-shimmer)
     - 4.4. [Desktop Controller Design and Functionality](#44-desktop-controller-design-and-functionality)
         - 4.4.1. [Session Coordination and Management](#441-session-coordination-and-management)
         - 4.4.2. [Real-Time Monitoring and Quality Assurance](#442-real-time-monitoring-and-quality-assurance)
         - 4.4.3. [User Interface Design and Usability](#443-user-interface-design-and-usability)
-    -
-    4.5. [Communication Protocol and Synchronization Mechanism](#45-communication-protocol-and-synchronization-mechanism)
+    - 4.5. [Communication Protocol and Synchronization Mechanism](#45-communication-protocol-and-synchronization-mechanism)
         - 4.5.1. [Multi-Layer Communication Architecture](#451-multi-layer-communication-architecture)
         - 4.5.2. [Temporal Synchronization Implementation](#452-temporal-synchronization-implementation)
         - 4.5.3. [Error Recovery and Fault Tolerance](#453-error-recovery-and-fault-tolerance)
@@ -33,37 +48,30 @@
         - 4.7.2. [Multi-Modal Data Integration Challenges](#472-multi-modal-data-integration-challenges)
         - 4.7.3. [Platform Integration and Compatibility](#473-platform-integration-and-compatibility)
 
----
-
-This comprehensive chapter presents the detailed design and implementation of the Multi-Sensor Recording System,
-demonstrating how established software engineering principles [Martin2008, Fowler2018] and distributed systems
-theory [Tanenbaum2016, Coulouris2011] have been systematically applied to create a novel contactless physiological
-measurement platform. The architectural design represents a sophisticated synthesis of distributed computing
-patterns [Gamma1994], real-time systems engineering [Liu2000], and research software development
-methodologies [Wilson2014] specifically tailored for physiological measurement applications.
-
-The chapter provides comprehensive technical analysis of design decisions, implementation strategies, and architectural
-patterns that enable the system to achieve research-grade measurement precision while maintaining the scalability,
-reliability, and maintainability required for long-term research applications [McConnell2004]. Through detailed
-examination of system components implemented in `AndroidApp/src/main/java/com/multisensor/recording/` and
-`PythonApp/src/`, communication protocols, and integration mechanisms, this chapter demonstrates how theoretical
-computer science principles translate into practical research capabilities [Brooks1995].
-
 ## 4.1 System Architecture Overview (PC–Android System Design)
 
 The Multi-Sensor Recording System architecture represents a sophisticated distributed computing solution specifically
 engineered to address the complex technical challenges inherent in synchronized multi-modal data collection while
 maintaining the scientific rigor and operational reliability essential for conducting high-quality physiological
-measurement research [Healey2005, Boucsein2012]. The architectural design demonstrates a systematic balance between
-technical requirements for precise coordination across heterogeneous devices [Lamport1978] and practical considerations
-for system reliability, scalability, and long-term maintainability in diverse research environments [Avizienis2004].
+measurement research (Healey & Picard, 2005; Boucsein, 2012). The architectural design demonstrates a systematic balance between
+technical requirements for precise coordination across heterogeneous devices (Lamport, 1978) and practical considerations
+for system reliability, scalability, and long-term maintainability in diverse research environments (Avizienis et al., 2004).
 
-The system architecture draws upon established distributed systems patterns [Buschmann1996] while introducing
+The system architecture draws upon established distributed systems patterns (Buschmann et al., 1996) while introducing
 specialized adaptations required for physiological measurement applications that must coordinate consumer-grade mobile
-devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance [Gray1993], data
-integrity [Date2003], and temporal precision [Mills1991] as fundamental requirements that cannot be compromised for
+devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance (Gray & Reuter, 1993), data
+integrity (Date, 2003), and temporal precision (Mills, 1991) as fundamental requirements that cannot be compromised for
 convenience or performance optimization, implemented through sophisticated algorithms in
-`PythonApp/src/master_clock_synchronizer.py` and `AndroidApp/src/main/java/com/multisensor/recording/SessionManager.kt`.
+`PythonApp/src/master_clock_synchronizer.py` (lines 156-234: temporal coordination algorithms) and `AndroidApp/src/main/java/com/multisensor/recording/services/SessionManager.kt` (lines 78-134: session lifecycle management).
+
+![Hardware Setup Architecture](../diagrams/02_hardware_setup_architecture.png)
+*Figure 4.2: Hardware Setup Architecture - Physical deployment diagram showing PC master controller, Android devices, thermal cameras, and GSR sensors in research environment configuration*
+
+![Android App Architecture](../diagrams/03_android_app_architecture.png)
+*Figure 4.3: Android Application Architecture - Detailed component diagram showing service architecture, data flow, and sensor integration within the Android application framework*
+
+![PC App Architecture](../diagrams/04_pc_app_architecture.png)
+*Figure 4.4: PC Application Architecture - Desktop controller architecture showing session management, device coordination, and real-time monitoring components*
 
 ### 4.1.1 Architectural Principles and Design Philosophy
 
@@ -3774,33 +3782,55 @@ Systems." IEEE Standard 1471-2000, 2000.
 
 [Kruchten1995] Kruchten, P. "The 4+1 View Model of Architecture." IEEE Software, 12(6), 42-50, 1995.
 
-[Lamport1978] Lamport, L. "Time, clocks, and the ordering of events in a distributed system." Communications of the ACM,
-21(7), 558-565, 1978.
+## References
 
-[Martin2008] Martin, R. C. "Clean Code: A Handbook of Agile Software Craftsmanship." Prentice Hall, 2008.
+Avizienis, A., Laprie, J. C., Randell, B., & Landwehr, C. (2004). Basic concepts and taxonomy of dependable and secure computing. *IEEE Transactions on Dependable and Secure Computing*, 1(1), 11-33.
 
-[McConnell2004] McConnell, S. "Code Complete: A Practical Handbook of Software Construction, Second Edition." Microsoft
-Press, 2004.
+Boucsein, W. (2012). *Electrodermal Activity (2nd ed.)*. Springer Science & Business Media. DOI: 10.1007/978-1-4614-1126-0
 
-[Meszaros2007] Meszaros, G. "xUnit Test Patterns: Refactoring Test Code." Addison-Wesley Professional, 2007.
+Brooks, F. P. (1995). *The Mythical Man-Month: Essays on Software Engineering*. Addison-Wesley Professional.
 
-[Parnas1972] Parnas, D. L. "On the criteria to be used in decomposing systems into modules." Communications of the ACM,
-15(12), 1053-1058, 1972.
+Buschmann, F., Meunier, R., Rohnert, H., Sommerlad, P., & Stal, M. (1996). *Pattern-Oriented Software Architecture Volume 1: A System of Patterns*. John Wiley & Sons.
 
-[Python2023] Python Software Foundation. "Python 3.11 Documentation." https://docs.python.org/3/, 2023.
+Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). *Distributed Systems: Concepts and Design (5th ed.)*. Addison-Wesley.
 
-[Rozanski2011] Rozanski, N., & Woods, E. "Software Systems Architecture: Working with Stakeholders Using Viewpoints and
-Perspectives, 2nd Edition." Addison-Wesley Professional, 2011.
+Date, C. J. (2003). *An Introduction to Database Systems (8th ed.)*. Addison-Wesley.
 
-[Shaw1996] Shaw, M., & Garlan, D. "Software Architecture: Perspectives on an Emerging Discipline." Prentice Hall, 1996.
+Fowler, M. (2018). *Refactoring: Improving the Design of Existing Code (2nd ed.)*. Addison-Wesley Professional.
 
-[Silberschatz2018] Silberschatz, A., Galvin, P. B., & Gagne, G. "Operating System Concepts, 10th Edition." John Wiley &
-Sons, 2018.
+Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
 
-[Tanenbaum2014] Tanenbaum, A. S., & Van Steen, M. "Distributed Systems: Principles and Paradigms, 2nd Edition." Prentice
-Hall, 2014.
+Gray, J., & Reuter, A. (1993). *Transaction Processing: Concepts and Techniques*. Morgan Kaufmann.
 
-[Vernon2013] Vernon, V. "Implementing Domain-Driven Design." Addison-Wesley Professional, 2013.
+Healey, J. A., & Picard, R. W. (2005). Detecting stress during real-world driving tasks using physiological sensors. *IEEE Transactions on Intelligent Transportation Systems*, 6(2), 156-166.
+
+Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. *Communications of the ACM*, 21(7), 558-565.
+
+Liu, J. W. S. (2000). *Real-Time Systems*. Prentice Hall.
+
+Martin, R. C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall.
+
+McConnell, S. (2004). *Code Complete: A Practical Handbook of Software Construction (2nd ed.)*. Microsoft Press.
+
+Meszaros, G. (2007). *xUnit Test Patterns: Refactoring Test Code*. Addison-Wesley Professional.
+
+Mills, D. L. (1991). Internet time synchronization: the network time protocol. *IEEE Transactions on Communications*, 39(10), 1482-1493.
+
+Parnas, D. L. (1972). On the criteria to be used in decomposing systems into modules. *Communications of the ACM*, 15(12), 1053-1058.
+
+Python Software Foundation (2023). *Python 3.11 Documentation*. Retrieved from https://docs.python.org/3/
+
+Rozanski, N., & Woods, E. (2011). *Software Systems Architecture: Working with Stakeholders Using Viewpoints and Perspectives (2nd ed.)*. Addison-Wesley Professional.
+
+Shaw, M., & Garlan, D. (1996). *Software Architecture: Perspectives on an Emerging Discipline*. Prentice Hall.
+
+Silberschatz, A., Galvin, P. B., & Gagne, G. (2018). *Operating System Concepts (10th ed.)*. John Wiley & Sons.
+
+Tanenbaum, A. S., & Van Steen, M. (2016). *Distributed Systems: Principles and Paradigms (3rd ed.)*. Pearson.
+
+Vernon, V. (2013). *Implementing Domain-Driven Design*. Addison-Wesley Professional.
+
+Wilson, G., Aruliah, D. A., Brown, C. T., Chue Hong, N. P., Davis, M., Guy, R. T., ... & Wilson, P. (2014). Best practices for scientific computing. *PLoS Biology*, 12(1), e1001745.
 
 - `PythonApp/src/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix
   F.103)
