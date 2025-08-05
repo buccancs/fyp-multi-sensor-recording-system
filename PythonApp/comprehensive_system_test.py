@@ -25,13 +25,13 @@ def test_python_environment():
     dependencies = {
         'cv2': 'OpenCV',
         'numpy': 'NumPy',
-        'PyQt5.QtWidgets': 'PyQt5',
+        'PyQt5': 'PyQt5',
         'requests': 'Requests',
         'websockets': 'WebSockets',
         'matplotlib': 'Matplotlib',
         'pandas': 'Pandas',
         'scipy': 'SciPy',
-        'pillow': 'Pillow (PIL)',
+        'PIL': 'Pillow (PIL)',
     }
     
     available = []
@@ -48,7 +48,7 @@ def test_python_environment():
                 __import__(module)
             available.append(name)
             print(f"✓ {name}")
-        except ImportError:
+        except (ImportError, AttributeError) as e:
             missing.append(name)
             print(f"✗ {name}")
     
