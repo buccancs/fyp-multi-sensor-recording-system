@@ -74,14 +74,20 @@ class FilesAdapter(
             when (fileType) {
                 FileType.VIDEO -> R.drawable.ic_video_file
                 FileType.RAW_IMAGE -> R.drawable.ic_image_file
-                FileType.THERMAL_DATA -> R.drawable.ic_data_file
+                FileType.THERMAL -> R.drawable.ic_data_file
+                FileType.GSR -> R.drawable.ic_data_file
+                FileType.METADATA -> R.drawable.ic_data_file
+                FileType.LOG -> R.drawable.ic_data_file
             }
 
         private fun getFileTypeBackground(fileType: FileType): Int =
             when (fileType) {
                 FileType.VIDEO -> R.drawable.file_item_video_background
                 FileType.RAW_IMAGE -> R.drawable.file_item_image_background
-                FileType.THERMAL_DATA -> R.drawable.file_item_data_background
+                FileType.THERMAL -> R.drawable.file_item_data_background
+                FileType.GSR -> R.drawable.file_item_data_background
+                FileType.METADATA -> R.drawable.file_item_data_background
+                FileType.LOG -> R.drawable.file_item_data_background
             }
 
         private fun formatFileSize(bytes: Long): String =
