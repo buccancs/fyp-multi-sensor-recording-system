@@ -1,53 +1,34 @@
-# Chapter 3: Requirements and Analysis
+# Chapter 3: Requirements Analysis and System Specification
 
-## Introduction
+## 3.1 Introduction
 
-This chapter establishes the formal requirements and analysis for the
-Multi-Sensor Recording System, building a foundation that guides the
-design and implementation. It begins by examining the **problem
-context** -- the current state of physiological measurement and its
-limitations -- to identify the opportunity for innovation. It then
-details the **stakeholder landscape** and how their needs were elicited,
-before defining the system's **functional** and **non-functional
-requirements**. Key usage scenarios are outlined to validate the
-requirements, and technical constraints and assumptions are addressed.
-Finally, the chapter concludes with a summary linking these requirements
-back to the project's overarching objectives. The aim is to ensure a
-rigorous requirements engineering process appropriate for a
-research-focused software system, using stakeholder input, literature
-insights, and analysis of the problem domain to derive a comprehensive
-set of
-requirements[\[1\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L87-L95).
-This approach ensures that the requirements align with both the
-scientific goals and practical feasibility of the project.
+This chapter establishes comprehensive requirements and system specifications for the Multi-Sensor Recording System for Contactless GSR Prediction Research, providing the analytical foundation that guides architectural design and implementation decisions. The chapter systematically examines the problem context within current physiological measurement paradigms, analyzes stakeholder requirements, and derives detailed functional and non-functional system specifications.
 
-## 3.1 Problem Context and Opportunity Analysis
+![Figure 3.1: Complete Data Flow Architecture](../diagrams/05_complete_data_flow_architecture.png)
+*Figure 3.1: Overview of the complete data flow architecture showing the integration between contactless sensors, traditional validation sensors, and data processing systems.*
 
-### 3.1.1 Current Physiological Measurement Landscape
+The requirements engineering methodology employed follows established software engineering practices adapted for research-focused system development (Brooks, 1995). The approach integrates stakeholder input from the psychophysiological research community, technical constraints from hardware and software platforms, and scientific requirements derived from the literature review to ensure comprehensive requirement coverage.
 
-Contemporary physiological monitoring heavily relies on contact-based
-sensor technologies, with galvanic skin response (GSR) via attached
-electrodes being a standard for measuring electrodermal activity. These
-traditional methods have proven effective in controlled settings, but
-they impose inherent limitations on research. Participants must wear
-sensors that physically contact the skin (often with conductive gel),
-and wires or devices tether them to recording equipment. Such setups can
-restrict natural movement and cause discomfort, influencing
-participants' behavior. For example, **wearable GSR sensors and ECG
-electrodes introduce discomfort and awareness that can bias emotional or
-stress responses** -- the very phenomena being
-measured[\[2\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L292-L300).
-Furthermore, many existing systems focus on a single modality (e.g.,
-only electrical GSR data), lacking the richer context that multi-modal
-measurements (like visual and thermal cues) could provide.
+The analysis progresses from problem identification through stakeholder analysis to detailed requirement specification, culminating in validation scenarios that demonstrate requirement satisfaction. This systematic approach ensures that derived requirements align with both scientific objectives and practical implementation feasibility while maintaining traceability to research goals.
 
-In recent years, there have been efforts to modernize this landscape.
-Cameras and other non-contact sensors have emerged as alternatives for
-measuring physiological signals such as heart rate or stress indicators.
-However, these approaches are still developing and are not yet standard
-in mainstream research practice. The current landscape is thus a mix of
-reliable but intrusive contact sensors and promising yet underutilized
-contactless techniques. This project positions itself at this
+## 3.2 Problem Context and Opportunity Analysis
+
+### Contemporary Physiological Measurement Challenges
+
+Current physiological monitoring methodologies predominantly rely on contact-based sensor technologies, with electrodermal activity measurement through attached electrodes representing the established standard for GSR research applications. While these traditional approaches provide accurate measurements under controlled laboratory conditions, they impose significant methodological constraints that limit research scope and ecological validity.
+
+![Figure 3.2: Hardware Integration Architecture](../diagrams/figure_3_5_hardware_integration_architecture.png)
+*Figure 3.2: Current hardware integration challenges showing the constraints imposed by traditional contact-based measurement systems and the proposed contactless alternatives.*
+
+Contact-based GSR measurement requires participants to wear electrodes that physically contact the skin surface, typically with conductive gel application for optimal signal quality. Wire connections tether participants to recording equipment, restricting natural movement patterns and potentially causing physical discomfort during extended measurement sessions. These experimental constraints can directly influence participant behavior, creating measurement artifacts that confound the emotional and stress responses being investigated (Boucsein, 2012).
+
+Additionally, traditional single-modality approaches focus exclusively on electrical GSR signals, failing to leverage complementary physiological indicators that multi-modal measurement systems could provide. This limitation restricts the comprehensive understanding of physiological responses that contemporary affective computing research requires.
+
+### Emerging Contactless Measurement Opportunities
+
+Recent technological advances have introduced cameras and other non-contact sensors as alternatives for physiological signal measurement, including heart rate monitoring and stress indicator detection. However, these contactless approaches remain in developmental stages and have not achieved widespread adoption in mainstream psychophysiological research practice.
+
+The current measurement landscape presents a dichotomy between reliable but intrusive contact-based sensors and promising yet underutilized contactless measurement techniques. This research project addresses this gap by developing a validated platform that combines the accuracy of traditional measurement methods with the ecological advantages of contactless monitoring.
 intersection, aiming to leverage advances in computer vision and thermal
 imaging to push the field toward **non-intrusive, multi-sensor
 measurement paradigms**.

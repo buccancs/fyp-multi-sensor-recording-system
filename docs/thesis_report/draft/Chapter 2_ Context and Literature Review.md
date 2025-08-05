@@ -51,22 +51,69 @@ signals and facial expressions, while thermal methods directly sense
 autonomic changes like blood flow and temperature that are invisible to
 RGB cameras.
 
-By combining these approaches, researchers aim to achieve **unobtrusive
-yet accurate** emotion and stress monitoring. The multi-modal
-integration of optical (RGB) and thermal data, often synchronized with
-ambient sensors, has become a leading-edge methodology in affective
-computing. The clear rationale is to maintain **research-grade precision
-without the burden on participants**: no electrodes, no wires, and no
-awareness that could bias the emotional
-state[\[19\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L49-L57)[\[20\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L55-L64).
-This section has outlined how contactless measurement techniques work
-and why they are a foundational component of modern affect detection
-systems. Subsequent sections will delve deeper into specific concepts --
-such as definitions of stress, and the physiological signals of stress
-(hormonal, electrodermal, and thermal) -- that underpin these
-technologies.
+By combining these approaches, researchers aim to achieve unobtrusive yet accurate emotion and stress monitoring. The multi-modal integration of optical (RGB) and thermal data, often synchronized with ambient sensors, has become a leading-edge methodology in affective computing. The clear rationale is to maintain research-grade precision without the burden on participants: eliminating electrodes, wires, and measurement awareness that could bias emotional responses.
 
-## 2.3 Definitions of Stress in Literature
+This section has outlined how contactless measurement techniques operate and their foundational role in modern affect detection systems. The following sections examine specific physiological measurement modalities, particularly galvanic skin response as a primary stress indicator, and establish the theoretical framework for contactless GSR measurement development.
+
+## 2.3 Galvanic Skin Response: Physiological Foundations and Measurement Techniques
+
+Galvanic Skin Response (GSR), alternatively termed Electrodermal Activity (EDA) or skin conductance, represents one of the most established and reliable indicators of autonomic nervous system activation in psychophysiological research (Boucsein, 2012). The physiological mechanism underlying GSR involves the sympathetic nervous system's control of eccrine sweat glands, particularly those located in the palmar and plantar surfaces, which respond to emotional and cognitive arousal independently of thermoregulatory requirements.
+
+![Figure 2.3: Traditional vs Contactless GSR Comparison](../diagrams/figure_3_1_traditional_vs_contactless_comparison.png)
+*Figure 2.3: Detailed comparison between traditional contact-based GSR measurement systems and proposed contactless approaches, highlighting the methodological advantages and technical challenges of each approach.*
+
+### Physiological Mechanisms of Electrodermal Activity
+
+The electrodermal response occurs through the sympathetic nervous system's innervation of eccrine sweat glands, which increases skin conductance through the release of sweat containing electrolytes. This physiological process operates independently of conscious control, making GSR particularly valuable for objective assessment of emotional and stress responses (Fowles et al., 1981). The temporal characteristics of GSR signals include both tonic components (baseline skin conductance level) and phasic components (rapid changes in response to stimuli), with typical response latencies ranging from 1-3 seconds following stimulus presentation.
+
+Research has established strong correlations between GSR magnitude and various psychological states including stress, cognitive load, emotional arousal, and attention. The quantitative relationship between electrodermal activity and sympathetic arousal makes GSR an ideal validation measure for developing contactless physiological monitoring systems.
+
+### Traditional Contact-Based GSR Measurement
+
+Conventional GSR measurement employs a pair of electrodes placed on the skin surface, typically on the fingers or palm, with conductive gel to ensure optimal electrical contact. The measurement system applies a small constant voltage (typically 0.5V) between the electrodes and measures the resulting current, which varies with skin conductance changes (Biopac Systems Inc., 2018).
+
+Standard GSR recording systems such as the Shimmer3 GSR+ sensor utilize silver/silver chloride electrodes with sampling rates ranging from 1-1000 Hz, providing high temporal resolution for capturing rapid electrodermal responses. These systems achieve measurement precision suitable for research applications but require direct skin contact, limiting their applicability in naturalistic settings.
+
+### Limitations of Contact-Based Approaches
+
+Traditional GSR measurement faces several methodological constraints that motivate the development of contactless alternatives. Physical electrode attachment creates participant awareness that can influence emotional responses, introducing measurement artifacts through the experimental process itself. Extended electrode contact can cause skin irritation, electrode displacement, and gel degradation, affecting measurement reliability during long-term monitoring sessions.
+
+Additional limitations include restricted participant mobility, hygiene concerns in multi-participant studies, and practical difficulties in naturalistic or group measurement scenarios. These constraints particularly impact ecological validity in real-world stress monitoring applications.
+
+### Emerging Contactless GSR Approaches
+
+Recent research has explored alternative methodologies for contactless GSR estimation, primarily through optical and thermal sensing approaches. Computer vision techniques have been applied to detect subtle changes in skin appearance that correlate with perspiration, while thermal imaging methods focus on detecting heat signatures associated with sweat gland activity.
+
+However, current contactless GSR methodologies remain at proof-of-concept stages with limited validation against established electrode-based reference measurements. Typical accuracy levels range from 60-70% correlation with reference GSR under controlled conditions, indicating substantial room for improvement in contactless measurement precision (McDuff et al., 2016).
+
+The technical challenges include environmental sensitivity, individual physiological variability, and the need for robust calibration methodologies that can adapt to different participants and measurement conditions. These limitations establish the research gap that this thesis addresses through the development of a validated multi-modal contactless GSR measurement platform.
+
+## 2.4 Distributed Systems and Sensor Fusion for Physiological Monitoring
+
+The development of multi-sensor physiological monitoring systems requires robust distributed system architectures capable of coordinating data acquisition across multiple devices while maintaining temporal synchronization and data integrity. This technical requirement becomes particularly critical when integrating contactless sensors with traditional physiological measurement equipment for validation and calibration purposes.
+
+![Figure 2.4: Requirements Dependency Network](../diagrams/figure_3_4_requirements_dependency_network.png)
+*Figure 2.4: Network diagram showing the interdependencies between system requirements including hardware integration, software coordination, temporal synchronization, and data fusion capabilities.*
+
+### Temporal Synchronization in Distributed Sensor Systems
+
+Physiological research requires precise temporal coordination between sensor modalities to enable meaningful signal correlation and analysis. The challenge intensifies when integrating sensors with different sampling rates, data formats, and processing latencies across distributed computing platforms (Lamport, 1978).
+
+Modern distributed sensor systems employ various synchronization strategies including Network Time Protocol (NTP) for coarse synchronization and specialized timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
+
+### Multi-Modal Data Fusion Architectures  
+
+Effective sensor fusion requires systematic integration of data streams with different characteristics, sampling rates, and noise profiles. The fusion architecture must accommodate real-time processing requirements while maintaining data quality and enabling offline analysis capabilities (Tanenbaum & Van Steen, 2016).
+
+The system architecture implements a centralized fusion approach where the desktop controller (`PythonApp/src/session/session_manager.py`) coordinates data streams from distributed sensors. This design pattern provides centralized control while enabling modular sensor integration and simplified temporal alignment across data modalities.
+
+### Communication Protocols for Physiological Data
+
+Reliable communication protocols are essential for maintaining data integrity during real-time physiological monitoring. The system employs JSON-based messaging defined in `protocol/communication_protocol.json` to ensure cross-platform compatibility between Android devices and desktop systems while providing structured data format validation.
+
+The protocol design incorporates error handling, connection recovery, and data buffering mechanisms to ensure robust operation under varying network conditions. This approach addresses common distributed system challenges including network latency, connection drops, and device mobility during data collection sessions.
+
+## 2.5 Definitions of Stress in Physiological Research
 
 Accurately defining "stress" is essential for research and applications
 in this domain, yet the term carries multiple meanings across scientific
