@@ -54,23 +54,4 @@
         <item name="cardForegroundColor">@color/md_theme_on_surface</item>
     </style>
 
-    <style name="Theme.MultiSensorRecording.Fallback" parent="Theme.AppCompat.DayNight.NoActionBar">
-
-        <item name="colorPrimary">@color/md_theme_primary</item>
-        <item name="colorPrimaryDark">@color/md_theme_primary_container</item>
-        <item name="colorAccent">@color/md_theme_secondary</item>
-        <item name="android:textColorPrimary">@color/md_theme_on_surface</item>
-        <item name="android:textColorSecondary">@color/md_theme_on_surface_variant</item>
-        <item name="android:colorBackground">@color/md_theme_background</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="Widget.App.CardView" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardBackgroundColor">@color/md_theme_surface</item>
-        <item name="cardCornerRadius">12dp</item>
-        <item name="cardElevation">4dp</item>
-        <item name="cardMaxElevation">8dp</item>
-        <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="rippleColor">@color/md_theme_primary</item>
-    </style>
 </resources>

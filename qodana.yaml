@@ -1,21 +1,7 @@
 version: "1.0"
-
-
-
-
-
-
-
-
 profile:
   name: qodana.recommended
-
-
-
 linter: jetbrains/qodana-jvm:2025.1
-
-
-
 include:
   - name: PythonUnreachableCode
   - name: PyUnusedLocal
@@ -96,8 +82,6 @@ include:
   - name: YAMLUnusedAnchor
   - name: YAMLUnresolvedAlias
   - name: YAMLSchemaValidation
-
-
 exclude:
   - name: All
     paths:

@@ -1,4 +1,4 @@
-# Multi-Sensor Synchronized Recording System
+ # Multi-Sensor Synchronized Recording System
 
 A comprehensive research platform that orchestrates synchronized data collection from multiple sensor modalities including smartphone cameras, thermal imaging, USB webcams, and physiological sensors [Healey2005, McDuff2014]. The system combines an Android mobile application with a Python desktop controller to enable precise temporal synchronization across all data sources for multi-modal research applications, addressing fundamental limitations in traditional physiological measurement methodologies [Boucsein2012, Wilhelm2010].
 

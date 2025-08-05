@@ -64,7 +64,7 @@ graph TB
         subgraph "Calibration Management Layer"
             CM[CalibrationManager<br/>Workflow Coordination]
             CS[CalibrationSession<br/>Session Management]
-            QA[QualityAssessment<br/>Metrics & Validation]
+            QA[QualityAssessment<br/>Metrics and Validation]
         end
         
         subgraph "Computer Vision Layer"
