@@ -25,9 +25,9 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from PyQt5.QtWidgets import QApplication
-from bucika_gsr.utils.logging_config import get_logger, AppLogger
-from bucika_gsr.webcam.dual_webcam_capture import test_dual_webcam_access
-from bucika_gsr.gui.dual_webcam_main_window import DualWebcamMainWindow
+from PythonApp.utils.logging_config import get_logger, AppLogger
+from PythonApp.webcam.dual_webcam_capture import test_dual_webcam_access
+from PythonApp.gui.dual_webcam_main_window import DualWebcamMainWindow
 
 logger = get_logger(__name__)
 

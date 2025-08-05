@@ -272,7 +272,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "PythonApp" / "src"))
 
-from bucika_gsr.utils.logging_config import get_logger, AppLogger, performance_timer
+from PythonApp.utils.logging_config import get_logger, AppLogger, performance_timer
 
 logger = get_logger(__name__)
 
