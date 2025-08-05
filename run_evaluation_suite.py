@@ -35,7 +35,7 @@ from evaluation_suite.framework.quality_validator import QualityValidator
 # Import test suites
 from evaluation_suite.foundation.android_tests import create_android_foundation_suite
 from evaluation_suite.foundation.pc_tests import create_pc_foundation_suite
-from evaluation_suite.integration.integration_tests import create_integration_test_suite
+from evaluation_suite.integration.integration_tests import create_real_integration_suite
 
 
 class EvaluationSuiteRunner:
@@ -133,7 +133,7 @@ class EvaluationSuiteRunner:
         
         # Integration layer test suites
         if not self.args.category or self.args.category == 'integration':
-            integration_suite = create_integration_test_suite()
+            integration_suite = create_real_integration_suite()
             self.test_framework.register_test_suite("integration_tests", integration_suite)
         
         # System layer test suites (placeholder for future implementation)

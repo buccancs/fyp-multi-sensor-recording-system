@@ -1,8 +1,8 @@
 {
   "evaluation_summary": {
-    "start_time": "2025-08-05T22:54:08.387308",
-    "end_time": "2025-08-05T22:54:37.016906",
-    "total_duration_seconds": 28.629598,
+    "start_time": "2025-08-05T23:45:18.280877",
+    "end_time": "2025-08-05T23:45:19.385138",
+    "total_duration_seconds": 1.104261,
     "test_configuration": {
       "category_filter": null,
       "parallel_execution": false,
@@ -11,16 +11,16 @@
     }
   },
   "test_results": {
-    "execution_id": "efaeb3dd-cd99-4a47-b4a3-2aba22a3f0b5",
+    "execution_id": "9aa42baf-2be9-4852-a43e-c8f03bef5cd3",
     "execution_time": {
-      "start": "2025-08-05T22:54:08.388295",
-      "end": "2025-08-05T22:54:36.472364",
-      "total_seconds": 28.084069
+      "start": "2025-08-05T23:45:18.283789",
+      "end": "2025-08-05T23:45:18.575998",
+      "total_seconds": 0.292209
     },
     "statistics": {
       "total_suites": 3,
       "total_tests": 17,
-      "success_rate": 100.0,
+      "success_rate": 82.35,
       "quality_score": 0.0,
       "coverage_percentage": 0.0
     },
@@ -47,21 +47,23 @@
       "integration_tests": {
         "category": "INTEGRATION",
         "total_tests": 6,
-        "success_rate": 100.0,
-        "execution_time": 28.03,
+        "success_rate": 50.0,
+        "execution_time": 0.24,
         "quality_score": 0.0
       }
     }
   },
   "quality_assessment": {
     "overall_quality": 0.0,
-    "success_rate": 1.0,
+    "success_rate": 0.8235294117647058,
     "coverage_percentage": 0.0,
     "quality_level": "Needs Improvement",
     "research_ready": false
   },
   "recommendations": [
+    "Improve test success rate (current: 82.4%, target: >95%)",
     "Enhance system quality (current: 0.000, target: >0.85)",
-    "Increase test coverage (current: 0.0%, target: >80%)"
+    "Increase test coverage (current: 0.0%, target: >80%)",
+    "Address failures in integration_tests suite (success rate: 50.0%)"
   ]
 }
