@@ -26,8 +26,8 @@ classifiers = [
 ]
 
 [project.scripts]
-bucika-gsr = "bucika_gsr.main:main"
-bucika-gsr-demo = "bucika_gsr.demo_enhanced_ui:main"
+bucika-gsr = "PythonApp.main:main"
+bucika-gsr-demo = "PythonApp.demo_enhanced_ui:main"
 
 dependencies = [
     "PyQt5>=5.15.11",
@@ -72,7 +72,7 @@ Issues = "https://github.com/buccancs/bucika_gsr/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["bucika_gsr*"]
+include = ["PythonApp*"]
 
 
 [tool.black]
@@ -100,7 +100,7 @@ extend-exclude = '''
 profile = "black"
 multi_line_output = 3
 line_length = 88
-known_first_party = ["bucika_gsr"]
+known_first_party = ["PythonApp"]
 known_third_party = ["PyQt5", "cv2", "numpy", "matplotlib", "requests"]
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 
@@ -141,7 +141,7 @@ skips = ["*_test.py", "test_*.py"]
 
 
 [tool.coverage.run]
-source = ["bucika_gsr"]
+source = ["PythonApp"]
 omit = [
     "*/tests/*",
     "*/test_*",
@@ -181,7 +181,7 @@ addopts = [
     "-ra",
     "--strict-markers",
     "--strict-config",
-    "--cov=bucika_gsr",
+    "--cov=PythonApp",
     "--cov-report=html:htmlcov",
     "--cov-report=xml:coverage.xml",
     "--cov-report=term-missing:skip-covered",

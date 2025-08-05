@@ -14,7 +14,7 @@ import os
 import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from bucika_gsr.utils.logging_config import (
+from PythonApp.utils.logging_config import (
     get_logger, performance_timer, log_function_entry, 
     log_memory_usage, log_exception_context, AppLogger
 )
