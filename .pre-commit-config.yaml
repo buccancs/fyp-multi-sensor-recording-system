@@ -102,6 +102,14 @@ repos:
         files: '\.md$'
 
 
+  - repo: https://github.com/errata-ai/vale
+    rev: v2.29.7
+    hooks:
+      - id: vale
+        args: [ '--config=.vale.ini' ]
+        files: '\.md$'
+
+
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.9.0.5
     hooks:
