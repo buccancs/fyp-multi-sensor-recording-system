@@ -125,3 +125,12 @@ htmlcov/
 /tmp/mermaid_config.json
 /tmp/puppeteer_config.json
 *.mmd
+
+# Dependency artifacts
+=1.*
+=2.*
+=3.*
+=4.*
+=5.*
+=10.*
+=13.*
