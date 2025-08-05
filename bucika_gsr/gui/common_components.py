@@ -88,41 +88,41 @@ class ModernButton(QPushButton):
         color_styles = {'primary':
             """
                 QPushButton {
-                    background-color: #2196F3;
+                    background-color:
                     color: white;
                 }
                 QPushButton:hover {
-                    background-color: #1976D2;
+                    background-color:
                 }
             """
             , 'success':
             """
                 QPushButton {
-                    background-color: #4CAF50;
+                    background-color:
                     color: white;
                 }
                 QPushButton:hover {
-                    background-color: #388E3C;
+                    background-color:
                 }
             """
             , 'danger':
             """
                 QPushButton {
-                    background-color: #f44336;
+                    background-color:
                     color: white;
                 }
                 QPushButton:hover {
-                    background-color: #D32F2F;
+                    background-color:
                 }
             """
             , 'secondary':
             """
                 QPushButton {
-                    background-color: #757575;
+                    background-color:
                     color: white;
                 }
                 QPushButton:hover {
-                    background-color: #616161;
+                    background-color:
                 }
             """
             }
@@ -143,18 +143,18 @@ class ModernGroupBox(QGroupBox):
             QGroupBox {
                 font-weight: 600;
                 font-size: 14px;
-                border: 2px solid #E0E0E0;
+                border: 2px solid
                 border-radius: 8px;
                 margin-top: 10px;
                 padding-top: 10px;
-                background-color: #FAFAFA;
+                background-color:
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 8px 0 8px;
-                color: #424242;
-                background-color: #FAFAFA;
+                color:
+                background-color:
             }
         """
             )
@@ -179,13 +179,13 @@ class ProgressIndicator(QWidget):
         self.progress_bar.setStyleSheet(
             """
             QProgressBar {
-                border: 2px solid #E0E0E0;
+                border: 2px solid
                 border-radius: 5px;
                 text-align: center;
-                background-color: #F5F5F5;
+                background-color:
             }
             QProgressBar::chunk {
-                background-color: #2196F3;
+                background-color:
                 border-radius: 3px;
             }
         """
@@ -225,9 +225,9 @@ class LogViewer(QWidget):
         self.log_text.setStyleSheet(
             """
             QTextEdit {
-                background-color: #263238;
-                color: #ECEFF1;
-                border: 1px solid #455A64;
+                background-color:
+                color:
+                border: 1px solid
                 border-radius: 4px;
                 font-family: 'Consolas', 'Monaco', monospace;
                 font-size: 12px;

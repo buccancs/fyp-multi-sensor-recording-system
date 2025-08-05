@@ -39,7 +39,6 @@ class TimingLogger:
         self.experiment_start_time: Optional[float] = None
         self.event_counter = 0
 
-        # Create logs directory if it doesn't exist
         os.makedirs(log_directory, exist_ok=True)
 
     def start_experiment_log(self, video_file: str) -> str:
@@ -60,7 +59,6 @@ class TimingLogger:
         self.experiment_start_time = time.time()
         self.event_counter = 0
 
-        # Create initial log entry
         log_data = {
             "experiment_info": {
                 "start_time": self.experiment_start_time,
@@ -175,7 +173,6 @@ class TimingLogger:
 class StimulusVideoWidget(QVideoWidget):
     """Custom QVideoWidget with keyboard shortcut support."""
 
-    # Signals for keyboard shortcuts
     space_pressed = pyqtSignal()
     escape_pressed = pyqtSignal()
 
@@ -211,30 +208,26 @@ class StimulusController(QWidget):
     handles full-screen display, keyboard shortcuts, and timing logging.
     """
 
-    # Signals for communication with MainWindow
-    status_changed = pyqtSignal(str)  # Status message updates
-    experiment_started = pyqtSignal()  # Experiment start notification
-    experiment_ended = pyqtSignal()  # Experiment end notification
-    error_occurred = pyqtSignal(str)  # Error notifications
+    status_changed = pyqtSignal(str)
+    experiment_started = pyqtSignal()
+    experiment_ended = pyqtSignal()
+    error_occurred = pyqtSignal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
 
-        # Media player components
         self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.video_widget = StimulusVideoWidget()
         self.media_player.setVideoOutput(self.video_widget)
 
-        # Timing and logging
         self.timing_logger = TimingLogger()
         self.current_video_file: Optional[str] = None
         self.is_experiment_active = False
 
-        # Position update timer
         self.position_timer = QTimer()
         self.position_timer.timeout.connect(self.update_position)
-        self.position_timer.setInterval(100)  # Update every 100ms
+        self.position_timer.setInterval(100)
 
         self.init_ui()
         self.connect_signals()
@@ -243,16 +236,13 @@ class StimulusController(QWidget):
         """Initialize the user interface."""
         layout = QVBoxLayout(self)
 
-        # Video widget (hidden by default, shown when needed)
         self.video_widget.hide()
         layout.addWidget(self.video_widget)
 
-        # Status label
         self.status_label = QLabel("Stimulus Controller Ready")
         self.status_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.status_label)
 
-        # Control buttons (for testing/debugging)
         button_layout = QHBoxLayout()
 
         self.test_play_btn = QPushButton("Test Play")
@@ -274,18 +264,15 @@ class StimulusController(QWidget):
 
     def connect_signals(self):
         """Connect media player and widget signals."""
-        # Media player signals
         self.media_player.stateChanged.connect(self.on_state_changed)
         self.media_player.mediaStatusChanged.connect(self.on_media_status_changed)
         self.media_player.positionChanged.connect(self.on_position_changed)
         self.media_player.durationChanged.connect(self.on_duration_changed)
         self.media_player.error.connect(self.on_media_error)
 
-        # Video widget keyboard shortcuts
         self.video_widget.space_pressed.connect(self.toggle_play_pause)
         self.video_widget.escape_pressed.connect(self.exit_fullscreen)
 
-        # Global shortcuts (work when main window has focus)
         self.space_shortcut = QShortcut(QKeySequence(Qt.Key_Space), self)
         self.space_shortcut.activated.connect(self.toggle_play_pause)
 
@@ -306,7 +293,6 @@ class StimulusController(QWidget):
             self.error_occurred.emit(f"Video file not found: {file_path}")
             return False
 
-        # Check file extension for supported formats
         supported_formats = [".mp4", ".avi", ".mov", ".mkv", ".wmv", ".m4v", ".3gp"]
         file_ext = os.path.splitext(file_path)[1].lower()
         if file_ext not in supported_formats:
@@ -314,20 +300,15 @@ class StimulusController(QWidget):
             return False
 
         try:
-            # Stop any current playback
             self.media_player.stop()
 
-            # Create media content from file with proper URL encoding
             file_url = QUrl.fromLocalFile(os.path.abspath(file_path))
             media_content = QMediaContent(file_url)
 
-            # Set media and wait for it to be loaded
             self.media_player.setMedia(media_content)
 
-            # Store file path for later use
             self.current_video_file = file_path
 
-            # Enable test buttons
             self.test_play_btn.setEnabled(True)
             self.test_pause_btn.setEnabled(True)
             self.test_fullscreen_btn.setEnabled(True)
@@ -362,14 +343,11 @@ class StimulusController(QWidget):
             return False
 
         try:
-            # Start experiment logging
             log_file = self.timing_logger.start_experiment_log(self.current_video_file)
             print(f"[DEBUG_LOG] Started experiment log: {log_file}")
 
-            # Position video widget on selected screen
             self.position_video_on_screen(screen_index)
 
-            # Show video widget and start playback
             self.video_widget.show()
             self.video_widget.showFullScreen()
             self.video_widget.setFocus()
@@ -400,15 +378,12 @@ class StimulusController(QWidget):
             return
 
         try:
-            # Stop playback and timer
             self.media_player.pause()
             self.position_timer.stop()
 
-            # Log experiment end
             current_position = self.media_player.position()
             self.timing_logger.log_stimulus_end(current_position, reason)
 
-            # Hide video widget
             self.video_widget.hide()
 
             self.is_experiment_active = False
@@ -480,11 +455,9 @@ class StimulusController(QWidget):
             self.video_widget.hide()
             print("[DEBUG_LOG] Exited full-screen mode")
 
-            # If experiment is active, stop it
             if self.is_experiment_active:
                 self.stop_stimulus_playback("user_exit")
 
-    # Test methods for debugging
     def test_play(self):
         """Test play functionality."""
         self.media_player.play()
@@ -500,7 +473,6 @@ class StimulusController(QWidget):
         self.video_widget.showFullScreen()
         self.video_widget.setFocus()
 
-    # Media player event handlers
     def on_state_changed(self, state):
         """Handle media player state changes."""
         state_names = {
@@ -511,7 +483,6 @@ class StimulusController(QWidget):
         state_name = state_names.get(state, "Unknown")
         print(f"[DEBUG_LOG] Media player state changed: {state_name}")
 
-        # Log stimulus start when playback begins
         if state == QMediaPlayer.PlayingState and self.is_experiment_active:
             duration = self.media_player.duration()
             self.timing_logger.log_stimulus_start(duration)
@@ -524,7 +495,6 @@ class StimulusController(QWidget):
 
     def on_position_changed(self, position):
         """Handle position changes during playback."""
-        # This is called frequently, so I don't log every change
 
     def on_duration_changed(self, duration):
         """Handle duration changes when media is loaded."""

@@ -5,14 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Settings Fragment Container -->
     <FrameLayout
         android:id="@+id/settings_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- Action Buttons -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

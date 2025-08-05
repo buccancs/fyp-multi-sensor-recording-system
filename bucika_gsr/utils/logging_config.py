@@ -177,7 +177,7 @@ class AppLogger:
             process = psutil.Process()
             memory_info = process.memory_info()
             logger = cls.get_logger(logger_name or 'MemoryMonitor')
-            extra_info = {'context': context, 'rss_mb': memory_info.rss / 
+            extra_info = {'context': context, 'rss_mb': memory_info.rss /
                 1024 / 1024, 'vms_mb': memory_info.vms / 1024 / 1024,
                 'percent': process.memory_percent()}
             logger.info(

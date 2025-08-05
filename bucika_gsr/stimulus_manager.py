@@ -277,7 +277,7 @@ class StimulusManager:
                     'synchronized_stimulus_start', timestamp=start_time,
                     monitor_id=config.monitor_id, stimulus_config=config)
                 self.presentation_history.append(event)
-            max_duration = max(config.duration_ms for config in configs if 
+            max_duration = max(config.duration_ms for config in configs if
                 config.duration_ms > 0)
             if max_duration > 0:
                 timer = QTimer()

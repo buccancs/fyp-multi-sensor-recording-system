@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Video Resolution Arrays -->
     <string-array name="video_resolution_entries">
         <item>4K Ultra HD (3840x2160)</item>
         <item>Full HD (1920x1080)</item>
@@ -18,7 +17,6 @@
         <item>640x360</item>
     </string-array>
 
-    <!-- Frame Rate Arrays -->
     <string-array name="frame_rate_entries">
         <item>60 fps (High Performance)</item>
         <item>30 fps (Standard)</item>
@@ -35,7 +33,6 @@
         <item>10</item>
     </string-array>
 
-    <!-- Video Quality Arrays -->
     <string-array name="video_quality_entries">
         <item>Ultra High Quality</item>
         <item>High Quality</item>
@@ -52,7 +49,6 @@
         <item>very_low</item>
     </string-array>
 
-    <!-- Storage Location Arrays -->
     <string-array name="storage_location_entries">
         <item>Internal Storage</item>
         <item>External Storage (SD Card)</item>
@@ -67,7 +63,6 @@
         <item>downloads</item>
     </string-array>
 
-    <!-- Max Recording Duration Arrays -->
     <string-array name="max_duration_entries">
         <item>No Limit</item>
         <item>4 Hours</item>
@@ -90,7 +85,6 @@
         <item>300</item>
     </string-array>
 
-    <!-- Thermal Frame Rate Arrays -->
     <string-array name="thermal_frame_rate_entries">
         <item>25 fps (Standard TC001)</item>
         <item>30 fps (Enhanced)</item>
@@ -107,7 +101,6 @@
         <item>10</item>
     </string-array>
 
-    <!-- Thermal Color Palette Arrays -->
     <string-array name="thermal_palette_entries">
         <item>Iron (Black-Red-Yellow-White)</item>
         <item>Rainbow (Full Spectrum)</item>
@@ -126,7 +119,6 @@
         <item>medical</item>
     </string-array>
 
-    <!-- Thermal Temperature Range Arrays -->
     <string-array name="thermal_temp_range_entries">
         <item>Auto Range (Dynamic)</item>
         <item>-20°C to 150°C (Extended)</item>
@@ -145,7 +137,6 @@
         <item>custom</item>
     </string-array>
 
-    <!-- Thermal Temperature Units Arrays -->
     <string-array name="thermal_units_entries">
         <item>Celsius (°C)</item>
         <item>Fahrenheit (°F)</item>
@@ -158,7 +149,6 @@
         <item>kelvin</item>
     </string-array>
 
-    <!-- Thermal Data Format Arrays -->
     <string-array name="thermal_format_entries">
         <item>Radiometric (Full Temperature Data)</item>
         <item>Visual (Image Only)</item>

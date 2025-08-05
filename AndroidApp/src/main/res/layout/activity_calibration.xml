@@ -7,13 +7,12 @@
     android:orientation="vertical"
     tools:context=".ui.CalibrationActivity">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        
+
         app:titleTextColor="?attr/colorOnPrimary"
         app:subtitleTextColor="?attr/colorOnPrimary" />
 
@@ -29,7 +28,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Overall Progress Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +69,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Camera Calibration Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,7 +162,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Thermal Calibration Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -259,7 +255,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Shimmer Calibration Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -353,7 +348,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- System Validation Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -419,7 +413,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Calibration Data Management Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

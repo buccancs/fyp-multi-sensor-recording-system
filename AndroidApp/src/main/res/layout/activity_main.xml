@@ -9,7 +9,6 @@
     android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <!-- App Bar with Material Design 3 Elevation -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -26,7 +25,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Progress Indicator for Loading States -->
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/loadingProgressBar"
         android:layout_width="match_parent"
@@ -36,7 +34,6 @@
         app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="bottom" />
 
-    <!-- Optimized Main Content with ConstraintLayout -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,7 +45,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/content_padding">
 
-            <!-- Recording Controls Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/recordingCard"
                 android:layout_width="0dp"
@@ -64,7 +60,6 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/card_padding">
 
-                    <!-- Preview Layout Switcher -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/previewLayoutToggle"
                         android:layout_width="wrap_content"
@@ -77,7 +72,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Camera Preview Container with switching capability -->
                     <FrameLayout
                         android:id="@+id/previewContainer"
                         android:layout_width="0dp"
@@ -88,7 +82,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintDimensionRatio="16:9">
 
-                        <!-- Dual Preview Layout (default) -->
                         <LinearLayout
                             android:id="@+id/dualPreviewLayout"
                             android:layout_width="match_parent"
@@ -175,7 +168,6 @@
 
                         </LinearLayout>
 
-                        <!-- Single RGB Preview Layout -->
                         <androidx.cardview.widget.CardView
                             android:id="@+id/singleRgbLayout"
                             android:layout_width="match_parent"
@@ -213,7 +205,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Single Thermal Preview Layout -->
                         <androidx.cardview.widget.CardView
                             android:id="@+id/singleThermalLayout"
                             android:layout_width="match_parent"
@@ -253,7 +244,6 @@
 
                     </FrameLayout>
 
-                    <!-- Recording Button -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/recordButton"
                         android:layout_width="0dp"
@@ -268,7 +258,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Recording Status -->
                     <TextView
                         android:id="@+id/recordingStatus"
                         android:layout_width="0dp"
@@ -287,7 +276,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- System Status Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/statusCard"
                 android:layout_width="0dp"
@@ -304,7 +292,6 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/card_padding">
 
-                    <!-- Status Title -->
                     <TextView
                         android:id="@+id/statusTitle"
                         android:layout_width="0dp"
@@ -317,7 +304,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Device Connection Grid -->
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/deviceStatusChips"
                         android:layout_width="0dp"
@@ -358,7 +344,6 @@
 
                     </com.google.android.material.chip.ChipGroup>
 
-                    <!-- Storage Progress -->
                     <TextView
                         android:id="@+id/storageLabel"
                         android:layout_width="0dp"
@@ -387,7 +372,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quick Actions Card with ViewStub for Performance -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/quickActionsCard"
                 android:layout_width="0dp"
@@ -416,7 +400,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Action Buttons Grid - Clean Text-Only Design -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/calibrationButton"
                         android:layout_width="0dp"
@@ -478,7 +461,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ViewStub for Advanced Settings (Performance Optimization) -->
             <ViewStub
                 android:id="@+id/advancedSettingsStub"
                 android:layout_width="0dp"
@@ -490,7 +472,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-            <!-- Loading State ViewStub -->
             <ViewStub
                 android:id="@+id/loadingStateStub"
                 android:layout_width="0dp"
@@ -502,7 +483,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-            <!-- Error State ViewStub -->
             <ViewStub
                 android:id="@+id/errorStateStub"
                 android:layout_width="0dp"
@@ -518,7 +498,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Action Button for Settings -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/settingsFab"
         android:layout_width="wrap_content"

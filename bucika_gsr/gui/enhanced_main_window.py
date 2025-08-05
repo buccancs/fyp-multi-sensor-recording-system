@@ -24,14 +24,10 @@ from PyQt5.QtWidgets import (
     QComboBox,
     QProgressBar,
 )
-# Import network server
 from bucika_gsr.network.device_server import JsonSocketServer
-# Import session manager
 from bucika_gsr.session.session_manager import SessionManager
-# Import webcam capture
 from bucika_gsr.webcam.webcam_capture import WebcamCapture
 
-# Import modular components
 from .device_panel import DeviceStatusPanel
 from .enhanced_stimulus_controller import EnhancedStimulusController, VLC_AVAILABLE
 from .preview_panel import PreviewPanel
@@ -44,83 +40,64 @@ class EnhancedMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Enhanced Multi-Sensor Recording System Controller")
-        self.setGeometry(100, 100, 1400, 900)  # Larger window for enhanced features
+        self.setGeometry(100, 100, 1400, 900)
 
-        # Initialize network server
         self.json_server = JsonSocketServer()
         self.server_running = False
 
-        # Initialize webcam capture
         self.webcam_capture = WebcamCapture()
         self.webcam_previewing = False
         self.webcam_recording = False
 
-        # Initialize session manager
         self.session_manager = SessionManager()
         self.current_session_id = None
 
-        # Initialize enhanced stimulus controller
         self.enhanced_stimulus_controller = EnhancedStimulusController(self)
 
-        # Performance monitoring
         self.performance_timer = QTimer()
         self.performance_timer.timeout.connect(self.update_performance_metrics)
-        self.performance_timer.setInterval(1000)  # Update every second
+        self.performance_timer.setInterval(1000)
 
-        # Initialize UI components
         self.init_ui()
 
-        # Connect server signals to GUI handlers
         self.connect_server_signals()
 
-        # Connect webcam signals to GUI handlers
         self.connect_webcam_signals()
 
-        # Connect enhanced stimulus controller signals
         self.connect_enhanced_stimulus_signals()
 
-        # Initialize placeholder data
         self.init_placeholder_data()
 
-        # Show VLC availability status
         self.show_vlc_status()
 
     def init_ui(self):
         """Initialize the enhanced user interface."""
-        # Create menu bar
         self.create_menu_bar()
 
-        # Create enhanced toolbar
         self.create_enhanced_toolbar()
 
-        # Create central widget and layout
         self.create_enhanced_central_widget()
 
-        # Create enhanced log dock widget
         self.create_enhanced_log_dock()
 
-        # Create enhanced status bar
         self.create_enhanced_status_bar()
 
     def create_menu_bar(self):
         """Create the enhanced menu bar."""
         menubar = self.menuBar()
 
-        # File menu
         file_menu = menubar.addMenu("File")
 
         exit_action = QAction("Exit", self)
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
-        # Tools menu
         tools_menu = menubar.addMenu("Tools")
 
         settings_action = QAction("Settings...", self)
         settings_action.triggered.connect(self.show_settings_dialog)
         tools_menu.addAction(settings_action)
 
-        # Enhanced menu - Stimulus
         stimulus_menu = menubar.addMenu("Stimulus")
 
         switch_backend_action = QAction("Switch Video Backend", self)
@@ -139,7 +116,6 @@ class EnhancedMainWindow(QMainWindow):
         performance_monitor_action.triggered.connect(self.toggle_performance_monitoring)
         stimulus_menu.addAction(performance_monitor_action)
 
-        # View menu
         view_menu = menubar.addMenu("View")
 
         self.show_log_action = QAction("Show Log", self)
@@ -148,7 +124,6 @@ class EnhancedMainWindow(QMainWindow):
         self.show_log_action.triggered.connect(self.toggle_log_dock)
         view_menu.addAction(self.show_log_action)
 
-        # Help menu
         help_menu = menubar.addMenu("Help")
 
         about_action = QAction("About Enhanced Controller", self)
@@ -164,31 +139,26 @@ class EnhancedMainWindow(QMainWindow):
         toolbar = self.addToolBar("EnhancedControls")
         toolbar.setMovable(False)
 
-        # Connect action
         connect_action = QAction("Connect", self)
         connect_action.triggered.connect(self.handle_connect)
         toolbar.addAction(connect_action)
 
-        # Disconnect action
         disconnect_action = QAction("Disconnect", self)
         disconnect_action.triggered.connect(self.handle_disconnect)
         toolbar.addAction(disconnect_action)
 
         toolbar.addSeparator()
 
-        # Start Session action
         start_action = QAction("Start Session", self)
         start_action.triggered.connect(self.handle_start)
         toolbar.addAction(start_action)
 
-        # Stop action
         stop_action = QAction("Stop", self)
         stop_action.triggered.connect(self.handle_stop)
         toolbar.addAction(stop_action)
 
         toolbar.addSeparator()
 
-        # Enhanced stimulus controls
         backend_label = QLabel("Backend:")
         toolbar.addWidget(backend_label)
 
@@ -200,7 +170,6 @@ class EnhancedMainWindow(QMainWindow):
 
         toolbar.addSeparator()
 
-        # Performance indicator
         perf_label = QLabel("Performance:")
         toolbar.addWidget(perf_label)
 
@@ -216,38 +185,29 @@ class EnhancedMainWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
-        # Main layout
         main_layout = QVBoxLayout(central_widget)
 
-        # Top section with device and preview panels
         top_layout = QHBoxLayout()
 
-        # Device status panel
         self.device_panel = DeviceStatusPanel(self)
         top_layout.addWidget(self.device_panel)
 
-        # Preview panel
         self.preview_panel = PreviewPanel(self)
         top_layout.addWidget(self.preview_panel)
 
         main_layout.addLayout(top_layout)
 
-        # Enhanced stimulus section
         stimulus_layout = QVBoxLayout()
 
-        # Stimulus control panel
         self.stimulus_panel = StimulusControlPanel(self)
         stimulus_layout.addWidget(self.stimulus_panel)
 
-        # Enhanced stimulus controller
         stimulus_layout.addWidget(self.enhanced_stimulus_controller)
 
         main_layout.addLayout(stimulus_layout)
 
-        # Enhanced status section
         status_layout = QHBoxLayout()
 
-        # VLC status indicator
         self.vlc_status_label = QLabel(
             f"VLC Backend: {'Available' if VLC_AVAILABLE else 'Not Available'}"
         )
@@ -258,7 +218,6 @@ class EnhancedMainWindow(QMainWindow):
 
         status_layout.addStretch()
 
-        # Timing precision indicator
         self.timing_precision_label = QLabel("Timing: Calibrating...")
         self.timing_precision_label.setStyleSheet(
             "QLabel { color: #666; font-size: 10px; }"
@@ -272,11 +231,9 @@ class EnhancedMainWindow(QMainWindow):
         self.log_dock = QDockWidget("Enhanced System Log", self)
         self.log_dock.setAllowedAreas(Qt.BottomDockWidgetArea | Qt.RightDockWidgetArea)
 
-        # Log widget container
         log_widget = QWidget()
         log_layout = QVBoxLayout(log_widget)
 
-        # Log filter controls
         filter_layout = QHBoxLayout()
 
         filter_label = QLabel("Filter:")
@@ -297,7 +254,6 @@ class EnhancedMainWindow(QMainWindow):
 
         log_layout.addLayout(filter_layout)
 
-        # Enhanced log text area
         self.log_text = QTextEdit()
         self.log_text.setMaximumHeight(200)
         self.log_text.setReadOnly(True)
@@ -305,32 +261,27 @@ class EnhancedMainWindow(QMainWindow):
 
         self.log_dock.setWidget(log_widget)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.log_dock)
-        self.log_dock.hide()  # Initially hidden
+        self.log_dock.hide()
 
     def create_enhanced_status_bar(self):
         """Create enhanced status bar with additional information."""
         status_bar = self.statusBar()
 
-        # Main status message
         self.status_message = QLabel("Enhanced Controller Ready")
         status_bar.addWidget(self.status_message)
 
-        # Permanent widgets on the right
         status_bar.addPermanentWidget(QLabel("|"))
 
-        # Backend status
         self.backend_status = QLabel("Backend: Qt")
         status_bar.addPermanentWidget(self.backend_status)
 
         status_bar.addPermanentWidget(QLabel("|"))
 
-        # Performance status
         self.performance_status = QLabel("Performance: 100%")
         status_bar.addPermanentWidget(self.performance_status)
 
         status_bar.addPermanentWidget(QLabel("|"))
 
-        # Timing status
         self.timing_status = QLabel("Timing: Ready")
         status_bar.addPermanentWidget(self.timing_status)
 
@@ -353,7 +304,6 @@ class EnhancedMainWindow(QMainWindow):
 
     def connect_enhanced_stimulus_signals(self):
         """Connect enhanced stimulus controller and panel signals."""
-        # Connect stimulus panel signals to enhanced controller
         self.stimulus_panel.file_loaded.connect(
             self.enhanced_stimulus_controller.load_video
         )
@@ -370,7 +320,6 @@ class EnhancedMainWindow(QMainWindow):
             self.on_enhanced_stimulus_screen_changed
         )
 
-        # Connect enhanced milestone 3.5 signals
         self.stimulus_panel.start_recording_play_requested.connect(
             self.on_enhanced_start_recording_play_requested
         )
@@ -378,7 +327,6 @@ class EnhancedMainWindow(QMainWindow):
             self.on_enhanced_mark_event_requested
         )
 
-        # Connect enhanced stimulus controller signals to main window
         self.enhanced_stimulus_controller.status_changed.connect(
             self.on_enhanced_stimulus_status_changed
         )
@@ -401,7 +349,6 @@ class EnhancedMainWindow(QMainWindow):
 
     def init_placeholder_data(self):
         """Initialize placeholder data for testing."""
-        # Initialize timing precision display
         QTimer.singleShot(1000, self.update_timing_precision_display)
 
     def show_vlc_status(self):
@@ -415,13 +362,11 @@ class EnhancedMainWindow(QMainWindow):
                 "VLC backend not available - Limited to Qt multimedia codecs", "Backend"
             )
 
-    # Enhanced signal handlers
     def on_enhanced_stimulus_seek_requested(self, position):
         """Handle enhanced stimulus seek request from panel."""
         duration = self.enhanced_stimulus_controller.get_duration()
         if duration > 0:
             seek_position = int((position / 100.0) * duration)
-            # Set position based on current backend
             if self.enhanced_stimulus_controller.current_backend:
                 if hasattr(self.enhanced_stimulus_controller, "qt_media_player"):
                     self.enhanced_stimulus_controller.qt_media_player.setPosition(
@@ -445,31 +390,25 @@ class EnhancedMainWindow(QMainWindow):
     def on_enhanced_start_recording_play_requested(self):
         """Handle enhanced synchronized recording start and stimulus playback."""
         try:
-            # Get selected screen for stimulus display
             screen_index = self.stimulus_panel.get_selected_screen()
 
-            # Start all recordings first
             self.log_message(
                 "Starting enhanced synchronized recording and stimulus playback...",
                 "Stimulus",
             )
 
-            # Start device recordings
             if self.server_running and self.json_server.connected_clients:
                 self.json_server.broadcast_command("start_record")
                 self.log_message("Sent start_record command to all devices", "Stimulus")
 
-            # Start PC webcam recording
             if not self.webcam_recording:
                 self.webcam_capture.start_recording()
                 self.log_message("Started PC webcam recording", "Stimulus")
 
-            # Start enhanced stimulus playback
             if self.enhanced_stimulus_controller.start_stimulus_playback(screen_index):
                 self.stimulus_panel.set_experiment_active(True)
                 self.log_message("Enhanced experiment started successfully", "Stimulus")
 
-                # Start performance monitoring
                 self.performance_timer.start()
             else:
                 self.log_message("Failed to start enhanced stimulus playback", "Errors")
@@ -505,15 +444,12 @@ class EnhancedMainWindow(QMainWindow):
     def on_enhanced_stimulus_experiment_ended(self):
         """Handle enhanced stimulus experiment end notification."""
         try:
-            # Stop performance monitoring
             self.performance_timer.stop()
 
-            # Stop all recordings
             if self.server_running and self.json_server.connected_clients:
                 self.json_server.broadcast_command("stop_record")
                 self.log_message("Sent stop_record command to all devices", "Stimulus")
 
-            # Stop PC webcam recording
             if self.webcam_recording:
                 self.webcam_capture.stop_recording()
                 self.log_message("Stopped PC webcam recording", "Stimulus")
@@ -538,7 +474,6 @@ class EnhancedMainWindow(QMainWindow):
         self.backend_status.setText(f"Backend: {backend_name}")
         self.log_message(f"Video backend switched to: {backend_name}", "Backend")
 
-    # Enhanced utility methods
     def test_timing_precision(self):
         """Test and display timing precision."""
         try:
@@ -571,7 +506,6 @@ class EnhancedMainWindow(QMainWindow):
     def update_performance_metrics(self):
         """Update performance metrics display."""
         try:
-            # Get performance data from enhanced controller
             if hasattr(self.enhanced_stimulus_controller, "frame_drop_count"):
                 frame_drops = self.enhanced_stimulus_controller.frame_drop_count
                 performance_score = max(0, 100 - (frame_drops * 2))
@@ -602,7 +536,6 @@ class EnhancedMainWindow(QMainWindow):
 
     def filter_log_messages(self, filter_type):
         """Filter log messages by type."""
-        # This would implement log filtering - simplified for now
         self.log_message(f"Log filter changed to: {filter_type}", "System")
 
     def clear_log(self):
@@ -671,17 +604,13 @@ Troubleshooting:
         timestamp = time.strftime("%H:%M:%S")
         formatted_message = f"[{timestamp}] [{category}] {message}"
 
-        # Add to log display
         self.log_text.append(formatted_message)
 
-        # Auto-scroll to bottom
         scrollbar = self.log_text.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
 
-        # Console output
         print(f"[DEBUG_LOG] {formatted_message}")
 
-    # Existing signal handlers (simplified - would include all from original MainWindow)
     def on_client_connected(self, client_info):
         """Handle client connection."""
         self.log_message(f"Client connected: {client_info}", "Network")
@@ -700,7 +629,6 @@ Troubleshooting:
 
     def on_webcam_frame_ready(self, frame):
         """Handle webcam frame."""
-        # Update preview panel
 
     def on_webcam_recording_started(self):
         """Handle webcam recording start."""
@@ -720,7 +648,6 @@ Troubleshooting:
         """Handle webcam status change."""
         self.log_message(f"Webcam status: {status}", "Recording")
 
-    # Toolbar handlers (simplified)
     def handle_connect(self):
         """Handle connect action."""
         self.log_message("Connect action triggered", "Network")
@@ -749,5 +676,4 @@ Troubleshooting:
             self.log_dock.hide()
 
 
-# Import time for logging
 import time

@@ -306,7 +306,7 @@ class DeviceClient(QThread):
             device_capabilities = set(device.get('capabilities', []))
             capability_status = {}
             for capability in requested_capabilities:
-                if (capability in self._supported_capabilities and 
+                if (capability in self._supported_capabilities and
                     capability in device_capabilities):
                     capability_status[capability] = True
                 else:

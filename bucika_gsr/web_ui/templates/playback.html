@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Sensor Recording Dashboard - Playback</title>
-    
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Chart.js for data visualization -->
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>
-    <!-- Socket.IO for real-time communication -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
-    
+
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -24,69 +23,69 @@
             --light-bg: #ecf0f1;
             --dark-bg: #34495e;
         }
-        
+
         body {
             background-color: var(--light-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .navbar {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-bg));
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .navbar-brand {
             font-weight: bold;
             color: white !important;
         }
-        
+
         .card {
             border: none;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        
+
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             transition: all 0.3s ease;
         }
-        
+
         .video-player {
             width: 100%;
             max-height: 400px;
             background: #000;
             border-radius: 8px;
         }
-        
+
         .playback-controls {
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
             margin: 10px 0;
         }
-        
+
         .timeline-slider {
             width: 100%;
             margin: 10px 0;
         }
-        
+
         .sensor-chart {
             height: 200px;
             margin: 10px 0;
         }
-        
+
         .speed-control {
             display: inline-block;
             margin: 0 10px;
         }
-        
+
         .session-list {
             max-height: 400px;
             overflow-y: auto;
         }
-        
+
         .session-item {
             cursor: pointer;
             padding: 10px;
@@ -94,16 +93,16 @@
             margin: 5px 0;
             transition: background-color 0.2s;
         }
-        
+
         .session-item:hover {
             background-color: #e9ecef;
         }
-        
+
         .session-item.selected {
             background-color: var(--secondary-color);
             color: white;
         }
-        
+
         .sync-indicator {
             display: inline-block;
             width: 10px;
@@ -111,15 +110,15 @@
             border-radius: 50%;
             margin-right: 5px;
         }
-        
+
         .sync-indicator.synced {
             background-color: var(--success-color);
         }
-        
+
         .sync-indicator.desynced {
             background-color: var(--danger-color);
         }
-        
+
         .real-time-indicator {
             position: fixed;
             top: 70px;
@@ -131,16 +130,16 @@
             font-size: 12px;
             z-index: 1000;
         }
-        
+
         .real-time-indicator.disconnected {
             background: var(--danger-color);
         }
-        
+
         @media (max-width: 768px) {
             .video-player {
                 max-height: 250px;
             }
-            
+
             .sensor-chart {
                 height: 150px;
             }
@@ -148,7 +147,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -194,16 +193,15 @@
             </div>
         </div>
     </nav>
-    
-    <!-- Real-time connection indicator -->
+
     <div id="connectionIndicator" class="real-time-indicator">
         <i class="fas fa-wifi me-1"></i>
         <span id="connectionStatus">Connected</span>
     </div>
-    
+
     <div class="container mt-4">
         <div class="row">
-            <!-- Session Selection Panel -->
+
             <div class="col-lg-3 col-md-4">
                 <div class="card">
                     <div class="card-header">
@@ -213,15 +211,14 @@
                     </div>
                     <div class="card-body">
                         <div class="session-list" id="sessionList">
-                            <!-- Sessions will be populated here -->
+
                         </div>
                         <button class="btn btn-primary btn-sm mt-2" onclick="refreshSessions()">
                             <i class="fas fa-sync-alt me-1"></i>Refresh
                         </button>
                     </div>
                 </div>
-                
-                <!-- Session Info Panel -->
+
                 <div class="card">
                     <div class="card-header">
                         <h6 class="mb-0">
@@ -235,10 +232,9 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Main Playback Panel -->
+
             <div class="col-lg-9 col-md-8">
-                <!-- Video Playback -->
+
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">
@@ -266,8 +262,7 @@
                                 </video>
                             </div>
                         </div>
-                        
-                        <!-- Playback Controls -->
+
                         <div class="playback-controls">
                             <div class="row align-items-center">
                                 <div class="col-md-8">
@@ -302,8 +297,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Sensor Data Visualization -->
+
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0">
@@ -333,8 +327,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Export & Analysis Tools -->
+
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0">
@@ -365,9 +358,8 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         // Playback state
         let currentSession = null;
@@ -375,16 +367,16 @@
         let currentTime = 0;
         let totalDuration = 0;
         let gsrChart, thermalChart, shimmerChart, heartRateChart;
-        
+
         // Initialize charts
         document.addEventListener('DOMContentLoaded', function() {
             initializeCharts();
             loadSessions();
-            
+
             // Update time display every second during playback
             setInterval(updateTimeDisplay, 1000);
         });
-        
+
         function initializeCharts() {
             const chartConfig = {
                 type: 'line',
@@ -415,7 +407,7 @@
                     }
                 }
             };
-            
+
             gsrChart = new Chart(document.getElementById('gsrChart'), {
                 ...chartConfig,
                 data: {
@@ -428,7 +420,7 @@
                     }]
                 }
             });
-            
+
             thermalChart = new Chart(document.getElementById('thermalChart'), {
                 ...chartConfig,
                 data: {
@@ -441,7 +433,7 @@
                     }]
                 }
             });
-            
+
             shimmerChart = new Chart(document.getElementById('shimmerChart'), {
                 ...chartConfig,
                 data: {
@@ -454,7 +446,7 @@
                     }]
                 }
             });
-            
+
             heartRateChart = new Chart(document.getElementById('heartRateChart'), {
                 ...chartConfig,
                 data: {
@@ -468,7 +460,7 @@
                 }
             });
         }
-        
+
         function loadSessions() {
             fetch('/api/playback/sessions')
                 .then(response => response.json())
@@ -485,15 +477,15 @@
                     displaySessions([]);
                 });
         }
-        
+
         function displaySessions(sessions) {
             const sessionList = document.getElementById('sessionList');
-            
+
             if (sessions.length === 0) {
                 sessionList.innerHTML = '<p class="text-muted">No recorded sessions found</p>';
                 return;
             }
-            
+
             sessionList.innerHTML = sessions.map(session => `
                 <div class="session-item" onclick="selectSession('${session.id}')">
                     <strong>${session.name || session.id}</strong>
@@ -506,20 +498,20 @@
                 </div>
             `).join('');
         }
-        
+
         function selectSession(sessionId) {
             // Remove previous selection
             document.querySelectorAll('.session-item').forEach(item => {
                 item.classList.remove('selected');
             });
-            
+
             // Add selection to clicked item
             event.target.closest('.session-item').classList.add('selected');
-            
+
             // Load session data
             loadSessionData(sessionId);
         }
-        
+
         function loadSessionData(sessionId) {
             fetch(`/api/playback/session/${sessionId}`)
                 .then(response => response.json())
@@ -537,7 +529,7 @@
                     console.error('Error loading session data:', error);
                 });
         }
-        
+
         function displaySessionInfo(session) {
             const sessionInfo = document.getElementById('sessionInfo');
             sessionInfo.innerHTML = `
@@ -549,7 +541,7 @@
                 <p><strong>Data Size:</strong> ${session.data_size}</p>
             `;
         }
-        
+
         function loadVideoFiles(sessionId) {
             fetch(`/api/playback/session/${sessionId}/videos`)
                 .then(response => response.json())
@@ -557,16 +549,16 @@
                     if (data.success && data.videos.length > 0) {
                         const video1 = document.getElementById('videoPlayer1');
                         const video2 = document.getElementById('videoPlayer2');
-                        
+
                         if (data.videos[0]) {
                             video1.src = `/api/playback/video/${sessionId}/${data.videos[0].filename}`;
                             totalDuration = data.videos[0].duration || 0;
                         }
-                        
+
                         if (data.videos[1]) {
                             video2.src = `/api/playback/video/${sessionId}/${data.videos[1].filename}`;
                         }
-                        
+
                         // Set up video synchronization
                         setupVideoSync();
                         updateTotalTime();
@@ -576,7 +568,7 @@
                     console.error('Error loading video files:', error);
                 });
         }
-        
+
         function loadSensorData(sessionId) {
             fetch(`/api/playback/session/${sessionId}/sensors`)
                 .then(response => response.json())
@@ -589,54 +581,54 @@
                     console.error('Error loading sensor data:', error);
                 });
         }
-        
+
         function updateChartData(sensorData) {
             if (sensorData.gsr) {
                 gsrChart.data.datasets[0].data = sensorData.gsr;
                 gsrChart.update();
             }
-            
+
             if (sensorData.thermal) {
                 thermalChart.data.datasets[0].data = sensorData.thermal;
                 thermalChart.update();
             }
-            
+
             if (sensorData.shimmer) {
                 shimmerChart.data.datasets[0].data = sensorData.shimmer;
                 shimmerChart.update();
             }
-            
+
             if (sensorData.heart_rate) {
                 heartRateChart.data.datasets[0].data = sensorData.heart_rate;
                 heartRateChart.update();
             }
         }
-        
+
         function setupVideoSync() {
             const video1 = document.getElementById('videoPlayer1');
             const video2 = document.getElementById('videoPlayer2');
-            
+
             // Synchronize video playback
             video1.addEventListener('play', () => {
                 if (!video2.paused) return;
                 video2.currentTime = video1.currentTime;
                 video2.play();
             });
-            
+
             video1.addEventListener('pause', () => {
                 video2.pause();
             });
-            
+
             video1.addEventListener('seeked', () => {
                 video2.currentTime = video1.currentTime;
             });
         }
-        
+
         function togglePlayback() {
             const video1 = document.getElementById('videoPlayer1');
             const video2 = document.getElementById('videoPlayer2');
             const playPauseIcon = document.getElementById('playPauseIcon');
-            
+
             if (isPlaying) {
                 video1.pause();
                 video2.pause();
@@ -649,12 +641,12 @@
                 isPlaying = true;
             }
         }
-        
+
         function stopPlayback() {
             const video1 = document.getElementById('videoPlayer1');
             const video2 = document.getElementById('videoPlayer2');
             const playPauseIcon = document.getElementById('playPauseIcon');
-            
+
             video1.pause();
             video2.pause();
             video1.currentTime = 0;
@@ -664,42 +656,42 @@
             currentTime = 0;
             updateTimeDisplay();
         }
-        
+
         function changePlaybackSpeed() {
             const speed = parseFloat(document.getElementById('speedSelect').value);
             const video1 = document.getElementById('videoPlayer1');
             const video2 = document.getElementById('videoPlayer2');
-            
+
             video1.playbackRate = speed;
             video2.playbackRate = speed;
         }
-        
+
         function seekTo(percentage) {
             const video1 = document.getElementById('videoPlayer1');
             const video2 = document.getElementById('videoPlayer2');
             const seekTime = (percentage / 100) * totalDuration;
-            
+
             video1.currentTime = seekTime;
             video2.currentTime = seekTime;
             currentTime = seekTime;
             updateTimeDisplay();
         }
-        
+
         function updateTimeDisplay() {
             const video1 = document.getElementById('videoPlayer1');
             if (video1 && !isNaN(video1.duration)) {
                 currentTime = video1.currentTime;
                 totalDuration = video1.duration;
-                
+
                 document.getElementById('currentTime').textContent = formatTime(currentTime);
                 document.getElementById('totalTime').textContent = formatTime(totalDuration);
-                
+
                 // Update timeline slider
                 const progress = (currentTime / totalDuration) * 100;
                 document.getElementById('timelineSlider').value = progress || 0;
             }
         }
-        
+
         function updateTotalTime() {
             const video1 = document.getElementById('videoPlayer1');
             video1.addEventListener('loadedmetadata', () => {
@@ -707,16 +699,16 @@
                 document.getElementById('totalTime').textContent = formatTime(totalDuration);
             });
         }
-        
+
         function exportSegment() {
             if (!currentSession) {
                 alert('Please select a session first');
                 return;
             }
-            
+
             const startTime = prompt('Enter start time (seconds):');
             const endTime = prompt('Enter end time (seconds):');
-            
+
             if (startTime && endTime) {
                 fetch('/api/playback/export-segment', {
                     method: 'POST',
@@ -743,29 +735,29 @@
                 });
             }
         }
-        
+
         function generateReport() {
             if (!currentSession) {
                 alert('Please select a session first');
                 return;
             }
-            
+
             window.open(`/api/playback/session/${currentSession.id}/report`, '_blank');
         }
-        
+
         function syncAnalysis() {
             if (!currentSession) {
                 alert('Please select a session first');
                 return;
             }
-            
+
             fetch(`/api/playback/session/${currentSession.id}/sync-analysis`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         const syncStatus = document.getElementById('syncStatus');
                         const syncIndicator = document.getElementById('syncIndicator');
-                        
+
                         if (data.analysis.sync_quality > 0.8) {
                             syncStatus.textContent = 'Well Synchronized';
                             syncIndicator.className = 'sync-indicator synced';
@@ -773,7 +765,7 @@
                             syncStatus.textContent = 'Sync Issues Detected';
                             syncIndicator.className = 'sync-indicator desynced';
                         }
-                        
+
                         alert(`Sync analysis complete. Quality: ${(data.analysis.sync_quality * 100).toFixed(1)}%`);
                     }
                 })
@@ -781,27 +773,27 @@
                     console.error('Sync analysis error:', error);
                 });
         }
-        
+
         function refreshSessions() {
             loadSessions();
         }
-        
+
         function formatDate(dateString) {
             return new Date(dateString).toLocaleString();
         }
-        
+
         function formatDuration(seconds) {
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
             const secs = Math.floor(seconds % 60);
-            
+
             if (hours > 0) {
                 return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             } else {
                 return `${minutes}:${secs.toString().padStart(2, '0')}`;
             }
         }
-        
+
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);

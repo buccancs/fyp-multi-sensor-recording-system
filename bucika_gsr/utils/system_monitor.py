@@ -53,8 +53,8 @@ class SystemMonitor:
             cpu_percent = psutil.cpu_percent(interval=0.1)
             cpu_freq = psutil.cpu_freq()
             cpu_stats = psutil.cpu_stats()
-            return {'usage_percent': cpu_percent, 'frequency_current': 
-                cpu_freq.current if cpu_freq else 0, 'frequency_min': 
+            return {'usage_percent': cpu_percent, 'frequency_current':
+                cpu_freq.current if cpu_freq else 0, 'frequency_min':
                 cpu_freq.min if cpu_freq else 0, 'frequency_max': cpu_freq.
                 max if cpu_freq else 0, 'ctx_switches': cpu_stats.
                 ctx_switches, 'interrupts': cpu_stats.interrupts,

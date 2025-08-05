@@ -8,7 +8,6 @@
     android:clickable="true"
     android:focusable="true">
 
-    <!-- File Icon -->
     <ImageView
         android:id="@+id/file_icon_image_view"
         android:layout_width="48dp"
@@ -17,14 +16,12 @@
         android:src="@drawable/ic_video_file"
         android:contentDescription="File type icon" />
 
-    <!-- File Information -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- File Name and Type -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +54,6 @@
 
         </LinearLayout>
 
-        <!-- File Details -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +79,6 @@
 
         </LinearLayout>
 
-        <!-- File Metadata (optional) -->
         <TextView
             android:id="@+id/file_metadata_text"
             android:layout_width="match_parent"

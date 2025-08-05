@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Session Management - Multi-Sensor Recording Dashboard</title>
-    
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Socket.IO for real-time communication -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
-    
+
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -22,22 +21,22 @@
             --light-bg: #ecf0f1;
             --dark-bg: #34495e;
         }
-        
+
         body {
             background-color: var(--light-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .navbar {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-bg));
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .navbar-brand {
             font-weight: bold;
             color: white !important;
         }
-        
+
         .session-card {
             background: white;
             border-radius: 12px;
@@ -46,12 +45,12 @@
             border: none;
             margin-bottom: 20px;
         }
-        
+
         .session-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
-        
+
         .status-indicator {
             width: 12px;
             height: 12px;
@@ -60,29 +59,29 @@
             margin-right: 8px;
             animation: pulse 2s infinite;
         }
-        
+
         .status-active {
             background-color: var(--success-color);
         }
-        
+
         .status-recording {
             background-color: var(--danger-color);
         }
-        
+
         .status-completed {
             background-color: var(--secondary-color);
         }
-        
+
         .status-error {
             background-color: var(--danger-color);
         }
-        
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-        
+
         .real-time-indicator {
             position: fixed;
             top: 20px;
@@ -94,18 +93,18 @@
             font-size: 12px;
             z-index: 1000;
         }
-        
+
         .real-time-indicator.disconnected {
             background: var(--danger-color);
         }
-        
+
         .session-stats {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 15px;
             margin-top: 15px;
         }
-        
+
         .btn-custom {
             border-radius: 6px;
             padding: 6px 12px;
@@ -116,7 +115,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -162,13 +161,12 @@
             </div>
         </div>
     </nav>
-    
-    <!-- Real-time connection indicator -->
+
     <div id="connectionIndicator" class="real-time-indicator">
         <i class="fas fa-wifi me-1"></i>
         <span id="connectionStatus">Connected</span>
     </div>
-    
+
     <div class="container mt-4">
         <div class="row">
             <div class="col-12">
@@ -177,8 +175,7 @@
                 </h2>
             </div>
         </div>
-        
-        <!-- Current Session -->
+
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="card session-card">
@@ -207,8 +204,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Session History -->
+
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="card session-card">
@@ -236,8 +232,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Session Statistics -->
+
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-3">
                 <div class="card session-card">
@@ -281,8 +276,7 @@
             </div>
         </div>
     </div>
-    
-    <!-- New Session Modal -->
+
     <div class="modal fade" id="newSessionModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -344,54 +338,53 @@
             </div>
         </div>
     </div>
-    
-    <!-- Bootstrap JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         // WebSocket connection for real-time updates
         const socket = io();
-        
+
         // Session data storage
         let currentSession = null;
         let sessionHistory = [];
-        
+
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             updateConnectionStatus(true);
             loadSessionHistory();
             setupEventHandlers();
         });
-        
+
         // Socket event handlers
         socket.on('connect', function() {
             console.log('Connected to dashboard server');
             updateConnectionStatus(true);
             socket.emit('request_session_info');
         });
-        
+
         socket.on('disconnect', function() {
             console.log('Disconnected from dashboard server');
             updateConnectionStatus(false);
         });
-        
+
         socket.on('session_info_update', function(data) {
             updateCurrentSession(data);
         });
-        
+
         socket.on('status_update', function(data) {
             updateCurrentSession(data.session);
         });
-        
+
         function setupEventHandlers() {
             document.getElementById('startNewSessionBtn').addEventListener('click', showNewSessionModal);
             document.getElementById('stopCurrentSessionBtn').addEventListener('click', stopCurrentSession);
         }
-        
+
         function updateConnectionStatus(connected) {
             const indicator = document.getElementById('connectionIndicator');
             const status = document.getElementById('connectionStatus');
-            
+
             if (connected) {
                 indicator.classList.remove('disconnected');
                 status.textContent = 'Connected';
@@ -400,17 +393,17 @@
                 status.textContent = 'Disconnected';
             }
         }
-        
+
         function updateCurrentSession(session) {
             currentSession = session;
             const container = document.getElementById('currentSessionContent');
             const startBtn = document.getElementById('startNewSessionBtn');
             const stopBtn = document.getElementById('stopCurrentSessionBtn');
-            
+
             if (session.active) {
                 const startTime = new Date(session.start_time);
                 const duration = calculateDuration(session.start_time);
-                
+
                 container.innerHTML = `
                     <div class="row">
                         <div class="col-md-6">
@@ -447,7 +440,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mt-3">
                         <h6>Recording Devices</h6>
                         <div class="d-flex flex-wrap gap-2">
@@ -457,13 +450,13 @@
                         </div>
                     </div>
                 `;
-                
+
                 startBtn.disabled = true;
                 stopBtn.disabled = false;
-                
+
                 // Update live duration every second
                 startLiveDurationUpdate(session.start_time);
-                
+
             } else {
                 container.innerHTML = `
                     <div class="text-center text-muted p-4">
@@ -472,16 +465,16 @@
                         <p>Start a new recording session to begin data collection</p>
                     </div>
                 `;
-                
+
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
-                
+
                 stopLiveDurationUpdate();
             }
         }
-        
+
         let durationInterval = null;
-        
+
         function startLiveDurationUpdate(startTime) {
             stopLiveDurationUpdate();
             durationInterval = setInterval(() => {
@@ -491,28 +484,28 @@
                 }
             }, 1000);
         }
-        
+
         function stopLiveDurationUpdate() {
             if (durationInterval) {
                 clearInterval(durationInterval);
                 durationInterval = null;
             }
         }
-        
+
         function calculateDuration(startTime) {
             if (!startTime) return '00:00:00';
-            
+
             const start = new Date(startTime);
             const now = new Date();
             const duration = Math.floor((now - start) / 1000);
-            
+
             const hours = Math.floor(duration / 3600);
             const minutes = Math.floor((duration % 3600) / 60);
             const seconds = duration % 60;
-            
+
             return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
-        
+
         function loadSessionHistory() {
             // Simulate loading session history
             // In real implementation, this would fetch from the server
@@ -538,14 +531,14 @@
                     data_size: '1.8 GB'
                 }
             ];
-            
+
             displaySessionHistory(mockSessions);
             updateSessionStatistics(mockSessions);
         }
-        
+
         function displaySessionHistory(sessions) {
             const container = document.getElementById('sessionHistoryContent');
-            
+
             if (sessions.length === 0) {
                 container.innerHTML = `
                     <div class="text-center text-muted p-4">
@@ -555,13 +548,13 @@
                 `;
                 return;
             }
-            
+
             let html = '';
             sessions.forEach(session => {
                 const startTime = new Date(session.start_time);
                 const endTime = new Date(session.end_time);
                 const statusClass = session.status === 'completed' ? 'status-completed' : 'status-error';
-                
+
                 html += `
                     <div class="session-item mb-3 p-3 border rounded">
                         <div class="row align-items-center">
@@ -589,7 +582,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mt-2">
                             <small class="text-muted">Devices: </small>
                             ${session.devices.map(device => `<span class="badge bg-secondary me-1">${device}</span>`).join('')}
@@ -598,15 +591,15 @@
                     </div>
                 `;
             });
-            
+
             container.innerHTML = html;
         }
-        
+
         function updateSessionStatistics(sessions) {
             const totalSessions = sessions.length;
             const totalDuration = sessions.reduce((sum, session) => sum + session.duration, 0);
             const completedSessions = sessions.filter(s => s.status === 'completed').length;
-            
+
             document.getElementById('totalSessions').textContent = totalSessions;
             document.getElementById('totalDuration').textContent = 
                 `${Math.floor(totalDuration / 3600)}h ${Math.floor((totalDuration % 3600) / 60)}m`;
@@ -614,33 +607,33 @@
             document.getElementById('successRate').textContent = 
                 totalSessions > 0 ? Math.round((completedSessions / totalSessions) * 100) + '%' : '100%';
         }
-        
+
         function showNewSessionModal() {
             const modal = new bootstrap.Modal(document.getElementById('newSessionModal'));
             modal.show();
         }
-        
+
         function createNewSession() {
             const sessionName = document.getElementById('sessionName').value;
             const sessionDescription = document.getElementById('sessionDescription').value;
             const duration = document.getElementById('recordingDuration').value;
-            
+
             // Get selected devices
             const deviceCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
             const selectedDevices = Array.from(deviceCheckboxes).map(cb => cb.value);
-            
+
             if (selectedDevices.length === 0) {
                 alert('Please select at least one recording device');
                 return;
             }
-            
+
             const sessionConfig = {
                 name: sessionName || `Session_${new Date().toISOString().slice(0, 19).replace(/:/g, '')}`,
                 description: sessionDescription,
                 devices: selectedDevices,
                 max_duration: parseInt(duration) * 60 // Convert to seconds
             };
-            
+
             // Start session via API
             fetch('/api/session/start', {
                 method: 'POST',
@@ -655,7 +648,7 @@
                     console.log('Session started:', data.session_id);
                     const modal = bootstrap.Modal.getInstance(document.getElementById('newSessionModal'));
                     modal.hide();
-                    
+
                     // Reset form
                     document.getElementById('newSessionForm').reset();
                 } else {
@@ -667,12 +660,12 @@
                 alert('Failed to start session');
             });
         }
-        
+
         function stopCurrentSession() {
             if (!currentSession || !currentSession.active) {
                 return;
             }
-            
+
             if (confirm('Are you sure you want to stop the current recording session?')) {
                 fetch('/api/session/stop', {
                     method: 'POST'
@@ -693,15 +686,15 @@
                 });
             }
         }
-        
+
         function refreshSessions() {
             console.log('Refreshing session history...');
             loadSessionHistory();
         }
-        
+
         function exportSessions() {
             console.log('Exporting session data...');
-            
+
             fetch('/api/sessions/export', {
                 method: 'GET'
             })
@@ -728,10 +721,10 @@
                 alert(`Export failed: ${error.message}`);
             });
         }
-        
+
         function viewSession(sessionId) {
             console.log(`Viewing session: ${sessionId}`);
-            
+
             fetch(`/api/session/${sessionId}`)
             .then(response => response.json())
             .then(data => {
@@ -766,10 +759,10 @@ Data Collected:
                 alert(`Failed to load session: ${error.message}`);
             });
         }
-        
+
         function downloadSession(sessionId) {
             console.log(`Downloading session: ${sessionId}`);
-            
+
             if (confirm(`Download all data for session ${sessionId}? This may be a large file.`)) {
                 fetch(`/api/session/${sessionId}/download`, {
                     method: 'GET'

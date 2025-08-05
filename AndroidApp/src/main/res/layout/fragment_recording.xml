@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Recording Controls Card -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +21,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Recording Status Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +54,6 @@
 
             </LinearLayout>
 
-            <!-- Session Information -->
             <TextView
                 android:id="@+id/sessionInfoText"
                 android:layout_width="match_parent"
@@ -66,7 +63,6 @@
                 android:textSize="12sp"
                 android:textColor="@color/textColorSecondary" />
 
-            <!-- Recording Controls -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,7 +117,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Live Data Preview Card -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -144,7 +139,6 @@
                 android:textColor="@color/md_theme_on_surface"
                 android:textStyle="bold" />
 
-            <!-- Preview Content Area -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -152,7 +146,6 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/preview_placeholder">
 
-                <!-- RGB Camera Preview using TextureView for compatibility with CameraRecorder -->
                 <TextureView
                     android:id="@+id/rgbCameraPreview"
                     android:layout_width="match_parent"
@@ -170,7 +163,6 @@
 
             </FrameLayout>
 
-            <!-- Recording Statistics -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
