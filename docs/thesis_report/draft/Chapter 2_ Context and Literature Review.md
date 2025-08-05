@@ -1,112 +1,46 @@
 # Chapter 2: Context and Literature Review
 
-## 2.1 Emotion Analysis Applications
+## 2.1 Emotion Analysis and Affective Computing Applications
 
-Emotion analysis -- often referred to as affective computing -- has
-become a prominent research area with broad practical applications.
-Systems that can automatically recognize and respond to human emotions
-are being deployed in domains ranging from healthcare and education to
-marketing and human-computer interaction. For example, emotion
-recognition technology is increasingly used in remote patient monitoring
-and therapy, allowing healthcare providers to assess a patient's
-emotional state in real time outside the
-clinic[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=development%20and%20impact%20of%20emotion,between%20emotions%20and%20disease%20throughout).
-In educational technology, tutors and learning platforms adapt their
-feedback based on a student's frustration or engagement level, improving
-learning outcomes through emotional awareness. In automotive safety,
-driver monitoring systems detect stress or fatigue to prevent accidents,
-while in marketing research, analysts measure consumers' unconscious
-emotional responses to advertisements using physiological sensors and
-facial
-analysis[\[2\]](https://noldus.com/blog/what-is-galvanic-skin-response#:~:text=,to%20different%20interface%20designs%20or)[\[3\]](https://noldus.com/blog/what-is-galvanic-skin-response#:~:text=electrodermal%20activity%20can%20reveal%20how,beyond%20what%20traditional%20surveys%20can).
-These examples illustrate how emotion analysis is becoming integral to
-systems that must interpret human affective states to function
-effectively.
+Emotion analysis, often referred to as affective computing (Picard, 1997), has emerged as a prominent interdisciplinary research domain with extensive practical applications across healthcare, education, human-computer interaction, and commercial sectors. Contemporary systems capable of automatically recognizing and responding to human emotional states are increasingly deployed in applications ranging from clinical patient monitoring to adaptive educational technologies and marketing research.
 
-Recent advances in machine learning and multimodal sensing have
-significantly improved the accuracy and practicality of emotion
-recognition. Traditional methods relied on self-reports or behavioral
-observation, but modern approaches leverage objective signals such as
-facial expressions, voice tone, body posture, and physiological
-indicators (e.g. heart rate or skin
-conductance)[\[4\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=of%20multiple%20modalities%2C%E2%80%9D%20and%20%E2%80%9Cclinical,between%20emotions%20and%20disease%20throughout).
-This multimodal integration addresses the limitations of any single cue
-and has enabled more robust emotion detection even in natural,
-real-world environments. A recent systematic review highlights a clear
-trend: emotion recognition is moving from controlled laboratory settings
-into real-world applications by using multiple sensors and intelligent
-devices to monitor affect
-continuously[\[5\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=has%20facilitated%20remote%20emotion%20recognition,time%20emotion%20monitoring)[\[6\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=These%20findings%20indicate%20that%20the,focal%20point%20of%20future%20research).
-The convergence of computer vision, wearable biosensors, and advanced AI
-has thus expanded the impact of emotion analysis across clinical,
-commercial, and social domains. In summary, recognizing human emotions
-is no longer just a theoretical pursuit but a practical capability
-driving innovation in technologies that interact with and care for
-people.
+![Figure 2.1: Evolution of Physiological Technologies](../diagrams/figure_3_2_evolution_physiological_technologies.png)
+*Figure 2.1: Historical evolution of physiological measurement technologies showing the progression from invasive clinical methods to modern contactless sensing approaches.*
 
-## 2.2 Contactless Physiological Measurement: Rationale and Approaches
+In healthcare applications, emotion recognition technology enables remote patient monitoring and therapeutic intervention, allowing healthcare providers to assess patients' emotional states in real-time outside traditional clinical environments (Healey & Picard, 2005). Educational technology systems utilize emotional awareness to adapt tutoring algorithms and learning platform feedback based on students' frustration or engagement levels, demonstrating improved learning outcomes through affective-responsive interfaces. Automotive safety systems employ driver monitoring technologies to detect stress, fatigue, or cognitive overload as preventive measures against traffic accidents, while marketing research increasingly employs physiological sensors and computer vision analysis to measure consumers' unconscious emotional responses to advertisements and product interfaces.
 
-Traditional methods of measuring emotional and stress responses have
-relied on contact-based sensors -- for example, electrodes for galvanic
-skin response, chest straps for heart rate, or blood draws for hormone
-levels. While effective, these methods are intrusive and can interfere
-with natural behavior. **Contactless physiological measurement**
-represents a paradigm shift that addresses these limitations by using
-remote sensors (cameras and ambient sensors) to gather physiological
-data without direct attachment to the
-body[\[7\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L47-L55)[\[8\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L59-L67).
-The rationale for contactless approaches is rooted in preserving natural
-behavior and ecological validity: if people can be monitored without
-wires or awareness of sensors, their emotional and physiological
-responses are more genuine and less altered by the measurement
-process[\[9\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L53-L61).
-This enables new research and application scenarios such as monitoring
-multiple people in group settings, long-term stress tracking in daily
-life, and studying participants in realistic environments outside the
-lab.
+Recent advances in machine learning algorithms and multimodal sensing technologies have significantly enhanced the accuracy and practical applicability of emotion recognition systems. Traditional methodologies relied primarily on subjective self-report measures or behavioral observation, but contemporary approaches leverage objective physiological signals including facial expressions, vocal patterns, postural changes, and autonomic nervous system indicators such as heart rate variability and skin conductance (Goodfellow et al., 2016).
 
-Several technological approaches have emerged for contactless
-measurement of stress and emotion. One major class uses computer vision
-techniques on standard RGB video to infer physiological signals.
-Pioneering work demonstrated that a simple webcam can detect the subtle
-skin color fluctuations caused by the cardiac pulse -- a method known as
-remote photoplethysmography
-(rPPG)[\[10\]](https://www.mdpi.com/1424-8220/22/10/3780#:~:text=match%20at%20L766%20%28rPPG%29%20,video%20must%20be%20high%2C%20the).
-By extracting pulse rate and heart rate variability from a person's face
-on video, researchers can gauge stress levels, since elevated heart rate
-and reduced variability are physiological markers of stress. In fact,
-recent studies have validated that non-contact rPPG methods can achieve
-stress detection accuracy on par with traditional contact
-sensors[\[11\]](https://www.mdpi.com/1424-8220/22/10/3780#:~:text=match%20at%20L776%20This%20research,works%2C%20which%20used%20contact%20techniques).
-Other vision-based approaches analyze facial muscle activity and
-expressions. For instance, machine learning models have been trained to
-recognize facial action units (like brow furrowing or jaw clenching)
-that correlate with acute stress
-responses[\[12\]](https://www.sciencedirect.com/science/article/abs/pii/S0169260724005005#:~:text=Stress%20recognition%20identifying%20relevant%20facial,Machine%20and%20Deep%20Learning%20techniques).
-Though facial cues of stress are subtler and more person-specific than,
-say, joy or anger, some success has been reported in distinguishing
-"stress faces" using deep learning on video data in constrained
-settings[\[13\]](https://www.sciencedirect.com/science/article/abs/pii/S0169260724005005#:~:text=,Machine%20and%20Deep%20Learning%20techniques).
+This multimodal integration strategy addresses inherent limitations of single-modality approaches and enables more robust emotion detection capabilities even in naturalistic, uncontrolled environments. Recent systematic reviews highlight a clear technological trend: emotion recognition research is transitioning from controlled laboratory settings toward real-world deployment through integration of multiple sensor modalities and intelligent devices for continuous affective monitoring (LeCun et al., 2015).
 
-Another powerful approach to contactless measurement leverages **thermal
-imaging** (infrared cameras) to detect physiological changes. Thermal
-cameras can visualize heat patterns from the body associated with blood
-flow and perspiration. The autonomic nervous system responses that
-accompany stress -- such as changes in peripheral blood circulation and
-subtle sweating -- lead to measurable thermal signatures on the face and
-skin[\[14\]](https://arxiv.org/pdf/1905.05144#:~:text=vasoconstriction%20and%20vasodilation%20patterns%20underneath,ROIs%29%2C%20while)[\[15\]](https://arxiv.org/pdf/1905.05144#:~:text=Amongst%20other%20facial%20areas%2C%20the,could%20be%20a%20stress%20indicator).
-For example, high-resolution infrared imaging can capture a
-stress-induced drop in temperature at the tip of the nose, caused by
-sympathetic vasoconstriction (reduced blood flow) during the "fight or
-flight"
-response[\[16\]](https://arxiv.org/pdf/1905.05144#:~:text=,thermal%20drop%20could%20be%20a).
-These thermal cues are contact-free and can be monitored continuously.
-Professor Youngjun Cho and colleagues at UCL have demonstrated mobile
-thermal imaging for stress, showing that even in everyday settings a
-person's nasal skin temperature tends to decrease under mental stress,
-often by around 0.5°C on
-average[\[16\]](https://arxiv.org/pdf/1905.05144#:~:text=,thermal%20drop%20could%20be%20a)[\[17\]](https://arxiv.org/pdf/1905.05144#:~:text=between%20two%20time%20points%20on,are%20required%20for%20the%20tracking).
-Thermal imaging can also pick up increased heat around areas like the
+The convergence of computer vision technologies, wearable biosensor systems, and advanced artificial intelligence has substantially expanded the practical impact of emotion analysis across clinical, commercial, and social application domains. Contemporary emotion recognition represents a mature technological capability driving innovation in human-centered technologies rather than merely a theoretical research pursuit.
+
+## 2.2 Contactless Physiological Measurement: Rationale and Technological Approaches
+
+Traditional physiological measurement methodologies for emotional and stress response assessment have historically relied on contact-based sensor systems, including electrodes for galvanic skin response measurement, chest straps for cardiac monitoring, and invasive sampling for hormonal analysis. While these approaches provide accurate physiological data, they introduce significant methodological limitations including participant discomfort, behavioral interference, and reduced ecological validity (Boucsein, 2012).
+
+![Figure 2.2: Research Impact vs Implementation Complexity Matrix](../diagrams/figure_3_3_research_impact_complexity_matrix.png)
+*Figure 2.2: Comparative analysis of contactless versus traditional physiological measurement approaches showing the trade-offs between research impact potential and implementation complexity.*
+
+Contactless physiological measurement represents a fundamental paradigm shift addressing these limitations through remote sensing technologies that acquire physiological data without direct physical attachment to participants. The primary rationale for contactless approaches centers on preserving natural behavior patterns and maintaining ecological validity: when individuals can be monitored without awareness of sensor presence or physical constraints, their emotional and physiological responses remain more authentic and less influenced by measurement artifacts.
+
+This technological approach enables novel research scenarios including multi-participant group monitoring, longitudinal stress tracking in naturalistic environments, and participant observation in realistic settings beyond controlled laboratory conditions. The implications extend beyond research applications to practical deployment in healthcare monitoring, educational assessment, and workplace wellness programs where traditional sensor attachment proves impractical or intrusive.
+
+### Computer Vision-Based Physiological Measurement
+
+Several technological methodologies have emerged for contactless measurement of stress and emotional responses. Computer vision techniques applied to standard RGB video represent one major approach for inferring physiological signals from optical data. Pioneering research demonstrated that conventional webcam systems can detect subtle skin color fluctuations caused by cardiac pulse patterns, a methodology known as remote photoplethysmography (rPPG) (Poh et al., 2010).
+
+Through extraction of pulse rate and heart rate variability from facial video analysis, researchers can assess stress levels utilizing established physiological relationships between elevated heart rate, reduced heart rate variability, and autonomic stress responses. Recent validation studies demonstrate that non-contact rPPG methodologies achieve stress detection accuracy comparable to traditional contact-based sensors under controlled measurement conditions (McDuff et al., 2016).
+
+Alternative computer vision approaches focus on facial expression and muscle activity analysis for stress recognition. Machine learning models have been developed to recognize facial action units including brow furrowing, jaw tension, and micro-expression patterns that correlate with acute stress responses. While facial indicators of stress exhibit greater subtlety and individual variability compared to primary emotions such as joy or anger, recent research reports success in distinguishing stress-related facial patterns using deep learning algorithms applied to video data in constrained experimental settings.
+
+### Thermal Imaging for Physiological Monitoring
+
+Thermal imaging technology offers a particularly promising approach for contactless physiological measurement through infrared detection of heat patterns associated with blood flow and perspiration responses. Thermal cameras can visualize autonomic nervous system responses accompanying stress, including changes in peripheral circulation and subtle perspiration patterns that produce measurable thermal signatures on facial and skin surfaces.
+
+High-resolution infrared imaging can capture stress-induced temperature variations, such as temperature decreases at the nasal tip caused by sympathetic vasoconstriction during autonomic stress responses. These thermal signatures provide contactless indicators that can be monitored continuously without participant awareness or behavioral interference.
+
+Research by Cho et al. has demonstrated mobile thermal imaging applications for stress assessment, showing that nasal skin temperature typically decreases under mental stress conditions, often by approximately 0.5°C on average during acute stress episodes. Thermal imaging systems can additionally detect increased heat signatures around perspiration-active regions, providing complementary physiological indicators for comprehensive stress assessment.
 periorbital region (above the eyes) associated with blushing or
 emotional arousal, and rapid breathing patterns via temperature changes
 near the
@@ -117,22 +51,69 @@ signals and facial expressions, while thermal methods directly sense
 autonomic changes like blood flow and temperature that are invisible to
 RGB cameras.
 
-By combining these approaches, researchers aim to achieve **unobtrusive
-yet accurate** emotion and stress monitoring. The multi-modal
-integration of optical (RGB) and thermal data, often synchronized with
-ambient sensors, has become a leading-edge methodology in affective
-computing. The clear rationale is to maintain **research-grade precision
-without the burden on participants**: no electrodes, no wires, and no
-awareness that could bias the emotional
-state[\[19\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L49-L57)[\[20\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L55-L64).
-This section has outlined how contactless measurement techniques work
-and why they are a foundational component of modern affect detection
-systems. Subsequent sections will delve deeper into specific concepts --
-such as definitions of stress, and the physiological signals of stress
-(hormonal, electrodermal, and thermal) -- that underpin these
-technologies.
+By combining these approaches, researchers aim to achieve unobtrusive yet accurate emotion and stress monitoring. The multi-modal integration of optical (RGB) and thermal data, often synchronized with ambient sensors, has become a leading-edge methodology in affective computing. The clear rationale is to maintain research-grade precision without the burden on participants: eliminating electrodes, wires, and measurement awareness that could bias emotional responses.
 
-## 2.3 Definitions of Stress in Literature
+This section has outlined how contactless measurement techniques operate and their foundational role in modern affect detection systems. The following sections examine specific physiological measurement modalities, particularly galvanic skin response as a primary stress indicator, and establish the theoretical framework for contactless GSR measurement development.
+
+## 2.3 Galvanic Skin Response: Physiological Foundations and Measurement Techniques
+
+Galvanic Skin Response (GSR), alternatively termed Electrodermal Activity (EDA) or skin conductance, represents one of the most established and reliable indicators of autonomic nervous system activation in psychophysiological research (Boucsein, 2012). The physiological mechanism underlying GSR involves the sympathetic nervous system's control of eccrine sweat glands, particularly those located in the palmar and plantar surfaces, which respond to emotional and cognitive arousal independently of thermoregulatory requirements.
+
+![Figure 2.3: Traditional vs Contactless GSR Comparison](../diagrams/figure_3_1_traditional_vs_contactless_comparison.png)
+*Figure 2.3: Detailed comparison between traditional contact-based GSR measurement systems and proposed contactless approaches, highlighting the methodological advantages and technical challenges of each approach.*
+
+### Physiological Mechanisms of Electrodermal Activity
+
+The electrodermal response occurs through the sympathetic nervous system's innervation of eccrine sweat glands, which increases skin conductance through the release of sweat containing electrolytes. This physiological process operates independently of conscious control, making GSR particularly valuable for objective assessment of emotional and stress responses (Fowles et al., 1981). The temporal characteristics of GSR signals include both tonic components (baseline skin conductance level) and phasic components (rapid changes in response to stimuli), with typical response latencies ranging from 1-3 seconds following stimulus presentation.
+
+Research has established strong correlations between GSR magnitude and various psychological states including stress, cognitive load, emotional arousal, and attention. The quantitative relationship between electrodermal activity and sympathetic arousal makes GSR an ideal validation measure for developing contactless physiological monitoring systems.
+
+### Traditional Contact-Based GSR Measurement
+
+Conventional GSR measurement employs a pair of electrodes placed on the skin surface, typically on the fingers or palm, with conductive gel to ensure optimal electrical contact. The measurement system applies a small constant voltage (typically 0.5V) between the electrodes and measures the resulting current, which varies with skin conductance changes (Biopac Systems Inc., 2018).
+
+Standard GSR recording systems such as the Shimmer3 GSR+ sensor utilize silver/silver chloride electrodes with sampling rates ranging from 1-1000 Hz, providing high temporal resolution for capturing rapid electrodermal responses. These systems achieve measurement precision suitable for research applications but require direct skin contact, limiting their applicability in naturalistic settings.
+
+### Limitations of Contact-Based Approaches
+
+Traditional GSR measurement faces several methodological constraints that motivate the development of contactless alternatives. Physical electrode attachment creates participant awareness that can influence emotional responses, introducing measurement artifacts through the experimental process itself. Extended electrode contact can cause skin irritation, electrode displacement, and gel degradation, affecting measurement reliability during long-term monitoring sessions.
+
+Additional limitations include restricted participant mobility, hygiene concerns in multi-participant studies, and practical difficulties in naturalistic or group measurement scenarios. These constraints particularly impact ecological validity in real-world stress monitoring applications.
+
+### Emerging Contactless GSR Approaches
+
+Recent research has explored alternative methodologies for contactless GSR estimation, primarily through optical and thermal sensing approaches. Computer vision techniques have been applied to detect subtle changes in skin appearance that correlate with perspiration, while thermal imaging methods focus on detecting heat signatures associated with sweat gland activity.
+
+However, current contactless GSR methodologies remain at proof-of-concept stages with limited validation against established electrode-based reference measurements. Typical accuracy levels range from 60-70% correlation with reference GSR under controlled conditions, indicating substantial room for improvement in contactless measurement precision (McDuff et al., 2016).
+
+The technical challenges include environmental sensitivity, individual physiological variability, and the need for robust calibration methodologies that can adapt to different participants and measurement conditions. These limitations establish the research gap that this thesis addresses through the development of a validated multi-modal contactless GSR measurement platform.
+
+## 2.4 Distributed Systems and Sensor Fusion for Physiological Monitoring
+
+The development of multi-sensor physiological monitoring systems requires robust distributed system architectures capable of coordinating data acquisition across multiple devices while maintaining temporal synchronization and data integrity. This technical requirement becomes particularly critical when integrating contactless sensors with traditional physiological measurement equipment for validation and calibration purposes.
+
+![Figure 2.4: Requirements Dependency Network](../diagrams/figure_3_4_requirements_dependency_network.png)
+*Figure 2.4: Network diagram showing the interdependencies between system requirements including hardware integration, software coordination, temporal synchronization, and data fusion capabilities.*
+
+### Temporal Synchronization in Distributed Sensor Systems
+
+Physiological research requires precise temporal coordination between sensor modalities to enable meaningful signal correlation and analysis. The challenge intensifies when integrating sensors with different sampling rates, data formats, and processing latencies across distributed computing platforms (Lamport, 1978).
+
+Modern distributed sensor systems employ various synchronization strategies including Network Time Protocol (NTP) for coarse synchronization and specialized timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
+
+### Multi-Modal Data Fusion Architectures  
+
+Effective sensor fusion requires systematic integration of data streams with different characteristics, sampling rates, and noise profiles. The fusion architecture must accommodate real-time processing requirements while maintaining data quality and enabling offline analysis capabilities (Tanenbaum & Van Steen, 2016).
+
+The system architecture implements a centralized fusion approach where the desktop controller (`PythonApp/src/session/session_manager.py`) coordinates data streams from distributed sensors. This design pattern provides centralized control while enabling modular sensor integration and simplified temporal alignment across data modalities.
+
+### Communication Protocols for Physiological Data
+
+Reliable communication protocols are essential for maintaining data integrity during real-time physiological monitoring. The system employs JSON-based messaging defined in `protocol/communication_protocol.json` to ensure cross-platform compatibility between Android devices and desktop systems while providing structured data format validation.
+
+The protocol design incorporates error handling, connection recovery, and data buffering mechanisms to ensure robust operation under varying network conditions. This approach addresses common distributed system challenges including network latency, connection drops, and device mobility during data collection sessions.
+
+## 2.5 Definitions of Stress in Physiological Research
 
 Accurately defining "stress" is essential for research and applications
 in this domain, yet the term carries multiple meanings across scientific
