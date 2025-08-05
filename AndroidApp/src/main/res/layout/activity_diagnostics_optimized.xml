@@ -9,7 +9,6 @@
     android:clipChildren="false"
     tools:context=".ui.DiagnosticsActivity">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -26,7 +25,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Optimized Content with ConstraintLayout -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +36,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/content_padding">
 
-            <!-- System Health Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/systemHealthCard"
                 android:layout_width="0dp"
@@ -66,7 +63,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Health Status Chips -->
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/healthStatusChips"
                         android:layout_width="0dp"
@@ -100,7 +96,6 @@
 
                     </com.google.android.material.chip.ChipGroup>
 
-                    <!-- Performance Metrics -->
                     <TextView
                         android:id="@+id/performanceLabel"
                         android:layout_width="0dp"
@@ -126,7 +121,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Action Buttons -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/runDiagnosticsButton"
                         android:layout_width="0dp"
@@ -160,7 +154,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Network Diagnostics Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/networkCard"
                 android:layout_width="0dp"
@@ -217,7 +210,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Device Information Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/deviceInfoCard"
                 android:layout_width="0dp"

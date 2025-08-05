@@ -2,14 +2,12 @@
 <resources>
     <string name="app_name">Multi-Sensor Recording</string>
     <string name="app_description">A comprehensive data collection system for multi-sensor research applications, featuring synchronized recording of camera, thermal, and physiological sensor data.</string>
-    
-    <!-- Navigation -->
+
     <string name="nav_header_title">Multi-Sensor Recording</string>
     <string name="nav_header_subtitle">Advanced Recording System</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    
-    <!-- Menu Items -->
+
     <string name="menu_recording">Recording</string>
     <string name="menu_devices">Devices</string>
     <string name="menu_calibration">Calibration</string>
@@ -19,37 +17,31 @@
     <string name="menu_shimmer">Shimmer Config</string>
     <string name="menu_sync_test">Sync Tests</string>
     <string name="menu_about">About</string>
-    
-    <!-- Bottom Navigation -->
+
     <string name="bottom_nav_record">Record</string>
     <string name="bottom_nav_monitor">Monitor</string>
     <string name="bottom_nav_calibrate">Calibrate</string>
-    
-    <!-- Recording Status -->
+
     <string name="status_ready">Ready to record</string>
     <string name="status_recording">Recording in progress...</string>
     <string name="status_stopped">Recording stopped</string>
     <string name="status_initializing">Initializing...</string>
-    
-    <!-- Connection Status -->
+
     <string name="pc_connected">PC: Connected</string>
     <string name="pc_waiting">PC: Waiting...</string>
     <string name="shimmer_connected">Shimmer: Connected</string>
     <string name="shimmer_disconnected">Shimmer: Off</string>
     <string name="thermal_connected">Thermal: Connected</string>
     <string name="thermal_disconnected">Thermal: Off</string>
-    
-    <!-- Actions -->
+
     <string name="action_start_recording">Start Recording</string>
     <string name="action_stop_recording">Stop Recording</string>
     <string name="action_run_calibration">Run Calibration</string>
-    
-    <!-- Navigation Drawer -->
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    
-    <!-- Permissions -->
+
     <string name="permission_required">Permissions Required</string>
     <string name="permission_request">Request Permissions</string>
-    
+
 </resources>

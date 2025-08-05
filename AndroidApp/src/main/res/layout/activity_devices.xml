@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.DevicesActivity">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -28,7 +27,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Refresh All Devices Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/refreshAllButton"
                 android:layout_width="match_parent"
@@ -37,7 +35,6 @@
                 android:text="Refresh All Devices"
                 app:icon="@drawable/ic_refresh" />
 
-            <!-- PC Connection Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,7 +120,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Shimmer Connection Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -220,7 +216,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Thermal Camera Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -306,7 +301,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Network Connection Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -403,7 +397,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- GSR Sensor Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -462,7 +455,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Configuration Actions Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -496,7 +488,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Test Results Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

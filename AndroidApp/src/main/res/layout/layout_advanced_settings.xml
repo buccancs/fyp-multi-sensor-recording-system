@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Advanced Settings Layout for ViewStub (Lazy Loading) -->
+
 <com.google.android.material.card.MaterialCardView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -25,7 +25,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- System Health Toggle -->
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/systemHealthSwitch"
             android:layout_width="0dp"
@@ -37,7 +36,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Auto Transfer Toggle -->
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/autoTransferSwitch"
             android:layout_width="0dp"

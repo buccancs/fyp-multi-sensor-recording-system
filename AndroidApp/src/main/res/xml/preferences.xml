@@ -2,12 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Device Configuration Category -->
     <PreferenceCategory
         android:title="Device Configuration"
         android:icon="@android:drawable/ic_menu_preferences">
 
-        <!-- Shimmer MAC Address Configuration -->
         <EditTextPreference
             android:key="shimmer_mac_address"
             android:title="Shimmer MAC Address"
@@ -17,7 +15,6 @@
             android:defaultValue="00:00:00:00:00:00"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Shimmer Device Name -->
         <EditTextPreference
             android:key="shimmer_device_name"
             android:title="Shimmer Device Name"
@@ -28,12 +25,10 @@
 
     </PreferenceCategory>
 
-    <!-- Recording Parameters Category -->
     <PreferenceCategory
         android:title="Recording Parameters"
         android:icon="@android:drawable/ic_menu_camera">
 
-        <!-- Video Resolution -->
         <ListPreference
             android:key="video_resolution"
             android:title="Video Resolution"
@@ -44,7 +39,6 @@
             android:defaultValue="1920x1080"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Frame Rate -->
         <ListPreference
             android:key="frame_rate"
             android:title="Frame Rate"
@@ -55,7 +49,6 @@
             android:defaultValue="30"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Video Quality -->
         <ListPreference
             android:key="video_quality"
             android:title="Video Quality"
@@ -66,14 +59,12 @@
             android:defaultValue="high"
             app:useSimpleSummaryProvider="true" />
 
-        <!-- Enable RAW Capture -->
         <SwitchPreferenceCompat
             android:key="enable_raw_capture"
             android:title="Enable RAW Capture"
             android:summary="Capture RAW images during recording"
             android:defaultValue="true" />
 
-        <!-- Enable Thermal Recording -->
         <SwitchPreferenceCompat
             android:key="enable_thermal_recording"
             android:title="Enable Thermal Recording"
@@ -82,12 +73,10 @@
 
     </PreferenceCategory>
 
-    <!-- Thermal Camera Configuration Category -->
     <PreferenceCategory
         android:title="Thermal Camera Configuration"
         android:icon="@android:drawable/ic_menu_camera">
 
-        <!-- Thermal Frame Rate -->
         <ListPreference
             android:key="thermal_frame_rate"
             android:title="Thermal Frame Rate"
@@ -98,7 +87,6 @@
             android:defaultValue="25"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Thermal Color Palette -->
         <ListPreference
             android:key="thermal_color_palette"
             android:title="Thermal Color Palette"
@@ -109,7 +97,6 @@
             android:defaultValue="iron"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Thermal Temperature Range -->
         <ListPreference
             android:key="thermal_temperature_range"
             android:title="Temperature Range"
@@ -120,7 +107,6 @@
             android:defaultValue="auto"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Thermal Emissivity -->
         <EditTextPreference
             android:key="thermal_emissivity"
             android:title="Emissivity"
@@ -130,21 +116,18 @@
             android:defaultValue="0.95"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Auto-calibration -->
         <SwitchPreferenceCompat
             android:key="thermal_auto_calibration"
             android:title="Auto-Calibration"
             android:summary="Enable automatic thermal calibration"
             android:defaultValue="true" />
 
-        <!-- High-Resolution Mode -->
         <SwitchPreferenceCompat
             android:key="thermal_high_resolution"
             android:title="High-Resolution Mode"
             android:summary="Enable high-resolution thermal capture when available"
             android:defaultValue="false" />
 
-        <!-- Temperature Units -->
         <ListPreference
             android:key="thermal_temperature_units"
             android:title="Temperature Units"
@@ -155,14 +138,12 @@
             android:defaultValue="celsius"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- USB Priority Mode -->
         <SwitchPreferenceCompat
             android:key="thermal_usb_priority"
             android:title="USB Priority Access"
             android:summary="Request exclusive USB access for thermal camera"
             android:defaultValue="true" />
 
-        <!-- Thermal Data Format -->
         <ListPreference
             android:key="thermal_data_format"
             android:title="Data Format"
@@ -175,12 +156,10 @@
 
     </PreferenceCategory>
 
-    <!-- Network Configuration Category -->
     <PreferenceCategory
         android:title="Network Configuration"
         android:icon="@android:drawable/ic_menu_manage">
 
-        <!-- Server IP Address -->
         <EditTextPreference
             android:key="server_ip"
             android:title="Server IP Address"
@@ -190,7 +169,6 @@
             android:defaultValue="192.168.1.100"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Server Port -->
         <EditTextPreference
             android:key="server_port"
             android:title="Server Port"
@@ -200,7 +178,6 @@
             android:defaultValue="8080"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- JSON Server Port -->
         <EditTextPreference
             android:key="json_server_port"
             android:title="JSON Server Port"
@@ -210,7 +187,6 @@
             android:defaultValue="9000"
             app:useSimpleSummaryProvider="false" />
 
-        <!-- Auto-Connect to Server -->
         <SwitchPreferenceCompat
             android:key="auto_connect_server"
             android:title="Auto-Connect to Server"
@@ -219,33 +195,28 @@
 
     </PreferenceCategory>
 
-    <!-- System Preferences Category -->
     <PreferenceCategory
         android:title="System Preferences"
         android:icon="@android:drawable/ic_menu_manage">
 
-        <!-- Enable Debug Logging -->
         <SwitchPreferenceCompat
             android:key="enable_debug_logging"
             android:title="Enable Debug Logging"
             android:summary="Enable detailed debug logging for troubleshooting"
             android:defaultValue="false" />
 
-        <!-- Keep Screen On -->
         <SwitchPreferenceCompat
             android:key="keep_screen_on"
             android:title="Keep Screen On"
             android:summary="Prevent screen from turning off during recording"
             android:defaultValue="true" />
 
-        <!-- Battery Optimization -->
         <SwitchPreferenceCompat
             android:key="battery_optimization"
             android:title="Battery Optimization"
             android:summary="Enable battery optimization features"
             android:defaultValue="false" />
 
-        <!-- Calibration Feedback -->
         <SwitchPreferenceCompat
             android:key="calibration_feedback"
             android:title="Calibration Feedback"
@@ -254,12 +225,10 @@
 
     </PreferenceCategory>
 
-    <!-- Advanced Settings Category -->
     <PreferenceCategory
         android:title="Advanced Settings"
         android:icon="@android:drawable/ic_menu_preferences">
 
-        <!-- Storage Location -->
         <ListPreference
             android:key="storage_location"
             android:title="Storage Location"
@@ -270,7 +239,6 @@
             android:defaultValue="internal"
             app:useSimpleSummaryProvider="true" />
 
-        <!-- Max Recording Duration -->
         <ListPreference
             android:key="max_recording_duration"
             android:title="Max Recording Duration"
@@ -281,7 +249,6 @@
             android:defaultValue="3600"
             app:useSimpleSummaryProvider="true" />
 
-        <!-- Reset Settings -->
         <Preference
             android:key="reset_settings"
             android:title="Reset to Defaults"

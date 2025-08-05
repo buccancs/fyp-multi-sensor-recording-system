@@ -5,7 +5,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -17,10 +16,8 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### Kotlin ###
 .kotlin
 
-### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
@@ -32,20 +29,16 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
 .vscode/
 
-### Mac OS ###
 .DS_Store
 
-### Android ###
 *.apk
 *.aab
 *.dex
@@ -57,7 +50,6 @@ AndroidApp/build/
 *.keystore
 *.jks
 
-### Python ###
 __pycache__/
 *.py[cod]
 *$py.class
@@ -83,14 +75,12 @@ coverage.xml
 .pytest_cache
 .hypothesis
 
-### Python Distribution / Packaging ###
 PythonApp/dist/
 PythonApp/build/
 *.egg-info/
 .installed.cfg
 *.egg
 
-### Windows ###
 Thumbs.db
 ehthumbs.db
 Desktop.ini
@@ -100,7 +90,6 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-### Project Specific ###
 external/
 docs/generated_docs
 recordings/
@@ -109,7 +98,6 @@ build-validation-report.html
 phase*_validation_report_*.json
 test_video.mp4
 
-### Application Logs ###
 logs/
 PythonApp/logs/
 *.log
@@ -117,29 +105,23 @@ test_recordings/
 test_calibration/
 test_results/
 
-### Hand Segmentation Outputs (generated files) ###
 hand_segmentation_*/
 demo_output_*/
 comparison_*/
 demo_hands_video.mp4
 
-### Build Optimization ###
-# Android build cache
 .gradle/local
 AndroidApp/.gradle/
-# Python cache optimization  
 **/__pycache__/
 **/*.pyc
 **/*.pyo
-# Test artifacts
 .pytest_cache/
 .coverage*
 htmlcov/
-# IDE artifacts
 *.swp
 *.swo
 *~
-.vscode/settings.json# Temporary files from diagram generation
+.vscode/settings.json
 /tmp/mermaid_config.json
 /tmp/puppeteer_config.json
 *.mmd
