@@ -124,9 +124,9 @@ class IDEIntegrationUITest {
         Log.i(testTag, "Testing bottom navigation")
 
         val bottomNavItems = listOf(
-            R.id.bottom_nav_recording to "Record",
-            R.id.bottom_nav_monitor to "Monitor",
-            R.id.bottom_nav_calibrate to "Calibrate"
+            R.id.nav_recording to "Record",
+            R.id.nav_devices to "Monitor", 
+            R.id.nav_calibration to "Calibrate"
         )
 
         for ((itemId, itemName) in bottomNavItems) {
@@ -280,7 +280,7 @@ class IDEIntegrationUITest {
                 .perform(DrawerActions.open())
 
             onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_network))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_network_config))
 
             Thread.sleep(2000)
 
@@ -313,7 +313,7 @@ class IDEIntegrationUITest {
                 .perform(DrawerActions.open())
 
             onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_shimmer))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_shimmer_config))
 
             Thread.sleep(2000)
 
