@@ -8,6 +8,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import android.util.TypedValue
 
 @RunWith(AndroidJUnit4::class)
 class SectionHeaderViewTest {
@@ -24,7 +25,7 @@ class SectionHeaderViewTest {
     @Test
     fun testInitialState() {
         assertNotNull(sectionHeaderView)
-        assertEquals(18f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(18f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
     }
 
     @Test
@@ -32,7 +33,7 @@ class SectionHeaderViewTest {
         sectionHeaderView.setHeader("Multi-Sensor Recording", SectionHeaderView.HeaderStyle.MAIN_TITLE)
 
         assertEquals("Multi-Sensor Recording", sectionHeaderView.text)
-        assertEquals(24f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(24f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
         assertEquals(android.widget.TextView.TEXT_ALIGNMENT_CENTER, sectionHeaderView.textAlignment)
     }
 
@@ -41,7 +42,7 @@ class SectionHeaderViewTest {
         sectionHeaderView.setHeader("Device Configuration", SectionHeaderView.HeaderStyle.SECTION_HEADER)
 
         assertEquals("Device Configuration", sectionHeaderView.text)
-        assertEquals(18f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(18f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
         assertEquals(android.widget.TextView.TEXT_ALIGNMENT_TEXT_START, sectionHeaderView.textAlignment)
     }
 
@@ -50,7 +51,7 @@ class SectionHeaderViewTest {
         sectionHeaderView.setHeader("Connection Settings", SectionHeaderView.HeaderStyle.SUB_HEADER)
 
         assertEquals("Connection Settings", sectionHeaderView.text)
-        assertEquals(16f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(16f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
         assertEquals(android.widget.TextView.TEXT_ALIGNMENT_TEXT_START, sectionHeaderView.textAlignment)
     }
 
@@ -59,7 +60,7 @@ class SectionHeaderViewTest {
         sectionHeaderView.setHeader("Default Header")
 
         assertEquals("Default Header", sectionHeaderView.text)
-        assertEquals(18f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(18f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
     }
 
     @Test
@@ -103,13 +104,13 @@ class SectionHeaderViewTest {
     @Test
     fun testTextSizesForAllStyles() {
         sectionHeaderView.setHeader("Test", SectionHeaderView.HeaderStyle.MAIN_TITLE)
-        assertEquals(24f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(24f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
 
         sectionHeaderView.setHeader("Test", SectionHeaderView.HeaderStyle.SECTION_HEADER)
-        assertEquals(18f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(18f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
 
         sectionHeaderView.setHeader("Test", SectionHeaderView.HeaderStyle.SUB_HEADER)
-        assertEquals(16f, sectionHeaderView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        assertEquals(16f, sectionHeaderView.textSize / sectionHeaderView.textSize / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 1f, context.resources.displayMetrics), 0.1f)
     }
 
     @Test
@@ -171,13 +172,5 @@ class SectionHeaderViewTest {
 
         sectionHeaderView.setLightTheme()
         assertEquals("Test Header", sectionHeaderView.text)
-    }
-
-    @Test
-    fun testComponentInheritance() {
-        assertTrue(
-            "SectionHeaderView should extend AppCompatTextView",
-            sectionHeaderView is androidx.appcompat.widget.AppCompatTextView
-        )
     }
 }

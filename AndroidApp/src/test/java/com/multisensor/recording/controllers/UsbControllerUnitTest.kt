@@ -835,7 +835,7 @@ class UsbControllerUnitTest {
     private fun createUsbDeviceIntent(action: String, device: UsbDevice?): Intent {
         return mockk<Intent>(relaxed = true).apply {
             every { this@apply.action } returns action
-            every { getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE) } returns device
+            every { getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java) } returns device
         }
     }
 }

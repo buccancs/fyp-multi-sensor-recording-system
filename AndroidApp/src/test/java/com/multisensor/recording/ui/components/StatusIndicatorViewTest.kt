@@ -1,6 +1,7 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
+import android.util.TypedValue
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.*
@@ -94,7 +95,8 @@ class StatusIndicatorViewTest {
         statusIndicatorView.setTextSize(customSize)
 
         val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
-        assertEquals(customSize, textView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, customSize, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, textView.textSize, 0.1f)
     }
 
     @Test
@@ -123,5 +125,74 @@ class StatusIndicatorViewTest {
 
         val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
         assertEquals("Recording State", textView.text)
+    }
+
+    @Test
+    fun testDefaultTextSize() {
+        val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, textView.textSize, 0.1f)
+    }
+
+    @Test
+    fun testStatusTypeEnumValues() {
+        val expectedValues = setOf(
+            StatusIndicatorView.StatusType.CONNECTED,
+            StatusIndicatorView.StatusType.DISCONNECTED,
+            StatusIndicatorView.StatusType.RECORDING,
+            StatusIndicatorView.StatusType.STOPPED,
+            StatusIndicatorView.StatusType.WARNING,
+            StatusIndicatorView.StatusType.ERROR
+        )
+
+        val actualValues = StatusIndicatorView.StatusType.entries.toSet()
+        assertEquals(expectedValues, actualValues)
+    }
+
+    @Test
+    fun testEmptyStatusText() {
+        statusIndicatorView.setStatus(StatusIndicatorView.StatusType.CONNECTED, "")
+
+        val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
+        assertEquals("", textView.text)
+    }
+
+    @Test
+    fun testLongStatusText() {
+        val longText = "This is a very long status message that should still be handled properly by the component"
+        statusIndicatorView.setStatus(StatusIndicatorView.StatusType.WARNING, longText)
+
+        val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
+        assertEquals(longText, textView.text)
+    }
+
+    @Test
+    fun testSpecialCharactersInStatus() {
+        val specialText = "Status with émojis 📡 and symbols ★ ♦ ♠"
+        statusIndicatorView.setStatus(StatusIndicatorView.StatusType.CONNECTED, specialText)
+
+        val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
+        assertEquals(specialText, textView.text)
+    }
+
+    @Test
+    fun testStatusWithNumbers() {
+        val numberText = "Device 1.2.3: Connected"
+        statusIndicatorView.setStatus(StatusIndicatorView.StatusType.CONNECTED, numberText)
+
+        val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
+        assertEquals(numberText, textView.text)
+    }
+
+    @Test
+    fun testTextSizeWithDifferentValues() {
+        val testSizes = arrayOf(12f, 14f, 16f, 18f, 20f)
+
+        for (size in testSizes) {
+            statusIndicatorView.setTextSize(size)
+            val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
+            val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, context.resources.displayMetrics)
+            assertEquals("Text size should be $size SP", expectedSizeInPixels, textView.textSize, 0.1f)
+        }
     }
 }
