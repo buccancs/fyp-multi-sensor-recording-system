@@ -229,7 +229,42 @@ run_test_category() {
 OVERALL_SUCCESS=true
 
 if [[ $UNIT_TESTS == true ]]; then
-    if ! run_test_category "Unit Tests" "testDebugUnitTest" "Core functionality and business logic tests"; then
+    if ! run_test_category "Core Unit Tests" "testDebugUnitTest" "Core functionality and business logic tests"; then
+        OVERALL_SUCCESS=false
+    fi
+fi
+
+# Run comprehensive recording components tests
+if [[ $UNIT_TESTS == true ]]; then
+    if ! run_test_category "Recording Components Tests" "test --tests '*RecordingComponentsComprehensiveTest*'" "Camera, thermal, and Shimmer recording validation"; then
+        OVERALL_SUCCESS=false
+    fi
+fi
+
+# Run comprehensive performance management tests  
+if [[ $PERFORMANCE_TESTS == true ]]; then
+    if ! run_test_category "Performance Management Tests" "test --tests '*PerformanceManagementComprehensiveTest*'" "Power management, network optimization, and system monitoring"; then
+        OVERALL_SUCCESS=false
+    fi
+fi
+
+# Run comprehensive device configuration tests
+if [[ $UNIT_TESTS == true ]]; then
+    if ! run_test_category "Device Configuration Tests" "test --tests '*DeviceConfigurationComprehensiveTest*'" "Device setup, sensor configuration, and health monitoring"; then
+        OVERALL_SUCCESS=false
+    fi
+fi
+
+# Run comprehensive connection management tests
+if [[ $UNIT_TESTS == true ]]; then
+    if ! run_test_category "Connection Management Tests" "test --tests '*ConnectionManagerComprehensiveTest*'" "Network discovery, communication protocols, and optimization"; then
+        OVERALL_SUCCESS=false
+    fi
+fi
+
+# Run comprehensive calibration tests
+if [[ $UNIT_TESTS == true ]]; then
+    if ! run_test_category "Calibration Tests" "test --tests '*CalibrationCaptureManagerComprehensiveTest*'" "Camera calibration, pattern detection, and quality assessment"; then
         OVERALL_SUCCESS=false
     fi
 fi

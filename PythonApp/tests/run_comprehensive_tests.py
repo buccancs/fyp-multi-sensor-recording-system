@@ -32,22 +32,41 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import test modules
 try:
-    from test_calibration_comprehensive import run_calibration_tests
-    CALIBRATION_TESTS_AVAILABLE = True
-except ImportError:
-    CALIBRATION_TESTS_AVAILABLE = False
+    from test_calibration_comprehensive import create_calibration_test_suite
+    from test_network_comprehensive import create_network_test_suite
+    from test_session_comprehensive import create_session_test_suite
+    CORE_TEST_MODULES_AVAILABLE = True
+except ImportError as e:
+    CORE_TEST_MODULES_AVAILABLE = False
+    print(f"Warning: Core test modules not available: {e}")
 
 try:
-    from test_network_comprehensive import run_network_tests
-    NETWORK_TESTS_AVAILABLE = True
-except ImportError:
-    NETWORK_TESTS_AVAILABLE = False
+    from test_shimmer_comprehensive import create_shimmer_test_suite
+    SHIMMER_TEST_AVAILABLE = True
+except ImportError as e:
+    SHIMMER_TEST_AVAILABLE = False
+    print(f"Warning: Shimmer test module not available: {e}")
 
 try:
-    from test_session_comprehensive import run_session_tests  
-    SESSION_TESTS_AVAILABLE = True
-except ImportError:
-    SESSION_TESTS_AVAILABLE = False
+    from test_gui_comprehensive import create_gui_test_suite
+    GUI_TEST_AVAILABLE = True
+except ImportError as e:
+    GUI_TEST_AVAILABLE = False
+    print(f"Warning: GUI test module not available: {e}")
+
+try:
+    from test_hand_segmentation_comprehensive import create_hand_segmentation_test_suite
+    HAND_SEGMENTATION_TEST_AVAILABLE = True
+except ImportError as e:
+    HAND_SEGMENTATION_TEST_AVAILABLE = False
+    print(f"Warning: Hand segmentation test module not available: {e}")
+
+try:
+    from test_time_sync_comprehensive import create_time_sync_test_suite
+    TIME_SYNC_TEST_AVAILABLE = True
+except ImportError as e:
+    TIME_SYNC_TEST_AVAILABLE = False
+    print(f"Warning: Time sync test module not available: {e}")
 
 # Try to import additional test modules
 try:
