@@ -2,8 +2,14 @@ package com.multisensor.recording.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -35,7 +41,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import android.widget.Toast
+import kotlin.math.*
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
@@ -54,8 +61,37 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var emptyStateText: TextView
     private lateinit var refreshButton: Button
 
+    // Camera preview components
+    private lateinit var rgbPreviewBtn: Button
+    private lateinit var irPreviewBtn: Button
+    private lateinit var rgbPreviewImage: ImageView
+    private lateinit var irPreviewImage: ImageView
+    private lateinit var rgbPreviewPlaceholder: TextView
+    private lateinit var irPreviewPlaceholder: TextView
+
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
+
+    // Camera preview state
+    private var isRgbPreviewActive = false
+    private var isIrPreviewActive = false
+    private val cameraPreviewHandler = Handler(Looper.getMainLooper())
+    private val rgbPreviewRunnable = object : Runnable {
+        override fun run() {
+            if (isRgbPreviewActive) {
+                updateRgbPreview()
+                cameraPreviewHandler.postDelayed(this, 100) // 10 FPS
+            }
+        }
+    }
+    private val irPreviewRunnable = object : Runnable {
+        override fun run() {
+            if (isIrPreviewActive) {
+                updateIrPreview()
+                cameraPreviewHandler.postDelayed(this, 200) // 5 FPS
+            }
+        }
+    }
 
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
@@ -128,6 +164,18 @@ class FileViewActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_bar)
         emptyStateText = findViewById(R.id.empty_state_text)
         refreshButton = findViewById(R.id.refresh_button)
+
+        // Initialize camera preview components
+        rgbPreviewBtn = findViewById(R.id.rgb_preview_btn)
+        irPreviewBtn = findViewById(R.id.ir_preview_btn)
+        rgbPreviewImage = findViewById(R.id.rgb_preview_image)
+        irPreviewImage = findViewById(R.id.ir_preview_image)
+        rgbPreviewPlaceholder = findViewById(R.id.rgb_preview_placeholder)
+        irPreviewPlaceholder = findViewById(R.id.ir_preview_placeholder)
+
+        // Setup camera preview button listeners
+        rgbPreviewBtn.setOnClickListener { toggleRgbPreview() }
+        irPreviewBtn.setOnClickListener { toggleIrPreview() }
     }
 
     private fun setupRecyclerViews() {
@@ -341,5 +389,203 @@ class FileViewActivity : AppCompatActivity() {
                 .setBackgroundTint(getColor(android.R.color.holo_red_dark))
                 .show()
         }
+    }
+
+    // Camera preview functionality
+    private fun toggleRgbPreview() {
+        if (!isRgbPreviewActive) {
+            startRgbPreview()
+        } else {
+            stopRgbPreview()
+        }
+    }
+
+    private fun toggleIrPreview() {
+        if (!isIrPreviewActive) {
+            startIrPreview()
+        } else {
+            stopIrPreview()
+        }
+    }
+
+    private fun startRgbPreview() {
+        isRgbPreviewActive = true
+        rgbPreviewBtn.text = "Stop"
+        rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
+        
+        rgbPreviewPlaceholder.visibility = View.GONE
+        rgbPreviewImage.visibility = View.VISIBLE
+        
+        // Start preview updates
+        cameraPreviewHandler.post(rgbPreviewRunnable)
+        
+        logger.info("RGB camera preview started")
+        showMessage("RGB camera preview started")
+    }
+
+    private fun stopRgbPreview() {
+        isRgbPreviewActive = false
+        rgbPreviewBtn.text = "Start"
+        rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_green_dark)
+        
+        rgbPreviewImage.visibility = View.GONE
+        rgbPreviewPlaceholder.visibility = View.VISIBLE
+        
+        cameraPreviewHandler.removeCallbacks(rgbPreviewRunnable)
+        
+        logger.info("RGB camera preview stopped")
+        showMessage("RGB camera preview stopped")
+    }
+
+    private fun startIrPreview() {
+        isIrPreviewActive = true
+        irPreviewBtn.text = "Stop"
+        irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
+        
+        irPreviewPlaceholder.visibility = View.GONE
+        irPreviewImage.visibility = View.VISIBLE
+        
+        // Start preview updates
+        cameraPreviewHandler.post(irPreviewRunnable)
+        
+        logger.info("IR camera preview started")
+        showMessage("IR camera preview started")
+    }
+
+    private fun stopIrPreview() {
+        isIrPreviewActive = false
+        irPreviewBtn.text = "Start"
+        irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_orange_dark)
+        
+        irPreviewImage.visibility = View.GONE
+        irPreviewPlaceholder.visibility = View.VISIBLE
+        
+        cameraPreviewHandler.removeCallbacks(irPreviewRunnable)
+        
+        logger.info("IR camera preview stopped")
+        showMessage("IR camera preview stopped")
+    }
+
+    private fun updateRgbPreview() {
+        try {
+            // Generate simulated RGB camera frame
+            val bitmap = generateRgbPreviewBitmap()
+            rgbPreviewImage.setImageBitmap(bitmap)
+        } catch (e: Exception) {
+            logger.error("Error updating RGB preview: ${e.message}")
+        }
+    }
+
+    private fun updateIrPreview() {
+        try {
+            // Generate simulated thermal camera frame
+            val bitmap = generateThermalPreviewBitmap()
+            irPreviewImage.setImageBitmap(bitmap)
+        } catch (e: Exception) {
+            logger.error("Error updating IR preview: ${e.message}")
+        }
+    }
+
+    private fun generateRgbPreviewBitmap(): Bitmap {
+        val width = 320
+        val height = 240
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+
+        // Create a simple animated pattern for RGB camera simulation
+        val time = System.currentTimeMillis() / 100
+        
+        // Background gradient
+        paint.color = Color.rgb(50, 50, 80)
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+        
+        // Add some moving elements to simulate camera feed
+        for (i in 0..10) {
+            val x = ((time + i * 30) % (width + 100)).toFloat() - 50
+            val y = (height * 0.2f + i * height * 0.05f).toFloat()
+            
+            paint.color = Color.rgb(
+                (100 + i * 15) % 255,
+                (150 + i * 10) % 255,
+                (200 + i * 5) % 255
+            )
+            canvas.drawCircle(x, y, 15f, paint)
+        }
+        
+        // Add "LIVE" indicator
+        paint.color = Color.RED
+        paint.textSize = 24f
+        canvas.drawText("● LIVE", 10f, 30f, paint)
+        
+        // Add timestamp
+        paint.color = Color.WHITE
+        paint.textSize = 16f
+        val timeStr = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+        canvas.drawText(timeStr, 10f, height - 10f, paint)
+
+        return bitmap
+    }
+
+    private fun generateThermalPreviewBitmap(): Bitmap {
+        val width = 320
+        val height = 240
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+
+        val time = System.currentTimeMillis() / 200.0
+
+        // Generate thermal-style gradient
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                // Create animated thermal pattern
+                val centerX = width / 2.0
+                val centerY = height / 2.0
+                val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
+                
+                val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
+                
+                // Thermal color mapping
+                val color = when {
+                    intensity < 85 -> Color.rgb(0, 0, intensity * 3)  // Blue
+                    intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)  // Blue to red
+                    else -> Color.rgb(255, (intensity - 170) * 3, 0)  // Red to yellow
+                }
+                
+                paint.color = color
+                canvas.drawPoint(x.toFloat(), y.toFloat(), paint)
+            }
+        }
+        
+        // Add some random "hot spots"
+        paint.color = Color.YELLOW
+        for (i in 0..3) {
+            val hotX = Random.nextInt(50, width - 50).toFloat()
+            val hotY = Random.nextInt(50, height - 50).toFloat()
+            canvas.drawCircle(hotX, hotY, 20f, paint)
+        }
+        
+        // Add thermal overlay text
+        paint.color = Color.WHITE
+        paint.textSize = 18f
+        canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
+        
+        // Add temperature reading
+        val temp = (20 + Random.nextFloat() * 15).toInt()
+        paint.textSize = 14f
+        canvas.drawText("${temp}°C", width - 60f, height - 10f, paint)
+
+        return bitmap
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        
+        // Stop camera previews
+        stopRgbPreview()
+        stopIrPreview()
+        
+        logger.info("FileViewActivity destroyed")
     }
 }
