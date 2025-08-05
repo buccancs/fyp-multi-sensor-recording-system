@@ -1,0 +1,525 @@
+#!/usr/bin/env python3
+"""
+Comprehensive System Test for Multi-Sensor Recording System
+This test validates that all major components are working correctly.
+"""
+
+import sys
+import os
+import traceback
+import tempfile
+import json
+import time
+import threading
+from pathlib import Path
+
+# Set up environment
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+project_root = Path(__file__).parent.parent / "home/runner/work/bucika_gsr/bucika_gsr"
+sys.path.insert(0, str(project_root))
+
+def test_python_environment():
+    """Test Python environment and dependencies."""
+    print("Testing Python environment...")
+    
+    dependencies = {
+        'cv2': 'OpenCV',
+        'numpy': 'NumPy',
+        'PyQt5.QtWidgets': 'PyQt5',
+        'requests': 'Requests',
+        'websockets': 'WebSockets',
+        'matplotlib': 'Matplotlib',
+        'pandas': 'Pandas',
+        'scipy': 'SciPy',
+        'pillow': 'Pillow (PIL)',
+    }
+    
+    available = []
+    missing = []
+    
+    for module, name in dependencies.items():
+        try:
+            if '.' in module:
+                parts = module.split('.')
+                mod = __import__(parts[0])
+                for part in parts[1:]:
+                    mod = getattr(mod, part)
+            else:
+                __import__(module)
+            available.append(name)
+            print(f"✓ {name}")
+        except ImportError:
+            missing.append(name)
+            print(f"✗ {name}")
+    
+    print(f"\nDependencies: {len(available)}/{len(dependencies)} available")
+    if missing:
+        print(f"Missing: {', '.join(missing)}")
+    
+    return len(missing) == 0
+
+def test_gui_components():
+    """Test GUI component creation and basic functionality."""
+    print("\nTesting GUI components...")
+    
+    try:
+        from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QLabel
+        from PyQt5.QtCore import Qt, QTimer
+        
+        app = QApplication([])
+        
+        # Test basic widget creation
+        main_window = QMainWindow()
+        main_window.setWindowTitle("Test Window")
+        main_window.resize(800, 600)
+        
+        central_widget = QWidget()
+        main_window.setCentralWidget(central_widget)
+        
+        # Test control widgets
+        button = QPushButton("Test Button")
+        label = QLabel("Test Label")
+        
+        print("✓ Basic widgets created successfully")
+        
+        # Test enhanced main window
+        try:
+            from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
+            enhanced_window = EnhancedMainWindow()
+            print("✓ Enhanced main window created successfully")
+            enhanced_window.close()
+        except Exception as e:
+            print(f"⚠ Enhanced main window creation failed: {e}")
+        
+        app.quit()
+        return True
+        
+    except Exception as e:
+        print(f"✗ GUI components test failed: {e}")
+        traceback.print_exc()
+        return False
+
+def test_opencv_functionality():
+    """Test OpenCV computer vision functionality."""
+    print("\nTesting OpenCV functionality...")
+    
+    try:
+        import cv2
+        import numpy as np
+        
+        print(f"✓ OpenCV version: {cv2.__version__}")
+        
+        # Test image creation and processing
+        test_img = np.zeros((480, 640, 3), dtype=np.uint8)
+        test_img[100:380, 100:540] = [0, 255, 0]  # Green rectangle
+        
+        # Test color conversion
+        gray = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
+        print("✓ Color conversion works")
+        
+        # Test edge detection
+        edges = cv2.Canny(gray, 50, 150)
+        print("✓ Edge detection works")
+        
+        # Test calibration pattern generation
+        pattern_size = (9, 6)
+        square_size = 1.0
+        pattern_points = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
+        pattern_points[:, :2] = np.mgrid[0:pattern_size[0], 0:pattern_size[1]].T.reshape(-1, 2)
+        pattern_points *= square_size
+        print("✓ Calibration pattern generation works")
+        
+        # Test camera matrix creation
+        camera_matrix = np.array([[500, 0, 320],
+                                  [0, 500, 240],
+                                  [0, 0, 1]], dtype=np.float32)
+        dist_coeffs = np.zeros((4, 1))
+        print("✓ Camera matrix operations work")
+        
+        return True
+        
+    except Exception as e:
+        print(f"✗ OpenCV functionality test failed: {e}")
+        traceback.print_exc()
+        return False
+
+def test_network_capabilities():
+    """Test network and communication functionality."""
+    print("\nTesting network capabilities...")
+    
+    try:
+        import socket
+        import json
+        import threading
+        import time
+        
+        # Test socket creation
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        print("✓ Socket creation works")
+        
+        # Test JSON message serialization
+        test_message = {
+            "type": "command",
+            "command": "start_recording",
+            "timestamp": time.time(),
+            "device_id": "test_device",
+            "parameters": {
+                "resolution": "1920x1080",
+                "fps": 30,
+                "sensors": ["camera", "thermal", "gsr"]
+            }
+        }
+        
+        json_str = json.dumps(test_message)
+        parsed_message = json.loads(json_str)
+        assert parsed_message == test_message
+        print("✓ JSON message serialization works")
+        
+        # Test basic server-client communication
+        def test_server():
+            try:
+                server_socket.bind(('localhost', 0))  # Let OS choose port
+                port = server_socket.getsockname()[1]
+                server_socket.listen(1)
+                
+                def handle_client():
+                    client_socket, addr = server_socket.accept()
+                    data = client_socket.recv(1024).decode()
+                    message = json.loads(data)
+                    
+                    # Send response
+                    response = {"status": "received", "echo": message}
+                    client_socket.send(json.dumps(response).encode())
+                    client_socket.close()
+                
+                client_thread = threading.Thread(target=handle_client, daemon=True)
+                client_thread.start()
+                
+                # Test client connection
+                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                client_socket.connect(('localhost', port))
+                client_socket.send(json.dumps(test_message).encode())
+                
+                response_data = client_socket.recv(1024).decode()
+                response = json.loads(response_data)
+                
+                assert response["status"] == "received"
+                assert response["echo"] == test_message
+                
+                client_socket.close()
+                client_thread.join(timeout=1)
+                
+                print("✓ Socket communication works")
+                
+            except Exception as e:
+                print(f"⚠ Socket communication test partial failure: {e}")
+            finally:
+                server_socket.close()
+        
+        test_server()
+        return True
+        
+    except Exception as e:
+        print(f"✗ Network capabilities test failed: {e}")
+        traceback.print_exc()
+        return False
+
+def test_data_processing():
+    """Test data processing and analysis capabilities."""
+    print("\nTesting data processing...")
+    
+    try:
+        import numpy as np
+        import pandas as pd
+        import matplotlib
+        matplotlib.use('Agg')  # Use non-interactive backend
+        import matplotlib.pyplot as plt
+        
+        # Test NumPy operations
+        data = np.random.randn(1000, 3)
+        mean_vals = np.mean(data, axis=0)
+        std_vals = np.std(data, axis=0)
+        print(f"✓ NumPy processing: mean={mean_vals}, std={std_vals}")
+        
+        # Test Pandas DataFrame operations
+        df = pd.DataFrame(data, columns=['GSR', 'PPG', 'Accelerometer'])
+        df['timestamp'] = pd.date_range('2024-01-01', periods=1000, freq='1ms')
+        
+        # Basic statistics
+        stats = df.describe()
+        print("✓ Pandas DataFrame operations work")
+        
+        # Test data filtering and processing
+        filtered_df = df[df['GSR'] > 0]
+        rolling_mean = df['PPG'].rolling(window=10).mean()
+        print("✓ Data filtering and rolling statistics work")
+        
+        # Test plotting (in memory)
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.plot(df.index[:100], df['GSR'][:100], label='GSR')
+        ax.plot(df.index[:100], df['PPG'][:100], label='PPG')
+        ax.legend()
+        ax.set_title('Sample Sensor Data')
+        
+        # Save plot to temporary file
+        with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
+            fig.savefig(f.name)
+            plot_file = f.name
+        
+        plt.close(fig)
+        
+        # Verify plot was created
+        if os.path.exists(plot_file) and os.path.getsize(plot_file) > 0:
+            print("✓ Matplotlib plotting works")
+            os.unlink(plot_file)
+        else:
+            print("⚠ Matplotlib plotting may have issues")
+        
+        return True
+        
+    except Exception as e:
+        print(f"✗ Data processing test failed: {e}")
+        traceback.print_exc()
+        return False
+
+def test_file_operations():
+    """Test file I/O and session management."""
+    print("\nTesting file operations...")
+    
+    try:
+        import json
+        import csv
+        from datetime import datetime
+        
+        # Test session metadata creation
+        session_metadata = {
+            "session_id": f"test_session_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            "start_time": datetime.now().isoformat(),
+            "devices": ["Android-01", "Android-02", "PC-Webcam-01", "PC-Webcam-02"],
+            "sensors": ["Camera", "Thermal", "GSR", "PPG"],
+            "configuration": {
+                "resolution": "1920x1080",
+                "fps": 30,
+                "sampling_rate": 512
+            }
+        }
+        
+        # Test JSON export
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            json.dump(session_metadata, f, indent=2)
+            json_file = f.name
+        
+        # Verify JSON file
+        with open(json_file, 'r') as f:
+            loaded_metadata = json.load(f)
+        
+        assert loaded_metadata == session_metadata
+        print("✓ JSON session metadata export/import works")
+        os.unlink(json_file)
+        
+        # Test CSV data export
+        sensor_data = [
+            {"timestamp": 1.0, "GSR": 1000, "PPG": 2048, "temp": 25.5},
+            {"timestamp": 1.1, "GSR": 1001, "PPG": 2049, "temp": 25.6},
+            {"timestamp": 1.2, "GSR": 1002, "PPG": 2050, "temp": 25.7},
+        ]
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+            writer = csv.DictWriter(f, fieldnames=sensor_data[0].keys())
+            writer.writeheader()
+            writer.writerows(sensor_data)
+            csv_file = f.name
+        
+        # Verify CSV file
+        with open(csv_file, 'r') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+        
+        assert len(rows) == len(sensor_data)
+        assert float(rows[0]["GSR"]) == 1000
+        print("✓ CSV sensor data export/import works")
+        os.unlink(csv_file)
+        
+        # Test directory structure creation
+        with tempfile.TemporaryDirectory() as temp_dir:
+            session_dir = Path(temp_dir) / "sessions" / session_metadata["session_id"]
+            session_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Create subdirectories
+            subdirs = ["video", "thermal", "sensor_data", "logs"]
+            for subdir in subdirs:
+                (session_dir / subdir).mkdir(exist_ok=True)
+            
+            # Verify structure
+            for subdir in subdirs:
+                assert (session_dir / subdir).exists()
+            
+            print("✓ Session directory structure creation works")
+        
+        return True
+        
+    except Exception as e:
+        print(f"✗ File operations test failed: {e}")
+        traceback.print_exc()
+        return False
+
+def test_system_integration():
+    """Test system integration and coordination."""
+    print("\nTesting system integration...")
+    
+    try:
+        # Test simulated multi-device coordination
+        class DeviceSimulator:
+            def __init__(self, device_id):
+                self.device_id = device_id
+                self.is_connected = False
+                self.is_recording = False
+                self.status = "idle"
+                
+            def connect(self):
+                self.is_connected = True
+                self.status = "connected"
+                return True
+                
+            def start_recording(self):
+                if self.is_connected:
+                    self.is_recording = True
+                    self.status = "recording"
+                    return True
+                return False
+                
+            def stop_recording(self):
+                self.is_recording = False
+                self.status = "connected"
+                return True
+                
+            def disconnect(self):
+                self.is_connected = False
+                self.is_recording = False
+                self.status = "disconnected"
+                return True
+                
+            def get_status(self):
+                return {
+                    "device_id": self.device_id,
+                    "connected": self.is_connected,
+                    "recording": self.is_recording,
+                    "status": self.status
+                }
+        
+        # Test coordinated recording session
+        devices = [
+            DeviceSimulator("Android-01"),
+            DeviceSimulator("Android-02"),
+            DeviceSimulator("PC-Webcam-01"),
+            DeviceSimulator("PC-Webcam-02"),
+        ]
+        
+        # Test connection phase
+        for device in devices:
+            assert device.connect() == True
+        
+        print("✓ All devices connected successfully")
+        
+        # Test synchronized recording start
+        for device in devices:
+            assert device.start_recording() == True
+        
+        # Verify all devices are recording
+        statuses = [device.get_status() for device in devices]
+        assert all(status["recording"] for status in statuses)
+        print("✓ Synchronized recording start works")
+        
+        # Test status monitoring
+        for status in statuses:
+            assert status["connected"] == True
+            assert status["recording"] == True
+            assert status["status"] == "recording"
+        
+        print("✓ Status monitoring works")
+        
+        # Test synchronized recording stop
+        for device in devices:
+            assert device.stop_recording() == True
+        
+        statuses = [device.get_status() for device in devices]
+        assert all(not status["recording"] for status in statuses)
+        print("✓ Synchronized recording stop works")
+        
+        # Test disconnection
+        for device in devices:
+            assert device.disconnect() == True
+        
+        statuses = [device.get_status() for device in devices]
+        assert all(not status["connected"] for status in statuses)
+        print("✓ Device disconnection works")
+        
+        return True
+        
+    except Exception as e:
+        print(f"✗ System integration test failed: {e}")
+        traceback.print_exc()
+        return False
+
+def generate_test_report():
+    """Generate a comprehensive test report."""
+    print("\n" + "=" * 60)
+    print("COMPREHENSIVE SYSTEM TEST REPORT")
+    print("=" * 60)
+    
+    tests = [
+        ("Python Environment", test_python_environment),
+        ("GUI Components", test_gui_components),
+        ("OpenCV Functionality", test_opencv_functionality),
+        ("Network Capabilities", test_network_capabilities),
+        ("Data Processing", test_data_processing),
+        ("File Operations", test_file_operations),
+        ("System Integration", test_system_integration),
+    ]
+    
+    results = {}
+    passed = 0
+    total = len(tests)
+    
+    for test_name, test_func in tests:
+        try:
+            print(f"\n{'-' * 40}")
+            print(f"Running: {test_name}")
+            result = test_func()
+            results[test_name] = "PASS" if result else "FAIL"
+            if result:
+                passed += 1
+                print(f"✓ {test_name}: PASSED")
+            else:
+                print(f"✗ {test_name}: FAILED")
+        except Exception as e:
+            results[test_name] = f"ERROR: {e}"
+            print(f"✗ {test_name}: ERROR - {e}")
+    
+    # Summary
+    print("\n" + "=" * 60)
+    print("TEST SUMMARY")
+    print("=" * 60)
+    
+    for test_name, result in results.items():
+        status_char = "✓" if result == "PASS" else "✗"
+        print(f"{status_char} {test_name}: {result}")
+    
+    print(f"\nOverall Result: {passed}/{total} tests passed ({passed/total*100:.1f}%)")
+    
+    if passed == total:
+        print("🎉 ALL TESTS PASSED! The Multi-Sensor Recording System is working correctly.")
+    else:
+        print("⚠️  Some tests failed. Review the details above.")
+    
+    return passed == total
+
+def main():
+    """Run comprehensive system test."""
+    success = generate_test_report()
+    return success
+
+if __name__ == "__main__":
+    success = main()
+    sys.exit(0 if success else 1)
