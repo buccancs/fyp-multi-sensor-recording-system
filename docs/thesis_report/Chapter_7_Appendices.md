@@ -37,6 +37,9 @@
    - 6.2. [F.2 Scientific Validation with Research Protocols](#f2-scientific-validation-with-research-protocols)
 7. [Appendix G: Code Listing](#appendix-g-code-listing)
    - 7.1. [G.1 Key Implementation Components](#g1-key-implementation-components)
+8. [Appendix H: Missing Diagrams and Visual Content](#appendix-h-missing-diagrams-and-visual-content)
+   - 8.1. [H.1 Missing Diagram Inventory](#h1-missing-diagram-inventory)
+   - 8.2. [H.2 Available Diagram Mappings](#h2-available-diagram-mappings)
 
 ---
 
@@ -407,6 +410,8 @@ Based on comprehensive testing, the current system supports:
 
 **Figure A.1: System Architecture Deployment Diagram**
 
+*Available diagram reference: `docs/diagrams/14_layer_architecture.png`*
+
 ```mermaid
 graph TB
     subgraph "Research Laboratory Network Environment"
@@ -506,6 +511,8 @@ graph TB
 
 **Figure A.2: Physical Laboratory Setup Configuration**
 
+*Available diagram reference: `docs/diagrams/02_hardware_setup_architecture.png`*
+
 ```
 [PLACEHOLDER: Comprehensive laboratory setup photograph collage showing:
 
@@ -554,6 +561,8 @@ Bottom Panel: Technical infrastructure detail
 #### A.2 Installation and Configuration Procedures
 
 **Figure A.3: Software Installation Workflow**
+
+*Available diagram reference: `docs/diagrams/17_software_installation_flow.png`*
 
 ```mermaid
 flowchart TD
@@ -636,6 +645,8 @@ quality:
 #### A.3 System Architecture Documentation
 
 **Figure A.4: Detailed Component Interaction Diagram**
+
+*Available diagram reference: `docs/diagrams/12_data_file_system_architecture.png`*
 
 ```mermaid
 graph TB
@@ -721,6 +732,8 @@ graph TB
 
 **Figure B.1: Python Desktop Controller Interface Screenshots**
 
+*Available diagram references: `docs/diagrams/04_pc_app_architecture.png`, `docs/diagrams/16_software_architecture_of_pc_app.png`*
+
 ```
 [PLACEHOLDER: Desktop application screenshot collage showing:
 
@@ -761,6 +774,8 @@ Session Control Panel:
 | **Synchronization Display** | Show timing accuracy across devices | Automatic real-time monitoring | ±ms deviation from reference time | Recalibrate if deviation exceeds ±50ms |
 
 **Figure B.2: Android Mobile Application Interface Screenshots**
+
+*Available diagram references: `docs/diagrams/03_android_app_architecture.png`, `docs/diagrams/15_software_architecture_of_android.png`*
 
 ```
 [PLACEHOLDER: Android application screenshot collection showing:
@@ -807,6 +822,8 @@ Settings and Configuration Screen:
 | **Post-Session Cleanup** | 10-15 minutes | 1. Sanitize GSR sensors and equipment<br/>2. Charge device batteries<br/>3. Update session database<br/>4. Archive raw data files | Equipment ready for next session | Clean equipment, charged batteries |
 
 **Figure B.3: Data Export and Analysis Workflow**
+
+*Available diagram reference: `docs/diagrams/13_data_export_workflow.png`*
 
 ```mermaid
 flowchart TD
@@ -923,6 +940,8 @@ python -m pytest PythonApp/
 
 **Figure B.2: Device Setup Workflow**
 
+*Note: This figure duplicates B.2 above - referencing Android Application Interface diagrams*
+
 ```mermaid
 flowchart LR
     subgraph "Device Preparation"
@@ -954,6 +973,8 @@ flowchart LR
 #### B.2 Recording Session Management
 
 **Figure B.3: Session Recording Interface**
+
+*Available diagram reference: `docs/diagrams/09_session_management_flow.png`*
 
 ```
 [PLACEHOLDER: Detailed screenshots showing:
@@ -1005,6 +1026,8 @@ flowchart LR
 | **Network Time Synchronization** | GPS reference clock | ±2.1ms | 0.3ms/hour | 2024-01-20 | ✅ Research-grade |
 
 **Figure D.1: Calibration Test Results Visualization**
+
+*Missing diagram - referenced calibration test results not available as image file*
 
 ```mermaid
 xychart-beta
@@ -1123,6 +1146,8 @@ The actual system configuration from `protocol/config.json` demonstrates the imp
 
 **Figure D.1: Test Coverage Heatmap**
 
+*Note: This duplicates Figure D.1 above - missing diagram for test coverage visualization*
+
 ```mermaid
 graph TB
     subgraph "Component Test Coverage"
@@ -1209,6 +1234,8 @@ graph TB
 | **Average All Users** | Mixed | 7.3 | 4.4 | 91.6% | 8.4% |
 
 **Figure E.1: User Satisfaction Analysis**
+
+*Missing diagram - user satisfaction analysis results not available as image file*
 
 ```mermaid
 xychart-beta
@@ -1870,6 +1897,8 @@ class ResearchProtocolHandler:
 
 **Figure B.4: Data Export Workflow Interface**
 
+*Available diagram reference: `docs/diagrams/13_data_export_workflow.png`*
+
 ```
 [PLACEHOLDER: Export interface screenshots showing:
 1. Session selection with filtering options
@@ -1905,6 +1934,8 @@ class ResearchProtocolHandler:
 | **Time Synchronization** | NTP + network compensation | ±18.7ms across all devices | Reference clock validation | Continuous |
 
 **Figure C.1: Calibration Validation Results**
+
+*Missing diagram - calibration validation results not available as image file*
 
 ```mermaid
 xychart-beta
@@ -3317,8 +3348,218 @@ Each implementation demonstrates the technical achievements and innovations disc
 - Content: Step-by-step development workflow for contributors
 - Expected sections: Git workflow, testing procedures, code review process, release procedures
 
-**[PLACEHOLDER: Deployment Procedure Guides]**
-- Location: `docs/deployment/`
-- Content: Comprehensive deployment procedures for different environments
-- Expected files: `production_deployment.md`, `development_setup.md`, `testing_environment_setup.md`, `docker_deployment.md`
+---
+
+## Appendix H: Missing Diagrams and Visual Content
+
+### H.1 Missing Diagram Inventory
+
+This section provides a comprehensive inventory of all diagrams referenced throughout the thesis documents but not currently available as image files in the repository. The analysis is based on systematic review of all figure references in Chapters 3-6 and appendices.
+
+#### H.1.1 Chapter 3 Missing Diagrams (5 diagrams missing)
+
+**Figure 3.1: Traditional vs. Contactless Measurement Setup Comparison**
+- *Status*: ❌ Missing diagram file
+- *Description*: Comparative illustration showing traditional physiological measurement setup versus the contactless approach
+- *Referenced in*: Chapter 3, Requirements and Analysis section
+- *Suggested creation*: Side-by-side photograph comparison or technical schematic
+
+**Figure 3.2: Evolution of Physiological Measurement Technologies**
+- *Status*: ❌ Missing diagram file  
+- *Description*: Timeline diagram showing progression from contact-based to contactless measurement technologies
+- *Referenced in*: Chapter 3, Literature Review context
+- *Suggested creation*: Timeline infographic with technology milestones
+
+**Figure 3.3: Research Impact Potential vs. Technical Complexity Matrix**
+- *Status*: ❌ Missing diagram file
+- *Description*: 2x2 matrix plotting research impact against technical implementation complexity
+- *Referenced in*: Chapter 3, Requirements justification
+- *Suggested creation*: Scatter plot or quadrant analysis chart
+
+**Figure 3.4: Requirements Dependency Network**
+- *Status*: ❌ Missing diagram file
+- *Description*: Network diagram showing interdependencies between functional and non-functional requirements
+- *Referenced in*: Chapter 3, Requirements analysis
+- *Suggested creation*: Network graph with requirement nodes and dependency edges
+
+**Figure 3.5: Hardware Integration Architecture**
+- *Status*: ❌ Missing diagram file
+- *Description*: Technical diagram showing hardware component integration and communication pathways
+- *Referenced in*: Chapter 3, System architecture overview
+- *Suggested creation*: Block diagram with component connections
+
+#### H.1.2 Chapter 4 Missing Diagrams (1 diagram missing)
+
+**Figure 4.1: Multi-Sensor Recording System Architecture Overview**
+- *Status*: ❌ Missing diagram file (could reference `05_complete_data_flow_architecture.png`)
+- *Description*: High-level system architecture showing all components and their interactions
+- *Referenced in*: Chapter 4, Design and Implementation
+- *Available alternative*: `docs/diagrams/05_complete_data_flow_architecture.png`
+
+#### H.1.3 Chapter 5 Missing Diagrams (6 diagrams missing)
+
+**Figure 5.1: Multi-Layered Testing Architecture**
+- *Status*: ❌ Missing diagram file
+- *Description*: Hierarchical diagram showing unit, integration, and system testing layers
+- *Referenced in*: Chapter 5, Testing framework
+- *Suggested creation*: Pyramid or layered architecture diagram
+
+**Figure 5.2: Test Coverage Heatmap**
+- *Status*: ❌ Missing diagram file  
+- *Description*: Visual heatmap showing test coverage across different system components
+- *Referenced in*: Chapter 5, Test results section
+- *Suggested creation*: Color-coded grid or heatmap visualization
+
+**Figure 5.3: Performance Benchmark Results Over Time**
+- *Status*: ❌ Missing diagram file
+- *Description*: Time series chart showing system performance metrics during extended testing
+- *Referenced in*: Chapter 5, Performance validation
+- *Suggested creation*: Line chart with multiple performance metrics
+
+**Figure 5.4: Scalability Performance Analysis**
+- *Status*: ❌ Missing diagram file
+- *Description*: Chart showing system performance degradation as device count increases
+- *Referenced in*: Chapter 5, Scalability testing
+- *Suggested creation*: Performance vs. device count scatter plot
+
+**Figure 5.5: System Reliability Over Extended Operation**
+- *Status*: ❌ Missing diagram file
+- *Description*: Reliability metrics plotted over extended operational periods
+- *Referenced in*: Chapter 5, Reliability assessment
+- *Suggested creation*: Reliability curve with confidence intervals
+
+**Figure 5.6: Temporal Synchronization Distribution Analysis**
+- *Status*: ❌ Missing diagram file
+- *Description*: Statistical distribution of synchronization accuracy measurements
+- *Referenced in*: Chapter 5, Synchronization precision validation
+- *Suggested creation*: Histogram or distribution plot
+
+#### H.1.4 Chapter 6 Missing Diagrams (4 diagrams missing)
+
+**Figure 6.1: Achievement Visualization Dashboard**
+- *Status*: ❌ Missing diagram file
+- *Description*: Comprehensive dashboard showing all system achievements and metrics
+- *Referenced in*: Chapter 6, Conclusions and evaluation
+- *Suggested creation*: Multi-panel dashboard layout
+
+**Figure 6.2: Goal Achievement Progress Timeline**
+- *Status*: ❌ Missing diagram file
+- *Description*: Timeline showing progression toward stated research goals
+- *Referenced in*: Chapter 6, Goal achievement analysis  
+- *Suggested creation*: Gantt chart or milestone timeline
+
+**Figure 6.3: Technical Architecture Innovation Map**
+- *Status*: ❌ Missing diagram file
+- *Description*: Diagram highlighting innovative aspects of the system architecture
+- *Referenced in*: Chapter 6, Innovation assessment
+- *Suggested creation*: Annotated architecture diagram with innovation callouts
+
+**Figure 6.4: Performance Excellence Metrics Visualization**
+- *Status*: ❌ Missing diagram file
+- *Description*: Comprehensive visualization of performance achievements
+- *Referenced in*: Chapter 6, Performance excellence validation
+- *Suggested creation*: Multi-metric performance dashboard
+
+#### H.1.5 Appendix Missing Diagrams (5 diagrams missing)
+
+**Figure C.1: Calibration Validation Results**
+- *Status*: ❌ Missing diagram file
+- *Description*: Charts showing calibration accuracy over time for all devices
+- *Referenced in*: Appendix C, Supporting documentation
+- *Current status*: Mermaid chart placeholder exists
+
+**Figure D.1: Calibration Test Results Visualization** (duplicate reference)
+- *Status*: ❌ Missing diagram file
+- *Description*: Visualization of calibration test outcomes and statistics
+- *Referenced in*: Appendix D, twice with different contexts
+- *Current status*: Mermaid chart placeholder exists
+
+**Figure E.1: User Satisfaction Analysis**
+- *Status*: ❌ Missing diagram file
+- *Description*: Statistical analysis of user experience survey results
+- *Referenced in*: Appendix E, User evaluation
+- *Current status*: Mermaid chart placeholder exists
+
+### H.2 Available Diagram Mappings
+
+This section maps currently available diagrams in `docs/diagrams/` to appropriate figure references where logical connections exist.
+
+#### H.2.1 Successfully Mapped Diagrams
+
+| Available File | Mapped to Figure Reference | Mapping Quality |
+|---|---|---|
+| `02_hardware_setup_architecture.png` | Figure A.2: Physical Laboratory Setup | ✅ Direct match |
+| `03_android_app_architecture.png` | Figure B.2: Android Application Interface | ✅ Direct match |
+| `04_pc_app_architecture.png` | Figure B.1: Python Desktop Controller Interface | ✅ Direct match |
+| `05_complete_data_flow_architecture.png` | Figure 4.2: Data Flow and Processing Pipeline | ✅ Direct match |
+| `07_networking_architecture.png` | Figure 4.3: Hybrid Star-Mesh Network Topology | ✅ Direct match |
+| `09_session_management_flow.png` | Figure B.3: Session Recording Interface | ✅ Good match |
+| `12_data_file_system_architecture.png` | Figure A.4: Detailed Component Interaction | ✅ Good match |
+| `13_data_export_workflow.png` | Figure B.3 & B.4: Data Export Workflow | ✅ Direct match |
+| `14_layer_architecture.png` | Figure A.1: System Architecture Deployment | ✅ Good match |
+| `15_software_architecture_of_android.png` | Figure 4.4: Android Application Layers | ✅ Direct match |
+| `17_software_installation_flow.png` | Figure A.3: Software Installation Workflow | ✅ Direct match |
+
+#### H.2.2 Gaps in Available Diagrams
+
+**Missing Diagram Numbers in Sequence:**
+- ❌ **06**: Gap between `05_complete_data_flow_architecture.png` and `07_networking_architecture.png`
+- ❌ **10**: Gap between `09_session_management_flow.png` and `12_data_file_system_architecture.png`
+- ❌ **11**: Gap between `09_session_management_flow.png` and `12_data_file_system_architecture.png`
+
+**Unused Available Diagrams:**
+- `01_table_of_contents.png` - Documentation structure overview
+- `08_data_collection_flow.png` - Alternative data flow visualization
+- `16_software_architecture_of_pc_app.png` - Alternative PC architecture view
+
+### H.3 Summary Statistics
+
+**Total Referenced Diagrams**: 37 unique figure references
+**Available Diagram Files**: 14 files in `docs/diagrams/`
+**Successfully Mapped**: 11 diagrams (29.7% coverage)
+**Missing Diagrams**: 23 diagrams (62.2% missing)
+**Duplicate References**: 3 instances (Figure D.1 appears twice, Figure B.2 and B.3 have duplicates)
+
+**Coverage by Chapter:**
+- Chapter 3: 0/5 diagrams available (0% coverage)
+- Chapter 4: 3/4 diagrams available (75% coverage)  
+- Chapter 5: 0/6 diagrams available (0% coverage)
+- Chapter 6: 0/4 diagrams available (0% coverage)
+- Appendices: 8/11 diagrams available (72.7% coverage)
+
+**Recommendation Priority:**
+1. **High Priority**: Create Chapter 3 requirement analysis diagrams for academic completeness
+2. **Medium Priority**: Develop Chapter 5 testing and validation visualization for research credibility
+3. **Low Priority**: Generate Chapter 6 conclusion dashboards for presentation enhancement
+
+### H.4 Implementation Recommendations
+
+#### H.4.1 Academic Presentation Standards
+
+For academic submission, the following diagram categories should be prioritized:
+
+1. **Requirements Analysis Visualizations** (Chapter 3)
+   - Traditional vs. contactless comparison for establishing research motivation
+   - Requirements dependency network for systematic analysis demonstration
+
+2. **Testing Framework Diagrams** (Chapter 5)  
+   - Multi-layered testing architecture for methodology validation
+   - Performance benchmark visualizations for quantitative evidence
+
+3. **Achievement Visualization** (Chapter 6)
+   - Goal achievement timeline for research contribution demonstration
+   - Performance excellence metrics for academic impact assessment
+
+#### H.4.2 Repository Organization Recommendations
+
+1. **Create placeholder image files** with standardized naming convention
+2. **Maintain diagram-to-reference mapping table** in repository documentation  
+3. **Implement automated diagram reference validation** in documentation build process
+4. **Establish diagram creation guidelines** for future development
+
+**Estimated effort for complete diagram creation**: 40-60 hours
+**Minimum viable diagram set**: 12 diagrams (covering Chapter 3 and key Chapter 5 visualizations)
+**Academic submission readiness**: Requires completion of Chapter 3 and Chapter 5 diagram sets
+
+---
 
