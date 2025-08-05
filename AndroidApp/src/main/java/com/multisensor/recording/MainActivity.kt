@@ -10,7 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -64,7 +65,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment)
+        // Get NavController properly by first getting the NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -103,7 +106,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 else -> {
-                    val navController = findNavController(R.id.nav_host_fragment)
+                    val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    val navController = navHostFragment.navController
                     navController.navigate(menuItem.itemId)
                     binding.drawerLayout.closeDrawers()
                     true
@@ -113,13 +117,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        binding.toolbar.setNavigationOnClickListener {
-            if (binding.drawerLayout.isDrawerOpen(binding.navView)) {
-                binding.drawerLayout.closeDrawer(binding.navView)
-            } else {
-                binding.drawerLayout.openDrawer(binding.navView)
-            }
-        }
+        // Removed manual navigation click listener since setupActionBarWithNavController handles this
     }
 
     private fun observeViewModel() {
@@ -142,7 +140,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
