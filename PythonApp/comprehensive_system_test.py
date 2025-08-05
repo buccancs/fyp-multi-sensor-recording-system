@@ -15,7 +15,7 @@ from pathlib import Path
 
 # Set up environment
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-project_root = Path(__file__).parent.parent / "home/runner/work/bucika_gsr/bucika_gsr"
+project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 def test_python_environment():
