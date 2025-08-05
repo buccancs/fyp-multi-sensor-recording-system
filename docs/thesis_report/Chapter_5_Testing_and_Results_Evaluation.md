@@ -283,7 +283,7 @@ The continuous integration framework provides automated testing execution with c
 - **Production Deployment Testing**: Comprehensive system validation in production-like environments with real hardware integration
     style ACCURACY fill:#e1f5fe
     style SCIENTIFIC fill:#f3e5f5
-```
+
 
 **Table 5.2: Test Coverage Analysis by Component**
 
@@ -327,10 +327,6 @@ graph LR
     style H fill:#ffeb3b
     style I fill:#2e7d32
     style J fill:#8bc34a
-```
-    
-    ACCURACY --> SCIENTIFIC
-    SYNCHRONIZATION --> SCIENTIFIC
 ```
 
 **Foundation Testing Layer Validation**: The foundation layer provides detailed validation of individual components and modules that form the building blocks of system functionality. This layer focuses on verifying correct implementation of algorithms, data structures, and basic functionality while establishing confidence in the fundamental correctness of system components.
@@ -521,6 +517,10 @@ Version control integration ensures that all testing artifacts including test co
 **Resource Optimization and Scheduling**: The framework implements intelligent resource scheduling that optimizes utilization of testing resources while minimizing test execution time and ensuring comprehensive coverage. Scheduling includes parallel test execution optimization, resource conflict resolution, and priority-based scheduling that accommodates both routine testing and urgent validation requirements.
 
 Resource optimization includes dynamic load balancing that distributes testing workload across available resources while maintaining test isolation and preventing interference between concurrent test executions. The system provides comprehensive resource utilization monitoring and optimization recommendations that improve testing efficiency.
+
+```mermaid
+graph TB
+    subgraph "Base"
         SCHEDULER[Test Scheduler]
         REPORTER[Result Reporter]
         ANALYZER[Data Analyzer]
@@ -2014,4 +2014,52 @@ The testing methodologies and evaluation frameworks described in this chapter ar
 **Production Deployment Testing and Validation:**
 - `PythonApp/src/production/deployment_automation.py` - Deployment testing automation with environment validation (See Appendix F.138)
 - `PythonApp/validate_testing_qa_framework.py` - QA framework validation with compliance checking (See Appendix F.139)
+
+These comprehensive implementation references demonstrate the systematic testing approach employed throughout the evaluation phase, providing concrete evidence of the rigorous quality assurance methodologies and extensive validation procedures that ensure the Multi-Sensor Recording System meets research-grade standards for reliability, performance, and scientific validity.
+
+## References
+
+[Ammann2008] Ammann, P., & Offutt, J. "Introduction to Software Testing." Cambridge University Press, 2008.
+
+[Beck2002] Beck, K. "Test Driven Development: By Example." Addison-Wesley Professional, 2002.
+
+[Beizer1995] Beizer, B. "Black-Box Testing: Techniques for Functional Testing of Software and Systems." John Wiley & Sons, 1995.
+
+[Burnstein2003] Burnstein, I. "Practical Software Testing: A Process-Oriented Approach." Springer Professional Computing, 2003.
+
+[Copeland2003] Copeland, L. "A Practitioner's Guide to Software Test Design." Artech House, 2003.
+
+[Craig2002] Craig, R. D., & Jaskiel, S. P. "Systematic Software Testing." Artech House, 2002.
+
+[Dustin2002] Dustin, E., Rashka, J., & Paul, J. "Automated Software Testing: Introduction, Management, and Performance." Addison-Wesley Professional, 2002.
+
+[Fewster1999] Fewster, M., & Graham, D. "Software Test Automation: Effective Use of Test Execution Tools." Addison-Wesley Professional, 1999.
+
+[Fowler2013] Fowler, M. "Refactoring: Improving the Design of Existing Code, 2nd Edition." Addison-Wesley Professional, 2013.
+
+[Glenford1979] Myers, G. J., Sandler, C., & Badgett, T. "The Art of Software Testing, 3rd Edition." John Wiley & Sons, 2011.
+
+[Graham2006] Graham, D., Van Veenendaal, E., Evans, I., & Black, R. "Foundations of Software Testing: ISTQB Certification." Cengage Learning EMEA, 2006.
+
+[Hamlet1994] Hamlet, D., & Maybee, J. "The Engineering of Software: Technical Foundations for the Individual." Addison-Wesley, 1994.
+
+[IEEE829] IEEE Computer Society. "IEEE Standard for Software and System Test Documentation." IEEE Standard 829-2008, 2008.
+
+[Jorgensen2013] Jorgensen, P. C. "Software Testing: A Craftsman's Approach, 4th Edition." CRC Press, 2013.
+
+[Kaner2013] Kaner, C., Bach, J., & Pettichord, B. "Lessons Learned in Software Testing." John Wiley & Sons, 2013.
+
+[Kit1995] Kit, E. "Software Testing in the Real World: Improving the Process." Addison-Wesley Professional, 1995.
+
+[Lewis2004] Lewis, W. E. "Software Testing and Continuous Quality Improvement, 3rd Edition." CRC Press, 2004.
+
+[Meszaros2007] Meszaros, G. "xUnit Test Patterns: Refactoring Test Code." Addison-Wesley Professional, 2007.
+
+[Osherove2009] Osherove, R. "The Art of Unit Testing: with examples in C#." Manning Publications, 2009.
+
+[Perry2006] Perry, W. E. "Effective Methods for Software Testing, 3rd Edition." John Wiley & Sons, 2006.
+
+[Sommerville2015] Sommerville, I. "Software Engineering, 10th Edition." Pearson, 2015.
+
+[Whittaker2009] Whittaker, J. A., Arbon, J., & Carollo, J. "How Google Tests Software." Addison-Wesley Professional, 2012.
 - `AndroidApp/validate_shimmer_integration.sh` - Hardware integration validation for production deployment (See Appendix F.140)
