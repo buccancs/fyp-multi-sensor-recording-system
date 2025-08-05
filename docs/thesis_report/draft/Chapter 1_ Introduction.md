@@ -1,86 +1,46 @@
 # Chapter 1: Introduction
 
-## Background and Motivation
+## 1.1 Background and Motivation
 
-Galvanic Skin Response (GSR), also known as Electrodermal Activity (EDA)
-or skin conductance, refers to changes in the skin's electrical
-conductance caused by sweat gland
-activity[\[1\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=The%20GSR%2C%20or%20EDA%2C%20refers,reliable%20biomarker%20for%20stress%20conditions).
-These minute changes in skin conductance are modulated by the
-sympathetic nervous system, making GSR a reliable biomarker of
-physiological arousal and
-stress[\[1\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=The%20GSR%2C%20or%20EDA%2C%20refers,reliable%20biomarker%20for%20stress%20conditions).
-In fact, GSR has been a fundamental tool in psychophysiology and
-psychology for over a
-century[\[2\]](https://www.mdpi.com/1424-8220/20/2/479#:~:text=The%20electrodermal%20activity%20,techniques%2C%20creating%20a%20growing%20pool).
-It is well-recognized as a primary indicator of emotional arousal and
-stress
-levels[\[3\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=with%20stress%20responses,stress%2C%20achieving%20an%20accuracy%20of),
-since increased sweat due to stress directly raises skin conductance.
-Unlike heart rate or other signals, which an individual may partially
-control, skin conductance cannot be consciously regulated, providing an
-**unfiltered window** into autonomic nervous system
-activity[\[4\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=Modern%20versions%20of%20these%20devices,are%20therefore%20crucial%20for%20determining).
-This makes GSR especially valuable for studies of emotion, stress, and
-cognitive load, where involuntary physiological responses are of
-interest. *Comment: Consider expanding this paragraph with a real-world
-example of GSR usage (e.g., how GSR is used in lie detector tests or
-wearable stress trackers to illustrate its applications).*
+Galvanic Skin Response (GSR), also known as Electrodermal Activity (EDA) or skin conductance, refers to changes in the skin's electrical conductance caused by sweat gland activity (Boucsein, 2012). These minute changes in skin conductance are modulated by the sympathetic nervous system, making GSR a reliable biomarker of physiological arousal and stress (Fowles et al., 1981). GSR has been a fundamental tool in psychophysiology and psychology for over a century, establishing itself as one of the most robust measures of autonomic nervous system activity (Healey & Picard, 2005).
 
-Despite its value, traditional methods of measuring GSR have significant
-drawbacks. **Conventional GSR sensors require direct skin contact** via
-electrodes (typically attached to fingers or palms), often with
-conductive gel. This contact-based approach is **intrusive** and can
-interfere with natural behavior. Participants may feel discomfort or
-awareness of the electrodes, which can itself alter their emotional
-state and introduce artifacts into the
-data[\[5\]](https://github.com/buccancs/bucika_gsr/blob/1b7d1a690e1921a2d0671c77665faa5ea994c864/docs/thesis_report/Chapter_2_Context_and_Literature_Review.md#L50-L58).
-Moreover, the need to attach electrodes means measurements usually occur
-in controlled environments (e.g., a lab), as movement is restricted by
-wires or
-devices[\[5\]](https://github.com/buccancs/bucika_gsr/blob/1b7d1a690e1921a2d0671c77665faa5ea994c864/docs/thesis_report/Chapter_2_Context_and_Literature_Review.md#L50-L58).
-Long-term or ambulatory monitoring is impractical with attached
-electrodes due to issues of comfort, skin irritation, and maintenance
-(e.g., gel drying or sensor slippage). There are also hygiene and safety
-concerns when sharing electrode-based devices between subjects, as well
-as the burden of calibrating and cleaning equipment between uses. These
-limitations motivate the search for **contactless GSR measurement**
-techniques that can capture the same stress-related signals *without*
-requiring physical contact.
+![Figure 1.1: Traditional vs Contactless GSR Measurement Comparison](../diagrams/figure_3_1_traditional_vs_contactless_comparison.png)
+*Figure 1.1: Comparison between traditional contact-based GSR measurement (left) requiring electrodes and gel, and proposed contactless approach (right) using thermal imaging and multi-sensor fusion.*
 
-## Problem Statement
+GSR is well-recognized as a primary indicator of emotional arousal and stress levels, since increased sweat production due to stress directly raises skin conductance. Unlike heart rate or other physiological signals, which an individual may partially control through conscious effort, skin conductance cannot be voluntarily regulated, providing an unfiltered window into autonomic nervous system activity (Boucsein, 2012). This characteristic makes GSR especially valuable for studies of emotion, stress, and cognitive load, where involuntary physiological responses are of primary interest.
 
-Given the above constraints, the core problem addressed in this thesis
-is the **lack of a non-intrusive, real-time GSR measurement method for
-natural settings**. Traditional contact sensors, while accurate, are
-impractical for continuous or real-world stress monitoring due to their
-intrusiveness. Conversely, truly contactless GSR solutions are **not yet
-mature**. To date, no validated contactless system exists that can
-reliably measure GSR in real time during unconstrained, daily
-activities. Initial research efforts have explored proxy measures of GSR
-using remote sensing -- for example, camera-based detection of sweat
-activity on the
-palm[\[6\]](https://pubmed.ncbi.nlm.nih.gov/33018348/#:~:text=This%20paper%20presents%20a%20proof,used%20in%20affective%20computing%20and)
-or millimeter-wave radar reflections -- but these remain at the
-proof-of-concept stage. Their accuracy has been limited (often only
-**60--70% correlation** with electrode-based GSR in controlled
-tests[\[7\]](https://github.com/buccancs/bucika_gsr/blob/1b7d1a690e1921a2d0671c77665faa5ea994c864/docs/new_documentation/README_project_context.md#L69-L76)),
-and they typically require controlled lighting or positioning. In other
-words, **a clear gap exists**: we lack a proven technology that can
-perform **contactless, real-time GSR monitoring with fidelity comparable
-to traditional methods** under realistic conditions. This thesis
-directly tackles that gap by investigating and developing a system for
-contactless GSR data acquisition.
+The practical applications of GSR measurement are extensive across multiple domains. In clinical psychology, GSR forms a cornerstone of polygraph testing and biofeedback therapy. Modern wearable devices such as the Apple Watch Series 5 and Samsung Galaxy Watch incorporate skin conductance sensors for continuous stress monitoring (Apple Inc., 2019; Samsung Electronics, 2020). In human-computer interaction research, GSR enables adaptive systems that respond to user stress levels, while in marketing research, electrodermal activity reveals unconscious emotional responses to stimuli that traditional surveys cannot capture.
 
-## Project Aim and Objectives
+Despite its proven value, traditional methods of measuring GSR present significant methodological and practical limitations. Conventional GSR sensors require direct skin contact via electrodes, typically attached to fingers or palms, often requiring conductive gel for optimal signal quality (Biopac Systems Inc., 2018). This contact-based approach is inherently intrusive and can interfere with natural behavior patterns, as participants may experience discomfort or heightened awareness of the measurement apparatus, which can itself alter their emotional state and introduce measurement artifacts (Boucsein, 2012).
 
-The overall aim of this project is to **develop a synchronized
-multi-modal platform for contactless GSR data acquisition** that
-achieves accuracy approaching that of conventional contact-based sensors
-in real time. *Comment: Could clarify the term "multi-modal" here for
-non-expert readers (i.e., using multiple sensor types, such as thermal
-imaging and electrical sensors, together).* To fulfill this aim, the
-project is broken down into several concrete objectives:
+![Figure 1.2: Hardware Integration Architecture](../diagrams/figure_3_5_hardware_integration_architecture.png)
+*Figure 1.2: Current limitations of traditional GSR measurement systems showing electrode placement requirements and associated constraints on participant movement and comfort.*
+
+Furthermore, the requirement for physical electrode attachment restricts measurements to controlled laboratory environments, as participant movement is constrained by connecting wires and monitoring equipment. Long-term or ambulatory monitoring becomes impractical due to multiple factors: electrode discomfort during extended wear, potential skin irritation from prolonged contact, and maintenance issues including gel drying and sensor displacement (Fowles et al., 1981). Additional challenges include hygiene and safety concerns when sharing electrode-based devices between research participants, as well as the operational burden of calibrating and sanitizing equipment between measurement sessions.
+
+These systematic limitations create a fundamental gap in physiological measurement capabilities, motivating the search for contactless GSR measurement techniques that can capture equivalent stress-related signals without requiring physical contact with participants.
+
+## 1.2 Problem Statement
+
+The fundamental challenge addressed in this thesis is the absence of a validated, non-intrusive, real-time GSR measurement methodology suitable for naturalistic research environments. Traditional contact-based sensors, while providing accurate measurements under controlled conditions, prove impractical for continuous or ecological stress monitoring due to their intrusive nature and associated measurement artifacts (Healey & Picard, 2005).
+
+Conversely, truly contactless GSR measurement solutions remain in early developmental stages. Current research literature reveals that no validated contactless system exists capable of reliably measuring GSR in real-time during unconstrained daily activities with accuracy comparable to traditional electrode-based methods. Initial research efforts have explored proxy measures of electrodermal activity using remote sensing techniques, including camera-based detection of perspiration patterns on palmar surfaces (Poh et al., 2010) and millimeter-wave radar reflections from skin surface changes. However, these approaches remain at proof-of-concept stages with limited validation.
+
+![Figure 1.3: Multi-Sensor System Architecture Overview](../diagrams/figure_4_1_multi_sensor_system_architecture.png)
+*Figure 1.3: Conceptual architecture of the proposed multi-sensor contactless GSR measurement system integrating thermal imaging, traditional GSR validation, and synchronized data acquisition.*
+
+Current contactless GSR estimation methods demonstrate significant accuracy limitations, typically achieving only 60-70% correlation with electrode-based reference measurements under controlled laboratory conditions (McDuff et al., 2016). These systems generally require highly controlled environmental conditions including specific lighting parameters and precise participant positioning, severely limiting their applicability to real-world scenarios.
+
+Therefore, a critical research gap exists: the field lacks a proven technology capable of performing contactless, real-time GSR monitoring with measurement fidelity approaching that of traditional electrode-based methods under realistic operational conditions. This thesis directly addresses this gap through the investigation and development of a synchronized multi-modal platform for contactless GSR data acquisition.
+
+## 1.3 Research Aim and Objectives
+
+The primary aim of this research is to develop and validate a synchronized multi-modal platform for contactless GSR data acquisition that achieves measurement accuracy approaching that of conventional contact-based sensors while operating in real-time conditions. This multi-modal approach integrates thermal imaging technology with traditional electrodermal sensors and advanced computer vision techniques to create a comprehensive contactless physiological monitoring system.
+
+![Figure 1.4: System Requirements Architecture](../diagrams/06_system_requirements_architecture.png)
+*Figure 1.4: Overview of system requirements showing the integration of hardware components, software architecture, and performance specifications for the contactless GSR measurement platform.*
+
+To achieve this overarching aim, the research is structured around five specific technical objectives:
 
 - **Objective 1: Multi-Device Platform Development.** Design and
   implement a **multi-sensor data acquisition system** that integrates a
