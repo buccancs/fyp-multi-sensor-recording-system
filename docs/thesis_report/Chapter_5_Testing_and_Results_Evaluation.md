@@ -88,118 +88,15 @@ Real-world validation extends systematically beyond controlled laboratory testin
 
 The comprehensive testing hierarchy implements a systematic and methodologically rigorous approach that validates system functionality at multiple levels of abstraction, from individual component operation and isolated function verification through complete end-to-end research workflows and realistic experimental scenarios [CITE - Craig, R.D., & Jaskiel, S.P. (2002). Systematic software testing. Artech House]. The hierarchical approach ensures that quality issues are systematically detected at the appropriate level of detail while providing comprehensive validation of system integration, component interaction effects, and emergent system behaviors that arise from complex component interactions in distributed environments.
 
-**Table 5.1: Comprehensive Testing Results Summary**
+**Comprehensive Testing Results Summary** (see Table 5.1 below)
 
-| Testing Level | Coverage Scope | Test Cases | Pass Rate | Critical Issues | Resolution Status | Confidence Level |
-|---|---|---|---|---|---|---|
-| **Unit Testing** | Individual functions and methods | 1,247 tests | 98.7% | 3 critical | ✅ Resolved | 99.9% |
-| **Component Testing** | Individual modules and classes | 342 tests | 99.1% | 1 critical | ✅ Resolved | 99.8% |
-| **Integration Testing** | Inter-component communication | 156 tests | 97.4% | 2 critical | ✅ Resolved | 99.5% |
-| **System Testing** | End-to-end workflows | 89 tests | 96.6% | 1 critical | ✅ Resolved | 99.2% |
-| **Performance Testing** | Load and stress scenarios | 45 tests | 94.4% | 0 critical | N/A | 98.7% |
-| **Reliability Testing** | Extended operation scenarios | 12 tests | 100% | 0 critical | N/A | 99.9% |
-| **Security Testing** | Data protection and access control | 23 tests | 100% | 0 critical | N/A | 99.9% |
-| **Usability Testing** | User experience and workflow | 34 tests | 91.2% | 0 critical | N/A | 95.8% |
-| **Research Validation** | Scientific accuracy and precision | 67 tests | 97.0% | 0 critical | N/A | 99.3% |
-| **Overall System** | Comprehensive system validation | 2,015 tests | 97.8% | 7 total | ✅ All resolved | 99.1% |
+**Performance Testing Results vs. Targets** (see Table 5.2 below)
 
-**Table 5.2: Performance Testing Results vs. Targets**
+**Reliability and Stress Testing Results** (see Table 5.3 below)
 
-| Performance Metric | Target | Achieved | % of Target | Statistical Confidence | Test Methodology |
-|---|---|---|---|---|---|
-| **Temporal Synchronization** | ±50ms | ±18.7ms ± 3.2ms | 267% better | 95% CI, n=10,000 | Network Time Protocol analysis |
-| **Frame Rate Consistency** | 24 FPS min | 29.8 ± 1.1 FPS | 124% of target | 99% CI, n=5,000 frames | Frame timing analysis |
-| **System Response Time** | <2.0s | 1.34 ± 0.18s | 149% better | 95% CI, n=1,000 | Response time measurement |
-| **Data Throughput** | 25 MB/s | 47.3 ± 2.1 MB/s | 189% of target | 99% CI, n=500 tests | Network performance testing |
-| **Memory Usage** | <4GB | 2.8 ± 0.3GB | 143% better | 95% CI, n=100 sessions | Resource monitoring |
-| **CPU Utilization** | <80% | 56.2 ± 8.4% | 142% better | 95% CI, n=100 sessions | Performance profiling |
-| **Battery Life** | 4 hours | 5.8 ± 0.4 hours | 145% of target | 95% CI, n=50 devices | Power consumption testing |
-| **Setup Time** | <10 min | 6.2 ± 1.1 min | 161% faster | 95% CI, n=200 setups | Time-motion studies |
+**Scientific Validation and Accuracy Assessment** (see Table 5.4 below)
 
-**Table 5.3: Reliability and Stress Testing Results**
-
-| Test Category | Duration | Success Rate | Failure Types | MTBF (Hours) | Recovery Time | Availability |
-|---|---|---|---|---|---|---|
-| **Continuous Operation** | 168 hours | 99.73% | Network timeouts (3), Storage full (1) | 42.0 hours | 1.2 ± 0.3 min | 99.73% |
-| **Device Scalability** | 12 devices × 8 hours | 98.9% | Connection drops (2), Memory limits (1) | 32.0 hours | 0.8 ± 0.2 min | 98.9% |
-| **Network Stress** | Variable bandwidth | 97.2% | Packet loss, Latency spikes | 18.5 hours | 2.1 ± 0.8 min | 97.2% |
-| **Thermal Stress** | 35°C ambient | 96.4% | Sensor overheating (1), Performance degradation | 24.0 hours | 3.5 ± 1.2 min | 96.4% |
-| **Memory Pressure** | Limited RAM | 94.8% | Out of memory (2), Swap usage | 12.0 hours | 5.2 ± 1.8 min | 94.8% |
-| **Storage Exhaustion** | Near-full disks | 99.1% | Write failures (1), Cleanup triggers | 96.0 hours | 0.5 ± 0.1 min | 99.1% |
-
-**Table 5.4: Scientific Validation and Accuracy Assessment**
-
-| Measurement Type | Reference Standard | Achieved Accuracy | Statistical Significance | Validation Method | Sample Size |
-|---|---|---|---|---|---|
-| **Temporal Precision** | Atomic clock reference | ±18.7ms (σ=3.2ms) | p<0.001, r=0.987 | Cross-correlation analysis | n=10,000 events |
-| **GSR Correlation** | Laboratory-grade GSR | r=0.892 ± 0.023 | p<0.001, CI=[0.869, 0.915] | Pearson correlation | n=2,500 samples |
-| **Frame Rate Stability** | High-speed reference | 99.8% within tolerance | p<0.001, χ²=12.4 | Frame timing validation | n=50,000 frames |
-| **Data Integrity** | Checksum validation | 99.997% success rate | p<0.001, binomial test | Hash verification | n=1,000,000 packets |
-| **Synchronization Drift** | GPS time reference | 2.1ms/hour drift | p<0.001, t-test=8.9 | Longitudinal analysis | n=168 hours |
-
-**Figure 5.1: Multi-Layered Testing Architecture**
-
-```mermaid
-graph TD
-    subgraph "Foundation Testing Layer"
-        UNIT[Unit Tests<br/>Individual Component Validation<br/>1,247 test cases<br/>98.7% pass rate]
-        COMPONENT[Component Tests<br/>Isolated Function Verification<br/>342 test cases<br/>99.1% pass rate]
-        MODULE[Module Tests<br/>Interface Validation<br/>156 test cases<br/>97.4% pass rate]
-    end
-    
-    subgraph "Integration Testing Layer"
-        SERVICE[Service Integration Tests<br/>Cross-Component Communication<br/>89 test cases<br/>96.6% pass rate]
-        PLATFORM[Platform Integration Tests<br/>Android-Python Coordination<br/>45 test cases<br/>94.4% pass rate]
-        HARDWARE[Hardware Integration Tests<br/>Sensor Communication Validation<br/>23 test cases<br/>100% pass rate]
-    end
-    
-    subgraph "System Testing Layer"
-        FUNCTIONAL[System Functional Tests<br/>End-to-End Workflow Validation<br/>34 test cases<br/>91.2% pass rate]
-        SCENARIO[Scenario Tests<br/>Research Use Case Validation<br/>12 test cases<br/>100% pass rate]
-        ACCEPTANCE[Acceptance Tests<br/>Stakeholder Requirement Validation<br/>8 test cases<br/>100% pass rate]
-    end
-    
-    subgraph "Specialized Testing Layer"
-        PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>4 device coordination]
-        STRESS[Stress Tests<br/>Resource Limit Testing<br/>71.4% success rate]
-        RELIABILITY[Reliability Tests<br/>Network Resilience Testing<br/>1ms-500ms latency tolerance]
-        SECURITY[Security Tests<br/>Data Protection Validation<br/>Integrity verification]
-        USABILITY[Usability Tests<br/>User Experience Validation<br/>Cross-platform integration]
-    end
-    
-    subgraph "Research-Specific Testing Layer"
-        ACCURACY[Accuracy Tests<br/>Measurement Precision Validation<br/>Network resilience validated]
-        SYNCHRONIZATION[Synchronization Tests<br/>Temporal Coordination Testing<br/>Multi-device synchronization]
-        SCIENTIFIC[Scientific Validation<br/>Research Methodology Verification<br/>Component documentation]
-    end
-    
-    UNIT --> SERVICE
-    COMPONENT --> SERVICE
-    MODULE --> SERVICE
-    
-    SERVICE --> FUNCTIONAL
-    PLATFORM --> FUNCTIONAL
-    HARDWARE --> FUNCTIONAL
-    
-    FUNCTIONAL --> PERFORMANCE
-    SCENARIO --> PERFORMANCE
-    ACCEPTANCE --> PERFORMANCE
-    
-    PERFORMANCE --> ACCURACY
-    STRESS --> ACCURACY
-    RELIABILITY --> ACCURACY
-    SECURITY --> ACCURACY
-    USABILITY --> ACCURACY
-    
-    ACCURACY --> SYNCHRONIZATION
-    SYNCHRONIZATION --> SCIENTIFIC
-    
-    style UNIT fill:#e8f5e8
-    style COMPONENT fill:#e8f5e8
-    style MODULE fill:#e8f5e8
-    style PERFORMANCE fill:#fff3e0
-    style SCIENTIFIC fill:#f3e5f5
-```
+**Multi-Layered Testing Architecture** (see Figure 5.1 below)
 
 ### Comprehensive Testing Framework Integration
 
@@ -2063,3 +1960,120 @@ These comprehensive implementation references demonstrate the systematic testing
 
 [Whittaker2009] Whittaker, J. A., Arbon, J., & Carollo, J. "How Google Tests Software." Addison-Wesley Professional, 2012.
 - `AndroidApp/validate_shimmer_integration.sh` - Hardware integration validation for production deployment (See Appendix F.140)
+
+---
+
+## Tables and Figures
+
+### Table 5.1: Comprehensive Testing Results Summary
+
+| Testing Level | Coverage Scope | Test Cases | Pass Rate | Critical Issues | Resolution Status | Confidence Level |
+|---|---|---|---|---|---|---|
+| **Unit Testing** | Individual functions and methods | 1,247 tests | 98.7% | 3 critical | ✅ Resolved | 99.9% |
+| **Component Testing** | Individual modules and classes | 342 tests | 99.1% | 1 critical | ✅ Resolved | 99.8% |
+| **Integration Testing** | Inter-component communication | 156 tests | 97.4% | 2 critical | ✅ Resolved | 99.5% |
+| **System Testing** | End-to-end workflows | 89 tests | 96.6% | 1 critical | ✅ Resolved | 99.2% |
+| **Performance Testing** | Load and stress scenarios | 45 tests | 94.4% | 0 critical | N/A | 98.7% |
+| **Reliability Testing** | Extended operation scenarios | 12 tests | 100% | 0 critical | N/A | 99.9% |
+| **Security Testing** | Data protection and access control | 23 tests | 100% | 0 critical | N/A | 99.9% |
+| **Usability Testing** | User experience and workflow | 34 tests | 91.2% | 0 critical | N/A | 95.8% |
+| **Research Validation** | Scientific accuracy and precision | 67 tests | 97.0% | 0 critical | N/A | 99.3% |
+| **Overall System** | Comprehensive system validation | 2,015 tests | 97.8% | 7 total | ✅ All resolved | 99.1% |
+
+### Table 5.2: Performance Testing Results vs. Targets
+
+| Performance Metric | Target | Achieved | % of Target | Statistical Confidence | Test Methodology |
+|---|---|---|---|---|---|
+| **Temporal Synchronization** | ±50ms | ±18.7ms ± 3.2ms | 267% better | 95% CI, n=10,000 | Network Time Protocol analysis |
+| **Frame Rate Consistency** | 24 FPS min | 29.8 ± 1.1 FPS | 124% of target | 99% CI, n=5,000 frames | Frame timing analysis |
+| **System Response Time** | <2.0s | 1.34 ± 0.18s | 149% better | 95% CI, n=1,000 | Response time measurement |
+| **Data Throughput** | 25 MB/s | 47.3 ± 2.1 MB/s | 189% of target | 99% CI, n=500 tests | Network performance testing |
+| **Memory Usage** | <4GB | 2.8 ± 0.3GB | 143% better | 95% CI, n=100 sessions | Resource monitoring |
+| **CPU Utilization** | <80% | 56.2 ± 8.4% | 142% better | 95% CI, n=100 sessions | Performance profiling |
+| **Battery Life** | 4 hours | 5.8 ± 0.4 hours | 145% of target | 95% CI, n=50 devices | Power consumption testing |
+| **Setup Time** | <10 min | 6.2 ± 1.1 min | 161% faster | 95% CI, n=200 setups | Time-motion studies |
+
+### Table 5.3: Reliability and Stress Testing Results
+
+| Test Category | Duration | Success Rate | Failure Types | MTBF (Hours) | Recovery Time | Availability |
+|---|---|---|---|---|---|---|
+| **Continuous Operation** | 168 hours | 99.73% | Network timeouts (3), Storage full (1) | 42.0 hours | 1.2 ± 0.3 min | 99.73% |
+| **Device Scalability** | 12 devices × 8 hours | 98.9% | Connection drops (2), Memory limits (1) | 32.0 hours | 0.8 ± 0.2 min | 98.9% |
+| **Network Stress** | Variable bandwidth | 97.2% | Packet loss, Latency spikes | 18.5 hours | 2.1 ± 0.8 min | 97.2% |
+| **Thermal Stress** | 35°C ambient | 96.4% | Sensor overheating (1), Performance degradation | 24.0 hours | 3.5 ± 1.2 min | 96.4% |
+| **Memory Pressure** | Limited RAM | 94.8% | Out of memory (2), Swap usage | 12.0 hours | 5.2 ± 1.8 min | 94.8% |
+| **Storage Exhaustion** | Near-full disks | 99.1% | Write failures (1), Cleanup triggers | 96.0 hours | 0.5 ± 0.1 min | 99.1% |
+
+### Table 5.4: Scientific Validation and Accuracy Assessment
+
+| Measurement Type | Reference Standard | Achieved Accuracy | Statistical Significance | Validation Method | Sample Size |
+|---|---|---|---|---|---|
+| **Temporal Precision** | Atomic clock reference | ±18.7ms (σ=3.2ms) | p<0.001, r=0.987 | Cross-correlation analysis | n=10,000 events |
+| **GSR Correlation** | Laboratory-grade GSR | r=0.892 ± 0.023 | p<0.001, CI=[0.869, 0.915] | Pearson correlation | n=2,500 samples |
+| **Frame Rate Stability** | High-speed reference | 99.8% within tolerance | p<0.001, χ²=12.4 | Frame timing validation | n=50,000 frames |
+| **Data Integrity** | Checksum validation | 99.997% success rate | p<0.001, binomial test | Hash verification | n=1,000,000 packets |
+| **Synchronization Drift** | GPS time reference | 2.1ms/hour drift | p<0.001, t-test=8.9 | Longitudinal analysis | n=168 hours |
+
+### Figure 5.1: Multi-Layered Testing Architecture
+
+```mermaid
+graph TD
+    subgraph "Foundation Testing Layer"
+        UNIT[Unit Tests<br/>Individual Component Validation<br/>1,247 test cases<br/>98.7% pass rate]
+        COMPONENT[Component Tests<br/>Isolated Function Verification<br/>342 test cases<br/>99.1% pass rate]
+        MODULE[Module Tests<br/>Interface Validation<br/>156 test cases<br/>97.4% pass rate]
+    end
+    
+    subgraph "Integration Testing Layer"
+        SERVICE[Service Integration Tests<br/>Cross-Component Communication<br/>89 test cases<br/>96.6% pass rate]
+        PLATFORM[Platform Integration Tests<br/>Android-Python Coordination<br/>45 test cases<br/>94.4% pass rate]
+        HARDWARE[Hardware Integration Tests<br/>Sensor Communication Validation<br/>23 test cases<br/>100% pass rate]
+    end
+    
+    subgraph "System Testing Layer"
+        FUNCTIONAL[System Functional Tests<br/>End-to-End Workflow Validation<br/>34 test cases<br/>91.2% pass rate]
+        SCENARIO[Scenario Tests<br/>Research Use Case Validation<br/>12 test cases<br/>100% pass rate]
+        ACCEPTANCE[Acceptance Tests<br/>Stakeholder Requirement Validation<br/>8 test cases<br/>100% pass rate]
+    end
+    
+    subgraph "Specialized Testing Layer"
+        PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>4 device coordination]
+        STRESS[Stress Tests<br/>Resource Limit Testing<br/>71.4% success rate]
+        RELIABILITY[Reliability Tests<br/>Network Resilience Testing<br/>1ms-500ms latency tolerance]
+        SECURITY[Security Tests<br/>Data Protection Validation<br/>Integrity verification]
+        USABILITY[Usability Tests<br/>User Experience Validation<br/>Cross-platform integration]
+    end
+    
+    subgraph "Research-Specific Testing Layer"
+        ACCURACY[Accuracy Tests<br/>Measurement Precision Validation<br/>Network resilience validated]
+        SYNCHRONIZATION[Synchronization Tests<br/>Temporal Coordination Testing<br/>Multi-device synchronization]
+        SCIENTIFIC[Scientific Validation<br/>Research Methodology Verification<br/>Component documentation]
+    end
+    
+    UNIT --> SERVICE
+    COMPONENT --> SERVICE
+    MODULE --> SERVICE
+    
+    SERVICE --> FUNCTIONAL
+    PLATFORM --> FUNCTIONAL
+    HARDWARE --> FUNCTIONAL
+    
+    FUNCTIONAL --> PERFORMANCE
+    SCENARIO --> PERFORMANCE
+    ACCEPTANCE --> PERFORMANCE
+    
+    PERFORMANCE --> ACCURACY
+    STRESS --> ACCURACY
+    RELIABILITY --> ACCURACY
+    SECURITY --> ACCURACY
+    USABILITY --> ACCURACY
+    
+    ACCURACY --> SYNCHRONIZATION
+    SYNCHRONIZATION --> SCIENTIFIC
+    
+    style UNIT fill:#e8f5e8
+    style COMPONENT fill:#e8f5e8
+    style MODULE fill:#e8f5e8
+    style PERFORMANCE fill:#fff3e0
+    style SCIENTIFIC fill:#f3e5f5
+```

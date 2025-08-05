@@ -797,17 +797,7 @@ The requirements analysis process employed multi-faceted stakeholder engagement 
 
 The physiological measurement research domain has experienced significant methodological limitations due to fundamental constraints inherent in traditional contact-based sensor technologies. Contemporary galvanic skin response (GSR) measurement, while representing the established scientific standard for electrodermal activity assessment, imposes systematic constraints that fundamentally limit research scope, experimental validity, and scientific advancement opportunities across multiple research disciplines.
 
-**Table 3.1: Comparative Analysis of Physiological Measurement Approaches**
-
-| Characteristic | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor |
-|---|---|---|---|
-| **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
-| **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
-| **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
-| **Scalability (max participants)** | 4-6 simultaneously | 4 simultaneously (tested) | Comparable capability |
-| **Equipment Cost per Setup** | $2,400-3,200 | $600-800 | 75% cost reduction |
-| **Motion Artifact Susceptibility** | Very High | Low | 90% reduction |
-| **Ecological Validity** | Limited (lab only) | High (natural settings) | Paradigm shift |
+**Comparative Analysis** (see Table 3.1 in Appendix)
 
 #### Research Gap Analysis and Innovation Opportunity
 
@@ -1346,16 +1336,7 @@ The testing approach systematically balances comprehensive thoroughness with pra
 
 The comprehensive testing hierarchy implements a systematic approach that validates system functionality at multiple levels of abstraction, from individual component operation through complete end-to-end research workflows.
 
-**Table 5.1: Comprehensive Testing Results Summary**
-
-| Testing Level | Coverage Scope | Test Cases | Pass Rate | Critical Issues | Resolution Status | Confidence Level |
-|---|---|---|---|---|---|---|
-| **Unit Testing** | Individual functions and methods | 1,247 tests | 98.7% | 3 critical | ✅ Resolved | 99.9% |
-| **Component Testing** | Individual modules and classes | 342 tests | 99.1% | 1 critical | ✅ Resolved | 99.8% |
-| **Integration Testing** | Inter-component communication | 156 tests | 97.4% | 2 critical | ✅ Resolved | 99.5% |
-| **System Testing** | End-to-end workflows | 89 tests | 96.6% | 1 critical | ✅ Resolved | 99.2% |
-| **Performance Testing** | Load and stress scenarios | 45 tests | 94.4% | 0 critical | N/A | 98.7% |
-| **Reliability Testing** | Extended operation scenarios | 12 tests | 100% | 0 critical | N/A | 99.9% |
+**Comprehensive Testing Results** (see Table 5.1 in Appendix)
 
 **Overall Testing Achievement:** 98.2% test success rate across 1,891 total test cases with 100% critical issue resolution and 99.3% average confidence level.
 
@@ -1958,4 +1939,65 @@ The open-source community contributions and collaborative development resources 
 - **Format:** Academic thesis following Version A: Lean Structure as specified
 
 This comprehensive thesis report provides complete academic treatment of the Multi-Sensor Recording System project while demonstrating significant technical contributions to distributed systems, mobile computing, and research methodology domains.
+
+---
+
+## Tables and Figures
+
+### Table 3.1: Comparative Analysis of Physiological Measurement Approaches
+
+| Characteristic | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor |
+|---|---|---|---|
+| **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
+| **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
+| **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
+| **Scalability (max participants)** | 4-6 simultaneously | 4 simultaneously (tested) | Comparable capability |
+| **Equipment Cost per Setup** | $2,400-3,200 | $600-800 | 75% cost reduction |
+| **Motion Artifact Susceptibility** | Very High | Low | 90% reduction |
+| **Ecological Validity** | Limited (lab only) | High (natural settings) | Paradigm shift |
+
+### Table 5.1: Comprehensive Testing Results Summary
+
+| Testing Level | Coverage Scope | Test Cases | Pass Rate | Critical Issues | Resolution Status | Confidence Level |
+|---|---|---|---|---|---|---|
+| **Unit Testing** | Individual functions and methods | 1,247 tests | 98.7% | 3 critical | ✅ Resolved | 99.9% |
+| **Component Testing** | Individual modules and classes | 342 tests | 99.1% | 1 critical | ✅ Resolved | 99.8% |
+| **Integration Testing** | Inter-component communication | 156 tests | 97.4% | 2 critical | ✅ Resolved | 99.5% |
+| **System Testing** | End-to-end workflows | 89 tests | 96.6% | 1 critical | ✅ Resolved | 99.2% |
+| **Performance Testing** | Load and stress scenarios | 45 tests | 94.4% | 0 critical | N/A | 98.7% |
+| **Reliability Testing** | Extended operation scenarios | 12 tests | 100% | 0 critical | N/A | 99.9% |
+
+---
+
+## Missing Diagrams and Visual Content
+
+The following diagrams should be created to enhance the thesis documentation:
+
+### System Architecture Diagrams
+1. **Overall System Architecture Diagram** - High-level view of PC controller coordinating multiple Android devices
+2. **Network Topology Diagram** - Detailed network communication structure showing WebSocket connections
+3. **Data Flow Diagram** - Multi-modal data processing pipeline from sensors to analysis
+4. **Synchronization Architecture Diagram** - Temporal coordination mechanisms across devices
+
+### Hardware Integration Diagrams  
+5. **Hardware Setup Diagram** - Physical arrangement of devices, cameras, and sensors
+6. **Android Device Component Diagram** - Internal architecture of mobile application
+7. **Sensor Integration Diagram** - Connection topology for Shimmer GSR and thermal cameras
+
+### Process Flow Diagrams
+8. **Research Session Workflow** - Step-by-step process from setup to data export
+9. **Error Recovery Process Diagram** - Fault tolerance and recovery mechanisms
+10. **Calibration Process Flowchart** - Camera and sensor calibration procedures
+
+### Testing and Validation Diagrams
+11. **Testing Hierarchy Diagram** - Multi-layered testing approach visualization  
+12. **Performance Benchmarking Charts** - Visual representation of performance metrics
+13. **Reliability Testing Results** - Success rates and failure analysis charts
+
+### Research Context Diagrams
+14. **Traditional vs. Contactless Measurement Comparison** - Visual comparison of approaches
+15. **Multi-Modal Sensor Fusion Diagram** - Integration of RGB, thermal, and physiological data
+16. **Temporal Synchronization Timeline** - Precision timing across multiple data streams
+
+These diagrams would significantly enhance the clarity and comprehensiveness of the thesis documentation by providing visual representations of complex technical concepts and system relationships.
 
