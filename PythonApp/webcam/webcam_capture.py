@@ -7,7 +7,9 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap
 from datetime import datetime
 from typing import Optional
+
 from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

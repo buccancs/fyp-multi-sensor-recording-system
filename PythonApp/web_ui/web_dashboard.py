@@ -927,6 +927,171 @@ Generated at: {datetime.now().isoformat()}"""
                 logger.error(f'Browse directory error: {e}')
                 return jsonify({'success': False, 'error': str(e)}), 500
 
+        # Camera API routes
+        @self.app.route('/api/camera/rgb/preview')
+        def api_camera_rgb_preview():
+            """Get RGB camera preview frame"""
+            try:
+                # Try to get frame from webcam capture if available
+                if (self.controller and hasattr(self.controller, 'webcam_capture') 
+                    and self.controller.webcam_capture):
+                    frame = self.controller.webcam_capture.get_current_frame()
+                    if frame is not None:
+                        import cv2
+                        import io
+                        from flask import Response
+                        
+                        # Encode frame as JPEG
+                        ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+                        if ret:
+                            response = Response(io.BytesIO(buffer).read(), mimetype='image/jpeg')
+                            response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+                            response.headers['Pragma'] = 'no-cache'
+                            response.headers['Expires'] = '0'
+                            return response
+                
+                # Fallback: return placeholder image
+                return self._generate_placeholder_image('RGB Camera\nPreview Not Available')
+            except Exception as e:
+                logger.error(f'RGB preview error: {e}')
+                return self._generate_placeholder_image('RGB Camera\nError')
+
+        @self.app.route('/api/camera/ir/preview')
+        def api_camera_ir_preview():
+            """Get IR camera preview frame"""
+            try:
+                # Try to get IR frame from connected Android devices
+                if (self.controller and hasattr(self.controller, 'android_device_manager') 
+                    and self.controller.android_device_manager):
+                    devices = self.controller.android_device_manager.get_connected_devices() or {}
+                    for device_id, device_info in devices.items():
+                        if 'thermal' in device_info.get('capabilities', []):
+                            # Request thermal frame from device
+                            # This would need device-specific implementation
+                            pass
+                
+                # Fallback: return placeholder thermal image
+                return self._generate_thermal_placeholder()
+            except Exception as e:
+                logger.error(f'IR preview error: {e}')
+                return self._generate_placeholder_image('IR Camera\nError')
+
+        @self.app.route('/api/camera/rgb/capture', methods=['POST'])
+        def api_camera_rgb_capture():
+            """Capture RGB camera snapshot"""
+            try:
+                if (self.controller and hasattr(self.controller, 'webcam_capture') 
+                    and self.controller.webcam_capture):
+                    frame = self.controller.webcam_capture.get_current_frame()
+                    if frame is not None:
+                        import cv2
+                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                        filename = f'rgb_snapshot_{timestamp}.jpg'
+                        
+                        # Save to recordings directory
+                        os.makedirs('recordings/snapshots', exist_ok=True)
+                        filepath = os.path.join('recordings/snapshots', filename)
+                        cv2.imwrite(filepath, frame)
+                        
+                        logger.info(f'RGB snapshot captured: {filepath}')
+                        return jsonify({'success': True, 'filename': filename, 'path': filepath})
+                
+                return jsonify({'success': False, 'error': 'RGB camera not available'}), 400
+            except Exception as e:
+                logger.error(f'RGB capture error: {e}')
+                return jsonify({'success': False, 'error': str(e)}), 500
+
+        @self.app.route('/api/camera/ir/capture', methods=['POST'])
+        def api_camera_ir_capture():
+            """Capture IR camera snapshot"""
+            try:
+                # For now, return success but indicate IR capture is not implemented
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                filename = f'ir_snapshot_{timestamp}.jpg'
+                logger.info(f'IR snapshot requested: {filename} (not implemented)')
+                return jsonify({'success': True, 'filename': filename, 
+                              'note': 'IR capture requires Android device integration'})
+            except Exception as e:
+                logger.error(f'IR capture error: {e}')
+                return jsonify({'success': False, 'error': str(e)}), 500
+
+    def _generate_placeholder_image(self, text='Camera\nNot Available'):
+        """Generate placeholder image for camera preview"""
+        try:
+            import cv2
+            import numpy as np
+            import io
+            from flask import Response
+            
+            # Create placeholder image
+            img = np.zeros((240, 320, 3), dtype=np.uint8)
+            img.fill(60)  # Dark gray background
+            
+            # Add text
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            lines = text.split('\n')
+            for i, line in enumerate(lines):
+                text_size = cv2.getTextSize(line, font, 0.6, 2)[0]
+                x = (img.shape[1] - text_size[0]) // 2
+                y = (img.shape[0] // 2) + (i - len(lines)//2) * 30
+                cv2.putText(img, line, (x, y), font, 0.6, (200, 200, 200), 2)
+            
+            # Encode as JPEG
+            ret, buffer = cv2.imencode('.jpg', img)
+            if ret:
+                response = Response(io.BytesIO(buffer).read(), mimetype='image/jpeg')
+                response.headers['Cache-Control'] = 'no-cache'
+                return response
+        except:
+            pass
+        
+        # Ultra-simple fallback
+        from flask import Response
+        return Response(b'', mimetype='image/jpeg')
+
+    def _generate_thermal_placeholder(self):
+        """Generate thermal-style placeholder image"""
+        try:
+            import cv2
+            import numpy as np
+            import io
+            from flask import Response
+            
+            # Create thermal-style gradient image
+            img = np.zeros((240, 320, 3), dtype=np.uint8)
+            
+            # Create a simple thermal gradient
+            for y in range(240):
+                for x in range(320):
+                    # Create radial gradient for thermal effect
+                    center_x, center_y = 160, 120
+                    distance = np.sqrt((x - center_x)**2 + (y - center_y)**2)
+                    intensity = max(0, 255 - int(distance * 1.5))
+                    
+                    # Thermal color mapping (blue-red)
+                    if intensity < 85:
+                        img[y, x] = [intensity * 3, 0, 255 - intensity * 3]  # Blue to purple
+                    elif intensity < 170:
+                        img[y, x] = [255, (intensity - 85) * 3, 0]  # Purple to red
+                    else:
+                        img[y, x] = [255, 255, (intensity - 170) * 3]  # Red to yellow
+            
+            # Add "IR CAMERA" text
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(img, 'IR CAMERA', (100, 120), font, 0.7, (255, 255, 255), 2)
+            cv2.putText(img, 'THERMAL PREVIEW', (60, 150), font, 0.5, (255, 255, 255), 1)
+            
+            # Encode as JPEG
+            ret, buffer = cv2.imencode('.jpg', img)
+            if ret:
+                response = Response(io.BytesIO(buffer).read(), mimetype='image/jpeg')
+                response.headers['Cache-Control'] = 'no-cache'
+                return response
+        except:
+            pass
+        
+        return self._generate_placeholder_image('IR Camera\nThermal Preview')
+
     def _setup_socket_handlers(self):
 
         @self.socketio.on('connect')

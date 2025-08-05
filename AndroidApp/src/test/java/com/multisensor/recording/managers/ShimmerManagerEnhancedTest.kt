@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import io.mockk.*
 import org.junit.After
 import org.junit.Before
@@ -212,9 +211,19 @@ class ShimmerManagerEnhancedTest {
     @Test
     fun `session management handles incomplete sessions properly`() {
         every { mockSharedPreferences.getString("current_logging_session", null) } returns "incomplete_session_456"
-        every { mockSharedPreferences.getLong("current_session_start", 0L) } returns System.currentTimeMillis() - 120000L
+        every {
+            mockSharedPreferences.getLong(
+                "current_session_start",
+                0L
+            )
+        } returns System.currentTimeMillis() - 120000L
         every { mockSharedPreferences.getBoolean("last_session_incomplete", false) } returns true
-        every { mockSharedPreferences.getString("incomplete_session_reason", null) } returns "Device disconnected during logging"
+        every {
+            mockSharedPreferences.getString(
+                "incomplete_session_reason",
+                null
+            )
+        } returns "Device disconnected during logging"
 
         shimmerManager.stopSDLogging(mockCallback)
 

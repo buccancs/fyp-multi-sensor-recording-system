@@ -1,7 +1,7 @@
 package com.multisensor.recording.network
 
-import com.multisensor.recording.util.Logger
 import com.multisensor.recording.recording.ShimmerDevice.ConnectionState
+import com.multisensor.recording.util.Logger
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
-import kotlin.collections.ArrayDeque
 
 @ServiceScoped
 class EnhancedJsonSocketClient @Inject constructor(
@@ -549,7 +548,8 @@ class EnhancedJsonSocketClient @Inject constructor(
                         iterator.remove()
 
                         if (pendingMessage.message.priority == MessagePriority.CRITICAL &&
-                            pendingMessage.retryCount < 3) {
+                            pendingMessage.retryCount < 3
+                        ) {
                             val retryMessage = pendingMessage.message.copy(
                                 timestamp = currentTime
                             )
@@ -662,9 +662,11 @@ class EnhancedJsonSocketClient @Inject constructor(
                 is StatusMessage -> {
                     extractTimestampFromMessage(message)
                 }
+
                 is AckMessage -> {
                     extractTimestampFromMessage(message)
                 }
+
                 else -> {
                     extractTimestampFromMessage(message)
                 }
@@ -764,7 +766,8 @@ class EnhancedJsonSocketClient @Inject constructor(
     private fun updateNetworkQualityMetrics(latency: Long) {
         if (connectionStats.latencySamples.size >= 2) {
             val previousLatencies = connectionStats.latencySamples.takeLast(10)
-            val latencyVariance = previousLatencies.map { (it - connectionStats.averageLatency).let { diff -> diff * diff } }.average()
+            val latencyVariance =
+                previousLatencies.map { (it - connectionStats.averageLatency).let { diff -> diff * diff } }.average()
             jitter = kotlin.math.sqrt(latencyVariance)
         }
 
@@ -784,16 +787,16 @@ class EnhancedJsonSocketClient @Inject constructor(
     private fun assessNetworkQuality(avgLatency: Double, jitter: Double, packetLoss: Double): NetworkQuality {
         return when {
             avgLatency < EXCELLENT_LATENCY_THRESHOLD_MS &&
-            jitter < EXCELLENT_JITTER_THRESHOLD_MS &&
-            packetLoss < EXCELLENT_LOSS_THRESHOLD_PCT -> NetworkQuality.EXCELLENT
+                    jitter < EXCELLENT_JITTER_THRESHOLD_MS &&
+                    packetLoss < EXCELLENT_LOSS_THRESHOLD_PCT -> NetworkQuality.EXCELLENT
 
             avgLatency < GOOD_LATENCY_THRESHOLD_MS &&
-            jitter < GOOD_JITTER_THRESHOLD_MS &&
-            packetLoss < GOOD_LOSS_THRESHOLD_PCT -> NetworkQuality.GOOD
+                    jitter < GOOD_JITTER_THRESHOLD_MS &&
+                    packetLoss < GOOD_LOSS_THRESHOLD_PCT -> NetworkQuality.GOOD
 
             avgLatency < FAIR_LATENCY_THRESHOLD_MS &&
-            jitter < FAIR_JITTER_THRESHOLD_MS &&
-            packetLoss < FAIR_LOSS_THRESHOLD_PCT -> NetworkQuality.FAIR
+                    jitter < FAIR_JITTER_THRESHOLD_MS &&
+                    packetLoss < FAIR_LOSS_THRESHOLD_PCT -> NetworkQuality.FAIR
 
             else -> NetworkQuality.POOR
         }
@@ -866,7 +869,7 @@ class EnhancedJsonSocketClient @Inject constructor(
 
     private fun adaptStreamingQuality() {
         val errorRate = connectionStats.errorCount.get().toDouble() /
-                       maxOf(1, connectionStats.messagesReceived.get()).toDouble()
+                maxOf(1, connectionStats.messagesReceived.get()).toDouble()
 
         val newQuality = when {
             errorRate > 0.1 || connectionStats.averageLatency > 200 -> StreamingQuality.LOW

@@ -9,9 +9,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
-import com.multisensor.recording.MainActivity
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
@@ -27,8 +25,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -158,25 +154,52 @@ class ShimmerRecorderManualTest {
             val scanPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN)
             val connectPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
 
-            assertEquals("BLUETOOTH_SCAN permission should be granted", PackageManager.PERMISSION_GRANTED, scanPermission)
-            assertEquals("BLUETOOTH_CONNECT permission should be granted", PackageManager.PERMISSION_GRANTED, connectPermission)
+            assertEquals(
+                "BLUETOOTH_SCAN permission should be granted",
+                PackageManager.PERMISSION_GRANTED,
+                scanPermission
+            )
+            assertEquals(
+                "BLUETOOTH_CONNECT permission should be granted",
+                PackageManager.PERMISSION_GRANTED,
+                connectPermission
+            )
 
             println("[DEBUG_LOG] Android 12+ Bluetooth permissions verified")
         } else {
             val bluetoothPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH)
-            val bluetoothAdminPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN)
+            val bluetoothAdminPermission =
+                ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN)
 
-            assertEquals("BLUETOOTH permission should be granted", PackageManager.PERMISSION_GRANTED, bluetoothPermission)
-            assertEquals("BLUETOOTH_ADMIN permission should be granted", PackageManager.PERMISSION_GRANTED, bluetoothAdminPermission)
+            assertEquals(
+                "BLUETOOTH permission should be granted",
+                PackageManager.PERMISSION_GRANTED,
+                bluetoothPermission
+            )
+            assertEquals(
+                "BLUETOOTH_ADMIN permission should be granted",
+                PackageManager.PERMISSION_GRANTED,
+                bluetoothAdminPermission
+            )
 
             println("[DEBUG_LOG] Legacy Bluetooth permissions verified")
         }
 
-        val fineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-        val coarseLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+        val fineLocationPermission =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+        val coarseLocationPermission =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
 
-        assertEquals("ACCESS_FINE_LOCATION permission should be granted", PackageManager.PERMISSION_GRANTED, fineLocationPermission)
-        assertEquals("ACCESS_COARSE_LOCATION permission should be granted", PackageManager.PERMISSION_GRANTED, coarseLocationPermission)
+        assertEquals(
+            "ACCESS_FINE_LOCATION permission should be granted",
+            PackageManager.PERMISSION_GRANTED,
+            fineLocationPermission
+        )
+        assertEquals(
+            "ACCESS_COARSE_LOCATION permission should be granted",
+            PackageManager.PERMISSION_GRANTED,
+            coarseLocationPermission
+        )
 
         assertTrue("Bluetooth should be enabled", bluetoothAdapter.isEnabled)
 

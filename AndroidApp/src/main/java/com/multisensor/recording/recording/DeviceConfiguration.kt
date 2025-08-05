@@ -132,5 +132,5 @@ data class DeviceConfiguration(
 
     override fun toString(): String =
         "DeviceConfiguration(rate=${samplingRate}Hz, sensors=${enabledSensors.size}, " +
-            "channels=[${enabledSensors.joinToString { it.displayName }}])"
+                "channels=[${enabledSensors.joinToString { it.displayName }}])"
 }

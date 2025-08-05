@@ -5,8 +5,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.io.*
-import java.net.*
+import java.io.DataInputStream
+import java.io.DataOutputStream
+import java.io.EOFException
+import java.io.File
+import java.net.ServerSocket
+import java.net.Socket
+import java.net.SocketException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
@@ -156,13 +161,15 @@ class PCCommunicationHandler(
 
         try {
             val jsonData = sensorSample.toJsonString()
-            val response = PCResponse.StreamingData(deviceId, mapOf(
-                "timestamp" to sensorSample.systemTimestamp,
-                "deviceId" to deviceId,
-                "sensors" to sensorSample.sensorValues,
-                "battery" to sensorSample.batteryLevel,
-                "sequence" to sensorSample.sequenceNumber
-            ))
+            val response = PCResponse.StreamingData(
+                deviceId, mapOf(
+                    "timestamp" to sensorSample.systemTimestamp,
+                    "deviceId" to deviceId,
+                    "sensors" to sensorSample.sensorValues,
+                    "battery" to sensorSample.batteryLevel,
+                    "sequence" to sensorSample.sequenceNumber
+                )
+            )
 
             activeConnections.values.forEach { connection ->
                 if (connection.streamingMode != StreamingMode.NONE) {
@@ -315,24 +322,31 @@ class PCCommunicationHandler(
             is PCCommand.StartStreaming -> {
                 handleStartStreaming(connection, command)
             }
+
             is PCCommand.StopStreaming -> {
                 handleStopStreaming(connection, command)
             }
+
             is PCCommand.ConfigureDevice -> {
                 handleConfigureDevice(connection, command)
             }
+
             is PCCommand.RequestDeviceInfo -> {
                 handleRequestDeviceInfo(connection, command)
             }
+
             is PCCommand.RequestFileTransfer -> {
                 handleRequestFileTransfer(connection, command)
             }
+
             is PCCommand.ListDevices -> {
                 handleListDevices(connection)
             }
+
             is PCCommand.GetStatus -> {
                 handleGetStatus(connection)
             }
+
             is PCCommand.Authenticate -> {
                 handleAuthenticate(connection, command)
             }

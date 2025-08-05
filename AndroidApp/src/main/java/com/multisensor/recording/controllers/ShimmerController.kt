@@ -1,9 +1,5 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -11,23 +7,15 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import com.multisensor.recording.recording.ShimmerRecorder
-
 import com.multisensor.recording.managers.ShimmerManager
-import com.multisensor.recording.ui.MainViewModel
-import com.multisensor.recording.persistence.ShimmerDeviceStateRepository
 import com.multisensor.recording.persistence.ShimmerDeviceState
+import com.multisensor.recording.persistence.ShimmerDeviceStateRepository
+import com.multisensor.recording.ui.MainViewModel
 import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
-import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
-
 
 
 @Singleton
@@ -51,7 +39,8 @@ class ShimmerController @Inject constructor(
     private var callback: ShimmerCallback? = null
     private var selectedShimmerAddress: String? = null
     private var selectedShimmerName: String? = null
-    private var preferredBtType: ShimmerBluetoothManagerAndroid.BT_TYPE = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
+    private var preferredBtType: ShimmerBluetoothManagerAndroid.BT_TYPE =
+        ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
 
     private val persistenceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -74,7 +63,10 @@ class ShimmerController @Inject constructor(
                 withContext(Dispatchers.Main) {
                     savedStates.forEach { deviceState ->
                         connectedDevices[deviceState.deviceAddress] = deviceState
-                        android.util.Log.d("ShimmerController", "[DEBUG_LOG] Restored device: ${deviceState.deviceName} (${deviceState.deviceAddress})")
+                        android.util.Log.d(
+                            "ShimmerController",
+                            "[DEBUG_LOG] Restored device: ${deviceState.deviceName} (${deviceState.deviceAddress})"
+                        )
                     }
 
                     attemptAutoReconnection()
@@ -89,11 +81,17 @@ class ShimmerController @Inject constructor(
         persistenceScope.launch {
             try {
                 val autoReconnectDevices = shimmerDeviceStateRepository.getAutoReconnectDevices()
-                android.util.Log.d("ShimmerController", "[DEBUG_LOG] Found ${autoReconnectDevices.size} devices for auto-reconnection")
+                android.util.Log.d(
+                    "ShimmerController",
+                    "[DEBUG_LOG] Found ${autoReconnectDevices.size} devices for auto-reconnection"
+                )
 
                 autoReconnectDevices.forEach { deviceState ->
                     if (connectionRetryAttempts.getOrDefault(deviceState.deviceAddress, 0) < maxRetryAttempts) {
-                        android.util.Log.d("ShimmerController", "[DEBUG_LOG] Attempting auto-reconnection to ${deviceState.deviceName}")
+                        android.util.Log.d(
+                            "ShimmerController",
+                            "[DEBUG_LOG] Attempting auto-reconnection to ${deviceState.deviceName}"
+                        )
 
                         withContext(Dispatchers.Main) {
                             callback?.updateStatusText("Auto-reconnecting to ${deviceState.deviceName}...")
@@ -145,7 +143,10 @@ class ShimmerController @Inject constructor(
                 try {
                     android.util.Log.d("ShimmerController", "[DEBUG_LOG] Initiating connection process...")
 
-                    callback?.showToast("Attempting connection to $name via $preferredBtType", android.widget.Toast.LENGTH_SHORT)
+                    callback?.showToast(
+                        "Attempting connection to $name via $preferredBtType",
+                        android.widget.Toast.LENGTH_SHORT
+                    )
 
                     callback?.updateStatusText("Connection initiated for $name")
 
@@ -406,7 +407,10 @@ class ShimmerController @Inject constructor(
 
     fun setSamplingRate(viewModel: MainViewModel, samplingRate: Double) {
         selectedShimmerAddress?.let { deviceId ->
-            android.util.Log.d("ShimmerController", "[DEBUG_LOG] Setting sampling rate to ${samplingRate}Hz for device: $deviceId")
+            android.util.Log.d(
+                "ShimmerController",
+                "[DEBUG_LOG] Setting sampling rate to ${samplingRate}Hz for device: $deviceId"
+            )
 
             callback?.updateStatusText("Setting sampling rate to ${samplingRate}Hz...")
 
@@ -514,7 +518,10 @@ class ShimmerController @Inject constructor(
                         .buildShimmerSensorEnableDetails(shimmerDevice, context as android.app.Activity, btManager)
                     callback?.onConfigurationComplete()
                 } catch (e: Exception) {
-                    android.util.Log.e("ShimmerController", "[DEBUG_LOG] Error showing sensor configuration: ${e.message}")
+                    android.util.Log.e(
+                        "ShimmerController",
+                        "[DEBUG_LOG] Error showing sensor configuration: ${e.message}"
+                    )
                     callback?.onShimmerError("Failed to show sensor configuration: ${e.message}")
                 }
             } else {
@@ -522,7 +529,10 @@ class ShimmerController @Inject constructor(
             }
         } else {
             callback?.showToast("No Shimmer device connected")
-            android.util.Log.w("ShimmerController", "[DEBUG_LOG] No connected Shimmer device available for configuration")
+            android.util.Log.w(
+                "ShimmerController",
+                "[DEBUG_LOG] No connected Shimmer device available for configuration"
+            )
         }
     }
 
@@ -539,7 +549,10 @@ class ShimmerController @Inject constructor(
                         .buildShimmerConfigOptions(shimmerDevice, context as android.app.Activity, btManager)
                     callback?.onConfigurationComplete()
                 } catch (e: Exception) {
-                    android.util.Log.e("ShimmerController", "[DEBUG_LOG] Error showing general configuration: ${e.message}")
+                    android.util.Log.e(
+                        "ShimmerController",
+                        "[DEBUG_LOG] Error showing general configuration: ${e.message}"
+                    )
                     callback?.onShimmerError("Failed to show general configuration: ${e.message}")
                 }
             } else {
@@ -547,7 +560,10 @@ class ShimmerController @Inject constructor(
             }
         } else {
             callback?.showToast("No Shimmer device connected")
-            android.util.Log.w("ShimmerController", "[DEBUG_LOG] No connected Shimmer device available for configuration")
+            android.util.Log.w(
+                "ShimmerController",
+                "[DEBUG_LOG] No connected Shimmer device available for configuration"
+            )
         }
     }
 

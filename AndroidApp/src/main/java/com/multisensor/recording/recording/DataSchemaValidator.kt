@@ -2,8 +2,8 @@ package com.multisensor.recording.recording
 
 import com.multisensor.recording.util.Logger
 import com.shimmerresearch.driver.ObjectCluster
-import com.shimmerresearch.driver.Configuration
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 data class DoubleRange(
     val start: Double,
@@ -418,7 +418,7 @@ class DataSchemaValidator(
 
         return channelNames.associateWith { channelName ->
             schema.supportedChannels.containsKey(channelName) ||
-            schema.supportedChannels.values.any { it.name == channelName }
+                    schema.supportedChannels.values.any { it.name == channelName }
         }
     }
 

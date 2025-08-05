@@ -6,7 +6,8 @@ import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import io.mockk.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert.*

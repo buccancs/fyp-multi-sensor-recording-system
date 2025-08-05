@@ -4,12 +4,14 @@ import ntplib
 import socket
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from typing import Dict, List, Optional, Callable, Set
-from concurrent.futures import ThreadPoolExecutor
-from ..network.pc_server import PCServer, JsonMessage, StartRecordCommand, StopRecordCommand
+
 from .ntp_time_server import NTPTimeServer
+from ..network.pc_server import PCServer, JsonMessage, StartRecordCommand, StopRecordCommand
 from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

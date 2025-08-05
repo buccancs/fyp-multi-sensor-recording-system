@@ -4,9 +4,9 @@ import ssl
 import threading
 import time
 import uuid
+from PyQt5.QtCore import QThread, pyqtSignal, QTimer
 from collections import defaultdict
 from typing import Dict, Optional, Any, Tuple, List
-from PyQt5.QtCore import QThread, pyqtSignal, QTimer
 
 
 class DeviceClient(QThread):

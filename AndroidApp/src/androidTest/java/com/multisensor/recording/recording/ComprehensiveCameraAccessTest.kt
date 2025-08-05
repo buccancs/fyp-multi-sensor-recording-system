@@ -7,9 +7,9 @@ import android.graphics.SurfaceTexture
 import android.hardware.usb.UsbManager
 import android.view.TextureView
 import androidx.core.content.ContextCompat
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.service.SessionManager
@@ -21,7 +21,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -126,7 +127,10 @@ class ComprehensiveCameraAccessTest {
         }
 
         assertTrue("[DEBUG_LOG] CAMERA permission not granted", permissionResults[Manifest.permission.CAMERA] == true)
-        assertTrue("[DEBUG_LOG] RECORD_AUDIO permission not granted", permissionResults[Manifest.permission.RECORD_AUDIO] == true)
+        assertTrue(
+            "[DEBUG_LOG] RECORD_AUDIO permission not granted",
+            permissionResults[Manifest.permission.RECORD_AUDIO] == true
+        )
         assertTrue(
             "[DEBUG_LOG] WRITE_EXTERNAL_STORAGE permission not granted",
             permissionResults[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true,
@@ -166,7 +170,8 @@ class ComprehensiveCameraAccessTest {
                                 surface: SurfaceTexture,
                                 width: Int,
                                 height: Int,
-                            ) {}
+                            ) {
+                            }
 
                             override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = false
 

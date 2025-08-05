@@ -37,6 +37,7 @@ from bucika_gsr.webcam.webcam_capture import WebcamCapture
 
 from .calibration_dialog import CalibrationDialog
 from .device_panel import DeviceStatusPanel
+from .file_browser_dialog import show_file_browser
 from .preview_panel import PreviewPanel
 from .session_review_dialog import show_session_review_dialog
 from .stimulus_controller import StimulusController
@@ -104,6 +105,11 @@ class MainWindow(QMainWindow):
         settings_action = QAction("Settings...", self)
         settings_action.triggered.connect(self.show_settings_dialog)
         tools_menu.addAction(settings_action)
+
+        # Add file browser action
+        file_browser_action = QAction("File Browser...", self)
+        file_browser_action.triggered.connect(self.show_file_browser)
+        tools_menu.addAction(file_browser_action)
 
         view_menu = menubar.addMenu("View")
 
@@ -304,6 +310,31 @@ class MainWindow(QMainWindow):
             self, "Settings", "Settings dialog not implemented yet."
         )
         self.log_message("Settings dialog closed")
+
+    def show_file_browser(self):
+        """Show file browser dialog"""
+        self.log_message("File browser menu item selected - opening file browser")
+        try:
+            # Get recordings directory from session manager if available
+            recordings_path = "recordings"
+            if hasattr(self.session_manager, 'base_recordings_dir'):
+                recordings_path = self.session_manager.base_recordings_dir
+            
+            selected_file = show_file_browser(self, recordings_path)
+            if selected_file:
+                self.log_message(f"File selected from browser: {selected_file}")
+                # Could add actions here like opening the file or adding to current session
+                QMessageBox.information(
+                    self, "File Selected", 
+                    f"Selected file:\n{selected_file}\n\nFile browser functionality is now available!"
+                )
+            else:
+                self.log_message("File browser closed without selection")
+        except Exception as e:
+            self.log_message(f"Error opening file browser: {str(e)}")
+            QMessageBox.critical(
+                self, "Error", f"Failed to open file browser:\n{str(e)}"
+            )
 
     def show_about(self):
         """Show about dialog."""

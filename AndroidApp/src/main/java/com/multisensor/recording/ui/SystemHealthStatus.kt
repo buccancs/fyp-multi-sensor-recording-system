@@ -23,9 +23,11 @@ data class SystemHealthStatus(
         get() = when {
             listOf(pcConnection, shimmerConnection, thermalCamera, networkConnection, rgbCamera)
                 .any { it == HealthStatus.ERROR } -> HealthStatus.ERROR
+
             listOf(pcConnection, rgbCamera).all { it == HealthStatus.CONNECTED } -> HealthStatus.CONNECTED
             listOf(pcConnection, shimmerConnection, thermalCamera, networkConnection, rgbCamera)
                 .any { it == HealthStatus.CONNECTING } -> HealthStatus.CONNECTING
+
             else -> HealthStatus.DISCONNECTED
         }
 

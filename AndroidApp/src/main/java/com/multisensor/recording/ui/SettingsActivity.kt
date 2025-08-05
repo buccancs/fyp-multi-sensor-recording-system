@@ -4,8 +4,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.google.android.material.button.MaterialButton
@@ -197,6 +197,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -518,12 +519,14 @@ class SettingsActivity : AppCompatActivity() {
                         setupGenericChangeListener(preference.getPreference(i))
                     }
                 }
+
                 is androidx.preference.SwitchPreferenceCompat -> {
                     preference.setOnPreferenceChangeListener { _, _ ->
                         (activity as? SettingsActivity)?.markAsChanged()
                         true
                     }
                 }
+
                 is androidx.preference.ListPreference -> {
                     if (preference.onPreferenceChangeListener == null) {
                         preference.setOnPreferenceChangeListener { _, _ ->
@@ -532,6 +535,7 @@ class SettingsActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 is androidx.preference.EditTextPreference -> {
                     if (preference.onPreferenceChangeListener == null) {
                         preference.setOnPreferenceChangeListener { _, _ ->

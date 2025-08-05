@@ -2,11 +2,9 @@ package com.multisensor.recording.handsegmentation
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Log
 import kotlinx.coroutines.runBlocking
-import java.io.File
 
 class HandSegmentationDemo(private val context: Context) {
 

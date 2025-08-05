@@ -1,11 +1,6 @@
 package com.multisensor.recording.persistence
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
-import androidx.room.Delete
+import androidx.room.*
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import kotlinx.coroutines.flow.Flow
 
@@ -44,22 +39,54 @@ interface ShimmerDeviceStateDao {
     suspend fun getSDLoggingDevices(): List<ShimmerDeviceState>
 
     @Query("UPDATE shimmer_device_state SET isConnected = :connected, lastConnectedTimestamp = :timestamp, lastUpdated = :updateTime WHERE deviceAddress = :address")
-    suspend fun updateConnectionStatus(address: String, connected: Boolean, timestamp: Long, updateTime: Long = System.currentTimeMillis())
+    suspend fun updateConnectionStatus(
+        address: String,
+        connected: Boolean,
+        timestamp: Long,
+        updateTime: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE shimmer_device_state SET enabledSensors = :sensors, samplingRate = :samplingRate, gsrRange = :gsrRange, sensorConfiguration = :config, lastUpdated = :updateTime WHERE deviceAddress = :address")
-    suspend fun updateSensorConfiguration(address: String, sensors: Set<String>, samplingRate: Double, gsrRange: Int, config: String?, updateTime: Long = System.currentTimeMillis())
+    suspend fun updateSensorConfiguration(
+        address: String,
+        sensors: Set<String>,
+        samplingRate: Double,
+        gsrRange: Int,
+        config: String?,
+        updateTime: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE shimmer_device_state SET isStreaming = :streaming, lastStreamingTimestamp = :timestamp, lastUpdated = :updateTime WHERE deviceAddress = :address")
-    suspend fun updateStreamingStatus(address: String, streaming: Boolean, timestamp: Long, updateTime: Long = System.currentTimeMillis())
+    suspend fun updateStreamingStatus(
+        address: String,
+        streaming: Boolean,
+        timestamp: Long,
+        updateTime: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE shimmer_device_state SET isSDLogging = :logging, lastSDLoggingTimestamp = :timestamp, lastUpdated = :updateTime WHERE deviceAddress = :address")
-    suspend fun updateSDLoggingStatus(address: String, logging: Boolean, timestamp: Long, updateTime: Long = System.currentTimeMillis())
+    suspend fun updateSDLoggingStatus(
+        address: String,
+        logging: Boolean,
+        timestamp: Long,
+        updateTime: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE shimmer_device_state SET batteryLevel = :battery, signalStrength = :signal, firmwareVersion = :firmware, lastUpdated = :updateTime WHERE deviceAddress = :address")
-    suspend fun updateDeviceInfo(address: String, battery: Int, signal: Int, firmware: String, updateTime: Long = System.currentTimeMillis())
+    suspend fun updateDeviceInfo(
+        address: String,
+        battery: Int,
+        signal: Int,
+        firmware: String,
+        updateTime: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE shimmer_device_state SET connectionAttempts = connectionAttempts + 1, lastConnectionError = :error, lastUpdated = :updateTime WHERE deviceAddress = :address")
-    suspend fun incrementConnectionAttempts(address: String, error: String?, updateTime: Long = System.currentTimeMillis())
+    suspend fun incrementConnectionAttempts(
+        address: String,
+        error: String?,
+        updateTime: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE shimmer_device_state SET connectionAttempts = 0, lastConnectionError = NULL, lastUpdated = :updateTime WHERE deviceAddress = :address")
     suspend fun resetConnectionAttempts(address: String, updateTime: Long = System.currentTimeMillis())

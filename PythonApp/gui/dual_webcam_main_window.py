@@ -1,8 +1,11 @@
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QPushButton, QSpinBox, QComboBox, QGroupBox, QProgressBar, QStatusBar, QMessageBox, QFrame, QSizePolicy
-from ..utils.logging_config import get_logger, performance_timer, log_method_entry
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QPushButton, QSpinBox, \
+    QComboBox, QGroupBox, QProgressBar, QStatusBar, QMessageBox, QFrame, QSizePolicy
+
 from .webcam.dual_webcam_capture import DualWebcamCapture, test_dual_webcam_access
+from ..utils.logging_config import get_logger, performance_timer, log_method_entry
+
 logger = get_logger(__name__)
 
 

@@ -6,34 +6,30 @@ This document contains enhanced Mermaid diagrams following best practices for do
 
 ```mermaid
 flowchart TD
-    %% Main documentation structure
+%% Main documentation structure
     START([Multi-Sensor Recording System<br/>Documentation Overview]) --> ARCH[System Architecture]
     START --> TECH[Technical Implementation]
     START --> DEPLOY[Deployment and Operations]
-    
-    %% Architecture Documentation
+%% Architecture Documentation
     ARCH --> A1[Hardware Setup Architecture]
-    ARCH --> A2[Android App Architecture] 
+    ARCH --> A2[Android App Architecture]
     ARCH --> A3[PC App Architecture]
     ARCH --> A4[Complete Data Flow Architecture]
-    
-    %% Technical Implementation
+%% Technical Implementation
     TECH --> T1[Networking Architecture]
     TECH --> T2[Data Collection Flow]
     TECH --> T3[Session Management Flow]
     TECH --> T4[Data File System Architecture]
     TECH --> T5[Data Export Workflow]
-    
-    %% System Architecture Details
+%% System Architecture Details
     DEPLOY --> D1[Layer Architecture]
     DEPLOY --> D2[Software Architecture - Android]
     DEPLOY --> D3[Software Architecture - PC App]
     DEPLOY --> D4[Software Installation Flow]
-    
     class START startClass
-    class ARCH,A1,A2,A3,A4 archClass
-    class TECH,T1,T2,T3,T4,T5 techClass
-    class DEPLOY,D1,D2,D3,D4 deployClass
+    class ARCH, A1, A2, A3, A4 archClass
+    class TECH, T1, T2, T3, T4, T5 techClass
+    class DEPLOY, D1, D2, D3, D4 deployClass
 ```
 
 ## Hardware Setup Architecture
@@ -42,65 +38,62 @@ flowchart TD
 graph TB
     subgraph LAB ["Research Laboratory Environment"]
         direction TB
-        
+
         subgraph MOBILE ["Mobile Sensor Nodes"]
             direction LR
-            
+
             subgraph NODE1 ["Primary Node"]
                 S22_1["Samsung Galaxy S22<br/>• Primary Android Controller<br/>• 4K Video Recording<br/>• Real-time Processing"]
                 TC001_1["TopDon TC001<br/>• Thermal Imaging Camera<br/>• USB-C OTG Interface<br/>• 256x192 Resolution"]
                 GSR_1["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• Bluetooth LE Protocol<br/>• Real-time Physiological Data"]
-                
-                S22_1 -.->|USB-C OTG<br/>High-Speed Data| TC001_1
+                S22_1 -.->|USB - C OTG<br/>High - Speed Data| TC001_1
                 S22_1 -.->|Bluetooth LE<br/>Low Latency| GSR_1
             end
-            
+
             subgraph NODE2 ["Secondary Node"]
                 S22_2["Samsung Galaxy S22<br/>• Secondary Android Controller<br/>• 4K Video Recording<br/>• Synchronized Capture"]
                 TC001_2["TopDon TC001<br/>• Thermal Imaging Camera<br/>• USB-C OTG Interface<br/>• 256x192 Resolution"]
                 GSR_2["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• Bluetooth LE Protocol<br/>• Real-time Physiological Data"]
-                
-                S22_2 -.->|USB-C OTG<br/>High-Speed Data| TC001_2
+                S22_2 -.->|USB - C OTG<br/>High - Speed Data| TC001_2
                 S22_2 -.->|Bluetooth LE<br/>Low Latency| GSR_2
             end
         end
-        
+
         subgraph STATIONARY ["Stationary Infrastructure"]
             direction TB
-            
+
             subgraph COMPUTE ["Computing Hub"]
                 PC["Windows PC Master Controller<br/>• Intel i7/i9 Processor<br/>• 16GB+ RAM<br/>• Real-time Coordination<br/>• Data Aggregation"]
             end
-            
+
             subgraph CAMERAS ["USB Camera Array"]
                 BRIO_1["Logitech Brio 4K<br/>• Primary USB Webcam<br/>• 4K @ 30fps<br/>• Auto-focus and HDR"]
                 BRIO_2["Logitech Brio 4K<br/>• Secondary USB Webcam<br/>• 4K @ 30fps<br/>• Wide Field of View"]
             end
-            
+
             subgraph STORAGE_SYS ["Storage System"]
                 STORAGE["High-Performance Storage<br/>• NVMe SSD 1TB+<br/>• Multi-stream Recording<br/>• Backup and Redundancy"]
             end
-            
-            PC ---|USB 3.0<br/>High Bandwidth| BRIO_1
-            PC ---|USB 3.0<br/>High Bandwidth| BRIO_2
+
+            PC ---|USB 3 . 0<br/>High Bandwidth| BRIO_1
+            PC ---|USB 3 . 0<br/>High Bandwidth| BRIO_2
             PC ---|SATA/NVMe<br/>Direct Access| STORAGE
         end
-        
+
         subgraph NETWORK ["Network Infrastructure"]
             direction LR
             ROUTER["WiFi Router<br/>• 802.11ac/ax Standard<br/>• 5GHz Band Priority<br/>• QoS Management"]
             SWITCH["Gigabit Switch<br/>• Low Latency Switching<br/>• Managed Configuration<br/>• Traffic Optimization"]
-            
             ROUTER ===|Ethernet<br/>Gigabit| SWITCH
         end
-        
+
         subgraph POWER ["Power Management"]
             direction TB
             UPS["Uninterruptible Power Supply<br/>• Battery Backup System<br/>• Surge Protection<br/>• Clean Power Delivery"]
             CHARGER_1["USB-C Fast Charger<br/>• 65W Power Delivery<br/>• Always-On Charging"]
             CHARGER_2["USB-C Fast Charger<br/>• 65W Power Delivery<br/>• Always-On Charging"]
         end
-        
+
         subgraph ENV ["Environmental Controls"]
             direction LR
             LIGHTING["Controlled Lighting<br/>• Consistent Illumination<br/>• Adjustable Intensity<br/>• Color Temperature Control"]
@@ -108,30 +101,27 @@ graph TB
             ACOUSTIC["Acoustic Isolation<br/>• Minimal Interference<br/>• Sound Dampening<br/>• Quiet Operation"]
         end
     end
-    
-    %% Network Connections
-    S22_1 ==>|WiFi 5GHz<br/>JSON Socket Protocol<br/>Real-time Commands| ROUTER
-    S22_2 ==>|WiFi 5GHz<br/>JSON Socket Protocol<br/>Real-time Commands| ROUTER
+
+%% Network Connections
+    S22_1 ==>|WiFi 5GHz<br/>JSON Socket Protocol<br/>Real - time Commands| ROUTER
+    S22_2 ==>|WiFi 5GHz<br/>JSON Socket Protocol<br/>Real - time Commands| ROUTER
     PC ==>|Ethernet Gigabit<br/>Master Controller<br/>Data Aggregation| SWITCH
-    
-    %% Power Connections
+%% Power Connections
     UPS -.->|Clean Power<br/>Backup Protection| PC
     UPS -.->|Clean Power<br/>Network Stability| ROUTER
     UPS -.->|Clean Power<br/>Network Stability| SWITCH
     CHARGER_1 -.->|Continuous Power<br/>65W Fast Charge| S22_1
     CHARGER_2 -.->|Continuous Power<br/>65W Fast Charge| S22_2
-    
-    %% Environmental Impact
+%% Environmental Impact
     LIGHTING -.->|Optimal Illumination| NODE1
     LIGHTING -.->|Optimal Illumination| NODE2
     LIGHTING -.->|Optimal Illumination| CAMERAS
     TEMP -.->|Thermal Stability| COMPUTE
     ACOUSTIC -.->|Noise Reduction| LAB
-
-    class S22_1,S22_2,TC001_1,TC001_2,GSR_1,GSR_2 mobileClass
-    class PC,BRIO_1,BRIO_2,STORAGE stationaryClass
-    class ROUTER,SWITCH networkClass
-    class UPS,CHARGER_1,CHARGER_2,LIGHTING,TEMP,ACOUSTIC infraClass
+    class S22_1, S22_2, TC001_1, TC001_2, GSR_1, GSR_2 mobileClass
+    class PC, BRIO_1, BRIO_2, STORAGE stationaryClass
+    class ROUTER, SWITCH networkClass
+    class UPS, CHARGER_1, CHARGER_2, LIGHTING, TEMP, ACOUSTIC infraClass
 ```
 
 ## Android App Architecture
@@ -140,10 +130,10 @@ graph TB
 graph TB
     subgraph ANDROID ["Android Application Clean Architecture"]
         direction TB
-        
+
         subgraph PRESENTATION ["Presentation Layer - UI and User Interaction"]
             direction TB
-            
+
             subgraph ACTIVITIES ["Activities and Fragments"]
                 MA["MainActivity<br/>• Main UI Orchestrator<br/>• Fragment Navigation<br/>• Lifecycle Management"]
                 RF["RecordingFragment<br/>• Recording Controls UI<br/>• Real-time Status Display<br/>• User Interaction Handler"]
@@ -151,13 +141,13 @@ graph TB
                 CF["CalibrationFragment<br/>• Sensor Calibration UI<br/>• Validation Controls<br/>• Configuration Interface"]
                 FF["FilesFragment<br/>• File Management UI<br/>• Browse Recordings<br/>• Export Controls"]
             end
-            
+
             subgraph VIEWMODELS [" ViewModels and State Management"]
                 MVM[" MainViewModel<br/>• UI State Coordination<br/>• LiveData Management<br/>• Event Handling"]
                 RSM["RecordingStateManager<br/>• Recording State Logic<br/>• Status Broadcasting<br/>• Error Handling"]
                 DSM["DeviceStateManager<br/>• Device Connection States<br/>• Health Monitoring<br/>• Status Updates"]
             end
-            
+
             subgraph UI_UTILS [" UI Utilities and Navigation"]
                 UC["UIController<br/>• Component Validation<br/>• Dynamic UI Updates<br/>• Theme Management"]
                 NU[" NavigationUtils<br/>• Fragment Navigation<br/>• Deep Linking<br/>• Back Stack Management"]
@@ -165,54 +155,54 @@ graph TB
                 MAC["MainActivityCoordinator<br/>• Activity Coordination<br/>• Event Distribution<br/>• State Synchronization"]
             end
         end
-        
+
         subgraph DOMAIN ["Domain Layer - Business Logic and Use Cases"]
             direction TB
-            
+
             subgraph RECORDING ["Recording Components"]
                 CR[" CameraRecorder<br/>• Camera2 API Integration<br/>• 4K Video + RAW Capture<br/>• Concurrent Recording"]
                 TR["ThermalRecorder<br/>• TopDon SDK Integration<br/>• Thermal Image Processing<br/>• Real-time Capture"]
                 SR["ShimmerRecorder<br/>• Bluetooth GSR Integration<br/>• Physiological Data Collection<br/>• Real-time Streaming"]
             end
-            
+
             subgraph SESSION ["Session Management"]
                 SM["SessionManager<br/>• Recording Session Logic<br/>• Lifecycle Coordination<br/>• State Persistence"]
                 SI[" SessionInfo<br/>• Session Metadata<br/>• Status Tracking<br/>• Configuration Storage"]
                 SS[" SensorSample<br/>• Data Point Abstraction<br/>• Timestamp Synchronization<br/>• Format Standardization"]
             end
-            
+
             subgraph COMMUNICATION ["Communication Layer"]
                 PCH["PCCommunicationHandler<br/>• PC Socket Communication<br/>• Command Processing<br/>• Protocol Implementation"]
                 CM["ConnectionManager<br/>• Network Management<br/>• Reconnection Logic<br/>• Health Monitoring"]
                 PS["PreviewStreamer<br/>• Live Preview Streaming<br/>• Real-time Transmission<br/>• Quality Management"]
             end
         end
-        
+
         subgraph DATA ["Data Layer - Storage and Device Integration"]
             direction TB
-            
+
             subgraph DEVICE_MGT ["Device Management"]
                 DST["DeviceStatusTracker<br/>• Multi-Device Status<br/>• Health Monitoring<br/>• Performance Metrics"]
                 BM["📶 BluetoothManager<br/>• Bluetooth LE Connectivity<br/>• Shimmer Integration<br/>• Pairing Management"]
                 UM["USBManager<br/>• USB-C OTG Management<br/>• Thermal Camera Control<br/>• Device Detection"]
             end
-            
+
             subgraph STORAGE ["Storage and Persistence"]
                 FS["FileSystemManager<br/>• Local Storage Management<br/>• Session Organization<br/>• File Hierarchy"]
                 MS["MetadataSerializer<br/>• JSON Serialization<br/>• Session Persistence<br/>• Data Integrity"]
                 CS["ConfigurationStore<br/>• Settings Persistence<br/>• Shared Preferences<br/>• Configuration Management"]
             end
         end
-        
+
         subgraph INFRASTRUCTURE ["Infrastructure Layer - Platform Integration"]
             direction TB
-            
+
             subgraph ANDROID_FW ["🤖 Android Framework Integration"]
                 CAM2["📸 Camera2 API<br/>• Low-level Camera Control<br/>• Concurrent Capture<br/>• Hardware Acceleration"]
                 BLE["Bluetooth LE API<br/>• Low Energy Communication<br/>• Shimmer Protocol<br/>• Connection Management"]
                 NET["Network API<br/>• Socket Communication<br/>• OkHttp Integration<br/>• Connection Pooling"]
             end
-            
+
             subgraph HARDWARE ["Hardware Abstraction"]
                 HAL["Hardware Abstraction Layer<br/>• Device-specific Adaptations<br/>• Platform Compatibility<br/>• Driver Integration"]
                 PERM["Permission Manager<br/>• Runtime Permissions<br/>• Security Enforcement<br/>• Access Control"]
@@ -220,16 +210,15 @@ graph TB
             end
         end
     end
-    
-    %% Layer Interactions - Presentation to Domain
+
+%% Layer Interactions - Presentation to Domain
     MA ==>|User Actions<br/>Navigation Events| MVM
     MVM ==>|Business Logic<br/>State Updates| SM
     RF ==>|Recording Commands<br/>UI Events| RSM
     DF ==>|Device Commands<br/>Status Requests| DSM
     CF ==>|Calibration Requests<br/>Configuration| CM
     FF ==>|File Operations<br/>Data Access| FS
-    
-    %% Domain Layer Internal Connections
+%% Domain Layer Internal Connections
     MVM ==>|Recording Control<br/>Session Management| CR
     MVM ==>|Thermal Control<br/>Image Processing| TR
     MVM ==>|GSR Control<br/>Data Streaming| SR
@@ -238,18 +227,16 @@ graph TB
     TR ==>|Data Communication<br/>Status Updates| PCH
     SR ==>|Data Communication<br/>Status Updates| PCH
     PCH ==>|Network Management<br/>Connection Control| CM
-    CR ==>|Preview Streaming<br/>Real-time Data| PS
+    CR ==>|Preview Streaming<br/>Real - time Data| PS
     PS ==>|Network Transmission<br/>Stream Management| CM
-    
-    %% Data Layer Connections
+%% Data Layer Connections
     DSM ==>|Device Status<br/>Health Monitoring| DST
     BM ==>|Bluetooth Status<br/>Connection State| DST
     UM ==>|USB Status<br/>Device Detection| DST
     SM ==>|Session Data<br/>Metadata Storage| MS
     MS ==>|File Operations<br/>Data Persistence| FS
     CS ==>|Configuration Data<br/>Settings Storage| FS
-    
-    %% Infrastructure Layer Support
+%% Infrastructure Layer Support
     CR ==>|Camera Control<br/>Hardware Access| CAM2
     SR ==>|Bluetooth Communication<br/>Data Transfer| BLE
     PCH ==>|Network Communication<br/>Socket Operations| NET
@@ -257,17 +244,15 @@ graph TB
     HAL ==>|Platform Adaptation<br/>Hardware Abstraction| BLE
     PERM ==>|Security Enforcement<br/>Access Control| HAL
     LIFE ==>|Resource Management<br/>Lifecycle Control| HAL
-    
-    %% UI Coordination
+%% UI Coordination
     MA ==>|UI Control<br/>Component Management| UC
     UC ==>|Activity Coordination<br/>Event Distribution| MAC
     MAC ==>|Navigation Control<br/>Fragment Management| NU
     NU ==>|UI Utilities<br/>Helper Functions| UU
-
-    class MA,RF,DF,CF,FF,MVM,RSM,DSM,UC,NU,UU,MAC presentationClass
-    class CR,TR,SR,SM,SI,SS,PCH,CM,PS domainClass
-    class DST,BM,UM,FS,MS,CS dataClass
-    class CAM2,BLE,NET,HAL,PERM,LIFE infraClass
+    class MA, RF, DF, CF, FF, MVM, RSM, DSM, UC, NU, UU, MAC presentationClass
+    class CR, TR, SR, SM, SI, SS, PCH, CM, PS domainClass
+    class DST, BM, UM, FS, MS, CS dataClass
+    class CAM2, BLE, NET, HAL, PERM, LIFE infraClass
 ```
 
 ## PC App Architecture
@@ -276,17 +261,17 @@ graph TB
 graph TB
     subgraph PC_APP ["PC Application Architecture - Python and PyQt5"]
         direction TB
-        
+
         subgraph UI_LAYER ["User Interface Layer - PyQt5 Framework"]
             direction TB
-            
+
             subgraph MAIN_UI ["Main Application Windows"]
                 MW["MainWindow<br/>• Primary Application Window<br/>• Menu Bar and Toolbar<br/>• Status Bar Management<br/>• Central Widget Coordination"]
                 DW["DeviceWindow<br/>• Device Management Interface<br/>• Real-time Status Display<br/>• Connection Control Panel<br/>• Health Monitoring Dashboard"]
                 RW["RecordingWindow<br/>• Recording Control Interface<br/>• Live Preview Management<br/>• Session Configuration<br/>• Progress Monitoring"]
                 CW["CalibrationWindow<br/>• Sensor Calibration Interface<br/>• Validation Controls<br/>• Configuration Management<br/>• Quality Assurance Tools"]
             end
-            
+
             subgraph WIDGETS ["🧩 Custom Widgets and Components"]
                 PW["PreviewWidget<br/>• Live Video Preview<br/>• Multi-stream Display<br/>• Real-time Rendering<br/>• Quality Controls"]
                 SW["StatusWidget<br/>• System Status Display<br/>• Performance Metrics<br/>• Alert Management<br/>• Health Indicators"]
@@ -294,17 +279,17 @@ graph TB
                 FW["FileWidget<br/>• File Management Interface<br/>• Session Browser<br/>• Export Controls<br/>• Metadata Display"]
             end
         end
-        
+
         subgraph BUSINESS ["Business Logic Layer - Core Application Logic"]
             direction TB
-            
+
             subgraph CONTROLLERS ["Control Components"]
                 AC["ApplicationController<br/>• Main Application Logic<br/>• Event Coordination<br/>• State Management<br/>• Command Processing"]
                 DC["DeviceController<br/>• Device Management Logic<br/>• Connection Orchestration<br/>• Status Monitoring<br/>• Command Distribution"]
                 RC["RecordingController<br/>• Recording Session Logic<br/>• Multi-stream Coordination<br/>• Quality Management<br/>• Error Recovery"]
                 CC["CalibrationController<br/>• Calibration Process Logic<br/>• Validation Algorithms<br/>• Configuration Management<br/>• Quality Assurance"]
             end
-            
+
             subgraph MANAGERS ["Management Services"]
                 SM["SessionManager<br/>• Session Lifecycle Management<br/>• Metadata Coordination<br/>• State Persistence<br/>• Archive Management"]
                 DM["DeviceManager<br/>• Multi-device Coordination<br/>• Health Monitoring<br/>• Connection Pool Management<br/>• Error Handling"]
@@ -312,38 +297,38 @@ graph TB
                 NM["NetworkManager<br/>• Network Communication<br/>• Socket Management<br/>• Protocol Handling<br/>• Reconnection Logic"]
             end
         end
-        
+
         subgraph DATA_LAYER ["Data Access Layer - Storage and Communication"]
             direction TB
-            
+
             subgraph COMMUNICATION ["Communication Services"]
                 SocketServer["SocketServer<br/>• TCP Socket Management<br/>• Client Connection Handling<br/>• Protocol Implementation<br/>• Message Routing"]
                 CommandProcessor["CommandProcessor<br/>• Command Parsing and Validation<br/>• Response Generation<br/>• Error Handling<br/>• Protocol Compliance"]
                 DataStreamer["DataStreamer<br/>• Real-time Data Streaming<br/>• Multi-client Broadcasting<br/>• Quality of Service<br/>• Buffer Management"]
             end
-            
+
             subgraph STORAGE ["Storage Services"]
                 FileHandler["FileHandler<br/>• File I/O Operations<br/>• Directory Management<br/>• Metadata Storage<br/>• Version Control"]
                 DatabaseManager["🗃️ DatabaseManager<br/>• SQLite Integration<br/>• Session Metadata<br/>• Query Optimization<br/>• Data Integrity"]
                 ConfigManager["ConfigManager<br/>• Configuration Storage<br/>• Settings Persistence<br/>• Default Management<br/>• Validation"]
             end
-            
+
             subgraph SENSORS ["Sensor Integration"]
                 CameraHandler["CameraHandler<br/>• USB Camera Integration<br/>• OpenCV Processing<br/>• Frame Capture<br/>• Quality Control"]
                 DataCollector["DataCollector<br/>• Multi-source Data Collection<br/>• Timestamp Synchronization<br/>• Format Standardization<br/>• Quality Assurance"]
                 SyncManager["SyncManager<br/>• Clock Synchronization<br/>• Multi-device Timing<br/>• Latency Compensation<br/>• Drift Correction"]
             end
         end
-        
+
         subgraph EXTERNAL ["External Dependencies and Platform Integration"]
             direction TB
-            
+
             subgraph FRAMEWORKS ["Framework Dependencies"]
                 PyQt5["🖼️ PyQt5 Framework<br/>• GUI Framework<br/>• Event System<br/>• Widget Library<br/>• Platform Abstraction"]
                 OpenCV["👁️ OpenCV Library<br/>• Computer Vision<br/>• Image Processing<br/>• Video Capture<br/>• Real-time Processing"]
                 NumPy["🔢 NumPy Library<br/>• Numerical Computing<br/>• Array Operations<br/>• Mathematical Functions<br/>• Performance Optimization"]
             end
-            
+
             subgraph SYSTEM ["System Integration"]
                 OS_Interface["Operating System Interface<br/>• Windows API Integration<br/>• Process Management<br/>• Hardware Access<br/>• Resource Control"]
                 HW_Interface["Hardware Interface<br/>• USB Device Management<br/>• Camera Control<br/>• Network Adaptation<br/>• Driver Integration"]
@@ -351,60 +336,53 @@ graph TB
             end
         end
     end
-    
-    %% UI Layer Connections
+
+%% UI Layer Connections
     MW ==>|Window Management<br/>Event Coordination| AC
     DW ==>|Device Commands<br/>Status Requests| DC
     RW ==>|Recording Commands<br/>Session Control| RC
     CW ==>|Calibration Commands<br/>Configuration| CC
-    
-    %% Widget to Controller Connections
+%% Widget to Controller Connections
     PW ==>|Preview Control<br/>Display Management| RC
     SW ==>|Status Updates<br/>Health Monitoring| DC
     LW ==>|Logging Events<br/>Debug Information| AC
     FW ==>|File Operations<br/>Management Commands| FM
-    
-    %% Business Logic Internal Connections
+%% Business Logic Internal Connections
     AC ==>|Application Control<br/>Global Coordination| SM
     DC ==>|Device Management<br/>Connection Control| DM
     RC ==>|Recording Management<br/>Session Control| SM
     CC ==>|Calibration Management<br/>Quality Control| DM
     SM ==>|File Operations<br/>Storage Management| FM
     DM ==>|Network Operations<br/>Communication| NM
-    
-    %% Data Layer Connections
+%% Data Layer Connections
     NM ==>|Socket Operations<br/>Network Management| SocketServer
     SocketServer ==>|Command Processing<br/>Message Handling| CommandProcessor
     CommandProcessor ==>|Data Distribution<br/>Client Broadcasting| DataStreamer
     SM ==>|File Operations<br/>Storage Management| FileHandler
     FM ==>|Database Operations<br/>Metadata Management| DatabaseManager
     AC ==>|Configuration Operations<br/>Settings Management| ConfigManager
-    
-    %% Sensor Integration
+%% Sensor Integration
     RC ==>|Camera Control<br/>Video Capture| CameraHandler
-    DataStreamer ==>|Data Collection<br/>Multi-source Integration| DataCollector
+    DataStreamer ==>|Data Collection<br/>Multi - source Integration| DataCollector
     DataCollector ==>|Synchronization<br/>Timing Control| SyncManager
-    
-    %% External Dependencies
+%% External Dependencies
     MW ==>|GUI Framework<br/>Widget Management| PyQt5
     PW ==>|GUI Framework<br/>Custom Widgets| PyQt5
     SW ==>|GUI Framework<br/>Display Components| PyQt5
     CameraHandler ==>|Computer Vision<br/>Image Processing| OpenCV
     DataCollector ==>|Numerical Operations<br/>Array Processing| NumPy
     SyncManager ==>|Mathematical Operations<br/>Time Calculations| NumPy
-    
-    %% System Integration
+%% System Integration
     FileHandler ==>|File System Operations<br/>Storage Access| FS_Interface
     SocketServer ==>|Network Operations<br/>Socket Management| OS_Interface
     CameraHandler ==>|Hardware Control<br/>Device Access| HW_Interface
     OS_Interface ==>|Platform Services<br/>System Resources| PyQt5
     HW_Interface ==>|Device Management<br/>Hardware Abstraction| OpenCV
     FS_Interface ==>|Storage Services<br/>File Operations| NumPy
-
-    class MW,DW,RW,CW,PW,SW,LW,FW uiClass
-    class AC,DC,RC,CC,SM,DM,FM,NM businessClass
-    class SocketServer,CommandProcessor,DataStreamer,FileHandler,DatabaseManager,ConfigManager,CameraHandler,DataCollector,SyncManager dataClass
-    class PyQt5,OpenCV,NumPy,OS_Interface,HW_Interface,FS_Interface externalClass
+    class MW, DW, RW, CW, PW, SW, LW, FW uiClass
+    class AC, DC, RC, CC, SM, DM, FM, NM businessClass
+    class SocketServer, CommandProcessor, DataStreamer, FileHandler, DatabaseManager, ConfigManager, CameraHandler, DataCollector, SyncManager dataClass
+    class PyQt5, OpenCV, NumPy, OS_Interface, HW_Interface, FS_Interface externalClass
 ```
 
 ## Complete Data Flow Architecture
@@ -413,128 +391,116 @@ graph TB
 graph TD
     subgraph COLLECTION ["Multi-Modal Data Collection Architecture"]
         direction TB
-        
+
         subgraph MOBILE_SOURCES ["Mobile Data Sources"]
             direction LR
-            
+
             subgraph DEVICE1 ["Primary Mobile Node"]
                 CAM1[" Camera2 API<br/>• 4K Video @ 30fps<br/>• RAW Image Capture<br/>• Concurrent Streams<br/>• Hardware Acceleration"]
                 THERMAL1["TopDon Thermal<br/>• 256x192 Resolution<br/>• 30fps Thermal Imaging<br/>• Temperature Mapping<br/>• Real-time Processing"]
                 GSR1["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• 1KHz Sampling Rate<br/>• Bluetooth LE Streaming<br/>• Real-time Physiological"]
             end
-            
+
             subgraph DEVICE2 ["Secondary Mobile Node"]
                 CAM2[" Camera2 API<br/>• 4K Video @ 30fps<br/>• RAW Image Capture<br/>• Synchronized Recording<br/>• Multi-angle Coverage"]
                 THERMAL2["TopDon Thermal<br/>• 256x192 Resolution<br/>• 30fps Thermal Imaging<br/>• Temperature Analysis<br/>• Coordinated Capture"]
                 GSR2["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• 1KHz Sampling Rate<br/>• Synchronized Streaming<br/>• Physiological Monitoring"]
             end
         end
-        
+
         subgraph STATIONARY_SOURCES ["Stationary Data Sources"]
             direction LR
-            
             BRIO1["Logitech Brio 4K<br/>• Primary USB Camera<br/>• 4K @ 30fps Recording<br/>• Auto-focus and HDR<br/>• Wide Field of View"]
             BRIO2["Logitech Brio 4K<br/>• Secondary USB Camera<br/>• 4K @ 30fps Recording<br/>• Fixed Position<br/>• Detail Capture"]
         end
-        
+
         subgraph AGGREGATION ["Real-time Data Aggregation Hub"]
             direction TB
-            
+
             subgraph MOBILE_PROC ["Mobile Processing"]
                 ANDROID1["Android App Node 1<br/>• Real-time Data Processing<br/>• Local Storage Management<br/>• Network Communication<br/>• Quality Control"]
                 ANDROID2["Android App Node 2<br/>• Real-time Data Processing<br/>• Synchronized Operations<br/>• Backup Recording<br/>• Status Monitoring"]
             end
-            
+
             subgraph MASTER_CTRL ["Master Controller Hub"]
                 PC_CTRL["PC Master Controller<br/>• Multi-stream Coordination<br/>• Real-time Synchronization<br/>• Quality Assurance<br/>• Command Distribution<br/>• Data Aggregation"]
             end
         end
-        
+
         subgraph PROCESSING ["Real-time Processing Pipeline"]
             direction TB
-            
+
             subgraph SYNC_LAYER ["Synchronization Layer"]
                 MASTER_CLOCK["Master Clock Synchronizer<br/>• Global Time Reference<br/>• Drift Compensation<br/>• Latency Calculation<br/>• Precision Timing"]
                 SYNC_ENGINE["Synchronization Engine<br/>• Multi-stream Alignment<br/>• Timestamp Correction<br/>• Buffer Management<br/>• Quality Monitoring"]
             end
-            
+
             subgraph QUALITY_CTRL ["Quality Control Layer"]
                 QC_ENGINE["Quality Control Engine<br/>• Data Validation<br/>• Error Detection<br/>• Integrity Checking<br/>• Performance Monitoring"]
                 REDUNDANCY["Redundancy Manager<br/>• Backup Data Streams<br/>• Failover Handling<br/>• Recovery Mechanisms<br/>• Continuity Assurance"]
             end
         end
-        
+
         subgraph STORAGE ["Multi-tier Storage Architecture"]
             direction TB
-            
+
             subgraph LOCAL_STORAGE ["Local Storage Tier"]
                 MOBILE_STORAGE["Mobile Local Storage<br/>• Device-specific Storage<br/>• Session Organization<br/>• Temporary Buffering<br/>• Quick Access"]
                 PC_STORAGE["PC Primary Storage<br/>• High-speed NVMe SSD<br/>• Master Data Repository<br/>• Real-time Writing<br/>• Performance Optimization"]
             end
-            
+
             subgraph BACKUP_TIER ["Backup and Archive Tier"]
                 BACKUP_STORAGE["Backup Storage<br/>• Redundant Data Copies<br/>• Automated Backup<br/>• Version Control<br/>• Disaster Recovery"]
                 ARCHIVE_STORAGE["Archive Storage<br/>• Long-term Retention<br/>• Compressed Storage<br/>• Metadata Indexing<br/>• Research Database"]
             end
         end
-        
+
         subgraph EXPORT ["Data Export and Analysis Pipeline"]
             direction LR
-            
             EXPORT_ENGINE["Export Engine<br/>• Multi-format Export<br/>• Quality Assurance<br/>• Compression Optimization<br/>• Delivery Management"]
             ANALYSIS_PREP["Analysis Preparation<br/>• Data Preprocessing<br/>• Format Conversion<br/>• Annotation Integration<br/>• Research Ready Output"]
         end
     end
-    
-    %% Data Flow from Sources to Mobile Processing
-    CAM1 ==>|Video Stream<br/>4K @ 30fps<br/>Real-time| ANDROID1
-    THERMAL1 ==>|Thermal Data<br/>256x192 @ 30fps<br/>USB-C| ANDROID1
+
+%% Data Flow from Sources to Mobile Processing
+    CAM1 ==>|Video Stream<br/>4K @ 30fps<br/>Real - time| ANDROID1
+    THERMAL1 ==>|Thermal Data<br/>256x192 @ 30fps<br/>USB - C| ANDROID1
     GSR1 ==>|Physiological Data<br/>1KHz Sampling<br/>Bluetooth LE| ANDROID1
-    
     CAM2 ==>|Video Stream<br/>4K @ 30fps<br/>Synchronized| ANDROID2
-    THERMAL2 ==>|Thermal Data<br/>256x192 @ 30fps<br/>USB-C| ANDROID2
+    THERMAL2 ==>|Thermal Data<br/>256x192 @ 30fps<br/>USB - C| ANDROID2
     GSR2 ==>|Physiological Data<br/>1KHz Sampling<br/>Bluetooth LE| ANDROID2
-    
-    %% Stationary Sources to Master Controller
-    BRIO1 ==>|Video Stream<br/>4K @ 30fps<br/>USB 3.0| PC_CTRL
-    BRIO2 ==>|Video Stream<br/>4K @ 30fps<br/>USB 3.0| PC_CTRL
-    
-    %% Mobile to Master Controller Communication
+%% Stationary Sources to Master Controller
+    BRIO1 ==>|Video Stream<br/>4K @ 30fps<br/>USB 3 . 0| PC_CTRL
+    BRIO2 ==>|Video Stream<br/>4K @ 30fps<br/>USB 3 . 0| PC_CTRL
+%% Mobile to Master Controller Communication
     ANDROID1 ==>|Processed Data<br/>JSON Protocol<br/>WiFi 5GHz| PC_CTRL
     ANDROID2 ==>|Processed Data<br/>JSON Protocol<br/>WiFi 5GHz| PC_CTRL
-    
-    %% Master Controller to Synchronization
-    PC_CTRL ==>|Multi-stream Data<br/>Real-time Coordination<br/>Command Distribution| MASTER_CLOCK
+%% Master Controller to Synchronization
+    PC_CTRL ==>|Multi - stream Data<br/>Real - time Coordination<br/>Command Distribution| MASTER_CLOCK
     MASTER_CLOCK ==>|Synchronized Timing<br/>Global Time Reference<br/>Precision Control| SYNC_ENGINE
-    
-    %% Synchronization to Quality Control
+%% Synchronization to Quality Control
     SYNC_ENGINE ==>|Aligned Data Streams<br/>Timestamp Corrected<br/>Buffer Managed| QC_ENGINE
     QC_ENGINE ==>|Validated Data<br/>Quality Assured<br/>Error Corrected| REDUNDANCY
-    
-    %% Processing to Storage
+%% Processing to Storage
     ANDROID1 ==>|Local Data<br/>Device Storage<br/>Session Files| MOBILE_STORAGE
     ANDROID2 ==>|Local Data<br/>Device Storage<br/>Session Files| MOBILE_STORAGE
-    REDUNDANCY ==>|Master Data<br/>High-speed Write<br/>Real-time Storage| PC_STORAGE
-    
-    %% Storage Tier Management
+    REDUNDANCY ==>|Master Data<br/>High - speed Write<br/>Real - time Storage| PC_STORAGE
+%% Storage Tier Management
     PC_STORAGE ==>|Automated Backup<br/>Redundant Copies<br/>Version Control| BACKUP_STORAGE
-    BACKUP_STORAGE ==>|Long-term Archive<br/>Compressed Storage<br/>Research Database| ARCHIVE_STORAGE
-    
-    %% Export Pipeline
+    BACKUP_STORAGE ==>|Long - term Archive<br/>Compressed Storage<br/>Research Database| ARCHIVE_STORAGE
+%% Export Pipeline
     PC_STORAGE ==>|Source Data<br/>Session Files<br/>Metadata| EXPORT_ENGINE
-    ARCHIVE_STORAGE ==>|Historical Data<br/>Research Archive<br/>Long-term Storage| EXPORT_ENGINE
-    EXPORT_ENGINE ==>|Processed Output<br/>Multi-format<br/>Quality Assured| ANALYSIS_PREP
-    
-    %% Feedback and Control Loops
+    ARCHIVE_STORAGE ==>|Historical Data<br/>Research Archive<br/>Long - term Storage| EXPORT_ENGINE
+    EXPORT_ENGINE ==>|Processed Output<br/>Multi - format<br/>Quality Assured| ANALYSIS_PREP
+%% Feedback and Control Loops
     QC_ENGINE -.->|Quality Metrics<br/>Performance Data<br/>Error Reports| PC_CTRL
     SYNC_ENGINE -.->|Timing Information<br/>Latency Data<br/>Sync Status| PC_CTRL
     PC_CTRL -.->|Control Commands<br/>Configuration Updates<br/>Status Requests| ANDROID1
     PC_CTRL -.->|Control Commands<br/>Configuration Updates<br/>Status Requests| ANDROID2
-
-    class CAM1,CAM2,THERMAL1,THERMAL2,GSR1,GSR2,BRIO1,BRIO2 sourceClass
-    class ANDROID1,ANDROID2,MASTER_CLOCK,SYNC_ENGINE,QC_ENGINE,REDUNDANCY processingClass
-    class MOBILE_STORAGE,PC_STORAGE,BACKUP_STORAGE,ARCHIVE_STORAGE storageClass
-    class PC_CTRL,EXPORT_ENGINE,ANALYSIS_PREP controlClass
+    class CAM1, CAM2, THERMAL1, THERMAL2, GSR1, GSR2, BRIO1, BRIO2 sourceClass
+    class ANDROID1, ANDROID2, MASTER_CLOCK, SYNC_ENGINE, QC_ENGINE, REDUNDANCY processingClass
+    class MOBILE_STORAGE, PC_STORAGE, BACKUP_STORAGE, ARCHIVE_STORAGE storageClass
+    class PC_CTRL, EXPORT_ENGINE, ANALYSIS_PREP controlClass
 ```
 
 ## Networking Architecture
@@ -1164,7 +1130,8 @@ flowchart TD
 
 ## Layer Architecture
 
-Comprehensive multi-layer system architecture showing the complete architectural stack from hardware to application layers.
+Comprehensive multi-layer system architecture showing the complete architectural stack from hardware to application
+layers.
 
 ```mermaid
 graph TB
@@ -1756,119 +1723,119 @@ Comprehensive flowchart showing the complete software installation and configura
 ```mermaid
 flowchart TD
     START([🚀 Installation Start])
-    
-    subgraph "Pre-Installation Checks"
-        SYS_REQ[System Requirements Check<br/>OS Compatibility<br/>Storage Space<br/>Hardware Requirements]
-        JAVA_CHECK[☕ Java Version Check<br/>Java 17/21 Detection<br/>JAVA_HOME Validation<br/>Path Configuration]
-        PYTHON_CHECK[🐍 Python Check<br/>Python 3.8+ Detection<br/>Virtual Environment<br/>Package Manager]
-    end
-    
-    subgraph "Dependency Installation"
-        CONDA_INSTALL[🐍 Conda Installation<br/>Miniconda Download<br/>Environment Setup<br/>Channel Configuration]
-        ANDROID_SDK[Android SDK Setup<br/>SDK Manager<br/>Build Tools<br/>Platform Components]
-        GIT_SETUP[Git Configuration<br/>Git Installation<br/>Credential Setup<br/>Repository Access]
-    end
-    
-    subgraph "Project Setup"
-        REPO_CLONE[Repository Clone<br/>Source Code Download<br/>Submodule Initialization<br/>Branch Selection]
-        ENV_CREATE[🐍 Environment Creation<br/>Conda Environment<br/>Dependencies Install<br/>Package Versions]
-        GRADLE_SETUP[Gradle Configuration<br/>Wrapper Download<br/>Build Settings<br/>Module Configuration]
-    end
-    
-    subgraph "Automated Setup Scripts"
-        WIN_SETUP[🪟 Windows Setup<br/>📜 setup_dev_env.ps1<br/>Automated Configuration<br/>Validation Checks]
-        LINUX_SETUP[🐧 Linux Setup<br/>📜 setup.sh<br/>Package Installation<br/>Environment Config]
-        PYTHON_SETUP[🐍 Python Setup<br/>📜 setup.py<br/>Universal Installer<br/>Cross-platform Support]
-    end
-    
-    subgraph "Development Environment"
-        IDE_CONFIG[IDE Configuration<br/>Android Studio<br/>Project Import<br/>SDK Configuration]
-        PYTHON_IDE[🐍 Python IDE Setup<br/>PyCharm/VSCode<br/>Interpreter Config<br/>Plugin Installation]
-        DEBUG_SETUP[🐛 Debug Configuration<br/>Breakpoint Setup<br/>Logging Config<br/>Profiling Tools]
-    end
-    
-    subgraph "Build Validation"
-        GRADLE_BUILD[🔨 Gradle Build<br/>Project Compilation<br/>Dependency Resolution<br/>Build Verification]
-        ANDROID_BUILD[Android Build<br/>APK Generation<br/>Signing Configuration<br/>Installation Test]
-        PYTHON_BUILD[🐍 Python Build<br/>Package Installation<br/>Import Verification<br/>Runtime Test]
-    end
-    
-    subgraph "Hardware Configuration"
-        USB_CONFIG[🔌 USB Configuration<br/>Device Detection<br/>Driver Installation<br/>Permission Setup]
-        BT_CONFIG[📶 Bluetooth Configuration<br/>📡 Adapter Detection<br/>Service Setup<br/>Pairing Verification]
-        CAMERA_CONFIG[📷 Camera Configuration<br/>🎥 Device Enumeration<br/>Driver Verification<br/>Settings Validation]
-    end
-    
-    subgraph "Network Configuration"
-        WIFI_CONFIG[📶 WiFi Configuration<br/>🌐 Network Setup<br/>Security Settings<br/>Quality Testing]
-        FIREWALL_CONFIG[Firewall Configuration<br/>🚫 Port Rules<br/>Exception Setup<br/>Security Policy]
-        QOS_CONFIG[QoS Configuration<br/>Traffic Prioritization<br/>Bandwidth Allocation<br/>Performance Optimization]
-    end
-    
-    subgraph "Testing and Validation"
-        UNIT_TEST[Unit Testing<br/>Test Execution<br/>Pass Verification<br/>Coverage Report]
-        INTEGRATION_TEST[Integration Testing<br/>Device Communication<br/>Component Interaction<br/>End-to-end Validation]
-        HARDWARE_TEST[Hardware Testing<br/>📷 Camera Functionality<br/>Sensor Validation<br/>🌐 Network Connectivity]
-    end
-    
-    subgraph "Documentation and Training"
-        DOC_INSTALL[Documentation Install<br/>User Guides<br/>API Documentation<br/>Reference Materials]
-        TUTORIAL_SETUP[🎓 Tutorial Setup<br/>Sample Projects<br/>Example Code<br/>Learning Resources]
-        SUPPORT_SETUP[🆘 Support Setup<br/>Contact Information<br/>Troubleshooting Guide<br/>FAQ Resources]
-    end
-    
-    subgraph "Post-Installation"
-        CONFIG_BACKUP[Configuration Backup<br/>Settings Export<br/>Profile Creation<br/>Recovery Setup]
-        UPDATE_SETUP[Update Configuration<br/>Auto-update Setup<br/>Version Tracking<br/>Notification Setup]
-        MONITORING_SETUP[Monitoring Setup<br/>Performance Tracking<br/>Health Checks<br/>Alert Configuration]
-    end
-    
-    %% Installation Flow
-    START --> SYS_REQ
-    SYS_REQ --> JAVA_CHECK
-    JAVA_CHECK --> PYTHON_CHECK
-    
-    PYTHON_CHECK --> CONDA_INSTALL
-    CONDA_INSTALL --> ANDROID_SDK
-    ANDROID_SDK --> GIT_SETUP
-    
-    GIT_SETUP --> REPO_CLONE
-    REPO_CLONE --> ENV_CREATE
-    ENV_CREATE --> GRADLE_SETUP
-    
-    GRADLE_SETUP --> WIN_SETUP
-    GRADLE_SETUP --> LINUX_SETUP
-    GRADLE_SETUP --> PYTHON_SETUP
-    
-    WIN_SETUP --> IDE_CONFIG
-    LINUX_SETUP --> PYTHON_IDE
-    PYTHON_SETUP --> DEBUG_SETUP
-    
-    IDE_CONFIG --> GRADLE_BUILD
-    PYTHON_IDE --> ANDROID_BUILD
-    DEBUG_SETUP --> PYTHON_BUILD
-    
-    GRADLE_BUILD --> USB_CONFIG
-    ANDROID_BUILD --> BT_CONFIG
-    PYTHON_BUILD --> CAMERA_CONFIG
-    
-    USB_CONFIG --> WIFI_CONFIG
-    BT_CONFIG --> FIREWALL_CONFIG
-    CAMERA_CONFIG --> QOS_CONFIG
-    
-    WIFI_CONFIG --> UNIT_TEST
-    FIREWALL_CONFIG --> INTEGRATION_TEST
-    QOS_CONFIG --> HARDWARE_TEST
-    
-    UNIT_TEST --> DOC_INSTALL
-    INTEGRATION_TEST --> TUTORIAL_SETUP
-    HARDWARE_TEST --> SUPPORT_SETUP
-    
-    DOC_INSTALL --> CONFIG_BACKUP
-    TUTORIAL_SETUP --> UPDATE_SETUP
-    SUPPORT_SETUP --> MONITORING_SETUP
-    
-    CONFIG_BACKUP --> SUCCESS([Installation Complete])
-    UPDATE_SETUP --> SUCCESS
-    MONITORING_SETUP --> SUCCESS
+
+subgraph "Pre-Installation Checks"
+SYS_REQ[System Requirements Check<br/>OS Compatibility<br/>Storage Space<br/>Hardware Requirements]
+JAVA_CHECK[☕ Java Version Check<br/>Java 17/21 Detection<br/>JAVA_HOME Validation<br/>Path Configuration]
+PYTHON_CHECK[🐍 Python Check<br/>Python 3.8+ Detection<br/>Virtual Environment<br/>Package Manager]
+end
+
+subgraph "Dependency Installation"
+CONDA_INSTALL[🐍 Conda Installation<br/>Miniconda Download<br/>Environment Setup<br/>Channel Configuration]
+ANDROID_SDK[Android SDK Setup<br/>SDK Manager<br/>Build Tools<br/>Platform Components]
+GIT_SETUP[Git Configuration<br/>Git Installation<br/>Credential Setup<br/>Repository Access]
+end
+
+subgraph "Project Setup"
+REPO_CLONE[Repository Clone<br/>Source Code Download<br/>Submodule Initialization<br/>Branch Selection]
+ENV_CREATE[🐍 Environment Creation<br/>Conda Environment<br/>Dependencies Install<br/>Package Versions]
+GRADLE_SETUP[Gradle Configuration<br/>Wrapper Download<br/>Build Settings<br/>Module Configuration]
+end
+
+subgraph "Automated Setup Scripts"
+WIN_SETUP[🪟 Windows Setup<br/>📜 setup_dev_env.ps1<br/>Automated Configuration<br/>Validation Checks]
+LINUX_SETUP[🐧 Linux Setup<br/>📜 setup.sh<br/>Package Installation<br/>Environment Config]
+PYTHON_SETUP[🐍 Python Setup<br/>📜 setup.py<br/>Universal Installer<br/>Cross-platform Support]
+end
+
+subgraph "Development Environment"
+IDE_CONFIG[IDE Configuration<br/>Android Studio<br/>Project Import<br/>SDK Configuration]
+PYTHON_IDE[🐍 Python IDE Setup<br/>PyCharm/VSCode<br/>Interpreter Config<br/>Plugin Installation]
+DEBUG_SETUP[🐛 Debug Configuration<br/>Breakpoint Setup<br/>Logging Config<br/>Profiling Tools]
+end
+
+subgraph "Build Validation"
+GRADLE_BUILD[🔨 Gradle Build<br/>Project Compilation<br/>Dependency Resolution<br/>Build Verification]
+ANDROID_BUILD[Android Build<br/>APK Generation<br/>Signing Configuration<br/>Installation Test]
+PYTHON_BUILD[🐍 Python Build<br/>Package Installation<br/>Import Verification<br/>Runtime Test]
+end
+
+subgraph "Hardware Configuration"
+USB_CONFIG[🔌 USB Configuration<br/>Device Detection<br/>Driver Installation<br/>Permission Setup]
+BT_CONFIG[📶 Bluetooth Configuration<br/>📡 Adapter Detection<br/>Service Setup<br/>Pairing Verification]
+CAMERA_CONFIG[📷 Camera Configuration<br/>🎥 Device Enumeration<br/>Driver Verification<br/>Settings Validation]
+end
+
+subgraph "Network Configuration"
+WIFI_CONFIG[📶 WiFi Configuration<br/>🌐 Network Setup<br/>Security Settings<br/>Quality Testing]
+FIREWALL_CONFIG[Firewall Configuration<br/>🚫 Port Rules<br/>Exception Setup<br/>Security Policy]
+QOS_CONFIG[QoS Configuration<br/>Traffic Prioritization<br/>Bandwidth Allocation<br/>Performance Optimization]
+end
+
+subgraph "Testing and Validation"
+UNIT_TEST[Unit Testing<br/>Test Execution<br/>Pass Verification<br/>Coverage Report]
+INTEGRATION_TEST[Integration Testing<br/>Device Communication<br/>Component Interaction<br/>End-to-end Validation]
+HARDWARE_TEST[Hardware Testing<br/>📷 Camera Functionality<br/>Sensor Validation<br/>🌐 Network Connectivity]
+end
+
+subgraph "Documentation and Training"
+DOC_INSTALL[Documentation Install<br/>User Guides<br/>API Documentation<br/>Reference Materials]
+TUTORIAL_SETUP[🎓 Tutorial Setup<br/>Sample Projects<br/>Example Code<br/>Learning Resources]
+SUPPORT_SETUP[🆘 Support Setup<br/>Contact Information<br/>Troubleshooting Guide<br/>FAQ Resources]
+end
+
+subgraph "Post-Installation"
+CONFIG_BACKUP[Configuration Backup<br/>Settings Export<br/>Profile Creation<br/>Recovery Setup]
+UPDATE_SETUP[Update Configuration<br/>Auto-update Setup<br/>Version Tracking<br/>Notification Setup]
+MONITORING_SETUP[Monitoring Setup<br/>Performance Tracking<br/>Health Checks<br/>Alert Configuration]
+end
+
+%% Installation Flow
+START --> SYS_REQ
+SYS_REQ --> JAVA_CHECK
+JAVA_CHECK --> PYTHON_CHECK
+
+PYTHON_CHECK --> CONDA_INSTALL
+CONDA_INSTALL --> ANDROID_SDK
+ANDROID_SDK --> GIT_SETUP
+
+GIT_SETUP --> REPO_CLONE
+REPO_CLONE --> ENV_CREATE
+ENV_CREATE --> GRADLE_SETUP
+
+GRADLE_SETUP --> WIN_SETUP
+GRADLE_SETUP --> LINUX_SETUP
+GRADLE_SETUP --> PYTHON_SETUP
+
+WIN_SETUP --> IDE_CONFIG
+LINUX_SETUP --> PYTHON_IDE
+PYTHON_SETUP --> DEBUG_SETUP
+
+IDE_CONFIG --> GRADLE_BUILD
+PYTHON_IDE --> ANDROID_BUILD
+DEBUG_SETUP --> PYTHON_BUILD
+
+GRADLE_BUILD --> USB_CONFIG
+ANDROID_BUILD --> BT_CONFIG
+PYTHON_BUILD --> CAMERA_CONFIG
+
+USB_CONFIG --> WIFI_CONFIG
+BT_CONFIG --> FIREWALL_CONFIG
+CAMERA_CONFIG --> QOS_CONFIG
+
+WIFI_CONFIG --> UNIT_TEST
+FIREWALL_CONFIG --> INTEGRATION_TEST
+QOS_CONFIG --> HARDWARE_TEST
+
+UNIT_TEST --> DOC_INSTALL
+INTEGRATION_TEST --> TUTORIAL_SETUP
+HARDWARE_TEST --> SUPPORT_SETUP
+
+DOC_INSTALL --> CONFIG_BACKUP
+TUTORIAL_SETUP --> UPDATE_SETUP
+SUPPORT_SETUP --> MONITORING_SETUP
+
+CONFIG_BACKUP --> SUCCESS([Installation Complete])
+UPDATE_SETUP --> SUCCESS
+MONITORING_SETUP --> SUCCESS
 ```

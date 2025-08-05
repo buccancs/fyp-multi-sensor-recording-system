@@ -1,10 +1,5 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-import com.multisensor.recording.util.NetworkUtils
-
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -12,10 +7,10 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.telephony.SignalStrength
 import android.telephony.TelephonyManager
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.multisensor.recording.util.NetworkUtils
 import kotlinx.coroutines.*
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -176,7 +171,10 @@ class NetworkController @Inject constructor() {
         callback?.onNetworkStatusChanged(true)
 
         if (isRecoveryInProgress && isStreamingActive) {
-            android.util.Log.i("NetworkController", "[DEBUG_LOG] Attempting streaming recovery on network: $networkType")
+            android.util.Log.i(
+                "NetworkController",
+                "[DEBUG_LOG] Attempting streaming recovery on network: $networkType"
+            )
             callback?.onNetworkRecovery(networkType)
             isRecoveryInProgress = false
         }
@@ -198,11 +196,18 @@ class NetworkController @Inject constructor() {
         }
     }
 
-    private fun handleNetworkCapabilitiesChanged(context: Context, network: Network, capabilities: NetworkCapabilities) {
+    private fun handleNetworkCapabilitiesChanged(
+        context: Context,
+        network: Network,
+        capabilities: NetworkCapabilities
+    ) {
         val hasInternet = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         val isValidated = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 
-        android.util.Log.d("NetworkController", "[DEBUG_LOG] Network capabilities - Internet: $hasInternet, Validated: $isValidated")
+        android.util.Log.d(
+            "NetworkController",
+            "[DEBUG_LOG] Network capabilities - Internet: $hasInternet, Validated: $isValidated"
+        )
 
         if (hasInternet && isValidated) {
             handleNetworkAvailable(context, network)
@@ -230,7 +235,10 @@ class NetworkController @Inject constructor() {
         }
 
         connectionRetryCount++
-        android.util.Log.i("NetworkController", "[DEBUG_LOG] Attempting streaming recovery (attempt $connectionRetryCount/$maxRetryAttempts)")
+        android.util.Log.i(
+            "NetworkController",
+            "[DEBUG_LOG] Attempting streaming recovery (attempt $connectionRetryCount/$maxRetryAttempts)"
+        )
 
         streamingScope.launch {
             delay(2000L * connectionRetryCount)
@@ -321,8 +329,16 @@ class NetworkController @Inject constructor() {
         updateStreamingDebugOverlay()
     }
 
-    fun updateStreamingIndicator(context: Context, isStreaming: Boolean, frameRate: Int = 0, dataSize: String = "0 KB/s") {
-        android.util.Log.d("NetworkController", "[DEBUG_LOG] Updating streaming indicator: streaming=$isStreaming, fps=$frameRate, size=$dataSize")
+    fun updateStreamingIndicator(
+        context: Context,
+        isStreaming: Boolean,
+        frameRate: Int = 0,
+        dataSize: String = "0 KB/s"
+    ) {
+        android.util.Log.d(
+            "NetworkController",
+            "[DEBUG_LOG] Updating streaming indicator: streaming=$isStreaming, fps=$frameRate, size=$dataSize"
+        )
 
         if (isStreaming && frameRate > 0) {
             currentFrameRate = frameRate
@@ -396,7 +412,10 @@ class NetworkController @Inject constructor() {
     }
 
     fun startStreaming(context: Context) {
-        android.util.Log.d("NetworkController", "[DEBUG_LOG] Starting streaming session with protocol: $currentStreamingProtocol")
+        android.util.Log.d(
+            "NetworkController",
+            "[DEBUG_LOG] Starting streaming session with protocol: $currentStreamingProtocol"
+        )
 
         if (isStreamingActive) {
             android.util.Log.w("NetworkController", "[DEBUG_LOG] Streaming already active")
@@ -442,7 +461,10 @@ class NetworkController @Inject constructor() {
                 try {
                     runAdvancedStreamingSession(context, targetFps, dataSize)
                 } catch (e: Exception) {
-                    android.util.Log.e("NetworkController", "[DEBUG_LOG] Advanced streaming session error: ${e.message}")
+                    android.util.Log.e(
+                        "NetworkController",
+                        "[DEBUG_LOG] Advanced streaming session error: ${e.message}"
+                    )
                     handleStreamingError(context, "Advanced streaming session error: ${e.message}")
                 }
             }
@@ -508,7 +530,10 @@ class NetworkController @Inject constructor() {
         var dynamicFps = targetFps
         var bitrateMultiplier = 1.0
 
-        android.util.Log.d("NetworkController", "[DEBUG_LOG] Advanced streaming session: ${targetFps}fps, ${frameInterval}ms interval, ${bytesPerFrame} bytes/frame, Protocol: ${currentStreamingProtocol.displayName}")
+        android.util.Log.d(
+            "NetworkController",
+            "[DEBUG_LOG] Advanced streaming session: ${targetFps}fps, ${frameInterval}ms interval, ${bytesPerFrame} bytes/frame, Protocol: ${currentStreamingProtocol.displayName}"
+        )
 
         while (isStreamingActive && !streamingJob?.isCancelled!!) {
             try {
@@ -540,7 +565,10 @@ class NetworkController @Inject constructor() {
                 if (shouldDropFrame(networkLatency, bufferLevel)) {
                     frameDropCount++
                     callback?.onFrameDropped("Network congestion: latency=${networkLatency}ms, buffer=${bufferLevel}%")
-                    android.util.Log.w("NetworkController", "[DEBUG_LOG] Frame dropped - Latency: ${networkLatency}ms, Buffer: ${bufferLevel}%")
+                    android.util.Log.w(
+                        "NetworkController",
+                        "[DEBUG_LOG] Frame dropped - Latency: ${networkLatency}ms, Buffer: ${bufferLevel}%"
+                    )
 
                     delay(frameInterval)
                     continue
@@ -721,7 +749,10 @@ class NetworkController @Inject constructor() {
         totalBytesTransmitted += bytesPerFrame
 
         if (totalBytesTransmitted % (1024 * 1024) == 0L) {
-            android.util.Log.d("NetworkController", "[DEBUG_LOG] Transmitted: ${totalBytesTransmitted / (1024 * 1024)}MB")
+            android.util.Log.d(
+                "NetworkController",
+                "[DEBUG_LOG] Transmitted: ${totalBytesTransmitted / (1024 * 1024)}MB"
+            )
         }
     }
 
@@ -758,7 +789,10 @@ class NetworkController @Inject constructor() {
         }
 
         if (recommendedQuality != currentQuality) {
-            android.util.Log.i("NetworkController", "[DEBUG_LOG] Adjusting quality from $currentQuality to $recommendedQuality for network: $networkType")
+            android.util.Log.i(
+                "NetworkController",
+                "[DEBUG_LOG] Adjusting quality from $currentQuality to $recommendedQuality for network: $networkType"
+            )
             setStreamingQuality(recommendedQuality)
         }
     }
@@ -766,9 +800,9 @@ class NetworkController @Inject constructor() {
     private fun isNetworkRecoverableError(error: Exception): Boolean {
         val message = error.message?.lowercase() ?: ""
         return message.contains("timeout") ||
-               message.contains("connection reset") ||
-               message.contains("network unreachable") ||
-               message.contains("temporary failure")
+                message.contains("connection reset") ||
+                message.contains("network unreachable") ||
+                message.contains("temporary failure")
     }
 
     private fun handleStreamingError(context: Context, errorMessage: String) {
@@ -868,12 +902,21 @@ class NetworkController @Inject constructor() {
             callback?.updateStatusText("Streaming quality changed: $quality ($resolution, ${targetFps}fps)")
             callback?.onStreamingQualityChanged(quality)
 
-            android.util.Log.i("NetworkController", "[DEBUG_LOG] Active streaming quality changed from $previousQuality to $quality")
+            android.util.Log.i(
+                "NetworkController",
+                "[DEBUG_LOG] Active streaming quality changed from $previousQuality to $quality"
+            )
         } else {
-            android.util.Log.d("NetworkController", "[DEBUG_LOG] Quality preset changed to $quality (will apply when streaming starts)")
+            android.util.Log.d(
+                "NetworkController",
+                "[DEBUG_LOG] Quality preset changed to $quality (will apply when streaming starts)"
+            )
         }
 
-        android.util.Log.d("NetworkController", "[DEBUG_LOG] Quality settings applied: $resolution, ${targetFps}fps, $dataSize")
+        android.util.Log.d(
+            "NetworkController",
+            "[DEBUG_LOG] Quality settings applied: $resolution, ${targetFps}fps, $dataSize"
+        )
     }
 
     enum class StreamingQuality(val displayName: String) {
@@ -960,7 +1003,10 @@ class NetworkController @Inject constructor() {
             currentDataSize = "0 KB/s"
 
             callback?.onStreamingError("Emergency stop failed: ${e.message}")
-            callback?.showToast("Emergency stop failed - Manual intervention may be required", android.widget.Toast.LENGTH_LONG)
+            callback?.showToast(
+                "Emergency stop failed - Manual intervention may be required",
+                android.widget.Toast.LENGTH_LONG
+            )
         }
     }
 
@@ -972,7 +1018,10 @@ class NetworkController @Inject constructor() {
         currentStreamingProtocol = protocol
 
         if (!validateProtocolCompatibility(protocol)) {
-            android.util.Log.w("NetworkController", "[DEBUG_LOG] Protocol $protocol incompatible with current network, reverting to $previousProtocol")
+            android.util.Log.w(
+                "NetworkController",
+                "[DEBUG_LOG] Protocol $protocol incompatible with current network, reverting to $previousProtocol"
+            )
             currentStreamingProtocol = previousProtocol
             callback?.onStreamingError("Protocol $protocol not compatible with current network")
             return
@@ -994,18 +1043,23 @@ class NetworkController @Inject constructor() {
             StreamingProtocol.RTMP -> {
                 estimatedBandwidth > 1_000_000L && networkType in listOf("WiFi", "4G LTE", "Ethernet")
             }
+
             StreamingProtocol.WEBRTC -> {
                 true
             }
+
             StreamingProtocol.HLS -> {
                 estimatedBandwidth > 500_000L
             }
+
             StreamingProtocol.DASH -> {
                 true
             }
+
             StreamingProtocol.UDP -> {
                 true
             }
+
             StreamingProtocol.TCP -> {
                 true
             }
@@ -1019,26 +1073,31 @@ class NetworkController @Inject constructor() {
                 frameDropEnabled = false
                 encryptionEnabled = false
             }
+
             StreamingProtocol.WEBRTC -> {
                 adaptiveBitrateEnabled = true
                 frameDropEnabled = true
                 encryptionEnabled = true
             }
+
             StreamingProtocol.HLS -> {
                 adaptiveBitrateEnabled = true
                 frameDropEnabled = false
                 encryptionEnabled = false
             }
+
             StreamingProtocol.DASH -> {
                 adaptiveBitrateEnabled = true
                 frameDropEnabled = false
                 encryptionEnabled = false
             }
+
             StreamingProtocol.UDP -> {
                 adaptiveBitrateEnabled = true
                 frameDropEnabled = true
                 encryptionEnabled = false
             }
+
             StreamingProtocol.TCP -> {
                 adaptiveBitrateEnabled = true
                 frameDropEnabled = false
@@ -1057,13 +1116,16 @@ class NetworkController @Inject constructor() {
             BandwidthEstimationMethod.MACHINE_LEARNING -> {
                 initializeMachineLearningModel()
             }
+
             BandwidthEstimationMethod.ADAPTIVE -> {
                 initializeAdaptiveAnalysis()
             }
+
             BandwidthEstimationMethod.HYBRID -> {
                 initializeMachineLearningModel()
                 initializeAdaptiveAnalysis()
             }
+
             BandwidthEstimationMethod.SIMPLE -> {
             }
         }
@@ -1151,7 +1213,10 @@ class NetworkController @Inject constructor() {
                             val rssi = wifiInfo.rssi
                             val signalLevel = wifiManager.calculateSignalLevel(rssi)
                             val percentage = ((signalLevel + 1) * 100) / 5
-                            android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $percentage% (Level: $signalLevel, RSSI: $rssi)")
+                            android.util.Log.d(
+                                "NetworkController",
+                                "[DEBUG_LOG] WiFi signal strength: $percentage% (Level: $signalLevel, RSSI: $rssi)"
+                            )
                             percentage
                         } catch (e: SecurityException) {
                             android.util.Log.w("NetworkController", "Permission denied for WiFi info")
@@ -1164,7 +1229,10 @@ class NetworkController @Inject constructor() {
                             if (wifiInfo != null) {
                                 val rssi = wifiInfo.rssi
                                 val signalLevel = WifiManager.calculateSignalLevel(rssi, 100)
-                                android.util.Log.d("NetworkController", "[DEBUG_LOG] WiFi signal strength: $signalLevel% (RSSI: $rssi)")
+                                android.util.Log.d(
+                                    "NetworkController",
+                                    "[DEBUG_LOG] WiFi signal strength: $signalLevel% (RSSI: $rssi)"
+                                )
                                 signalLevel
                             } else {
                                 android.util.Log.w("NetworkController", "WiFi info not available")
@@ -1176,30 +1244,44 @@ class NetworkController @Inject constructor() {
                         }
                     }
                 }
+
                 networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> {
                     val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
-                        try {
-                            val cellInfos = telephonyManager.allCellInfo
-                            if (cellInfos != null && cellInfos.isNotEmpty()) {
-                                val cellInfo = cellInfos[0]
-                                val signalStrength = cellInfo.cellSignalStrength
-                                val level = signalStrength.level
+                    try {
+                        val cellInfos = telephonyManager.allCellInfo
+                        if (cellInfos != null && cellInfos.isNotEmpty()) {
+                            val cellInfo = cellInfos[0]
+                            val signalStrength = cellInfo.cellSignalStrength
+                            val level = signalStrength.level
 
-                                val percentage = (level * 25).coerceIn(0, 100)
-                                android.util.Log.d("NetworkController", "[DEBUG_LOG] Cellular signal strength: $percentage% (level: $level)")
-                                percentage
-                            } else {
-                                android.util.Log.d("NetworkController", "[DEBUG_LOG] No cellular info available, using default")
-                                75
-                            }
-                        } catch (e: SecurityException) {
-                            android.util.Log.w("NetworkController", "[DEBUG_LOG] Missing permissions for cellular signal strength")
+                            val percentage = (level * 25).coerceIn(0, 100)
+                            android.util.Log.d(
+                                "NetworkController",
+                                "[DEBUG_LOG] Cellular signal strength: $percentage% (level: $level)"
+                            )
+                            percentage
+                        } else {
+                            android.util.Log.d(
+                                "NetworkController",
+                                "[DEBUG_LOG] No cellular info available, using default"
+                            )
                             75
                         }
+                    } catch (e: SecurityException) {
+                        android.util.Log.w(
+                            "NetworkController",
+                            "[DEBUG_LOG] Missing permissions for cellular signal strength"
+                        )
+                        75
                     }
+                }
+
                 else -> {
-                    android.util.Log.d("NetworkController", "[DEBUG_LOG] Unknown network type, using default signal strength")
+                    android.util.Log.d(
+                        "NetworkController",
+                        "[DEBUG_LOG] Unknown network type, using default signal strength"
+                    )
                     75
                 }
             }
@@ -1273,7 +1355,10 @@ class NetworkController @Inject constructor() {
             decryptionCipher?.init(Cipher.DECRYPT_MODE, encryptionKey, IvParameterSpec(encryptionIv))
 
             android.util.Log.i("NetworkController", "[DEBUG_LOG] AES-256 encryption initialized successfully")
-            android.util.Log.d("NetworkController", "[DEBUG_LOG] - Key length: ${encryptionKey?.encoded?.size ?: 0} bytes")
+            android.util.Log.d(
+                "NetworkController",
+                "[DEBUG_LOG] - Key length: ${encryptionKey?.encoded?.size ?: 0} bytes"
+            )
             android.util.Log.d("NetworkController", "[DEBUG_LOG] - IV length: ${encryptionIv?.size ?: 0} bytes")
 
             return true
@@ -1344,11 +1429,17 @@ class NetworkController @Inject constructor() {
         }
 
         private fun trainModel() {
-            android.util.Log.d("NetworkController", "[DEBUG_LOG] Starting ML model training with ${trainingData.size} data points")
+            android.util.Log.d(
+                "NetworkController",
+                "[DEBUG_LOG] Starting ML model training with ${trainingData.size} data points"
+            )
 
             try {
                 if (trainingData.size < 3) {
-                    android.util.Log.w("NetworkController", "[DEBUG_LOG] Insufficient training data, using default model")
+                    android.util.Log.w(
+                        "NetworkController",
+                        "[DEBUG_LOG] Insufficient training data, using default model"
+                    )
                     isModelTrained = true
                     return
                 }
@@ -1386,7 +1477,10 @@ class NetworkController @Inject constructor() {
                     modelSlope = slope
                     modelIntercept = intercept
                 } else {
-                    android.util.Log.w("NetworkController", "[DEBUG_LOG] Model training failed: insufficient variance in data")
+                    android.util.Log.w(
+                        "NetworkController",
+                        "[DEBUG_LOG] Model training failed: insufficient variance in data"
+                    )
                 }
 
                 isModelTrained = true
@@ -1417,7 +1511,10 @@ class NetworkController @Inject constructor() {
             )
 
             trainingData.add(dataPoint)
-            android.util.Log.d("NetworkController", "[DEBUG_LOG] Added training data: ${bandwidth}bps, $networkType, signal:$signalStrength%")
+            android.util.Log.d(
+                "NetworkController",
+                "[DEBUG_LOG] Added training data: ${bandwidth}bps, $networkType, signal:$signalStrength%"
+            )
 
             if (trainingData.size % 10 == 0) {
                 isModelTrained = false

@@ -2,7 +2,6 @@ package com.multisensor.recording.protocol;
 
 import android.content.Context;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -148,29 +147,29 @@ public class SchemaManager {
 
             case "preview_frame":
                 return message.has("frame_id") &&
-                       message.has("image_data") &&
-                       message.has("width") &&
-                       message.has("height");
+                        message.has("image_data") &&
+                        message.has("width") &&
+                        message.has("height");
 
             case "file_chunk":
                 return message.has("file_id") &&
-                       message.has("chunk_index") &&
-                       message.has("total_chunks") &&
-                       message.has("chunk_data") &&
-                       message.has("chunk_size") &&
-                       message.has("file_type");
+                        message.has("chunk_index") &&
+                        message.has("total_chunks") &&
+                        message.has("chunk_data") &&
+                        message.has("chunk_size") &&
+                        message.has("file_type");
 
             case "device_status":
                 return message.has("device_id") &&
-                       message.has("status");
+                        message.has("status");
 
             case "ack":
                 return message.has("message_id") &&
-                       message.has("success");
+                        message.has("success");
 
             case "calibration_start":
                 return message.has("pattern_type") &&
-                       message.has("pattern_size");
+                        message.has("pattern_size");
 
             case "calibration_result":
                 return message.has("success");

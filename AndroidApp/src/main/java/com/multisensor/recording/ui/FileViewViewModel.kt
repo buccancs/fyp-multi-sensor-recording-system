@@ -78,8 +78,8 @@ class FileViewViewModel @Inject constructor(
         }
 
         val fileCount = (if (sessionInfo.videoFilePath != null) 1 else 0) +
-                       sessionInfo.rawFilePaths.size +
-                       (if (sessionInfo.thermalFilePath != null) 1 else 0)
+                sessionInfo.rawFilePaths.size +
+                (if (sessionInfo.thermalFilePath != null) 1 else 0)
 
         return SessionItem(
             sessionId = sessionInfo.sessionId,
@@ -222,8 +222,8 @@ class FileViewViewModel @Inject constructor(
         } else {
             currentState.sessions.filter { session ->
                 session.sessionId.contains(query, ignoreCase = true) ||
-                session.name.contains(query, ignoreCase = true) ||
-                session.deviceTypes.any { it.contains(query, ignoreCase = true) }
+                        session.name.contains(query, ignoreCase = true) ||
+                        session.deviceTypes.any { it.contains(query, ignoreCase = true) }
             }
         }
 

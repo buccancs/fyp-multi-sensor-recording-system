@@ -100,10 +100,12 @@ class CrashRecoveryManager @Inject constructor(
                         logger.info("CrashRecovery: Removing incomplete video file ${file.name}")
                         file.delete()
                     }
+
                     file.name.endsWith(".tmp") -> {
                         logger.info("CrashRecovery: Removing temporary file ${file.name}")
                         file.delete()
                     }
+
                     file.name.endsWith(".dng") && file.length() < 1024 -> {
                         logger.info("CrashRecovery: Removing incomplete DNG file ${file.name}")
                         file.delete()

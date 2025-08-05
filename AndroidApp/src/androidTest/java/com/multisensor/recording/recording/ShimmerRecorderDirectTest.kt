@@ -2,7 +2,6 @@ package com.multisensor.recording.recording
 
 import android.Manifest
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger

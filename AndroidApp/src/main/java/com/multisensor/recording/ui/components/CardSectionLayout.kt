@@ -35,18 +35,21 @@ class CardSectionLayout @JvmOverloads constructor(
                 elevation = dpToPx(2).toFloat()
                 setMargins(0, 0, 0, dpToPx(16))
             }
+
             CardStyle.COMPACT -> {
                 setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
                 setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12))
                 elevation = dpToPx(2).toFloat()
                 setMargins(0, 0, 0, dpToPx(8))
             }
+
             CardStyle.FLAT -> {
                 setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
                 setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16))
                 elevation = 0f
                 setMargins(0, 0, 0, dpToPx(16))
             }
+
             CardStyle.DARK -> {
                 setBackgroundColor(ContextCompat.getColor(context, android.R.color.black))
                 setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16))
@@ -78,7 +81,10 @@ class CardSectionLayout @JvmOverloads constructor(
         layoutParams = params
     }
 
-    fun addHeader(headerText: String, headerStyle: SectionHeaderView.HeaderStyle = SectionHeaderView.HeaderStyle.SECTION_HEADER) {
+    fun addHeader(
+        headerText: String,
+        headerStyle: SectionHeaderView.HeaderStyle = SectionHeaderView.HeaderStyle.SECTION_HEADER
+    ) {
         val header = SectionHeaderView(context)
         header.setHeader(headerText, headerStyle)
 
@@ -91,6 +97,7 @@ class CardSectionLayout @JvmOverloads constructor(
                     header.setLightTheme()
                 }
             }
+
             else -> header.setLightTheme()
         }
 
@@ -111,6 +118,7 @@ class CardSectionLayout @JvmOverloads constructor(
             is GradientDrawable -> {
                 Color.WHITE
             }
+
             else -> {
                 Color.WHITE
             }

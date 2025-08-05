@@ -1,11 +1,14 @@
+import cv2
+import numpy as np
 import os
 import time
 from pathlib import Path
 from typing import List, Optional, Dict, Any
-import cv2
-import numpy as np
-from .utils import SegmentationConfig, SegmentationMethod, HandRegion, ProcessingResult, crop_frame_to_region, resize_frame, save_processing_metadata
-from .models import BaseHandSegmentation, MediaPipeHandSegmentation, ColorBasedHandSegmentation, ContourBasedHandSegmentation
+
+from .models import BaseHandSegmentation, MediaPipeHandSegmentation, ColorBasedHandSegmentation, \
+    ContourBasedHandSegmentation
+from .utils import SegmentationConfig, SegmentationMethod, HandRegion, ProcessingResult, crop_frame_to_region, \
+    resize_frame, save_processing_metadata
 
 
 class HandSegmentationEngine:

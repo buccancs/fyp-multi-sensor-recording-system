@@ -1,6 +1,8 @@
 # Thermal Camera Integration Module
 
-The Thermal Camera Integration System provides comprehensive thermal imaging capabilities through TopDon TC001 thermal cameras, enabling synchronized thermal data collection with precise temporal alignment across the Multi-Sensor Recording System.
+The Thermal Camera Integration System provides comprehensive thermal imaging capabilities through TopDon TC001 thermal
+cameras, enabling synchronized thermal data collection with precise temporal alignment across the Multi-Sensor Recording
+System.
 
 ## Table of Contents
 
@@ -17,9 +19,12 @@ The Thermal Camera Integration System provides comprehensive thermal imaging cap
 
 ### System Role and Responsibilities
 
-The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001 cameras connected via USB-C OTG to Android devices, providing synchronized thermal data streams for multi-modal research applications.
+The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001
+cameras connected via USB-C OTG to Android devices, providing synchronized thermal data streams for multi-modal research
+applications.
 
 **Primary Functions:**
+
 - **Thermal Image Acquisition**: High-resolution thermal imaging with configurable frame rates
 - **Temperature Measurement**: Accurate temperature readings with calibrated sensors
 - **USB-C OTG Integration**: Direct hardware interface through Android USB connectivity
@@ -418,22 +423,22 @@ class ThermalSynchronizer {
 #### Physical Connection
 
 1. **Required Hardware**:
-   - TopDon TC001 thermal camera
-   - USB-C OTG adapter
-   - Samsung S22 smartphone
-   - USB-C cable
+    - TopDon TC001 thermal camera
+    - USB-C OTG adapter
+    - Samsung S22 smartphone
+    - USB-C cable
 
 2. **Connection Procedure**:
-   - Connect thermal camera to USB-C OTG adapter
-   - Connect OTG adapter to smartphone USB-C port
-   - Verify power indicator on thermal camera
-   - Launch Multi-Sensor Recording app
+    - Connect thermal camera to USB-C OTG adapter
+    - Connect OTG adapter to smartphone USB-C port
+    - Verify power indicator on thermal camera
+    - Launch Multi-Sensor Recording app
 
 3. **Verification Steps**:
-   - Check thermal camera detection in app
-   - Verify USB OTG permission granted
-   - Test thermal imaging functionality
-   - Validate temperature readings
+    - Check thermal camera detection in app
+    - Verify USB OTG permission granted
+    - Test thermal imaging functionality
+    - Validate temperature readings
 
 #### Initial Configuration
 
@@ -449,54 +454,54 @@ class ThermalSynchronizer {
    ```
 
 2. **Calibration Setup**:
-   - Position calibration target in view
-   - Capture thermal calibration images
-   - Process RGB-thermal alignment
-   - Validate calibration accuracy
+    - Position calibration target in view
+    - Capture thermal calibration images
+    - Process RGB-thermal alignment
+    - Validate calibration accuracy
 
 ### Recording Workflow
 
 #### Pre-Recording Setup
 
 1. **Environment Preparation**:
-   - Ensure stable ambient temperature
-   - Minimize heat sources in background
-   - Position subjects at appropriate distance
-   - Allow thermal camera warmup time (2-3 minutes)
+    - Ensure stable ambient temperature
+    - Minimize heat sources in background
+    - Position subjects at appropriate distance
+    - Allow thermal camera warmup time (2-3 minutes)
 
 2. **Quality Verification**:
-   - Check thermal image clarity
-   - Verify temperature measurement accuracy
-   - Test synchronization with RGB camera
-   - Validate frame rate stability
+    - Check thermal image clarity
+    - Verify temperature measurement accuracy
+    - Test synchronization with RGB camera
+    - Validate frame rate stability
 
 #### Recording Execution
 
 1. **Start Recording**:
-   - Initialize thermal recording from PC controller
-   - Monitor real-time thermal display
-   - Verify synchronization indicators
-   - Check data quality metrics
+    - Initialize thermal recording from PC controller
+    - Monitor real-time thermal display
+    - Verify synchronization indicators
+    - Check data quality metrics
 
 2. **During Recording**:
-   - Monitor thermal uniformity
-   - Check for thermal artifacts
-   - Verify subject tracking
-   - Watch storage space indicators
+    - Monitor thermal uniformity
+    - Check for thermal artifacts
+    - Verify subject tracking
+    - Watch storage space indicators
 
 #### Post-Recording Analysis
 
 1. **Data Validation**:
-   - Verify thermal data completeness
-   - Check temperature range validity
-   - Validate synchronization accuracy
-   - Review quality metrics
+    - Verify thermal data completeness
+    - Check temperature range validity
+    - Validate synchronization accuracy
+    - Review quality metrics
 
 2. **Export Options**:
-   - Raw thermal data (binary format)
-   - Processed temperature matrices (CSV)
-   - Visual thermal images (PNG/JPEG)
-   - Analysis-ready datasets (HDF5)
+    - Raw thermal data (binary format)
+    - Processed temperature matrices (CSV)
+    - Visual thermal images (PNG/JPEG)
+    - Analysis-ready datasets (HDF5)
 
 ## API Reference
 
@@ -608,6 +613,7 @@ def test_thermal_rgb_synchronization():
 
 **Symptoms**: Thermal camera not detected
 **Solutions**:
+
 1. Check USB-C OTG adapter compatibility
 2. Verify USB permissions granted
 3. Test with different USB-C cable
@@ -617,6 +623,7 @@ def test_thermal_rgb_synchronization():
 
 **Symptoms**: Inaccurate temperature readings
 **Solutions**:
+
 1. Check emissivity settings for target material
 2. Verify ambient temperature compensation
 3. Allow sufficient camera warmup time
@@ -626,6 +633,7 @@ def test_thermal_rgb_synchronization():
 
 **Symptoms**: Thermal and RGB data misaligned
 **Solutions**:
+
 1. Verify synchronization timestamp accuracy
 2. Check network latency compensation
 3. Validate master clock synchronization
@@ -633,4 +641,5 @@ def test_thermal_rgb_synchronization():
 
 ---
 
-*For related modules, see [Android Mobile Application](../android-mobile-application/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*For related modules, see [Android Mobile Application](../android-mobile-application/README.md)
+and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*

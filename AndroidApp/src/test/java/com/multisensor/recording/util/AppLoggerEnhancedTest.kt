@@ -1,9 +1,7 @@
 package com.multisensor.recording.util
 
 import android.content.Context
-import android.os.Build
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -166,11 +164,11 @@ class AppLoggerEnhancedTest {
 
         AppLogger.logNetwork(tag, "GET", "https://api.example.com", "200 OK", 150L, context)
 
-        AppLogger.logRecording(tag, "start", "Camera1", 5000L, 1024*1024L, context)
+        AppLogger.logRecording(tag, "start", "Camera1", 5000L, 1024 * 1024L, context)
 
         AppLogger.logSensor(tag, "reading", "GSR", "1.23", 3, System.currentTimeMillis(), context)
 
-        AppLogger.logFile(tag, "save", "test.mp4", 1024*1024L, 250L, true, context)
+        AppLogger.logFile(tag, "save", "test.mp4", 1024 * 1024L, 250L, true, context)
         AppLogger.logFile(tag, "save", "failed.mp4", null, 100L, false, context)
 
         AppLogger.logStateChange(tag, "Camera", "IDLE", "RECORDING", context)
@@ -253,11 +251,15 @@ class AppLoggerEnhancedTest {
             }
         }
 
-        assertTrue("All threads should complete within timeout",
-                  latch.await(30, TimeUnit.SECONDS))
+        assertTrue(
+            "All threads should complete within timeout",
+            latch.await(30, TimeUnit.SECONDS)
+        )
 
-        assertTrue("No exceptions should occur during concurrent logging: ${exceptions.joinToString()}",
-                  exceptions.isEmpty())
+        assertTrue(
+            "No exceptions should occur during concurrent logging: ${exceptions.joinToString()}",
+            exceptions.isEmpty()
+        )
 
         val stats = AppLogger.getPerformanceStats()
         assertTrue("Should have performance stats from threads", stats.isNotEmpty())

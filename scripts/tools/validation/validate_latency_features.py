@@ -6,8 +6,8 @@ This script validates the latency measurement implementation without
 requiring PyQt5 or complex dependencies.
 """
 
-import time
 import json
+import time
 from collections import deque
 
 

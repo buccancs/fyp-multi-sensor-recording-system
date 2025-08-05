@@ -16,49 +16,68 @@
           "description": "Unix timestamp in milliseconds when message was created"
         }
       },
-      "required": ["type", "timestamp"]
+      "required": [
+        "type",
+        "timestamp"
+      ]
     }
   },
   "oneOf": [
     {
       "title": "Start Record Command",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "start_record"},
+            "type": {
+              "const": "start_record"
+            },
             "session_id": {
               "type": "string",
               "description": "Unique identifier for the recording session"
             }
           },
-          "required": ["session_id"]
+          "required": [
+            "session_id"
+          ]
         }
       ]
     },
     {
-      "title": "Stop Record Command", 
+      "title": "Stop Record Command",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "stop_record"},
+            "type": {
+              "const": "stop_record"
+            },
             "session_id": {
               "type": "string",
               "description": "Session identifier to correlate with start command"
             }
           },
-          "required": ["session_id"]
+          "required": [
+            "session_id"
+          ]
         }
       ]
     },
     {
       "title": "Preview Frame Data",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "preview_frame"},
+            "type": {
+              "const": "preview_frame"
+            },
             "frame_id": {
               "type": "integer",
               "minimum": 0,
@@ -74,22 +93,31 @@
               "description": "Frame width in pixels"
             },
             "height": {
-              "type": "integer", 
+              "type": "integer",
               "minimum": 1,
               "description": "Frame height in pixels"
             }
           },
-          "required": ["frame_id", "image_data", "width", "height"]
+          "required": [
+            "frame_id",
+            "image_data",
+            "width",
+            "height"
+          ]
         }
       ]
     },
     {
       "title": "File Chunk Data",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "file_chunk"},
+            "type": {
+              "const": "file_chunk"
+            },
             "file_id": {
               "type": "string",
               "description": "Unique identifier for the file being transferred"
@@ -115,28 +143,49 @@
             },
             "file_type": {
               "type": "string",
-              "enum": ["video", "audio", "sensor", "metadata"],
+              "enum": [
+                "video",
+                "audio",
+                "sensor",
+                "metadata"
+              ],
               "description": "Type of file being transferred"
             }
           },
-          "required": ["file_id", "chunk_index", "total_chunks", "chunk_data", "chunk_size", "file_type"]
+          "required": [
+            "file_id",
+            "chunk_index",
+            "total_chunks",
+            "chunk_data",
+            "chunk_size",
+            "file_type"
+          ]
         }
       ]
     },
     {
       "title": "Device Status Update",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "device_status"},
+            "type": {
+              "const": "device_status"
+            },
             "device_id": {
               "type": "string",
               "description": "Unique device identifier"
             },
             "status": {
               "type": "string",
-              "enum": ["idle", "recording", "processing", "error"],
+              "enum": [
+                "idle",
+                "recording",
+                "processing",
+                "error"
+              ],
               "description": "Current device status"
             },
             "battery_level": {
@@ -151,17 +200,24 @@
               "description": "Available storage in MB"
             }
           },
-          "required": ["device_id", "status"]
+          "required": [
+            "device_id",
+            "status"
+          ]
         }
       ]
     },
     {
       "title": "Acknowledgment Message",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "ack"},
+            "type": {
+              "const": "ack"
+            },
             "message_id": {
               "type": "string",
               "description": "ID of the message being acknowledged"
@@ -175,42 +231,69 @@
               "description": "Error description if success is false"
             }
           },
-          "required": ["message_id", "success"]
+          "required": [
+            "message_id",
+            "success"
+          ]
         }
       ]
     },
     {
       "title": "Calibration Command",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "calibration_start"},
+            "type": {
+              "const": "calibration_start"
+            },
             "pattern_type": {
               "type": "string",
-              "enum": ["chessboard", "circles", "asymmetric_circles"],
+              "enum": [
+                "chessboard",
+                "circles",
+                "asymmetric_circles"
+              ],
               "description": "Type of calibration pattern to use"
             },
             "pattern_size": {
               "type": "object",
               "properties": {
-                "rows": {"type": "integer", "minimum": 3},
-                "cols": {"type": "integer", "minimum": 3}
+                "rows": {
+                  "type": "integer",
+                  "minimum": 3
+                },
+                "cols": {
+                  "type": "integer",
+                  "minimum": 3
+                }
               },
-              "required": ["rows", "cols"]
+              "required": [
+                "rows",
+                "cols"
+              ]
             }
           },
-          "required": ["pattern_type", "pattern_size"]
+          "required": [
+            "pattern_type",
+            "pattern_size"
+          ]
         }
       ]
     },
     {
       "title": "Calibration Result",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "calibration_result"},
+            "type": {
+              "const": "calibration_result"
+            },
             "success": {
               "type": "boolean",
               "description": "Whether calibration was successful"
@@ -224,27 +307,37 @@
               "type": "array",
               "items": {
                 "type": "array",
-                "items": {"type": "number"}
+                "items": {
+                  "type": "number"
+                }
               },
               "description": "3x3 camera intrinsic matrix"
             },
             "distortion_coefficients": {
               "type": "array",
-              "items": {"type": "number"},
+              "items": {
+                "type": "number"
+              },
               "description": "Distortion coefficients"
             }
           },
-          "required": ["success"]
+          "required": [
+            "success"
+          ]
         }
       ]
     },
     {
       "title": "Handshake Message",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "handshake"},
+            "type": {
+              "const": "handshake"
+            },
             "protocol_version": {
               "type": "integer",
               "minimum": 1,
@@ -260,21 +353,33 @@
             },
             "device_type": {
               "type": "string",
-              "enum": ["android", "pc"],
+              "enum": [
+                "android",
+                "pc"
+              ],
               "description": "Type of device sending the handshake"
             }
           },
-          "required": ["protocol_version", "device_name", "app_version", "device_type"]
+          "required": [
+            "protocol_version",
+            "device_name",
+            "app_version",
+            "device_type"
+          ]
         }
       ]
     },
     {
       "title": "Handshake Acknowledgment",
       "allOf": [
-        {"$ref": "#/definitions/message_base"},
+        {
+          "$ref": "#/definitions/message_base"
+        },
         {
           "properties": {
-            "type": {"const": "handshake_ack"},
+            "type": {
+              "const": "handshake_ack"
+            },
             "protocol_version": {
               "type": "integer",
               "minimum": 1,
@@ -297,7 +402,12 @@
               "description": "Optional message about compatibility status"
             }
           },
-          "required": ["protocol_version", "server_name", "server_version", "compatible"]
+          "required": [
+            "protocol_version",
+            "server_name",
+            "server_version",
+            "compatible"
+          ]
         }
       ]
     }

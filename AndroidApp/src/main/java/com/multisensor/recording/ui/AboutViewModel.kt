@@ -1,7 +1,6 @@
 package com.multisensor.recording.ui
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Build
@@ -9,12 +8,12 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class Developer(
@@ -269,7 +268,8 @@ class AboutViewModel @Inject constructor(
         return try {
             val cameraList = mutableListOf<String>()
 
-            val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
+            val cameraManager =
+                context.getSystemService(Context.CAMERA_SERVICE) as android.hardware.camera2.CameraManager
             val cameraIds = cameraManager.cameraIdList
 
             for (cameraId in cameraIds) {

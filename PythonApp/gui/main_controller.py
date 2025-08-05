@@ -1,11 +1,12 @@
-from typing import Optional, Dict, Any, List
 from PyQt5.QtCore import QObject, pyqtSignal
-from ..utils.logging_config import get_logger
-from ..network.device_server import JsonSocketServer
-from ..session.session_manager import SessionManager
-from ..session.session_logger import get_session_logger
-from .webcam.webcam_capture import WebcamCapture
+from typing import Optional, Dict, Any, List
+
 from .gui.stimulus_controller import StimulusController
+from .webcam.webcam_capture import WebcamCapture
+from ..network.device_server import JsonSocketServer
+from ..session.session_logger import get_session_logger
+from ..session.session_manager import SessionManager
+from ..utils.logging_config import get_logger
 
 
 class MainController(QObject):

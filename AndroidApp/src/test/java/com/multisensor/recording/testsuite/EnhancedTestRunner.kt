@@ -2,14 +2,12 @@ package com.multisensor.recording.testsuite
 
 import org.junit.runner.Description
 import org.junit.runner.Result
-import org.junit.runner.notification.RunListener
 import org.junit.runner.notification.Failure
+import org.junit.runner.notification.RunListener
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlinx.coroutines.*
-import kotlin.system.measureTimeMillis
 
 class EnhancedTestRunner : RunListener() {
 
@@ -224,9 +222,27 @@ class EnhancedTestRunner : RunListener() {
             appendLine("<h2>Test Summary</h2>")
             appendLine("<table>")
             appendLine("<tr><th>Status</th><th>Count</th><th>Percentage</th></tr>")
-            appendLine("<tr class='passed'><td>Passed</td><td>$passedTests</td><td>${(passedTests * 100.0 / totalTests).format(1)}%</td></tr>")
-            appendLine("<tr class='failed'><td>Failed</td><td>$failedTests</td><td>${(failedTests * 100.0 / totalTests).format(1)}%</td></tr>")
-            appendLine("<tr class='skipped'><td>Skipped</td><td>$skippedTests</td><td>${(skippedTests * 100.0 / totalTests).format(1)}%</td></tr>")
+            appendLine(
+                "<tr class='passed'><td>Passed</td><td>$passedTests</td><td>${
+                    (passedTests * 100.0 / totalTests).format(
+                        1
+                    )
+                }%</td></tr>"
+            )
+            appendLine(
+                "<tr class='failed'><td>Failed</td><td>$failedTests</td><td>${
+                    (failedTests * 100.0 / totalTests).format(
+                        1
+                    )
+                }%</td></tr>"
+            )
+            appendLine(
+                "<tr class='skipped'><td>Skipped</td><td>$skippedTests</td><td>${
+                    (skippedTests * 100.0 / totalTests).format(
+                        1
+                    )
+                }%</td></tr>"
+            )
             appendLine("</table>")
 
             appendLine("<h2>Performance Analysis</h2>")
@@ -243,7 +259,8 @@ class EnhancedTestRunner : RunListener() {
                     else -> ""
                 }
                 val performanceClass = if (metrics.executionTimeMs > PERFORMANCE_THRESHOLD_MS ||
-                                         metrics.memoryUsageMB > MEMORY_THRESHOLD_MB) "performance-warning" else ""
+                    metrics.memoryUsageMB > MEMORY_THRESHOLD_MB
+                ) "performance-warning" else ""
 
                 appendLine("<tr class='$statusClass $performanceClass'>")
                 appendLine("<td>${testData?.testName ?: "unknown"}</td>")

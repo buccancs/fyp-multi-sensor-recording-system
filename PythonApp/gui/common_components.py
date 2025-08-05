@@ -1,6 +1,8 @@
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTextEdit, QProgressBar, QFrame, QGroupBox, QSizePolicy
 from PyQt5.QtGui import QFont, QPalette
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTextEdit, QProgressBar, QFrame, \
+    QGroupBox, QSizePolicy
+
 from ..utils.logging_config import get_logger
 
 

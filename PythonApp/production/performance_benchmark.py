@@ -4,7 +4,9 @@ import json
 import os
 import platform
 import psutil
+import statistics
 import sys
+import threading
 import time
 import tracemalloc
 from contextlib import contextmanager
@@ -12,8 +14,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
-import threading
-import statistics
+
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent
 sys.path.insert(0, str(src_dir))

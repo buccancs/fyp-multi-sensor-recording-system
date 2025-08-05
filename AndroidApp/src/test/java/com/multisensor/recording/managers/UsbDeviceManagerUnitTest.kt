@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -146,8 +149,10 @@ class UsbDeviceManagerUnitTest {
 
     @Test
     fun `getConnectedUsbDevices should return device list`() {
-        val mockDevice1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/002")
-        val mockDevice2 = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "/dev/bus/usb/001/003")
+        val mockDevice1 =
+            createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/002")
+        val mockDevice2 =
+            createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "/dev/bus/usb/001/003")
         val deviceMap = hashMapOf(
             "device1" to mockDevice1,
             "device2" to mockDevice2
@@ -239,19 +244,27 @@ class UsbDeviceManagerUnitTest {
     fun `device detection should handle edge cases`() {
 
         val minDevice = createMockUsbDevice(vendorId = 0x0000, productId = 0x0000)
-        assertFalse("Min VID/PID should not be supported",
-                   usbDeviceManager.isSupportedTopdonDevice(minDevice))
+        assertFalse(
+            "Min VID/PID should not be supported",
+            usbDeviceManager.isSupportedTopdonDevice(minDevice)
+        )
 
         val maxDevice = createMockUsbDevice(vendorId = 0xFFFF, productId = 0xFFFF)
-        assertFalse("Max VID/PID should not be supported",
-                   usbDeviceManager.isSupportedTopdonDevice(maxDevice))
+        assertFalse(
+            "Max VID/PID should not be supported",
+            usbDeviceManager.isSupportedTopdonDevice(maxDevice)
+        )
 
         val edgeDevice1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3900)
         val edgeDevice2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3902)
-        assertFalse("Edge case PID (0x3900) should not be supported",
-                   usbDeviceManager.isSupportedTopdonDevice(edgeDevice1))
-        assertFalse("Edge case PID (0x3902) should not be supported",
-                   usbDeviceManager.isSupportedTopdonDevice(edgeDevice2))
+        assertFalse(
+            "Edge case PID (0x3900) should not be supported",
+            usbDeviceManager.isSupportedTopdonDevice(edgeDevice1)
+        )
+        assertFalse(
+            "Edge case PID (0x3902) should not be supported",
+            usbDeviceManager.isSupportedTopdonDevice(edgeDevice2)
+        )
     }
 
     @Test

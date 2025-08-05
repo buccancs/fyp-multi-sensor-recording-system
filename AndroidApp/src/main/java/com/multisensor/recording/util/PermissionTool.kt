@@ -36,7 +36,12 @@ object PermissionTool {
             } else {
                 val backgroundLocationPermissions = getBackgroundLocationPermissions()
                 if (backgroundLocationPermissions.isNotEmpty()) {
-                    requestPermissions(context, backgroundLocationPermissions, "Background Location Permissions", callback)
+                    requestPermissions(
+                        context,
+                        backgroundLocationPermissions,
+                        "Background Location Permissions",
+                        callback
+                    )
                 } else {
                     callback.onAllGranted()
                 }
@@ -74,7 +79,8 @@ object PermissionTool {
         requestPermissions(context, permissions, "Storage", callback)
     }
 
-    fun areAllDangerousPermissionsGranted(context: Context): Boolean = XXPermissions.isGranted(context, getAllDangerousPermissions())
+    fun areAllDangerousPermissionsGranted(context: Context): Boolean =
+        XXPermissions.isGranted(context, getAllDangerousPermissions())
 
     fun getMissingDangerousPermissions(context: Context): List<String> {
         val allPermissions = getAllDangerousPermissions()
@@ -88,7 +94,7 @@ object PermissionTool {
         callback: PermissionCallback,
     ) {
         val isBackgroundLocationRequest = permissions.size == 1 &&
-            permissions.first() == Permission.ACCESS_BACKGROUND_LOCATION
+                permissions.first() == Permission.ACCESS_BACKGROUND_LOCATION
 
         if (isBackgroundLocationRequest) {
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
@@ -152,7 +158,12 @@ object PermissionTool {
                             never: Boolean,
                         ) {
                             if (never) {
-                                showPermanentDenialDialog(context, permissions.toList(), "Background Location Permissions", callback)
+                                showPermanentDenialDialog(
+                                    context,
+                                    permissions.toList(),
+                                    "Background Location Permissions",
+                                    callback
+                                )
                             } else {
                                 callback.onTemporarilyDenied(permissions.toList())
                             }
@@ -210,9 +221,11 @@ object PermissionTool {
                 Toast
                     .makeText(
                         context,
-                        "Please go to Settings > Apps > ${context.applicationInfo.loadLabel(
-                            context.packageManager,
-                        )} > Permissions to enable required permissions",
+                        "Please go to Settings > Apps > ${
+                            context.applicationInfo.loadLabel(
+                                context.packageManager,
+                            )
+                        } > Permissions to enable required permissions",
                         Toast.LENGTH_LONG,
                     ).show()
             }
@@ -312,20 +325,32 @@ object PermissionTool {
                     phase1Completed = true
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
-                        requestPermissions(context, foregroundLocationPermissions, "Foreground Location Permissions", this)
+                        requestPermissions(
+                            context,
+                            foregroundLocationPermissions,
+                            "Foreground Location Permissions",
+                            this
+                        )
                     } else {
                         checkBackgroundLocationPermissions()
                     }
                 }
+
                 !phase2Completed -> {
                     phase2Completed = true
                     val backgroundLocationPermissions = getBackgroundLocationPermissions()
                     if (backgroundLocationPermissions.isNotEmpty()) {
-                        requestPermissions(context, backgroundLocationPermissions, "Background Location Permissions", this)
+                        requestPermissions(
+                            context,
+                            backgroundLocationPermissions,
+                            "Background Location Permissions",
+                            this
+                        )
                     } else {
                         originalCallback.onAllGranted()
                     }
                 }
+
                 else -> {
                     originalCallback.onAllGranted()
                 }
@@ -340,16 +365,25 @@ object PermissionTool {
 
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
-                        requestPermissions(context, foregroundLocationPermissions, "Foreground Location Permissions", this)
+                        requestPermissions(
+                            context,
+                            foregroundLocationPermissions,
+                            "Foreground Location Permissions",
+                            this
+                        )
                     } else {
                         checkBackgroundLocationPermissions()
                     }
                 }
+
                 !phase2Completed -> {
                     phase2DeniedPermissions.addAll(deniedPermissions)
                     phase2Completed = true
 
-                    android.util.Log.d("PermissionTool", "[DEBUG_LOG] Foreground location denied, skipping background location request")
+                    android.util.Log.d(
+                        "PermissionTool",
+                        "[DEBUG_LOG] Foreground location denied, skipping background location request"
+                    )
 
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions
                     if (allDeniedPermissions.isNotEmpty()) {
@@ -358,10 +392,12 @@ object PermissionTool {
                         originalCallback.onAllGranted()
                     }
                 }
+
                 else -> {
                     phase3DeniedPermissions.addAll(deniedPermissions)
 
-                    val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
+                    val allDeniedPermissions =
+                        phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
                     if (allDeniedPermissions.isNotEmpty()) {
                         originalCallback.onTemporarilyDenied(allDeniedPermissions)
                     } else {
@@ -379,11 +415,17 @@ object PermissionTool {
 
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
-                        requestPermissions(context, foregroundLocationPermissions, "Foreground Location Permissions", this)
+                        requestPermissions(
+                            context,
+                            foregroundLocationPermissions,
+                            "Foreground Location Permissions",
+                            this
+                        )
                     } else {
                         checkBackgroundLocationPermissions()
                     }
                 }
+
                 !phase2Completed -> {
                     phase2DeniedPermissions.addAll(deniedPermissions)
                     phase2Completed = true
@@ -391,9 +433,11 @@ object PermissionTool {
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions
                     originalCallback.onPermanentlyDeniedWithSettingsOpened(allDeniedPermissions)
                 }
+
                 else -> {
                     phase3DeniedPermissions.addAll(deniedPermissions)
-                    val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
+                    val allDeniedPermissions =
+                        phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
                     originalCallback.onPermanentlyDeniedWithSettingsOpened(allDeniedPermissions)
                 }
             }
@@ -407,11 +451,17 @@ object PermissionTool {
 
                     val foregroundLocationPermissions = getForegroundLocationPermissions()
                     if (foregroundLocationPermissions.isNotEmpty()) {
-                        requestPermissions(context, foregroundLocationPermissions, "Foreground Location Permissions", this)
+                        requestPermissions(
+                            context,
+                            foregroundLocationPermissions,
+                            "Foreground Location Permissions",
+                            this
+                        )
                     } else {
                         checkBackgroundLocationPermissions()
                     }
                 }
+
                 !phase2Completed -> {
                     phase2DeniedPermissions.addAll(deniedPermissions)
                     phase2Completed = true
@@ -419,9 +469,11 @@ object PermissionTool {
                     val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions
                     originalCallback.onPermanentlyDeniedWithoutSettings(allDeniedPermissions)
                 }
+
                 else -> {
                     phase3DeniedPermissions.addAll(deniedPermissions)
-                    val allDeniedPermissions = phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
+                    val allDeniedPermissions =
+                        phase1DeniedPermissions + phase2DeniedPermissions + phase3DeniedPermissions
                     originalCallback.onPermanentlyDeniedWithoutSettings(allDeniedPermissions)
                 }
             }

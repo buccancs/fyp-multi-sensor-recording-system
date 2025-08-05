@@ -2,15 +2,14 @@ package com.multisensor.recording.controllers
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.MediaActionSound
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.calibration.SyncClockManager
 import io.mockk.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert.*
@@ -167,7 +166,12 @@ class CalibrationControllerTest {
 
         verify { mockCallback.onCalibrationStarted() }
         verify { mockCallback.onCalibrationFailed(errorMessage) }
-        verify { mockCallback.showToast(match { it.contains("failed") && it.contains(errorMessage) }, Toast.LENGTH_LONG) }
+        verify {
+            mockCallback.showToast(
+                match { it.contains("failed") && it.contains(errorMessage) },
+                Toast.LENGTH_LONG
+            )
+        }
 
         verify { mockEditor.putBoolean("last_calibration_success", false) }
 
@@ -371,11 +375,13 @@ class CalibrationControllerTest {
 
         calibrationController.showSyncStatus()
 
-        verify { mockCallback.showToast(match {
-            it.contains("Clock Synchronization Status") &&
-            it.contains("✅ Yes") &&
-            it.contains("25ms")
-        }, Toast.LENGTH_LONG) }
+        verify {
+            mockCallback.showToast(match {
+                it.contains("Clock Synchronization Status") &&
+                        it.contains("✅ Yes") &&
+                        it.contains("25ms")
+            }, Toast.LENGTH_LONG)
+        }
 
         println("[DEBUG_LOG] Show sync status test passed")
     }
@@ -567,7 +573,10 @@ class CalibrationControllerTest {
 
         val optimization = calibrationController.analyzePatternOptimization()
         assertNotNull("Pattern optimization should be available", optimization)
-        assertTrue("Efficiency should be valid", optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f)
+        assertTrue(
+            "Efficiency should be valid",
+            optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f
+        )
 
         println("[DEBUG_LOG] Advanced quality assessment test passed")
     }
@@ -582,7 +591,14 @@ class CalibrationControllerTest {
             assertTrue("Predicted quality should be valid", predictedQuality >= 0.0f && predictedQuality <= 1.0f)
             assertTrue("Uncertainty should be valid", uncertainty >= 0.0f && uncertainty <= 1.0f)
 
-            println("[DEBUG_LOG] Pattern ${pattern.displayName}: Quality=${String.format("%.3f", predictedQuality)}, Uncertainty=${String.format("%.3f", uncertainty)}")
+            println(
+                "[DEBUG_LOG] Pattern ${pattern.displayName}: Quality=${
+                    String.format(
+                        "%.3f",
+                        predictedQuality
+                    )
+                }, Uncertainty=${String.format("%.3f", uncertainty)}"
+            )
         }
 
         println("[DEBUG_LOG] Machine learning prediction test passed")
@@ -630,7 +646,10 @@ class CalibrationControllerTest {
         val validation = calibrationController.performStatisticalValidation()
 
         assertTrue("Should have valid statistical analysis", validation.isValid || !validation.isValid)
-        assertTrue("Confidence level should be reasonable", validation.confidenceLevel >= 0.0f && validation.confidenceLevel <= 1.0f)
+        assertTrue(
+            "Confidence level should be reasonable",
+            validation.confidenceLevel >= 0.0f && validation.confidenceLevel <= 1.0f
+        )
         assertTrue("P-value should be valid", validation.pValue >= 0.0f && validation.pValue <= 1.0f)
         assertNotNull("Should have recommendation", validation.recommendation)
 
@@ -681,7 +700,14 @@ class CalibrationControllerTest {
         assertTrue("Should have recommendations", report.systemRecommendations.isNotEmpty())
         assertNotNull("Should include performance metrics", report.performanceMetrics)
 
-        println("[DEBUG_LOG] Report generated: ${report.totalCalibrations} calibrations, avg quality = ${String.format("%.3f", report.averageQuality)}")
+        println(
+            "[DEBUG_LOG] Report generated: ${report.totalCalibrations} calibrations, avg quality = ${
+                String.format(
+                    "%.3f",
+                    report.averageQuality
+                )
+            }"
+        )
         println("[DEBUG_LOG] Trend: ${report.qualityTrend}, Recommendations: ${report.systemRecommendations.size}")
         println("[DEBUG_LOG] Comprehensive calibration report test passed")
     }
@@ -716,7 +742,9 @@ class CalibrationControllerTest {
 
         val (isValidGood, issuesGood) = calibrationController.validateCalibrationSetup()
 
-        assertFalse("Should not report sync offset issue", issuesGood.any { it.contains("Clock offset") && it.contains("exceeds") })
+        assertFalse(
+            "Should not report sync offset issue",
+            issuesGood.any { it.contains("Clock offset") && it.contains("exceeds") })
 
         println("[DEBUG_LOG] Advanced validation setup test passed")
     }
@@ -731,13 +759,32 @@ class CalibrationControllerTest {
             val optimization = calibrationController.analyzePatternOptimization()
 
             assertNotNull("Optimization should be available", optimization)
-            assertTrue("Pattern efficiency should be valid", optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f)
-            assertTrue("Convergence rate should be valid", optimization.convergenceRate >= 0.0f && optimization.convergenceRate <= 1.0f)
-            assertTrue("Spatial coverage should be valid", optimization.spatialCoverage >= 0.0f && optimization.spatialCoverage <= 1.0f)
-            assertTrue("Redundancy analysis should be valid", optimization.redundancyAnalysis >= 0.0f && optimization.redundancyAnalysis <= 1.0f)
+            assertTrue(
+                "Pattern efficiency should be valid",
+                optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f
+            )
+            assertTrue(
+                "Convergence rate should be valid",
+                optimization.convergenceRate >= 0.0f && optimization.convergenceRate <= 1.0f
+            )
+            assertTrue(
+                "Spatial coverage should be valid",
+                optimization.spatialCoverage >= 0.0f && optimization.spatialCoverage <= 1.0f
+            )
+            assertTrue(
+                "Redundancy analysis should be valid",
+                optimization.redundancyAnalysis >= 0.0f && optimization.redundancyAnalysis <= 1.0f
+            )
             assertNotNull("Should recommend a pattern", optimization.recommendedPattern)
 
-            println("[DEBUG_LOG] Pattern ${pattern.displayName}: Efficiency=${String.format("%.3f", optimization.patternEfficiency)}, Coverage=${String.format("%.3f", optimization.spatialCoverage)}")
+            println(
+                "[DEBUG_LOG] Pattern ${pattern.displayName}: Efficiency=${
+                    String.format(
+                        "%.3f",
+                        optimization.patternEfficiency
+                    )
+                }, Coverage=${String.format("%.3f", optimization.spatialCoverage)}"
+            )
         }
 
         println("[DEBUG_LOG] Pattern optimization analysis test passed")

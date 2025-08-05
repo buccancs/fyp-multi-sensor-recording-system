@@ -5,13 +5,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityCalibrationBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CalibrationActivity : AppCompatActivity() {
@@ -254,15 +254,20 @@ class CalibrationActivity : AppCompatActivity() {
         binding.overallProgressBar.progress = overallProgress
         binding.overallProgressText.text = "Overall Progress: $overallProgress%"
 
-        binding.cameraProgressBar.progress = if (uiState.isCameraCalibrating) uiState.cameraCalibrationProgress else if (uiState.isCameraCalibrated) 100 else 0
-        binding.thermalProgressBar.progress = if (uiState.isThermalCalibrating) uiState.thermalCalibrationProgress else if (uiState.isThermalCalibrated) 100 else 0
-        binding.shimmerProgressBar.progress = if (uiState.isShimmerCalibrating) uiState.shimmerCalibrationProgress else if (uiState.isShimmerCalibrated) 100 else 0
+        binding.cameraProgressBar.progress =
+            if (uiState.isCameraCalibrating) uiState.cameraCalibrationProgress else if (uiState.isCameraCalibrated) 100 else 0
+        binding.thermalProgressBar.progress =
+            if (uiState.isThermalCalibrating) uiState.thermalCalibrationProgress else if (uiState.isThermalCalibrated) 100 else 0
+        binding.shimmerProgressBar.progress =
+            if (uiState.isShimmerCalibrating) uiState.shimmerCalibrationProgress else if (uiState.isShimmerCalibrated) 100 else 0
     }
 
     private fun updateCalibrationDataStatus(uiState: CalibrationUiState) {
-        val hasCalibrationData = uiState.isCameraCalibrated || uiState.isThermalCalibrated || uiState.isShimmerCalibrated
+        val hasCalibrationData =
+            uiState.isCameraCalibrated || uiState.isThermalCalibrated || uiState.isShimmerCalibrated
 
-        val isAnyCalibrating = uiState.isCameraCalibrating || uiState.isThermalCalibrating || uiState.isShimmerCalibrating
+        val isAnyCalibrating =
+            uiState.isCameraCalibrating || uiState.isThermalCalibrating || uiState.isShimmerCalibrating
 
         binding.saveCalibrationButton.isEnabled = hasCalibrationData && !isAnyCalibrating
         binding.exportCalibrationButton.isEnabled = hasCalibrationData && !isAnyCalibrating
@@ -289,6 +294,7 @@ class CalibrationActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 

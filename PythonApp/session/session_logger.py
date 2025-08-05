@@ -5,6 +5,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List
+
 from ..utils.logging_config import get_logger
 
 

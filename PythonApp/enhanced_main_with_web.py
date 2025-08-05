@@ -2,8 +2,9 @@ import os
 import sys
 import webbrowser
 from PyQt5.QtCore import Qt, qVersion, QTimer
-from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMessageBox
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from utils.logging_config import get_logger, AppLogger

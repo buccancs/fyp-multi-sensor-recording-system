@@ -4,24 +4,20 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.multisensor.recording.managers.ShimmerManager
-import com.multisensor.recording.persistence.ShimmerDeviceStateRepository
 import com.multisensor.recording.persistence.ShimmerDeviceState
+import com.multisensor.recording.persistence.ShimmerDeviceStateRepository
 import com.multisensor.recording.ui.MainViewModel
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)

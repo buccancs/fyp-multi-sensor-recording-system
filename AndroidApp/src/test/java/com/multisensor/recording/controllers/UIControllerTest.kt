@@ -2,15 +2,12 @@ package com.multisensor.recording.controllers
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.SessionDisplayInfo
 import com.multisensor.recording.ui.ShimmerDeviceInfo
-import com.multisensor.recording.ui.components.StatusIndicatorView
-import com.multisensor.recording.ui.components.ActionButtonPair
 import io.mockk.*
 import org.junit.After
 import org.junit.Assert.*
@@ -427,8 +424,10 @@ class UIControllerTest {
         assertTrue("Validation should pass when all components available", result.isValid)
         assertEquals("No errors expected", 0, result.errors.size)
         assertTrue("Component count should be greater than 0", result.componentCount > 0)
-        assertTrue("Validation timestamp should be recent",
-            System.currentTimeMillis() - result.validationTimestamp < 1000)
+        assertTrue(
+            "Validation timestamp should be recent",
+            System.currentTimeMillis() - result.validationTimestamp < 1000
+        )
     }
 
     @Test
@@ -449,9 +448,11 @@ class UIControllerTest {
         val result = uiController.validateUIComponents()
 
         assertTrue("Should have warnings for missing components", result.warnings.isNotEmpty())
-        assertTrue("Should warn about battery text",
+        assertTrue(
+            "Should warn about battery text",
             result.warnings.any { it.contains("Battery level text is null") })
-        assertTrue("Should warn about PC indicator",
+        assertTrue(
+            "Should warn about PC indicator",
             result.warnings.any { it.contains("PC connection indicator is null") })
     }
 
@@ -463,7 +464,8 @@ class UIControllerTest {
 
         assertTrue("Recovery should succeed with valid callback", result.success)
         assertTrue("Should have recovery actions", result.recoveryActions.isNotEmpty())
-        assertTrue("Should re-initialize components",
+        assertTrue(
+            "Should re-initialize components",
             result.recoveryActions.any { it.contains("Re-initialized UI components") })
     }
 
@@ -473,7 +475,8 @@ class UIControllerTest {
         val result = uiController.recoverFromUIErrors()
 
         assertFalse("Recovery should fail with null callback", result.success)
-        assertTrue("Should have failure message",
+        assertTrue(
+            "Should have failure message",
             result.recoveryActions.any { it.contains("Cannot recover - UI callback is null") })
     }
 
@@ -501,7 +504,8 @@ class UIControllerTest {
         val result = uiController.validateUIState(invalidBatteryState)
 
         assertFalse("Should detect invalid battery level", result.isValid)
-        assertTrue("Should have battery level error",
+        assertTrue(
+            "Should have battery level error",
             result.issues.any { it.contains("Invalid battery level: 150") })
     }
 
@@ -515,7 +519,8 @@ class UIControllerTest {
         val result = uiController.validateUIState(lowBatteryState)
 
         assertTrue("Should pass validation for valid low battery", result.isValid)
-        assertTrue("Should suggest low battery warning",
+        assertTrue(
+            "Should suggest low battery warning",
             result.suggestions.any { it.contains("Low battery level detected") })
     }
 
@@ -530,7 +535,8 @@ class UIControllerTest {
         val result = uiController.validateUIState(inconsistentStreamingState)
 
         assertFalse("Should detect inconsistent streaming state", result.isValid)
-        assertTrue("Should have streaming state error",
+        assertTrue(
+            "Should have streaming state error",
             result.issues.any { it.contains("Inconsistent streaming state") })
     }
 
@@ -545,7 +551,8 @@ class UIControllerTest {
         val result = uiController.validateUIState(errorDialogState)
 
         assertFalse("Should detect error dialog issue", result.isValid)
-        assertTrue("Should have error dialog issue",
+        assertTrue(
+            "Should have error dialog issue",
             result.issues.any { it.contains("Error dialog should be shown but no error message") })
     }
 

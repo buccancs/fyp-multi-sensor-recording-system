@@ -1,13 +1,11 @@
 package com.multisensor.recording.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class DevicesUiState(
@@ -47,13 +45,14 @@ data class DevicesUiState(
     val isTesting: Boolean = false,
     val testResults: List<String> = emptyList()
 ) {
-    val totalConnectedDevices: Int get() = listOf(
-        isPcConnected,
-        isShimmerConnected,
-        isThermalConnected,
-        isNetworkConnected,
-        isGsrConnected
-    ).count { it }
+    val totalConnectedDevices: Int
+        get() = listOf(
+            isPcConnected,
+            isShimmerConnected,
+            isThermalConnected,
+            isNetworkConnected,
+            isGsrConnected
+        ).count { it }
 
     val allDevicesHealthy: Boolean get() = totalConnectedDevices > 0 && testResults.none { it.contains("FAILED") }
 }

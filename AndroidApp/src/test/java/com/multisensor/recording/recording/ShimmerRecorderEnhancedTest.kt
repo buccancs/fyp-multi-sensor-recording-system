@@ -4,7 +4,9 @@ import android.content.Context
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*

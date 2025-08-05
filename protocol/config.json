@@ -3,7 +3,6 @@
   "description": "Shared configuration for synchronized multimodal recording system",
   "last_updated": "2025-07-30T01:24:00Z",
   "protocol_version": 1,
-  
   "network": {
     "host": "192.168.0.100",
     "port": 9000,
@@ -15,7 +14,6 @@
     "reconnect_attempts": 3,
     "use_newline_protocol": false
   },
-  
   "devices": {
     "camera_id": 0,
     "frame_rate": 30,
@@ -38,7 +36,6 @@
     "max_file_size_mb": 1000,
     "storage_warning_threshold_mb": 500
   },
-  
   "UI": {
     "preview_scale": 0.5,
     "show_calibration_overlay": true,
@@ -54,7 +51,6 @@
     "status_update_interval": 1000,
     "notification_timeout": 5000
   },
-  
   "calibration": {
     "pattern_type": "chessboard",
     "pattern_rows": 7,
@@ -76,7 +72,6 @@
     "capture_delay": 2.0,
     "quality_threshold": 0.3
   },
-  
   "session": {
     "default_session_name": "recording_session",
     "session_directory": "recordings",
@@ -87,7 +82,6 @@
     "backup_enabled": true,
     "max_session_duration_minutes": 120
   },
-  
   "logging": {
     "level": "INFO",
     "file_enabled": true,
@@ -97,7 +91,6 @@
     "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     "log_directory": "logs"
   },
-  
   "testing": {
     "fake_device_enabled": false,
     "mock_data_directory": "test_data",
@@ -106,7 +99,6 @@
     "generate_test_files": true,
     "test_file_size_kb": 1024
   },
-  
   "performance": {
     "max_memory_usage_mb": 2048,
     "gc_threshold": 0.8,
@@ -116,7 +108,6 @@
     "preview_queue_size": 10,
     "file_transfer_queue_size": 50
   },
-  
   "security": {
     "encryption_enabled": false,
     "authentication_required": false,

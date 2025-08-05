@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.multisensor.recording.managers.PermissionManager
 import io.mockk.*
-import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -74,14 +73,21 @@ class PermissionControllerAcademicTest {
     fun `validateInternalState should return valid result for consistent state`() {
         permissionController.setCallback(mockCallback)
         every { mockSharedPreferences.getInt("permission_retry_count", 0) } returns 0
-        every { mockSharedPreferences.getLong("last_permission_request_time", 0) } returns System.currentTimeMillis() - 1000
+        every {
+            mockSharedPreferences.getLong(
+                "last_permission_request_time",
+                0
+            )
+        } returns System.currentTimeMillis() - 1000
 
         val validationResult = permissionController.validateInternalState()
 
         assertTrue("State should be valid when all invariants are satisfied", validationResult.isValid)
         assertTrue("No violations should be present", validationResult.violations.isEmpty())
-        assertTrue("Validation timestamp should be recent",
-            System.currentTimeMillis() - validationResult.validationTimestamp < 1000)
+        assertTrue(
+            "Validation timestamp should be recent",
+            System.currentTimeMillis() - validationResult.validationTimestamp < 1000
+        )
     }
 
     @Test
@@ -92,7 +98,8 @@ class PermissionControllerAcademicTest {
         val validationResult = permissionController.validateInternalState()
 
         assertFalse("State should be invalid with negative retry count", validationResult.isValid)
-        assertTrue("Should report retry count violation",
+        assertTrue(
+            "Should report retry count violation",
             validationResult.violations.any { it.contains("Retry count cannot be negative") })
     }
 
@@ -105,7 +112,8 @@ class PermissionControllerAcademicTest {
         val validationResult = permissionController.validateInternalState()
 
         assertFalse("State should be invalid with future timestamp", validationResult.isValid)
-        assertTrue("Should report temporal violation",
+        assertTrue(
+            "Should report temporal violation",
             validationResult.violations.any { it.contains("cannot be in the future") })
     }
 
@@ -117,7 +125,8 @@ class PermissionControllerAcademicTest {
         val validationResult = permissionController.validateInternalState()
 
         assertFalse("State should be invalid with storage inconsistency", validationResult.isValid)
-        assertTrue("Should report storage consistency violation",
+        assertTrue(
+            "Should report storage consistency violation",
             validationResult.violations.any { it.contains("differs from persisted") })
     }
 

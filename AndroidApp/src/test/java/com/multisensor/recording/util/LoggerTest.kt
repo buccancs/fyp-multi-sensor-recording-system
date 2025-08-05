@@ -1,9 +1,6 @@
 package com.multisensor.recording.util
 
 import android.content.Context
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

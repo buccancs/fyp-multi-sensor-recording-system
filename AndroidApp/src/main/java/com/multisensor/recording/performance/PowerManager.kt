@@ -4,15 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
-import android.os.PowerManager
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -133,11 +127,13 @@ class PowerManager @Inject constructor(
                 adaptiveFrameRateEnabled = true
                 backgroundProcessingOptimized = false
             }
+
             PowerSaveMode.OPTIMIZED -> {
                 adaptiveFrameRateEnabled = true
                 backgroundProcessingOptimized = true
                 optimizeBackgroundProcessing()
             }
+
             PowerSaveMode.AGGRESSIVE -> {
                 adaptiveFrameRateEnabled = true
                 backgroundProcessingOptimized = true
@@ -182,6 +178,7 @@ class PowerManager @Inject constructor(
                 enableThermal = true,
                 reducedProcessing = false
             )
+
             PowerSaveMode.OPTIMIZED -> PowerRecommendations(
                 recommendedFrameRate = 3.0f,
                 recommendedQuality = 70,
@@ -189,6 +186,7 @@ class PowerManager @Inject constructor(
                 enableThermal = true,
                 reducedProcessing = true
             )
+
             PowerSaveMode.AGGRESSIVE -> PowerRecommendations(
                 recommendedFrameRate = 1.0f,
                 recommendedQuality = 55,

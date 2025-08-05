@@ -1,6 +1,8 @@
 # UI Architecture Module
 
-The UI Architecture System provides comprehensive user interface frameworks for both Android mobile applications and Python desktop controllers, implementing modern design patterns and ensuring consistent user experience across all platform interfaces.
+The UI Architecture System provides comprehensive user interface frameworks for both Android mobile applications and
+Python desktop controllers, implementing modern design patterns and ensuring consistent user experience across all
+platform interfaces.
 
 ## Table of Contents
 
@@ -17,9 +19,11 @@ The UI Architecture System provides comprehensive user interface frameworks for 
 
 ### System Role and Responsibilities
 
-The UI Architecture System defines and implements the user interface frameworks that provide intuitive, accessible, and responsive interfaces across both Android and Python desktop platforms.
+The UI Architecture System defines and implements the user interface frameworks that provide intuitive, accessible, and
+responsive interfaces across both Android and Python desktop platforms.
 
 **Primary Functions:**
+
 - **Cross-Platform Design System**: Consistent visual language and interaction patterns
 - **Component Libraries**: Reusable UI components with standardized behavior
 - **Navigation Architecture**: Intuitive navigation patterns and state management
@@ -534,25 +538,25 @@ class StatusIndicator(QWidget):
 #### Android Navigation
 
 1. **Navigation Drawer**: Primary navigation to main sections
-   - Recording controls
-   - Device management
-   - Calibration tools
-   - File management
+    - Recording controls
+    - Device management
+    - Calibration tools
+    - File management
 
 2. **Bottom Navigation**: Quick access to frequently used functions
-   - Record/Stop
-   - Monitor devices
-   - View status
+    - Record/Stop
+    - Monitor devices
+    - View status
 
 3. **Contextual Actions**: Toolbar actions relevant to current screen
 
 #### Python Desktop Navigation
 
 1. **Tab Interface**: Organized by workflow phases
-   - Recording: Session controls and monitoring
-   - Devices: Connection and device management
-   - Calibration: Camera calibration workflows
-   - Files: Data management and export
+    - Recording: Session controls and monitoring
+    - Devices: Connection and device management
+    - Calibration: Camera calibration workflows
+    - Files: Data management and export
 
 2. **Status Bar**: Real-time system status indicators
 3. **Menu Bar**: Advanced settings and tools
@@ -699,4 +703,5 @@ class AccessibilityHelper {
 
 ---
 
-*For related modules, see [Android Mobile Application](../android-mobile-application/README.md) and [Python Desktop Controller](../python-desktop-controller/README.md) documentation.*
+*For related modules, see [Android Mobile Application](../android-mobile-application/README.md)
+and [Python Desktop Controller](../python-desktop-controller/README.md) documentation.*

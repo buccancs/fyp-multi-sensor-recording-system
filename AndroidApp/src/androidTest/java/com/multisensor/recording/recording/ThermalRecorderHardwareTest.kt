@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.multisensor.recording.service.SessionManager
-import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.testing.HiltAndroidRule

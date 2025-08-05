@@ -44,7 +44,10 @@ class UsbDeviceManager @Inject constructor() {
                     if (usbDevice != null) {
                         handleDeviceAttached(usbDevice, callback)
                     } else {
-                        android.util.Log.w("UsbDeviceManager", "[DEBUG_LOG] USB device attached but no device in intent")
+                        android.util.Log.w(
+                            "UsbDeviceManager",
+                            "[DEBUG_LOG] USB device attached but no device in intent"
+                        )
                         callback.onError("USB device attached but no device information available")
                     }
                 }
@@ -59,7 +62,10 @@ class UsbDeviceManager @Inject constructor() {
                     if (usbDevice != null) {
                         handleDeviceDetached(usbDevice, callback)
                     } else {
-                        android.util.Log.w("UsbDeviceManager", "[DEBUG_LOG] USB device detached but no device in intent")
+                        android.util.Log.w(
+                            "UsbDeviceManager",
+                            "[DEBUG_LOG] USB device detached but no device in intent"
+                        )
                     }
                 }
 
@@ -76,8 +82,14 @@ class UsbDeviceManager @Inject constructor() {
     private fun handleDeviceAttached(usbDevice: UsbDevice, callback: UsbDeviceCallback) {
         android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] USB device attached:")
         android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Device name: ${usbDevice.deviceName}")
-        android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}")
-        android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}")
+        android.util.Log.d(
+            "UsbDeviceManager",
+            "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}"
+        )
+        android.util.Log.d(
+            "UsbDeviceManager",
+            "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}"
+        )
         android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Device class: ${usbDevice.deviceClass}")
 
         if (isSupportedTopdonDevice(usbDevice)) {
@@ -92,8 +104,14 @@ class UsbDeviceManager @Inject constructor() {
     private fun handleDeviceDetached(usbDevice: UsbDevice, callback: UsbDeviceCallback) {
         android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] USB device detached:")
         android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Device name: ${usbDevice.deviceName}")
-        android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}")
-        android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}")
+        android.util.Log.d(
+            "UsbDeviceManager",
+            "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}"
+        )
+        android.util.Log.d(
+            "UsbDeviceManager",
+            "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}"
+        )
 
         callback.onDeviceDetached(usbDevice)
     }
@@ -123,7 +141,15 @@ class UsbDeviceManager @Inject constructor() {
 
             deviceList.values.toList().also { devices ->
                 devices.forEach { device ->
-                    android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] - ${device.deviceName}: VID=0x${String.format("%04X", device.vendorId)}, PID=0x${String.format("%04X", device.productId)}")
+                    android.util.Log.d(
+                        "UsbDeviceManager",
+                        "[DEBUG_LOG] - ${device.deviceName}: VID=0x${
+                            String.format(
+                                "%04X",
+                                device.vendorId
+                            )
+                        }, PID=0x${String.format("%04X", device.productId)}"
+                    )
                 }
             }
         } catch (e: Exception) {
@@ -136,7 +162,10 @@ class UsbDeviceManager @Inject constructor() {
         return getConnectedUsbDevices(context).filter { device ->
             isSupportedTopdonDevice(device)
         }.also { supportedDevices ->
-            android.util.Log.d("UsbDeviceManager", "[DEBUG_LOG] Found ${supportedDevices.size} supported TOPDON devices")
+            android.util.Log.d(
+                "UsbDeviceManager",
+                "[DEBUG_LOG] Found ${supportedDevices.size} supported TOPDON devices"
+            )
         }
     }
 

@@ -11,10 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.databinding.FragmentRecordingBinding
 import com.multisensor.recording.recording.CameraRecorder
-import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
+import com.multisensor.recording.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import android.widget.Toast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,6 +41,8 @@ class RecordingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Toast.makeText(requireContext(), "Recording Fragment Loaded", Toast.LENGTH_SHORT).show()
+
         setupUI()
         setupCameraPreview()
         observeViewModel()
@@ -48,14 +51,17 @@ class RecordingFragment : Fragment() {
     private fun setupUI() {
         binding.apply {
             startRecordingButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Start Recording clicked!", Toast.LENGTH_SHORT).show()
                 viewModel.startRecording()
             }
 
             stopRecordingButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Stop Recording clicked!", Toast.LENGTH_SHORT).show()
                 viewModel.stopRecording()
             }
 
             pauseRecordingButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Pause Recording clicked!", Toast.LENGTH_SHORT).show()
                 viewModel.pauseRecording()
             }
         }

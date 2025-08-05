@@ -2,13 +2,12 @@ package com.multisensor.recording.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.multisensor.recording.recording.DeviceConfiguration
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @HiltViewModel
@@ -375,15 +374,19 @@ class ShimmerConfigViewModel @Inject constructor(
             "Default" -> {
                 Pair(setOf("GSR", "PPG", "ACCEL"), 256)
             }
+
             "High Performance" -> {
                 Pair(setOf("GSR", "PPG", "ACCEL", "GYRO", "MAG", "ECG"), 512)
             }
+
             "Low Power" -> {
                 Pair(setOf("GSR", "PPG"), 128)
             }
+
             "Custom" -> {
                 return
             }
+
             else -> {
                 logger.warning("Unknown preset: $presetName")
                 return

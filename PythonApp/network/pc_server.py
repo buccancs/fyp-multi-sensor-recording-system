@@ -3,12 +3,12 @@ import json
 import logging
 import socket
 import struct
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Dict, List, Optional, Callable, Any, Set
-import threading
-from concurrent.futures import ThreadPoolExecutor
 
 
 @dataclass
