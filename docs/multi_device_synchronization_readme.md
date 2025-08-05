@@ -78,7 +78,7 @@ graph TB
         subgraph "Network Coordination Layer"
             NCH[NetworkCommunicationHandler<br/>Message Protocol]
             SS[SessionSynchronizer<br/>Event Coordination]
-            DM[DeviceManager<br/>Discovery & Registration]
+            DM[DeviceManager<br/>Discovery and Registration]
         end
         
         subgraph "Device Integration Layer"

@@ -40,7 +40,7 @@ class StimulusControlPanel(QGroupBox):
         self.timeline_slider.setValue(0)
         self.timeline_slider.sliderMoved.connect(self.handle_seek)
         stim_layout.addWidget(self.timeline_slider)
-        self.start_recording_play_btn = QPushButton('Start Recording & Play')
+        self.start_recording_play_btn = QPushButton('Start Recording and Play')
         self.start_recording_play_btn.setEnabled(False)
         self.start_recording_play_btn.setStyleSheet(
             'QPushButton { background-color: #4CAF50; color: white; font-weight: bold; }'

@@ -3513,7 +3513,7 @@ This section maps currently available diagrams in `docs/diagrams/` to appropriat
 | `07_networking_architecture.png` | Figure 4.3: Hybrid Star-Mesh Network Topology | ✅ Direct match |
 | `09_session_management_flow.png` | Figure B.3: Session Recording Interface | ✅ Good match |
 | `12_data_file_system_architecture.png` | Figure A.4: Detailed Component Interaction | ✅ Good match |
-| `13_data_export_workflow.png` | Figure B.3 & B.4: Data Export Workflow | ✅ Direct match |
+| `13_data_export_workflow.png` | Figure B.3 and B.4: Data Export Workflow | ✅ Direct match |
 | `14_layer_architecture.png` | Figure A.1: System Architecture Deployment | ✅ Good match |
 | `15_software_architecture_of_android.png` | Figure 4.4: Android Application Layers | ✅ Direct match |
 | `17_software_installation_flow.png` | Figure A.3: Software Installation Workflow | ✅ Direct match |

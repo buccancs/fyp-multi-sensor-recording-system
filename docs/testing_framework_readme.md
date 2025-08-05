@@ -40,7 +40,7 @@ graph TB
         subgraph "Test Categories"
             UT[Unit Tests<br/>Component Validation]
             IT[Integration Tests<br/>System Interaction]
-            PT[Performance Tests<br/>Load & Stress]
+            PT[Performance Tests<br/>Load and Stress]
             E2E[End-to-End Tests<br/>Workflow Validation]
         end
         
@@ -82,7 +82,7 @@ flowchart TD
     E2E[End-to-End Tests]
     
     COLLECT[Results Collection]
-    ANALYZE[Analysis & Reporting]
+    ANALYZE[Analysis and Reporting]
     CLEANUP[Environment Cleanup]
     
     END([Test Execution Complete])

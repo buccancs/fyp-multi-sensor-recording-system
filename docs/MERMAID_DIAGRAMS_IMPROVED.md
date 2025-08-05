@@ -5,12 +5,11 @@ This document contains enhanced Mermaid diagrams following best practices for do
 ## Table of Contents Diagram
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 flowchart TD
     %% Main documentation structure
     START([Multi-Sensor Recording System<br/>Documentation Overview]) --> ARCH[System Architecture]
     START --> TECH[Technical Implementation]
-    START --> DEPLOY[Deployment & Operations]
+    START --> DEPLOY[Deployment and Operations]
     
     %% Architecture Documentation
     ARCH --> A1[Hardware Setup Architecture]
@@ -31,12 +30,6 @@ flowchart TD
     DEPLOY --> D3[Software Architecture - PC App]
     DEPLOY --> D4[Software Installation Flow]
     
-    %% Styling for different categories
-    classDef archClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef techClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef deployClass fill:#E8F5E8,stroke:#388E3C,stroke-width:2px,color:#000000
-    classDef startClass fill:#F5F5F5,stroke:#424242,stroke-width:3px,color:#000000
-    
     class START startClass
     class ARCH,A1,A2,A3,A4 archClass
     class TECH,T1,T2,T3,T4,T5 techClass
@@ -46,7 +39,6 @@ flowchart TD
 ## Hardware Setup Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph LAB ["Research Laboratory Environment"]
         direction TB
@@ -81,12 +73,12 @@ graph TB
             end
             
             subgraph CAMERAS ["USB Camera Array"]
-                BRIO_1["Logitech Brio 4K<br/>• Primary USB Webcam<br/>• 4K @ 30fps<br/>• Auto-focus & HDR"]
+                BRIO_1["Logitech Brio 4K<br/>• Primary USB Webcam<br/>• 4K @ 30fps<br/>• Auto-focus and HDR"]
                 BRIO_2["Logitech Brio 4K<br/>• Secondary USB Webcam<br/>• 4K @ 30fps<br/>• Wide Field of View"]
             end
             
             subgraph STORAGE_SYS ["Storage System"]
-                STORAGE["High-Performance Storage<br/>• NVMe SSD 1TB+<br/>• Multi-stream Recording<br/>• Backup & Redundancy"]
+                STORAGE["High-Performance Storage<br/>• NVMe SSD 1TB+<br/>• Multi-stream Recording<br/>• Backup and Redundancy"]
             end
             
             PC ---|USB 3.0<br/>High Bandwidth| BRIO_1
@@ -135,13 +127,7 @@ graph TB
     LIGHTING -.->|Optimal Illumination| CAMERAS
     TEMP -.->|Thermal Stability| COMPUTE
     ACOUSTIC -.->|Noise Reduction| LAB
-    
-    %% Styling
-    classDef mobileClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef stationaryClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef networkClass fill:#E8F5E8,stroke:#388E3C,stroke-width:2px,color:#000000
-    classDef infraClass fill:#F8F9FA,stroke:#F57C00,stroke-width:2px,color:#000000
-    
+
     class S22_1,S22_2,TC001_1,TC001_2,GSR_1,GSR_2 mobileClass
     class PC,BRIO_1,BRIO_2,STORAGE stationaryClass
     class ROUTER,SWITCH networkClass
@@ -151,15 +137,14 @@ graph TB
 ## Android App Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph ANDROID ["Android Application Clean Architecture"]
         direction TB
         
-        subgraph PRESENTATION ["Presentation Layer - UI & User Interaction"]
+        subgraph PRESENTATION ["Presentation Layer - UI and User Interaction"]
             direction TB
             
-            subgraph ACTIVITIES ["Activities & Fragments"]
+            subgraph ACTIVITIES ["Activities and Fragments"]
                 MA["MainActivity<br/>• Main UI Orchestrator<br/>• Fragment Navigation<br/>• Lifecycle Management"]
                 RF["RecordingFragment<br/>• Recording Controls UI<br/>• Real-time Status Display<br/>• User Interaction Handler"]
                 DF["DevicesFragment<br/>• Device Management UI<br/>• Connection Status Display<br/>• Pairing Interface"]
@@ -167,13 +152,13 @@ graph TB
                 FF["FilesFragment<br/>• File Management UI<br/>• Browse Recordings<br/>• Export Controls"]
             end
             
-            subgraph VIEWMODELS [" ViewModels & State Management"]
+            subgraph VIEWMODELS [" ViewModels and State Management"]
                 MVM[" MainViewModel<br/>• UI State Coordination<br/>• LiveData Management<br/>• Event Handling"]
                 RSM["RecordingStateManager<br/>• Recording State Logic<br/>• Status Broadcasting<br/>• Error Handling"]
                 DSM["DeviceStateManager<br/>• Device Connection States<br/>• Health Monitoring<br/>• Status Updates"]
             end
             
-            subgraph UI_UTILS [" UI Utilities & Navigation"]
+            subgraph UI_UTILS [" UI Utilities and Navigation"]
                 UC["UIController<br/>• Component Validation<br/>• Dynamic UI Updates<br/>• Theme Management"]
                 NU[" NavigationUtils<br/>• Fragment Navigation<br/>• Deep Linking<br/>• Back Stack Management"]
                 UU[" UIUtils<br/>• Helper Functions<br/>• UI Animations<br/>• Resource Management"]
@@ -181,7 +166,7 @@ graph TB
             end
         end
         
-        subgraph DOMAIN ["Domain Layer - Business Logic & Use Cases"]
+        subgraph DOMAIN ["Domain Layer - Business Logic and Use Cases"]
             direction TB
             
             subgraph RECORDING ["Recording Components"]
@@ -203,7 +188,7 @@ graph TB
             end
         end
         
-        subgraph DATA ["Data Layer - Storage & Device Integration"]
+        subgraph DATA ["Data Layer - Storage and Device Integration"]
             direction TB
             
             subgraph DEVICE_MGT ["Device Management"]
@@ -212,7 +197,7 @@ graph TB
                 UM["USBManager<br/>• USB-C OTG Management<br/>• Thermal Camera Control<br/>• Device Detection"]
             end
             
-            subgraph STORAGE ["Storage & Persistence"]
+            subgraph STORAGE ["Storage and Persistence"]
                 FS["FileSystemManager<br/>• Local Storage Management<br/>• Session Organization<br/>• File Hierarchy"]
                 MS["MetadataSerializer<br/>• JSON Serialization<br/>• Session Persistence<br/>• Data Integrity"]
                 CS["ConfigurationStore<br/>• Settings Persistence<br/>• Shared Preferences<br/>• Configuration Management"]
@@ -278,13 +263,7 @@ graph TB
     UC ==>|Activity Coordination<br/>Event Distribution| MAC
     MAC ==>|Navigation Control<br/>Fragment Management| NU
     NU ==>|UI Utilities<br/>Helper Functions| UU
-    
-    %% Styling
-    classDef presentationClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef domainClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef dataClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef infraClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    
+
     class MA,RF,DF,CF,FF,MVM,RSM,DSM,UC,NU,UU,MAC presentationClass
     class CR,TR,SR,SM,SI,SS,PCH,CM,PS domainClass
     class DST,BM,UM,FS,MS,CS dataClass
@@ -294,22 +273,21 @@ graph TB
 ## PC App Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
-    subgraph PC_APP ["PC Application Architecture - Python & PyQt5"]
+    subgraph PC_APP ["PC Application Architecture - Python and PyQt5"]
         direction TB
         
         subgraph UI_LAYER ["User Interface Layer - PyQt5 Framework"]
             direction TB
             
             subgraph MAIN_UI ["Main Application Windows"]
-                MW["MainWindow<br/>• Primary Application Window<br/>• Menu Bar & Toolbar<br/>• Status Bar Management<br/>• Central Widget Coordination"]
+                MW["MainWindow<br/>• Primary Application Window<br/>• Menu Bar and Toolbar<br/>• Status Bar Management<br/>• Central Widget Coordination"]
                 DW["DeviceWindow<br/>• Device Management Interface<br/>• Real-time Status Display<br/>• Connection Control Panel<br/>• Health Monitoring Dashboard"]
                 RW["RecordingWindow<br/>• Recording Control Interface<br/>• Live Preview Management<br/>• Session Configuration<br/>• Progress Monitoring"]
                 CW["CalibrationWindow<br/>• Sensor Calibration Interface<br/>• Validation Controls<br/>• Configuration Management<br/>• Quality Assurance Tools"]
             end
             
-            subgraph WIDGETS ["🧩 Custom Widgets & Components"]
+            subgraph WIDGETS ["🧩 Custom Widgets and Components"]
                 PW["PreviewWidget<br/>• Live Video Preview<br/>• Multi-stream Display<br/>• Real-time Rendering<br/>• Quality Controls"]
                 SW["StatusWidget<br/>• System Status Display<br/>• Performance Metrics<br/>• Alert Management<br/>• Health Indicators"]
                 LW["LogWidget<br/>• Application Logging<br/>• Event History<br/>• Debug Information<br/>• Error Tracking"]
@@ -335,12 +313,12 @@ graph TB
             end
         end
         
-        subgraph DATA_LAYER ["Data Access Layer - Storage & Communication"]
+        subgraph DATA_LAYER ["Data Access Layer - Storage and Communication"]
             direction TB
             
             subgraph COMMUNICATION ["Communication Services"]
                 SocketServer["SocketServer<br/>• TCP Socket Management<br/>• Client Connection Handling<br/>• Protocol Implementation<br/>• Message Routing"]
-                CommandProcessor["CommandProcessor<br/>• Command Parsing & Validation<br/>• Response Generation<br/>• Error Handling<br/>• Protocol Compliance"]
+                CommandProcessor["CommandProcessor<br/>• Command Parsing and Validation<br/>• Response Generation<br/>• Error Handling<br/>• Protocol Compliance"]
                 DataStreamer["DataStreamer<br/>• Real-time Data Streaming<br/>• Multi-client Broadcasting<br/>• Quality of Service<br/>• Buffer Management"]
             end
             
@@ -357,7 +335,7 @@ graph TB
             end
         end
         
-        subgraph EXTERNAL ["External Dependencies & Platform Integration"]
+        subgraph EXTERNAL ["External Dependencies and Platform Integration"]
             direction TB
             
             subgraph FRAMEWORKS ["Framework Dependencies"]
@@ -422,13 +400,7 @@ graph TB
     OS_Interface ==>|Platform Services<br/>System Resources| PyQt5
     HW_Interface ==>|Device Management<br/>Hardware Abstraction| OpenCV
     FS_Interface ==>|Storage Services<br/>File Operations| NumPy
-    
-    %% Styling
-    classDef uiClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef businessClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef dataClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef externalClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    
+
     class MW,DW,RW,CW,PW,SW,LW,FW uiClass
     class AC,DC,RC,CC,SM,DM,FM,NM businessClass
     class SocketServer,CommandProcessor,DataStreamer,FileHandler,DatabaseManager,ConfigManager,CameraHandler,DataCollector,SyncManager dataClass
@@ -438,7 +410,6 @@ graph TB
 ## Complete Data Flow Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TD
     subgraph COLLECTION ["Multi-Modal Data Collection Architecture"]
         direction TB
@@ -462,7 +433,7 @@ graph TD
         subgraph STATIONARY_SOURCES ["Stationary Data Sources"]
             direction LR
             
-            BRIO1["Logitech Brio 4K<br/>• Primary USB Camera<br/>• 4K @ 30fps Recording<br/>• Auto-focus & HDR<br/>• Wide Field of View"]
+            BRIO1["Logitech Brio 4K<br/>• Primary USB Camera<br/>• 4K @ 30fps Recording<br/>• Auto-focus and HDR<br/>• Wide Field of View"]
             BRIO2["Logitech Brio 4K<br/>• Secondary USB Camera<br/>• 4K @ 30fps Recording<br/>• Fixed Position<br/>• Detail Capture"]
         end
         
@@ -501,13 +472,13 @@ graph TD
                 PC_STORAGE["PC Primary Storage<br/>• High-speed NVMe SSD<br/>• Master Data Repository<br/>• Real-time Writing<br/>• Performance Optimization"]
             end
             
-            subgraph BACKUP_TIER ["Backup & Archive Tier"]
+            subgraph BACKUP_TIER ["Backup and Archive Tier"]
                 BACKUP_STORAGE["Backup Storage<br/>• Redundant Data Copies<br/>• Automated Backup<br/>• Version Control<br/>• Disaster Recovery"]
                 ARCHIVE_STORAGE["Archive Storage<br/>• Long-term Retention<br/>• Compressed Storage<br/>• Metadata Indexing<br/>• Research Database"]
             end
         end
         
-        subgraph EXPORT ["Data Export & Analysis Pipeline"]
+        subgraph EXPORT ["Data Export and Analysis Pipeline"]
             direction LR
             
             EXPORT_ENGINE["Export Engine<br/>• Multi-format Export<br/>• Quality Assurance<br/>• Compression Optimization<br/>• Delivery Management"]
@@ -559,13 +530,7 @@ graph TD
     SYNC_ENGINE -.->|Timing Information<br/>Latency Data<br/>Sync Status| PC_CTRL
     PC_CTRL -.->|Control Commands<br/>Configuration Updates<br/>Status Requests| ANDROID1
     PC_CTRL -.->|Control Commands<br/>Configuration Updates<br/>Status Requests| ANDROID2
-    
-    %% Styling
-    classDef sourceClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef processingClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef storageClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef controlClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    
+
     class CAM1,CAM2,THERMAL1,THERMAL2,GSR1,GSR2,BRIO1,BRIO2 sourceClass
     class ANDROID1,ANDROID2,MASTER_CLOCK,SYNC_ENGINE,QC_ENGINE,REDUNDANCY processingClass
     class MOBILE_STORAGE,PC_STORAGE,BACKUP_STORAGE,ARCHIVE_STORAGE storageClass
@@ -575,7 +540,6 @@ graph TD
 ## Networking Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph NETWORK ["Multi-Layer Network Architecture"]
         direction TB
@@ -636,7 +600,7 @@ graph TB
             end
         end
         
-        subgraph MONITORING ["Network Monitoring & Management"]
+        subgraph MONITORING ["Network Monitoring and Management"]
             direction TB
             
             subgraph PERFORMANCE [" Performance Monitoring"]
@@ -644,7 +608,7 @@ graph TB
                 BANDWIDTH_MONITOR["Bandwidth Monitor<br/>• Throughput Measurement<br/>• Utilization Tracking<br/>• Capacity Planning<br/>• Traffic Analysis"]
             end
             
-            subgraph RELIABILITY ["Reliability & Recovery"]
+            subgraph RELIABILITY ["Reliability and Recovery"]
                 CONNECTION_POOL["Connection Pool Manager<br/>• Connection Reuse<br/>• Pool Size Management<br/>• Health Checking<br/>• Resource Optimization"]
                 FAILOVER_MGMT["Failover Management<br/>• Automatic Recovery<br/>• Redundant Paths<br/>• Service Continuity<br/>• Graceful Degradation"]
             end
@@ -689,14 +653,7 @@ graph TB
     BANDWIDTH_MONITOR -.->|Capacity Information<br/>Traffic Patterns| IP_ROUTING
     CONNECTION_POOL -.->|Pool Status<br/>Resource Metrics| TCP_MGMT
     FAILOVER_MGMT -.->|Recovery Status<br/>Health Information| AUTH_LAYER
-    
-    %% Styling
-    classDef physicalClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef networkClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef applicationClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef endpointClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    classDef monitoringClass fill:#6C757D,stroke:#495057,stroke-width:2px,color:#000000
-    
+
     class ETHERNET,SWITCH,WIFI_ROUTER,ACCESS_POINT physicalClass
     class IP_ROUTING,QOS_MGMT,TCP_MGMT,UDP_STREAMING networkClass
     class JSON_SOCKET,HTTP_REST,WEBSOCKET,TLS_ENCRYPTION,AUTH_LAYER applicationClass
@@ -707,13 +664,12 @@ graph TB
 ## Data Collection Flow
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 flowchart TD
     %% Start of the data collection process
     START([Data Collection Process Start]) --> INIT_CHECK{🔍 System Initialization Check}
     
     %% Initialization and Setup Phase
-    INIT_CHECK -->|System Ready| DEVICE_DISCOVERY[Device Discovery & Connection]
+    INIT_CHECK -->|System Ready| DEVICE_DISCOVERY[Device Discovery and Connection]
     INIT_CHECK -->|❌ System Not Ready| ERROR_INIT[❌ Initialization Error]
     ERROR_INIT --> RETRY_INIT{Retry Initialization?}
     RETRY_INIT -->|Yes| INIT_CHECK
@@ -734,7 +690,7 @@ flowchart TD
     PARTIAL_MODE -->|No| ABORT
     
     %% Calibration and Configuration Phase
-    DEVICE_CHECK -->|All Connected| CALIBRATION[Sensor Calibration & Configuration]
+    DEVICE_CHECK -->|All Connected| CALIBRATION[Sensor Calibration and Configuration]
     CALIBRATION --> SYNC_SETUP[Clock Synchronization Setup]
     SYNC_SETUP --> QUALITY_CHECK[Quality Assurance Check]
     QUALITY_CHECK --> CALIB_VALID{Calibration Valid?}
@@ -754,7 +710,7 @@ flowchart TD
     START_RECORDING --> PARALLEL_RECORDING[Parallel Data Collection]
     
     %% Parallel Recording Streams
-    PARALLEL_RECORDING --> ANDROID_REC[Android Video & Thermal Recording]
+    PARALLEL_RECORDING --> ANDROID_REC[Android Video and Thermal Recording]
     PARALLEL_RECORDING --> GSR_REC[GSR Data Streaming]
     PARALLEL_RECORDING --> USB_REC[USB Camera Recording]
     PARALLEL_RECORDING --> MONITORING[Real-time Monitoring]
@@ -818,13 +774,6 @@ flowchart TD
     PARTIAL_RECOVERY --> ARCHIVE_READY
     LOSS_REPORT --> COMPLETE
     
-    %% Styling
-    classDef startEndClass fill:#28A745,stroke:#1E7E34,stroke-width:3px,color:#000000
-    classDef processClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef decisionClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef errorClass fill:#DC3545,stroke:#B02A37,stroke-width:2px,color:#000000
-    classDef warningClass fill:#FFC107,stroke:#E0A800,stroke-width:2px,color:#000000
-    
     class START,COMPLETE startEndClass
     class DEVICE_DISCOVERY,CONNECT_ANDROID,CONNECT_THERMAL,CONNECT_GSR,CONNECT_USB,CALIBRATION,SYNC_SETUP,QUALITY_CHECK,SESSION_SETUP,METADATA_SETUP,STORAGE_PREP,START_RECORDING,PARALLEL_RECORDING,ANDROID_REC,GSR_REC,USB_REC,MONITORING,QUALITY_MONITOR,SYNC_MONITOR,STOP_RECORDING,FINALIZE_DATA,DATA_VALIDATION,METADATA_COMPLETE,FILE_ORGANIZATION,COMPRESSION,BACKUP_CREATE,VERIFICATION,ARCHIVE_DATA,CLEANUP,SESSION_REPORT processClass
     class INIT_CHECK,DEVICE_CHECK,CALIB_VALID,RECORDING_READY,CONTINUE_REC,ERROR_DETECT,ERROR_TYPE,RESTART_CHECK,VERIFY_CHECK,RECOVERY_SUCCESS,RECOVERY_POSSIBLE decisionClass
@@ -835,7 +784,6 @@ flowchart TD
 ## Session Management Flow
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 flowchart TD
     %% Session Lifecycle Start
     START([Session Management Lifecycle]) --> SESSION_REQ[Session Creation Request]
@@ -843,7 +791,7 @@ flowchart TD
     %% Session Initialization
     SESSION_REQ --> VALIDATE_REQ{Validate Request Parameters?}
     VALIDATE_REQ -->|❌ Invalid| REQ_ERROR[❌ Request Validation Error]
-    REQ_ERROR --> ERROR_RESPONSE[📨 Error Response & Logging]
+    REQ_ERROR --> ERROR_RESPONSE[📨 Error Response and Logging]
     ERROR_RESPONSE --> END_ERROR([❌ Session Creation Failed])
     
     VALIDATE_REQ -->|Valid| GEN_SESSION_ID[🆔 Generate Unique Session ID]
@@ -966,15 +914,7 @@ flowchart TD
         QUALITY --> RESOURCES[Resource Usage]
         RESOURCES --> ALERTS[🚨 Alert Management]
     end
-    
-    %% Styling
-    classDef startEndClass fill:#28A745,stroke:#1E7E34,stroke-width:3px,color:#000000
-    classDef processClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef stateClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef decisionClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef errorClass fill:#DC3545,stroke:#B02A37,stroke-width:2px,color:#000000
-    classDef warningClass fill:#FFC107,stroke:#E0A800,stroke-width:2px,color:#000000
-    
+
     class START,END_SUCCESS,END_ERROR startEndClass
     class SESSION_REQ,GEN_SESSION_ID,CREATE_METADATA,INIT_STORAGE,DEVICE_PREP,CONFIG_SENSORS,SYNC_PREP,QUALITY_PREP,MONITOR_RECORDING,FINALIZE_SESSION,PROCESS_DATA,VALIDATE_DATA,ARCHIVE_SESSION,UPDATE_INDEX,GEN_REPORT,NOTIFY_COMPLETION,CLEANUP_TEMP,RELEASE_RESOURCES,SESSION_COMPLETE processClass
     class SESSION_READY,RECORDING_STATE,PAUSE_STATE,CREATED,INITIALIZED,READY,ACTIVE,PAUSED,STOPPING,COMPLETED stateClass
@@ -986,7 +926,6 @@ flowchart TD
 ## Data File System Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph FILESYSTEM ["Hierarchical Data File System Architecture"]
         direction TB
@@ -1042,7 +981,7 @@ graph TB
             METADATA_DIR --> QUALITY_REPORT["quality_report.json<br/>• Data Quality Assessment<br/>• Validation Results<br/>• Error Analysis<br/>• Recommendations"]
         end
         
-        subgraph BACKUP_STRATEGY ["Backup & Recovery Strategy"]
+        subgraph BACKUP_STRATEGY ["Backup and Recovery Strategy"]
             direction TB
             
             BACKUP --> LOCAL_BACKUP["Local Backup<br/>• Real-time Mirroring<br/>• RAID Configuration<br/>• Instant Recovery<br/>• Hardware Redundancy"]
@@ -1054,7 +993,7 @@ graph TB
             ARCHIVE_BACKUP --> COMPRESSION["Data Compression<br/>• Space Optimization<br/>• Format Preservation<br/>• Integrity Checking<br/>• Quality Retention"]
         end
         
-        subgraph ACCESS_CONTROL ["Access Control & Security"]
+        subgraph ACCESS_CONTROL ["Access Control and Security"]
             direction LR
             
             PERMISSIONS["Permission Management<br/>• Role-based Access<br/>• User Authentication<br/>• Operation Logging<br/>• Security Auditing"]
@@ -1086,15 +1025,7 @@ graph TB
     RAW_DATA ==>|Data Processing<br/>Quality Enhancement| PROCESSED
     PROCESSED ==>|Export Generation<br/>Distribution Ready| EXPORTS
     RAW_DATA ==>|Preview Generation<br/>Quick Reference| PREVIEWS
-    
-    %% Styling
-    classDef rootClass fill:#28A745,stroke:#1E7E34,stroke-width:3px,color:#000000
-    classDef sessionClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef deviceClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef dataClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef backupClass fill:#6C757D,stroke:#495057,stroke-width:2px,color:#000000
-    classDef securityClass fill:#DC3545,stroke:#B02A37,stroke-width:2px,color:#000000
-    
+
     class ROOT,SESSIONS,CALIBRATION,EXPORTS,BACKUP rootClass
     class SESSION_DIR,METADATA_DIR,RAW_DATA,PROCESSED,PREVIEWS sessionClass
     class ANDROID1_DATA,ANDROID2_DATA,PC_DATA deviceClass
@@ -1117,7 +1048,7 @@ flowchart TD
         QUALITY_SET[Quality Settings<br/>Compression Level<br/>Metadata Inclusion<br/>Validation Options]
     end
     
-    subgraph "Data Validation & Integrity"
+    subgraph "Data Validation and Integrity"
         INTEGRITY_CHECK[Integrity Verification<br/>File Completeness<br/>Checksum Validation<br/>Corruption Detection]
         SYNC_VALIDATE[Synchronization Validation<br/>Timestamp Consistency<br/>Alignment Quality<br/>Precision Metrics]
         QUALITY_ASSESS[Quality Assessment<br/>Signal Quality<br/>Calibration Accuracy<br/>Completeness Score]
@@ -1167,7 +1098,7 @@ flowchart TD
         QUALITY_REPORT[Quality Report<br/>Export Summary<br/>Quality Metrics<br/>⚠️ Known Issues]
     end
     
-    subgraph "Delivery & Distribution"
+    subgraph "Delivery and Distribution"
         EXPORT_DELIVERY[Export Delivery<br/>Local Storage<br/>Cloud Upload<br/>Email Notification]
         ACCESS_SETUP[Access Setup<br/>User Permissions<br/>Access Documentation<br/>Security Briefing]
         BACKUP_EXPORT[Export Backup<br/>Archive Storage<br/>Version Control<br/>Backup Verification]
@@ -1417,7 +1348,7 @@ Clean architecture implementation for the Android application showing layers, pa
 graph TB
     subgraph "Android Clean Architecture Implementation"
         subgraph "Presentation Layer (UI)"
-            subgraph "Activities & Fragments"
+            subgraph "Activities and Fragments"
                 MAIN_ACT[🏠 MainActivity<br/>Single Activity Pattern<br/>🧭 Navigation Host<br/>Lifecycle Management]
                 
                 subgraph "Feature Fragments"
@@ -1435,7 +1366,7 @@ graph TB
                 CAL_VM[CalibrationViewModel<br/>Calibration State<br/>Quality Metrics<br/>Validation Status]
             end
             
-            subgraph "UI Components & Utils"
+            subgraph "UI Components and Utils"
                 UI_CTRL[UIController<br/>Component Validation<br/>Theme Management<br/>♿ Accessibility Support]
                 NAV_UTIL[🧭 NavigationUtils<br/>Fragment Navigation<br/>State Preservation<br/>Route Management]
                 UI_UTIL[🛠️ UIUtils<br/>Styling Utilities<br/>Status Indicators<br/>Animation Helpers]
@@ -1494,7 +1425,7 @@ graph TB
         end
         
         subgraph "Infrastructure Layer"
-            subgraph "Framework & Platform"
+            subgraph "Framework and Platform"
                 ANDROID_FW[Android Framework<br/>Permission System<br/>Lifecycle Management<br/>System Services]
                 CAMERA2_FW[📷 Camera2 Framework<br/>📸 Low-level Control<br/>🎥 Concurrent Capture<br/>Hardware Abstraction]
                 BT_FW[📶 Bluetooth Framework<br/>📡 BLE Support<br/>Connection Management<br/>Service Discovery]
@@ -1514,19 +1445,19 @@ graph TB
         end
         
         subgraph "Cross-Cutting Concerns"
-            subgraph "Logging & Monitoring"
+            subgraph "Logging and Monitoring"
                 LOGGER[Logging System<br/>Structured Logging<br/>Debug Support<br/>Performance Tracking]
                 CRASH_REPORT[Crash Reporting<br/>Error Analytics<br/>Debug Information<br/>Stability Metrics]
                 PERF_MON[Performance Monitor<br/>Resource Tracking<br/>Memory Usage<br/>🔋 Battery Impact]
             end
             
-            subgraph "Security & Privacy"
+            subgraph "Security and Privacy"
                 ENCRYPT[Encryption Service<br/>Data Protection<br/>Key Management<br/>Secure Storage]
                 PERM_MGR[Permission Manager<br/>Runtime Permissions<br/>Access Control<br/>Security Enforcement]
                 PRIVACY[Privacy Protection<br/>Data Anonymization<br/>Secure Communication<br/>Consent Management]
             end
             
-            subgraph "Configuration & Settings"
+            subgraph "Configuration and Settings"
                 CONFIG_MGR[Configuration Manager<br/>Settings Hierarchy<br/>Validation Rules<br/>Dynamic Updates]
                 THEME_MGR[Theme Manager<br/>🌙 Dark/Light Mode<br/>Color Schemes<br/>♿ Accessibility Themes]
                 LOCALE_MGR[🌍 Localization Manager<br/>Multi-language Support<br/>🌐 Regional Settings<br/>Resource Management]
@@ -1709,7 +1640,7 @@ graph TB
                 ERROR_SYS[ErrorSystem<br/>Exception Handling<br/>Error Logging<br/>Recovery Mechanisms]
             end
             
-            subgraph "Threading & Concurrency"
+            subgraph "Threading and Concurrency"
                 THREAD_POOL[🧵 ThreadPool<br/>Worker Threads<br/>Load Balancing<br/>Task Scheduling]
                 ASYNC_MGR[AsyncManager<br/>Async Operations<br/>Future Management<br/>Timeout Handling]
                 QUEUE_MGR[QueueManager<br/>Message Queues<br/>Priority Handling<br/>Flow Control]
@@ -1874,13 +1805,13 @@ flowchart TD
         QOS_CONFIG[QoS Configuration<br/>Traffic Prioritization<br/>Bandwidth Allocation<br/>Performance Optimization]
     end
     
-    subgraph "Testing & Validation"
+    subgraph "Testing and Validation"
         UNIT_TEST[Unit Testing<br/>Test Execution<br/>Pass Verification<br/>Coverage Report]
         INTEGRATION_TEST[Integration Testing<br/>Device Communication<br/>Component Interaction<br/>End-to-end Validation]
         HARDWARE_TEST[Hardware Testing<br/>📷 Camera Functionality<br/>Sensor Validation<br/>🌐 Network Connectivity]
     end
     
-    subgraph "Documentation & Training"
+    subgraph "Documentation and Training"
         DOC_INSTALL[Documentation Install<br/>User Guides<br/>API Documentation<br/>Reference Materials]
         TUTORIAL_SETUP[🎓 Tutorial Setup<br/>Sample Projects<br/>Example Code<br/>Learning Resources]
         SUPPORT_SETUP[🆘 Support Setup<br/>Contact Information<br/>Troubleshooting Guide<br/>FAQ Resources]
