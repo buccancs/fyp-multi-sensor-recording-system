@@ -73,53 +73,44 @@ for each major component:
 **Core System Components:**
 
 - **Android Mobile Application**: Comprehensive sensor coordination and data collection platform
-    - Technical documentation: `docs/new_documentation/README_Android_Mobile_Application.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
+    - Technical documentation: `../android_mobile_application_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **Python Desktop Controller**: Central coordination hub for multi-device synchronization
-    - Technical documentation: `docs/new_documentation/README_python_desktop_controller.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
+    - Technical documentation: `../python_desktop_controller_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **Multi-Device Synchronization Framework**: Coordination protocols for distributed operation
-    - Technical documentation: `docs/new_documentation/README_Multi_Device_Synchronization.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
+    - Technical documentation: `../multi_device_synchronization_readme.md`
+    - Architecture overview: `../ARCHITECTURE_DIAGRAMS.md`
 
 - **Camera Recording System**: Video capture and processing pipeline
-    - Technical documentation: `docs/new_documentation/README_CameraRecorder.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
+    - See Android Mobile Application and thermal camera integration
+    - Technical documentation: `../thermal_camera_integration_readme.md`
 
 - **Session Management**: Research workflow coordination and data organization
-    - Technical documentation: `docs/new_documentation/README_session_management.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_session_management.md`
+    - Technical documentation: `../session_management_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **Networking Protocol**: Cross-platform communication framework
-    - Technical documentation: `docs/new_documentation/README_networking_protocol.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_networking_protocol.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_networking_protocol.md`
+    - Technical documentation: `../networking_protocol_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 **Sensor Integration Components:**
 
 - **Shimmer3 GSR+ Integration**: Reference physiological measurement sensor
-    - Technical documentation: `docs/new_documentation/README_shimmer3_gsr_plus.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
+    - Technical documentation: `../shimmer_integration_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **TopDon TC001 Thermal Camera**: Thermal imaging integration
-    - Technical documentation: `docs/new_documentation/README_topdon_tc001.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
+    - Technical documentation: `../thermal_camera_integration_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 **Supporting Infrastructure:**
 
 - **Testing and QA Framework**: Comprehensive validation system
-    - Technical documentation: `docs/new_documentation/README_testing_qa_framework.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+    - Technical documentation: `../testing_framework_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 **Validated System Capabilities:**
 
