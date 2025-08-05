@@ -4613,7 +4613,7 @@ def test_enhanced_ui_implementation():
 
 def test_requirements_file():
     print('\n📋 Testing Requirements File:')
-    req_file = Path(__file__).parent / 'requirements-enhanced.txt'
+    req_file = Path(__file__).parent / 'test-requirements.txt'
     if req_file.exists():
         print('✅ Enhanced requirements file: Found')
         with open(req_file, 'r') as f:

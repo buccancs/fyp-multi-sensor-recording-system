@@ -1,5 +1,6 @@
 package com.multisensor.recording.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -32,6 +33,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import android.widget.Toast
 
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
@@ -88,18 +90,22 @@ class FileViewActivity : AppCompatActivity() {
                 viewModel.refreshSessions()
                 true
             }
+
             R.id.action_delete_all -> {
                 showDeleteAllDialog()
                 true
             }
+
             R.id.action_export_all -> {
                 showMessage("Export functionality coming soon")
                 true
             }
+
             android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -146,6 +152,7 @@ class FileViewActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.onSearchQueryChanged(s.toString())
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -158,6 +165,7 @@ class FileViewActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.applyFilter(position)
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -218,7 +226,13 @@ class FileViewActivity : AppCompatActivity() {
     private fun handleFileClick(fileItem: FileItem) {
         AlertDialog.Builder(this)
             .setTitle(fileItem.file.name)
-            .setMessage("File size: ${formatFileSize(fileItem.file.length())}\nLast modified: ${dateFormatter.format(Date(fileItem.file.lastModified()))}")
+            .setMessage(
+                "File size: ${formatFileSize(fileItem.file.length())}\nLast modified: ${
+                    dateFormatter.format(
+                        Date(fileItem.file.lastModified())
+                    )
+                }"
+            )
             .setPositiveButton("Open") { _, _ ->
                 openFile(fileItem)
             }
@@ -280,6 +294,7 @@ class FileViewActivity : AppCompatActivity() {
             .show()
     }
 
+    @SuppressLint("DefaultLocale")
     private fun formatDuration(durationMs: Long): String {
         val seconds = durationMs / 1000
         val minutes = seconds / 60
@@ -291,6 +306,7 @@ class FileViewActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun formatFileSize(bytes: Long): String {
         return when {
             bytes >= 1024 * 1024 * 1024 -> String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0))
@@ -302,4 +318,17 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun getMimeType(fileType: FileType): String {
         return when (fileType) {
-            FileType.VIDEO -> "video
+            FileType.VIDEO -> "video"
+            FileType.RAW_IMAGE -> "image"
+            FileType.THERMAL_DATA -> "thermal"
+        }
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+}

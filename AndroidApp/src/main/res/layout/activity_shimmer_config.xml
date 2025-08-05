@@ -180,15 +180,13 @@
                     </LinearLayout>
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/gsr_sensor_switch"
-                        android:layout_width="match_parent"
+                            android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="GSR Sensor"
                         android:layout_marginBottom="8dp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/accelerometer_switch"
-                        android:layout_width="match_parent"
+                            android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Accelerometer" />
 
