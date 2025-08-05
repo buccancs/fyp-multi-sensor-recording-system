@@ -11,25 +11,26 @@ Milestone: 3.5 - Enhanced Stimulus Presentation Controller
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
     QAction,
-    QMessageBox,
-    QDockWidget,
-    QTextEdit,
-    QLabel,
-    QPushButton,
     QComboBox,
+    QDockWidget,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QMessageBox,
     QProgressBar,
+    QPushButton,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
+
 from bucika_gsr.network.device_server import JsonSocketServer
 from bucika_gsr.session.session_manager import SessionManager
 from bucika_gsr.webcam.webcam_capture import WebcamCapture
 
 from .device_panel import DeviceStatusPanel
-from .enhanced_stimulus_controller import EnhancedStimulusController, VLC_AVAILABLE
+from .enhanced_stimulus_controller import VLC_AVAILABLE, EnhancedStimulusController
 from .preview_panel import PreviewPanel
 from .stimulus_panel import StimulusControlPanel
 

@@ -14,28 +14,29 @@ import json
 import os
 import platform
 import subprocess
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, Optional
+
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (
     QDialog,
-    QVBoxLayout,
+    QFrame,
+    QGridLayout,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QListWidget,
     QListWidgetItem,
-    QPushButton,
-    QTextEdit,
-    QTabWidget,
-    QWidget,
-    QGroupBox,
-    QGridLayout,
     QMessageBox,
+    QPushButton,
     QSplitter,
-    QFrame,
+    QTabWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from datetime import datetime
-from pathlib import Path
-from typing import Optional, Dict
 
 
 class SessionReviewDialog(QDialog):

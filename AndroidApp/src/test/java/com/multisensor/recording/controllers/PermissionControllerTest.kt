@@ -381,7 +381,7 @@ class PermissionControllerTest {
             permissionController.checkPermissions(mockContext)
             permissionController.updatePermissionButtonVisibility(mockContext)
             permissionController.requestPermissionsManually(mockContext)
-            // If we reach here, no exception was thrown
+
         } catch (e: Exception) {
             fail("Operations should not crash when callback is null, but got: ${e.message}")
         }
@@ -395,7 +395,7 @@ class PermissionControllerTest {
             permissionController.setCallback(mockContext as PermissionController.PermissionCallback)
             permissionController.resetState()
             permissionController.clearPersistedState()
-            // If we reach here, no exception was thrown
+
         } catch (e: Exception) {
             fail("Operations should handle SharedPreferences initialization failure gracefully, but got: ${e.message}")
         }

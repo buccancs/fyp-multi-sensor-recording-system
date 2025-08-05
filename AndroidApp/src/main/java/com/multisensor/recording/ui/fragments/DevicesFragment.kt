@@ -37,7 +37,7 @@ class DevicesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Add visual feedback to confirm fragment is loaded
+
         Toast.makeText(requireContext(), "Devices Fragment Loaded", Toast.LENGTH_SHORT).show()
 
         setupUI()

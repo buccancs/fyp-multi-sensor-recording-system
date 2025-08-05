@@ -13,21 +13,22 @@ Milestone: 3.5 - Stimulus Presentation Controller
 import json
 import os
 import time
-from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QUrl
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+from PyQt5.QtCore import Qt, QTimer, QUrl, pyqtSignal
 from PyQt5.QtGui import QKeySequence
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QShortcut,
     QApplication,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QShortcut,
+    QVBoxLayout,
+    QWidget,
 )
-from datetime import datetime
-from typing import Optional, Dict, Any
 
 
 class TimingLogger:

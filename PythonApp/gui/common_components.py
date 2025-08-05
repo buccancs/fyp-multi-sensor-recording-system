@@ -1,7 +1,17 @@
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QFont, QPalette
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTextEdit, QProgressBar, QFrame, \
-    QGroupBox, QSizePolicy
+from PyQt5.QtWidgets import (
+    QFrame,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QProgressBar,
+    QPushButton,
+    QSizePolicy,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ..utils.logging_config import get_logger
 
@@ -9,10 +19,10 @@ from ..utils.logging_config import get_logger
 class StatusIndicator(QWidget):
     statusChanged = pyqtSignal(bool, str)
 
-    def __init__(self, label_text='Status', parent=None):
+    def __init__(self, label_text="Status", parent=None):
         super().__init__(parent)
         self.is_connected = False
-        self.status_text = 'Disconnected'
+        self.status_text = "Disconnected"
         self.logger = get_logger(__name__)
         self.setup_ui(label_text)
         self.update_appearance()
@@ -23,7 +33,7 @@ class StatusIndicator(QWidget):
         self.label = QLabel(label_text)
         self.label.setMinimumWidth(80)
         layout.addWidget(self.label)
-        self.indicator = QLabel('●')
+        self.indicator = QLabel("●")
         self.indicator.setFixedSize(16, 16)
         self.indicator.setAlignment(Qt.AlignCenter)
         font = QFont()
@@ -35,33 +45,32 @@ class StatusIndicator(QWidget):
         layout.addWidget(self.status_label)
         layout.addStretch()
 
-    def set_status(self, is_connected, status_text=''):
-        if (self.is_connected != is_connected or self.status_text !=
-            status_text):
+    def set_status(self, is_connected, status_text=""):
+        if self.is_connected != is_connected or self.status_text != status_text:
             self.is_connected = is_connected
             if status_text:
                 self.status_text = status_text
             else:
-                self.status_text = ('Connected' if is_connected else
-                    'Disconnected')
+                self.status_text = "Connected" if is_connected else "Disconnected"
             self.update_appearance()
             self.statusChanged.emit(is_connected, self.status_text)
             self.logger.debug(
-                f'Status updated: {self.label.text()} - {self.status_text}')
+                f"Status updated: {self.label.text()} - {self.status_text}"
+            )
 
     def update_appearance(self):
         if self.is_connected:
-            self.indicator.setStyleSheet('color: #4CAF50;')
-            self.status_label.setStyleSheet('color: #2E7D32;')
+            self.indicator.setStyleSheet("color: #4CAF50;")
+            self.status_label.setStyleSheet("color: #2E7D32;")
         else:
-            self.indicator.setStyleSheet('color: #f44336;')
-            self.status_label.setStyleSheet('color: #C62828;')
+            self.indicator.setStyleSheet("color: #f44336;")
+            self.status_label.setStyleSheet("color: #C62828;")
         self.status_label.setText(self.status_text)
 
 
 class ModernButton(QPushButton):
 
-    def __init__(self, text, button_type='primary', parent=None):
+    def __init__(self, text, button_type="primary", parent=None):
         super().__init__(text, parent)
         self.button_type = button_type
         self.setup_styling()
@@ -87,8 +96,8 @@ class ModernButton(QPushButton):
                 opacity: 0.6;
             }
         """
-        color_styles = {'primary':
-            """
+        color_styles = {
+            "primary": """
                 QPushButton {
                     background-color:
                     color: white;
@@ -96,9 +105,8 @@ class ModernButton(QPushButton):
                 QPushButton:hover {
                     background-color:
                 }
-            """
-            , 'success':
-            """
+            """,
+            "success": """
                 QPushButton {
                     background-color:
                     color: white;
@@ -106,9 +114,8 @@ class ModernButton(QPushButton):
                 QPushButton:hover {
                     background-color:
                 }
-            """
-            , 'danger':
-            """
+            """,
+            "danger": """
                 QPushButton {
                     background-color:
                     color: white;
@@ -116,9 +123,8 @@ class ModernButton(QPushButton):
                 QPushButton:hover {
                     background-color:
                 }
-            """
-            , 'secondary':
-            """
+            """,
+            "secondary": """
                 QPushButton {
                     background-color:
                     color: white;
@@ -126,10 +132,9 @@ class ModernButton(QPushButton):
                 QPushButton:hover {
                     background-color:
                 }
-            """
-            }
-        style = base_style + color_styles.get(self.button_type,
-            color_styles['primary'])
+            """,
+        }
+        style = base_style + color_styles.get(self.button_type, color_styles["primary"])
         self.setStyleSheet(style)
 
 
@@ -159,12 +164,12 @@ class ModernGroupBox(QGroupBox):
                 background-color:
             }
         """
-            )
+        )
 
 
 class ProgressIndicator(QWidget):
 
-    def __init__(self, label_text='Progress', parent=None):
+    def __init__(self, label_text="Progress", parent=None):
         super().__init__(parent)
         self.setup_ui(label_text)
 
@@ -191,10 +196,10 @@ class ProgressIndicator(QWidget):
                 border-radius: 3px;
             }
         """
-            )
+        )
         layout.addWidget(self.progress_bar)
 
-    def set_progress(self, value, text=''):
+    def set_progress(self, value, text=""):
         self.progress_bar.setValue(max(0, min(100, value)))
         if text:
             self.label.setText(text)
@@ -210,7 +215,7 @@ class ProgressIndicator(QWidget):
 
 class LogViewer(QWidget):
 
-    def __init__(self, title='System Log', parent=None):
+    def __init__(self, title="System Log", parent=None):
         super().__init__(parent)
         self.max_lines = 1000
         self.setup_ui(title)
@@ -219,7 +224,8 @@ class LogViewer(QWidget):
         layout = QVBoxLayout(self)
         title_label = QLabel(title)
         title_label.setStyleSheet(
-            'font-weight: 600; font-size: 14px; margin-bottom: 5px;')
+            "font-weight: 600; font-size: 14px; margin-bottom: 5px;"
+        )
         layout.addWidget(title_label)
         self.log_text = QTextEdit()
         self.log_text.setReadOnly(True)
@@ -236,53 +242,61 @@ class LogViewer(QWidget):
                 padding: 5px;
             }
         """
-            )
+        )
         layout.addWidget(self.log_text)
         button_layout = QHBoxLayout()
-        self.clear_button = ModernButton('Clear', 'secondary')
+        self.clear_button = ModernButton("Clear", "secondary")
         self.clear_button.clicked.connect(self.clear_log)
         button_layout.addWidget(self.clear_button)
         button_layout.addStretch()
-        self.save_button = ModernButton('Save Log', 'primary')
+        self.save_button = ModernButton("Save Log", "primary")
         self.save_button.clicked.connect(self.save_log)
         button_layout.addWidget(self.save_button)
         layout.addLayout(button_layout)
 
-    def add_log_entry(self, message, level='INFO'):
+    def add_log_entry(self, message, level="INFO"):
         from datetime import datetime
-        timestamp = datetime.now().strftime('%H:%M:%S')
-        level_colors = {'DEBUG': '#90A4AE', 'INFO': '#81C784', 'WARNING':
-            '#FFB74D', 'ERROR': '#E57373', 'CRITICAL': '#F44336'}
-        color = level_colors.get(level, '#ECEFF1')
+
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        level_colors = {
+            "DEBUG": "#90A4AE",
+            "INFO": "#81C784",
+            "WARNING": "#FFB74D",
+            "ERROR": "#E57373",
+            "CRITICAL": "#F44336",
+        }
+        color = level_colors.get(level, "#ECEFF1")
         formatted_message = (
             f'<span style="color: {color};">[{timestamp}] {level}: {message}</span>'
-            )
+        )
         self.log_text.append(formatted_message)
         scrollbar = self.log_text.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
 
     def clear_log(self):
         self.log_text.clear()
-        self.add_log_entry('Log cleared', 'INFO')
+        self.add_log_entry("Log cleared", "INFO")
 
     def save_log(self):
         from PyQt5.QtWidgets import QFileDialog
-        filename, _ = QFileDialog.getSaveFileName(self, 'Save Log',
-            'system_log.txt', 'Text Files (*.txt)')
+
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "Save Log", "system_log.txt", "Text Files (*.txt)"
+        )
         if filename:
             try:
-                with open(filename, 'w') as f:
+                with open(filename, "w") as f:
                     f.write(self.log_text.toPlainText())
-                self.add_log_entry(f'Log saved to {filename}', 'INFO')
+                self.add_log_entry(f"Log saved to {filename}", "INFO")
             except Exception as e:
-                self.add_log_entry(f'Failed to save log: {e}', 'ERROR')
+                self.add_log_entry(f"Failed to save log: {e}", "ERROR")
 
 
 class ConnectionManager(QWidget):
     connectionRequested = pyqtSignal(str)
     disconnectionRequested = pyqtSignal(str)
 
-    def __init__(self, device_type='Generic Device', parent=None):
+    def __init__(self, device_type="Generic Device", parent=None):
         super().__init__(parent)
         self.device_type = device_type
         self.is_connected = False
@@ -291,15 +305,15 @@ class ConnectionManager(QWidget):
     def setup_ui(self):
         layout = QVBoxLayout(self)
         device_label = QLabel(self.device_type)
-        device_label.setStyleSheet('font-weight: 600; font-size: 14px;')
+        device_label.setStyleSheet("font-weight: 600; font-size: 14px;")
         layout.addWidget(device_label)
-        self.status_indicator = StatusIndicator('Status')
+        self.status_indicator = StatusIndicator("Status")
         layout.addWidget(self.status_indicator)
         button_layout = QHBoxLayout()
-        self.connect_button = ModernButton('Connect', 'success')
+        self.connect_button = ModernButton("Connect", "success")
         self.connect_button.clicked.connect(self.request_connection)
         button_layout.addWidget(self.connect_button)
-        self.disconnect_button = ModernButton('Disconnect', 'danger')
+        self.disconnect_button = ModernButton("Disconnect", "danger")
         self.disconnect_button.clicked.connect(self.request_disconnection)
         self.disconnect_button.setEnabled(False)
         button_layout.addWidget(self.disconnect_button)
@@ -311,7 +325,7 @@ class ConnectionManager(QWidget):
     def request_disconnection(self):
         self.disconnectionRequested.emit(self.device_type)
 
-    def set_connection_status(self, connected, status_text=''):
+    def set_connection_status(self, connected, status_text=""):
         self.is_connected = connected
         self.status_indicator.set_status(connected, status_text)
         self.connect_button.setEnabled(not connected)
@@ -343,5 +357,5 @@ def create_separator(orientation=Qt.Horizontal):
     else:
         separator.setFrameShape(QFrame.VLine)
     separator.setFrameShadow(QFrame.Sunken)
-    separator.setStyleSheet('color: #E0E0E0;')
+    separator.setStyleSheet("color: #E0E0E0;")
     return separator

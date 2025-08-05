@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         setSupportActionBar(binding.toolbar)
         try {
-            // Get NavController properly by first getting the NavHostFragment
+
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
 
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Removed manual navigation click listener since setupActionBarWithNavController handles this
+
     }
 
     private fun observeViewModel() {

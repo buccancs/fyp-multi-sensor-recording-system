@@ -1,16 +1,17 @@
 import sys
+
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QApplication
 
+from ..network.device_server import JsonSocketServer
+from ..session.session_logger import get_session_logger
+from ..session.session_manager import SessionManager
+from ..utils.logging_config import get_logger
 from .gui.main_controller import MainController
 from .gui.main_window import MainWindow
 from .gui.simplified_main_window import SimplifiedMainWindow
 from .gui.stimulus_controller import StimulusController
 from .webcam.webcam_capture import WebcamCapture
-from ..network.device_server import JsonSocketServer
-from ..session.session_logger import get_session_logger
-from ..session.session_manager import SessionManager
-from ..utils.logging_config import get_logger
 
 
 class Application(QObject):
@@ -26,48 +27,49 @@ class Application(QObject):
         self.main_controller = None
         self.main_window = None
         self._create_services()
-        self.logger.info('application initialized')
+        self.logger.info("application initialized")
 
     def _create_services(self):
         try:
             self.session_manager = SessionManager()
-            self.json_server = JsonSocketServer(session_manager=self.
-                session_manager)
+            self.json_server = JsonSocketServer(session_manager=self.session_manager)
             self.webcam_capture = WebcamCapture()
             self.stimulus_controller = None
             if not self.use_simplified_ui:
                 self.main_controller = MainController()
         except Exception as e:
-            self.logger.error(f'failed to create services: {e}')
+            self.logger.error(f"failed to create services: {e}")
             raise
 
     def create_main_window(self):
         try:
             if self.use_simplified_ui:
                 self.main_window = SimplifiedMainWindow()
-                self.logger.info('Created simplified main window')
+                self.logger.info("Created simplified main window")
             else:
                 self.main_window = MainWindow()
                 self.stimulus_controller = StimulusController(self.main_window)
-                self.main_controller.inject_dependencies(session_manager=
-                    self.session_manager, json_server=self.json_server,
-                    webcam_capture=self.webcam_capture, stimulus_controller
-                    =self.stimulus_controller)
+                self.main_controller.inject_dependencies(
+                    session_manager=self.session_manager,
+                    json_server=self.json_server,
+                    webcam_capture=self.webcam_capture,
+                    stimulus_controller=self.stimulus_controller,
+                )
                 self.main_window.set_controller(self.main_controller)
-                self.logger.info('Created traditional main window')
+                self.logger.info("Created traditional main window")
             return self.main_window
         except Exception as e:
-            self.logger.error(f'failed to create main window: {e}')
+            self.logger.error(f"failed to create main window: {e}")
             raise
 
     def run(self):
         try:
             main_window = self.create_main_window()
             main_window.show()
-            self.logger.info('application started')
+            self.logger.info("application started")
             return main_window
         except Exception as e:
-            self.logger.error(f'failed to run application: {e}')
+            self.logger.error(f"failed to run application: {e}")
             raise
 
     def cleanup(self):
@@ -78,9 +80,9 @@ class Application(QObject):
                 self.json_server.cleanup()
             if self.webcam_capture:
                 self.webcam_capture.cleanup()
-            self.logger.info('cleanup completed')
+            self.logger.info("cleanup completed")
         except Exception as e:
-            self.logger.error(f'cleanup error: {e}')
+            self.logger.error(f"cleanup error: {e}")
 
 
 def main():
@@ -92,9 +94,9 @@ def main():
         qt_app.aboutToQuit.connect(app.cleanup)
         sys.exit(qt_app.exec_())
     except Exception as e:
-        logger.error(f'application failed: {e}')
+        logger.error(f"application failed: {e}")
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
