@@ -206,7 +206,7 @@ class JsonSocketServer(QThread):
                 device = self.devices[device_id]
                 status_data = {'battery': message.get('battery'), 'storage':
                     message.get('storage'), 'temperature': message.get(
-                    'temperature'), 'recording': message.get('recording', 
+                    'temperature'), 'recording': message.get('recording',
                     False), 'connected': message.get('connected', True),
                     'timestamp': message.get('timestamp')}
                 device.update_status(status_data)

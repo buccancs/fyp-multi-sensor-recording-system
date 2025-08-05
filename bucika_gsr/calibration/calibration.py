@@ -180,7 +180,7 @@ class CalibrationManager:
                 min_x, min_y = np.min(all_points.reshape(-1, 2), axis=0)
                 max_x, max_y = np.max(all_points.reshape(-1, 2), axis=0)
                 coverage_area = (max_x - min_x) * (max_y - min_y)
-                quality_metrics['pattern_coverage'] = min(100.0, 
+                quality_metrics['pattern_coverage'] = min(100.0,
                     coverage_area / total_area * 100)
             mean_error = quality_metrics['mean_reprojection_error']
             if mean_error < 0.5:
@@ -223,7 +223,7 @@ class CalibrationManager:
             'thermal_distortion_coeffs': self.thermal_distortion_coeffs.
             tolist() if self.thermal_distortion_coeffs is not None else
             None, 'rotation_matrix': self.rotation_matrix.tolist() if self.
-            rotation_matrix is not None else None, 'translation_vector': 
+            rotation_matrix is not None else None, 'translation_vector':
             self.translation_vector.tolist() if self.translation_vector is not
             None else None, 'calibration_quality': self.calibration_quality,
             'timestamp': time.time(), 'calibration_parameters': {

@@ -235,14 +235,12 @@ pause
 echo "Starting Multi-Sensor Recording System..."
 echo
 
-# Check if Python is installed
 if ! command -v python3 &> /dev/null; then
     echo "Error: Python 3 is not installed"
     echo "Please install Python 3.8 or later"
     exit 1
 fi
 
-# Create virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
     python3 -m venv venv
@@ -338,40 +336,31 @@ python src/application.py
             api_overview.write_text(
                 """# Python API Documentation
 
-## Core Modules
 
-### Application (`src/application.py`)
 Main application entry point and GUI management.
 
-### Session Management (`src/session/`)
 - `session_manager.py` - Recording session management
 - `session_logger.py` - Session logging and persistence
 - `session_synchronizer.py` - Cross-device synchronization
 
-### Calibration (`src/calibration/`)
 - `calibration_manager.py` - Camera calibration management
 - `calibration_processor.py` - Calibration algorithms
 - `calibration_result.py` - Calibration data structures
 
-### Networking (`src/networking/`)
 - `json_socket_server.py` - JSON-based socket server
 - `device_server.py` - Device communication management
 
-### Production (`src/production/`)
 - `performance_benchmark.py` - Performance benchmarking tools
 - `security_scanner.py` - Security assessment tools
 
-## Configuration
 
 See `protocol/config.json` for runtime configuration options.
 See `protocol/message_schema.json` for network message definitions.
 
-## Usage Examples
 
 ```python
 from src.application import Application
 
-# Start the application
 app = Application()
 app.run()
 ```
@@ -391,42 +380,34 @@ For detailed usage examples, see the user manual.
 Version: {self.version}
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-## Overview
 
 The Multi-Sensor Recording System is a comprehensive solution for synchronized recording
 across multiple devices including Android cameras, Shimmer sensors, and thermal cameras.
 
-## System Requirements
 
-### PC Application (Python)
 - Windows 10/11, macOS 10.15+, or Linux Ubuntu 18.04+
 - Python 3.8 or later
 - 8GB RAM minimum, 16GB recommended
 - 1GB free disk space
 - Network connectivity (Wi-Fi or Ethernet)
 
-### Android Application
 - Android 7.0 (API level 24) or later
 - 4GB RAM minimum
 - Camera permission
 - Network connectivity (Wi-Fi)
 - 500MB free storage
 
-## Installation
 
-### PC Application
 1. Extract the Python distribution zip file
 2. Run the appropriate startup script:
    - Windows: Double-click `start.bat`
    - macOS/Linux: Run `./start.sh` in terminal
 3. The application will automatically install dependencies
 
-### Android Application
 1. Enable "Unknown sources" in Android security settings
 2. Install the APK file: `MultiSensorRecording-{self.version}.apk`
 3. Grant camera and storage permissions when prompted
 
-## Quick Start
 
 1. Start the PC application
 2. Install and start the Android app
@@ -435,47 +416,37 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 5. Tap "Connect" to establish connection
 6. Use the PC interface to start/stop recordings
 
-## Features
 
-### Recording Capabilities
 - Synchronized video recording across multiple Android devices
 - Shimmer sensor data collection
 - Thermal camera integration
 - Automatic file organization and metadata
 
-### Calibration
 - Camera calibration using chessboard patterns
 - Real-time calibration feedback
 - Calibration result validation
 
-### Session Management
 - Session-based recording organization
 - Automatic session recovery after crashes
 - Session metadata and logging
 
-### Network Communication
 - Robust PC-Android communication
 - Automatic reconnection handling
 - Real-time status monitoring
 
-## Troubleshooting
 
-### Connection Issues
 - Verify both devices are on the same network
 - Check firewall settings on PC
 - Ensure port 9000 is not blocked
 
-### Performance Issues
 - Close unnecessary applications
 - Ensure adequate storage space
 - Check network bandwidth
 
-### Recording Issues
 - Verify camera permissions on Android
 - Check storage permissions
 - Ensure adequate free space
 
-## Support
 
 For technical support and updates, please refer to the project documentation
 or contact the development team.
@@ -490,9 +461,7 @@ or contact the development team.
 
 Version: {self.version}
 
-## Production Deployment
 
-### Pre-deployment Checklist
 
 - [ ] All tests pass
 - [ ] Security scan completed
@@ -500,7 +469,6 @@ Version: {self.version}
 - [ ] Documentation is up-to-date
 - [ ] Production configuration reviewed
 
-### Android APK Deployment
 
 1. **Production APK**: `MultiSensorRecording-{self.version}.apk`
    - Signed with release key
@@ -511,7 +479,6 @@ Version: {self.version}
    - For testing and development
    - Not for production use
 
-### Python Application Deployment
 
 1. **Source Distribution**: `MultiSensorRecording-Python-{self.version}.zip`
    - Complete source code
@@ -520,47 +487,39 @@ Version: {self.version}
 
 2. **Installation Steps**:
    ```bash
-   # Extract the distribution
    unzip MultiSensorRecording-Python-{self.version}.zip
    cd MultiSensorRecording-Python-{self.version}
-   
-   # Windows
+
    start.bat
-   
-   # Linux/macOS
+
    chmod +x start.sh
    ./start.sh
    ```
 
-### Network Configuration
 
 Default configuration in `protocol/config.json`:
 - Port: 9000
 - Host: 192.168.0.100 (update for your network)
 - Protocol: TCP with JSON messages
 
-### Security Considerations
 
 - Enable firewall rules for port 9000
 - Use encrypted networks (WPA2/WPA3)
 - Regularly update dependencies
 - Monitor for security updates
 
-### Performance Optimization
 
 - Allocate at least 8GB RAM for PC application
 - Use SSD storage for better I/O performance
 - Ensure stable network connectivity
 - Monitor system resources during operation
 
-### Monitoring and Maintenance
 
 - Check log files regularly (`logs/` directory)
 - Monitor disk space usage
 - Backup recording sessions
 - Update components as needed
 
-### Troubleshooting
 
 Common deployment issues:
 1. Port conflicts - Change port in config.json
@@ -568,7 +527,6 @@ Common deployment issues:
 3. Network connectivity - Check firewall and network settings
 4. Missing dependencies - Run startup scripts to install
 
-### Rollback Procedures
 
 If deployment issues occur:
 1. Stop all running applications
@@ -576,7 +534,6 @@ If deployment issues occur:
 3. Verify configuration
 4. Restart services
 
-### Support and Updates
 
 - Keep deployment guide with installation
 - Document any configuration changes
@@ -593,52 +550,40 @@ If deployment issues occur:
 Version: {self.version}
 Build Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-## Package Contents
 
 This distribution contains the complete Multi-Sensor Recording System for production deployment:
 
-### Android Application
 - `android/MultiSensorRecording-{self.version}.apk` - Production APK
 - `android/MultiSensorRecording-{self.version}-debug.apk` - Debug APK
 
-### Python PC Application
 - `python/MultiSensorRecording-Python-{self.version}.zip` - Complete Python distribution
 
-### Documentation
 - `MultiSensorRecording-Docs-{self.version}.zip` - Complete documentation package
 - `USER_MANUAL.md` - User installation and operation guide
 - `DEPLOYMENT_GUIDE.md` - Production deployment instructions
 
-### Installation Scripts
 - `install.bat` - Windows installation script
 - `install.sh` - Linux/macOS installation script
 
-## Quick Installation
 
-### Windows
 1. Run `install.bat` as Administrator
 2. Follow the on-screen instructions
 
-### Linux/macOS
 1. Make script executable: `chmod +x install.sh`
 2. Run: `sudo ./install.sh`
 
-### Manual Installation
 1. Extract Python distribution: `python/MultiSensorRecording-Python-{self.version}.zip`
 2. Install Android APK: `android/MultiSensorRecording-{self.version}.apk`
 3. Follow the User Manual for detailed setup
 
-## System Requirements
 
 - **PC**: Windows 10+/macOS 10.15+/Ubuntu 18.04+, Python 3.8+, 8GB RAM
 - **Android**: Android 7.0+, 4GB RAM, Camera access
 - **Network**: Wi-Fi or Ethernet connection between devices
 
-## Support
 
 Refer to the documentation package for complete setup and troubleshooting guides.
 
-## Verification
 
 Package integrity can be verified using the provided checksums in `checksums.txt`.
 
@@ -725,7 +670,6 @@ echo
 
 echo "Checking system requirements..."
 
-# Check if Python is installed
 if ! command -v python3 &> /dev/null; then
     echo "Error: Python 3 is required but not found"
     echo "Please install Python 3.8 or later"
@@ -735,7 +679,6 @@ fi
 
 echo "Python found - OK"
 
-# Check if unzip is available
 if ! command -v unzip &> /dev/null; then
     echo "Error: unzip is required but not found"
     echo "Please install unzip utility"
@@ -744,7 +687,6 @@ fi
 
 echo "Unzip found - OK"
 
-# Check if ADB is available (optional)
 if ! command -v adb &> /dev/null; then
     echo "Note: ADB not found - Android debugging will not be available"
 else
@@ -754,7 +696,6 @@ fi
 echo
 echo "Installing Python application..."
 
-# Extract Python distribution
 if [ -f "python/MultiSensorRecording-Python-{self.version}.zip" ]; then
     echo "Extracting Python application..."
     cd python

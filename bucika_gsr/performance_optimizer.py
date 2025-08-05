@@ -69,14 +69,14 @@ class MemoryOptimizer:
         if tracemalloc.is_tracing():
             current, peak = tracemalloc.get_traced_memory()
             tracemalloc.stop()
-            return {'current_mb': current / 1024 / 1024, 'peak_mb': peak / 
+            return {'current_mb': current / 1024 / 1024, 'peak_mb': peak /
                 1024 / 1024}
         return None
 
     def get_memory_snapshot(self) ->Dict[str, Any]:
         process = psutil.Process()
         memory_info = process.memory_info()
-        snapshot = {'rss_mb': memory_info.rss / 1024 / 1024, 'vms_mb': 
+        snapshot = {'rss_mb': memory_info.rss / 1024 / 1024, 'vms_mb':
             memory_info.vms / 1024 / 1024, 'percent': process.
             memory_percent(), 'available_mb': psutil.virtual_memory().
             available / 1024 / 1024, 'total_mb': psutil.virtual_memory().
@@ -205,7 +205,7 @@ class NetworkOptimizer:
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
         self.bandwidth_history = deque(maxlen=60)
-        self.quality_levels = {'high': {'resolution': (1920, 1080), 'fps': 
+        self.quality_levels = {'high': {'resolution': (1920, 1080), 'fps':
             30, 'quality': 0.9}, 'medium': {'resolution': (1280, 720),
             'fps': 20, 'quality': 0.7}, 'low': {'resolution': (640, 480),
             'fps': 15, 'quality': 0.5}}
@@ -328,7 +328,7 @@ class PerformanceMonitor:
         net_io = psutil.net_io_counters()
         disk_io = psutil.disk_io_counters()
         return PerformanceMetrics(timestamp=time.time(), cpu_percent=
-            process.cpu_percent(), memory_mb=process.memory_info().rss / 
+            process.cpu_percent(), memory_mb=process.memory_info().rss /
             1024 / 1024, memory_percent=process.memory_percent(),
             network_bytes_sent=net_io.bytes_sent, network_bytes_recv=net_io
             .bytes_recv, disk_io_read=disk_io.read_bytes if disk_io else 0,

@@ -325,7 +325,7 @@ class CrossDeviceCalibrationCoordinator:
                 len(session.devices), 'total_cameras': total_cameras,
                 'active_cameras': collected_cameras, 'progress_per_camera':
                 progress_per_camera, 'calibration_results': list(session.
-                calibration_results.keys()), 'overall_progress': 
+                calibration_results.keys()), 'overall_progress':
                 collected_cameras / total_cameras if total_cameras > 0 else 0}
             return status
         except Exception as e:

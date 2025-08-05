@@ -12,22 +12,16 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter, epilog=
         """
 Examples:
-  # List available sessions
   python hand_segmentation_cli.py list-sessions
 
-  # Process a session with MediaPipe (default)
   python hand_segmentation_cli.py process-session session_20250131_143022
 
-  # Process a session with color-based method
   python hand_segmentation_cli.py process-session session_20250131_143022 --method color_based
 
-  # Process a single video file
   python hand_segmentation_cli.py process-video /path/to/video.mp4
 
-  # Check processing status of a session
   python hand_segmentation_cli.py status session_20250131_143022
 
-  # Process with custom parameters
   python hand_segmentation_cli.py process-session SESSION_ID \\
     --method mediapipe \\
     --confidence 0.7 \\

@@ -269,12 +269,12 @@ class CalibrationDialog(QDialog):
             - Reprojection Error: {summary.get('rgb_error', 'N/A'):.3f} pixels<br>
             - Focal Length: fx={summary.get('rgb_fx', 'N/A'):.1f}, fy={summary.get('rgb_fy', 'N/A'):.1f}<br>
             - Principal Point: cx={summary.get('rgb_cx', 'N/A'):.1f}, cy={summary.get('rgb_cy', 'N/A'):.1f}<br><br>
-            
+
             <b>Thermal Camera:</b><br>
             - Reprojection Error: {summary.get('thermal_error', 'N/A'):.3f} pixels<br>
             - Focal Length: fx={summary.get('thermal_fx', 'N/A'):.1f}, fy={summary.get('thermal_fy', 'N/A'):.1f}<br>
             - Principal Point: cx={summary.get('thermal_cx', 'N/A'):.1f}, cy={summary.get('thermal_cy', 'N/A'):.1f}<br><br>
-            
+
             <b>Stereo Calibration:</b><br>
             - Stereo Error: {summary.get('stereo_error', 'N/A'):.3f} pixels<br>
             - Translation: {summary.get('translation', 'N/A')}<br>

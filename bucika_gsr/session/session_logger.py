@@ -46,7 +46,7 @@ class SessionLogger(QObject):
                 session_id = f'session_{timestamp_str}'
             session_folder = self.base_sessions_dir / session_id
             session_folder.mkdir(parents=True, exist_ok=True)
-            self.current_session = {'session': session_id, 'session_name': 
+            self.current_session = {'session': session_id, 'session_name':
                 session_name or session_id, 'start_time': self.
                 session_start_time.isoformat(), 'end_time': None,
                 'duration': None, 'devices': devices or [], 'events': [],
@@ -104,7 +104,7 @@ class SessionLogger(QObject):
 
     def log_recording_start(self, devices: List[str], session_id: Optional[
         str]=None) ->None:
-        self.log_event('start_record', {'devices': devices, 'session': 
+        self.log_event('start_record', {'devices': devices, 'session':
             session_id or (self.current_session.get('session') if self.
             current_session else None)})
 

@@ -27,10 +27,10 @@ def main():
         argparse.RawDescriptionHelpFormatter, epilog=
         """
 Examples:
-  python web_launcher.py                    # Start with default settings
-  python web_launcher.py --port 8080       # Start on port 8080
-  python web_launcher.py --host 0.0.0.0    # Allow external connections
-  python web_launcher.py --debug           # Enable debug mode
+  python web_launcher.py
+  python web_launcher.py --port 8080
+  python web_launcher.py --host 0.0.0.0
+  python web_launcher.py --debug
         """
         )
     parser.add_argument('--port', '-p', type=int, default=5000, help=

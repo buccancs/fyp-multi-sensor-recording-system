@@ -211,9 +211,9 @@ class SessionSynchronizer:
                 device_status[device_id] = {'sync_state': self.sync_states[
                     device_id].value, 'has_session_state': last_state is not
                     None, 'last_sync': last_state.sync_timestamp.isoformat(
-                    ) if last_state else None, 'offline_since': 
+                    ) if last_state else None, 'offline_since':
                     offline_since.isoformat() if offline_since else None,
-                    'queued_messages': queue_size, 'is_connected': 
+                    'queued_messages': queue_size, 'is_connected':
                     device_id not in self.offline_devices}
             return {'running': self.is_running, 'sync_interval': self.
                 sync_interval, 'statistics': {'sync_attempts': self.

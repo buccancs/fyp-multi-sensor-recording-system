@@ -516,7 +516,7 @@ Generated at: {datetime.now().isoformat()}"""
             try:
                 import random
                 time_points = list(range(0, 1800, 5))
-                sensor_data = {'gsr': [{'x': t, 'y': random.uniform(0.1, 
+                sensor_data = {'gsr': [{'x': t, 'y': random.uniform(0.1,
                     2.0)} for t in time_points], 'thermal': [{'x': t, 'y':
                     random.uniform(25, 35)} for t in time_points],
                     'shimmer': [{'x': t, 'y': random.uniform(0.5, 3.0)} for
@@ -617,8 +617,8 @@ Generated at: {datetime.now().isoformat()}"""
                     '/session_20250802_001'}, {'name': 'camera1.mp4',
                     'type': 'file', 'size': 2684354560, 'modified':
                     '2025-08-02T11:00:00Z', 'path': path + '/camera1.mp4'},
-                    {'name': 'sensor_data.json', 'type': 'file', 'size': 
-                    1048576, 'modified': '2025-08-02T11:00:00Z', 'path': 
+                    {'name': 'sensor_data.json', 'type': 'file', 'size':
+                    1048576, 'modified': '2025-08-02T11:00:00Z', 'path':
                     path + '/sensor_data.json'}]
                 return jsonify({'success': True, 'files': files})
             except Exception as e:

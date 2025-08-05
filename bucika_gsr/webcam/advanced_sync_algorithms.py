@@ -183,10 +183,10 @@ class AdaptiveSynchronizer:
         recent_quality = list(self.quality_history)[-10:]
         avg_quality = statistics.mean(recent_quality)
         if avg_quality > 0.9:
-            self.adaptive_threshold = max(self.sync_threshold_ms * 0.5, 
+            self.adaptive_threshold = max(self.sync_threshold_ms * 0.5,
                 self.adaptive_threshold * (1 - self.adaptation_rate))
         elif avg_quality < 0.7:
-            self.adaptive_threshold = min(self.sync_threshold_ms * 2.0, 
+            self.adaptive_threshold = min(self.sync_threshold_ms * 2.0,
                 self.adaptive_threshold * (1 + self.adaptation_rate))
         if len(self.offset_history) >= self.drift_detection_window:
             recent_offsets = list(self.offset_history)[-self.
@@ -274,7 +274,7 @@ def test_dual_camera_sync(camera1_index: int=0, camera2_index: int=1,
         cap2.release()
         diagnostics = synchronizer.get_diagnostics()
         test_results = {'success': True, 'duration_seconds': time.time() -
-            start_time, 'frames_captured': frame_count, 'average_fps': 
+            start_time, 'frames_captured': frame_count, 'average_fps':
             frame_count / (time.time() - start_time),
             'synchronization_metrics': diagnostics, 'quality_statistics': {
             'mean_quality': statistics.mean([f.sync_quality for f in
