@@ -51,3 +51,6 @@ dependencies:
     - pre-commit
     - sphinx
     - sphinx-rtd-theme
+    - pyshimmer
+    - bleak
+    - pybluez
