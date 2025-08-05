@@ -11,10 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import kotlin.test.assertNotNull
+import org.junit.Assert.*
 
 @RunWith(AndroidJUnit4::class)
 @Config(manifest = Config.NONE)
