@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButt
 from collections import deque
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Callable, Any, Tuple
+
 from calibration_quality_assessment import CalibrationQualityAssessment, CalibrationQualityResult, PatternType
 
 

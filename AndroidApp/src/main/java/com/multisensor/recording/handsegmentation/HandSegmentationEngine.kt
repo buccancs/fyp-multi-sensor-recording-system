@@ -3,15 +3,14 @@ package com.multisensor.recording.handsegmentation
 import android.content.Context
 import android.graphics.*
 import android.util.Log
-import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.*
+import kotlin.math.max
+import kotlin.math.min
 
 class HandSegmentationEngine(private val context: Context) {
 
@@ -150,8 +149,8 @@ class HandSegmentationEngine(private val context: Context) {
             val value = hsv[2] * 255
 
             skinMask[i] = (hue >= SKIN_HUE_MIN && hue <= SKIN_HUE_MAX) &&
-                         (sat >= SKIN_SAT_MIN && sat <= SKIN_SAT_MAX) &&
-                         (value >= SKIN_VAL_MIN && value <= SKIN_VAL_MAX)
+                    (sat >= SKIN_SAT_MIN && sat <= SKIN_SAT_MAX) &&
+                    (value >= SKIN_VAL_MIN && value <= SKIN_VAL_MAX)
         }
 
         return findHandRegions(skinMask, width, height, timestamp)
@@ -188,7 +187,14 @@ class HandSegmentationEngine(private val context: Context) {
         return handRegions.sortedByDescending { it.confidence }.take(2)
     }
 
-    private fun floodFill(skinMask: BooleanArray, visited: BooleanArray, startX: Int, startY: Int, width: Int, height: Int): List<Point> {
+    private fun floodFill(
+        skinMask: BooleanArray,
+        visited: BooleanArray,
+        startX: Int,
+        startY: Int,
+        width: Int,
+        height: Int
+    ): List<Point> {
         val component = mutableListOf<Point>()
         val stack = mutableListOf<Point>()
         stack.add(Point(startX, startY))
@@ -350,7 +356,8 @@ class HandSegmentationEngine(private val context: Context) {
 
             var savedCount = 0
             for ((index, data) in croppedDataset.withIndex()) {
-                val filename = "hand_${data.handType.name.lowercase()}_${data.timestamp}_${String.format("%04d", index)}.png"
+                val filename =
+                    "hand_${data.handType.name.lowercase()}_${data.timestamp}_${String.format("%04d", index)}.png"
                 val file = File(datasetDir, filename)
 
                 try {
@@ -404,7 +411,8 @@ class HandSegmentationEngine(private val context: Context) {
             "left_hands" to croppedDataset.count { it.handType == HandType.LEFT },
             "right_hands" to croppedDataset.count { it.handType == HandType.RIGHT },
             "unknown_hands" to croppedDataset.count { it.handType == HandType.UNKNOWN },
-            "average_confidence" to if (croppedDataset.isNotEmpty()) croppedDataset.map { it.confidence }.average() else 0.0,
+            "average_confidence" to if (croppedDataset.isNotEmpty()) croppedDataset.map { it.confidence }
+                .average() else 0.0,
             "timespan_ms" to if (croppedDataset.isNotEmpty()) croppedDataset.maxOf { it.timestamp } - croppedDataset.minOf { it.timestamp } else 0L
         )
     }

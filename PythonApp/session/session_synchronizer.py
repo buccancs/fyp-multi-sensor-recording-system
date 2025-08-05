@@ -5,9 +5,11 @@ from collections import deque
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Dict, List, Optional, Any, Callable
 from queue import Queue, Empty
+from typing import Dict, List, Optional, Any, Callable
+
 from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

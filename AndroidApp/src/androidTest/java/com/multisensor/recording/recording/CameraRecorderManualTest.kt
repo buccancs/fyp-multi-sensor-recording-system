@@ -3,9 +3,9 @@ package com.multisensor.recording.recording
 import android.Manifest
 import android.graphics.SurfaceTexture
 import android.view.TextureView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule

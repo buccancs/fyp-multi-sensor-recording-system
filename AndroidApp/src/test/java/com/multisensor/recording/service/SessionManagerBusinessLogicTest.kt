@@ -1,14 +1,13 @@
 package com.multisensor.recording.service
 
 import com.multisensor.recording.util.Logger
-import io.mockk.*
-import kotlinx.coroutines.test.runTest
+import io.mockk.mockk
+import io.mockk.unmockkAll
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
-import java.io.IOException
 
 class SessionManagerBusinessLogicTest {
     private lateinit var mockLogger: Logger

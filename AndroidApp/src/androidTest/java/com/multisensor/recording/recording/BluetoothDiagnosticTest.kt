@@ -58,13 +58,14 @@ class BluetoothDiagnosticTest {
 
                 val deviceInfo = mutableListOf<String>()
                 pairedDevices?.forEachIndexed { index, device ->
-                    val info = "Device $index: Name='${device.name}', Address='${device.address}', Type=${device.type}, BondState=${device.bondState}"
+                    val info =
+                        "Device $index: Name='${device.name}', Address='${device.address}', Type=${device.type}, BondState=${device.bondState}"
                     println("[DEBUG_LOG] $info")
                     deviceInfo.add(info)
 
                     val isShimmerDevice =
                         device.name?.contains("Shimmer", ignoreCase = true) == true ||
-                            device.name?.contains("RN42", ignoreCase = true) == true
+                                device.name?.contains("RN42", ignoreCase = true) == true
                     println("[DEBUG_LOG]   Matches Shimmer criteria: $isShimmerDevice")
                     println("[DEBUG_LOG]   ---")
                 }
@@ -73,7 +74,7 @@ class BluetoothDiagnosticTest {
                     pairedDevices
                         ?.filter { device ->
                             device.name?.contains("Shimmer", ignoreCase = true) == true ||
-                                device.name?.contains("RN42", ignoreCase = true) == true
+                                    device.name?.contains("RN42", ignoreCase = true) == true
                         }?.map { it.address } ?: emptyList()
 
                 val shimmerCount = shimmerDevices.size
@@ -86,7 +87,8 @@ class BluetoothDiagnosticTest {
                 println("[DEBUG_LOG] Summary: $summary")
 
                 if (shimmerCount == 0) {
-                    val guidance = "No Shimmer devices found. Check: 1) Device is paired with PIN 1234, 2) Device name contains 'Shimmer' or 'RN42', 3) Device is properly bonded"
+                    val guidance =
+                        "No Shimmer devices found. Check: 1) Device is paired with PIN 1234, 2) Device name contains 'Shimmer' or 'RN42', 3) Device is properly bonded"
                     println("[DEBUG_LOG] Guidance: $guidance")
 
                     println("[DEBUG_LOG] This is expected if no Shimmer device is properly paired")

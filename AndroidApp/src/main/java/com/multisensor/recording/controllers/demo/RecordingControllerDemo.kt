@@ -1,9 +1,7 @@
 package com.multisensor.recording.controllers.demo
 
 import android.content.Context
-import android.view.TextureView
 import com.multisensor.recording.controllers.RecordingController
-import com.multisensor.recording.ui.MainViewModel
 
 class RecordingControllerDemo {
 
@@ -129,6 +127,7 @@ class RecordingControllerDemo {
                             println("    $key: $value")
                         }
                     }
+
                     else -> println("    $data")
                 }
             }

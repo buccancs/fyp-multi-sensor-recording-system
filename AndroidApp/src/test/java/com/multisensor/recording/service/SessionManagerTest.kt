@@ -5,7 +5,9 @@ import com.multisensor.recording.persistence.CrashRecoveryManager
 import com.multisensor.recording.persistence.SessionStateDao
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
-import io.mockk.*
+import io.mockk.mockk
+import io.mockk.unmockkAll
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
@@ -15,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import java.io.File
 
 @Ignore("Disabled due to Windows Robolectric compatibility issues - functionality validated on hardware")
 @RunWith(RobolectricTestRunner::class)
@@ -31,7 +32,8 @@ class SessionManagerTest {
         val mockThermalSettings = mockk<ThermalCameraSettings>(relaxed = true)
         val mockSessionStateDao = mockk<SessionStateDao>(relaxed = true)
         val mockCrashRecoveryManager = mockk<CrashRecoveryManager>(relaxed = true)
-        sessionManager = SessionManager(context, mockLogger, mockThermalSettings, mockSessionStateDao, mockCrashRecoveryManager)
+        sessionManager =
+            SessionManager(context, mockLogger, mockThermalSettings, mockSessionStateDao, mockCrashRecoveryManager)
     }
 
     @After

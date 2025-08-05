@@ -1,14 +1,12 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
-import android.graphics.Color
-import android.text.SpannableString
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 
 @RunWith(AndroidJUnit4::class)
 class LabelTextViewTest {
@@ -208,7 +206,8 @@ class LabelTextViewTest {
 
     @Test
     fun testLongLabelText() {
-        val longText = "This is a very long label text that should still be handled properly by the component and wrap appropriately"
+        val longText =
+            "This is a very long label text that should still be handled properly by the component and wrap appropriately"
         labelTextView.setLabel(longText)
         assertEquals(longText, labelTextView.text)
     }
@@ -247,8 +246,10 @@ class LabelTextViewTest {
 
     @Test
     fun testComponentInheritance() {
-        assertTrue("LabelTextView should extend AppCompatTextView",
-            labelTextView is androidx.appcompat.widget.AppCompatTextView)
+        assertTrue(
+            "LabelTextView should extend AppCompatTextView",
+            labelTextView is androidx.appcompat.widget.AppCompatTextView
+        )
     }
 
     @Test

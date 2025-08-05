@@ -1,6 +1,8 @@
 # Python Desktop Controller Module
 
-The Python Desktop Controller Application serves as the central command and control hub for the Multi-Sensor Recording System, orchestrating device coordination, data aggregation, real-time monitoring, and post-session analysis across multiple sensor modalities including Android smartphones, USB webcams, thermal cameras, and physiological sensors.
+The Python Desktop Controller Application serves as the central command and control hub for the Multi-Sensor Recording
+System, orchestrating device coordination, data aggregation, real-time monitoring, and post-session analysis across
+multiple sensor modalities including Android smartphones, USB webcams, thermal cameras, and physiological sensors.
 
 ## Table of Contents
 
@@ -17,17 +19,23 @@ The Python Desktop Controller Application serves as the central command and cont
 
 ### System Role and Responsibilities
 
-The Python Desktop Controller encompasses comprehensive orchestration capabilities designed for complex multi-modal research environments. It serves as the master coordinator in the distributed Multi-Sensor Recording System, providing:
+The Python Desktop Controller encompasses comprehensive orchestration capabilities designed for complex multi-modal
+research environments. It serves as the master coordinator in the distributed Multi-Sensor Recording System, providing:
 
 **Primary Functions:**
-- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment
-- **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status, data quality, synchronization precision, and system performance
-- **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with automated device configuration
+
+- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal
+  sensors, and physiological monitoring equipment
+- **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status,
+  data quality, synchronization precision, and system performance
+- **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with
+  automated device configuration
 - **Data Integration and Analysis**: Comprehensive data collection coordination and post-session analysis capabilities
 
 ### Technology Stack
 
 **Core Technologies:**
+
 - **Language**: Python 3.8+ with modern scientific computing libraries
 - **GUI Framework**: PyQt5 5.15.7 for cross-platform desktop interface
 - **Computer Vision**: OpenCV 4.8.0.74 for camera operations and calibration algorithms
@@ -116,48 +124,57 @@ graph TB
 ### Component Architecture
 
 #### GUI Layer Components
+
 - **application.py**: Main application entry point with PyQt5 initialization
 - **PyQt5 Interface**: Modern tabbed interface organizing functionality by research workflow phases
 - **Logging System**: Comprehensive logging and diagnostic framework
 
 #### Camera Management Components
+
 - **WebcamManager**: USB camera detection, configuration, and control
 - **Camera Control**: Low-level camera operations and parameter management
 - **Recording Pipeline**: Video capture and encoding management
 
 #### Calibration System Components
+
 - **CalibrationManager**: Complete calibration workflow coordination
 - **CalibrationProcessor**: OpenCV-based calibration algorithms
 - **CalibrationResult**: Quality assessment and validation
 - **Computer Vision**: Pattern detection and image processing
 
 #### Shimmer Integration Components
+
 - **ShimmerManager**: Multi-library support with fallback mechanisms
 - **Shimmer Bluetooth**: Direct pyshimmer device connections
 - **Shimmer Android**: Mediated connections through Android devices
 - **Shimmer Data**: Stream processing and data management
 
 #### Network Layer Components
+
 - **SessionManager**: Socket server for Android device communication
 - **NetworkCommunicationHandler**: Protocol implementation and message handling
 - **DeviceService**: Device discovery and status management
 
 #### Data Processing Components
+
 - **DataProcessor**: Multi-modal data processing and validation
 - **SynchronizationEngine**: Temporal alignment and coordination
 - **DataExporter**: Session export and format conversion
 
 ### Navigation Architecture
 
-The Python application features a clean tabbed interface that organizes functionality according to research workflow phases:
+The Python application features a clean tabbed interface that organizes functionality according to research workflow
+phases:
 
 #### Tabbed Interface Structure
+
 - **Recording Tab**: Centralized recording controls with real-time preview and session management
 - **Devices Tab**: Comprehensive device connection management with individual and global coordination
 - **Calibration Tab**: Streamlined calibration workflows with progress tracking and quality assessment
 - **Files Tab**: Data management functions, export capabilities, and integrated system logging
 
 #### Component-Based Architecture
+
 - **ModernButton**: Standardized button styling with hover effects and semantic color coding
 - **StatusIndicator**: Consistent status communication across device types and operational states
 - **ProgressIndicator**: Unified progress visualization for operations and procedures
@@ -169,7 +186,8 @@ The Python application features a clean tabbed interface that organizes function
 
 #### JSON Socket Protocol
 
-The primary communication method between the Python Desktop Controller and Android devices uses JSON messages over TCP sockets.
+The primary communication method between the Python Desktop Controller and Android devices uses JSON messages over TCP
+sockets.
 
 **Connection Parameters:**
 | Parameter | Value | Description |
@@ -214,6 +232,7 @@ All communication messages follow a standardized JSON format:
 #### Session Control Commands
 
 **Initialize Session:**
+
 ```json
 {
   "type": "command",
@@ -234,6 +253,7 @@ All communication messages follow a standardized JSON format:
 ```
 
 **Start Recording:**
+
 ```json
 {
   "type": "command",
@@ -257,6 +277,7 @@ All communication messages follow a standardized JSON format:
 #### Status Monitoring Messages
 
 **Device Status Request:**
+
 ```json
 {
   "type": "command",
@@ -271,6 +292,7 @@ All communication messages follow a standardized JSON format:
 ```
 
 **Device Status Response:**
+
 ```json
 {
   "type": "status",
@@ -604,9 +626,9 @@ class SessionManager:
    ```
 
 2. **Hardware Configuration**:
-   - Connect USB webcams to PC
-   - Ensure Android devices are on same WiFi network
-   - Verify Shimmer sensors are charged and available
+    - Connect USB webcams to PC
+    - Ensure Android devices are on same WiFi network
+    - Verify Shimmer sensors are charged and available
 
 3. **Application Launch**:
    ```bash
@@ -622,24 +644,28 @@ class SessionManager:
 The application provides a tabbed interface with four main sections:
 
 #### Recording Tab
+
 - **Session Controls**: Start/stop recording sessions
 - **Real-time Preview**: Live video feeds from connected cameras
 - **Status Monitoring**: Device health and recording progress
 - **Quick Actions**: Emergency stop and session management
 
 #### Devices Tab
+
 - **Device Discovery**: Automatic detection of available devices
 - **Connection Management**: Individual device connection controls
 - **Status Dashboard**: Comprehensive device status overview
 - **Network Configuration**: IP addresses and connection settings
 
 #### Calibration Tab
+
 - **Camera Calibration**: Intrinsic parameter calibration
 - **Stereo Calibration**: RGB-thermal alignment
 - **Quality Assessment**: Coverage analysis and recommendations
 - **Calibration History**: Previous calibration results and comparison
 
 #### Files Tab
+
 - **Session Browser**: Navigate recorded sessions
 - **Data Export**: Export tools for various formats
 - **Logging Viewer**: System logs and diagnostics
@@ -650,36 +676,41 @@ The application provides a tabbed interface with four main sections:
 #### 1. Pre-Recording Setup
 
 **Device Connection:**
+
 1. Navigate to Devices tab
 2. Click "Scan for Devices" to detect available equipment
 3. Connect each device individually using connection controls
 4. Verify all devices show "Connected" status
 
 **Session Configuration:**
+
 1. Switch to Recording tab
 2. Click "New Session" to create recording session
 3. Configure recording parameters:
-   - Session duration
-   - Video resolution and frame rate
-   - Thermal camera settings
-   - Shimmer sampling rate
+    - Session duration
+    - Video resolution and frame rate
+    - Thermal camera settings
+    - Shimmer sampling rate
 4. Add participant information and session notes
 
 #### 2. Recording Execution
 
 **Start Recording:**
+
 1. Click "Start Recording" button
 2. Monitor real-time status indicators
 3. Observe preview feeds for quality assessment
 4. Watch for any error notifications or warnings
 
 **During Recording:**
+
 - Monitor device status indicators
 - Check storage space and battery levels
 - Observe synchronization quality metrics
 - Use emergency stop if necessary
 
 **Stop Recording:**
+
 1. Click "Stop Recording" or wait for automatic completion
 2. Wait for data finalization across all devices
 3. Verify session completion status
@@ -688,12 +719,14 @@ The application provides a tabbed interface with four main sections:
 #### 3. Post-Recording Procedures
 
 **Data Verification:**
+
 1. Navigate to Files tab
 2. Select completed session from browser
 3. Review session metadata and file inventory
 4. Check data integrity and completeness
 
 **Data Export:**
+
 1. Select export format (CSV, JSON, custom)
 2. Choose data components to include
 3. Configure export settings and destination
@@ -704,6 +737,7 @@ The application provides a tabbed interface with four main sections:
 #### Camera Calibration
 
 **Intrinsic Calibration:**
+
 1. Navigate to Calibration tab
 2. Select "Camera Calibration" mode
 3. Choose camera to calibrate
@@ -713,6 +747,7 @@ The application provides a tabbed interface with four main sections:
 7. Save calibration parameters
 
 **Quality Assessment:**
+
 - **Coverage Map**: Visual representation of calibration board positions
 - **RMS Error**: Reprojection error in pixels
 - **Quality Score**: Overall calibration quality (Excellent/Good/Fair/Poor)
@@ -721,6 +756,7 @@ The application provides a tabbed interface with four main sections:
 #### Stereo Calibration
 
 **RGB-Thermal Alignment:**
+
 1. Select "Stereo Calibration" mode
 2. Configure both RGB and thermal cameras
 3. Capture synchronized calibration images
@@ -733,6 +769,7 @@ The application provides a tabbed interface with four main sections:
 #### Clock Synchronization
 
 **Network Time Sync:**
+
 1. Navigate to Calibration tab
 2. Select "System Synchronization"
 3. Verify network connectivity to all devices
@@ -741,6 +778,7 @@ The application provides a tabbed interface with four main sections:
 6. Validate temporal alignment across devices
 
 **Synchronization Quality Metrics:**
+
 - **Network Latency**: Round-trip time measurements
 - **Clock Drift**: Time drift between devices
 - **Precision**: Achieved synchronization accuracy
@@ -920,11 +958,13 @@ class ProtocolHandler:
 
 ### Testing Framework
 
-The Python Desktop Controller includes comprehensive testing covering system functionality, integration scenarios, and performance validation.
+The Python Desktop Controller includes comprehensive testing covering system functionality, integration scenarios, and
+performance validation.
 
 #### Test Categories
 
 **Unit Testing:**
+
 ```bash
 # Run Python unit tests
 ../gradlew :PythonApp:runPythonTests
@@ -934,6 +974,7 @@ The Python Desktop Controller includes comprehensive testing covering system fun
 ```
 
 **Integration Testing:**
+
 ```bash
 # Test calibration implementation
 python test_calibration_implementation.py
@@ -946,6 +987,7 @@ python test_integration_logging.py
 ```
 
 **Performance Testing:**
+
 ```bash
 # Test system performance under load
 python test_enhanced_stress_testing.py
@@ -960,6 +1002,7 @@ python test_data_integrity_validation.py
 #### Comprehensive Test Suite
 
 **Recording Session Testing:**
+
 ```bash
 # Quick validation test
 python run_quick_recording_session_test.py
@@ -972,6 +1015,7 @@ python run_recording_session_test.py --stress-test --devices 8 --duration 300
 ```
 
 **Test Configuration Options:**
+
 - `--duration SECONDS`: Set recording simulation duration
 - `--devices COUNT`: Number of Android devices to simulate
 - `--verbose`: Enable detailed progress information
@@ -1041,6 +1085,7 @@ class SessionTest:
 
 **Problem**: Application fails to start
 **Solutions**:
+
 1. Verify Python environment activation: `conda activate thermal-env`
 2. Check dependency installation: `conda list`
 3. Validate PyQt5 installation: `python -c "import PyQt5; print('PyQt5 available')"`
@@ -1048,6 +1093,7 @@ class SessionTest:
 
 **Problem**: GUI components not displaying correctly
 **Solutions**:
+
 1. Update PyQt5 to latest version: `conda update pyqt5`
 2. Check display scaling settings
 3. Verify graphics drivers are up to date
@@ -1057,6 +1103,7 @@ class SessionTest:
 
 **Problem**: Cannot detect USB cameras
 **Solutions**:
+
 1. Verify camera connections and power
 2. Check USB port functionality with other devices
 3. Restart application with administrator privileges
@@ -1065,6 +1112,7 @@ class SessionTest:
 
 **Problem**: Android devices not connecting
 **Solutions**:
+
 1. Verify network connectivity (same WiFi network)
 2. Check Android app is running and network configured
 3. Test network connectivity: `ping [android_device_ip]`
@@ -1075,6 +1123,7 @@ class SessionTest:
 
 **Problem**: Calibration fails or produces poor results
 **Solutions**:
+
 1. Ensure calibration board is clearly visible and well-lit
 2. Capture images from diverse angles and distances
 3. Use appropriate calibration board size (recommend 9x6 chessboard)
@@ -1083,6 +1132,7 @@ class SessionTest:
 
 **Problem**: Stereo calibration alignment poor
 **Solutions**:
+
 1. Ensure both cameras can see calibration board simultaneously
 2. Verify temporal synchronization between cameras
 3. Use larger calibration board for better feature detection
@@ -1093,6 +1143,7 @@ class SessionTest:
 
 **Problem**: High CPU or memory usage
 **Solutions**:
+
 1. Reduce number of concurrent devices
 2. Lower video resolution or frame rate
 3. Close unnecessary applications
@@ -1101,6 +1152,7 @@ class SessionTest:
 
 **Problem**: Network latency or connection drops
 **Solutions**:
+
 1. Use wired network connection if possible
 2. Reduce network traffic from other applications
 3. Check WiFi signal strength and interference
@@ -1111,6 +1163,7 @@ class SessionTest:
 
 **Problem**: Data corruption or missing files
 **Solutions**:
+
 1. Verify sufficient storage space on all devices
 2. Check file system integrity
 3. Use data validation tools: `python tools/validate_data_schemas.py --session [session_id]`
@@ -1119,6 +1172,7 @@ class SessionTest:
 
 **Problem**: Synchronization issues between data streams
 **Solutions**:
+
 1. Verify system clock synchronization
 2. Check network stability during recording
 3. Review synchronization quality metrics
@@ -1171,20 +1225,26 @@ def monitor_resources():
 ### Support Resources
 
 **Technical Documentation**:
+
 - [System Architecture](../multi-device-synchronization/README.md)
 - [Android Integration](../android-mobile-application/README.md)
 - [Network Protocol](../networking-protocol/README.md)
 
 **Community Support**:
+
 - GitHub Issues: [Repository Issues](https://github.com/buccancs/bucika_gsr/issues)
 - Discussion Forums: [GitHub Discussions](https://github.com/buccancs/bucika_gsr/discussions)
 - Research Community: Academic research forums and conferences
 
 **Development Resources**:
+
 - [Testing Framework](../testing-framework/README.md)
 - [Calibration System](../calibration-system/README.md)
 - [Session Management](../session-management/README.md)
 
 ---
 
-*This comprehensive documentation consolidates all Python Desktop Controller information from multiple sources into a single authoritative reference. For related modules, see the [Android Mobile Application](../android-mobile-application/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*This comprehensive documentation consolidates all Python Desktop Controller information from multiple sources into a
+single authoritative reference. For related modules, see
+the [Android Mobile Application](../android-mobile-application/README.md)
+and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*

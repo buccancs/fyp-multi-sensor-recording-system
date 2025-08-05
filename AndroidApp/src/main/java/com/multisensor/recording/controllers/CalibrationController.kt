@@ -1,11 +1,6 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.media.MediaActionSound
 import android.os.Handler
@@ -16,10 +11,10 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.calibration.SyncClockManager
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.*
-import org.json.JSONObject
 
 @Singleton
 class CalibrationController @Inject constructor(
@@ -127,12 +122,21 @@ class CalibrationController @Inject constructor(
                 restoreSessionState(context)
             }
         } catch (e: Exception) {
-            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to initialize MediaActionSound: ${e.message}")
+            android.util.Log.e(
+                "CalibrationController",
+                "[DEBUG_LOG] Failed to initialize MediaActionSound: ${e.message}"
+            )
         }
     }
 
-    fun runCalibration(lifecycleScope: LifecycleCoroutineScope, pattern: CalibrationPattern = CalibrationPattern.SINGLE_POINT) {
-        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Starting enhanced calibration capture with pattern: ${pattern.displayName}")
+    fun runCalibration(
+        lifecycleScope: LifecycleCoroutineScope,
+        pattern: CalibrationPattern = CalibrationPattern.SINGLE_POINT
+    ) {
+        android.util.Log.d(
+            "CalibrationController",
+            "[DEBUG_LOG] Starting enhanced calibration capture with pattern: ${pattern.displayName}"
+        )
 
         currentPattern = pattern
         currentSessionState = CalibrationSessionState(
@@ -162,7 +166,10 @@ class CalibrationController @Inject constructor(
                 )
 
                 if (result.success) {
-                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}")
+                    android.util.Log.d(
+                        "CalibrationController",
+                        "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}"
+                    )
 
                     val quality = calculateCalibrationQuality(result)
                     qualityMetrics.add(quality)
@@ -187,7 +194,10 @@ class CalibrationController @Inject constructor(
 
                     callback?.onCalibrationCompleted(result.calibrationId)
                 } else {
-                    android.util.Log.e("CalibrationController", "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}")
+                    android.util.Log.e(
+                        "CalibrationController",
+                        "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}"
+                    )
 
                     callback?.getContext()?.let { context ->
                         saveCalibrationHistory(context, "failed_${System.currentTimeMillis()}", false)
@@ -215,8 +225,14 @@ class CalibrationController @Inject constructor(
         }
     }
 
-    private fun triggerCalibrationCaptureSuccess(calibrationId: String = "unknown", quality: CalibrationQuality? = null) {
-        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration photo captured - triggering feedback for ID: $calibrationId")
+    private fun triggerCalibrationCaptureSuccess(
+        calibrationId: String = "unknown",
+        quality: CalibrationQuality? = null
+    ) {
+        android.util.Log.d(
+            "CalibrationController",
+            "[DEBUG_LOG] Calibration photo captured - triggering feedback for ID: $calibrationId"
+        )
 
         showCalibrationCaptureToast(quality)
 
@@ -257,7 +273,10 @@ class CalibrationController @Inject constructor(
                         contentView.removeView(flashOverlay)
                         android.util.Log.d("CalibrationController", "[DEBUG_LOG] Screen flash effect completed")
                     } catch (e: Exception) {
-                        android.util.Log.w("CalibrationController", "[DEBUG_LOG] Error removing flash overlay: ${e.message}")
+                        android.util.Log.w(
+                            "CalibrationController",
+                            "[DEBUG_LOG] Error removing flash overlay: ${e.message}"
+                        )
                     }
                 }, 150)
             }
@@ -267,7 +286,10 @@ class CalibrationController @Inject constructor(
     private fun triggerCalibrationAudioFeedback() {
         try {
             mediaActionSound?.play(MediaActionSound.SHUTTER_CLICK)
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Camera shutter sound played for calibration feedback")
+            android.util.Log.d(
+                "CalibrationController",
+                "[DEBUG_LOG] Camera shutter sound played for calibration feedback"
+            )
         } catch (e: Exception) {
             android.util.Log.w("CalibrationController", "[DEBUG_LOG] Failed to play shutter sound: ${e.message}")
         }
@@ -342,13 +364,20 @@ class CalibrationController @Inject constructor(
                 callback?.runOnUiThread {
                     if (success) {
                         val syncStatus = syncClockManager.getSyncStatus()
-                        val statusMessage = "✅ Clock sync successful!\nOffset: ${syncStatus.clockOffsetMs}ms\nSync ID: $syncId"
+                        val statusMessage =
+                            "✅ Clock sync successful!\nOffset: ${syncStatus.clockOffsetMs}ms\nSync ID: $syncId"
                         callback?.showToast(statusMessage, Toast.LENGTH_LONG)
 
                         callback?.updateStatusText("Clock synchronized - Offset: ${syncStatus.clockOffsetMs}ms")
 
-                        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Clock sync test successful: offset=${syncStatus.clockOffsetMs}ms")
-                        callback?.onSyncTestCompleted(true, "Clock synchronized with offset: ${syncStatus.clockOffsetMs}ms")
+                        android.util.Log.d(
+                            "CalibrationController",
+                            "[DEBUG_LOG] Clock sync test successful: offset=${syncStatus.clockOffsetMs}ms"
+                        )
+                        callback?.onSyncTestCompleted(
+                            true,
+                            "Clock synchronized with offset: ${syncStatus.clockOffsetMs}ms"
+                        )
                     } else {
                         callback?.showToast("❌ Clock sync test failed", Toast.LENGTH_LONG)
                         android.util.Log.e("CalibrationController", "[DEBUG_LOG] Clock sync test failed")
@@ -427,7 +456,12 @@ class CalibrationController @Inject constructor(
         return syncClockManager.getSyncStatistics().toString()
     }
 
-    private fun saveCalibrationHistory(context: Context, calibrationId: String, success: Boolean, quality: CalibrationQuality? = null) {
+    private fun saveCalibrationHistory(
+        context: Context,
+        calibrationId: String,
+        success: Boolean,
+        quality: CalibrationQuality? = null
+    ) {
         try {
             val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
             val currentCount = prefs.getInt(PREF_CALIBRATION_COUNT, 0)
@@ -448,7 +482,10 @@ class CalibrationController @Inject constructor(
                 apply()
             }
 
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration history saved: $calibrationId (success: $success, quality: ${quality?.score})")
+            android.util.Log.d(
+                "CalibrationController",
+                "[DEBUG_LOG] Calibration history saved: $calibrationId (success: $success, quality: ${quality?.score})"
+            )
         } catch (e: Exception) {
             android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to save calibration history: ${e.message}")
         }
@@ -539,9 +576,15 @@ class CalibrationController @Inject constructor(
 
                     currentPattern = pattern
 
-                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] Session state restored: ${currentSessionState?.sessionId}")
+                    android.util.Log.d(
+                        "CalibrationController",
+                        "[DEBUG_LOG] Session state restored: ${currentSessionState?.sessionId}"
+                    )
                     android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Pattern: ${pattern.displayName}")
-                    android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Progress: ${currentSessionState?.completedPoints}/${currentSessionState?.totalPoints}")
+                    android.util.Log.d(
+                        "CalibrationController",
+                        "[DEBUG_LOG] - Progress: ${currentSessionState?.completedPoints}/${currentSessionState?.totalPoints}"
+                    )
                 } else {
                     android.util.Log.d("CalibrationController", "[DEBUG_LOG] Inactive session found, clearing state")
                     clearSessionState(context)
@@ -588,16 +631,31 @@ class CalibrationController @Inject constructor(
         val statisticalMetrics = calculateStatisticalMetrics(result)
 
         val weights = floatArrayOf(0.25f, 0.20f, 0.20f, 0.15f, 0.10f, 0.10f)
-        val metrics = floatArrayOf(syncAccuracy, visualClarity, thermalAccuracy, spatialPrecision, temporalStability, signalToNoiseRatio)
+        val metrics = floatArrayOf(
+            syncAccuracy,
+            visualClarity,
+            thermalAccuracy,
+            spatialPrecision,
+            temporalStability,
+            signalToNoiseRatio
+        )
         val overallReliability = weights.zip(metrics).sumOf { (w, m) -> (w * m).toDouble() }.toFloat()
 
         val confidenceInterval = calculateConfidenceInterval(statisticalMetrics)
 
-        generateAdvancedValidationMessages(validationMessages, syncAccuracy, visualClarity, thermalAccuracy, overallReliability, statisticalMetrics)
+        generateAdvancedValidationMessages(
+            validationMessages,
+            syncAccuracy,
+            visualClarity,
+            thermalAccuracy,
+            overallReliability,
+            statisticalMetrics
+        )
 
         val historicalWeight = min(1.0f, qualityMetrics.size * 0.05f)
         val temporalWeight = calculateTemporalWeight()
-        val finalScore = (overallReliability * 0.8f + historicalWeight * 0.1f + temporalWeight * 0.1f).coerceIn(0.0f, 1.0f)
+        val finalScore =
+            (overallReliability * 0.8f + historicalWeight * 0.1f + temporalWeight * 0.1f).coerceIn(0.0f, 1.0f)
 
         return CalibrationQuality(
             score = finalScore,
@@ -787,7 +845,8 @@ class CalibrationController @Inject constructor(
         if (std == 0.0f || values.size < 4) return 3.0f
         val n = values.size
         val kurt = values.sumOf { ((it - mean) / std).toDouble().pow(4.0) }.toFloat()
-        return kurt * n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) - 3.0f * (n - 1).toDouble().pow(2.0).toFloat() / ((n - 2) * (n - 3))
+        return kurt * n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) - 3.0f * (n - 1).toDouble().pow(2.0)
+            .toFloat() / ((n - 2) * (n - 3))
     }
 
     private fun percentile(sortedValues: List<Float>, percentile: Int): Float {
@@ -802,7 +861,8 @@ class CalibrationController @Inject constructor(
         val meanTime = timeIndices.average().toFloat()
         val meanValue = values.average().toFloat()
 
-        val numerator = timeIndices.zip(values).sumOf { (t, v) -> ((t - meanTime) * (v - meanValue)).toDouble() }.toFloat()
+        val numerator =
+            timeIndices.zip(values).sumOf { (t, v) -> ((t - meanTime) * (v - meanValue)).toDouble() }.toFloat()
         val denomTime = sqrt(timeIndices.sumOf { (it - meanTime).pow(2).toDouble() }.toFloat())
         val denomValue = sqrt(values.sumOf { (it - meanValue).pow(2).toDouble() }.toFloat())
 
@@ -884,10 +944,19 @@ class CalibrationController @Inject constructor(
         currentSessionState?.let { sessionState ->
             val duration = System.currentTimeMillis() - sessionState.startTimestamp
 
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration session completed: ${sessionState.sessionId}")
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Pattern: ${sessionState.currentPattern.displayName}")
+            android.util.Log.d(
+                "CalibrationController",
+                "[DEBUG_LOG] Calibration session completed: ${sessionState.sessionId}"
+            )
+            android.util.Log.d(
+                "CalibrationController",
+                "[DEBUG_LOG] - Pattern: ${sessionState.currentPattern.displayName}"
+            )
             android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Duration: ${duration}ms")
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] - Points: ${sessionState.completedPoints}/${sessionState.totalPoints}")
+            android.util.Log.d(
+                "CalibrationController",
+                "[DEBUG_LOG] - Points: ${sessionState.completedPoints}/${sessionState.totalPoints}"
+            )
 
             callback?.getContext()?.let { context ->
                 clearSessionState(context)
@@ -933,7 +1002,7 @@ class CalibrationController @Inject constructor(
         currentSessionState?.let { state ->
             val timeSinceUpdate = System.currentTimeMillis() - state.lastUpdateTimestamp
             if (state.isSessionActive && timeSinceUpdate > 300000) {
-                issues.add("Session appears stale (${timeSinceUpdate/1000}s) - consider restarting")
+                issues.add("Session appears stale (${timeSinceUpdate / 1000}s) - consider restarting")
             }
         }
 
@@ -942,11 +1011,25 @@ class CalibrationController @Inject constructor(
             val qualityStd = calculateQualityStandardDeviation()
 
             if (avgQuality < 0.5f) {
-                issues.add("Recent calibration quality (${String.format("%.2f", avgQuality)}) is below acceptable threshold (0.50)")
+                issues.add(
+                    "Recent calibration quality (${
+                        String.format(
+                            "%.2f",
+                            avgQuality
+                        )
+                    }) is below acceptable threshold (0.50)"
+                )
             }
 
             if (qualityStd > 0.3f) {
-                issues.add("High quality variability detected (σ = ${String.format("%.2f", qualityStd)}) - system may be unstable")
+                issues.add(
+                    "High quality variability detected (σ = ${
+                        String.format(
+                            "%.2f",
+                            qualityStd
+                        )
+                    }) - system may be unstable"
+                )
             }
 
             val validation = performStatisticalValidation()
@@ -957,7 +1040,14 @@ class CalibrationController @Inject constructor(
 
         val patternOptimization = analyzePatternOptimization()
         if (patternOptimization.patternEfficiency < 0.4f) {
-            issues.add("Current pattern efficiency is low (${String.format("%.2f", patternOptimization.patternEfficiency)}) - consider switching to ${patternOptimization.recommendedPattern.displayName}")
+            issues.add(
+                "Current pattern efficiency is low (${
+                    String.format(
+                        "%.2f",
+                        patternOptimization.patternEfficiency
+                    )
+                }) - consider switching to ${patternOptimization.recommendedPattern.displayName}"
+            )
         }
 
         if (patternOptimization.spatialCoverage < 0.6f) {
@@ -1218,8 +1308,10 @@ class CalibrationController @Inject constructor(
 
         return PerformanceMetrics(
             averageCalibrationTime = sessionDuration / max(1, qualityMetrics.size),
-            successRate = if (qualityMetrics.isNotEmpty()) qualityMetrics.count { it.score > 0.7f }.toFloat() / qualityMetrics.size else 0.0f,
-            systemUptime = currentTime - (qualityMetrics.firstOrNull()?.let { System.currentTimeMillis() } ?: currentTime),
+            successRate = if (qualityMetrics.isNotEmpty()) qualityMetrics.count { it.score > 0.7f }
+                .toFloat() / qualityMetrics.size else 0.0f,
+            systemUptime = currentTime - (qualityMetrics.firstOrNull()?.let { System.currentTimeMillis() }
+                ?: currentTime),
             memoryEfficiency = 0.95f
         )
     }

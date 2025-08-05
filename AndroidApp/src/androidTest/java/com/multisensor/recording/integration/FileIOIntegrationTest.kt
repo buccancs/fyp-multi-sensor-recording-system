@@ -6,7 +6,6 @@ import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
@@ -17,8 +16,6 @@ import org.junit.runner.RunWith
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.nio.file.Files
-import java.nio.file.StandardOpenOption
 import javax.inject.Inject
 
 @HiltAndroidTest

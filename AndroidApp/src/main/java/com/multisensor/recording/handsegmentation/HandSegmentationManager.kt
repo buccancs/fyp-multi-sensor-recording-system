@@ -2,10 +2,6 @@ package com.multisensor.recording.handsegmentation
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.lifecycle.lifecycleScope
-import com.multisensor.recording.recording.CameraRecorder
-import com.multisensor.recording.util.AppLogger
 import com.multisensor.recording.util.logD
 import com.multisensor.recording.util.logE
 import com.multisensor.recording.util.logI
@@ -141,7 +137,9 @@ class HandSegmentationManager @Inject constructor(
                 try {
                     mediaRetriever.setDataSource(videoPath)
 
-                    val durationMs = mediaRetriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+                    val durationMs =
+                        mediaRetriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)
+                            ?.toLongOrNull() ?: 0L
                     val frameRate = 10
 
                     var frameCount = 0
@@ -151,7 +149,10 @@ class HandSegmentationManager @Inject constructor(
 
                     while (currentTimeMs < durationMs && frameCount < 100) {
                         try {
-                            val bitmap = mediaRetriever.getFrameAtTime(currentTimeMs * 1000, android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                            val bitmap = mediaRetriever.getFrameAtTime(
+                                currentTimeMs * 1000,
+                                android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC
+                            )
 
                             if (bitmap != null) {
                                 val frameFile = File(outputDir, "frame_${String.format("%04d", frameCount)}.jpg")

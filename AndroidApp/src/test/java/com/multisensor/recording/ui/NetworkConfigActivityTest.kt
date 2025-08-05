@@ -1,10 +1,7 @@
 package com.multisensor.recording.ui
 
-import android.content.Context
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import androidx.test.core.app.ApplicationProvider
 import com.multisensor.recording.R
 import com.multisensor.recording.network.NetworkConfiguration
 import com.multisensor.recording.network.ServerConfiguration
@@ -12,16 +9,19 @@ import com.multisensor.recording.util.Logger
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowToast
 import javax.inject.Inject
@@ -55,11 +55,11 @@ class NetworkConfigActivityTest {
         mockLogger = mockk(relaxed = true)
 
         every { mockNetworkConfiguration.getServerConfiguration() } returns
-            ServerConfiguration(
-                serverIp = "192.168.1.100",
-                legacyPort = 8080,
-                jsonPort = 9000,
-            )
+                ServerConfiguration(
+                    serverIp = "192.168.1.100",
+                    legacyPort = 8080,
+                    jsonPort = 9000,
+                )
         every { mockNetworkConfiguration.isValidIpAddress(any()) } returns true
         every { mockNetworkConfiguration.isValidPort(any()) } returns true
         every { mockNetworkConfiguration.getConfigurationSummary() } returns "NetworkConfig[IP=192.168.1.100, Legacy=8080, JSON=9000]"
@@ -252,7 +252,10 @@ class NetworkConfigActivityTest {
         saveButton.performClick()
 
         verify { mockLogger.error("Failed to save network configuration", any()) }
-        assertTrue("Toast should contain error message", ShadowToast.getTextOfLatestToast().contains("Failed to save configuration"))
+        assertTrue(
+            "Toast should contain error message",
+            ShadowToast.getTextOfLatestToast().contains("Failed to save configuration")
+        )
 
         println("[DEBUG_LOG] Exception handling test passed")
     }
@@ -268,7 +271,10 @@ class NetworkConfigActivityTest {
         resetButton.performClick()
 
         verify { mockLogger.error("Failed to reset network configuration", any()) }
-        assertTrue("Toast should contain error message", ShadowToast.getTextOfLatestToast().contains("Failed to reset configuration"))
+        assertTrue(
+            "Toast should contain error message",
+            ShadowToast.getTextOfLatestToast().contains("Failed to reset configuration")
+        )
 
         println("[DEBUG_LOG] Reset exception handling test passed")
     }

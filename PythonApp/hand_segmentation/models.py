@@ -1,7 +1,8 @@
+import cv2
+import numpy as np
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple
-import numpy as np
-import cv2
+
 from .utils import HandRegion, SegmentationConfig, create_bounding_box_from_landmarks, create_hand_mask_from_landmarks
 
 

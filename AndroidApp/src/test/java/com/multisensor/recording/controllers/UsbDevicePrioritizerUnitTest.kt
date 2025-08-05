@@ -1,7 +1,9 @@
 package com.multisensor.recording.controllers
 
 import android.hardware.usb.UsbDevice
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -101,8 +103,13 @@ class UsbDevicePrioritizerUnitTest {
 
         val assessment = devicePrioritizer.assessDevicePriority(deviceKey, mockDevice3, connectionTime, connectionCount)
 
-        assertTrue("Priority level should be low",
-                   assessment.priorityLevel in listOf(UsbDevicePrioritizer.PriorityLevel.LOW, UsbDevicePrioritizer.PriorityLevel.DISABLED))
+        assertTrue(
+            "Priority level should be low",
+            assessment.priorityLevel in listOf(
+                UsbDevicePrioritizer.PriorityLevel.LOW,
+                UsbDevicePrioritizer.PriorityLevel.DISABLED
+            )
+        )
         assertTrue("Priority score should be low", assessment.priorityScore < 0.5)
         assertTrue("Quality score should match poor input", assessment.qualityScore < 0.5)
         assertTrue("Recommendations should be present", assessment.recommendations.isNotEmpty())
@@ -136,9 +143,11 @@ class UsbDevicePrioritizerUnitTest {
 
     @Test
     fun `should optimize device selection for multiple devices`() {
-        val assessment1 = createMockAssessment("device_001", mockDevice1, 0.92, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
+        val assessment1 =
+            createMockAssessment("device_001", mockDevice1, 0.92, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
         val assessment2 = createMockAssessment("device_002", mockDevice2, 0.85, UsbDevicePrioritizer.PriorityLevel.HIGH)
-        val assessment3 = createMockAssessment("device_003", mockDevice3, 0.75, UsbDevicePrioritizer.PriorityLevel.MEDIUM)
+        val assessment3 =
+            createMockAssessment("device_003", mockDevice3, 0.75, UsbDevicePrioritizer.PriorityLevel.MEDIUM)
         val assessments = listOf(assessment1, assessment2, assessment3)
 
         val selectionResult = devicePrioritizer.optimizeDeviceSelection(assessments, 2)
@@ -175,14 +184,20 @@ class UsbDevicePrioritizerUnitTest {
         val actualReliability = 0.9
         val resourceUsage = 0.3
 
-        devicePrioritizer.updateDevicePriorityFeedback(deviceKey, initialPerformanceScore, actualReliability, resourceUsage)
+        devicePrioritizer.updateDevicePriorityFeedback(
+            deviceKey,
+            initialPerformanceScore,
+            actualReliability,
+            resourceUsage
+        )
 
         assertTrue("Feedback update should complete successfully", true)
     }
 
     @Test
     fun `should generate comprehensive priority analysis report`() {
-        val assessment1 = createMockAssessment("device_001", mockDevice1, 0.9, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
+        val assessment1 =
+            createMockAssessment("device_001", mockDevice1, 0.9, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
         val assessment2 = createMockAssessment("device_002", mockDevice2, 0.7, UsbDevicePrioritizer.PriorityLevel.HIGH)
         val assessment3 = createMockAssessment("device_003", mockDevice3, 0.4, UsbDevicePrioritizer.PriorityLevel.LOW)
         val assessments = listOf(assessment1, assessment2, assessment3)
@@ -208,10 +223,14 @@ class UsbDevicePrioritizerUnitTest {
         val tc001PlusAssessment = createAssessmentForDevice(mockDevice2)
         val tc001VariantAssessment = createAssessmentForDevice(mockDevice3)
 
-        assertTrue("TC001 should have highest characteristics score",
-                   tc001Assessment.characteristicsScore >= tc001PlusAssessment.characteristicsScore)
-        assertTrue("TC001 Plus should have higher score than variant",
-                   tc001PlusAssessment.characteristicsScore >= tc001VariantAssessment.characteristicsScore)
+        assertTrue(
+            "TC001 should have highest characteristics score",
+            tc001Assessment.characteristicsScore >= tc001PlusAssessment.characteristicsScore
+        )
+        assertTrue(
+            "TC001 Plus should have higher score than variant",
+            tc001PlusAssessment.characteristicsScore >= tc001VariantAssessment.characteristicsScore
+        )
     }
 
     @Test
@@ -256,14 +275,16 @@ class UsbDevicePrioritizerUnitTest {
             devicePrioritizer.assessDevicePriority(deviceKey, mockDevice1, connectionTime, connectionCount)
         }
 
-        val finalAssessment = devicePrioritizer.assessDevicePriority(deviceKey, mockDevice1, connectionTime, connectionCount)
+        val finalAssessment =
+            devicePrioritizer.assessDevicePriority(deviceKey, mockDevice1, connectionTime, connectionCount)
 
         assertTrue("Confidence should increase with more data points", finalAssessment.confidence > 0.5)
     }
 
     @Test
     fun `should handle mathematical edge cases in optimization metrics`() {
-        val assessment = createMockAssessment("single_device", mockDevice1, 1.0, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
+        val assessment =
+            createMockAssessment("single_device", mockDevice1, 1.0, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
 
         val selectionResult = devicePrioritizer.optimizeDeviceSelection(listOf(assessment), 1)
 
@@ -300,7 +321,13 @@ class UsbDevicePrioritizerUnitTest {
         val deviceKey = "${device.vendorId}_${device.productId}_${device.deviceName}"
 
         every { mockPerformanceAnalytics.calculateConnectionQuality(deviceKey) } returns
-            UsbPerformanceAnalytics.ConnectionQualityMetrics(0.8, 10.0, 0.8, 0.8, UsbPerformanceAnalytics.QualityAction.OPTIMAL)
+                UsbPerformanceAnalytics.ConnectionQualityMetrics(
+                    0.8,
+                    10.0,
+                    0.8,
+                    0.8,
+                    UsbPerformanceAnalytics.QualityAction.OPTIMAL
+                )
         every { mockPerformanceAnalytics.getResourceUtilization() } returns mapOf(
             "efficiency_score" to 0.8,
             "memory_usage" to 0.3,

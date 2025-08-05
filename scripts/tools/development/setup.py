@@ -7,9 +7,9 @@ This script automatically detects the platform and launches the appropriate setu
 """
 
 import os
-import sys
-import subprocess
 import platform
+import subprocess
+import sys
 from pathlib import Path
 
 

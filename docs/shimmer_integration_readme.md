@@ -1,6 +1,8 @@
 # Shimmer Integration Module
 
-The Shimmer Integration System provides comprehensive physiological data collection capabilities through Shimmer3 GSR+ sensors, enabling high-precision galvanic skin response monitoring with seamless integration into the Multi-Sensor Recording System's multi-modal data collection framework.
+The Shimmer Integration System provides comprehensive physiological data collection capabilities through Shimmer3 GSR+
+sensors, enabling high-precision galvanic skin response monitoring with seamless integration into the Multi-Sensor
+Recording System's multi-modal data collection framework.
 
 ## Table of Contents
 
@@ -17,9 +19,12 @@ The Shimmer Integration System provides comprehensive physiological data collect
 
 ### System Role and Responsibilities
 
-The Shimmer Integration System serves as the physiological data backbone of the Multi-Sensor Recording System, providing research-grade galvanic skin response (GSR) measurements that maintain precise temporal alignment with concurrent visual, thermal, and environmental sensor data streams.
+The Shimmer Integration System serves as the physiological data backbone of the Multi-Sensor Recording System, providing
+research-grade galvanic skin response (GSR) measurements that maintain precise temporal alignment with concurrent
+visual, thermal, and environmental sensor data streams.
 
 **Primary Functions:**
+
 - **High-Precision GSR Monitoring**: Research-grade physiological signal acquisition with configurable sampling rates
 - **Dual Integration Architecture**: Support for both direct PC Bluetooth connections and Android-mediated communication
 - **Real-Time Signal Processing**: Advanced artifact detection, quality assessment, and adaptive filtering
@@ -38,18 +43,21 @@ The system builds upon established psychophysiology and physiological computing 
 ### Physiological Monitoring Capabilities
 
 #### GSR Signal Acquisition
+
 - **Sampling Rates**: 256Hz, 512Hz, 1024Hz configurable rates for different research requirements
 - **Signal Quality**: Research-grade precision with 16-bit ADC resolution
 - **Dynamic Range**: Wide range accommodation for diverse physiological responses
 - **Artifact Detection**: Real-time motion and electrical artifact identification
 
 #### Multi-Modal Integration
+
 - **Temporal Synchronization**: Sub-millisecond alignment with visual and thermal data
 - **Data Fusion**: Coordinated analysis across multiple physiological and behavioral measures
 - **Session Management**: Integrated recording sessions with comprehensive metadata
 - **Quality Assurance**: Continuous signal quality monitoring and validation
 
 #### Research Applications
+
 - **Emotion Recognition**: Automated affective state assessment through GSR analysis
 - **Stress Monitoring**: Sympathetic nervous system activity measurement
 - **Cognitive Load Assessment**: Mental workload evaluation through physiological responses
@@ -121,18 +129,21 @@ graph TB
 ### Dual Integration Architecture
 
 #### Direct PC Bluetooth Connection
+
 - **Implementation**: `PythonApp/src/shimmer_manager.py`
 - **Advantages**: Low latency, direct control, minimal interference
 - **Use Cases**: Laboratory environments, controlled settings
 - **Communication**: Direct Bluetooth serial protocol with pyshimmer library
 
 #### Android-Mediated Connection
+
 - **Implementation**: `AndroidApp/src/main/java/com/multisensor/recording/ShimmerService.kt`
 - **Advantages**: Mobile deployment, unified device management
 - **Use Cases**: Field research, mobile experiments
 - **Communication**: Bluetooth to Android, then socket relay to PC
 
 #### Failover and Redundancy
+
 - **Automatic Detection**: Dynamic connection quality assessment
 - **Seamless Switching**: Transparent failover between connection modes
 - **Quality Maintenance**: Consistent data quality across connection types
@@ -141,6 +152,7 @@ graph TB
 ### Signal Processing Architecture
 
 #### Real-Time Processing Pipeline
+
 1. **Raw Signal Acquisition**: Direct ADC data from Shimmer sensors
 2. **Artifact Detection**: Motion and electrical interference identification
 3. **Quality Assessment**: Real-time signal quality scoring
@@ -149,6 +161,7 @@ graph TB
 6. **Data Storage**: Structured storage with metadata and quality metrics
 
 #### Advanced Processing Features
+
 - **Tonic/Phasic Decomposition**: Separation of baseline and response components
 - **Event Detection**: Automated identification of physiological responses
 - **Statistical Analysis**: Real-time descriptive statistics and trend analysis
@@ -301,22 +314,22 @@ class ShimmerCommand:
 ```python
 class ShimmerManager:
     """Central coordination for Shimmer device management and data collection"""
-    
+
     def __init__(self):
         self.devices = {}
         self.connection_managers = {}
         self.signal_processor = SignalProcessor()
         self.quality_monitor = QualityMonitor()
         self.data_manager = DataManager()
-    
+
     def discover_devices(self) -> List[ShimmerDeviceInfo]:
         """Discover available Shimmer devices via Bluetooth"""
         discovered_devices = []
-        
+
         try:
             # Scan for Bluetooth devices
             bluetooth_devices = bluetooth.discover_devices(lookup_names=True)
-            
+
             for device_address, device_name in bluetooth_devices:
                 if "Shimmer" in device_name:
                     device_info = ShimmerDeviceInfo(
@@ -325,53 +338,53 @@ class ShimmerManager:
                         connection_type="bluetooth"
                     )
                     discovered_devices.append(device_info)
-                    
+
         except Exception as e:
             logger.error(f"Device discovery failed: {e}")
-        
+
         return discovered_devices
-    
+
     def connect_device(self, device_id: str, connection_type: str = "auto") -> bool:
         """Establish connection to Shimmer device"""
         if device_id in self.devices:
             logger.warning(f"Device {device_id} already connected")
             return True
-        
+
         try:
             if connection_type == "auto":
                 # Try direct Bluetooth first, fallback to Android relay
                 connection_manager = self._create_connection_manager(device_id)
             else:
                 connection_manager = self._create_specific_connection(device_id, connection_type)
-            
+
             if connection_manager.connect():
                 self.connection_managers[device_id] = connection_manager
-                
+
                 # Initialize device configuration
                 device = ShimmerDevice(device_id, connection_manager)
                 self.devices[device_id] = device
-                
+
                 # Configure default settings
                 self._configure_device_defaults(device)
-                
+
                 logger.info(f"Successfully connected to device {device_id}")
                 return True
             else:
                 logger.error(f"Failed to connect to device {device_id}")
                 return False
-                
+
         except Exception as e:
             logger.error(f"Connection error for device {device_id}: {e}")
             return False
-    
+
     def start_data_streaming(self, device_id: str, session_config: SessionConfig) -> bool:
         """Start real-time data streaming from Shimmer device"""
         if device_id not in self.devices:
             logger.error(f"Device {device_id} not connected")
             return False
-        
+
         device = self.devices[device_id]
-        
+
         try:
             # Configure streaming parameters
             streaming_config = StreamingConfig(
@@ -379,45 +392,45 @@ class ShimmerManager:
                 buffer_size=session_config.buffer_size,
                 quality_threshold=session_config.quality_threshold
             )
-            
+
             # Start streaming with callback for real-time processing
             device.start_streaming(
                 config=streaming_config,
                 data_callback=self._process_streaming_data,
                 quality_callback=self._monitor_signal_quality
             )
-            
+
             logger.info(f"Started data streaming for device {device_id}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Failed to start streaming for device {device_id}: {e}")
             return False
-    
+
     def _process_streaming_data(self, device_id: str, raw_data: bytes):
         """Process real-time streaming data from Shimmer device"""
         try:
             # Parse raw data packet
             parsed_data = self.signal_processor.parse_raw_data(raw_data)
-            
+
             # Apply real-time signal processing
             processed_data = self.signal_processor.process_gsr_sample(
                 parsed_data, device_id
             )
-            
+
             # Assess signal quality
             quality_score = self.quality_monitor.assess_sample_quality(
                 processed_data
             )
-            
+
             # Store processed data
             self.data_manager.store_sample(
                 device_id, processed_data, quality_score
             )
-            
+
             # Trigger real-time callbacks for external systems
             self._notify_data_listeners(device_id, processed_data)
-            
+
         except Exception as e:
             logger.error(f"Data processing error for device {device_id}: {e}")
 ```
@@ -636,22 +649,22 @@ bucika_gsr/
 #### Shimmer Device Preparation
 
 1. **Hardware Setup**:
-   - Charge Shimmer3 GSR+ devices fully before use
-   - Attach GSR electrodes following manufacturer guidelines
-   - Verify device functionality using Shimmer software
-   - Record device MAC addresses for identification
+    - Charge Shimmer3 GSR+ devices fully before use
+    - Attach GSR electrodes following manufacturer guidelines
+    - Verify device functionality using Shimmer software
+    - Record device MAC addresses for identification
 
 2. **Electrode Placement**:
-   - Clean skin surface with alcohol wipe
-   - Attach electrodes to index and middle finger (recommended)
-   - Alternative: palm placement for long-term recording
-   - Ensure good electrical contact without excessive pressure
+    - Clean skin surface with alcohol wipe
+    - Attach electrodes to index and middle finger (recommended)
+    - Alternative: palm placement for long-term recording
+    - Ensure good electrical contact without excessive pressure
 
 3. **Environmental Considerations**:
-   - Minimize electromagnetic interference sources
-   - Maintain stable temperature conditions
-   - Avoid excessive humidity or moisture
-   - Position devices away from WiFi routers and other wireless equipment
+    - Minimize electromagnetic interference sources
+    - Maintain stable temperature conditions
+    - Avoid excessive humidity or moisture
+    - Position devices away from WiFi routers and other wireless equipment
 
 #### Software Configuration
 
@@ -666,10 +679,10 @@ bucika_gsr/
    ```
 
 2. **Bluetooth Configuration**:
-   - Enable Bluetooth on PC controller
-   - Pair Shimmer devices using standard Bluetooth pairing
-   - Verify COM port assignment (Windows) or device path (Linux)
-   - Test basic connectivity with Shimmer software
+    - Enable Bluetooth on PC controller
+    - Pair Shimmer devices using standard Bluetooth pairing
+    - Verify COM port assignment (Windows) or device path (Linux)
+    - Test basic connectivity with Shimmer software
 
 ### Device Connection and Management
 
@@ -686,124 +699,124 @@ bucika_gsr/
    ```
 
 2. **Connection Establishment**:
-   - Select device from discovered list
-   - Click "Connect" button
-   - Monitor connection status indicators
-   - Verify data streaming capability
+    - Select device from discovered list
+    - Click "Connect" button
+    - Monitor connection status indicators
+    - Verify data streaming capability
 
 3. **Configuration Settings**:
-   - **Sampling Rate**: 512Hz (recommended for research)
-   - **GSR Range**: Auto-range for optimal sensitivity
-   - **Calibration**: Enable automatic calibration
-   - **Quality Monitoring**: Enable real-time quality assessment
+    - **Sampling Rate**: 512Hz (recommended for research)
+    - **GSR Range**: Auto-range for optimal sensitivity
+    - **Calibration**: Enable automatic calibration
+    - **Quality Monitoring**: Enable real-time quality assessment
 
 #### Android-Mediated Connection
 
 1. **Android App Setup**:
-   - Launch Multi-Sensor Recording app on Android device
-   - Navigate to "Shimmer Configuration" section
-   - Enable Bluetooth and grant necessary permissions
-   - Scan for nearby Shimmer devices
+    - Launch Multi-Sensor Recording app on Android device
+    - Navigate to "Shimmer Configuration" section
+    - Enable Bluetooth and grant necessary permissions
+    - Scan for nearby Shimmer devices
 
 2. **Device Pairing**:
-   - Select Shimmer device from scan results
-   - Complete Bluetooth pairing process
-   - Verify connection in Android app
-   - Test data relay to PC controller
+    - Select Shimmer device from scan results
+    - Complete Bluetooth pairing process
+    - Verify connection in Android app
+    - Test data relay to PC controller
 
 3. **Network Relay Configuration**:
-   - Ensure Android device connected to same WiFi as PC
-   - Verify PC controller IP address and port
-   - Test socket communication between Android and PC
-   - Monitor data relay quality and latency
+    - Ensure Android device connected to same WiFi as PC
+    - Verify PC controller IP address and port
+    - Test socket communication between Android and PC
+    - Monitor data relay quality and latency
 
 ### Recording Session Workflow
 
 #### Pre-Recording Preparation
 
 1. **Signal Quality Check**:
-   - Connect all Shimmer devices
-   - Monitor real-time signal display
-   - Verify electrode contact quality
-   - Check for artifact presence
+    - Connect all Shimmer devices
+    - Monitor real-time signal display
+    - Verify electrode contact quality
+    - Check for artifact presence
 
 2. **Baseline Recording**:
-   - Record 2-3 minutes of baseline activity
-   - Ensure participant relaxation
-   - Monitor signal stability
-   - Document baseline conditions
+    - Record 2-3 minutes of baseline activity
+    - Ensure participant relaxation
+    - Monitor signal stability
+    - Document baseline conditions
 
 3. **Synchronization Validation**:
-   - Verify temporal alignment with other sensors
-   - Check master clock synchronization
-   - Test coordinated recording start/stop
-   - Validate data timestamp consistency
+    - Verify temporal alignment with other sensors
+    - Check master clock synchronization
+    - Test coordinated recording start/stop
+    - Validate data timestamp consistency
 
 #### Recording Execution
 
 1. **Session Initiation**:
-   - Create new recording session in PC controller
-   - Configure session parameters:
-     - Duration and recording modes
-     - Quality thresholds and artifact handling
-     - Real-time processing options
-   - Add participant information and session notes
+    - Create new recording session in PC controller
+    - Configure session parameters:
+        - Duration and recording modes
+        - Quality thresholds and artifact handling
+        - Real-time processing options
+    - Add participant information and session notes
 
 2. **Data Monitoring**:
-   - Monitor real-time GSR signal display
-   - Watch quality indicators and artifact detection
-   - Check electrode contact status
-   - Observe signal-to-noise ratio metrics
+    - Monitor real-time GSR signal display
+    - Watch quality indicators and artifact detection
+    - Check electrode contact status
+    - Observe signal-to-noise ratio metrics
 
 3. **Quality Management**:
-   - Address quality warnings immediately
-   - Re-attach electrodes if contact quality degrades
-   - Document any intervention or environmental changes
-   - Monitor for systematic artifacts or drift
+    - Address quality warnings immediately
+    - Re-attach electrodes if contact quality degrades
+    - Document any intervention or environmental changes
+    - Monitor for systematic artifacts or drift
 
 #### Post-Recording Procedures
 
 1. **Data Validation**:
-   - Review session quality report
-   - Check for data gaps or corruption
-   - Validate temporal synchronization
-   - Verify data export completeness
+    - Review session quality report
+    - Check for data gaps or corruption
+    - Validate temporal synchronization
+    - Verify data export completeness
 
 2. **Quality Assessment**:
-   - Analyze overall session quality metrics
-   - Review artifact detection and filtering results
-   - Assess electrode contact stability
-   - Generate quality assurance report
+    - Analyze overall session quality metrics
+    - Review artifact detection and filtering results
+    - Assess electrode contact stability
+    - Generate quality assurance report
 
 ### Signal Analysis and Interpretation
 
 #### Real-Time Analysis Features
 
 1. **Live Signal Display**:
-   - Real-time GSR conductance visualization
-   - Quality score indicators
-   - Artifact detection markers
-   - Statistical summary display
+    - Real-time GSR conductance visualization
+    - Quality score indicators
+    - Artifact detection markers
+    - Statistical summary display
 
 2. **Physiological Indices**:
-   - Tonic (baseline) level monitoring
-   - Phasic response detection
-   - Arousal level estimation
-   - Stress indicator assessment
+    - Tonic (baseline) level monitoring
+    - Phasic response detection
+    - Arousal level estimation
+    - Stress indicator assessment
 
 #### Post-Session Analysis
 
 1. **Signal Decomposition**:
-   - Separate tonic and phasic components
-   - Identify physiological responses
-   - Calculate response metrics (amplitude, latency, duration)
-   - Generate event-related analysis
+    - Separate tonic and phasic components
+    - Identify physiological responses
+    - Calculate response metrics (amplitude, latency, duration)
+    - Generate event-related analysis
 
 2. **Quality Reporting**:
-   - Comprehensive session quality assessment
-   - Artifact impact analysis
-   - Signal-to-noise ratio calculation
-   - Electrode performance evaluation
+    - Comprehensive session quality assessment
+    - Artifact impact analysis
+    - Signal-to-noise ratio calculation
+    - Electrode performance evaluation
 
 ## API Reference
 
@@ -814,22 +827,22 @@ bucika_gsr/
 ```python
 class ShimmerManager:
     """Central coordination for Shimmer device management"""
-    
+
     def discover_devices(self) -> List[ShimmerDeviceInfo]:
         """Discover available Shimmer devices via Bluetooth"""
-    
+
     def connect_device(self, device_id: str, connection_type: str = "auto") -> bool:
         """Establish connection to Shimmer device"""
-    
+
     def configure_device(self, device_id: str, config: ShimmerConfig) -> bool:
         """Configure Shimmer device parameters"""
-    
+
     def start_data_streaming(self, device_id: str, session_config: SessionConfig) -> bool:
         """Start real-time data streaming from device"""
-    
+
     def stop_data_streaming(self, device_id: str) -> bool:
         """Stop data streaming and finalize data"""
-    
+
     def get_device_status(self, device_id: str) -> DeviceStatus:
         """Get current device status and health metrics"""
 ```
@@ -1025,12 +1038,14 @@ class QualityAssessmentTest:
 
 **Symptoms**: Cannot discover or connect to Shimmer devices
 **Diagnosis**:
+
 1. Check Bluetooth adapter functionality
 2. Verify device pairing status
 3. Check COM port assignment (Windows)
 4. Test with official Shimmer software
 
 **Solutions**:
+
 1. **Bluetooth Reset**:
    ```bash
    # Windows: Reset Bluetooth stack
@@ -1042,30 +1057,32 @@ class QualityAssessmentTest:
    ```
 
 2. **Device Re-pairing**:
-   - Remove existing device pairing
-   - Clear Bluetooth cache
-   - Re-pair devices using fresh pairing process
-   - Verify PIN/passkey if required
+    - Remove existing device pairing
+    - Clear Bluetooth cache
+    - Re-pair devices using fresh pairing process
+    - Verify PIN/passkey if required
 
 #### Data Streaming Issues
 
 **Symptoms**: Intermittent data loss, connection drops
 **Diagnosis**:
+
 1. Monitor Bluetooth signal strength
 2. Check for interference sources
 3. Verify power levels on Shimmer devices
 4. Test connection stability over time
 
 **Solutions**:
+
 1. **Environment Optimization**:
-   - Move away from WiFi routers and other 2.4GHz devices
-   - Reduce distance between Shimmer and PC/Android device
-   - Ensure line-of-sight communication when possible
+    - Move away from WiFi routers and other 2.4GHz devices
+    - Reduce distance between Shimmer and PC/Android device
+    - Ensure line-of-sight communication when possible
 
 2. **Power Management**:
-   - Disable USB selective suspend (Windows)
-   - Disable power saving on Bluetooth adapter
-   - Ensure adequate battery levels on Shimmer devices
+    - Disable USB selective suspend (Windows)
+    - Disable power saving on Bluetooth adapter
+    - Ensure adequate battery levels on Shimmer devices
 
 ### Signal Quality Issues
 
@@ -1073,45 +1090,49 @@ class QualityAssessmentTest:
 
 **Symptoms**: High resistance values, unstable signal, poor quality scores
 **Diagnosis**:
+
 1. Check electrode attachment and contact pressure
 2. Verify skin preparation (cleaning, dryness)
 3. Monitor contact resistance values
 4. Check for electrode degradation
 
 **Solutions**:
+
 1. **Electrode Optimization**:
-   - Clean skin with alcohol wipe and allow to dry
-   - Apply electrodes with moderate pressure
-   - Use conductive gel if appropriate
-   - Replace electrodes if degraded
+    - Clean skin with alcohol wipe and allow to dry
+    - Apply electrodes with moderate pressure
+    - Use conductive gel if appropriate
+    - Replace electrodes if degraded
 
 2. **Alternative Placement**:
-   - Try different finger positions
-   - Consider palm placement for long sessions
-   - Test alternative electrode types
-   - Document placement for consistency
+    - Try different finger positions
+    - Consider palm placement for long sessions
+    - Test alternative electrode types
+    - Document placement for consistency
 
 #### Artifact Contamination
 
 **Symptoms**: High artifact detection, poor signal quality, unreliable measurements
 **Diagnosis**:
+
 1. Identify artifact types (motion, electrical, electrode)
 2. Check environmental conditions
 3. Monitor participant movement
 4. Review electrode stability
 
 **Solutions**:
+
 1. **Motion Artifact Reduction**:
-   - Minimize participant movement during recording
-   - Secure electrode cables to prevent tugging
-   - Use wrist restraints if appropriate
-   - Consider alternative electrode placement
+    - Minimize participant movement during recording
+    - Secure electrode cables to prevent tugging
+    - Use wrist restraints if appropriate
+    - Consider alternative electrode placement
 
 2. **Electrical Interference Mitigation**:
-   - Turn off nearby electronic devices
-   - Use battery power when possible
-   - Check for ground loops
-   - Consider shielded cables
+    - Turn off nearby electronic devices
+    - Use battery power when possible
+    - Check for ground loops
+    - Consider shielded cables
 
 ### Advanced Diagnostics
 
@@ -1173,21 +1194,26 @@ python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 ### Support Resources
 
 **Technical Documentation**:
+
 - [Multi-Device Synchronization](../multi-device-synchronization/README.md)
 - [Android Integration](../android-mobile-application/README.md)
 - [Signal Processing Fundamentals](../session-management/README.md)
 
 **Diagnostic Tools**:
+
 - Shimmer device discovery utility
 - Signal quality analyzer
 - Bluetooth connection tester
 - Performance monitoring suite
 
 **Community Support**:
+
 - GitHub Issues: [Shimmer Issues](https://github.com/buccancs/bucika_gsr/issues?q=label%3Ashimmer)
 - Discussion Forum: [Physiological Monitoring](https://github.com/buccancs/bucika_gsr/discussions)
 - Research Community: Psychophysiology and wearable sensing forums
 
 ---
 
-*This comprehensive documentation consolidates all Shimmer Integration information into a single authoritative reference. For related modules, see the [Multi-Device Synchronization](../multi-device-synchronization/README.md) and [Android Mobile Application](../android-mobile-application/README.md) documentation.*
+*This comprehensive documentation consolidates all Shimmer Integration information into a single authoritative
+reference. For related modules, see the [Multi-Device Synchronization](../multi-device-synchronization/README.md)
+and [Android Mobile Application](../android-mobile-application/README.md) documentation.*

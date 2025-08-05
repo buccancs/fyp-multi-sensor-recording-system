@@ -1,10 +1,11 @@
-import os
 import json
+import os
+from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
-from datetime import datetime
-from .segmentation_engine import HandSegmentationEngine, create_segmentation_engine
-from .utils import SegmentationConfig, SegmentationMethod, ProcessingResult
+
+from .segmentation_engine import create_segmentation_engine
+from .utils import SegmentationMethod, ProcessingResult
 
 
 class SessionPostProcessor:

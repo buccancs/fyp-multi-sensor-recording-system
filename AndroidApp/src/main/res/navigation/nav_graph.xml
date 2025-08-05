@@ -6,27 +6,27 @@
     app:startDestination="@id/nav_recording">
 
     <fragment
-        android:id="@+id/nav_recording"
-        android:name="com.multisensor.recording.ui.fragments.RecordingFragment"
-        android:label="Recording"
-        tools:layout="@layout/fragment_recording" />
+            android:id="@+id/nav_recording"
+            android:name="com.multisensor.recording.ui.fragments.RecordingFragment"
+            android:label="Recording"
+            tools:layout="@layout/fragment_recording"/>
 
     <fragment
-        android:id="@+id/nav_devices"
-        android:name="com.multisensor.recording.ui.fragments.DevicesFragment"
-        android:label="Devices"
-        tools:layout="@layout/fragment_devices" />
+            android:id="@+id/nav_devices"
+            android:name="com.multisensor.recording.ui.fragments.DevicesFragment"
+            android:label="Devices"
+            tools:layout="@layout/fragment_devices"/>
 
     <fragment
-        android:id="@+id/nav_calibration"
-        android:name="com.multisensor.recording.ui.fragments.CalibrationFragment"
-        android:label="Calibration"
-        tools:layout="@layout/fragment_calibration" />
+            android:id="@+id/nav_calibration"
+            android:name="com.multisensor.recording.ui.fragments.CalibrationFragment"
+            android:label="Calibration"
+            tools:layout="@layout/fragment_calibration"/>
 
     <fragment
-        android:id="@+id/nav_files"
-        android:name="com.multisensor.recording.ui.fragments.FilesFragment"
-        android:label="Files"
-        tools:layout="@layout/fragment_files" />
+            android:id="@+id/nav_files"
+            android:name="com.multisensor.recording.ui.fragments.FilesFragment"
+            android:label="Files"
+            tools:layout="@layout/fragment_files"/>
 
 </navigation>

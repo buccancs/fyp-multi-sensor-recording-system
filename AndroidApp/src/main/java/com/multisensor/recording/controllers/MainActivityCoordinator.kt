@@ -1,13 +1,8 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.hardware.usb.UsbDevice
 import android.view.TextureView
 import android.view.View
@@ -87,7 +82,10 @@ class MainActivityCoordinator @Inject constructor(
     private var errorRecoveryAttempts = 0
 
     fun initialize(callback: CoordinatorCallback) {
-        android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Initializing coordinator with all feature controllers")
+        android.util.Log.d(
+            "MainActivityCoordinator",
+            "[DEBUG_LOG] Initializing coordinator with all feature controllers"
+        )
 
         this.callback = callback
 
@@ -129,10 +127,17 @@ class MainActivityCoordinator @Inject constructor(
     private fun setupPermissionController() {
         permissionController.setCallback(object : PermissionController.PermissionCallback {
             override fun onAllPermissionsGranted() {
-                android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] All permissions granted - initializing recording system")
+                android.util.Log.d(
+                    "MainActivityCoordinator",
+                    "[DEBUG_LOG] All permissions granted - initializing recording system"
+                )
             }
 
-            override fun onPermissionsTemporarilyDenied(deniedPermissions: List<String>, grantedCount: Int, totalCount: Int) {
+            override fun onPermissionsTemporarilyDenied(
+                deniedPermissions: List<String>,
+                grantedCount: Int,
+                totalCount: Int
+            ) {
                 callback?.updateStatusText("Permissions: $grantedCount/$totalCount granted - Some permissions denied")
             }
 
@@ -160,7 +165,10 @@ class MainActivityCoordinator @Inject constructor(
     private fun setupUsbController() {
         usbController.setCallback(object : UsbController.UsbCallback {
             override fun onSupportedDeviceAttached(device: UsbDevice) {
-                android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Supported USB device attached - coordinating with other controllers")
+                android.util.Log.d(
+                    "MainActivityCoordinator",
+                    "[DEBUG_LOG] Supported USB device attached - coordinating with other controllers"
+                )
                 callback?.updateStatusText("Topdon thermal camera connected - Ready for recording")
             }
 
@@ -413,7 +421,10 @@ class MainActivityCoordinator @Inject constructor(
                 callback?.runOnUiThread(action)
             }
 
-            override fun registerBroadcastReceiver(receiver: android.content.BroadcastReceiver, filter: android.content.IntentFilter): android.content.Intent? {
+            override fun registerBroadcastReceiver(
+                receiver: android.content.BroadcastReceiver,
+                filter: android.content.IntentFilter
+            ): android.content.Intent? {
                 return try {
                     callback?.getContext()?.registerReceiver(receiver, filter)
                 } catch (e: Exception) {
@@ -593,7 +604,10 @@ class MainActivityCoordinator @Inject constructor(
         val currentQuality = recordingController.getCurrentQuality()
         if (!recordingController.validateQualityForResources(context, currentQuality)) {
             val recommendedQuality = recordingController.getRecommendedQuality(context)
-            android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Current quality $currentQuality not suitable, switching to $recommendedQuality")
+            android.util.Log.w(
+                "MainActivityCoordinator",
+                "[DEBUG_LOG] Current quality $currentQuality not suitable, switching to $recommendedQuality"
+            )
             recordingController.setRecordingQuality(recommendedQuality)
         }
 
@@ -619,8 +633,14 @@ class MainActivityCoordinator @Inject constructor(
         if (recordingController.validateQualityForResources(context, quality)) {
             recordingController.setRecordingQuality(quality)
         } else {
-            android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Quality $quality not suitable for current resources")
-            callback?.showToast("Quality $quality not suitable for current storage/resources", android.widget.Toast.LENGTH_LONG)
+            android.util.Log.w(
+                "MainActivityCoordinator",
+                "[DEBUG_LOG] Quality $quality not suitable for current resources"
+            )
+            callback?.showToast(
+                "Quality $quality not suitable for current storage/resources",
+                android.widget.Toast.LENGTH_LONG
+            )
         }
     }
 
@@ -765,10 +785,16 @@ class MainActivityCoordinator @Inject constructor(
                 errorCount = jsonObject.getInt("errorCount"),
                 lastErrorTimestamp = jsonObject.getLong("lastErrorTimestamp")
             ).also {
-                android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinator state restored: ${activeFeaturesList.size} features")
+                android.util.Log.d(
+                    "MainActivityCoordinator",
+                    "[DEBUG_LOG] Coordinator state restored: ${activeFeaturesList.size} features"
+                )
             }
         } catch (e: Exception) {
-            android.util.Log.e("MainActivityCoordinator", "[DEBUG_LOG] Failed to restore coordinator state: ${e.message}")
+            android.util.Log.e(
+                "MainActivityCoordinator",
+                "[DEBUG_LOG] Failed to restore coordinator state: ${e.message}"
+            )
             null
         }
     }
@@ -802,7 +828,10 @@ class MainActivityCoordinator @Inject constructor(
         )
 
         if (errorRecoveryAttempts < 3) {
-            android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Attempting error recovery (attempt $errorRecoveryAttempts/3)")
+            android.util.Log.d(
+                "MainActivityCoordinator",
+                "[DEBUG_LOG] Attempting error recovery (attempt $errorRecoveryAttempts/3)"
+            )
 
             callback?.getContext()?.let { context ->
                 saveCoordinatorState(context, currentState!!)
@@ -812,24 +841,36 @@ class MainActivityCoordinator @Inject constructor(
                         "initialization" -> {
                             resetAllStates()
                         }
+
                         "calibration" -> {
                             calibrationController.resetState()
                         }
+
                         "recording" -> {
                             callback?.getContext()?.let { context ->
-                                android.util.Log.w("MainActivityCoordinator", "Cannot stop recording without viewModel access")
+                                android.util.Log.w(
+                                    "MainActivityCoordinator",
+                                    "Cannot stop recording without viewModel access"
+                                )
                             }
                         }
+
                         "network" -> {
                             networkController.resetState()
                         }
                     }
                 } catch (recoveryError: Exception) {
-                    android.util.Log.e("MainActivityCoordinator", "[DEBUG_LOG] Recovery failed: ${recoveryError.message}")
+                    android.util.Log.e(
+                        "MainActivityCoordinator",
+                        "[DEBUG_LOG] Recovery failed: ${recoveryError.message}"
+                    )
                 }
             }
         } else {
-            android.util.Log.e("MainActivityCoordinator", "[DEBUG_LOG] Maximum recovery attempts reached, manual intervention required")
+            android.util.Log.e(
+                "MainActivityCoordinator",
+                "[DEBUG_LOG] Maximum recovery attempts reached, manual intervention required"
+            )
             callback?.showToast("System error: Please restart the application", Toast.LENGTH_LONG)
         }
     }
@@ -851,6 +892,7 @@ class MainActivityCoordinator @Inject constructor(
                     conflictingFeatures.add("calibration")
                 }
             }
+
             "calibration" -> {
                 if (!activeFeatures.contains("permissions")) {
                     missingDependencies.add("permissions")
@@ -859,11 +901,13 @@ class MainActivityCoordinator @Inject constructor(
                     conflictingFeatures.add("recording")
                 }
             }
+
             "network" -> {
                 if (!activeFeatures.contains("permissions")) {
                     missingDependencies.add("permissions")
                 }
             }
+
             "shimmer" -> {
                 if (!activeFeatures.contains("permissions")) {
                     missingDependencies.add("permissions")
@@ -874,7 +918,10 @@ class MainActivityCoordinator @Inject constructor(
         val isValid = missingDependencies.isEmpty() && conflictingFeatures.isEmpty()
 
         if (!isValid) {
-            android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Feature dependency validation failed for $featureToActivate")
+            android.util.Log.w(
+                "MainActivityCoordinator",
+                "[DEBUG_LOG] Feature dependency validation failed for $featureToActivate"
+            )
             android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] - Missing: $missingDependencies")
             android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] - Conflicts: $conflictingFeatures")
         }
@@ -896,7 +943,10 @@ class MainActivityCoordinator @Inject constructor(
             return true
         } else {
             android.util.Log.w("MainActivityCoordinator", "[DEBUG_LOG] Feature activation blocked: $featureName")
-            callback?.showToast("Cannot activate $featureName: ${validation.missingDependencies.joinToString()}", Toast.LENGTH_SHORT)
+            callback?.showToast(
+                "Cannot activate $featureName: ${validation.missingDependencies.joinToString()}",
+                Toast.LENGTH_SHORT
+            )
             return false
         }
     }
@@ -923,7 +973,10 @@ class MainActivityCoordinator @Inject constructor(
             uiController.cleanup()
 
             permissionController.resetState()
-            android.util.Log.w("MainActivityCoordinator", "Cannot stop recording in resetAllStates without viewModel access")
+            android.util.Log.w(
+                "MainActivityCoordinator",
+                "Cannot stop recording in resetAllStates without viewModel access"
+            )
 
 
             callback?.getContext()?.let { context ->

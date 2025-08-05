@@ -89,7 +89,7 @@ class ConnectionManager(
             val startTime = System.currentTimeMillis()
 
             try {
-                logger.debug("Connection attempt $attempt/${ policy.maxRetryAttempts} for device: $deviceId")
+                logger.debug("Connection attempt $attempt/${policy.maxRetryAttempts} for device: $deviceId")
 
                 val success = connectionFunction()
                 val duration = System.currentTimeMillis() - startTime

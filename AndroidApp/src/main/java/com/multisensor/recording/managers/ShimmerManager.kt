@@ -2,31 +2,16 @@ package com.multisensor.recording.managers
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.os.Build
-import android.view.LayoutInflater
-import android.widget.ProgressBar
-import com.multisensor.recording.R
 import android.content.Context
-import android.content.SharedPreferences
-import android.text.InputType
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Spinner
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Toast
 import android.os.Handler
 import android.os.Looper
-import com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog
-import com.shimmerresearch.android.guiUtilities.ShimmerDialogConfigurations
-import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
+import android.view.LayoutInflater
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.Toast
 import com.shimmerresearch.android.Shimmer
-import com.shimmerresearch.bluetooth.ShimmerBluetooth
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logD
-import com.multisensor.recording.util.logE
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logW
+import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -104,6 +89,7 @@ class ShimmerManager @Inject constructor(
                         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] User selected 'Connect to Device'")
                         connectSelectedShimmerDevice(activity, callback)
                     }
+
                     1 -> {
                         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] User selected 'Launch Device Selection'")
                         launchShimmerDeviceDialog(activity, callback)
@@ -123,7 +109,10 @@ class ShimmerManager @Inject constructor(
         try {
             val lastDeviceInfo = getLastConnectedDeviceInfo()
             if (lastDeviceInfo != null) {
-                android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Found previous device: ${lastDeviceInfo.name} (${lastDeviceInfo.address})")
+                android.util.Log.d(
+                    "ShimmerManager",
+                    "[DEBUG_LOG] Found previous device: ${lastDeviceInfo.name} (${lastDeviceInfo.address})"
+                )
 
                 val progressDialog = createModernProgressDialog(
                     activity,
@@ -146,9 +135,16 @@ class ShimmerManager @Inject constructor(
                             progressDialog.dismiss()
 
                             isConnected = true
-                            saveDeviceConnectionState(lastDeviceInfo.address, lastDeviceInfo.name, lastDeviceInfo.btType)
+                            saveDeviceConnectionState(
+                                lastDeviceInfo.address,
+                                lastDeviceInfo.name,
+                                lastDeviceInfo.btType
+                            )
 
-                            android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Successfully connected to ${lastDeviceInfo.name}")
+                            android.util.Log.d(
+                                "ShimmerManager",
+                                "[DEBUG_LOG] Successfully connected to ${lastDeviceInfo.name}"
+                            )
                             callback.onDeviceSelected(lastDeviceInfo.address, lastDeviceInfo.name)
                             callback.onConnectionStatusChanged(true)
 
@@ -156,15 +152,25 @@ class ShimmerManager @Inject constructor(
 
                     } catch (e: Exception) {
                         progressDialog.dismiss()
-                        android.util.Log.e("ShimmerManager", "[DEBUG_LOG] Failed to connect to stored device: ${e.message}")
+                        android.util.Log.e(
+                            "ShimmerManager",
+                            "[DEBUG_LOG] Failed to connect to stored device: ${e.message}"
+                        )
 
-                        Toast.makeText(activity, "Failed to connect to ${lastDeviceInfo.name}. Please select device manually.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            activity,
+                            "Failed to connect to ${lastDeviceInfo.name}. Please select device manually.",
+                            Toast.LENGTH_LONG
+                        ).show()
                         launchShimmerDeviceDialog(activity, callback)
                     }
                 }, 500)
 
             } else {
-                android.util.Log.d("ShimmerManager", "[DEBUG_LOG] No previously connected device found, showing device selection")
+                android.util.Log.d(
+                    "ShimmerManager",
+                    "[DEBUG_LOG] No previously connected device found, showing device selection"
+                )
                 launchShimmerDeviceDialog(activity, callback)
             }
 
@@ -178,7 +184,10 @@ class ShimmerManager @Inject constructor(
         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Launching Shimmer device selection dialog")
 
         try {
-            val intent = android.content.Intent(activity, com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog::class.java)
+            val intent = android.content.Intent(
+                activity,
+                com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog::class.java
+            )
 
             val options = arrayOf(
                 "Shimmer3-GSR+ (Bluetooth Classic)",
@@ -194,11 +203,15 @@ class ShimmerManager @Inject constructor(
                         0 -> {
                             val address = "00:06:66:68:4A:B4"
                             val name = "Shimmer_4AB4"
-                            android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Selected Classic BT device: $name ($address)")
+                            android.util.Log.d(
+                                "ShimmerManager",
+                                "[DEBUG_LOG] Selected Classic BT device: $name ($address)"
+                            )
 
                             saveDeviceConnectionState(address, name, ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC)
                             callback.onDeviceSelected(address, name)
                         }
+
                         1 -> {
                             val address = "00:06:66:68:4A:B5"
                             val name = "Shimmer_4AB5"
@@ -207,9 +220,11 @@ class ShimmerManager @Inject constructor(
                             saveDeviceConnectionState(address, name, ShimmerBluetoothManagerAndroid.BT_TYPE.BLE)
                             callback.onDeviceSelected(address, name)
                         }
+
                         2 -> {
                             showScanningDialog(activity, callback)
                         }
+
                         3 -> {
                             showManualMacDialog(activity, callback)
                         }
@@ -294,7 +309,11 @@ class ShimmerManager @Inject constructor(
                     saveDeviceConnectionState(macAddress, deviceName, ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC)
                     callback.onDeviceSelected(macAddress, deviceName)
                 } else {
-                    android.widget.Toast.makeText(activity, "Invalid MAC address format", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(
+                        activity,
+                        "Invalid MAC address format",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
                     callback.onError("Invalid MAC address format")
                 }
             }
@@ -338,7 +357,10 @@ class ShimmerManager @Inject constructor(
                             enabledSensors.add(sensors[index])
                         }
                     }
-                    android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Sensor configuration applied: ${enabledSensors.joinToString()}")
+                    android.util.Log.d(
+                        "ShimmerManager",
+                        "[DEBUG_LOG] Sensor configuration applied: ${enabledSensors.joinToString()}"
+                    )
                     callback.onConfigurationComplete()
                 }
                 .setNegativeButton("Cancel") { _, _ ->
@@ -378,7 +400,13 @@ class ShimmerManager @Inject constructor(
         layout.addView(gsrRangeLabel)
 
         val gsrRangeSpinner = android.widget.Spinner(activity)
-        val gsrRanges = arrayOf("10-56 kΩ (Range 0)", "56-220 kΩ (Range 1)", "220-680 kΩ (Range 2)", "680-4.7 MΩ (Range 3)", "Auto Range")
+        val gsrRanges = arrayOf(
+            "10-56 kΩ (Range 0)",
+            "56-220 kΩ (Range 1)",
+            "220-680 kΩ (Range 2)",
+            "680-4.7 MΩ (Range 3)",
+            "Auto Range"
+        )
         val gsrAdapter = android.widget.ArrayAdapter(activity, android.R.layout.simple_spinner_item, gsrRanges)
         gsrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         gsrRangeSpinner.adapter = gsrAdapter
@@ -494,10 +522,12 @@ class ShimmerManager @Inject constructor(
                         Toast.makeText(activity, "SD Logging started", Toast.LENGTH_SHORT).show()
                         callback.onConfigurationComplete()
                     }
+
                     1 -> {
                         Toast.makeText(activity, "SD Logging stopped", Toast.LENGTH_SHORT).show()
                         callback.onConfigurationComplete()
                     }
+
                     2 -> showFormatConfirmation(activity, callback)
                     3 -> Toast.makeText(activity, "Log files viewer - Not implemented", Toast.LENGTH_SHORT).show()
                 }
@@ -716,7 +746,10 @@ class ShimmerManager @Inject constructor(
         }
 
         if (isSDLogging) {
-            return ValidationResult(false, "SD logging is already active. Stop current logging before starting new session.")
+            return ValidationResult(
+                false,
+                "SD logging is already active. Stop current logging before starting new session."
+            )
         }
 
         if (!deviceCapabilities.contains("SD_LOGGING")) {
@@ -724,7 +757,10 @@ class ShimmerManager @Inject constructor(
         }
 
         if (lastKnownBatteryLevel in 1..10) {
-            return ValidationResult(false, "Device battery too low for reliable logging ($lastKnownBatteryLevel%). Please charge device.")
+            return ValidationResult(
+                false,
+                "Device battery too low for reliable logging ($lastKnownBatteryLevel%). Please charge device."
+            )
         }
 
         return ValidationResult(true, "Device ready for SD logging")
@@ -988,8 +1024,18 @@ class ShimmerManager @Inject constructor(
             summary.append("Session Summary:\n")
             summary.append("- ID: $sessionId\n")
             summary.append("- Duration: ${durationMinutes}m ${durationSeconds}s\n")
-            summary.append("- Start: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date(startTime))}\n")
-            summary.append("- End: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date(endTime))}\n")
+            summary.append(
+                "- Start: ${
+                    java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                        .format(java.util.Date(startTime))
+                }\n"
+            )
+            summary.append(
+                "- End: ${
+                    java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                        .format(java.util.Date(endTime))
+                }\n"
+            )
             summary.append("- Battery consumed: ${if (lastKnownBatteryLevel > 0) "~${100 - lastKnownBatteryLevel}%" else "Unknown"}\n")
             summary.append("- Data quality: Estimated good\n")
 
@@ -1178,7 +1224,10 @@ class ShimmerManager @Inject constructor(
         reconnectionAttempts++
         val delayMs = calculateBackoffDelay(reconnectionAttempts)
 
-        android.util.Log.d(TAG_CONNECTION, "Reconnection attempt $reconnectionAttempts of $RECONNECTION_ATTEMPTS (delay: ${delayMs}ms)")
+        android.util.Log.d(
+            TAG_CONNECTION,
+            "Reconnection attempt $reconnectionAttempts of $RECONNECTION_ATTEMPTS (delay: ${delayMs}ms)"
+        )
 
         val progressDialog = createModernProgressDialog(
             activity,
@@ -1254,10 +1303,12 @@ class ShimmerManager @Inject constructor(
     private fun discoverDeviceCapabilities() {
         try {
             deviceCapabilities.clear()
-            deviceCapabilities.addAll(setOf(
-                "GSR", "PPG", "Accelerometer", "Gyroscope",
-                "Magnetometer", "SD_LOGGING", "REAL_TIME_STREAMING"
-            ))
+            deviceCapabilities.addAll(
+                setOf(
+                    "GSR", "PPG", "Accelerometer", "Gyroscope",
+                    "Magnetometer", "SD_LOGGING", "REAL_TIME_STREAMING"
+                )
+            )
 
             lastKnownBatteryLevel = (50..100).random()
 

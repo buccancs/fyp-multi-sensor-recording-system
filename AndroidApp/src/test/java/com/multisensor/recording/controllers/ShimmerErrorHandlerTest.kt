@@ -1,22 +1,20 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.persistence.ShimmerDeviceStateRepository
-import com.multisensor.recording.persistence.ShimmerDeviceState
-import com.multisensor.recording.persistence.ShimmerConnectionHistory
 import com.multisensor.recording.persistence.ConnectionAction
+import com.multisensor.recording.persistence.ShimmerConnectionHistory
+import com.multisensor.recording.persistence.ShimmerDeviceState
+import com.multisensor.recording.persistence.ShimmerDeviceStateRepository
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
@@ -169,7 +167,15 @@ class ShimmerErrorHandlerTest {
         assertTrue(result)
         assertTrue(retryAttempted)
         assertFalse(finalFailureCalled)
-        coVerify { mockRepository.logConnectionAttempt(testDeviceAddress, false, any(), testDeviceName, testConnectionType) }
+        coVerify {
+            mockRepository.logConnectionAttempt(
+                testDeviceAddress,
+                false,
+                any(),
+                testDeviceName,
+                testConnectionType
+            )
+        }
     }
 
     @Test

@@ -1,10 +1,11 @@
 package com.multisensor.recording.controllers
 
 import android.content.Context
-import android.hardware.usb.UsbDevice
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.mockk
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -82,7 +83,10 @@ class UsbPerformanceAnalyticsUnitTest {
         val qualityMetrics = performanceAnalytics.calculateConnectionQuality(deviceKey)
 
         assertTrue("Quality score should be low", qualityMetrics.overallQuality < 0.5)
-        assertTrue("Should recommend action", qualityMetrics.recommendedAction != UsbPerformanceAnalytics.QualityAction.OPTIMAL)
+        assertTrue(
+            "Should recommend action",
+            qualityMetrics.recommendedAction != UsbPerformanceAnalytics.QualityAction.OPTIMAL
+        )
         assertTrue("Average response time should be high", qualityMetrics.averageResponseTime > 50.0)
     }
 
@@ -103,8 +107,14 @@ class UsbPerformanceAnalyticsUnitTest {
 
         assertTrue("Should have recorded events", report.totalEvents > 0)
         assertTrue("Average response time should be reasonable", report.averageResponseTime > 0)
-        assertTrue("95th percentile should be >= average", report.percentile95ResponseTime >= report.averageResponseTime)
-        assertTrue("99th percentile should be >= 95th", report.percentile99ResponseTime >= report.percentile95ResponseTime)
+        assertTrue(
+            "95th percentile should be >= average",
+            report.percentile95ResponseTime >= report.averageResponseTime
+        )
+        assertTrue(
+            "99th percentile should be >= 95th",
+            report.percentile99ResponseTime >= report.percentile95ResponseTime
+        )
         assertTrue("Should have quality metrics for devices", report.qualityMetrics.isNotEmpty())
         assertTrue("Should have recommendations", report.systemRecommendations.isNotEmpty())
     }
@@ -240,8 +250,10 @@ class UsbPerformanceAnalyticsUnitTest {
 
         val report = performanceAnalytics.generatePerformanceReport(mockContext)
 
-        assertTrue("Total events should be around window size",
-                   report.totalEvents <= windowSize + 50)
+        assertTrue(
+            "Total events should be around window size",
+            report.totalEvents <= windowSize + 50
+        )
     }
 
     @Test
@@ -269,7 +281,9 @@ class UsbPerformanceAnalyticsUnitTest {
 
         val qualityMetrics = performanceAnalytics.calculateConnectionQuality(deviceKey)
 
-        assertTrue("Trimmed mean should handle outliers",
-                   qualityMetrics.averageResponseTime < 50.0)
+        assertTrue(
+            "Trimmed mean should handle outliers",
+            qualityMetrics.averageResponseTime < 50.0
+        )
     }
 }

@@ -59,11 +59,13 @@ class AnalyticsManager @Inject constructor(
         currentSessionId = sessionId
         sessionStartTime = System.currentTimeMillis()
 
-        trackEvent(SessionEvent.SESSION_STARTED, mapOf(
-            "session_id" to sessionId,
-            "app_version" to APP_VERSION,
-            "protocol_version" to PROTOCOL_VERSION
-        ))
+        trackEvent(
+            SessionEvent.SESSION_STARTED, mapOf(
+                "session_id" to sessionId,
+                "app_version" to APP_VERSION,
+                "protocol_version" to PROTOCOL_VERSION
+            )
+        )
 
         Log.i(TAG, "Analytics session started: $sessionId")
     }
@@ -72,10 +74,12 @@ class AnalyticsManager @Inject constructor(
         currentSessionId?.let { sessionId ->
             val duration = System.currentTimeMillis() - sessionStartTime
 
-            trackEvent(SessionEvent.SESSION_ENDED, mapOf(
-                "session_id" to sessionId,
-                "duration_ms" to duration
-            ))
+            trackEvent(
+                SessionEvent.SESSION_ENDED, mapOf(
+                    "session_id" to sessionId,
+                    "duration_ms" to duration
+                )
+            )
 
             updateSessionMetrics { metrics ->
                 metrics.copy(
@@ -95,23 +99,27 @@ class AnalyticsManager @Inject constructor(
     fun trackSessionMetrics(metrics: SessionMetrics) {
         _sessionMetrics.value = metrics
 
-        trackEvent(MetricEvent.SESSION_METRICS, mapOf(
-            "recording_count" to metrics.recordingCount,
-            "total_data_size_mb" to metrics.totalDataSizeMB,
-            "average_frame_rate" to metrics.averageFrameRate,
-            "error_count" to metrics.errorCount
-        ))
+        trackEvent(
+            MetricEvent.SESSION_METRICS, mapOf(
+                "recording_count" to metrics.recordingCount,
+                "total_data_size_mb" to metrics.totalDataSizeMB,
+                "average_frame_rate" to metrics.averageFrameRate,
+                "error_count" to metrics.errorCount
+            )
+        )
     }
 
     fun reportErrorEvent(error: ErrorEvent) {
-        trackEvent(ErrorEventType.ERROR_OCCURRED, mapOf(
-            "error_type" to error.type,
-            "error_message" to error.message,
-            "error_code" to error.code,
-            "stack_trace" to error.stackTrace,
-            "session_id" to (currentSessionId ?: "unknown"),
-            "timestamp" to System.currentTimeMillis()
-        ))
+        trackEvent(
+            ErrorEventType.ERROR_OCCURRED, mapOf(
+                "error_type" to error.type,
+                "error_message" to error.message,
+                "error_code" to error.code,
+                "stack_trace" to error.stackTrace,
+                "session_id" to (currentSessionId ?: "unknown"),
+                "timestamp" to System.currentTimeMillis()
+            )
+        )
 
         updateSessionMetrics { metrics ->
             metrics.copy(errorCount = metrics.errorCount + 1)
@@ -126,13 +134,15 @@ class AnalyticsManager @Inject constructor(
                 try {
                     val performance = collectPerformanceMetrics()
 
-                    trackEvent(MetricEvent.PERFORMANCE_METRICS, mapOf(
-                        "memory_usage_mb" to performance.memoryUsageMB,
-                        "cpu_usage_percent" to performance.cpuUsagePercent,
-                        "battery_level" to performance.batteryLevel,
-                        "storage_available_mb" to performance.storageAvailableMB,
-                        "network_speed_mbps" to performance.networkSpeedMbps
-                    ))
+                    trackEvent(
+                        MetricEvent.PERFORMANCE_METRICS, mapOf(
+                            "memory_usage_mb" to performance.memoryUsageMB,
+                            "cpu_usage_percent" to performance.cpuUsagePercent,
+                            "battery_level" to performance.batteryLevel,
+                            "storage_available_mb" to performance.storageAvailableMB,
+                            "network_speed_mbps" to performance.networkSpeedMbps
+                        )
+                    )
 
                     updateSystemHealth(performance)
 
@@ -146,22 +156,26 @@ class AnalyticsManager @Inject constructor(
     }
 
     fun trackUserInteraction(interaction: UserInteraction) {
-        trackEvent(UserEvent.USER_INTERACTION, mapOf(
-            "action" to interaction.action,
-            "screen" to interaction.screen,
-            "element" to interaction.element,
-            "duration_ms" to interaction.durationMs
-        ))
+        trackEvent(
+            UserEvent.USER_INTERACTION, mapOf(
+                "action" to interaction.action,
+                "screen" to interaction.screen,
+                "element" to interaction.element,
+                "duration_ms" to interaction.durationMs
+            )
+        )
     }
 
     fun trackNetworkEvent(event: NetworkEvent) {
-        trackEvent(NetworkEventType.NETWORK_EVENT, mapOf(
-            "event_type" to event.type,
-            "connection_type" to event.connectionType,
-            "bandwidth_mbps" to event.bandwidthMbps,
-            "latency_ms" to event.latencyMs,
-            "success" to event.success
-        ))
+        trackEvent(
+            NetworkEventType.NETWORK_EVENT, mapOf(
+                "event_type" to event.type,
+                "connection_type" to event.connectionType,
+                "bandwidth_mbps" to event.bandwidthMbps,
+                "latency_ms" to event.latencyMs,
+                "success" to event.success
+            )
+        )
     }
 
     private fun trackEvent(eventType: AnalyticsEventType, parameters: Map<String, Any>) {
@@ -284,7 +298,7 @@ class AnalyticsManager @Inject constructor(
     private fun updateSystemHealth(performance: PerformanceMetrics) {
         val health = SystemHealth(
             isHealthy = performance.memoryUsageMB < BUFFER_SIZE &&
-                       performance.batteryLevel > 20,
+                    performance.batteryLevel > 20,
             memoryPressure = performance.memoryUsageMB > 1000,
             lowBattery = performance.batteryLevel < 30,
             storageWarning = performance.storageAvailableMB < 100,

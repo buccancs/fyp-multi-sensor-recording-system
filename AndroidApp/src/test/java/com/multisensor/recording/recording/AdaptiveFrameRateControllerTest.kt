@@ -2,9 +2,15 @@ package com.multisensor.recording.recording
 
 import com.multisensor.recording.network.NetworkQualityMonitor
 import com.multisensor.recording.util.Logger
-import io.mockk.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -118,7 +124,12 @@ class AdaptiveFrameRateControllerTest {
         adaptiveFrameRateController.setManualFrameRate(manualFrameRate)
 
         assertFalse("Adaptive mode should be disabled", adaptiveFrameRateController.isAdaptiveModeEnabled())
-        assertEquals("Frame rate should be set to manual value", manualFrameRate, adaptiveFrameRateController.getCurrentFrameRate(), 0.1f)
+        assertEquals(
+            "Frame rate should be set to manual value",
+            manualFrameRate,
+            adaptiveFrameRateController.getCurrentFrameRate(),
+            0.1f
+        )
 
         verify { mockListener.onFrameRateChanged(manualFrameRate, "Manual override to ${manualFrameRate}fps") }
         verify { mockListener.onAdaptationModeChanged(false) }
@@ -157,7 +168,10 @@ class AdaptiveFrameRateControllerTest {
         assertTrue("Frame rate should be clamped to minimum", adaptiveFrameRateController.getCurrentFrameRate() >= 0.1f)
 
         adaptiveFrameRateController.setManualFrameRate(15.0f)
-        assertTrue("Frame rate should be clamped to maximum", adaptiveFrameRateController.getCurrentFrameRate() <= 10.0f)
+        assertTrue(
+            "Frame rate should be clamped to maximum",
+            adaptiveFrameRateController.getCurrentFrameRate() <= 10.0f
+        )
 
         adaptiveFrameRateController.setManualFrameRate(-1.0f)
         assertTrue("Negative frame rate should be handled", adaptiveFrameRateController.getCurrentFrameRate() > 0)
@@ -250,7 +264,8 @@ class AdaptiveFrameRateControllerTest {
                     reason: String,
                 ): Unit = throw RuntimeException("Test exception")
 
-                override fun onAdaptationModeChanged(isAdaptive: Boolean): Unit = throw RuntimeException("Test exception")
+                override fun onAdaptationModeChanged(isAdaptive: Boolean): Unit =
+                    throw RuntimeException("Test exception")
             }
 
         adaptiveFrameRateController.addListener(faultyListener)
@@ -288,7 +303,12 @@ class AdaptiveFrameRateControllerTest {
 
         adaptiveFrameRateController.onNetworkQualityChanged(quality)
 
-        assertEquals("Frame rate should remain at default when inactive", 2.0f, adaptiveFrameRateController.getCurrentFrameRate(), 0.1f)
+        assertEquals(
+            "Frame rate should remain at default when inactive",
+            2.0f,
+            adaptiveFrameRateController.getCurrentFrameRate(),
+            0.1f
+        )
 
         println("[DEBUG_LOG] Adaptive controller in inactive state test passed")
     }
@@ -308,7 +328,11 @@ class AdaptiveFrameRateControllerTest {
 
         adaptiveFrameRateController.setManualFrameRate(1.5f)
 
-        every { mockNetworkQualityMonitor.getCurrentQuality() } returns NetworkQualityMonitor.NetworkQuality(3, 100, 1000.0)
+        every { mockNetworkQualityMonitor.getCurrentQuality() } returns NetworkQualityMonitor.NetworkQuality(
+            3,
+            100,
+            1000.0
+        )
         adaptiveFrameRateController.enableAdaptiveMode()
 
         assertTrue("Concurrent operations should work", true)

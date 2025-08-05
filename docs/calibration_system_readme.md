@@ -1,6 +1,8 @@
 # Calibration System Module
 
-The Calibration System provides comprehensive camera calibration and quality assessment capabilities for the Multi-Sensor Recording System, ensuring accurate spatial alignment and temporal synchronization across all camera modalities including RGB cameras, thermal cameras, and multi-device stereo configurations.
+The Calibration System provides comprehensive camera calibration and quality assessment capabilities for the
+Multi-Sensor Recording System, ensuring accurate spatial alignment and temporal synchronization across all camera
+modalities including RGB cameras, thermal cameras, and multi-device stereo configurations.
 
 ## Table of Contents
 
@@ -17,9 +19,12 @@ The Calibration System provides comprehensive camera calibration and quality ass
 
 ### System Role and Responsibilities
 
-The Calibration System serves as the foundation for accurate spatial and temporal alignment across the Multi-Sensor Recording System. Modern multi-modal sensing applications require precise geometric calibration and temporal synchronization to ensure that data from different sensors can be meaningfully combined for analysis.
+The Calibration System serves as the foundation for accurate spatial and temporal alignment across the Multi-Sensor
+Recording System. Modern multi-modal sensing applications require precise geometric calibration and temporal
+synchronization to ensure that data from different sensors can be meaningfully combined for analysis.
 
 **Primary Functions:**
+
 - **Intrinsic Camera Calibration**: Individual camera parameter estimation for geometric correction
 - **Stereo Calibration**: RGB-thermal camera alignment with rotation and translation matrices
 - **Quality Assessment**: Comprehensive calibration quality evaluation and coverage analysis
@@ -38,18 +43,21 @@ The calibration system builds upon established computer vision principles:
 ### Calibration Capabilities
 
 #### Single Camera Calibration
+
 - **Intrinsic Parameters**: Camera matrix, distortion coefficients, principal point
 - **Pattern Detection**: Chessboard and circle grid detection with sub-pixel accuracy
 - **Quality Metrics**: RMS error analysis, coverage assessment, parameter confidence intervals
 - **Distortion Modeling**: Radial and tangential distortion correction
 
 #### Stereo Calibration
+
 - **RGB-Thermal Alignment**: Spatial relationship estimation between visible and thermal cameras
 - **Epipolar Geometry**: Fundamental and essential matrix computation
 - **Rectification**: Image rectification for simplified stereo matching
 - **Disparity Mapping**: Depth estimation from calibrated stereo pairs
 
 #### Temporal Calibration
+
 - **Synchronization Validation**: Frame-level temporal alignment assessment
 - **Latency Measurement**: Inter-device timing offset estimation
 - **Quality Monitoring**: Continuous temporal alignment quality assessment
@@ -107,21 +115,25 @@ graph TB
 ### Component Architecture
 
 #### Calibration Management Layer
+
 - **CalibrationManager**: Central coordination of all calibration workflows and procedures
 - **CalibrationSession**: Session-based calibration management with progress tracking
 - **QualityAssessment**: Comprehensive quality metrics and validation framework
 
 #### Computer Vision Layer
+
 - **CalibrationProcessor**: OpenCV-based calibration algorithm implementation
 - **PatternDetector**: Robust calibration pattern detection with sub-pixel accuracy
 - **OptimizationProcessor**: Non-linear parameter optimization and refinement
 
 #### Data Management Layer
+
 - **CalibrationResult**: Structured storage of calibration parameters and quality metrics
 - **DataManager**: JSON-based persistence with metadata and version management
 - **ExportManager**: Multi-format export capabilities for analysis workflows
 
 #### Integration Layer
+
 - **CameraInterface**: Hardware abstraction for diverse camera platforms
 - **TemporalInterface**: Synchronization calibration and validation
 - **UserInterface**: Interactive calibration controls and progress visualization
@@ -129,6 +141,7 @@ graph TB
 ### Calibration Workflow Architecture
 
 #### Pattern-Based Calibration Pipeline
+
 1. **Pattern Presentation**: Automated or manual calibration pattern display
 2. **Image Acquisition**: Synchronized image capture across multiple cameras
 3. **Feature Detection**: Robust corner or circle detection with quality filtering
@@ -137,6 +150,7 @@ graph TB
 6. **Result Storage**: Structured persistence with metadata and provenance
 
 #### Multi-Camera Coordination
+
 1. **Device Synchronization**: Temporal alignment of image capture across cameras
 2. **Simultaneous Capture**: Coordinated image acquisition for stereo calibration
 3. **Cross-Modal Alignment**: RGB-thermal spatial relationship estimation
@@ -690,16 +704,16 @@ bucika_gsr/calibration/
 #### Pre-Calibration Setup
 
 1. **Pattern Preparation**:
-   - Print high-quality calibration patterns (recommended: 9x6 chessboard)
-   - Mount pattern on rigid, flat surface
-   - Ensure good lighting conditions
-   - Verify pattern dimensions and square size accuracy
+    - Print high-quality calibration patterns (recommended: 9x6 chessboard)
+    - Mount pattern on rigid, flat surface
+    - Ensure good lighting conditions
+    - Verify pattern dimensions and square size accuracy
 
 2. **Environment Setup**:
-   - Stable camera mounting
-   - Consistent lighting (avoid shadows and reflections)
-   - Clear workspace for pattern movement
-   - Minimum distance variation for comprehensive calibration
+    - Stable camera mounting
+    - Consistent lighting (avoid shadows and reflections)
+    - Clear workspace for pattern movement
+    - Minimum distance variation for comprehensive calibration
 
 3. **Software Configuration**:
    ```bash
@@ -715,50 +729,53 @@ bucika_gsr/calibration/
 #### Step-by-Step Procedure
 
 1. **Initialize Calibration Session**:
-   - Navigate to Calibration tab in PC controller
-   - Select "Single Camera Calibration"
-   - Choose target camera (USB webcam or Android device)
-   - Configure pattern parameters:
-     - Pattern type: Chessboard (recommended)
-     - Pattern size: 9x6 corners
-     - Square size: 25mm (measure accurately)
+    - Navigate to Calibration tab in PC controller
+    - Select "Single Camera Calibration"
+    - Choose target camera (USB webcam or Android device)
+    - Configure pattern parameters:
+        - Pattern type: Chessboard (recommended)
+        - Pattern size: 9x6 corners
+        - Square size: 25mm (measure accurately)
 
 2. **Image Capture Process**:
-   - Position calibration pattern in camera view
-   - Ensure pattern is fully visible and in focus
-   - Capture images from various positions and angles:
-     - Center, corners, and edges of image
-     - Different distances (near and far)
-     - Various tilting angles (±30 degrees)
-   - Target: 15-25 high-quality images
+    - Position calibration pattern in camera view
+    - Ensure pattern is fully visible and in focus
+    - Capture images from various positions and angles:
+        - Center, corners, and edges of image
+        - Different distances (near and far)
+        - Various tilting angles (±30 degrees)
+    - Target: 15-25 high-quality images
 
 3. **Quality Assessment**:
-   - Monitor real-time detection feedback
-   - Verify pattern detection accuracy
-   - Check coverage map for comprehensive sampling
-   - Review detection success rate (target: >80%)
+    - Monitor real-time detection feedback
+    - Verify pattern detection accuracy
+    - Check coverage map for comprehensive sampling
+    - Review detection success rate (target: >80%)
 
 4. **Calibration Processing**:
-   - Execute calibration algorithm
-   - Review RMS error (target: <1.0 pixels)
-   - Analyze quality metrics and coverage score
-   - Save calibration parameters
+    - Execute calibration algorithm
+    - Review RMS error (target: <1.0 pixels)
+    - Analyze quality metrics and coverage score
+    - Save calibration parameters
 
 #### Quality Criteria
 
 **Excellent Calibration (RMS < 0.5)**:
+
 - Sub-pixel detection accuracy
 - Comprehensive coverage (>80% of image area)
 - Consistent error distribution
 - Suitable for high-precision applications
 
 **Good Calibration (RMS < 1.0)**:
+
 - Acceptable detection accuracy
 - Good coverage (>60% of image area)
 - Minor error clustering
 - Suitable for most research applications
 
 **Improvement Recommendations**:
+
 - Increase image count for better coverage
 - Improve lighting conditions
 - Use larger calibration pattern
@@ -769,36 +786,36 @@ bucika_gsr/calibration/
 #### RGB-Thermal Stereo Calibration
 
 1. **Setup Requirements**:
-   - Both cameras must see calibration pattern simultaneously
-   - Synchronized image capture capability
-   - Overlap region of at least 60% between camera views
-   - Consistent lighting for both visible and thermal imaging
+    - Both cameras must see calibration pattern simultaneously
+    - Synchronized image capture capability
+    - Overlap region of at least 60% between camera views
+    - Consistent lighting for both visible and thermal imaging
 
 2. **Calibration Procedure**:
-   - Configure stereo calibration mode
-   - Verify temporal synchronization between cameras
-   - Capture synchronized image pairs (15-20 pairs recommended)
-   - Process stereo calibration parameters
-   - Validate epipolar geometry
+    - Configure stereo calibration mode
+    - Verify temporal synchronization between cameras
+    - Capture synchronized image pairs (15-20 pairs recommended)
+    - Process stereo calibration parameters
+    - Validate epipolar geometry
 
 3. **Quality Validation**:
-   - Epipolar error assessment (target: <2.0 pixels)
-   - Rectification quality evaluation
-   - Baseline measurement validation
-   - Cross-validation with test patterns
+    - Epipolar error assessment (target: <2.0 pixels)
+    - Rectification quality evaluation
+    - Baseline measurement validation
+    - Cross-validation with test patterns
 
 #### Multi-Device Stereo Networks
 
 1. **Network Calibration**:
-   - Define camera network topology
-   - Establish pairwise stereo relationships
-   - Process bundle adjustment optimization
-   - Validate global consistency
+    - Define camera network topology
+    - Establish pairwise stereo relationships
+    - Process bundle adjustment optimization
+    - Validate global consistency
 
 2. **Temporal Alignment**:
-   - Synchronize capture timing across all cameras
-   - Validate frame-level temporal alignment
-   - Compensate for network and processing delays
+    - Synchronize capture timing across all cameras
+    - Validate frame-level temporal alignment
+    - Compensate for network and processing delays
 
 ### Calibration Data Management
 
@@ -824,16 +841,16 @@ calibration_data/
 #### Data Export and Integration
 
 1. **Export Formats**:
-   - JSON (structured metadata)
-   - OpenCV XML/YAML
-   - MATLAB .mat files
-   - Custom research formats
+    - JSON (structured metadata)
+    - OpenCV XML/YAML
+    - MATLAB .mat files
+    - Custom research formats
 
 2. **Integration Workflows**:
-   - Real-time calibration application
-   - Post-processing calibration correction
-   - Multi-session calibration comparison
-   - Longitudinal calibration stability analysis
+    - Real-time calibration application
+    - Post-processing calibration correction
+    - Multi-session calibration comparison
+    - Longitudinal calibration stability analysis
 
 ## API Reference
 
@@ -1082,12 +1099,14 @@ class CalibrationIntegrationTest:
 
 **Symptoms**: Low detection success rate, inconsistent corner detection
 **Diagnosis**:
+
 1. Check image quality and focus
 2. Verify lighting conditions
 3. Validate pattern print quality and dimensions
 4. Review pattern positioning and visibility
 
 **Solutions**:
+
 1. **Image Quality Improvement**:
    ```python
    # Check image sharpness
@@ -1097,20 +1116,22 @@ class CalibrationIntegrationTest:
    ```
 
 2. **Lighting Optimization**:
-   - Use diffuse, even lighting
-   - Avoid shadows and reflections
-   - Ensure sufficient contrast between pattern and background
+    - Use diffuse, even lighting
+    - Avoid shadows and reflections
+    - Ensure sufficient contrast between pattern and background
 
 #### High Calibration Error
 
 **Symptoms**: RMS error > 2.0 pixels, poor quality grade
 **Diagnosis**:
+
 1. Analyze error distribution across images
 2. Check calibration pattern quality
 3. Review image capture diversity
 4. Validate camera stability during capture
 
 **Solutions**:
+
 1. **Pattern Quality Verification**:
    ```python
    # Measure pattern planarity
@@ -1120,21 +1141,23 @@ class CalibrationIntegrationTest:
    ```
 
 2. **Image Diversity Enhancement**:
-   - Capture more images from diverse positions
-   - Increase angular diversity (±45 degrees)
-   - Include corner and edge positions
-   - Vary distance from camera
+    - Capture more images from diverse positions
+    - Increase angular diversity (±45 degrees)
+    - Include corner and edge positions
+    - Vary distance from camera
 
 #### Stereo Calibration Problems
 
 **Symptoms**: High epipolar error, poor rectification quality
 **Diagnosis**:
+
 1. Verify temporal synchronization between cameras
 2. Check camera overlap and baseline geometry
 3. Validate individual camera calibrations
 4. Review pattern visibility in both cameras
 
 **Solutions**:
+
 1. **Synchronization Verification**:
    ```python
    # Test temporal alignment
@@ -1144,10 +1167,10 @@ class CalibrationIntegrationTest:
    ```
 
 2. **Baseline Optimization**:
-   - Verify adequate baseline distance (>5% of working distance)
-   - Ensure sufficient camera overlap (>60%)
-   - Check for parallel optical axes
-   - Validate camera mounting stability
+    - Verify adequate baseline distance (>5% of working distance)
+    - Ensure sufficient camera overlap (>60%)
+    - Check for parallel optical axes
+    - Validate camera mounting stability
 
 ### Advanced Diagnostics
 
@@ -1192,21 +1215,26 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 ### Support Resources
 
 **Technical Documentation**:
+
 - [Computer Vision Fundamentals](../camera-recording-system/README.md)
 - [Multi-Device Synchronization](../multi-device-synchronization/README.md)
 - [System Integration Guide](../../README.md)
 
 **Diagnostic Tools**:
+
 - Pattern detection validator
 - Calibration quality analyzer
 - Parameter confidence estimator
 - Cross-validation framework
 
 **Community Support**:
+
 - GitHub Issues: [Calibration Issues](https://github.com/buccancs/bucika_gsr/issues?q=label%3Acalibration)
 - Discussion Forum: [Calibration Discussion](https://github.com/buccancs/bucika_gsr/discussions)
 - Academic Resources: Computer vision and calibration literature
 
 ---
 
-*This comprehensive documentation consolidates all Calibration System information into a single authoritative reference. For related modules, see the [Camera Recording System](../camera-recording-system/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*This comprehensive documentation consolidates all Calibration System information into a single authoritative reference.
+For related modules, see the [Camera Recording System](../camera-recording-system/README.md)
+and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*

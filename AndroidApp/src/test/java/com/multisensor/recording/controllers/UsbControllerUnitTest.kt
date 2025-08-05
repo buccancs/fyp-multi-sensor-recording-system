@@ -352,10 +352,19 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device1))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device1)
+        )
 
         assertEquals(1, usbController.getConnectedSupportedDeviceCount())
         val remainingDevices = usbController.getConnectedSupportedDevicesList()
@@ -379,7 +388,10 @@ class UsbControllerUnitTest {
         val firstConnectionTime = usbController.getDeviceConnectionTime(deviceKey)
         val firstConnectionCount = usbController.getDeviceConnectionCount(deviceKey)
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device)
+        )
         Thread.sleep(10)
         usbController.handleUsbDeviceIntent(mockContext, intent)
 
@@ -403,10 +415,16 @@ class UsbControllerUnitTest {
 
         assertEquals(0, usbController.getConnectedSupportedDeviceCount())
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
         verify { mockCallback.updateStatusText(match { it.contains("1 Topdon thermal camera connected") }) }
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
         verify { mockCallback.updateStatusText(match { it.contains("2 Topdon thermal cameras connected") }) }
     }
 
@@ -426,22 +444,33 @@ class UsbControllerUnitTest {
         assertTrue(usbController.isDeviceConnected(deviceKey))
         assertEquals(device, usbController.getDeviceInfoByKey(deviceKey))
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device)
+        )
         assertFalse(usbController.isDeviceConnected(deviceKey))
         assertNull(usbController.getDeviceInfoByKey(deviceKey))
     }
 
     @Test
     fun `should handle mixed supported and unsupported devices correctly`() {
-        val supportedDevice = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
-        val unsupportedDevice = createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "/dev/bus/usb/001/002")
+        val supportedDevice =
+            createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
+        val unsupportedDevice =
+            createMockUsbDevice(vendorId = 0x1234, productId = 0x5678, deviceName = "/dev/bus/usb/001/002")
 
         every { mockUsbDeviceManager.isSupportedTopdonDevice(supportedDevice) } returns true
         every { mockUsbDeviceManager.isSupportedTopdonDevice(unsupportedDevice) } returns false
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, supportedDevice))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, unsupportedDevice))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, supportedDevice)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, unsupportedDevice)
+        )
 
         assertEquals(1, usbController.getConnectedSupportedDeviceCount())
         val connectedDevices = usbController.getConnectedSupportedDevicesList()
@@ -469,7 +498,10 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device)
+        )
 
         verify { mockEditor.putInt("connected_device_count", 1) }
         verify { mockEditor.putStringSet("connected_device_keys", any()) }
@@ -484,8 +516,14 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
 
         val summary = usbController.getMultiDeviceStatusSummary(mockContext)
 
@@ -513,8 +551,14 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
 
         assertEquals(2, usbController.getConnectedSupportedDeviceCount())
         val connectedDevices = usbController.getConnectedSupportedDevicesList()
@@ -531,18 +575,31 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
 
         val assessments = usbController.getDevicePriorityAssessments()
 
         assertEquals(2, assessments.size)
-        assertTrue("Should have assessments for both devices",
-                   assessments.any { it.device == device1 } && assessments.any { it.device == device2 })
+        assertTrue(
+            "Should have assessments for both devices",
+            assessments.any { it.device == device1 } && assessments.any { it.device == device2 })
 
         assessments.forEach { assessment ->
-            assertTrue("Priority score should be valid", assessment.priorityScore >= 0.0 && assessment.priorityScore <= 1.0)
-            assertTrue("Quality score should be valid", assessment.qualityScore >= 0.0 && assessment.qualityScore <= 1.0)
+            assertTrue(
+                "Priority score should be valid",
+                assessment.priorityScore >= 0.0 && assessment.priorityScore <= 1.0
+            )
+            assertTrue(
+                "Quality score should be valid",
+                assessment.qualityScore >= 0.0 && assessment.qualityScore <= 1.0
+            )
             assertTrue("Confidence should be valid", assessment.confidence >= 0.0 && assessment.confidence <= 1.0)
             assertNotNull("Should have priority level", assessment.priorityLevel)
             assertTrue("Should have recommendations", assessment.recommendations.isNotEmpty())
@@ -558,9 +615,18 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device3))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device3)
+        )
 
         val selectionResult = usbController.getOptimizedDeviceSelection(maxDevices = 2)
 
@@ -583,8 +649,14 @@ class UsbControllerUnitTest {
         every { mockCallback.areAllPermissionsGranted() } returns true
 
         repeat(5) {
-            usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device))
-            usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device))
+            usbController.handleUsbDeviceIntent(
+                mockContext,
+                createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device)
+            )
+            usbController.handleUsbDeviceIntent(
+                mockContext,
+                createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_DETACHED, device)
+            )
         }
 
         val report = usbController.getPerformanceAnalyticsReport(mockContext)
@@ -593,7 +665,10 @@ class UsbControllerUnitTest {
         assertTrue("Average response time should be valid", report.averageResponseTime >= 0.0)
         assertTrue("95th percentile should be valid", report.percentile95ResponseTime >= 0L)
         assertTrue("99th percentile should be valid", report.percentile99ResponseTime >= 0L)
-        assertTrue("CPU efficiency should be valid", report.cpuEfficiencyScore >= 0.0 && report.cpuEfficiencyScore <= 1.0)
+        assertTrue(
+            "CPU efficiency should be valid",
+            report.cpuEfficiencyScore >= 0.0 && report.cpuEfficiencyScore <= 1.0
+        )
         assertTrue("Memory utilization should be valid", report.memoryUtilization >= 0L)
         assertTrue("Event throughput should be valid", report.eventThroughput >= 0.0)
         assertTrue("Should have system recommendations", report.systemRecommendations.isNotEmpty())
@@ -607,12 +682,18 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device)
+        )
 
         val qualityReport = usbController.monitorDeviceConnectionQuality(deviceKey)
 
         assertTrue("Quality report should contain device key", qualityReport.contains(deviceKey))
-        assertTrue("Quality report should contain quality analysis", qualityReport.contains("Connection Quality Analysis"))
+        assertTrue(
+            "Quality report should contain quality analysis",
+            qualityReport.contains("Connection Quality Analysis")
+        )
         assertTrue("Quality report should contain overall score", qualityReport.contains("Overall Quality Score"))
         assertTrue("Quality report should contain detailed metrics", qualityReport.contains("Detailed Metrics"))
         assertTrue("Quality report should be non-empty", qualityReport.isNotEmpty())
@@ -626,8 +707,14 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
 
         val priorityReport = usbController.generateDevicePriorityReport()
 
@@ -671,7 +758,10 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device)
+        )
 
         val reportBefore = usbController.getPerformanceAnalyticsReport(mockContext)
         assertTrue("Should have events before reset", reportBefore.totalEvents > 0)
@@ -691,12 +781,21 @@ class UsbControllerUnitTest {
         every { mockUsbDeviceManager.isSupportedTopdonDevice(any()) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
 
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1))
-        usbController.handleUsbDeviceIntent(mockContext, createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2))
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device1)
+        )
+        usbController.handleUsbDeviceIntent(
+            mockContext,
+            createUsbDeviceIntent(UsbManager.ACTION_USB_DEVICE_ATTACHED, device2)
+        )
 
         val systemStatus = usbController.getComprehensiveSystemStatus(mockContext)
 
-        assertTrue("Should contain system analysis title", systemStatus.contains("Comprehensive USB Controller System Analysis"))
+        assertTrue(
+            "Should contain system analysis title",
+            systemStatus.contains("Comprehensive USB Controller System Analysis")
+        )
         assertTrue("Should contain multi-device status", systemStatus.contains("MULTI-DEVICE STATUS"))
         assertTrue("Should contain performance analytics", systemStatus.contains("PERFORMANCE ANALYTICS"))
         assertTrue("Should contain device prioritization", systemStatus.contains("DEVICE PRIORITIZATION"))

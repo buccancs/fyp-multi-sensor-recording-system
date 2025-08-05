@@ -1,9 +1,12 @@
 import os
 import time
-from datetime import datetime
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QSize
 from PyQt5.QtGui import QFont, QPalette, QColor, QIcon, QPixmap, QPainter
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox, QLabel, QPushButton, QProgressBar, QSlider, QComboBox, QTextEdit, QTabWidget, QFrame, QSplitter, QToolBar, QStatusBar, QMenuBar, QAction, QMessageBox, QFileDialog, QSpacerItem, QSizePolicy, QApplication
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox, QLabel, QPushButton, \
+    QProgressBar, QSlider, QComboBox, QTextEdit, QTabWidget, QFrame, QSplitter, QToolBar, QStatusBar, QMenuBar, QAction, \
+    QMessageBox, QFileDialog, QSpacerItem, QSizePolicy, QApplication
+from datetime import datetime
+
 try:
     from .device_panel import DeviceStatusPanel
 except ImportError:

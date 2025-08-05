@@ -8,12 +8,14 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Callable, Any, Set, Union
-from enum import Enum
-from ..utils.logging_config import get_logger
+
 from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
 from ..network.pc_server import PCServer
+from ..utils.logging_config import get_logger
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..',
     'AndroidApp', 'libs', 'pyshimmer'))
 try:

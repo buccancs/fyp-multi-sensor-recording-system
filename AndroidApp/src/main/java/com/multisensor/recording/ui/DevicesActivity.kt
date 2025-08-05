@@ -6,13 +6,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.launch
 import com.multisensor.recording.databinding.ActivityDevicesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DevicesActivity : AppCompatActivity() {
@@ -363,6 +363,7 @@ class DevicesActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 

@@ -1,13 +1,12 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
-import android.graphics.Color
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 
 @RunWith(AndroidJUnit4::class)
 class StatusIndicatorViewTest {
@@ -24,7 +23,10 @@ class StatusIndicatorViewTest {
     @Test
     fun testInitialState() {
         assertNotNull(statusIndicatorView)
-        assertEquals("Status: Disconnected", statusIndicatorView.findViewById<android.widget.TextView>(android.R.id.text1)?.text)
+        assertEquals(
+            "Status: Disconnected",
+            statusIndicatorView.findViewById<android.widget.TextView>(android.R.id.text1)?.text
+        )
     }
 
     @Test

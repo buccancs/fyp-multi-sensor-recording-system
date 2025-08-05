@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Multi-Sensor Recording Dashboard - File Viewer</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -192,802 +192,807 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-chart-line me-2"></i>
-                Multi-Sensor Recording Dashboard
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/devices">
-                            <i class="fas fa-devices me-1"></i>Devices
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/sessions">
-                            <i class="fas fa-history me-1"></i>Sessions
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/playback">
-                            <i class="fas fa-play me-1"></i>Playback
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/files">
-                            <i class="fas fa-folder me-1"></i>File Viewer
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/settings">
-                            <i class="fas fa-cog me-1"></i>Settings
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-chart-line me-2"></i>
+            Multi-Sensor Recording Dashboard
+        </a>
+        <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/devices">
+                        <i class="fas fa-devices me-1"></i>Devices
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sessions">
+                        <i class="fas fa-history me-1"></i>Sessions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/playback">
+                        <i class="fas fa-play me-1"></i>Playback
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/files">
+                        <i class="fas fa-folder me-1"></i>File Viewer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/settings">
+                        <i class="fas fa-cog me-1"></i>Settings
+                    </a>
+                </li>
+            </ul>
         </div>
-    </nav>
-
-    <div id="connectionIndicator" class="real-time-indicator">
-        <i class="fas fa-wifi me-1"></i>
-        <span id="connectionStatus">Connected</span>
     </div>
+</nav>
 
-    <div class="container mt-4">
-        <div class="row">
+<div class="real-time-indicator" id="connectionIndicator">
+    <i class="fas fa-wifi me-1"></i>
+    <span id="connectionStatus">Connected</span>
+</div>
 
-            <div class="col-lg-5 col-md-6">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="fas fa-folder-open me-2"></i>File Browser
-                        </h5>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-outline-primary btn-sm" onclick="goUp()">
-                                <i class="fas fa-level-up-alt"></i>
-                            </button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="refreshFiles()">
-                                <i class="fas fa-sync-alt"></i>
-                            </button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="toggleGridView()">
-                                <i class="fas fa-th" id="viewToggleIcon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
+<div class="container mt-4">
+    <div class="row">
 
-                        <div class="breadcrumb-nav">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0" id="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#" onclick="navigateTo('/')">recordings</a></li>
-                                </ol>
-                            </nav>
-                        </div>
-
-                        <div class="search-box mb-3">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="form-control" id="searchInput" placeholder="Search files..." oninput="filterFiles(this.value)">
-                        </div>
-
-                        <div class="batch-actions" id="batchActions">
-                            <div class="d-flex align-items-center">
-                                <span class="me-3"><span id="selectedCount">0</span> files selected</span>
-                                <button class="btn btn-sm btn-primary me-2" onclick="downloadSelected()">
-                                    <i class="fas fa-download me-1"></i>Download
-                                </button>
-                                <button class="btn btn-sm btn-danger me-2" onclick="deleteSelected()">
-                                    <i class="fas fa-trash me-1"></i>Delete
-                                </button>
-                                <button class="btn btn-sm btn-secondary" onclick="clearSelection()">
-                                    <i class="fas fa-times me-1"></i>Clear
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="file-browser" id="fileBrowser">
-
-                        </div>
+        <div class="col-lg-5 col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-folder-open me-2"></i>File Browser
+                    </h5>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-primary btn-sm" onclick="goUp()">
+                            <i class="fas fa-level-up-alt"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="refreshFiles()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="toggleGridView()">
+                            <i class="fas fa-th" id="viewToggleIcon"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
+                <div class="card-body">
 
-            <div class="col-lg-7 col-md-6">
+                    <div class="breadcrumb-nav">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0" id="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" onclick="navigateTo('/')">recordings</a></li>
+                            </ol>
+                        </nav>
+                    </div>
 
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="fas fa-eye me-2"></i>File Preview
-                        </h5>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-outline-primary btn-sm" onclick="downloadCurrentFile()" id="downloadBtn" disabled>
+                    <div class="search-box mb-3">
+                        <i class="fas fa-search search-icon"></i>
+                        <input class="form-control" id="searchInput" oninput="filterFiles(this.value)"
+                               placeholder="Search files..."
+                               type="text">
+                    </div>
+
+                    <div class="batch-actions" id="batchActions">
+                        <div class="d-flex align-items-center">
+                            <span class="me-3"><span id="selectedCount">0</span> files selected</span>
+                            <button class="btn btn-sm btn-primary me-2" onclick="downloadSelected()">
                                 <i class="fas fa-download me-1"></i>Download
                             </button>
-                            <button class="btn btn-outline-secondary btn-sm" onclick="openInExternal()" id="openBtn" disabled>
-                                <i class="fas fa-external-link-alt me-1"></i>Open
+                            <button class="btn btn-sm btn-danger me-2" onclick="deleteSelected()">
+                                <i class="fas fa-trash me-1"></i>Delete
                             </button>
-                            <button class="btn btn-outline-info btn-sm" onclick="showFileProperties()" id="propertiesBtn" disabled>
-                                <i class="fas fa-info-circle me-1"></i>Properties
+                            <button class="btn btn-sm btn-secondary" onclick="clearSelection()">
+                                <i class="fas fa-times me-1"></i>Clear
                             </button>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="file-preview" id="filePreview">
-                            <div class="text-muted">
-                                <i class="fas fa-file fa-3x mb-3"></i>
-                                <p>Select a file to preview</p>
-                            </div>
+
+                    <div class="file-browser" id="fileBrowser">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 col-md-6">
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-eye me-2"></i>File Preview
+                    </h5>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-primary btn-sm" disabled id="downloadBtn"
+                                onclick="downloadCurrentFile()">
+                            <i class="fas fa-download me-1"></i>Download
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" disabled id="openBtn"
+                                onclick="openInExternal()">
+                            <i class="fas fa-external-link-alt me-1"></i>Open
+                        </button>
+                        <button class="btn btn-outline-info btn-sm" disabled id="propertiesBtn"
+                                onclick="showFileProperties()">
+                            <i class="fas fa-info-circle me-1"></i>Properties
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="file-preview" id="filePreview">
+                        <div class="text-muted">
+                            <i class="fas fa-file fa-3x mb-3"></i>
+                            <p>Select a file to preview</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-info me-2"></i>File Details
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div id="fileDetails">
-                            <p class="text-muted">Select a file to view details</p>
-                        </div>
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info me-2"></i>File Details
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div id="fileDetails">
+                        <p class="text-muted">Select a file to view details</p>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-bolt me-2"></i>Quick Actions
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-2">
-                                <button class="btn btn-outline-primary w-100" onclick="createNewFolder()">
-                                    <i class="fas fa-folder-plus me-1"></i>New Folder
-                                </button>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <button class="btn btn-outline-success w-100" onclick="uploadFiles()">
-                                    <i class="fas fa-upload me-1"></i>Upload Files
-                                </button>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <button class="btn btn-outline-warning w-100" onclick="exportToZip()">
-                                    <i class="fas fa-file-archive me-1"></i>Export as ZIP
-                                </button>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <button class="btn btn-outline-info w-100" onclick="generateIndex()">
-                                    <i class="fas fa-list me-1"></i>Generate Index
-                                </button>
-                            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-primary w-100" onclick="createNewFolder()">
+                                <i class="fas fa-folder-plus me-1"></i>New Folder
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-success w-100" onclick="uploadFiles()">
+                                <i class="fas fa-upload me-1"></i>Upload Files
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-warning w-100" onclick="exportToZip()">
+                                <i class="fas fa-file-archive me-1"></i>Export as ZIP
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-info w-100" onclick="generateIndex()">
+                                <i class="fas fa-list me-1"></i>Generate Index
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="uploadModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Upload Files</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="file" class="form-control" id="fileInput" multiple>
-                    <div class="mt-3">
-                        <div class="progress" style="display: none;" id="uploadProgress">
-                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                        </div>
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Files</h5>
+                <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="fileInput" multiple type="file">
+                <div class="mt-3">
+                    <div class="progress" id="uploadProgress" style="display: none;">
+                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="performUpload()">Upload</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                <button class="btn btn-primary" onclick="performUpload()" type="button">Upload</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="propertiesModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">File Properties</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="propertiesContent">
+<div class="modal fade" id="propertiesModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">File Properties</h5>
+                <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body" id="propertiesContent">
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        // File browser state
-        let currentPath = '/';
-        let currentFiles = [];
-        let selectedFiles = [];
-        let currentFile = null;
-        let isGridView = false;
+<script>
+    // File browser state
+    let currentPath = '/';
+    let currentFiles = [];
+    let selectedFiles = [];
+    let currentFile = null;
+    let isGridView = false;
 
-        // Initialize file browser
-        document.addEventListener('DOMContentLoaded', function() {
-            loadFiles(currentPath);
+    // Initialize file browser
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFiles(currentPath);
+    });
+
+    function loadFiles(path) {
+        currentPath = path;
+
+        fetch(`/api/files/browse?path=${encodeURIComponent(path)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentFiles = data.files;
+                    displayFiles(currentFiles);
+                    updateBreadcrumb(path);
+                } else {
+                    console.error('Failed to load files:', data.error);
+                    displayFiles([]);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading files:', error);
+                displayFiles([]);
+            });
+    }
+
+    function displayFiles(files) {
+        const fileBrowser = document.getElementById('fileBrowser');
+
+        if (files.length === 0) {
+            fileBrowser.innerHTML = '<div class="text-center text-muted p-4"><i class="fas fa-folder-open fa-2x mb-2"></i><p>No files found</p></div>';
+            return;
+        }
+
+        // Sort files: directories first, then by name
+        files.sort((a, b) => {
+            if (a.type === 'directory' && b.type !== 'directory') return -1;
+            if (a.type !== 'directory' && b.type === 'directory') return 1;
+            return a.name.localeCompare(b.name);
         });
 
-        function loadFiles(path) {
-            currentPath = path;
+        fileBrowser.innerHTML = files.map(file => {
+            const isSelected = selectedFiles.includes(file.path);
+            const icon = getFileIcon(file);
 
-            fetch(`/api/files/browse?path=${encodeURIComponent(path)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        currentFiles = data.files;
-                        displayFiles(currentFiles);
-                        updateBreadcrumb(path);
-                    } else {
-                        console.error('Failed to load files:', data.error);
-                        displayFiles([]);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading files:', error);
-                    displayFiles([]);
-                });
-        }
-
-        function displayFiles(files) {
-            const fileBrowser = document.getElementById('fileBrowser');
-
-            if (files.length === 0) {
-                fileBrowser.innerHTML = '<div class="text-center text-muted p-4"><i class="fas fa-folder-open fa-2x mb-2"></i><p>No files found</p></div>';
-                return;
-            }
-
-            // Sort files: directories first, then by name
-            files.sort((a, b) => {
-                if (a.type === 'directory' && b.type !== 'directory') return -1;
-                if (a.type !== 'directory' && b.type === 'directory') return 1;
-                return a.name.localeCompare(b.name);
-            });
-
-            fileBrowser.innerHTML = files.map(file => {
-                const isSelected = selectedFiles.includes(file.path);
-                const icon = getFileIcon(file);
-
-                return `
-                    <div class="file-item ${isSelected ? 'selected' : ''}" onclick="selectFile('${file.path}')" oncontextmenu="showContextMenu(event, '${file.path}')">
-                        <div class="file-icon">
-                            <i class="${icon}"></i>
-                        </div>
-                        <div class="file-details">
-                            <div class="fw-medium">${file.name}</div>
-                            <div class="file-size">${file.type === 'directory' ? 'Folder' : formatFileSize(file.size)}</div>
-                            <div class="file-date">${formatDate(file.modified)}</div>
-                        </div>
-                        <div class="file-actions">
-                            <input type="checkbox" class="form-check-input" ${isSelected ? 'checked' : ''} 
-                                   onchange="toggleFileSelection('${file.path}')" onclick="event.stopPropagation()">
-                        </div>
+            return `
+                <div class="file-item ${isSelected ? 'selected' : ''}" onclick="selectFile('${file.path}')" oncontextmenu="showContextMenu(event, '${file.path}')">
+                    <div class="file-icon">
+                        <i class="${icon}"></i>
                     </div>
-                `;
-            }).join('');
+                    <div class="file-details">
+                        <div class="fw-medium">${file.name}</div>
+                        <div class="file-size">${file.type === 'directory' ? 'Folder' : formatFileSize(file.size)}</div>
+                        <div class="file-date">${formatDate(file.modified)}</div>
+                    </div>
+                    <div class="file-actions">
+                        <input type="checkbox" class="form-check-input" ${isSelected ? 'checked' : ''}
+                               onchange="toggleFileSelection('${file.path}')" onclick="event.stopPropagation()">
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function getFileIcon(file) {
+        if (file.type === 'directory') {
+            return 'fas fa-folder text-warning';
         }
 
-        function getFileIcon(file) {
-            if (file.type === 'directory') {
-                return 'fas fa-folder text-warning';
-            }
+        const ext = file.name.split('.').pop().toLowerCase();
 
-            const ext = file.name.split('.').pop().toLowerCase();
-
-            switch (ext) {
-                case 'mp4':
-                case 'avi':
-                case 'mov':
-                case 'mkv':
-                    return 'fas fa-file-video text-danger';
-                case 'jpg':
-                case 'jpeg':
-                case 'png':
-                case 'gif':
-                case 'bmp':
-                    return 'fas fa-file-image text-success';
-                case 'mp3':
-                case 'wav':
-                case 'ogg':
-                case 'flac':
-                    return 'fas fa-file-audio text-info';
-                case 'pdf':
-                    return 'fas fa-file-pdf text-danger';
-                case 'txt':
-                case 'log':
-                    return 'fas fa-file-alt text-secondary';
-                case 'json':
-                case 'xml':
-                case 'csv':
-                    return 'fas fa-file-code text-primary';
-                case 'zip':
-                case 'rar':
-                case '7z':
-                    return 'fas fa-file-archive text-warning';
-                default:
-                    return 'fas fa-file text-muted';
-            }
+        switch (ext) {
+            case 'mp4':
+            case 'avi':
+            case 'mov':
+            case 'mkv':
+                return 'fas fa-file-video text-danger';
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+            case 'bmp':
+                return 'fas fa-file-image text-success';
+            case 'mp3':
+            case 'wav':
+            case 'ogg':
+            case 'flac':
+                return 'fas fa-file-audio text-info';
+            case 'pdf':
+                return 'fas fa-file-pdf text-danger';
+            case 'txt':
+            case 'log':
+                return 'fas fa-file-alt text-secondary';
+            case 'json':
+            case 'xml':
+            case 'csv':
+                return 'fas fa-file-code text-primary';
+            case 'zip':
+            case 'rar':
+            case '7z':
+                return 'fas fa-file-archive text-warning';
+            default:
+                return 'fas fa-file text-muted';
         }
+    }
 
-        function selectFile(filePath) {
-            // Clear previous selection
-            document.querySelectorAll('.file-item').forEach(item => {
-                item.classList.remove('selected');
+    function selectFile(filePath) {
+        // Clear previous selection
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+
+        // Select clicked item
+        event.target.closest('.file-item').classList.add('selected');
+
+        // Load file details
+        fetch(`/api/files/details?path=${encodeURIComponent(filePath)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentFile = data.file;
+                    displayFileDetails(currentFile);
+                    previewFile(currentFile);
+                    enableFileActions();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading file details:', error);
             });
+    }
 
-            // Select clicked item
-            event.target.closest('.file-item').classList.add('selected');
+    function displayFileDetails(file) {
+        const fileDetails = document.getElementById('fileDetails');
 
-            // Load file details
-            fetch(`/api/files/details?path=${encodeURIComponent(filePath)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        currentFile = data.file;
-                        displayFileDetails(currentFile);
-                        previewFile(currentFile);
-                        enableFileActions();
-                    }
+        fileDetails.innerHTML = `
+            <table class="table table-sm file-info-table">
+                <tr>
+                    <td><strong>Name:</strong></td>
+                    <td>${file.name}</td>
+                </tr>
+                <tr>
+                    <td><strong>Type:</strong></td>
+                    <td>${file.type}</td>
+                </tr>
+                <tr>
+                    <td><strong>Size:</strong></td>
+                    <td>${file.type === 'directory' ? '-' : formatFileSize(file.size)}</td>
+                </tr>
+                <tr>
+                    <td><strong>Modified:</strong></td>
+                    <td>${formatDate(file.modified)}</td>
+                </tr>
+                <tr>
+                    <td><strong>Path:</strong></td>
+                    <td><code>${file.path}</code></td>
+                </tr>
+                ${file.duration ? `
+                <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>${formatDuration(file.duration)}</td>
+                </tr>
+                ` : ''}
+                ${file.dimensions ? `
+                <tr>
+                    <td><strong>Dimensions:</strong></td>
+                    <td>${file.dimensions}</td>
+                </tr>
+                ` : ''}
+            </table>
+        `;
+    }
+
+    function previewFile(file) {
+        const filePreview = document.getElementById('filePreview');
+
+        if (file.type === 'directory') {
+            filePreview.innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="fas fa-folder fa-3x mb-3 text-warning"></i>
+                    <p>Folder</p>
+                    <button class="btn btn-primary" onclick="navigateTo('${file.path}')">
+                        <i class="fas fa-folder-open me-1"></i>Open Folder
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        const ext = file.name.split('.').pop().toLowerCase();
+
+        if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(ext)) {
+            filePreview.innerHTML = `<img src="/api/files/content?path=${encodeURIComponent(file.path)}" alt="${file.name}">`;
+        } else if (['mp4', 'avi', 'mov', 'mkv'].includes(ext)) {
+            filePreview.innerHTML = `
+                <video controls>
+                    <source src="/api/files/content?path=${encodeURIComponent(file.path)}" type="video/${ext}">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+        } else if (['mp3', 'wav', 'ogg'].includes(ext)) {
+            filePreview.innerHTML = `
+                <audio controls style="width: 100%;">
+                    <source src="/api/files/content?path=${encodeURIComponent(file.path)}" type="audio/${ext}">
+                    Your browser does not support the audio tag.
+                </audio>
+            `;
+        } else if (['txt', 'log', 'json', 'xml', 'csv'].includes(ext)) {
+            fetch(`/api/files/content?path=${encodeURIComponent(file.path)}`)
+                .then(response => response.text())
+                .then(content => {
+                    filePreview.innerHTML = `<div class="text-content">${content}</div>`;
                 })
                 .catch(error => {
-                    console.error('Error loading file details:', error);
+                    filePreview.innerHTML = `
+                        <div class="text-center text-muted">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                            <p>Cannot preview file</p>
+                        </div>
+                    `;
                 });
-        }
-
-        function displayFileDetails(file) {
-            const fileDetails = document.getElementById('fileDetails');
-
-            fileDetails.innerHTML = `
-                <table class="table table-sm file-info-table">
-                    <tr>
-                        <td><strong>Name:</strong></td>
-                        <td>${file.name}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Type:</strong></td>
-                        <td>${file.type}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Size:</strong></td>
-                        <td>${file.type === 'directory' ? '-' : formatFileSize(file.size)}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Modified:</strong></td>
-                        <td>${formatDate(file.modified)}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Path:</strong></td>
-                        <td><code>${file.path}</code></td>
-                    </tr>
-                    ${file.duration ? `
-                    <tr>
-                        <td><strong>Duration:</strong></td>
-                        <td>${formatDuration(file.duration)}</td>
-                    </tr>
-                    ` : ''}
-                    ${file.dimensions ? `
-                    <tr>
-                        <td><strong>Dimensions:</strong></td>
-                        <td>${file.dimensions}</td>
-                    </tr>
-                    ` : ''}
-                </table>
+        } else {
+            filePreview.innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="fas fa-file fa-3x mb-3"></i>
+                    <p>Preview not available for this file type</p>
+                    <button class="btn btn-outline-primary" onclick="downloadCurrentFile()">
+                        <i class="fas fa-download me-1"></i>Download to view
+                    </button>
+                </div>
             `;
         }
+    }
 
-        function previewFile(file) {
-            const filePreview = document.getElementById('filePreview');
+    function enableFileActions() {
+        document.getElementById('downloadBtn').disabled = false;
+        document.getElementById('openBtn').disabled = false;
+        document.getElementById('propertiesBtn').disabled = false;
+    }
 
-            if (file.type === 'directory') {
-                filePreview.innerHTML = `
-                    <div class="text-center text-muted">
-                        <i class="fas fa-folder fa-3x mb-3 text-warning"></i>
-                        <p>Folder</p>
-                        <button class="btn btn-primary" onclick="navigateTo('${file.path}')">
-                            <i class="fas fa-folder-open me-1"></i>Open Folder
-                        </button>
-                    </div>
-                `;
-                return;
-            }
+    function navigateTo(path) {
+        loadFiles(path);
+    }
 
-            const ext = file.name.split('.').pop().toLowerCase();
+    function goUp() {
+        const parentPath = currentPath.split('/').slice(0, -1).join('/') || '/';
+        navigateTo(parentPath);
+    }
 
-            if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(ext)) {
-                filePreview.innerHTML = `<img src="/api/files/content?path=${encodeURIComponent(file.path)}" alt="${file.name}">`;
-            } else if (['mp4', 'avi', 'mov', 'mkv'].includes(ext)) {
-                filePreview.innerHTML = `
-                    <video controls>
-                        <source src="/api/files/content?path=${encodeURIComponent(file.path)}" type="video/${ext}">
-                        Your browser does not support the video tag.
-                    </video>
-                `;
-            } else if (['mp3', 'wav', 'ogg'].includes(ext)) {
-                filePreview.innerHTML = `
-                    <audio controls style="width: 100%;">
-                        <source src="/api/files/content?path=${encodeURIComponent(file.path)}" type="audio/${ext}">
-                        Your browser does not support the audio tag.
-                    </audio>
-                `;
-            } else if (['txt', 'log', 'json', 'xml', 'csv'].includes(ext)) {
-                fetch(`/api/files/content?path=${encodeURIComponent(file.path)}`)
-                    .then(response => response.text())
-                    .then(content => {
-                        filePreview.innerHTML = `<div class="text-content">${content}</div>`;
-                    })
-                    .catch(error => {
-                        filePreview.innerHTML = `
-                            <div class="text-center text-muted">
-                                <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
-                                <p>Cannot preview file</p>
-                            </div>
-                        `;
-                    });
+    function refreshFiles() {
+        loadFiles(currentPath);
+    }
+
+    function toggleGridView() {
+        isGridView = !isGridView;
+        const icon = document.getElementById('viewToggleIcon');
+        icon.className = isGridView ? 'fas fa-list' : 'fas fa-th';
+        // TODO: Implement grid view layout
+    }
+
+    function updateBreadcrumb(path) {
+        const breadcrumb = document.getElementById('breadcrumb');
+        const parts = path.split('/').filter(part => part);
+
+        let html = '<li class="breadcrumb-item"><a href="#" onclick="navigateTo(\'/\')">recordings</a></li>';
+
+        let currentPath = '';
+        parts.forEach((part, index) => {
+            currentPath += '/' + part;
+            if (index === parts.length - 1) {
+                html += `<li class="breadcrumb-item active">${part}</li>`;
             } else {
-                filePreview.innerHTML = `
-                    <div class="text-center text-muted">
-                        <i class="fas fa-file fa-3x mb-3"></i>
-                        <p>Preview not available for this file type</p>
-                        <button class="btn btn-outline-primary" onclick="downloadCurrentFile()">
-                            <i class="fas fa-download me-1"></i>Download to view
-                        </button>
-                    </div>
-                `;
+                html += `<li class="breadcrumb-item"><a href="#" onclick="navigateTo('${currentPath}')">${part}</a></li>`;
             }
+        });
+
+        breadcrumb.innerHTML = html;
+    }
+
+    function filterFiles(searchTerm) {
+        const filteredFiles = currentFiles.filter(file =>
+            file.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        displayFiles(filteredFiles);
+    }
+
+    function toggleFileSelection(filePath) {
+        const index = selectedFiles.indexOf(filePath);
+        if (index > -1) {
+            selectedFiles.splice(index, 1);
+        } else {
+            selectedFiles.push(filePath);
         }
 
-        function enableFileActions() {
-            document.getElementById('downloadBtn').disabled = false;
-            document.getElementById('openBtn').disabled = false;
-            document.getElementById('propertiesBtn').disabled = false;
+        updateBatchActions();
+    }
+
+    function updateBatchActions() {
+        const batchActions = document.getElementById('batchActions');
+        const selectedCount = document.getElementById('selectedCount');
+
+        selectedCount.textContent = selectedFiles.length;
+
+        if (selectedFiles.length > 0) {
+            batchActions.classList.add('show');
+        } else {
+            batchActions.classList.remove('show');
         }
+    }
 
-        function navigateTo(path) {
-            loadFiles(path);
+    function clearSelection() {
+        selectedFiles = [];
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        document.querySelectorAll('.form-check-input').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        updateBatchActions();
+    }
+
+    function downloadCurrentFile() {
+        if (currentFile) {
+            window.open(`/api/files/download?path=${encodeURIComponent(currentFile.path)}`);
         }
+    }
 
-        function goUp() {
-            const parentPath = currentPath.split('/').slice(0, -1).join('/') || '/';
-            navigateTo(parentPath);
-        }
+    function downloadSelected() {
+        if (selectedFiles.length === 0) return;
 
-        function refreshFiles() {
-            loadFiles(currentPath);
-        }
+        fetch('/api/files/download-multiple', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ files: selectedFiles })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'selected_files.zip';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Download error:', error);
+            alert('Download failed');
+        });
+    }
 
-        function toggleGridView() {
-            isGridView = !isGridView;
-            const icon = document.getElementById('viewToggleIcon');
-            icon.className = isGridView ? 'fas fa-list' : 'fas fa-th';
-            // TODO: Implement grid view layout
-        }
+    function deleteSelected() {
+        if (selectedFiles.length === 0) return;
 
-        function updateBreadcrumb(path) {
-            const breadcrumb = document.getElementById('breadcrumb');
-            const parts = path.split('/').filter(part => part);
-
-            let html = '<li class="breadcrumb-item"><a href="#" onclick="navigateTo(\'/\')">recordings</a></li>';
-
-            let currentPath = '';
-            parts.forEach((part, index) => {
-                currentPath += '/' + part;
-                if (index === parts.length - 1) {
-                    html += `<li class="breadcrumb-item active">${part}</li>`;
-                } else {
-                    html += `<li class="breadcrumb-item"><a href="#" onclick="navigateTo('${currentPath}')">${part}</a></li>`;
-                }
-            });
-
-            breadcrumb.innerHTML = html;
-        }
-
-        function filterFiles(searchTerm) {
-            const filteredFiles = currentFiles.filter(file => 
-                file.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            displayFiles(filteredFiles);
-        }
-
-        function toggleFileSelection(filePath) {
-            const index = selectedFiles.indexOf(filePath);
-            if (index > -1) {
-                selectedFiles.splice(index, 1);
-            } else {
-                selectedFiles.push(filePath);
-            }
-
-            updateBatchActions();
-        }
-
-        function updateBatchActions() {
-            const batchActions = document.getElementById('batchActions');
-            const selectedCount = document.getElementById('selectedCount');
-
-            selectedCount.textContent = selectedFiles.length;
-
-            if (selectedFiles.length > 0) {
-                batchActions.classList.add('show');
-            } else {
-                batchActions.classList.remove('show');
-            }
-        }
-
-        function clearSelection() {
-            selectedFiles = [];
-            document.querySelectorAll('.file-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.form-check-input').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            updateBatchActions();
-        }
-
-        function downloadCurrentFile() {
-            if (currentFile) {
-                window.open(`/api/files/download?path=${encodeURIComponent(currentFile.path)}`);
-            }
-        }
-
-        function downloadSelected() {
-            if (selectedFiles.length === 0) return;
-
-            fetch('/api/files/download-multiple', {
+        if (confirm(`Are you sure you want to delete ${selectedFiles.length} file(s)?`)) {
+            fetch('/api/files/delete-multiple', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ files: selectedFiles })
             })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    refreshFiles();
+                    clearSelection();
+                    alert('Files deleted successfully');
+                } else {
+                    alert('Delete failed: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Delete error:', error);
+                alert('Delete failed');
+            });
+        }
+    }
+
+    function openInExternal() {
+        if (currentFile) {
+            fetch(`/api/files/open-external`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ path: currentFile.path })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Failed to open file: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Open external error:', error);
+            });
+        }
+    }
+
+    function showFileProperties() {
+        if (!currentFile) return;
+
+        fetch(`/api/files/properties?path=${encodeURIComponent(currentFile.path)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayProperties(data.properties);
+                    new bootstrap.Modal(document.getElementById('propertiesModal')).show();
+                }
+            })
+            .catch(error => {
+                console.error('Properties error:', error);
+            });
+    }
+
+    function displayProperties(properties) {
+        const content = document.getElementById('propertiesContent');
+        content.innerHTML = `
+            <table class="table">
+                ${Object.entries(properties).map(([key, value]) => `
+                    <tr>
+                        <td><strong>${key}:</strong></td>
+                        <td>${value}</td>
+                    </tr>
+                `).join('')}
+            </table>
+        `;
+    }
+
+    function createNewFolder() {
+        const folderName = prompt('Enter folder name:');
+        if (folderName) {
+            fetch('/api/files/create-folder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    path: currentPath,
+                    name: folderName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    refreshFiles();
+                } else {
+                    alert('Failed to create folder: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Create folder error:', error);
+            });
+        }
+    }
+
+    function uploadFiles() {
+        new bootstrap.Modal(document.getElementById('uploadModal')).show();
+    }
+
+    function performUpload() {
+        const fileInput = document.getElementById('fileInput');
+        const files = fileInput.files;
+
+        if (files.length === 0) {
+            alert('Please select files to upload');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('path', currentPath);
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i]);
+        }
+
+        const progressBar = document.getElementById('uploadProgress');
+        progressBar.style.display = 'block';
+
+        fetch('/api/files/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('uploadModal')).hide();
+                refreshFiles();
+                alert('Files uploaded successfully');
+            } else {
+                alert('Upload failed: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            alert('Upload failed');
+        })
+        .finally(() => {
+            progressBar.style.display = 'none';
+        });
+    }
+
+    function exportToZip() {
+        fetch(`/api/files/export-zip?path=${encodeURIComponent(currentPath)}`)
             .then(response => response.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'selected_files.zip';
+                a.download = `export_${Date.now()}.zip`;
                 a.click();
                 window.URL.revokeObjectURL(url);
             })
             .catch(error => {
-                console.error('Download error:', error);
-                alert('Download failed');
+                console.error('Export error:', error);
+                alert('Export failed');
             });
-        }
+    }
 
-        function deleteSelected() {
-            if (selectedFiles.length === 0) return;
-
-            if (confirm(`Are you sure you want to delete ${selectedFiles.length} file(s)?`)) {
-                fetch('/api/files/delete-multiple', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ files: selectedFiles })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        refreshFiles();
-                        clearSelection();
-                        alert('Files deleted successfully');
-                    } else {
-                        alert('Delete failed: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Delete error:', error);
-                    alert('Delete failed');
-                });
-            }
-        }
-
-        function openInExternal() {
-            if (currentFile) {
-                fetch(`/api/files/open-external`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ path: currentFile.path })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        alert('Failed to open file: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Open external error:', error);
-                });
-            }
-        }
-
-        function showFileProperties() {
-            if (!currentFile) return;
-
-            fetch(`/api/files/properties?path=${encodeURIComponent(currentFile.path)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        displayProperties(data.properties);
-                        new bootstrap.Modal(document.getElementById('propertiesModal')).show();
-                    }
-                })
-                .catch(error => {
-                    console.error('Properties error:', error);
-                });
-        }
-
-        function displayProperties(properties) {
-            const content = document.getElementById('propertiesContent');
-            content.innerHTML = `
-                <table class="table">
-                    ${Object.entries(properties).map(([key, value]) => `
-                        <tr>
-                            <td><strong>${key}:</strong></td>
-                            <td>${value}</td>
-                        </tr>
-                    `).join('')}
-                </table>
-            `;
-        }
-
-        function createNewFolder() {
-            const folderName = prompt('Enter folder name:');
-            if (folderName) {
-                fetch('/api/files/create-folder', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        path: currentPath,
-                        name: folderName 
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        refreshFiles();
-                    } else {
-                        alert('Failed to create folder: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Create folder error:', error);
-                });
-            }
-        }
-
-        function uploadFiles() {
-            new bootstrap.Modal(document.getElementById('uploadModal')).show();
-        }
-
-        function performUpload() {
-            const fileInput = document.getElementById('fileInput');
-            const files = fileInput.files;
-
-            if (files.length === 0) {
-                alert('Please select files to upload');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('path', currentPath);
-
-            for (let i = 0; i < files.length; i++) {
-                formData.append('files', files[i]);
-            }
-
-            const progressBar = document.getElementById('uploadProgress');
-            progressBar.style.display = 'block';
-
-            fetch('/api/files/upload', {
-                method: 'POST',
-                body: formData
-            })
+    function generateIndex() {
+        fetch(`/api/files/generate-index?path=${encodeURIComponent(currentPath)}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    bootstrap.Modal.getInstance(document.getElementById('uploadModal')).hide();
+                    alert('Index generated successfully');
                     refreshFiles();
-                    alert('Files uploaded successfully');
                 } else {
-                    alert('Upload failed: ' + data.error);
+                    alert('Index generation failed: ' + data.error);
                 }
             })
             .catch(error => {
-                console.error('Upload error:', error);
-                alert('Upload failed');
-            })
-            .finally(() => {
-                progressBar.style.display = 'none';
+                console.error('Index generation error:', error);
+                alert('Index generation failed');
             });
-        }
+    }
 
-        function exportToZip() {
-            fetch(`/api/files/export-zip?path=${encodeURIComponent(currentPath)}`)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `export_${Date.now()}.zip`;
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => {
-                    console.error('Export error:', error);
-                    alert('Export failed');
-                });
-        }
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
 
-        function generateIndex() {
-            fetch(`/api/files/generate-index?path=${encodeURIComponent(currentPath)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Index generated successfully');
-                        refreshFiles();
-                    } else {
-                        alert('Index generation failed: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Index generation error:', error);
-                    alert('Index generation failed');
-                });
-        }
+    function formatDate(dateString) {
+        return new Date(dateString).toLocaleString();
+    }
 
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
+    function formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
 
-        function formatDate(dateString) {
-            return new Date(dateString).toLocaleString();
+        if (hours > 0) {
+            return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        } else {
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
         }
-
-        function formatDuration(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const secs = Math.floor(seconds % 60);
-
-            if (hours > 0) {
-                return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            } else {
-                return `${minutes}:${secs.toString().padStart(2, '0')}`;
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>

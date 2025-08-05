@@ -37,6 +37,7 @@ class SectionHeaderView @JvmOverloads constructor(
                 setTextColor(ContextCompat.getColor(context, android.R.color.black))
                 setPadding(0, 0, 0, dpToPx(16))
             }
+
             HeaderStyle.SECTION_HEADER -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
                 setTypeface(null, Typeface.BOLD)
@@ -44,6 +45,7 @@ class SectionHeaderView @JvmOverloads constructor(
                 setTextColor(ContextCompat.getColor(context, android.R.color.black))
                 setPadding(0, 0, 0, dpToPx(8))
             }
+
             HeaderStyle.SUB_HEADER -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 setTypeface(null, Typeface.BOLD)

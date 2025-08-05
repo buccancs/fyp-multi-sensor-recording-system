@@ -1,11 +1,10 @@
 @file:Suppress("DEPRECATION")
+
 package com.multisensor.recording.util
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.NetworkInfo
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -20,7 +19,7 @@ object NetworkUtils {
             val activeNetwork = connectivityManager.activeNetwork
             val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
             networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true &&
-            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         } catch (e: Exception) {
             Log.e(TAG, "Error checking network connectivity: ${e.message}")
             false
@@ -42,6 +41,7 @@ object NetworkUtils {
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                     getCellularNetworkType(context)
                 }
+
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "Ethernet"
                 else -> "Other"
             }
@@ -60,8 +60,10 @@ object NetworkUtils {
                     TelephonyManager.NETWORK_TYPE_HSDPA,
                     TelephonyManager.NETWORK_TYPE_HSUPA,
                     TelephonyManager.NETWORK_TYPE_HSPA -> "3G"
+
                     TelephonyManager.NETWORK_TYPE_EDGE,
                     TelephonyManager.NETWORK_TYPE_GPRS -> "2G"
+
                     else -> "Mobile"
                 }
             } else {

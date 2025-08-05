@@ -207,9 +207,24 @@ class ActionButtonPairTest : DescribeSpec({
         }
 
         it("should handle multiple style changes correctly") {
-            actionButtonPair.setButtons("Test1", "Test2", ActionButtonPair.ButtonStyle.PRIMARY, ActionButtonPair.ButtonStyle.SECONDARY)
-            actionButtonPair.setButtons("Test3", "Test4", ActionButtonPair.ButtonStyle.NEUTRAL, ActionButtonPair.ButtonStyle.WARNING)
-            actionButtonPair.setButtons("Test5", "Test6", ActionButtonPair.ButtonStyle.WARNING, ActionButtonPair.ButtonStyle.PRIMARY)
+            actionButtonPair.setButtons(
+                "Test1",
+                "Test2",
+                ActionButtonPair.ButtonStyle.PRIMARY,
+                ActionButtonPair.ButtonStyle.SECONDARY
+            )
+            actionButtonPair.setButtons(
+                "Test3",
+                "Test4",
+                ActionButtonPair.ButtonStyle.NEUTRAL,
+                ActionButtonPair.ButtonStyle.WARNING
+            )
+            actionButtonPair.setButtons(
+                "Test5",
+                "Test6",
+                ActionButtonPair.ButtonStyle.WARNING,
+                ActionButtonPair.ButtonStyle.PRIMARY
+            )
 
             actionButtonPair.getLeftButton().text shouldBe "Test5"
             actionButtonPair.getRightButton().text shouldBe "Test6"

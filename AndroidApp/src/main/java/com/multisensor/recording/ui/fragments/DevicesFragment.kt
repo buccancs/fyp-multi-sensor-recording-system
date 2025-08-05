@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.databinding.FragmentDevicesBinding
-import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.SystemHealthStatus
 import android.widget.Toast

@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.multisensor.recording.config.CommonConstants
 import org.json.JSONObject
-import java.io.OutputStream
 import java.net.Socket
 
 class HandshakeManager(
@@ -58,7 +57,10 @@ class HandshakeManager(
                 Log.w(TAG, "Server message: $message")
 
                 if (serverProtocolVersion != CommonConstants.PROTOCOL_VERSION) {
-                    Log.w(TAG, "Version mismatch: Android v${CommonConstants.PROTOCOL_VERSION}, Server v$serverProtocolVersion")
+                    Log.w(
+                        TAG,
+                        "Version mismatch: Android v${CommonConstants.PROTOCOL_VERSION}, Server v$serverProtocolVersion"
+                    )
                     Log.w(TAG, "Consider updating both applications to the same version")
                 }
 

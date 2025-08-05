@@ -1,89 +1,5 @@
 #!/usr/bin/env python3
 
-from PyQt5.QtCore import QCoreApplication, QTimer
-from PyQt5.QtCore import QTimer
-from PyQt5.QtCore import QTimer, QThread, pyqtSignal
-from PyQt5.QtTest import QSignalSpy
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QLabel, QFileDialog
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QLabel, QFileDialog, QTextEdit, QHBoxLayout, QProgressBar
-from PythonApp.network.device_client import DeviceClient
-from PythonApp.application import Application
-from PythonApp.calibration.calibration import CalibrationManager, create_calibration_pattern_points
-from PythonApp.calibration.calibration_manager import CalibrationManager
-from PythonApp.calibration.calibration_processor import CalibrationProcessor
-from PythonApp.calibration.calibration_result import CalibrationResult
-from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from PythonApp.config.configuration_manager import ConfigurationManager, DeviceConfig, SessionConfig
-from dataclasses import dataclass
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from datetime import datetime, timedelta
-from PythonApp.gui.enhanced_stimulus_controller import EnhancedStimulusController, EnhancedTimingLogger, CodecInfo, VideoBackend, VLC_AVAILABLE
-from PythonApp.gui.stimulus_controller import StimulusController, TimingLogger
-from PythonApp.gui.stimulus_panel import StimulusControlPanel
-from PythonApp.hand_segmentation import HandSegmentationEngine, SegmentationConfig, SegmentationMethod, SessionPostProcessor, create_segmentation_engine, create_session_post_processor
-from PythonApp.hand_segmentation.utils import HandRegion, ProcessingResult, create_bounding_box_from_landmarks, crop_frame_to_region, create_hand_mask_from_landmarks
-from PythonApp.master_clock_synchronizer import MasterClockSynchronizer
-from PythonApp.network.android_device_manager import AndroidDeviceManager
-from PythonApp.network.device_server import JsonSocketServer
-from PythonApp.network.device_server import JsonSocketServer, RemoteDevice
-from PythonApp.network.device_server import JsonSocketServer, create_command_message, decode_base64_image
-from PythonApp.network.enhanced_device_server import EnhancedDeviceServer
-from PythonApp.network.enhanced_device_server import EnhancedDeviceServer, EnhancedRemoteDevice, MessagePriority, ConnectionState, NetworkMessage
-from PythonApp.network.enhanced_device_server import EnhancedDeviceServer, MessagePriority, ConnectionState
-from PythonApp.network.pc_server import PCServer, HelloMessage, SensorDataMessage
-from PythonApp.network.pc_server import PCServer, HelloMessage, SensorDataMessage, StatusMessage
-from PythonApp.ntp_time_server import NTPTimeServer
-from PythonApp.ntp_time_server import NTPTimeServer, TimeServerManager, TimeServerStatus, TimeSyncResponse
-from PythonApp.ntp_time_server import TimeServerManager
-from pathlib import Path
-from PythonApp.protocol import create_message, validate_message, get_host, get_port
-from PythonApp.protocol import get_calibration_config, get_calibration_error_threshold
-from PythonApp.protocol import get_config_manager, get_schema_manager, validate_config, get_valid_message_types, create_message
-from PythonApp.session.session_logger import SessionLogger, get_session_logger, reset_session_logger
-from PythonApp.session.session_manager import SessionManager
-from PythonApp.session.session_synchronizer import SessionSynchronizer, MessagePriority, SessionSyncState
-from PythonApp.shimmer_manager import ShimmerManager
-from PythonApp.shimmer_manager import ShimmerManager, ShimmerSample
-from PythonApp.shimmer_manager import ShimmerManager, ShimmerStatus, ShimmerSample, DeviceConfiguration, PYSHIMMER_AVAILABLE
-from PythonApp.calibration.calibration_processor import CalibrationProcessor
-from PythonApp.stimulus_manager import StimulusManager
-from PythonApp.stimulus_manager import StimulusManager, StimulusConfig, StimulusEvent, MonitorInfo
-from PythonApp.tests.test_device_simulator import DeviceSimulator
-from threading import Event
-from typing import Dict
-from typing import Dict, Any, Optional
-from typing import Dict, Any, Optional, List, Callable
-from typing import Dict, List
-from typing import Dict, List, Any
-from typing import Dict, List, Any, Optional
-from typing import Dict, List, Any, Optional, Tuple
-from typing import Dict, List, Any, Tuple
-from typing import Dict, List, Optional
-from typing import Dict, List, Optional, Any
-from typing import Dict, List, Optional, Any, Tuple
-from typing import Dict, List, Optional, Callable, Any
-from typing import List
-from typing import List, Tuple
-from unittest.mock import MagicMock, Mock, patch
-from unittest.mock import MagicMock, patch
-from unittest.mock import Mock
-from unittest.mock import Mock, patch
-from unittest.mock import Mock, patch, MagicMock
-from unittest.mock import Mock, patch, MagicMock, call
-from unittest.mock import patch, MagicMock
-from PythonApp.utils.logging_config import AppLogger, get_logger, performance_timer, log_function_entry, log_method_entry, log_exception_context, log_memory_usage, PerformanceMonitor, StructuredFormatter, ColoredFormatter
-from PythonApp.utils.logging_config import get_logger
-from PythonApp.utils.logging_config import get_logger, AppLogger
-from PythonApp.utils.logging_config import get_logger, AppLogger, performance_timer
-from PythonApp.webcam.advanced_sync_algorithms import AdaptiveSynchronizer, SynchronizationStrategy, SyncFrame, TimingMetrics
-from PythonApp.webcam.cv_preprocessing_pipeline import AdvancedROIDetector, PhysiologicalSignalExtractor, ROIDetectionMethod, SignalExtractionMethod, PhysiologicalSignal
-from PythonApp.webcam.dual_webcam_capture import DualWebcamCapture, test_dual_webcam_access
-from PythonApp.webcam.dual_webcam_capture import test_dual_webcam_access
-from PythonApp.webcam.webcam_capture import WebcamCapture, test_webcam_access
 import argparse
 import ast
 import asyncio
@@ -115,7 +31,100 @@ import unittest
 import uuid
 import webbrowser
 import zipfile
-
+from PyQt5.QtCore import QCoreApplication, QTimer
+from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QThread, pyqtSignal
+from PyQt5.QtTest import QSignalSpy
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QLabel, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QLabel, QFileDialog, \
+    QTextEdit, QHBoxLayout, QProgressBar
+from PythonApp.application import Application
+from PythonApp.calibration.calibration import CalibrationManager, create_calibration_pattern_points
+from PythonApp.calibration.calibration_manager import CalibrationManager
+from PythonApp.calibration.calibration_processor import CalibrationProcessor
+from PythonApp.calibration.calibration_processor import CalibrationProcessor
+from PythonApp.calibration.calibration_result import CalibrationResult
+from PythonApp.config.configuration_manager import ConfigurationManager, DeviceConfig, SessionConfig
+from PythonApp.gui.enhanced_stimulus_controller import EnhancedStimulusController, EnhancedTimingLogger, CodecInfo, \
+    VideoBackend, VLC_AVAILABLE
+from PythonApp.gui.stimulus_controller import StimulusController, TimingLogger
+from PythonApp.gui.stimulus_panel import StimulusControlPanel
+from PythonApp.hand_segmentation import HandSegmentationEngine, SegmentationConfig, SegmentationMethod, \
+    SessionPostProcessor, create_segmentation_engine, create_session_post_processor
+from PythonApp.hand_segmentation.utils import HandRegion, ProcessingResult, create_bounding_box_from_landmarks, \
+    crop_frame_to_region, create_hand_mask_from_landmarks
+from PythonApp.master_clock_synchronizer import MasterClockSynchronizer
+from PythonApp.network.android_device_manager import AndroidDeviceManager
+from PythonApp.network.device_client import DeviceClient
+from PythonApp.network.device_server import JsonSocketServer
+from PythonApp.network.device_server import JsonSocketServer, RemoteDevice
+from PythonApp.network.device_server import JsonSocketServer, create_command_message, decode_base64_image
+from PythonApp.network.enhanced_device_server import EnhancedDeviceServer
+from PythonApp.network.enhanced_device_server import EnhancedDeviceServer, EnhancedRemoteDevice, MessagePriority, \
+    ConnectionState, NetworkMessage
+from PythonApp.network.enhanced_device_server import EnhancedDeviceServer, MessagePriority, ConnectionState
+from PythonApp.network.pc_server import PCServer, HelloMessage, SensorDataMessage
+from PythonApp.network.pc_server import PCServer, HelloMessage, SensorDataMessage, StatusMessage
+from PythonApp.ntp_time_server import NTPTimeServer
+from PythonApp.ntp_time_server import NTPTimeServer, TimeServerManager, TimeServerStatus, TimeSyncResponse
+from PythonApp.ntp_time_server import TimeServerManager
+from PythonApp.protocol import create_message, validate_message, get_host, get_port
+from PythonApp.protocol import get_calibration_config, get_calibration_error_threshold
+from PythonApp.protocol import get_config_manager, get_schema_manager, validate_config, get_valid_message_types, \
+    create_message
+from PythonApp.session.session_logger import SessionLogger, get_session_logger, reset_session_logger
+from PythonApp.session.session_manager import SessionManager
+from PythonApp.session.session_synchronizer import SessionSynchronizer, MessagePriority, SessionSyncState
+from PythonApp.shimmer_manager import ShimmerManager
+from PythonApp.shimmer_manager import ShimmerManager, ShimmerSample
+from PythonApp.shimmer_manager import ShimmerManager, ShimmerStatus, ShimmerSample, DeviceConfiguration, \
+    PYSHIMMER_AVAILABLE
+from PythonApp.stimulus_manager import StimulusManager
+from PythonApp.stimulus_manager import StimulusManager, StimulusConfig, StimulusEvent, MonitorInfo
+from PythonApp.tests.test_device_simulator import DeviceSimulator
+from PythonApp.utils.logging_config import AppLogger, get_logger, performance_timer, log_function_entry, \
+    log_method_entry, log_exception_context, log_memory_usage, PerformanceMonitor, StructuredFormatter, ColoredFormatter
+from PythonApp.utils.logging_config import get_logger
+from PythonApp.utils.logging_config import get_logger, AppLogger
+from PythonApp.utils.logging_config import get_logger, AppLogger, performance_timer
+from PythonApp.webcam.advanced_sync_algorithms import AdaptiveSynchronizer, SynchronizationStrategy, SyncFrame, \
+    TimingMetrics
+from PythonApp.webcam.cv_preprocessing_pipeline import AdvancedROIDetector, PhysiologicalSignalExtractor, \
+    ROIDetectionMethod, SignalExtractionMethod, PhysiologicalSignal
+from PythonApp.webcam.dual_webcam_capture import DualWebcamCapture, test_dual_webcam_access
+from PythonApp.webcam.dual_webcam_capture import test_dual_webcam_access
+from PythonApp.webcam.webcam_capture import WebcamCapture, test_webcam_access
+from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from datetime import datetime, timedelta
+from pathlib import Path
+from threading import Event
+from typing import Dict
+from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, List
+from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Callable, Any
+from typing import List
+from typing import List, Tuple
+from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock, patch
+from unittest.mock import Mock
+from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 
 """
 Multi-Sensor Recording System - Enhanced Complete Test Suite

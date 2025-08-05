@@ -2,7 +2,10 @@
 
 ## Overview
 
-The Android Mobile Application serves as a sophisticated mobile data collection and sensor integration platform within the Multi-Sensor Recording System. Built using Kotlin and Jetpack Compose, it provides real-time sensor data acquisition, camera recording capabilities, and seamless communication with the Python Desktop Controller through a JSON-based networking protocol.
+The Android Mobile Application serves as a sophisticated mobile data collection and sensor integration platform within
+the Multi-Sensor Recording System. Built using Kotlin and Jetpack Compose, it provides real-time sensor data
+acquisition, camera recording capabilities, and seamless communication with the Python Desktop Controller through a
+JSON-based networking protocol.
 
 ## System Architecture
 
@@ -65,6 +68,7 @@ The Android application communicates with the Python Desktop Controller using a 
 #### Message Types
 
 **1. Sensor Data Messages**
+
 ```json
 {
   "type": "sensor_data",
@@ -92,6 +96,7 @@ The Android application communicates with the Python Desktop Controller using a 
 ```
 
 **2. Recording Status Messages**
+
 ```json
 {
   "type": "recording_status",
@@ -105,6 +110,7 @@ The Android application communicates with the Python Desktop Controller using a 
 ```
 
 **3. System Information Messages**
+
 ```json
 {
   "type": "system_info",
@@ -152,6 +158,7 @@ AndroidApp/
 ### Key Classes
 
 **MainActivity.kt**
+
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -184,6 +191,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 **RecordingManager.kt**
+
 ```kotlin
 @Singleton
 class RecordingManager @Inject constructor(
@@ -231,6 +239,7 @@ class RecordingManager @Inject constructor(
 ```
 
 **SensorManager.kt**
+
 ```kotlin
 @Singleton
 class SensorManager @Inject constructor(
@@ -290,10 +299,10 @@ class SensorManager @Inject constructor(
 ### Installation and Setup
 
 1. **Prerequisites**
-   - Android device running Android 7.0 (API level 24) or higher
-   - Minimum 2GB RAM
-   - 1GB available storage space
-   - Camera and microphone permissions
+    - Android device running Android 7.0 (API level 24) or higher
+    - Minimum 2GB RAM
+    - 1GB available storage space
+    - Camera and microphone permissions
 
 2. **Installation**
    ```bash
@@ -307,36 +316,40 @@ class SensorManager @Inject constructor(
    ```
 
 3. **Initial Configuration**
-   - Launch the application
-   - Grant required permissions when prompted
-   - Configure network settings to connect to desktop controller
-   - Test camera and sensor functionality
+    - Launch the application
+    - Grant required permissions when prompted
+    - Configure network settings to connect to desktop controller
+    - Test camera and sensor functionality
 
 ### Application Usage
 
 **1. Connecting to Desktop Controller**
+
 - Navigate to Connection screen
 - Enter desktop controller IP address
 - Tap "Connect" button
 - Verify connection status indicator
 
 **2. Starting a Recording Session**
+
 - Ensure connection to desktop controller is established
 - Navigate to Recording screen
 - Configure recording parameters:
-  - Video resolution (720p, 1080p, 4K)
-  - Frame rate (30fps, 60fps)
-  - Sensor sampling rate
+    - Video resolution (720p, 1080p, 4K)
+    - Frame rate (30fps, 60fps)
+    - Sensor sampling rate
 - Tap "Start Recording" button
 - Monitor real-time sensor data display
 
 **3. Managing Recording Sessions**
+
 - View active session information
 - Monitor storage usage
 - Pause/resume recording as needed
 - Stop recording when complete
 
 **4. File Management**
+
 - Access recorded files in Local Files section
 - Review session metadata
 - Transfer files to desktop controller
@@ -345,18 +358,21 @@ class SensorManager @Inject constructor(
 ### Configuration Options
 
 **Network Settings**
+
 - Desktop Controller IP: `192.168.1.100`
 - Port: `8080`
 - Connection timeout: `30 seconds`
 - Retry attempts: `3`
 
 **Recording Settings**
+
 - Video codec: H.264
 - Audio codec: AAC
 - Container format: MP4
 - Sensor data format: JSON
 
 **Privacy Settings**
+
 - Local data retention: `7 days`
 - Automatic deletion: `Enabled`
 - Data encryption: `AES-256`
@@ -393,11 +409,11 @@ class SensorManager {
     fun startCollection(): Result<Unit>
     fun stopCollection(): Result<Unit>
     fun pauseCollection(): Result<Unit>
-    
+
     // Data access
     fun getSensorData(): Flow<SensorData>
     fun getAvailableSensors(): List<SensorInfo>
-    
+
     // Configuration
     fun setSamplingRate(sensorType: Int, rate: SamplingRate)
     fun enableSensor(sensorType: Int, enabled: Boolean)
@@ -618,11 +634,13 @@ class RecordingIntegrationTest {
 **1. Connection Problems**
 
 *Issue*: Cannot connect to desktop controller
+
 ```
 Error: java.net.ConnectException: Connection refused
 ```
 
 *Solutions*:
+
 - Verify desktop controller is running
 - Check IP address and port configuration
 - Ensure devices are on same network
@@ -631,11 +649,13 @@ Error: java.net.ConnectException: Connection refused
 **2. Camera Recording Failures**
 
 *Issue*: Camera initialization fails
+
 ```
 Error: CameraAccessException: Camera device is in use
 ```
 
 *Solutions*:
+
 - Close other camera applications
 - Restart the application
 - Check camera permissions in device settings
@@ -644,11 +664,13 @@ Error: CameraAccessException: Camera device is in use
 **3. Sensor Data Issues**
 
 *Issue*: Sensor data not being collected
+
 ```
 Warning: Sensor not available or permission denied
 ```
 
 *Solutions*:
+
 - Verify sensor availability on device
 - Check motion sensor permissions
 - Calibrate sensors in device settings
@@ -659,6 +681,7 @@ Warning: Sensor not available or permission denied
 *Issue*: Application running slowly or out of storage
 
 *Solutions*:
+
 - Clear application cache
 - Delete old recording sessions
 - Close background applications
@@ -667,21 +690,25 @@ Warning: Sensor not available or permission denied
 ### Diagnostic Commands
 
 **Check Application Logs**
+
 ```bash
 adb logcat | grep BucikaGSR
 ```
 
 **Monitor Network Traffic**
+
 ```bash
 adb shell netstat -an | grep 8080
 ```
 
 **Check Storage Usage**
+
 ```bash
 adb shell df -h /data/data/com.buccancs.bucikagsr
 ```
 
 **Verify Sensor Functionality**
+
 ```bash
 adb shell dumpsys sensorservice
 ```
@@ -689,18 +716,21 @@ adb shell dumpsys sensorservice
 ### Performance Optimization
 
 **Memory Management**
+
 - Implement proper lifecycle management
 - Use memory-efficient data structures
 - Clear unused resources promptly
 - Monitor memory usage with profiler
 
 **Battery Optimization**
+
 - Implement adaptive sampling rates
 - Use background processing efficiently
 - Optimize network communication
 - Implement power-aware scheduling
 
 **Storage Optimization**
+
 - Compress recorded data
 - Implement automatic cleanup
 - Use efficient file formats
@@ -811,4 +841,5 @@ android {
 }
 ```
 
-This Android Mobile Application documentation provides comprehensive coverage of the mobile component's architecture, implementation, and operational procedures within the Multi-Sensor Recording System.
+This Android Mobile Application documentation provides comprehensive coverage of the mobile component's architecture,
+implementation, and operational procedures within the Multi-Sensor Recording System.
