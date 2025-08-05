@@ -7,6 +7,7 @@ import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.network.FileTransferHandler
 import com.multisensor.recording.calibration.CalibrationCaptureManager
+import com.multisensor.recording.testbase.BaseUnitTest
 import com.multisensor.recording.util.Logger
 import io.mockk.coEvery
 import io.mockk.every
@@ -15,6 +16,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.MainUiState
 
 class MainViewModelTest : BaseUnitTest() {
 

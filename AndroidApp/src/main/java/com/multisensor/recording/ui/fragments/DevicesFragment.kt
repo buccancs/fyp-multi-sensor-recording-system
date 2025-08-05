@@ -15,6 +15,7 @@ import com.multisensor.recording.ui.SystemHealthStatus
 import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.multisensor.recording.ui.MainViewModel
 
 @AndroidEntryPoint
 class DevicesFragment : Fragment() {
