@@ -8,7 +8,6 @@
     android:padding="16dp"
     tools:context=".ui.fragments.FilesFragment">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/filesTitle"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Storage Info -->
     <TextView
         android:id="@+id/storageUsageText"
         android:layout_width="0dp"
@@ -45,7 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Session Info -->
     <TextView
         android:id="@+id/totalSessionsText"
         android:layout_width="0dp"
@@ -70,7 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- File Management Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/browseFilesButton"
         android:layout_width="0dp"
@@ -120,7 +116,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- File List Placeholder -->
     <TextView
         android:id="@+id/fileListLabel"
         android:layout_width="0dp"

@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- Search and Filter Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +35,6 @@
 
     </LinearLayout>
 
-    <!-- Main Content Area -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -44,7 +42,6 @@
         android:orientation="horizontal"
         android:baselineAligned="false">
 
-        <!-- Sessions List -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -74,7 +71,6 @@
 
         </LinearLayout>
 
-        <!-- Files List and Session Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -82,7 +78,6 @@
             android:orientation="vertical"
             android:layout_margin="8dp">
 
-            <!-- Session Information -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,7 +114,6 @@
 
             </LinearLayout>
 
-            <!-- Files List -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -152,7 +146,6 @@
 
     </LinearLayout>
 
-    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
@@ -161,7 +154,6 @@
         android:visibility="gone"
         android:layout_margin="16dp" />
 
-    <!-- Empty State -->
     <TextView
         android:id="@+id/empty_state_text"
         android:layout_width="match_parent"
@@ -173,7 +165,6 @@
         android:padding="32dp"
         android:visibility="gone" />
 
-    <!-- Refresh Button -->
     <Button
         android:id="@+id/refresh_button"
         android:layout_width="wrap_content"

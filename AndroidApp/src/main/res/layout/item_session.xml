@@ -8,7 +8,6 @@
     android:clickable="true"
     android:focusable="true">
 
-    <!-- Session Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +37,6 @@
 
     </LinearLayout>
 
-    <!-- Session Details -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +62,6 @@
 
     </LinearLayout>
 
-    <!-- File Information -->
     <TextView
         android:id="@+id/session_files_text"
         android:layout_width="match_parent"

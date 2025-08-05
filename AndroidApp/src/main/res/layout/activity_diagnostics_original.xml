@@ -7,13 +7,12 @@
     android:orientation="vertical"
     tools:context=".ui.DiagnosticsActivity">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        
+
         app:titleTextColor="?attr/colorOnPrimary"
         app:subtitleTextColor="?attr/colorOnPrimary" />
 
@@ -29,7 +28,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- System Health Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,7 +122,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Performance Metrics Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,7 +142,6 @@
                         android:textAppearance="?attr/textAppearanceHeadlineSmall"
                         android:textStyle="bold" />
 
-                    <!-- CPU Usage -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -171,7 +167,6 @@
 
                     </LinearLayout>
 
-                    <!-- Memory Usage -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -197,7 +192,6 @@
 
                     </LinearLayout>
 
-                    <!-- Storage Usage -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -223,7 +217,6 @@
 
                     </LinearLayout>
 
-                    <!-- Battery Level -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -249,7 +242,6 @@
 
                     </LinearLayout>
 
-                    <!-- Additional Metrics -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -278,7 +270,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Error Logs Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -372,7 +363,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Diagnostic Actions Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -463,7 +453,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Test Results Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -484,7 +473,6 @@
                         android:textAppearance="?attr/textAppearanceHeadlineSmall"
                         android:textStyle="bold" />
 
-                    <!-- Network Test Results -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -503,7 +491,6 @@
                         android:fontFamily="monospace"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <!-- Device Test Results -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -522,7 +509,6 @@
                         android:fontFamily="monospace"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <!-- Performance Test Results -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -545,7 +531,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Report Actions Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
