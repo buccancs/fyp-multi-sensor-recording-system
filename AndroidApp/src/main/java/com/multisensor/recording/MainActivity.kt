@@ -65,54 +65,67 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation() {
         setSupportActionBar(binding.toolbar)
 
-        // Get NavController properly by first getting the NavHostFragment
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        try {
+            // Get NavController properly by first getting the NavHostFragment
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_recording, R.id.nav_devices,
-                R.id.nav_calibration, R.id.nav_files
-            ),
-            binding.drawerLayout
-        )
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.nav_recording, R.id.nav_devices,
+                    R.id.nav_calibration, R.id.nav_files
+                ),
+                binding.drawerLayout
+            )
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+            setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.navView.setupWithNavController(navController)
+            binding.navView.setupWithNavController(navController)
 
-        binding.bottomNavigation.setupWithNavController(navController)
+            binding.bottomNavigation.setupWithNavController(navController)
 
-        binding.navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-                R.id.nav_network_config -> {
-                    showToast("Network Config - Coming Soon")
-                    true
-                }
-                R.id.nav_shimmer_config -> {
-                    showToast("Shimmer Config - Coming Soon")
-                    true
-                }
-                R.id.nav_diagnostics -> {
-                    showToast("Diagnostics - Coming Soon")
-                    true
-                }
-                R.id.nav_about -> {
-                    showToast("About - Coming Soon")
-                    true
-                }
-                else -> {
-                    val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                    val navController = navHostFragment.navController
-                    navController.navigate(menuItem.itemId)
-                    binding.drawerLayout.closeDrawers()
-                    true
+            binding.navView.setNavigationItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.nav_settings -> {
+                        startActivity(Intent(this, SettingsActivity::class.java))
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_network_config -> {
+                        showToast("Network Config - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_shimmer_config -> {
+                        showToast("Shimmer Config - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_diagnostics -> {
+                        showToast("Diagnostics - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_about -> {
+                        showToast("About - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    else -> {
+                        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                        val navController = navHostFragment.navController
+                        navController.navigate(menuItem.itemId)
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
                 }
             }
+
+            logger.info("Navigation setup completed successfully")
+            
+        } catch (e: Exception) {
+            logger.error("Error during navigation setup", e)
+            showErrorDialog("Navigation Error", "Failed to setup navigation: ${e.message}")
         }
     }
 
