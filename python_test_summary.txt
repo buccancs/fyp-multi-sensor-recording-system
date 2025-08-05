@@ -1,0 +1,70 @@
+PYTHON TEST EXECUTION SUMMARY
+==================================================
+
+Timestamp: 2025-08-05T22:55:24.128641
+Python Version: 3.12.3 (main, Jun 18 2025, 17:59:45) [GCC 13.3.0]
+
+OVERALL RESULTS:
+Total tests: 151
+Failures: 0
+Errors: 1
+Skipped: 150
+Success rate: 99.3%
+
+TEST MODULE RESULTS:
+
+test_calibration_comprehensive:
+  Tests: 15
+  Failures: 0
+  Errors: 0
+  Skipped: 15
+  Success: True
+
+test_network_comprehensive:
+  Tests: 26
+  Failures: 0
+  Errors: 0
+  Skipped: 26
+  Success: True
+
+test_session_comprehensive:
+  Tests: 24
+  Failures: 0
+  Errors: 0
+  Skipped: 24
+  Success: True
+
+test_shimmer_comprehensive:
+  Tests: 14
+  Failures: 0
+  Errors: 0
+  Skipped: 14
+  Success: True
+
+test_gui_comprehensive:
+  Tests: 23
+  Failures: 0
+  Errors: 0
+  Skipped: 23
+  Success: True
+
+test_hand_segmentation_comprehensive:
+  Tests: 27
+  Failures: 0
+  Errors: 0
+  Skipped: 27
+  Success: True
+
+test_time_sync_comprehensive:
+  Tests: 21
+  Failures: 0
+  Errors: 0
+  Skipped: 21
+  Success: True
+
+consolidated_tests:
+  Tests: 1
+  Failures: 0
+  Errors: 1
+  Skipped: 0
+  Success: False
