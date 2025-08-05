@@ -138,16 +138,7 @@ The network architecture employs multiple protocols to optimize different types 
 - **Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimized for low latency with adaptive compression.
 - **Synchronization Channel (UDP)**: Time-critical synchronization messages with minimal overhead. Used for clock synchronization and recording triggers.
 
-**Table 4.1: Network Communication Protocol Specifications**
-
-| Protocol Layer | Technology | Purpose | Performance Metrics | Security Features |
-|---|---|---|---|---|
-| **Transport Layer** | WebSocket over TLS 1.3 | Bidirectional real-time communication | <50ms latency, 99.9% reliability | End-to-end encryption |
-| **Application Layer** | JSON-based messaging | Structured data exchange | <10ms parsing time | Message integrity validation |
-| **Synchronization** | NTP + custom compensation | Temporal alignment | ±25ms precision | Tamper-resistant timestamps |
-| **Discovery Layer** | mDNS/Bonjour | Automatic device discovery | <30s discovery time | Certificate-based authentication |
-| **Error Recovery** | Automatic reconnection | Fault tolerance | <15s recovery time | Session state preservation |
-| **Data Integrity** | CRC32 + MD5 checksums | Corruption detection | 100% error detection | Cryptographic signatures |
+The network communication architecture implements multiple protocol layers for optimal performance and security. Detailed protocol specifications are provided in Appendix A.3.
 
 ### 4.1.3 Data Flow Architecture
 
@@ -753,29 +744,9 @@ class ShimmerRecorder @Inject constructor(
 | **USB Webcams** | DirectShow/V4L2, OpenCV | RGB video capture | 1920x1080@30fps, auto-focus | OpenCV VideoCapture |
 | **Network Infrastructure** | WiFi 802.11ac, Gigabit Ethernet | Data communication backbone | ≥100Mbps throughput, <10ms latency | TCP/WebSocket protocols |
 
-**Table 4.2: Performance Benchmarks vs. Target Specifications**
+The comprehensive performance evaluation demonstrates exceptional system capabilities across all major operational scenarios. Performance specifications and detailed system component analysis are documented in Appendix A.4.
 
-| Performance Metric | Target Specification | Achieved Performance | Performance Ratio | Status |
-|---|---|---|---|---|
-| **Temporal Synchronization** | ±50ms accuracy | ±18.7ms (avg) | 267% better | ✅ Exceeds target |
-| **Frame Rate Consistency** | 24 FPS minimum | 29.8 FPS (avg) | 124% of target | ✅ Exceeds target |
-| **Data Throughput** | 25 MB/s minimum | 47.3 MB/s (avg) | 189% of target | ✅ Exceeds target |
-| **System Uptime** | 95% availability | 99.73% achieved | 105% of target | ✅ Exceeds target |
-| **Setup Time** | <10 minutes | 6.2 minutes (avg) | 161% faster | ✅ Exceeds target |
-| **Battery Life** | 4 hours minimum | 5.8 hours (avg) | 145% of target | ✅ Exceeds target |
-| **Device Capacity** | 8 devices maximum | 12 devices tested | 150% of target | ✅ Exceeds target |
-| **Error Rate** | <1% data loss | 0.027% observed | 3700% better | ✅ Exceeds target |
-
-**Table 4.3: Technology Stack Justification Matrix**
-
-| Technology Choice | Alternative Considered | Decision Rationale | Performance Impact | Integration Complexity |
-|---|---|---|---|---|
-| **Python + FastAPI** | Java Spring, Node.js | Rapid prototyping, rich scientific libraries | High performance, low latency | Low complexity |
-| **Kotlin + Camera2** | Java + CameraX, Flutter | Native performance, modern async support | Maximum performance | Medium complexity |
-| **WebSocket Protocol** | HTTP REST, gRPC | Real-time bidirectional communication | Low latency communication | Low complexity |
-| **SQLite + JSON** | PostgreSQL, MongoDB | Local storage simplicity | Fast local queries | Low complexity |
-| **OpenCV Integration** | Custom image processing | Mature computer vision library | Optimized algorithms | Medium complexity |
-| **Bluetooth LE** | WiFi Direct, USB | Low power, standardized protocol | Power efficient | Medium complexity |
+The technology choices reflect systematic evaluation across multiple criteria including technical capability, community support, and long-term sustainability. The comprehensive justification matrix is provided in Appendix A.5.
 
 **Figure 4.2: Data Flow and Processing Pipeline**
 
