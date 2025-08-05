@@ -29,6 +29,7 @@ class TestType(Enum):
     MULTI_DEVICE = auto()
     NETWORK_PERFORMANCE = auto()
     SYNCHRONIZATION = auto()
+    ERROR_HANDLING = auto()
     
     # System Layer Types
     END_TO_END = auto()
@@ -41,6 +42,8 @@ class TestType(Enum):
     RELIABILITY = auto()
     FAULT_TOLERANCE = auto()
     USABILITY = auto()
+    PERFORMANCE = auto()
+    STRESS_TEST = auto()
 
 
 class TestPriority(Enum):
