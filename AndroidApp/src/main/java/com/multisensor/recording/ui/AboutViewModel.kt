@@ -219,12 +219,11 @@ class AboutViewModel @Inject constructor(
         val displayMetrics = DisplayMetrics()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                context.display?.getMetrics(displayMetrics)
-            } catch (e: Exception) {
-                @Suppress("DEPRECATION")
-                windowManager.defaultDisplay.getMetrics(displayMetrics)
-            }
+            val windowMetrics = windowManager.currentWindowMetrics
+            val bounds = windowMetrics.bounds
+            displayMetrics.widthPixels = bounds.width()
+            displayMetrics.heightPixels = bounds.height()
+            displayMetrics.densityDpi = context.resources.displayMetrics.densityDpi
         } else {
             @Suppress("DEPRECATION")
             windowManager.defaultDisplay.getMetrics(displayMetrics)

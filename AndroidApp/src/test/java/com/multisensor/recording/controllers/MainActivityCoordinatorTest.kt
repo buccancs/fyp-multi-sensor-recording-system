@@ -28,7 +28,6 @@ class MainActivityCoordinatorTest {
     private val mockNetworkController = mockk<NetworkController>(relaxed = true)
     private val mockStatusDisplayController = mockk<StatusDisplayController>(relaxed = true)
     private val mockUIController = mockk<UIController>(relaxed = true)
-    private val mockMenuController = mockk<MenuController>(relaxed = true)
 
     private val mockCallback = mockk<MainActivityCoordinator.CoordinatorCallback>(relaxed = true)
     private val mockContext = mockk<Context>(relaxed = true)
@@ -54,8 +53,7 @@ class MainActivityCoordinatorTest {
             mockCalibrationController,
             mockNetworkController,
             mockStatusDisplayController,
-            mockUIController,
-            mockMenuController
+            mockUIController
         )
     }
 
@@ -76,7 +74,6 @@ class MainActivityCoordinatorTest {
         verify { mockNetworkController.setCallback(any()) }
         verify { mockStatusDisplayController.setCallback(any()) }
         verify { mockUIController.setCallback(any()) }
-        verify { mockMenuController.setCallback(any()) }
     }
 
     @Test
@@ -170,7 +167,8 @@ class MainActivityCoordinatorTest {
         val menuCreated = coordinator.createOptionsMenu(mockMenu, mockActivity)
         val menuHandled = coordinator.handleOptionsItemSelected(mockMenuItem)
 
-        verify { mockMenuController.createOptionsMenu(mockMenu, mockActivity) }
-        verify { mockMenuController.handleOptionsItemSelected(mockMenuItem) }
+        // Since MenuController is no longer used, these should return false
+        assertFalse(menuCreated)
+        assertFalse(menuHandled)
     }
 }

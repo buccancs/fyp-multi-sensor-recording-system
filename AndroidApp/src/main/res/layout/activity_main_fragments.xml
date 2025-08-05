@@ -40,15 +40,15 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                app:menu="@menu/bottom_navigation_menu"
-                app:labelVisibilityMode="labeled"
-                app:itemIconTint="?attr/colorOnSurface"
-                app:itemTextColor="?attr/colorOnSurface"
-                app:backgroundTint="?attr/colorSurface"/>
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:menu="@menu/bottom_navigation_menu"
+            app:labelVisibilityMode="labeled"
+            app:itemIconTint="?attr/colorOnSurface"
+            app:itemTextColor="?attr/colorOnSurface"
+            app:backgroundTint="?attr/colorSurface" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

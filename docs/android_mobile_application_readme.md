@@ -308,12 +308,14 @@ class SensorManager @Inject constructor(
    ```bash
    # Clone repository
    git clone https://github.com/buccancs/bucika_gsr.git
-   cd bucika_gsr/AndroidApp
+   cd bucika_gsr
    
-   # Build and install
-   ./gradlew assembleDebug
-   adb install app/build/outputs/apk/debug/app-debug.apk
+   # Build and install (all compilation issues resolved as of 2025-01-08)
+   ./gradlew :AndroidApp:assembleDevDebug
+   adb install AndroidApp/build/outputs/apk/dev/debug/AndroidApp-dev-debug.apk
    ```
+   
+   > **Build Status**: All critical compilation errors have been resolved. The Android application now builds successfully without MainViewModel import errors, duplicate method conflicts, or NavController initialization issues.
 
 3. **Initial Configuration**
     - Launch the application

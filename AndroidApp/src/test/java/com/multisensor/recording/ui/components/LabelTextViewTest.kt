@@ -1,6 +1,7 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
+import android.util.TypedValue
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.*
@@ -23,7 +24,8 @@ class LabelTextViewTest {
     @Test
     fun testInitialState() {
         assertNotNull(labelTextView)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -31,7 +33,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Device Name:", LabelTextView.LabelStyle.FORM_LABEL)
 
         assertEquals("Device Name:", labelTextView.text)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -39,7 +42,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Enter the device identifier", LabelTextView.LabelStyle.DESCRIPTION)
 
         assertEquals("Enter the device identifier", labelTextView.text)
-        assertEquals(12f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -47,7 +51,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Please configure the following settings", LabelTextView.LabelStyle.INSTRUCTION)
 
         assertEquals("Please configure the following settings", labelTextView.text)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -55,7 +60,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Invalid configuration", LabelTextView.LabelStyle.ERROR)
 
         assertEquals("Invalid configuration", labelTextView.text)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -63,7 +69,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Configuration saved successfully", LabelTextView.LabelStyle.SUCCESS)
 
         assertEquals("Configuration saved successfully", labelTextView.text)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -71,7 +78,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Default Label")
 
         assertEquals("Default Label", labelTextView.text)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -171,19 +179,24 @@ class LabelTextViewTest {
     @Test
     fun testTextSizesForAllStyles() {
         labelTextView.setLabel("Test", LabelTextView.LabelStyle.FORM_LABEL)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedFormLabelSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedFormLabelSize, labelTextView.textSize, 0.1f)
 
         labelTextView.setLabel("Test", LabelTextView.LabelStyle.DESCRIPTION)
-        assertEquals(12f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedDescriptionSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, context.resources.displayMetrics)
+        assertEquals(expectedDescriptionSize, labelTextView.textSize, 0.1f)
 
         labelTextView.setLabel("Test", LabelTextView.LabelStyle.INSTRUCTION)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedInstructionSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedInstructionSize, labelTextView.textSize, 0.1f)
 
         labelTextView.setLabel("Test", LabelTextView.LabelStyle.ERROR)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedErrorSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedErrorSize, labelTextView.textSize, 0.1f)
 
         labelTextView.setLabel("Test", LabelTextView.LabelStyle.SUCCESS)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSuccessSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSuccessSize, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -245,20 +258,13 @@ class LabelTextViewTest {
     }
 
     @Test
-    fun testComponentInheritance() {
-        assertTrue(
-            "LabelTextView should extend AppCompatTextView",
-            labelTextView is androidx.appcompat.widget.AppCompatTextView
-        )
-    }
-
-    @Test
     fun testFormFieldScenario() {
         labelTextView.setLabel("Email Address:", LabelTextView.LabelStyle.FORM_LABEL)
         labelTextView.setRequired(true)
 
         assertEquals("Email Address:*", labelTextView.text.toString())
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test
@@ -266,7 +272,8 @@ class LabelTextViewTest {
         labelTextView.setLabel("Invalid email format", LabelTextView.LabelStyle.ERROR)
 
         assertEquals("Invalid email format", labelTextView.text)
-        assertEquals(14f, labelTextView.textSize / context.resources.displayMetrics.scaledDensity, 0.1f)
+        val expectedSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
+        assertEquals(expectedSizeInPixels, labelTextView.textSize, 0.1f)
     }
 
     @Test

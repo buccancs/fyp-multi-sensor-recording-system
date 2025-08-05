@@ -377,11 +377,13 @@ class PermissionControllerTest {
 
     @Test
     fun `operations should not crash when callback is null`() {
-
-        assertDoesNotThrow {
+        try {
             permissionController.checkPermissions(mockContext)
             permissionController.updatePermissionButtonVisibility(mockContext)
             permissionController.requestPermissionsManually(mockContext)
+            // If we reach here, no exception was thrown
+        } catch (e: Exception) {
+            fail("Operations should not crash when callback is null, but got: ${e.message}")
         }
     }
 
@@ -389,10 +391,13 @@ class PermissionControllerTest {
     fun `operations should handle SharedPreferences initialization failure gracefully`() {
         every { mockContext.getSharedPreferences(any(), any()) } throws RuntimeException("Permission denied")
 
-        assertDoesNotThrow {
+        try {
             permissionController.setCallback(mockContext as PermissionController.PermissionCallback)
             permissionController.resetState()
             permissionController.clearPersistedState()
+            // If we reach here, no exception was thrown
+        } catch (e: Exception) {
+            fail("Operations should handle SharedPreferences initialization failure gracefully, but got: ${e.message}")
         }
     }
 

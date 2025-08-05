@@ -271,7 +271,7 @@ class UsbDeviceManagerUnitTest {
     fun `intent handling should be defensive`() {
         val malformedIntent = mockk<Intent>(relaxed = true)
         every { malformedIntent.action } returns UsbManager.ACTION_USB_DEVICE_ATTACHED
-        every { malformedIntent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE) } throws RuntimeException("Intent error")
+        every { malformedIntent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java) } throws RuntimeException("Intent error")
 
         usbDeviceManager.handleUsbDeviceIntent(malformedIntent, mockCallback)
 
@@ -320,7 +320,7 @@ class UsbDeviceManagerUnitTest {
     private fun createUsbDeviceIntent(action: String, device: UsbDevice?): Intent {
         return mockk<Intent>(relaxed = true).apply {
             every { this@apply.action } returns action
-            every { getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE) } returns device
+            every { getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java) } returns device
         }
     }
 }

@@ -213,7 +213,7 @@ class FileViewUiStateTest {
             listOf(
                 createTestFile("file1.mp4", FileType.VIDEO),
                 createTestFile("file2.dng", FileType.RAW_IMAGE),
-                createTestFile("file3.dat", FileType.THERMAL_DATA),
+                createTestFile("file3.dat", FileType.THERMAL),
             )
         val state = FileViewUiState(
             sessionFiles = files,
@@ -319,7 +319,7 @@ class FileViewUiStateTest {
 
     @Test
     fun `file item extension handles files without extension`() {
-        val fileItem = createTestFile("logfile", FileType.THERMAL_DATA)
+        val fileItem = createTestFile("logfile", FileType.THERMAL)
 
         assertEquals("[DEBUG_LOG] File without extension should return empty string", "", fileItem.file.extension)
     }
@@ -330,7 +330,7 @@ class FileViewUiStateTest {
 
         assertTrue("[DEBUG_LOG] Should contain VIDEO type", types.contains(FileType.VIDEO))
         assertTrue("[DEBUG_LOG] Should contain RAW_IMAGE type", types.contains(FileType.RAW_IMAGE))
-        assertTrue("[DEBUG_LOG] Should contain THERMAL_DATA type", types.contains(FileType.THERMAL_DATA))
+        assertTrue("[DEBUG_LOG] Should contain THERMAL type", types.contains(FileType.THERMAL))
 
         assertEquals("[DEBUG_LOG] Should have exactly 3 file types", 3, types.size)
     }

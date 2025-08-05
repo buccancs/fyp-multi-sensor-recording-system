@@ -10,7 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -58,68 +59,72 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         setSupportActionBar(binding.toolbar)
+        try {
+            // Get NavController properly by first getting the NavHostFragment
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
 
-        val navController = findNavController(R.id.nav_host_fragment)
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.nav_recording, R.id.nav_devices,
+                    R.id.nav_calibration, R.id.nav_files
+                ),
+                binding.drawerLayout
+            )
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_recording, R.id.nav_devices,
-                R.id.nav_calibration, R.id.nav_files
-            ),
-            binding.drawerLayout
-        )
+            setupActionBarWithNavController(navController, appBarConfiguration)
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+            binding.navView.setupWithNavController(navController)
 
-        binding.navView.setupWithNavController(navController)
+            binding.bottomNavigation.setupWithNavController(navController)
 
-        binding.bottomNavigation.setupWithNavController(navController)
-
-        binding.navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-
-                R.id.nav_network_config -> {
-                    showToast("Network Config - Coming Soon")
-                    true
-                }
-
-                R.id.nav_shimmer_config -> {
-                    showToast("Shimmer Config - Coming Soon")
-                    true
-                }
-
-                R.id.nav_diagnostics -> {
-                    showToast("Diagnostics - Coming Soon")
-                    true
-                }
-
-                R.id.nav_about -> {
-                    showToast("About - Coming Soon")
-                    true
-                }
-
-                else -> {
-                    val navController = findNavController(R.id.nav_host_fragment)
-                    navController.navigate(menuItem.itemId)
-                    binding.drawerLayout.closeDrawers()
-                    true
+            binding.navView.setNavigationItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.nav_settings -> {
+                        startActivity(Intent(this, SettingsActivity::class.java))
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_network_config -> {
+                        showToast("Network Config - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_shimmer_config -> {
+                        showToast("Shimmer Config - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_diagnostics -> {
+                        showToast("Diagnostics - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    R.id.nav_about -> {
+                        showToast("About - Coming Soon")
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+                    else -> {
+                        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                        val navController = navHostFragment.navController
+                        navController.navigate(menuItem.itemId)
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
                 }
             }
+
+            logger.info("Navigation setup completed successfully")
+            
+        } catch (e: Exception) {
+            logger.error("Error during navigation setup", e)
+            showErrorDialog("Navigation Error", "Failed to setup navigation: ${e.message}")
         }
     }
 
     private fun setupUI() {
-        binding.toolbar.setNavigationOnClickListener {
-            if (binding.drawerLayout.isDrawerOpen(binding.navView)) {
-                binding.drawerLayout.closeDrawer(binding.navView)
-            } else {
-                binding.drawerLayout.openDrawer(binding.navView)
-            }
-        }
+        // Removed manual navigation click listener since setupActionBarWithNavController handles this
     }
 
     private fun observeViewModel() {
@@ -142,7 +147,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 

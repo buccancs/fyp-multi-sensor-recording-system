@@ -11,9 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.databinding.FragmentCalibrationBinding
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModel
+import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.multisensor.recording.ui.MainViewModel
 
 @AndroidEntryPoint
 class CalibrationFragment : Fragment() {
@@ -34,6 +35,8 @@ class CalibrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Toast.makeText(requireContext(), "Calibration Fragment Loaded", Toast.LENGTH_SHORT).show()
 
         setupUI()
         observeViewModel()

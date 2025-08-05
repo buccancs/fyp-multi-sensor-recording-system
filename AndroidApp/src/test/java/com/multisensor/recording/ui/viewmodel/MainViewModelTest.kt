@@ -5,9 +5,9 @@ import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.service.SessionManager
+import com.multisensor.recording.network.FileTransferHandler
+import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.testbase.BaseUnitTest
-import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.util.Logger
 import io.mockk.coEvery
 import io.mockk.every
@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.MainUiState
 
 class MainViewModelTest : BaseUnitTest() {
 
@@ -24,6 +26,8 @@ class MainViewModelTest : BaseUnitTest() {
     private val mockThermalRecorder: ThermalRecorder = mockk(relaxed = true)
     private val mockShimmerRecorder: ShimmerRecorder = mockk(relaxed = true)
     private val mockSessionManager: SessionManager = mockk(relaxed = true)
+    private val mockFileTransferHandler: FileTransferHandler = mockk(relaxed = true)
+    private val mockCalibrationCaptureManager: CalibrationCaptureManager = mockk(relaxed = true)
     private val mockLogger: Logger = mockk(relaxed = true)
 
     @Before
@@ -39,6 +43,8 @@ class MainViewModelTest : BaseUnitTest() {
             mockThermalRecorder,
             mockShimmerRecorder,
             mockSessionManager,
+            mockFileTransferHandler,
+            mockCalibrationCaptureManager,
             mockLogger
         )
     }

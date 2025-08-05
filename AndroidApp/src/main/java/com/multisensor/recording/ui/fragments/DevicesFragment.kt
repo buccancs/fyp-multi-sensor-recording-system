@@ -11,9 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.databinding.FragmentDevicesBinding
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.SystemHealthStatus
+import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.multisensor.recording.ui.MainViewModel
 
 @AndroidEntryPoint
 class DevicesFragment : Fragment() {
@@ -35,6 +37,9 @@ class DevicesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Add visual feedback to confirm fragment is loaded
+        Toast.makeText(requireContext(), "Devices Fragment Loaded", Toast.LENGTH_SHORT).show()
+
         setupUI()
         observeViewModel()
     }
@@ -42,14 +47,17 @@ class DevicesFragment : Fragment() {
     private fun setupUI() {
         binding.apply {
             connectDevicesButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Connect Devices clicked!", Toast.LENGTH_SHORT).show()
                 viewModel.connectAllDevices()
             }
 
             scanDevicesButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Scan Devices clicked!", Toast.LENGTH_SHORT).show()
                 viewModel.scanForDevices()
             }
 
             refreshDevicesButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Refresh clicked!", Toast.LENGTH_SHORT).show()
                 viewModel.refreshSystemStatus()
             }
         }

@@ -16,76 +16,52 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
 
     @Test
     fun mainActivity_should_launch_successfully() {
-        onView(withId(R.id.statusText))
+        onView(withId(R.id.nav_host_fragment))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun mainActivity_should_display_initial_status() {
+    fun mainActivity_should_display_toolbar() {
         waitForUiIdle()
 
-        onView(withId(R.id.statusText))
+        onView(withId(R.id.toolbar))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun mainActivity_should_show_control_buttons() {
+    fun mainActivity_should_show_bottom_navigation() {
         waitForUiIdle()
 
-        onView(withId(R.id.startRecordingButton))
-            .check(matches(isDisplayed()))
-
-        onView(withId(R.id.stopRecordingButton))
+        onView(withId(R.id.bottomNavigation))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun recordButton_should_be_clickable_when_enabled() {
+    fun mainActivity_should_show_navigation_drawer() {
         waitForUiIdle()
 
-        onView(withId(R.id.startRecordingButton))
+        onView(withId(R.id.nav_view))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun mainActivity_should_display_app_bar() {
+        waitForUiIdle()
+
+        onView(withId(R.id.appBarLayout))
+            .check(matches(isDisplayed()))
+
+        onView(withId(R.id.toolbar))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun bottomNavigation_should_be_clickable() {
+        waitForUiIdle()
+
+        onView(withId(R.id.bottomNavigation))
             .check(matches(isDisplayed()))
             .perform(click())
-
-        onView(withId(R.id.statusText))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun calibrationButton_should_be_clickable() {
-        waitForUiIdle()
-
-        onView(withId(R.id.calibrationButton))
-            .check(matches(isDisplayed()))
-            .perform(click())
-
-        onView(withId(R.id.statusText))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun batteryDisplay_should_be_visible() {
-        waitForUiIdle()
-
-        onView(withId(R.id.batteryLevelText))
-            .check(matches(isDisplayed()))
-
-        onView(withId(R.id.batteryLevelText))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun deviceStatus_indicators_should_be_visible() {
-        waitForUiIdle()
-
-        onView(withId(R.id.pcConnectionIndicator))
-            .check(matches(isDisplayed()))
-
-        onView(withId(R.id.shimmerConnectionIndicator))
-            .check(matches(isDisplayed()))
-
-        onView(withId(R.id.thermalConnectionIndicator))
-            .check(matches(isDisplayed()))
     }
 
     @Test
@@ -95,10 +71,10 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         activityRule.scenario.recreate()
         waitForUiIdle()
 
-        onView(withId(R.id.statusText))
+        onView(withId(R.id.nav_host_fragment))
             .check(matches(isDisplayed()))
 
-        onView(withId(R.id.startRecordingButton))
+        onView(withId(R.id.bottomNavigation))
             .check(matches(isDisplayed()))
     }
 
@@ -106,8 +82,10 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
     fun navigation_drawer_should_be_accessible() {
         waitForUiIdle()
 
+        onView(withId(R.id.drawer_layout))
+            .check(matches(isDisplayed()))
 
-        onView(withId(R.id.statusText))
+        onView(withId(R.id.nav_view))
             .check(matches(isDisplayed()))
     }
 
@@ -119,7 +97,15 @@ class MainActivityIntegrationTest : BaseUiIntegrationTest() {
         activityRule.scenario.moveToState(androidx.lifecycle.Lifecycle.State.RESUMED)
         waitForUiIdle()
 
-        onView(withId(R.id.statusText))
+        onView(withId(R.id.nav_host_fragment))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun fragment_container_should_be_visible() {
+        waitForUiIdle()
+
+        onView(withId(R.id.nav_host_fragment))
             .check(matches(isDisplayed()))
     }
 }

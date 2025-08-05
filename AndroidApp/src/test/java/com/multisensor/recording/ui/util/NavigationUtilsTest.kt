@@ -2,6 +2,7 @@ package com.multisensor.recording.ui.util
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -96,7 +97,10 @@ class NavigationUtilsTest {
     @Test
     fun `launchActivity should add extras when provided`() {
         val activityClass = TestActivity::class.java
-        val extras = mapOf("key1" to "value1", "key2" to "value2")
+        val extras = Bundle().apply {
+            putString("key1", "value1")
+            putString("key2", "value2")
+        }
         mockkStatic(Intent::class)
         val mockIntent = mockk<Intent>(relaxed = true)
         every { Intent(context, activityClass) } returns mockIntent
@@ -105,8 +109,7 @@ class NavigationUtilsTest {
         NavigationUtils.launchActivity(context, activityClass, extras)
 
         verify { context.startActivity(mockIntent) }
-        verify { mockIntent.putExtra("key1", "value1") }
-        verify { mockIntent.putExtra("key2", "value2") }
+        verify { mockIntent.putExtras(extras) }
     }
 
     @Test
