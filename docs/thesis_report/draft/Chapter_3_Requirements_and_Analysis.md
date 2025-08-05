@@ -1,5 +1,12 @@
 # Chapter 3: Requirements and Analysis
 
+This chapter presents the systematic requirements engineering process that established the foundation for the Multi-Sensor Recording System design and implementation. The requirements analysis demonstrates rigorous academic methodology for requirements engineering specifically adapted for research software development, where traditional commercial requirements approaches may be insufficient for addressing the unique challenges of scientific instrumentation (Sommerville, 2016; Wiegers & Beatty, 2013).
+
+The requirements engineering methodology combines established software engineering practices (Martin, 2008; Brooks, 1995) with specialized approaches developed specifically for scientific instrumentation requirements (Wilson et al., 2014). This methodology ensures that the system meets the rigorous demands of research applications while maintaining the flexibility needed for diverse research scenarios.
+
+![System Requirements Architecture](../diagrams/06_system_requirements_architecture.png)
+*Figure 3.1: System Requirements Architecture - Overview of functional and non-functional requirements mapped to system components showing the distributed PC-Android coordination framework*
+
 ## Table of Contents
 
 3.1. [Problem Statement and Research Context](#31-problem-statement-and-research-context)
@@ -15,10 +22,8 @@
 
 3.3. [Functional Requirements Overview](#33-functional-requirements-overview)
 
--
-3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
--
-3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
+- 3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
+- 3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
 - 3.3.3. [Real-Time Data Processing and Analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
 - 3.3.4. [User Interface and Session Management Requirements](#334-user-interface-and-session-management-requirements)
 
@@ -30,12 +35,9 @@
 
 3.5. [Use Case Scenarios](#35-use-case-scenarios)
 
--
-3.5.1. [Primary Use Case: Multi-Participant Recording Session](#351-primary-use-case-multi-participant-recording-session)
--
-3.5.2. [Secondary Use Case: System Calibration and Configuration](#352-secondary-use-case-system-calibration-and-configuration)
--
-3.5.3. [Secondary Use Case: Real-Time Monitoring and Annotation](#353-secondary-use-case-real-time-monitoring-and-annotation)
+- 3.5.1. [Primary Use Case: Multi-Participant Recording Session](#351-primary-use-case-multi-participant-recording-session)
+- 3.5.2. [Secondary Use Case: System Calibration and Configuration](#352-secondary-use-case-system-calibration-and-configuration)
+- 3.5.3. [Secondary Use Case: Real-Time Monitoring and Annotation](#353-secondary-use-case-real-time-monitoring-and-annotation)
 
 3.6. [System Analysis (Architecture & Data Flow)](#36-system-analysis-architecture--data-flow)
 
