@@ -25,10 +25,11 @@ import com.multisensor.recording.util.logD
 import com.multisensor.recording.util.logE
 import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logW
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.util.Logger
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -319,18 +320,26 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun getMimeType(fileType: FileType): String {
         return when (fileType) {
-            FileType.VIDEO -> "video/mp4"
-            FileType.RAW_IMAGE -> "image/*"
-            FileType.THERMAL_DATA -> "application/octet-stream"
+            FileType.VIDEO -> "video/*"
+            FileType.THERMAL -> "application/octet-stream"
+            FileType.GSR -> "text/csv"
+            FileType.METADATA -> "application/json"
+            FileType.LOG -> "text/plain"
+            else -> "application/octet-stream"
         }
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        findViewById<View>(android.R.id.content)?.let { view ->
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
-    private fun showError(error: String) {
-        Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
-        android.util.Log.e("FileViewActivity", error)
+    private fun showError(message: String) {
+        findViewById<View>(android.R.id.content)?.let { view ->
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getColor(android.R.color.holo_red_dark))
+                .show()
+        }
     }
 }

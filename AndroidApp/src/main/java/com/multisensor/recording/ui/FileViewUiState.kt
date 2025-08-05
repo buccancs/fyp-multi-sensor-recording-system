@@ -113,7 +113,10 @@ enum class FileType(
 ) {
     VIDEO("Video"),
     RAW_IMAGE("RAW Image"),
-    THERMAL_DATA("Thermal Data")
+    THERMAL("Thermal Data"),
+    GSR("GSR Data"),
+    METADATA("Metadata"),
+    LOG("Log")
 }
 
 val File.extension: String
