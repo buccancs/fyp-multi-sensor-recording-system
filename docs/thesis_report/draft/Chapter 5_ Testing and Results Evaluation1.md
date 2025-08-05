@@ -1,53 +1,34 @@
-# Chapter 5: Testing and Results Evaluation
+# Chapter 5: Experimental Methodology and Results Evaluation
 
-## 5.1 Testing Strategy Overview
+## 5.1 Testing and Validation Framework
 
-The testing strategy for the Multi-Sensor Recording System was designed
-to be **systematic, rigorous, and multi-layered** to ensure the system
-meets the high reliability and precision standards required for
-scientific research use. Unlike typical commercial software, this system
-handles **coordinated multi-device data capture** and must maintain
-**research-grade accuracy** (e.g. precise timing, no data loss) -- any
-failure could compromise an entire experiment. Therefore, a
-comprehensive testing philosophy was adopted, combining standard
-software testing practices with custom methods to validate scientific
-data integrity. The approach balanced thorough coverage with practical
-constraints, focusing effort on the most critical components and
-behaviors.
+The validation methodology for the Multi-Sensor Recording System employs a systematic, multi-layered testing framework specifically designed to ensure research-grade reliability and precision for physiological data acquisition. Unlike conventional software applications, this system requires coordinated multi-device data capture with stringent accuracy requirements including precise temporal synchronization, zero data loss tolerance, and validated measurement precision—critical factors where any failure could compromise experimental validity.
 
-### 5.1.1 Methodology and Multi-Level Testing Approach
+![Figure 5.1: Multi-Layered Testing Architecture](../diagrams/figure_5_1_multi_layered_testing_architecture.png)
+*Figure 5.1: Comprehensive testing framework showing the hierarchical validation approach from unit testing through system integration to experimental validation.*
 
-We implemented a **multi-level testing hierarchy** that verifies the
-system at increasing levels of integration. At the lowest level, **unit
-tests** target individual modules in isolation (e.g. a single class or
-function) to ensure each building block behaves as expected. Above that,
-**integration tests** validate interactions between components -- for
-example, verifying that the Android app, desktop controller, and sensor
-interfaces work together properly. At the highest level, **system
-tests** exercise the entire system in end-to-end scenarios that mimic
-real usage. This hierarchy aligns with best practices in software
-engineering[\[1\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/08_Testing_QA_Framework_Comprehensive.md#L20-L29)[\[2\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/08_Testing_QA_Framework_Comprehensive.md#L43-L52),
-ensuring that issues are caught as early as possible and that the final
-system is verified in realistic conditions.
+The testing philosophy integrates established software engineering practices with specialized validation methods for scientific instrumentation, balancing comprehensive coverage with practical implementation constraints while prioritizing critical system components and behaviors that directly impact research outcomes.
 
-Crucially, our methodology also incorporated **user-level and acceptance
-testing** for the overall workflow. While automated tests cover much of
-the functionality, a small set of manual tests were performed from a
-user's perspective to ensure the system is intuitive and meets user
-expectations (e.g. ease of starting a recording session, real-time
-feedback on the interface). Each test level had a clear purpose: unit
-tests to catch logic bugs, integration tests to catch interface
-mismatches or timing issues, system tests to validate that all
-requirements are met when everything runs together, and user tests to
-confirm the solution is practical to use.
+### Multi-Level Testing Hierarchy
 
-### 5.1.2 Research-Specific Testing Considerations and Metrics
+The implementation employs a multi-level testing hierarchy that systematically verifies system functionality at progressively increasing levels of integration complexity. At the foundational level, unit tests target individual software modules in isolation (implemented in `AndroidApp/src/test/` and `PythonApp/tests/`), ensuring each component behaves according to specification before integration.
 
-Standard testing techniques had to be augmented to address
-**research-specific requirements**. In particular, we defined custom
-metrics and validation criteria for aspects like **temporal
-synchronization accuracy**, **sensor data quality**, and **long-term
-reliability**, which are not typical concerns in ordinary apps. For
+Integration testing validates interactions between system components, including verification of communication protocols between Android applications and desktop controllers, sensor interface coordination, and data synchronization mechanisms. The testing framework, documented in `scripts/integration_tests.py`, specifically validates the JSON socket communication protocol defined in `protocol/communication_protocol.json`.
+
+System-level testing exercises the complete multi-sensor platform in end-to-end scenarios that replicate realistic usage conditions, ensuring that all functional requirements are satisfied during integrated operation. This hierarchical approach ensures early detection of implementation issues while providing comprehensive validation of the final system under realistic operational conditions.
+
+### Research-Specific Validation Metrics
+
+Standard software testing methodologies require augmentation to address research-specific requirements including temporal synchronization accuracy, sensor data quality validation, and long-term system reliability—considerations not typically addressed in conventional software applications.
+
+![Figure 5.2: Test Coverage Heatmap](../diagrams/figure_5_2_test_coverage_heatmap.png)
+*Figure 5.2: Comprehensive test coverage analysis showing validation density across system components, with particular emphasis on critical data acquisition and synchronization pathways.*
+
+**Temporal Synchronization Validation:** Custom validation procedures assess timestamp alignment accuracy across distributed sensor nodes, with target specifications requiring synchronization precision within 5 milliseconds. Testing protocols verify synchronization maintenance under various network conditions and device configurations.
+
+**Sensor Data Quality Assessment:** Specialized validation metrics evaluate GSR signal fidelity, thermal imaging quality, and camera data integrity. Quality assessment includes signal-to-noise ratio analysis, correlation validation with reference sensors, and statistical validation of measurement precision.
+
+**Long-term Reliability Characterization:** Extended testing protocols assess system performance during prolonged operation, including evaluation of synchronization drift, data loss rates, and hardware stability under continuous operation conditions.
 example, one key metric is **synchronization precision** between devices
 (measured in microseconds or milliseconds): the system should timestamp
 data such that signals from the video, thermal, and GSR sensors are

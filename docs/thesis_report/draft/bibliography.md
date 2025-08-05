@@ -10,6 +10,8 @@
 
 **Brooks, F. P. (1995)**. *The Mythical Man-Month: Essays on Software Engineering*. Addison-Wesley Professional.
 
+**Cho, Y., Bianchi-Berthouze, N., & Julier, S. J. (2017)**. DeepBreath: Deep learning of breathing patterns for automatic stress recognition using low-cost thermal imaging in natural settings. *Proceedings of the 2017 ACM International Conference on Multimodal Interaction*, 456-463.
+
 **Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011)**. *Distributed Systems: Concepts and Design (5th ed.)*. Addison-Wesley.
 
 **Dean, J., & Ghemawat, S. (2008)**. MapReduce: Simplified data processing on large clusters. *Communications of the ACM*, 51(1), 107-113.
@@ -26,6 +28,8 @@
 
 **Lamport, L. (1978)**. Time, clocks, and the ordering of events in a distributed system. *Communications of the ACM*, 21(7), 558-565.
 
+**Lazarus, R. S., & Folkman, S. (1984)**. *Stress, Appraisal, and Coping*. Springer Publishing Company.
+
 **LeCun, Y., Bengio, Y., & Hinton, G. (2015)**. Deep learning. *Nature*, 521(7553), 436-444.
 
 **Liu, J. W. S. (2000)**. *Real-Time Systems*. Prentice Hall.
@@ -36,9 +40,13 @@
 
 **McDuff, D., Gontarek, S., & Picard, R. W. (2016)**. Improvements in remote cardiopulmonary measurement using a five band digital camera. *IEEE Transactions on Biomedical Engineering*, 61(10), 2593-2601.
 
+**Picard, R. W. (1997)**. *Affective Computing*. MIT Press.
+
 **Poh, M. Z., McDuff, D. J., & Picard, R. W. (2010)**. Non-contact, automated cardiac pulse measurements using video imaging and blind source separation. *Optics Express*, 18(10), 10762-10774.
 
 **Samsung Electronics (2020)**. *Samsung Health: Advanced Biometric Monitoring*. Samsung Developer Documentation.
+
+**Selye, H. (1936)**. A syndrome produced by diverse nocuous agents. *Nature*, 138(3479), 32.
 
 **Tanenbaum, A. S., & Van Steen, M. (2016)**. *Distributed Systems: Principles and Paradigms (3rd ed.)*. Pearson.
 
