@@ -64,7 +64,7 @@ graph TB
         subgraph "Calibration Management Layer"
             CM[CalibrationManager<br/>Workflow Coordination]
             CS[CalibrationSession<br/>Session Management]
-            QA[QualityAssessment<br/>Metrics & Validation]
+            QA[QualityAssessment<br/>Metrics and Validation]
         end
         
         subgraph "Computer Vision Layer"
@@ -75,7 +75,7 @@ graph TB
         
         subgraph "Data Management Layer"
             CR[CalibrationResult<br/>Parameter Storage]
-            DM[DataManager<br/>Persistence & Loading]
+            DM[DataManager<br/>Persistence and Loading]
             EM[ExportManager<br/>Format Conversion]
         end
         

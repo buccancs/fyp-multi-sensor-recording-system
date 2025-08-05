@@ -13,8 +13,7 @@
     android:theme="@style/ThemeOverlay.Material3.Dark">
 
     <ImageView
-        android:id="@+id/nav_header_icon"
-        android:layout_width="64dp"
+            android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="App Icon"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
@@ -30,8 +29,7 @@
         android:textColor="?attr/colorOnPrimaryContainer" />
 
     <TextView
-        android:id="@+id/nav_header_subtitle"
-        android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Research Platform"
         android:textAppearance="?attr/textAppearanceBodyMedium"

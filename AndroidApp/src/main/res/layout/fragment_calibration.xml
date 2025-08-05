@@ -85,8 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/calibrationPreviewCard"
-        android:layout_width="0dp"
+            android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="12dp"
@@ -96,8 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/previewPlaceholder"
-            android:layout_width="match_parent"
+                android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Calibration preview will appear here"
             android:gravity="center"

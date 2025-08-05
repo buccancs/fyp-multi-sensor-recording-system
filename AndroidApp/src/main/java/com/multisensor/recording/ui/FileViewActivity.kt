@@ -1,5 +1,6 @@
 package com.multisensor.recording.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,15 +25,17 @@ import com.multisensor.recording.util.logD
 import com.multisensor.recording.util.logE
 import com.multisensor.recording.util.logI
 import com.multisensor.recording.util.logW
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.util.Logger
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import android.widget.Toast
 
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
@@ -88,18 +92,22 @@ class FileViewActivity : AppCompatActivity() {
                 viewModel.refreshSessions()
                 true
             }
+
             R.id.action_delete_all -> {
                 showDeleteAllDialog()
                 true
             }
+
             R.id.action_export_all -> {
                 showMessage("Export functionality coming soon")
                 true
             }
+
             android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -146,6 +154,7 @@ class FileViewActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.onSearchQueryChanged(s.toString())
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -158,6 +167,7 @@ class FileViewActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.applyFilter(position)
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -218,7 +228,13 @@ class FileViewActivity : AppCompatActivity() {
     private fun handleFileClick(fileItem: FileItem) {
         AlertDialog.Builder(this)
             .setTitle(fileItem.file.name)
-            .setMessage("File size: ${formatFileSize(fileItem.file.length())}\nLast modified: ${dateFormatter.format(Date(fileItem.file.lastModified()))}")
+            .setMessage(
+                "File size: ${formatFileSize(fileItem.file.length())}\nLast modified: ${
+                    dateFormatter.format(
+                        Date(fileItem.file.lastModified())
+                    )
+                }"
+            )
             .setPositiveButton("Open") { _, _ ->
                 openFile(fileItem)
             }
@@ -280,6 +296,7 @@ class FileViewActivity : AppCompatActivity() {
             .show()
     }
 
+    @SuppressLint("DefaultLocale")
     private fun formatDuration(durationMs: Long): String {
         val seconds = durationMs / 1000
         val minutes = seconds / 60
@@ -291,6 +308,7 @@ class FileViewActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun formatFileSize(bytes: Long): String {
         return when {
             bytes >= 1024 * 1024 * 1024 -> String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0))
@@ -302,4 +320,26 @@ class FileViewActivity : AppCompatActivity() {
 
     private fun getMimeType(fileType: FileType): String {
         return when (fileType) {
-            FileType.VIDEO -> "video
+            FileType.VIDEO -> "video/*"
+            FileType.THERMAL -> "application/octet-stream"
+            FileType.GSR -> "text/csv"
+            FileType.METADATA -> "application/json"
+            FileType.LOG -> "text/plain"
+            else -> "application/octet-stream"
+        }
+    }
+
+    private fun showMessage(message: String) {
+        findViewById<View>(android.R.id.content)?.let { view ->
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showError(message: String) {
+        findViewById<View>(android.R.id.content)?.let { view ->
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getColor(android.R.color.holo_red_dark))
+                .show()
+        }
+    }
+}
