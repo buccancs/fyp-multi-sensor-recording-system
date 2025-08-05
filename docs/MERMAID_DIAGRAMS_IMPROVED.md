@@ -5,7 +5,6 @@ This document contains enhanced Mermaid diagrams following best practices for do
 ## Table of Contents Diagram
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 flowchart TD
     %% Main documentation structure
     START([Multi-Sensor Recording System<br/>Documentation Overview]) --> ARCH[System Architecture]
@@ -31,12 +30,6 @@ flowchart TD
     DEPLOY --> D3[Software Architecture - PC App]
     DEPLOY --> D4[Software Installation Flow]
     
-    %% Styling for different categories
-    classDef archClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef techClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef deployClass fill:#E8F5E8,stroke:#388E3C,stroke-width:2px,color:#000000
-    classDef startClass fill:#F5F5F5,stroke:#424242,stroke-width:3px,color:#000000
-    
     class START startClass
     class ARCH,A1,A2,A3,A4 archClass
     class TECH,T1,T2,T3,T4,T5 techClass
@@ -46,7 +39,6 @@ flowchart TD
 ## Hardware Setup Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph LAB ["Research Laboratory Environment"]
         direction TB
@@ -135,13 +127,7 @@ graph TB
     LIGHTING -.->|Optimal Illumination| CAMERAS
     TEMP -.->|Thermal Stability| COMPUTE
     ACOUSTIC -.->|Noise Reduction| LAB
-    
-    %% Styling
-    classDef mobileClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef stationaryClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef networkClass fill:#E8F5E8,stroke:#388E3C,stroke-width:2px,color:#000000
-    classDef infraClass fill:#F8F9FA,stroke:#F57C00,stroke-width:2px,color:#000000
-    
+
     class S22_1,S22_2,TC001_1,TC001_2,GSR_1,GSR_2 mobileClass
     class PC,BRIO_1,BRIO_2,STORAGE stationaryClass
     class ROUTER,SWITCH networkClass
@@ -151,7 +137,6 @@ graph TB
 ## Android App Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph ANDROID ["Android Application Clean Architecture"]
         direction TB
@@ -278,13 +263,7 @@ graph TB
     UC ==>|Activity Coordination<br/>Event Distribution| MAC
     MAC ==>|Navigation Control<br/>Fragment Management| NU
     NU ==>|UI Utilities<br/>Helper Functions| UU
-    
-    %% Styling
-    classDef presentationClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef domainClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef dataClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef infraClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    
+
     class MA,RF,DF,CF,FF,MVM,RSM,DSM,UC,NU,UU,MAC presentationClass
     class CR,TR,SR,SM,SI,SS,PCH,CM,PS domainClass
     class DST,BM,UM,FS,MS,CS dataClass
@@ -294,7 +273,6 @@ graph TB
 ## PC App Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph PC_APP ["PC Application Architecture - Python and PyQt5"]
         direction TB
@@ -422,13 +400,7 @@ graph TB
     OS_Interface ==>|Platform Services<br/>System Resources| PyQt5
     HW_Interface ==>|Device Management<br/>Hardware Abstraction| OpenCV
     FS_Interface ==>|Storage Services<br/>File Operations| NumPy
-    
-    %% Styling
-    classDef uiClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef businessClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef dataClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef externalClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    
+
     class MW,DW,RW,CW,PW,SW,LW,FW uiClass
     class AC,DC,RC,CC,SM,DM,FM,NM businessClass
     class SocketServer,CommandProcessor,DataStreamer,FileHandler,DatabaseManager,ConfigManager,CameraHandler,DataCollector,SyncManager dataClass
@@ -438,7 +410,6 @@ graph TB
 ## Complete Data Flow Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TD
     subgraph COLLECTION ["Multi-Modal Data Collection Architecture"]
         direction TB
@@ -559,13 +530,7 @@ graph TD
     SYNC_ENGINE -.->|Timing Information<br/>Latency Data<br/>Sync Status| PC_CTRL
     PC_CTRL -.->|Control Commands<br/>Configuration Updates<br/>Status Requests| ANDROID1
     PC_CTRL -.->|Control Commands<br/>Configuration Updates<br/>Status Requests| ANDROID2
-    
-    %% Styling
-    classDef sourceClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef processingClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef storageClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef controlClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    
+
     class CAM1,CAM2,THERMAL1,THERMAL2,GSR1,GSR2,BRIO1,BRIO2 sourceClass
     class ANDROID1,ANDROID2,MASTER_CLOCK,SYNC_ENGINE,QC_ENGINE,REDUNDANCY processingClass
     class MOBILE_STORAGE,PC_STORAGE,BACKUP_STORAGE,ARCHIVE_STORAGE storageClass
@@ -575,7 +540,6 @@ graph TD
 ## Networking Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph NETWORK ["Multi-Layer Network Architecture"]
         direction TB
@@ -689,14 +653,7 @@ graph TB
     BANDWIDTH_MONITOR -.->|Capacity Information<br/>Traffic Patterns| IP_ROUTING
     CONNECTION_POOL -.->|Pool Status<br/>Resource Metrics| TCP_MGMT
     FAILOVER_MGMT -.->|Recovery Status<br/>Health Information| AUTH_LAYER
-    
-    %% Styling
-    classDef physicalClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef networkClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef applicationClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef endpointClass fill:#28A745,stroke:#1E7E34,stroke-width:2px,color:#000000
-    classDef monitoringClass fill:#6C757D,stroke:#495057,stroke-width:2px,color:#000000
-    
+
     class ETHERNET,SWITCH,WIFI_ROUTER,ACCESS_POINT physicalClass
     class IP_ROUTING,QOS_MGMT,TCP_MGMT,UDP_STREAMING networkClass
     class JSON_SOCKET,HTTP_REST,WEBSOCKET,TLS_ENCRYPTION,AUTH_LAYER applicationClass
@@ -707,7 +664,6 @@ graph TB
 ## Data Collection Flow
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 flowchart TD
     %% Start of the data collection process
     START([Data Collection Process Start]) --> INIT_CHECK{🔍 System Initialization Check}
@@ -818,13 +774,6 @@ flowchart TD
     PARTIAL_RECOVERY --> ARCHIVE_READY
     LOSS_REPORT --> COMPLETE
     
-    %% Styling
-    classDef startEndClass fill:#28A745,stroke:#1E7E34,stroke-width:3px,color:#000000
-    classDef processClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef decisionClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef errorClass fill:#DC3545,stroke:#B02A37,stroke-width:2px,color:#000000
-    classDef warningClass fill:#FFC107,stroke:#E0A800,stroke-width:2px,color:#000000
-    
     class START,COMPLETE startEndClass
     class DEVICE_DISCOVERY,CONNECT_ANDROID,CONNECT_THERMAL,CONNECT_GSR,CONNECT_USB,CALIBRATION,SYNC_SETUP,QUALITY_CHECK,SESSION_SETUP,METADATA_SETUP,STORAGE_PREP,START_RECORDING,PARALLEL_RECORDING,ANDROID_REC,GSR_REC,USB_REC,MONITORING,QUALITY_MONITOR,SYNC_MONITOR,STOP_RECORDING,FINALIZE_DATA,DATA_VALIDATION,METADATA_COMPLETE,FILE_ORGANIZATION,COMPRESSION,BACKUP_CREATE,VERIFICATION,ARCHIVE_DATA,CLEANUP,SESSION_REPORT processClass
     class INIT_CHECK,DEVICE_CHECK,CALIB_VALID,RECORDING_READY,CONTINUE_REC,ERROR_DETECT,ERROR_TYPE,RESTART_CHECK,VERIFY_CHECK,RECOVERY_SUCCESS,RECOVERY_POSSIBLE decisionClass
@@ -835,7 +784,6 @@ flowchart TD
 ## Session Management Flow
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 flowchart TD
     %% Session Lifecycle Start
     START([Session Management Lifecycle]) --> SESSION_REQ[Session Creation Request]
@@ -966,15 +914,7 @@ flowchart TD
         QUALITY --> RESOURCES[Resource Usage]
         RESOURCES --> ALERTS[🚨 Alert Management]
     end
-    
-    %% Styling
-    classDef startEndClass fill:#28A745,stroke:#1E7E34,stroke-width:3px,color:#000000
-    classDef processClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef stateClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef decisionClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef errorClass fill:#DC3545,stroke:#B02A37,stroke-width:2px,color:#000000
-    classDef warningClass fill:#FFC107,stroke:#E0A800,stroke-width:2px,color:#000000
-    
+
     class START,END_SUCCESS,END_ERROR startEndClass
     class SESSION_REQ,GEN_SESSION_ID,CREATE_METADATA,INIT_STORAGE,DEVICE_PREP,CONFIG_SENSORS,SYNC_PREP,QUALITY_PREP,MONITOR_RECORDING,FINALIZE_SESSION,PROCESS_DATA,VALIDATE_DATA,ARCHIVE_SESSION,UPDATE_INDEX,GEN_REPORT,NOTIFY_COMPLETION,CLEANUP_TEMP,RELEASE_RESOURCES,SESSION_COMPLETE processClass
     class SESSION_READY,RECORDING_STATE,PAUSE_STATE,CREATED,INITIALIZED,READY,ACTIVE,PAUSED,STOPPING,COMPLETED stateClass
@@ -986,7 +926,6 @@ flowchart TD
 ## Data File System Architecture
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
     subgraph FILESYSTEM ["Hierarchical Data File System Architecture"]
         direction TB
@@ -1086,15 +1025,7 @@ graph TB
     RAW_DATA ==>|Data Processing<br/>Quality Enhancement| PROCESSED
     PROCESSED ==>|Export Generation<br/>Distribution Ready| EXPORTS
     RAW_DATA ==>|Preview Generation<br/>Quick Reference| PREVIEWS
-    
-    %% Styling
-    classDef rootClass fill:#28A745,stroke:#1E7E34,stroke-width:3px,color:#000000
-    classDef sessionClass fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000000
-    classDef deviceClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000000
-    classDef dataClass fill:#E8F5E8,stroke:#D17001,stroke-width:2px,color:#000000
-    classDef backupClass fill:#6C757D,stroke:#495057,stroke-width:2px,color:#000000
-    classDef securityClass fill:#DC3545,stroke:#B02A37,stroke-width:2px,color:#000000
-    
+
     class ROOT,SESSIONS,CALIBRATION,EXPORTS,BACKUP rootClass
     class SESSION_DIR,METADATA_DIR,RAW_DATA,PROCESSED,PREVIEWS sessionClass
     class ANDROID1_DATA,ANDROID2_DATA,PC_DATA deviceClass

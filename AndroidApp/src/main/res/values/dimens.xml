@@ -12,31 +12,15 @@
     <dimen name="card_padding">20dp</dimen>
 
     <dimen name="elevation_card">4dp</dimen>
-    <dimen name="elevation_fab">8dp</dimen>
-    <dimen name="elevation_bottom_sheet">16dp</dimen>
-    <dimen name="elevation_preview">2dp</dimen>
 
     <dimen name="corner_radius_card">12dp</dimen>
-    <dimen name="corner_radius_button">8dp</dimen>
-    <dimen name="corner_radius_fab">16dp</dimen>
 
-    <dimen name="button_height">48dp</dimen>
     <dimen name="button_height_large">56dp</dimen>
-    <dimen name="fab_size">56dp</dimen>
-
-    <dimen name="status_indicator_size">12dp</dimen>
-    <dimen name="recording_indicator_size">16dp</dimen>
 
     <dimen name="spacing_xs">4dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
     <dimen name="spacing_medium">16dp</dimen>
-    <dimen name="spacing_large">24dp</dimen>
-    <dimen name="spacing_xl">32dp</dimen>
-
-    <dimen name="preview_height">200dp</dimen>
-    <dimen name="preview_height_compact">120dp</dimen>
 
     <dimen name="touch_target_min">48dp</dimen>
-    <dimen name="touch_target_preferred">56dp</dimen>
 
 </resources>
