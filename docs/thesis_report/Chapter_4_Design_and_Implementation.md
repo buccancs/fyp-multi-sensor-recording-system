@@ -46,7 +46,7 @@ The chapter provides comprehensive technical analysis of design decisions, imple
 patterns that enable the system to achieve research-grade measurement precision while maintaining the scalability,
 reliability, and maintainability required for long-term research applications [McConnell2004]. Through detailed
 examination of system components implemented in `AndroidApp/src/main/java/com/multisensor/recording/` and
-`PythonApp/src/`, communication protocols, and integration mechanisms, this chapter demonstrates how theoretical
+`PythonApp/`, communication protocols, and integration mechanisms, this chapter demonstrates how theoretical
 computer science principles translate into practical research capabilities [Brooks1995].
 
 ## 4.1 System Architecture Overview (PC–Android System Design)
@@ -63,7 +63,7 @@ specialized adaptations required for physiological measurement applications that
 devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance [Gray1993], data
 integrity [Date2003], and temporal precision [Mills1991] as fundamental requirements that cannot be compromised for
 convenience or performance optimization, implemented through sophisticated algorithms in
-`PythonApp/src/master_clock_synchronizer.py` and `AndroidApp/src/main/java/com/multisensor/recording/SessionManager.kt`.
+`PythonApp/master_clock_synchronizer.py` and `AndroidApp/src/main/java/com/multisensor/recording/SessionManager.kt`.
 
 ### 4.1.1 Architectural Principles and Design Philosophy
 
@@ -3614,9 +3614,9 @@ with detailed code snippets provided in **Appendix F**.
 
 **Core System Architecture and Design Patterns:**
 
-- `PythonApp/src/application.py` - Dependency injection container and service orchestration implementing IoC pattern (
+- `PythonApp/application.py` - Dependency injection container and service orchestration implementing IoC pattern (
   See Appendix F.71)
-- `PythonApp/src/enhanced_main_with_web.py` - Web-integrated application launcher with factory pattern implementation (
+- `PythonApp/enhanced_main_with_web.py` - Web-integrated application launcher with factory pattern implementation (
   See Appendix F.72)
 - `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Fragment-based architecture with Material
   Design 3 implementation (See Appendix F.73)
@@ -3625,13 +3625,13 @@ with detailed code snippets provided in **Appendix F**.
 
 **Distributed System Implementation and Network Architecture:**
 
-- `PythonApp/src/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (
+- `PythonApp/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (
   See Appendix F.75)
-- `PythonApp/src/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction
+- `PythonApp/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction
   algorithms (See Appendix F.76)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device discovery and
   connection management with state machine implementation (See Appendix F.77)
-- `PythonApp/src/master_clock_synchronizer.py` - High-precision master clock coordination with NTP integration (See
+- `PythonApp/master_clock_synchronizer.py` - High-precision master clock coordination with NTP integration (See
   Appendix F.78)
 
 **Android Application Core Components and Mobile Architecture:**
@@ -3649,30 +3649,30 @@ with detailed code snippets provided in **Appendix F**.
 
 **Desktop Controller Architecture and Session Management:**
 
-- `PythonApp/src/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See
+- `PythonApp/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See
   Appendix F.84)
-- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See
   Appendix F.85)
-- `PythonApp/src/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
+- `PythonApp/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
   validation (See Appendix F.86)
-- `PythonApp/src/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
+- `PythonApp/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
   F.87)
 
 **Computer Vision Pipeline and Signal Processing:**
 
-- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless
+- `PythonApp/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless
   analysis (See Appendix F.88)
-- `PythonApp/src/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix
+- `PythonApp/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix
   F.89)
-- `PythonApp/src/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See
+- `PythonApp/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See
   Appendix F.90)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android computer
   vision pipeline implementation (See Appendix F.91)
 
 **Communication Protocol Implementation and Data Management:**
 
-- `PythonApp/src/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
-- `PythonApp/src/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix
+- `PythonApp/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
+- `PythonApp/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix
   F.93)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication
   with state synchronization (See Appendix F.94)
@@ -3681,13 +3681,13 @@ with detailed code snippets provided in **Appendix F**.
 
 **Data Processing, Analysis, and Quality Assurance:**
 
-- `PythonApp/src/session/session_logger.py` - Structured logging with performance monitoring and analytics (See Appendix
+- `PythonApp/session/session_logger.py` - Structured logging with performance monitoring and analytics (See Appendix
   F.96)
-- `PythonApp/src/session/session_recovery.py` - Fault tolerance and recovery mechanisms with state restoration (See
+- `PythonApp/session/session_recovery.py` - Fault tolerance and recovery mechanisms with state restoration (See
   Appendix F.97)
 - `AndroidApp/src/main/java/com/multisensor/recording/persistence/` - Data persistence layer with encryption and
   compression (See Appendix F.98)
-- `PythonApp/src/utils/data_validation.py` - Comprehensive data integrity validation with statistical analysis (See
+- `PythonApp/utils/data_validation.py` - Comprehensive data integrity validation with statistical analysis (See
   Appendix F.99)
 
 **Performance Optimization and System Monitoring:**
@@ -3696,7 +3696,7 @@ with detailed code snippets provided in **Appendix F**.
   with bandwidth management (See Appendix F.100)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Intelligent power management with
   battery optimization (See Appendix F.101)
-- `PythonApp/src/production/performance_benchmark.py` - Comprehensive performance benchmarking with statistical
+- `PythonApp/production/performance_benchmark.py` - Comprehensive performance benchmarking with statistical
   reporting (See Appendix F.102)
 
 These implementation references demonstrate the comprehensive technical depth and systematic engineering approach
@@ -3802,5 +3802,5 @@ Hall, 2014.
 
 [Vernon2013] Vernon, V. "Implementing Domain-Driven Design." Addison-Wesley Professional, 2013.
 
-- `PythonApp/src/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix
+- `PythonApp/monitoring/system_monitor.py` - Real-time system monitoring with predictive analytics (See Appendix
   F.103)

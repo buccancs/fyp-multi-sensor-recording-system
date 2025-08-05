@@ -234,12 +234,12 @@ detection, including detailed analysis of:
 
 The background analysis demonstrates how established theoretical principles from multiple scientific domains converge to
 enable the sophisticated coordination and measurement capabilities achieved by the Multi-Sensor Recording System through
-implementations in `AndroidApp/src/main/java/com/multisensor/recording/` and `PythonApp/src/`. Through comprehensive
+implementations in `AndroidApp/src/main/java/com/multisensor/recording/` and `PythonApp/`. Through comprehensive
 literature survey and systematic technology evaluation [Kitchenham2007; Webster2002], this chapter establishes the
 research foundation that enables the novel contributions presented in subsequent chapters while providing the technical
 justification for architectural and implementation decisions based on proven software engineering
 principles [Gamma1994; Martin2008; Fowler2002]. The distributed coordination approach is implemented through
-`PythonApp/src/session/session_manager.py` following established patterns from distributed systems
+`PythonApp/session/session_manager.py` following established patterns from distributed systems
 research [Lamport1978; Chandy1985; Birman2007].
 
 **Chapter Organization and Academic Contributions:**
@@ -1842,44 +1842,44 @@ code components. All referenced files include detailed code snippets in **Append
 
 **Computer Vision and Signal Processing (Based on Literature Analysis):**
 
-- `PythonApp/src/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
+- `PythonApp/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
   MediaPipe and OpenCV for contactless analysis (See Appendix F.25)
-- `PythonApp/src/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
   vision research (See Appendix F.26)
-- `PythonApp/src/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
+- `PythonApp/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
   on DSP literature (See Appendix F.27)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android
   implementation of hand analysis algorithms (See Appendix F.28)
 
 **Distributed Systems Architecture (Following Academic Frameworks):**
 
-- `PythonApp/src/network/device_server.py` - Distributed coordination server implementing academic network protocols (
+- `PythonApp/network/device_server.py` - Distributed coordination server implementing academic network protocols (
   See Appendix F.29)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless network coordination
   with automatic discovery protocols (See Appendix F.30)
-- `PythonApp/src/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
+- `PythonApp/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
   algorithms (See Appendix F.31)
-- `PythonApp/src/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
+- `PythonApp/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
   See Appendix F.32)
 
 **Physiological Measurement Systems (Research-Grade Implementation):**
 
-- `PythonApp/src/shimmer_manager.py` - GSR sensor integration following research protocols and academic calibration
+- `PythonApp/shimmer_manager.py` - GSR sensor integration following research protocols and academic calibration
   standards (See Appendix F.33)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` - Mobile GSR recording with
   research-grade data validation (See Appendix F.34)
-- `PythonApp/src/calibration/calibration_manager.py` - Calibration methodology implementing academic standards for
+- `PythonApp/calibration/calibration_manager.py` - Calibration methodology implementing academic standards for
   physiological measurement (See Appendix F.35)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt` - Thermal camera integration with
   academic-grade calibration (See Appendix F.36)
 
 **Multi-Modal Data Integration (Academic Data Fusion Approaches):**
 
-- `PythonApp/src/session/session_manager.py` - Multi-modal data coordination implementing academic data fusion
+- `PythonApp/session/session_manager.py` - Multi-modal data coordination implementing academic data fusion
   methodologies (See Appendix F.37)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/SessionInfo.kt` - Session data management with academic
   research protocols (See Appendix F.38)
-- `PythonApp/src/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
+- `PythonApp/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
   principles (See Appendix F.39)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation
   based on academic data integrity standards (See Appendix F.40)
@@ -1890,7 +1890,7 @@ code components. All referenced files include detailed code snippets in **Append
   See Appendix F.41)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/` - Research-grade test suite with statistical
   validation (See Appendix F.42)
-- `PythonApp/src/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
+- `PythonApp/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
   See Appendix F.43)
 
 ---
