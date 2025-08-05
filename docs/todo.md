@@ -1,10 +1,10 @@
 # Documentation TODO
 
 ## High Priority
-- [ ] Fix broken cross-references to `docs/new_documentation/`
+- [x] Fix broken cross-references to `docs/new_documentation/`
 - [ ] Generate missing diagrams (23 remaining)
 - [ ] Update API documentation with latest changes
-- [ ] Create quick start guide for new users
+- [x] Create quick start guide for new users
 
 ## Medium Priority
 - [ ] Add troubleshooting sections to component guides
