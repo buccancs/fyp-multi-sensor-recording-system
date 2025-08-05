@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt, qVersion
 from PyQt5.QtWidgets import QApplication
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from ..utils.logging_config import get_logger, AppLogger
+from .utils.logging_config import get_logger, AppLogger
 log_level = os.environ.get('MSR_LOG_LEVEL', 'INFO')
 AppLogger.set_level(log_level)
 from .gui.enhanced_ui_main_window import EnhancedMainWindow

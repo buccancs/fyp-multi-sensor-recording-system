@@ -25,11 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logD
-import com.multisensor.recording.util.logE
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logW
+import com.multisensor.recording.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import com.multisensor.recording.R
@@ -40,6 +36,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.*
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
@@ -107,11 +105,6 @@ class FileViewActivity : AppCompatActivity() {
         observeUiState()
 
         logger.info("FileViewActivity created with MVVM architecture")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        logger.info("FileViewActivity destroyed")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
