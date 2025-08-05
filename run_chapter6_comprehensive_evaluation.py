@@ -133,15 +133,21 @@ class Chapter6TestRunner:
             
             if success:
                 print("    ✅ Core evaluation completed successfully")
-                # Try to load detailed results
-                results_file = self.repo_root / "chapter6_evaluation_results.json"
-                if results_file.exists():
-                    with open(results_file, 'r') as f:
-                        core_results = json.load(f)
-                    self.results["evaluation_components"]["core_evaluation"]["detailed_results"] = core_results
+                # Try to load detailed results - but don't fail if we can't access them
+                try:
+                    results_file = self.repo_root / "chapter6_evaluation_results.json"
+                    if results_file.exists():
+                        with open(results_file, 'r') as f:
+                            core_results = json.load(f)
+                        # Create the nested structure if it doesn't exist
+                        if "detailed_results" not in self.results["evaluation_components"]["core_evaluation"]:
+                            self.results["evaluation_components"]["core_evaluation"]["detailed_results"] = core_results
+                except Exception:
+                    pass  # Silently continue if we can't load detailed results
             else:
                 print("    ❌ Core evaluation failed")
-                print(f"    Error: {result.stderr}")
+                if result.stderr:
+                    print(f"    Error: {result.stderr}")
             
             return success
             
@@ -163,12 +169,17 @@ class Chapter6TestRunner:
             
             if success:
                 print("    ✅ Performance metrics collected successfully")
-                # Try to load detailed metrics
-                metrics_file = self.repo_root / "chapter6_metrics_detailed.json"
-                if metrics_file.exists():
-                    with open(metrics_file, 'r') as f:
-                        metrics_data = json.load(f)
-                    self.results["evaluation_components"]["performance_metrics"]["detailed_metrics"] = metrics_data
+                # Try to load detailed metrics - but don't fail if we can't access them
+                try:
+                    metrics_file = self.repo_root / "chapter6_metrics_detailed.json"
+                    if metrics_file.exists():
+                        with open(metrics_file, 'r') as f:
+                            metrics_data = json.load(f)
+                        # Create the nested structure if it doesn't exist
+                        if "detailed_metrics" not in self.results["evaluation_components"]["performance_metrics"]:
+                            self.results["evaluation_components"]["performance_metrics"]["detailed_metrics"] = metrics_data
+                except Exception:
+                    pass  # Silently continue if we can't load detailed metrics
             else:
                 print("    ❌ Performance metrics collection failed")
             
