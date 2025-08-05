@@ -1011,8 +1011,8 @@ information is available in the complete thesis structure:
 - Chapter 7: Appendices (`Chapter_7_Appendices.md`)
 
 **Supporting Technical Documentation:**
-Available in `docs/new_documentation/` directory with component-specific README, USER_GUIDE, and PROTOCOL documents for
-all system components including Android Mobile Application, Python Desktop Controller, Multi-Device Synchronization,
+Available in docs/ directory with component-specific documentation including
+all system components: Android Mobile Application, Python Desktop Controller, Multi-Device Synchronization,
 Camera Recording System, Session Management, Hardware Integration, Testing Framework, and Networking Protocol
 components.
 
@@ -4563,53 +4563,44 @@ for each major component:
 **Core System Components:**
 
 - **Android Mobile Application**: Comprehensive sensor coordination and data collection platform
-    - Technical documentation: `docs/new_documentation/README_Android_Mobile_Application.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
+    - Technical documentation: `../android_mobile_application_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **Python Desktop Controller**: Central coordination hub for multi-device synchronization
-    - Technical documentation: `docs/new_documentation/README_python_desktop_controller.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
+    - Technical documentation: `../python_desktop_controller_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **Multi-Device Synchronization Framework**: Coordination protocols for distributed operation
-    - Technical documentation: `docs/new_documentation/README_Multi_Device_Synchronization.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
+    - Technical documentation: `../multi_device_synchronization_readme.md`
+    - Architecture overview: `../ARCHITECTURE_DIAGRAMS.md`
 
 - **Camera Recording System**: Video capture and processing pipeline
-    - Technical documentation: `docs/new_documentation/README_CameraRecorder.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
+    - See Android Mobile Application and thermal camera integration
+    - Technical documentation: `../thermal_camera_integration_readme.md`
 
 - **Session Management**: Research workflow coordination and data organization
-    - Technical documentation: `docs/new_documentation/README_session_management.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_session_management.md`
+    - Technical documentation: `../session_management_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **Networking Protocol**: Cross-platform communication framework
-    - Technical documentation: `docs/new_documentation/README_networking_protocol.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_networking_protocol.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_networking_protocol.md`
+    - Technical documentation: `../networking_protocol_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 **Sensor Integration Components:**
 
 - **Shimmer3 GSR+ Integration**: Reference physiological measurement sensor
-    - Technical documentation: `docs/new_documentation/README_shimmer3_gsr_plus.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
+    - Technical documentation: `../shimmer_integration_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 - **TopDon TC001 Thermal Camera**: Thermal imaging integration
-    - Technical documentation: `docs/new_documentation/README_topdon_tc001.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
+    - Technical documentation: `../thermal_camera_integration_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 **Supporting Infrastructure:**
 
 - **Testing and QA Framework**: Comprehensive validation system
-    - Technical documentation: `docs/new_documentation/README_testing_qa_framework.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
-    - Protocol specification: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+    - Technical documentation: `../testing_framework_readme.md`
+    - Quick start guide: `../QUICK_START.md`
 
 ### Validated System Capabilities
 
@@ -12465,7 +12456,7 @@ detailed implementation code snippets available in **Appendix F**.
   use (See Appendix F.162)
 - `AndroidApp/src/main/java/com/multisensor/recording/ui/` - User-friendly interface implementation with Material Design
   3 and accessibility features (See Appendix F.163)
-- `docs/new_documentation/` - Comprehensive documentation framework enabling community adoption and contribution (See
+- `docs/` - Comprehensive documentation framework enabling community adoption and contribution (See
   Appendix F.164)
 - `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` - Intuitive mobile interface demonstrating
   accessibility and usability achievements (See Appendix F.165)
@@ -12572,7 +12563,7 @@ detailed implementation code snippets available in **Appendix F**.
 
 This appendix provides comprehensive technical information necessary for future development teams to continue, modify,
 or extend the Multi-Sensor Recording System. The system follows a component-first documentation approach with detailed
-technical specifications available in the `docs/new_documentation/` directory.
+technical specifications available in the docs/ directory.
 
 ### A.1 Component Documentation Reference
 
@@ -12580,41 +12571,41 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 
 **Core System Components:**
 
-- **Android Mobile Application**: `docs/new_documentation/README_Android_Mobile_Application.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
+- **Android Mobile Application**: `../android_mobile_application_readme.md`
+    - Component guide: `../android_mobile_application_readme.md`
+    - Quick start: `../QUICK_START.md`
 
-- **Python Desktop Controller**: `docs/new_documentation/README_python_desktop_controller.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
+- **Python Desktop Controller**: `../python_desktop_controller_readme.md`
+    - Component guide: `../python_desktop_controller_readme.md`
+    - Quick start: `../QUICK_START.md`
 
-- **Multi-Device Synchronization**: `docs/new_documentation/README_Multi_Device_Synchronization.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
+- **Multi-Device Synchronization**: `../multi_device_synchronization_readme.md`
+    - Component guide: `../multi_device_synchronization_readme.md`
+    - Architecture: `../ARCHITECTURE_DIAGRAMS.md`
 
-- **Camera Recording System**: `docs/new_documentation/README_CameraRecorder.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
+- **Camera Recording System**: See Android Mobile Application documentation above
+    - Camera integration: `../thermal_camera_integration_readme.md`
+    - UI architecture: `../ui_architecture_readme.md`
 
-- **Session Management**: `docs/new_documentation/README_session_management.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_session_management.md`
+- **Session Management**: `../session_management_readme.md`
+    - Component guide: `../session_management_readme.md`
+    - Quick start: `../QUICK_START.md`
 
 **Hardware Integration Components:**
 
-- **Shimmer3 GSR+ Sensor**: `docs/new_documentation/README_shimmer3_gsr_plus.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
+- **Shimmer3 GSR+ Sensor**: `../shimmer_integration_readme.md`
+    - Component guide: `../shimmer_integration_readme.md`
+    - Quick start: `../QUICK_START.md`
 
-- **TopDon TC001 Thermal Camera**: `docs/new_documentation/README_topdon_tc001.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
+- **TopDon TC001 Thermal Camera**: `../thermal_camera_integration_readme.md`
+    - Component guide: `../thermal_camera_integration_readme.md`
+    - Quick start: `../QUICK_START.md`
 
 **Testing and Validation:**
 
-- **Testing and QA Framework**: `docs/new_documentation/README_testing_qa_framework.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+- **Testing and QA Framework**: `../testing_framework_readme.md`
+    - Component guide: `../testing_framework_readme.md`
+    - Quick start: `../QUICK_START.md`
 
 ### A.2 Comprehensive Technical Specifications Integration
 
@@ -12764,9 +12755,9 @@ integration.
 - **Performance Benchmarks**: Sub-2 second response time with 99% availability requirements
 - **Security Standards**: Zero high-severity vulnerabilities with comprehensive penetration testing
 - **Research Compliance**: Systematic validation of scientific methodology and data integrity
-- **Testing Framework**: `docs/new_documentation/README_testing_qa_framework.md`
-    - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
-    - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+- **Testing Framework**: `../testing_framework_readme.md`
+    - Component guide: `../testing_framework_readme.md`
+    - Quick start: `../QUICK_START.md`
 
 ### A.2 Validated System Configuration
 

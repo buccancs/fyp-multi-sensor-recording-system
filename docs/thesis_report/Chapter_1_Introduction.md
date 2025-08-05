@@ -839,7 +839,7 @@ information is available in the complete thesis structure:
 - Chapter 7: Appendices (`Chapter_7_Appendices.md`)
 
 **Supporting Technical Documentation:**
-Available in `docs/new_documentation/` directory with component-specific README, USER_GUIDE, and PROTOCOL documents for
+Available in docs/ directory with component-specific documentation for
 all system components including Android Mobile Application, Python Desktop Controller, Multi-Device Synchronization,
 Camera Recording System, Session Management, Hardware Integration, Testing Framework, and Networking Protocol
 components.
