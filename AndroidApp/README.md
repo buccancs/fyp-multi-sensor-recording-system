@@ -2,17 +2,17 @@
 
 ## Overview
 
-The Android Mobile Application serves as a sophisticated **distributed mobile data collection node** within the multi-sensor recording system, implementing advanced sensor integration and real-time communication protocols for scientific research applications [Wilhelm2010, McDuff2014]. This application represents a paradigm shift from traditional centralized data collection to distributed mobile sensing, enabling contactless physiological measurement while maintaining research-grade data quality and temporal precision.
+The Android Mobile Application serves as a **distributed mobile data collection node** within the multi-sensor recording system, implementing sensor integration and real-time communication protocols for scientific research applications. This application enables contactless physiological measurement while maintaining research-grade data quality and temporal precision.
 
-The application implements established principles of distributed systems design [Lamport1978, Tanenbaum2016] while accommodating the unique constraints of mobile platforms, providing researchers with a powerful tool for multi-modal data collection in diverse environments where traditional laboratory equipment would be impractical or intrusive.
+The application implements distributed systems design principles while accommodating the unique constraints of mobile platforms, providing researchers with a powerful tool for multi-modal data collection in diverse environments.
 
 ## Architecture
 
-The Android application follows Clean Architecture principles [Martin2017] with a sophisticated layered design that separates concerns while enabling efficient sensor data collection and communication:
+The Android application follows Clean Architecture principles with a layered design that separates concerns while enabling efficient sensor data collection and communication:
 
-- **Presentation Layer**: Modern Android UI implementing Material Design principles [Google2014] with real-time data visualization and intuitive controls
-- **Domain Layer**: Business logic and sensor coordination implementing domain-driven design patterns [Evans2003]
-- **Data Layer**: Multi-sensor data collection and storage with comprehensive metadata tracking and quality assurance
+- **Presentation Layer**: Modern Android UI implementing Material Design principles with real-time data visualization
+- **Domain Layer**: Business logic and sensor coordination implementing domain-driven design patterns
+- **Data Layer**: Multi-sensor data collection and storage with metadata tracking
 - **Communication Layer**: JSON socket protocol implementation for PC coordination and real-time preview streaming
 
 ## Project Structure
@@ -36,10 +36,10 @@ The application implements a modular architecture with clear separation of respo
 
 ### Multi-Sensor Data Collection
 
-The application provides comprehensive sensor integration capabilities following best practices in mobile sensor development [Lane2010, Miluzzo2010]:
+The application provides comprehensive sensor integration capabilities:
 
 - **Real-time sensor data collection** - Simultaneous data acquisition from camera, thermal imaging, and physiological sensors with microsecond timestamp precision
-- **JSON socket protocol communication** - Standardized communication with PC master-controller implementing reliable message passing and error recovery [Fielding2000]
+- **JSON socket protocol communication** - Standardized communication with PC master-controller implementing reliable message passing and error recovery
 - **Synchronized recording with PC controller** - Distributed coordination ensuring temporal alignment across multiple devices and sensor modalities
 - **User-friendly mobile interface** - Intuitive controls designed for research applications with minimal training requirements
 - **Multi-sensor data integration** - Unified data collection framework supporting diverse sensor types with extensible architecture
@@ -108,27 +108,7 @@ This Android application operates as an integral component of the multi-sensor r
 
 ## References
 
-[Evans2003] Evans, E. (2003). Domain-Driven Design: Tackling Complexity in the Heart of Software. Addison-Wesley Professional.
-
-[Fielding2000] Fielding, R. T. (2000). Architectural styles and the design of network-based software architectures. University of California, Irvine.
-
-[Google2014] Google Inc. (2014). Material Design Guidelines. Retrieved from https://material.io/design/
-
-[Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565.
-
-[Lane2010] Lane, N. D., et al. (2010). A survey of mobile phone sensing. IEEE Communications Magazine, 48(9), 140-150.
-
-[Martin2017] Martin, R. C. (2017). Clean Architecture: A Craftsman's Guide to Software Structure and Design. Prentice Hall.
-
 [McDuff2014] McDuff, D., Gontarek, S., & Picard, R. W. (2014). Remote detection of photoplethysmographic systolic and diastolic peaks using a digital camera. IEEE Transactions on Biomedical Engineering, 61(12), 2948-2954.
-
-[Miluzzo2010] Miluzzo, E., et al. (2010). Sensing meets mobile social networks: the design, implementation and evaluation of the CenceMe application. In Proceedings of the 6th ACM conference on Embedded network sensor systems (pp. 337-350).
-
-[Nielsen1993] Nielsen, J. (1993). Usability Engineering. Morgan Kaufmann Publishers Inc.
-
-[Sandve2013] Sandve, G. K., Nekrutenko, A., Taylor, J., & Hovig, E. (2013). Ten simple rules for reproducible computational research. PLoS Computational Biology, 9(10), e1003285.
-
-[Tanenbaum2016] Tanenbaum, A. S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. Prentice-Hall.
 
 [Wilhelm2010] Wilhelm, F. H., Pfaltz, M. C., & Grossman, P. (2010). Continuous electronic data capture of physiology, behavior and environment in ambulatory subjects. Behavior Research Methods, 38(1), 157-165.
 

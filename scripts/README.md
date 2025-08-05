@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Standalone Scripts Collection provides comprehensive execution and utility scripts for the multi-sensor recording system, implementing automation and system management capabilities based on established DevOps practices [Bass2015] and system administration principles [Limoncelli2016]. These scripts enable efficient system operation, maintenance, and development workflow automation while ensuring consistent and reliable system management procedures.
+The Standalone Scripts Collection provides execution and utility scripts for the multi-sensor recording system, implementing automation and system management capabilities based on established DevOps practices]. These scripts enable efficient system operation, maintenance, and development workflow automation while ensuring consistent and reliable system management procedures.
 
-The scripts follow Unix philosophy principles [Raymond2003] and infrastructure as code practices [Morris2016] to provide modular, composable utilities that support both development activities and production system management with emphasis on automation, reliability, and maintainability.
+The scripts follow Unix philosophy principles] to provide modular, composable utilities that support both development activities and production system management with emphasis on automation, reliability, and maintainability.
 
 ## Architecture
 
@@ -21,7 +21,7 @@ The Scripts Collection implements a modular architecture with clear separation o
 
 This collection provides systematic script organization supporting all aspects of system management and operation:
 
-- **System setup and initialization scripts** - Comprehensive system configuration automation implementing infrastructure as code principles with validation and error recovery procedures [Morris2016]
+- **System setup and initialization scripts** - Comprehensive system configuration automation implementing infrastructure as code principles with validation and error recovery procedures
 - **Data processing and analysis utilities** - Automated data processing pipelines with quality assurance and statistical validation enabling systematic analysis and research workflow automation
 - **Calibration automation scripts** - Systematic calibration procedure automation with quality assessment and validation ensuring consistent calibration results and research reproducibility
 - **System maintenance tools** - Comprehensive system maintenance automation including monitoring, optimization, and preventive maintenance procedures ensuring system reliability and performance
@@ -32,7 +32,7 @@ This collection provides systematic script organization supporting all aspects o
 
 ### Advanced Automation Features
 
-The script collection provides sophisticated automation capabilities:
+The script collection provides automation capabilities:
 - **Configuration Management**: Systematic configuration management with version control and validation procedures
 - **Error Recovery**: Comprehensive error handling with automatic recovery and rollback capabilities
 - **Quality Assurance**: Built-in quality checking and validation procedures ensuring reliable automation results
@@ -42,7 +42,7 @@ The script collection provides sophisticated automation capabilities:
 
 ### System Management and Automation
 
-These scripts provide comprehensive system management capabilities supporting both development and production environments:
+These scripts provide system management capabilities supporting both development and production environments:
 
 - **Automated system setup and configuration** - Complete system initialization with dependency management, configuration validation, and environment setup ensuring consistent system deployment across diverse environments
 - **Batch data processing capabilities** - Systematic data processing automation with quality control and validation enabling efficient large-scale data analysis and research workflow automation
@@ -64,9 +64,9 @@ The scripts integrate seamlessly with research workflows providing:
 
 ### Script Design Principles
 
-Scripts are designed following established system administration and automation best practices:
+Scripts are designed following system administration and automation best practices:
 
-- **Modularity**: Individual scripts designed for specific tasks with clear interfaces and composable functionality [Raymond2003]
+- **Modularity**: Individual scripts designed for specific tasks with clear interfaces and composable functionality
 - **Error Handling**: Comprehensive error detection and recovery with detailed logging and diagnostic information
 - **Validation**: Built-in validation procedures ensuring script reliability and result verification
 - **Documentation**: Complete inline documentation with usage examples and troubleshooting procedures
@@ -94,10 +94,10 @@ The script collection follows established software engineering practices:
 
 The scripts address specific requirements of scientific research environments:
 
-- **Reproducibility**: Script design ensuring reproducible execution with documented parameters and deterministic behavior [Wilson2014]
+- **Reproducibility**: Script design ensuring reproducible execution with documented parameters and deterministic behavior
 - **Auditability**: Complete operation logging with audit trails supporting research documentation and validation requirements
 - **Flexibility**: Configurable scripts supporting diverse research protocols and experimental designs
-- **Integration**: Seamless integration with research tools and analysis platforms supporting comprehensive research workflows
+- **Integration**: Seamless integration with research tools and analysis platforms supporting research workflows
 
 ## Script Categories
 
@@ -121,12 +121,11 @@ The scripts address specific requirements of scientific research environments:
 
 ## References
 
-[Bass2015] Bass, L., Weber, I., & Zhu, L. (2015). DevOps: A Software Architect's Perspective. Addison-Wesley Professional.
 
-[Limoncelli2016] Limoncelli, T. A., Hogan, C. J., & Chalup, S. R. (2016). The Practice of System and Network Administration: Volume 1: DevOps and other Best Practices for Enterprise IT. Addison-Wesley Professional.
 
-[Morris2016] Morris, K. (2016). Infrastructure as Code: Managing Servers in the Cloud. O'Reilly Media.
 
-[Raymond2003] Raymond, E. S. (2003). The Art of Unix Programming. Addison-Wesley Professional.
 
-[Wilson2014] Wilson, G., et al. (2014). Best practices for scientific computing. PLoS Biology, 12(1), e1001745.
+
+
+
+

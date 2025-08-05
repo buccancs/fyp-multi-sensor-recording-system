@@ -4,7 +4,7 @@
 
 The Communication Protocol module defines and implements the standardized JSON socket protocol that serves as the communication backbone for the multi-sensor recording system, providing reliable inter-device communication based on established networking standards and distributed systems principles [Tanenbaum2016, Coulouris2011]. This module ensures consistent, extensible, and reliable communication across all system components while maintaining the precision and reliability required for scientific research applications.
 
-The protocol implementation follows RESTful design principles [Fielding2000] and message-oriented middleware patterns [Hohpe2003] to provide a robust communication framework that supports complex multi-device coordination while maintaining simplicity and extensibility essential for research software development and maintenance.
+The protocol implementation follows RESTful design principles] to provide a robust communication framework that supports complex multi-device coordination while maintaining simplicity and extensibility essential for research software development and maintenance.
 
 ## Architecture
 
@@ -19,9 +19,9 @@ The Protocol module implements a layered communication architecture with clear s
 
 ### Protocol Specifications and Implementation
 
-This directory provides comprehensive protocol documentation and implementation resources:
+This directory provides protocol documentation and implementation resources:
 
-- **JSON socket protocol specifications** - Complete protocol definition with message schemas, state machines, and communication patterns ensuring standardized inter-device communication [Crockford2006]
+- **JSON socket protocol specifications** - Complete protocol definition with message schemas, state machines, and communication patterns ensuring standardized inter-device communication
 - **Message format definitions** - Systematic message format specifications with JSON schema validation ensuring data integrity and type safety across all communication scenarios
 - **Communication standards documentation** - Comprehensive protocol documentation with best practices, implementation guidelines, and troubleshooting procedures supporting development and maintenance
 - **Protocol implementation examples** - Practical implementation examples with code samples and usage patterns supporting rapid development and consistent implementation
@@ -30,7 +30,7 @@ This directory provides comprehensive protocol documentation and implementation 
 
 ### Advanced Protocol Features
 
-The protocol provides sophisticated capabilities supporting research-grade applications:
+The protocol provides capabilities supporting research-grade applications:
 - **Temporal Synchronization Messages**: Specialized message types for distributed time coordination with microsecond precision
 - **Quality Assurance Protocols**: Built-in quality monitoring and validation procedures ensuring research data integrity
 - **Metadata Exchange Standards**: Comprehensive metadata communication supporting research documentation and reproducibility
@@ -40,9 +40,9 @@ The protocol provides sophisticated capabilities supporting research-grade appli
 
 ### Research-Grade Communication Infrastructure
 
-The communication protocol provides comprehensive capabilities designed for scientific research applications:
+The communication protocol provides capabilities designed for scientific research applications:
 
-- **JSON-based message formatting** - Human-readable, structured message format ensuring interoperability, debugging capability, and protocol extensibility while maintaining parsing efficiency [Crockford2006]
+- **JSON-based message formatting** - Human-readable, structured message format ensuring interoperability, debugging capability, and protocol extensibility while maintaining parsing efficiency
 - **Socket-based communication** - Reliable TCP socket infrastructure with automatic connection management and error recovery ensuring robust communication in research environments
 - **Multi-device synchronization** - Sophisticated coordination algorithms implementing distributed consensus and temporal synchronization enabling reliable multi-device operation with research-grade precision
 - **Real-time data streaming** - Low-latency data transmission optimized for continuous sensor data with adaptive bandwidth management and quality-of-service control
@@ -64,7 +64,7 @@ The communication protocol provides comprehensive capabilities designed for scie
 
 The Protocol implementation follows established communication standards and best practices:
 
-- **Layered Architecture**: Clean separation between message definition, protocol logic, and transport mechanisms enabling flexible implementation and comprehensive testing [Zimmermann1980]
+- **Layered Architecture**: Clean separation between message definition, protocol logic, and transport mechanisms enabling flexible implementation and testing
 - **State Machine Design**: Formal state machine specification with validated transitions ensuring reliable protocol behavior and predictable error recovery
 - **Message Validation**: Comprehensive validation procedures with JSON schema enforcement ensuring data integrity and protocol compliance
 - **Performance Optimization**: Efficient protocol design with message compression and adaptive quality management optimized for research applications
@@ -99,14 +99,13 @@ The protocol definitions in this directory establish the communication standards
 
 ## References
 
-[Coulouris2011] Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). Distributed Systems: Concepts and Design. Addison-Wesley.
 
-[Crockford2006] Crockford, D. (2006). The application/json Media Type for JavaScript Object Notation (JSON). RFC 4627.
 
-[Fielding2000] Fielding, R. T. (2000). Architectural styles and the design of network-based software architectures. University of California, Irvine.
 
-[Hohpe2003] Hohpe, G., & Woolf, B. (2003). Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions. Addison-Wesley Professional.
 
-[Tanenbaum2016] Tanenbaum, A. S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. Prentice-Hall.
 
-[Zimmermann1980] Zimmermann, H. (1980). OSI reference model--The ISO model of architecture for open systems interconnection. IEEE Transactions on Communications, 28(4), 425-432.
+
+
+
+
+

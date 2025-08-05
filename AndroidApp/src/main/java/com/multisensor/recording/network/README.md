@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Network component implements the client-side networking infrastructure for the Android mobile application within the multi-sensor recording system, providing sophisticated communication capabilities based on established distributed systems principles [Tanenbaum2016, Coulouris2011]. This component enables reliable, low-latency communication with the PC master-controller while maintaining the resilience and autonomy required for mobile sensor nodes.
+The Network component implements the client-side networking infrastructure for the Android mobile application within the multi-sensor recording system, providing communication capabilities based on established distributed systems principles [Tanenbaum2016, Coulouris2011]. This component enables reliable, low-latency communication with the PC master-controller while maintaining the resilience and autonomy required for mobile sensor nodes.
 
 The implementation follows client-server architectural patterns with support for peer-to-peer communication, implementing robust networking protocols that ensure reliable data transmission despite the inherent challenges of mobile wireless networking [Stevens2013, Kurose2016].
 
@@ -19,7 +19,7 @@ The Network component implements a layered networking architecture optimized for
 
 This component provides essential networking functionality within the distributed multi-sensor recording system architecture, serving as the communication foundation that enables:
 
-- **Distributed Coordination**: Reliable communication with PC master-controller enabling synchronized multi-device recording operations [Lamport1978]
+- **Distributed Coordination**: Reliable communication with PC master-controller enabling synchronized multi-device recording operations
 - **Real-time Data Streaming**: Low-latency sensor data transmission optimized for continuous physiological and visual data streams
 - **Network Resilience**: Fault-tolerant networking with automatic recovery mechanisms ensuring session continuity despite network disruptions
 - **Protocol Compliance**: Standardized JSON socket protocol implementation ensuring interoperability and system integration
@@ -28,7 +28,7 @@ This component provides essential networking functionality within the distribute
 
 ### Component Organization
 
-The Network component is strategically positioned within the Android application architecture (`./AndroidApp/src/main/java/com/multisensor/recording/network/`) to provide comprehensive networking services:
+The Network component is strategically positioned within the Android application architecture (`./AndroidApp/src/main/java/com/multisensor/recording/network/`) to provide networking services:
 
 ```
 network/
@@ -45,7 +45,7 @@ network/
 
 The component leverages proven networking design patterns for mobile applications:
 
-- **Observer Pattern**: Event-driven networking enabling reactive communication and loose coupling with application components [Gamma1994]
+- **Observer Pattern**: Event-driven networking enabling reactive communication and loose coupling with application components
 - **Strategy Pattern**: Configurable networking strategies supporting diverse network conditions and quality requirements
 - **Command Pattern**: Network operation encapsulation enabling reliable execution and error recovery procedures
 - **State Pattern**: Connection state management with clear state transitions and validation procedures
@@ -54,7 +54,7 @@ The component leverages proven networking design patterns for mobile application
 
 ### Core Networking Capabilities
 
-The Network component provides comprehensive networking functionality designed for research-grade mobile applications:
+The Network component provides networking functionality designed for research-grade mobile applications:
 
 - **Core functionality specific to mobile networking** - Advanced socket management implementing robust connection handling, automatic reconnection, and adaptive quality management for reliable mobile communication
 - **Integration with other system components** - Seamless integration with sensor managers, user interface, and data storage through well-defined networking interfaces and event-driven communication
@@ -74,7 +74,7 @@ The Network component provides comprehensive networking functionality designed f
 
 The Network implementation follows established mobile networking standards and best practices:
 
-- **Battery Optimization**: Efficient networking protocols minimizing battery consumption through intelligent connection management and data compression [Zhang2012]
+- **Battery Optimization**: Efficient networking protocols minimizing battery consumption through intelligent connection management and data compression
 - **Bandwidth Management**: Adaptive bandwidth utilization with quality-of-service management supporting diverse network conditions
 - **Security**: Secure communication protocols with optional encryption and authentication supporting sensitive research data protection
 - **Performance**: Optimized networking algorithms with minimal latency and maximum throughput for real-time data transmission
@@ -83,7 +83,7 @@ The Network implementation follows established mobile networking standards and b
 
 The implementation addresses specific requirements of scientific research applications:
 
-- **Data Integrity**: Comprehensive data integrity verification with checksums and acknowledgment mechanisms ensuring complete data transmission [Saltzer1984]
+- **Data Integrity**: Comprehensive data integrity verification with checksums and acknowledgment mechanisms ensuring complete data transmission
 - **Temporal Precision**: Network protocol optimization for microsecond-level timestamp preservation supporting research-grade temporal synchronization
 - **Reliability**: High-availability networking with fault tolerance supporting continuous research operations without data loss
 - **Auditability**: Complete networking operation logging supporting research documentation and troubleshooting procedures
@@ -107,20 +107,4 @@ The Network component integrates seamlessly with the overall multi-sensor record
 4. **Quality Management**: Continuous connection quality assessment with automatic optimization and error recovery
 5. **Session Completion**: Coordinated session termination with data integrity verification and connection cleanup
 
-## References
-
-[Coulouris2011] Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). Distributed Systems: Concepts and Design. Addison-Wesley.
-
-[Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional.
-
-[Kurose2016] Kurose, J. F., & Ross, K. W. (2016). Computer Networking: A Top-Down Approach. Pearson.
-
-[Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565.
-
-[Saltzer1984] Saltzer, J. H., Reed, D. P., & Clark, D. D. (1984). End-to-end arguments in system design. ACM Transactions on Computer Systems, 2(4), 277-288.
-
-[Stevens2013] Stevens, W. R., Fenner, B., & Rudoff, A. M. (2013). UNIX Network Programming, Volume 1: The Sockets Networking API. Addison-Wesley Professional.
-
-[Tanenbaum2016] Tanenbaum, A. S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. Prentice-Hall.
-
-[Zhang2012] Zhang, L., et al. (2012). Accurate online power estimation and automatic battery behavior based power model generation for smartphones. In Proceedings of the eighth IEEE/ACM/IFIP international conference on Hardware/software codesign and system synthesis (pp. 105-114).
+## References Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). Distributed Systems: Concepts and Design. Addison-Wesley. Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional. Kurose, J. F., & Ross, K. W. (2016). Computer Networking: A Top-Down Approach. Pearson. Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565. Saltzer, J. H., Reed, D. P., & Clark, D. D. (1984). End-to-end arguments in system design. ACM Transactions on Computer Systems, 2(4), 277-288. Stevens, W. R., Fenner, B., & Rudoff, A. M. (2013). UNIX Network Programming, Volume 1: The Sockets Networking API. Addison-Wesley Professional. Tanenbaum, A. S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. Prentice-Hall. Zhang, L., et al. (2012). Accurate online power estimation and automatic battery behavior based power model generation for smartphones. In Proceedings of the eighth IEEE/ACM/IFIP international conference on Hardware/software codesign and system synthesis (pp. 105-114).

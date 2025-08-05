@@ -2,20 +2,20 @@
 
 ## Overview
 
-The Network module implements sophisticated socket communication and protocol handling for the multi-sensor recording system, providing the distributed communication infrastructure that enables coordinated data collection across heterogeneous sensor platforms [Tanenbaum2016, Coulouris2011]. This module realizes the JSON socket protocol architecture that forms the backbone of the PC master-controller system.
+The Network module implements socket communication and protocol handling for the multi-sensor recording system, providing the distributed communication infrastructure that enables coordinated data collection across heterogeneous sensor platforms. This module realizes the JSON socket protocol architecture that forms the backbone of the PC master-controller system.
 
-The implementation follows established networking principles and distributed systems design patterns [Stevens2013, Fielding2000] to ensure reliable, low-latency communication suitable for real-time scientific data collection applications requiring microsecond-level temporal precision [Mills1991, IEEE1588-2008].
+The implementation follows established networking principles and distributed systems design patterns to ensure reliable, low-latency communication suitable for real-time scientific data collection applications.
 
 ## Architecture
 
-The network architecture implements a hybrid client-server model with the PC controller serving as the central coordination hub while maintaining support for peer-to-peer communication between devices when needed. The design follows the principle of graceful degradation, ensuring continued operation even when individual network connections experience intermittent failures [Saltzer1984].
+The network architecture implements a hybrid client-server model with the PC controller serving as the central coordination hub while maintaining support for peer-to-peer communication between devices when needed. The design follows the principle of graceful degradation, ensuring continued operation even when individual network connections experience intermittent failures.
 
 ### Communication Protocol Stack
 
 The module implements a layered protocol architecture:
 
-- **Transport Layer**: TCP socket connections providing reliable, ordered delivery [Stevens2013]
-- **Message Format Layer**: JSON-based protocol for structured data exchange [Crockford2006]
+- **Transport Layer**: TCP socket connections providing reliable, ordered delivery
+- **Message Format Layer**: JSON-based protocol for structured data exchange
 - **Session Layer**: Connection management and session lifecycle coordination
 - **Application Layer**: Device-specific command and data protocols
 
@@ -95,20 +95,6 @@ The network module enables reliable communication between the PC master-controll
 
 ## References
 
-[Avizienis2004] Avizienis, A., Laprie, J. C., Randell, B., & Landwehr, C. (2004). Basic concepts and taxonomy of dependable and secure computing. IEEE Transactions on Dependable and Secure Computing, 1(1), 11-33.
-
-[Coulouris2011] Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). Distributed Systems: Concepts and Design. Addison-Wesley.
-
 [Crockford2006] Crockford, D. (2006). The application/json Media Type for JavaScript Object Notation (JSON). RFC 4627.
 
-[Fielding2000] Fielding, R. T. (2000). Architectural styles and the design of network-based software architectures. University of California, Irvine.
-
-[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
-
-[Mills1991] Mills, D. L. (1991). Internet time synchronization: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
-
-[Saltzer1984] Saltzer, J. H., Reed, D. P., & Clark, D. D. (1984). End-to-end arguments in system design. ACM Transactions on Computer Systems, 2(4), 277-288.
-
 [Stevens2013] Stevens, W. R., Fenner, B., & Rudoff, A. M. (2013). UNIX Network Programming, Volume 1: The Sockets Networking API. Addison-Wesley Professional.
-
-[Tanenbaum2016] Tanenbaum, A. S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. Prentice-Hall.

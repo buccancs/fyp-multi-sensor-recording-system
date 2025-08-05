@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Managers component implements the core management layer for the Android mobile application within the multi-sensor recording system, providing sophisticated resource management and coordination services based on established software architecture patterns [Fowler2002, Evans2003]. This component encapsulates the complex logic required to manage sensor resources, device connections, and data flow coordination while maintaining system reliability and performance.
+The Managers component implements the core management layer for the Android mobile application within the multi-sensor recording system, providing resource management and coordination services based on established software architecture patterns [Fowler2002, Evans2003]. This component encapsulates the complex logic required to manage sensor resources, device connections, and data flow coordination while maintaining system reliability and performance.
 
-The implementation follows the Manager pattern and Service Layer architectural patterns [Fowler2002], providing centralized management services that abstract the complexity of multi-sensor coordination while ensuring proper resource lifecycle management and error handling essential for research-grade applications.
+The implementation follows the Manager pattern and Service Layer architectural patterns, providing centralized management services that abstract the complexity of multi-sensor coordination while ensuring proper resource lifecycle management and error handling essential for research-grade applications.
 
 ## Architecture
 
@@ -20,7 +20,7 @@ The Managers component implements a hierarchical management architecture with sp
 
 This component provides essential management functionality within the distributed multi-sensor recording system architecture, serving as the coordination layer that enables:
 
-- **Resource Management**: Systematic management of hardware resources including cameras, sensors, and network connections following established resource management patterns [Stevens2013]
+- **Resource Management**: Systematic management of hardware resources including cameras, sensors, and network connections following resource management patterns
 - **Service Coordination**: Centralized coordination of application services with dependency management and lifecycle control
 - **State Management**: Comprehensive application state management with consistent state transitions and persistence
 - **Quality Assurance**: Continuous monitoring and validation of system components ensuring research-grade reliability and data quality
@@ -46,7 +46,7 @@ managers/
 
 The component leverages proven design patterns for robust resource management:
 
-- **Singleton Pattern**: Ensuring single instances of critical managers with global access and state consistency [Gamma1994]
+- **Singleton Pattern**: Ensuring single instances of critical managers with global access and state consistency
 - **Observer Pattern**: Event notification system enabling reactive management and loose coupling between components
 - **Command Pattern**: Encapsulation of management operations enabling reliable execution and audit trails
 - **Factory Pattern**: Dynamic creation of managed resources with proper initialization and configuration
@@ -55,9 +55,9 @@ The component leverages proven design patterns for robust resource management:
 
 ### Core Management Capabilities
 
-The Managers component provides comprehensive management functionality designed for scientific research applications:
+The Managers component provides management functionality designed for scientific research applications:
 
-- **Core functionality specific to resource management** - Centralized resource lifecycle management implementing sophisticated allocation, monitoring, and cleanup procedures for reliable operation
+- **Core functionality specific to resource management** - Centralized resource lifecycle management implementing allocation, monitoring, and cleanup procedures for reliable operation
 - **Integration with other system components** - Seamless coordination with sensors, user interface, and communication layers through well-defined management interfaces and event systems
 - **Support for the PC master-controller architecture** - Implementation of distributed management patterns enabling coordinated operation with PC controller while maintaining autonomous operation capabilities
 - **JSON socket protocol communication support** - Protocol management and coordination ensuring reliable communication and data exchange with master controller and peer devices
@@ -75,7 +75,7 @@ The Managers component provides comprehensive management functionality designed 
 
 The Managers implementation follows established software engineering best practices for critical system components:
 
-- **Defensive Programming**: Comprehensive input validation and error checking with graceful degradation and detailed logging [McConnell2004]
+- **Defensive Programming**: Comprehensive input validation and error checking with graceful degradation and detailed logging
 - **Resource Management**: Proper resource acquisition and release with RAII patterns preventing memory leaks and resource exhaustion
 - **Thread Safety**: Concurrent access management with appropriate synchronization mechanisms ensuring data consistency
 - **Performance Optimization**: Efficient resource utilization with lazy initialization and optimized algorithms for mobile constraints
@@ -84,7 +84,7 @@ The Managers implementation follows established software engineering best practi
 
 The implementation addresses specific requirements of scientific research applications:
 
-- **Reliability**: High-availability design with fault tolerance and automatic recovery supporting continuous research operations [Avizienis2004]
+- **Reliability**: High-availability design with fault tolerance and automatic recovery supporting continuous research operations
 - **Auditability**: Comprehensive logging and state tracking supporting research documentation and validation requirements
 - **Configurability**: Flexible configuration management supporting diverse research protocols and experimental designs
 - **Scalability**: Efficient resource management supporting extended recording sessions and multiple simultaneous devices
@@ -108,16 +108,4 @@ The Managers component integrates seamlessly with the overall multi-sensor recor
 4. **Coordination**: Multi-resource coordination with temporal synchronization and state consistency
 5. **Cleanup**: Systematic resource release with integrity verification and audit trail completion
 
-## References
-
-[Avizienis2004] Avizienis, A., Laprie, J. C., Randell, B., & Landwehr, C. (2004). Basic concepts and taxonomy of dependable and secure computing. IEEE Transactions on Dependable and Secure Computing, 1(1), 11-33.
-
-[Evans2003] Evans, E. (2003). Domain-Driven Design: Tackling Complexity in the Heart of Software. Addison-Wesley Professional.
-
-[Fowler2002] Fowler, M. (2002). Patterns of Enterprise Application Architecture. Addison-Wesley Professional.
-
-[Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional.
-
-[McConnell2004] McConnell, S. (2004). Code Complete: A Practical Handbook of Software Construction. Microsoft Press.
-
-[Stevens2013] Stevens, W. R., Fenner, B., & Rudoff, A. M. (2013). UNIX Network Programming, Volume 1: The Sockets Networking API. Addison-Wesley Professional.
+## References Avizienis, A., Laprie, J. C., Randell, B., & Landwehr, C. (2004). Basic concepts and taxonomy of dependable and secure computing. IEEE Transactions on Dependable and Secure Computing, 1(1), 11-33. Evans, E. (2003). Domain-Driven Design: Tackling Complexity in the Heart of Software. Addison-Wesley Professional. Fowler, M. (2002). Patterns of Enterprise Application Architecture. Addison-Wesley Professional. Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional. McConnell, S. (2004). Code Complete: A Practical Handbook of Software Construction. Microsoft Press. Stevens, W. R., Fenner, B., & Rudoff, A. M. (2013). UNIX Network Programming, Volume 1: The Sockets Networking API. Addison-Wesley Professional.

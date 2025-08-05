@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Calibration Data Repository contains comprehensive calibration test datasets and validation sessions for the multi-sensor recording system, providing essential reference data for system validation, algorithm development, and quality assurance procedures [Taylor1997, BIPM2019]. This repository supports research reproducibility and system validation by maintaining documented calibration sessions with known parameters and expected outcomes.
+The Calibration Data Repository contains calibration test datasets and validation sessions for the multi-sensor recording system, providing essential reference data for system validation, algorithm development, and quality assurance procedures. This repository supports research reproducibility and system validation by maintaining documented calibration sessions with known parameters and expected outcomes.
 
-The calibration data follows established metrological standards and best practices for scientific data management [Wilson2014, Sandve2013], ensuring that system validation procedures can be independently verified and calibration algorithms can be systematically evaluated across diverse operational scenarios.
+The calibration data follows established metrological standards and best practices for scientific data management, ensuring that system validation procedures can be independently verified and calibration algorithms can be systematically evaluated.
 
 ## Repository Structure
 
@@ -15,7 +15,7 @@ The repository organizes calibration data into systematic categories supporting 
 - **multi_device_test/** - Multi-device coordination calibration datasets validating synchronized operation across multiple sensor nodes with temporal precision verification
 - **test_calibration_session/** - Standard calibration session datasets providing reference implementations of complete calibration workflows with quality assessment
 - **test_session/** - General test session recordings containing diverse operational scenarios for algorithm robustness testing and edge case validation
-  - **device_1/** - Primary device calibration data with comprehensive sensor parameter validation
+  - **device_1/** - Primary device calibration data with sensor parameter validation
   - **device_2/** - Secondary device calibration data enabling cross-device comparison and consistency verification
 - **integration_test/** - Integration testing calibration datasets validating inter-component coordination and system-wide calibration procedures
 - **another_session/** - Additional calibration session datasets providing extended validation coverage and algorithmic diversity testing
@@ -27,11 +27,11 @@ The repository organizes calibration data into systematic categories supporting 
 
 ### Standard Session Contents
 
-Each calibration test session directory maintains a consistent structure supporting comprehensive validation and analysis:
+Each calibration test session directory maintains a consistent structure supporting validation and analysis:
 
-- **Device-specific calibration data** - Individual sensor calibration parameters with uncertainty quantification and traceability documentation [BIPM2019]
+- **Device-specific calibration data** - Individual sensor calibration parameters with uncertainty quantification and traceability documentation
 - **Sensor readings and measurements** - Raw sensor data collected during calibration procedures with timestamp preservation and quality indicators
-- **Calibration parameters and results** - Computed calibration coefficients with statistical validation and confidence interval estimation [Taylor1997]
+- **Calibration parameters and results** - Computed calibration coefficients with statistical validation and confidence interval estimation
 - **Session metadata and logs** - Comprehensive session documentation including environmental conditions, hardware configuration, and procedural documentation
 - **Validation data for accuracy assessment** - Reference measurements and ground truth data enabling independent verification of calibration quality and system performance
 
@@ -50,7 +50,7 @@ All calibration datasets adhere to research-grade data quality standards:
 
 The calibration data repository serves multiple critical functions in system validation and development:
 
-- **System calibration validation** - Verification of calibration algorithm correctness and accuracy through comparison with reference datasets and known ground truth [Zhang2000]
+- **System calibration validation** - Verification of calibration algorithm correctness and accuracy through comparison with reference datasets and known ground truth
 - **Algorithm development and testing** - Systematic evaluation of calibration algorithm modifications with consistent test datasets enabling objective performance comparison
 - **Performance benchmarking** - Quantitative assessment of system calibration performance with statistical metrics and comparative analysis across different operational conditions
 - **Accuracy assessment** - Comprehensive validation of measurement accuracy through comparison with reference standards and cross-validation procedures
@@ -68,7 +68,7 @@ The calibration data repository serves multiple critical functions in system val
 
 ### Documentation and Traceability
 
-The repository implements comprehensive data management following research data management best practices:
+The repository implements data management following research data management best practices:
 
 - **Version Control**: Complete versioning of calibration datasets with change documentation and backward compatibility maintenance
 - **Metadata Documentation**: Systematic metadata recording including calibration procedures, system configuration, and environmental conditions
@@ -79,7 +79,7 @@ The repository implements comprehensive data management following research data 
 
 The calibration data management follows established scientific data standards:
 
-- **FAIR Principles**: Data organization following Findable, Accessible, Interoperable, and Reusable principles supporting open science practices [Wilkinson2016]
+- **FAIR Principles**: Data organization following Findable, Accessible, Interoperable, and Reusable principles supporting open science practices
 - **Reproducibility Support**: Complete documentation enabling independent reproduction of calibration procedures and validation of results
 - **Long-term Preservation**: Data format and organization designed for long-term accessibility and research value preservation
 - **Ethical Compliance**: Appropriate data management ensuring compliance with research ethics and data protection requirements
@@ -105,14 +105,13 @@ Researchers and developers can utilize the calibration data repository for:
 
 ## References
 
-[BIPM2019] Bureau International des Poids et Mesures. (2019). The International System of Units (SI). 9th edition.
 
-[Sandve2013] Sandve, G. K., Nekrutenko, A., Taylor, J., & Hovig, E. (2013). Ten simple rules for reproducible computational research. PLoS Computational Biology, 9(10), e1003285.
 
-[Taylor1997] Taylor, B. N., & Kuyatt, C. E. (1997). Guidelines for evaluating and expressing the uncertainty of NIST measurement results. NIST Technical Note 1297.
 
-[Wilkinson2016] Wilkinson, M. D., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. Scientific Data, 3, 160018.
 
-[Wilson2014] Wilson, G., et al. (2014). Best practices for scientific computing. PLoS Biology, 12(1), e1001745.
 
-[Zhang2000] Zhang, Z. (2000). A flexible new technique for camera calibration. IEEE Transactions on Pattern Analysis and Machine Intelligence, 22(11), 1330-1334.
+
+
+
+
+
