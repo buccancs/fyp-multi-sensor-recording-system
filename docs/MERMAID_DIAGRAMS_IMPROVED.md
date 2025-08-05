@@ -10,7 +10,7 @@ flowchart TD
     %% Main documentation structure
     START([Multi-Sensor Recording System<br/>Documentation Overview]) --> ARCH[System Architecture]
     START --> TECH[Technical Implementation]
-    START --> DEPLOY[Deployment & Operations]
+    START --> DEPLOY[Deployment and Operations]
     
     %% Architecture Documentation
     ARCH --> A1[Hardware Setup Architecture]
@@ -81,12 +81,12 @@ graph TB
             end
             
             subgraph CAMERAS ["USB Camera Array"]
-                BRIO_1["Logitech Brio 4K<br/>• Primary USB Webcam<br/>• 4K @ 30fps<br/>• Auto-focus & HDR"]
+                BRIO_1["Logitech Brio 4K<br/>• Primary USB Webcam<br/>• 4K @ 30fps<br/>• Auto-focus and HDR"]
                 BRIO_2["Logitech Brio 4K<br/>• Secondary USB Webcam<br/>• 4K @ 30fps<br/>• Wide Field of View"]
             end
             
             subgraph STORAGE_SYS ["Storage System"]
-                STORAGE["High-Performance Storage<br/>• NVMe SSD 1TB+<br/>• Multi-stream Recording<br/>• Backup & Redundancy"]
+                STORAGE["High-Performance Storage<br/>• NVMe SSD 1TB+<br/>• Multi-stream Recording<br/>• Backup and Redundancy"]
             end
             
             PC ---|USB 3.0<br/>High Bandwidth| BRIO_1
@@ -156,10 +156,10 @@ graph TB
     subgraph ANDROID ["Android Application Clean Architecture"]
         direction TB
         
-        subgraph PRESENTATION ["Presentation Layer - UI & User Interaction"]
+        subgraph PRESENTATION ["Presentation Layer - UI and User Interaction"]
             direction TB
             
-            subgraph ACTIVITIES ["Activities & Fragments"]
+            subgraph ACTIVITIES ["Activities and Fragments"]
                 MA["MainActivity<br/>• Main UI Orchestrator<br/>• Fragment Navigation<br/>• Lifecycle Management"]
                 RF["RecordingFragment<br/>• Recording Controls UI<br/>• Real-time Status Display<br/>• User Interaction Handler"]
                 DF["DevicesFragment<br/>• Device Management UI<br/>• Connection Status Display<br/>• Pairing Interface"]
@@ -167,13 +167,13 @@ graph TB
                 FF["FilesFragment<br/>• File Management UI<br/>• Browse Recordings<br/>• Export Controls"]
             end
             
-            subgraph VIEWMODELS [" ViewModels & State Management"]
+            subgraph VIEWMODELS [" ViewModels and State Management"]
                 MVM[" MainViewModel<br/>• UI State Coordination<br/>• LiveData Management<br/>• Event Handling"]
                 RSM["RecordingStateManager<br/>• Recording State Logic<br/>• Status Broadcasting<br/>• Error Handling"]
                 DSM["DeviceStateManager<br/>• Device Connection States<br/>• Health Monitoring<br/>• Status Updates"]
             end
             
-            subgraph UI_UTILS [" UI Utilities & Navigation"]
+            subgraph UI_UTILS [" UI Utilities and Navigation"]
                 UC["UIController<br/>• Component Validation<br/>• Dynamic UI Updates<br/>• Theme Management"]
                 NU[" NavigationUtils<br/>• Fragment Navigation<br/>• Deep Linking<br/>• Back Stack Management"]
                 UU[" UIUtils<br/>• Helper Functions<br/>• UI Animations<br/>• Resource Management"]
@@ -181,7 +181,7 @@ graph TB
             end
         end
         
-        subgraph DOMAIN ["Domain Layer - Business Logic & Use Cases"]
+        subgraph DOMAIN ["Domain Layer - Business Logic and Use Cases"]
             direction TB
             
             subgraph RECORDING ["Recording Components"]
@@ -203,7 +203,7 @@ graph TB
             end
         end
         
-        subgraph DATA ["Data Layer - Storage & Device Integration"]
+        subgraph DATA ["Data Layer - Storage and Device Integration"]
             direction TB
             
             subgraph DEVICE_MGT ["Device Management"]
@@ -212,7 +212,7 @@ graph TB
                 UM["USBManager<br/>• USB-C OTG Management<br/>• Thermal Camera Control<br/>• Device Detection"]
             end
             
-            subgraph STORAGE ["Storage & Persistence"]
+            subgraph STORAGE ["Storage and Persistence"]
                 FS["FileSystemManager<br/>• Local Storage Management<br/>• Session Organization<br/>• File Hierarchy"]
                 MS["MetadataSerializer<br/>• JSON Serialization<br/>• Session Persistence<br/>• Data Integrity"]
                 CS["ConfigurationStore<br/>• Settings Persistence<br/>• Shared Preferences<br/>• Configuration Management"]
@@ -296,7 +296,7 @@ graph TB
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#000000', 'primaryBorderColor': '#1B5E75', 'lineColor': '#333333', 'secondaryColor': '#A23B72', 'tertiaryColor': '#6C757D', 'background': '#FFFFFF', 'mainBkg': '#F8F9FA', 'secondBkg': '#E9ECEF', 'tertiaryBkg': '#F8F9FA'}}}%%
 graph TB
-    subgraph PC_APP ["PC Application Architecture - Python & PyQt5"]
+    subgraph PC_APP ["PC Application Architecture - Python and PyQt5"]
         direction TB
         
         subgraph UI_LAYER ["User Interface Layer - PyQt5 Framework"]

@@ -323,7 +323,7 @@ class EnhancedMainWindow(QMainWindow):
         return panel
 
     def create_stimulus_panel(self):
-        panel = ModernGroupBox('Stimulus Presentation & Preview')
+        panel = ModernGroupBox('Stimulus Presentation and Preview')
         layout = QVBoxLayout(panel)
         layout.setSpacing(12)
         preview_group = ModernGroupBox('Video Preview')
