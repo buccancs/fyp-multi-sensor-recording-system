@@ -1011,7 +1011,7 @@ Reliability requirements ensure that the system can operate dependably in resear
 
 ---
 
-## 3.6 System Analysis (Architecture & Data Flow)
+## 3.6 System Analysis (Architecture and Data Flow)
 
 ### 3.6.1 Data Flow Analysis
 
