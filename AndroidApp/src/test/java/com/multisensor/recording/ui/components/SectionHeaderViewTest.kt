@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Typeface
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 
 @RunWith(AndroidJUnit4::class)
 class SectionHeaderViewTest {
@@ -72,8 +72,10 @@ class SectionHeaderViewTest {
 
         for (style in styles) {
             sectionHeaderView.setHeader("Test Header", style)
-            assertTrue("Header should be bold for style $style",
-                sectionHeaderView.typeface.isBold || sectionHeaderView.typeface.style == Typeface.BOLD)
+            assertTrue(
+                "Header should be bold for style $style",
+                sectionHeaderView.typeface.isBold || sectionHeaderView.typeface.style == Typeface.BOLD
+            )
         }
     }
 
@@ -173,7 +175,9 @@ class SectionHeaderViewTest {
 
     @Test
     fun testComponentInheritance() {
-        assertTrue("SectionHeaderView should extend AppCompatTextView",
-            sectionHeaderView is androidx.appcompat.widget.AppCompatTextView)
+        assertTrue(
+            "SectionHeaderView should extend AppCompatTextView",
+            sectionHeaderView is androidx.appcompat.widget.AppCompatTextView
+        )
     }
 }

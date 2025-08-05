@@ -27,12 +27,13 @@ Requirements validated:
 5.5.3 Usability and Effectiveness Evaluation
 """
 
-import os
-import sys
-import subprocess
 import json
-from pathlib import Path
+import os
+import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
+
 
 class Chapter5Validator:
     def __init__(self):

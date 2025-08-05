@@ -21,8 +21,8 @@ object PersistenceModule {
             SessionStateDatabase::class.java,
             "session_state_database"
         )
-        .fallbackToDestructiveMigration()
-        .build()
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

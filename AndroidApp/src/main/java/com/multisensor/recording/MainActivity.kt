@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
@@ -15,18 +15,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
-import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.SystemHealthStatus
+import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -86,22 +81,27 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, SettingsActivity::class.java))
                     true
                 }
+
                 R.id.nav_network_config -> {
                     showToast("Network Config - Coming Soon")
                     true
                 }
+
                 R.id.nav_shimmer_config -> {
                     showToast("Shimmer Config - Coming Soon")
                     true
                 }
+
                 R.id.nav_diagnostics -> {
                     showToast("Diagnostics - Coming Soon")
                     true
                 }
+
                 R.id.nav_about -> {
                     showToast("About - Coming Soon")
                     true
                 }
+
                 else -> {
                     val navController = findNavController(R.id.nav_host_fragment)
                     navController.navigate(menuItem.itemId)

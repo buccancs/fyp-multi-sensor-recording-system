@@ -12,13 +12,12 @@ import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
@@ -101,15 +100,19 @@ class MainViewModelEnhanced @Inject constructor(
                 }
 
                 val hasErrors = !cameraResult.success ||
-                               (!thermalResult.success && thermalResult.required) ||
-                               (!shimmerResult.success && shimmerResult.required)
+                        (!thermalResult.success && thermalResult.required) ||
+                        (!shimmerResult.success && shimmerResult.required)
 
                 forceUpdateUiState { currentState ->
                     currentState.copy(
                         statusText = statusMessage,
                         isInitialized = !hasErrors,
                         isLoadingPermissions = false,
-                        errorMessage = if (hasErrors) getInitializationErrorMessage(cameraResult, thermalResult, shimmerResult) else null,
+                        errorMessage = if (hasErrors) getInitializationErrorMessage(
+                            cameraResult,
+                            thermalResult,
+                            shimmerResult
+                        ) else null,
                         showErrorDialog = hasErrors
                     )
                 }
@@ -178,7 +181,8 @@ class MainViewModelEnhanced @Inject constructor(
         try {
             val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
             val batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-            val isCharging = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_STATUS) == BatteryManager.BATTERY_STATUS_CHARGING
+            val isCharging =
+                batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_STATUS) == BatteryManager.BATTERY_STATUS_CHARGING
 
             val batteryStatus = when {
                 isCharging -> BatteryStatus.CHARGING
@@ -365,8 +369,10 @@ class MainViewModelEnhanced @Inject constructor(
             state.isRecording -> ValidationResult(false, "Recording already in progress")
             state.batteryLevel < 15 && state.batteryStatus != BatteryStatus.CHARGING ->
                 ValidationResult(false, "Battery level too low (${state.batteryLevel}%). Please charge device.")
+
             !state.isPcConnected && !state.showManualControls ->
                 ValidationResult(false, "PC connection required for recording")
+
             else -> ValidationResult(true, "Ready to record")
         }
     }

@@ -1,30 +1,22 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-import com.multisensor.recording.util.NetworkUtils
-
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.os.IBinder
 import android.view.TextureView
 import androidx.core.content.ContextCompat
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
-import javax.inject.Inject
-import javax.inject.Singleton
-import android.content.ComponentName
-import android.content.ServiceConnection
-import android.os.IBinder
+import com.multisensor.recording.util.NetworkUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import kotlinx.coroutines.delay
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class RecordingController @Inject constructor() {
@@ -109,7 +101,10 @@ class RecordingController @Inject constructor() {
             startPerformanceMonitoring(context)
         }
 
-        android.util.Log.d("RecordingController", "[DEBUG_LOG] State persistence initialized with enhanced recording state and analytics")
+        android.util.Log.d(
+            "RecordingController",
+            "[DEBUG_LOG] State persistence initialized with enhanced recording state and analytics"
+        )
     }
 
     private fun saveState() {
@@ -146,7 +141,10 @@ class RecordingController @Inject constructor() {
 
             android.util.Log.d("RecordingController", "[DEBUG_LOG] State restored from persistent storage")
             android.util.Log.d("RecordingController", "[DEBUG_LOG] - Initialized: $isRecordingSystemInitialized")
-            android.util.Log.d("RecordingController", "[DEBUG_LOG] - Total recording time: ${formatDuration(totalRecordingTime)}")
+            android.util.Log.d(
+                "RecordingController",
+                "[DEBUG_LOG] - Total recording time: ${formatDuration(totalRecordingTime)}"
+            )
             android.util.Log.d("RecordingController", "[DEBUG_LOG] - Quality setting: $currentQuality")
         }
     }
@@ -215,7 +213,10 @@ class RecordingController @Inject constructor() {
                 currentRecordingState = recordingState
 
                 if (recordingState.isRecording && recordingState.currentSessionId != null) {
-                    android.util.Log.w("RecordingController", "[DEBUG_LOG] Found interrupted recording session: ${recordingState.currentSessionId}")
+                    android.util.Log.w(
+                        "RecordingController",
+                        "[DEBUG_LOG] Found interrupted recording session: ${recordingState.currentSessionId}"
+                    )
 
                     currentSession = RecordingSession(
                         sessionId = "recovered_${recordingState.currentSessionId}",
@@ -315,7 +316,10 @@ class RecordingController @Inject constructor() {
             )
 
             if (!bindToRecordingService(context)) {
-                android.util.Log.w("RecordingController", "[DEBUG_LOG] Failed to bind to recording service, starting anyway")
+                android.util.Log.w(
+                    "RecordingController",
+                    "[DEBUG_LOG] Failed to bind to recording service, starting anyway"
+                )
             }
 
             val intent = Intent(context, RecordingService::class.java).apply {
@@ -333,7 +337,10 @@ class RecordingController @Inject constructor() {
             callback?.onRecordingStarted()
             callback?.updateStatusText("Recording in progress - Session: ${currentSession?.sessionId ?: "Unknown"} (${currentQuality.displayName})")
 
-            android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording started successfully - Session: ${currentSession?.sessionId}")
+            android.util.Log.d(
+                "RecordingController",
+                "[DEBUG_LOG] Recording started successfully - Session: ${currentSession?.sessionId}"
+            )
         } catch (e: Exception) {
             android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to start recording: ${e.message}")
 
@@ -376,7 +383,10 @@ class RecordingController @Inject constructor() {
                     sessionHistory.removeAt(0)
                 }
 
-                android.util.Log.d("RecordingController", "[DEBUG_LOG] Session completed: ${completedSession.sessionId}, Duration: ${duration}ms")
+                android.util.Log.d(
+                    "RecordingController",
+                    "[DEBUG_LOG] Session completed: ${completedSession.sessionId}, Duration: ${duration}ms"
+                )
             }
 
             val intent = Intent(context, RecordingService::class.java).apply {
@@ -431,7 +441,7 @@ class RecordingController @Inject constructor() {
             val currentSessionInfo = currentSession?.let { session ->
                 val duration = System.currentTimeMillis() - session.startTime
                 val timeFormat = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
-                "${session.sessionId} (${timeFormat.format(java.util.Date(session.startTime))}, ${duration/1000}s)"
+                "${session.sessionId} (${timeFormat.format(java.util.Date(session.startTime))}, ${duration / 1000}s)"
             } ?: "None"
             append("- Current Session: $currentSessionInfo\n")
 
@@ -442,14 +452,21 @@ class RecordingController @Inject constructor() {
             val lastSessionInfo = lastSession?.let { session ->
                 val status = if (session.isComplete && !session.hasErrors) "✓" else "✗"
                 val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
-                "$status ${session.sessionId} (${timeFormat.format(java.util.Date(session.startTime))}, ${formatDuration(session.duration)})"
+                "$status ${session.sessionId} (${timeFormat.format(java.util.Date(session.startTime))}, ${
+                    formatDuration(
+                        session.duration
+                    )
+                })"
             } ?: "None"
             append("- Last Session: $lastSessionInfo")
         }
     }
 
     fun resetState() {
-        android.util.Log.d("RecordingController", "[DEBUG_LOG] Starting recording controller state reset with resource cleanup")
+        android.util.Log.d(
+            "RecordingController",
+            "[DEBUG_LOG] Starting recording controller state reset with resource cleanup"
+        )
 
         try {
             cleanupSessionResources()
@@ -468,10 +485,16 @@ class RecordingController @Inject constructor() {
 
             saveState()
 
-            android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording controller state reset completed with resource cleanup")
+            android.util.Log.d(
+                "RecordingController",
+                "[DEBUG_LOG] Recording controller state reset completed with resource cleanup"
+            )
 
         } catch (e: Exception) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Error during recording controller reset: ${e.message}")
+            android.util.Log.e(
+                "RecordingController",
+                "[DEBUG_LOG] Error during recording controller reset: ${e.message}"
+            )
         }
     }
 
@@ -553,7 +576,10 @@ class RecordingController @Inject constructor() {
         if (!connected) {
             callback?.onRecordingError("Lost connection to recording service")
             currentSession?.let {
-                android.util.Log.w("RecordingController", "[DEBUG_LOG] Active session detected during service disconnect - attempting recovery")
+                android.util.Log.w(
+                    "RecordingController",
+                    "[DEBUG_LOG] Active session detected during service disconnect - attempting recovery"
+                )
                 currentSessionMetadata["connection_lost"] = currentTime
             }
         } else {
@@ -663,7 +689,10 @@ class RecordingController @Inject constructor() {
         }
 
         if (validationResults.isNotEmpty()) {
-            android.util.Log.w("RecordingController", "[DEBUG_LOG] Validation failed: ${validationResults.joinToString(", ")}")
+            android.util.Log.w(
+                "RecordingController",
+                "[DEBUG_LOG] Validation failed: ${validationResults.joinToString(", ")}"
+            )
             callback?.onRecordingError("Validation failed: ${validationResults.joinToString(", ")}")
             return false
         }
@@ -768,31 +797,41 @@ class RecordingController @Inject constructor() {
                 when (changes) {
                     is MutableList<*> -> {
                         (changes as MutableList<Map<String, Any>>).apply {
-                            add(mapOf(
+                            add(
+                                mapOf(
+                                    "timestamp" to System.currentTimeMillis(),
+                                    "from" to previousQuality.name,
+                                    "to" to quality.name
+                                )
+                            )
+                        }
+                    }
+
+                    else -> {
+                        mutableListOf(
+                            mapOf(
                                 "timestamp" to System.currentTimeMillis(),
                                 "from" to previousQuality.name,
                                 "to" to quality.name
-                            ))
-                        }
-                    }
-                    else -> {
-                        mutableListOf(mapOf(
-                            "timestamp" to System.currentTimeMillis(),
-                            "from" to previousQuality.name,
-                            "to" to quality.name
-                        ))
+                            )
+                        )
                     }
                 }
-            } ?: mutableListOf(mapOf(
-                "timestamp" to System.currentTimeMillis(),
-                "from" to previousQuality.name,
-                "to" to quality.name
-            ))
+            } ?: mutableListOf(
+                mapOf(
+                    "timestamp" to System.currentTimeMillis(),
+                    "from" to previousQuality.name,
+                    "to" to quality.name
+                )
+            )
         }
 
         saveState()
         callback?.updateStatusText("Recording quality set to: ${quality.displayName}")
-        android.util.Log.d("RecordingController", "[DEBUG_LOG] Recording quality changed from $previousQuality to $quality")
+        android.util.Log.d(
+            "RecordingController",
+            "[DEBUG_LOG] Recording quality changed from $previousQuality to $quality"
+        )
     }
 
     fun getCurrentQuality(): RecordingQuality = currentQuality
@@ -828,17 +867,22 @@ class RecordingController @Inject constructor() {
         when (quality) {
             RecordingQuality.ULTRA_HIGH -> {
                 if (deviceClass != "HIGH_END" || currentMetrics.memoryUsageMB > 384) {
-                    android.util.Log.w("RecordingController", "[DEBUG_LOG] Insufficient resources for ULTRA_HIGH quality")
+                    android.util.Log.w(
+                        "RecordingController",
+                        "[DEBUG_LOG] Insufficient resources for ULTRA_HIGH quality"
+                    )
                     return false
                 }
             }
+
             RecordingQuality.HIGH -> {
                 if (deviceClass == "LOW_END" || currentMetrics.memoryUsageMB > 512) {
                     android.util.Log.w("RecordingController", "[DEBUG_LOG] Insufficient resources for HIGH quality")
                     return false
                 }
             }
-            else -> {  }
+
+            else -> {}
         }
 
         return true
@@ -906,7 +950,11 @@ class RecordingController @Inject constructor() {
         }
     }
 
-    private fun emergencyStopWithDataPreservation(context: Context, viewModel: MainViewModel, emergencyMetadata: Map<String, Any>) {
+    private fun emergencyStopWithDataPreservation(
+        context: Context,
+        viewModel: MainViewModel,
+        emergencyMetadata: Map<String, Any>
+    ) {
         try {
             preserveCurrentSessionState(emergencyMetadata)
 
@@ -918,10 +966,16 @@ class RecordingController @Inject constructor() {
 
             updateSessionStatusToEmergencyStopped()
 
-            android.util.Log.i("RecordingController", "[DEBUG_LOG] Emergency stop with data preservation completed successfully")
+            android.util.Log.i(
+                "RecordingController",
+                "[DEBUG_LOG] Emergency stop with data preservation completed successfully"
+            )
 
         } catch (e: Exception) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Error during emergency stop with data preservation: ${e.message}")
+            android.util.Log.e(
+                "RecordingController",
+                "[DEBUG_LOG] Error during emergency stop with data preservation: ${e.message}"
+            )
             stopRecording(context, viewModel)
         }
     }
@@ -930,7 +984,8 @@ class RecordingController @Inject constructor() {
         return mapOf(
             "emergency_stop_timestamp" to System.currentTimeMillis(),
             "emergency_stop_reason" to "User initiated emergency stop",
-            "session_duration_ms" to (System.currentTimeMillis() - (currentSessionStartTime ?: System.currentTimeMillis())),
+            "session_duration_ms" to (System.currentTimeMillis() - (currentSessionStartTime
+                ?: System.currentTimeMillis())),
             "battery_level" to getBatteryLevel(),
             "available_storage_mb" to -1,
             "memory_usage_mb" to getMemoryUsage(),
@@ -942,7 +997,10 @@ class RecordingController @Inject constructor() {
         try {
             currentSessionMetadata.putAll(emergencyMetadata)
 
-            android.util.Log.d("RecordingController", "[DEBUG_LOG] Current session state preserved with emergency metadata")
+            android.util.Log.d(
+                "RecordingController",
+                "[DEBUG_LOG] Current session state preserved with emergency metadata"
+            )
 
         } catch (e: Exception) {
             android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to preserve session state: ${e.message}")
@@ -978,10 +1036,16 @@ class RecordingController @Inject constructor() {
             }
 
             recoveryFile.writeText(jsonData)
-            android.util.Log.i("RecordingController", "[DEBUG_LOG] Emergency recovery file created: ${recoveryFile.absolutePath}")
+            android.util.Log.i(
+                "RecordingController",
+                "[DEBUG_LOG] Emergency recovery file created: ${recoveryFile.absolutePath}"
+            )
 
         } catch (e: Exception) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to create emergency recovery file: ${e.message}")
+            android.util.Log.e(
+                "RecordingController",
+                "[DEBUG_LOG] Failed to create emergency recovery file: ${e.message}"
+            )
         }
     }
 
@@ -992,7 +1056,10 @@ class RecordingController @Inject constructor() {
             stopRecording(context, viewModel)
 
         } catch (e: Exception) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to gracefully stop recording components: ${e.message}")
+            android.util.Log.e(
+                "RecordingController",
+                "[DEBUG_LOG] Failed to gracefully stop recording components: ${e.message}"
+            )
         }
     }
 
@@ -1086,7 +1153,10 @@ class RecordingController @Inject constructor() {
 
                     delay(5000)
                 } catch (e: Exception) {
-                    android.util.Log.e("RecordingController", "[DEBUG_LOG] Error in performance monitoring: ${e.message}")
+                    android.util.Log.e(
+                        "RecordingController",
+                        "[DEBUG_LOG] Error in performance monitoring: ${e.message}"
+                    )
                     delay(10000)
                 }
             }
@@ -1190,6 +1260,7 @@ class RecordingController @Inject constructor() {
             trendAnalysis.recommendedQualityAdjustment == RecordingAnalytics.QualityAdjustmentRecommendation.EMERGENCY_REDUCE -> {
                 RecordingQuality.LOW
             }
+
             trendAnalysis.recommendedQualityAdjustment == RecordingAnalytics.QualityAdjustmentRecommendation.DECREASE -> {
                 when (currentQuality) {
                     RecordingQuality.ULTRA_HIGH -> RecordingQuality.HIGH
@@ -1198,6 +1269,7 @@ class RecordingController @Inject constructor() {
                     RecordingQuality.LOW -> RecordingQuality.LOW
                 }
             }
+
             trendAnalysis.recommendedQualityAdjustment == RecordingAnalytics.QualityAdjustmentRecommendation.INCREASE -> {
                 when (currentQuality) {
                     RecordingQuality.LOW -> RecordingQuality.MEDIUM
@@ -1206,6 +1278,7 @@ class RecordingController @Inject constructor() {
                     RecordingQuality.ULTRA_HIGH -> RecordingQuality.ULTRA_HIGH
                 }
             }
+
             else -> currentQuality
         }
 

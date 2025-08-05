@@ -1,12 +1,7 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.widget.Toast
@@ -106,11 +101,16 @@ class UsbController @Inject constructor(
             UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
                 handleUsbDeviceAttached(context, intent)
             }
+
             UsbManager.ACTION_USB_DEVICE_DETACHED -> {
                 handleUsbDeviceDetached(context, intent)
             }
+
             else -> {
-                android.util.Log.d("UsbController", "[DEBUG_LOG] Intent action: ${intent.action} (not USB device related)")
+                android.util.Log.d(
+                    "UsbController",
+                    "[DEBUG_LOG] Intent action: ${intent.action} (not USB device related)"
+                )
             }
         }
 
@@ -132,8 +132,14 @@ class UsbController @Inject constructor(
         device?.let { usbDevice ->
             android.util.Log.d("UsbController", "[DEBUG_LOG] USB device attached:")
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Device name: ${usbDevice.deviceName}")
-            android.util.Log.d("UsbController", "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}")
-            android.util.Log.d("UsbController", "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}")
+            android.util.Log.d(
+                "UsbController",
+                "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}"
+            )
+            android.util.Log.d(
+                "UsbController",
+                "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}"
+            )
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Device class: ${usbDevice.deviceClass}")
 
             if (usbDeviceManager.isSupportedTopdonDevice(usbDevice)) {
@@ -160,8 +166,14 @@ class UsbController @Inject constructor(
             android.util.Log.d("UsbController", "[DEBUG_LOG] USB device detached:")
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Device name: ${usbDevice.deviceName}")
             android.util.Log.d("UsbController", "[DEBUG_LOG] - Device key: $deviceKey")
-            android.util.Log.d("UsbController", "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}")
-            android.util.Log.d("UsbController", "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}")
+            android.util.Log.d(
+                "UsbController",
+                "[DEBUG_LOG] - Vendor ID: 0x${String.format("%04X", usbDevice.vendorId)}"
+            )
+            android.util.Log.d(
+                "UsbController",
+                "[DEBUG_LOG] - Product ID: 0x${String.format("%04X", usbDevice.productId)}"
+            )
 
             callback?.onDeviceDetached(usbDevice)
 
@@ -242,7 +254,10 @@ class UsbController @Inject constructor(
 
     private fun handleUnsupportedDeviceAttached(context: Context, usbDevice: UsbDevice) {
         android.util.Log.d("UsbController", "[DEBUG_LOG] ⚠ USB device is not a supported Topdon thermal camera")
-        android.util.Log.d("UsbController", "[DEBUG_LOG] Supported devices: VID=0x0BDA, PID=0x3901/0x5840/0x5830/0x5838")
+        android.util.Log.d(
+            "UsbController",
+            "[DEBUG_LOG] Supported devices: VID=0x0BDA, PID=0x3901/0x5840/0x5830/0x5838"
+        )
 
         callback?.onUnsupportedDeviceAttached(usbDevice)
 
@@ -286,7 +301,10 @@ class UsbController @Inject constructor(
         }
 
         isScanning = true
-        android.util.Log.d("UsbController", "[DEBUG_LOG] Starting periodic USB device scanning (${SCANNING_INTERVAL_MS}ms interval)")
+        android.util.Log.d(
+            "UsbController",
+            "[DEBUG_LOG] Starting periodic USB device scanning (${SCANNING_INTERVAL_MS}ms interval)"
+        )
 
         val scanningRunnable = object : Runnable {
             override fun run() {
@@ -375,7 +393,14 @@ class UsbController @Inject constructor(
                     } else "Unknown"
 
                     append("  • ${device.deviceName} (Key: $key)\n")
-                    append("    VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)}\n")
+                    append(
+                        "    VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${
+                            String.format(
+                                "%04X",
+                                device.productId
+                            )
+                        }\n"
+                    )
                     append("    Connected: $timeStr, Count: $connectionCount\n")
                 }
             }
@@ -385,7 +410,14 @@ class UsbController @Inject constructor(
                 supportedDevices.forEach { device ->
                     val key = getDeviceKey(device)
                     if (!connectedSupportedDevices.containsKey(key)) {
-                        append("  • ${device.deviceName} (VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)})\n")
+                        append(
+                            "  • ${device.deviceName} (VID: 0x${
+                                String.format(
+                                    "%04X",
+                                    device.vendorId
+                                )
+                            }, PID: 0x${String.format("%04X", device.productId)})\n"
+                        )
                     }
                 }
             }
@@ -504,7 +536,10 @@ class UsbController @Inject constructor(
                 apply()
             }
 
-            android.util.Log.d("UsbController", "[DEBUG_LOG] Multi-device state saved: ${connectedSupportedDevices.size} devices")
+            android.util.Log.d(
+                "UsbController",
+                "[DEBUG_LOG] Multi-device state saved: ${connectedSupportedDevices.size} devices"
+            )
         } catch (e: Exception) {
             android.util.Log.e("UsbController", "[DEBUG_LOG] Failed to save multi-device state: ${e.message}")
         }
@@ -515,7 +550,10 @@ class UsbController @Inject constructor(
             val prefs = context.getSharedPreferences(USB_PREFS_NAME, Context.MODE_PRIVATE)
             val deviceKeys = prefs.getStringSet("connected_device_keys", emptySet()) ?: emptySet()
 
-            android.util.Log.d("UsbController", "[DEBUG_LOG] Restoring multi-device state for ${deviceKeys.size} devices")
+            android.util.Log.d(
+                "UsbController",
+                "[DEBUG_LOG] Restoring multi-device state for ${deviceKeys.size} devices"
+            )
 
             connectedSupportedDevices.clear()
             deviceConnectionTimes.clear()
@@ -559,7 +597,14 @@ class UsbController @Inject constructor(
                     } else "Unknown"
 
                     append("  • ${device.deviceName} (Key: $key)\n")
-                    append("    VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${String.format("%04X", device.productId)}\n")
+                    append(
+                        "    VID: 0x${String.format("%04X", device.vendorId)}, PID: 0x${
+                            String.format(
+                                "%04X",
+                                device.productId
+                            )
+                        }\n"
+                    )
                     append("    Connected at: $timeStr, Total connections: $connectionCount\n")
                 }
             }
@@ -767,7 +812,10 @@ class UsbController @Inject constructor(
             if (removedDevice.vendorId == newDevice.vendorId && removedDevice.productId == newDevice.productId) {
                 calibrationStates[removedDeviceId]?.let { calibration ->
                     calibrationStates[newDeviceId] = calibration
-                    android.util.Log.d("UsbController", "[DEBUG_LOG] Calibration state transferred to replacement device")
+                    android.util.Log.d(
+                        "UsbController",
+                        "[DEBUG_LOG] Calibration state transferred to replacement device"
+                    )
                 }
             }
 
@@ -779,13 +827,19 @@ class UsbController @Inject constructor(
 
     fun setDeviceFilter(filter: DeviceFilter) {
         deviceFilter = filter
-        android.util.Log.d("UsbController", "[DEBUG_LOG] Device filter updated: ${filter.vendorIds.size} vendors, ${filter.productIds.size} products")
+        android.util.Log.d(
+            "UsbController",
+            "[DEBUG_LOG] Device filter updated: ${filter.vendorIds.size} vendors, ${filter.productIds.size} products"
+        )
 
         val filteredDevices = connectedSupportedDevices.filter { (deviceId, device) ->
             applyDeviceFilter(device)
         }
 
-        android.util.Log.d("UsbController", "[DEBUG_LOG] Filtered devices: ${filteredDevices.size}/${connectedSupportedDevices.size}")
+        android.util.Log.d(
+            "UsbController",
+            "[DEBUG_LOG] Filtered devices: ${filteredDevices.size}/${connectedSupportedDevices.size}"
+        )
     }
 
     private fun applyDeviceFilter(device: UsbDevice): Boolean {

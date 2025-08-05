@@ -1,11 +1,8 @@
 package com.multisensor.recording.testbase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.multisensor.recording.util.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

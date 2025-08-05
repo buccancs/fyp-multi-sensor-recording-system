@@ -1,14 +1,12 @@
 package com.multisensor.recording.util
 
 import android.content.Context
-import android.content.res.Resources
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.view.View
-import androidx.annotation.StringRes
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.multisensor.recording.R
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import com.multisensor.recording.R
 import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton

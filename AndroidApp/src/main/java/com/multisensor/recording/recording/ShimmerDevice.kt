@@ -35,10 +35,10 @@ data class ShimmerDevice(
 
     fun isConnected(): Boolean =
         connectionState in
-            listOf(
-                ConnectionState.CONNECTED,
-                ConnectionState.STREAMING,
-            )
+                listOf(
+                    ConnectionState.CONNECTED,
+                    ConnectionState.STREAMING,
+                )
 
     fun isActivelyStreaming(): Boolean = connectionState == ConnectionState.STREAMING && isStreaming.get()
 
@@ -65,7 +65,8 @@ data class ShimmerDevice(
     fun getSamplesPerSecond(): Double {
         val timeSinceLastSample = System.currentTimeMillis() - lastSampleTime
         return if (timeSinceLastSample < 5000 && sampleCount.get() > 0) {
-            sampleCount.get().toDouble() / ((System.currentTimeMillis() - (lastSampleTime - timeSinceLastSample)) / 1000.0)
+            sampleCount.get()
+                .toDouble() / ((System.currentTimeMillis() - (lastSampleTime - timeSinceLastSample)) / 1000.0)
         } else {
             0.0
         }

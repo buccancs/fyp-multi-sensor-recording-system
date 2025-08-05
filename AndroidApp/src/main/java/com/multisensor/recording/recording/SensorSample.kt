@@ -123,11 +123,11 @@ data class SensorSample(
         val header =
             if (includeHeader) {
                 "Timestamp_ms,DeviceTime_ms,SystemTime_ms,SessionTime_ms,DeviceId,SequenceNumber," +
-                    "GSR_Conductance_uS,PPG_A13," +
-                    "Accel_X_g,Accel_Y_g,Accel_Z_g," +
-                    "Gyro_X_dps,Gyro_Y_dps,Gyro_Z_dps," +
-                    "Mag_X_gauss,Mag_Y_gauss,Mag_Z_gauss," +
-                    "ECG_mV,EMG_mV,Battery_Percentage\n"
+                        "GSR_Conductance_uS,PPG_A13," +
+                        "Accel_X_g,Accel_Y_g,Accel_Z_g," +
+                        "Gyro_X_dps,Gyro_Y_dps,Gyro_Z_dps," +
+                        "Mag_X_gauss,Mag_Y_gauss,Mag_Z_gauss," +
+                        "ECG_mV,EMG_mV,Battery_Percentage\n"
             } else {
                 ""
             }
@@ -217,16 +217,19 @@ data class SensorSample(
                         errors.add("GSR value out of range: $value µS")
                     }
                 }
+
                 SensorChannel.PPG -> {
                     if (value < 0 || value > 4096) {
                         errors.add("PPG value out of range: $value")
                     }
                 }
+
                 SensorChannel.ACCEL -> {
                     if (Math.abs(value) > 50) {
                         errors.add("Accelerometer value out of range: $value g")
                     }
                 }
+
                 else -> {
                     if (!value.isFinite()) {
                         errors.add("${channel.name} value is not finite: $value")

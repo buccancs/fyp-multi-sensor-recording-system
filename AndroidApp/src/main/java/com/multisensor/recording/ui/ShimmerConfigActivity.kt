@@ -1,9 +1,6 @@
 package com.multisensor.recording.ui
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +14,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.R
-import com.multisensor.recording.recording.DeviceConfiguration
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -169,9 +165,11 @@ class ShimmerConfigActivity : AppCompatActivity() {
 
         if (state.isRecording && state.dataPacketsReceived > 0) {
             val duration = state.recordingDuration / 1000
-            realTimeDataText.text = "Recording: ${duration}s\nPackets: ${state.dataPacketsReceived}\nSignal: ${state.signalStrength} dBm"
+            realTimeDataText.text =
+                "Recording: ${duration}s\nPackets: ${state.dataPacketsReceived}\nSignal: ${state.signalStrength} dBm"
         } else if (state.isDeviceConnected) {
-            realTimeDataText.text = "Connected\nBattery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\nSignal: ${state.signalStrength} dBm"
+            realTimeDataText.text =
+                "Connected\nBattery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\nSignal: ${state.signalStrength} dBm"
         } else {
             realTimeDataText.text = "No device connected"
         }
@@ -247,7 +245,11 @@ class ShimmerConfigActivity : AppCompatActivity() {
             }
 
         if (missingPermissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, missingPermissions.toTypedArray(), BLUETOOTH_PERMISSION_REQUEST_CODE)
+            ActivityCompat.requestPermissions(
+                this,
+                missingPermissions.toTypedArray(),
+                BLUETOOTH_PERMISSION_REQUEST_CODE
+            )
         } else {
             logger.info("Bluetooth permissions already granted.")
         }
@@ -265,14 +267,14 @@ class ShimmerConfigActivity : AppCompatActivity() {
             if (allGranted) {
                 logger.info("Bluetooth permissions granted by user.")
             } else {
-                Toast.makeText(this, "Bluetooth permissions are required for shimmer device functionality", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Bluetooth permissions are required for shimmer device functionality",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
-
-
-
-
 
 
     private fun showMessage(message: String) {

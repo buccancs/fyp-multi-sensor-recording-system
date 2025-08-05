@@ -22,12 +22,18 @@ class PermissionManager @Inject constructor() {
 
     fun areAllPermissionsGranted(context: Context): Boolean {
         return AllAndroidPermissions.getDangerousPermissions().all { permission ->
-            ContextCompat.checkSelfPermission(context, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
         }
     }
 
     fun requestPermissions(activity: Activity, callback: PermissionCallback) {
-        android.util.Log.d("PermissionManager", "[DEBUG_LOG] Requesting permissions, retry count: $permissionRetryCount")
+        android.util.Log.d(
+            "PermissionManager",
+            "[DEBUG_LOG] Requesting permissions, retry count: $permissionRetryCount"
+        )
 
         PermissionTool.requestAllDangerousPermissions(activity, object : PermissionTool.PermissionCallback {
             override fun onAllGranted() {
@@ -40,26 +46,44 @@ class PermissionManager @Inject constructor() {
                 val grantedCount = AllAndroidPermissions.getDangerousPermissions().size - deniedPermissions.size
                 val totalCount = AllAndroidPermissions.getDangerousPermissions().size
 
-                android.util.Log.d("PermissionManager", "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.joinToString(", ")}")
-                android.util.Log.d("PermissionManager", "[DEBUG_LOG] Current retry count: $permissionRetryCount / $maxPermissionRetries")
+                android.util.Log.d(
+                    "PermissionManager",
+                    "[DEBUG_LOG] Permissions temporarily denied: ${deniedPermissions.joinToString(", ")}"
+                )
+                android.util.Log.d(
+                    "PermissionManager",
+                    "[DEBUG_LOG] Current retry count: $permissionRetryCount / $maxPermissionRetries"
+                )
 
                 if (permissionRetryCount < maxPermissionRetries) {
                     permissionRetryCount++
-                    android.util.Log.d("PermissionManager", "[DEBUG_LOG] Incrementing retry count to: $permissionRetryCount")
+                    android.util.Log.d(
+                        "PermissionManager",
+                        "[DEBUG_LOG] Incrementing retry count to: $permissionRetryCount"
+                    )
                     callback.onPermissionsTemporarilyDenied(deniedPermissions, grantedCount, totalCount)
                 } else {
-                    android.util.Log.d("PermissionManager", "[DEBUG_LOG] Max retries reached, treating as permanently denied")
+                    android.util.Log.d(
+                        "PermissionManager",
+                        "[DEBUG_LOG] Max retries reached, treating as permanently denied"
+                    )
                     callback.onPermissionsPermanentlyDenied(deniedPermissions)
                 }
             }
 
             override fun onPermanentlyDeniedWithSettingsOpened(deniedPermissions: List<String>) {
-                android.util.Log.d("PermissionManager", "[DEBUG_LOG] Permanently denied permissions, Settings opened: ${deniedPermissions.joinToString(", ")}")
+                android.util.Log.d(
+                    "PermissionManager",
+                    "[DEBUG_LOG] Permanently denied permissions, Settings opened: ${deniedPermissions.joinToString(", ")}"
+                )
                 callback.onPermissionsPermanentlyDenied(deniedPermissions)
             }
 
             override fun onPermanentlyDeniedWithoutSettings(deniedPermissions: List<String>) {
-                android.util.Log.d("PermissionManager", "[DEBUG_LOG] Permanently denied permissions, no Settings: ${deniedPermissions.joinToString(", ")}")
+                android.util.Log.d(
+                    "PermissionManager",
+                    "[DEBUG_LOG] Permanently denied permissions, no Settings: ${deniedPermissions.joinToString(", ")}"
+                )
                 callback.onPermissionsPermanentlyDenied(deniedPermissions)
             }
         })
@@ -90,14 +114,20 @@ class PermissionManager @Inject constructor() {
         var deniedCount = 0
 
         allPermissions.forEach { permission ->
-            val isGranted = ContextCompat.checkSelfPermission(context, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            val isGranted = ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
             val status = if (isGranted) "GRANTED" else "DENIED"
             if (isGranted) grantedCount++ else deniedCount++
 
             android.util.Log.d("PermissionManager", "[DEBUG_LOG] $permission: $status")
         }
 
-        android.util.Log.d("PermissionManager", "[DEBUG_LOG] Summary: $grantedCount granted, $deniedCount denied out of ${allPermissions.size} total")
+        android.util.Log.d(
+            "PermissionManager",
+            "[DEBUG_LOG] Summary: $grantedCount granted, $deniedCount denied out of ${allPermissions.size} total"
+        )
         android.util.Log.d("PermissionManager", "[DEBUG_LOG] ===== END PERMISSION STATES =====")
     }
 
@@ -107,13 +137,19 @@ class PermissionManager @Inject constructor() {
 
     fun getGrantedPermissions(context: Context): List<String> {
         return AllAndroidPermissions.getDangerousPermissions().filter { permission ->
-            ContextCompat.checkSelfPermission(context, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
         }
     }
 
     fun getDeniedPermissions(context: Context): List<String> {
         return AllAndroidPermissions.getDangerousPermissions().filter { permission ->
-            ContextCompat.checkSelfPermission(context, permission) != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
         }
     }
 }

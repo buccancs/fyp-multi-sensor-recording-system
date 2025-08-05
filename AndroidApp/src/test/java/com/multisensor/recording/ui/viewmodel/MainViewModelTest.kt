@@ -1,18 +1,17 @@
 package com.multisensor.recording.ui.viewmodel
 
 import com.google.common.truth.Truth.assertThat
+import com.multisensor.recording.recording.CameraRecorder
+import com.multisensor.recording.recording.ShimmerRecorder
+import com.multisensor.recording.recording.ThermalRecorder
+import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.testbase.BaseUnitTest
-import com.multisensor.recording.testfixtures.UiStateTestFactory
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
-import com.multisensor.recording.recording.CameraRecorder
-import com.multisensor.recording.recording.ThermalRecorder
-import com.multisensor.recording.recording.ShimmerRecorder
-import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
-import io.mockk.mockk
-import io.mockk.every
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

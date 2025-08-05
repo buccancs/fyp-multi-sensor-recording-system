@@ -1,7 +1,7 @@
 package com.multisensor.recording.ui
 
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
 
 class ShimmerConfigUiStateTest {
 
@@ -136,7 +136,10 @@ class ShimmerConfigUiStateTest {
             enabledSensors = emptySet()
         )
 
-        assertFalse("[DEBUG_LOG] Should not be able to apply configuration without sensors", state.canApplyConfiguration)
+        assertFalse(
+            "[DEBUG_LOG] Should not be able to apply configuration without sensors",
+            state.canApplyConfiguration
+        )
     }
 
     @Test
@@ -181,8 +184,10 @@ class ShimmerConfigUiStateTest {
     fun `connectionHealthStatus returns BLUETOOTH_DISABLED when bluetooth off`() {
         val state = ShimmerConfigUiState(isBluetoothEnabled = false)
 
-        assertEquals("[DEBUG_LOG] Should return BLUETOOTH_DISABLED",
-            ConnectionHealthStatus.BLUETOOTH_DISABLED, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return BLUETOOTH_DISABLED",
+            ConnectionHealthStatus.BLUETOOTH_DISABLED, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -192,8 +197,10 @@ class ShimmerConfigUiStateTest {
             hasBluetoothPermission = false
         )
 
-        assertEquals("[DEBUG_LOG] Should return NO_PERMISSION",
-            ConnectionHealthStatus.NO_PERMISSION, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return NO_PERMISSION",
+            ConnectionHealthStatus.NO_PERMISSION, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -204,8 +211,10 @@ class ShimmerConfigUiStateTest {
             isLoadingConnection = true
         )
 
-        assertEquals("[DEBUG_LOG] Should return CONNECTING when loading",
-            ConnectionHealthStatus.CONNECTING, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return CONNECTING when loading",
+            ConnectionHealthStatus.CONNECTING, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -217,8 +226,10 @@ class ShimmerConfigUiStateTest {
             signalStrength = -60
         )
 
-        assertEquals("[DEBUG_LOG] Should return EXCELLENT for strong signal",
-            ConnectionHealthStatus.EXCELLENT, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return EXCELLENT for strong signal",
+            ConnectionHealthStatus.EXCELLENT, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -230,8 +241,10 @@ class ShimmerConfigUiStateTest {
             signalStrength = -75
         )
 
-        assertEquals("[DEBUG_LOG] Should return GOOD for medium signal",
-            ConnectionHealthStatus.GOOD, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return GOOD for medium signal",
+            ConnectionHealthStatus.GOOD, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -243,8 +256,10 @@ class ShimmerConfigUiStateTest {
             signalStrength = -90
         )
 
-        assertEquals("[DEBUG_LOG] Should return POOR for weak signal",
-            ConnectionHealthStatus.POOR, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return POOR for weak signal",
+            ConnectionHealthStatus.POOR, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -255,8 +270,10 @@ class ShimmerConfigUiStateTest {
             isDeviceConnected = false
         )
 
-        assertEquals("[DEBUG_LOG] Should return DISCONNECTED when not connected",
-            ConnectionHealthStatus.DISCONNECTED, state.connectionHealthStatus)
+        assertEquals(
+            "[DEBUG_LOG] Should return DISCONNECTED when not connected",
+            ConnectionHealthStatus.DISCONNECTED, state.connectionHealthStatus
+        )
     }
 
     @Test
@@ -317,7 +334,11 @@ class ShimmerConfigUiStateTest {
     @Test
     fun `shimmer sensor enum values are correct`() {
         assertEquals("[DEBUG_LOG] GSR key should be correct", "gsr", ShimmerSensor.GSR.key)
-        assertEquals("[DEBUG_LOG] GSR display name should be correct", "Galvanic Skin Response", ShimmerSensor.GSR.displayName)
+        assertEquals(
+            "[DEBUG_LOG] GSR display name should be correct",
+            "Galvanic Skin Response",
+            ShimmerSensor.GSR.displayName
+        )
 
         assertEquals("[DEBUG_LOG] Accelerometer key should be correct", "accel", ShimmerSensor.ACCELEROMETER.key)
         assertEquals("[DEBUG_LOG] PPG key should be correct", "ppg", ShimmerSensor.PPG.key)
@@ -328,7 +349,10 @@ class ShimmerConfigUiStateTest {
     fun `connection health status enum contains all expected values`() {
         val statuses = ConnectionHealthStatus.values()
 
-        assertTrue("[DEBUG_LOG] Should contain BLUETOOTH_DISABLED", statuses.contains(ConnectionHealthStatus.BLUETOOTH_DISABLED))
+        assertTrue(
+            "[DEBUG_LOG] Should contain BLUETOOTH_DISABLED",
+            statuses.contains(ConnectionHealthStatus.BLUETOOTH_DISABLED)
+        )
         assertTrue("[DEBUG_LOG] Should contain NO_PERMISSION", statuses.contains(ConnectionHealthStatus.NO_PERMISSION))
         assertTrue("[DEBUG_LOG] Should contain DISCONNECTED", statuses.contains(ConnectionHealthStatus.DISCONNECTED))
         assertTrue("[DEBUG_LOG] Should contain CONNECTING", statuses.contains(ConnectionHealthStatus.CONNECTING))

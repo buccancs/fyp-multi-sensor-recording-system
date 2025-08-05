@@ -1,7 +1,7 @@
 package com.multisensor.recording.ui
 
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
 
 class SettingsUiStateTest {
 
@@ -156,7 +156,10 @@ class SettingsUiStateTest {
             audioSampleRate = 44100
         )
 
-        assertFalse("[DEBUG_LOG] Device config should be invalid with zero shimmer sampling rate", state.isDeviceConfigValid)
+        assertFalse(
+            "[DEBUG_LOG] Device config should be invalid with zero shimmer sampling rate",
+            state.isDeviceConfigValid
+        )
     }
 
     @Test
@@ -188,14 +191,21 @@ class SettingsUiStateTest {
             audioSampleRate = 44100
         )
 
-        assertFalse("[DEBUG_LOG] Overall configuration should be invalid when network config invalid", state.isConfigurationValid)
+        assertFalse(
+            "[DEBUG_LOG] Overall configuration should be invalid when network config invalid",
+            state.isConfigurationValid
+        )
     }
 
     @Test
     fun `formattedStorageThreshold returns correct percentage`() {
         val state = SettingsUiState(storageThreshold = 0.85f)
 
-        assertEquals("[DEBUG_LOG] Formatted storage threshold should be correct", "85%", state.formattedStorageThreshold)
+        assertEquals(
+            "[DEBUG_LOG] Formatted storage threshold should be correct",
+            "85%",
+            state.formattedStorageThreshold
+        )
     }
 
     @Test
@@ -226,7 +236,10 @@ class SettingsUiStateTest {
 
         assertTrue("[DEBUG_LOG] Network section should be expanded", state.isSectionExpanded(SettingsSection.NETWORK))
         assertTrue("[DEBUG_LOG] Devices section should be expanded", state.isSectionExpanded(SettingsSection.DEVICES))
-        assertFalse("[DEBUG_LOG] Recording section should not be expanded", state.isSectionExpanded(SettingsSection.RECORDING))
+        assertFalse(
+            "[DEBUG_LOG] Recording section should not be expanded",
+            state.isSectionExpanded(SettingsSection.RECORDING)
+        )
     }
 
     @Test
@@ -237,12 +250,18 @@ class SettingsUiStateTest {
         )
         val state = SettingsUiState(validationErrors = validationErrors)
 
-        assertEquals("[DEBUG_LOG] Should return correct error for IP address",
-            "Invalid IP format", state.getValidationError("serverIpAddress"))
-        assertEquals("[DEBUG_LOG] Should return correct error for port",
-            "Port must be between 1024-65535", state.getValidationError("legacyPort"))
-        assertNull("[DEBUG_LOG] Should return null for field without error",
-            state.getValidationError("audioSampleRate"))
+        assertEquals(
+            "[DEBUG_LOG] Should return correct error for IP address",
+            "Invalid IP format", state.getValidationError("serverIpAddress")
+        )
+        assertEquals(
+            "[DEBUG_LOG] Should return correct error for port",
+            "Port must be between 1024-65535", state.getValidationError("legacyPort")
+        )
+        assertNull(
+            "[DEBUG_LOG] Should return null for field without error",
+            state.getValidationError("audioSampleRate")
+        )
     }
 
     @Test
@@ -255,7 +274,11 @@ class SettingsUiStateTest {
 
         assertEquals("[DEBUG_LOG] Light theme display name should be correct", "Light", AppTheme.LIGHT.displayName)
         assertEquals("[DEBUG_LOG] Dark theme display name should be correct", "Dark", AppTheme.DARK.displayName)
-        assertEquals("[DEBUG_LOG] System theme display name should be correct", "Follow System", AppTheme.SYSTEM.displayName)
+        assertEquals(
+            "[DEBUG_LOG] System theme display name should be correct",
+            "Follow System",
+            AppTheme.SYSTEM.displayName
+        )
     }
 
     @Test
@@ -268,14 +291,22 @@ class SettingsUiStateTest {
         assertTrue("[DEBUG_LOG] Should contain WARN level", levels.contains(LogLevel.WARN))
         assertTrue("[DEBUG_LOG] Should contain ERROR level", levels.contains(LogLevel.ERROR))
 
-        assertTrue("[DEBUG_LOG] VERBOSE should have lower priority than DEBUG",
-            LogLevel.VERBOSE.priority < LogLevel.DEBUG.priority)
-        assertTrue("[DEBUG_LOG] DEBUG should have lower priority than INFO",
-            LogLevel.DEBUG.priority < LogLevel.INFO.priority)
-        assertTrue("[DEBUG_LOG] INFO should have lower priority than WARN",
-            LogLevel.INFO.priority < LogLevel.WARN.priority)
-        assertTrue("[DEBUG_LOG] WARN should have lower priority than ERROR",
-            LogLevel.WARN.priority < LogLevel.ERROR.priority)
+        assertTrue(
+            "[DEBUG_LOG] VERBOSE should have lower priority than DEBUG",
+            LogLevel.VERBOSE.priority < LogLevel.DEBUG.priority
+        )
+        assertTrue(
+            "[DEBUG_LOG] DEBUG should have lower priority than INFO",
+            LogLevel.DEBUG.priority < LogLevel.INFO.priority
+        )
+        assertTrue(
+            "[DEBUG_LOG] INFO should have lower priority than WARN",
+            LogLevel.INFO.priority < LogLevel.WARN.priority
+        )
+        assertTrue(
+            "[DEBUG_LOG] WARN should have lower priority than ERROR",
+            LogLevel.WARN.priority < LogLevel.ERROR.priority
+        )
     }
 
     @Test
@@ -320,7 +351,11 @@ class SettingsUiStateTest {
         assertTrue("[DEBUG_LOG] Should contain LOW resolution", resolutions.contains(VideoResolution.LOW))
 
         assertEquals("[DEBUG_LOG] 4K resolution value should be correct", "3840x2160", VideoResolution.UHD_4K.value)
-        assertEquals("[DEBUG_LOG] Full HD resolution value should be correct", "1920x1080", VideoResolution.FULL_HD.value)
+        assertEquals(
+            "[DEBUG_LOG] Full HD resolution value should be correct",
+            "1920x1080",
+            VideoResolution.FULL_HD.value
+        )
         assertEquals("[DEBUG_LOG] HD resolution value should be correct", "1280x720", VideoResolution.HD.value)
     }
 
@@ -334,7 +369,11 @@ class SettingsUiStateTest {
         assertTrue("[DEBUG_LOG] Should contain LOW quality", qualities.contains(VideoQuality.LOW))
         assertTrue("[DEBUG_LOG] Should contain VERY_LOW quality", qualities.contains(VideoQuality.VERY_LOW))
 
-        assertEquals("[DEBUG_LOG] Ultra high quality value should be correct", "ultra_high", VideoQuality.ULTRA_HIGH.value)
+        assertEquals(
+            "[DEBUG_LOG] Ultra high quality value should be correct",
+            "ultra_high",
+            VideoQuality.ULTRA_HIGH.value
+        )
         assertEquals("[DEBUG_LOG] High quality value should be correct", "high", VideoQuality.HIGH.value)
         assertEquals("[DEBUG_LOG] Medium quality value should be correct", "medium", VideoQuality.MEDIUM.value)
     }
@@ -351,7 +390,11 @@ class SettingsUiStateTest {
         assertEquals("[DEBUG_LOG] Internal storage value should be correct", "internal", StorageLocation.INTERNAL.value)
         assertEquals("[DEBUG_LOG] External storage value should be correct", "external", StorageLocation.EXTERNAL.value)
         assertEquals("[DEBUG_LOG] Private storage value should be correct", "private", StorageLocation.PRIVATE.value)
-        assertEquals("[DEBUG_LOG] Downloads storage value should be correct", "downloads", StorageLocation.DOWNLOADS.value)
+        assertEquals(
+            "[DEBUG_LOG] Downloads storage value should be correct",
+            "downloads",
+            StorageLocation.DOWNLOADS.value
+        )
     }
 
     @Test
@@ -378,8 +421,10 @@ class SettingsUiStateTest {
         )
 
         invalidStates.forEach { state ->
-            assertFalse("[DEBUG_LOG] Invalid IP ${state.serverIpAddress} should fail validation",
-                state.isNetworkConfigValid)
+            assertFalse(
+                "[DEBUG_LOG] Invalid IP ${state.serverIpAddress} should fail validation",
+                state.isNetworkConfigValid
+            )
         }
     }
 }

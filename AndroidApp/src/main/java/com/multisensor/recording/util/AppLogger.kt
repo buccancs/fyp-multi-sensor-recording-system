@@ -6,17 +6,12 @@ import android.os.Build
 import android.os.Debug
 import android.os.Process
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
-import kotlin.system.measureTimeMillis
 
 object AppLogger {
 
@@ -248,8 +243,10 @@ object AppLogger {
             updatePerformanceStats(operationName, durationMs)
 
             val contextStr = context?.let { " ($it)" } ?: ""
-            i(tag, "⏱️ Completed $operationName$contextStr in ${durationMs}ms",
-              context = mapOf("duration_ms" to durationMs, "operation" to operationName))
+            i(
+                tag, "⏱️ Completed $operationName$contextStr in ${durationMs}ms",
+                context = mapOf("duration_ms" to durationMs, "operation" to operationName)
+            )
 
             durationMs
         } else {
@@ -265,13 +262,17 @@ object AppLogger {
             val durationMs = (System.nanoTime() - startTime) / 1_000_000
             updatePerformanceStats(operationName, durationMs)
 
-            i(tag, "⏱️ Measured $operationName in ${durationMs}ms",
-              context = mapOf("duration_ms" to durationMs, "operation" to operationName))
+            i(
+                tag, "⏱️ Measured $operationName in ${durationMs}ms",
+                context = mapOf("duration_ms" to durationMs, "operation" to operationName)
+            )
             result
         } catch (e: Exception) {
             val durationMs = (System.nanoTime() - startTime) / 1_000_000
-            e(tag, "⏱️ Failed $operationName after ${durationMs}ms", e,
-              context = mapOf("duration_ms" to durationMs, "operation" to operationName))
+            e(
+                tag, "⏱️ Failed $operationName after ${durationMs}ms", e,
+                context = mapOf("duration_ms" to durationMs, "operation" to operationName)
+            )
             throw e
         }
     }
@@ -307,8 +308,10 @@ object AppLogger {
 
         i(tag, "📊 Performance Statistics:")
         performanceStats.forEach { (operation, stats) ->
-            i(tag, "  $operation: ${stats.totalCalls} calls, avg=${stats.avgTimeMs}ms, " +
-                    "min=${stats.minTimeMs}ms, max=${stats.maxTimeMs}ms, total=${stats.totalTimeMs}ms")
+            i(
+                tag, "  $operation: ${stats.totalCalls} calls, avg=${stats.avgTimeMs}ms, " +
+                        "min=${stats.minTimeMs}ms, max=${stats.maxTimeMs}ms, total=${stats.totalTimeMs}ms"
+            )
         }
     }
 
@@ -403,18 +406,25 @@ object AppLogger {
         val afterMemory = Runtime.getRuntime().let { it.totalMemory() - it.freeMemory() }
         val freed = beforeMemory - afterMemory
 
-        i(tag, "🗑️ $context - Freed ${formatFileSize(freed)} (${formatFileSize(beforeMemory)} → ${formatFileSize(afterMemory)})",
-          context = mapOf(
-              "freed_bytes" to freed,
-              "before_bytes" to beforeMemory,
-              "after_bytes" to afterMemory
-          ))
+        i(
+            tag,
+            "🗑️ $context - Freed ${formatFileSize(freed)} (${formatFileSize(beforeMemory)} → ${
+                formatFileSize(afterMemory)
+            })",
+            context = mapOf(
+                "freed_bytes" to freed,
+                "before_bytes" to beforeMemory,
+                "after_bytes" to afterMemory
+            )
+        )
     }
 
     fun logThreadInfo(tag: String, context: String = "Thread Info") {
         val thread = Thread.currentThread()
-        d(tag, "🧵 $context - Thread: ${thread.name}, ID: ${thread.id}, " +
-                "State: ${thread.state}")
+        d(
+            tag, "🧵 $context - Thread: ${thread.name}, ID: ${thread.id}, " +
+                    "State: ${thread.state}"
+        )
     }
 
     fun logError(tag: String, operation: String, error: Throwable) {
@@ -453,8 +463,10 @@ object AppLogger {
     private fun logSystemStateAtCrash() {
         try {
             val runtime = Runtime.getRuntime()
-            e("CrashReport", "Memory - Used: ${formatFileSize(runtime.totalMemory() - runtime.freeMemory())}, " +
-                    "Max: ${formatFileSize(runtime.maxMemory())}")
+            e(
+                "CrashReport", "Memory - Used: ${formatFileSize(runtime.totalMemory() - runtime.freeMemory())}, " +
+                        "Max: ${formatFileSize(runtime.maxMemory())}"
+            )
 
             e("CrashReport", "Active Threads: ${Thread.activeCount()}")
 
@@ -467,7 +479,10 @@ object AppLogger {
                     val recent = memorySnapshots.takeLast(3)
                     e("CrashReport", "Recent Memory Snapshots:")
                     recent.forEach { snapshot ->
-                        e("CrashReport", "  ${snapshot.context}: ${snapshot.usedMemoryMB}MB used, ${snapshot.threadCount} threads")
+                        e(
+                            "CrashReport",
+                            "  ${snapshot.context}: ${snapshot.usedMemoryMB}MB used, ${snapshot.threadCount} threads"
+                        )
                     }
                 }
             }
@@ -492,7 +507,13 @@ object AppLogger {
         }
     }
 
-    fun logStateChange(tag: String, component: String, fromState: String, toState: String, context: Map<String, Any>? = null) {
+    fun logStateChange(
+        tag: String,
+        component: String,
+        fromState: String,
+        toState: String,
+        context: Map<String, Any>? = null
+    ) {
         val stateContext = mutableMapOf<String, Any>(
             "component" to component,
             "from_state" to fromState,
@@ -504,7 +525,12 @@ object AppLogger {
         i(tag, "🔄 State Change: $component from '$fromState' to '$toState'", context = stateContext)
     }
 
-    fun logLifecycle(tag: String, lifecycleEvent: String, componentName: String? = null, context: Map<String, Any>? = null) {
+    fun logLifecycle(
+        tag: String,
+        lifecycleEvent: String,
+        componentName: String? = null,
+        context: Map<String, Any>? = null
+    ) {
         val component = componentName ?: tag
         val lifecycleContext = mutableMapOf<String, Any>(
             "component" to component,
@@ -516,8 +542,10 @@ object AppLogger {
         i(tag, "🔄 Lifecycle: $component.$lifecycleEvent", context = lifecycleContext)
     }
 
-    fun logNetwork(tag: String, operation: String, endpoint: String? = null, status: String? = null,
-                   responseTime: Long? = null, context: Map<String, Any>? = null) {
+    fun logNetwork(
+        tag: String, operation: String, endpoint: String? = null, status: String? = null,
+        responseTime: Long? = null, context: Map<String, Any>? = null
+    ) {
         val endpointInfo = endpoint?.let { " to $it" } ?: ""
         val statusInfo = status?.let { " - $it" } ?: ""
         val timeInfo = responseTime?.let { " (${it}ms)" } ?: ""
@@ -533,8 +561,10 @@ object AppLogger {
         i(tag, "🌐 Network: $operation$endpointInfo$statusInfo$timeInfo", context = networkContext)
     }
 
-    fun logRecording(tag: String, operation: String, deviceInfo: String? = null, duration: Long? = null,
-                     fileSize: Long? = null, context: Map<String, Any>? = null) {
+    fun logRecording(
+        tag: String, operation: String, deviceInfo: String? = null, duration: Long? = null,
+        fileSize: Long? = null, context: Map<String, Any>? = null
+    ) {
         val deviceString = deviceInfo?.let { " ($it)" } ?: ""
         val durationString = duration?.let { " ${it}ms" } ?: ""
         val sizeString = fileSize?.let { " ${formatFileSize(it)}" } ?: ""
@@ -550,8 +580,10 @@ object AppLogger {
         i(tag, "📹 Recording: $operation$deviceString$durationString$sizeString", context = recordingContext)
     }
 
-    fun logSensor(tag: String, operation: String, sensorType: String? = null, value: String? = null,
-                  accuracy: Int? = null, timestamp: Long? = null, context: Map<String, Any>? = null) {
+    fun logSensor(
+        tag: String, operation: String, sensorType: String? = null, value: String? = null,
+        accuracy: Int? = null, timestamp: Long? = null, context: Map<String, Any>? = null
+    ) {
         val sensorInfo = sensorType?.let { " $it" } ?: ""
         val valueInfo = value?.let { " = $it" } ?: ""
         val accuracyInfo = accuracy?.let { " (accuracy: $it)" } ?: ""
@@ -568,8 +600,10 @@ object AppLogger {
         i(tag, "📊 Sensor$sensorInfo: $operation$valueInfo$accuracyInfo", context = sensorContext)
     }
 
-    fun logFile(tag: String, operation: String, fileName: String? = null, size: Long? = null,
-                duration: Long? = null, success: Boolean = true, context: Map<String, Any>? = null) {
+    fun logFile(
+        tag: String, operation: String, fileName: String? = null, size: Long? = null,
+        duration: Long? = null, success: Boolean = true, context: Map<String, Any>? = null
+    ) {
         val fileInfo = fileName?.let { " $it" } ?: ""
         val sizeInfo = size?.let { " (${formatFileSize(it)})" } ?: ""
         val durationInfo = duration?.let { " in ${it}ms" } ?: ""

@@ -11,14 +11,14 @@ Usage:
     python validate_data_schemas.py --check-schema SCHEMA_FILE
 """
 
+import argparse
 import json
-import sys
+import jsonschema
 import os
+import sys
+from jsonschema import ValidationError
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-import argparse
-import jsonschema
-from jsonschema import ValidationError
 
 
 class DataSchemaValidator:

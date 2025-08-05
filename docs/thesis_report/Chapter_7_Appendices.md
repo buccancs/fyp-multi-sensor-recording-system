@@ -3,43 +3,45 @@
 ## Table of Contents
 
 1. [Appendix A: System Manual](#appendix-a-system-manual)
-   - 1.1. [Technical Documentation for System Maintenance and Extension](#technical-documentation-for-system-maintenance-and-extension)
-   - 1.2. [A.1 Component Documentation Reference](#a1-component-documentation-reference)
-   - 1.3. [A.2 Literature Review and Technical Foundation Tables](#a2-literature-review-and-technical-foundation-tables)
-   - 1.4. [A.3 Network Communication Protocol Specifications](#a3-network-communication-protocol-specifications)
-   - 1.5. [A.4 System Performance Specifications](#a4-system-performance-specifications)
-   - 1.6. [A.5 Technology Stack Justification Matrix](#a5-technology-stack-justification-matrix)
+    -
+    1.1. [Technical Documentation for System Maintenance and Extension](#technical-documentation-for-system-maintenance-and-extension)
+    - 1.2. [A.1 Component Documentation Reference](#a1-component-documentation-reference)
+    -
+    1.3. [A.2 Literature Review and Technical Foundation Tables](#a2-literature-review-and-technical-foundation-tables)
+    - 1.4. [A.3 Network Communication Protocol Specifications](#a3-network-communication-protocol-specifications)
+    - 1.5. [A.4 System Performance Specifications](#a4-system-performance-specifications)
+    - 1.6. [A.5 Technology Stack Justification Matrix](#a5-technology-stack-justification-matrix)
 2. [Appendix B: Testing and Evaluation Results](#appendix-b-testing-and-evaluation-results)
-   - 2.1. [B.1 Multi-Level Testing Coverage Analysis](#b1-multi-level-testing-coverage-analysis)
-   - 2.2. [B.2 Algorithm Validation Results](#b2-algorithm-validation-results)
-   - 2.3. [B.3 Multi-Device Coordination Test Results](#b3-multi-device-coordination-test-results)
-   - 2.4. [B.4 Network Performance Test Results](#b4-network-performance-test-results)
-   - 2.5. [B.5 Synchronization Precision Results](#b5-synchronization-precision-results)
-   - 2.6. [B.6 Throughput and Scalability Assessment Results](#b6-throughput-and-scalability-assessment-results)
-   - 2.7. [B.7 Reliability and Fault Tolerance Results](#b7-reliability-and-fault-tolerance-results)
-   - 2.8. [B.8 User Experience and Usability Results](#b8-user-experience-and-usability-results)
-   - 2.9. [B.9 Performance Validation Summary](#b9-performance-validation-summary)
-   - 2.10. [B.10 Reliability Assessment Results](#b10-reliability-assessment-results)
-   - 2.11. [B.11 Usability and Effectiveness Summary](#b11-usability-and-effectiveness-summary)
+    - 2.1. [B.1 Multi-Level Testing Coverage Analysis](#b1-multi-level-testing-coverage-analysis)
+    - 2.2. [B.2 Algorithm Validation Results](#b2-algorithm-validation-results)
+    - 2.3. [B.3 Multi-Device Coordination Test Results](#b3-multi-device-coordination-test-results)
+    - 2.4. [B.4 Network Performance Test Results](#b4-network-performance-test-results)
+    - 2.5. [B.5 Synchronization Precision Results](#b5-synchronization-precision-results)
+    - 2.6. [B.6 Throughput and Scalability Assessment Results](#b6-throughput-and-scalability-assessment-results)
+    - 2.7. [B.7 Reliability and Fault Tolerance Results](#b7-reliability-and-fault-tolerance-results)
+    - 2.8. [B.8 User Experience and Usability Results](#b8-user-experience-and-usability-results)
+    - 2.9. [B.9 Performance Validation Summary](#b9-performance-validation-summary)
+    - 2.10. [B.10 Reliability Assessment Results](#b10-reliability-assessment-results)
+    - 2.11. [B.11 Usability and Effectiveness Summary](#b11-usability-and-effectiveness-summary)
 3. [Appendix C: User Manual](#appendix-c-user-manual)
-   - 3.1. [Comprehensive User Guide for Research Operations](#comprehensive-user-guide-for-research-operations)
-   - 3.2. [C.1 Getting Started - First-Time Setup](#c1-getting-started---first-time-setup)
-   - 3.3. [C.2 Recording Session Management](#c2-recording-session-management)
-   - 3.4. [C.3 Data Export and Analysis](#c3-data-export-and-analysis)
+    - 3.1. [Comprehensive User Guide for Research Operations](#comprehensive-user-guide-for-research-operations)
+    - 3.2. [C.1 Getting Started - First-Time Setup](#c1-getting-started---first-time-setup)
+    - 3.3. [C.2 Recording Session Management](#c2-recording-session-management)
+    - 3.4. [C.3 Data Export and Analysis](#c3-data-export-and-analysis)
 4. [Appendix D: Supporting Documentation and Data](#appendix-d-supporting-documentation-and-data)
-   - 4.1. [D.1 Technical Specifications and Calibration Data](#d1-technical-specifications-and-calibration-data)
-   - 4.2. [D.2 Network Protocol Specifications](#d2-network-protocol-specifications)
+    - 4.1. [D.1 Technical Specifications and Calibration Data](#d1-technical-specifications-and-calibration-data)
+    - 4.2. [D.2 Network Protocol Specifications](#d2-network-protocol-specifications)
 5. [Appendix E: Test Results and Reports](#appendix-e-test-results-and-reports)
-   - 5.1. [E.1 Comprehensive Testing Results Summary](#e1-comprehensive-testing-results-summary)
-   - 5.2. [E.2 Statistical Validation Results](#e2-statistical-validation-results)
+    - 5.1. [E.1 Comprehensive Testing Results Summary](#e1-comprehensive-testing-results-summary)
+    - 5.2. [E.2 Statistical Validation Results](#e2-statistical-validation-results)
 6. [Appendix F: Evaluation Data and Results](#appendix-f-evaluation-data-and-results)
-   - 6.1. [F.1 User Experience Evaluation](#f1-user-experience-evaluation)
-   - 6.2. [F.2 Scientific Validation with Research Protocols](#f2-scientific-validation-with-research-protocols)
+    - 6.1. [F.1 User Experience Evaluation](#f1-user-experience-evaluation)
+    - 6.2. [F.2 Scientific Validation with Research Protocols](#f2-scientific-validation-with-research-protocols)
 7. [Appendix G: Code Listing](#appendix-g-code-listing)
-   - 7.1. [G.1 Key Implementation Components](#g1-key-implementation-components)
+    - 7.1. [G.1 Key Implementation Components](#g1-key-implementation-components)
 8. [Appendix H: Missing Diagrams and Visual Content](#appendix-h-missing-diagrams-and-visual-content)
-   - 8.1. [H.1 Missing Diagram Inventory](#h1-missing-diagram-inventory)
-   - 8.2. [H.2 Available Diagram Mappings](#h2-available-diagram-mappings)
+    - 8.1. [H.1 Missing Diagram Inventory](#h1-missing-diagram-inventory)
+    - 8.2. [H.2 Available Diagram Mappings](#h2-available-diagram-mappings)
 
 ---
 
@@ -47,96 +49,101 @@
 
 ### Technical Documentation for System Maintenance and Extension
 
-This appendix provides comprehensive technical information necessary for future development teams to continue, modify, or extend the Multi-Sensor Recording System. The system follows a component-first documentation approach with detailed technical specifications available in the `docs/new_documentation/` directory.
+This appendix provides comprehensive technical information necessary for future development teams to continue, modify,
+or extend the Multi-Sensor Recording System. The system follows a component-first documentation approach with detailed
+technical specifications available in the `docs/new_documentation/` directory.
 
 ### A.1 Component Documentation Reference
 
 The Multi-Sensor Recording System is organized into self-contained components, each with comprehensive documentation:
 
 **Core System Components:**
+
 - **Android Mobile Application**: `docs/new_documentation/README_Android_Mobile_Application.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_Android_Mobile_Application.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_Android_Mobile_Application.md`
 
 - **Python Desktop Controller**: `docs/new_documentation/README_python_desktop_controller.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_python_desktop_controller.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_python_desktop_controller.md`
 
 - **Multi-Device Synchronization**: `docs/new_documentation/README_Multi_Device_Synchronization.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_Multi_Device_Synchronization.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_Multi_Device_Synchronization.md`
 
 - **Camera Recording System**: `docs/new_documentation/README_CameraRecorder.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_CameraRecorder.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_CameraRecorder.md`
 
 - **Session Management**: `docs/new_documentation/README_session_management.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_session_management.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_session_management.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_session_management.md`
 
 **Hardware Integration Components:**
+
 - **Shimmer3 GSR+ Sensor**: `docs/new_documentation/README_shimmer3_gsr_plus.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_shimmer3_gsr_plus.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_shimmer3_gsr_plus.md`
 
 - **TopDon TC001 Thermal Camera**: `docs/new_documentation/README_topdon_tc001.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_topdon_tc001.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_topdon_tc001.md`
 
 **Testing and Validation:**
+
 - **Testing and QA Framework**: `docs/new_documentation/README_testing_qa_framework.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
 
 ### A.2 Literature Review and Technical Foundation Tables
 
 **Table A.2.1: Quick Access Links for Documentation Structure**
 
-| Section | Coverage | Key Topics |
-|---------|----------|------------|
-| Technical Foundations | Chapter 2 - Part A | Distributed Systems, Software Architecture, Technology Selection |
+| Section                   | Coverage           | Key Topics                                                            |
+|---------------------------|--------------------|-----------------------------------------------------------------------|
+| Technical Foundations     | Chapter 2 - Part A | Distributed Systems, Software Architecture, Technology Selection      |
 | Physiological Foundations | Chapter 2 - Part B | Stress Detection, GSR vs. Cortisol, Thermal Imaging, Sensor Selection |
 
 ### A.3 Network Communication Protocol Specifications
 
 **Table A.3.1: Network Communication Protocol Specifications**
 
-| Protocol Layer | Technology | Purpose | Performance Metrics | Security Features |
-|---|---|---|---|---|
-| **Transport Layer** | WebSocket over TLS 1.3 | Bidirectional real-time communication | <50ms latency, 99.9% reliability | End-to-end encryption |
-| **Application Layer** | JSON-based messaging | Structured data exchange | <10ms parsing time | Message integrity validation |
-| **Synchronization** | NTP + custom compensation | Temporal alignment | ±25ms precision | Tamper-resistant timestamps |
-| **Discovery Layer** | mDNS/Bonjour | Automatic device discovery | <30s discovery time | Certificate-based authentication |
-| **Error Recovery** | Automatic reconnection | Fault tolerance | <15s recovery time | Session state preservation |
-| **Data Integrity** | CRC32 + MD5 checksums | Corruption detection | 100% error detection | Cryptographic signatures |
+| Protocol Layer        | Technology                | Purpose                               | Performance Metrics              | Security Features                |
+|-----------------------|---------------------------|---------------------------------------|----------------------------------|----------------------------------|
+| **Transport Layer**   | WebSocket over TLS 1.3    | Bidirectional real-time communication | <50ms latency, 99.9% reliability | End-to-end encryption            |
+| **Application Layer** | JSON-based messaging      | Structured data exchange              | <10ms parsing time               | Message integrity validation     |
+| **Synchronization**   | NTP + custom compensation | Temporal alignment                    | ±25ms precision                  | Tamper-resistant timestamps      |
+| **Discovery Layer**   | mDNS/Bonjour              | Automatic device discovery            | <30s discovery time              | Certificate-based authentication |
+| **Error Recovery**    | Automatic reconnection    | Fault tolerance                       | <15s recovery time               | Session state preservation       |
+| **Data Integrity**    | CRC32 + MD5 checksums     | Corruption detection                  | 100% error detection             | Cryptographic signatures         |
 
 ### A.4 System Performance Specifications
 
 **Table A.4.1: Performance Benchmarks vs. Target Specifications**
 
-| Performance Metric | Target Specification | Achieved Performance | Performance Ratio | Status |
-|---|---|---|---|---|
-| **Temporal Synchronization** | ±50ms accuracy | ±18.7ms (avg) | 267% better | ✅ Exceeds target |
-| **Frame Rate Consistency** | 24 FPS minimum | 29.8 FPS (avg) | 124% of target | ✅ Exceeds target |
-| **Data Throughput** | 25 MB/s minimum | 47.3 MB/s (avg) | 189% of target | ✅ Exceeds target |
-| **System Uptime** | 95% availability | 99.73% achieved | 105% of target | ✅ Exceeds target |
-| **Setup Time** | <10 minutes | 6.2 minutes (avg) | 161% faster | ✅ Exceeds target |
-| **Battery Life** | 4 hours minimum | 5.8 hours (avg) | 145% of target | ✅ Exceeds target |
-| **Device Capacity** | 8 devices maximum | 12 devices tested | 150% of target | ✅ Exceeds target |
-| **Error Rate** | <1% data loss | 0.027% observed | 3700% better | ✅ Exceeds target |
+| Performance Metric           | Target Specification | Achieved Performance | Performance Ratio | Status           |
+|------------------------------|----------------------|----------------------|-------------------|------------------|
+| **Temporal Synchronization** | ±50ms accuracy       | ±18.7ms (avg)        | 267% better       | ✅ Exceeds target |
+| **Frame Rate Consistency**   | 24 FPS minimum       | 29.8 FPS (avg)       | 124% of target    | ✅ Exceeds target |
+| **Data Throughput**          | 25 MB/s minimum      | 47.3 MB/s (avg)      | 189% of target    | ✅ Exceeds target |
+| **System Uptime**            | 95% availability     | 99.73% achieved      | 105% of target    | ✅ Exceeds target |
+| **Setup Time**               | <10 minutes          | 6.2 minutes (avg)    | 161% faster       | ✅ Exceeds target |
+| **Battery Life**             | 4 hours minimum      | 5.8 hours (avg)      | 145% of target    | ✅ Exceeds target |
+| **Device Capacity**          | 8 devices maximum    | 12 devices tested    | 150% of target    | ✅ Exceeds target |
+| **Error Rate**               | <1% data loss        | 0.027% observed      | 3700% better      | ✅ Exceeds target |
 
 ### A.5 Technology Stack Justification Matrix
 
 **Table A.5.1: Technology Stack Justification Matrix**
 
-| Technology Choice | Alternative Considered | Decision Rationale | Performance Impact | Integration Complexity |
-|---|---|---|---|---|
-| **Python + FastAPI** | Java Spring, Node.js | Rapid prototyping, rich scientific libraries | High performance, low latency | Low complexity |
-| **Kotlin + Camera2** | Java + CameraX, Flutter | Native performance, modern async support | Maximum performance | Medium complexity |
-| **WebSocket Protocol** | HTTP REST, gRPC | Real-time bidirectional communication | Low latency communication | Low complexity |
-| **SQLite + JSON** | PostgreSQL, MongoDB | Local storage simplicity | Fast local queries | Low complexity |
-| **OpenCV Integration** | Custom image processing | Mature computer vision library | Optimized algorithms | Medium complexity |
-| **Bluetooth LE** | WiFi Direct, USB | Low power, standardized protocol | Power efficient | Medium complexity |
+| Technology Choice      | Alternative Considered  | Decision Rationale                           | Performance Impact            | Integration Complexity |
+|------------------------|-------------------------|----------------------------------------------|-------------------------------|------------------------|
+| **Python + FastAPI**   | Java Spring, Node.js    | Rapid prototyping, rich scientific libraries | High performance, low latency | Low complexity         |
+| **Kotlin + Camera2**   | Java + CameraX, Flutter | Native performance, modern async support     | Maximum performance           | Medium complexity      |
+| **WebSocket Protocol** | HTTP REST, gRPC         | Real-time bidirectional communication        | Low latency communication     | Low complexity         |
+| **SQLite + JSON**      | PostgreSQL, MongoDB     | Local storage simplicity                     | Fast local queries            | Low complexity         |
+| **OpenCV Integration** | Custom image processing | Mature computer vision library               | Optimized algorithms          | Medium complexity      |
+| **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardized protocol             | Power efficient               | Medium complexity      |
 
 ---
 
@@ -146,150 +153,155 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 
 **Table B.1.1: Multi-Level Testing Coverage Summary**
 
-| Testing Level | Coverage Scope | Test Cases | Pass Rate | Critical Issues | Resolution Status | Confidence Level |
-|---|---|---|---|---|---|---|
-| **Unit Testing** | Individual functions and methods | 1,247 tests | 98.7% | 3 critical | ✅ Resolved | 99.9% |
-| **Component Testing** | Individual modules and classes | 342 tests | 99.1% | 1 critical | ✅ Resolved | 99.8% |
-| **Integration Testing** | Inter-component communication | 156 tests | 97.4% | 2 critical | ✅ Resolved | 99.5% |
-| **System Testing** | End-to-end workflows | 89 tests | 96.6% | 1 critical | ✅ Resolved | 99.2% |
-| **Performance Testing** | Load and stress scenarios | 45 tests | 94.4% | 0 critical | N/A | 98.7% |
-| **Reliability Testing** | Extended operation scenarios | 12 tests | 100% | 0 critical | N/A | 99.9% |
+| Testing Level           | Coverage Scope                   | Test Cases  | Pass Rate | Critical Issues | Resolution Status | Confidence Level |
+|-------------------------|----------------------------------|-------------|-----------|-----------------|-------------------|------------------|
+| **Unit Testing**        | Individual functions and methods | 1,247 tests | 98.7%     | 3 critical      | ✅ Resolved        | 99.9%            |
+| **Component Testing**   | Individual modules and classes   | 342 tests   | 99.1%     | 1 critical      | ✅ Resolved        | 99.8%            |
+| **Integration Testing** | Inter-component communication    | 156 tests   | 97.4%     | 2 critical      | ✅ Resolved        | 99.5%            |
+| **System Testing**      | End-to-end workflows             | 89 tests    | 96.6%     | 1 critical      | ✅ Resolved        | 99.2%            |
+| **Performance Testing** | Load and stress scenarios        | 45 tests    | 94.4%     | 0 critical      | N/A               | 98.7%            |
+| **Reliability Testing** | Extended operation scenarios     | 12 tests    | 100%      | 0 critical      | N/A               | 99.9%            |
 
 ### B.2 Algorithm Validation Results
 
 **Table B.2.1: Algorithm Validation Results**
 
-| Algorithm Category | Test Cases | Accuracy Target | Achieved Accuracy | Performance Target | Achieved Performance |
-|---|---|---|---|---|---|
-| **Camera Calibration** | 45 tests | <0.5 pixel RMS | 0.23 ± 0.08 pixel | <10s processing | 6.4 ± 1.2s |
-| **Synchronization** | 120 tests | <5ms precision | 2.1 ± 0.8ms | <1s coordination | 0.34 ± 0.12s |
-| **Signal Processing** | 78 tests | >95% correlation | 97.8 ± 1.4% | <100ms latency | 67 ± 15ms |
-| **Thermal Processing** | 32 tests | ±0.1°C accuracy | ±0.06°C | <50ms frame | 28 ± 8ms |
+| Algorithm Category     | Test Cases | Accuracy Target  | Achieved Accuracy | Performance Target | Achieved Performance |
+|------------------------|------------|------------------|-------------------|--------------------|----------------------|
+| **Camera Calibration** | 45 tests   | <0.5 pixel RMS   | 0.23 ± 0.08 pixel | <10s processing    | 6.4 ± 1.2s           |
+| **Synchronization**    | 120 tests  | <5ms precision   | 2.1 ± 0.8ms       | <1s coordination   | 0.34 ± 0.12s         |
+| **Signal Processing**  | 78 tests   | >95% correlation | 97.8 ± 1.4%       | <100ms latency     | 67 ± 15ms            |
+| **Thermal Processing** | 32 tests   | ±0.1°C accuracy  | ±0.06°C           | <50ms frame        | 28 ± 8ms             |
 
 ### B.3 Multi-Device Coordination Test Results
 
 **Table B.3.1: Multi-Device Coordination Test Results**
 
-| Device Count | Connection Success Rate | Sync Precision | Data Integrity | Session Success Rate | Performance Impact |
-|---|---|---|---|---|---|
-| **2 Devices** | 100% | 1.8 ± 0.4ms | 99.98% | 100% | Baseline |
-| **4 Devices** | 98.5% | 2.3 ± 0.7ms | 99.94% | 98.2% | +15% CPU |
-| **6 Devices** | 96.8% | 3.1 ± 1.2ms | 99.89% | 95.1% | +28% CPU |
-| **8 Devices** | 94.2% | 4.2 ± 1.8ms | 99.82% | 91.7% | +45% CPU |
+| Device Count  | Connection Success Rate | Sync Precision | Data Integrity | Session Success Rate | Performance Impact |
+|---------------|-------------------------|----------------|----------------|----------------------|--------------------|
+| **2 Devices** | 100%                    | 1.8 ± 0.4ms    | 99.98%         | 100%                 | Baseline           |
+| **4 Devices** | 98.5%                   | 2.3 ± 0.7ms    | 99.94%         | 98.2%                | +15% CPU           |
+| **6 Devices** | 96.8%                   | 3.1 ± 1.2ms    | 99.89%         | 95.1%                | +28% CPU           |
+| **8 Devices** | 94.2%                   | 4.2 ± 1.8ms    | 99.82%         | 91.7%                | +45% CPU           |
 
 ### B.4 Network Performance Test Results
 
 **Table B.4.1: Network Performance Test Results**
 
-| Network Condition | Latency | Packet Loss | Success Rate | Data Integrity | Recovery Time |
-|---|---|---|---|---|---|
-| **Optimal** | 1-5ms | 0% | 100% | 100% | N/A |
-| **Good** | 10-25ms | 0.1% | 99.8% | 99.98% | <2s |
-| **Fair** | 50-100ms | 1% | 98.5% | 99.87% | 3-8s |
-| **Poor** | 200-500ms | 5% | 92.3% | 99.45% | 10-30s |
-| **Critical** | >500ms | >10% | 78.9% | 98.92% | 30-120s |
+| Network Condition | Latency   | Packet Loss | Success Rate | Data Integrity | Recovery Time |
+|-------------------|-----------|-------------|--------------|----------------|---------------|
+| **Optimal**       | 1-5ms     | 0%          | 100%         | 100%           | N/A           |
+| **Good**          | 10-25ms   | 0.1%        | 99.8%        | 99.98%         | <2s           |
+| **Fair**          | 50-100ms  | 1%          | 98.5%        | 99.87%         | 3-8s          |
+| **Poor**          | 200-500ms | 5%          | 92.3%        | 99.45%         | 10-30s        |
+| **Critical**      | >500ms    | >10%        | 78.9%        | 98.92%         | 30-120s       |
 
 ### B.5 Synchronization Precision Results
 
 **Table B.5.1: Synchronization Precision Results**
 
-| Synchronization Metric | Target Precision | Measured Precision | Sample Size | Statistical Analysis |
-|---|---|---|---|---|
-| **Initial Sync** | ≤50ms | 23.7ms ± 8.2ms | n=500 | Mean ± SD, normal distribution |
-| **Sustained Sync** | ≤25ms | 18.4ms ± 6.1ms | n=10,000 | 95.7% within tolerance |
-| **Recovery Sync** | ≤100ms | 67.3ms ± 15.4ms | n=200 | Exponential recovery pattern |
-| **Cross-Device** | ≤25ms | 21.8ms ± 7.9ms | n=2,000 | Cross-device variance analysis |
-| **Long-Term Drift** | <1ms/hour | 0.34ms/hour ± 0.12ms | 24h sessions | Linear regression analysis |
+| Synchronization Metric | Target Precision | Measured Precision   | Sample Size  | Statistical Analysis           |
+|------------------------|------------------|----------------------|--------------|--------------------------------|
+| **Initial Sync**       | ≤50ms            | 23.7ms ± 8.2ms       | n=500        | Mean ± SD, normal distribution |
+| **Sustained Sync**     | ≤25ms            | 18.4ms ± 6.1ms       | n=10,000     | 95.7% within tolerance         |
+| **Recovery Sync**      | ≤100ms           | 67.3ms ± 15.4ms      | n=200        | Exponential recovery pattern   |
+| **Cross-Device**       | ≤25ms            | 21.8ms ± 7.9ms       | n=2,000      | Cross-device variance analysis |
+| **Long-Term Drift**    | <1ms/hour        | 0.34ms/hour ± 0.12ms | 24h sessions | Linear regression analysis     |
 
 ### B.6 Throughput and Scalability Assessment Results
 
 **Table B.6.1: Throughput and Scalability Assessment Results**
 
-| Performance Metric | 2 Devices | 4 Devices | 6 Devices | 8 Devices | Scalability Factor |
-|---|---|---|---|---|---|
-| **Data Throughput** | 45.2 MB/s | 87.3 MB/s | 126.8 MB/s | 158.4 MB/s | Linear (0.92) |
-| **CPU Utilization** | 32.1% | 58.7% | 78.9% | 95.2% | Near-linear (0.88) |
-| **Memory Usage** | 1.8 GB | 3.2 GB | 4.7 GB | 6.8 GB | Super-linear (1.15) |
-| **Response Time** | 0.8s | 1.2s | 1.9s | 3.1s | Exponential (1.42) |
-| **Error Rate** | 0.1% | 0.3% | 0.8% | 2.1% | Exponential (1.89) |
+| Performance Metric  | 2 Devices | 4 Devices | 6 Devices  | 8 Devices  | Scalability Factor  |
+|---------------------|-----------|-----------|------------|------------|---------------------|
+| **Data Throughput** | 45.2 MB/s | 87.3 MB/s | 126.8 MB/s | 158.4 MB/s | Linear (0.92)       |
+| **CPU Utilization** | 32.1%     | 58.7%     | 78.9%      | 95.2%      | Near-linear (0.88)  |
+| **Memory Usage**    | 1.8 GB    | 3.2 GB    | 4.7 GB     | 6.8 GB     | Super-linear (1.15) |
+| **Response Time**   | 0.8s      | 1.2s      | 1.9s       | 3.1s       | Exponential (1.42)  |
+| **Error Rate**      | 0.1%      | 0.3%      | 0.8%       | 2.1%       | Exponential (1.89)  |
 
 ### B.7 Reliability and Fault Tolerance Results
 
 **Table B.7.1: Reliability and Fault Tolerance Results**
 
-| Reliability Metric | Target Value | Measured Value | Test Duration | Statistical Significance |
-|---|---|---|---|---|
-| **System Uptime** | ≥99.5% | 99.73% ± 0.12% | 168 hours | p < 0.001 |
-| **Data Success Rate** | ≥99% | 99.84% ± 0.08% | 720 sessions | 99.9% confidence |
-| **Network Stability** | ≥98% | 99.21% ± 0.15% | 10,000 connections | p < 0.01 |
-| **Recovery Success** | ≥95% | 98.7% ± 1.2% | 156 failure scenarios | 95% confidence |
-| **Sync Accuracy** | ≥99% | 99.91% ± 0.04% | 50,000 sync events | p < 0.001 |
+| Reliability Metric    | Target Value | Measured Value | Test Duration         | Statistical Significance |
+|-----------------------|--------------|----------------|-----------------------|--------------------------|
+| **System Uptime**     | ≥99.5%       | 99.73% ± 0.12% | 168 hours             | p < 0.001                |
+| **Data Success Rate** | ≥99%         | 99.84% ± 0.08% | 720 sessions          | 99.9% confidence         |
+| **Network Stability** | ≥98%         | 99.21% ± 0.15% | 10,000 connections    | p < 0.01                 |
+| **Recovery Success**  | ≥95%         | 98.7% ± 1.2%   | 156 failure scenarios | 95% confidence           |
+| **Sync Accuracy**     | ≥99%         | 99.91% ± 0.04% | 50,000 sync events    | p < 0.001                |
 
 ### B.8 User Experience and Usability Results
 
 **Table B.8.1: User Experience and Usability Results**
 
-| Usability Metric | Target Value | Measured Value | Sample Size | User Satisfaction |
-|---|---|---|---|---|
-| **Setup Time** | <10 minutes | 6.2 ± 1.1 minutes | n=50 users | 92% satisfied |
-| **Learning Curve** | <2 hours | 1.4 ± 0.3 hours | n=25 new users | 88% satisfied |
-| **Task Completion** | >95% | 97.8% ± 2.1% | n=200 tasks | 94% satisfied |
-| **Error Recovery** | <5 minutes | 3.2 ± 1.8 minutes | n=45 errors | 89% satisfied |
-| **Overall Satisfaction** | >85% | 91.2% ± 4.3% | n=75 users | 91% satisfied |
+| Usability Metric         | Target Value | Measured Value    | Sample Size    | User Satisfaction |
+|--------------------------|--------------|-------------------|----------------|-------------------|
+| **Setup Time**           | <10 minutes  | 6.2 ± 1.1 minutes | n=50 users     | 92% satisfied     |
+| **Learning Curve**       | <2 hours     | 1.4 ± 0.3 hours   | n=25 new users | 88% satisfied     |
+| **Task Completion**      | >95%         | 97.8% ± 2.1%      | n=200 tasks    | 94% satisfied     |
+| **Error Recovery**       | <5 minutes   | 3.2 ± 1.8 minutes | n=45 errors    | 89% satisfied     |
+| **Overall Satisfaction** | >85%         | 91.2% ± 4.3%      | n=75 users     | 91% satisfied     |
 
 ### B.9 Performance Validation Summary
 
 **Table B.9.1: Performance Validation Summary**
 
-| Performance Category | Tests Executed | Success Rate | Performance vs. Target | Critical Issues |
-|---|---|---|---|---|
-| **Response Time** | 1,000 tests | 96.8% | 149% better | 0 critical |
-| **Throughput** | 500 tests | 94.2% | 189% of target | 0 critical |
-| **Resource Usage** | 100 sessions | 98.7% | Within limits | 0 critical |
-| **Scalability** | 45 scenarios | 91.1% | 8-device support | 0 critical |
-| **Overall Performance** | 1,645 tests | 95.2% | Exceeds targets | 0 critical |
+| Performance Category    | Tests Executed | Success Rate | Performance vs. Target | Critical Issues |
+|-------------------------|----------------|--------------|------------------------|-----------------|
+| **Response Time**       | 1,000 tests    | 96.8%        | 149% better            | 0 critical      |
+| **Throughput**          | 500 tests      | 94.2%        | 189% of target         | 0 critical      |
+| **Resource Usage**      | 100 sessions   | 98.7%        | Within limits          | 0 critical      |
+| **Scalability**         | 45 scenarios   | 91.1%        | 8-device support       | 0 critical      |
+| **Overall Performance** | 1,645 tests    | 95.2%        | Exceeds targets        | 0 critical      |
 
 ### B.10 Reliability Assessment Results
 
 **Table B.10.1: Reliability Assessment Results**
 
-| Reliability Metric | Target | Achieved | Test Duration | Confidence Level |
-|---|---|---|---|---|
-| **System Availability** | ≥99.5% | 99.73% ± 0.12% | 168 hours | 99.9% |
-| **Data Integrity** | ≥99.9% | 99.98% ± 0.02% | 1M operations | 99.9% |
-| **Recovery Success** | ≥95% | 98.7% ± 1.2% | 156 scenarios | 95% |
-| **Error Rate** | <1% | 0.27% ± 0.08% | 10K operations | 99% |
-| **Stability Duration** | 24 hours | 168+ hours | Continuous | Validated |
+| Reliability Metric      | Target   | Achieved       | Test Duration  | Confidence Level |
+|-------------------------|----------|----------------|----------------|------------------|
+| **System Availability** | ≥99.5%   | 99.73% ± 0.12% | 168 hours      | 99.9%            |
+| **Data Integrity**      | ≥99.9%   | 99.98% ± 0.02% | 1M operations  | 99.9%            |
+| **Recovery Success**    | ≥95%     | 98.7% ± 1.2%   | 156 scenarios  | 95%              |
+| **Error Rate**          | <1%      | 0.27% ± 0.08%  | 10K operations | 99%              |
+| **Stability Duration**  | 24 hours | 168+ hours     | Continuous     | Validated        |
 
 ### B.11 Usability and Effectiveness Summary
 
 **Table B.11.1: Usability and Effectiveness Summary**
 
-| Usability Aspect | Target | Achieved | Sample Size | Success Rate |
-|---|---|---|---|---|
-| **Setup Efficiency** | <10 min | 6.2 ± 1.1 min | n=50 | 96% |
-| **Learning Curve** | <2 hours | 1.4 ± 0.3 hours | n=25 | 88% |
-| **Task Success** | >95% | 97.8% ± 2.1% | n=200 | 98% |
-| **Error Recovery** | <5 min | 3.2 ± 1.8 min | n=45 | 89% |
-| **User Satisfaction** | >85% | 91.2% ± 4.3% | n=75 | 91% |
+| Usability Aspect      | Target   | Achieved        | Sample Size | Success Rate |
+|-----------------------|----------|-----------------|-------------|--------------|
+| **Setup Efficiency**  | <10 min  | 6.2 ± 1.1 min   | n=50        | 96%          |
+| **Learning Curve**    | <2 hours | 1.4 ± 0.3 hours | n=25        | 88%          |
+| **Task Success**      | >95%     | 97.8% ± 2.1%    | n=200       | 98%          |
+| **Error Recovery**    | <5 min   | 3.2 ± 1.8 min   | n=45        | 89%          |
+| **User Satisfaction** | >85%     | 91.2% ± 4.3%    | n=75        | 91%          |
 
 ---
 
 ## Appendix C: User Manual
 
-This section provides consolidated technical specifications from all comprehensive component documentation integrated into the thesis framework.
+This section provides consolidated technical specifications from all comprehensive component documentation integrated
+into the thesis framework.
 
 **Multi-Device Synchronization System Technical Specifications:**
 
-The synchronization system implements sophisticated Network Time Protocol (NTP) algorithms optimized for local network precision and mobile device coordination. The system achieves sub-millisecond temporal alignment across diverse sensor modalities through advanced clock drift compensation and network-resilient communication protocols.
+The synchronization system implements sophisticated Network Time Protocol (NTP) algorithms optimized for local network
+precision and mobile device coordination. The system achieves sub-millisecond temporal alignment across diverse sensor
+modalities through advanced clock drift compensation and network-resilient communication protocols.
 
 *Core Synchronization Components:*
+
 - **MasterClockSynchronizer**: Central time authority with precision drift compensation
-- **SessionSynchronizer**: Coordinated session management with automatic recovery mechanisms  
+- **SessionSynchronizer**: Coordinated session management with automatic recovery mechanisms
 - **NTPTimeServer**: Custom NTP implementation optimized for local network operation
 - **Clock Drift Compensation**: Advanced algorithms maintaining accuracy over extended sessions
 
 *Performance Specifications:*
+
 - **Temporal Precision**: ±3.2ms synchronization accuracy across all connected devices
 - **Network Latency Tolerance**: 1ms to 500ms with adaptive quality management
 - **Device Coordination**: Support for up to 8 simultaneous devices with horizontal scaling
@@ -297,9 +309,12 @@ The synchronization system implements sophisticated Network Time Protocol (NTP) 
 
 **Android Mobile Application Architecture Specifications:**
 
-The Android application implements sophisticated autonomous operation with comprehensive multi-sensor coordination capabilities. The architecture employs modern Android development patterns with fragment-based UI, Room database persistence, and Kotlin Coroutines for structured concurrency.
+The Android application implements sophisticated autonomous operation with comprehensive multi-sensor coordination
+capabilities. The architecture employs modern Android development patterns with fragment-based UI, Room database
+persistence, and Kotlin Coroutines for structured concurrency.
 
 *Technical Architecture Components:*
+
 - **Fragment-Based UI**: RecordingFragment, DevicesFragment, CalibrationFragment architecture
 - **Multi-Sensor Coordination**: Simultaneous RGB, thermal, and physiological sensor management
 - **Room Database**: Local persistence with automatic backup and integrity verification
@@ -307,6 +322,7 @@ The Android application implements sophisticated autonomous operation with compr
 - **Background Processing**: Kotlin Coroutines enabling responsive UI with complex sensor coordination
 
 *Performance Specifications:*
+
 - **Video Recording**: 4K resolution at sustained 60fps with simultaneous RAW capture
 - **Battery Optimization**: 5.8 ± 0.4 hours continuous operation with intelligent power management
 - **Memory Management**: 2.8 ± 0.3GB peak usage with automatic resource optimization
@@ -314,9 +330,12 @@ The Android application implements sophisticated autonomous operation with compr
 
 **Python Desktop Controller Technical Specifications:**
 
-The Python controller implements sophisticated distributed system coordination with dependency injection architecture and comprehensive service orchestration. The system provides central coordination for multi-device networks while maintaining individual device autonomy.
+The Python controller implements sophisticated distributed system coordination with dependency injection architecture
+and comprehensive service orchestration. The system provides central coordination for multi-device networks while
+maintaining individual device autonomy.
 
 *Architectural Components:*
+
 - **Application Container**: Advanced IoC container with lifecycle management and service orchestration
 - **Network Layer**: Sophisticated TCP/WebSocket server supporting up to 8 simultaneous connections
 - **Synchronization Engine**: Master clock synchronizer with custom NTP protocol implementation
@@ -324,6 +343,7 @@ The Python controller implements sophisticated distributed system coordination w
 - **Session Management**: Comprehensive lifecycle control with automatic recovery and validation
 
 *Performance Specifications:*
+
 - **System Response Time**: 1.34 ± 0.18s with intelligent load balancing
 - **Data Throughput**: 47.3 ± 2.1 MB/s with adaptive quality management
 - **CPU Utilization**: 56.2 ± 8.4% across diverse operational scenarios
@@ -331,9 +351,12 @@ The Python controller implements sophisticated distributed system coordination w
 
 **Camera Recording System Technical Specifications:**
 
-The camera system implements Stage 3 RAW extraction with Samsung-specific optimizations and multi-stream configuration capabilities. The system supports simultaneous 4K video recording and DNG RAW capture with precise temporal synchronization.
+The camera system implements Stage 3 RAW extraction with Samsung-specific optimizations and multi-stream configuration
+capabilities. The system supports simultaneous 4K video recording and DNG RAW capture with precise temporal
+synchronization.
 
 *Technical Features:*
+
 - **Multi-Stream Configuration**: Independent video and RAW capture with quality optimization
 - **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic detection
 - **RAW Processing Pipeline**: DNG file generation with comprehensive metadata embedding
@@ -341,6 +364,7 @@ The camera system implements Stage 3 RAW extraction with Samsung-specific optimi
 - **Quality Validation**: Comprehensive error management and recovery with visual confirmation
 
 *Performance Specifications:*
+
 - **Frame Rate Consistency**: 99.8% within tolerance across 50,000 frame validation
 - **Setup Time**: 6.2 ± 1.1 minutes with automated configuration management
 - **Resolution**: 4K (3840×2160) video with simultaneous RAW capture capabilities
@@ -348,9 +372,12 @@ The camera system implements Stage 3 RAW extraction with Samsung-specific optimi
 
 **Shimmer3 GSR+ Integration Technical Specifications:**
 
-The Shimmer3 integration provides research-grade physiological measurement with multi-sensor platform capabilities and comprehensive wireless connectivity management. The system supports high-precision GSR measurements alongside complementary physiological signals.
+The Shimmer3 integration provides research-grade physiological measurement with multi-sensor platform capabilities and
+comprehensive wireless connectivity management. The system supports high-precision GSR measurements alongside
+complementary physiological signals.
 
 *Hardware Specifications:*
+
 - **GSR Measurement Ranges**: 10kΩ to 4.7MΩ across five configurable ranges
 - **Sampling Rates**: 1 Hz to 1000 Hz with adaptive rate management
 - **Multi-Sensor Platform**: Integrated PPG, accelerometry, gyroscope, and magnetometer
@@ -358,6 +385,7 @@ The Shimmer3 integration provides research-grade physiological measurement with 
 - **Battery Life**: Extended operation with intelligent power management
 
 *Data Quality Features:*
+
 - **Real-Time Assessment**: Continuous signal quality monitoring with artifact detection
 - **Electrode Contact Detection**: Automatic validation of sensor-skin interface quality
 - **Movement Artifact Identification**: Advanced algorithms detecting motion-related signal corruption
@@ -365,9 +393,11 @@ The Shimmer3 integration provides research-grade physiological measurement with 
 
 **TopDon Thermal Camera Integration Technical Specifications:**
 
-The thermal camera integration provides sophisticated temperature measurement capabilities optimized for physiological research applications. The system features uncooled microbolometer technology with research-grade accuracy.
+The thermal camera integration provides sophisticated temperature measurement capabilities optimized for physiological
+research applications. The system features uncooled microbolometer technology with research-grade accuracy.
 
 *Hardware Specifications:*
+
 - **Resolution**: 256×192 pixel thermal sensor with high-precision measurement
 - **Temperature Range**: -20°C to +650°C (TC001 Plus) with ±1.5°C accuracy
 - **Frame Rate**: Up to 25 Hz with real-time thermal data processing
@@ -375,6 +405,7 @@ The thermal camera integration provides sophisticated temperature measurement ca
 - **Connectivity**: USB-C OTG with Android device integration and automatic detection
 
 *Processing Capabilities:*
+
 - **Real-Time Calibration**: Manufacturer-validated coefficients with environmental compensation
 - **Temperature ROI Analysis**: Multi-point measurement with region-specific analysis
 - **Thermal Data Export**: Raw thermal data access with processed temperature matrices
@@ -382,26 +413,31 @@ The thermal camera integration provides sophisticated temperature measurement ca
 
 **Testing and Quality Assurance Framework Technical Specifications:**
 
-The testing framework implements comprehensive multi-layered validation with sophisticated statistical analysis and confidence interval estimation. The system provides systematic validation from component level through complete system integration.
+The testing framework implements comprehensive multi-layered validation with sophisticated statistical analysis and
+confidence interval estimation. The system provides systematic validation from component level through complete system
+integration.
 
 *Testing Infrastructure:*
+
 - **Python Testing**: pytest framework with asyncio integration and comprehensive coverage analysis
 - **Android Testing**: JUnit 5 with Espresso UI testing and MockK framework integration
 - **Integration Testing**: WebSocket validation with network simulation and error injection
 - **Statistical Validation**: Confidence interval estimation with comparative benchmark analysis
 
 *Quality Standards:*
+
 - **Code Coverage**: 75% line coverage minimum with 65% branch coverage requirements
 - **Performance Benchmarks**: Sub-2 second response time with 99% availability requirements
 - **Security Standards**: Zero high-severity vulnerabilities with comprehensive penetration testing
 - **Research Compliance**: Systematic validation of scientific methodology and data integrity
 - **Testing Framework**: `docs/new_documentation/README_testing_qa_framework.md`
-  - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
-  - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
+    - User guide: `docs/new_documentation/USER_GUIDE_testing_qa_framework.md`
+    - Protocol: `docs/new_documentation/PROTOCOL_testing_qa_framework.md`
 
 ### A.2 Validated System Configuration
 
 Based on comprehensive testing, the current system supports:
+
 - **Device Coordination**: Up to 4 simultaneous devices tested and validated
 - **Network Performance**: Latency tolerance from 1ms to 500ms
 - **Test Success Rate**: 71.4% across comprehensive validation scenarios
@@ -471,43 +507,43 @@ graph TB
 
 **Table A.1: Validated Hardware Configuration Matrix**
 
-| Component Category | Minimum Tested | Recommended Configuration | Notes | Estimated Cost (USD) |
-|---|---|---|---|---|
-| **Central Controller** | Multi-core CPU, 8GB RAM | Python 3.9+, conda environment | Linux/Windows compatible | $800-1,200 |
-| **Android Devices** | Android 8.0+, 4GB RAM | Samsung Galaxy S22, Android 11+ | 4 devices tested simultaneously | $300-800 each |
-| **Thermal Cameras** | TopDon TC001 | TopDon TC001 Plus with USB-C | TC001: -20°C to +550°C, TC001+: -20°C to +650°C | $350-500 each |
-| **GSR Sensors** | Shimmer3 GSR+ basic | Shimmer3 GSR+ with BLE | Bluetooth Low Energy support, 0.1-50μS range | $1,200-1,800 each |
-| **Network Infrastructure** | Wi-Fi 802.11n | Wi-Fi 802.11ac dual-band | Tested with 1ms-500ms latency | $100-400 |
-| **Storage Solutions** | 1TB local storage | Network storage with backup | Session data and video files | $200-1,000 |
+| Component Category         | Minimum Tested          | Recommended Configuration       | Notes                                           | Estimated Cost (USD) |
+|----------------------------|-------------------------|---------------------------------|-------------------------------------------------|----------------------|
+| **Central Controller**     | Multi-core CPU, 8GB RAM | Python 3.9+, conda environment  | Linux/Windows compatible                        | $800-1,200           |
+| **Android Devices**        | Android 8.0+, 4GB RAM   | Samsung Galaxy S22, Android 11+ | 4 devices tested simultaneously                 | $300-800 each        |
+| **Thermal Cameras**        | TopDon TC001            | TopDon TC001 Plus with USB-C    | TC001: -20°C to +550°C, TC001+: -20°C to +650°C | $350-500 each        |
+| **GSR Sensors**            | Shimmer3 GSR+ basic     | Shimmer3 GSR+ with BLE          | Bluetooth Low Energy support, 0.1-50μS range    | $1,200-1,800 each    |
+| **Network Infrastructure** | Wi-Fi 802.11n           | Wi-Fi 802.11ac dual-band        | Tested with 1ms-500ms latency                   | $100-400             |
+| **Storage Solutions**      | 1TB local storage       | Network storage with backup     | Session data and video files                    | $200-1,000           |
 
 **TopDon Thermal Camera Detailed Specifications:**
 
-| Specification | TC001 | TC001 Plus |
-|---|---|---|
-| **Sensor Type** | Uncooled Microbolometer | Enhanced Microbolometer |
-| **Resolution** | 256×192 (49,152 pixels) | 256×192 (49,152 pixels) |
-| **Pixel Pitch** | 12 μm | 12 μm |
-| **Spectral Range** | 8-14 μm (LWIR) | 8-14 μm (LWIR) |
-| **Temperature Range** | -20°C to +550°C | -20°C to +650°C |
-| **Accuracy** | ±2°C or ±2% | ±1.5°C or ±1.5% |
-| **Frame Rate** | Up to 25 Hz | Up to 25 Hz |
-| **Field of View** | 25° × 19° | 25° × 19° |
-| **Interface** | USB-C | USB-C |
-| **Power Consumption** | <2W | <2.5W |
+| Specification         | TC001                   | TC001 Plus              |
+|-----------------------|-------------------------|-------------------------|
+| **Sensor Type**       | Uncooled Microbolometer | Enhanced Microbolometer |
+| **Resolution**        | 256×192 (49,152 pixels) | 256×192 (49,152 pixels) |
+| **Pixel Pitch**       | 12 μm                   | 12 μm                   |
+| **Spectral Range**    | 8-14 μm (LWIR)          | 8-14 μm (LWIR)          |
+| **Temperature Range** | -20°C to +550°C         | -20°C to +650°C         |
+| **Accuracy**          | ±2°C or ±2%             | ±1.5°C or ±1.5%         |
+| **Frame Rate**        | Up to 25 Hz             | Up to 25 Hz             |
+| **Field of View**     | 25° × 19°               | 25° × 19°               |
+| **Interface**         | USB-C                   | USB-C                   |
+| **Power Consumption** | <2W                     | <2.5W                   |
 
 **Table A.2: Software Environment Specifications**
 
-| Software Component | Version | License Type | Installation Source | Configuration Notes |
-|---|---|---|---|---|
-| **Operating System** | Windows 10/11 Pro | Commercial | Microsoft Store/Volume License | Enable Developer Mode for Android debugging |
-| **Python Runtime** | Python 3.9+ with conda | Open Source | Anaconda Distribution | Use conda environment for dependency isolation |
-| **Android Studio** | 2022.3.1+ (Electric Eel) | Open Source | Google Developer Tools | Include Android SDK and ADB tools |
-| **OpenCV** | 4.8.0+ | BSD License | pip/conda install | Computer vision and image processing |
-| **FastAPI** | 0.104.0+ | MIT License | pip install | Web API framework for device communication |
-| **SQLAlchemy** | 2.0+ | MIT License | pip install | Database ORM for session management |
-| **WebSocket Libraries** | websockets 11.0+ | BSD License | pip install | Real-time bidirectional communication |
-| **PyQt5** | 5.15.0+ | GPL/Commercial | pip install | GUI framework for desktop controller |
-| **psutil** | 5.8.0+ | BSD License | pip install | System monitoring and resource tracking |
+| Software Component      | Version                  | License Type   | Installation Source            | Configuration Notes                            |
+|-------------------------|--------------------------|----------------|--------------------------------|------------------------------------------------|
+| **Operating System**    | Windows 10/11 Pro        | Commercial     | Microsoft Store/Volume License | Enable Developer Mode for Android debugging    |
+| **Python Runtime**      | Python 3.9+ with conda   | Open Source    | Anaconda Distribution          | Use conda environment for dependency isolation |
+| **Android Studio**      | 2022.3.1+ (Electric Eel) | Open Source    | Google Developer Tools         | Include Android SDK and ADB tools              |
+| **OpenCV**              | 4.8.0+                   | BSD License    | pip/conda install              | Computer vision and image processing           |
+| **FastAPI**             | 0.104.0+                 | MIT License    | pip install                    | Web API framework for device communication     |
+| **SQLAlchemy**          | 2.0+                     | MIT License    | pip install                    | Database ORM for session management            |
+| **WebSocket Libraries** | websockets 11.0+         | BSD License    | pip install                    | Real-time bidirectional communication          |
+| **PyQt5**               | 5.15.0+                  | GPL/Commercial | pip install                    | GUI framework for desktop controller           |
+| **psutil**              | 5.8.0+                   | BSD License    | pip install                    | System monitoring and resource tracking        |
 
 **Figure A.2: Physical Laboratory Setup Configuration**
 
@@ -536,27 +572,27 @@ Bottom Panel: Technical infrastructure detail
 
 **Table A.3: Network Configuration Specifications**
 
-| Network Parameter | Configuration Value | Purpose | Security Considerations |
-|---|---|---|---|
-| **Research Network SSID** | ResearchLab_5GHz_Sensors | Dedicated 5GHz band for sensors | WPA3-Enterprise with certificate authentication |
-| **IP Address Range** | 192.168.100.0/24 | Isolated subnet for research equipment | VLAN isolation from institutional network |
-| **DHCP Lease Time** | 24 hours | Stable addressing for long sessions | Static reservations for critical devices |
-| **Quality of Service (QoS)** | Video: High, Data: Medium, Management: Low | Prioritize real-time data streams | Bandwidth allocation per device type |
-| **Firewall Rules** | Block external internet, allow internal | Research data protection | Prevent unauthorized data exfiltration |
-| **Network Time Protocol** | Internal NTP server at 192.168.100.1 | Precise time synchronization | GPS-synchronized reference clock |
-| **VPN Access** | IPSec tunnel for remote administration | Secure remote system access | Multi-factor authentication required |
-| **Monitoring and Logging** | SNMP monitoring with syslog aggregation | Network performance tracking | Centralized log analysis and alerting |
+| Network Parameter            | Configuration Value                        | Purpose                                | Security Considerations                         |
+|------------------------------|--------------------------------------------|----------------------------------------|-------------------------------------------------|
+| **Research Network SSID**    | ResearchLab_5GHz_Sensors                   | Dedicated 5GHz band for sensors        | WPA3-Enterprise with certificate authentication |
+| **IP Address Range**         | 192.168.100.0/24                           | Isolated subnet for research equipment | VLAN isolation from institutional network       |
+| **DHCP Lease Time**          | 24 hours                                   | Stable addressing for long sessions    | Static reservations for critical devices        |
+| **Quality of Service (QoS)** | Video: High, Data: Medium, Management: Low | Prioritize real-time data streams      | Bandwidth allocation per device type            |
+| **Firewall Rules**           | Block external internet, allow internal    | Research data protection               | Prevent unauthorized data exfiltration          |
+| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronization           | GPS-synchronized reference clock                |
+| **VPN Access**               | IPSec tunnel for remote administration     | Secure remote system access            | Multi-factor authentication required            |
+| **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralized log analysis and alerting           |
 
 **Table A.2: Network Configuration Requirements**
 
-| Network Parameter | Minimum Requirement | Optimal Configuration | Enterprise Configuration |
-|---|---|---|---|
-| **Bandwidth per Device** | 10 Mbps upload | 25 Mbps upload | 50 Mbps upload |
-| **Total Network Capacity** | 100 Mbps | 500 Mbps | 1 Gbps |
-| **Latency** | <50ms | <20ms | <10ms |
-| **Concurrent Device Limit** | 8 devices | 16 devices | 32 devices |
-| **Quality of Service (QoS)** | Basic priority | Traffic shaping | Enterprise QoS policies |
-| **Security Features** | WPA2 encryption | WPA3 with device certificates | Enterprise authentication |
+| Network Parameter            | Minimum Requirement | Optimal Configuration         | Enterprise Configuration  |
+|------------------------------|---------------------|-------------------------------|---------------------------|
+| **Bandwidth per Device**     | 10 Mbps upload      | 25 Mbps upload                | 50 Mbps upload            |
+| **Total Network Capacity**   | 100 Mbps            | 500 Mbps                      | 1 Gbps                    |
+| **Latency**                  | <50ms               | <20ms                         | <10ms                     |
+| **Concurrent Device Limit**  | 8 devices           | 16 devices                    | 32 devices                |
+| **Quality of Service (QoS)** | Basic priority      | Traffic shaping               | Enterprise QoS policies   |
+| **Security Features**        | WPA2 encryption     | WPA3 with device certificates | Enterprise authentication |
 
 #### A.2 Installation and Configuration Procedures
 
@@ -705,21 +741,27 @@ graph TB
 ### A.6 Missing Documentation Placeholders
 
 **[PLACEHOLDER: System Installation Automation Scripts]**
+
 - Location: `tools/installation/install_system.sh`
-- Content: Automated installation script for complete system setup including dependencies, environment configuration, and initial testing
-- Expected sections: Prerequisites check, dependency installation, network configuration, device registration, validation tests
+- Content: Automated installation script for complete system setup including dependencies, environment configuration,
+  and initial testing
+- Expected sections: Prerequisites check, dependency installation, network configuration, device registration,
+  validation tests
 
 **[PLACEHOLDER: Configuration Template Files]**
+
 - Location: `config/templates/`
 - Content: Template configuration files for different research scenarios and hardware setups
 - Expected files: `research_config_template.yaml`, `device_profiles_template.json`, `network_settings_template.conf`
 
 **[PLACEHOLDER: Troubleshooting Workflow Documentation]**
+
 - Location: `docs/troubleshooting/system_diagnostics_guide.md`
 - Content: Step-by-step troubleshooting procedures for common system issues
 - Expected sections: Network connectivity, device discovery, synchronization problems, data quality issues
 
 **[PLACEHOLDER: Maintenance Schedule Documentation]**
+
 - Location: `docs/maintenance/system_maintenance_schedule.md`
 - Content: Regular maintenance procedures and schedules for optimal system performance
 - Expected sections: Daily checks, weekly maintenance, monthly calibration, annual updates
@@ -732,7 +774,8 @@ graph TB
 
 **Figure B.1: Python Desktop Controller Interface Screenshots**
 
-*Available diagram references: `docs/diagrams/04_pc_app_architecture.png`, `docs/diagrams/16_software_architecture_of_pc_app.png`*
+*Available diagram
+references: `docs/diagrams/04_pc_app_architecture.png`, `docs/diagrams/16_software_architecture_of_pc_app.png`*
 
 ```
 [PLACEHOLDER: Desktop application screenshot collage showing:
@@ -762,20 +805,21 @@ Session Control Panel:
 
 **Table B.1: User Interface Element Reference Guide**
 
-| Interface Element | Function | User Action | Expected Result | Troubleshooting |
-|---|---|---|---|---|
-| **Device Discovery Button** | Scan for available Android devices | Click "Discover Devices" | Devices appear in sidebar list | Check Wi-Fi connectivity if no devices found |
-| **Session Start Control** | Begin synchronized recording | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status |
-| **Quality Monitor Panel** | Real-time assessment of data quality | Monitor automatically updates | Color indicators show quality status | Red indicators require attention |
-| **Emergency Stop Button** | Immediately halt all recording | Click red "STOP" button | All devices stop, data saved automatically | Use only in emergency situations |
-| **Export Data Wizard** | Convert and export research data | Click "Export Session Data" | Step-by-step data conversion process | Check storage space before export |
-| **Device Configuration** | Adjust individual device settings | Right-click device in sidebar | Context menu with device options | Changes apply immediately to device |
-| **Network Status Indicator** | Show connection health | Automatic real-time updates | Green=good, Yellow=warning, Red=error | Check network infrastructure if red |
-| **Synchronization Display** | Show timing accuracy across devices | Automatic real-time monitoring | ±ms deviation from reference time | Recalibrate if deviation exceeds ±50ms |
+| Interface Element            | Function                             | User Action                       | Expected Result                            | Troubleshooting                              |
+|------------------------------|--------------------------------------|-----------------------------------|--------------------------------------------|----------------------------------------------|
+| **Device Discovery Button**  | Scan for available Android devices   | Click "Discover Devices"          | Devices appear in sidebar list             | Check Wi-Fi connectivity if no devices found |
+| **Session Start Control**    | Begin synchronized recording         | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status         |
+| **Quality Monitor Panel**    | Real-time assessment of data quality | Monitor automatically updates     | Color indicators show quality status       | Red indicators require attention             |
+| **Emergency Stop Button**    | Immediately halt all recording       | Click red "STOP" button           | All devices stop, data saved automatically | Use only in emergency situations             |
+| **Export Data Wizard**       | Convert and export research data     | Click "Export Session Data"       | Step-by-step data conversion process       | Check storage space before export            |
+| **Device Configuration**     | Adjust individual device settings    | Right-click device in sidebar     | Context menu with device options           | Changes apply immediately to device          |
+| **Network Status Indicator** | Show connection health               | Automatic real-time updates       | Green=good, Yellow=warning, Red=error      | Check network infrastructure if red          |
+| **Synchronization Display**  | Show timing accuracy across devices  | Automatic real-time monitoring    | ±ms deviation from reference time          | Recalibrate if deviation exceeds ±50ms       |
 
 **Figure B.2: Android Mobile Application Interface Screenshots**
 
-*Available diagram references: `docs/diagrams/03_android_app_architecture.png`, `docs/diagrams/15_software_architecture_of_android.png`*
+*Available diagram
+references: `docs/diagrams/03_android_app_architecture.png`, `docs/diagrams/15_software_architecture_of_android.png`*
 
 ```
 [PLACEHOLDER: Android application screenshot collection showing:
@@ -812,14 +856,14 @@ Settings and Configuration Screen:
 
 **Table B.2: Standard Operating Procedures for Research Sessions**
 
-| Procedure Phase | Duration | Required Actions | Quality Checkpoints | Success Criteria |
-|---|---|---|---|---|
-| **Pre-Session Setup** | 10-15 minutes | 1. Power on all equipment<br/>2. Verify network connectivity<br/>3. Check device battery levels<br/>4. Load participant configuration | All devices connected and green status | 100% device connectivity, >4 hours battery |
-| **Participant Preparation** | 5-8 minutes | 1. Position participant comfortably<br/>2. Attach GSR sensors (if using reference)<br/>3. Adjust camera angles<br/>4. Confirm participant consent | Optimal sensor placement and comfort | Clear video framing, sensor signal quality |
-| **System Calibration** | 3-5 minutes | 1. Run thermal calibration sequence<br/>2. Synchronize all device clocks<br/>3. Test recording start/stop<br/>4. Verify data quality indicators | Calibration within tolerance, sync <±25ms | All quality indicators green |
-| **Recording Session** | Variable | 1. Monitor real-time quality indicators<br/>2. Maintain visual supervision<br/>3. Note any anomalies or events<br/>4. Ensure continuous recording | Quality maintained throughout session | <1% frame drops, continuous data streams |
-| **Session Completion** | 5-10 minutes | 1. Stop all recordings safely<br/>2. Verify data integrity<br/>3. Export/backup session data<br/>4. Document session notes | Complete data capture verified | 100% data integrity, successful backup |
-| **Post-Session Cleanup** | 10-15 minutes | 1. Sanitize GSR sensors and equipment<br/>2. Charge device batteries<br/>3. Update session database<br/>4. Archive raw data files | Equipment ready for next session | Clean equipment, charged batteries |
+| Procedure Phase             | Duration      | Required Actions                                                                                                                                  | Quality Checkpoints                       | Success Criteria                           |
+|-----------------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------|--------------------------------------------|
+| **Pre-Session Setup**       | 10-15 minutes | 1. Power on all equipment<br/>2. Verify network connectivity<br/>3. Check device battery levels<br/>4. Load participant configuration             | All devices connected and green status    | 100% device connectivity, >4 hours battery |
+| **Participant Preparation** | 5-8 minutes   | 1. Position participant comfortably<br/>2. Attach GSR sensors (if using reference)<br/>3. Adjust camera angles<br/>4. Confirm participant consent | Optimal sensor placement and comfort      | Clear video framing, sensor signal quality |
+| **System Calibration**      | 3-5 minutes   | 1. Run thermal calibration sequence<br/>2. Synchronize all device clocks<br/>3. Test recording start/stop<br/>4. Verify data quality indicators   | Calibration within tolerance, sync <±25ms | All quality indicators green               |
+| **Recording Session**       | Variable      | 1. Monitor real-time quality indicators<br/>2. Maintain visual supervision<br/>3. Note any anomalies or events<br/>4. Ensure continuous recording | Quality maintained throughout session     | <1% frame drops, continuous data streams   |
+| **Session Completion**      | 5-10 minutes  | 1. Stop all recordings safely<br/>2. Verify data integrity<br/>3. Export/backup session data<br/>4. Document session notes                        | Complete data capture verified            | 100% data integrity, successful backup     |
+| **Post-Session Cleanup**    | 10-15 minutes | 1. Sanitize GSR sensors and equipment<br/>2. Charge device batteries<br/>3. Update session database<br/>4. Archive raw data files                 | Equipment ready for next session          | Clean equipment, charged batteries         |
 
 **Figure B.3: Data Export and Analysis Workflow**
 
@@ -859,14 +903,14 @@ flowchart TD
 
 **Table B.3: Common User Scenarios and Troubleshooting Guide**
 
-| Scenario | Symptoms | Probable Cause | Resolution Steps | Prevention |
-|---|---|---|---|---|
-| **Device Connection Lost** | Device shows red status, stops responding | Network interruption, device sleep | 1. Check Wi-Fi signal strength<br/>2. Restart device networking<br/>3. Re-pair device if necessary | Use dedicated research network, disable device sleep |
-| **Poor Video Quality** | Blurry images, low frame rate | Insufficient lighting, network congestion | 1. Improve lighting conditions<br/>2. Check network bandwidth usage<br/>3. Adjust video quality settings | Optimize lighting setup, monitor network load |
-| **Synchronization Drift** | Timing deviation >±50ms | Clock drift, network latency | 1. Recalibrate time synchronization<br/>2. Check network latency<br/>3. Restart synchronization service | Regular calibration schedule, stable network |
-| **Storage Full** | Recording stops unexpectedly | Insufficient storage space | 1. Clear old session data<br/>2. Add additional storage<br/>3. Enable automatic cleanup | Monitor storage usage, automated archival |
-| **GSR Sensor Issues** | No signal or erratic readings | Poor electrode contact, battery low | 1. Check electrode placement<br/>2. Replace sensor battery<br/>3. Clean electrode surfaces | Regular sensor maintenance, spare batteries |
-| **Thermal Calibration Error** | Inaccurate temperature readings | Environmental factors, sensor drift | 1. Allow thermal equilibration time<br/>2. Use reference target for calibration<br/>3. Check ambient conditions | Controlled environment, regular calibration |
+| Scenario                      | Symptoms                                  | Probable Cause                            | Resolution Steps                                                                                                | Prevention                                           |
+|-------------------------------|-------------------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| **Device Connection Lost**    | Device shows red status, stops responding | Network interruption, device sleep        | 1. Check Wi-Fi signal strength<br/>2. Restart device networking<br/>3. Re-pair device if necessary              | Use dedicated research network, disable device sleep |
+| **Poor Video Quality**        | Blurry images, low frame rate             | Insufficient lighting, network congestion | 1. Improve lighting conditions<br/>2. Check network bandwidth usage<br/>3. Adjust video quality settings        | Optimize lighting setup, monitor network load        |
+| **Synchronization Drift**     | Timing deviation >±50ms                   | Clock drift, network latency              | 1. Recalibrate time synchronization<br/>2. Check network latency<br/>3. Restart synchronization service         | Regular calibration schedule, stable network         |
+| **Storage Full**              | Recording stops unexpectedly              | Insufficient storage space                | 1. Clear old session data<br/>2. Add additional storage<br/>3. Enable automatic cleanup                         | Monitor storage usage, automated archival            |
+| **GSR Sensor Issues**         | No signal or erratic readings             | Poor electrode contact, battery low       | 1. Check electrode placement<br/>2. Replace sensor battery<br/>3. Clean electrode surfaces                      | Regular sensor maintenance, spare batteries          |
+| **Thermal Calibration Error** | Inaccurate temperature readings           | Environmental factors, sensor drift       | 1. Allow thermal equilibration time<br/>2. Use reference target for calibration<br/>3. Check ambient conditions | Controlled environment, regular calibration          |
 
 ```
 [PLACEHOLDER: Screenshot collection showing:
@@ -881,15 +925,18 @@ flowchart TD
 
 **Prerequisites and Environment Setup:**
 
-The system requires specific prerequisites for optimal operation. The following setup procedure is based on the actual repository instructions:
+The system requires specific prerequisites for optimal operation. The following setup procedure is based on the actual
+repository instructions:
 
 **Prerequisites:**
+
 - **Java 17 or Java 21** (recommended for optimal compatibility)
 - **Conda/Miniconda** for Python environment management
 - **Android Studio** (Arctic Fox or later) for Android development
 - **Git** for version control
 
-> **Note**: Python installation is **not required** - the setup script automatically installs Miniconda and configures the environment.
+> **Note**: Python installation is **not required** - the setup script automatically installs Miniconda and configures
+> the environment.
 
 **Automated Setup Process:**
 
@@ -907,7 +954,8 @@ tools/development/setup_dev_env.ps1
 tools/development/setup.sh
 ```
 
-These scripts automatically install Miniconda, create the conda environment, install all dependencies, configure Android SDK components, and validate the complete build system.
+These scripts automatically install Miniconda, create the conda environment, install all dependencies, configure Android
+SDK components, and validate the complete build system.
 
 **Build Commands:**
 
@@ -928,15 +976,15 @@ python -m pytest PythonApp/
 
 **Table B.1: Pre-Session Checklist**
 
-| Step | Task | Estimated Time | Critical Success Factors |
-|---|---|---|---|
-| 1 | Power on all devices and verify connectivity | 3 minutes | Green status indicators for all devices |
-| 2 | Launch central controller application | 1 minute | No error messages, dashboard loads completely |
-| 3 | Verify device discovery and registration | 2 minutes | All expected devices appear in device list |
-| 4 | Configure session parameters and participant info | 3 minutes | Complete participant consent and setup forms |
-| 5 | Perform synchronization test | 1 minute | Temporal offset within ±25ms tolerance |
-| 6 | Execute pre-recording quality check | 2 minutes | All quality indicators show green status |
-| **Total Setup Time** | **≤12 minutes** | **Research-ready state achieved** |
+| Step                 | Task                                              | Estimated Time                    | Critical Success Factors                      |
+|----------------------|---------------------------------------------------|-----------------------------------|-----------------------------------------------|
+| 1                    | Power on all devices and verify connectivity      | 3 minutes                         | Green status indicators for all devices       |
+| 2                    | Launch central controller application             | 1 minute                          | No error messages, dashboard loads completely |
+| 3                    | Verify device discovery and registration          | 2 minutes                         | All expected devices appear in device list    |
+| 4                    | Configure session parameters and participant info | 3 minutes                         | Complete participant consent and setup forms  |
+| 5                    | Perform synchronization test                      | 1 minute                          | Temporal offset within ±25ms tolerance        |
+| 6                    | Execute pre-recording quality check               | 2 minutes                         | All quality indicators show green status      |
+| **Total Setup Time** | **≤12 minutes**                                   | **Research-ready state achieved** |
 
 **Figure B.2: Device Setup Workflow**
 
@@ -988,21 +1036,25 @@ flowchart LR
 ### B.4 Missing Documentation Placeholders
 
 **[PLACEHOLDER: Quick Start Guide Documents]**
+
 - Location: `docs/user_guides/quick_start_guide.md`
 - Content: Condensed setup and operation guide for immediate system use
 - Expected sections: 5-minute setup, basic recording session, essential troubleshooting
 
 **[PLACEHOLDER: Training Material Documentation]**
+
 - Location: `docs/training/`
 - Content: Comprehensive training materials for new users and research teams
 - Expected files: `user_training_slides.pdf`, `hands_on_exercises.md`, `certification_checklist.md`
 
 **[PLACEHOLDER: Best Practices Guides]**
+
 - Location: `docs/user_guides/best_practices.md`
 - Content: Research methodology best practices for optimal data quality
 - Expected sections: Session planning, participant preparation, data collection protocols
 
 **[PLACEHOLDER: Workflow Templates]**
+
 - Location: `templates/workflows/`
 - Content: Pre-configured workflow templates for common research scenarios
 - Expected files: `stress_response_workflow.json`, `cognitive_load_workflow.json`, `longitudinal_study_workflow.json`
@@ -1015,15 +1067,15 @@ flowchart LR
 
 **Table D.1: Device Calibration and Validation Results**
 
-| Device Type | Calibration Method | Accuracy Achieved | Drift Rate | Validation Date | Certification Status |
-|---|---|---|---|---|---|
-| **Topdon TC001 Thermal Camera #1** | Black-body reference at 37°C | ±0.08°C | 0.02°C/hour | 2024-01-15 | ✅ Research-grade |
-| **Topdon TC001 Thermal Camera #2** | Black-body reference at 37°C | ±0.09°C | 0.03°C/hour | 2024-01-15 | ✅ Research-grade |
-| **Shimmer3 GSR+ Sensor #1** | 1kΩ precision resistor network | ±0.1µS | 0.05µS/hour | 2024-01-10 | ✅ Research-grade |
-| **Shimmer3 GSR+ Sensor #2** | 1kΩ precision resistor network | ±0.12µS | 0.04µS/hour | 2024-01-10 | ✅ Research-grade |
-| **Samsung Galaxy S22 Camera #1** | Color checker card validation | 95.2% color accuracy | N/A | 2024-01-12 | ✅ Validated |
-| **Samsung Galaxy S22 Camera #2** | Color checker card validation | 94.8% color accuracy | N/A | 2024-01-12 | ✅ Validated |
-| **Network Time Synchronization** | GPS reference clock | ±2.1ms | 0.3ms/hour | 2024-01-20 | ✅ Research-grade |
+| Device Type                        | Calibration Method             | Accuracy Achieved    | Drift Rate  | Validation Date | Certification Status |
+|------------------------------------|--------------------------------|----------------------|-------------|-----------------|----------------------|
+| **Topdon TC001 Thermal Camera #1** | Black-body reference at 37°C   | ±0.08°C              | 0.02°C/hour | 2024-01-15      | ✅ Research-grade     |
+| **Topdon TC001 Thermal Camera #2** | Black-body reference at 37°C   | ±0.09°C              | 0.03°C/hour | 2024-01-15      | ✅ Research-grade     |
+| **Shimmer3 GSR+ Sensor #1**        | 1kΩ precision resistor network | ±0.1µS               | 0.05µS/hour | 2024-01-10      | ✅ Research-grade     |
+| **Shimmer3 GSR+ Sensor #2**        | 1kΩ precision resistor network | ±0.12µS              | 0.04µS/hour | 2024-01-10      | ✅ Research-grade     |
+| **Samsung Galaxy S22 Camera #1**   | Color checker card validation  | 95.2% color accuracy | N/A         | 2024-01-12      | ✅ Validated          |
+| **Samsung Galaxy S22 Camera #2**   | Color checker card validation  | 94.8% color accuracy | N/A         | 2024-01-12      | ✅ Validated          |
+| **Network Time Synchronization**   | GPS reference clock            | ±2.1ms               | 0.3ms/hour  | 2024-01-20      | ✅ Research-grade     |
 
 **Figure D.1: Calibration Test Results Visualization**
 
@@ -1041,7 +1093,8 @@ xychart-beta
 
 **Communication Protocol Configuration:**
 
-The actual system configuration from `protocol/config.json` demonstrates the implemented network protocol specifications:
+The actual system configuration from `protocol/config.json` demonstrates the implemented network protocol
+specifications:
 
 ```json
 {
@@ -1061,14 +1114,14 @@ The actual system configuration from `protocol/config.json` demonstrates the imp
 
 **Table D.2: Communication Protocol Message Format Specification**
 
-| Message Type | JSON Structure | Size (bytes) | Frequency | Error Handling |
-|---|---|---|---|---|
-| **Device Registration** | `{"type":"register","device_id":"string","capabilities":[]}` | 128-512 | Once per session | Retry with exponential backoff |
-| **Time Synchronization** | `{"type":"sync","timestamp":"ISO8601","ntp_offset":"float"}` | 256 | Every 30 seconds | NTP fallback protocol |
-| **Video Frame Metadata** | `{"type":"frame","timestamp":"ISO8601","frame_id":"int","quality":"float"}` | 128 | 30 Hz | Frame drop tolerance |
-| **GSR Data Stream** | `{"type":"gsr","timestamp":"ISO8601","value":"float","sensor_id":"string"}` | 64 | 128 Hz | Data interpolation |
-| **Quality Alert** | `{"type":"alert","level":"warning/error","message":"string","device_id":"string"}` | 256 | Event-driven | Immediate delivery |
-| **Session Control** | `{"type":"control","command":"start/stop/pause","session_id":"string"}` | 128 | User-initiated | Acknowledged delivery |
+| Message Type             | JSON Structure                                                                     | Size (bytes) | Frequency        | Error Handling                 |
+|--------------------------|------------------------------------------------------------------------------------|--------------|------------------|--------------------------------|
+| **Device Registration**  | `{"type":"register","device_id":"string","capabilities":[]}`                       | 128-512      | Once per session | Retry with exponential backoff |
+| **Time Synchronization** | `{"type":"sync","timestamp":"ISO8601","ntp_offset":"float"}`                       | 256          | Every 30 seconds | NTP fallback protocol          |
+| **Video Frame Metadata** | `{"type":"frame","timestamp":"ISO8601","frame_id":"int","quality":"float"}`        | 128          | 30 Hz            | Frame drop tolerance           |
+| **GSR Data Stream**      | `{"type":"gsr","timestamp":"ISO8601","value":"float","sensor_id":"string"}`        | 64           | 128 Hz           | Data interpolation             |
+| **Quality Alert**        | `{"type":"alert","level":"warning/error","message":"string","device_id":"string"}` | 256          | Event-driven     | Immediate delivery             |
+| **Session Control**      | `{"type":"control","command":"start/stop/pause","session_id":"string"}`            | 128          | User-initiated   | Acknowledged delivery          |
 
 **System Configuration Specifications:**
 
@@ -1108,21 +1161,25 @@ The actual system configuration from `protocol/config.json` demonstrates the imp
 ### C.4 Missing Documentation Placeholders
 
 **[PLACEHOLDER: Calibration Procedure Documents]**
+
 - Location: `docs/calibration/detailed_calibration_procedures.md`
 - Content: Step-by-step calibration procedures for all system components
 - Expected sections: Thermal camera calibration, GSR sensor calibration, camera synchronization calibration
 
 **[PLACEHOLDER: Hardware Compatibility Matrix]**
+
 - Location: `docs/hardware/compatibility_matrix.xlsx`
 - Content: Comprehensive compatibility testing results for different hardware configurations
 - Expected columns: Device model, OS version, compatibility status, known issues, recommended settings
 
 **[PLACEHOLDER: Performance Benchmark Reports]**
+
 - Location: `docs/performance/benchmark_reports/`
 - Content: Detailed performance benchmarking across different system configurations
 - Expected files: `cpu_performance_analysis.pdf`, `memory_usage_analysis.pdf`, `network_throughput_analysis.pdf`
 
 **[PLACEHOLDER: Integration Test Specifications]**
+
 - Location: `tests/integration/test_specifications.md`
 - Content: Detailed specifications for integration testing across system components
 - Expected sections: End-to-end test scenarios, component interaction tests, failure recovery tests
@@ -1135,14 +1192,14 @@ The actual system configuration from `protocol/config.json` demonstrates the imp
 
 **Table D.1: Performance Benchmarking Results**
 
-| Test Category | Test Cases | Success Rate | Average Response Time | 95th Percentile | Standard Deviation |
-|---|---|---|---|---|---|
-| **Unit Tests** | 1,247 | 98.7% | 0.043s | 0.089s | 0.021s |
-| **Integration Tests** | 156 | 97.4% | 2.34s | 4.12s | 1.23s |
-| **System Tests** | 89 | 96.6% | 15.7s | 28.3s | 8.9s |
-| **Performance Tests** | 45 | 94.4% | 1.34s | 2.87s | 0.67s |
-| **Stress Tests** | 12 | 100% | 168 hours | N/A | N/A |
-| **Security Tests** | 23 | 100% | N/A | N/A | N/A |
+| Test Category         | Test Cases | Success Rate | Average Response Time | 95th Percentile | Standard Deviation |
+|-----------------------|------------|--------------|-----------------------|-----------------|--------------------|
+| **Unit Tests**        | 1,247      | 98.7%        | 0.043s                | 0.089s          | 0.021s             |
+| **Integration Tests** | 156        | 97.4%        | 2.34s                 | 4.12s           | 1.23s              |
+| **System Tests**      | 89         | 96.6%        | 15.7s                 | 28.3s           | 8.9s               |
+| **Performance Tests** | 45         | 94.4%        | 1.34s                 | 2.87s           | 0.67s              |
+| **Stress Tests**      | 12         | 100%         | 168 hours             | N/A             | N/A                |
+| **Security Tests**    | 23         | 100%         | N/A                   | N/A             | N/A                |
 
 **Figure D.1: Test Coverage Heatmap**
 
@@ -1169,47 +1226,51 @@ graph TB
 
 **Table D.2: Reliability Testing Results (168-hour Continuous Operation)**
 
-| Time Period | System Availability | Failure Count | MTBF (hours) | Recovery Time (minutes) | Data Integrity |
-|---|---|---|---|---|---|
-| **Hours 1-24** | 100% | 0 | ∞ | N/A | 100% |
-| **Hours 25-48** | 99.8% | 1 (network timeout) | 48.0 | 1.2 | 100% |
-| **Hours 49-72** | 100% | 0 | ∞ | N/A | 100% |
-| **Hours 73-96** | 99.6% | 1 (storage warning) | 96.0 | 0.8 | 100% |
-| **Hours 97-120** | 100% | 0 | ∞ | N/A | 100% |
-| **Hours 121-144** | 99.9% | 1 (thermal recalibration) | 144.0 | 0.5 | 100% |
-| **Hours 145-168** | 100% | 0 | ∞ | N/A | 100% |
-| **Overall** | 99.73% | 3 total | 56.0 | 0.83 avg | 100% |
+| Time Period       | System Availability | Failure Count             | MTBF (hours) | Recovery Time (minutes) | Data Integrity |
+|-------------------|---------------------|---------------------------|--------------|-------------------------|----------------|
+| **Hours 1-24**    | 100%                | 0                         | ∞            | N/A                     | 100%           |
+| **Hours 25-48**   | 99.8%               | 1 (network timeout)       | 48.0         | 1.2                     | 100%           |
+| **Hours 49-72**   | 100%                | 0                         | ∞            | N/A                     | 100%           |
+| **Hours 73-96**   | 99.6%               | 1 (storage warning)       | 96.0         | 0.8                     | 100%           |
+| **Hours 97-120**  | 100%                | 0                         | ∞            | N/A                     | 100%           |
+| **Hours 121-144** | 99.9%               | 1 (thermal recalibration) | 144.0        | 0.5                     | 100%           |
+| **Hours 145-168** | 100%                | 0                         | ∞            | N/A                     | 100%           |
+| **Overall**       | 99.73%              | 3 total                   | 56.0         | 0.83 avg                | 100%           |
 
 ### G.2 Statistical Validation Results
 
 **Table D.3: Statistical Significance Testing**
 
-| Hypothesis Test | Sample Size | Test Statistic | p-value | Confidence Interval | Conclusion |
-|---|---|---|---|---|---|
-| **Temporal Accuracy vs. Target** | n=10,000 | t=23.7 | p<0.001 | [17.2ms, 20.1ms] | Significantly better than target |
-| **GSR Correlation Validation** | n=2,500 | r=0.892 | p<0.001 | [0.869, 0.915] | Strong significant correlation |
-| **Frame Rate Consistency** | n=50,000 | χ²=12.4 | p<0.001 | [29.6, 30.0] FPS | Highly consistent performance |
-| **Network Throughput** | n=500 | t=15.2 | p<0.001 | [45.2, 49.4] MB/s | Exceeds minimum requirements |
-| **System Response Time** | n=1,000 | t=-18.9 | p<0.001 | [1.16, 1.52] seconds | Significantly faster than target |
+| Hypothesis Test                  | Sample Size | Test Statistic | p-value | Confidence Interval  | Conclusion                       |
+|----------------------------------|-------------|----------------|---------|----------------------|----------------------------------|
+| **Temporal Accuracy vs. Target** | n=10,000    | t=23.7         | p<0.001 | [17.2ms, 20.1ms]     | Significantly better than target |
+| **GSR Correlation Validation**   | n=2,500     | r=0.892        | p<0.001 | [0.869, 0.915]       | Strong significant correlation   |
+| **Frame Rate Consistency**       | n=50,000    | χ²=12.4        | p<0.001 | [29.6, 30.0] FPS     | Highly consistent performance    |
+| **Network Throughput**           | n=500       | t=15.2         | p<0.001 | [45.2, 49.4] MB/s    | Exceeds minimum requirements     |
+| **System Response Time**         | n=1,000     | t=-18.9        | p<0.001 | [1.16, 1.52] seconds | Significantly faster than target |
 
 ### E.6 Missing Documentation Placeholders
 
 **[PLACEHOLDER: Detailed Test Plan Documents]**
+
 - Location: `tests/test_plans/comprehensive_test_plan.md`
 - Content: Detailed test plans covering all system functionality and edge cases
 - Expected sections: Unit test plans, integration test plans, system test plans, acceptance test plans
 
 **[PLACEHOLDER: Test Case Specification Files]**
+
 - Location: `tests/test_cases/`
 - Content: Individual test case specifications with expected results and validation criteria
 - Expected files: `network_resilience_test_cases.json`, `data_integrity_test_cases.json`, `performance_test_cases.json`
 
 **[PLACEHOLDER: Regression Test Reports]**
+
 - Location: `test_results/regression/`
 - Content: Historical regression test reports tracking system stability over development cycles
 - Expected files: `regression_report_v2.0.pdf`, `regression_report_v2.1.pdf`, `performance_regression_analysis.xlsx`
 
 **[PLACEHOLDER: Performance Benchmarking Data]**
+
 - Location: `test_results/benchmarks/`
 - Content: Raw performance benchmarking data and analysis across different hardware configurations
 - Expected files: `cpu_benchmark_results.csv`, `memory_benchmark_results.csv`, `network_benchmark_results.csv`
@@ -1222,16 +1283,16 @@ graph TB
 
 **Table E.1: Usability Testing Results with Research Personnel**
 
-| Participant Role | Experience Level | Setup Time (minutes) | Satisfaction Score (1-5) | Task Completion Rate | Error Rate |
-|---|---|---|---|---|---|
-| **Principal Investigator** | Expert | 4.2 | 4.8 | 100% | 0% |
-| **Graduate Student #1** | Intermediate | 6.8 | 4.5 | 95% | 5% |
-| **Graduate Student #2** | Intermediate | 7.1 | 4.4 | 92% | 8% |
-| **Research Assistant #1** | Novice | 9.3 | 4.1 | 87% | 13% |
-| **Research Assistant #2** | Novice | 8.7 | 4.2 | 89% | 11% |
-| **Technical Support** | Expert | 3.9 | 4.9 | 100% | 0% |
-| **Undergraduate Volunteer** | Novice | 11.2 | 3.8 | 78% | 22% |
-| **Average All Users** | Mixed | 7.3 | 4.4 | 91.6% | 8.4% |
+| Participant Role            | Experience Level | Setup Time (minutes) | Satisfaction Score (1-5) | Task Completion Rate | Error Rate |
+|-----------------------------|------------------|----------------------|--------------------------|----------------------|------------|
+| **Principal Investigator**  | Expert           | 4.2                  | 4.8                      | 100%                 | 0%         |
+| **Graduate Student #1**     | Intermediate     | 6.8                  | 4.5                      | 95%                  | 5%         |
+| **Graduate Student #2**     | Intermediate     | 7.1                  | 4.4                      | 92%                  | 8%         |
+| **Research Assistant #1**   | Novice           | 9.3                  | 4.1                      | 87%                  | 13%        |
+| **Research Assistant #2**   | Novice           | 8.7                  | 4.2                      | 89%                  | 11%        |
+| **Technical Support**       | Expert           | 3.9                  | 4.9                      | 100%                 | 0%         |
+| **Undergraduate Volunteer** | Novice           | 11.2                 | 3.8                      | 78%                  | 22%        |
+| **Average All Users**       | Mixed            | 7.3                  | 4.4                      | 91.6%                | 8.4%       |
 
 **Figure E.1: User Satisfaction Analysis**
 
@@ -1249,35 +1310,40 @@ xychart-beta
 
 **Table E.2: Research Study Validation Results**
 
-| Study Protocol | Participants | Session Duration | Data Quality Score | Scientific Validity | Publication Status |
-|---|---|---|---|---|---|
-| **Stress Response Study** | 24 participants | 45 minutes avg | 4.7/5.0 | Peer-reviewed acceptable | Under review |
-| **Multi-modal Correlation** | 18 participants | 60 minutes avg | 4.8/5.0 | Research-grade quality | Published |
-| **Long-duration Monitoring** | 12 participants | 120 minutes avg | 4.6/5.0 | Research-grade quality | In preparation |
-| **Group Dynamics Study** | 32 participants (8 groups) | 30 minutes avg | 4.5/5.0 | Acceptable for research | Under review |
-| **Calibration Validation** | 6 participants | 90 minutes avg | 4.9/5.0 | Reference-grade quality | Published |
+| Study Protocol               | Participants               | Session Duration | Data Quality Score | Scientific Validity      | Publication Status |
+|------------------------------|----------------------------|------------------|--------------------|--------------------------|--------------------|
+| **Stress Response Study**    | 24 participants            | 45 minutes avg   | 4.7/5.0            | Peer-reviewed acceptable | Under review       |
+| **Multi-modal Correlation**  | 18 participants            | 60 minutes avg   | 4.8/5.0            | Research-grade quality   | Published          |
+| **Long-duration Monitoring** | 12 participants            | 120 minutes avg  | 4.6/5.0            | Research-grade quality   | In preparation     |
+| **Group Dynamics Study**     | 32 participants (8 groups) | 30 minutes avg   | 4.5/5.0            | Acceptable for research  | Under review       |
+| **Calibration Validation**   | 6 participants             | 90 minutes avg   | 4.9/5.0            | Reference-grade quality  | Published          |
 
 ### F.4 Missing Documentation Placeholders
 
 **[PLACEHOLDER: User Feedback Forms]**
+
 - Location: `docs/evaluation/user_feedback_forms.pdf`
 - Content: Standardized feedback forms used for user experience evaluation
 - Expected sections: System usability scale, custom research workflow questionnaires, technical difficulty assessments
 
 **[PLACEHOLDER: Statistical Analysis Reports]**
+
 - Location: `analysis/statistical_reports/`
 - Content: Detailed statistical analysis reports using R/SPSS for evaluation data
 - Expected files: `user_experience_analysis.pdf`, `system_performance_statistics.pdf`, `reliability_analysis_report.pdf`
 
 **[PLACEHOLDER: Validation Methodology Documents]**
+
 - Location: `docs/evaluation/validation_methodology.md`
 - Content: Detailed methodology for system validation and evaluation procedures
 - Expected sections: Experimental design, participant selection criteria, data collection protocols
 
 **[PLACEHOLDER: Performance Comparison Studies]**
+
 - Location: `docs/evaluation/comparative_studies/`
 - Content: Comparative analysis against existing systems and industry standards
-- Expected files: `commercial_system_comparison.pdf`, `academic_system_benchmarks.pdf`, `industry_standard_compliance.md`
+- Expected files: `commercial_system_comparison.pdf`, `academic_system_benchmarks.pdf`,
+  `industry_standard_compliance.md`
 
 ---
 
@@ -1285,9 +1351,12 @@ xychart-beta
 
 ### G.1 Key Implementation Components
 
-This appendix provides detailed code snippets for all files referenced in the thesis chapters. Each code listing corresponds to specific file references mentioned in Chapters 1-6, demonstrating the technical implementation of concepts discussed in the academic content.
+This appendix provides detailed code snippets for all files referenced in the thesis chapters. Each code listing
+corresponds to specific file references mentioned in Chapters 1-6, demonstrating the technical implementation of
+concepts discussed in the academic content.
 
-*Note: Code snippets are organized by reference numbers (F.1-F.177) corresponding to file mentions in the chapter sections. Complete source code is available in the project repository.*
+*Note: Code snippets are organized by reference numbers (F.1-F.177) corresponding to file mentions in the chapter
+sections. Complete source code is available in the project repository.*
 
 ---
 
@@ -1884,10 +1953,14 @@ class ResearchProtocolHandler:
         return True
 ```
 
-**Note**: The complete source code repository contains approximately 15,000 lines of production-quality code across Python and Kotlin implementations. The full codebase is available in the project repository with comprehensive documentation, unit tests, and deployment scripts. The selected listings above demonstrate key architectural patterns and technical innovations that address the unique challenges of research-grade distributed sensor coordination.
+**Note**: The complete source code repository contains approximately 15,000 lines of production-quality code across
+Python and Kotlin implementations. The full codebase is available in the project repository with comprehensive
+documentation, unit tests, and deployment scripts. The selected listings above demonstrate key architectural patterns
+and technical innovations that address the unique challenges of research-grade distributed sensor coordination.
 |---|---|---|---|
 | **Start Recording** | Green "Start" button | Ctrl+R | Synchronized recording begins across all devices |
-| **Pause Recording** | Yellow "Pause" button | Ctrl+P | All devices pause simultaneously, resume capability maintained |
+| **Pause Recording** | Yellow "Pause" button | Ctrl+P | All devices pause simultaneously, resume capability
+maintained |
 | **Stop Recording** | Red "Stop" button | Ctrl+S | Complete session termination, data finalization initiated |
 | **Add Marker** | "Marker" button | Ctrl+M | Timestamp marker added to all data streams |
 | **Quality Check** | "Quality" button | Ctrl+Q | Real-time quality assessment displayed |
@@ -1910,13 +1983,13 @@ class ResearchProtocolHandler:
 
 **Table B.3: Supported Export Formats**
 
-| Format | Use Case | File Size | Compatibility | Processing Time |
-|---|---|---|---|---|
-| **CSV** | Statistical analysis (SPSS, R, Excel) | Large | Universal | Fast |
-| **JSON** | Web applications, Python analysis | Medium | High | Fast |
-| **MATLAB .mat** | MATLAB/Octave analysis | Medium | MATLAB ecosystem | Medium |
-| **HDF5** | Large dataset analysis (Python, R) | Compressed | Scientific computing | Slow |
-| **Custom Research** | Specialized analysis pipelines | Variable | Project-specific | Variable |
+| Format              | Use Case                              | File Size  | Compatibility        | Processing Time |
+|---------------------|---------------------------------------|------------|----------------------|-----------------|
+| **CSV**             | Statistical analysis (SPSS, R, Excel) | Large      | Universal            | Fast            |
+| **JSON**            | Web applications, Python analysis     | Medium     | High                 | Fast            |
+| **MATLAB .mat**     | MATLAB/Octave analysis                | Medium     | MATLAB ecosystem     | Medium          |
+| **HDF5**            | Large dataset analysis (Python, R)    | Compressed | Scientific computing | Slow            |
+| **Custom Research** | Specialized analysis pipelines        | Variable   | Project-specific     | Variable        |
 
 ---
 
@@ -1926,12 +1999,12 @@ class ResearchProtocolHandler:
 
 **Table C.1: Device Calibration Specifications**
 
-| Device Type | Calibration Method | Accuracy Specification | Validation Protocol | Recalibration Schedule |
-|---|---|---|---|---|
-| **Android Cameras** | Checkerboard pattern analysis | <0.5 pixel reprojection error | 20-point grid validation | Monthly |
-| **Thermal Cameras** | Blackbody reference calibration | ±0.08°C absolute accuracy | Temperature reference validation | Weekly |
-| **GSR Sensors** | Known resistance calibration | ±0.1µS precision | Multi-point resistance validation | Before each session |
-| **Time Synchronization** | NTP + network compensation | ±18.7ms across all devices | Reference clock validation | Continuous |
+| Device Type              | Calibration Method              | Accuracy Specification        | Validation Protocol               | Recalibration Schedule |
+|--------------------------|---------------------------------|-------------------------------|-----------------------------------|------------------------|
+| **Android Cameras**      | Checkerboard pattern analysis   | <0.5 pixel reprojection error | 20-point grid validation          | Monthly                |
+| **Thermal Cameras**      | Blackbody reference calibration | ±0.08°C absolute accuracy     | Temperature reference validation  | Weekly                 |
+| **GSR Sensors**          | Known resistance calibration    | ±0.1µS precision              | Multi-point resistance validation | Before each session    |
+| **Time Synchronization** | NTP + network compensation      | ±18.7ms across all devices    | Reference clock validation        | Continuous             |
 
 **Figure C.1: Calibration Validation Results**
 
@@ -1952,14 +2025,15 @@ xychart-beta
 
 **Table C.2: Standard Research Protocols**
 
-| Protocol Name | Duration | Participants | Data Streams | Research Application |
-|---|---|---|---|---|
-| **Stress Response Measurement** | 20 minutes | 1-4 participants | RGB + Thermal + GSR | Psychophysiology studies |
-| **Social Interaction Analysis** | 45 minutes | 2-8 participants | Multi-angle RGB + GSR | Social psychology research |
-| **Emotion Recognition Validation** | 15 minutes | 1 participant | High-res RGB + Thermal | Computer vision research |
-| **Group Dynamics Study** | 60 minutes | 4-12 participants | Distributed sensing | Organizational research |
-| **Longitudinal Monitoring** | Multiple sessions | 1-2 participants | All modalities | Clinical research |
-adb logcat | grep "MultiSensorRecording"
+| Protocol Name                      | Duration                    | Participants      | Data Streams           | Research Application       |
+|------------------------------------|-----------------------------|-------------------|------------------------|----------------------------|
+| **Stress Response Measurement**    | 20 minutes                  | 1-4 participants  | RGB + Thermal + GSR    | Psychophysiology studies   |
+| **Social Interaction Analysis**    | 45 minutes                  | 2-8 participants  | Multi-angle RGB + GSR  | Social psychology research |
+| **Emotion Recognition Validation** | 15 minutes                  | 1 participant     | High-res RGB + Thermal | Computer vision research   |
+| **Group Dynamics Study**           | 60 minutes                  | 4-12 participants | Distributed sensing    | Organizational research    |
+| **Longitudinal Monitoring**        | Multiple sessions           | 1-2 participants  | All modalities         | Clinical research          |
+ adb logcat                         | grep "MultiSensorRecording" 
+
 ```
 
 #### A.3 Configuration Management
@@ -2008,11 +2082,14 @@ experiment:
 
 **Component Integration Framework:**
 
-The system architecture has been designed with extensibility as a core principle, enabling integration of additional sensor modalities and processing algorithms without requiring fundamental architectural changes. Future developers should follow established patterns when adding new capabilities.
+The system architecture has been designed with extensibility as a core principle, enabling integration of additional
+sensor modalities and processing algorithms without requiring fundamental architectural changes. Future developers
+should follow established patterns when adding new capabilities.
 
 **Adding New Sensor Types:**
 
-The sensor integration framework follows a plugin architecture that abstracts sensor-specific communication details while maintaining consistent data flow patterns throughout the system.
+The sensor integration framework follows a plugin architecture that abstracts sensor-specific communication details
+while maintaining consistent data flow patterns throughout the system.
 
 ```python
 # Example: Adding a new sensor type
@@ -2039,7 +2116,8 @@ class NewSensorDriver(BaseSensorDriver):
 
 **Network Protocol Extensions:**
 
-The communication protocol has been designed with forward compatibility, allowing new message types and data formats to be added without disrupting existing functionality.
+The communication protocol has been designed with forward compatibility, allowing new message types and data formats to
+be added without disrupting existing functionality.
 
 ```python
 # Protocol extension example
@@ -2059,9 +2137,12 @@ class ProtocolExtension:
 
 **Common Issues and Solutions:**
 
-Based on extensive testing and operational experience, several common issues have been identified along with their resolution procedures. The troubleshooting procedures follow systematic diagnostic approaches that isolate problems to specific system components.
+Based on extensive testing and operational experience, several common issues have been identified along with their
+resolution procedures. The troubleshooting procedures follow systematic diagnostic approaches that isolate problems to
+specific system components.
 
 **Network Connectivity Issues:**
+
 ```bash
 # Diagnostic procedure
 python -m tools.network_diagnostic
@@ -2076,6 +2157,7 @@ python -m tools.restart_discovery
 ```
 
 **Sensor Communication Problems:**
+
 ```bash
 # GSR sensor diagnostics
 python -m tools.gsr_diagnostic --device-id [DEVICE_ID]
@@ -2090,35 +2172,40 @@ python -m tools.thermal_diagnostic --usb-port [PORT]
 
 ### Comprehensive Guide for System Operation
 
-This user manual provides step-by-step instructions for researchers and technical operators to effectively utilize the Multi-Sensor Recording System for contactless GSR prediction studies. The procedures have been validated through extensive user testing and incorporate feedback from multiple research teams.
+This user manual provides step-by-step instructions for researchers and technical operators to effectively utilize the
+Multi-Sensor Recording System for contactless GSR prediction studies. The procedures have been validated through
+extensive user testing and incorporate feedback from multiple research teams.
 
 #### B.1 Pre-Session Setup Procedures
 
 **Equipment Preparation Checklist:**
 
-The setup procedures reflect best practices developed through systematic user experience testing and operational validation. Each step includes quality verification procedures that ensure proper system function before data collection begins.
+The setup procedures reflect best practices developed through systematic user experience testing and operational
+validation. Each step includes quality verification procedures that ensure proper system function before data collection
+begins.
 
 1. **Hardware Verification** (Estimated time: 5 minutes)
-   - Verify all Android devices are charged above 80% capacity
-   - Confirm thermal cameras are properly connected via USB-C OTG
-   - Test GSR sensor battery levels (minimum 70% charge required)
-   - Validate central controller network connectivity
+    - Verify all Android devices are charged above 80% capacity
+    - Confirm thermal cameras are properly connected via USB-C OTG
+    - Test GSR sensor battery levels (minimum 70% charge required)
+    - Validate central controller network connectivity
 
 2. **Software Initialization** (Estimated time: 3 minutes)
-   - Launch Python controller application
-   - Verify device discovery and connection status
-   - Confirm sensor calibration status
-   - Test communication pathways with all devices
+    - Launch Python controller application
+    - Verify device discovery and connection status
+    - Confirm sensor calibration status
+    - Test communication pathways with all devices
 
 3. **Environmental Setup** (Estimated time: 2 minutes)
-   - Position devices according to experimental protocol
-   - Verify adequate lighting conditions for RGB capture
-   - Confirm thermal imaging field of view
-   - Test participant positioning and comfort
+    - Position devices according to experimental protocol
+    - Verify adequate lighting conditions for RGB capture
+    - Confirm thermal imaging field of view
+    - Test participant positioning and comfort
 
 **Device Positioning Guidelines:**
 
-The positioning guidelines have been developed through extensive validation studies examining the impact of device placement on data quality and measurement accuracy [CITE - Device positioning validation studies].
+The positioning guidelines have been developed through extensive validation studies examining the impact of device
+placement on data quality and measurement accuracy [CITE - Device positioning validation studies].
 
 ```
 Recommended Camera Positions:
@@ -2132,35 +2219,37 @@ Recommended Camera Positions:
 
 **Session Execution Protocol:**
 
-The session workflow incorporates lessons learned from user experience studies and operational feedback from multiple research teams. The procedures balance experimental rigor with practical usability.
+The session workflow incorporates lessons learned from user experience studies and operational feedback from multiple
+research teams. The procedures balance experimental rigor with practical usability.
 
 1. **Participant Preparation** (5 minutes)
-   - Explain contactless measurement approach
-   - Ensure participant comfort and positioning
-   - Verify informed consent documentation
-   - Conduct baseline measurement validation
+    - Explain contactless measurement approach
+    - Ensure participant comfort and positioning
+    - Verify informed consent documentation
+    - Conduct baseline measurement validation
 
 2. **System Initialization** (2 minutes)
-   - Start central controller application
-   - Verify device connectivity (expect 100% connection rate)
-   - Confirm synchronization accuracy (target: ±5ms)
-   - Initialize recording buffers
+    - Start central controller application
+    - Verify device connectivity (expect 100% connection rate)
+    - Confirm synchronization accuracy (target: ±5ms)
+    - Initialize recording buffers
 
 3. **Data Collection** (Variable duration)
-   - Begin coordinated recording across all devices
-   - Monitor real-time quality indicators
-   - Ensure continuous data flow validation
-   - Maintain participant comfort and engagement
+    - Begin coordinated recording across all devices
+    - Monitor real-time quality indicators
+    - Ensure continuous data flow validation
+    - Maintain participant comfort and engagement
 
 4. **Session Completion** (3 minutes)
-   - Stop recording on all devices simultaneously
-   - Verify data integrity and completeness
-   - Export data in standardized formats
-   - Generate session summary report
+    - Stop recording on all devices simultaneously
+    - Verify data integrity and completeness
+    - Export data in standardized formats
+    - Generate session summary report
 
 **Quality Assurance During Recording:**
 
-Real-time quality monitoring procedures ensure data validity while minimizing session interruption. The quality indicators have been calibrated through extensive validation testing.
+Real-time quality monitoring procedures ensure data validity while minimizing session interruption. The quality
+indicators have been calibrated through extensive validation testing.
 
 ```
 Quality Indicators:
@@ -2175,7 +2264,9 @@ Quality Indicators:
 
 **Data Export Procedures:**
 
-The export system provides multiple format options optimized for different analysis workflows commonly used in psychophysiological research. Format selection should align with subsequent analysis requirements and computational resources.
+The export system provides multiple format options optimized for different analysis workflows commonly used in
+psychophysiological research. Format selection should align with subsequent analysis requirements and computational
+resources.
 
 **Standard Export Formats:**
 
@@ -2204,7 +2295,8 @@ export_data(
 
 **Data Validation Procedures:**
 
-Post-session data validation ensures research-grade quality and identifies potential issues before analysis begins. The validation procedures incorporate statistical quality assessment and automated anomaly detection.
+Post-session data validation ensures research-grade quality and identifies potential issues before analysis begins. The
+validation procedures incorporate statistical quality assessment and automated anomaly detection.
 
 ```bash
 # Comprehensive data validation
@@ -2223,13 +2315,16 @@ python -m analysis.validate_session --session-id [SESSION_ID]
 
 ### Technical Specifications and Reference Materials
 
-This appendix provides comprehensive technical documentation, reference data, and supporting materials that supplement the main thesis content. The materials are organized to support both immediate research applications and future system development efforts.
+This appendix provides comprehensive technical documentation, reference data, and supporting materials that supplement
+the main thesis content. The materials are organized to support both immediate research applications and future system
+development efforts.
 
 #### C.1 Hardware Specifications
 
 **Thermal Camera Technical Details:**
 
-The Topdon TC001 thermal camera selection represents a careful balance between research-grade performance and practical accessibility. The technical specifications demonstrate capability for precise physiological measurement applications.
+The Topdon TC001 thermal camera selection represents a careful balance between research-grade performance and practical
+accessibility. The technical specifications demonstrate capability for precise physiological measurement applications.
 
 ```
 Topdon TC001 Thermal Camera Specifications:
@@ -2243,11 +2338,15 @@ Topdon TC001 Thermal Camera Specifications:
 - Calibration: Factory calibrated with drift compensation
 ```
 
-The selection rationale for this specific thermal camera model reflects extensive evaluation of available research-grade thermal imaging solutions. The decision prioritized measurement accuracy, integration compatibility, and cost-effectiveness for research laboratory adoption [CITE - Thermal camera evaluation criteria for physiological research].
+The selection rationale for this specific thermal camera model reflects extensive evaluation of available research-grade
+thermal imaging solutions. The decision prioritized measurement accuracy, integration compatibility, and
+cost-effectiveness for research laboratory
+adoption [CITE - Thermal camera evaluation criteria for physiological research].
 
 **Android Device Requirements:**
 
-Device selection criteria emphasize consistency across research installations while accommodating varying institutional procurement constraints and budget limitations.
+Device selection criteria emphasize consistency across research installations while accommodating varying institutional
+procurement constraints and budget limitations.
 
 ```
 Minimum Android Device Specifications:
@@ -2264,7 +2363,8 @@ Minimum Android Device Specifications:
 
 **Thermal Camera Calibration Reference:**
 
-The calibration procedures ensure measurement accuracy comparable to research-grade instrumentation while accounting for environmental variations commonly encountered in research settings.
+The calibration procedures ensure measurement accuracy comparable to research-grade instrumentation while accounting for
+environmental variations commonly encountered in research settings.
 
 ```
 Calibration Reference Points:
@@ -2282,7 +2382,8 @@ Calibration Validation:
 
 **GSR Sensor Calibration Standards:**
 
-The GSR calibration procedures follow established psychophysiological research protocols while adapting to the specific requirements of the Shimmer3 GSR+ sensor platform [CITE - Shimmer3 GSR+ calibration protocols].
+The GSR calibration procedures follow established psychophysiological research protocols while adapting to the specific
+requirements of the Shimmer3 GSR+ sensor platform [CITE - Shimmer3 GSR+ calibration protocols].
 
 ```
 GSR Calibration Protocol:
@@ -2297,7 +2398,8 @@ GSR Calibration Protocol:
 
 **WebSocket Communication Schema:**
 
-The communication protocol design prioritizes reliability and extensibility while maintaining real-time performance requirements. The schema supports future protocol extensions without breaking backward compatibility.
+The communication protocol design prioritizes reliability and extensibility while maintaining real-time performance
+requirements. The schema supports future protocol extensions without breaking backward compatibility.
 
 ```json
 {
@@ -2331,13 +2433,16 @@ The communication protocol design prioritizes reliability and extensibility whil
 
 ### Comprehensive Testing Validation Results
 
-This appendix presents detailed testing results from the comprehensive validation framework implemented for the Multi-Sensor Recording System. The testing results provide empirical evidence of system functionality and identify areas for continued improvement.
+This appendix presents detailed testing results from the comprehensive validation framework implemented for the
+Multi-Sensor Recording System. The testing results provide empirical evidence of system functionality and identify areas
+for continued improvement.
 
 #### G.1 Current Test Suite Results
 
 Based on the latest comprehensive test suite execution (from `test_results/complete_test_results.json`):
 
 **Overall Test Performance:**
+
 - **Total Test Scenarios**: 7 comprehensive test cases
 - **Successful Tests**: 4 out of 7 (57.1% success rate)
 - **Failed Tests**: 3 (Enhanced Stress Testing, Network Resilience, Comprehensive Recording)
@@ -2345,6 +2450,7 @@ Based on the latest comprehensive test suite execution (from `test_results/compl
 - **Test Execution Date**: August 2, 2025 (23:23:41 UTC)
 
 **Test Results Summary:**
+
 ```
 Test Suite Execution Results:
 ╭──────────────────────────────────────────────────────────────╮
@@ -2365,6 +2471,7 @@ Test Suite Execution Results:
 The network resilience testing demonstrates robust operation across diverse network conditions:
 
 **Network Condition Test Results:**
+
 ```
 Network Resilience Validation:
 ╭─────────────────────────────────────────────────────────────╮
@@ -2379,6 +2486,7 @@ Network Resilience Validation:
 ```
 
 **Key Performance Achievements:**
+
 - Successfully coordinated 4 devices across all network conditions
 - Demonstrated automatic connection recovery after simulated dropouts
 - Maintained data integrity across all network stress scenarios
@@ -2389,6 +2497,7 @@ Network Resilience Validation:
 Comprehensive data corruption testing validates system reliability:
 
 **Corruption Detection Results:**
+
 ```
 Data Integrity Test Results:
 ╭──────────────────────────────────────────────────────────────╮
@@ -2406,8 +2515,9 @@ Data Integrity Test Results:
 #### F.4 System Capabilities Validation
 
 **Validated System Performance:**
+
 - **Device Coordination**: Up to 4 simultaneous devices tested and validated
-- **Network Latency Tolerance**: 1ms to 500ms range successfully handled  
+- **Network Latency Tolerance**: 1ms to 500ms range successfully handled
 - **Message Success Rate**: 84.3% to 100% depending on network conditions
 - **Data Integrity**: 100% corruption detection across all test scenarios
 - **Cross-Platform Operation**: Android-Python coordination via WebSocket protocol
@@ -2416,26 +2526,29 @@ Data Integrity Test Results:
 #### E.5 Areas Identified for Improvement
 
 **Failed Test Analysis:**
+
 1. **Enhanced Stress Testing**: Failed with exit code 1 after 76.73 seconds
-   - Issue: Resource monitoring and concurrent session handling under extreme load
-   - Impact: System performance under maximum stress conditions not fully validated
-   - Next Steps: Optimize memory management and concurrent session handling
+    - Issue: Resource monitoring and concurrent session handling under extreme load
+    - Impact: System performance under maximum stress conditions not fully validated
+    - Next Steps: Optimize memory management and concurrent session handling
 
 2. **Network Resilience Testing**: Failed with exit code 1 after 104.99 seconds
-   - Issue: Packet loss tolerance exceeded acceptable thresholds (15.7% vs 5% target)
-   - Impact: Performance degradation under high packet loss conditions
-   - Next Steps: Enhance packet loss recovery and retry mechanisms
+    - Issue: Packet loss tolerance exceeded acceptable thresholds (15.7% vs 5% target)
+    - Impact: Performance degradation under high packet loss conditions
+    - Next Steps: Enhance packet loss recovery and retry mechanisms
 
 3. **Comprehensive Recording Session**: Failed with exit code 1 after 0.39 seconds
-   - Issue: Complex integration scenario rapid failure
-   - Impact: End-to-end recording workflow needs refinement
-   - Next Steps: Enhanced error handling and dependency management
+    - Issue: Complex integration scenario rapid failure
+    - Impact: End-to-end recording workflow needs refinement
+    - Next Steps: Enhanced error handling and dependency management
 
 **Test Framework Enhancements:**
+
 - Improved stress testing with resource monitoring capabilities
-- Enhanced network resilience under extreme packet loss conditions  
+- Enhanced network resilience under extreme packet loss conditions
 - Better integration test error handling and recovery mechanisms
 - Extended test coverage for edge cases and error conditions
+
 ```
 
 #### G.2 Reliability and Stress Testing
@@ -2445,7 +2558,9 @@ Data Integrity Test Results:
 Reliability testing validates system stability during extended research sessions and under various stress conditions. The testing protocol simulates realistic research scenarios with systematic stress application.
 
 ```
+
 Extended Operation Results (72-hour continuous test):
+
 - System uptime: 99.7% (21.6 minutes total downtime)
 - Automatic recovery: 100% success rate
 - Data loss incidents: 0 occurrences
@@ -2453,10 +2568,12 @@ Extended Operation Results (72-hour continuous test):
 - Performance degradation: <2% over 72 hours
 
 Stress Test Results:
+
 - Maximum concurrent devices: 12 (target: 8)
 - Peak memory usage: 1.8GB (limit: 2GB)
 - Network saturation point: >150% of typical load
 - Error recovery time: <5 seconds average
+
 ```
 
 **Failure Recovery Testing:**
@@ -2464,20 +2581,22 @@ Stress Test Results:
 The failure recovery testing validates system resilience and data protection capabilities under various failure scenarios commonly encountered in research environments.
 
 ```
+
 Failure Scenario Testing:
 ╭──────────────────────────────────────────────────────────╮
-│ Failure Type           │ Recovery Time │ Data Loss │ Auto │
+│ Failure Type │ Recovery Time │ Data Loss │ Auto │
 ├────────────────────────┼───────────────┼───────────┼──────┤
-│ Network disconnection  │ 3.2s         │ 0%        │ ✓    │
-│ Device power loss      │ 8.1s         │ 0%        │ ✓    │
-│ Software crash         │ 12.5s        │ 0%        │ ✓    │
-│ Storage full           │ 1.8s         │ 0%        │ ✓    │
-│ Sensor malfunction     │ 5.4s         │ 0%        │ ✓    │
+│ Network disconnection │ 3.2s │ 0% │ ✓ │
+│ Device power loss │ 8.1s │ 0% │ ✓ │
+│ Software crash │ 12.5s │ 0% │ ✓ │
+│ Storage full │ 1.8s │ 0% │ ✓ │
+│ Sensor malfunction │ 5.4s │ 0% │ ✓ │
 ╰──────────────────────────────────────────────────────────╯
 
 All tested failure scenarios demonstrate complete automatic
 recovery with zero data loss, validating system design for
 critical research applications.
+
 ```
 
 #### G.3 Accuracy Validation Results
@@ -2487,23 +2606,29 @@ critical research applications.
 Accuracy validation compares system measurements against established reference standards using calibrated instrumentation traceable to national standards.
 
 ```
+
 Thermal Measurement Accuracy:
+
 - Reference comparison: ±0.08°C RMS error
 - Linearity: R² = 0.9998 across temperature range
 - Stability: ±0.02°C over 4-hour session
 - Spatial accuracy: ±0.1°C across field of view
 
 GSR Measurement Correlation:
+
 - Reference sensor correlation: r = 0.97 (p < 0.001)
 - Temporal alignment accuracy: ±1.2ms
 - Signal-to-noise ratio: 42.3dB
 - Dynamic range: 0.1-50μS with 16-bit resolution
+
 ```
 
 **Statistical Validation Summary:**
 
 ```
+
 Statistical Validation Results:
+
 - Sample size: n = 1,247 measurement sessions
 - Measurement correlation: r = 0.95 (95% CI: 0.94-0.96)
 - Systematic bias: 0.03μS ± 0.12μS (not significant)
@@ -2513,6 +2638,7 @@ Statistical Validation Results:
 
 Results demonstrate research-grade measurement accuracy
 suitable for psychophysiological research applications.
+
 ```
 
 ---
@@ -2532,19 +2658,21 @@ The system evaluation encompasses multiple performance dimensions relevant to re
 Based on actual test execution results from August 2, 2025:
 
 ```
+
 Evaluation Summary Dashboard:
 ╭─────────────────────────────────────────────────────────╮
-│ Performance Domain        │ Score    │ Benchmark │ Grade │
+│ Performance Domain │ Score │ Benchmark │ Grade │
 ├───────────────────────────┼──────────┼───────────┼───────┤
-│ Test Success Rate         │ 57.1%    │ >70%      │ C     │
-│ System Reliability        │ 100%     │ >99%      │ A+    │
-│ Data Integrity           │ 100%     │ >95%      │ A+    │
-│ Network Resilience       │ 80.0%    │ >85%      │ B     │
-│ Integration Testing      │ 4/7      │ >5/7      │ C+    │
-│ Technical Innovation     │ 95.7%    │ >90%      │ A     │
+│ Test Success Rate │ 57.1% │ >70% │ C │
+│ System Reliability │ 100% │ >99% │ A+ │
+│ Data Integrity │ 100% │ >95% │ A+ │
+│ Network Resilience │ 80.0% │ >85% │ B │
+│ Integration Testing │ 4/7 │ >5/7 │ C+ │
+│ Technical Innovation │ 95.7% │ >90% │ A │
 ╰─────────────────────────────────────────────────────────╯
 
 Overall System Grade: B+ (76.8% composite score)
+
 ```
 
 **Detailed Performance Metrics:**
@@ -2552,7 +2680,9 @@ Overall System Grade: B+ (76.8% composite score)
 The performance evaluation incorporates both quantitative measurements and qualitative assessment based on actual test execution data.
 
 ```
+
 Quantitative Performance Analysis:
+
 - Test execution duration: 341.76 seconds (~5.7 minutes)
 - Data integrity validation: 100% corruption detection (9/9 tests)
 - Network resilience: 4/5 conditions passed (80% success rate)
@@ -2562,11 +2692,13 @@ Quantitative Performance Analysis:
 - Resource utilization: Optimal CPU and memory usage
 
 Test Category Performance:
+
 - Foundation Tests: 100% success (Integration Logging, Recording Session)
 - Hardware Integration: 100% success (Sensor Simulation)
 - Data Quality: 100% success (Integrity Validation)
 - Stress Testing: 0% success (Resource limitations identified)
 - Network Testing: 80% success (Packet loss tolerance issues)
+
 ```
 
 #### G.2 Comparative Analysis Results
@@ -2576,17 +2708,18 @@ Test Category Performance:
 The comparative analysis positions the Multi-Sensor Recording System against existing research instrumentation and commercial solutions, demonstrating competitive advantages in key performance areas.
 
 ```
+
 Competitive Analysis Matrix:
 ╭──────────────────────────────────────────────────────────╮
-│ Criterion              │ This System │ Commercial │ Aca │
+│ Criterion │ This System │ Commercial │ Aca │
 ├────────────────────────┼─────────────┼────────────┼─────┤
-│ Measurement Accuracy   │ 97.3%       │ 98.1%      │ 94% │
-│ Setup Time             │ 8.2 min     │ 15.3 min   │ 22  │
-│ Cost Effectiveness     │ High        │ Low        │ Med │
-│ Flexibility           │ Very High   │ Medium     │ Low │
-│ Multi-participant     │ Yes (8)     │ Limited    │ No  │
-│ Contactless Operation │ Yes         │ No         │ No  │
-│ Integration Capability│ Excellent   │ Limited    │ Poor│
+│ Measurement Accuracy │ 97.3% │ 98.1% │ 94% │
+│ Setup Time │ 8.2 min │ 15.3 min │ 22 │
+│ Cost Effectiveness │ High │ Low │ Med │
+│ Flexibility │ Very High │ Medium │ Low │
+│ Multi-participant │ Yes (8)     │ Limited │ No │
+│ Contactless Operation │ Yes │ No │ No │
+│ Integration Capability│ Excellent │ Limited │ Poor│
 ╰──────────────────────────────────────────────────────────╯
 
 Key Advantages:
@@ -2594,18 +2727,22 @@ Key Advantages:
 ✓ Exceptional multi-participant coordination
 ✓ Outstanding cost-effectiveness for research labs
 ✓ Unprecedented system flexibility and extensibility
+
 ```
 
 **Performance Improvement Analysis:**
 
 ```
+
 Performance Improvements Over Baseline:
+
 - Setup time reduction: 62% faster than traditional methods
 - Participant comfort: 89% improvement (survey-based)
 - Data collection efficiency: 45% increase in session throughput
 - Research scope expansion: 300% increase in possible study designs
 - Cost reduction: 74% lower than commercial alternatives
 - Maintenance requirements: 58% reduction in technical support needs
+
 ```
 
 #### G.3 User Experience Evaluation
@@ -2615,29 +2752,34 @@ Performance Improvements Over Baseline:
 User experience evaluation incorporated feedback from multiple research teams across different institutions, providing comprehensive assessment of system usability and research applicability.
 
 ```
+
 User Experience Survey Results (n=24 researchers):
 ╭─────────────────────────────────────────────────────────╮
-│ Aspect                   │ Rating  │ Comments Summary    │
+│ Aspect │ Rating │ Comments Summary │
 ├──────────────────────────┼─────────┼─────────────────────┤
-│ Overall Satisfaction     │ 9.2/10  │ "Exceeded expectations" │
-│ Ease of Learning         │ 8.8/10  │ "Intuitive interface"   │
-│ Setup Efficiency         │ 9.0/10  │ "Much faster than old" │
-│ Data Quality            │ 9.4/10  │ "Research-grade quality"│
-│ System Reliability      │ 9.6/10  │ "Never had failures"    │
-│ Technical Support       │ 8.9/10  │ "Excellent documentation"|
+│ Overall Satisfaction │ 9.2/10 │ "Exceeded expectations" │
+│ Ease of Learning │ 8.8/10 │ "Intuitive interface"   │
+│ Setup Efficiency │ 9.0/10 │ "Much faster than old" │
+│ Data Quality │ 9.4/10 │ "Research-grade quality"│
+│ System Reliability │ 9.6/10 │ "Never had failures"    │
+│ Technical Support │ 8.9/10 │ "Excellent documentation"|
 ╰─────────────────────────────────────────────────────────╯
 
 Qualitative Feedback Themes:
+
 - "Revolutionary for multi-participant studies"
 - "Finally enables natural behavior research"
 - "Cost-effective solution for resource-limited labs"
 - "Outstanding technical documentation and support"
+
 ```
 
 **Operational Efficiency Assessment:**
 
 ```
+
 Operational Metrics Improvement:
+
 - Session preparation time: 15.3 min → 8.2 min (46% reduction)
 - Data processing time: 2.4 hours → 0.8 hours (67% reduction)
 - Error recovery time: 12.5 min → 3.2 min (74% reduction)
@@ -2645,11 +2787,13 @@ Operational Metrics Improvement:
 - Equipment maintenance frequency: Weekly → Monthly (75% reduction)
 
 Research Productivity Impact:
+
 - Studies completed per month: 12 → 19 (58% increase)
 - Participant recruitment success: 73% → 91% (improved comfort)
 - Data quality consistency: 85% → 97% (automated validation)
-- Cross-site collaboration capability: New feature enabling 
+- Cross-site collaboration capability: New feature enabling
   distributed research across multiple institutions
+
 ```
 
 ---
@@ -3296,20 +3440,23 @@ class ComprehensiveTestAnalyzer:
 The remaining code references (F.146-F.177) follow similar patterns, implementing:
 
 - **Research-grade validation systems** with statistical confidence analysis
-- **Production deployment frameworks** with automated quality assurance  
+- **Production deployment frameworks** with automated quality assurance
 - **Extensible architectures** enabling future research development
 - **Community accessibility features** with comprehensive documentation
 - **Academic research protocols** with reproducible methodologies
 
-Each implementation demonstrates the technical achievements and innovations discussed in the thesis conclusions, providing concrete evidence of the system's contributions to multi-sensor physiological measurement research.
+Each implementation demonstrates the technical achievements and innovations discussed in the thesis conclusions,
+providing concrete evidence of the system's contributions to multi-sensor physiological measurement research.
 
-*For complete implementations of all 177 referenced files, see the full source code repository at `PythonApp/` and `AndroidApp/` directories.*
+*For complete implementations of all 177 referenced files, see the full source code repository at `PythonApp/`
+and `AndroidApp/` directories.*
 
 ## Missing Items
 
 ### Missing Figures
 
-- **Figure B.2**: Android Mobile Application Interface Screenshots *(Note: could potentially use android architecture diagrams)*
+- **Figure B.2**: Android Mobile Application Interface Screenshots *(Note: could potentially use android architecture
+  diagrams)*
 - **Figure B.4**: Data Export Workflow Interface *(Note: could potentially use 13_data_export_workflow.png)*
 - **Figure C.1**: Calibration Validation Results
 - **Figure D.1**: Calibration Test Results Visualization
@@ -3317,11 +3464,13 @@ Each implementation demonstrates the technical achievements and innovations disc
 
 ### Missing Tables
 
-*Note: Specific tables referenced in various appendices should be developed based on the detailed specifications and data outlined in each appendix section.*
+*Note: Specific tables referenced in various appendices should be developed based on the detailed specifications and
+data outlined in each appendix section.*
 
 ### Missing Code Snippets
 
-*Note: Code implementation references are comprehensive throughout this appendix chapter, with detailed snippets provided in sections F.1-F.177 as referenced.*
+*Note: Code implementation references are comprehensive throughout this appendix chapter, with detailed snippets
+provided in sections F.1-F.177 as referenced.*
 
 ## References
 
@@ -3333,7 +3482,8 @@ Each implementation demonstrates the technical achievements and innovations disc
 
 [Freeman2004] Freeman, E., Freeman, E., Bates, B., & Sierra, K. "Head First Design Patterns." O'Reilly Media, 2004.
 
-[Goodrich2013] Goodrich, M. T., Tamassia, R., & Goldwasser, M. H. "Data Structures and Algorithms in Java, 6th Edition." John Wiley & Sons, 2013.
+[Goodrich2013] Goodrich, M. T., Tamassia, R., & Goldwasser, M. H. "Data Structures and Algorithms in Java, 6th Edition."
+John Wiley & Sons, 2013.
 
 [Kotlin2023] JetBrains. "Kotlin Programming Language Documentation." https://kotlinlang.org/docs/, 2023.
 
@@ -3345,23 +3495,28 @@ Each implementation demonstrates the technical achievements and innovations disc
 
 [Ramalho2015] Ramalho, L. "Fluent Python: Clear, Concise, and Effective Programming." O'Reilly Media, 2015.
 
-[Sweigart2015] Sweigart, A. "Automate the Boring Stuff with Python: Practical Programming for Total Beginners." No Starch Press, 2015.
+[Sweigart2015] Sweigart, A. "Automate the Boring Stuff with Python: Practical Programming for Total Beginners." No
+Starch Press, 2015.
 
-[Vanderplas2016] VanderPlas, J. "Python Data Science Handbook: Essential Tools for Working with Data." O'Reilly Media, 2016.
+[Vanderplas2016] VanderPlas, J. "Python Data Science Handbook: Essential Tools for Working with Data." O'Reilly Media,
+2016.
 
 ### F.6 Missing Documentation Placeholders
 
 **[PLACEHOLDER: Complete API Documentation]**
+
 - Location: `docs/api/complete_api_reference.md`
 - Content: Comprehensive API documentation generated from code annotations
 - Expected sections: REST endpoints, WebSocket protocols, data schemas, authentication methods
 
 **[PLACEHOLDER: Code Style Guide Documents]**
+
 - Location: `docs/development/code_style_guide.md`
 - Content: Coding standards and style guidelines for the project
 - Expected sections: Python style guide, Kotlin style guide, documentation standards, code review checklist
 
 **[PLACEHOLDER: Development Workflow Documentation]**
+
 - Location: `docs/development/development_workflow.md`
 - Content: Step-by-step development workflow for contributors
 - Expected sections: Git workflow, testing procedures, code review process, release procedures
@@ -3372,35 +3527,43 @@ Each implementation demonstrates the technical achievements and innovations disc
 
 ### H.1 Missing Diagram Inventory
 
-This section provides a comprehensive inventory of all diagrams referenced throughout the thesis documents but not currently available as image files in the repository. The analysis is based on systematic review of all figure references in Chapters 3-6 and appendices.
+This section provides a comprehensive inventory of all diagrams referenced throughout the thesis documents but not
+currently available as image files in the repository. The analysis is based on systematic review of all figure
+references in Chapters 3-6 and appendices.
 
 #### H.1.1 Chapter 3 Missing Diagrams (5 diagrams missing)
 
 **Figure 3.1: Traditional vs. Contactless Measurement Setup Comparison**
+
 - *Status*: ❌ Missing diagram file
-- *Description*: Comparative illustration showing traditional physiological measurement setup versus the contactless approach
+- *Description*: Comparative illustration showing traditional physiological measurement setup versus the contactless
+  approach
 - *Referenced in*: Chapter 3, Requirements and Analysis section
 - *Suggested creation*: Side-by-side photograph comparison or technical schematic
 
 **Figure 3.2: Evolution of Physiological Measurement Technologies**
-- *Status*: ❌ Missing diagram file  
+
+- *Status*: ❌ Missing diagram file
 - *Description*: Timeline diagram showing progression from contact-based to contactless measurement technologies
 - *Referenced in*: Chapter 3, Literature Review context
 - *Suggested creation*: Timeline infographic with technology milestones
 
 **Figure 3.3: Research Impact Potential vs. Technical Complexity Matrix**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: 2x2 matrix plotting research impact against technical implementation complexity
 - *Referenced in*: Chapter 3, Requirements justification
 - *Suggested creation*: Scatter plot or quadrant analysis chart
 
 **Figure 3.4: Requirements Dependency Network**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Network diagram showing interdependencies between functional and non-functional requirements
 - *Referenced in*: Chapter 3, Requirements analysis
 - *Suggested creation*: Network graph with requirement nodes and dependency edges
 
 **Figure 3.5: Hardware Integration Architecture**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Technical diagram showing hardware component integration and communication pathways
 - *Referenced in*: Chapter 3, System architecture overview
@@ -3409,6 +3572,7 @@ This section provides a comprehensive inventory of all diagrams referenced throu
 #### H.1.2 Chapter 4 Missing Diagrams (1 diagram missing)
 
 **Figure 4.1: Multi-Sensor Recording System Architecture Overview**
+
 - *Status*: ❌ Missing diagram file (could reference `05_complete_data_flow_architecture.png`)
 - *Description*: High-level system architecture showing all components and their interactions
 - *Referenced in*: Chapter 4, Design and Implementation
@@ -3417,36 +3581,42 @@ This section provides a comprehensive inventory of all diagrams referenced throu
 #### H.1.3 Chapter 5 Missing Diagrams (6 diagrams missing)
 
 **Figure 5.1: Multi-Layered Testing Architecture**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Hierarchical diagram showing unit, integration, and system testing layers
 - *Referenced in*: Chapter 5, Testing framework
 - *Suggested creation*: Pyramid or layered architecture diagram
 
 **Figure 5.2: Test Coverage Heatmap**
-- *Status*: ❌ Missing diagram file  
+
+- *Status*: ❌ Missing diagram file
 - *Description*: Visual heatmap showing test coverage across different system components
 - *Referenced in*: Chapter 5, Test results section
 - *Suggested creation*: Color-coded grid or heatmap visualization
 
 **Figure 5.3: Performance Benchmark Results Over Time**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Time series chart showing system performance metrics during extended testing
 - *Referenced in*: Chapter 5, Performance validation
 - *Suggested creation*: Line chart with multiple performance metrics
 
 **Figure 5.4: Scalability Performance Analysis**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Chart showing system performance degradation as device count increases
 - *Referenced in*: Chapter 5, Scalability testing
 - *Suggested creation*: Performance vs. device count scatter plot
 
 **Figure 5.5: System Reliability Over Extended Operation**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Reliability metrics plotted over extended operational periods
 - *Referenced in*: Chapter 5, Reliability assessment
 - *Suggested creation*: Reliability curve with confidence intervals
 
 **Figure 5.6: Temporal Synchronization Distribution Analysis**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Statistical distribution of synchronization accuracy measurements
 - *Referenced in*: Chapter 5, Synchronization precision validation
@@ -3455,24 +3625,28 @@ This section provides a comprehensive inventory of all diagrams referenced throu
 #### H.1.4 Chapter 6 Missing Diagrams (4 diagrams missing)
 
 **Figure 6.1: Achievement Visualization Dashboard**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Comprehensive dashboard showing all system achievements and metrics
 - *Referenced in*: Chapter 6, Conclusions and evaluation
 - *Suggested creation*: Multi-panel dashboard layout
 
 **Figure 6.2: Goal Achievement Progress Timeline**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Timeline showing progression toward stated research goals
-- *Referenced in*: Chapter 6, Goal achievement analysis  
+- *Referenced in*: Chapter 6, Goal achievement analysis
 - *Suggested creation*: Gantt chart or milestone timeline
 
 **Figure 6.3: Technical Architecture Innovation Map**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Diagram highlighting innovative aspects of the system architecture
 - *Referenced in*: Chapter 6, Innovation assessment
 - *Suggested creation*: Annotated architecture diagram with innovation callouts
 
 **Figure 6.4: Performance Excellence Metrics Visualization**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Comprehensive visualization of performance achievements
 - *Referenced in*: Chapter 6, Performance excellence validation
@@ -3481,18 +3655,21 @@ This section provides a comprehensive inventory of all diagrams referenced throu
 #### H.1.5 Appendix Missing Diagrams (5 diagrams missing)
 
 **Figure C.1: Calibration Validation Results**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Charts showing calibration accuracy over time for all devices
 - *Referenced in*: Appendix C, Supporting documentation
 - *Current status*: Mermaid chart placeholder exists
 
 **Figure D.1: Calibration Test Results Visualization** (duplicate reference)
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Visualization of calibration test outcomes and statistics
 - *Referenced in*: Appendix D, twice with different contexts
 - *Current status*: Mermaid chart placeholder exists
 
 **Figure E.1: User Satisfaction Analysis**
+
 - *Status*: ❌ Missing diagram file
 - *Description*: Statistical analysis of user experience survey results
 - *Referenced in*: Appendix E, User evaluation
@@ -3500,32 +3677,35 @@ This section provides a comprehensive inventory of all diagrams referenced throu
 
 ### H.2 Available Diagram Mappings
 
-This section maps currently available diagrams in `docs/diagrams/` to appropriate figure references where logical connections exist.
+This section maps currently available diagrams in `docs/diagrams/` to appropriate figure references where logical
+connections exist.
 
 #### H.2.1 Successfully Mapped Diagrams
 
-| Available File | Mapped to Figure Reference | Mapping Quality |
-|---|---|---|
-| `02_hardware_setup_architecture.png` | Figure A.2: Physical Laboratory Setup | ✅ Direct match |
-| `03_android_app_architecture.png` | Figure B.2: Android Application Interface | ✅ Direct match |
-| `04_pc_app_architecture.png` | Figure B.1: Python Desktop Controller Interface | ✅ Direct match |
-| `05_complete_data_flow_architecture.png` | Figure 4.2: Data Flow and Processing Pipeline | ✅ Direct match |
-| `07_networking_architecture.png` | Figure 4.3: Hybrid Star-Mesh Network Topology | ✅ Direct match |
-| `09_session_management_flow.png` | Figure B.3: Session Recording Interface | ✅ Good match |
-| `12_data_file_system_architecture.png` | Figure A.4: Detailed Component Interaction | ✅ Good match |
-| `13_data_export_workflow.png` | Figure B.3 and B.4: Data Export Workflow | ✅ Direct match |
-| `14_layer_architecture.png` | Figure A.1: System Architecture Deployment | ✅ Good match |
-| `15_software_architecture_of_android.png` | Figure 4.4: Android Application Layers | ✅ Direct match |
-| `17_software_installation_flow.png` | Figure A.3: Software Installation Workflow | ✅ Direct match |
+| Available File                            | Mapped to Figure Reference                      | Mapping Quality |
+|-------------------------------------------|-------------------------------------------------|-----------------|
+| `02_hardware_setup_architecture.png`      | Figure A.2: Physical Laboratory Setup           | ✅ Direct match  |
+| `03_android_app_architecture.png`         | Figure B.2: Android Application Interface       | ✅ Direct match  |
+| `04_pc_app_architecture.png`              | Figure B.1: Python Desktop Controller Interface | ✅ Direct match  |
+| `05_complete_data_flow_architecture.png`  | Figure 4.2: Data Flow and Processing Pipeline   | ✅ Direct match  |
+| `07_networking_architecture.png`          | Figure 4.3: Hybrid Star-Mesh Network Topology   | ✅ Direct match  |
+| `09_session_management_flow.png`          | Figure B.3: Session Recording Interface         | ✅ Good match    |
+| `12_data_file_system_architecture.png`    | Figure A.4: Detailed Component Interaction      | ✅ Good match    |
+| `13_data_export_workflow.png`             | Figure B.3 and B.4: Data Export Workflow        | ✅ Direct match  |
+| `14_layer_architecture.png`               | Figure A.1: System Architecture Deployment      | ✅ Good match    |
+| `15_software_architecture_of_android.png` | Figure 4.4: Android Application Layers          | ✅ Direct match  |
+| `17_software_installation_flow.png`       | Figure A.3: Software Installation Workflow      | ✅ Direct match  |
 
 #### H.2.2 Gaps in Available Diagrams
 
 **Missing Diagram Numbers in Sequence:**
+
 - ❌ **06**: Gap between `05_complete_data_flow_architecture.png` and `07_networking_architecture.png`
 - ❌ **10**: Gap between `09_session_management_flow.png` and `12_data_file_system_architecture.png`
 - ❌ **11**: Gap between `09_session_management_flow.png` and `12_data_file_system_architecture.png`
 
 **Unused Available Diagrams:**
+
 - `01_table_of_contents.png` - Documentation structure overview
 - `08_data_collection_flow.png` - Alternative data flow visualization
 - `16_software_architecture_of_pc_app.png` - Alternative PC architecture view
@@ -3539,13 +3719,15 @@ This section maps currently available diagrams in `docs/diagrams/` to appropriat
 **Duplicate References**: 3 instances (Figure D.1 appears twice, Figure B.2 and B.3 have duplicates)
 
 **Coverage by Chapter:**
+
 - Chapter 3: 0/5 diagrams available (0% coverage)
-- Chapter 4: 3/4 diagrams available (75% coverage)  
+- Chapter 4: 3/4 diagrams available (75% coverage)
 - Chapter 5: 0/6 diagrams available (0% coverage)
 - Chapter 6: 0/4 diagrams available (0% coverage)
 - Appendices: 8/11 diagrams available (72.7% coverage)
 
 **Recommendation Priority:**
+
 1. **High Priority**: Create Chapter 3 requirement analysis diagrams for academic completeness
 2. **Medium Priority**: Develop Chapter 5 testing and validation visualization for research credibility
 3. **Low Priority**: Generate Chapter 6 conclusion dashboards for presentation enhancement
@@ -3557,21 +3739,21 @@ This section maps currently available diagrams in `docs/diagrams/` to appropriat
 For academic submission, the following diagram categories should be prioritized:
 
 1. **Requirements Analysis Visualizations** (Chapter 3)
-   - Traditional vs. contactless comparison for establishing research motivation
-   - Requirements dependency network for systematic analysis demonstration
+    - Traditional vs. contactless comparison for establishing research motivation
+    - Requirements dependency network for systematic analysis demonstration
 
-2. **Testing Framework Diagrams** (Chapter 5)  
-   - Multi-layered testing architecture for methodology validation
-   - Performance benchmark visualizations for quantitative evidence
+2. **Testing Framework Diagrams** (Chapter 5)
+    - Multi-layered testing architecture for methodology validation
+    - Performance benchmark visualizations for quantitative evidence
 
 3. **Achievement Visualization** (Chapter 6)
-   - Goal achievement timeline for research contribution demonstration
-   - Performance excellence metrics for academic impact assessment
+    - Goal achievement timeline for research contribution demonstration
+    - Performance excellence metrics for academic impact assessment
 
 #### H.4.2 Repository Organization Recommendations
 
 1. **Create placeholder image files** with standardized naming convention
-2. **Maintain diagram-to-reference mapping table** in repository documentation  
+2. **Maintain diagram-to-reference mapping table** in repository documentation
 3. **Implement automated diagram reference validation** in documentation build process
 4. **Establish diagram creation guidelines** for future development
 

@@ -1,20 +1,15 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Handler
 import android.os.Looper
-import android.widget.TextView
 import android.view.View
+import android.widget.TextView
 import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -136,9 +131,15 @@ class StatusDisplayController @Inject constructor() {
             startPeriodicStatusUpdates()
 
             callback?.onStatusMonitoringInitialized()
-            android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Status monitoring system initialized successfully")
+            android.util.Log.d(
+                "StatusDisplayController",
+                "[DEBUG_LOG] Status monitoring system initialized successfully"
+            )
         } catch (e: Exception) {
-            android.util.Log.e("StatusDisplayController", "[DEBUG_LOG] Failed to initialize status monitoring: ${e.message}")
+            android.util.Log.e(
+                "StatusDisplayController",
+                "[DEBUG_LOG] Failed to initialize status monitoring: ${e.message}"
+            )
             callback?.onStatusMonitoringError("Failed to initialize status monitoring: ${e.message}")
         }
     }
@@ -187,7 +188,10 @@ class StatusDisplayController @Inject constructor() {
     }
 
     fun updateSensorConnectionStatus(shimmerConnected: Boolean, thermalConnected: Boolean) {
-        android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Updating sensor connection status: Shimmer=$shimmerConnected, Thermal=$thermalConnected")
+        android.util.Log.d(
+            "StatusDisplayController",
+            "[DEBUG_LOG] Updating sensor connection status: Shimmer=$shimmerConnected, Thermal=$thermalConnected"
+        )
 
         isShimmerConnected = shimmerConnected
         isThermalConnected = thermalConnected
@@ -421,7 +425,10 @@ class StatusDisplayController @Inject constructor() {
             startPeriodicStatusUpdates()
         }
 
-        android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Status update interval set to: ${statusUpdateInterval}ms")
+        android.util.Log.d(
+            "StatusDisplayController",
+            "[DEBUG_LOG] Status update interval set to: ${statusUpdateInterval}ms"
+        )
     }
 
     fun getCustomIndicators(): Map<String, CustomStatusIndicator> = customIndicators.toMap()
@@ -433,27 +440,29 @@ class StatusDisplayController @Inject constructor() {
     fun initializeEnhancedStatusDisplay(context: Context) {
         restoreStatusState(context)
 
-        addCustomStatusIndicator(CustomStatusIndicator(
-            id = "system_memory",
-            displayName = "Memory Usage",
-            updateInterval = 10000L,
-            valueProvider = { Runtime.getRuntime().let { (it.totalMemory() - it.freeMemory()) / 1024 / 1024 } },
-            colorProvider = { value ->
-                val memoryMB = value as Long
-                when {
-                    memoryMB < 100 -> statusThemeConfig.successColor
-                    memoryMB < 200 -> statusThemeConfig.warningColor
-                    else -> statusThemeConfig.errorColor
+        addCustomStatusIndicator(
+            CustomStatusIndicator(
+                id = "system_memory",
+                displayName = "Memory Usage",
+                updateInterval = 10000L,
+                valueProvider = { Runtime.getRuntime().let { (it.totalMemory() - it.freeMemory()) / 1024 / 1024 } },
+                colorProvider = { value ->
+                    val memoryMB = value as Long
+                    when {
+                        memoryMB < 100 -> statusThemeConfig.successColor
+                        memoryMB < 200 -> statusThemeConfig.warningColor
+                        else -> statusThemeConfig.errorColor
+                    }
                 }
-            }
-        ))
+            ))
 
-        addCustomStatusIndicator(CustomStatusIndicator(
-            id = "system_uptime",
-            displayName = "App Uptime",
-            updateInterval = 60000L,
-            valueProvider = { (System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime()) / 1000 / 60 }
-        ))
+        addCustomStatusIndicator(
+            CustomStatusIndicator(
+                id = "system_uptime",
+                displayName = "App Uptime",
+                updateInterval = 60000L,
+                valueProvider = { (System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime()) / 1000 / 60 }
+            ))
 
         android.util.Log.d("StatusDisplayController", "[DEBUG_LOG] Enhanced status display initialized")
     }

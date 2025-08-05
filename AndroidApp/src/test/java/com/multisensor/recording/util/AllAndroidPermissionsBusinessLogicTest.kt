@@ -31,7 +31,7 @@ class AllAndroidPermissionsBusinessLogicTest {
             assertTrue(
                 "Permission should follow Android format",
                 permission.startsWith("android.permission.") ||
-                    permission.startsWith("com.android."),
+                        permission.startsWith("com.android."),
             )
         }
     }
@@ -113,7 +113,7 @@ class AllAndroidPermissionsBusinessLogicTest {
             assertTrue(
                 "Permission should follow Android format",
                 permission.startsWith("android.permission.") ||
-                    permission.startsWith("com.android."),
+                        permission.startsWith("com.android."),
             )
         }
     }
@@ -162,7 +162,7 @@ class AllAndroidPermissionsBusinessLogicTest {
             assertTrue(
                 "Location description should mention GPS or positioning",
                 description.contains("location", ignoreCase = true) ||
-                    description.contains("GPS", ignoreCase = true),
+                        description.contains("GPS", ignoreCase = true),
             )
         }
 
@@ -170,8 +170,8 @@ class AllAndroidPermissionsBusinessLogicTest {
             assertTrue(
                 "Camera description should mention pictures or videos",
                 description.contains("picture", ignoreCase = true) ||
-                    description.contains("video", ignoreCase = true) ||
-                    description.contains("camera", ignoreCase = true),
+                        description.contains("video", ignoreCase = true) ||
+                        description.contains("camera", ignoreCase = true),
             )
         }
 
@@ -179,7 +179,7 @@ class AllAndroidPermissionsBusinessLogicTest {
             assertTrue(
                 "Storage description should mention files or storage",
                 description.contains("file", ignoreCase = true) ||
-                    description.contains("storage", ignoreCase = true),
+                        description.contains("storage", ignoreCase = true),
             )
         }
     }

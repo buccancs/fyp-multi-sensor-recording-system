@@ -1,10 +1,11 @@
 import logging
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QLabel, QPushButton, QTextEdit, QSplitter, QMessageBox, QAction, QMenuBar, QStatusBar, QFrame
-from .device_panel import DeviceStatusPanel
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QLabel, QPushButton, QTextEdit, \
+    QSplitter, QMessageBox, QAction, QMenuBar, QStatusBar, QFrame
+
+from .common_components import ModernButton, ModernGroupBox, StatusIndicator, ProgressIndicator, LogViewer, \
+    ConnectionManager
 from .preview_panel import PreviewPanel
-from .calibration_dialog import CalibrationDialog
-from .common_components import ModernButton, ModernGroupBox, StatusIndicator, ProgressIndicator, LogViewer, ConnectionManager
 
 
 class SimplifiedMainWindow(QMainWindow):

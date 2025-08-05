@@ -1,6 +1,8 @@
 # Networking Protocol Module
 
-The Networking Protocol System defines the communication framework that enables coordinated operation across all devices in the Multi-Sensor Recording System, providing reliable message exchange, temporal synchronization, and data streaming capabilities between PC controllers and mobile devices.
+The Networking Protocol System defines the communication framework that enables coordinated operation across all devices
+in the Multi-Sensor Recording System, providing reliable message exchange, temporal synchronization, and data streaming
+capabilities between PC controllers and mobile devices.
 
 ## Table of Contents
 
@@ -17,9 +19,12 @@ The Networking Protocol System defines the communication framework that enables 
 
 ### System Role and Responsibilities
 
-The Networking Protocol System provides the communication backbone for the distributed Multi-Sensor Recording System, enabling coordination between PC controllers and Android mobile devices through standardized JSON-based messaging over TCP/UDP sockets.
+The Networking Protocol System provides the communication backbone for the distributed Multi-Sensor Recording System,
+enabling coordination between PC controllers and Android mobile devices through standardized JSON-based messaging over
+TCP/UDP sockets.
 
 **Primary Functions:**
+
 - **Reliable Message Exchange**: JSON-based command and status communication
 - **Device Discovery**: Automatic detection and registration of network devices
 - **Session Coordination**: Distributed session management and synchronization
@@ -97,13 +102,13 @@ graph TB
 
 #### Communication Channels
 
-| Channel | Protocol | Port | Purpose | Message Type |
-|---------|----------|------|---------|--------------|
-| Command Channel | TCP | 9000 | Device control and coordination | JSON Commands |
-| Time Sync | UDP | 8889 | Clock synchronization | NTP Protocol |
-| Discovery | UDP | 8888 | Device registration | Broadcast Messages |
-| File Transfer | TCP | 9001 | Data exchange | Binary/JSON Data |
-| Status Updates | TCP | 9000 | Real-time status reporting | JSON Status |
+| Channel         | Protocol | Port | Purpose                         | Message Type       |
+|-----------------|----------|------|---------------------------------|--------------------|
+| Command Channel | TCP      | 9000 | Device control and coordination | JSON Commands      |
+| Time Sync       | UDP      | 8889 | Clock synchronization           | NTP Protocol       |
+| Discovery       | UDP      | 8888 | Device registration             | Broadcast Messages |
+| File Transfer   | TCP      | 9001 | Data exchange                   | Binary/JSON Data   |
+| Status Updates  | TCP      | 9000 | Real-time status reporting      | JSON Status        |
 
 ## Protocol Specification
 
@@ -193,7 +198,7 @@ graph TB
 ```python
 class NetworkManager:
     """Central network communication coordinator"""
-    
+
     def __init__(self, config: NetworkConfig):
         self.config = config
         self.message_server = MessageServer(config.message_port)
@@ -201,7 +206,7 @@ class NetworkManager:
         self.discovery_server = DiscoveryServer(config.discovery_port)
         self.connected_devices = {}
         self.message_handlers = {}
-        
+
     def start_services(self) -> bool:
         """Start all network services"""
         try:
@@ -213,17 +218,17 @@ class NetworkManager:
         except Exception as e:
             logger.error(f"Failed to start network services: {e}")
             return False
-    
+
     def register_message_handler(self, message_type: str, handler: Callable):
         """Register handler for specific message type"""
         self.message_handlers[message_type] = handler
-    
+
     def send_message(self, target_device: str, message: NetworkMessage) -> bool:
         """Send message to specific device"""
         if target_device not in self.connected_devices:
             logger.error(f"Device {target_device} not connected")
             return False
-            
+
         try:
             device_connection = self.connected_devices[target_device]
             serialized_message = message.serialize()
@@ -232,7 +237,7 @@ class NetworkManager:
         except Exception as e:
             logger.error(f"Failed to send message to {target_device}: {e}")
             return False
-    
+
     def broadcast_message(self, message: NetworkMessage) -> Dict[str, bool]:
         """Broadcast message to all connected devices"""
         results = {}
@@ -392,10 +397,10 @@ class NetworkQualityMonitor:
 #### Initial Setup
 
 1. **Network Requirements**:
-   - All devices on same WiFi network
-   - Network supports multicast/broadcast
-   - Firewall configured for required ports
-   - Sufficient bandwidth for data streaming
+    - All devices on same WiFi network
+    - Network supports multicast/broadcast
+    - Firewall configured for required ports
+    - Sufficient bandwidth for data streaming
 
 2. **PC Controller Configuration**:
    ```python
@@ -410,22 +415,22 @@ class NetworkQualityMonitor:
    ```
 
 3. **Android Device Configuration**:
-   - Connect to research WiFi network
-   - Configure PC controller IP address
-   - Test network connectivity
-   - Verify port accessibility
+    - Connect to research WiFi network
+    - Configure PC controller IP address
+    - Test network connectivity
+    - Verify port accessibility
 
 #### Device Discovery Process
 
 1. **Automatic Discovery**:
-   - PC controller broadcasts discovery messages
-   - Android devices respond with device information
-   - Automatic device registration and capability detection
+    - PC controller broadcasts discovery messages
+    - Android devices respond with device information
+    - Automatic device registration and capability detection
 
 2. **Manual Configuration**:
-   - Direct IP address entry
-   - Manual device registration
-   - Custom port configuration
+    - Direct IP address entry
+    - Manual device registration
+    - Custom port configuration
 
 ### Network Diagnostics
 
@@ -445,16 +450,16 @@ python network_diagnostics.py --test-quality --duration 60
 #### Performance Monitoring
 
 1. **Real-time Monitoring**:
-   - Network quality dashboard
-   - Latency and throughput graphs
-   - Packet loss detection
-   - Connection stability tracking
+    - Network quality dashboard
+    - Latency and throughput graphs
+    - Packet loss detection
+    - Connection stability tracking
 
 2. **Quality Metrics**:
-   - Round-trip latency (target: <10ms)
-   - Packet loss rate (target: <0.1%)
-   - Throughput (target: >10 Mbps)
-   - Connection stability (target: >99% uptime)
+    - Round-trip latency (target: <10ms)
+    - Packet loss rate (target: <0.1%)
+    - Throughput (target: >10 Mbps)
+    - Connection stability (target: >99% uptime)
 
 ## API Reference
 
@@ -514,21 +519,21 @@ class NetworkProtocolTest:
             target_device="test_target",
             payload={"test_data": "test_value"}
         )
-        
+
         serialized = original_message.serialize()
         deserialized = NetworkMessage.deserialize(serialized)
-        
+
         assert original_message.message_type == deserialized.message_type
         assert original_message.payload == deserialized.payload
-    
+
     def test_network_quality_assessment(self):
         """Test network quality monitoring"""
         monitor = NetworkQualityMonitor()
-        
+
         # Simulate good network conditions
         for _ in range(100):
             monitor._update_latency_history("test_device", 5.0)  # 5ms latency
-        
+
         quality = monitor.assess_network_quality("test_device")
         assert quality == NetworkQuality.EXCELLENT
 ```
@@ -541,6 +546,7 @@ class NetworkProtocolTest:
 
 **Symptoms**: Cannot connect devices, discovery fails
 **Solutions**:
+
 1. Check network connectivity
 2. Verify firewall settings
 3. Test port accessibility
@@ -550,6 +556,7 @@ class NetworkProtocolTest:
 
 **Symptoms**: High latency, packet loss
 **Solutions**:
+
 1. Check network congestion
 2. Optimize WiFi settings
 3. Use wired connections when possible
@@ -557,4 +564,5 @@ class NetworkProtocolTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md) and [Session Management](../session-management/README.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md)
+and [Session Management](../session-management/README.md) documentation.*

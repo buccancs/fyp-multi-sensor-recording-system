@@ -1,14 +1,12 @@
 package com.multisensor.recording.controllers
 
 import android.content.Context
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 
 class RecordingAnalyticsTest {
 
@@ -29,8 +27,10 @@ class RecordingAnalyticsTest {
 
         val metrics = analytics.currentMetrics.value
         assertNotNull("Performance metrics should be initialized", metrics)
-        assertEquals("Initial timestamp should be recent",
-            System.currentTimeMillis(), metrics.timestamp, 5000)
+        assertEquals(
+            "Initial timestamp should be recent",
+            System.currentTimeMillis(), metrics.timestamp, 5000
+        )
     }
 
     @Test
@@ -41,8 +41,10 @@ class RecordingAnalyticsTest {
 
         val metrics = analytics.currentMetrics.value
         assertTrue("Memory usage should be non-negative", metrics.memoryUsageMB >= 0)
-        assertTrue("CPU usage should be between 0 and 100",
-            metrics.cpuUsagePercent >= 0f && metrics.cpuUsagePercent <= 100f)
+        assertTrue(
+            "CPU usage should be between 0 and 100",
+            metrics.cpuUsagePercent >= 0f && metrics.cpuUsagePercent <= 100f
+        )
         assertTrue("Storage write rate should be non-negative", metrics.storageWriteRateMBps >= 0f)
         assertNotNull("Thermal state should be set", metrics.thermalState)
     }
@@ -59,10 +61,14 @@ class RecordingAnalyticsTest {
         assertEquals("Average bitrate should match input", averageBitrate, metrics.averageBitrate)
         assertEquals("Frame stability should match input", frameStability, metrics.frameStability, 0.01f)
         assertEquals("Audio quality should match input", audioQuality, metrics.audioQualityScore, 0.01f)
-        assertTrue("Overall quality score should be reasonable",
-            metrics.overallQualityScore >= 0f && metrics.overallQualityScore <= 1f)
-        assertTrue("Recording efficiency should be reasonable",
-            metrics.recordingEfficiency >= 0f && metrics.recordingEfficiency <= 1f)
+        assertTrue(
+            "Overall quality score should be reasonable",
+            metrics.overallQualityScore >= 0f && metrics.overallQualityScore <= 1f
+        )
+        assertTrue(
+            "Recording efficiency should be reasonable",
+            metrics.recordingEfficiency >= 0f && metrics.recordingEfficiency <= 1f
+        )
     }
 
     @Test
@@ -107,13 +113,19 @@ class RecordingAnalyticsTest {
         val trendAnalysis = analytics.performTrendAnalysis()
 
         assertNotNull("Performance trend should be determined", trendAnalysis.performanceTrend)
-        assertTrue("Predicted performance should be reasonable",
-            trendAnalysis.predictedPerformance >= 0f)
+        assertTrue(
+            "Predicted performance should be reasonable",
+            trendAnalysis.predictedPerformance >= 0f
+        )
         assertNotNull("Confidence interval should be provided", trendAnalysis.confidenceInterval)
-        assertNotNull("Quality recommendation should be provided",
-            trendAnalysis.recommendedQualityAdjustment)
-        assertTrue("Trend strength should be between 0 and 1",
-            trendAnalysis.trendStrength >= 0f && trendAnalysis.trendStrength <= 1f)
+        assertNotNull(
+            "Quality recommendation should be provided",
+            trendAnalysis.recommendedQualityAdjustment
+        )
+        assertTrue(
+            "Trend strength should be between 0 and 1",
+            trendAnalysis.trendStrength >= 0f && trendAnalysis.trendStrength <= 1f
+        )
     }
 
     @Test
@@ -132,8 +144,10 @@ class RecordingAnalyticsTest {
 
         assertEquals("Total frames processed should match", 100L, sessionSummary["total_frames_processed"])
         assertEquals("Total frames dropped should match", 5L, sessionSummary["total_frames_dropped"])
-        assertEquals("Frame drop rate should be calculated correctly", 0.05f,
-            sessionSummary["overall_frame_drop_rate"] as Float, 0.01f)
+        assertEquals(
+            "Frame drop rate should be calculated correctly", 0.05f,
+            sessionSummary["overall_frame_drop_rate"] as Float, 0.01f
+        )
     }
 
     @Test
@@ -146,8 +160,10 @@ class RecordingAnalyticsTest {
         val report = analytics.generateAnalyticsReport()
         val sessionSummary = report["session_summary"] as Map<*, *>
 
-        assertEquals("Total bytes written should match", 3L * 1024 * 1024,
-            sessionSummary["total_bytes_written"])
+        assertEquals(
+            "Total bytes written should match", 3L * 1024 * 1024,
+            sessionSummary["total_bytes_written"]
+        )
     }
 
     @Test
@@ -166,16 +182,20 @@ class RecordingAnalyticsTest {
 
         assertNotNull("Report should be generated", report)
         assertTrue("Report should contain session summary", report.containsKey("session_summary"))
-        assertTrue("Report should contain performance statistics",
-            report.containsKey("performance_statistics"))
+        assertTrue(
+            "Report should contain performance statistics",
+            report.containsKey("performance_statistics")
+        )
         assertTrue("Report should contain quality analysis", report.containsKey("quality_analysis"))
         assertTrue("Report should contain trend analysis", report.containsKey("trend_analysis"))
         assertTrue("Report should contain metadata", report.containsKey("metadata"))
 
         val metadata = report["metadata"] as Map<*, *>
         assertTrue("Metadata should contain timestamp", metadata.containsKey("report_timestamp"))
-        assertTrue("Metadata should contain data points analyzed",
-            metadata.containsKey("data_points_analyzed"))
+        assertTrue(
+            "Metadata should contain data points analyzed",
+            metadata.containsKey("data_points_analyzed")
+        )
     }
 
     @Test
@@ -207,8 +227,10 @@ class RecordingAnalyticsTest {
 
         val metrics = analytics.qualityMetrics.value
         assertTrue("Bitrate variability should be calculated", metrics.bitrateVariability >= 0f)
-        assertTrue("Overall quality should reflect all inputs",
-            metrics.overallQualityScore >= 0f && metrics.overallQualityScore <= 1f)
+        assertTrue(
+            "Overall quality should reflect all inputs",
+            metrics.overallQualityScore >= 0f && metrics.overallQualityScore <= 1f
+        )
     }
 
     @Test
@@ -232,8 +254,10 @@ class RecordingAnalyticsTest {
 
         val metrics = analytics.currentMetrics.value
         assertNotNull("Thermal state should be present", metrics.thermalState)
-        assertTrue("Thermal state should be valid enum value",
-            RecordingAnalytics.ThermalState.entries.contains(metrics.thermalState))
+        assertTrue(
+            "Thermal state should be valid enum value",
+            RecordingAnalytics.ThermalState.entries.contains(metrics.thermalState)
+        )
     }
 
     @Test
@@ -251,8 +275,10 @@ class RecordingAnalyticsTest {
         assertNotNull("Report should be generated with concurrent updates", report)
 
         val sessionSummary = report["session_summary"] as Map<*, *>
-        assertTrue("Frame count should reflect all updates",
-            (sessionSummary["total_frames_processed"] as Long) > 0L)
+        assertTrue(
+            "Frame count should reflect all updates",
+            (sessionSummary["total_frames_processed"] as Long) > 0L
+        )
     }
 
     @Test
@@ -266,14 +292,18 @@ class RecordingAnalyticsTest {
 
         val trendAnalysis = analytics.performTrendAnalysis()
 
-        assertNotNull("Quality recommendation should be generated",
-            trendAnalysis.recommendedQualityAdjustment)
-        assertTrue("Should recommend quality reduction for degrading performance",
+        assertNotNull(
+            "Quality recommendation should be generated",
+            trendAnalysis.recommendedQualityAdjustment
+        )
+        assertTrue(
+            "Should recommend quality reduction for degrading performance",
             trendAnalysis.recommendedQualityAdjustment ==
-            RecordingAnalytics.QualityAdjustmentRecommendation.DECREASE ||
-            trendAnalysis.recommendedQualityAdjustment ==
-            RecordingAnalytics.QualityAdjustmentRecommendation.EMERGENCY_REDUCE ||
-            trendAnalysis.recommendedQualityAdjustment ==
-            RecordingAnalytics.QualityAdjustmentRecommendation.MAINTAIN)
+                    RecordingAnalytics.QualityAdjustmentRecommendation.DECREASE ||
+                    trendAnalysis.recommendedQualityAdjustment ==
+                    RecordingAnalytics.QualityAdjustmentRecommendation.EMERGENCY_REDUCE ||
+                    trendAnalysis.recommendedQualityAdjustment ==
+                    RecordingAnalytics.QualityAdjustmentRecommendation.MAINTAIN
+        )
     }
 }

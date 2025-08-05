@@ -289,7 +289,12 @@ class PermissionControllerTest {
     @Test
     fun `getPermanentlyDeniedPermissions should return stored permissions`() {
         val deniedPermissions = setOf("android.permission.CAMERA", "android.permission.RECORD_AUDIO")
-        every { mockSharedPreferences.getStringSet("permanently_denied_permissions", emptySet()) } returns deniedPermissions
+        every {
+            mockSharedPreferences.getStringSet(
+                "permanently_denied_permissions",
+                emptySet()
+            )
+        } returns deniedPermissions
         permissionController.setCallback(mockContext as PermissionController.PermissionCallback)
 
         val result = permissionController.getPermanentlyDeniedPermissions()

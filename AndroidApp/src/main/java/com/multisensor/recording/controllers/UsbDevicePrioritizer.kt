@@ -1,7 +1,6 @@
 package com.multisensor.recording.controllers
 
 import android.hardware.usb.UsbDevice
-import kotlin.math.ln
 
 class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnalytics) {
 
@@ -79,11 +78,11 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
         val adaptiveWeights = getAdaptiveWeights(deviceKey)
 
         val priorityScore = (
-            qualityScore * adaptiveWeights.getOrDefault("quality", QUALITY_WEIGHT) +
-            historyScore * adaptiveWeights.getOrDefault("history", HISTORY_WEIGHT) +
-            characteristicsScore * adaptiveWeights.getOrDefault("characteristics", CHARACTERISTICS_WEIGHT) +
-            efficiencyScore * adaptiveWeights.getOrDefault("efficiency", EFFICIENCY_WEIGHT)
-        )
+                qualityScore * adaptiveWeights.getOrDefault("quality", QUALITY_WEIGHT) +
+                        historyScore * adaptiveWeights.getOrDefault("history", HISTORY_WEIGHT) +
+                        characteristicsScore * adaptiveWeights.getOrDefault("characteristics", CHARACTERISTICS_WEIGHT) +
+                        efficiencyScore * adaptiveWeights.getOrDefault("efficiency", EFFICIENCY_WEIGHT)
+                )
 
         val priorityLevel = determinePriorityLevel(priorityScore, qualityScore)
 
@@ -126,7 +125,7 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
 
         val primaryDevice = sortedDevices.firstOrNull {
             it.priorityLevel in listOf(PriorityLevel.CRITICAL, PriorityLevel.HIGH) &&
-            it.qualityScore > 0.7
+                    it.qualityScore > 0.7
         } ?: sortedDevices.firstOrNull()
 
         val secondaryDevices = selectSecondaryDevices(
@@ -204,15 +203,17 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
             append("├─────────────────────────────────────────────────────────────────────┤\n")
 
             assessments.sortedByDescending { it.priorityScore }.forEachIndexed { index, assessment ->
-                append("│ %4d │ %-19s │ %-8s │ %.3f │ %.3f  │ %.3f  │ %.3f │\n".format(
-                    index + 1,
-                    assessment.deviceKey.take(19),
-                    assessment.priorityLevel.name.take(8),
-                    assessment.priorityScore,
-                    assessment.qualityScore,
-                    assessment.historyScore,
-                    assessment.confidence
-                ))
+                append(
+                    "│ %4d │ %-19s │ %-8s │ %.3f │ %.3f  │ %.3f  │ %.3f │\n".format(
+                        index + 1,
+                        assessment.deviceKey.take(19),
+                        assessment.priorityLevel.name.take(8),
+                        assessment.priorityScore,
+                        assessment.qualityScore,
+                        assessment.historyScore,
+                        assessment.confidence
+                    )
+                )
             }
             append("└─────────────────────────────────────────────────────────────────────┘\n\n")
 
@@ -233,8 +234,10 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
             when {
                 highPriorityDevices.isEmpty() ->
                     append("⚠️  No high-priority devices available - consider device troubleshooting\n")
+
                 highPriorityDevices.size == 1 ->
                     append("ℹ️  Single high-priority device - consider redundancy planning\n")
+
                 else ->
                     append("✅ Multiple high-priority devices available - optimal configuration\n")
             }
@@ -351,8 +354,8 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
         if (selected.isEmpty()) return 0.0
 
         val modelDiversity = if (selected.none {
-            it.device.productId == candidate.device.productId
-        }) 0.1 else 0.0
+                it.device.productId == candidate.device.productId
+            }) 0.1 else 0.0
 
         val performanceDiversity = selected.minOfOrNull { selected ->
             kotlin.math.abs(selected.priorityScore - candidate.priorityScore)

@@ -1,6 +1,8 @@
 # Session Management Module
 
-The Session Management System provides comprehensive coordination of recording sessions across all devices and sensors in the Multi-Sensor Recording System, ensuring consistent data organization, temporal alignment, and quality assurance throughout the complete data collection lifecycle.
+The Session Management System provides comprehensive coordination of recording sessions across all devices and sensors
+in the Multi-Sensor Recording System, ensuring consistent data organization, temporal alignment, and quality assurance
+throughout the complete data collection lifecycle.
 
 ## Table of Contents
 
@@ -17,9 +19,11 @@ The Session Management System provides comprehensive coordination of recording s
 
 ### System Role and Responsibilities
 
-The Session Management System serves as the central coordinator for all recording activities, managing the complete lifecycle from session initialization through data finalization and export.
+The Session Management System serves as the central coordinator for all recording activities, managing the complete
+lifecycle from session initialization through data finalization and export.
 
 **Primary Functions:**
+
 - **Session Lifecycle Management**: Creation, execution, and finalization of recording sessions
 - **Multi-Device Coordination**: Synchronized control across all connected devices
 - **Data Organization**: Structured storage and metadata management
@@ -406,36 +410,36 @@ class DataManager:
 #### Basic Session Setup
 
 1. **Session Parameters**:
-   - Session name and description
-   - Duration and recording schedule
-   - Participant information
-   - Experimental conditions
+    - Session name and description
+    - Duration and recording schedule
+    - Participant information
+    - Experimental conditions
 
 2. **Device Configuration**:
-   - Select recording devices
-   - Configure recording parameters
-   - Verify device connectivity
-   - Test synchronization
+    - Select recording devices
+    - Configure recording parameters
+    - Verify device connectivity
+    - Test synchronization
 
 3. **Quality Settings**:
-   - Set quality thresholds
-   - Configure artifact detection
-   - Enable real-time monitoring
-   - Define stopping criteria
+    - Set quality thresholds
+    - Configure artifact detection
+    - Enable real-time monitoring
+    - Define stopping criteria
 
 #### Advanced Configuration
 
 1. **Synchronization Settings**:
-   - Precision requirements
-   - Master clock selection
-   - Compensation algorithms
-   - Quality monitoring
+    - Precision requirements
+    - Master clock selection
+    - Compensation algorithms
+    - Quality monitoring
 
 2. **Data Management**:
-   - Storage location
-   - Compression settings
-   - Backup configuration
-   - Export formats
+    - Storage location
+    - Compression settings
+    - Backup configuration
+    - Export formats
 
 ### Recording Session Execution
 
@@ -450,30 +454,30 @@ class DataManager:
 #### During Recording
 
 1. **Real-time Monitoring**:
-   - Device status indicators
-   - Data quality metrics
-   - Storage utilization
-   - Synchronization quality
+    - Device status indicators
+    - Data quality metrics
+    - Storage utilization
+    - Synchronization quality
 
 2. **Quality Management**:
-   - Address quality warnings
-   - Monitor artifact levels
-   - Check synchronization drift
-   - Validate data integrity
+    - Address quality warnings
+    - Monitor artifact levels
+    - Check synchronization drift
+    - Validate data integrity
 
 #### Post-Recording
 
 1. **Data Validation**:
-   - Verify data completeness
-   - Check synchronization accuracy
-   - Validate file integrity
-   - Review quality metrics
+    - Verify data completeness
+    - Check synchronization accuracy
+    - Validate file integrity
+    - Review quality metrics
 
 2. **Export and Analysis**:
-   - Generate analysis-ready exports
-   - Create quality reports
-   - Archive raw data
-   - Prepare for analysis
+    - Generate analysis-ready exports
+    - Create quality reports
+    - Archive raw data
+    - Prepare for analysis
 
 ## API Reference
 
@@ -578,20 +582,24 @@ class SessionManagementTest:
 ### Common Session Issues
 
 #### Session Creation Failures
+
 - Verify device connectivity
 - Check storage availability
 - Validate configuration parameters
 
 #### Recording Start Problems
+
 - Check device synchronization
 - Verify quality thresholds
 - Test network connectivity
 
 #### Data Organization Issues
+
 - Check storage permissions
 - Verify disk space
 - Validate file formats
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md) and [Networking Protocol](../networking-protocol/README.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md)
+and [Networking Protocol](../networking-protocol/README.md) documentation.*

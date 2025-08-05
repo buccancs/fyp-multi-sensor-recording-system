@@ -1,15 +1,17 @@
 import cv2
 import numpy as np
-import time
-import threading
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Union, Callable
-from enum import Enum
-import scipy.signal
 import scipy.ndimage
-from collections import deque
+import scipy.signal
 import statistics
+import threading
+import time
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Union, Callable
+
 from ..utils.logging_config import get_logger, performance_timer
+
 logger = get_logger(__name__)
 
 

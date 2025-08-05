@@ -83,14 +83,18 @@ data class SessionInfo(
             append("video=${if (videoEnabled) "enabled" else "disabled"}, ")
             append("raw=${if (rawEnabled) "enabled (${getRawImageCount()} files)" else "disabled"}, ")
             append(
-                "thermal=${if (thermalEnabled) {
-                    "enabled ($thermalFrameCount frames, ${String.format(
-                        "%.1f",
-                        getThermalDataSizeMB(),
-                    )}MB)"
-                } else {
-                    "disabled"
-                }}, ",
+                "thermal=${
+                    if (thermalEnabled) {
+                        "enabled ($thermalFrameCount frames, ${
+                            String.format(
+                                "%.1f",
+                                getThermalDataSizeMB(),
+                            )
+                        }MB)"
+                    } else {
+                        "disabled"
+                    }
+                }, ",
             )
             if (errorOccurred) append("ERROR: $errorMessage, ")
             append("active=${isActive()}")

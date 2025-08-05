@@ -5,13 +5,15 @@ import socket
 import struct
 import threading
 import time
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Callable, Tuple
-from enum import Enum, auto
 import weakref
 from PyQt5.QtCore import QThread, pyqtSignal, QTimer, QMutex, QMutexLocker
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Dict, List, Optional, Any, Callable, Tuple
+
 from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

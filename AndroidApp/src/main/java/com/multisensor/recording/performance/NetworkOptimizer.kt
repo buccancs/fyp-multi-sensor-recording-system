@@ -5,12 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -107,12 +102,14 @@ class NetworkOptimizer @Inject constructor(
                     50_000_000L
                 }
             }
+
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                 when {
                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED) -> 20_000_000L
                     else -> 5_000_000L
                 }
             }
+
             else -> 1_000_000L
         }
     }

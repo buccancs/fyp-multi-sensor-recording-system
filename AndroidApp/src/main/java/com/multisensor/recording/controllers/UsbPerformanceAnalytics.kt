@@ -3,7 +3,6 @@ package com.multisensor.recording.controllers
 import android.content.Context
 import android.os.SystemClock
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.math.abs
 
 class UsbPerformanceAnalytics {
 
@@ -130,10 +129,10 @@ class UsbPerformanceAnalytics {
         val throughputScore = minOf(eventRate / 10.0, 1.0)
 
         val overallQuality = (
-            stabilityScore * STABILITY_WEIGHT +
-            (1.0 - minOf(averageResponseTime / RESPONSE_TIME_THRESHOLD_MS, 1.0)) * RESPONSE_TIME_WEIGHT +
-            throughputScore * THROUGHPUT_WEIGHT
-        )
+                stabilityScore * STABILITY_WEIGHT +
+                        (1.0 - minOf(averageResponseTime / RESPONSE_TIME_THRESHOLD_MS, 1.0)) * RESPONSE_TIME_WEIGHT +
+                        throughputScore * THROUGHPUT_WEIGHT
+                )
 
         val recommendedAction = when {
             overallQuality >= 0.9 -> QualityAction.OPTIMAL

@@ -1,6 +1,8 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTabWidget, QWidget, QVBoxLayout, QLabel
+
 from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

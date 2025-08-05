@@ -102,14 +102,22 @@ class ThermalCameraBulletproofIntegrationTest {
         println("[BULLETPROOF_TEST] Testing state transition edge cases...")
 
 
-        assertFalse("Recording should fail before init",
-                   thermalRecorder.startRecording("test"))
-        assertFalse("Stop should fail before init",
-                   thermalRecorder.stopRecording())
-        assertFalse("Preview should fail before init",
-                   thermalRecorder.startPreview())
-        assertTrue("Stop preview should succeed",
-                  thermalRecorder.stopPreview())
+        assertFalse(
+            "Recording should fail before init",
+            thermalRecorder.startRecording("test")
+        )
+        assertFalse(
+            "Stop should fail before init",
+            thermalRecorder.stopRecording()
+        )
+        assertFalse(
+            "Preview should fail before init",
+            thermalRecorder.startPreview()
+        )
+        assertTrue(
+            "Stop preview should succeed",
+            thermalRecorder.stopPreview()
+        )
 
         thermalRecorder.initialize()
         delay(500)
@@ -122,10 +130,14 @@ class ThermalCameraBulletproofIntegrationTest {
 
         thermalRecorder.cleanup()
 
-        assertFalse("Recording should fail after cleanup",
-                   thermalRecorder.startRecording("test"))
-        assertFalse("Preview should fail after cleanup",
-                   thermalRecorder.startPreview())
+        assertFalse(
+            "Recording should fail after cleanup",
+            thermalRecorder.startRecording("test")
+        )
+        assertFalse(
+            "Preview should fail after cleanup",
+            thermalRecorder.startPreview()
+        )
 
         println("[BULLETPROOF_TEST] State transition test completed")
     }
@@ -168,19 +180,27 @@ class ThermalCameraBulletproofIntegrationTest {
         thermalRecorder.initialize()
         delay(500)
 
-        assertFalse("Empty session ID should fail",
-                   thermalRecorder.startRecording(""))
-        assertFalse("Null-like session ID should fail",
-                   thermalRecorder.startRecording("null"))
-        assertFalse("Very long session ID should fail",
-                   thermalRecorder.startRecording("a".repeat(1000)))
+        assertFalse(
+            "Empty session ID should fail",
+            thermalRecorder.startRecording("")
+        )
+        assertFalse(
+            "Null-like session ID should fail",
+            thermalRecorder.startRecording("null")
+        )
+        assertFalse(
+            "Very long session ID should fail",
+            thermalRecorder.startRecording("a".repeat(1000))
+        )
 
         thermalRecorder.cleanup()
         thermalRecorder.cleanup()
         thermalRecorder.cleanup()
 
-        assertFalse("Should fail gracefully after multiple cleanups",
-                   thermalRecorder.startRecording("test"))
+        assertFalse(
+            "Should fail gracefully after multiple cleanups",
+            thermalRecorder.startRecording("test")
+        )
 
         println("[BULLETPROOF_TEST] Error recovery test completed")
     }
@@ -217,8 +237,10 @@ class ThermalCameraBulletproofIntegrationTest {
         println("[BULLETPROOF_TEST] Final memory usage: ${finalMemory / 1024 / 1024}MB")
         println("[BULLETPROOF_TEST] Memory increase: ${memoryIncrease / 1024 / 1024}MB")
 
-        assertTrue("Memory increase should be reasonable (< 50MB)",
-                  memoryIncrease < 50 * 1024 * 1024)
+        assertTrue(
+            "Memory increase should be reasonable (< 50MB)",
+            memoryIncrease < 50 * 1024 * 1024
+        )
 
         println("[BULLETPROOF_TEST] Memory management test completed")
     }
@@ -236,8 +258,10 @@ class ThermalCameraBulletproofIntegrationTest {
 
         supportedDeviceIds.forEach { (vendorId, productId) ->
             val mockDevice = createMockUsbDevice(vendorId, productId)
-            assertTrue("Device VID:0x${vendorId.toString(16)}, PID:0x${productId.toString(16)} should be supported",
-                      usbDeviceManager.isSupportedTopdonDevice(mockDevice))
+            assertTrue(
+                "Device VID:0x${vendorId.toString(16)}, PID:0x${productId.toString(16)} should be supported",
+                usbDeviceManager.isSupportedTopdonDevice(mockDevice)
+            )
         }
 
         val edgeCaseIds = listOf(
@@ -251,8 +275,10 @@ class ThermalCameraBulletproofIntegrationTest {
 
         edgeCaseIds.forEach { (vendorId, productId) ->
             val mockDevice = createMockUsbDevice(vendorId, productId)
-            assertFalse("Edge case device VID:0x${vendorId.toString(16)}, PID:0x${productId.toString(16)} should NOT be supported",
-                       usbDeviceManager.isSupportedTopdonDevice(mockDevice))
+            assertFalse(
+                "Edge case device VID:0x${vendorId.toString(16)}, PID:0x${productId.toString(16)} should NOT be supported",
+                usbDeviceManager.isSupportedTopdonDevice(mockDevice)
+            )
         }
 
         println("[BULLETPROOF_TEST] Device filter validation completed")
@@ -268,7 +294,13 @@ class ThermalCameraBulletproofIntegrationTest {
         val operations = listOf(
             suspend { repeat(20) { thermalRecorder.getThermalCameraStatus(); delay(5) } },
             suspend { repeat(10) { thermalRecorder.startPreview(); delay(10); thermalRecorder.stopPreview(); delay(10) } },
-            suspend { repeat(5) { thermalRecorder.startRecording("thread_test_$it"); delay(20); thermalRecorder.stopRecording(); delay(20) } }
+            suspend {
+                repeat(5) {
+                    thermalRecorder.startRecording("thread_test_$it"); delay(20); thermalRecorder.stopRecording(); delay(
+                    20
+                )
+                }
+            }
         )
 
         operations.forEach { operation ->

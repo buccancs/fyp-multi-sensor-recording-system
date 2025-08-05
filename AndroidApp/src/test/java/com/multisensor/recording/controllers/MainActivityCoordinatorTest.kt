@@ -2,18 +2,16 @@ package com.multisensor.recording.controllers
 
 import android.content.Context
 import android.content.Intent
-import android.hardware.usb.UsbDevice
 import android.view.TextureView
 import android.view.View
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.multisensor.recording.ui.MainViewModel
 import io.mockk.*
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -132,7 +130,10 @@ class MainActivityCoordinatorTest {
         val statusSummary = coordinator.getSystemStatusSummary(mockContext)
 
         assertNotNull("Status summary should not be null", statusSummary)
-        assertTrue("Status summary should contain coordinator info", statusSummary.contains("Coordinator Initialized: true"))
+        assertTrue(
+            "Status summary should contain coordinator info",
+            statusSummary.contains("Coordinator Initialized: true")
+        )
         assertTrue("Status summary should contain permission info", statusSummary.contains("Permission Retries: 2"))
         assertTrue("Status summary should contain USB status", statusSummary.contains("USB Status: Connected"))
     }

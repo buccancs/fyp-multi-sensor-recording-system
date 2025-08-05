@@ -1,4 +1,3 @@
-import java.time.Duration
 import groovy.json.JsonSlurper
 import io.gitlab.arturbosch.detekt.Detekt
 
@@ -219,7 +218,8 @@ tasks.register("generateConstants") {
         val calibration = json["calibration"] as Map<*, *>
 
         outputDir.mkdirs()
-        outputFile.writeText("""
+        outputFile.writeText(
+            """
 
         package com.multisensor.recording.config
         object CommonConstants {
@@ -246,7 +246,8 @@ tasks.register("generateConstants") {
                 const val SQUARE_SIZE_M: Double = ${calibration["square_size_m"]}
             }
         }
-        """.trimIndent())
+        """.trimIndent()
+        )
         println("Generated CommonConstants.kt from config.json")
     }
 }
@@ -290,11 +291,18 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/*_Factory.*", "**/*_MembersInjector.*", "**/*Module*.*",
         "**/databinding/*", "**/generated/**/*.*"
     )
-    val javaClasses = fileTree("${layout.buildDirectory.get().asFile}/intermediates/javac/debug/classes") { exclude(fileFilter) }
-    val kotlinClasses = fileTree("${layout.buildDirectory.get().asFile}/tmp/kotlin-classes/debug") { exclude(fileFilter) }
+    val javaClasses =
+        fileTree("${layout.buildDirectory.get().asFile}/intermediates/javac/debug/classes") { exclude(fileFilter) }
+    val kotlinClasses =
+        fileTree("${layout.buildDirectory.get().asFile}/tmp/kotlin-classes/debug") { exclude(fileFilter) }
     classDirectories.setFrom(files(javaClasses, kotlinClasses))
     sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-    executionData.setFrom(fileTree(layout.buildDirectory.get().asFile) { include("jacoco/**/*.exec", "outputs/code_coverage/**/*.ec") })
+    executionData.setFrom(fileTree(layout.buildDirectory.get().asFile) {
+        include(
+            "jacoco/**/*.exec",
+            "outputs/code_coverage/**/*.ec"
+        )
+    })
     doFirst {
         executionData.setFrom(files(executionData.files.filter { it.exists() }))
     }
@@ -333,9 +341,11 @@ tasks.register("runIDEIntegrationUITest") {
 
     doLast {
         exec {
-            commandLine("adb", "shell", "am", "instrument", "-w",
-                       "-e", "class", "com.multisensor.recording.IDEIntegrationUITest",
-                       "com.multisensor.recording.test/androidx.test.runner.AndroidJUnitRunner")
+            commandLine(
+                "adb", "shell", "am", "instrument", "-w",
+                "-e", "class", "com.multisensor.recording.IDEIntegrationUITest",
+                "com.multisensor.recording.test/androidx.test.runner.AndroidJUnitRunner"
+            )
         }
     }
 }

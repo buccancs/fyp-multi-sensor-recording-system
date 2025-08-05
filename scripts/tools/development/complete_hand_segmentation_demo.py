@@ -11,11 +11,12 @@ Demonstrates the full Android-Python hand segmentation workflow:
 This addresses the original requirement: "make it available to run it on the phone, and create a cropped dataset"
 """
 
+import json
 import os
 import sys
-import json
 import time
 from pathlib import Path
+
 
 def demonstrate_android_integration():
     """Demonstrate Android hand segmentation integration"""

@@ -1,7 +1,10 @@
 package com.multisensor.recording.recording
 
 import com.multisensor.recording.util.Logger
-import io.mockk.*
+import io.mockk.Called
+import io.mockk.clearAllMocks
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
@@ -27,7 +30,11 @@ class ConnectionManagerTestSimple {
     fun testConnectionManagerInitialization() {
         runTest {
             assertNotNull("ConnectionManager should not be null", connectionManager)
-            assertEquals("ConnectionManager class name should match", "ConnectionManager", connectionManager.javaClass.simpleName)
+            assertEquals(
+                "ConnectionManager class name should match",
+                "ConnectionManager",
+                connectionManager.javaClass.simpleName
+            )
         }
     }
 
@@ -41,8 +48,10 @@ class ConnectionManagerTestSimple {
             )
 
             for (connectionString in validStrings) {
-                assertTrue("Connection string should be valid: $connectionString",
-                    connectionString.isNotBlank())
+                assertTrue(
+                    "Connection string should be valid: $connectionString",
+                    connectionString.isNotBlank()
+                )
             }
         }
     }
@@ -61,8 +70,10 @@ class ConnectionManagerTestSimple {
         runTest {
             assertNotNull("ConnectionManager should be created", connectionManager)
 
-            assertTrue("ConnectionManager should be properly instantiated",
-                connectionManager is ConnectionManager)
+            assertTrue(
+                "ConnectionManager should be properly instantiated",
+                connectionManager is ConnectionManager
+            )
         }
     }
 

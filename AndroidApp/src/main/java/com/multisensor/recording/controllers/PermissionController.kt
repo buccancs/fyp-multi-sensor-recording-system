@@ -1,9 +1,5 @@
 package com.multisensor.recording.controllers
 
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logE
-
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,7 +7,6 @@ import android.widget.Toast
 import com.multisensor.recording.managers.PermissionManager
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.*
 
 @Singleton
 class PermissionController @Inject constructor(
@@ -56,7 +51,10 @@ class PermissionController @Inject constructor(
             loadPersistedState()
             android.util.Log.d("PermissionController", "[DEBUG_LOG] State persistence initialized")
         } catch (e: Exception) {
-            android.util.Log.e("PermissionController", "[DEBUG_LOG] Failed to initialize state persistence: ${e.message}")
+            android.util.Log.e(
+                "PermissionController",
+                "[DEBUG_LOG] Failed to initialize state persistence: ${e.message}"
+            )
         }
     }
 
@@ -75,7 +73,10 @@ class PermissionController @Inject constructor(
                 persistState()
             }
 
-            android.util.Log.d("PermissionController", "[DEBUG_LOG] Loaded persisted state: checked=$hasCheckedPermissionsOnStartup, retries=$permissionRetryCount")
+            android.util.Log.d(
+                "PermissionController",
+                "[DEBUG_LOG] Loaded persisted state: checked=$hasCheckedPermissionsOnStartup, retries=$permissionRetryCount"
+            )
         }
     }
 
@@ -133,10 +134,16 @@ class PermissionController @Inject constructor(
         val allPermissionsGranted = permissionManager.areAllPermissionsGranted(context)
 
         if (!allPermissionsGranted) {
-            android.util.Log.d("PermissionController", "[DEBUG_LOG] Showing permission request button - permissions missing")
+            android.util.Log.d(
+                "PermissionController",
+                "[DEBUG_LOG] Showing permission request button - permissions missing"
+            )
             callback?.showPermissionButton(true)
         } else {
-            android.util.Log.d("PermissionController", "[DEBUG_LOG] Hiding permission request button - all permissions granted")
+            android.util.Log.d(
+                "PermissionController",
+                "[DEBUG_LOG] Hiding permission request button - all permissions granted"
+            )
             callback?.showPermissionButton(false)
         }
     }
@@ -147,7 +154,10 @@ class PermissionController @Inject constructor(
         grantedCount: Int,
         totalCount: Int
     ) {
-        android.util.Log.d("PermissionController", "[DEBUG_LOG] Showing temporary denial message for ${temporarilyDenied.size} permissions")
+        android.util.Log.d(
+            "PermissionController",
+            "[DEBUG_LOG] Showing temporary denial message for ${temporarilyDenied.size} permissions"
+        )
 
         val message = buildString {
             append("Some permissions were denied but can be requested again.\n\n")
@@ -160,7 +170,10 @@ class PermissionController @Inject constructor(
 
         callback?.updateStatusText("Permissions: $grantedCount/$totalCount granted - Some permissions denied")
 
-        android.util.Log.i("PermissionController", "Temporary permission denial: ${temporarilyDenied.joinToString(", ")}")
+        android.util.Log.i(
+            "PermissionController",
+            "Temporary permission denial: ${temporarilyDenied.joinToString(", ")}"
+        )
     }
 
     private fun showPermanentlyDeniedMessage(context: Context, permanentlyDenied: List<String>) {
@@ -177,7 +190,10 @@ class PermissionController @Inject constructor(
 
         callback?.updateStatusText("Permissions required - Please enable in Settings")
 
-        android.util.Log.w("PermissionController", "Permanently denied permissions: ${permanentlyDenied.joinToString(", ")}")
+        android.util.Log.w(
+            "PermissionController",
+            "Permanently denied permissions: ${permanentlyDenied.joinToString(", ")}"
+        )
     }
 
     fun getPermissionDisplayName(permission: String): String {
@@ -232,7 +248,10 @@ class PermissionController @Inject constructor(
             putStringSet(KEY_PERMANENTLY_DENIED_PERMISSIONS, deniedPermissions.toSet())
             apply()
         }
-        android.util.Log.d("PermissionController", "[DEBUG_LOG] Stored permanently denied permissions: ${deniedPermissions.joinToString(", ")}")
+        android.util.Log.d(
+            "PermissionController",
+            "[DEBUG_LOG] Stored permanently denied permissions: ${deniedPermissions.joinToString(", ")}"
+        )
     }
 
     fun getPermanentlyDeniedPermissions(): Set<String> {
@@ -257,7 +276,13 @@ class PermissionController @Inject constructor(
             append("- Permission retry count: $permissionRetryCount\n")
             append("- State persistence: ${if (sharedPreferences != null) "Enabled" else "Disabled"}\n")
             val permanentlyDenied = getPermanentlyDeniedPermissions()
-            append("- Permanently denied permissions: ${if (permanentlyDenied.isEmpty()) "None" else permanentlyDenied.joinToString(", ")}\n")
+            append(
+                "- Permanently denied permissions: ${
+                    if (permanentlyDenied.isEmpty()) "None" else permanentlyDenied.joinToString(
+                        ", "
+                    )
+                }\n"
+            )
             append("- Last request time: ${sharedPreferences?.getLong(KEY_LAST_PERMISSION_REQUEST_TIME, 0) ?: 0}")
         }
     }

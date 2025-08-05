@@ -1,8 +1,8 @@
 package com.multisensor.recording.ui
 
-import java.io.File
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
+import java.io.File
 
 class FileViewUiStateTest {
 
@@ -125,8 +125,10 @@ class FileViewUiStateTest {
         )
 
         val expectedPercentage = 0.75f
-        assertEquals("[DEBUG_LOG] Storage usage percentage should be correct",
-            expectedPercentage, state.storageUsagePercentage, 0.01f)
+        assertEquals(
+            "[DEBUG_LOG] Storage usage percentage should be correct",
+            expectedPercentage, state.storageUsagePercentage, 0.01f
+        )
     }
 
     @Test
@@ -136,8 +138,10 @@ class FileViewUiStateTest {
             availableStorage = 0L
         )
 
-        assertEquals("[DEBUG_LOG] Storage usage percentage should be zero",
-            0f, state.storageUsagePercentage, 0.01f)
+        assertEquals(
+            "[DEBUG_LOG] Storage usage percentage should be zero",
+            0f, state.storageUsagePercentage, 0.01f
+        )
     }
 
     @Test
@@ -148,8 +152,10 @@ class FileViewUiStateTest {
             storageWarningThreshold = 0.8f
         )
 
-        assertTrue("[DEBUG_LOG] Should show storage warning when usage exceeds threshold",
-            state.showStorageWarning)
+        assertTrue(
+            "[DEBUG_LOG] Should show storage warning when usage exceeds threshold",
+            state.showStorageWarning
+        )
     }
 
     @Test
@@ -160,8 +166,10 @@ class FileViewUiStateTest {
             storageWarningThreshold = 0.8f
         )
 
-        assertFalse("[DEBUG_LOG] Should not show storage warning when usage below threshold",
-            state.showStorageWarning)
+        assertFalse(
+            "[DEBUG_LOG] Should not show storage warning when usage below threshold",
+            state.showStorageWarning
+        )
     }
 
     @Test
@@ -173,24 +181,30 @@ class FileViewUiStateTest {
         )
         val state = FileViewUiState(sessions = sessions)
 
-        assertEquals("[DEBUG_LOG] Total file count should sum all session files",
-            15, state.totalFileCount)
+        assertEquals(
+            "[DEBUG_LOG] Total file count should sum all session files",
+            15, state.totalFileCount
+        )
     }
 
     @Test
     fun `totalFileCount returns zero when no sessions`() {
         val state = FileViewUiState(sessions = emptyList())
 
-        assertEquals("[DEBUG_LOG] Total file count should be zero when no sessions",
-            0, state.totalFileCount)
+        assertEquals(
+            "[DEBUG_LOG] Total file count should be zero when no sessions",
+            0, state.totalFileCount
+        )
     }
 
     @Test
     fun `selectedFilesCount returns correct count`() {
         val state = FileViewUiState(selectedFileIndices = setOf(0, 2, 4, 7))
 
-        assertEquals("[DEBUG_LOG] Selected files count should match indices size",
-            4, state.selectedFilesCount)
+        assertEquals(
+            "[DEBUG_LOG] Selected files count should match indices size",
+            4, state.selectedFilesCount
+        )
     }
 
     @Test
@@ -238,8 +252,10 @@ class FileViewUiStateTest {
             searchQuery = "Test Session 1"
         )
 
-        assertEquals("[DEBUG_LOG] Search results count should return filtered count",
-            1, state.searchResultsCount)
+        assertEquals(
+            "[DEBUG_LOG] Search results count should return filtered count",
+            1, state.searchResultsCount
+        )
     }
 
     @Test
@@ -253,8 +269,10 @@ class FileViewUiStateTest {
             searchQuery = ""
         )
 
-        assertEquals("[DEBUG_LOG] Search results count should return total count when not searching",
-            2, state.searchResultsCount)
+        assertEquals(
+            "[DEBUG_LOG] Search results count should return total count when not searching",
+            2, state.searchResultsCount
+        )
     }
 
     @Test
@@ -278,7 +296,11 @@ class FileViewUiStateTest {
     fun `session item formatted duration handles minutes only`() {
         val session = createTestSession("test", "Test", duration = 125000L)
 
-        assertEquals("[DEBUG_LOG] Formatted duration should show minutes and seconds", "2m 5s", session.formattedDuration)
+        assertEquals(
+            "[DEBUG_LOG] Formatted duration should show minutes and seconds",
+            "2m 5s",
+            session.formattedDuration
+        )
     }
 
     @Test

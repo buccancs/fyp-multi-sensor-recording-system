@@ -34,8 +34,8 @@ class DeviceStatusTracker(
     ) {
         fun isFullyOperational(): Boolean =
             connectionState == ConnectionState.CONNECTED &&
-            communicationHealth == CommunicationHealth.EXCELLENT &&
-            batteryLevel > 20
+                    communicationHealth == CommunicationHealth.EXCELLENT &&
+                    batteryLevel > 20
 
         fun getDisplaySummary(): String = buildString {
             append("Device: $deviceName ($deviceId)\n")

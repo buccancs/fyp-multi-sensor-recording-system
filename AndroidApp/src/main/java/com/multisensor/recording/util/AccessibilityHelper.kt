@@ -7,7 +7,6 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.core.view.accessibility.AccessibilityViewCommand
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -72,13 +71,15 @@ class AccessibilityHelper @Inject constructor(
 
             signalStrength?.let { strength ->
                 append(". Signal strength: ")
-                append(when {
-                    strength >= 80 -> "excellent"
-                    strength >= 60 -> "good"
-                    strength >= 40 -> "fair"
-                    strength >= 20 -> "poor"
-                    else -> "very poor"
-                })
+                append(
+                    when {
+                        strength >= 80 -> "excellent"
+                        strength >= 60 -> "good"
+                        strength >= 40 -> "fair"
+                        strength >= 20 -> "poor"
+                        else -> "very poor"
+                    }
+                )
             }
         }
 
@@ -116,13 +117,15 @@ class AccessibilityHelper @Inject constructor(
                 append(", charging")
             } else {
                 append(", ")
-                append(when {
-                    batteryLevel >= 80 -> "excellent level"
-                    batteryLevel >= 50 -> "good level"
-                    batteryLevel >= 30 -> "moderate level"
-                    batteryLevel >= 15 -> "low level, consider charging"
-                    else -> "critically low, charging recommended"
-                })
+                append(
+                    when {
+                        batteryLevel >= 80 -> "excellent level"
+                        batteryLevel >= 50 -> "good level"
+                        batteryLevel >= 30 -> "moderate level"
+                        batteryLevel >= 15 -> "low level, consider charging"
+                        else -> "critically low, charging recommended"
+                    }
+                )
             }
         }
 

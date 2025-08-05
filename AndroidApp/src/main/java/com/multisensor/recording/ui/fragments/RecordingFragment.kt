@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.multisensor.recording.databinding.FragmentRecordingBinding
 import com.multisensor.recording.recording.CameraRecorder
-import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.MainUiState
+import com.multisensor.recording.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject

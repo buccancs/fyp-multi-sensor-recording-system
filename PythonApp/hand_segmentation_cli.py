@@ -1,9 +1,10 @@
 import argparse
-import sys
 import os
+import sys
 from pathlib import Path
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from hand_segmentation import SessionPostProcessor, create_session_post_processor, SegmentationConfig, SegmentationMethod
+from hand_segmentation import SessionPostProcessor, create_session_post_processor
 
 
 def main():

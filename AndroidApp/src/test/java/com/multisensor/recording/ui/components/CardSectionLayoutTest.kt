@@ -1,15 +1,14 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
-import android.graphics.Color
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 
 @RunWith(AndroidJUnit4::class)
 class CardSectionLayoutTest {
@@ -158,8 +157,10 @@ class CardSectionLayoutTest {
 
         for (style in styles) {
             cardSectionLayout.setCardStyle(style)
-            assertEquals("Orientation should remain vertical for style $style",
-                LinearLayout.VERTICAL, cardSectionLayout.orientation)
+            assertEquals(
+                "Orientation should remain vertical for style $style",
+                LinearLayout.VERTICAL, cardSectionLayout.orientation
+            )
         }
     }
 
@@ -208,7 +209,8 @@ class CardSectionLayoutTest {
 
     @Test
     fun testLongHeaderText() {
-        val longText = "This is a very long header text that should still be handled properly by the card section layout component"
+        val longText =
+            "This is a very long header text that should still be handled properly by the card section layout component"
         cardSectionLayout.addHeader(longText)
 
         assertEquals(1, cardSectionLayout.childCount)
@@ -218,8 +220,10 @@ class CardSectionLayoutTest {
 
     @Test
     fun testComponentInheritance() {
-        assertTrue("CardSectionLayout should extend LinearLayout",
-            cardSectionLayout is LinearLayout)
+        assertTrue(
+            "CardSectionLayout should extend LinearLayout",
+            cardSectionLayout is LinearLayout
+        )
     }
 
     @Test

@@ -7,12 +7,10 @@ import com.multisensor.recording.ui.MainViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.mockk.spyk
-import io.mockk.slot
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 
 class RecordingControllerTest {
 
@@ -34,7 +32,12 @@ class RecordingControllerTest {
         mockSharedPreferences = mockk(relaxed = true)
         mockSharedPreferencesEditor = mockk(relaxed = true)
 
-        every { mockContext.getSharedPreferences("recording_controller_state", Context.MODE_PRIVATE) } returns mockSharedPreferences
+        every {
+            mockContext.getSharedPreferences(
+                "recording_controller_state",
+                Context.MODE_PRIVATE
+            )
+        } returns mockSharedPreferences
         every { mockSharedPreferences.edit() } returns mockSharedPreferencesEditor
         every { mockSharedPreferencesEditor.putBoolean(any(), any()) } returns mockSharedPreferencesEditor
         every { mockSharedPreferencesEditor.putString(any(), any()) } returns mockSharedPreferencesEditor
@@ -53,12 +56,17 @@ class RecordingControllerTest {
 
     @Test
     fun `test recording controller initialization`() {
-        assertFalse("Recording system should not be initialized initially", recordingController.isRecordingSystemInitialized())
+        assertFalse(
+            "Recording system should not be initialized initially",
+            recordingController.isRecordingSystemInitialized()
+        )
 
         recordingController.initializeRecordingSystem(mockContext, mockTextureView, mockViewModel)
 
-        assertTrue("Recording system should be initialized after initializeRecordingSystem call",
-            recordingController.isRecordingSystemInitialized())
+        assertTrue(
+            "Recording system should be initialized after initializeRecordingSystem call",
+            recordingController.isRecordingSystemInitialized()
+        )
         verify { mockCallback.onRecordingInitialized() }
         verify { mockViewModel.initializeSystem(mockTextureView) }
     }
@@ -80,14 +88,20 @@ class RecordingControllerTest {
 
         val state = recordingController.getCurrentState()
         assertEquals("Total recording time should be restored", 5000L, state.totalRecordingTime)
-        assertEquals("Quality setting should be restored", RecordingController.RecordingQuality.HIGH, state.lastQualitySetting)
+        assertEquals(
+            "Quality setting should be restored",
+            RecordingController.RecordingQuality.HIGH,
+            state.lastQualitySetting
+        )
     }
 
     @Test
     fun `test recording quality settings management`() {
         recordingController.setRecordingQuality(RecordingController.RecordingQuality.HIGH)
-        assertEquals("Quality should be set to HIGH",
-            RecordingController.RecordingQuality.HIGH, recordingController.getCurrentQuality())
+        assertEquals(
+            "Quality should be set to HIGH",
+            RecordingController.RecordingQuality.HIGH, recordingController.getCurrentQuality()
+        )
 
         val details = recordingController.getQualityDetails(RecordingController.RecordingQuality.HIGH)
         assertEquals("Resolution should match HIGH quality", "1920x1080", details["resolution"])
@@ -106,18 +120,25 @@ class RecordingControllerTest {
 
     @Test
     fun `test service connection monitoring`() = runTest {
-        assertFalse("Service should not be connected initially", recordingController.serviceConnectionState.value.isConnected)
+        assertFalse(
+            "Service should not be connected initially",
+            recordingController.serviceConnectionState.value.isConnected
+        )
 
         recordingController.handleServiceConnectionStatus(true)
-        assertTrue("Service should be connected after status update",
-            recordingController.serviceConnectionState.value.isConnected)
+        assertTrue(
+            "Service should be connected after status update",
+            recordingController.serviceConnectionState.value.isConnected
+        )
 
         recordingController.updateServiceHeartbeat()
         assertTrue("Service should be healthy after heartbeat", recordingController.isServiceHealthy())
 
         recordingController.handleServiceConnectionStatus(false)
-        assertFalse("Service should not be connected after disconnect",
-            recordingController.serviceConnectionState.value.isConnected)
+        assertFalse(
+            "Service should not be connected after disconnect",
+            recordingController.serviceConnectionState.value.isConnected
+        )
         verify { mockCallback.onRecordingError("Lost connection to recording service") }
     }
 
@@ -167,12 +188,16 @@ class RecordingControllerTest {
             every { path } returns "/test/path"
         }
 
-        assertFalse("Validation should fail when system not initialized",
-            recordingController.validateRecordingPrerequisites(mockContext))
+        assertFalse(
+            "Validation should fail when system not initialized",
+            recordingController.validateRecordingPrerequisites(mockContext)
+        )
 
         recordingController.initializeRecordingSystem(mockContext, mockTextureView, mockViewModel)
-        assertTrue("System should be initialized after initialization call",
-            recordingController.isRecordingSystemInitialized())
+        assertTrue(
+            "System should be initialized after initialization call",
+            recordingController.isRecordingSystemInitialized()
+        )
     }
 
     @Test
@@ -181,8 +206,10 @@ class RecordingControllerTest {
             every { path } returns "/test/path"
         }
 
-        assertNotNull("Quality validation should return a result",
-            recordingController.validateQualityForResources(mockContext, RecordingController.RecordingQuality.LOW))
+        assertNotNull(
+            "Quality validation should return a result",
+            recordingController.validateQualityForResources(mockContext, RecordingController.RecordingQuality.LOW)
+        )
     }
 
     @Test
@@ -193,8 +220,10 @@ class RecordingControllerTest {
 
         val recommendedQuality = recordingController.getRecommendedQuality(mockContext)
         assertNotNull("Should return a recommended quality", recommendedQuality)
-        assertTrue("Should return a valid quality option",
-            recordingController.getAvailableQualities().contains(recommendedQuality))
+        assertTrue(
+            "Should return a valid quality option",
+            recordingController.getAvailableQualities().contains(recommendedQuality)
+        )
     }
 
     @Test
@@ -234,8 +263,10 @@ class RecordingControllerTest {
         recordingController.setRecordingQuality(RecordingController.RecordingQuality.LOW)
         recordingController.setRecordingQuality(RecordingController.RecordingQuality.ULTRA_HIGH)
 
-        assertEquals("Final quality should be ULTRA_HIGH",
-            RecordingController.RecordingQuality.ULTRA_HIGH, recordingController.getCurrentQuality())
+        assertEquals(
+            "Final quality should be ULTRA_HIGH",
+            RecordingController.RecordingQuality.ULTRA_HIGH, recordingController.getCurrentQuality()
+        )
 
         recordingController.stopRecording(mockContext, mockViewModel)
     }

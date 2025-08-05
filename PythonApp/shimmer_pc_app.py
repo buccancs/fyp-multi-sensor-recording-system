@@ -1,12 +1,13 @@
+import argparse
 import asyncio
 import logging
 import signal
 import sys
-import time
 import threading
+import time
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-import argparse
+
 sys.path.insert(0, str(Path(__file__).parent))
 from .shimmer_manager import ShimmerManager, ShimmerSample, ShimmerStatus, ConnectionType, DeviceState
 from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample

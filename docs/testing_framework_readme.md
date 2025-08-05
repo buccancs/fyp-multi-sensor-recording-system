@@ -1,6 +1,7 @@
 # Testing Framework Module
 
-The Testing Framework provides comprehensive validation and quality assurance for the Multi-Sensor Recording System, ensuring system reliability, performance, and data integrity across all components and integration scenarios.
+The Testing Framework provides comprehensive validation and quality assurance for the Multi-Sensor Recording System,
+ensuring system reliability, performance, and data integrity across all components and integration scenarios.
 
 ## Table of Contents
 
@@ -17,9 +18,11 @@ The Testing Framework provides comprehensive validation and quality assurance fo
 
 ### System Role and Responsibilities
 
-The Testing Framework serves as the quality assurance backbone, providing systematic validation of all system components from individual units to complete end-to-end scenarios.
+The Testing Framework serves as the quality assurance backbone, providing systematic validation of all system components
+from individual units to complete end-to-end scenarios.
 
 **Primary Functions:**
+
 - **Unit Testing**: Individual component validation
 - **Integration Testing**: Cross-component interaction testing
 - **Performance Testing**: System performance under load
@@ -103,6 +106,7 @@ flowchart TD
 ### Unit Testing
 
 #### Component Tests
+
 - **Android Components**: Activity, Service, and Fragment testing
 - **Python Components**: Class and function validation
 - **Calibration Algorithms**: Mathematical accuracy verification
@@ -134,6 +138,7 @@ class CalibrationTest:
 ### Integration Testing
 
 #### System Integration
+
 - **PC-Android Communication**: Network protocol validation
 - **Device Synchronization**: Temporal alignment testing
 - **Data Flow**: Multi-modal data integration
@@ -148,11 +153,11 @@ class SystemIntegrationTest:
         # Setup test environment
         pc_controller = TestPCController()
         android_simulator = AndroidDeviceSimulator()
-        
+
         # Test device discovery
         discovered = pc_controller.discover_devices()
         assert android_simulator.device_id in discovered
-        
+
         # Test message exchange
         test_message = create_test_message()
         response = pc_controller.send_message(android_simulator.device_id, test_message)
@@ -163,6 +168,7 @@ class SystemIntegrationTest:
 ### Performance Testing
 
 #### Load Testing
+
 - **Concurrent Device Management**: Multiple device handling
 - **Network Throughput**: Data streaming performance
 - **Memory Usage**: Resource utilization monitoring
@@ -209,6 +215,7 @@ class PerformanceTest:
 ### End-to-End Testing
 
 #### Complete Workflow Testing
+
 - **Recording Session Lifecycle**: Full session execution
 - **Data Integrity**: End-to-end data validation
 - **Quality Assurance**: Complete quality pipeline
@@ -260,63 +267,63 @@ class EndToEndTest:
 ```python
 class TestFramework:
     """Comprehensive testing framework coordinator"""
-    
+
     def __init__(self):
         self.test_suites = {}
         self.test_results = {}
         self.quality_monitor = QualityMonitor()
         self.performance_monitor = PerformanceMonitor()
-    
+
     def register_test_suite(self, name: str, test_suite: TestSuite):
         """Register test suite for execution"""
         self.test_suites[name] = test_suite
-    
+
     def run_all_tests(self) -> TestResults:
         """Execute all registered test suites"""
         results = TestResults()
-        
+
         for suite_name, test_suite in self.test_suites.items():
             suite_results = self._run_test_suite(suite_name, test_suite)
             results.add_suite_results(suite_name, suite_results)
-        
+
         return results
-    
+
     def run_test_category(self, category: TestCategory) -> TestResults:
         """Run tests for specific category"""
         category_suites = {
             name: suite for name, suite in self.test_suites.items()
             if suite.category == category
         }
-        
+
         results = TestResults()
         for suite_name, test_suite in category_suites.items():
             suite_results = self._run_test_suite(suite_name, test_suite)
             results.add_suite_results(suite_name, suite_results)
-        
+
         return results
-    
+
     def _run_test_suite(self, name: str, test_suite: TestSuite) -> SuiteResults:
         """Execute individual test suite"""
         logger.info(f"Running test suite: {name}")
-        
+
         suite_results = SuiteResults(name)
-        
+
         for test in test_suite.tests:
             try:
                 # Setup test environment
                 test_env = self._setup_test_environment(test)
-                
+
                 # Execute test
                 start_time = time.time()
                 test_result = test.execute(test_env)
                 execution_time = time.time() - start_time
-                
+
                 # Collect performance metrics
                 performance_metrics = self.performance_monitor.collect_metrics(test)
-                
+
                 # Validate results
                 validation_result = self._validate_test_result(test, test_result)
-                
+
                 # Store results
                 suite_results.add_test_result(TestResult(
                     test_name=test.name,
@@ -325,10 +332,10 @@ class TestFramework:
                     performance_metrics=performance_metrics,
                     error_message=validation_result.error_message
                 ))
-                
+
                 # Cleanup
                 self._cleanup_test_environment(test_env)
-                
+
             except Exception as e:
                 logger.error(f"Test {test.name} failed with exception: {e}")
                 suite_results.add_test_result(TestResult(
@@ -336,7 +343,7 @@ class TestFramework:
                     success=False,
                     error_message=str(e)
                 ))
-        
+
         return suite_results
 ```
 
@@ -480,10 +487,10 @@ TEST_CONFIG = {
 class TestFramework:
     def register_test_suite(self, name: str, test_suite: TestSuite):
         """Register test suite for execution"""
-    
+
     def run_all_tests(self) -> TestResults:
         """Execute all registered test suites"""
-    
+
     def run_test_category(self, category: TestCategory) -> TestResults:
         """Run tests for specific category"""
 ```
@@ -579,4 +586,5 @@ jobs:
 
 ---
 
-*For related modules, see [Session Management](../session-management/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*For related modules, see [Session Management](../session-management/README.md)
+and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*

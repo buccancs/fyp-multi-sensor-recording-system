@@ -3,7 +3,6 @@ package com.multisensor.recording.managers
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import io.mockk.*
 import org.junit.After
 import org.junit.Before

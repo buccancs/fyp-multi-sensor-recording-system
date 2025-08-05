@@ -5,11 +5,10 @@ import android.content.Context
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CaptureResult
 import android.view.TextureView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.core.app.ActivityScenario
 import androidx.test.rule.GrantPermissionRule
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.service.SessionManager
@@ -105,7 +104,8 @@ class SamsungS21S22CameraRawExtractionTest {
         println("[SAMSUNG_TEST] SDK: ${android.os.Build.VERSION.SDK_INT}")
 
         val isSamsungDevice = deviceManufacturer.contains("SAMSUNG")
-        val isSamsungS21S22 = deviceModel.contains("SM-G99") || deviceModel.contains("S21") || deviceModel.contains("S22")
+        val isSamsungS21S22 =
+            deviceModel.contains("SM-G99") || deviceModel.contains("S21") || deviceModel.contains("S22")
 
         if (!isSamsungDevice) {
             println("[SAMSUNG_TEST] WARNING: Not a Samsung device - test results may not be applicable")
@@ -130,7 +130,8 @@ class SamsungS21S22CameraRawExtractionTest {
                 val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
 
                 val isLevel3 = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3
-                val hasRawCapability = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
+                val hasRawCapability =
+                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
 
                 println("[SAMSUNG_TEST] Camera $cameraId: Level=${getHardwareLevelName(hardwareLevel)}, RAW=$hasRawCapability")
 
@@ -173,6 +174,7 @@ class SamsungS21S22CameraRawExtractionTest {
                     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
                         surfaceAvailableLatch.countDown()
                     }
+
                     override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
                     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = false
                     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
@@ -180,8 +182,10 @@ class SamsungS21S22CameraRawExtractionTest {
             }
         }
 
-        assertTrue("[SAMSUNG_TEST] TextureView surface not available",
-                   surfaceAvailableLatch.await(10, TimeUnit.SECONDS))
+        assertTrue(
+            "[SAMSUNG_TEST] TextureView surface not available",
+            surfaceAvailableLatch.await(10, TimeUnit.SECONDS)
+        )
 
         println("[SAMSUNG_TEST] ✓ Samsung camera surface ready")
     }
@@ -330,13 +334,16 @@ class SamsungS21S22CameraRawExtractionTest {
 
                 val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
                 val hasRaw = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
-                val hasManualSensor = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
-                val hasManualPostProcessing = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING) == true
+                val hasManualSensor =
+                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
+                val hasManualPostProcessing =
+                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING) == true
 
                 val activeArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
                 val pixelArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)
                 val physicalSize = characteristics.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE)
-                val colorFilterArrangement = characteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT)
+                val colorFilterArrangement =
+                    characteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT)
 
                 println("[SAMSUNG_TEST] Hardware Level: ${getHardwareLevelName(hardwareLevel)}")
                 println("[SAMSUNG_TEST] RAW Capability: $hasRaw")
@@ -364,7 +371,10 @@ class SamsungS21S22CameraRawExtractionTest {
             }
         }
 
-        assertTrue("[SAMSUNG_TEST] No camera found with basic RAW capability", samsungOptimalCameraFound || hasBasicRawCapability())
+        assertTrue(
+            "[SAMSUNG_TEST] No camera found with basic RAW capability",
+            samsungOptimalCameraFound || hasBasicRawCapability()
+        )
 
         if (samsungOptimalCameraFound) {
             println("[SAMSUNG_TEST] ✓ Samsung S21/S22 optimal camera characteristics validated")
@@ -404,7 +414,7 @@ class SamsungS21S22CameraRawExtractionTest {
             }
 
             val isTiff = (bytes[0] == 0x49.toByte() && bytes[1] == 0x49.toByte()) ||
-                        (bytes[0] == 0x4D.toByte() && bytes[1] == 0x4D.toByte())
+                    (bytes[0] == 0x4D.toByte() && bytes[1] == 0x4D.toByte())
 
             assertTrue("[SAMSUNG_TEST] Invalid DNG/TIFF header", isTiff)
             println("[SAMSUNG_TEST] ✓ DNG file header validation passed: ${dngFile.name}")

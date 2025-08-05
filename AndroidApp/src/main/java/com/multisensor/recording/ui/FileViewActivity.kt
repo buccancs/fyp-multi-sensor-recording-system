@@ -2,7 +2,6 @@ package com.multisensor.recording.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +9,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,22 +18,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.multisensor.recording.util.AppLogger
-import com.multisensor.recording.util.logD
-import com.multisensor.recording.util.logE
-import com.multisensor.recording.util.logI
-import com.multisensor.recording.util.logW
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import com.multisensor.recording.R
-import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.util.Logger
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import android.widget.Toast
 
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {

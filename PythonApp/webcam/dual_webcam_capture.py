@@ -1,17 +1,20 @@
 import cv2
+import json
 import numpy as np
 import os
 import threading
 import time
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional, Dict, List, Tuple, Callable
-from dataclasses import dataclass
-import json
-from ..utils.logging_config import get_logger
+
 from .webcam.advanced_sync_algorithms import AdaptiveSynchronizer, SynchronizationStrategy
-from .webcam.cv_preprocessing_pipeline import AdvancedROIDetector, PhysiologicalSignalExtractor, ROIDetectionMethod, SignalExtractionMethod
+from .webcam.cv_preprocessing_pipeline import AdvancedROIDetector, PhysiologicalSignalExtractor, ROIDetectionMethod, \
+    SignalExtractionMethod
+from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

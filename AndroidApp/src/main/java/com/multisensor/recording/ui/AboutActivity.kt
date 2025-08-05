@@ -7,14 +7,14 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.launch
-import com.multisensor.recording.databinding.ActivityAboutBinding
 import com.multisensor.recording.BuildConfig
+import com.multisensor.recording.databinding.ActivityAboutBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AboutActivity : AppCompatActivity() {
@@ -102,7 +102,8 @@ class AboutActivity : AppCompatActivity() {
 
         binding.licenseLinkButton.setOnClickListener {
             try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/LICENSE"))
+                val intent =
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/LICENSE"))
                 startActivity(intent)
             } catch (e: Exception) {
                 showError("Failed to open license: ${e.message}")
@@ -111,7 +112,8 @@ class AboutActivity : AppCompatActivity() {
 
         binding.privacyPolicyButton.setOnClickListener {
             try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/PRIVACY.md"))
+                val intent =
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/PRIVACY.md"))
                 startActivity(intent)
             } catch (e: Exception) {
                 showError("Failed to open privacy policy: ${e.message}")
@@ -187,7 +189,8 @@ class AboutActivity : AppCompatActivity() {
         binding.licenseText.text = uiState.licenseInfo
 
         if (uiState.thirdPartyLicenses.isNotEmpty()) {
-            binding.thirdPartyLicensesText.text = "Third-party Libraries:\n${uiState.thirdPartyLicenses.joinToString("\n") { "• $it" }}"
+            binding.thirdPartyLicensesText.text =
+                "Third-party Libraries:\n${uiState.thirdPartyLicenses.joinToString("\n") { "• $it" }}"
         } else {
             binding.thirdPartyLicensesText.text = "No third-party licenses to display"
         }
@@ -234,6 +237,7 @@ class AboutActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 

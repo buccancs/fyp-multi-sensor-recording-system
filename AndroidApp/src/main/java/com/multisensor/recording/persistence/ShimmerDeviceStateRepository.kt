@@ -2,8 +2,8 @@ package com.multisensor.recording.persistence
 
 import android.content.Context
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,7 +52,12 @@ class ShimmerDeviceStateRepository @Inject constructor(
     }
 
 
-    suspend fun updateConnectionStatus(address: String, connected: Boolean, deviceName: String? = null, connectionType: ShimmerBluetoothManagerAndroid.BT_TYPE? = null) = withContext(Dispatchers.IO) {
+    suspend fun updateConnectionStatus(
+        address: String,
+        connected: Boolean,
+        deviceName: String? = null,
+        connectionType: ShimmerBluetoothManagerAndroid.BT_TYPE? = null
+    ) = withContext(Dispatchers.IO) {
         val timestamp = System.currentTimeMillis()
         deviceStateDao.updateConnectionStatus(address, connected, timestamp)
 
@@ -70,7 +75,13 @@ class ShimmerDeviceStateRepository @Inject constructor(
         )
     }
 
-    suspend fun logConnectionAttempt(address: String, success: Boolean, error: String? = null, deviceName: String? = null, connectionType: ShimmerBluetoothManagerAndroid.BT_TYPE? = null) = withContext(Dispatchers.IO) {
+    suspend fun logConnectionAttempt(
+        address: String,
+        success: Boolean,
+        error: String? = null,
+        deviceName: String? = null,
+        connectionType: ShimmerBluetoothManagerAndroid.BT_TYPE? = null
+    ) = withContext(Dispatchers.IO) {
         if (!success) {
             deviceStateDao.incrementConnectionAttempts(address, error)
         }
@@ -140,9 +151,10 @@ class ShimmerDeviceStateRepository @Inject constructor(
         }
     }
 
-    suspend fun updateDeviceInfo(address: String, batteryLevel: Int, signalStrength: Int, firmwareVersion: String) = withContext(Dispatchers.IO) {
-        deviceStateDao.updateDeviceInfo(address, batteryLevel, signalStrength, firmwareVersion)
-    }
+    suspend fun updateDeviceInfo(address: String, batteryLevel: Int, signalStrength: Int, firmwareVersion: String) =
+        withContext(Dispatchers.IO) {
+            deviceStateDao.updateDeviceInfo(address, batteryLevel, signalStrength, firmwareVersion)
+        }
 
 
     suspend fun getDevicesByPriority(): List<ShimmerDeviceState> = withContext(Dispatchers.IO) {
@@ -206,13 +218,15 @@ class ShimmerDeviceStateRepository @Inject constructor(
         deviceStateDao.insertConnectionHistory(history)
     }
 
-    suspend fun getConnectionHistory(address: String, limit: Int = 50): List<ShimmerConnectionHistory> = withContext(Dispatchers.IO) {
-        deviceStateDao.getConnectionHistory(address, limit)
-    }
+    suspend fun getConnectionHistory(address: String, limit: Int = 50): List<ShimmerConnectionHistory> =
+        withContext(Dispatchers.IO) {
+            deviceStateDao.getConnectionHistory(address, limit)
+        }
 
-    suspend fun getRecentConnectionHistory(limit: Int = 100): List<ShimmerConnectionHistory> = withContext(Dispatchers.IO) {
-        deviceStateDao.getRecentConnectionHistory(limit)
-    }
+    suspend fun getRecentConnectionHistory(limit: Int = 100): List<ShimmerConnectionHistory> =
+        withContext(Dispatchers.IO) {
+            deviceStateDao.getRecentConnectionHistory(limit)
+        }
 
 
     suspend fun cleanupOldData(maxAge: Long = 30 * 24 * 60 * 60 * 1000L) = withContext(Dispatchers.IO) {

@@ -7,7 +7,9 @@ import threading
 import time
 from PyQt5.QtCore import QThread, pyqtSignal
 from typing import Dict, List, Optional, Any
+
 from ..utils.logging_config import get_logger
+
 logger = get_logger(__name__)
 
 

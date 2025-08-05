@@ -4,9 +4,13 @@
 
 ## Executive Summary
 
-The Python Desktop Controller Application represents the central orchestration hub of the Multi-Sensor Recording System, serving as the master controller for coordinating multiple heterogeneous devices in physiological measurement research. This comprehensive documentation provides detailed technical analysis, implementation guidance, and practical deployment strategies for academic research environments.
+The Python Desktop Controller Application represents the central orchestration hub of the Multi-Sensor Recording System,
+serving as the master controller for coordinating multiple heterogeneous devices in physiological measurement research.
+This comprehensive documentation provides detailed technical analysis, implementation guidance, and practical deployment
+strategies for academic research environments.
 
 **Key Achievements:**
+
 - **Coordinated Multi-Device System**: Controls up to 8 simultaneous devices with ±3.2ms temporal precision
 - **Research-Grade Reliability**: 99.7% system availability and 99.98% data integrity
 - **Contactless Measurement Platform**: Eliminates artifacts from traditional electrode-based systems
@@ -15,63 +19,63 @@ The Python Desktop Controller Application represents the central orchestration h
 ## Table of Contents
 
 1. [System Overview and Research Context](#1-system-overview-and-research-context)
-   - 1.1. [Research Significance and Innovation](#11-research-significance-and-innovation)
-   - 1.2. [Academic Contributions and Technical Impact](#12-academic-contributions-and-technical-impact)
-   - 1.3. [System Capabilities and Performance Metrics](#13-system-capabilities-and-performance-metrics)
-   - 1.4. [Integration with Multi-Sensor Ecosystem](#14-integration-with-multi-sensor-ecosystem)
+    - 1.1. [Research Significance and Innovation](#11-research-significance-and-innovation)
+    - 1.2. [Academic Contributions and Technical Impact](#12-academic-contributions-and-technical-impact)
+    - 1.3. [System Capabilities and Performance Metrics](#13-system-capabilities-and-performance-metrics)
+    - 1.4. [Integration with Multi-Sensor Ecosystem](#14-integration-with-multi-sensor-ecosystem)
 
 2. [Architectural Design and Implementation](#2-architectural-design-and-implementation)
-   - 2.1. [Core Architecture and Design Philosophy](#21-core-architecture-and-design-philosophy)
-   - 2.2. [Application Framework and Component Structure](#22-application-framework-and-component-structure)
-   - 2.3. [Enhanced GUI System and User Experience](#23-enhanced-gui-system-and-user-experience)
-   - 2.4. [Network Layer and Device Coordination](#24-network-layer-and-device-coordination)
-   - 2.5. [Data Processing and Management Pipeline](#25-data-processing-and-management-pipeline)
+    - 2.1. [Core Architecture and Design Philosophy](#21-core-architecture-and-design-philosophy)
+    - 2.2. [Application Framework and Component Structure](#22-application-framework-and-component-structure)
+    - 2.3. [Enhanced GUI System and User Experience](#23-enhanced-gui-system-and-user-experience)
+    - 2.4. [Network Layer and Device Coordination](#24-network-layer-and-device-coordination)
+    - 2.5. [Data Processing and Management Pipeline](#25-data-processing-and-management-pipeline)
 
 3. [Communication and Protocol Systems](#3-communication-and-protocol-systems)
-   - 3.1. [Network Communication Architecture](#31-network-communication-architecture)
-   - 3.2. [JSON Protocol and Message Systems](#32-json-protocol-and-message-systems)
-   - 3.3. [Device Integration Protocols](#33-device-integration-protocols)
-   - 3.4. [Synchronization and Timing Systems](#34-synchronization-and-timing-systems)
-   - 3.5. [Error Handling and Recovery Mechanisms](#35-error-handling-and-recovery-mechanisms)
+    - 3.1. [Network Communication Architecture](#31-network-communication-architecture)
+    - 3.2. [JSON Protocol and Message Systems](#32-json-protocol-and-message-systems)
+    - 3.3. [Device Integration Protocols](#33-device-integration-protocols)
+    - 3.4. [Synchronization and Timing Systems](#34-synchronization-and-timing-systems)
+    - 3.5. [Error Handling and Recovery Mechanisms](#35-error-handling-and-recovery-mechanisms)
 
 4. [Advanced Features and Specialized Components](#4-advanced-features-and-specialized-components)
-   - 4.1. [Master Clock Synchronization System](#41-master-clock-synchronization-system)
-   - 4.2. [Shimmer3 GSR+ Integration](#42-shimmer3-gsr-integration)
-   - 4.3. [Hand Segmentation and Computer Vision](#43-hand-segmentation-and-computer-vision)
-   - 4.4. [Calibration and Quality Assessment](#44-calibration-and-quality-assessment)
-   - 4.5. [Stimulus Management System](#45-stimulus-management-system)
-   - 4.6. [Dual Webcam Recording Implementation](#46-dual-webcam-recording-implementation)
+    - 4.1. [Master Clock Synchronization System](#41-master-clock-synchronization-system)
+    - 4.2. [Shimmer3 GSR+ Integration](#42-shimmer3-gsr-integration)
+    - 4.3. [Hand Segmentation and Computer Vision](#43-hand-segmentation-and-computer-vision)
+    - 4.4. [Calibration and Quality Assessment](#44-calibration-and-quality-assessment)
+    - 4.5. [Stimulus Management System](#45-stimulus-management-system)
+    - 4.6. [Dual Webcam Recording Implementation](#46-dual-webcam-recording-implementation)
 
 5. [Quality Assurance and Testing Framework](#5-quality-assurance-and-testing-framework)
-   - 5.1. [Comprehensive Testing Strategy](#51-comprehensive-testing-strategy)
-   - 5.2. [Performance Analysis and Benchmarking](#52-performance-analysis-and-benchmarking)
-   - 5.3. [Validation and Verification Procedures](#53-validation-and-verification-procedures)
-   - 5.4. [Reliability and Stress Testing](#54-reliability-and-stress-testing)
+    - 5.1. [Comprehensive Testing Strategy](#51-comprehensive-testing-strategy)
+    - 5.2. [Performance Analysis and Benchmarking](#52-performance-analysis-and-benchmarking)
+    - 5.3. [Validation and Verification Procedures](#53-validation-and-verification-procedures)
+    - 5.4. [Reliability and Stress Testing](#54-reliability-and-stress-testing)
 
 6. [System Monitoring and Diagnostics](#6-system-monitoring-and-diagnostics)
-   - 6.1. [Enhanced Logging and Monitoring System](#61-enhanced-logging-and-monitoring-system)
-   - 6.2. [Performance Metrics and Analytics](#62-performance-metrics-and-analytics)
-   - 6.3. [Diagnostic Tools and Troubleshooting](#63-diagnostic-tools-and-troubleshooting)
-   - 6.4. [Security and Data Integrity](#64-security-and-data-integrity)
+    - 6.1. [Enhanced Logging and Monitoring System](#61-enhanced-logging-and-monitoring-system)
+    - 6.2. [Performance Metrics and Analytics](#62-performance-metrics-and-analytics)
+    - 6.3. [Diagnostic Tools and Troubleshooting](#63-diagnostic-tools-and-troubleshooting)
+    - 6.4. [Security and Data Integrity](#64-security-and-data-integrity)
 
 7. [Operational Procedures and User Guide](#7-operational-procedures-and-user-guide)
-   - 7.1. [System Setup and Installation](#71-system-setup-and-installation)
-   - 7.2. [Recording Session Workflow](#72-recording-session-workflow)
-   - 7.3. [Device Management and Configuration](#73-device-management-and-configuration)
-   - 7.4. [Advanced Features and Customization](#74-advanced-features-and-customization)
-   - 7.5. [Maintenance and Updates](#75-maintenance-and-updates)
+    - 7.1. [System Setup and Installation](#71-system-setup-and-installation)
+    - 7.2. [Recording Session Workflow](#72-recording-session-workflow)
+    - 7.3. [Device Management and Configuration](#73-device-management-and-configuration)
+    - 7.4. [Advanced Features and Customization](#74-advanced-features-and-customization)
+    - 7.5. [Maintenance and Updates](#75-maintenance-and-updates)
 
 8. [Research Applications and Best Practices](#8-research-applications-and-best-practices)
-   - 8.1. [Experimental Design Considerations](#81-experimental-design-considerations)
-   - 8.2. [Data Management and Analysis Guidelines](#82-data-management-and-analysis-guidelines)
-   - 8.3. [Academic Research Standards](#83-academic-research-standards)
-   - 8.4. [Ethical Considerations and Privacy](#84-ethical-considerations-and-privacy)
+    - 8.1. [Experimental Design Considerations](#81-experimental-design-considerations)
+    - 8.2. [Data Management and Analysis Guidelines](#82-data-management-and-analysis-guidelines)
+    - 8.3. [Academic Research Standards](#83-academic-research-standards)
+    - 8.4. [Ethical Considerations and Privacy](#84-ethical-considerations-and-privacy)
 
 9. [Development and Extension Guidelines](#9-development-and-extension-guidelines)
-   - 9.1. [Development Environment Setup](#91-development-environment-setup)
-   - 9.2. [Code Architecture and Patterns](#92-code-architecture-and-patterns)
-   - 9.3. [Extension Points and Plugin Development](#93-extension-points-and-plugin-development)
-   - 9.4. [Contribution Guidelines](#94-contribution-guidelines)
+    - 9.1. [Development Environment Setup](#91-development-environment-setup)
+    - 9.2. [Code Architecture and Patterns](#92-code-architecture-and-patterns)
+    - 9.3. [Extension Points and Plugin Development](#93-extension-points-and-plugin-development)
+    - 9.4. [Contribution Guidelines](#94-contribution-guidelines)
 
 10. [Future Enhancements and Research Directions](#10-future-enhancements-and-research-directions)
     - 10.1. [Planned Technical Enhancements](#101-planned-technical-enhancements)
@@ -101,15 +105,23 @@ The Python Desktop Controller Application represents the central orchestration h
 
 ## 1. System Overview and Research Context
 
-The Python Desktop Controller Application stands as the central orchestration hub of the Multi-Sensor Recording System, representing a paradigmatic advancement in research instrumentation that fundamentally reimagines physiological measurement through sophisticated distributed sensor network coordination. This enhanced documentation provides comprehensive technical analysis, implementation guidance, and practical deployment strategies for academic research environments.
+The Python Desktop Controller Application stands as the central orchestration hub of the Multi-Sensor Recording System,
+representing a paradigmatic advancement in research instrumentation that fundamentally reimagines physiological
+measurement through sophisticated distributed sensor network coordination. This enhanced documentation provides
+comprehensive technical analysis, implementation guidance, and practical deployment strategies for academic research
+environments.
 
 ### 1.1. Research Significance and Innovation
 
 #### 1.1.1. Revolutionary Approach to Physiological Measurement
 
-The Python Desktop Controller addresses fundamental limitations in traditional physiological measurement methodologies by providing a unified, software-defined platform for coordinating multiple heterogeneous devices within distributed sensor networks. This enables a new generation of contactless physiological measurement studies that eliminate the artifacts and constraints associated with conventional electrode-based systems.
+The Python Desktop Controller addresses fundamental limitations in traditional physiological measurement methodologies
+by providing a unified, software-defined platform for coordinating multiple heterogeneous devices within distributed
+sensor networks. This enables a new generation of contactless physiological measurement studies that eliminate the
+artifacts and constraints associated with conventional electrode-based systems.
 
 **Core Innovation Areas:**
+
 - **Contactless Measurement Paradigm**: Eliminates physical contact requirements that introduce confounding factors
 - **Distributed Sensor Coordination**: Manages up to 8 heterogeneous devices with microsecond precision
 - **Research-Grade Reliability**: Achieves 99.7% system availability and 99.98% data integrity
@@ -117,21 +129,25 @@ The Python Desktop Controller addresses fundamental limitations in traditional p
 
 #### 1.1.2. Technical Breakthrough and System Capabilities
 
-The system demonstrates several significant technical breakthroughs that advance both computer science research and practical instrumentation development:
+The system demonstrates several significant technical breakthroughs that advance both computer science research and
+practical instrumentation development:
 
 **Temporal Precision Achievements:**
+
 - ±3.2ms synchronization across all connected devices
 - Network latency tolerance from 1ms to 500ms
 - Clock drift correction for extended sessions
 - Automatic recovery from network interruptions
 
 **System Reliability Metrics:**
+
 - 99.7% system availability across testing scenarios
 - 99.98% data integrity verification
 - 71.4% comprehensive test success rate
 - Fault-tolerant operation with graceful degradation
 
 **Multi-Device Coordination:**
+
 - Supports 2-8 simultaneous devices
 - Dynamic device discovery and configuration
 - Heterogeneous platform integration (Android, PC, specialized sensors)
@@ -141,21 +157,25 @@ The system demonstrates several significant technical breakthroughs that advance
 
 #### 1.2.1. Novel Architectural Innovations
 
-The Python Desktop Controller embodies several significant technical innovations that contribute meaningfully to distributed systems research and practical instrumentation development:
+The Python Desktop Controller embodies several significant technical innovations that contribute meaningfully to
+distributed systems research and practical instrumentation development:
 
 **Hybrid Star-Mesh Coordination Architecture:**
+
 - Combines centralized coordination simplicity with distributed system resilience
 - Master-coordinator pattern with distributed processing capabilities
 - Fault-tolerant coordination maintaining operational continuity
 - Scalable architecture supporting 2-8 device configurations
 
 **Advanced Multi-Modal Synchronization Framework:**
+
 - Microsecond-level precision across wireless networks
 - Sophisticated algorithms compensating for network latency variations
 - Device-specific timing inconsistency compensation
 - Extended Network Time Protocol (NTP) implementations for mobile devices
 
 **Cross-Platform Integration Methodology:**
+
 - Seamless Android-Python development environment coordination
 - Unified data models supporting diverse sensor modalities
 - Common development patterns enabling consistent code organization
@@ -163,15 +183,18 @@ The Python Desktop Controller embodies several significant technical innovations
 
 #### 1.2.2. Research-Specific Quality Management
 
-The system implements advanced quality management specifically designed for research applications where measurement precision and data integrity are paramount:
+The system implements advanced quality management specifically designed for research applications where measurement
+precision and data integrity are paramount:
 
 **Real-Time Quality Assessment:**
+
 - Continuous monitoring across all sensor modalities
 - Adaptive parameter adjustment based on environmental conditions
 - Comprehensive data validation with integrity verification
 - Research-grade documentation with complete audit trails
 
 **Performance Optimization:**
+
 - Dynamic resource allocation across heterogeneous devices
 - Adaptive quality settings based on network conditions
 - Real-time performance monitoring and optimization
@@ -182,6 +205,7 @@ The system implements advanced quality management specifically designed for rese
 #### 1.3.1. Core System Performance
 
 **Device Coordination Capabilities:**
+
 - **Maximum Device Count**: 8 simultaneous devices
 - **Temporal Precision**: ±3.2ms synchronization accuracy
 - **Network Latency Tolerance**: 1ms to 500ms operational range
@@ -189,6 +213,7 @@ The system implements advanced quality management specifically designed for rese
 - **Data Integrity**: 99.98% verification success rate
 
 **Supported Device Categories:**
+
 - **Primary Devices**: Android smartphones with specialized applications
 - **PC-Based Sensors**: Webcams, thermal cameras, USB devices
 - **Specialized Hardware**: Shimmer3 GSR+ sensors, custom measurement devices
@@ -197,18 +222,21 @@ The system implements advanced quality management specifically designed for rese
 #### 1.3.2. Advanced Feature Set
 
 **Master Clock Synchronization:**
+
 - High-precision NTP server implementation
 - Network latency compensation algorithms
 - Clock drift correction for extended sessions
 - Cross-platform time synchronization protocols
 
 **Comprehensive Data Management:**
+
 - Multi-format data recording and storage
 - Real-time data validation and integrity checking
 - Automated backup and recovery systems
 - Research-grade metadata generation and tracking
 
 **Quality Assurance Systems:**
+
 - Real-time performance monitoring
 - Automated system health assessment
 - Predictive maintenance and failure detection
@@ -218,9 +246,11 @@ The system implements advanced quality management specifically designed for rese
 
 #### 1.4.1. Ecosystem Architecture
 
-The Python Desktop Controller serves as the central hub within a comprehensive multi-sensor ecosystem designed for advanced physiological measurement research:
+The Python Desktop Controller serves as the central hub within a comprehensive multi-sensor ecosystem designed for
+advanced physiological measurement research:
 
 **Primary Integration Components:**
+
 - **Android Mobile Applications**: Specialized camera and sensor applications
 - **Thermal Camera Systems**: TopDon TC001 integration with computer vision
 - **Physiological Sensors**: Shimmer3 GSR+ for reference measurements
@@ -228,6 +258,7 @@ The Python Desktop Controller serves as the central hub within a comprehensive m
 - **Stimulus Management**: Coordinated presentation and timing systems
 
 **Communication Architecture:**
+
 - **JSON Socket Protocol**: Lightweight, efficient device communication
 - **REST API Interfaces**: Web-based control and monitoring
 - **USB Device Protocols**: Direct hardware integration
@@ -236,6 +267,7 @@ The Python Desktop Controller serves as the central hub within a comprehensive m
 #### 1.4.2. Research Workflow Integration
 
 **Experimental Design Support:**
+
 - **Session Planning**: Automated experiment configuration and setup
 - **Device Configuration**: Centralized parameter management across all devices
 - **Data Collection**: Synchronized multi-modal data recording
@@ -243,6 +275,7 @@ The Python Desktop Controller serves as the central hub within a comprehensive m
 - **Post-Processing**: Automated data validation and initial analysis
 
 **Academic Research Features:**
+
 - **Reproducibility Support**: Complete experiment parameter documentation
 - **Data Provenance**: Full audit trail of all measurement activities
 - **Quality Metrics**: Comprehensive assessment of measurement reliability
@@ -256,15 +289,18 @@ The Python Desktop Controller serves as the central hub within a comprehensive m
 
 #### 3.1.1. Multi-Protocol Communication Framework
 
-The Python Desktop Controller implements a sophisticated multi-protocol communication framework designed to handle diverse device types and network conditions:
+The Python Desktop Controller implements a sophisticated multi-protocol communication framework designed to handle
+diverse device types and network conditions:
 
 **Primary Communication Protocols:**
+
 - **JSON Socket Protocol**: Lightweight, human-readable message format
 - **RESTful API**: HTTP-based web service interface for remote control
 - **WebSocket Protocol**: Real-time bidirectional communication
 - **UDP Broadcasting**: Discovery and heartbeat mechanisms
 
 **Protocol Selection Strategy:**
+
 - **Control Messages**: JSON over TCP for reliability
 - **Time-Critical Data**: UDP with custom reliability mechanisms
 - **Bulk Data Transfer**: HTTP/HTTPS with compression
@@ -273,12 +309,14 @@ The Python Desktop Controller implements a sophisticated multi-protocol communic
 #### 3.1.2. Network Layer Implementation
 
 **Connection Management:**
+
 - **Connection Pooling**: Efficient resource utilization for multiple devices
 - **Automatic Reconnection**: Exponential backoff with maximum retry limits
 - **Heartbeat Monitoring**: Regular connectivity verification
 - **Graceful Degradation**: Reduced functionality during connectivity issues
 
 **Network Security:**
+
 - **TLS/SSL Encryption**: Secure communication channels
 - **Certificate-Based Authentication**: Device identity verification
 - **Message Integrity**: Cryptographic hash verification
@@ -291,6 +329,7 @@ The Python Desktop Controller implements a sophisticated multi-protocol communic
 The system implements a comprehensive JSON-based messaging protocol designed for research applications:
 
 **Standard Message Format:**
+
 ```json
 {
     "header": {
@@ -320,6 +359,7 @@ The system implements a comprehensive JSON-based messaging protocol designed for
 ```
 
 **Message Categories:**
+
 - **Control Messages**: System control and configuration commands
 - **Data Messages**: Sensor data and measurement information
 - **Status Messages**: Device status and health information
@@ -329,6 +369,7 @@ The system implements a comprehensive JSON-based messaging protocol designed for
 #### 3.2.2. Message Processing and Routing
 
 **Message Processing Pipeline:**
+
 1. **Reception**: Message receipt and initial validation
 2. **Parsing**: JSON deserialization and structure validation
 3. **Authentication**: Source verification and authorization
@@ -337,6 +378,7 @@ The system implements a comprehensive JSON-based messaging protocol designed for
 6. **Response**: Result formatting and transmission
 
 **Message Routing System:**
+
 - **Direct Routing**: Point-to-point message delivery
 - **Broadcast Routing**: System-wide message distribution
 - **Filtered Routing**: Selective message delivery based on criteria
@@ -347,9 +389,11 @@ The system implements a comprehensive JSON-based messaging protocol designed for
 #### 3.3.1. Android Device Integration
 
 **Android Application Protocol:**
-The integration with Android devices implements a specialized protocol designed for mobile device capabilities and constraints:
+The integration with Android devices implements a specialized protocol designed for mobile device capabilities and
+constraints:
 
 **Device Registration Process:**
+
 1. **Discovery Phase**: Automatic device detection via mDNS
 2. **Capability Exchange**: Device feature and capability negotiation
 3. **Authentication**: Certificate-based mutual authentication
@@ -357,6 +401,7 @@ The integration with Android devices implements a specialized protocol designed 
 5. **Activation**: Device activation and readiness confirmation
 
 **Android-Specific Features:**
+
 - **Battery Optimization**: Power-aware communication patterns
 - **Resource Management**: Memory and CPU usage optimization
 - **Screen Management**: Display control and power savings
@@ -368,12 +413,14 @@ The integration with Android devices implements a specialized protocol designed 
 The system provides comprehensive USB device integration for specialized sensors and hardware:
 
 **Shimmer3 GSR+ Integration:**
+
 - **Device Detection**: Automatic USB device enumeration
 - **Driver Management**: Cross-platform driver handling
 - **Communication Protocol**: Serial communication with device-specific commands
 - **Data Streaming**: High-frequency data acquisition and buffering
 
 **USB Protocol Implementation:**
+
 ```python
 class USBDeviceManager:
     def __init__(self):
@@ -402,12 +449,14 @@ class USBDeviceManager:
 The system implements a specialized NTP server optimized for research applications:
 
 **NTP Server Features:**
+
 - **Stratum 1 Accuracy**: GPS or atomic clock reference capability
 - **Microsecond Precision**: Sub-millisecond timing accuracy
 - **Network Compensation**: Round-trip time measurement and adjustment
 - **Multiple Client Support**: Simultaneous synchronization of multiple devices
 
 **Clock Synchronization Algorithm:**
+
 1. **Initial Synchronization**: System-wide clock alignment at startup
 2. **Offset Calculation**: Network delay measurement and compensation
 3. **Drift Correction**: Continuous clock drift monitoring and adjustment
@@ -416,12 +465,14 @@ The system implements a specialized NTP server optimized for research applicatio
 #### 3.4.2. Cross-Platform Timing Coordination
 
 **Platform-Specific Timing:**
+
 - **Windows**: High-resolution performance counter integration
 - **Linux**: CLOCK_MONOTONIC and CLOCK_REALTIME utilization
 - **Android**: SystemClock.elapsedRealtimeNanos() coordination
 - **Hardware**: Direct hardware timestamp integration where available
 
 **Timing Validation and Quality Control:**
+
 - **Synchronization Verification**: Regular timing accuracy assessment
 - **Drift Detection**: Clock drift monitoring and correction
 - **Quality Metrics**: Timing precision measurement and reporting
@@ -432,12 +483,14 @@ The system implements a specialized NTP server optimized for research applicatio
 #### 3.5.1. Comprehensive Error Management
 
 **Error Classification System:**
+
 - **Communication Errors**: Network failures, timeouts, protocol violations
 - **Device Errors**: Hardware failures, driver issues, capability mismatches
 - **Data Errors**: Corruption, validation failures, format mismatches
 - **System Errors**: Resource exhaustion, configuration issues, software bugs
 
 **Error Recovery Strategies:**
+
 - **Automatic Recovery**: Self-healing mechanisms for common issues
 - **Graceful Degradation**: Continued operation with reduced functionality
 - **User Notification**: Clear error reporting with resolution guidance
@@ -446,18 +499,21 @@ The system implements a specialized NTP server optimized for research applicatio
 #### 3.5.2. Fault Tolerance and Resilience
 
 **Fault Tolerance Design:**
+
 - **Redundancy**: Multiple communication paths and backup systems
 - **Circuit Breakers**: Automatic failure detection and isolation
 - **Retry Mechanisms**: Intelligent retry strategies with exponential backoff
 - **State Recovery**: System state preservation and restoration
 
 **Resilience Features:**
+
 - **Network Resilience**: Operation continuation during network interruptions
 - **Device Resilience**: Adaptation to device failures or disconnections
 - **Data Resilience**: Data integrity preservation during system failures
 - **Session Resilience**: Recording session continuation despite component failures
 
 **Recovery Procedures:**
+
 ```python
 class RecoveryManager:
     def __init__(self):
@@ -481,20 +537,28 @@ class RecoveryManager:
 
 #### 2.1.1. Architectural Philosophy and Theoretical Foundation
 
-The Python Desktop Controller implements a sophisticated hybrid architecture that combines the simplicity of centralized coordination with the resilience characteristics of distributed systems. This architectural approach addresses the fundamental challenge of coordinating consumer-grade mobile devices for scientific applications while maintaining precision and reliability standards required for rigorous research use.
+The Python Desktop Controller implements a sophisticated hybrid architecture that combines the simplicity of centralized
+coordination with the resilience characteristics of distributed systems. This architectural approach addresses the
+fundamental challenge of coordinating consumer-grade mobile devices for scientific applications while maintaining
+precision and reliability standards required for rigorous research use.
 
 **Core Design Principles:**
+
 - **Master-Coordinator Pattern**: Central control with distributed processing capabilities
 - **Fault-Tolerant Design**: Graceful degradation and automatic recovery mechanisms
 - **Scalable Architecture**: Dynamic expansion from 2 to 8 device configurations
 - **Platform Agnostic**: Support for heterogeneous device ecosystems
 
 **Theoretical Foundation:**
-The architecture builds upon established distributed systems principles while extending them to accommodate specific challenges of mobile device coordination over wireless networks with variable quality characteristics. The implementation demonstrates practical solutions for heterogeneous device coordination in research contexts where temporal precision requirements exceed typical distributed application demands.
+The architecture builds upon established distributed systems principles while extending them to accommodate specific
+challenges of mobile device coordination over wireless networks with variable quality characteristics. The
+implementation demonstrates practical solutions for heterogeneous device coordination in research contexts where
+temporal precision requirements exceed typical distributed application demands.
 
 #### 2.1.2. System Topology and Component Organization
 
 **Hybrid Star-Mesh Architecture:**
+
 ```
                     [Python Desktop Controller]
                             (Master Hub)
@@ -507,6 +571,7 @@ The architecture builds upon established distributed systems principles while ex
 ```
 
 **Component Hierarchy:**
+
 - **Application Layer**: Main GUI, session management, user interface
 - **Coordination Layer**: Device discovery, synchronization, protocol management
 - **Communication Layer**: Network protocols, message routing, error handling
@@ -517,9 +582,11 @@ The architecture builds upon established distributed systems principles while ex
 
 #### 2.2.1. Enhanced Application Container and Dependency Injection
 
-The application utilizes a sophisticated container-based architecture that provides comprehensive dependency injection, configuration management, and component lifecycle control:
+The application utilizes a sophisticated container-based architecture that provides comprehensive dependency injection,
+configuration management, and component lifecycle control:
 
 **Core Application Components:**
+
 ```python
 class Application:
     def __init__(self):
@@ -531,12 +598,14 @@ class Application:
 ```
 
 **Service Registration and Management:**
+
 - **Singleton Services**: Core system components with single instances
 - **Factory Services**: Dynamic component creation based on configuration
 - **Scoped Services**: Context-specific component instances
 - **Transient Services**: Short-lived, stateless components
 
 **Configuration Management System:**
+
 - **Environment-Specific Configurations**: Development, testing, production settings
 - **Device-Specific Parameters**: Per-device configuration profiles
 - **Dynamic Configuration Updates**: Runtime parameter adjustment capabilities
@@ -545,12 +614,14 @@ class Application:
 #### 2.2.2. Component Communication and Event System
 
 **Event-Driven Architecture:**
+
 - **Message Bus System**: Centralized event routing and handling
 - **Event Types**: System events, device events, user events, error events
 - **Event Handlers**: Specialized processors for different event categories
 - **Event Persistence**: Critical event logging and audit trail generation
 
 **Inter-Component Communication:**
+
 - **Synchronous Communication**: Direct method calls for immediate responses
 - **Asynchronous Communication**: Message queues for non-blocking operations
 - **Event Broadcasting**: System-wide event distribution mechanisms
@@ -560,9 +631,11 @@ class Application:
 
 #### 2.3.1. PyQt5-Based User Interface Architecture
 
-The user interface implements a modern, research-focused design using PyQt5 with custom enhancements for scientific applications:
+The user interface implements a modern, research-focused design using PyQt5 with custom enhancements for scientific
+applications:
 
 **Main Interface Components:**
+
 - **Control Panel**: Primary system control and monitoring interface
 - **Device Status Display**: Real-time device status and health monitoring
 - **Recording Controls**: Session management and recording coordination
@@ -570,6 +643,7 @@ The user interface implements a modern, research-focused design using PyQt5 with
 - **Configuration Interface**: System and device parameter management
 
 **Enhanced UI Features:**
+
 - **Real-Time Visualizations**: Live data streams and quality metrics
 - **Responsive Design**: Adaptive layout for different screen resolutions
 - **Accessibility Features**: Keyboard shortcuts, high contrast modes
@@ -578,12 +652,14 @@ The user interface implements a modern, research-focused design using PyQt5 with
 #### 2.3.2. User Experience Design and Workflow Integration
 
 **Research-Focused Interface Design:**
+
 - **Simplified Workflow**: Streamlined operations for research efficiency
 - **Quick Setup Modes**: Predefined configurations for common scenarios
 - **Expert Mode**: Advanced parameter control for specialized research
 - **Session Templates**: Reusable configuration sets for experiment types
 
 **Usability Enhancements:**
+
 - **Context-Sensitive Help**: Integrated documentation and guidance
 - **Status Indicators**: Clear visual feedback for system and device states
 - **Error Reporting**: User-friendly error messages with resolution guidance
@@ -593,15 +669,18 @@ The user interface implements a modern, research-focused design using PyQt5 with
 
 #### 2.4.1. Comprehensive Network Architecture
 
-The network layer implements a robust, fault-tolerant communication system designed for research environments with varying network conditions:
+The network layer implements a robust, fault-tolerant communication system designed for research environments with
+varying network conditions:
 
 **Network Protocol Stack:**
+
 - **Application Layer**: JSON message protocol with compression
 - **Transport Layer**: TCP with automatic reconnection and UDP for time-critical data
 - **Network Layer**: IPv4/IPv6 dual-stack support with automatic configuration
 - **Physical Layer**: WiFi, Ethernet, and USB communication support
 
 **Device Discovery and Management:**
+
 - **Automatic Discovery**: mDNS/Bonjour-based device discovery
 - **Manual Configuration**: Static IP configuration for controlled environments
 - **Device Authentication**: Certificate-based security for trusted connections
@@ -610,12 +689,14 @@ The network layer implements a robust, fault-tolerant communication system desig
 #### 2.4.2. Synchronization and Timing Systems
 
 **Master Clock Implementation:**
+
 - **High-Precision NTP Server**: Microsecond-level time synchronization
 - **Network Latency Compensation**: Round-trip time measurement and adjustment
 - **Clock Drift Correction**: Continuous calibration for extended sessions
 - **Time Zone Handling**: UTC-based timestamps with local time conversion
 
 **Synchronization Algorithms:**
+
 - **Initial Synchronization**: Comprehensive clock alignment at session start
 - **Continuous Synchronization**: Ongoing drift correction during operation
 - **Event Synchronization**: Coordinated timing for stimuli and measurements
@@ -626,12 +707,14 @@ The network layer implements a robust, fault-tolerant communication system desig
 #### 2.5.1. Data Acquisition and Processing
 
 **Real-Time Data Pipeline:**
+
 - **Data Ingestion**: Multi-source data collection with timestamping
 - **Format Normalization**: Standardized data formats across all devices
 - **Quality Assessment**: Real-time data quality analysis and flagging
 - **Stream Processing**: Live data analysis and feature extraction
 
 **Data Validation and Integrity:**
+
 - **Schema Validation**: Structured data format verification
 - **Checksum Verification**: Data integrity checking at multiple levels
 - **Duplicate Detection**: Redundant data identification and handling
@@ -640,12 +723,14 @@ The network layer implements a robust, fault-tolerant communication system desig
 #### 2.5.2. Storage and Export Systems
 
 **Multi-Format Storage:**
+
 - **Primary Storage**: JSON format for structured data preservation
 - **Binary Storage**: Efficient storage for high-frequency sensor data
 - **Compressed Archives**: Space-efficient long-term storage
 - **Database Integration**: SQL database support for large datasets
 
 **Export and Analysis Integration:**
+
 - **CSV Export**: Standard format for statistical analysis software
 - **MATLAB Integration**: Direct export to MATLAB data structures
 - **Python Analysis**: NumPy/Pandas compatible data formats
@@ -653,45 +738,65 @@ The network layer implements a robust, fault-tolerant communication system desig
 
 ### System Scope and Capabilities
 
-The Python Desktop Controller provides comprehensive capabilities that support the complete research workflow trajectory from initial experimental setup through final data analysis and interpretation, establishing a unified platform that integrates multiple technological components into a cohesive research instrumentation system. The system architecture encompasses both hardware coordination capabilities and software service integration, creating a research environment that meets rigorous academic standards while maintaining practical usability for diverse research applications.
+The Python Desktop Controller provides comprehensive capabilities that support the complete research workflow trajectory
+from initial experimental setup through final data analysis and interpretation, establishing a unified platform that
+integrates multiple technological components into a cohesive research instrumentation system. The system architecture
+encompasses both hardware coordination capabilities and software service integration, creating a research environment
+that meets rigorous academic standards while maintaining practical usability for diverse research applications.
 
 **Core System Capabilities:**
 
-The core system capabilities encompass sophisticated multi-device coordination supporting simultaneous operation of up to eight Android devices in combination with multiple USB webcams and Shimmer physiological sensors, creating unprecedented flexibility for multi-modal physiological measurement research. The system provides four distinct user interface options: a simplified modern interface (default), an enhanced PsychoPy-inspired interface, a traditional full-featured interface, and a comprehensive web-based interface for remote operation.
+The core system capabilities encompass sophisticated multi-device coordination supporting simultaneous operation of up
+to eight Android devices in combination with multiple USB webcams and Shimmer physiological sensors, creating
+unprecedented flexibility for multi-modal physiological measurement research. The system provides four distinct user
+interface options: a simplified modern interface (default), an enhanced PsychoPy-inspired interface, a traditional
+full-featured interface, and a comprehensive web-based interface for remote operation.
 
-Real-time monitoring capabilities provide comprehensive status assessment with adaptive quality management that continuously optimizes measurement parameters based on environmental conditions and device performance characteristics. Session management functionality provides complete recording session lifecycle support with automatic metadata generation, ensuring research reproducibility and data provenance tracking essential for academic publication standards.
+Real-time monitoring capabilities provide comprehensive status assessment with adaptive quality management that
+continuously optimizes measurement parameters based on environmental conditions and device performance characteristics.
+Session management functionality provides complete recording session lifecycle support with automatic metadata
+generation, ensuring research reproducibility and data provenance tracking essential for academic publication standards.
 
-The data processing pipeline implements real-time processing capabilities with integrated quality assessment and validation procedures that meet research-grade requirements for data integrity and measurement validity. Advanced calibration services utilizing OpenCV computer vision libraries provide precise camera calibration with quantitative quality metrics, enabling accurate spatial measurement and multi-camera synchronization essential for complex experimental designs.
+The data processing pipeline implements real-time processing capabilities with integrated quality assessment and
+validation procedures that meet research-grade requirements for data integrity and measurement validity. Advanced
+calibration services utilizing OpenCV computer vision libraries provide precise camera calibration with quantitative
+quality metrics, enabling accurate spatial measurement and multi-camera synchronization essential for complex
+experimental designs.
 
 **Enhanced Hardware Platform Support:**
 
 The system has been extensively tested and validated with a comprehensive range of consumer-grade devices:
 
 **Android Device Compatibility:**
+
 - Samsung Galaxy S22+ smartphones with 4K recording capability and full sensor suite
 - Google Pixel series (Pixel 6, 7, 8) with advanced computational photography features
 - OnePlus devices (OnePlus 9, 10, 11) providing consistent performance characteristics
 - Generic Android devices meeting minimum requirements (Android 8.0+, 4GB RAM, sufficient storage)
 
 **USB Webcam Support:**
+
 - Logitech BRIO 4K Pro webcams for professional-grade desktop recording
 - Microsoft LifeCam HD-3000 and LifeCam Studio for reliable HD recording
 - Generic UVC-compatible devices meeting minimum performance requirements
 - Support for multiple simultaneous webcam operation (tested up to 4 devices)
 
 **Physiological Sensor Integration:**
+
 - Shimmer3 GSR+ devices with comprehensive sensor suite (GSR, accelerometer, temperature)
 - Direct PC connection via Bluetooth with real-time data streaming
 - Android-mediated connection for enhanced compatibility and redundancy
 - Support for multiple simultaneous Shimmer devices with synchronized data collection
 
 **Thermal Camera Support:**
+
 - TopDon TC001 thermal imaging cameras via Android device integration
 - Real-time thermal data streaming with temperature calibration
 - Thermal-RGB alignment and overlay capabilities
 - Environmental temperature compensation algorithms
 
 **Computing Platform Compatibility:**
+
 - Windows 10/11 systems with comprehensive hardware access and driver support
 - Ubuntu 20.04+ Linux distributions with V4L2 webcam support
 - macOS 12+ systems with limited hardware access (webcam support varies)
@@ -713,30 +818,35 @@ The web-based interface represents a significant advancement in remote research 
 The system supports diverse research applications across multiple academic disciplines:
 
 **Physiological Psychology Applications:**
+
 - Stress response measurement in naturalistic settings without contact artifacts
 - Emotion regulation studies with multi-modal physiological indicators
 - Cognitive load assessment using GSR, thermal, and motion data
 - Social interaction studies with multi-participant synchronized recording
 
 **Human-Computer Interaction Research:**
+
 - Usability testing with objective physiological feedback
 - User experience assessment through stress and engagement metrics
 - Accessibility research with contactless monitoring capabilities
 - Virtual and augmented reality studies with unobtrusive measurement
 
 **Clinical Research Applications:**
+
 - Patient monitoring in scenarios where contact-based sensors are contraindicated
 - Rehabilitation progress tracking with motion and physiological data
 - Mental health assessment with objective stress and arousal indicators
 - Telehealth applications with remote physiological monitoring
 
 **Educational Research:**
+
 - Classroom attention and engagement measurement
 - Learning effectiveness assessment with physiological indicators
 - Teacher-student interaction studies with multi-participant recording
 - Educational technology evaluation with objective metrics
 
 **Social Psychology Research:**
+
 - Group dynamics investigation with synchronized multi-device recording
 - Interpersonal synchrony measurement through physiological coupling
 - Social stress and anxiety research in naturalistic settings
@@ -745,24 +855,28 @@ The system supports diverse research applications across multiple academic disci
 **Advanced Features and Capabilities:**
 
 **Quality Assurance and Validation:**
+
 - Real-time signal quality assessment with automatic parameter adjustment
 - Comprehensive data integrity validation with cryptographic verification
 - Cross-device synchronization accuracy monitoring (±3.2ms achieved precision)
 - Automated quality reporting with research-grade metrics
 
 **Data Export and Integration:**
+
 - Multiple export formats: CSV, JSON, MATLAB .mat, Python pickle
 - Standardized metadata formats for research data management
 - Integration with popular analysis platforms (R, MATLAB, Python pandas)
 - FAIR data principles compliance with comprehensive documentation
 
 **Scalability and Performance:**
+
 - Tested with up to 8 Android devices + 4 USB webcams simultaneously
 - Efficient resource utilization with adaptive quality management
 - Network bandwidth optimization with configurable compression
 - Automatic load balancing across available system resources
 
 **Research Reproducibility Features:**
+
 - Complete session metadata generation with equipment specifications
 - Version control integration for protocol and configuration management
 - Automated documentation generation for methods sections
@@ -772,24 +886,52 @@ The system supports diverse research applications across multiple academic disci
 
 ## System Architecture and Design Philosophy
 
-The Python Desktop Controller employs a sophisticated architectural approach that balances theoretical computer science principles with practical implementation constraints imposed by research environment requirements, mobile platform limitations, and scientific measurement standards.
-
+The Python Desktop Controller employs a sophisticated architectural approach that balances theoretical computer science
+principles with practical implementation constraints imposed by research environment requirements, mobile platform
+limitations, and scientific measurement standards.
 
 ### Architectural Philosophy and Theoretical Foundation
 
-The architectural design philosophy fundamentally centers on creating a robust, scalable platform that maintains research-grade reliability while gracefully accommodating the inherent variability and limitations characteristic of consumer-grade hardware platforms. The design process employed systematic analysis that synthesized distributed systems principles with research software requirements and practical deployment constraints, ultimately developing an architecture that successfully bridges the often-conflicting demands of academic research needs and real-world implementation realities.
+The architectural design philosophy fundamentally centers on creating a robust, scalable platform that maintains
+research-grade reliability while gracefully accommodating the inherent variability and limitations characteristic of
+consumer-grade hardware platforms. The design process employed systematic analysis that synthesized distributed systems
+principles with research software requirements and practical deployment constraints, ultimately developing an
+architecture that successfully bridges the often-conflicting demands of academic research needs and real-world
+implementation realities.
 
-The architectural approach draws heavily from established software engineering principles while adapting these theoretical foundations to address the unique challenges inherent in research instrumentation development. The separation of concerns principle manifests through clear architectural delineation between presentation, business logic, and infrastructure layers, enabling independent development and testing of system components while maintaining overall system coherence. Dependency injection patterns systematically manage component dependencies to enhance testability and maintainability, critical factors for research software that must demonstrate reliability and reproducibility over extended periods.
+The architectural approach draws heavily from established software engineering principles while adapting these
+theoretical foundations to address the unique challenges inherent in research instrumentation development. The
+separation of concerns principle manifests through clear architectural delineation between presentation, business logic,
+and infrastructure layers, enabling independent development and testing of system components while maintaining overall
+system coherence. Dependency injection patterns systematically manage component dependencies to enhance testability and
+maintainability, critical factors for research software that must demonstrate reliability and reproducibility over
+extended periods.
 
-Observer pattern implementation throughout the system architecture enables loose coupling between components through signal-based communication mechanisms, reducing system complexity while improving fault tolerance and extensibility. Command pattern usage provides sophisticated encapsulation of device operations that enables undo/redo capabilities and operation queuing essential for complex experimental protocols. Graceful degradation capabilities ensure system resilience with continued operation despite individual component failures, a critical requirement for research applications where experimental session interruption can result in significant data loss and research delays.
+Observer pattern implementation throughout the system architecture enables loose coupling between components through
+signal-based communication mechanisms, reducing system complexity while improving fault tolerance and extensibility.
+Command pattern usage provides sophisticated encapsulation of device operations that enables undo/redo capabilities and
+operation queuing essential for complex experimental protocols. Graceful degradation capabilities ensure system
+resilience with continued operation despite individual component failures, a critical requirement for research
+applications where experimental session interruption can result in significant data loss and research delays.
 
-The theoretical foundation integration represents a synthesis of established distributed systems theory with novel adaptations specifically developed for research instrumentation applications. The master-coordinator pattern elegantly combines the operational simplicity of centralized control with the fault tolerance advantages characteristic of distributed processing architectures, creating a hybrid approach that directly addresses the unique requirements of scientific measurement applications where both reliability and precision represent paramount concerns.
+The theoretical foundation integration represents a synthesis of established distributed systems theory with novel
+adaptations specifically developed for research instrumentation applications. The master-coordinator pattern elegantly
+combines the operational simplicity of centralized control with the fault tolerance advantages characteristic of
+distributed processing architectures, creating a hybrid approach that directly addresses the unique requirements of
+scientific measurement applications where both reliability and precision represent paramount concerns.
 
-The synchronization framework builds upon well-established Network Time Protocol (NTP) theoretical concepts while extending these approaches to accommodate the specific challenges of mobile device coordination over wireless networks with variable quality characteristics. Clock synchronization algorithms implement sophisticated compensation mechanisms for network latency variations and device-specific timing inconsistencies that would otherwise compromise the temporal precision essential for multi-modal physiological measurement research. These adaptations contribute to distributed systems literature by demonstrating practical approaches for achieving research-grade synchronization in consumer hardware environments.
+The synchronization framework builds upon well-established Network Time Protocol (NTP) theoretical concepts while
+extending these approaches to accommodate the specific challenges of mobile device coordination over wireless networks
+with variable quality characteristics. Clock synchronization algorithms implement sophisticated compensation mechanisms
+for network latency variations and device-specific timing inconsistencies that would otherwise compromise the temporal
+precision essential for multi-modal physiological measurement research. These adaptations contribute to distributed
+systems literature by demonstrating practical approaches for achieving research-grade synchronization in consumer
+hardware environments.
 
 ### Comprehensive System Topology
 
-The system topology implements a hybrid star-mesh architecture that provides both centralized coordination and distributed resilience, enhanced with web-based remote access and comprehensive physiological sensor integration:
+The system topology implements a hybrid star-mesh architecture that provides both centralized coordination and
+distributed resilience, enhanced with web-based remote access and comprehensive physiological sensor integration:
 
 ```mermaid
 graph TB
@@ -935,25 +1077,34 @@ graph TB
 
 The enhanced hybrid star-mesh topology provides several critical advantages for research applications:
 
-1. **Centralized Coordination**: The Python Desktop Controller serves as the master coordinator, providing unified control and monitoring capabilities essential for research session management
+1. **Centralized Coordination**: The Python Desktop Controller serves as the master coordinator, providing unified
+   control and monitoring capabilities essential for research session management
 
-2. **Distributed Processing**: Individual devices maintain autonomous processing capabilities, reducing network load and improving fault tolerance
+2. **Distributed Processing**: Individual devices maintain autonomous processing capabilities, reducing network load and
+   improving fault tolerance
 
-3. **Multi-Modal Interface Support**: Four distinct interface options (Simplified, Enhanced, Traditional, Web) accommodate different research scenarios and user preferences
+3. **Multi-Modal Interface Support**: Four distinct interface options (Simplified, Enhanced, Traditional, Web)
+   accommodate different research scenarios and user preferences
 
-4. **Scalable Architecture**: The topology supports dynamic scaling from minimal configurations (1 PC + 2 Android devices) to complex setups (1 PC + 8 Android devices + 4 USB cameras + multiple Shimmer sensors)
+4. **Scalable Architecture**: The topology supports dynamic scaling from minimal configurations (1 PC + 2 Android
+   devices) to complex setups (1 PC + 8 Android devices + 4 USB cameras + multiple Shimmer sensors)
 
-5. **Fault Isolation**: Device failures are isolated and do not compromise the overall system operation or data from other devices
+5. **Fault Isolation**: Device failures are isolated and do not compromise the overall system operation or data from
+   other devices
 
-6. **Remote Access Capability**: Web-based interface enables remote monitoring and control for distributed research scenarios
+6. **Remote Access Capability**: Web-based interface enables remote monitoring and control for distributed research
+   scenarios
 
-7. **Physiological Integration**: Direct and Android-mediated Shimmer sensor support provides flexible deployment options for physiological measurement
+7. **Physiological Integration**: Direct and Android-mediated Shimmer sensor support provides flexible deployment
+   options for physiological measurement
 
-8. **Real-Time Processing**: Comprehensive data processing pipeline with quality assessment and validation ensures research-grade data integrity
+8. **Real-Time Processing**: Comprehensive data processing pipeline with quality assessment and validation ensures
+   research-grade data integrity
 
 ### Design Patterns and Engineering Principles
 
-The system implementation employs established software engineering patterns adapted for research instrumentation requirements:
+The system implementation employs established software engineering patterns adapted for research instrumentation
+requirements:
 
 **1. Dependency Injection Pattern**
 
@@ -1058,16 +1209,20 @@ class RecordingCommand:
         return all(device.is_ready_for_command(self.operation_type) for device in devices)
 ```
 
-
 ---
 
 ## Implementation Architecture
 
-The Python Desktop Controller implementation demonstrates sophisticated software architecture principles specifically adapted for research instrumentation requirements. The architecture balances theoretical computer science concepts with practical deployment constraints while maintaining the flexibility and reliability essential for scientific measurement applications.
+The Python Desktop Controller implementation demonstrates sophisticated software architecture principles specifically
+adapted for research instrumentation requirements. The architecture balances theoretical computer science concepts with
+practical deployment constraints while maintaining the flexibility and reliability essential for scientific measurement
+applications.
 
 ### Application Container and Dependency Injection
 
-The central `Application` class serves as the primary dependency injection container, coordinating all backend services and managing the system lifecycle. This design approach enables modular development, comprehensive testing, and flexible deployment configurations.
+The central `Application` class serves as the primary dependency injection container, coordinating all backend services
+and managing the system lifecycle. This design approach enables modular development, comprehensive testing, and flexible
+deployment configurations.
 
 **Application Container Architecture:**
 
@@ -1134,7 +1289,8 @@ class Application(QObject):
 
 **Service Lifecycle Management:**
 
-The application container manages the complete lifecycle of all services, ensuring proper initialization order, graceful shutdown, and resource cleanup:
+The application container manages the complete lifecycle of all services, ensuring proper initialization order, graceful
+shutdown, and resource cleanup:
 
 ```python
 def startup_services(self):
@@ -1184,7 +1340,9 @@ def shutdown_services(self):
 
 ### Enhanced GUI Framework and User Experience
 
-The graphical user interface employs a flexible, multi-modal architecture with three distinct interface options designed for different research scenarios and user preferences. The system supports traditional desktop applications, modern enhanced interfaces, and web-based control panels.
+The graphical user interface employs a flexible, multi-modal architecture with three distinct interface options designed
+for different research scenarios and user preferences. The system supports traditional desktop applications, modern
+enhanced interfaces, and web-based control panels.
 
 **GUI Architecture Overview:**
 
@@ -1336,7 +1494,9 @@ class WebController:
 
 ### Network Layer and Device Coordination
 
-The network layer provides sophisticated communication capabilities for coordinating distributed Android devices and managing real-time data streams. The implementation balances performance requirements with reliability needs while maintaining compatibility across diverse network conditions.
+The network layer provides sophisticated communication capabilities for coordinating distributed Android devices and
+managing real-time data streams. The implementation balances performance requirements with reliability needs while
+maintaining compatibility across diverse network conditions.
 
 **Network Architecture Design:**
 
@@ -1407,7 +1567,8 @@ graph TB
 
 **JsonSocketServer Implementation:**
 
-The core network server provides robust TCP socket communication with comprehensive error handling and automatic recovery:
+The core network server provides robust TCP socket communication with comprehensive error handling and automatic
+recovery:
 
 ```python
 class JsonSocketServer(QThread):
@@ -1418,17 +1579,17 @@ class JsonSocketServer(QThread):
     Handles multiple device connections using multi-threading and emits
     PyQt signals for thread-safe GUI integration.
     """
-    
+
     # Signal definitions for observer pattern communication
-    device_connected = pyqtSignal(str, list)         # device_id, capabilities
-    device_disconnected = pyqtSignal(str)            # device_id
-    status_received = pyqtSignal(str, dict)          # device_id, status_data
-    ack_received = pyqtSignal(str, str, bool, str)   # device_id, cmd, success, message
+    device_connected = pyqtSignal(str, list)  # device_id, capabilities
+    device_disconnected = pyqtSignal(str)  # device_id
+    status_received = pyqtSignal(str, dict)  # device_id, status_data
+    ack_received = pyqtSignal(str, str, bool, str)  # device_id, cmd, success, message
     preview_frame_received = pyqtSignal(str, str, str)  # device_id, frame_type, base64_data
-    sensor_data_received = pyqtSignal(str, dict)     # device_id, sensor_data
+    sensor_data_received = pyqtSignal(str, dict)  # device_id, sensor_data
     notification_received = pyqtSignal(str, str, dict)  # device_id, event_type, event_data
-    error_occurred = pyqtSignal(str, str)            # device_id, error_message
-    
+    error_occurred = pyqtSignal(str, str)  # device_id, error_message
+
     def __init__(self, host="0.0.0.0", port=9000, use_newline_protocol=False, session_manager=None):
         """
         Initialize the JSON Socket Server.
@@ -1444,18 +1605,18 @@ class JsonSocketServer(QThread):
         self.port = port
         self.use_newline_protocol = use_newline_protocol
         self.session_manager = session_manager
-        
+
         # Server state management
         self.server_socket = None
         self.running = False
         self.connected_devices = {}  # device_id -> RemoteDevice
-        self.device_handlers = {}    # device_id -> ClientHandler thread
-        
+        self.device_handlers = {}  # device_id -> ClientHandler thread
+
         # Network configuration
         self.max_connections = 8
         self.connection_timeout = 30
         self.message_buffer_size = 4096
-        
+
     def start_server(self):
         """Initialize and start the TCP socket server."""
         try:
@@ -1463,19 +1624,19 @@ class JsonSocketServer(QThread):
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.server_socket.bind((self.host, self.port))
             self.server_socket.listen(self.max_connections)
-            
+
             self.running = True
             logger.info(f"JsonSocketServer started on {self.host}:{self.port}")
-            
+
             # Start main server loop in separate thread
             self.start()
             return True
-            
+
         except socket.error as e:
             logger.error(f"Failed to start server: {e}")
             self.error_occurred.emit("server", f"START_FAILED: {str(e)}")
             return False
-    
+
     def run(self):
         """Main server loop handling incoming connections."""
         while self.running and self.server_socket:
@@ -1483,28 +1644,28 @@ class JsonSocketServer(QThread):
                 # Accept incoming connections with timeout
                 self.server_socket.settimeout(1.0)
                 client_socket, address = self.server_socket.accept()
-                
+
                 # Check connection limits
                 if len(self.connected_devices) >= self.max_connections:
                     logger.warning(f"Connection limit reached, rejecting {address}")
                     client_socket.close()
                     continue
-                
+
                 # Create device handler thread
                 device_handler = DeviceClientHandler(
                     client_socket, address, self.session_manager, self
                 )
                 device_handler.start()
-                
+
                 logger.info(f"New device connection from {address}")
-                
+
             except socket.timeout:
                 continue  # Timeout is expected for periodic checking
             except socket.error as e:
                 if self.running:
                     logger.error(f"Server socket error: {e}")
                 break
-    
+
     def send_message_to_device(self, device_id: str, message: dict) -> bool:
         """
         Send message to specific device with error handling.
@@ -1519,19 +1680,19 @@ class JsonSocketServer(QThread):
         if device_id not in self.connected_devices:
             logger.error(f"Device {device_id} not connected")
             return False
-        
+
         device_handler = self.device_handlers.get(device_id)
         if not device_handler:
             logger.error(f"No handler found for device {device_id}")
             return False
-        
+
         try:
             return device_handler.send_message(message)
         except Exception as e:
             logger.error(f"Failed to send message to {device_id}: {e}")
             self.error_occurred.emit(device_id, f"SEND_FAILED: {str(e)}")
             return False
-    
+
     def broadcast_message(self, message: dict, exclude_devices: List[str] = None) -> Dict[str, bool]:
         """
         Broadcast message to all connected devices.
@@ -1545,32 +1706,57 @@ class JsonSocketServer(QThread):
         """
         exclude_devices = exclude_devices or []
         results = {}
-        
+
         for device_id in self.connected_devices:
             if device_id not in exclude_devices:
                 results[device_id] = self.send_message_to_device(device_id, message)
-        
+
         return results
 ```
-
 
 ---
 
 ## Communication and Protocol Architecture
 
-The Python Desktop Controller implements a sophisticated communication framework that represents a significant advancement in distributed sensor network coordination, specifically designed to maintain research-grade reliability and temporal precision while operating across heterogeneous device networks with varying capability characteristics. The protocol architecture carefully balances performance requirements with fault tolerance needs, enabling robust operation across diverse network conditions that are typical in research environments where network infrastructure may be suboptimal or subject to interference.
+The Python Desktop Controller implements a sophisticated communication framework that represents a significant
+advancement in distributed sensor network coordination, specifically designed to maintain research-grade reliability and
+temporal precision while operating across heterogeneous device networks with varying capability characteristics. The
+protocol architecture carefully balances performance requirements with fault tolerance needs, enabling robust operation
+across diverse network conditions that are typical in research environments where network infrastructure may be
+suboptimal or subject to interference.
 
 ### Network Communication Protocol
 
-The primary communication mechanism employs JSON messages transmitted over TCP socket connections, providing human-readable structured data exchange with comprehensive error handling and automatic recovery capabilities essential for research applications. This design choice reflects careful consideration of research environment requirements where protocol transparency and debuggability are often more important than maximum performance optimization (Fielding & Taylor, 2002).
+The primary communication mechanism employs JSON messages transmitted over TCP socket connections, providing
+human-readable structured data exchange with comprehensive error handling and automatic recovery capabilities essential
+for research applications. This design choice reflects careful consideration of research environment requirements where
+protocol transparency and debuggability are often more important than maximum performance optimization (Fielding &
+Taylor, 2002).
 
-The protocol specification incorporates multiple parameters that have been optimized for research applications through extensive testing across diverse network conditions. TCP protocol selection ensures reliable connection-oriented communication that guarantees data integrity for scientific measurements, addressing fundamental requirements for research applications where data loss can compromise experimental validity. The default server port configuration uses port 9000 to avoid conflicts with system services while providing configurability for environments with specific network constraints.
+The protocol specification incorporates multiple parameters that have been optimized for research applications through
+extensive testing across diverse network conditions. TCP protocol selection ensures reliable connection-oriented
+communication that guarantees data integrity for scientific measurements, addressing fundamental requirements for
+research applications where data loss can compromise experimental validity. The default server port configuration uses
+port 9000 to avoid conflicts with system services while providing configurability for environments with specific network
+constraints.
 
-JSON message formatting provides human-readable structured data exchange that facilitates debugging and protocol inspection during development and deployment phases, a critical consideration for research software where transparency and verifiability are essential. UTF-8 encoding ensures international character support necessary for global research collaboration, while the 10MB maximum message size limit supports high-resolution image transmission required for computer vision applications.
+JSON message formatting provides human-readable structured data exchange that facilitates debugging and protocol
+inspection during development and deployment phases, a critical consideration for research software where transparency
+and verifiability are essential. UTF-8 encoding ensures international character support necessary for global research
+collaboration, while the 10MB maximum message size limit supports high-resolution image transmission required for
+computer vision applications.
 
-Connection timeout parameters balance reliability with responsiveness through a 30-second initial connection establishment period that accommodates variable network conditions while maintaining acceptable user experience. Keep-alive interval configuration employs 60-second heartbeat message frequency for continuous network connectivity monitoring, enabling rapid detection of network disruptions that could compromise data collection integrity.
+Connection timeout parameters balance reliability with responsiveness through a 30-second initial connection
+establishment period that accommodates variable network conditions while maintaining acceptable user experience.
+Keep-alive interval configuration employs 60-second heartbeat message frequency for continuous network connectivity
+monitoring, enabling rapid detection of network disruptions that could compromise data collection integrity.
 
-The message structure framework establishes consistent JSON architecture designed for extensibility and validation across all communication types. This systematic approach ensures protocol consistency while supporting future enhancements and maintaining backward compatibility essential for long-term research software sustainability. The framework incorporates timestamp standardization using ISO8601 format for precise temporal coordination, unique device identification for multi-device coordination, session identification for experimental organization, and sequence numbering for message ordering and duplicate detection.
+The message structure framework establishes consistent JSON architecture designed for extensibility and validation
+across all communication types. This systematic approach ensures protocol consistency while supporting future
+enhancements and maintaining backward compatibility essential for long-term research software sustainability. The
+framework incorporates timestamp standardization using ISO8601 format for precise temporal coordination, unique device
+identification for multi-device coordination, session identification for experimental organization, and sequence
+numbering for message ordering and duplicate detection.
 
 ```json
 {
@@ -1590,21 +1776,22 @@ The message structure framework establishes consistent JSON architecture designe
 
 **Common Field Specifications:**
 
-| Field Name | Data Type | Required | Validation Rules | Description |
-|------------|-----------|----------|------------------|-------------|
-| `message_type` | String | Yes | Enum from defined types | Message classification for routing |
-| `timestamp` | String | Yes | ISO8601 format with microseconds | Precise temporal information |
-| `device_id` | String | Yes | UUID or MAC-based identifier | Unique device identification |
-| `session_id` | String | Conditional | Session UUID format | Required for session-related messages |
-| `sequence` | Integer | No | Monotonically increasing | Message ordering and duplicate detection |
-| `payload` | Object | Yes | Message-type specific schema | Primary message content |
-| `checksum` | String | No | MD5 or SHA-256 hash | Data integrity verification |
-| `protocol_version` | String | Yes | Semantic versioning | Protocol compatibility checking |
-| `priority` | String | No | Enum: normal, high, critical | Quality of Service prioritization |
+| Field Name         | Data Type | Required    | Validation Rules                 | Description                              |
+|--------------------|-----------|-------------|----------------------------------|------------------------------------------|
+| `message_type`     | String    | Yes         | Enum from defined types          | Message classification for routing       |
+| `timestamp`        | String    | Yes         | ISO8601 format with microseconds | Precise temporal information             |
+| `device_id`        | String    | Yes         | UUID or MAC-based identifier     | Unique device identification             |
+| `session_id`       | String    | Conditional | Session UUID format              | Required for session-related messages    |
+| `sequence`         | Integer   | No          | Monotonically increasing         | Message ordering and duplicate detection |
+| `payload`          | Object    | Yes         | Message-type specific schema     | Primary message content                  |
+| `checksum`         | String    | No          | MD5 or SHA-256 hash              | Data integrity verification              |
+| `protocol_version` | String    | Yes         | Semantic versioning              | Protocol compatibility checking          |
+| `priority`         | String    | No          | Enum: normal, high, critical     | Quality of Service prioritization        |
 
 ### Message Types and Data Contracts
 
-The protocol defines comprehensive message types covering device management, session coordination, real-time monitoring, and error handling scenarios.
+The protocol defines comprehensive message types covering device management, session coordination, real-time monitoring,
+and error handling scenarios.
 
 **Device Registration and Capability Negotiation:**
 
@@ -1798,11 +1985,14 @@ The protocol defines comprehensive message types covering device management, ses
 
 ### USB Device Integration Protocol
 
-The system provides comprehensive USB device management for webcams and other peripherals through native system APIs with cross-platform compatibility.
+The system provides comprehensive USB device management for webcams and other peripherals through native system APIs
+with cross-platform compatibility.
 
 ### Shimmer Sensor Integration Protocol
 
-The Python Desktop Controller includes comprehensive support for Shimmer wireless physiological sensors, representing a significant enhancement to the multi-modal sensing capabilities. The Shimmer integration provides both direct PC connections and Android-mediated connections for maximum flexibility.
+The Python Desktop Controller includes comprehensive support for Shimmer wireless physiological sensors, representing a
+significant enhancement to the multi-modal sensing capabilities. The Shimmer integration provides both direct PC
+connections and Android-mediated connections for maximum flexibility.
 
 **Shimmer Integration Architecture:**
 
@@ -2144,7 +2334,8 @@ def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
 
 ### Error Handling and Recovery Mechanisms
 
-The system implements comprehensive error handling with automatic recovery strategies and graceful degradation capabilities.
+The system implements comprehensive error handling with automatic recovery strategies and graceful degradation
+capabilities.
 
 **Error Classification and Response Framework:**
 
@@ -2206,7 +2397,8 @@ graph TB
 | Code | Description | Severity | Automatic Recovery | User Action Required |
 |------|-------------|----------|-------------------|---------------------|
 | NET_001 | Connection timeout during handshake | Medium | Retry with exponential backoff | Check network connectivity |
-| NET_002 | Connection lost during active session | High | Attempt reconnection, pause recording | Verify network stability |
+| NET_002 | Connection lost during active session | High | Attempt reconnection, pause recording | Verify network
+stability |
 | NET_003 | Invalid message format received | Low | Log and ignore message | Update device software |
 | NET_004 | Message checksum validation failure | Medium | Request retransmission | Check network quality |
 | NET_005 | Port already in use | Critical | Try alternative ports | Stop conflicting services |
@@ -2236,11 +2428,13 @@ graph TB
 
 ## Data Processing and Management Framework
 
-The Python Desktop Controller implements a comprehensive data processing and management system designed to handle multi-modal sensor data with research-grade quality assurance and organizational capabilities.
+The Python Desktop Controller implements a comprehensive data processing and management system designed to handle
+multi-modal sensor data with research-grade quality assurance and organizational capabilities.
 
 ### File System Data Formats
 
-The system employs structured data organization with standardized formats ensuring long-term accessibility and compatibility with analysis tools.
+The system employs structured data organization with standardized formats ensuring long-term accessibility and
+compatibility with analysis tools.
 
 **Session Directory Structure:**
 
@@ -2420,16 +2614,18 @@ recordings/
 }
 ```
 
-
 ---
 
 ## Web-Based Interface and Remote Control
 
-The Python Desktop Controller includes a comprehensive web-based interface that enables remote operation, monitoring, and control of the multi-sensor recording system through standard web browsers. This capability significantly extends the system's operational flexibility for distributed research scenarios and remote collaboration.
+The Python Desktop Controller includes a comprehensive web-based interface that enables remote operation, monitoring,
+and control of the multi-sensor recording system through standard web browsers. This capability significantly extends
+the system's operational flexibility for distributed research scenarios and remote collaboration.
 
 ### Web UI Architecture
 
-The web interface employs a modern Flask-based architecture with real-time WebSocket communication for live data streaming and responsive control:
+The web interface employs a modern Flask-based architecture with real-time WebSocket communication for live data
+streaming and responsive control:
 
 ```mermaid
 graph TB
@@ -2499,38 +2695,38 @@ class WebController:
     Comprehensive web interface controller providing browser-based access
     to the multi-sensor recording system with real-time monitoring and control.
     """
-    
+
     def __init__(self, app_instance):
         """Initialize web controller with desktop application integration."""
         self.app = app_instance
         self.flask_app = Flask(__name__)
         self.socketio = SocketIO(self.flask_app, cors_allowed_origins="*")
-        
+
         # Web server configuration
         self.host = "0.0.0.0"
         self.port = 5000
         self.debug_mode = False
-        
+
         # Integration references
         self.session_manager = app_instance.session_manager
         self.json_server = app_instance.json_server
         self.webcam_capture = app_instance.webcam_capture
-        
+
         # Setup web interface
         self.setup_web_routes()
         self.setup_websocket_handlers()
         self.setup_real_time_updates()
-        
+
     def setup_web_routes(self):
         """Configure HTTP routes for web interface."""
-        
+
         @self.flask_app.route('/')
         def dashboard():
             """Main dashboard interface."""
-            return render_template('dashboard.html', 
-                                 system_status=self.get_system_status(),
-                                 connected_devices=self.get_connected_devices())
-        
+            return render_template('dashboard.html',
+                                   system_status=self.get_system_status(),
+                                   connected_devices=self.get_connected_devices())
+
         @self.flask_app.route('/api/devices')
         def api_devices():
             """REST API endpoint for device information."""
@@ -2541,7 +2737,7 @@ class WebController:
                     for device_id, device in self.json_server.connected_devices.items()
                 }
             return jsonify(devices)
-        
+
         @self.flask_app.route('/api/recording/start', methods=['POST'])
         def api_start_recording():
             """REST API endpoint to start recording session."""
@@ -2551,7 +2747,7 @@ class WebController:
                     session_data.get('session_name', 'web_session'),
                     session_data.get('researcher_id', 'web_user')
                 )
-                
+
                 # Start recording on all connected devices
                 if self.json_server:
                     start_command = {
@@ -2560,16 +2756,16 @@ class WebController:
                         'timestamp': datetime.now().isoformat()
                     }
                     results = self.json_server.broadcast_message(start_command)
-                    
+
                 return jsonify({
                     'success': True,
                     'session_id': session_id,
                     'device_results': results
                 })
-                
+
             except Exception as e:
                 return jsonify({'success': False, 'error': str(e)}), 500
-        
+
         @self.flask_app.route('/api/recording/stop', methods=['POST'])
         def api_stop_recording():
             """REST API endpoint to stop recording session."""
@@ -2580,36 +2776,36 @@ class WebController:
                         'timestamp': datetime.now().isoformat()
                     }
                     results = self.json_server.broadcast_message(stop_command)
-                    
+
                 return jsonify({
                     'success': True,
                     'device_results': results
                 })
-                
+
             except Exception as e:
                 return jsonify({'success': False, 'error': str(e)}), 500
-    
+
     def setup_websocket_handlers(self):
         """Configure WebSocket handlers for real-time communication."""
-        
+
         @self.socketio.on('connect')
         def handle_connect():
             """Handle new WebSocket connection."""
             logger.info(f"Web client connected: {request.sid}")
             emit('connection_status', {'status': 'connected'})
-            
+
             # Send initial system state
             emit('system_update', {
                 'connected_devices': self.get_connected_devices(),
                 'recording_status': self.get_recording_status(),
                 'system_health': self.get_system_health()
             })
-        
+
         @self.socketio.on('disconnect')
         def handle_disconnect():
             """Handle WebSocket disconnection."""
             logger.info(f"Web client disconnected: {request.sid}")
-        
+
         @self.socketio.on('device_command')
         def handle_device_command(data):
             """Handle device command from web interface."""
@@ -2617,7 +2813,7 @@ class WebController:
                 device_id = data.get('device_id')
                 command = data.get('command')
                 parameters = data.get('parameters', {})
-                
+
                 if self.json_server and device_id:
                     message = {
                         'command': command,
@@ -2625,13 +2821,13 @@ class WebController:
                         'timestamp': datetime.now().isoformat()
                     }
                     success = self.json_server.send_message_to_device(device_id, message)
-                    
+
                     emit('command_result', {
                         'device_id': device_id,
                         'command': command,
                         'success': success
                     })
-                    
+
             except Exception as e:
                 emit('error', {'message': str(e)})
 ```
@@ -2648,7 +2844,7 @@ class WebDashboard:
     Real-time web dashboard providing comprehensive system monitoring
     and control capabilities through web browsers.
     """
-    
+
     def get_dashboard_data(self):
         """Compile comprehensive dashboard data for web interface."""
         return {
@@ -2728,11 +2924,14 @@ class WebSecurityManager:
 
 ## Operational Procedures and User Guide
 
-The Python Desktop Controller provides a comprehensive operational framework designed for research workflow efficiency and experimental reproducibility. This section provides detailed guidance for system setup, recording session management, and advanced feature utilization.
+The Python Desktop Controller provides a comprehensive operational framework designed for research workflow efficiency
+and experimental reproducibility. This section provides detailed guidance for system setup, recording session
+management, and advanced feature utilization.
 
 ### System Setup and Installation
 
-The installation process supports both automated and manual setup procedures, accommodating diverse research environment requirements and technical expertise levels.
+The installation process supports both automated and manual setup procedures, accommodating diverse research environment
+requirements and technical expertise levels.
 
 **Automated Setup Procedure:**
 
@@ -2769,15 +2968,15 @@ pip install opencv-contrib-python  # For advanced computer vision
 
 **System Requirements and Compatibility:**
 
-| Component | Minimum Requirements | Recommended | Notes |
-|-----------|---------------------|-------------|--------|
-| **Operating System** | Windows 10, Ubuntu 18.04, macOS 10.14 | Windows 11, Ubuntu 22.04, macOS 13+ | Research workflows validated on recommended versions |
-| **Python Version** | Python 3.8+ | Python 3.10+ | Type hints and performance optimizations |
-| **Memory (RAM)** | 8GB | 16GB+ | Multi-device recording requires substantial buffering |
-| **Storage** | 100GB available | 1TB+ SSD | Research sessions generate large datasets |
-| **Network** | WiFi 802.11n | WiFi 6 (802.11ax) | Low latency essential for synchronization |
-| **USB Ports** | USB 2.0 | USB 3.0+ | Multiple webcams require bandwidth |
-| **Graphics** | Integrated graphics | Dedicated GPU | Computer vision processing acceleration |
+| Component            | Minimum Requirements                  | Recommended                         | Notes                                                 |
+|----------------------|---------------------------------------|-------------------------------------|-------------------------------------------------------|
+| **Operating System** | Windows 10, Ubuntu 18.04, macOS 10.14 | Windows 11, Ubuntu 22.04, macOS 13+ | Research workflows validated on recommended versions  |
+| **Python Version**   | Python 3.8+                           | Python 3.10+                        | Type hints and performance optimizations              |
+| **Memory (RAM)**     | 8GB                                   | 16GB+                               | Multi-device recording requires substantial buffering |
+| **Storage**          | 100GB available                       | 1TB+ SSD                            | Research sessions generate large datasets             |
+| **Network**          | WiFi 802.11n                          | WiFi 6 (802.11ax)                   | Low latency essential for synchronization             |
+| **USB Ports**        | USB 2.0                               | USB 3.0+                            | Multiple webcams require bandwidth                    |
+| **Graphics**         | Integrated graphics                   | Dedicated GPU                       | Computer vision processing acceleration               |
 
 **Environment Validation:**
 
@@ -2802,7 +3001,8 @@ python main.py --validate-only
 
 ### Recording Session Workflow
 
-The recording session workflow provides systematic procedures ensuring experimental reproducibility and data quality while accommodating diverse research protocols.
+The recording session workflow provides systematic procedures ensuring experimental reproducibility and data quality
+while accommodating diverse research protocols.
 
 **Pre-Session Preparation Protocol:**
 
@@ -2819,11 +3019,11 @@ The recording session workflow provides systematic procedures ensuring experimen
    ```
 
 2. **Device Connection and Verification**
-   - Navigate to **Devices** tab in the main interface
-   - Wait for automatic device discovery (typically 10-30 seconds)
-   - Connect to discovered Android devices using **Connect** buttons
-   - Verify USB webcam detection and functionality
-   - Perform connection tests for all devices
+    - Navigate to **Devices** tab in the main interface
+    - Wait for automatic device discovery (typically 10-30 seconds)
+    - Connect to discovered Android devices using **Connect** buttons
+    - Verify USB webcam detection and functionality
+    - Perform connection tests for all devices
 
 3. **Quality Assurance Checks**
    ```
@@ -2847,10 +3047,10 @@ The recording session workflow provides systematic procedures ensuring experimen
    ```
 
 2. **Pre-Recording Validation**
-   - Verify all device status indicators show "Ready" (green)
-   - Confirm adequate storage space across all devices
-   - Check network connectivity stability
-   - Validate synchronization accuracy < 5ms
+    - Verify all device status indicators show "Ready" (green)
+    - Confirm adequate storage space across all devices
+    - Check network connectivity stability
+    - Validate synchronization accuracy < 5ms
 
 3. **Recording Initiation and Monitoring**
    ```
@@ -2871,10 +3071,10 @@ The recording session workflow provides systematic procedures ensuring experimen
 **Post-Session Data Management:**
 
 1. **Immediate Data Verification**
-   - Navigate to **Files** tab
-   - Verify presence of all expected data files
-   - Check file sizes for reasonable values
-   - Review session metadata for completeness
+    - Navigate to **Files** tab
+    - Verify presence of all expected data files
+    - Check file sizes for reasonable values
+    - Review session metadata for completeness
 
 2. **Data Export and Backup**
    ```
@@ -2886,14 +3086,15 @@ The recording session workflow provides systematic procedures ensuring experimen
    ```
 
 3. **Session Documentation**
-   - Record experimental conditions and observations
-   - Document any technical issues or anomalies
-   - Complete participant session notes
-   - Archive session summary report
+    - Record experimental conditions and observations
+    - Document any technical issues or anomalies
+    - Complete participant session notes
+    - Archive session summary report
 
 ### Device Management and Configuration
 
-The device management system provides comprehensive control over connected hardware with automated optimization and manual override capabilities.
+The device management system provides comprehensive control over connected hardware with automated optimization and
+manual override capabilities.
 
 **Android Device Management:**
 
@@ -3018,7 +3219,8 @@ class WebcamConfiguration:
 
 ### Advanced Features and Customization
 
-The system provides extensive customization capabilities for specialized research requirements and workflow optimization.
+The system provides extensive customization capabilities for specialized research requirements and workflow
+optimization.
 
 **Recording Profile Management:**
 
@@ -3199,11 +3401,14 @@ class BatchSessionManager:
 
 ## Testing and Validation Framework
 
-The Python Desktop Controller implements a comprehensive testing strategy specifically designed for research software validation, ensuring reliability, accuracy, and reproducibility essential for scientific measurement applications. The current implementation includes over 75 test files covering all system components.
+The Python Desktop Controller implements a comprehensive testing strategy specifically designed for research software
+validation, ensuring reliability, accuracy, and reproducibility essential for scientific measurement applications. The
+current implementation includes over 75 test files covering all system components.
 
 ### Comprehensive Testing Strategy
 
-The testing framework employs multiple validation layers addressing both technical functionality and research-specific requirements with extensive automation and continuous integration support.
+The testing framework employs multiple validation layers addressing both technical functionality and research-specific
+requirements with extensive automation and continuous integration support.
 
 **Multi-Layered Testing Architecture:**
 
@@ -3289,7 +3494,7 @@ class EnhancedTestRunner:
     Comprehensive test runner with detailed reporting and analysis
     supporting over 75 test files across all system components.
     """
-    
+
     def __init__(self):
         self.results = {}
         self.start_time = None
@@ -3304,7 +3509,7 @@ class EnhancedTestRunner:
             'dual_webcam': 'tests.test_dual_webcam_system',
             'stress_testing': 'tests.test_enhanced_stress_testing'
         }
-        
+
     def run_comprehensive_test_suite(self):
         """
         Execute complete test suite with detailed reporting and
@@ -3312,7 +3517,7 @@ class EnhancedTestRunner:
         """
         self.start_time = datetime.now()
         logger.info("=== Starting Comprehensive Test Suite ===")
-        
+
         # Test execution results
         test_results = {
             'execution_timestamp': self.start_time.isoformat(),
@@ -3323,14 +3528,14 @@ class EnhancedTestRunner:
             'coverage_analysis': {},
             'research_validation': {}
         }
-        
+
         # Execute test categories
         for category, module_path in self.test_categories.items():
             logger.info(f"Running {category} tests...")
             try:
                 category_results = self._run_test_category(category, module_path)
                 test_results['test_categories'][category] = category_results
-                
+
             except Exception as e:
                 logger.error(f"Failed to run {category} tests: {e}")
                 test_results['test_categories'][category] = {
@@ -3339,52 +3544,52 @@ class EnhancedTestRunner:
                     'tests_run': 0,
                     'failures': 1
                 }
-        
+
         # Performance benchmarking
         test_results['performance_benchmarks'] = self._run_performance_benchmarks()
-        
+
         # Coverage analysis
         test_results['coverage_analysis'] = self._analyze_test_coverage()
-        
+
         # Research-specific validation
         test_results['research_validation'] = self._run_research_validation()
-        
+
         # Generate comprehensive report
         self.end_time = datetime.now()
         test_results['total_duration'] = (self.end_time - self.start_time).total_seconds()
         test_results['overall_metrics'] = self._calculate_overall_metrics(test_results)
-        
+
         self._generate_comprehensive_report(test_results)
         return test_results
-    
+
     def _run_test_category(self, category: str, module_path: str):
         """Execute tests for a specific category with detailed metrics."""
         category_start = time.time()
-        
+
         try:
             # Dynamic test discovery and execution
             if category == 'calibration':
                 from tests.test_calibration_comprehensive import run_calibration_tests
                 results = run_calibration_tests()
-                
+
             elif category == 'shimmer':
                 from tests.test_shimmer_comprehensive import run_shimmer_tests
                 results = run_shimmer_tests()
-                
+
             elif category == 'integration':
                 from tests.test_system_integration import run_integration_tests
                 results = run_integration_tests()
-                
+
             elif category == 'recording_session':
                 from tests.test_comprehensive_recording_session import run_comprehensive_recording_session_test
                 results = run_comprehensive_recording_session_test()
-                
+
             else:
                 # Generic test runner for other categories
                 results = self._run_generic_tests(module_path)
-            
+
             category_duration = time.time() - category_start
-            
+
             return {
                 'success': True,
                 'duration': category_duration,
@@ -3394,7 +3599,7 @@ class EnhancedTestRunner:
                 'skipped': results.get('skipped', 0),
                 'details': results.get('details', [])
             }
-            
+
         except Exception as e:
             return {
                 'success': False,
@@ -3407,7 +3612,8 @@ class EnhancedTestRunner:
 
 ### Performance Analysis and Benchmarking
 
-The system includes comprehensive performance monitoring and benchmarking capabilities designed to validate research-grade operation under diverse conditions:
+The system includes comprehensive performance monitoring and benchmarking capabilities designed to validate
+research-grade operation under diverse conditions:
 
 ```python
 class PerformanceBenchmarkSuite:
@@ -3516,16 +3722,18 @@ class ResearchValidationSuite:
         }
 ```
 
-
 ---
 
 ## System Monitoring and Logging
 
-The Python Desktop Controller implements a sophisticated monitoring and logging system designed to provide comprehensive visibility into system operation while supporting research reproducibility and troubleshooting requirements.
+The Python Desktop Controller implements a sophisticated monitoring and logging system designed to provide comprehensive
+visibility into system operation while supporting research reproducibility and troubleshooting requirements.
 
 ### Comprehensive Logging System
 
-The logging framework employs structured logging with specialized categories and configurable output formats, enabling both real-time monitoring and post-hoc analysis. The actual implementation provides sophisticated centralized logging configuration.
+The logging framework employs structured logging with specialized categories and configurable output formats, enabling
+both real-time monitoring and post-hoc analysis. The actual implementation provides sophisticated centralized logging
+configuration.
 
 **Centralized Logging Architecture:**
 
@@ -3637,18 +3845,18 @@ def get_logger(name: str = None) -> logging.Logger:
 
 **Logger Category Specifications:**
 
-| Category | Module Path | Purpose | Level | Output |
-|----------|-------------|---------|--------|--------|
-| `multisensor.session` | Session management | Recording coordination | INFO | File + Console |
-| `multisensor.device` | Device communication | Hardware interaction | DEBUG | File |
-| `multisensor.network` | Network operations | TCP/UDP communication | INFO | File + Console |
-| `multisensor.webcam` | Camera operations | Video processing | DEBUG | File |
-| `multisensor.calibration` | Calibration procedures | OpenCV operations | INFO | File |
-| `multisensor.shimmer` | Shimmer sensors | Physiological data | INFO | File + Console |
-| `multisensor.ui` | User interface | GUI interactions | INFO | Console |
-| `multisensor.web` | Web interface | Browser operations | INFO | File |
-| `multisensor.performance` | Performance monitoring | System metrics | DEBUG | File |
-| `multisensor.security` | Security events | Access control | WARNING | File + Console |
+| Category                  | Module Path            | Purpose                | Level   | Output         |
+|---------------------------|------------------------|------------------------|---------|----------------|
+| `multisensor.session`     | Session management     | Recording coordination | INFO    | File + Console |
+| `multisensor.device`      | Device communication   | Hardware interaction   | DEBUG   | File           |
+| `multisensor.network`     | Network operations     | TCP/UDP communication  | INFO    | File + Console |
+| `multisensor.webcam`      | Camera operations      | Video processing       | DEBUG   | File           |
+| `multisensor.calibration` | Calibration procedures | OpenCV operations      | INFO    | File           |
+| `multisensor.shimmer`     | Shimmer sensors        | Physiological data     | INFO    | File + Console |
+| `multisensor.ui`          | User interface         | GUI interactions       | INFO    | Console        |
+| `multisensor.web`         | Web interface          | Browser operations     | INFO    | File           |
+| `multisensor.performance` | Performance monitoring | System metrics         | DEBUG   | File           |
+| `multisensor.security`    | Security events        | Access control         | WARNING | File + Console |
 
 **Advanced Logging Features:**
 
@@ -3710,7 +3918,8 @@ class SessionContextLogger:
 
 ### Performance Monitoring
 
-The performance monitoring system provides real-time metrics collection and analysis with automated alerting and hardware detection capabilities. The implementation includes actual system monitoring through the SystemMonitor class.
+The performance monitoring system provides real-time metrics collection and analysis with automated alerting and
+hardware detection capabilities. The implementation includes actual system monitoring through the SystemMonitor class.
 
 **Real-Time System Monitoring:**
 
@@ -3997,7 +4206,8 @@ class SystemMonitor:
 
 ### Diagnostic Tools and Troubleshooting
 
-The system provides comprehensive diagnostic capabilities designed to support rapid issue identification and resolution in research environments.
+The system provides comprehensive diagnostic capabilities designed to support rapid issue identification and resolution
+in research environments.
 
 **Automated Diagnostic System:**
 
@@ -4007,7 +4217,7 @@ class AutomatedDiagnosticSystem:
     Comprehensive automated diagnostic system for research software
     with intelligent issue detection and resolution recommendations.
     """
-    
+
     def run_comprehensive_diagnostics(self):
         """
         Execute comprehensive system diagnostics with automated issue detection
@@ -4023,10 +4233,10 @@ class AutomatedDiagnosticSystem:
             "recommendations": [],
             "automated_fixes_applied": []
         }
-        
+
         # System-level diagnostics
         diagnostic_results["system_health"] = self._diagnose_system_health()
-        
+
         # Component-specific diagnostics
         diagnostic_results["component_diagnostics"] = {
             "session_manager": self._diagnose_session_manager(),
@@ -4035,24 +4245,24 @@ class AutomatedDiagnosticSystem:
             "webcam_service": self._diagnose_webcam_service(),
             "calibration_service": self._diagnose_calibration_service()
         }
-        
+
         # Network connectivity diagnostics
         diagnostic_results["network_diagnostics"] = self._diagnose_network_connectivity()
-        
+
         # Data integrity verification
         diagnostic_results["data_integrity_check"] = self._verify_data_integrity()
-        
+
         # Performance bottleneck analysis
         diagnostic_results["performance_analysis"] = self._analyze_performance_bottlenecks()
-        
+
         # Generate recommendations
         diagnostic_results["recommendations"] = self._generate_recommendations(diagnostic_results)
-        
+
         # Apply automated fixes where safe
         diagnostic_results["automated_fixes_applied"] = self._apply_automated_fixes(diagnostic_results)
-        
+
         return diagnostic_results
-    
+
     def _diagnose_network_connectivity(self):
         """
         Comprehensive network connectivity diagnostics for device communication.
@@ -4064,11 +4274,11 @@ class AutomatedDiagnosticSystem:
             "latency_analysis": {},
             "quality_assessment": {}
         }
-        
+
         # Basic connectivity tests
         connectivity_results = {}
         test_addresses = ["8.8.8.8", "1.1.1.1", "192.168.1.1"]
-        
+
         for address in test_addresses:
             try:
                 response_time = ping3.ping(address, timeout=5)
@@ -4081,18 +4291,18 @@ class AutomatedDiagnosticSystem:
                     "reachable": False,
                     "error": str(e)
                 }
-        
+
         network_diagnostics["connectivity_tests"] = connectivity_results
-        
+
         # Bandwidth testing
         network_diagnostics["bandwidth_tests"] = self._test_network_bandwidth()
-        
+
         # Device-specific connectivity
         network_diagnostics["device_connectivity"] = self._test_device_connectivity()
-        
+
         # Overall assessment
         network_diagnostics["overall_status"] = self._assess_network_status(network_diagnostics)
-        
+
         return network_diagnostics
 ```
 
@@ -4100,11 +4310,13 @@ class AutomatedDiagnosticSystem:
 
 ## Research Applications and Best Practices
 
-The Python Desktop Controller is specifically designed to support diverse research applications while maintaining scientific rigor and data quality. This section provides comprehensive guidance for optimal research utilization.
+The Python Desktop Controller is specifically designed to support diverse research applications while maintaining
+scientific rigor and data quality. This section provides comprehensive guidance for optimal research utilization.
 
 ### Experimental Design Considerations
 
-The system supports various experimental paradigms while maintaining measurement precision and data integrity essential for scientific validity.
+The system supports various experimental paradigms while maintaining measurement precision and data integrity essential
+for scientific validity.
 
 **Research Protocol Integration:**
 
@@ -4215,7 +4427,8 @@ class ResearchProtocolManager:
 
 ### Data Management Best Practices
 
-Comprehensive data management practices ensure research reproducibility and long-term data accessibility while maintaining participant privacy and research integrity.
+Comprehensive data management practices ensure research reproducibility and long-term data accessibility while
+maintaining participant privacy and research integrity.
 
 **Research Data Organization Framework:**
 
@@ -4317,7 +4530,8 @@ class ResearchDataManager:
 
 ### Academic Research Guidelines
 
-The system supports academic research requirements including reproducibility, transparency, and methodological rigor essential for scientific publication.
+The system supports academic research requirements including reproducibility, transparency, and methodological rigor
+essential for scientific publication.
 
 **Reproducibility Framework:**
 
@@ -4388,11 +4602,13 @@ class ReproducibilityManager:
 
 ## Future Enhancements and Research Directions
 
-The Python Desktop Controller provides a robust foundation for continued development and research extension, with planned enhancements addressing emerging research needs and technological capabilities.
+The Python Desktop Controller provides a robust foundation for continued development and research extension, with
+planned enhancements addressing emerging research needs and technological capabilities.
 
 ### Planned Technical Enhancements
 
-Future development priorities focus on expanding research capabilities while maintaining system reliability and ease of use.
+Future development priorities focus on expanding research capabilities while maintaining system reliability and ease of
+use.
 
 **Advanced Analytics Integration:**
 
@@ -4493,7 +4709,8 @@ class LongitudinalStudyManager:
 
 ### Community Development and Contribution
 
-The open-source architecture enables community contribution and collaborative development, extending system capabilities through distributed expertise.
+The open-source architecture enables community contribution and collaborative development, extending system capabilities
+through distributed expertise.
 
 **Community Contribution Framework:**
 
@@ -4543,15 +4760,21 @@ class CommunityDevelopmentFramework:
 
 ### Long-term Vision and Impact
 
-The long-term vision encompasses transformation of physiological measurement research through democratized access to advanced measurement capabilities and community-driven innovation.
+The long-term vision encompasses transformation of physiological measurement research through democratized access to
+advanced measurement capabilities and community-driven innovation.
 
 **Research Impact Projections:**
 
-1. **Democratization of Research Capabilities**: Reduction of barriers to advanced physiological measurement research through cost-effective, open-source solutions
-2. **Methodological Innovation**: Enabling new research paradigms through contactless measurement and multi-modal sensor integration
-3. **Community-Driven Development**: Fostering collaborative development ecosystem for continued innovation and capability expansion
-4. **Educational Applications**: Supporting research methodology training and hands-on learning in physiological measurement techniques
-5. **Cross-Disciplinary Applications**: Facilitating research applications across psychology, human-computer interaction, clinical research, and educational domains
+1. **Democratization of Research Capabilities**: Reduction of barriers to advanced physiological measurement research
+   through cost-effective, open-source solutions
+2. **Methodological Innovation**: Enabling new research paradigms through contactless measurement and multi-modal sensor
+   integration
+3. **Community-Driven Development**: Fostering collaborative development ecosystem for continued innovation and
+   capability expansion
+4. **Educational Applications**: Supporting research methodology training and hands-on learning in physiological
+   measurement techniques
+5. **Cross-Disciplinary Applications**: Facilitating research applications across psychology, human-computer
+   interaction, clinical research, and educational domains
 
 **Sustainability and Long-term Maintenance:**
 
@@ -4600,28 +4823,40 @@ class SustainabilityPlan:
 
 ## Conclusion
 
-The Python Desktop Controller Application represents a significant advancement in research instrumentation by successfully bridging the gap between academic research requirements and practical software implementation. This comprehensive documentation has detailed the sophisticated architecture, implementation strategies, and operational procedures that enable research-grade physiological measurement through innovative contactless methodologies.
+The Python Desktop Controller Application represents a significant advancement in research instrumentation by
+successfully bridging the gap between academic research requirements and practical software implementation. This
+comprehensive documentation has detailed the sophisticated architecture, implementation strategies, and operational
+procedures that enable research-grade physiological measurement through innovative contactless methodologies.
 
 ### Technical Achievement Summary
 
-The system demonstrates several key technical achievements that contribute to both computer science research and practical research instrumentation:
+The system demonstrates several key technical achievements that contribute to both computer science research and
+practical research instrumentation:
 
-1. **Architectural Innovation**: The hybrid star-mesh topology successfully combines centralized coordination simplicity with distributed system resilience, achieving exceptional temporal precision of ±3.2ms across wireless networks.
+1. **Architectural Innovation**: The hybrid star-mesh topology successfully combines centralized coordination simplicity
+   with distributed system resilience, achieving exceptional temporal precision of ±3.2ms across wireless networks.
 
-2. **Cross-Platform Integration**: Comprehensive methodologies for coordinating Android and Python development while maintaining code quality and integration effectiveness across heterogeneous platforms.
+2. **Cross-Platform Integration**: Comprehensive methodologies for coordinating Android and Python development while
+   maintaining code quality and integration effectiveness across heterogeneous platforms.
 
-3. **Research-Grade Quality**: Implementation of comprehensive quality management systems achieving 99.7% availability and 99.98% data integrity across extensive testing scenarios.
+3. **Research-Grade Quality**: Implementation of comprehensive quality management systems achieving 99.7% availability
+   and 99.98% data integrity across extensive testing scenarios.
 
-4. **Community-Oriented Design**: Open-source architecture with comprehensive documentation enabling community contribution and collaborative development for extended research impact.
+4. **Community-Oriented Design**: Open-source architecture with comprehensive documentation enabling community
+   contribution and collaborative development for extended research impact.
 
 ### Research Impact and Significance
 
 The Python Desktop Controller enables new research paradigms by:
 
-- **Democratizing Advanced Measurement**: Providing cost-effective alternatives to commercial research instrumentation while maintaining scientific validity
-- **Enabling Contactless Research**: Supporting physiological measurement in naturalistic settings without the constraints of traditional contact-based methodologies  
-- **Supporting Multi-Modal Integration**: Coordinating diverse sensor modalities with research-grade synchronization and quality assurance
-- **Facilitating Reproducible Research**: Comprehensive documentation and standardized procedures supporting research reproducibility and transparency
+- **Democratizing Advanced Measurement**: Providing cost-effective alternatives to commercial research instrumentation
+  while maintaining scientific validity
+- **Enabling Contactless Research**: Supporting physiological measurement in naturalistic settings without the
+  constraints of traditional contact-based methodologies
+- **Supporting Multi-Modal Integration**: Coordinating diverse sensor modalities with research-grade synchronization and
+  quality assurance
+- **Facilitating Reproducible Research**: Comprehensive documentation and standardized procedures supporting research
+  reproducibility and transparency
 
 ### Academic and Practical Contributions
 
@@ -4636,12 +4871,17 @@ This documentation serves multiple audiences while maintaining academic rigor ap
 
 The established foundation supports continued development through:
 
-- **Planned Technical Enhancements**: Advanced analytics integration, longitudinal study support, and expanded sensor capabilities
+- **Planned Technical Enhancements**: Advanced analytics integration, longitudinal study support, and expanded sensor
+  capabilities
 - **Community Development Framework**: Structured approaches for community contribution and collaborative innovation
 - **Sustainability Planning**: Long-term maintenance and development strategies ensuring continued research utility
 - **Research Methodology Extensions**: Support for emerging research paradigms and methodological innovations
 
-The Python Desktop Controller Application successfully demonstrates that research-grade reliability and accuracy can be achieved using consumer-grade hardware when supported by sophisticated software algorithms and comprehensive validation procedures. This achievement opens new possibilities for democratizing access to advanced research capabilities while establishing new standards for research software development that balance scientific rigor with practical usability and community accessibility.
+The Python Desktop Controller Application successfully demonstrates that research-grade reliability and accuracy can be
+achieved using consumer-grade hardware when supported by sophisticated software algorithms and comprehensive validation
+procedures. This achievement opens new possibilities for democratizing access to advanced research capabilities while
+establishing new standards for research software development that balance scientific rigor with practical usability and
+community accessibility.
 
 ---
 
@@ -4649,15 +4889,20 @@ The Python Desktop Controller Application successfully demonstrates that researc
 
 ### Physiological Measurement and Biometric Research
 
-Boucsein, W. (2012). *Electrodermal Activity* (2nd ed.). Springer Science+Business Media. https://doi.org/10.1007/978-1-4614-1126-0
+Boucsein, W. (2012). *Electrodermal Activity* (2nd ed.). Springer Science+Business
+Media. https://doi.org/10.1007/978-1-4614-1126-0
 
-Critchley, H. D. (2002). Electrodermal responses: What happens in the brain. *The Neuroscientist*, 8(2), 132-142. https://doi.org/10.1177/107385840200800209
+Critchley, H. D. (2002). Electrodermal responses: What happens in the brain. *The Neuroscientist*, 8(2),
+132-142. https://doi.org/10.1177/107385840200800209
 
-Fairclough, S. H. (2009). Fundamentals of physiological computing. *Interacting with Computers*, 21(1-2), 133-145. https://doi.org/10.1016/j.intcom.2008.10.011
+Fairclough, S. H. (2009). Fundamentals of physiological computing. *Interacting with Computers*, 21(1-2),
+133-145. https://doi.org/10.1016/j.intcom.2008.10.011
 
-Kandel, E. R., Schwartz, J. H., Jessell, T. M., Siegelbaum, S. A., & Hudspeth, A. J. (2012). *Principles of Neural Science* (5th ed.). McGraw-Hill Education.
+Kandel, E. R., Schwartz, J. H., Jessell, T. M., Siegelbaum, S. A., & Hudspeth, A. J. (2012). *Principles of Neural
+Science* (5th ed.). McGraw-Hill Education.
 
-Kreibig, S. D. (2010). Autonomic nervous system activity in emotion: A review. *Biological Psychology*, 84(3), 394-421. https://doi.org/10.1016/j.biopsycho.2010.03.010
+Kreibig, S. D. (2010). Autonomic nervous system activity in emotion: A review. *Biological Psychology*, 84(3),
+394-421. https://doi.org/10.1016/j.biopsycho.2010.03.010
 
 Picard, R. W. (2000). *Affective Computing*. MIT Press.
 
@@ -4665,7 +4910,8 @@ Stern, R. M., Ray, W. J., & Quigley, K. S. (2001). *Psychophysiological Recordin
 
 ### Distributed Systems and Network Architecture
 
-Fielding, R. T., & Taylor, R. N. (2002). Principled design of the modern Web architecture. *ACM Transactions on Internet Technology*, 2(2), 115-150. https://doi.org/10.1145/514183.514185
+Fielding, R. T., & Taylor, R. N. (2002). Principled design of the modern Web architecture. *ACM Transactions on Internet
+Technology*, 2(2), 115-150. https://doi.org/10.1145/514183.514185
 
 Liu, J. W. S. (2000). *Real-Time Systems*. Prentice Hall.
 
@@ -4673,7 +4919,8 @@ Tanenbaum, A. S., & van Steen, M. (2016). *Distributed Systems: Principles and P
 
 ### Software Engineering and Development Methodologies
 
-Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
+Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented
+Software*. Addison-Wesley Professional.
 
 Hunt, A., & Thomas, D. (1999). *The Pragmatic Programmer: From Journeyman to Master*. Addison-Wesley Professional.
 
@@ -4697,23 +4944,32 @@ Norman, D. A. (2013). *The Design of Everyday Things: Revised and Expanded Editi
 
 ### Research Methodology and Experimental Design
 
-Bronfenbrenner, U. (1977). Toward an experimental ecology of human development. *American Psychologist*, 32(7), 513-531. https://doi.org/10.1037/0003-066X.32.7.513
+Bronfenbrenner, U. (1977). Toward an experimental ecology of human development. *American Psychologist*, 32(7),
+513-531. https://doi.org/10.1037/0003-066X.32.7.513
 
-Cummins, N., Epps, J., Breakspear, M., & Goecke, R. (2015). An investigation of depressed speech detection: Features and normalization. In *Proceedings of the Annual Conference of the International Speech Communication Association* (pp. 2997-3001). ISCA.
+Cummins, N., Epps, J., Breakspear, M., & Goecke, R. (2015). An investigation of depressed speech detection: Features and
+normalization. In *Proceedings of the Annual Conference of the International Speech Communication Association* (pp.
+2997-3001). ISCA.
 
-Orne, M. T. (1962). On the social psychology of the psychological experiment: With particular reference to demand characteristics and their implications. *American Psychologist*, 17(11), 776-783. https://doi.org/10.1037/h0043424
+Orne, M. T. (1962). On the social psychology of the psychological experiment: With particular reference to demand
+characteristics and their implications. *American Psychologist*, 17(11), 776-783. https://doi.org/10.1037/h0043424
 
 ### Implementation Code References
 
 The Python Desktop Controller implements concepts from this documentation through the following key source files:
 
 - `PythonApp/src/application.py` - Main application framework implementing dependency injection patterns [Gamma1994]
-- `PythonApp/src/session/session_manager.py` - Session management implementing distributed coordination principles [Tanenbaum2016]
+- `PythonApp/src/session/session_manager.py` - Session management implementing distributed coordination
+  principles [Tanenbaum2016]
 - `PythonApp/src/webcam/webcam_capture.py` - Computer vision pipeline implementing real-time processing [VanderPlas2016]
-- `PythonApp/src/shimmer_manager.py` - Physiological sensor integration implementing research measurement standards [Boucsein2012]
-- `PythonApp/src/network/device_server.py` - Network communication implementing distributed system patterns [Fielding2002]
+- `PythonApp/src/shimmer_manager.py` - Physiological sensor integration implementing research measurement
+  standards [Boucsein2012]
+- `PythonApp/src/network/device_server.py` - Network communication implementing distributed system
+  patterns [Fielding2002]
 
-Through comprehensive technical innovation, rigorous validation, and extensive documentation, this project contributes significantly to both the immediate research community and the broader goals of advancing scientific measurement methodologies for the benefit of diverse research applications and educational endeavors.
+Through comprehensive technical innovation, rigorous validation, and extensive documentation, this project contributes
+significantly to both the immediate research community and the broader goals of advancing scientific measurement
+methodologies for the benefit of diverse research applications and educational endeavors.
 
 ---
 
@@ -4723,11 +4979,13 @@ Through comprehensive technical innovation, rigorous validation, and extensive d
 **Version**: 1.0  
 **Date**: January 2025  
 **Classification**: Academic Research Documentation  
-**Intended Audience**: Academic researchers, software developers, research operators, students  
+**Intended Audience**: Academic researchers, software developers, research operators, students
 
-**Keywords**: Multi-sensor systems, distributed architectures, real-time synchronization, physiological measurement, contactless sensing, research instrumentation, Python development, PyQt5, computer vision, academic research
+**Keywords**: Multi-sensor systems, distributed architectures, real-time synchronization, physiological measurement,
+contactless sensing, research instrumentation, Python development, PyQt5, computer vision, academic research
 
-**Citation Format**: 
+**Citation Format**:
+
 ```
 Python Desktop Controller Application - Comprehensive Academic Documentation. 
 Multi-Sensor Recording System Project. Version 1.0. January 2025.

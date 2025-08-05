@@ -128,7 +128,10 @@ class RecordingAnalytics {
                 performanceHistory.removeAt(0)
             }
 
-            android.util.Log.v("RecordingAnalytics", "Performance metrics updated - Memory: ${memoryUsage}MB, CPU: ${cpuUsage}%")
+            android.util.Log.v(
+                "RecordingAnalytics",
+                "Performance metrics updated - Memory: ${memoryUsage}MB, CPU: ${cpuUsage}%"
+            )
 
         } catch (e: Exception) {
             android.util.Log.e("RecordingAnalytics", "Error updating performance metrics: ${e.message}")
@@ -159,7 +162,10 @@ class RecordingAnalytics {
                 qualityHistory.removeAt(0)
             }
 
-            android.util.Log.v("RecordingAnalytics", "Quality metrics updated - Overall: $overallQuality, Efficiency: $recordingEfficiency")
+            android.util.Log.v(
+                "RecordingAnalytics",
+                "Quality metrics updated - Overall: $overallQuality, Efficiency: $recordingEfficiency"
+            )
 
         } catch (e: Exception) {
             android.util.Log.e("RecordingAnalytics", "Error updating quality metrics: ${e.message}")
@@ -197,7 +203,10 @@ class RecordingAnalytics {
                 batteryDrainRate = batteryDrainRate
             )
 
-            android.util.Log.d("RecordingAnalytics", "Resource analysis complete - Mean Memory: $meanMemory MB, Mean CPU: $meanCpu%")
+            android.util.Log.d(
+                "RecordingAnalytics",
+                "Resource analysis complete - Mean Memory: $meanMemory MB, Mean CPU: $meanCpu%"
+            )
 
             return statistics
 
@@ -243,7 +252,10 @@ class RecordingAnalytics {
                 trendStrength = kotlin.math.abs(correlation).toFloat()
             )
 
-            android.util.Log.d("RecordingAnalytics", "Trend analysis complete - Trend: $trend, Predicted: $predictedPerformance")
+            android.util.Log.d(
+                "RecordingAnalytics",
+                "Trend analysis complete - Trend: $trend, Predicted: $predictedPerformance"
+            )
 
             return analysis
 
@@ -338,14 +350,18 @@ class RecordingAnalytics {
         return (sqrt(variance) / mean).toFloat()
     }
 
-    private fun calculateOverallQualityScore(frameStability: Float, audioQuality: Float, bitrateVariability: Float): Float {
+    private fun calculateOverallQualityScore(
+        frameStability: Float,
+        audioQuality: Float,
+        bitrateVariability: Float
+    ): Float {
         val frameWeight = 0.4f
         val audioWeight = 0.3f
         val bitrateWeight = 0.3f
 
         return (frameStability * frameWeight) +
-               (audioQuality * audioWeight) +
-               ((1f - bitrateVariability) * bitrateWeight)
+                (audioQuality * audioWeight) +
+                ((1f - bitrateVariability) * bitrateWeight)
     }
 
     private fun calculateRecordingEfficiency(): Float {
@@ -409,7 +425,10 @@ class RecordingAnalytics {
         return Triple(slope, intercept, correlation)
     }
 
-    private fun generateQualityRecommendation(trend: Trend, predictedPerformance: Float): QualityAdjustmentRecommendation {
+    private fun generateQualityRecommendation(
+        trend: Trend,
+        predictedPerformance: Float
+    ): QualityAdjustmentRecommendation {
         return when {
             trend == Trend.DEGRADING && predictedPerformance < 0.3f -> QualityAdjustmentRecommendation.EMERGENCY_REDUCE
             trend == Trend.DEGRADING && predictedPerformance < 0.6f -> QualityAdjustmentRecommendation.DECREASE

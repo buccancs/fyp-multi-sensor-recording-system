@@ -1,12 +1,13 @@
-import os
-import sys
 import json
-import time
 import logging
+import os
 import platform
+import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, Any, List
+
 try:
     import psutil
     PSUTIL_AVAILABLE = True
@@ -43,7 +44,7 @@ except ImportError as e:
     JsonSocketServer = None
     MainController = None
     ShimmerManager = None
-from .common_components import ModernButton, ModernGroupBox, StatusIndicator, ProgressIndicator, LogViewer, ConnectionManager
+from .common_components import ModernButton, ModernGroupBox, StatusIndicator, ProgressIndicator
 
 
 class RealTimeDataPlotter(QWidget):
