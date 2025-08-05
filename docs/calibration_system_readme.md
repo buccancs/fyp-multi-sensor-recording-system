@@ -75,7 +75,7 @@ graph TB
         
         subgraph "Data Management Layer"
             CR[CalibrationResult<br/>Parameter Storage]
-            DM[DataManager<br/>Persistence & Loading]
+            DM[DataManager<br/>Persistence and Loading]
             EM[ExportManager<br/>Format Conversion]
         end
         

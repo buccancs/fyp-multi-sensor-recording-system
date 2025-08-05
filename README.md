@@ -262,14 +262,14 @@ graph TB
         end
     end
     
-    subgraph "Processing & Control Layer"
+    subgraph "Processing and Control Layer"
         PC[PC Controller<br/>Synchronization Master]
         SYNC[Temporal Synchronization<br/>Engine]
         CAL[Camera Calibration<br/>System]
         STIM[Stimulus Presentation<br/>Controller]
     end
     
-    subgraph "Data Storage & Analysis"
+    subgraph "Data Storage and Analysis"
         VID[Video Files<br/>MP4 + RAW]
         THER[Thermal Data<br/>Binary + Metadata]
         GSR[Physiological Data<br/>CSV + Timestamps]
@@ -463,7 +463,7 @@ project-root/
 ├── build.gradle                 # root gradle build configuration
 ├── .gitmodules                  # git submodules configuration
 ├── gradle/wrapper/              # gradle wrapper files
-├── gradlew & gradlew.bat        # gradle wrapper scripts
+├── gradlew and gradlew.bat        # gradle wrapper scripts
 ├── AndroidApp/                  # android app module (kotlin + camera2, shimmer, etc.)
 │   ├── build.gradle             # android module build configuration
 │   ├── src/main/                # android source code
@@ -925,7 +925,7 @@ The repository contains **14 available diagrams** in `docs/diagrams/` with **23 
 - **Available diagrams**: 29.7% coverage of referenced figures
 - **Chapter 4 coverage**: 75% (best coverage with architecture diagrams)
 - **Appendix coverage**: 72.7% (good technical diagram availability)
-- **Chapter 3 & 5 coverage**: 0% (requires creation for academic completion)
+- **Chapter 3 and 5 coverage**: 0% (requires creation for academic completion)
 
 For complete diagram inventory and mapping analysis, see [Missing Diagrams Analysis](MISSING_DIAGRAMS_ANALYSIS.md).
 - **Enhanced Appendix System**: New Appendix B with 11 comprehensive testing tables (B.1.1-B.11.1)

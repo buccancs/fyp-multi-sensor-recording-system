@@ -6,7 +6,7 @@ This document provides a comprehensive visual overview of the multi-sensor recor
 
 The multi-sensor recording system follows a **PC master-controller** architecture with **offline-first local recording** capabilities, using a **JSON socket protocol** for standardized communication between components.
 
-## Visual Quality & Design Improvements
+## Visual Quality and Design Improvements
 
 **🎨 Enhanced Visual Design:**
 - **4K Ultra-High Resolution**: All diagrams rendered at 4000+ pixel width for crisp display
