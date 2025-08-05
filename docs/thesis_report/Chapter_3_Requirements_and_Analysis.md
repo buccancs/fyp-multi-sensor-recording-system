@@ -116,26 +116,9 @@ The physiological measurement research domain has experienced significant method
 
 The following comparative analysis illustrates the fundamental limitations of traditional GSR measurement approaches compared to the proposed contactless system architecture:
 
-**Table 3.1: Comparative Analysis of Physiological Measurement Approaches**
+**Comparative Analysis of Physiological Measurement Approaches** (see Table 3.1 below)
 
-| Characteristic | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor |
-|---|---|---|---|
-| **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
-| **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
-| **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
-| **Scalability (max participants)** | 4-6 simultaneously | 4 simultaneously (tested) | Comparable capability |
-| **Equipment Cost per Setup** | $2,400-3,200 | $600-800 | 75% cost reduction |
-| **Motion Artifact Susceptibility** | Very High | Low | 90% reduction |
-| **Ecological Validity** | Limited (lab only) | High (natural settings) | Paradigm shift |
-| **Data Quality** | Research-grade | Developing | Under validation |
-| **Network Resilience** | Not applicable | 1ms-500ms latency tolerance | New capability |
-
-**Figure 3.1: Traditional vs. Contactless Measurement Setup Comparison**
-```
-[PLACEHOLDER: Side-by-side photographs showing:
-Left: Traditional GSR setup with participant connected to electrodes, wires, gel
-Right: Contactless setup with participant in natural position, cameras positioned discretely]
-```
+**Traditional vs. Contactless Measurement Setup Comparison** (see Figure 3.1 below)
 
 ### 3.1.2 Evolution of Measurement Paradigms
 
@@ -178,38 +161,9 @@ timeline
 
 ### 3.1.3 Identified Research Gap and Opportunity
 
-**Table 3.2: Research Gap Analysis Matrix**
+**Research Gap Analysis Matrix** (see Table 3.2 below)
 
-| Research Domain | Current Limitations | Gap Severity | Opportunity Impact | Technical Feasibility |
-|---|---|---|---|---|
-| **Natural Behavior Studies** | Contact artifacts alter behavior | Critical | High | High |
-| **Group Dynamics Research** | Limited multi-participant capability | High | High | Medium |
-| **Pediatric Research** | Child discomfort with electrodes | Critical | High | High |
-| **Long-Duration Studies** | Electrode degradation over time | High | Medium | High |
-| **Mobile Research Applications** | Cable restrictions limit mobility | High | High | High |
-| **Large Population Studies** | High cost per participant | Medium | High | Medium |
-| **Cross-Cultural Research** | Electrode acceptance varies culturally | Medium | Medium | High |
-
-**Figure 3.3: Research Impact Potential vs. Technical Complexity Matrix**
-
-```mermaid
-quadrantChart
-    title Research Opportunity Analysis
-    x-axis Low Complexity --> High Complexity
-    y-axis Low Impact --> High Impact
-    quadrant-1 Quick Wins
-    quadrant-2 Major Projects
-    quadrant-3 Fill-ins
-    quadrant-4 Questionable
-    
-    Natural Behavior Studies: [0.8, 0.9]
-    Group Dynamics Research: [0.6, 0.8]
-    Pediatric Research: [0.3, 0.9]
-    Long-Duration Studies: [0.4, 0.7]
-    Mobile Applications: [0.5, 0.8]
-    Large Population Studies: [0.7, 0.6]
-    Cross-Cultural Research: [0.2, 0.5]
-```
+**Research Impact Potential vs. Technical Complexity Matrix** (see Figure 3.3 below)
 
 ## 3.2 Requirements Engineering Approach
 
@@ -1249,3 +1203,60 @@ These implementation references demonstrate complete traceability from requireme
 
 [Young2004] Young, R. R. "The Requirements Engineering Handbook." Artech House, 2004.
 - `AndroidApp/src/test/java/com/multisensor/recording/ui/` - User interface requirement validation with usability testing (See Appendix F.70)
+
+---
+
+## Tables and Figures
+
+### Table 3.1: Comparative Analysis of Physiological Measurement Approaches
+
+| Characteristic | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor |
+|---|---|---|---|
+| **Setup Time per Participant** | 8-12 minutes | 2-3 minutes | 3.2x faster |
+| **Movement Restriction** | High (wired electrodes) | None (contactless) | Complete freedom |
+| **Participant Discomfort** | Moderate to High | Minimal | 85% reduction |
+| **Scalability (max participants)** | 4-6 simultaneously | 4 simultaneously (tested) | Comparable capability |
+| **Equipment Cost per Setup** | $2,400-3,200 | $600-800 | 75% cost reduction |
+| **Motion Artifact Susceptibility** | Very High | Low | 90% reduction |
+| **Ecological Validity** | Limited (lab only) | High (natural settings) | Paradigm shift |
+| **Data Quality** | Research-grade | Developing | Under validation |
+| **Network Resilience** | Not applicable | 1ms-500ms latency tolerance | New capability |
+
+### Table 3.2: Research Gap Analysis Matrix
+
+| Research Domain | Current Limitations | Gap Severity | Opportunity Impact | Technical Feasibility |
+|---|---|---|---|---|
+| **Natural Behavior Studies** | Contact artifacts alter behavior | Critical | High | High |
+| **Group Dynamics Research** | Limited multi-participant capability | High | High | Medium |
+| **Pediatric Research** | Child discomfort with electrodes | Critical | High | High |
+| **Long-Duration Studies** | Electrode degradation over time | High | Medium | High |
+| **Mobile Research Applications** | Cable restrictions limit mobility | High | High | High |
+| **Large Population Studies** | High cost per participant | Medium | High | Medium |
+| **Cross-Cultural Research** | Electrode acceptance varies culturally | Medium | Medium | High |
+
+### Figure 3.1: Traditional vs. Contactless Measurement Setup Comparison
+
+[PLACEHOLDER: Side-by-side photographs showing:
+Left: Traditional GSR setup with participant connected to electrodes, wires, gel
+Right: Contactless setup with participant in natural position, cameras positioned discretely]
+
+### Figure 3.3: Research Impact Potential vs. Technical Complexity Matrix
+
+```mermaid
+quadrantChart
+    title Research Opportunity Analysis
+    x-axis Low Complexity --> High Complexity
+    y-axis Low Impact --> High Impact
+    quadrant-1 Quick Wins
+    quadrant-2 Major Projects
+    quadrant-3 Fill-ins
+    quadrant-4 Questionable
+    
+    Natural Behavior Studies: [0.8, 0.9]
+    Group Dynamics Research: [0.6, 0.8]
+    Pediatric Research: [0.3, 0.9]
+    Long-Duration Studies: [0.4, 0.7]
+    Mobile Applications: [0.5, 0.8]
+    Large Population Studies: [0.7, 0.6]
+    Cross-Cultural Research: [0.2, 0.5]
+```
