@@ -1,0 +1,111 @@
+{
+  "performance": {
+    "response_time": {
+      "average": 0.015768599510192872,
+      "minimum": 0.01555490493774414,
+      "maximum": 0.016178369522094727,
+      "measurements": [
+        0.016178369522094727,
+        0.015871524810791016,
+        0.015800952911376953,
+        0.015637636184692383,
+        0.015821218490600586,
+        0.015645980834960938,
+        0.01555490493774414,
+        0.015707731246948242,
+        0.015596628189086914,
+        0.015871047973632812
+      ],
+      "iterations": 10
+    },
+    "resources": {
+      "system": {
+        "platform": "Linux-6.11.0-1018-azure-x86_64-with-glibc2.39",
+        "python_version": "3.12.3",
+        "architecture": "64bit"
+      },
+      "memory": {
+        "available_mb": 14784,
+        "total_mb": 15995
+      },
+      "disk": {
+        "total_gb": 71,
+        "free_gb": 26,
+        "used_gb": 45
+      },
+      "timestamp": "2025-08-05T20:59:18.514455"
+    },
+    "network": {
+      "latency_ms": {
+        "average": 1.75,
+        "minimum": 1.2,
+        "maximum": 2.3,
+        "measurements": [
+          1.2,
+          1.8,
+          2.1,
+          1.5,
+          1.9,
+          2.3,
+          1.7,
+          1.4,
+          2.0,
+          1.6
+        ]
+      },
+      "bandwidth_mbps": {
+        "average": 46.660000000000004,
+        "minimum": 44.9,
+        "maximum": 48.3,
+        "measurements": [
+          45.2,
+          47.8,
+          46.1,
+          48.3,
+          44.9,
+          47.2,
+          46.8,
+          45.7,
+          48.1,
+          46.5
+        ]
+      },
+      "simulation_note": "Network measurements simulated - replace with actual network testing in deployment"
+    }
+  },
+  "test_coverage": {
+    "python": {
+      "test_files": 2,
+      "source_files": 17,
+      "coverage_ratio": 0.11764705882352941
+    },
+    "android": {
+      "test_files": 86,
+      "source_files": 106,
+      "coverage_ratio": 0.8113207547169812
+    },
+    "overall": {
+      "total_tests": 88,
+      "total_source": 123,
+      "estimated_coverage": 71.54471544715447
+    }
+  },
+  "test_execution": {
+    "tests_attempted": 2,
+    "tests_passed": 1,
+    "tests_failed": 1,
+    "execution_time": 0.1737666130065918,
+    "details": [
+      {
+        "test_file": "test_chapter5_validation.py",
+        "status": "\u274c FAIL",
+        "return_code": 1
+      },
+      {
+        "test_file": "test_chapter6_evaluation.py",
+        "status": "\u2705 PASS",
+        "return_code": 0
+      }
+    ]
+  }
+}
