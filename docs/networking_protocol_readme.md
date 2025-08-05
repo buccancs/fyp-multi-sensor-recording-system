@@ -32,7 +32,7 @@ The Networking Protocol System provides the communication backbone for the distr
 graph TB
     subgraph "Protocol Stack"
         subgraph "Application Layer"
-            JSON[JSON Message Protocol<br/>Command & Status Exchange]
+            JSON[JSON Message Protocol<br/>Command and Status Exchange]
             SYNC[Synchronization Protocol<br/>Temporal Coordination]
             STREAM[Data Streaming Protocol<br/>Real-time Data Transfer]
         end

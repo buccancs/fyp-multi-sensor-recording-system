@@ -200,7 +200,7 @@ Performance testing validates computational efficiency under various load condit
 
 Algorithm validation demonstrates research-grade accuracy across all computational components. Comprehensive validation results and accuracy measurements are documented in Appendix B.2.
 
-## 5.3 Integration Testing (Multi-Device Synchronization & Networking)
+## 5.3 Integration Testing (Multi-Device Synchronization and Networking)
 
 Integration testing validates the complex interactions between system components with particular emphasis on multi-device coordination, network communication, and temporal synchronization across heterogeneous sensor platforms. This testing category addresses the unique challenges of distributed sensor systems operating across different hardware platforms and network configurations.
 

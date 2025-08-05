@@ -229,7 +229,7 @@ class RealTimeCalibrationWidget(QWidget):
         self.pattern_progress = self._create_metric_bar('Pattern:',
             metrics_layout)
         layout.addWidget(metrics_group)
-        status_group = QGroupBox('Status & Recommendations')
+        status_group = QGroupBox('Status and Recommendations')
         status_layout = QVBoxLayout(status_group)
         self.primary_issue_label = QLabel('Primary Issue: Initializing')
         self.primary_issue_label.setFont(QFont('Arial', 10, QFont.Bold))

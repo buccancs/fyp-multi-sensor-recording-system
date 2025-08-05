@@ -65,7 +65,7 @@ graph TB
         subgraph "Physiological Sensor Layer"
             S1[Shimmer3 GSR+ Device #1<br/>Wireless Sensor Platform]
             S2[Shimmer3 GSR+ Device #2<br/>Wireless Sensor Platform]
-            CAL[Calibration & Configuration<br/>Parameter Management]
+            CAL[Calibration and Configuration<br/>Parameter Management]
         end
         
         subgraph "Communication Layer"
@@ -81,7 +81,7 @@ graph TB
         end
         
         subgraph "Data Management Layer"
-            DM[Data Manager<br/>Collection & Storage]
+            DM[Data Manager<br/>Collection and Storage]
             SM[Session Manager<br/>Recording Coordination]
             EM[Export Manager<br/>Format Conversion]
         end

@@ -171,7 +171,7 @@ class FileViewViewModel @Inject constructor(
                         files.add(
                             FileItem(
                                 file = thermalFile,
-                                type = FileType.THERMAL_DATA,
+                                type = FileType.THERMAL,
                                 sessionId = sessionInfo.sessionId,
                                 metadata = "Thermal data"
                             )
