@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object SecurityModule {
-    
+
     @Provides
     @Singleton
     fun provideSecurityUtils(
@@ -25,7 +25,7 @@ object SecurityModule {
     ): SecurityUtils {
         return SecurityUtils(context, logger)
     }
-    
+
     @Provides
     @Singleton
     fun provideEncryptedFileManager(
@@ -35,7 +35,7 @@ object SecurityModule {
     ): EncryptedFileManager {
         return EncryptedFileManager(context, securityUtils, logger)
     }
-    
+
     @Provides
     @Singleton
     fun providePrivacyManager(
@@ -44,7 +44,7 @@ object SecurityModule {
     ): PrivacyManager {
         return PrivacyManager(context, logger)
     }
-    
+
     @Provides
     @Singleton
     fun provideSecureLogger(

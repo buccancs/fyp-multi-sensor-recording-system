@@ -1,4 +1,3 @@
-
 """
 Comprehensive System Test for Multi-Sensor Recording System
 This test validates that all major components are working correctly.

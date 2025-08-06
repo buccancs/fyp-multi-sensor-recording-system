@@ -13,26 +13,22 @@ import com.multisensor.recording.R
 import com.multisensor.recording.security.PrivacyManager
 import com.multisensor.recording.util.Logger
 
-/**
- * Consent dialog for user privacy and data collection consent.
- * Implements GDPR-compliant consent collection with clear information about data usage.
- */
 class ConsentDialog(
     private val context: Context,
     private val privacyManager: PrivacyManager,
     private val logger: Logger,
     private val onConsentResult: (Boolean) -> Unit
 ) {
-    
+
     fun show(studyId: String? = null) {
-        // Don't show if consent already given
+
         if (privacyManager.hasValidConsent()) {
             onConsentResult(true)
             return
         }
-        
+
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_consent, null)
-        
+
         val titleText = dialogView.findViewById<TextView>(R.id.consent_title)
         val contentText = dialogView.findViewById<TextView>(R.id.consent_content)
         val dataTypesText = dialogView.findViewById<TextView>(R.id.data_types)
@@ -40,11 +36,9 @@ class ConsentDialog(
         val anonymizationCheckbox = dialogView.findViewById<CheckBox>(R.id.checkbox_anonymization)
         val faceBlurringCheckbox = dialogView.findViewById<CheckBox>(R.id.checkbox_face_blurring)
         val understandCheckbox = dialogView.findViewById<CheckBox>(R.id.checkbox_understand)
-        
-        // Set up content
+
         setupConsentContent(titleText, contentText, dataTypesText, rightsText, studyId)
-        
-        // Create dialog
+
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
             .setPositiveButton("I Consent") { _, _ ->
@@ -55,22 +49,21 @@ class ConsentDialog(
             }
             .setCancelable(false)
             .create()
-        
-        // Enable/disable consent button based on understanding checkbox
+
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
             positiveButton.isEnabled = false
-            
+
             understandCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 positiveButton.isEnabled = isChecked
             }
         }
-        
+
         dialog.show()
-        
+
         logger.info("Consent dialog displayed for study: ${studyId ?: "unknown"}")
     }
-    
+
     private fun setupConsentContent(
         titleText: TextView,
         contentText: TextView,
@@ -79,11 +72,11 @@ class ConsentDialog(
         studyId: String?
     ) {
         titleText.text = "Research Data Collection Consent"
-        
+
         val consentContent = """
             <h3>Purpose of Data Collection</h3>
             <p>This application collects multi-sensor physiological data for research purposes${if (studyId != null) " as part of study: <b>$studyId</b>" else ""}.</p>
-            
+
             <h3>Data Processing and Storage</h3>
             <p>Your data will be:</p>
             <ul>
@@ -92,14 +85,14 @@ class ConsentDialog(
             <li>Not shared with third parties without your explicit consent</li>
             <li>Anonymized when possible to protect your privacy</li>
             </ul>
-            
+
             <h3>Voluntary Participation</h3>
             <p>Your participation is voluntary. You may withdraw consent at any time, and your data will be deleted upon request.</p>
         """.trimIndent()
-        
+
         contentText.text = Html.fromHtml(consentContent, Html.FROM_HTML_MODE_LEGACY)
         contentText.movementMethod = LinkMovementMethod.getInstance()
-        
+
         val dataTypesContent = """
             <h3>Types of Data Collected</h3>
             <ul>
@@ -110,9 +103,9 @@ class ConsentDialog(
             <li><b>Timestamps:</b> Recording session timing information</li>
             </ul>
         """.trimIndent()
-        
+
         dataTypesText.text = Html.fromHtml(dataTypesContent, Html.FROM_HTML_MODE_LEGACY)
-        
+
         val rightsContent = """
             <h3>Your Rights (GDPR Compliance)</h3>
             <ul>
@@ -122,13 +115,13 @@ class ConsentDialog(
             <li><b>Right to rectification:</b> You can request correction of inaccurate data</li>
             <li><b>Data portability:</b> You can request transfer of your data</li>
             </ul>
-            
+
             <p><small>Data retention period: ${privacyManager.getDataRetentionDays()} days from collection date.</small></p>
         """.trimIndent()
-        
+
         rightsText.text = Html.fromHtml(rightsContent, Html.FROM_HTML_MODE_LEGACY)
     }
-    
+
     private fun handleConsent(
         consentGiven: Boolean,
         enableAnonymization: Boolean,
@@ -136,49 +129,43 @@ class ConsentDialog(
         studyId: String?
     ) {
         if (consentGiven) {
-            // Generate anonymous participant ID
+
             val participantId = privacyManager.generateAnonymousParticipantId()
-            
-            // Record consent
+
             privacyManager.recordConsent(participantId, studyId)
-            
-            // Configure anonymization preferences
+
             privacyManager.configureAnonymization(
                 enableDataAnonymization = enableAnonymization,
                 enableFaceBlurring = enableFaceBlurring,
-                enableMetadataStripping = true // Always strip metadata for privacy
+                enableMetadataStripping = true 
             )
-            
+
             logger.info("User consent granted with participant ID: $participantId")
         } else {
             logger.info("User consent declined")
         }
-        
+
         onConsentResult(consentGiven)
     }
-    
-    /**
-     * Show privacy settings dialog for existing users
-     */
+
     fun showPrivacySettings() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_privacy_settings, null)
-        
+
         val currentSettings = privacyManager.getAnonymizationSettings()
         val consentInfo = privacyManager.getConsentInfo()
-        
+
         val anonymizationCheckbox = dialogView.findViewById<CheckBox>(R.id.checkbox_anonymization)
         val faceBlurringCheckbox = dialogView.findViewById<CheckBox>(R.id.checkbox_face_blurring)
         val metadataStrippingCheckbox = dialogView.findViewById<CheckBox>(R.id.checkbox_metadata_stripping)
         val participantIdText = dialogView.findViewById<TextView>(R.id.participant_id_text)
         val consentDateText = dialogView.findViewById<TextView>(R.id.consent_date_text)
-        
-        // Set current values
+
         anonymizationCheckbox.isChecked = currentSettings.dataAnonymizationEnabled
         faceBlurringCheckbox.isChecked = currentSettings.faceBlurringEnabled
         metadataStrippingCheckbox.isChecked = currentSettings.metadataStrippingEnabled
-        
+
         participantIdText.text = "Participant ID: ${consentInfo.participantId ?: "Not set"}"
-        
+
         if (consentInfo.consentDate > 0) {
             val date = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
                 .format(java.util.Date(consentInfo.consentDate))
@@ -186,7 +173,7 @@ class ConsentDialog(
         } else {
             consentDateText.text = "Consent not given"
         }
-        
+
         AlertDialog.Builder(context)
             .setTitle("Privacy Settings")
             .setView(dialogView)
@@ -204,7 +191,7 @@ class ConsentDialog(
             }
             .show()
     }
-    
+
     private fun showWithdrawConsentDialog() {
         AlertDialog.Builder(context)
             .setTitle("Withdraw Consent")
@@ -212,7 +199,7 @@ class ConsentDialog(
             .setPositiveButton("Withdraw") { _, _ ->
                 if (privacyManager.withdrawConsent()) {
                     logger.info("User consent withdrawn successfully")
-                    // Trigger data deletion process
+
                     onConsentResult(false)
                 }
             }

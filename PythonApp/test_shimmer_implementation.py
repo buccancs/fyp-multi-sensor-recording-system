@@ -1,4 +1,3 @@
-
 """
 Test Shimmer sensor integration functionality.
 This simulates the missing test_shimmer_implementation.py file mentioned in README.

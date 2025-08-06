@@ -12,13 +12,12 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class PrivacyManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val logger: Logger
 ) {
-    
+
     companion object {
         private const val PREFS_FILE = "privacy_preferences"
         private const val KEY_CONSENT_GIVEN = "consent_given"
@@ -30,17 +29,17 @@ class PrivacyManager @Inject constructor(
         private const val KEY_PARTICIPANT_ID = "participant_id"
         private const val KEY_STUDY_ID = "study_id"
         private const val KEY_DATA_RETENTION_DAYS = "data_retention_days"
-        
+
         private const val CURRENT_CONSENT_VERSION = 1
         private const val DEFAULT_RETENTION_DAYS = 365
     }
-    
+
     private val securePrefs: SharedPreferences by lazy {
         try {
             val masterKey = MasterKey.Builder(context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                 .build()
-                
+
             EncryptedSharedPreferences.create(
                 context,
                 PREFS_FILE,
@@ -53,15 +52,13 @@ class PrivacyManager @Inject constructor(
             context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE)
         }
     }
-    
 
     fun hasValidConsent(): Boolean {
         val consentGiven = securePrefs.getBoolean(KEY_CONSENT_GIVEN, false)
         val consentVersion = securePrefs.getInt(KEY_CONSENT_VERSION, 0)
-        
+
         return consentGiven && consentVersion >= CURRENT_CONSENT_VERSION
     }
-    
 
     fun recordConsent(participantId: String? = null, studyId: String? = null) {
         securePrefs.edit()
@@ -73,10 +70,9 @@ class PrivacyManager @Inject constructor(
                 studyId?.let { putString(KEY_STUDY_ID, it) }
             }
             .apply()
-        
+
         logger.info("User consent recorded for study: ${studyId ?: "unknown"}")
     }
-    
 
     fun withdrawConsent(): Boolean {
         return try {
@@ -84,7 +80,7 @@ class PrivacyManager @Inject constructor(
                 .putBoolean(KEY_CONSENT_GIVEN, false)
                 .putLong("consent_withdrawn_date", System.currentTimeMillis())
                 .apply()
-            
+
             logger.info("User consent withdrawn - data should be deleted")
             true
         } catch (e: Exception) {
@@ -92,7 +88,6 @@ class PrivacyManager @Inject constructor(
             false
         }
     }
-    
 
     fun getConsentInfo(): ConsentInfo {
         return ConsentInfo(
@@ -103,7 +98,6 @@ class PrivacyManager @Inject constructor(
             studyId = securePrefs.getString(KEY_STUDY_ID, null)
         )
     }
-    
 
     fun configureAnonymization(
         enableDataAnonymization: Boolean,
@@ -115,10 +109,9 @@ class PrivacyManager @Inject constructor(
             .putBoolean(KEY_FACE_BLURRING, enableFaceBlurring)
             .putBoolean(KEY_METADATA_STRIPPING, enableMetadataStripping)
             .apply()
-        
+
         logger.info("Data anonymization configured: anonymize=$enableDataAnonymization, blur=$enableFaceBlurring, strip=$enableMetadataStripping")
     }
-    
 
     fun getAnonymizationSettings(): AnonymizationSettings {
         return AnonymizationSettings(
@@ -127,78 +120,67 @@ class PrivacyManager @Inject constructor(
             metadataStrippingEnabled = securePrefs.getBoolean(KEY_METADATA_STRIPPING, true)
         )
     }
-    
 
     fun setDataRetentionPeriod(days: Int) {
         securePrefs.edit()
             .putInt(KEY_DATA_RETENTION_DAYS, days)
             .apply()
-        
+
         logger.info("Data retention period set to $days days")
     }
-    
-    /**
-     * Get data retention period
-     */
+
     fun getDataRetentionDays(): Int {
         return securePrefs.getInt(KEY_DATA_RETENTION_DAYS, DEFAULT_RETENTION_DAYS)
     }
-    
-    /**
-     * Generate anonymous participant ID
-     */
+
     fun generateAnonymousParticipantId(): String {
         val uuid = UUID.randomUUID().toString()
         val anonymousId = "ANON_${uuid.substring(0, 8).uppercase()}"
-        
+
         securePrefs.edit()
             .putString(KEY_PARTICIPANT_ID, anonymousId)
             .apply()
-        
+
         return anonymousId
     }
-    
 
     fun getParticipantId(): String? {
         return securePrefs.getString(KEY_PARTICIPANT_ID, null)
     }
-    
 
     fun shouldDeleteData(dataTimestamp: Long): Boolean {
         val retentionPeriodMs = getDataRetentionDays() * 24 * 60 * 60 * 1000L
         val currentTime = System.currentTimeMillis()
-        
+
         return (currentTime - dataTimestamp) > retentionPeriodMs
     }
-    
 
     suspend fun anonymizeMetadata(metadata: Map<String, Any>): Map<String, Any> = withContext(Dispatchers.Default) {
         val anonymizedMetadata = metadata.toMutableMap()
-        
+
         if (getAnonymizationSettings().metadataStrippingEnabled) {
             val keysToRemove = listOf(
                 "device_id", "serial_number", "mac_address", "imei",
                 "phone_number", "email", "user_name", "device_name",
                 "network_ssid", "ip_address", "location", "gps"
             )
-            
+
             keysToRemove.forEach { key ->
                 anonymizedMetadata.remove(key)
             }
-            
+
             anonymizedMetadata["participant_id"] = getParticipantId() ?: generateAnonymousParticipantId()
             anonymizedMetadata["session_id"] = "SESSION_${UUID.randomUUID().toString().substring(0, 8)}"
             anonymizedMetadata["device_type"] = android.os.Build.MODEL.replace(Regex("[0-9]+"), "X")
         }
-        
+
         anonymizedMetadata.toMap()
     }
-    
 
     suspend fun generatePrivacyReport(): PrivacyReport = withContext(Dispatchers.Default) {
         val consentInfo = getConsentInfo()
         val anonymizationSettings = getAnonymizationSettings()
-        
+
         PrivacyReport(
             consentInfo = consentInfo,
             anonymizationSettings = anonymizationSettings,
@@ -217,7 +199,6 @@ class PrivacyManager @Inject constructor(
             thirdPartySharing = "None"
         )
     }
-    
 
     suspend fun clearAllPrivacyData(): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
@@ -229,7 +210,7 @@ class PrivacyManager @Inject constructor(
             false
         }
     }
-    
+
     data class ConsentInfo(
         val consentGiven: Boolean,
         val consentDate: Long,
@@ -237,13 +218,13 @@ class PrivacyManager @Inject constructor(
         val participantId: String?,
         val studyId: String?
     )
-    
+
     data class AnonymizationSettings(
         val dataAnonymizationEnabled: Boolean,
         val faceBlurringEnabled: Boolean,
         val metadataStrippingEnabled: Boolean
     )
-    
+
     data class PrivacyReport(
         val consentInfo: ConsentInfo,
         val anonymizationSettings: AnonymizationSettings,
