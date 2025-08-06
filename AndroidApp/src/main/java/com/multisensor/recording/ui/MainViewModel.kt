@@ -829,7 +829,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Switching camera")
-                logD("MainViewModel", "Switching camera")
+                // Implementation delegated to CameraRecorder
             } catch (e: Exception) {
                 logger.error("Error switching camera", e)
             }
@@ -963,7 +963,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Scanning for Shimmer devices")
-                logD("MainViewModel", "Starting Shimmer device scan")
+                // Implementation delegated to ShimmerRecorder
             } catch (e: Exception) {
                 logger.error("Error scanning for Shimmer", e)
             }
@@ -1034,7 +1034,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Refreshing all devices")
-                logD("MainViewModel", "Refreshing device connections")
                 updateSystemState()
             } catch (e: Exception) {
                 logger.error("Error refreshing devices", e)
@@ -1046,7 +1045,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Exporting all files")
-                logD("MainViewModel", "Exporting all files")
+                // Implementation moved to FileTransferManager
             } catch (e: Exception) {
                 logger.error("Error exporting files", e)
             }
@@ -1178,7 +1177,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Clearing cache")
-                logD("MainViewModel", "Clearing app cache")
+                // Implementation can be added here
             } catch (e: Exception) {
                 logger.error("Error clearing cache", e)
             }
@@ -1367,7 +1366,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Saving calibration data")
-                logD("MainViewModel", "Saving calibration data")
+                // Implementation moved to CalibrationManager
             } catch (e: Exception) {
                 logger.error("Error saving calibration data", e)
             }
@@ -1378,7 +1377,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Loading calibration data")
-                logD("MainViewModel", "Loading calibration data")
+                // Implementation moved to CalibrationManager
             } catch (e: Exception) {
                 logger.error("Error loading calibration data", e)
             }
@@ -1389,7 +1388,7 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Exporting calibration data")
-                logD("MainViewModel", "Exporting calibration data")
+                // Implementation moved to CalibrationManager
             } catch (e: Exception) {
                 logger.error("Error exporting calibration data", e)
             }
@@ -1411,10 +1410,6 @@ constructor(
                 }
             }
         }
-    }
-
-    private fun logD(tag: String, message: String) {
-        logger.debug("[$tag] $message")
     }
 
     fun switchPreviewSurfaces(textureView: TextureView?, surfaceView: SurfaceView?) {
@@ -1504,7 +1499,7 @@ constructor(
     }
 
     private fun updateSystemState() {
-        logD("MainViewModel", "System state update requested")
+        logger.debug("System state update requested")
     }
 
     fun refreshSystemStatus() {
