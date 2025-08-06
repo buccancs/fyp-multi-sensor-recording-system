@@ -23,6 +23,7 @@ import com.multisensor.recording.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

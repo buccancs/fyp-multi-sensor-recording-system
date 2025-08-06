@@ -20,36 +20,36 @@ import java.io.File
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi  
 class CalibrationCaptureManagerComprehensiveTest {
-    
+
     private lateinit var mockContext: Context
     private lateinit var mockSessionManager: SessionManager
     private lateinit var mockLogger: Logger
     private lateinit var calibrationManager: CalibrationCaptureManager
-    
+
     @Before
     fun setup() {
         mockContext = mockk(relaxed = true)
         mockSessionManager = mockk(relaxed = true)
         mockLogger = mockk(relaxed = true)
-        
+
         calibrationManager = CalibrationCaptureManager(mockContext, mockSessionManager, mockLogger)
     }
-    
+
     @After
     fun tearDown() {
         clearAllMocks()
     }
-    
+
     @Test
     fun `calibration manager initialization should succeed`() = runTest {
         assertNotNull("CalibrationCaptureManager should be created", calibrationManager)
-        
+
         val initResult = calibrationManager.initialize()
         assertTrue("CalibrationCaptureManager should initialize successfully", initResult)
-        
+
         verify { mockLogger.info("Initializing CalibrationCaptureManager...") }
     }
-    
+
     @Test
     fun `calibration pattern configuration should work`() = runTest {
 
@@ -58,7 +58,7 @@ class CalibrationCaptureManagerComprehensiveTest {
             mapOf("type" to "circles", "rows" to 7, "cols" to 5, "circle_size" to 15.0),
             mapOf("type" to "asymmetric_circles", "rows" to 8, "cols" to 4, "circle_size" to 12.0)
         )
-        
+
         patternConfigs.forEach { config ->
             val configResult = calibrationManager.configurePattern(
                 type = config["type"] as String,
@@ -66,7 +66,7 @@ class CalibrationCaptureManagerComprehensiveTest {
                 cols = config["cols"] as Int,
                 elementSize = config.values.last() as Double
             )
-            
+
             assertTrue("Pattern configuration should succeed for ${config["type"]}", configResult)
 
             val currentConfig = calibrationManager.getCurrentPatternConfig()
@@ -75,7 +75,7 @@ class CalibrationCaptureManagerComprehensiveTest {
             assertEquals("Cols should be set", config["cols"], currentConfig["cols"])
         }
     }
-    
+
     @Test
     fun `image capture and validation should work`() = runTest {
 
@@ -87,18 +87,18 @@ class CalibrationCaptureManagerComprehensiveTest {
         every { mockBitmap.config } returns Bitmap.Config.ARGB_8888
 
         every { calibrationManager.captureCalibrationImage() } returns mockBitmap
-        
+
         val capturedImage = calibrationManager.captureCalibrationImage()
         assertNotNull("Should capture calibration image", capturedImage)
         assertEquals("Image width should be correct", 640, capturedImage.width)
         assertEquals("Image height should be correct", 480, capturedImage.height)
 
         every { calibrationManager.validateCapturedImage(mockBitmap) } returns true
-        
+
         val validationResult = calibrationManager.validateCapturedImage(capturedImage)
         assertTrue("Captured image should be valid", validationResult)
     }
-    
+
     @Test
     fun `pattern detection should work correctly`() = runTest {
         val mockBitmap = mockk<Bitmap>(relaxed = true)
@@ -108,7 +108,7 @@ class CalibrationCaptureManagerComprehensiveTest {
             mapOf("type" to "circles", "expected_corners" to 35),
             mapOf("type" to "asymmetric_circles", "expected_corners" to 32)
         )
-        
+
         patternTests.forEach { test ->
             calibrationManager.configurePattern(
                 test["type"] as String, 
@@ -121,11 +121,11 @@ class CalibrationCaptureManagerComprehensiveTest {
             val mockCorners = List(expectedCorners) { index ->
                 mapOf("x" to (index % 10) * 50.0, "y" to (index / 10) * 50.0)
             }
-            
+
             every { calibrationManager.detectPattern(mockBitmap) } returns mockCorners
-            
+
             val detectedCorners = calibrationManager.detectPattern(mockBitmap)
-            
+
             assertNotNull("Should detect pattern corners", detectedCorners)
             assertEquals("Should detect correct number of corners", 
                         expectedCorners, detectedCorners.size)
@@ -138,13 +138,13 @@ class CalibrationCaptureManagerComprehensiveTest {
             }
         }
     }
-    
+
     @Test
     fun `calibration session management should work`() = runTest {
 
         val sessionId = "calibration_test_session"
         every { calibrationManager.startCalibrationSession(sessionId) } returns true
-        
+
         val sessionResult = calibrationManager.startCalibrationSession(sessionId)
         assertTrue("Calibration session should start successfully", sessionResult)
 
@@ -156,7 +156,7 @@ class CalibrationCaptureManagerComprehensiveTest {
         repeat(imageCount) { index ->
             val mockBitmap = mockk<Bitmap>(relaxed = true)
             every { calibrationManager.addCalibrationImage(mockBitmap) } returns true
-            
+
             val addResult = calibrationManager.addCalibrationImage(mockBitmap)
             assertTrue("Should add calibration image $index", addResult)
         }
@@ -166,11 +166,11 @@ class CalibrationCaptureManagerComprehensiveTest {
                     imageCount, calibrationManager.getCalibrationImageCount())
 
         every { calibrationManager.endCalibrationSession() } returns true
-        
+
         val endResult = calibrationManager.endCalibrationSession()
         assertTrue("Calibration session should end successfully", endResult)
     }
-    
+
     @Test
     fun `camera calibration calculation should work`() = runTest {
 
@@ -178,7 +178,7 @@ class CalibrationCaptureManagerComprehensiveTest {
 
         val calibrationImages = 12
         val mockCornersList = mutableListOf<List<Map<String, Double>>>()
-        
+
         repeat(calibrationImages) { imageIndex ->
             val corners = List(54) { cornerIndex ->
                 mapOf(
@@ -201,11 +201,11 @@ class CalibrationCaptureManagerComprehensiveTest {
             "pattern_size" to arrayOf(9, 6),
             "square_size" to 25.0
         )
-        
+
         every { calibrationManager.calculateCameraCalibration() } returns mockCalibrationResult
 
         val calibrationResult = calibrationManager.calculateCameraCalibration()
-        
+
         assertNotNull("Calibration calculation should return result", calibrationResult)
         assertTrue("Should include camera matrix", calibrationResult.containsKey("camera_matrix"))
         assertTrue("Should include distortion coefficients", 
@@ -215,7 +215,7 @@ class CalibrationCaptureManagerComprehensiveTest {
         val rmsError = calibrationResult["rms_error"] as Double
         assertTrue("RMS error should be reasonable", rmsError < 1.0)
     }
-    
+
     @Test
     fun `calibration quality assessment should work`() = runTest {
         val mockCalibrationData = mapOf(
@@ -241,25 +241,25 @@ class CalibrationCaptureManagerComprehensiveTest {
                 "Sufficient calibration images captured"
             )
         )
-        
+
         val qualityAssessment = calibrationManager.assessCalibrationQuality(mockCalibrationData)
-        
+
         assertNotNull("Quality assessment should be available", qualityAssessment)
         assertEquals("Overall quality should be excellent", "EXCELLENT", 
                     qualityAssessment["overall_quality"])
-        
+
         val qualityScore = qualityAssessment["quality_score"] as Double
         assertTrue("Quality score should be high", qualityScore > 90.0)
-        
+
         val recommendations = qualityAssessment["recommendations"] as List<*>
         assertTrue("Should include recommendations", recommendations.isNotEmpty())
     }
-    
+
     @Test
     fun `stereo calibration should work`() = runTest {
 
         every { calibrationManager.configureStereoCalibration(true) } returns true
-        
+
         val stereoResult = calibrationManager.configureStereoCalibration(true)
         assertTrue("Stereo calibration should be configured", stereoResult)
 
@@ -269,9 +269,9 @@ class CalibrationCaptureManagerComprehensiveTest {
         repeat(leftImages) { index ->
             val leftImage = mockk<Bitmap>(relaxed = true)
             val rightImage = mockk<Bitmap>(relaxed = true)
-            
+
             every { calibrationManager.addStereoImagePair(leftImage, rightImage) } returns true
-            
+
             val addResult = calibrationManager.addStereoImagePair(leftImage, rightImage)
             assertTrue("Should add stereo image pair $index", addResult)
         }
@@ -297,11 +297,11 @@ class CalibrationCaptureManagerComprehensiveTest {
             "fundamental_matrix" to Array(3) { Array(3) { 0.0 } },
             "rms_error" to 0.52
         )
-        
+
         every { calibrationManager.calculateStereoCalibration() } returns mockStereoResult
-        
+
         val stereoCalibration = calibrationManager.calculateStereoCalibration()
-        
+
         assertNotNull("Stereo calibration should return result", stereoCalibration)
         assertTrue("Should include left camera matrix", 
                   stereoCalibration.containsKey("left_camera_matrix"))
@@ -312,7 +312,7 @@ class CalibrationCaptureManagerComprehensiveTest {
         assertTrue("Should include translation vector", 
                   stereoCalibration.containsKey("translation_vector"))
     }
-    
+
     @Test
     fun `calibration persistence should work`() = runTest {
         val calibrationData = mapOf(
@@ -329,12 +329,12 @@ class CalibrationCaptureManagerComprehensiveTest {
 
         val calibrationId = "test_calibration_001"
         every { calibrationManager.saveCalibration(calibrationId, calibrationData) } returns true
-        
+
         val saveResult = calibrationManager.saveCalibration(calibrationId, calibrationData)
         assertTrue("Calibration should be saved successfully", saveResult)
 
         every { calibrationManager.loadCalibration(calibrationId) } returns calibrationData
-        
+
         val loadedCalibration = calibrationManager.loadCalibration(calibrationId)
         assertNotNull("Calibration should be loaded successfully", loadedCalibration)
 
@@ -344,11 +344,11 @@ class CalibrationCaptureManagerComprehensiveTest {
                     calibrationData["device_id"], loadedCalibration["device_id"])
 
         every { calibrationManager.validateSavedCalibration(calibrationId) } returns true
-        
+
         val validationResult = calibrationManager.validateSavedCalibration(calibrationId)
         assertTrue("Saved calibration should be valid", validationResult)
     }
-    
+
     @Test
     fun `calibration export and import should work`() = runTest {
         val calibrationData = mapOf(
@@ -368,10 +368,10 @@ class CalibrationCaptureManagerComprehensiveTest {
         )
 
         val exportFormats = listOf("opencv_yaml", "json", "matlab")
-        
+
         exportFormats.forEach { format ->
             every { calibrationManager.exportCalibration(calibrationData, format) } returns "exported_data_$format"
-            
+
             val exportResult = calibrationManager.exportCalibration(calibrationData, format)
             assertNotNull("Export should succeed for format $format", exportResult)
             assertTrue("Export result should contain format identifier", 
@@ -380,13 +380,13 @@ class CalibrationCaptureManagerComprehensiveTest {
 
         val exportedData = "exported_calibration_data_json"
         every { calibrationManager.importCalibration(exportedData, "json") } returns calibrationData
-        
+
         val importedData = calibrationManager.importCalibration(exportedData, "json")
         assertNotNull("Import should succeed", importedData)
         assertEquals("Imported RMS error should match", 
                     calibrationData["rms_error"], importedData["rms_error"])
     }
-    
+
     @Test
     fun `error handling and recovery should work`() = runTest {
 
@@ -397,27 +397,27 @@ class CalibrationCaptureManagerComprehensiveTest {
             "INVALID_PARAMETERS" to "Invalid calibration parameters detected",
             "STORAGE_ERROR" to "Failed to save calibration data"
         )
-        
+
         errorScenarios.forEach { (errorCode, errorMessage) ->
             every { calibrationManager.handleCalibrationError(errorCode, errorMessage) } returns true
-            
+
             val errorResult = calibrationManager.handleCalibrationError(errorCode, errorMessage)
             assertTrue("Error $errorCode should be handled", errorResult)
-            
+
             verify { mockLogger.error(match { it.contains(errorCode) }) }
         }
 
         every { calibrationManager.attemptCalibrationRecovery() } returns true
-        
+
         val recoveryResult = calibrationManager.attemptCalibrationRecovery()
         assertTrue("Calibration recovery should succeed", recoveryResult)
 
         every { calibrationManager.resetCalibration() } returns true
-        
+
         val resetResult = calibrationManager.resetCalibration()
         assertTrue("Calibration reset should succeed", resetResult)
     }
-    
+
     @Test
     fun `performance monitoring should work`() = runTest {
 
@@ -430,13 +430,13 @@ class CalibrationCaptureManagerComprehensiveTest {
             "calibration_calculation" to 85.7,
             "quality_assessment" to 12.3
         )
-        
+
         operations.forEach { (operation, duration) ->
             calibrationManager.recordPerformanceMetric(operation, duration)
         }
 
         val performanceStats = calibrationManager.getPerformanceStatistics()
-        
+
         assertNotNull("Performance statistics should be available", performanceStats)
         assertTrue("Should include pattern detection metrics", 
                   performanceStats.containsKey("pattern_detection"))

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        
+
         enableEdgeToEdge()
 
         binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             logger.info("Navigation setup completed successfully")
-            
+
         } catch (e: SecurityException) {
             logger.error("Permission error during navigation setup: ${e.message}", e)
             showErrorDialog("Permission Error", "Failed to setup navigation permissions: ${e.message}")

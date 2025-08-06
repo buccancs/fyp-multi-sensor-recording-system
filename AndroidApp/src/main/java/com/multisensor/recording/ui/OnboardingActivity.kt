@@ -44,7 +44,7 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        
+
         setupViewPager()
         setupButtons()
         updatePermissionStatus()
@@ -53,7 +53,7 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setupViewPager() {
         onboardingAdapter = OnboardingAdapter(this)
         binding.viewPager.adapter = onboardingAdapter
-        
+
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ ->
 
         }.attach()
