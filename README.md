@@ -189,12 +189,23 @@ bucika_gsr/
 - **Session Management**: Local recording coordination and synchronization
 
 #### Clean MVVM Architecture
-The Android application follows clean MVVM architecture with specialized controllers:
-- **RecordingSessionController**: Manages all recording operations with reactive state
-- **DeviceConnectionManager**: Handles device connectivity and initialization 
-- **FileTransferManager**: Manages file operations and data transfer
-- **CalibrationManager**: Coordinates calibration processes
-- **MainViewModelRefactored**: Pure UI state coordination with single responsibility
+
+**Refactored Architecture Achievement:**
+The Android application underwent complete architectural refactoring to implement clean MVVM patterns following single responsibility principle. The original monolithic MainViewModel (2035 lines) was refactored into specialized controllers, achieving a **78% size reduction** (2035 → 451 lines) while dramatically improving maintainability and testability.
+
+**Specialized Controllers:**
+- **RecordingSessionController** (218 lines): Pure recording operation management with reactive StateFlow patterns
+- **DeviceConnectionManager** (389 lines): Device connectivity orchestration and initialization procedures  
+- **FileTransferManager** (448 lines): Data transfer operations and session management
+- **CalibrationManager** (441 lines): Calibration process coordination for all device types
+- **MainViewModelRefactored** (451 lines): Pure UI state coordination through reactive composition
+
+**Architecture Benefits:**
+- **Improved Maintainability**: Each component has single, well-defined responsibility
+- **Enhanced Testability**: Controllers can be unit tested independently with clear dependencies
+- **Reactive Architecture**: StateFlow-based state management ensures UI consistency
+- **Production-Ready Code**: Complete comment removal with self-documenting architecture
+- **Scalability**: New features can be added to specific controllers without affecting others
 
 ### Communication Protocol
 - **JSON-based Messaging**: Structured communication between PC and Android

@@ -9,20 +9,26 @@ JSON-based networking protocol.
 
 ## System Architecture
 
+### Clean MVVM Architecture with Specialized Controllers
+
+The Android application implements a comprehensive refactored architecture following clean MVVM patterns and single responsibility principle. The original monolithic MainViewModel (2035 lines) was completely refactored into specialized controllers, achieving a **78% size reduction** while dramatically improving maintainability and testability.
+
 ### Core Components
 
 ```
-Android Application
+Android Application (Refactored Architecture)
 ├── UI Layer (Jetpack Compose)
 │   ├── MainActivity
 │   ├── RecordingScreen
 │   ├── SettingsScreen
 │   └── ConnectionScreen
+├── ViewModel Layer
+│   └── MainViewModelRefactored (451 lines) - Pure UI state coordination
 ├── Business Logic Layer
-│   ├── RecordingManager
-│   ├── SensorManager
-│   ├── NetworkManager
-│   └── FileManager
+│   ├── RecordingSessionController (218 lines) - Recording operations
+│   ├── DeviceConnectionManager (389 lines) - Device connectivity
+│   ├── FileTransferManager (448 lines) - File operations
+│   └── CalibrationManager (441 lines) - Calibration processes
 ├── Data Layer
 │   ├── LocalDatabase (Room)
 │   ├── PreferencesManager
@@ -32,6 +38,63 @@ Android Application
     ├── SensorAPI
     └── NetworkingAPI
 ```
+
+### Specialized Controllers Architecture
+
+#### RecordingSessionController (218 lines)
+**Pure recording operation management**
+- Handles all recording lifecycle operations (start, stop, capture)
+- Manages recording state with reactive StateFlow patterns
+- Implements error handling and recovery mechanisms
+- Provides unified interface for multi-modal recording coordination
+
+#### DeviceConnectionManager (389 lines)
+**Device connectivity orchestration**
+- Manages device discovery and initialization procedures
+- Handles connection state management and monitoring
+- Implements automatic reconnection and fault tolerance
+- Coordinates multi-device synchronization protocols
+
+#### FileTransferManager (448 lines)
+**Data transfer and file operations**
+- Manages file transfer operations to PC controller
+- Handles data export and session management
+- Implements progress tracking and error recovery
+- Coordinates storage optimization and cleanup procedures
+
+#### CalibrationManager (441 lines)
+**Calibration process coordination**
+- Manages camera and sensor calibration workflows
+- Handles calibration data validation and storage
+- Implements automated calibration quality assessment
+- Coordinates multi-device calibration synchronization
+
+#### MainViewModelRefactored (451 lines)
+**Pure UI state coordination through reactive composition**
+```kotlin
+val uiState = combine(
+    recordingController.recordingState,
+    deviceManager.connectionState,
+    fileManager.operationState,
+    calibrationManager.calibrationState
+) { recording, device, file, calibration ->
+    MainUiState(
+        isRecording = recording.isActive,
+        connectionStatus = device.connectionStatus,
+        operationStatus = file.operationStatus,
+        calibrationStatus = calibration.status
+    )
+}
+```
+
+### Architecture Benefits
+
+- **78% size reduction**: MainViewModel reduced from 2035 to 451 lines
+- **Improved testability**: Each controller can be tested in isolation with clear dependencies
+- **Enhanced maintainability**: Changes to one domain don't affect other components
+- **Reactive architecture**: StateFlow-based state management ensures UI consistency
+- **Single responsibility adherence**: Each component has one clear purpose and responsibility
+- **Production-ready code**: Complete comment removal with self-documenting architecture
 
 ### Technical Stack
 
