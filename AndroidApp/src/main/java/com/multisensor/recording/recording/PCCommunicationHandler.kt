@@ -320,7 +320,7 @@ class PCCommunicationHandler(
     }
 
     private suspend fun processCommand(connection: PCConnection, command: PCCommand) {
-        // Enforce authentication for all commands except Authenticate
+
         if (!connection.isAuthenticated && command !is PCCommand.Authenticate) {
             logger.warning("Unauthenticated connection attempted to execute command: ${command::class.simpleName}")
             val errorResponse = PCResponse.Error("Authentication required", 401)
@@ -503,29 +503,28 @@ class PCCommunicationHandler(
     }
 
     private fun validateAuthToken(token: String): Boolean {
-        // Enhanced authentication validation
+
         return try {
-            // Check if token is properly formatted and has sufficient entropy
+
             if (token.length < 32) {
                 logger.warning("Authentication token too short")
                 return false
             }
             
-            // Decode base64 token and check length
+
             val decoded = android.util.Base64.decode(token, android.util.Base64.URL_SAFE or android.util.Base64.NO_WRAP)
-            if (decoded.size < 24) { // At least 192 bits
+            if (decoded.size < 24) {
                 logger.warning("Authentication token insufficient entropy")
                 return false
             }
             
-            // In production, compare against stored hash of expected token
-            // For now, validate format and potentially check against configured token
+
             val configuredToken = getConfiguredAuthToken()
             if (configuredToken != null) {
                 return token == configuredToken
             }
             
-            // If no configured token, require minimum security standards
+
             true
         } catch (e: Exception) {
             logger.error("Token validation failed", e)
@@ -533,13 +532,9 @@ class PCCommunicationHandler(
         }
     }
     
-    /**
-     * Get the configured authentication token from secure storage
-     * In production, this should retrieve from Android Keystore or secure preferences
-     */
+    
     private fun getConfiguredAuthToken(): String? {
-        // Implementation: Use SecurityUtils to generate a secure token for this session
-        // In a production environment, this would retrieve a stored token from secure storage
+
         return securityUtils.generateAuthToken()
     }
 

@@ -14,7 +14,7 @@ import com.multisensor.recording.ui.MainUiState
 import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.MainViewModelRefactored
 
 @AndroidEntryPoint
 class CalibrationFragment : Fragment() {
@@ -22,7 +22,7 @@ class CalibrationFragment : Fragment() {
     private var _binding: FragmentCalibrationBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModelRefactored by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

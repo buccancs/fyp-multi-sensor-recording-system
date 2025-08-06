@@ -15,7 +15,7 @@ import com.multisensor.recording.ui.SystemHealthStatus
 import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.MainViewModelRefactored
 
 @AndroidEntryPoint
 class DevicesFragment : Fragment() {
@@ -23,7 +23,7 @@ class DevicesFragment : Fragment() {
     private var _binding: FragmentDevicesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModelRefactored by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +36,6 @@ class DevicesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         Toast.makeText(requireContext(), "Devices Fragment Loaded", Toast.LENGTH_SHORT).show()
 

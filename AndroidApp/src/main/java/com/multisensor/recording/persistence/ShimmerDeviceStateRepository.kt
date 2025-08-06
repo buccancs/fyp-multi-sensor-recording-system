@@ -16,7 +16,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
     private val database by lazy { SessionStateDatabase.getDatabase(context) }
     private val deviceStateDao by lazy { database.shimmerDeviceStateDao() }
 
-
     suspend fun saveDeviceState(deviceState: ShimmerDeviceState) = withContext(Dispatchers.IO) {
         deviceStateDao.insertDeviceState(deviceState)
         logConnectionHistory(
@@ -50,7 +49,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
             deviceStateDao.deleteDeviceState(deviceState)
         }
     }
-
 
     suspend fun updateConnectionStatus(
         address: String,
@@ -96,7 +94,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
             error
         )
     }
-
 
     suspend fun updateSensorConfiguration(
         address: String,
@@ -156,7 +153,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
             deviceStateDao.updateDeviceInfo(address, batteryLevel, signalStrength, firmwareVersion)
         }
 
-
     suspend fun getDevicesByPriority(): List<ShimmerDeviceState> = withContext(Dispatchers.IO) {
         deviceStateDao.getAutoReconnectDevices()
     }
@@ -183,7 +179,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
         }
     }
 
-
     fun observeAllDeviceStates(): Flow<List<ShimmerDeviceState>> {
         return deviceStateDao.observeAllDeviceStates()
     }
@@ -195,7 +190,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
     fun observeDeviceState(address: String): Flow<ShimmerDeviceState?> {
         return deviceStateDao.observeDeviceState(address)
     }
-
 
     private suspend fun logConnectionHistory(
         address: String,
@@ -227,7 +221,6 @@ class ShimmerDeviceStateRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             deviceStateDao.getRecentConnectionHistory(limit)
         }
-
 
     suspend fun cleanupOldData(maxAge: Long = 30 * 24 * 60 * 60 * 1000L) = withContext(Dispatchers.IO) {
         val cutoffTime = System.currentTimeMillis() - maxAge

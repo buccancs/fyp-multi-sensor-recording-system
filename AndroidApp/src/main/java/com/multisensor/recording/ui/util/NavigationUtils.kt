@@ -8,7 +8,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.multisensor.recording.R
 
-
 object NavigationUtils {
 
     fun navigateToFragment(fragment: Fragment, destinationId: Int) {

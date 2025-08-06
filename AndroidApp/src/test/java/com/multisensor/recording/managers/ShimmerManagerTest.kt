@@ -157,7 +157,6 @@ class ShimmerManagerTest {
 
         shimmerManager.disconnect(mockCallback)
 
-
         verify { mockCallback.onConnectionStatusChanged(false) }
     }
 
@@ -173,7 +172,6 @@ class ShimmerManagerTest {
 
     @Test
     fun `MAC address validation works correctly`() {
-
 
         every { mockSharedPreferences.getString("last_device_address", null) } returns null
 

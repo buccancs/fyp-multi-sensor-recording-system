@@ -56,7 +56,6 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var emptyStateText: TextView
     private lateinit var refreshButton: Button
 
-
     private lateinit var rgbPreviewBtn: Button
     private lateinit var irPreviewBtn: Button
     private lateinit var rgbPreviewImage: ImageView
@@ -66,7 +65,6 @@ class FileViewActivity : AppCompatActivity() {
 
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
-
 
     private var isRgbPreviewActive = false
     private var isIrPreviewActive = false
@@ -155,14 +153,12 @@ class FileViewActivity : AppCompatActivity() {
         emptyStateText = findViewById(R.id.empty_state_text)
         refreshButton = findViewById(R.id.refresh_button)
 
-
         rgbPreviewBtn = findViewById(R.id.rgb_preview_btn)
         irPreviewBtn = findViewById(R.id.ir_preview_btn)
         rgbPreviewImage = findViewById(R.id.rgb_preview_image)
         irPreviewImage = findViewById(R.id.ir_preview_image)
         rgbPreviewPlaceholder = findViewById(R.id.rgb_preview_placeholder)
         irPreviewPlaceholder = findViewById(R.id.ir_preview_placeholder)
-
 
         rgbPreviewBtn.setOnClickListener { toggleRgbPreview() }
         irPreviewBtn.setOnClickListener { toggleIrPreview() }
@@ -381,7 +377,6 @@ class FileViewActivity : AppCompatActivity() {
         }
     }
 
-
     private fun toggleRgbPreview() {
         if (!isRgbPreviewActive) {
             startRgbPreview()
@@ -483,7 +478,6 @@ class FileViewActivity : AppCompatActivity() {
         val canvas = Canvas(bitmap)
         val paint = Paint()
 
-
         val time = System.currentTimeMillis() / 100
         
 
@@ -525,7 +519,6 @@ class FileViewActivity : AppCompatActivity() {
         val paint = Paint()
 
         val time = System.currentTimeMillis() / 200.0
-
 
         for (y in 0 until height) {
             for (x in 0 until width) {

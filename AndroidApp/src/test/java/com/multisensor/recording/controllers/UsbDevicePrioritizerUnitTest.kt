@@ -296,7 +296,6 @@ class UsbDevicePrioritizerUnitTest {
         assertFalse("Risk score should not be NaN", metrics.riskScore.isNaN())
     }
 
-
     private fun createMockAssessment(
         deviceKey: String,
         device: UsbDevice,

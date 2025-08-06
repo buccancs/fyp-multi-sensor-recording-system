@@ -18,10 +18,6 @@ import javax.inject.Singleton
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
-/**
- * Secure JSON socket client that uses TLS/SSL for encrypted communication.
- * Replaces the plain JsonSocketClient with security features.
- */
 @Singleton
 class SecureJsonSocketClient
 @Inject
@@ -170,7 +166,7 @@ constructor(
         val authMessage = AuthenticateMessage(token = token)
         sendMessage(authMessage)
         
-        // Set timeout for authentication
+
         connectionScope?.launch {
             delay(AUTH_TIMEOUT_MS)
             if (!isAuthenticated) {
@@ -227,7 +223,7 @@ constructor(
                 val socketFactory = sslContext.socketFactory
                 sslSocket = socketFactory.createSocket() as SSLSocket
                 
-                // Configure SSL socket
+
                 sslSocket?.apply {
                     soTimeout = CONNECTION_TIMEOUT_MS
                     enabledProtocols = arrayOf("TLSv1.2", "TLSv1.3")
@@ -248,13 +244,11 @@ constructor(
                 logger.info("Secure connection established to PC server at $serverIp:$serverPort")
                 logger.info("SSL Session: ${sslSocket?.session?.protocol} with ${sslSocket?.session?.cipherSuite}")
 
-                // Send hello message first
                 sendHelloMessage(
                     deviceId = android.os.Build.MODEL + "_" + getDeviceSerial().takeLast(4),
                     capabilities = listOf("rgb_video", "thermal", "shimmer"),
                 )
 
-                // Then authenticate if we have a token
                 authToken?.let { token ->
                     sendAuthenticateMessage(token)
                 }
@@ -314,7 +308,7 @@ constructor(
                 if (message != null) {
                     logger.debug("Received secure message: ${message.type}")
                     
-                    // Handle authentication response
+
                     if (message is AuthResponseMessage) {
                         handleAuthenticationResponse(message)
                     } else {
@@ -398,7 +392,6 @@ private fun getDeviceSerial(): String {
     }
 }
 
-// New message types for authentication
 data class AuthenticateMessage(
     val token: String
 ) : JsonMessage() {

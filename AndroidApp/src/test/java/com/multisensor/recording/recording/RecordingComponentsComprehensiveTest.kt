@@ -1,41 +1,4 @@
-/* DISABLED - Comprehensive test references non-existent classes
-package com.multisensor.recording.recording
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.*
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import kotlinx.coroutines.test.runTest
-import android.content.Context
-import android.hardware.camera2.CameraManager
-import android.media.MediaRecorder
-import android.os.Environment
-import java.io.File
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-
-/**
- * Comprehensive Recording Components Tests
- * =======================================
- * 
- * This test suite provides comprehensive coverage for all recording-related
- * components in the Android application.
- * 
- * Test coverage:
- * - CameraRecorder: Video recording, configuration, quality management
- * - ThermalRecorder: Thermal sensor data recording, calibration
- * - ShimmerRecorder: Shimmer device integration, data synchronization
- * - Recording coordination: Multi-modal recording synchronization
- * 
- * Author: Multi-Sensor Recording System
- * Date: 2025-01-16
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class RecordingComponentsComprehensiveTest {
@@ -74,9 +37,7 @@ class RecordingComponentsComprehensiveTest {
         shimmerRecorder = ShimmerRecorder(mockContext)
     }
 
-    /**
-     * Camera Recorder Tests
-     */
+    
     @Test
     fun `test camera recorder initialization`() {
         val config = CameraConfiguration(
@@ -177,9 +138,7 @@ class RecordingComponentsComprehensiveTest {
         assertNotNull(result.exceptionOrNull())
     }
 
-    /**
-     * Thermal Recorder Tests
-     */
+    
     @Test
     fun `test thermal recorder initialization`() {
         val config = ThermalConfiguration(
@@ -270,9 +229,7 @@ class RecordingComponentsComprehensiveTest {
         assertEquals(0, health.errorCount)
     }
 
-    /**
-     * Shimmer Recorder Tests
-     */
+    
     @Test
     fun `test shimmer recorder initialization`() {
         val config = ShimmerConfiguration(
@@ -388,9 +345,7 @@ class RecordingComponentsComprehensiveTest {
         assertFalse(shimmerRecorder.validateSensorData(invalidData))
     }
 
-    /**
-     * Multi-Modal Recording Coordination Tests
-     */
+    
     @Test
     fun `test synchronized multi-modal recording`() = runTest {
         val recordingSession = MultiModalRecordingSession(
@@ -507,29 +462,6 @@ class RecordingComponentsComprehensiveTest {
         assertNotNull(overallQuality.recommendations)
     }
 
-    /*
-    @Test
-    fun `test recording storage management`() {
-        val storageManager = RecordingStorageManager(mockContext)
-
-        val session = RecordingSession(
-            sessionId = "session_003",
-            duration = 300000,
-            estimatedFileSize = 500 * 1024 * 1024
-        )
-        
-        val storageInfo = storageManager.getStorageInfo()
-        assertNotNull(storageInfo.availableSpace)
-        assertNotNull(storageInfo.totalSpace)
-        
-        val hasCapacity = storageManager.validateStorageCapacity(session)
-        assertTrue(hasCapacity is StorageValidationResult)
-        
-        if (!hasCapacity.hasCapacity) {
-            val cleanupResult = storageManager.cleanupOldRecordings(session.estimatedFileSize)
-            assertTrue(cleanupResult.isSuccess)
-        }
-    }
-    */
+    
 }
 */

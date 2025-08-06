@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ShimmerDeviceStateDao {
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDeviceState(deviceState: ShimmerDeviceState)
 
@@ -94,7 +93,6 @@ interface ShimmerDeviceStateDao {
     @Query("DELETE FROM shimmer_device_state WHERE lastUpdated < :cutoffTime")
     suspend fun deleteOldDeviceStates(cutoffTime: Long)
 
-
     @Query("SELECT * FROM shimmer_device_state ORDER BY lastUpdated DESC")
     fun observeAllDeviceStates(): Flow<List<ShimmerDeviceState>>
 
@@ -103,7 +101,6 @@ interface ShimmerDeviceStateDao {
 
     @Query("SELECT * FROM shimmer_device_state WHERE deviceAddress = :address")
     fun observeDeviceState(address: String): Flow<ShimmerDeviceState?>
-
 
     @Insert
     suspend fun insertConnectionHistory(history: ShimmerConnectionHistory)

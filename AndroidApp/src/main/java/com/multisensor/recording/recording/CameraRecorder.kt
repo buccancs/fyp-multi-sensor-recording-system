@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -949,7 +948,6 @@ constructor(
                 MediaRecorder()
             }.apply {
                 setVideoSource(MediaRecorder.VideoSource.SURFACE)
-
 
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setOutputFile(videoFile.absolutePath)

@@ -50,7 +50,6 @@ class ShimmerManagerEnhancedTest {
         clearAllMocks()
     }
 
-
     @Test
     fun `getDeviceStatistics returns comprehensive statistics when data available`() {
         every { mockSharedPreferences.getInt("connection_count", 0) } returns 5
@@ -90,7 +89,6 @@ class ShimmerManagerEnhancedTest {
         assertEquals(0L, statistics.deviceUptime)
     }
 
-
     @Test
     fun `initiateIntelligentReconnection handles no previous device gracefully`() {
         every { mockSharedPreferences.getString("last_device_address", null) } returns null
@@ -127,7 +125,6 @@ class ShimmerManagerEnhancedTest {
 
         verify { mockContext.getSharedPreferences("shimmer_device_prefs", Context.MODE_PRIVATE) }
     }
-
 
     @Test
     fun `startSDLogging validates device connection before proceeding`() {
@@ -173,7 +170,6 @@ class ShimmerManagerEnhancedTest {
         verify { mockEditor.remove("current_logging_session") }
     }
 
-
     @Test
     fun `device capabilities are properly managed and stored`() {
         every { mockSharedPreferences.getString("device_capabilities", any()) } returns "GSR,PPG,Accelerometer"
@@ -182,7 +178,6 @@ class ShimmerManagerEnhancedTest {
 
         assertNotNull(statistics)
     }
-
 
     @Test
     fun `error handling maintains system stability during SharedPreferences failures`() {
@@ -206,7 +201,6 @@ class ShimmerManagerEnhancedTest {
 
         verify { mockCallback.onError(any()) }
     }
-
 
     @Test
     fun `session management handles incomplete sessions properly`() {
@@ -244,7 +238,6 @@ class ShimmerManagerEnhancedTest {
         verify { mockCallback.onError(any()) }
     }
 
-
     @Test
     fun `existing callback interface methods are still supported`() {
         val legacyCallback = object : ShimmerManager.ShimmerCallback {
@@ -278,7 +271,6 @@ class ShimmerManagerEnhancedTest {
         verify { mockContext.getSharedPreferences(any(), any()) }
     }
 
-
     @Test
     fun `resource management handles multiple rapid operations`() {
         every { mockSharedPreferences.getString("last_device_address", null) } returns "00:06:66:68:4A:B4"
@@ -305,7 +297,6 @@ class ShimmerManagerEnhancedTest {
 
         verify { mockCallback.onError(any()) }
     }
-
 
     @Test
     fun `configuration constants are properly applied`() {

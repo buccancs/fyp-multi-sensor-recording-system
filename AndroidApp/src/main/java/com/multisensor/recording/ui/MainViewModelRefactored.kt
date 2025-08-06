@@ -399,6 +399,30 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
+    fun openDataFolder() {
+        viewModelScope.launch {
+            fileManager.openDataFolder()
+        }
+    }
+
+    fun saveCalibration() {
+        viewModelScope.launch {
+            calibrationManager.saveCalibrationData()
+        }
+    }
+
+    fun startCalibration() {
+        viewModelScope.launch {
+            calibrationManager.runCalibration()
+        }
+    }
+
+    fun stopCalibration() {
+        viewModelScope.launch {
+            calibrationManager.stopCalibration()
+        }
+    }
+
     @Deprecated("Use CalibrationManager instead")
     fun saveCalibrationData() {
         viewModelScope.launch {
