@@ -104,6 +104,20 @@ jobs:
         mypy PythonApp/ --json-report quality-reports/mypy-report || true
         echo "::endgroup::"
 
+    - name: Technical Debt Audit
+      run: |
+        echo "::group::Comprehensive Technical Debt Audit"
+        python scripts/tech_debt_audit.py --report --category python
+        
+        # Copy audit report to quality reports directory
+        mkdir -p quality-reports/tech-debt
+        cp audit_reports/tech_debt_audit_*.md quality-reports/tech-debt/ || true
+        
+        # Generate summary metrics for CI
+        python scripts/tech_debt_audit.py --category python --format=json > quality-reports/tech-debt/python-debt-metrics.json || true
+        
+        echo "::endgroup::"
+
     - name: Upload Python quality reports
       uses: actions/upload-artifact@v3
       if: always()

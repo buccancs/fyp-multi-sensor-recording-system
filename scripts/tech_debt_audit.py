@@ -821,8 +821,47 @@ class TechnicalDebtAuditor:
         else:
             return 0
     
-    def generate_report(self, audit_results: Dict[str, Any], output_file: Optional[Path] = None) -> str:
-        """Generate comprehensive audit report."""
+    def generate_report(self, audit_results: Dict[str, Any], output_file: Optional[Path] = None, format_type: str = 'markdown') -> str:
+        """Generate comprehensive audit report in specified format."""
+        if format_type == 'json':
+            return self._generate_json_report(audit_results, output_file)
+        else:
+            return self._generate_markdown_report(audit_results, output_file)
+    
+    def _generate_json_report(self, audit_results: Dict[str, Any], output_file: Optional[Path] = None) -> str:
+        """Generate JSON format audit report."""
+        # Clean up results for JSON serialization
+        json_results = {
+            'timestamp': datetime.now().isoformat(),
+            'repo_path': audit_results['repo_path'],
+            'overall_score': audit_results['overall_score'],
+            'total_issues': audit_results['total_issues'],
+            'critical_issues': audit_results['critical_issues'],
+            'categories': {}
+        }
+        
+        for category, results in audit_results['categories'].items():
+            if results.get('status') == 'completed':
+                json_results['categories'][category] = {
+                    'score': results.get('score', 0),
+                    'issues_count': len(results.get('issues', [])),
+                    'issues': results.get('issues', []),
+                    'checks': results.get('checks', {}),
+                    'recommendations': results.get('recommendations', [])
+                }
+        
+        json_output = json.dumps(json_results, indent=2, default=str)
+        
+        if output_file:
+            output_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_file, 'w') as f:
+                f.write(json_output)
+            print(f"📊 JSON report saved to: {output_file}")
+        
+        return json_output
+    
+    def _generate_markdown_report(self, audit_results: Dict[str, Any], output_file: Optional[Path] = None) -> str:
+        """Generate markdown format audit report."""
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
         report_lines = [
@@ -1084,6 +1123,12 @@ Examples:
         help="Audit specific category only"
     )
     parser.add_argument(
+        "--format",
+        choices=['markdown', 'json'],
+        default='markdown',
+        help="Output format for the report (default: markdown)"
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         help="Output file for report (default: audit_reports/tech_debt_audit_TIMESTAMP.md)"
@@ -1107,13 +1152,14 @@ Examples:
         print(f"   Critical Issues: {results['critical_issues']}")
         
         # Generate report if requested
-        if args.report:
+        if args.report or args.format == 'json':
             if args.output:
                 output_file = args.output
             else:
-                output_file = repo_path / "audit_reports" / f"tech_debt_audit_{auditor.timestamp}.md"
+                extension = 'json' if args.format == 'json' else 'md'
+                output_file = repo_path / "audit_reports" / f"tech_debt_audit_{auditor.timestamp}.{extension}"
             
-            auditor.generate_report(results, output_file)
+            auditor.generate_report(results, output_file, format_type=args.format)
         
         # Exit with appropriate code
         if results['critical_issues'] > 0:

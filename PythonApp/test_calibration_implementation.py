@@ -69,181 +69,216 @@ def test_pattern_detection():
         print(f"✗ Pattern detection test failed: {e}")
         return False
 
+def _setup_single_camera_parameters():
+    """Setup parameters for single camera calibration test."""
+    import numpy as np
+    
+    pattern_size = (9, 6)
+    square_size = 1.0
+    
+    objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
+    objp[:, :2] = np.mgrid[0 : pattern_size[0], 0 : pattern_size[1]].T.reshape(-1, 2)
+    objp *= square_size
+    
+    num_images = 10
+    img_size = (640, 480)
+    
+    true_camera_matrix = np.array([[500, 0, 320], [0, 500, 240], [0, 0, 1]], dtype=np.float32)
+    true_dist_coeffs = np.array([0.1, -0.2, 0.001, 0.002, 0.1], dtype=np.float32)
+    
+    return {
+        'objp': objp, 'num_images': num_images, 'img_size': img_size,
+        'true_camera_matrix': true_camera_matrix, 'true_dist_coeffs': true_dist_coeffs
+    }
+
+
+def _generate_single_camera_data(params):
+    """Generate synthetic data for single camera calibration."""
+    import cv2
+    import numpy as np
+    
+    objpoints = []
+    imgpoints = []
+    
+    for i in range(params['num_images']):
+        rvec = np.random.randn(3, 1) * 0.5
+        tvec = np.random.randn(3, 1) * 2.0
+        tvec[2] = abs(tvec[2]) + 5.0
+        
+        imgpts, _ = cv2.projectPoints(
+            params['objp'], rvec, tvec, params['true_camera_matrix'], params['true_dist_coeffs']
+        )
+        imgpts = imgpts.reshape(-1, 2)
+        imgpts += np.random.randn(*imgpts.shape) * 0.5
+        
+        objpoints.append(params['objp'])
+        imgpoints.append(imgpts)
+    
+    return objpoints, imgpoints
+
+
+def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coeffs, rvecs, tvecs):
+    """Evaluate calibration quality using reprojection error."""
+    import cv2
+    
+    total_error = 0
+    for i in range(len(objpoints)):
+        imgpoints2, _ = cv2.projectPoints(
+            objpoints[i], rvecs[i], tvecs[i], camera_matrix, dist_coeffs
+        )
+        error = cv2.norm(
+            imgpoints[i], imgpoints2.reshape(-1, 2), cv2.NORM_L2
+        ) / len(imgpoints2)
+        total_error += error
+    
+    mean_error = total_error / len(objpoints)
+    print(f"✓ Mean reprojection error: {mean_error:.3f} pixels")
+    print(f"✓ Calibrated camera matrix:\n{camera_matrix}")
+    print(f"✓ Distortion coefficients: {dist_coeffs.flatten()}")
+    
+    return True
+
+
 def test_single_camera_calibration():
     """Test single camera calibration with intrinsic parameter calculation."""
     print("Testing single camera calibration...")
-
+    
     try:
         import cv2
         import numpy as np
-
-        pattern_size = (9, 6)
-        square_size = 1.0
-
-        objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
-        objp[:, :2] = np.mgrid[0 : pattern_size[0], 0 : pattern_size[1]].T.reshape(
-            -1, 2
-        )
-        objp *= square_size
-
-        num_images = 10
-        img_size = (640, 480)
-
-        objpoints = []
-        imgpoints = []
-
-        true_camera_matrix = np.array(
-            [[500, 0, 320], [0, 500, 240], [0, 0, 1]], dtype=np.float32
-        )
-        true_dist_coeffs = np.array([0.1, -0.2, 0.001, 0.002, 0.1], dtype=np.float32)
-
-        for i in range(num_images):
-
-            rvec = np.random.randn(3, 1) * 0.5
-            tvec = np.random.randn(3, 1) * 2.0
-            tvec[2] = abs(tvec[2]) + 5.0
-
-            imgpts, _ = cv2.projectPoints(
-                objp, rvec, tvec, true_camera_matrix, true_dist_coeffs
-            )
-            imgpts = imgpts.reshape(-1, 2)
-
-            imgpts += np.random.randn(*imgpts.shape) * 0.5
-
-            objpoints.append(objp)
-            imgpoints.append(imgpts)
-
+        
+        params = _setup_single_camera_parameters()
+        objpoints, imgpoints = _generate_single_camera_data(params)
+        
         ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv2.calibrateCamera(
-            objpoints, imgpoints, img_size, None, None
+            objpoints, imgpoints, params['img_size'], None, None
         )
-
+        
         if ret:
             print("✓ Camera calibration completed successfully")
-
-            total_error = 0
-            for i in range(len(objpoints)):
-                imgpoints2, _ = cv2.projectPoints(
-                    objpoints[i], rvecs[i], tvecs[i], camera_matrix, dist_coeffs
-                )
-                error = cv2.norm(
-                    imgpoints[i], imgpoints2.reshape(-1, 2), cv2.NORM_L2
-                ) / len(imgpoints2)
-                total_error += error
-
-            mean_error = total_error / len(objpoints)
-            print(f"✓ Mean reprojection error: {mean_error:.3f} pixels")
-
-            print(f"✓ Calibrated camera matrix:\n{camera_matrix}")
-            print(f"✓ Distortion coefficients: {dist_coeffs.flatten()}")
-
-            return True
+            return _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coeffs, rvecs, tvecs)
         else:
             print("✗ Camera calibration failed")
             return False
-
+    
     except Exception as e:
         print(f"✗ Single camera calibration test failed: {e}")
         traceback.print_exc()
         return False
 
+def _setup_stereo_calibration_parameters():
+    """Setup parameters for stereo calibration test."""
+    import numpy as np
+    
+    pattern_size = (9, 6)
+    square_size = 1.0
+    
+    objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
+    objp[:, :2] = np.mgrid[0 : pattern_size[0], 0 : pattern_size[1]].T.reshape(-1, 2)
+    objp *= square_size
+    
+    img_size = (640, 480)
+    num_images = 15
+    
+    camera_matrix1 = np.array([[500, 0, 320], [0, 500, 240], [0, 0, 1]], dtype=np.float32)
+    camera_matrix2 = np.array([[480, 0, 310], [0, 480, 235], [0, 0, 1]], dtype=np.float32)
+    
+    dist_coeffs1 = np.array([0.1, -0.2, 0.001, 0.002, 0.1], dtype=np.float32)
+    dist_coeffs2 = np.array([0.12, -0.18, 0.0015, 0.0025, 0.08], dtype=np.float32)
+    
+    baseline = 50.0
+    stereo_R = np.eye(3, dtype=np.float32)
+    stereo_T = np.array([[baseline], [0], [0]], dtype=np.float32)
+    
+    return {
+        'objp': objp, 'img_size': img_size, 'num_images': num_images,
+        'camera_matrix1': camera_matrix1, 'camera_matrix2': camera_matrix2,
+        'dist_coeffs1': dist_coeffs1, 'dist_coeffs2': dist_coeffs2,
+        'stereo_R': stereo_R, 'stereo_T': stereo_T
+    }
+
+
+def _generate_synthetic_stereo_data(params):
+    """Generate synthetic stereo calibration data."""
+    import cv2
+    import numpy as np
+    
+    objpoints, imgpoints1, imgpoints2 = [], [], []
+    
+    for i in range(params['num_images']):
+        rvec = np.random.randn(3, 1) * 0.3
+        tvec = np.random.randn(3, 1) * 1.5
+        tvec[2] = abs(tvec[2]) + 4.0
+        
+        imgpts1, _ = cv2.projectPoints(
+            params['objp'], rvec, tvec, params['camera_matrix1'], params['dist_coeffs1']
+        )
+        
+        R, _ = cv2.Rodrigues(rvec)
+        tvec2 = params['stereo_R'] @ tvec + params['stereo_T']
+        rvec2, _ = cv2.Rodrigues(params['stereo_R'] @ R)
+        
+        imgpts2, _ = cv2.projectPoints(
+            params['objp'], rvec2, tvec2, params['camera_matrix2'], params['dist_coeffs2']
+        )
+        
+        imgpts1 = imgpts1.reshape(-1, 2).astype(np.float32)
+        imgpts2 = imgpts2.reshape(-1, 2).astype(np.float32)
+        imgpts1 += np.random.randn(*imgpts1.shape) * 0.3
+        imgpts2 += np.random.randn(*imgpts2.shape) * 0.3
+        
+        objpoints.append(params['objp'].astype(np.float32))
+        imgpoints1.append(imgpts1)
+        imgpoints2.append(imgpts2)
+    
+    return objpoints, imgpoints1, imgpoints2
+
+
+def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, params):
+    """Perform the actual stereo calibration computation."""
+    import cv2
+    import numpy as np
+    
+    try:
+        ret, _, _, _, _, R, T, E, F = cv2.stereoCalibrate(
+            objpoints, imgpoints1, imgpoints2,
+            params['camera_matrix1'], params['dist_coeffs1'],
+            params['camera_matrix2'], params['dist_coeffs2'],
+            params['img_size'], flags=cv2.CALIB_FIX_INTRINSIC,
+        )
+        
+        if ret:
+            print("✓ Stereo calibration completed successfully")
+            print(f"✓ Rotation matrix:\n{R}")
+            print(f"✓ Translation vector: {T.flatten()}")
+            print(f"✓ Essential matrix computed")
+            print(f"✓ Fundamental matrix computed")
+            
+            baseline_computed = np.linalg.norm(T)
+            print(f"✓ Computed baseline: {baseline_computed:.2f}mm")
+            return True
+        else:
+            print("✗ Stereo calibration failed")
+            return False
+            
+    except cv2.error as e:
+        print(f"⚠ Stereo calibration failed with synthetic data: {str(e)}")
+        print("✓ Stereo calibration functionality verified (algorithm available)")
+        return True
+
+
 def test_stereo_calibration():
     """Test stereo calibration for RGB-thermal camera alignment."""
     print("Testing stereo calibration...")
-
+    
     try:
         import cv2
         import numpy as np
-
-        pattern_size = (9, 6)
-        square_size = 1.0
-
-        objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
-        objp[:, :2] = np.mgrid[0 : pattern_size[0], 0 : pattern_size[1]].T.reshape(
-            -1, 2
-        )
-        objp *= square_size
-
-        img_size = (640, 480)
-        num_images = 15
-
-        camera_matrix1 = np.array(
-            [[500, 0, 320], [0, 500, 240], [0, 0, 1]], dtype=np.float32
-        )
-        camera_matrix2 = np.array(
-            [[480, 0, 310], [0, 480, 235], [0, 0, 1]], dtype=np.float32
-        )
-
-        dist_coeffs1 = np.array([0.1, -0.2, 0.001, 0.002, 0.1], dtype=np.float32)
-        dist_coeffs2 = np.array([0.12, -0.18, 0.0015, 0.0025, 0.08], dtype=np.float32)
-
-        baseline = 50.0
-        stereo_R = np.eye(3, dtype=np.float32)
-        stereo_T = np.array([[baseline], [0], [0]], dtype=np.float32)
-
-        objpoints = []
-        imgpoints1 = []
-        imgpoints2 = []
-
-        for i in range(num_images):
-
-            rvec = np.random.randn(3, 1) * 0.3
-            tvec = np.random.randn(3, 1) * 1.5
-            tvec[2] = abs(tvec[2]) + 4.0
-
-            imgpts1, _ = cv2.projectPoints(
-                objp, rvec, tvec, camera_matrix1, dist_coeffs1
-            )
-
-            R, _ = cv2.Rodrigues(rvec)
-            tvec2 = stereo_R @ tvec + stereo_T
-            rvec2, _ = cv2.Rodrigues(stereo_R @ R)
-
-            imgpts2, _ = cv2.projectPoints(
-                objp, rvec2, tvec2, camera_matrix2, dist_coeffs2
-            )
-
-            imgpts1 = imgpts1.reshape(-1, 2).astype(np.float32)
-            imgpts2 = imgpts2.reshape(-1, 2).astype(np.float32)
-            imgpts1 += np.random.randn(*imgpts1.shape) * 0.3
-            imgpts2 += np.random.randn(*imgpts2.shape) * 0.3
-
-            objpoints.append(objp.astype(np.float32))
-            imgpoints1.append(imgpts1)
-            imgpoints2.append(imgpts2)
-
-        try:
-            ret, _, _, _, _, R, T, E, F = cv2.stereoCalibrate(
-                objpoints,
-                imgpoints1,
-                imgpoints2,
-                camera_matrix1,
-                dist_coeffs1,
-                camera_matrix2,
-                dist_coeffs2,
-                img_size,
-                flags=cv2.CALIB_FIX_INTRINSIC,
-            )
-
-            if ret:
-                print("✓ Stereo calibration completed successfully")
-                print(f"✓ Rotation matrix:\n{R}")
-                print(f"✓ Translation vector: {T.flatten()}")
-                print(f"✓ Essential matrix computed")
-                print(f"✓ Fundamental matrix computed")
-
-                baseline_computed = np.linalg.norm(T)
-                print(f"✓ Computed baseline: {baseline_computed:.2f}mm")
-
-                return True
-            else:
-                print("✗ Stereo calibration failed")
-                return False
-        except cv2.error as e:
-
-            print(f"⚠ Stereo calibration failed with synthetic data: {str(e)}")
-            print("✓ Stereo calibration functionality verified (algorithm available)")
-            return True
-
+        
+        params = _setup_stereo_calibration_parameters()
+        objpoints, imgpoints1, imgpoints2 = _generate_synthetic_stereo_data(params)
+        return _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, params)
+        
     except Exception as e:
         print(f"✗ Stereo calibration test failed: {e}")
         traceback.print_exc()
