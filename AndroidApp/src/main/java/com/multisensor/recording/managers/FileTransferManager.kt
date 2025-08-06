@@ -14,22 +14,6 @@ import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manager responsible for file operations and data transfer.
- * Follows single responsibility principle by focusing only on file management.
- * 
- * Handles:
- * - File transfer to PC server
- * - File browsing and organization
- * - Storage management
- * - Data export operations
- * - Session file cleanup
- * 
- * @param context Application context for file system access
- * @param fileTransferHandler Network file transfer implementation
- * @param sessionManager Session management for file organization
- * @param logger Application logger
- */
 @Singleton
 class FileTransferManager @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -37,10 +21,7 @@ class FileTransferManager @Inject constructor(
     private val sessionManager: SessionManager,
     private val logger: Logger
 ) {
-    
-    /**
-     * Represents the current state of file operations
-     */
+
     data class FileOperationState(
         val isTransferring: Boolean = false,
         val transferProgress: TransferProgress? = null,
@@ -48,10 +29,7 @@ class FileTransferManager @Inject constructor(
         val storageInfo: StorageInfo = StorageInfo(),
         val lastOperation: String? = null
     )
-    
-    /**
-     * Progress information for file transfers
-     */
+
     data class TransferProgress(
         val totalFiles: Int,
         val transferredFiles: Int,
@@ -62,10 +40,7 @@ class FileTransferManager @Inject constructor(
         val progressPercent: Int
             get() = if (totalFiles > 0) (transferredFiles * 100) / totalFiles else 0
     }
-    
-    /**
-     * Storage usage information
-     */
+
     data class StorageInfo(
         val totalSpace: Long = 0L,
         val usedSpace: Long = 0L,
@@ -75,7 +50,7 @@ class FileTransferManager @Inject constructor(
     ) {
         val usagePercent: Int
             get() = if (totalSpace > 0) ((usedSpace * 100) / totalSpace).toInt() else 0
-        
+
         fun formatSize(bytes: Long): String {
             return when {
                 bytes < 1024 -> "$bytes B"
@@ -85,10 +60,7 @@ class FileTransferManager @Inject constructor(
             }
         }
     }
-    
-    /**
-     * File type classification for transfer operations
-     */
+
     enum class FileType(val extension: String, val category: String) {
         VIDEO("mp4", "video"),
         SENSOR_DATA("csv", "sensor_data"),
@@ -97,7 +69,7 @@ class FileTransferManager @Inject constructor(
         LOG("txt", "log"),
         CONFIG("json", "config"),
         UNKNOWN("", "data");
-        
+
         companion object {
             fun fromPath(filePath: String): FileType {
                 val extension = filePath.substringAfterLast('.', "").lowercase()
@@ -105,27 +77,22 @@ class FileTransferManager @Inject constructor(
             }
         }
     }
-    
+
     private val _operationState = MutableStateFlow(FileOperationState())
     val operationState: StateFlow<FileOperationState> = _operationState.asStateFlow()
-    
+
     private val recordingsDir: File
         get() = File(context.getExternalFilesDir(null), "recordings")
-    
-    /**
-     * Transfers all session files to the PC server
-     * 
-     * @return Transfer result with summary information
-     */
+
     suspend fun transferAllFilesToPC(): Result<String> {
         return try {
             if (_operationState.value.isTransferring) {
                 return Result.failure(IllegalStateException("Transfer already in progress"))
             }
-            
+
             logger.info("Starting file transfer to PC")
             _operationState.value = _operationState.value.copy(isTransferring = true)
-            
+
             val sessions = sessionManager.getAllSessions()
             if (sessions.isEmpty()) {
                 val message = "No recording sessions found to transfer"
@@ -135,13 +102,13 @@ class FileTransferManager @Inject constructor(
                 )
                 return Result.failure(IllegalStateException(message))
             }
-            
+
             var transferredFiles = 0
             var totalFiles = 0
             var transferredBytes = 0L
             var totalBytes = 0L
             val errors = mutableListOf<String>()
-            
+
             for (session in sessions) {
                 try {
                     val sessionFiles = fileTransferHandler.getAvailableFiles(session.sessionId)
@@ -151,18 +118,18 @@ class FileTransferManager @Inject constructor(
                     logger.warning("Failed to get files for session ${session.sessionId}: ${e.message}")
                 }
             }
-            
+
             logger.info("Found $totalFiles files (${formatBytes(totalBytes)}) across ${sessions.size} sessions")
-            
+
             for (session in sessions) {
                 try {
                     val sessionFiles = fileTransferHandler.getAvailableFiles(session.sessionId)
-                    
+
                     for (filePath in sessionFiles) {
                         try {
                             val file = File(filePath)
                             val fileType = FileType.fromPath(filePath)
-                            
+
                             _operationState.value = _operationState.value.copy(
                                 transferProgress = TransferProgress(
                                     totalFiles = totalFiles,
@@ -172,20 +139,20 @@ class FileTransferManager @Inject constructor(
                                     transferredBytes = transferredBytes
                                 )
                             )
-                            
+
                             fileTransferHandler.handleSendFileCommand(
                                 SendFileCommand(
                                     filepath = filePath,
                                     filetype = fileType.category
                                 )
                             )
-                            
+
                             transferredFiles++
                             transferredBytes += file.length()
                             logger.debug("Transferred file: ${file.name}")
-                            
+
                             delay(100)
-                            
+
                         } catch (e: Exception) {
                             val error = "Failed to transfer file: $filePath - ${e.message}"
                             errors.add(error)
@@ -198,26 +165,26 @@ class FileTransferManager @Inject constructor(
                     logger.error(error, e)
                 }
             }
-            
+
             val summary = if (transferredFiles > 0) {
                 "Successfully transferred $transferredFiles of $totalFiles files (${formatBytes(transferredBytes)})"
             } else {
                 "No files were transferred successfully"
             }
-            
+
             if (errors.isNotEmpty()) {
                 logger.warning("Transfer completed with ${errors.size} errors")
             }
-            
+
             _operationState.value = _operationState.value.copy(
                 isTransferring = false,
                 transferProgress = null,
                 lastOperation = summary
             )
-            
+
             logger.info("File transfer completed: $summary")
             Result.success(summary)
-            
+
         } catch (e: Exception) {
             logger.error("File transfer failed", e)
             _operationState.value = _operationState.value.copy(
@@ -228,17 +195,12 @@ class FileTransferManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Exports all data to external storage or sharing
-     * 
-     * @return Export result with file information
-     */
+
     suspend fun exportAllData(): Result<String> {
         return try {
             logger.info("Starting data export...")
             _operationState.value = _operationState.value.copy(isTransferring = true)
-            
+
             if (!recordingsDir.exists() || recordingsDir.listFiles()?.isEmpty() == true) {
                 val message = "No data to export"
                 _operationState.value = _operationState.value.copy(
@@ -247,24 +209,24 @@ class FileTransferManager @Inject constructor(
                 )
                 return Result.failure(IllegalStateException(message))
             }
-            
+
             val fileCount = recordingsDir.walkTopDown().count { it.isFile }
             val totalSize = calculateDirectorySize(recordingsDir)
-            
+
             logger.info("Exporting $fileCount files (${formatBytes(totalSize)})")
-            
+
             delay(2000)
-            
+
             val summary = "Export completed: $fileCount files (${formatBytes(totalSize)}) from ${recordingsDir.absolutePath}"
-            
+
             _operationState.value = _operationState.value.copy(
                 isTransferring = false,
                 lastOperation = summary
             )
-            
+
             logger.info("Data export completed")
             Result.success(summary)
-            
+
         } catch (e: Exception) {
             logger.error("Data export failed", e)
             _operationState.value = _operationState.value.copy(
@@ -274,17 +236,12 @@ class FileTransferManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Deletes the current recording session
-     * 
-     * @return Deletion result with information about removed files
-     */
+
     suspend fun deleteCurrentSession(): Result<String> {
         return try {
             logger.info("Deleting current session...")
             _operationState.value = _operationState.value.copy(isTransferring = true)
-            
+
             val currentSession = sessionManager.getCurrentSession()
             if (currentSession == null) {
                 val message = "No active session to delete"
@@ -294,13 +251,13 @@ class FileTransferManager @Inject constructor(
                 )
                 return Result.failure(IllegalStateException(message))
             }
-            
+
             val sessionDir = File(recordingsDir, currentSession.sessionId)
             val deletedFiles = if (sessionDir.exists()) {
                 val fileCount = sessionDir.walkTopDown().count { it.isFile }
                 val size = calculateDirectorySize(sessionDir)
                 val success = sessionDir.deleteRecursively()
-                
+
                 if (success) {
                     logger.info("Deleted session directory: ${sessionDir.absolutePath}")
                     fileCount
@@ -312,21 +269,21 @@ class FileTransferManager @Inject constructor(
                 logger.warning("Session directory does not exist: ${sessionDir.absolutePath}")
                 0
             }
-            
+
             sessionManager.finalizeCurrentSession()
-            
+
             val summary = "Session deleted: $deletedFiles files removed"
-            
+
             _operationState.value = _operationState.value.copy(
                 isTransferring = false,
                 lastOperation = summary
             )
-            
+
             refreshStorageInfo()
-            
+
             logger.info("Current session deleted: $summary")
             Result.success(summary)
-            
+
         } catch (e: Exception) {
             logger.error("Session deletion failed", e)
             _operationState.value = _operationState.value.copy(
@@ -336,17 +293,12 @@ class FileTransferManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Deletes all recorded data
-     * 
-     * @return Deletion result with information about removed files
-     */
+
     suspend fun deleteAllData(): Result<String> {
         return try {
             logger.info("Deleting all recorded data...")
             _operationState.value = _operationState.value.copy(isTransferring = true)
-            
+
             if (!recordingsDir.exists()) {
                 val message = "No data directory found"
                 _operationState.value = _operationState.value.copy(
@@ -355,28 +307,28 @@ class FileTransferManager @Inject constructor(
                 )
                 return Result.success(message)
             }
-            
+
             val fileCount = recordingsDir.walkTopDown().count { it.isFile }
             val totalSize = calculateDirectorySize(recordingsDir)
-            
+
             val success = recordingsDir.deleteRecursively() && recordingsDir.mkdirs()
-            
+
             val summary = if (success) {
                 "All data deleted: $fileCount files (${formatBytes(totalSize)}) removed"
             } else {
                 "Failed to delete all data"
             }
-            
+
             _operationState.value = _operationState.value.copy(
                 isTransferring = false,
                 lastOperation = summary
             )
-            
+
             refreshStorageInfo()
-            
+
             logger.info("All data deletion completed: $summary")
             if (success) Result.success(summary) else Result.failure(RuntimeException(summary))
-            
+
         } catch (e: Exception) {
             logger.error("Data deletion failed", e)
             _operationState.value = _operationState.value.copy(
@@ -386,58 +338,50 @@ class FileTransferManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Opens the data folder for browsing
-     * 
-     * @return Folder information
-     */
+
     suspend fun openDataFolder(): Result<String> {
         return try {
             logger.info("Opening data folder...")
-            
+
             if (!recordingsDir.exists()) {
                 recordingsDir.mkdirs()
                 logger.info("Created recordings directory: ${recordingsDir.absolutePath}")
             }
-            
+
             val sessionCount = getSessionCount()
             val totalSize = calculateDirectorySize(recordingsDir)
-            
+
             val summary = "Data folder: ${recordingsDir.absolutePath} ($sessionCount sessions, ${formatBytes(totalSize)})"
-            
+
             _operationState.value = _operationState.value.copy(lastOperation = summary)
-            
+
             logger.info("Data folder opened: $summary")
             Result.success(summary)
-            
+
         } catch (e: Exception) {
             logger.error("Failed to open data folder", e)
             Result.failure(e)
         }
     }
-    
-    /**
-     * Refreshes storage information
-     */
+
     suspend fun refreshStorageInfo(): Result<StorageInfo> {
         return try {
             logger.debug("Refreshing storage information...")
-            
+
             val externalFilesDir = context.getExternalFilesDir(null)
             val totalSpace = externalFilesDir?.totalSpace ?: 0L
             val freeSpace = externalFilesDir?.freeSpace ?: 0L
             val usedSpace = totalSpace - freeSpace
-            
+
             val sessionCount = getSessionCount()
             val fileCount = if (recordingsDir.exists()) {
                 recordingsDir.walkTopDown().count { it.isFile }
             } else 0
-            
+
             val recordingsSize = if (recordingsDir.exists()) {
                 calculateDirectorySize(recordingsDir)
             } else 0L
-            
+
             val storageInfo = StorageInfo(
                 totalSpace = totalSpace,
                 usedSpace = usedSpace,
@@ -445,41 +389,28 @@ class FileTransferManager @Inject constructor(
                 sessionCount = sessionCount,
                 fileCount = fileCount
             )
-            
+
             _operationState.value = _operationState.value.copy(storageInfo = storageInfo)
-            
+
             logger.debug("Storage info refreshed: $sessionCount sessions, $fileCount files, ${formatBytes(recordingsSize)} recordings")
             Result.success(storageInfo)
-            
+
         } catch (e: Exception) {
             logger.error("Failed to refresh storage info", e)
             Result.failure(e)
         }
     }
-    
-    /**
-     * Gets the current operation state
-     */
+
     fun getCurrentState(): FileOperationState = _operationState.value
-    
-    /**
-     * Clears any operation errors
-     */
+
     fun clearError() {
         _operationState.value = _operationState.value.copy(transferError = null)
     }
-    
-    /**
-     * Gets the recordings directory path
-     */
+
     fun getRecordingsPath(): String = recordingsDir.absolutePath
-    
-    /**
-     * Checks if transfer is currently in progress
-     */
+
     fun isTransferring(): Boolean = _operationState.value.isTransferring
-    
-    
+
     private fun getSessionCount(): Int {
         return try {
             if (!recordingsDir.exists()) 0
@@ -489,11 +420,11 @@ class FileTransferManager @Inject constructor(
             0
         }
     }
-    
+
     private fun calculateDirectorySize(directory: File): Long {
         return try {
             if (!directory.exists()) return 0L
-            
+
             var size = 0L
             directory.walkTopDown().forEach { file ->
                 if (file.isFile) {
@@ -506,7 +437,7 @@ class FileTransferManager @Inject constructor(
             0L
         }
     }
-    
+
     private fun formatBytes(bytes: Long): String {
         return when {
             bytes < 1024 -> "$bytes B"

@@ -19,19 +19,6 @@ import com.multisensor.recording.managers.CalibrationManager
 import com.multisensor.recording.util.Logger
 import javax.inject.Inject
 
-/**
- * Refactored MainViewModel following clean MVVM architecture.
- * 
- * This ViewModel now focuses solely on UI state management and coordination,
- * delegating business logic to specialized controllers and managers:
- * - RecordingSessionController: Handles all recording operations
- * - DeviceConnectionManager: Manages device connections
- * - FileTransferManager: Handles file operations
- * - CalibrationManager: Manages calibration processes
- * 
- * By following the single responsibility principle, this ViewModel is now
- * much more maintainable and testable.
- */
 @HiltViewModel
 class MainViewModelRefactored @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -47,7 +34,7 @@ class MainViewModelRefactored @Inject constructor(
 
     init {
         logger.info("MainViewModel initialized with clean architecture")
-        
+
         viewModelScope.launch {
             combine(
                 recordingController.recordingState,
@@ -55,13 +42,13 @@ class MainViewModelRefactored @Inject constructor(
                 fileManager.operationState,
                 calibrationManager.calibrationState
             ) { recordingState, connectionState, fileState, calibrationState ->
-                
+
                 _uiState.value.copy(
                     isRecording = recordingState.isRecording,
                     isPaused = recordingState.isPaused,
                     recordingSessionId = recordingState.sessionId,
                     isLoadingRecording = false,
-                    
+
                     isCameraConnected = connectionState.cameraConnected,
                     isThermalConnected = connectionState.thermalConnected,
                     isShimmerConnected = connectionState.shimmerConnected,
@@ -69,7 +56,7 @@ class MainViewModelRefactored @Inject constructor(
                     isInitialized = connectionState.cameraConnected || connectionState.thermalConnected,
                     isConnecting = connectionState.isInitializing,
                     isScanning = connectionState.isScanning,
-                    
+
                     isCalibrating = calibrationState.isCalibrating,
                     isCalibrationRunning = calibrationState.isCalibrating,
                     isValidating = calibrationState.isValidating,
@@ -79,27 +66,27 @@ class MainViewModelRefactored @Inject constructor(
                     isCameraCalibrated = calibrationState.completedCalibrations.contains(CalibrationManager.CalibrationType.CAMERA),
                     isThermalCalibrated = calibrationState.completedCalibrations.contains(CalibrationManager.CalibrationType.THERMAL),
                     isShimmerCalibrated = calibrationState.completedCalibrations.contains(CalibrationManager.CalibrationType.SHIMMER),
-                    
+
                     isTransferring = fileState.isTransferring,
-                    
+
                     statusText = determineStatusText(recordingState, connectionState, fileState, calibrationState),
-                    errorMessage = recordingState.recordingError 
-                        ?: connectionState.connectionError 
-                        ?: fileState.transferError 
+                    errorMessage = recordingState.recordingError
+                        ?: connectionState.connectionError
+                        ?: fileState.transferError
                         ?: calibrationState.calibrationError,
-                    
+
                     showManualControls = true,
                     isLoadingPermissions = connectionState.isInitializing,
-                    showErrorDialog = (recordingState.recordingError != null 
-                        || connectionState.connectionError != null 
-                        || fileState.transferError != null 
+                    showErrorDialog = (recordingState.recordingError != null
+                        || connectionState.connectionError != null
+                        || fileState.transferError != null
                         || calibrationState.calibrationError != null)
                 )
             }.collect { newState ->
                 _uiState.value = newState
             }
         }
-        
+
         updateUiState { currentState ->
             currentState.copy(
                 statusText = "Initializing application...",
@@ -109,17 +96,13 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-    
-    /**
-     * Initializes the system with provided views for camera preview
-     */
     fun initializeSystem(textureView: TextureView, thermalSurfaceView: SurfaceView? = null) {
         viewModelScope.launch {
             try {
                 logger.info("Initializing recording system...")
-                
+
                 val result = deviceManager.initializeAllDevices(textureView, thermalSurfaceView)
-                
+
                 if (result.isFailure) {
                     logger.error("System initialization failed: ${result.exceptionOrNull()?.message}")
                     updateUiState { currentState ->
@@ -133,7 +116,7 @@ class MainViewModelRefactored @Inject constructor(
                 } else {
                     logger.info("System initialization completed successfully")
                 }
-                
+
             } catch (e: Exception) {
                 logger.error("System initialization error", e)
                 updateUiState { currentState ->
@@ -148,9 +131,6 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-    /**
-     * Initializes system with fallback mode
-     */
     fun initializeSystemWithFallback() {
         viewModelScope.launch {
             logger.info("Initializing system with fallback mode...")
@@ -166,17 +146,12 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-
-    
-    /**
-     * Starts a new recording session
-     */
     fun startRecording() {
         viewModelScope.launch {
             try {
                 logger.info("Starting recording session...")
                 val result = recordingController.startRecording()
-                
+
                 if (result.isFailure) {
                     logger.error("Failed to start recording: ${result.exceptionOrNull()?.message}")
                 }
@@ -186,15 +161,12 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-    /**
-     * Stops the current recording session
-     */
     fun stopRecording() {
         viewModelScope.launch {
             try {
                 logger.info("Stopping recording session...")
                 val result = recordingController.stopRecording()
-                
+
                 if (result.isFailure) {
                     logger.error("Failed to stop recording: ${result.exceptionOrNull()?.message}")
                 }
@@ -204,15 +176,12 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-    /**
-     * Captures a RAW image during recording
-     */
     fun captureRawImage() {
         viewModelScope.launch {
             try {
                 logger.info("Capturing RAW image...")
                 val result = recordingController.captureRawImage()
-                
+
                 if (result.isFailure) {
                     logger.error("Failed to capture RAW image: ${result.exceptionOrNull()?.message}")
                 }
@@ -222,65 +191,42 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-    /**
-     * Pauses the current recording
-     */
     fun pauseRecording() {
         viewModelScope.launch {
             recordingController.pauseRecording()
         }
     }
 
-
-    
-    /**
-     * Connects to the PC server
-     */
     fun connectToPC() {
         viewModelScope.launch {
             deviceManager.connectToPC()
         }
     }
 
-    /**
-     * Disconnects from the PC server
-     */
     fun disconnectFromPC() {
         viewModelScope.launch {
             deviceManager.disconnectFromPC()
         }
     }
 
-    /**
-     * Scans for available devices
-     */
     fun scanForDevices() {
         viewModelScope.launch {
             deviceManager.scanForDevices()
         }
     }
 
-    /**
-     * Connects to all available devices
-     */
     fun connectAllDevices() {
         viewModelScope.launch {
             deviceManager.refreshDeviceStatus()
         }
     }
 
-    /**
-     * Refreshes the status of all devices
-     */
     fun refreshSystemStatus() {
         viewModelScope.launch {
             deviceManager.refreshDeviceStatus()
         }
     }
 
-    /**
-     * Checks device capabilities
-     */
     fun checkRawStage3Availability(): Boolean {
         viewModelScope.launch {
             deviceManager.checkDeviceCapabilities()
@@ -288,9 +234,6 @@ class MainViewModelRefactored @Inject constructor(
         return false
     }
 
-    /**
-     * Checks thermal camera availability
-     */
     fun checkThermalCameraAvailability(): Boolean {
         viewModelScope.launch {
             deviceManager.checkDeviceCapabilities()
@@ -298,120 +241,78 @@ class MainViewModelRefactored @Inject constructor(
         return false
     }
 
-
-    
-    /**
-     * Runs the calibration process
-     */
     fun runCalibration() {
         viewModelScope.launch {
             calibrationManager.runCalibration()
         }
     }
 
-    /**
-     * Starts camera calibration
-     */
     fun startCameraCalibration() {
         viewModelScope.launch {
             calibrationManager.runCameraCalibration()
         }
     }
 
-    /**
-     * Starts thermal calibration
-     */
     fun startThermalCalibration() {
         viewModelScope.launch {
             calibrationManager.runThermalCalibration()
         }
     }
 
-    /**
-     * Starts Shimmer calibration
-     */
     fun startShimmerCalibration() {
         viewModelScope.launch {
             calibrationManager.runShimmerCalibration()
         }
     }
 
-    /**
-     * Validates the system calibration
-     */
     fun validateSystem() {
         viewModelScope.launch {
             calibrationManager.validateSystemCalibration()
         }
     }
 
-
-    
-    /**
-     * Transfers files to PC
-     */
     fun transferFilesToPC() {
         viewModelScope.launch {
             fileManager.transferAllFilesToPC()
         }
     }
 
-    /**
-     * Exports all data
-     */
     fun exportData() {
         viewModelScope.launch {
             fileManager.exportAllData()
         }
     }
 
-    /**
-     * Deletes the current session
-     */
     fun deleteCurrentSession() {
         viewModelScope.launch {
             fileManager.deleteCurrentSession()
         }
     }
 
-    /**
-     * Deletes all recorded data
-     */
     fun deleteAllFiles() {
         viewModelScope.launch {
             fileManager.deleteAllData()
         }
     }
 
-    /**
-     * Opens the data folder
-     */
     fun browseFiles() {
         viewModelScope.launch {
             fileManager.openDataFolder()
         }
     }
 
-    /**
-     * Refreshes storage information
-     */
     fun refreshStorageInfo() {
         viewModelScope.launch {
             fileManager.refreshStorageInfo()
         }
     }
 
-
-    
-    /**
-     * Clears any error messages
-     */
     fun clearError() {
         recordingController.clearError()
         deviceManager.clearError()
         fileManager.clearError()
         calibrationManager.clearError()
-        
+
         updateUiState { currentState ->
             currentState.copy(
                 errorMessage = null,
@@ -420,8 +321,6 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-
-    
     private fun updateUiState(update: (MainUiState) -> MainUiState) {
         _uiState.value = update(_uiState.value)
     }
@@ -442,8 +341,6 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-
-    
     override fun onCleared() {
         super.onCleared()
         logger.info("MainViewModel cleared")
@@ -455,8 +352,6 @@ class MainViewModelRefactored @Inject constructor(
         }
     }
 
-
-    
     @Deprecated("Use specific controller methods instead")
     fun switchCamera() {
         logger.warning("switchCamera() is deprecated - functionality moved to DeviceConnectionManager")

@@ -18,24 +18,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manager responsible for handling device connections and initialization.
- * Follows single responsibility principle by focusing only on device connectivity.
- * 
- * Manages connections for:
- * - RGB Camera
- * - Thermal Camera (Topdon)
- * - Shimmer Sensors
- * - PC Server (JSON socket)
- * 
- * @param context Application context for system services
- * @param cameraRecorder RGB camera controller
- * @param thermalRecorder Thermal camera controller
- * @param shimmerRecorder Shimmer sensor controller
- * @param jsonSocketClient PC communication client
- * @param networkConfiguration Network settings
- * @param logger Application logger
- */
 @Singleton
 class DeviceConnectionManager @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -46,10 +28,7 @@ class DeviceConnectionManager @Inject constructor(
     private val networkConfiguration: NetworkConfiguration,
     private val logger: Logger
 ) {
-    
-    /**
-     * Represents the connection status of all devices
-     */
+
     data class DeviceConnectionState(
         val cameraConnected: Boolean = false,
         val thermalConnected: Boolean = false,
@@ -60,37 +39,24 @@ class DeviceConnectionManager @Inject constructor(
         val connectionError: String? = null,
         val deviceInfo: DeviceInfo = DeviceInfo()
     )
-    
-    /**
-     * Information about discovered and connected devices
-     */
+
     data class DeviceInfo(
         val availableCameras: List<String> = emptyList(),
         val shimmerDevices: List<ShimmerDeviceInfo> = emptyList(),
         val pcServerAddress: String? = null,
         val thermalCameraModel: String? = null
     )
-    
-    /**
-     * Information about a Shimmer device
-     */
+
     data class ShimmerDeviceInfo(
         val macAddress: String,
         val deviceName: String,
         val connectionType: String,
         val isConnected: Boolean = false
     )
-    
+
     private val _connectionState = MutableStateFlow(DeviceConnectionState())
     val connectionState: StateFlow<DeviceConnectionState> = _connectionState.asStateFlow()
-    
-    /**
-     * Initializes all devices with provided views for camera preview
-     * 
-     * @param textureView View for RGB camera preview
-     * @param thermalSurfaceView View for thermal camera preview
-     * @return Initialization result with device status summary
-     */
+
     suspend fun initializeAllDevices(
         textureView: TextureView? = null,
         thermalSurfaceView: SurfaceView? = null
@@ -98,11 +64,11 @@ class DeviceConnectionManager @Inject constructor(
         return try {
             logger.info("Initializing all devices...")
             _connectionState.value = _connectionState.value.copy(isInitializing = true)
-            
+
             val results = mutableListOf<String>()
             var successCount = 0
             var totalDevices = 0
-            
+
             totalDevices++
             val cameraResult = initializeCamera(textureView)
             if (cameraResult.isSuccess) {
@@ -111,7 +77,7 @@ class DeviceConnectionManager @Inject constructor(
             } else {
                 results.add("Camera: ${cameraResult.exceptionOrNull()?.message ?: "Failed"}")
             }
-            
+
             totalDevices++
             val thermalResult = initializeThermalCamera(thermalSurfaceView)
             if (thermalResult.isSuccess) {
@@ -120,7 +86,7 @@ class DeviceConnectionManager @Inject constructor(
             } else {
                 results.add("Thermal: ${thermalResult.exceptionOrNull()?.message ?: "N/A"}")
             }
-            
+
             totalDevices++
             val shimmerResult = initializeShimmerSensors()
             if (shimmerResult.isSuccess) {
@@ -129,14 +95,14 @@ class DeviceConnectionManager @Inject constructor(
             } else {
                 results.add("Shimmer: ${shimmerResult.exceptionOrNull()?.message ?: "N/A"}")
             }
-            
+
             val summary = "Device initialization: $successCount/$totalDevices successful - ${results.joinToString(", ")}"
-            
+
             _connectionState.value = _connectionState.value.copy(isInitializing = false)
-            
+
             logger.info("Device initialization completed: $summary")
             Result.success(summary)
-            
+
         } catch (e: Exception) {
             logger.error("Device initialization failed", e)
             _connectionState.value = _connectionState.value.copy(
@@ -146,10 +112,7 @@ class DeviceConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Initializes the RGB camera
-     */
+
     private suspend fun initializeCamera(textureView: TextureView?): Result<Unit> {
         return try {
             if (textureView != null) {
@@ -170,10 +133,7 @@ class DeviceConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Initializes the thermal camera
-     */
+
     private suspend fun initializeThermalCamera(surfaceView: SurfaceView?): Result<Unit> {
         return try {
             val success = thermalRecorder.initialize(surfaceView)
@@ -191,10 +151,7 @@ class DeviceConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Initializes Shimmer sensors
-     */
+
     private suspend fun initializeShimmerSensors(): Result<Unit> {
         return try {
             val success = shimmerRecorder.initialize()
@@ -211,22 +168,19 @@ class DeviceConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Connects to the PC server
-     */
+
     suspend fun connectToPC(): Result<String> {
         return try {
             logger.info("Connecting to PC server...")
-            
+
             val serverConfig = networkConfiguration.getServerConfiguration()
             jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
             jsonSocketClient.connect()
-            
+
             delay(2000)
-            
+
             val isConnected = jsonSocketClient.isConnected()
-            
+
             if (isConnected) {
                 val address = serverConfig.getJsonAddress()
                 _connectionState.value = _connectionState.value.copy(
@@ -241,7 +195,7 @@ class DeviceConnectionManager @Inject constructor(
                 logger.error(message)
                 Result.failure(RuntimeException(message))
             }
-            
+
         } catch (e: Exception) {
             logger.error("PC connection error", e)
             _connectionState.value = _connectionState.value.copy(
@@ -250,37 +204,31 @@ class DeviceConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Disconnects from the PC server
-     */
+
     suspend fun disconnectFromPC(): Result<Unit> {
         return try {
             logger.info("Disconnecting from PC server...")
             jsonSocketClient.disconnect()
-            
+
             _connectionState.value = _connectionState.value.copy(
                 pcConnected = false,
                 deviceInfo = _connectionState.value.deviceInfo.copy(pcServerAddress = null)
             )
-            
+
             logger.info("Disconnected from PC server")
             Result.success(Unit)
-            
+
         } catch (e: Exception) {
             logger.error("PC disconnection error", e)
             Result.failure(e)
         }
     }
-    
-    /**
-     * Scans for available devices
-     */
+
     suspend fun scanForDevices(): Result<DeviceInfo> {
         return try {
             logger.info("Scanning for devices...")
             _connectionState.value = _connectionState.value.copy(isScanning = true)
-            
+
             val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val availableCameras = try {
                 cameraManager.cameraIdList.toList()
@@ -288,7 +236,7 @@ class DeviceConnectionManager @Inject constructor(
                 logger.warning("Camera scan failed: ${e.message}")
                 emptyList()
             }
-            
+
             val shimmerDevices = try {
                 shimmerRecorder.scanForDevices().map { (mac, name) ->
                     ShimmerDeviceInfo(
@@ -302,30 +250,30 @@ class DeviceConnectionManager @Inject constructor(
                 logger.warning("Shimmer scan failed: ${e.message}")
                 emptyList()
             }
-            
+
             val thermalModel = try {
                 if (thermalRecorder.isThermalCameraAvailable()) "Topdon Camera" else null
             } catch (e: Exception) {
                 logger.warning("Thermal check failed: ${e.message}")
                 null
             }
-            
+
             val deviceInfo = DeviceInfo(
                 availableCameras = availableCameras,
                 shimmerDevices = shimmerDevices,
                 thermalCameraModel = thermalModel
             )
-            
+
             _connectionState.value = _connectionState.value.copy(
                 isScanning = false,
                 deviceInfo = deviceInfo
             )
-            
+
             val summary = "Found: ${availableCameras.size} cameras, ${shimmerDevices.size} Shimmer devices, thermal: ${thermalModel != null}"
             logger.info("Device scan completed: $summary")
-            
+
             Result.success(deviceInfo)
-            
+
         } catch (e: Exception) {
             logger.error("Device scan error", e)
             _connectionState.value = _connectionState.value.copy(
@@ -335,10 +283,7 @@ class DeviceConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
-    /**
-     * Connects to a specific Shimmer device
-     */
+
     suspend fun connectShimmerDevice(
         macAddress: String,
         deviceName: String,
@@ -346,98 +291,86 @@ class DeviceConnectionManager @Inject constructor(
     ): Result<Unit> {
         return try {
             logger.info("Connecting to Shimmer device: $deviceName ($macAddress)")
-            
+
             val success = shimmerRecorder.connectSingleDevice(macAddress, deviceName, connectionType)
-            
+
             if (success) {
                 val updatedDevices = _connectionState.value.deviceInfo.shimmerDevices.map { device ->
                     if (device.macAddress == macAddress) {
                         device.copy(isConnected = true)
                     } else device
                 }
-                
+
                 _connectionState.value = _connectionState.value.copy(
                     shimmerConnected = true,
                     deviceInfo = _connectionState.value.deviceInfo.copy(shimmerDevices = updatedDevices)
                 )
-                
+
                 logger.info("Successfully connected to Shimmer device: $deviceName")
                 Result.success(Unit)
             } else {
                 Result.failure(RuntimeException("Failed to connect to Shimmer device"))
             }
-            
+
         } catch (e: Exception) {
             logger.error("Shimmer connection error", e)
             Result.failure(e)
         }
     }
-    
-    /**
-     * Refreshes the status of all connected devices
-     */
+
     suspend fun refreshDeviceStatus(): Result<String> {
         return try {
             logger.info("Refreshing device status...")
-            
+
             val cameraConnected = cameraRecorder.isConnected
-            
+
             val thermalConnected = thermalRecorder.isThermalCameraAvailable()
-            
+
             val shimmerStatus = shimmerRecorder.getShimmerStatus()
             val shimmerConnected = shimmerStatus.isConnected
-            
+
             val pcConnected = jsonSocketClient.isConnected()
-            
+
             _connectionState.value = _connectionState.value.copy(
                 cameraConnected = cameraConnected,
                 thermalConnected = thermalConnected,
                 shimmerConnected = shimmerConnected,
                 pcConnected = pcConnected
             )
-            
+
             val summary = "Status: Camera=$cameraConnected, Thermal=$thermalConnected, Shimmer=$shimmerConnected, PC=$pcConnected"
             logger.info("Device status refreshed: $summary")
-            
+
             Result.success(summary)
-            
+
         } catch (e: Exception) {
             logger.error("Device status refresh error", e)
             Result.failure(e)
         }
     }
-    
-    /**
-     * Gets the current connection state
-     */
+
     fun getCurrentState(): DeviceConnectionState = _connectionState.value
-    
-    /**
-     * Clears any connection errors
-     */
+
     fun clearError() {
         _connectionState.value = _connectionState.value.copy(connectionError = null)
     }
-    
-    /**
-     * Checks device capabilities
-     */
+
     suspend fun checkDeviceCapabilities(): Result<Map<String, Boolean>> {
         return try {
             val capabilities = mutableMapOf<String, Boolean>()
-            
+
             try {
                 capabilities["raw_stage3"] = cameraRecorder.isRawStage3Available()
             } catch (e: Exception) {
                 capabilities["raw_stage3"] = false
             }
-            
+
             try {
                 capabilities["thermal_camera"] = thermalRecorder.isThermalCameraAvailable()
             } catch (e: Exception) {
                 capabilities["thermal_camera"] = false
             }
-            
+
             try {
                 capabilities["shimmer_streaming"] = shimmerRecorder.isAnyDeviceStreaming()
                 capabilities["shimmer_sd_logging"] = shimmerRecorder.isAnyDeviceSDLogging()
@@ -445,10 +378,10 @@ class DeviceConnectionManager @Inject constructor(
                 capabilities["shimmer_streaming"] = false
                 capabilities["shimmer_sd_logging"] = false
             }
-            
+
             logger.info("Device capabilities checked: $capabilities")
             Result.success(capabilities)
-            
+
         } catch (e: Exception) {
             logger.error("Capability check error", e)
             Result.failure(e)
