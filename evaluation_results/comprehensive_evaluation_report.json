@@ -1,8 +1,8 @@
 {
   "evaluation_summary": {
-    "start_time": "2025-08-06T07:07:37.544303",
-    "end_time": "2025-08-06T07:07:39.749522",
-    "total_duration_seconds": 2.205219,
+    "start_time": "2025-08-06T07:00:04.347045",
+    "end_time": "2025-08-06T07:00:06.553379",
+    "total_duration_seconds": 2.206334,
     "test_configuration": {
       "category_filter": null,
       "parallel_execution": false,

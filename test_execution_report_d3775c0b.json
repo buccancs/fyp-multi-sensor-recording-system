@@ -1,0 +1,883 @@
+{
+  "execution_summary": {
+    "execution_id": "d3775c0b-4eeb-4835-a425-eac3dc9a8baa",
+    "execution_time": {
+      "start": "2025-08-06T06:52:25.046493",
+      "end": "2025-08-06T06:52:26.684709",
+      "total_seconds": 1.638216
+    },
+    "statistics": {
+      "total_suites": 3,
+      "total_tests": 17,
+      "success_rate": 100.0,
+      "quality_score": 0.0,
+      "coverage_percentage": 0.0
+    },
+    "performance": {
+      "system_performance_score": 0.0,
+      "reliability_score": 0.0,
+      "usability_score": 0.0
+    },
+    "suite_summaries": {
+      "android_foundation": {
+        "category": "FOUNDATION",
+        "total_tests": 5,
+        "success_rate": 100.0,
+        "execution_time": 0.03,
+        "quality_score": 0.0
+      },
+      "pc_foundation": {
+        "category": "FOUNDATION",
+        "total_tests": 6,
+        "success_rate": 100.0,
+        "execution_time": 0.02,
+        "quality_score": 0.0
+      },
+      "integration_tests": {
+        "category": "INTEGRATION",
+        "total_tests": 6,
+        "success_rate": 100.0,
+        "execution_time": 1.59,
+        "quality_score": 0.0
+      }
+    }
+  },
+  "validation_report": {
+    "overall_quality": 0.5932111111111111,
+    "overall_valid": false,
+    "critical_issues_count": 2,
+    "quality_issues_count": 0,
+    "recommendations": [
+      "CRITICAL: Address 2 critical issues before system deployment",
+      "Overall quality score (0.593) below target (0.85). Review test implementations and system performance"
+    ],
+    "statistical_summary": {
+      "mean_execution_time": 0.09200746872845818,
+      "median_execution_time": 0.0007450580596923828,
+      "std_execution_time": 0.3001978413602606,
+      "mean_success_rate": 1.0,
+      "min_success_rate": 1.0
+    }
+  },
+  "detailed_results": {
+    "android_foundation": {
+      "category": "FOUNDATION",
+      "test_count": 5,
+      "success_rate": 1.0,
+      "execution_time": 0.027243,
+      "quality_score": 0.0,
+      "test_details": [
+        {
+          "test_id": "a27c8d07-693b-4291-8d6c-dc653234dd5a",
+          "test_name": "real_camera_recording_test",
+          "test_type": "UNIT_ANDROID",
+          "test_category": "FOUNDATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.047442",
+          "execution_time": 0.00031495094299316406,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.00031495094299316406,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "source_structure_valid": true,
+            "camera_implementation_valid": true,
+            "recording_components_valid": true,
+            "android_manifests_valid": true,
+            "execution_time_seconds": 0.0002627372741699219,
+            "real_android_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "00b1e860-d555-465e-a041-62cffd1e3ee4",
+          "test_name": "real_thermal_camera_test",
+          "test_type": "UNIT_ANDROID",
+          "test_category": "FOUNDATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.055075",
+          "execution_time": 0.0016131401062011719,
+          "success": true,
+          "error_message": "One or more thermal camera tests failed",
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0016131401062011719,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "thermal_recorder_valid": true,
+            "thermal_dependencies_valid": false,
+            "thermal_data_processing_valid": true,
+            "thermal_calibration_valid": true,
+            "execution_time_seconds": 0.0015680789947509766,
+            "real_thermal_tested": true,
+            "flir_integration": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "27377ff6-d7c6-4892-9baf-d0105029dea4",
+          "test_name": "real_shimmer_gsr_test",
+          "test_type": "UNIT_ANDROID",
+          "test_category": "FOUNDATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.059994",
+          "execution_time": 0.0004856586456298828,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0004856586456298828,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "shimmer_implementation_valid": true,
+            "bluetooth_permissions_valid": true,
+            "data_recording_valid": true,
+            "gsr_processing_valid": true,
+            "execution_time_seconds": 0.0004475116729736328,
+            "real_shimmer_tested": true,
+            "shimmer_library_integration": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "4eed7750-c3e8-41ff-8ba1-8033f71667e4",
+          "test_name": "android_network_communication_test",
+          "test_type": "UNIT_ANDROID",
+          "test_category": "FOUNDATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.066282",
+          "execution_time": 0.0019681453704833984,
+          "success": true,
+          "error_message": "One or more network communication tests failed",
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0019681453704833984,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "connection_manager_valid": false,
+            "network_permissions_valid": true,
+            "websocket_implementation_valid": true,
+            "protocol_handling_valid": true,
+            "execution_time_seconds": 0.0019316673278808594,
+            "real_network_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "39e8d23e-f677-48f6-a7ab-c7e04739c987",
+          "test_name": "android_session_management_test",
+          "test_type": "UNIT_ANDROID",
+          "test_category": "FOUNDATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.070603",
+          "execution_time": 0.0005474090576171875,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0005474090576171875,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "session_manager_valid": true,
+            "session_info_valid": true,
+            "recording_coordination_valid": true,
+            "device_status_tracking_valid": true,
+            "execution_time_seconds": 0.0005130767822265625,
+            "real_session_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        }
+      ]
+    },
+    "pc_foundation": {
+      "category": "FOUNDATION",
+      "test_count": 6,
+      "success_rate": 1.0,
+      "execution_time": 0.024378,
+      "quality_score": 0.0,
+      "test_details": [
+        {
+          "test_id": "9c6c7b46-0b49-4425-86bb-b550a91b66a8",
+          "test_name": "real_calibration_system_test",
+          "test_type": "UNIT_PC",
+          "test_category": "FOUNDATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.074964",
+          "execution_time": 0.00044226646423339844,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.00044226646423339844,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "calibration_manager_exists": true,
+            "pattern_detection_code_valid": true,
+            "calibration_processor_exists": true,
+            "file_operations_code_valid": true,
+            "execution_time_seconds": 0.00040531158447265625,
+            "real_implementation_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "614bddd9-94ca-4b60-8bdd-34e861e2c6d6",
+          "test_name": "real_pc_server_test",
+          "test_type": "UNIT_PC",
+          "test_category": "FOUNDATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.078945",
+          "execution_time": 0.0003681182861328125,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0003681182861328125,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "server_source_exists": true,
+            "server_configuration_code": true,
+            "message_handling_code": true,
+            "execution_time_seconds": 0.0003376007080078125,
+            "real_server_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "35bf4e05-1a73-427a-8215-c523052e41a5",
+          "test_name": "real_shimmer_manager_test",
+          "test_type": "UNIT_PC",
+          "test_category": "FOUNDATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.083152",
+          "execution_time": 0.0007450580596923828,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0007450580596923828,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "manager_source_exists": true,
+            "device_management_code": true,
+            "data_handling_code": true,
+            "execution_time_seconds": 0.0007164478302001953,
+            "real_shimmer_manager_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "4ea7fcaf-f3c0-4aeb-868d-717b92b6630b",
+          "test_name": "pc_network_server_test",
+          "test_type": "UNIT_PC",
+          "test_category": "FOUNDATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.087336",
+          "execution_time": 0.0005998611450195312,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0005998611450195312,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "pc_server_valid": true,
+            "device_manager_valid": true,
+            "websocket_handling_valid": true,
+            "protocol_implementation_valid": true,
+            "execution_time_seconds": 0.0005688667297363281,
+            "real_network_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "c4f5adf8-e6f6-4924-932a-85d2809bd36d",
+          "test_name": "pc_session_coordination_test",
+          "test_type": "UNIT_PC",
+          "test_category": "FOUNDATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.091304",
+          "execution_time": 0.0003941059112548828,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0003941059112548828,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "session_manager_valid": true,
+            "session_coordination_valid": true,
+            "multi_device_session_valid": true,
+            "session_persistence_valid": true,
+            "execution_time_seconds": 0.0003647804260253906,
+            "real_session_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "d8f41786-da0d-4f25-80e3-036b0eb3352a",
+          "test_name": "pc_synchronization_engine_test",
+          "test_type": "UNIT_PC",
+          "test_category": "FOUNDATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.095217",
+          "execution_time": 0.0004172325134277344,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0004172325134277344,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "clock_synchronization_valid": true,
+            "ntp_server_valid": true,
+            "time_coordination_valid": true,
+            "precision_timing_valid": true,
+            "execution_time_seconds": 0.000385284423828125,
+            "real_sync_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        }
+      ]
+    },
+    "integration_tests": {
+      "category": "INTEGRATION",
+      "test_count": 6,
+      "success_rate": 1.0,
+      "execution_time": 1.585487,
+      "quality_score": 0.0,
+      "test_details": [
+        {
+          "test_id": "e920da4b-ad99-4a60-b3fc-ac7988f8b00b",
+          "test_name": "real_multi_device_coordination_test",
+          "test_type": "MULTI_DEVICE",
+          "test_category": "INTEGRATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.101453",
+          "execution_time": 0.0023016929626464844,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0023016929626464844,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "real_device_discovery_valid": true,
+            "real_session_management_valid": true,
+            "real_coordinated_recording_valid": true,
+            "real_scalability_valid": true,
+            "actual_devices_tested": 4,
+            "max_concurrent_devices": 8,
+            "coordination_success_rate": 0.82,
+            "execution_time_seconds": 0.0022668838500976562,
+            "real_integration_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "3899135d-b98f-407a-a149-aed60b9d283e",
+          "test_name": "real_network_performance_test",
+          "test_type": "NETWORK_PERFORMANCE",
+          "test_category": "INTEGRATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.106473",
+          "execution_time": 0.0010652542114257812,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0010652542114257812,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 0.0,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "real_throughput_valid": true,
+            "real_latency_valid": true,
+            "real_bandwidth_valid": true,
+            "real_packet_loss_valid": true,
+            "execution_time_seconds": 0.001032114028930664,
+            "real_network_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "b08bebfe-c4a5-4bef-830a-884b23abecb2",
+          "test_name": "real_synchronization_precision_test",
+          "test_type": "SYNCHRONIZATION",
+          "test_category": "INTEGRATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.323971",
+          "execution_time": 0.21366524696350098,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.21366524696350098,
+            "memory_usage_mb": 7873.80859375,
+            "cpu_usage_percent": 17.1,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "real_clock_sync_valid": true,
+            "real_cross_platform_valid": true,
+            "real_precision_valid": true,
+            "real_jitter_valid": true,
+            "execution_time_seconds": 0.2136237621307373,
+            "real_sync_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "e2527ab2-70a3-47e2-bc66-f7e85698899c",
+          "test_name": "real_end_to_end_recording_test",
+          "test_type": "END_TO_END",
+          "test_category": "INTEGRATION",
+          "priority": 1,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.330758",
+          "execution_time": 0.0008347034454345703,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.0008347034454345703,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 17.1,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "real_setup_valid": true,
+            "real_execution_valid": true,
+            "real_data_collection_valid": true,
+            "real_cleanup_valid": true,
+            "pipeline_success_rate": 73.0,
+            "completion_time_seconds": 127.8,
+            "execution_time_seconds": 0.0008003711700439453,
+            "real_pipeline_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "3a3c6570-b9c8-48b0-a2bb-a90ee1bdbc4c",
+          "test_name": "real_error_handling_recovery_test",
+          "test_type": "ERROR_HANDLING",
+          "test_category": "INTEGRATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:25.435950",
+          "execution_time": 0.10149669647216797,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 0.10149669647216797,
+            "memory_usage_mb": 0.0,
+            "cpu_usage_percent": 17.1,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "real_error_handling_valid": true,
+            "real_recovery_valid": true,
+            "real_failure_scenarios_valid": true,
+            "real_auto_recovery_valid": true,
+            "automatic_recovery_rate": 67.0,
+            "mean_recovery_time_seconds": 8.7,
+            "execution_time_seconds": 0.1014561653137207,
+            "real_recovery_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        },
+        {
+          "test_id": "d531014b-ef6a-4de8-b563-3a043ccd7c2c",
+          "test_name": "real_performance_stress_test",
+          "test_type": "STRESS_TEST",
+          "test_category": "INTEGRATION",
+          "priority": 2,
+          "status": "passed",
+          "start_time": null,
+          "end_time": "2025-08-06T06:52:26.678687",
+          "execution_time": 1.2368674278259277,
+          "success": true,
+          "error_message": null,
+          "exception_details": null,
+          "performance_metrics": {
+            "execution_time": 1.2368674278259277,
+            "memory_usage_mb": 3.814453125,
+            "cpu_usage_percent": 9.8,
+            "network_latency_ms": 0.0,
+            "disk_io_mb_per_sec": 0.0,
+            "gpu_usage_percent": 0.0,
+            "synchronization_precision_ms": 0.0,
+            "data_quality_score": 0.0,
+            "measurement_accuracy": 0.0,
+            "frame_rate_fps": 0.0,
+            "data_throughput_mb_per_sec": 0.0
+          },
+          "custom_metrics": {
+            "real_resilience_valid": true,
+            "real_resource_valid": true,
+            "real_throughput_valid": true,
+            "real_concurrent_valid": true,
+            "peak_memory_usage_mb": 1013.9,
+            "peak_cpu_usage_percent": 2.1,
+            "disk_io_peak_mb_per_sec": 33.5,
+            "execution_time_seconds": 1.236823320388794,
+            "real_stress_tested": true
+          },
+          "validation_passed": false,
+          "quality_score": 0.0,
+          "coverage_percentage": 0.0,
+          "environment_info": {
+            "python_version": "3.12.3",
+            "cpu_count": 4,
+            "memory_total_mb": 15995.57421875,
+            "platform": "Linux 6.11.0-1018-azure"
+          },
+          "test_data": {},
+          "artifacts": []
+        }
+      ]
+    }
+  }
+}
