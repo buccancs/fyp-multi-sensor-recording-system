@@ -147,11 +147,14 @@ python run_evaluation_suite.py --category integration_tests
 bucika_gsr/
 ├── AndroidApp/                 # Android recording application
 │   ├── src/main/java/com/multisensor/recording/
-│   │   ├── recording/         # Core recording components
-│   │   ├── calibration/       # Camera calibration
-│   │   ├── network/           # Communication protocols
-│   │   └── service/           # Background services
-│   └── build.gradle.kts       # Android build configuration
+│   │   ├── controllers/        # Specialized business logic controllers
+│   │   ├── managers/           # Device and system managers
+│   │   ├── recording/          # Core recording components
+│   │   ├── calibration/        # Camera calibration
+│   │   ├── network/            # Communication protocols
+│   │   ├── service/            # Background services
+│   │   └── ui/                 # Clean MVVM UI layer
+│   └── build.gradle.kts        # Android build configuration
 ├── PythonApp/                 # PC master controller
 │   ├── calibration/           # Camera calibration system
 │   ├── network/               # Device communication
@@ -184,6 +187,14 @@ bucika_gsr/
 - **Shimmer Manager**: Bluetooth GSR sensor communication and data streaming
 - **Network Client**: Real-time communication with PC controller
 - **Session Management**: Local recording coordination and synchronization
+
+#### Clean MVVM Architecture
+The Android application follows clean MVVM architecture with specialized controllers:
+- **RecordingSessionController**: Manages all recording operations with reactive state
+- **DeviceConnectionManager**: Handles device connectivity and initialization 
+- **FileTransferManager**: Manages file operations and data transfer
+- **CalibrationManager**: Coordinates calibration processes
+- **MainViewModelRefactored**: Pure UI state coordination with single responsibility
 
 ### Communication Protocol
 - **JSON-based Messaging**: Structured communication between PC and Android
