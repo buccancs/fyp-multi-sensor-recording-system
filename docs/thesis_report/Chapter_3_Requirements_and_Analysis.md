@@ -811,7 +811,7 @@ experimental conditions change or new participants join the study.
 - Metadata completeness verification ensuring all session parameters and environmental conditions are recorded
 - Performance impact assessment ensuring session management overhead <5% of system resources
 
-#### FR-002: Temporal Synchronization and Precision Management
+#### FR-002A: Temporal Synchronization and Precision Management
 
 **Requirement Statement**: The system shall maintain temporal synchronization across all connected devices with maximum
 deviation of ≤5ms from the reference timeline throughout recording sessions.
@@ -838,7 +838,7 @@ characteristics.
 - Latency measurement and compensation algorithms [CITE - Network latency compensation techniques]
 - Clock drift detection and correction mechanisms
 
-#### FR-003: Session Management and Lifecycle Control
+#### FR-003A: Session Management and Lifecycle Control
 
 **Requirement Statement**: The system shall provide comprehensive session lifecycle management including session
 creation, configuration, execution monitoring, and controlled termination with automatic data preservation.
@@ -1215,7 +1215,7 @@ The advanced data processing requirements define the sophisticated analysis capa
 into meaningful physiological insights. These requirements represent the technical innovations that enable contactless
 physiological measurement through computational analysis of multi-modal data streams.
 
-#### FR-010: Real-Time Hand Detection and Tracking
+#### FR-010A: Real-Time Hand Detection and Tracking
 
 **Comprehensive Requirement Description**: The system must implement sophisticated computer vision algorithms for
 real-time detection and tracking of hand regions within the video streams. Hand detection serves as a critical
@@ -1247,7 +1247,7 @@ required for basic data collection.
 **Validation Criteria**: Demonstrated reliable hand detection across diverse participant populations with accuracy
 sufficient for physiological analysis applications.
 
-#### FR-011: Advanced Camera Calibration System
+#### FR-011A: Advanced Camera Calibration System
 
 **Comprehensive Requirement Description**: The system must provide sophisticated camera calibration capabilities that
 ensure accurate spatial and temporal alignment between different imaging modalities, particularly RGB and thermal
@@ -1280,7 +1280,7 @@ single-modality operation.
 **Validation Criteria**: Demonstrated calibration accuracy through geometric validation tests and successful multi-modal
 alignment verification.
 
-#### FR-012: Precision Data Synchronization Framework
+#### FR-012A: Precision Data Synchronization Framework
 
 **Comprehensive Requirement Description**: The system must implement advanced synchronization algorithms that maintain
 precise temporal alignment across all data modalities despite the inherent timing variations and network latencies
