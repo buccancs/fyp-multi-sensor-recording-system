@@ -1438,8 +1438,115 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Connecting all devices...")
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = "Connecting to all devices...",
+                        isConnecting = true
+                    )
+                }
+                
+                // Track connection results
+                var successCount = 0
+                var totalAttempts = 0
+                val connectionResults = mutableListOf<String>()
+                
+                // Check camera status (can't "connect" but can check if initialized)
+                totalAttempts++
+                try {
+                    val cameraConnected = cameraRecorder.isConnected
+                    if (cameraConnected) {
+                        successCount++
+                        connectionResults.add("Camera: Available")
+                        logger.info("Camera device is available")
+                    } else {
+                        connectionResults.add("Camera: Not initialized")
+                        logger.warning("Camera device not initialized")
+                    }
+                } catch (e: Exception) {
+                    connectionResults.add("Camera: Error - ${e.message}")
+                    logger.error("Camera status check error", e)
+                }
+                
+                // Connect to Shimmer devices
+                totalAttempts++
+                try {
+                    // Scan for devices first, then connect
+                    val discoveredDevices = shimmerRecorder.scanAndPairDevices()
+                    if (discoveredDevices.isNotEmpty()) {
+                        val shimmerConnected = shimmerRecorder.connectDevices(discoveredDevices)
+                        if (shimmerConnected) {
+                            successCount++
+                            connectionResults.add("Shimmer: Connected (${discoveredDevices.size} devices)")
+                            logger.info("Shimmer devices connected: ${discoveredDevices.size}")
+                        } else {
+                            connectionResults.add("Shimmer: Failed to connect")
+                            logger.warning("Shimmer connection failed")
+                        }
+                    } else {
+                        connectionResults.add("Shimmer: No devices found")
+                        logger.info("No Shimmer devices discovered")
+                    }
+                } catch (e: Exception) {
+                    connectionResults.add("Shimmer: Error - ${e.message}")
+                    logger.error("Shimmer connection error", e)
+                }
+                
+                // Connect to thermal camera
+                totalAttempts++
+                try {
+                    val thermalAvailable = thermalRecorder.isThermalCameraAvailable()
+                    if (thermalAvailable) {
+                        // Thermal camera is available, no explicit connect needed
+                        successCount++
+                        connectionResults.add("Thermal: Available")
+                        logger.info("Thermal camera is available")
+                    } else {
+                        connectionResults.add("Thermal: Not available")
+                        logger.warning("Thermal camera not available")
+                    }
+                } catch (e: Exception) {
+                    connectionResults.add("Thermal: Error - ${e.message}")
+                    logger.error("Thermal camera check error", e)
+                }
+                
+                // Update UI state with results
+                val statusMessage = "Device connections: $successCount/$totalAttempts successful"
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = statusMessage,
+                        isConnecting = false,
+                        isCameraConnected = connectionResults.any { it.startsWith("Camera: Available") },
+                        isShimmerConnected = connectionResults.any { it.startsWith("Shimmer: Connected") },
+                        isThermalConnected = connectionResults.any { it.startsWith("Thermal: Available") },
+                        systemHealth = currentState.systemHealth.copy(
+                            shimmerConnection = if (connectionResults.any { it.startsWith("Shimmer: Connected") })
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            thermalCamera = if (connectionResults.any { it.startsWith("Thermal: Available") })
+                                SystemHealthStatus.HealthStatus.CONNECTED  
+                            else
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            rgbCamera = if (connectionResults.any { it.startsWith("Camera: Available") })
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
+                                SystemHealthStatus.HealthStatus.DISCONNECTED
+                        )
+                    )
+                }
+                
+                logger.info("Device connection completed: $statusMessage")
+                logger.info("Connection details: ${connectionResults.joinToString(", ")}")
+                
             } catch (e: Exception) {
                 logger.error("Error connecting devices", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = "Device connection failed: ${e.message}",
+                        isConnecting = false,
+                        errorMessage = "Connection error: ${e.message}"
+                    )
+                }
             }
         }
     }
