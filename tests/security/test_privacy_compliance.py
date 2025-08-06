@@ -90,6 +90,8 @@ class PrivacyComplianceTests(unittest.TestCase):
         2025-01-16 10:30:05 DEBUG MAC: 00:1B:44:11:3A:B7
         2025-01-16 10:30:06 INFO Session started for ANON_ABC12345
         2025-01-16 10:30:07 INFO Processing sensor data
+        """
+        
         pii_patterns = {
             "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
             "phone": r"[\+]?[1-9]?[0-9]{3}[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}",
@@ -217,14 +219,12 @@ class PrivacyComplianceTests(unittest.TestCase):
 
     @pytest.mark.security 
     def test_log_privacy_audit(self):
-        safe_log_content = """
-        2025-01-16 10:30:00 INFO Session started for ANON_ABC12345
-        2025-01-16 10:30:01 DEBUG Processing sensor data
-        2025-01-16 10:30:02 INFO Calibration completed
-        2025-01-16 10:30:00 INFO User john.doe@example.com connected
-        2025-01-16 10:30:01 DEBUG Device ID: SAMSUNG123456
-        2025-01-16 10:30:02 ERROR Failed for +1-555-123-4567
-        """
+        safe_log_content = "2025-01-16 10:30:00 INFO Session started for ANON_ABC12345\n"
+        safe_log_content += "2025-01-16 10:30:01 DEBUG Processing sensor data\n"
+        safe_log_content += "2025-01-16 10:30:02 INFO Calibration completed\n"
+        safe_log_content += "2025-01-16 10:30:00 INFO User john.doe@example.com connected\n"
+        safe_log_content += "2025-01-16 10:30:01 DEBUG Device ID: SAMSUNG123456\n"
+        safe_log_content += "2025-01-16 10:30:02 ERROR Failed for +1-555-123-4567\n"
         
         privacy_violations = self.privacy_manager.scan_logs_for_privacy_violations(safe_log_content)
         
@@ -237,6 +237,7 @@ class PrivacyComplianceTests(unittest.TestCase):
 
 
 class MockPrivacyManager:
+    def __init__(self):
         self.data_store = {}
         self.anonymization_settings = {
             "data_anonymization_enabled": False,
