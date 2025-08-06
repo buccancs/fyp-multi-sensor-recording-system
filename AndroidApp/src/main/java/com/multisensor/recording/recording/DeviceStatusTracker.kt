@@ -344,8 +344,8 @@ class DeviceStatusTracker(
         statusListeners.forEach { listener ->
             try {
                 listener.onDeviceStatusChanged(deviceId, status)
-            } catch (e: Exception) {
-                logger.error("Error notifying status listener", e)
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error notifying status listener", e)
             }
         }
     }
@@ -354,8 +354,8 @@ class DeviceStatusTracker(
         statusListeners.forEach { listener ->
             try {
                 listener.onConnectionStateChanged(deviceId, state)
-            } catch (e: Exception) {
-                logger.error("Error notifying connection state listener", e)
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error notifying connection state listener", e)
             }
         }
     }
