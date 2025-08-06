@@ -1,11 +1,14 @@
 package com.multisensor.recording.ui.viewmodel
 
+import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.network.FileTransferHandler
+import com.multisensor.recording.network.JsonSocketClient
+import com.multisensor.recording.network.NetworkConfiguration
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.testbase.BaseUnitTest
 import com.multisensor.recording.util.Logger
@@ -22,12 +25,15 @@ import com.multisensor.recording.ui.MainUiState
 class MainViewModelTest : BaseUnitTest() {
 
     private lateinit var viewModel: MainViewModel
+    private val mockContext: Context = mockk(relaxed = true)
     private val mockCameraRecorder: CameraRecorder = mockk(relaxed = true)
     private val mockThermalRecorder: ThermalRecorder = mockk(relaxed = true)
     private val mockShimmerRecorder: ShimmerRecorder = mockk(relaxed = true)
     private val mockSessionManager: SessionManager = mockk(relaxed = true)
     private val mockFileTransferHandler: FileTransferHandler = mockk(relaxed = true)
     private val mockCalibrationCaptureManager: CalibrationCaptureManager = mockk(relaxed = true)
+    private val mockJsonSocketClient: JsonSocketClient = mockk(relaxed = true)
+    private val mockNetworkConfiguration: NetworkConfiguration = mockk(relaxed = true)
     private val mockLogger: Logger = mockk(relaxed = true)
 
     @Before
@@ -39,12 +45,15 @@ class MainViewModelTest : BaseUnitTest() {
         every { mockLogger.error(any()) } returns Unit
 
         viewModel = MainViewModel(
+            mockContext,
             mockCameraRecorder,
             mockThermalRecorder,
             mockShimmerRecorder,
             mockSessionManager,
             mockFileTransferHandler,
             mockCalibrationCaptureManager,
+            mockJsonSocketClient,
+            mockNetworkConfiguration,
             mockLogger
         )
     }
