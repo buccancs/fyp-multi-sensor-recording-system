@@ -11,6 +11,7 @@ from .utils import (
     create_hand_mask_from_landmarks,
 )
 
+
 class BaseHandSegmentation(ABC):
 
     def __init__(self, config: SegmentationConfig):
@@ -28,6 +29,7 @@ class BaseHandSegmentation(ABC):
     @abstractmethod
     def cleanup(self):
         pass
+
 
 class MediaPipeHandSegmentation(BaseHandSegmentation):
 
@@ -100,6 +102,7 @@ class MediaPipeHandSegmentation(BaseHandSegmentation):
             self.hands = None
         self.is_initialized = False
 
+
 class ColorBasedHandSegmentation(BaseHandSegmentation):
 
     def __init__(self, config: SegmentationConfig):
@@ -151,6 +154,7 @@ class ColorBasedHandSegmentation(BaseHandSegmentation):
 
     def cleanup(self):
         self.is_initialized = False
+
 
 class ContourBasedHandSegmentation(BaseHandSegmentation):
 

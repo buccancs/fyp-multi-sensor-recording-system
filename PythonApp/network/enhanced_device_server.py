@@ -17,11 +17,13 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class MessagePriority(Enum):
     CRITICAL = 1
     HIGH = 2
     NORMAL = 3
     LOW = 4
+
 
 class ConnectionState(Enum):
     DISCONNECTED = auto()
@@ -29,6 +31,7 @@ class ConnectionState(Enum):
     CONNECTED = auto()
     RECONNECTING = auto()
     ERROR = auto()
+
 
 @dataclass
 class NetworkMessage:
@@ -41,6 +44,7 @@ class NetworkMessage:
     timeout: float = 30.0
     requires_ack: bool = False
     message_id: Optional[str] = None
+
 
 @dataclass
 class ConnectionStats:
@@ -60,6 +64,7 @@ class ConnectionStats:
     packet_loss_rate: float = 0.0
     ping_count: int = 0
     pong_count: int = 0
+
 
 class EnhancedRemoteDevice:
 
@@ -203,6 +208,7 @@ class EnhancedRemoteDevice:
                     "latency_samples": len(self.stats.latency_samples),
                 },
             }
+
 
 class EnhancedDeviceServer(QThread):
     device_connected = pyqtSignal(str, dict)
@@ -714,8 +720,10 @@ class EnhancedDeviceServer(QThread):
         device.queue_message(message)
         return True
 
+
 def create_command_message(command: str, **kwargs) -> Dict[str, Any]:
     return {"type": "command", "command": command, "timestamp": time.time(), **kwargs}
+
 
 def decode_base64_image(data: str) -> Optional[bytes]:
     try:

@@ -20,7 +20,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.MainViewModelRefactored
 import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.util.Logger
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainFragmentsBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModelRefactored
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         try {
-            viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+            viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
 
             setupNavigation()
             setupUI()

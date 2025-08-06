@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 import psutil
 from PyQt5.QtCore import QObject, pyqtSignal
 
+
 class SessionRecoveryManager(QObject):
     disk_space_warning = pyqtSignal(str, float)
     disk_space_critical = pyqtSignal(str, float)
@@ -388,7 +389,9 @@ class SessionRecoveryManager(QObject):
             print(f"[DEBUG_LOG] Failed to get recovery statistics: {e}")
             return {}
 
+
 _recovery_manager_instance: Optional[SessionRecoveryManager] = None
+
 
 def get_recovery_manager(
     base_sessions_dir: str = "recordings", backup_dir: Optional[str] = None
@@ -399,6 +402,7 @@ def get_recovery_manager(
             base_sessions_dir, backup_dir
         )
     return _recovery_manager_instance
+
 
 def reset_recovery_manager() -> None:
     global _recovery_manager_instance

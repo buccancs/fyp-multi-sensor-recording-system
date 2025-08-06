@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
+
 class Phase4Validator:
 
     def __init__(self, project_root: str):
@@ -477,6 +478,7 @@ class Phase4Validator:
             "detailed_results": self.results,
         }
 
+
 def main():
     project_root = Path(__file__).parent.parent.parent
     validator = Phase4Validator(str(project_root))
@@ -488,6 +490,7 @@ def main():
     with open(report_file, "w") as f:
         json.dump(report, f, indent=2, default=str)
     print(f"Detailed validation report saved to: {report_file}")
+
 
 if __name__ == "__main__":
     main()

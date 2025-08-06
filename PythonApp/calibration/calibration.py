@@ -6,6 +6,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import cv2
 import numpy as np
 
+
 class CalibrationManager:
 
     def __init__(self):
@@ -510,6 +511,7 @@ class CalibrationManager:
     def save_calibration(self, device_id, filename):
         return self.save_calibration_data(filename)
 
+
 def create_calibration_pattern_points(
     pattern_size: Tuple[int, int], square_size: float
 ) -> np.ndarray:
@@ -522,6 +524,7 @@ def create_calibration_pattern_points(
     ].T.reshape(-1, 2)
     pattern_points *= square_size
     return pattern_points
+
 
 def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) -> bool:
     if len(images) < min_images:
@@ -538,6 +541,7 @@ def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) 
             return False
     print(f"[DEBUG_LOG] Calibration image validation passed: {len(images)} images")
     return True
+
 
 def draw_calibration_pattern(
     image: np.ndarray,

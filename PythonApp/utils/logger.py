@@ -1,11 +1,13 @@
 from enum import Enum
 
+
 class LogLevel(Enum):
     DEBUG = "DEBUG"
     INFO = "INFO"
     WARNING = "WARNING"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
+
 
 class LoggerManager:
 
@@ -333,7 +335,9 @@ class LoggerManager:
             print(error_msg)
             return cleanup_report
 
+
 logger_manager = None
+
 
 def get_logger_manager():
     global logger_manager
@@ -361,19 +365,24 @@ def get_logger_manager():
             logger_manager = LoggerManager()
     return logger_manager
 
+
 def log_info(logger_name, message, **kwargs):
     get_logger_manager().log_structured(logger_name, LogLevel.INFO, message, **kwargs)
+
 
 def log_error(logger_name, message, **kwargs):
     get_logger_manager().log_structured(logger_name, LogLevel.ERROR, message, **kwargs)
 
+
 def log_debug(logger_name, message, **kwargs):
     get_logger_manager().log_structured(logger_name, LogLevel.DEBUG, message, **kwargs)
+
 
 def log_warning(logger_name, message, **kwargs):
     get_logger_manager().log_structured(
         logger_name, LogLevel.WARNING, message, **kwargs
     )
+
 
 def log_critical(logger_name, message, **kwargs):
     get_logger_manager().log_structured(

@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional
 
 from ..utils.logging_config import get_logger
 
+
 @dataclass
 class BuildResult:
     component: str
@@ -24,6 +25,7 @@ class BuildResult:
     build_size_mb: Optional[float] = None
     checksum: Optional[str] = None
 
+
 @dataclass
 class DeploymentPackage:
     version: str
@@ -33,6 +35,7 @@ class DeploymentPackage:
     package_path: str
     checksum: str
     deployment_instructions: List[str]
+
 
 class DeploymentAutomation:
 
@@ -402,6 +405,7 @@ python src/application.py
             api_overview.write_text(
                 """# Python API Documentation
 
+
 Main application entry point and GUI management.
 
 - `session_manager.py` - Recording session management
@@ -418,8 +422,10 @@ Main application entry point and GUI management.
 - `performance_benchmark.py` - Performance benchmarking tools
 - `security_scanner.py` - Security assessment tools
 
+
 See `protocol/config.json` for runtime configuration options.
 See `protocol/message_schema.json` for network message definitions.
+
 
 ```python
 from src.application import Application
@@ -443,8 +449,10 @@ For detailed usage examples, see the user manual.
 Version: {self.version}
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
+
 The Multi-Sensor Recording System is a comprehensive solution for synchronized recording
 across multiple devices including Android cameras, Shimmer sensors, and thermal cameras.
+
 
 - Windows 10/11, macOS 10.15+, or Linux Ubuntu 18.04+
 - Python 3.8 or later
@@ -458,6 +466,7 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 - Network connectivity (Wi-Fi)
 - 500MB free storage
 
+
 1. Extract the Python distribution zip file
 2. Run the appropriate startup script:
    - Windows: Double-click `start.bat`
@@ -468,12 +477,14 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 2. Install the APK file: `MultiSensorRecording-{self.version}.apk`
 3. Grant camera and storage permissions when prompted
 
+
 1. Start the PC application
 2. Install and start the Android app
 3. Ensure both devices are on the same network
 4. In the Android app, enter the PC's IP address
 5. Tap "Connect" to establish connection
 6. Use the PC interface to start/stop recordings
+
 
 - Synchronized video recording across multiple Android devices
 - Shimmer sensor data collection
@@ -492,6 +503,7 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 - Automatic reconnection handling
 - Real-time status monitoring
 
+
 - Verify both devices are on the same network
 - Check firewall settings on PC
 - Ensure port 9000 is not blocked
@@ -503,6 +515,7 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 - Verify camera permissions on Android
 - Check storage permissions
 - Ensure adequate free space
+
 
 For technical support and updates, please refer to the project documentation
 or contact the development team.
@@ -517,11 +530,14 @@ or contact the development team.
 
 Version: {self.version}
 
+
+
 - [ ] All tests pass
 - [ ] Security scan completed
 - [ ] Performance benchmarks meet requirements
 - [ ] Documentation is up-to-date
 - [ ] Production configuration reviewed
+
 
 1. **Production APK**: `MultiSensorRecording-{self.version}.apk`
    - Signed with release key
@@ -531,6 +547,7 @@ Version: {self.version}
 2. **Debug APK**: `MultiSensorRecording-{self.version}-debug.apk`
    - For testing and development
    - Not for production use
+
 
 1. **Source Distribution**: `MultiSensorRecording-Python-{self.version}.zip`
    - Complete source code
@@ -548,25 +565,30 @@ Version: {self.version}
    ./start.sh
    ```
 
+
 Default configuration in `protocol/config.json`:
 - Port: 9000
 - Host: 192.168.0.100 (update for your network)
 - Protocol: TCP with JSON messages
+
 
 - Enable firewall rules for port 9000
 - Use encrypted networks (WPA2/WPA3)
 - Regularly update dependencies
 - Monitor for security updates
 
+
 - Allocate at least 8GB RAM for PC application
 - Use SSD storage for better I/O performance
 - Ensure stable network connectivity
 - Monitor system resources during operation
 
+
 - Check log files regularly (`logs/` directory)
 - Monitor disk space usage
 - Backup recording sessions
 - Update components as needed
+
 
 Common deployment issues:
 1. Port conflicts - Change port in config.json
@@ -574,11 +596,13 @@ Common deployment issues:
 3. Network connectivity - Check firewall and network settings
 4. Missing dependencies - Run startup scripts to install
 
+
 If deployment issues occur:
 1. Stop all running applications
 2. Restore previous version files
 3. Verify configuration
 4. Restart services
+
 
 - Keep deployment guide with installation
 - Document any configuration changes
@@ -595,6 +619,7 @@ If deployment issues occur:
 Version: {self.version}
 Build Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
+
 This distribution contains the complete Multi-Sensor Recording System for production deployment:
 
 - `android/MultiSensorRecording-{self.version}.apk` - Production APK
@@ -609,6 +634,7 @@ This distribution contains the complete Multi-Sensor Recording System for produc
 - `install.bat` - Windows installation script
 - `install.sh` - Linux/macOS installation script
 
+
 1. Run `install.bat` as Administrator
 2. Follow the on-screen instructions
 
@@ -619,11 +645,14 @@ This distribution contains the complete Multi-Sensor Recording System for produc
 2. Install Android APK: `android/MultiSensorRecording-{self.version}.apk`
 3. Follow the User Manual for detailed setup
 
+
 - **PC**: Windows 10+/macOS 10.15+/Ubuntu 18.04+, Python 3.8+, 8GB RAM
 - **Android**: Android 7.0+, 4GB RAM, Camera access
 - **Network**: Wi-Fi or Ethernet connection between devices
 
+
 Refer to the documentation package for complete setup and troubleshooting guides.
+
 
 Package integrity can be verified using the provided checksums in `checksums.txt`.
 
@@ -841,6 +870,7 @@ echo
                 sha256_hash.update(chunk)
         return sha256_hash.hexdigest()
 
+
 async def main():
     project_root = Path(__file__).parent.parent.parent
     version = sys.argv[1] if len(sys.argv) > 1 else None
@@ -872,6 +902,7 @@ async def main():
         import traceback
 
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

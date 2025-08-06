@@ -38,6 +38,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+
 class SessionReviewDialog(QDialog):
     """
     Post-session review dialog for comprehensive session analysis.
@@ -591,6 +592,7 @@ class SessionReviewDialog(QDialog):
                 f"Failed to export session data.\n\nError: {str(e)}",
             )
             print(f"[DEBUG_LOG] Failed to export session data: {e}")
+
 
 def show_session_review_dialog(
     session_data: Dict, session_folder: str, parent=None

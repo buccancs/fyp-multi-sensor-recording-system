@@ -17,6 +17,7 @@ from calibration_quality_assessment import (
 )
 from real_time_calibration_feedback import MultiCameraCalibrationManager
 
+
 class CalibrationPhase(Enum):
     INITIALIZATION = "initialization"
     PATTERN_DETECTION = "pattern_detection"
@@ -25,6 +26,7 @@ class CalibrationPhase(Enum):
     STEREO_CALIBRATION = "stereo_calibration"
     RESULT_AGGREGATION = "result_aggregation"
     COMPLETION = "completion"
+
 
 @dataclass
 class DeviceCalibrationInfo:
@@ -38,6 +40,7 @@ class DeviceCalibrationInfo:
     status: str = "disconnected"
     last_seen: float = 0.0
 
+
 @dataclass
 class CalibrationSession:
     session_id: str
@@ -50,6 +53,7 @@ class CalibrationSession:
     collected_images: Dict[str, List[np.ndarray]] = field(default_factory=dict)
     calibration_results: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class CalibrationCommand:
     command_type: str
@@ -57,6 +61,7 @@ class CalibrationCommand:
     target_device: Optional[str] = None
     parameters: Dict[str, Any] = field(default_factory=dict)
     timestamp: float = 0.0
+
 
 @dataclass
 class CalibrationResponse:
@@ -67,6 +72,7 @@ class CalibrationResponse:
     data: Dict[str, Any] = field(default_factory=dict)
     error_message: Optional[str] = None
     timestamp: float = 0.0
+
 
 class CrossDeviceCalibrationCoordinator:
 
@@ -590,6 +596,7 @@ class CrossDeviceCalibrationCoordinator:
             self.logger.info("CrossDeviceCalibrationCoordinator cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
+
 
 if __name__ == "__main__":
     pass

@@ -46,6 +46,7 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+
 class WebSignal:
 
     def __init__(self):
@@ -67,6 +68,7 @@ class WebSignal:
                 callback(*args, **kwargs)
             except Exception as e:
                 logger.error(f"Error in signal callback: {e}")
+
 
 class WebController:
 
@@ -542,6 +544,7 @@ class WebController:
             logger.error(f"Error getting session info: {e}")
         return session_info
 
+
 def create_web_controller_with_real_components():
     controller = WebController()
     session_manager = None
@@ -583,6 +586,7 @@ def create_web_controller_with_real_components():
     controller.start_monitoring()
     logger.info("WebController created with real components")
     return controller
+
 
 if __name__ == "__main__":
     print("Testing WebController with real components...")

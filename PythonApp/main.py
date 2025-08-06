@@ -13,6 +13,7 @@ from .gui.enhanced_ui_main_window import EnhancedMainWindow
 
 logger = get_logger(__name__)
 
+
 def main():
     logger.info(
         "=== Multi-Sensor Recording System Controller Starting (Enhanced UI) ==="
@@ -43,6 +44,7 @@ def main():
     except Exception as e:
         logger.error(f"Fatal error during application startup: {e}", exc_info=True)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     logger.info("Application started from command line")

@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 """
 Comprehensive Evaluation Suite Runner
 
@@ -25,15 +25,18 @@ from pathlib import Path
 from datetime import datetime
 import json
 
+# Add the evaluation suite to Python path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from evaluation_suite.framework.test_framework import TestFramework
 from evaluation_suite.framework.test_categories import TestCategory, TestConfiguration, QualityThresholds
 from evaluation_suite.framework.quality_validator import QualityValidator
 
+# Import test suites
 from evaluation_suite.foundation.android_tests import create_android_foundation_suite
 from evaluation_suite.foundation.pc_tests import create_pc_foundation_suite
 from evaluation_suite.integration.integration_tests import create_real_integration_suite
+
 
 class EvaluationSuiteRunner:
     """Main evaluation suite runner"""
@@ -42,12 +45,15 @@ class EvaluationSuiteRunner:
         self.args = args
         self.output_dir = Path(args.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-
+        
+        # Setup logging
         self._setup_logging()
-
+        
+        # Initialize test framework
         quality_thresholds = self._load_quality_thresholds()
         self.test_framework = TestFramework(quality_thresholds)
-
+        
+        # Configure test execution
         config = TestConfiguration(
             parallel_execution=args.parallel,
             generate_reports=True,
@@ -61,23 +67,27 @@ class EvaluationSuiteRunner:
     def _setup_logging(self):
         """Setup logging configuration"""
         log_level = logging.DEBUG if self.args.verbose else logging.INFO
-
+        
+        # Create formatters
         detailed_formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
         simple_formatter = logging.Formatter(
             '%(levelname)s: %(message)s'
         )
-
+        
+        # Setup file logging
         log_file = self.output_dir / f"evaluation_suite_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(detailed_formatter)
-
+        
+        # Setup console logging
         console_handler = logging.StreamHandler()
         console_handler.setLevel(log_level)
         console_handler.setFormatter(simple_formatter)
-
+        
+        # Configure root logger
         root_logger = logging.getLogger()
         root_logger.setLevel(logging.DEBUG)
         root_logger.addHandler(file_handler)
@@ -91,18 +101,20 @@ class EvaluationSuiteRunner:
             try:
                 with open(self.args.config_file, 'r') as f:
                     config_data = json.load(f)
-
+                
+                # Extract quality thresholds from config
                 thresholds_data = config_data.get('quality_thresholds', {})
                 return QualityThresholds(**thresholds_data)
                 
             except Exception as e:
                 self.logger.warning(f"Failed to load config file: {e}. Using defaults.")
-
+        
+        # Use default thresholds, potentially modified for quick tests
         thresholds = QualityThresholds()
         if self.args.quick:
-
+            # Relaxed thresholds for quick validation
             thresholds.minimum_success_rate = 0.90
-            thresholds.maximum_execution_time = 600.0
+            thresholds.maximum_execution_time = 600.0  # 10 minutes
             thresholds.minimum_coverage = 0.70
         
         return thresholds
@@ -110,21 +122,25 @@ class EvaluationSuiteRunner:
     def _register_test_suites(self):
         """Register all test suites with the framework"""
         self.logger.info("Registering test suites...")
-
+        
+        # Foundation layer test suites
         if not self.args.category or self.args.category == 'foundation':
             android_suite = create_android_foundation_suite()
             self.test_framework.register_test_suite("android_foundation", android_suite)
             
             pc_suite = create_pc_foundation_suite()
             self.test_framework.register_test_suite("pc_foundation", pc_suite)
-
+        
+        # Integration layer test suites
         if not self.args.category or self.args.category == 'integration':
             integration_suite = create_real_integration_suite()
             self.test_framework.register_test_suite("integration_tests", integration_suite)
-
+        
+        # System layer test suites (placeholder for future implementation)
         if not self.args.category or self.args.category == 'system':
             self.logger.info("System test suites not yet implemented")
-
+        
+        # Performance layer test suites (placeholder for future implementation)
         if not self.args.category or self.args.category == 'performance':
             self.logger.info("Performance test suites not yet implemented")
     
@@ -137,9 +153,10 @@ class EvaluationSuiteRunner:
         start_time = datetime.now()
         
         try:
-
+            # Register test suites
             self._register_test_suites()
-
+            
+            # Run tests based on category selection
             if self.args.category:
                 category = TestCategory[self.args.category.upper()]
                 self.logger.info(f"Running {category.name} test category")
@@ -147,9 +164,11 @@ class EvaluationSuiteRunner:
             else:
                 self.logger.info("Running complete evaluation suite")
                 results = await self.test_framework.run_all_tests()
-
+            
+            # Generate comprehensive report
             await self._generate_final_report(results, start_time)
-
+            
+            # Display summary
             self._display_summary(results)
             
             return results
@@ -167,7 +186,8 @@ class EvaluationSuiteRunner:
         total_duration = (end_time - start_time).total_seconds()
         
         self.logger.info("Generating comprehensive evaluation report...")
-
+        
+        # Create detailed report
         report_data = {
             "evaluation_summary": {
                 "start_time": start_time.isoformat(),
@@ -184,11 +204,13 @@ class EvaluationSuiteRunner:
             "quality_assessment": self._assess_overall_quality(results),
             "recommendations": self._generate_recommendations(results)
         }
-
+        
+        # Save main report
         report_file = self.output_dir / "comprehensive_evaluation_report.json"
         with open(report_file, 'w') as f:
             json.dump(report_data, f, indent=2, default=str)
-
+        
+        # Generate human-readable summary
         summary_file = self.output_dir / "evaluation_summary.md"
         await self._generate_markdown_summary(report_data, summary_file)
         
@@ -200,11 +222,13 @@ class EvaluationSuiteRunner:
         """Assess overall system quality based on test results"""
         if not results:
             return {"overall_quality": 0.0, "assessment": "No results available"}
-
+        
+        # Calculate quality metrics
         success_rate = results.overall_success_rate
         quality_score = results.overall_quality_score
         coverage = results.overall_coverage
-
+        
+        # Determine quality level
         if success_rate > 0.95 and quality_score > 0.90:
             quality_level = "Excellent"
         elif success_rate > 0.90 and quality_score > 0.80:
@@ -228,22 +252,26 @@ class EvaluationSuiteRunner:
             return ["Complete evaluation suite execution to generate recommendations"]
         
         recommendations = []
-
+        
+        # Success rate recommendations
         if results.overall_success_rate < 0.95:
             recommendations.append(
                 f"Improve test success rate (current: {results.overall_success_rate:.1%}, target: >95%)"
             )
-
+        
+        # Quality score recommendations
         if results.overall_quality_score < 0.85:
             recommendations.append(
                 f"Enhance system quality (current: {results.overall_quality_score:.3f}, target: >0.85)"
             )
-
+        
+        # Coverage recommendations
         if results.overall_coverage < 80.0:
             recommendations.append(
                 f"Increase test coverage (current: {results.overall_coverage:.1f}%, target: >80%)"
             )
-
+        
+        # Suite-specific recommendations
         for suite_name, suite_results in results.suite_results.items():
             if suite_results.success_rate < 0.90:
                 recommendations.append(
@@ -263,7 +291,8 @@ class EvaluationSuiteRunner:
             f"**Generated:** {datetime.now().isoformat()}\n",
             f"**Duration:** {report_data['evaluation_summary']['total_duration_seconds']:.1f} seconds\n"
         ]
-
+        
+        # Test results summary
         if 'test_results' in report_data and report_data['test_results']:
             results = report_data['test_results']['statistics']
             content.extend([
@@ -274,7 +303,8 @@ class EvaluationSuiteRunner:
                 f"- **Quality Score:** {results['quality_score']}",
                 f"- **Coverage:** {results['coverage_percentage']}%\n"
             ])
-
+        
+        # Quality assessment
         if 'quality_assessment' in report_data:
             quality = report_data['quality_assessment']
             content.extend([
@@ -283,12 +313,14 @@ class EvaluationSuiteRunner:
                 f"- **Research Ready:** {'Yes' if quality.get('research_ready', False) else 'No'}",
                 f"- **Overall Quality Score:** {quality.get('overall_quality', 0):.3f}\n"
             ])
-
+        
+        # Recommendations
         if 'recommendations' in report_data:
             content.append("\n## Recommendations\n")
             for i, rec in enumerate(report_data['recommendations'], 1):
                 content.append(f"{i}. {rec}")
-
+        
+        # Write to file
         with open(output_file, 'w') as f:
             f.write('\n'.join(content))
     
@@ -308,7 +340,8 @@ class EvaluationSuiteRunner:
         print(f"Quality Score: {results.overall_quality_score:.3f}")
         print(f"Coverage: {results.overall_coverage:.1f}%")
         print(f"Execution Time: {results.total_execution_time:.1f} seconds")
-
+        
+        # Suite breakdown
         print("\nSuite Results:")
         for suite_name, suite_results in results.suite_results.items():
             status = "✓" if suite_results.success_rate > 0.90 else "✗"
@@ -316,6 +349,7 @@ class EvaluationSuiteRunner:
                   f"({suite_results.passed_tests}/{suite_results.total_tests})")
         
         print("="*60)
+
 
 def main():
     """Main entry point"""
@@ -360,17 +394,19 @@ def main():
     )
     
     args = parser.parse_args()
-
+    
+    # Create and run evaluation suite
     runner = EvaluationSuiteRunner(args)
     
     try:
-
+        # Run evaluation
         results = asyncio.run(runner.run_evaluation())
-
+        
+        # Exit with appropriate code
         if results and results.overall_success_rate > 0.90:
-            sys.exit(0)
+            sys.exit(0)  # Success
         else:
-            sys.exit(1)
+            sys.exit(1)  # Failure or issues
             
     except KeyboardInterrupt:
         print("\nEvaluation interrupted by user")
@@ -378,6 +414,7 @@ def main():
     except Exception as e:
         print(f"\nEvaluation failed: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

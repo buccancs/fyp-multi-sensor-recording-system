@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional
 
 from ..utils.logging_config import get_logger
 
+
 @dataclass
 class DeviceConfig:
     device_id: str
@@ -18,6 +19,7 @@ class DeviceConfig:
     last_connected: str
     active: bool = True
 
+
 @dataclass
 class SessionConfig:
     session_id: str
@@ -26,6 +28,7 @@ class SessionConfig:
     calibration_settings: Dict[str, Any]
     created_timestamp: str
     modified_timestamp: str
+
 
 class ConfigurationManager:
 

@@ -1,7 +1,7 @@
 package com.multisensor.recording.ui.viewmodel
 
-import android.content.Context
 import com.google.common.truth.Truth.assertThat
+import android.content.Context
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.recording.ThermalRecorder

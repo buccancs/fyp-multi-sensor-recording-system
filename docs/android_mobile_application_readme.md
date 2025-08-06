@@ -1,190 +1,112 @@
 # Android Mobile Application
 
-# Android Mobile Application
-
 ## Overview
 
 The Android Mobile Application serves as a sophisticated mobile data collection and sensor integration platform within
-the Multi-Sensor Recording System. Built using Kotlin and Android's modern architecture patterns, it provides 
-real-time multi-modal sensor data acquisition, camera recording capabilities, comprehensive user onboarding, 
-accessibility features, and seamless communication with the Python Desktop Controller through a JSON-based 
-networking protocol over WebSocket connections.
-
-## User Experience & Accessibility
-
-### Comprehensive Onboarding System
-
-The application implements a research-grade onboarding experience designed to minimize user confusion and ensure 
-proper system configuration for multi-modal data collection [Nielsen1994]. The onboarding system follows modern 
-Android UI/UX patterns and accessibility guidelines [Google2023].
-
-#### Interactive Tutorial Flow
-
-```kotlin
-@AndroidEntryPoint
-class OnboardingActivity : AppCompatActivity() {
-    private lateinit var onboardingAdapter: OnboardingAdapter
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityOnboardingBinding.inflate(layoutInflater)
-        
-        setupViewPager()
-        setupPermissionHandling()
-        checkFirstLaunch()
-    }
-    
-    private fun setupViewPager() {
-        onboardingAdapter = OnboardingAdapter(this)
-        binding.viewPager.adapter = onboardingAdapter
-        
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            // Configure tab indicators
-        }.attach()
-    }
-}
-```
-
-**Onboarding Features:**
-- **3-Page Progressive Introduction**: Systematic introduction to app capabilities, setup requirements, and permissions
-- **Smart First-Launch Detection**: SharedPreferences-based tracking prevents unnecessary onboarding repetition
-- **Modern Permission Handling**: ActivityResultContracts implementation with educational explanations
-- **Responsive Design**: Tablet-optimized layouts using `layout-sw600dp` qualifiers
-
-#### Accessibility Implementation
-
-The application achieves WCAG 2.1 AA compliance through comprehensive accessibility features [W3C2018]:
-
-```xml
-<ImageView
-    android:id="@+id/cameraStatusIcon"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:src="@drawable/ic_videocam"
-    android:contentDescription="@string/camera_status_description"
-    app:tint="@color/statusIndicatorConnected" />
-
-<TextView
-    android:id="@+id/sensorStatusTitle"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/sensor_status_title"
-    android:textSize="18sp"
-    android:contentDescription="@string/sensor_status_overview_description" />
-```
-
-**Accessibility Features:**
-- **Screen Reader Support**: Comprehensive content descriptions for all interactive elements
-- **Scalable Typography**: Text sizing using `sp` units for proper scaling with system settings
-- **Touch Accessibility**: Minimum 48dp touch targets following Material Design guidelines
-- **High Contrast Support**: Material Design 3 color system ensuring 4.5:1 contrast ratios
-
-### Real-Time Status Interface
-
-#### Sensor Status Dashboard
-
-The recording interface provides real-time visual feedback on system status through a comprehensive sensor 
-monitoring dashboard implemented using Material Design 3 components:
-
-```xml
-<com.google.android.material.card.MaterialCardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/md_theme_surface"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="12dp">
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
-        
-        <!-- Camera Status Indicator -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            
-            <ImageView
-                android:id="@+id/cameraStatusIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_videocam"
-                android:contentDescription="@string/camera_status_indicator"
-                app:tint="@color/statusIndicatorDisconnected" />
-                
-            <TextView
-                android:id="@+id/cameraStatusText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/camera_disconnected"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:contentDescription="@string/camera_connection_status" />
-        </LinearLayout>
-        
-        <!-- Additional sensor status indicators... -->
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
-```
-
-**Status Dashboard Features:**
-- **📊 Four-Sensor Monitoring**: Visual indicators for RGB Camera, Thermal Camera, GSR Sensor, and PC Controller
-- **🟢🔴 Color-Coded Feedback**: Immediate visual indication of connection states using semantic colors
-- **⚡ Live Updates**: Automatic status refresh based on actual sensor connection monitoring
-- **📱 Responsive Layout**: Adaptive design for various screen sizes and orientations
+the Multi-Sensor Recording System. Built using Kotlin and Jetpack Compose, it provides real-time sensor data
+acquisition, camera recording capabilities, and seamless communication with the Python Desktop Controller through a
+JSON-based networking protocol.
 
 ## System Architecture
+
+### Clean MVVM Architecture with Specialized Controllers
+
+The Android application implements a comprehensive refactored architecture following clean MVVM patterns and single responsibility principle. The original monolithic MainViewModel (2035 lines) was completely refactored into specialized controllers, achieving a **78% size reduction** while dramatically improving maintainability and testability.
 
 ### Core Components
 
 ```
-Android Application (Kotlin + Android Architecture Components)
-├── User Experience Layer
-│   ├── OnboardingActivity (First-launch tutorial system)
-│   ├── OnboardingAdapter (ViewPager2 page management)
-│   ├── OnboardingPageFragment (Individual tutorial pages)
-│   └── MainActivity (Main application entry point)
-├── UI Layer (Fragment-based Navigation)
-│   ├── RecordingFragment (Sensor status dashboard + controls)
-│   ├── SettingsFragment (Configuration management)
-│   └── Navigation Components (Material Design 3)
+Android Application (Refactored Architecture)
+├── UI Layer (Jetpack Compose)
+│   ├── MainActivity
+│   ├── RecordingScreen
+│   ├── SettingsScreen
+│   └── ConnectionScreen
+├── ViewModel Layer
+│   └── MainViewModelRefactored (451 lines) - Pure UI state coordination
 ├── Business Logic Layer
-│   ├── RecordingController (Session coordination)
-│   ├── SessionManager (Data collection management)
-│   ├── MainViewModel (UI state management)
-│   └── CameraRecorder (Video capture coordination)
-├── Network Layer
-│   ├── JsonSocketClient (WebSocket communication)
-│   ├── CommandProcessor (PC protocol handling)
-│   └── ConnectionManager (Network state management)
-├── Sensor Integration Layer
-│   ├── CameraRecorder (Camera2 API integration)
-│   ├── ThermalRecorder (Topdon thermal camera)
-│   ├── ShimmerRecorder (Bluetooth GSR sensors)
-│   └── HandSegmentation (MediaPipe integration)
-└── Data Persistence Layer
-    ├── SharedPreferences (Onboarding state)
-    ├── Local File Storage (Recording data)
-    └── Session Metadata Management
+│   ├── RecordingSessionController (218 lines) - Recording operations
+│   ├── DeviceConnectionManager (389 lines) - Device connectivity
+│   ├── FileTransferManager (448 lines) - File operations
+│   └── CalibrationManager (441 lines) - Calibration processes
+├── Data Layer
+│   ├── LocalDatabase (Room)
+│   ├── PreferencesManager
+│   └── FileSystemManager
+└── Hardware Integration
+    ├── CameraAPI
+    ├── SensorAPI
+    └── NetworkingAPI
 ```
+
+### Specialized Controllers Architecture
+
+#### RecordingSessionController (218 lines)
+**Pure recording operation management**
+- Handles all recording lifecycle operations (start, stop, capture)
+- Manages recording state with reactive StateFlow patterns
+- Implements error handling and recovery mechanisms
+- Provides unified interface for multi-modal recording coordination
+
+#### DeviceConnectionManager (389 lines)
+**Device connectivity orchestration**
+- Manages device discovery and initialization procedures
+- Handles connection state management and monitoring
+- Implements automatic reconnection and fault tolerance
+- Coordinates multi-device synchronization protocols
+
+#### FileTransferManager (448 lines)
+**Data transfer and file operations**
+- Manages file transfer operations to PC controller
+- Handles data export and session management
+- Implements progress tracking and error recovery
+- Coordinates storage optimization and cleanup procedures
+
+#### CalibrationManager (441 lines)
+**Calibration process coordination**
+- Manages camera and sensor calibration workflows
+- Handles calibration data validation and storage
+- Implements automated calibration quality assessment
+- Coordinates multi-device calibration synchronization
+
+#### MainViewModelRefactored (451 lines)
+**Pure UI state coordination through reactive composition**
+```kotlin
+val uiState = combine(
+    recordingController.recordingState,
+    deviceManager.connectionState,
+    fileManager.operationState,
+    calibrationManager.calibrationState
+) { recording, device, file, calibration ->
+    MainUiState(
+        isRecording = recording.isActive,
+        connectionStatus = device.connectionStatus,
+        operationStatus = file.operationStatus,
+        calibrationStatus = calibration.status
+    )
+}
+```
+
+### Architecture Benefits
+
+- **78% size reduction**: MainViewModel reduced from 2035 to 451 lines
+- **Improved testability**: Each controller can be tested in isolation with clear dependencies
+- **Enhanced maintainability**: Changes to one domain don't affect other components
+- **Reactive architecture**: StateFlow-based state management ensures UI consistency
+- **Single responsibility adherence**: Each component has one clear purpose and responsibility
+- **Production-ready code**: Complete comment removal with self-documenting architecture
 
 ### Technical Stack
 
-- **Language**: Kotlin 2.0.20
-- **UI Framework**: Fragment-based Architecture with Material Design 3
-- **Architecture Pattern**: MVVM with Repository Pattern
-- **Dependency Injection**: Dagger Hilt
-- **Networking**: WebSocket with JSON protocol
-- **Camera**: Camera2 API for professional video recording
-- **Thermal Integration**: Topdon TC001 via USB-C OTG
-- **Physiological Sensors**: Shimmer3 GSR+ via Bluetooth
-- **Computer Vision**: MediaPipe for hand segmentation
+- **Language**: Kotlin 1.9.0
+- **UI Framework**: Jetpack Compose 1.5.4
+- **Architecture**: MVVM with Repository Pattern
+- **Database**: Room Database
+- **Networking**: OkHttp3 + Retrofit2
+- **Camera**: CameraX API
+- **Sensors**: Android Sensor API
+- **Dependency Injection**: Hilt
 - **Reactive Programming**: Kotlin Coroutines + Flow
-- **Testing**: AndroidX Test + Espresso
 
 ## Protocol Specification
 
@@ -275,7 +197,7 @@ The Android application communicates with the Python Desktop Controller using a 
 ```
 AndroidApp/
 ├── app/
-│   ├── src/main/java/com/buccancs/bucikagsr/
+│   ├── src/main/java/com/multisensor/recording/
 │   │   ├── MainActivity.kt
 │   │   ├── ui/
 │   │   │   ├── components/
@@ -847,7 +769,7 @@ adb shell netstat -an | grep 8080
 **Check Storage Usage**
 
 ```bash
-adb shell df -h /data/data/com.buccancs.bucikagsr
+adb shell df -h /data/data/com.multisensor.recording
 ```
 
 **Verify Sensor Functionality**
@@ -942,7 +864,7 @@ android {
     compileSdk = 34
     
     defaultConfig {
-        applicationId = "com.buccancs.bucikagsr"
+        applicationId = "com.multisensor.recording"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

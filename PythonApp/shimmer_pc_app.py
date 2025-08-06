@@ -18,6 +18,7 @@ from .shimmer_manager import (
     ShimmerStatus,
 )
 
+
 class ShimmerPCApplication:
 
     def __init__(self, android_port: int = 9000, enable_gui: bool = False):
@@ -271,6 +272,7 @@ class ShimmerPCApplication:
         self.logger.info(f"Received signal {signum}, shutting down...")
         self.is_running = False
 
+
 def main():
     parser = argparse.ArgumentParser(description="Shimmer PC Integration Application")
     parser.add_argument(
@@ -328,6 +330,7 @@ def main():
     except Exception as e:
         logger.error(f"Application error: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

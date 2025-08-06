@@ -14,6 +14,7 @@ from typing import Any, Callable, Dict, List, Optional
 
 import psutil
 
+
 @dataclass
 class PerformanceMetrics:
     timestamp: float
@@ -29,6 +30,7 @@ class PerformanceMetrics:
     gpu_usage: Optional[float] = None
     gpu_memory_mb: Optional[float] = None
 
+
 @dataclass
 class ResourceLimits:
     max_memory_mb: float = 2048.0
@@ -38,6 +40,7 @@ class ResourceLimits:
     memory_warning_threshold: float = 0.8
     cpu_warning_threshold: float = 0.7
     cleanup_interval_seconds: int = 300
+
 
 @dataclass
 class OptimizationConfig:
@@ -49,6 +52,7 @@ class OptimizationConfig:
     monitoring_interval_seconds: float = 1.0
     history_retention_minutes: int = 60
     alert_threshold_violations: int = 3
+
 
 class MemoryOptimizer:
 
@@ -138,6 +142,7 @@ class MemoryOptimizer:
             )
         return consumers
 
+
 class CPUOptimizer:
 
     def __init__(self, logger=None):
@@ -217,6 +222,7 @@ class CPUOptimizer:
             pool.shutdown(wait=True)
             self.logger.info(f"Shut down thread pool: {name}")
         self.thread_pools.clear()
+
 
 class NetworkOptimizer:
 
@@ -305,6 +311,7 @@ class NetworkOptimizer:
 
     def get_recommended_settings(self) -> Dict[str, Any]:
         return self.quality_levels[self.current_quality]
+
 
 class PerformanceMonitor:
 
@@ -506,6 +513,7 @@ class PerformanceMonitor:
         except Exception as e:
             self.logger.error(f"Error exporting metrics: {e}")
 
+
 class PerformanceManager:
 
     def __init__(self, logger=None):
@@ -556,6 +564,7 @@ class PerformanceManager:
         self.logger.warning(
             f"Current usage - CPU: {metrics.cpu_percent:.1f}%, Memory: {metrics.memory_mb:.1f}MB"
         )
+
 
 if __name__ == "__main__":
     logging.basicConfig(

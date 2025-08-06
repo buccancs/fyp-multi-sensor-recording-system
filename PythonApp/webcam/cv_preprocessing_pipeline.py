@@ -15,12 +15,14 @@ from ..utils.logging_config import get_logger, performance_timer
 
 logger = get_logger(__name__)
 
+
 class ROIDetectionMethod(Enum):
     FACE_CASCADE = "face_cascade"
     DNN_FACE = "dnn_face"
     MEDIAPIPE = "mediapipe"
     CUSTOM_TRACKER = "custom_tracker"
     MANUAL_SELECTION = "manual"
+
 
 class SignalExtractionMethod(Enum):
     MEAN_RGB = "mean_rgb"
@@ -29,6 +31,7 @@ class SignalExtractionMethod(Enum):
     CHROM_METHOD = "chrom"
     POS_METHOD = "pos"
     ADAPTIVE_HYBRID = "adaptive"
+
 
 @dataclass
 class ROIMetrics:
@@ -45,6 +48,7 @@ class ROIMetrics:
     is_valid: bool = False
     confidence_score: float = 0.0
     frame_count: int = 0
+
 
 @dataclass
 class PhysiologicalSignal:
@@ -81,6 +85,7 @@ class PhysiologicalSignal:
         except Exception as e:
             logger.warning(f"Heart rate estimation failed: {e}")
         return None
+
 
 class AdvancedROIDetector:
 
@@ -314,6 +319,7 @@ class AdvancedROIDetector:
         self.tracker = None
         self.roi_metrics = ROIMetrics()
         logger.info("ROI tracking reset")
+
 
 class PhysiologicalSignalExtractor:
 
@@ -596,6 +602,7 @@ class PhysiologicalSignalExtractor:
             logger.debug(f"Spectral features calculation failed: {e}")
             return {}
 
+
 def create_comprehensive_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
     logger.info("Creating comprehensive CV preprocessing pipeline")
     roi_detector = AdvancedROIDetector(
@@ -617,6 +624,7 @@ def create_comprehensive_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
     }
     logger.info("CV preprocessing pipeline created successfully")
     return pipeline
+
 
 if __name__ == "__main__":
     pipeline = create_comprehensive_pipeline()

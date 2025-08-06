@@ -34,6 +34,7 @@ from .enhanced_stimulus_controller import VLC_AVAILABLE, EnhancedStimulusControl
 from .preview_panel import PreviewPanel
 from .stimulus_panel import StimulusControlPanel
 
+
 class EnhancedMainWindow(QMainWindow):
     """Enhanced main window with PsychoPy-inspired stimulus controller integration."""
 
@@ -674,5 +675,6 @@ Troubleshooting:
             self.log_dock.show()
         else:
             self.log_dock.hide()
+
 
 import time

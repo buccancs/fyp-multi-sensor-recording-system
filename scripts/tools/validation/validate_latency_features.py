@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 """
 Basic validation script for latency measurement features.
 
@@ -9,6 +9,7 @@ requiring PyQt5 or complex dependencies.
 import json
 import time
 from collections import deque
+
 
 class MockConnectionStats:
     """Mock connection statistics for testing."""
@@ -23,6 +24,7 @@ class MockConnectionStats:
         self.ping_count = 0
         self.pong_count = 0
 
+
 class MockMutex:
     """Mock mutex for testing."""
 
@@ -31,6 +33,7 @@ class MockMutex:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
+
 
 class MockQMutexLocker:
     """Mock QMutexLocker for testing."""
@@ -43,6 +46,7 @@ class MockQMutexLocker:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
+
 
 def validate_latency_calculation():
     """Test basic latency calculation functionality."""
@@ -70,6 +74,7 @@ def validate_latency_calculation():
     assert stats.jitter > 0
 
     print("✓ Latency calculation works correctly")
+
 
 def validate_jitter_calculation():
     """Test jitter calculation with different latency patterns."""
@@ -99,6 +104,7 @@ def validate_jitter_calculation():
 
     print(f"✓ High jitter: {high_jitter_stats.jitter:.2f}ms, Low jitter: {low_jitter_stats.jitter:.2f}ms")
 
+
 def validate_packet_loss_calculation():
     """Test packet loss calculation."""
     print("Testing packet loss calculation...")
@@ -114,6 +120,7 @@ def validate_packet_loss_calculation():
     assert abs(stats.packet_loss_rate - 20.0) < 0.1
 
     print(f"✓ Packet loss calculation: {stats.packet_loss_rate}%")
+
 
 def validate_network_quality_assessment():
     """Test network quality assessment logic."""
@@ -141,6 +148,7 @@ def validate_network_quality_assessment():
         assert result == expected, f"Expected {expected}, got {result}"
         print(f"✓ Latency {latency}ms, Jitter {jitter}ms, Loss {loss}% -> {result}")
 
+
 def validate_ping_pong_timing():
     """Test ping/pong timing accuracy."""
     print("Testing ping/pong timing...")
@@ -154,6 +162,7 @@ def validate_ping_pong_timing():
     assert 5.0 < rtt < 50.0, f"RTT {rtt}ms is outside expected range"
 
     print(f"✓ Ping/pong timing: {rtt:.2f}ms RTT")
+
 
 def validate_adaptive_quality_logic():
     """Test adaptive streaming quality logic."""
@@ -177,6 +186,7 @@ def validate_adaptive_quality_logic():
         quality, fps = adapt_streaming_quality(latency, error_rate)
         assert quality == expected_quality and fps == expected_fps
         print(f"✓ Latency {latency}ms, Error {error_rate*100}% -> {quality} quality ({fps} FPS)")
+
 
 def main():
     """Run all validation tests."""
@@ -203,6 +213,7 @@ def main():
     except Exception as e:
         print(f"\n✗ Validation failed: {e}")
         return False
+
 
 if __name__ == "__main__":
     success = main()

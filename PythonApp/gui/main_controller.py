@@ -9,6 +9,7 @@ from ..utils.logging_config import get_logger
 from .gui.stimulus_controller import StimulusController
 from .webcam.webcam_capture import WebcamCapture
 
+
 class MainController(QObject):
     server_status_changed = pyqtSignal(bool)
     webcam_status_changed = pyqtSignal(str)

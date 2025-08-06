@@ -22,6 +22,7 @@ from .utils import (
     save_processing_metadata,
 )
 
+
 class HandSegmentationEngine:
 
     def __init__(self, config: SegmentationConfig):
@@ -183,6 +184,7 @@ class HandSegmentationEngine:
             self.segmentation_model = None
         self.is_initialized = False
         print("[INFO] Hand segmentation engine cleaned up")
+
 
 def create_segmentation_engine(
     method: str = "mediapipe", **kwargs

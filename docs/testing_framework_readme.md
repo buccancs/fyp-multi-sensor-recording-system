@@ -108,40 +108,9 @@ flowchart TD
 #### Component Tests
 
 - **Android Components**: Activity, Service, and Fragment testing
-- **Android UX Components**: Onboarding system, accessibility compliance, and real-time status interface testing
 - **Python Components**: Class and function validation
 - **Calibration Algorithms**: Mathematical accuracy verification
 - **Signal Processing**: Algorithm correctness validation
-
-#### Android UX Testing
-
-```kotlin
-@ExtendWith(MockitoExtension::class)
-class OnboardingActivityTest {
-    
-    @get:Rule
-    val activityRule = ActivityScenarioRule(OnboardingActivity::class.java)
-    
-    @Test
-    fun `first launch detection should show onboarding`() {
-        // Test first-launch logic and tutorial presentation
-        activityRule.scenario.onActivity { activity ->
-            assertThat(activity.binding.viewPager.isVisible).isTrue()
-            assertThat(activity.binding.tabLayout.tabCount).isEqualTo(3)
-        }
-    }
-    
-    @Test
-    fun `accessibility features should meet WCAG standards`() {
-        // Validate WCAG 2.1 AA compliance
-        activityRule.scenario.onActivity { activity ->
-            val nextButton = activity.findViewById<Button>(R.id.nextButton)
-            assertThat(nextButton.layoutParams.width).isAtLeast(48.dpToPx())
-            assertThat(nextButton.contentDescription).isNotNull()
-        }
-    }
-}
-```
 
 #### Example Unit Test
 

@@ -11,12 +11,14 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class VideoCodec(Enum):
     MP4V = "mp4v"
     XVID = "XVID"
     MJPG = "MJPG"
     H264 = "H264"
     X264 = "X264"
+
 
 class ResolutionPreset(Enum):
     HD_720P = 1280, 720
@@ -25,6 +27,7 @@ class ResolutionPreset(Enum):
     VGA = 640, 480
     QVGA = 320, 240
     UHD_4K = 3840, 2160
+
 
 @dataclass
 class CameraInfo:
@@ -36,6 +39,7 @@ class CameraInfo:
     is_working: bool
     error_message: Optional[str] = None
 
+
 @dataclass
 class RecordingConfig:
     codec: VideoCodec = VideoCodec.MP4V
@@ -44,6 +48,7 @@ class RecordingConfig:
     quality: int = 80
     file_format: str = "mp4"
 
+
 @dataclass
 class PreviewConfig:
     max_width: int = 640
@@ -51,6 +56,7 @@ class PreviewConfig:
     fps: int = 30
     enable_scaling: bool = True
     maintain_aspect_ratio: bool = True
+
 
 @dataclass
 class WebcamConfiguration:
@@ -68,6 +74,7 @@ class WebcamConfiguration:
             self.preview = PreviewConfig()
         if self.fallback_codecs is None:
             self.fallback_codecs = [VideoCodec.MP4V, VideoCodec.XVID, VideoCodec.MJPG]
+
 
 class CameraDetector:
 
@@ -199,6 +206,7 @@ class CameraDetector:
                 return cam
         return None
 
+
 class CodecValidator:
 
     @staticmethod
@@ -252,6 +260,7 @@ class CodecValidator:
             if CodecValidator.test_codec(codec):
                 return codec
         return None
+
 
 class WebcamConfigManager:
 
@@ -473,8 +482,10 @@ class WebcamConfigManager:
             print(f"[DEBUG_LOG] Failed to load configuration: {e}, using defaults")
             self.config = WebcamConfiguration()
 
+
 def create_default_config() -> WebcamConfiguration:
     return WebcamConfiguration()
+
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing Webcam Configuration System...")

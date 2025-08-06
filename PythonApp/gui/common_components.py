@@ -15,6 +15,7 @@ from PyQt5.QtWidgets import (
 
 from ..utils.logging_config import get_logger
 
+
 class StatusIndicator(QWidget):
     statusChanged = pyqtSignal(bool, str)
 
@@ -65,6 +66,7 @@ class StatusIndicator(QWidget):
             self.indicator.setStyleSheet("color: #f44336;")
             self.status_label.setStyleSheet("color: #C62828;")
         self.status_label.setText(self.status_text)
+
 
 class ModernButton(QPushButton):
 
@@ -135,6 +137,7 @@ class ModernButton(QPushButton):
         style = base_style + color_styles.get(self.button_type, color_styles["primary"])
         self.setStyleSheet(style)
 
+
 class ModernGroupBox(QGroupBox):
 
     def __init__(self, title, parent=None):
@@ -162,6 +165,7 @@ class ModernGroupBox(QGroupBox):
             }
         """
         )
+
 
 class ProgressIndicator(QWidget):
 
@@ -207,6 +211,7 @@ class ProgressIndicator(QWidget):
         else:
             self.progress_bar.setMinimum(0)
             self.progress_bar.setMaximum(100)
+
 
 class LogViewer(QWidget):
 
@@ -286,6 +291,7 @@ class LogViewer(QWidget):
             except Exception as e:
                 self.add_log_entry(f"Failed to save log: {e}", "ERROR")
 
+
 class ConnectionManager(QWidget):
     connectionRequested = pyqtSignal(str)
     disconnectionRequested = pyqtSignal(str)
@@ -325,6 +331,7 @@ class ConnectionManager(QWidget):
         self.connect_button.setEnabled(not connected)
         self.disconnect_button.setEnabled(connected)
 
+
 def apply_dark_theme(widget):
     dark_palette = QPalette()
     dark_palette.setColor(QPalette.Window, Qt.darkGray)
@@ -341,6 +348,7 @@ def apply_dark_theme(widget):
     dark_palette.setColor(QPalette.Highlight, Qt.blue)
     dark_palette.setColor(QPalette.HighlightedText, Qt.black)
     widget.setPalette(dark_palette)
+
 
 def create_separator(orientation=Qt.Horizontal):
     separator = QFrame()

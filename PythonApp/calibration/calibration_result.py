@@ -9,6 +9,7 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class CalibrationResult:
 
     def __init__(self, device_id: str):
@@ -210,7 +211,7 @@ class CalibrationResult:
             rvec, _ = cv2.Rodrigues(self.rotation_matrix)
             euler_angles = np.degrees(rvec.flatten())
         except (cv2.error, ValueError, TypeError) as e:
-
+            # Handle OpenCV errors or invalid rotation matrix
             logger.debug(f"Failed to compute euler angles: {e}")
             euler_angles = [0, 0, 0]
         return {
@@ -286,6 +287,7 @@ class CalibrationResult:
 
     def __repr__(self) -> str:
         return self.__str__()
+
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing CalibrationResult...")
