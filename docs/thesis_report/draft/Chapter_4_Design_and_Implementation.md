@@ -271,9 +271,10 @@ that coordinates four specialized components:
 
 **Jetpack Compose UI Layer:**
 - **RecordingScreen**: Main interface with recording controls, device status indicators, and camera preview
-- **DevicesScreen**: Device management with scanning and connection capabilities
-- **CalibrationScreen**: Calibration workflow with progress tracking and validation
-- **FilesScreen**: File management with browse, export, and session organization
+- **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features comprehensive status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
+- **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
+- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and comprehensive export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualization
+- **OnboardingActivity**: Modern multi-page onboarding flow with Material 3 design, featuring welcome screens, feature showcase, comprehensive permission management, and setup completion guide with horizontal pager navigation
 - **MainNavigation**: Compose Navigation with bottom navigation bar and state preservation
 - **Material 3 Theme**: Comprehensive design system with dynamic theming and accessibility support
 
