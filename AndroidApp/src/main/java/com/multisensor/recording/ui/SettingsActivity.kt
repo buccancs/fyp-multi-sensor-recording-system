@@ -588,3 +588,4 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 }
+

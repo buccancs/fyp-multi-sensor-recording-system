@@ -1,19 +1,4 @@
 #!/usr/bin/env python3
-"""
-Enhanced Logging Integration for Phase 1
-=========================================
-
-This script adds comprehensive logging to areas that may be missing it,
-particularly focusing on:
-- MainActivity refactoring monitoring
-- Controller integration points
-- State management operations
-- Performance-critical sections
-- Cross-component communication
-
-Author: Phase 1 Implementation Team
-Date: 2025-07-31
-"""
 
 import os
 import re
@@ -33,9 +18,6 @@ except ImportError:
 
 
 class LoggingEnhancer:
-    """
-    Enhances existing code with comprehensive logging for Phase 1 validation.
-    """
 
     def __init__(self):
         self.project_root = Path(__file__).parent
@@ -44,9 +26,6 @@ class LoggingEnhancer:
         self.enhancements_made = []
 
     def enhance_mainactivity_logging(self) -> bool:
-        """
-        Add comprehensive logging to MainActivity for refactoring monitoring.
-        """
         logger.info("Enhancing MainActivity with comprehensive logging...")
 
         main_activity_path = self.android_root / "src/main/java/com/multisensor/recording/MainActivity.kt"
@@ -66,33 +45,22 @@ class LoggingEnhancer:
             enhancements = [
                 (
                     r'override fun onCreate\(savedInstanceState: Bundle\?\) \{',
-                    '''override fun onCreate(savedInstanceState: Bundle?) {
-        AppLogger.logMethodEntry("MainActivity", "onCreate", "Initializing main activity")
-        AppLogger.logMemoryUsage("MainActivity", "onCreate - start")'''
                 ),
 
                 (
                     r'override fun onResume\(\) \{',
-                    '''override fun onResume() {
-        AppLogger.logMethodEntry("MainActivity", "onResume", "Activity resuming")'''
                 ),
 
                 (
                     r'override fun onPause\(\) \{',
-                    '''override fun onPause() {
-        AppLogger.logMethodEntry("MainActivity", "onPause", "Activity pausing")'''
                 ),
 
                 (
                     r'fun onPermissionResult\(',
-                    '''fun onPermissionResult(
-        AppLogger.logMethodEntry("MainActivity", "onPermissionResult", "Processing permission result")'''
                 ),
 
                 (
                     r'private fun updateRecordingState\(',
-                    '''private fun updateRecordingState(
-        AppLogger.logStateChange("MainActivity", "recording_state", "Updating recording state")'''
                 )
             ]
 
@@ -122,9 +90,6 @@ class LoggingEnhancer:
             return False
 
     def enhance_controller_logging(self) -> bool:
-        """
-        Add logging to controller classes for integration monitoring.
-        """
         logger.info("Enhancing controller classes with logging...")
 
         controllers_dir = self.android_root / "src/main/java/com/multisensor/recording/controllers"
@@ -174,9 +139,6 @@ class LoggingEnhancer:
         return True
 
     def enhance_python_components(self) -> bool:
-        """
-        Add comprehensive logging to Python components.
-        """
         logger.info("Enhancing Python components with logging...")
 
         modules_to_enhance = [
@@ -237,7 +199,6 @@ class LoggingEnhancer:
         return True
 
     def _find_imports_end(self, content: str) -> int:
-        """Find the end of import statements in Python code."""
         lines = content.split('\n')
         imports_end_line = 0
 
@@ -251,20 +212,11 @@ class LoggingEnhancer:
         return len('\n'.join(lines[:imports_end_line + 1])) + 1
 
     def create_logging_test_suite(self) -> bool:
-        """
-        Create comprehensive test suite for logging validation.
-        """
         logger.info("Creating logging test suite...")
 
         test_file_path = self.project_root / "test_comprehensive_logging.py"
 
         test_content = '''#!/usr/bin/env python3
-"""
-Comprehensive Logging Test Suite for Phase 1
-=============================================
-
-Tests all logging enhancements and validates comprehensive coverage.
-"""
 
 import sys
 import time
@@ -277,7 +229,6 @@ from PythonApp.utils.logging_config import get_logger, AppLogger, performance_ti
 logger = get_logger(__name__)
 
 class LoggingTestSuite:
-    """Comprehensive logging validation test suite."""
 
     def __init__(self):
         self.logger = get_logger(__name__)
@@ -286,7 +237,6 @@ class LoggingTestSuite:
 
     @performance_timer("logging_infrastructure_test")
     def test_logging_infrastructure(self):
-        """Test comprehensive logging infrastructure."""
         self.logger.info("=== Testing Logging Infrastructure ===")
 
         try:
@@ -315,7 +265,6 @@ class LoggingTestSuite:
             self.logger.error(f"❌ Logging infrastructure test FAILED: {e}")
 
     def test_component_logging(self):
-        """Test individual component logging."""
         self.logger.info("=== Testing Component Logging ===")
 
         components = [
@@ -342,7 +291,6 @@ class LoggingTestSuite:
         self.tests_passed += 1
 
     def test_performance_monitoring(self):
-        """Test performance monitoring capabilities."""
         self.logger.info("=== Testing Performance Monitoring ===")
 
         try:
@@ -366,7 +314,6 @@ class LoggingTestSuite:
             self.logger.error(f"❌ Performance monitoring test FAILED: {e}")
 
     def test_log_file_creation(self):
-        """Test log file creation and structure."""
         self.logger.info("=== Testing Log File Creation ===")
 
         try:
@@ -397,7 +344,6 @@ class LoggingTestSuite:
             self.logger.error(f"❌ Log file creation test FAILED: {e}")
 
     def run_all_tests(self):
-        """Run all logging tests."""
         self.logger.info("🚀 Starting Comprehensive Logging Test Suite")
         self.logger.info("=" * 60)
 
@@ -434,7 +380,6 @@ class LoggingTestSuite:
             return False
 
 def main():
-    """Run comprehensive logging tests."""
     try:
         AppLogger.initialize(log_level="DEBUG", console_output=True, file_output=True)
 
@@ -449,25 +394,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-'''
-
-        with open(test_file_path, 'w') as f:
-            f.write(test_content)
-
-        os.chmod(test_file_path, 0o755)
-
-        logger.info(f"Created comprehensive logging test suite: {test_file_path}")
-        return True
-
-    def create_android_logging_test(self) -> bool:
-        """
-        Create Android logging test utility.
-        """
-        logger.info("Creating Android logging test utility...")
-
-        test_file_path = self.android_root / "src/main/java/com/multisensor/recording/util/LoggingTestUtility.kt"
-
-        test_content = '''package com.multisensor.recording.util
 
 import android.content.Context
 import android.util.Log
@@ -575,9 +501,6 @@ object LoggingTestUtility {
         return True
 
     def run_enhancements(self) -> bool:
-        """
-        Run all logging enhancements.
-        """
         logger.info("🔧 Starting comprehensive logging enhancements for Phase 1")
         logger.info("=" * 60)
 
@@ -626,7 +549,6 @@ object LoggingTestUtility {
 
 
 def main():
-    """Main entry point for logging enhancement."""
     print("🔧 Multi-Sensor Recording System - Logging Enhancement for Phase 1")
     print("=" * 70)
 

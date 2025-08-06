@@ -5,17 +5,6 @@ import com.multisensor.recording.testbase.BaseUnitTest
 import org.junit.Test
 import java.io.File
 
-/**
- * Architecture enforcement tests to maintain strict separation of concerns.
- * Validates that the clean MVVM architecture layers are properly maintained.
- * 
- * Enforces the following architectural rules:
- * - UI layer only depends on ViewModels and Controllers
- * - Controllers don't depend on UI components
- * - Managers handle business logic without UI dependencies
- * - Network layer is isolated from UI layer
- * - Service layer maintains proper boundaries
- */
 class SimpleArchitectureTest : BaseUnitTest() {
 
     private val sourceRoot = "AndroidApp/src/main/java/com/multisensor/recording"
@@ -126,7 +115,7 @@ class SimpleArchitectureTest : BaseUnitTest() {
         val sourceDir = File(sourceRoot)
         
         if (!sourceDir.exists()) {
-            return emptyList() // Skip if source directory doesn't exist in test environment
+            return emptyList() 
         }
         
         sourceDir.walkTopDown()
@@ -149,7 +138,7 @@ class SimpleArchitectureTest : BaseUnitTest() {
         val sourceDir = File(sourceRoot)
         
         if (!sourceDir.exists()) {
-            return emptyList() // Skip if source directory doesn't exist in test environment
+            return emptyList() 
         }
         
         sourceDir.walkTopDown()
@@ -167,15 +156,13 @@ class SimpleArchitectureTest : BaseUnitTest() {
         
         return violations
 
-    // Architecture Enforcement Tests - Added to detect forbidden dependencies
-
     @Test
     fun `UI layer should not directly import from network or service packages`() {
         val uiFiles = getKotlinFilesInPackage("ui")
         val forbiddenImports = listOf(
             "com.multisensor.recording.network.",
             "com.multisensor.recording.service.",
-            "com.multisensor.recording.recording."  // UI should go through controllers/managers
+            "com.multisensor.recording.recording."  
         )
 
         uiFiles.forEach { file ->
@@ -241,10 +228,9 @@ class SimpleArchitectureTest : BaseUnitTest() {
     fun `Infrastructure utilities should be used consistently`() {
         val allKotlinFiles = getAllKotlinFiles()
         
-        // Check that logging is done through centralized utilities
         allKotlinFiles.forEach { file ->
             val content = file.readText()
-            // Should not use direct Android Log
+            
             if (content.contains("import android.util.Log")) {
                 assertThat(content).doesNotContain("Log.d(")
                 assertThat(content).doesNotContain("Log.e(")
@@ -260,17 +246,14 @@ class SimpleArchitectureTest : BaseUnitTest() {
         allKotlinFiles.forEach { file ->
             val content = file.readText()
             
-            // Check that @Singleton is used for managers and controllers
             if (content.contains("class") && 
                 (content.contains("Manager") || content.contains("Controller")) &&
                 content.contains("@Inject constructor")) {
-                // Should have proper DI scope
+                
                 assertThat(content.contains("@Singleton") || content.contains("@ActivityScoped") || content.contains("@ServiceScoped")).isTrue()
             }
         }
     }
-
-    // Helper methods for architecture testing
 
     private fun getKotlinFilesInPackage(packageName: String): List<File> {
         val srcDir = File("src/main/java/com/multisensor/recording/$packageName")

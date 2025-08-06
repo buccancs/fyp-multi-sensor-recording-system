@@ -86,3 +86,4 @@ class SessionItemDiffCallback : DiffUtil.ItemCallback<SessionItem>() {
         return oldItem == newItem
     }
 }
+

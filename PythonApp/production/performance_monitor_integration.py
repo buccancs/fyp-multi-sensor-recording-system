@@ -1,9 +1,3 @@
-"""
-Integrated performance monitoring system for the multi-sensor recording application.
-
-This module combines endurance testing, graceful degradation, and performance optimization
-to provide comprehensive performance management for the recording system.
-"""
 
 import asyncio
 import json
@@ -22,7 +16,6 @@ try:
     )
     from ..utils.logging_config import get_logger
 except ImportError:
-    # Fallback for testing
     import sys
     current_dir = Path(__file__).parent
     sys.path.insert(0, str(current_dir))
@@ -35,42 +28,29 @@ except ImportError:
 
 
 class PerformanceMonitorIntegration:
-    """
-    Integrated performance monitoring system that combines:
-    - Real-time graceful degradation
-    - Long-duration endurance testing
-    - Performance recommendations
-    - Automated optimization
-    """
     
     def __init__(self, config_file: Optional[str] = None):
         self.logger = get_logger(__name__)
         
-        # Load configuration
         self.config = self._load_configuration(config_file)
         
-        # Initialize components
         self.degradation_manager = GracefulDegradationManager(
             self.config.get("performance_thresholds")
         )
         
-        # Performance monitoring state
         self.monitoring_active = False
         self.performance_history: List[Dict[str, Any]] = []
         self.alerts_log: List[Dict[str, Any]] = []
         
-        # Integration callbacks
         self.status_change_callbacks: List[Callable] = []
         self.performance_alert_callbacks: List[Callable] = []
         
-        # Setup degradation manager callbacks
         self.degradation_manager.add_level_change_callback(self._on_performance_level_change)
         self.degradation_manager.add_metrics_callback(self._get_application_metrics)
         
         self.logger.info("PerformanceMonitorIntegration: Initialized integrated performance monitoring")
         
     def _load_configuration(self, config_file: Optional[str]) -> Dict[str, Any]:
-        """Load performance monitoring configuration."""
         default_config = {
             "performance_thresholds": PerformanceThresholds(
                 cpu_degraded_threshold=70.0,
@@ -107,26 +87,15 @@ class PerformanceMonitorIntegration:
         return default_config
         
     def _get_application_metrics(self) -> SystemMetrics:
-        """
-        Get application-specific metrics. 
-        This should be customized to integrate with the actual recording system.
-        """
-        # This is a placeholder that would be replaced with actual application metrics
         current_time = time.time()
         
-        # In a real implementation, this would query:
-        # - Active recording sessions
-        # - Connected devices
-        # - Processing queue sizes
-        # - Recording quality settings
-        # - Frame processing rates
         
         return SystemMetrics(
             timestamp=current_time,
-            cpu_percent=0.0,  # Will be filled by system monitoring
-            memory_percent=0.0,  # Will be filled by system monitoring
-            disk_write_speed_mbps=0.0,  # Will be filled by system monitoring
-            network_speed_mbps=0.0,  # Will be filled by system monitoring
+            cpu_percent=0.0,
+            memory_percent=0.0,
+            disk_write_speed_mbps=0.0,
+            network_speed_mbps=0.0,
             queue_sizes={
                 "video_processing": 0,
                 "thermal_processing": 0,
@@ -143,7 +112,6 @@ class PerformanceMonitorIntegration:
         )
         
     def _on_performance_level_change(self, new_level: PerformanceLevel):
-        """Handle performance level changes."""
         alert = {
             "timestamp": time.time(),
             "type": "performance_level_change",
@@ -154,7 +122,6 @@ class PerformanceMonitorIntegration:
         self.alerts_log.append(alert)
         self.logger.info(f"PerformanceMonitorIntegration: {alert['message']}")
         
-        # Notify callbacks
         for callback in self.performance_alert_callbacks:
             try:
                 callback(alert)
@@ -162,32 +129,26 @@ class PerformanceMonitorIntegration:
                 self.logger.error(f"PerformanceMonitorIntegration: Error in alert callback: {e}")
                 
     async def start_monitoring(self):
-        """Start integrated performance monitoring."""
         if self.monitoring_active:
             self.logger.warning("PerformanceMonitorIntegration: Monitoring already active")
             return
             
         self.monitoring_active = True
         
-        # Start graceful degradation monitoring
         await self.degradation_manager.start_monitoring()
         
-        # Start periodic status reporting
         asyncio.create_task(self._periodic_status_reporting())
         
         self.logger.info("PerformanceMonitorIntegration: Started integrated performance monitoring")
         
     async def stop_monitoring(self):
-        """Stop performance monitoring."""
         self.monitoring_active = False
         
-        # Stop degradation monitoring
         await self.degradation_manager.stop_monitoring()
         
         self.logger.info("PerformanceMonitorIntegration: Stopped performance monitoring")
         
     async def _periodic_status_reporting(self):
-        """Periodically generate status reports."""
         interval_seconds = self.config["monitoring"]["status_report_interval_minutes"] * 60
         
         while self.monitoring_active:
@@ -198,14 +159,12 @@ class PerformanceMonitorIntegration:
                     "status": status
                 })
                 
-                # Trim history
                 max_age = time.time() - (self.config["monitoring"]["history_retention_hours"] * 3600)
                 self.performance_history = [
                     h for h in self.performance_history 
                     if h["timestamp"] > max_age
                 ]
                 
-                # Auto-export reports if enabled
                 if self.config["output"]["auto_export_reports"]:
                     await self._auto_export_report()
                     
@@ -218,7 +177,6 @@ class PerformanceMonitorIntegration:
                 await asyncio.sleep(interval_seconds)
                 
     async def _auto_export_report(self):
-        """Automatically export performance report."""
         try:
             reports_dir = Path(self.config["output"]["reports_directory"])
             reports_dir.mkdir(exist_ok=True)
@@ -239,19 +197,8 @@ class PerformanceMonitorIntegration:
     async def run_endurance_test(self, 
                                 duration_hours: Optional[float] = None,
                                 custom_config: Optional[EnduranceTestConfig] = None) -> EnduranceTestResult:
-        """
-        Run a comprehensive endurance test with integrated monitoring.
-        
-        Args:
-            duration_hours: Test duration. If None, uses default from config.
-            custom_config: Custom test configuration. If None, creates from defaults.
-            
-        Returns:
-            EnduranceTestResult with comprehensive analysis.
-        """
         self.logger.info("PerformanceMonitorIntegration: Starting integrated endurance test")
         
-        # Create test configuration
         if custom_config is None:
             if duration_hours is None:
                 duration_hours = self.config["endurance_test"]["default_duration_hours"]
@@ -264,20 +211,16 @@ class PerformanceMonitorIntegration:
                 enable_detailed_logging=self.config["output"]["enable_detailed_logging"]
             )
             
-        # Temporarily disable regular monitoring to avoid conflicts
         was_monitoring = self.monitoring_active
         if was_monitoring:
             await self.stop_monitoring()
             
         try:
-            # Run endurance test
             runner = EnduranceTestRunner(custom_config)
             result = await runner.run_endurance_test()
             
-            # Log results
             self.logger.info(f"PerformanceMonitorIntegration: Endurance test completed - Success: {result.success}")
             
-            # Add to alerts log
             alert = {
                 "timestamp": time.time(),
                 "type": "endurance_test_completed",
@@ -292,12 +235,10 @@ class PerformanceMonitorIntegration:
             return result
             
         finally:
-            # Restart monitoring if it was active
             if was_monitoring:
                 await self.start_monitoring()
                 
     def get_comprehensive_status(self) -> Dict[str, Any]:
-        """Get comprehensive system performance status."""
         degradation_status = self.degradation_manager.get_current_status()
         
         status = {
@@ -310,7 +251,7 @@ class PerformanceMonitorIntegration:
             "queue_status": degradation_status["queue_status"],
             "recent_alerts_count": len([
                 alert for alert in self.alerts_log 
-                if time.time() - alert["timestamp"] < 3600  # Last hour
+                if time.time() - alert["timestamp"] < 3600
             ]),
             "recommendations": self._generate_current_recommendations()
         }
@@ -318,7 +259,6 @@ class PerformanceMonitorIntegration:
         return status
         
     def _generate_current_recommendations(self) -> List[str]:
-        """Generate current performance recommendations."""
         recommendations = []
         
         status = self.degradation_manager.get_current_status()
@@ -335,7 +275,6 @@ class PerformanceMonitorIntegration:
                 "optimizing recording parameters."
             )
             
-        # Check frame dropping
         frame_stats = status.get("frame_drop_stats", {})
         if frame_stats.get("drop_rate_actual", 0) > 0:
             recommendations.append(
@@ -343,10 +282,9 @@ class PerformanceMonitorIntegration:
                 "This helps prevent memory overflow but may affect recording quality."
             )
             
-        # Check recent alerts
         recent_alerts = [
             alert for alert in self.alerts_log 
-            if time.time() - alert["timestamp"] < 1800  # Last 30 minutes
+            if time.time() - alert["timestamp"] < 1800
         ]
         
         if len(recent_alerts) > 5:
@@ -361,13 +299,10 @@ class PerformanceMonitorIntegration:
         return recommendations
         
     def generate_performance_report(self) -> Dict[str, Any]:
-        """Generate comprehensive performance report."""
         current_status = self.get_comprehensive_status()
         
-        # Analyze performance history
         history_analysis = self._analyze_performance_history()
         
-        # Alert summary
         alert_summary = self._analyze_alerts()
         
         report = {
@@ -386,11 +321,9 @@ class PerformanceMonitorIntegration:
         return report
         
     def _analyze_performance_history(self) -> Dict[str, Any]:
-        """Analyze performance history for trends."""
         if not self.performance_history:
             return {"insufficient_data": True}
             
-        # Extract performance levels over time
         levels = [h["status"]["performance_level"] for h in self.performance_history]
         
         level_counts = {
@@ -403,7 +336,6 @@ class PerformanceMonitorIntegration:
         total = len(levels)
         level_percentages = {k: (v / total * 100) if total > 0 else 0 for k, v in level_counts.items()}
         
-        # Check for performance degradation trends
         recent_levels = levels[-10:] if len(levels) >= 10 else levels
         degradation_trend = sum(1 for level in recent_levels if level in ["degraded", "critical"]) / len(recent_levels)
         
@@ -415,29 +347,25 @@ class PerformanceMonitorIntegration:
         }
         
     def _analyze_alerts(self) -> Dict[str, Any]:
-        """Analyze alert patterns and frequencies."""
         if not self.alerts_log:
             return {"no_alerts": True}
             
-        # Group alerts by type
         alert_types = {}
         for alert in self.alerts_log:
             alert_type = alert.get("type", "unknown")
             alert_types[alert_type] = alert_types.get(alert_type, 0) + 1
             
-        # Recent alert frequency
-        recent_threshold = time.time() - 3600  # Last hour
+        recent_threshold = time.time() - 3600
         recent_alerts = [alert for alert in self.alerts_log if alert["timestamp"] > recent_threshold]
         
         return {
             "total_alerts": len(self.alerts_log),
             "alert_types": alert_types,
             "recent_alerts_count": len(recent_alerts),
-            "alert_frequency_per_hour": len(recent_alerts)  # Already filtered to last hour
+            "alert_frequency_per_hour": len(recent_alerts)
         }
         
     def _generate_long_term_recommendations(self, history_analysis: Dict[str, Any]) -> List[str]:
-        """Generate long-term performance recommendations based on historical data."""
         recommendations = []
         
         if history_analysis.get("insufficient_data"):
@@ -467,28 +395,22 @@ class PerformanceMonitorIntegration:
         return recommendations
         
     def add_status_change_callback(self, callback: Callable):
-        """Add callback for status changes."""
         self.status_change_callbacks.append(callback)
         
     def add_performance_alert_callback(self, callback: Callable):
-        """Add callback for performance alerts."""
         self.performance_alert_callbacks.append(callback)
         
     def should_drop_frame(self) -> bool:
-        """Check if current frame should be dropped (integration with recording system)."""
         return self.degradation_manager.should_drop_frame()
         
     def get_adapted_recording_settings(self, **baseline_settings) -> Dict[str, Any]:
-        """Get recording settings adapted for current performance level."""
         return self.degradation_manager.get_adapted_quality_settings(**baseline_settings)
 
 
-# Global instance for easy access
 _performance_monitor: Optional[PerformanceMonitorIntegration] = None
 
 
 def get_performance_monitor(config_file: Optional[str] = None) -> PerformanceMonitorIntegration:
-    """Get the global performance monitor instance."""
     global _performance_monitor
     if _performance_monitor is None:
         _performance_monitor = PerformanceMonitorIntegration(config_file)
@@ -496,7 +418,6 @@ def get_performance_monitor(config_file: Optional[str] = None) -> PerformanceMon
 
 
 async def main():
-    """Example usage of the integrated performance monitoring system."""
     import argparse
     
     parser = argparse.ArgumentParser(description="Integrated Performance Monitoring System")
@@ -508,14 +429,12 @@ async def main():
     
     args = parser.parse_args()
     
-    # Configure logging
     level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(
         level=level,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
     
-    # Create performance monitor
     monitor = PerformanceMonitorIntegration(args.config)
     
     try:
@@ -548,7 +467,6 @@ async def main():
                 
             await monitor.stop_monitoring()
             
-            # Generate final report
             report = monitor.generate_performance_report()
             report_file = f"performance_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             

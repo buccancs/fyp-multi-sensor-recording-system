@@ -1,10 +1,3 @@
-"""
-Device diversity testing and performance profiling for Android devices.
-
-This module provides capabilities to test performance across different Android device
-tiers, detect device capabilities, and provide automatic optimization recommendations
-based on hardware specifications.
-"""
 
 import json
 import logging
@@ -25,7 +18,6 @@ except ImportError:
 
 
 class DeviceTier(Enum):
-    """Device performance tiers based on capabilities."""
     LOW_END = "low_end"
     MID_RANGE = "mid_range"
     HIGH_END = "high_end"
@@ -34,7 +26,6 @@ class DeviceTier(Enum):
 
 
 class PerformanceCategory(Enum):
-    """Performance testing categories."""
     CPU_INTENSIVE = "cpu_intensive"
     MEMORY_INTENSIVE = "memory_intensive"
     CAMERA_PROCESSING = "camera_processing"
@@ -46,78 +37,61 @@ class PerformanceCategory(Enum):
 
 @dataclass
 class DeviceSpecification:
-    """Android device hardware specifications."""
     
-    # Device identification
     device_model: str
     manufacturer: str
     android_version: str
     api_level: int
     
-    # CPU specifications
     cpu_architecture: str
     cpu_cores: int
     cpu_frequency_mhz: int
     
-    # Memory specifications
     total_ram_mb: int
     available_ram_mb: int
     
-    # Storage specifications
     total_storage_gb: int
     available_storage_gb: int
-    storage_type: str  # "emmc", "ufs_2.0", "ufs_3.0", etc.
+    storage_type: str
     
-    # Display specifications
     screen_width: int
     screen_height: int
     screen_density_dpi: int
     
-    # Camera specifications
     camera_count: int
     max_camera_resolution: str
     supports_camera2_api: bool
     
-    # Network capabilities
     supports_5ghz_wifi: bool
     supports_bluetooth_5: bool
     supports_nfc: bool
     
-    # Power specifications
     battery_capacity_mah: int
     supports_fast_charging: bool
     
-    # Special features
     has_thermal_camera: bool = False
     has_hardware_acceleration: bool = False
     supports_vulkan_api: bool = False
     
-    # Derived properties
     tier: DeviceTier = DeviceTier.UNKNOWN
     performance_score: float = 0.0
     
     def calculate_tier_and_score(self):
-        """Calculate device tier and performance score based on specifications."""
-        # Calculate performance score (0-100)
         score = 0.0
         
-        # CPU score (0-25)
         cpu_score = min(25, (self.cpu_cores * self.cpu_frequency_mhz) / 80000)
         score += cpu_score
         
-        # Memory score (0-25)
-        memory_score = min(25, self.total_ram_mb / 200)  # 5GB = 25 points
+        memory_score = min(25, self.total_ram_mb / 200)
         score += memory_score
         
-        # Storage score (0-15)
-        storage_score = min(15, self.total_storage_gb / 8)  # 128GB = 15 points
+        storage_score = min(15, self.total_storage_gb / 8)
         if self.storage_type in ["ufs_3.0", "ufs_3.1"]:
             storage_score *= 1.2
         elif self.storage_type in ["ufs_2.0", "ufs_2.1"]:
             storage_score *= 1.1
         score += min(15, storage_score)
         
-        # Camera score (0-15)
         camera_score = self.camera_count * 2
         if self.supports_camera2_api:
             camera_score += 5
@@ -125,7 +99,6 @@ class DeviceSpecification:
             camera_score += 5
         score += min(15, camera_score)
         
-        # Features score (0-20)
         features_score = 0
         if self.supports_5ghz_wifi:
             features_score += 3
@@ -141,7 +114,6 @@ class DeviceSpecification:
         
         self.performance_score = min(100, score)
         
-        # Determine tier based on score
         if self.performance_score >= 80:
             self.tier = DeviceTier.FLAGSHIP
         elif self.performance_score >= 60:
@@ -154,33 +126,27 @@ class DeviceSpecification:
 
 @dataclass
 class PerformanceTestResult:
-    """Results from a performance test on a device."""
     
     test_category: PerformanceCategory
     device_model: str
     test_duration_seconds: float
     
-    # Performance metrics
     throughput_ops_per_second: float
     average_response_time_ms: float
     peak_memory_usage_mb: float
     cpu_usage_percent: float
     battery_drain_percent: float
     
-    # Quality metrics
-    success_rate: float  # 0.0-1.0
+    success_rate: float
     error_count: int
-    frame_drop_rate: float = 0.0  # For camera/video tests
+    frame_drop_rate: float = 0.0
     
-    # Additional metrics
     metadata: Dict[str, Any] = field(default_factory=dict)
     
     def get_performance_grade(self) -> str:
-        """Get a letter grade for this performance test."""
         if self.success_rate < 0.8:
             return "F"
         
-        # Calculate composite score
         efficiency_score = self.throughput_ops_per_second / max(1, self.cpu_usage_percent)
         
         if efficiency_score >= 10 and self.success_rate >= 0.95:
@@ -195,23 +161,19 @@ class PerformanceTestResult:
 
 @dataclass
 class DeviceProfile:
-    """Complete performance profile for a device."""
     
     device_spec: DeviceSpecification
     test_results: List[PerformanceTestResult] = field(default_factory=list)
     optimization_recommendations: List[str] = field(default_factory=list)
     
-    # Derived performance characteristics
     overall_performance_grade: str = "N/A"
     best_categories: List[PerformanceCategory] = field(default_factory=list)
     worst_categories: List[PerformanceCategory] = field(default_factory=list)
     
     def analyze_performance(self):
-        """Analyze test results and generate insights."""
         if not self.test_results:
             return
             
-        # Calculate overall grade
         grades = [result.get_performance_grade() for result in self.test_results]
         grade_scores = {"A": 4, "B": 3, "C": 2, "D": 1, "F": 0}
         avg_score = statistics.mean([grade_scores[grade] for grade in grades])
@@ -227,7 +189,6 @@ class DeviceProfile:
         else:
             self.overall_performance_grade = "F"
             
-        # Find best and worst categories
         category_scores = {}
         for result in self.test_results:
             efficiency = result.throughput_ops_per_second / max(1, result.cpu_usage_percent)
@@ -238,14 +199,11 @@ class DeviceProfile:
         self.best_categories = [cat for cat, _ in sorted_categories[:2]]
         self.worst_categories = [cat for cat, _ in sorted_categories[-2:]]
         
-        # Generate optimization recommendations
         self._generate_optimization_recommendations()
         
     def _generate_optimization_recommendations(self):
-        """Generate device-specific optimization recommendations."""
         self.optimization_recommendations = []
         
-        # Tier-based recommendations
         if self.device_spec.tier == DeviceTier.LOW_END:
             self.optimization_recommendations.extend([
                 "Use conservative quality settings to maintain performance",
@@ -269,7 +227,6 @@ class DeviceProfile:
                 "Use advanced processing features"
             ])
             
-        # Category-specific recommendations
         for result in self.test_results:
             if result.get_performance_grade() in ["D", "F"]:
                 if result.test_category == PerformanceCategory.CAMERA_PROCESSING:
@@ -285,7 +242,6 @@ class DeviceProfile:
                         "CPU performance is limited - reduce processing complexity"
                     )
                     
-        # RAM-based recommendations
         if self.device_spec.total_ram_mb < 3000:
             self.optimization_recommendations.append(
                 "Low RAM detected - implement strict memory management"
@@ -297,14 +253,12 @@ class DeviceProfile:
 
 
 class DevicePerformanceTester:
-    """Performs comprehensive performance testing on Android devices."""
     
     def __init__(self):
         self.logger = get_logger(__name__)
         self.test_profiles: Dict[DeviceTier, Dict[str, Any]] = self._create_test_profiles()
         
     def _create_test_profiles(self) -> Dict[DeviceTier, Dict[str, Any]]:
-        """Create tier-specific test profiles."""
         return {
             DeviceTier.LOW_END: {
                 "camera_resolution": (640, 480),
@@ -337,17 +291,6 @@ class DevicePerformanceTester:
         }
         
     def detect_device_specifications(self, adb_device_id: Optional[str] = None) -> DeviceSpecification:
-        """
-        Detect device specifications using ADB commands.
-        Note: This is a simplified implementation for demonstration.
-        Real implementation would use actual ADB commands.
-        """
-        # This is a mock implementation that would normally use ADB
-        # In reality, this would execute commands like:
-        # adb shell getprop ro.product.model
-        # adb shell getprop ro.build.version.release
-        # adb shell cat /proc/meminfo
-        # etc.
         
         return DeviceSpecification(
             device_model="Mock Device",
@@ -380,13 +323,10 @@ class DevicePerformanceTester:
         
     def run_performance_test(self, device_spec: DeviceSpecification, 
                            category: PerformanceCategory) -> PerformanceTestResult:
-        """Run a specific performance test on a device."""
         self.logger.info(f"DevicePerformanceTester: Running {category.value} test on {device_spec.device_model}")
         
-        # Get test profile for device tier
         test_profile = self.test_profiles.get(device_spec.tier, self.test_profiles[DeviceTier.MID_RANGE])
         
-        # Simulate test execution based on category
         if category == PerformanceCategory.CPU_INTENSIVE:
             return self._test_cpu_intensive(device_spec, test_profile)
         elif category == PerformanceCategory.MEMORY_INTENSIVE:
@@ -406,11 +346,8 @@ class DevicePerformanceTester:
             
     def _test_cpu_intensive(self, device_spec: DeviceSpecification, 
                            test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate CPU-intensive testing."""
-        # Simulate CPU performance based on device specs
         base_throughput = device_spec.cpu_cores * device_spec.cpu_frequency_mhz / 1000
         
-        # Apply tier adjustments
         if device_spec.tier == DeviceTier.LOW_END:
             throughput = base_throughput * 0.7
             cpu_usage = 95.0
@@ -423,7 +360,7 @@ class DevicePerformanceTester:
             throughput = base_throughput * 1.1
             cpu_usage = 70.0
             success_rate = 0.96
-        else:  # FLAGSHIP
+        else:
             throughput = base_throughput * 1.3
             cpu_usage = 60.0
             success_rate = 0.98
@@ -444,11 +381,10 @@ class DevicePerformanceTester:
         
     def _test_memory_intensive(self, device_spec: DeviceSpecification, 
                               test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate memory-intensive testing."""
         available_memory = device_spec.available_ram_mb
-        memory_efficiency = min(1.0, available_memory / 4000)  # 4GB baseline
+        memory_efficiency = min(1.0, available_memory / 4000)
         
-        throughput = memory_efficiency * 50  # MB/s
+        throughput = memory_efficiency * 50
         cpu_usage = 40 + (1 - memory_efficiency) * 30
         success_rate = 0.8 + memory_efficiency * 0.15
         
@@ -468,7 +404,6 @@ class DevicePerformanceTester:
         
     def _test_camera_processing(self, device_spec: DeviceSpecification, 
                                test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate camera processing testing."""
         camera_performance = 1.0
         
         if device_spec.supports_camera2_api:
@@ -482,7 +417,7 @@ class DevicePerformanceTester:
         throughput = fps * test_profile["camera_resolution"][0] * test_profile["camera_resolution"][1] / 1000000
         
         cpu_usage = 60 - (camera_performance - 1) * 20
-        frame_drop_rate = max(0, (30 - fps) / 30 * 0.1)  # Assuming 30 FPS target
+        frame_drop_rate = max(0, (30 - fps) / 30 * 0.1)
         success_rate = 1.0 - frame_drop_rate
         
         return PerformanceTestResult(
@@ -490,7 +425,7 @@ class DevicePerformanceTester:
             device_model=device_spec.device_model,
             test_duration_seconds=test_profile["test_duration_seconds"],
             throughput_ops_per_second=throughput,
-            average_response_time_ms=1000 / fps,  # Frame time
+            average_response_time_ms=1000 / fps,
             peak_memory_usage_mb=300,
             cpu_usage_percent=cpu_usage,
             battery_drain_percent=3.0,
@@ -506,14 +441,12 @@ class DevicePerformanceTester:
         
     def _test_thermal_processing(self, device_spec: DeviceSpecification, 
                                 test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate thermal camera processing testing."""
         if device_spec.has_thermal_camera:
-            throughput = 20.0  # Thermal frames per second
+            throughput = 20.0
             cpu_usage = 45.0
             success_rate = 0.95
             battery_drain = 2.5
         else:
-            # Simulated thermal processing without hardware
             throughput = 5.0
             cpu_usage = 80.0
             success_rate = 0.75
@@ -535,8 +468,7 @@ class DevicePerformanceTester:
         
     def _test_network_throughput(self, device_spec: DeviceSpecification, 
                                 test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate network throughput testing."""
-        base_throughput = 50.0  # Mbps
+        base_throughput = 50.0
         
         if device_spec.supports_5ghz_wifi:
             base_throughput *= 2.0
@@ -562,8 +494,6 @@ class DevicePerformanceTester:
         
     def _test_storage_io(self, device_spec: DeviceSpecification, 
                         test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate storage I/O testing."""
-        # Storage performance based on type
         storage_multipliers = {
             "emmc": 1.0,
             "ufs_2.0": 2.0,
@@ -573,7 +503,7 @@ class DevicePerformanceTester:
         }
         
         multiplier = storage_multipliers.get(device_spec.storage_type, 1.0)
-        throughput = 100 * multiplier  # MB/s
+        throughput = 100 * multiplier
         
         cpu_usage = 30.0
         success_rate = 0.98
@@ -594,9 +524,7 @@ class DevicePerformanceTester:
         
     def _test_battery_efficiency(self, device_spec: DeviceSpecification, 
                                 test_profile: Dict[str, Any]) -> PerformanceTestResult:
-        """Simulate battery efficiency testing."""
-        # Battery efficiency based on capacity and device tier
-        base_efficiency = device_spec.battery_capacity_mah / 4000  # 4000mAh baseline
+        base_efficiency = device_spec.battery_capacity_mah / 4000
         
         if device_spec.tier == DeviceTier.FLAGSHIP:
             efficiency_score = base_efficiency * 1.2
@@ -605,9 +533,8 @@ class DevicePerformanceTester:
         else:
             efficiency_score = base_efficiency
             
-        # Simulate power consumption test
-        power_consumption_mw = 2000 / efficiency_score  # Lower is better
-        throughput = 1000 / power_consumption_mw  # Operations per mW
+        power_consumption_mw = 2000 / efficiency_score
+        throughput = 1000 / power_consumption_mw
         
         return PerformanceTestResult(
             test_category=PerformanceCategory.BATTERY_EFFICIENCY,
@@ -628,16 +555,12 @@ class DevicePerformanceTester:
         )
         
     def run_comprehensive_test_suite(self, device_spec: DeviceSpecification) -> DeviceProfile:
-        """Run comprehensive performance testing on a device."""
         self.logger.info(f"DevicePerformanceTester: Running comprehensive test suite on {device_spec.device_model}")
         
-        # Calculate device tier and score
         device_spec.calculate_tier_and_score()
         
-        # Create device profile
         profile = DeviceProfile(device_spec=device_spec)
         
-        # Run all performance tests
         for category in PerformanceCategory:
             try:
                 result = self.run_performance_test(device_spec, category)
@@ -646,7 +569,6 @@ class DevicePerformanceTester:
             except Exception as e:
                 self.logger.error(f"DevicePerformanceTester: Error running {category.value} test: {e}")
                 
-        # Analyze results
         profile.analyze_performance()
         
         self.logger.info(f"DevicePerformanceTester: Test suite completed - Overall Grade: {profile.overall_performance_grade}")
@@ -654,20 +576,16 @@ class DevicePerformanceTester:
 
 
 class DeviceDiversityAnalyzer:
-    """Analyzes performance across diverse device configurations."""
     
     def __init__(self):
         self.logger = get_logger(__name__)
         self.device_profiles: List[DeviceProfile] = []
         
     def add_device_profile(self, profile: DeviceProfile):
-        """Add a device profile to the analysis."""
         self.device_profiles.append(profile)
         
     def create_sample_device_profiles(self) -> List[DeviceProfile]:
-        """Create sample device profiles for testing purposes."""
         sample_devices = [
-            # Low-end device
             DeviceSpecification(
                 device_model="Budget Phone A",
                 manufacturer="Generic",
@@ -694,7 +612,6 @@ class DeviceDiversityAnalyzer:
                 supports_fast_charging=False
             ),
             
-            # Mid-range device
             DeviceSpecification(
                 device_model="Mid-Range Phone B",
                 manufacturer="Samsung",
@@ -722,7 +639,6 @@ class DeviceDiversityAnalyzer:
                 has_hardware_acceleration=True
             ),
             
-            # High-end device
             DeviceSpecification(
                 device_model="Flagship Phone C",
                 manufacturer="Google",
@@ -753,7 +669,6 @@ class DeviceDiversityAnalyzer:
             )
         ]
         
-        # Generate profiles for sample devices
         tester = DevicePerformanceTester()
         profiles = []
         
@@ -765,7 +680,6 @@ class DeviceDiversityAnalyzer:
         return profiles
         
     def analyze_device_diversity(self) -> Dict[str, Any]:
-        """Analyze performance characteristics across device diversity."""
         if not self.device_profiles:
             return {"error": "No device profiles available for analysis"}
             
@@ -781,7 +695,6 @@ class DeviceDiversityAnalyzer:
         return analysis
         
     def _analyze_tier_distribution(self) -> Dict[str, Any]:
-        """Analyze distribution of devices across tiers."""
         tier_counts = defaultdict(int)
         tier_scores = defaultdict(list)
         
@@ -799,13 +712,11 @@ class DeviceDiversityAnalyzer:
         }
         
     def _analyze_performance_across_tiers(self) -> Dict[str, Any]:
-        """Analyze performance characteristics across device tiers."""
         tier_performance = defaultdict(list)
         
         for profile in self.device_profiles:
             tier = profile.device_spec.tier.value
             
-            # Calculate average performance metrics
             if profile.test_results:
                 avg_throughput = statistics.mean([r.throughput_ops_per_second for r in profile.test_results])
                 avg_cpu = statistics.mean([r.cpu_usage_percent for r in profile.test_results])
@@ -822,7 +733,6 @@ class DeviceDiversityAnalyzer:
         return dict(tier_performance)
         
     def _analyze_category_performance(self) -> Dict[str, Any]:
-        """Analyze performance by test category across all devices."""
         category_analysis = {}
         
         for category in PerformanceCategory:
@@ -840,7 +750,6 @@ class DeviceDiversityAnalyzer:
                         })
                         
             if category_results:
-                # Calculate statistics
                 throughputs = [r["throughput"] for r in category_results]
                 success_rates = [r["success_rate"] for r in category_results]
                 
@@ -858,10 +767,8 @@ class DeviceDiversityAnalyzer:
         return category_analysis
         
     def _generate_diversity_recommendations(self) -> List[str]:
-        """Generate recommendations for handling device diversity."""
         recommendations = []
         
-        # Analyze tier distribution
         tier_dist = self._analyze_tier_distribution()
         low_end_percentage = tier_dist["distribution"].get("low_end", 0) / tier_dist.get("total_devices", 1) * 100
         
@@ -871,13 +778,12 @@ class DeviceDiversityAnalyzer:
                 "settings and provide performance optimization options."
             )
             
-        # Analyze performance variance
         category_analysis = self._analyze_category_performance()
         high_variance_categories = []
         
         for category, data in category_analysis.items():
             variance = data["statistics"]["performance_variance"]
-            if variance > 50:  # Arbitrary threshold
+            if variance > 50:
                 high_variance_categories.append(category)
                 
         if high_variance_categories:
@@ -886,7 +792,6 @@ class DeviceDiversityAnalyzer:
                 "Implement adaptive quality settings based on device capabilities."
             )
             
-        # Check for poor performing categories
         poor_categories = []
         for category, data in category_analysis.items():
             avg_success_rate = data["statistics"]["avg_success_rate"]
@@ -902,7 +807,6 @@ class DeviceDiversityAnalyzer:
         return recommendations
         
     def _generate_compatibility_matrix(self) -> Dict[str, Any]:
-        """Generate a compatibility matrix showing which features work well on which device tiers."""
         matrix = {}
         
         for tier in DeviceTier:
@@ -924,7 +828,6 @@ class DeviceDiversityAnalyzer:
                             category_results.append(grade)
                             
                 if category_results:
-                    # Calculate compatibility score
                     grade_scores = {"A": 4, "B": 3, "C": 2, "D": 1, "F": 0}
                     avg_score = statistics.mean([grade_scores[grade] for grade in category_results])
                     
@@ -948,7 +851,6 @@ class DeviceDiversityAnalyzer:
         return matrix
         
     def export_analysis_report(self, output_file: str):
-        """Export comprehensive analysis report to file."""
         analysis = self.analyze_device_diversity()
         
         report = {
@@ -980,7 +882,6 @@ class DeviceDiversityAnalyzer:
 
 
 def main():
-    """Command-line interface for device diversity testing."""
     import argparse
     
     parser = argparse.ArgumentParser(description="Device Diversity Testing and Analysis")
@@ -994,7 +895,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Configure logging
     level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(
         level=level,
@@ -1013,7 +913,6 @@ def main():
                 print(f"  - {profile.device_spec.device_model} ({profile.device_spec.tier.value}): "
                       f"Grade {profile.overall_performance_grade}")
                       
-            # Perform diversity analysis
             analysis = analyzer.analyze_device_diversity()
             
             print(f"\nDevice Diversity Analysis:")
@@ -1028,10 +927,8 @@ def main():
             print(f"Testing device: {args.test_device}")
             tester = DevicePerformanceTester()
             
-            # Detect device specifications (would use real ADB in practice)
             device_spec = tester.detect_device_specifications(args.test_device)
             
-            # Run comprehensive test suite
             profile = tester.run_comprehensive_test_suite(device_spec)
             analyzer.add_device_profile(profile)
             
@@ -1041,7 +938,6 @@ def main():
             print(f"  Performance Score: {profile.device_spec.performance_score:.1f}")
             print(f"  Overall Grade: {profile.overall_performance_grade}")
             
-        # Export analysis report
         analyzer.export_analysis_report(args.output)
         print(f"\nAnalysis report saved to: {args.output}")
         

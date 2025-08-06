@@ -1,18 +1,3 @@
-"""
-Runtime Security Checks Module
-=============================
-
-This module provides runtime security validation to ensure the system
-is running with appropriate security configurations. It performs startup
-checks and ongoing monitoring as recommended in the security assessment.
-
-Security Checks:
-- TLS configuration validation
-- Default password detection  
-- Environment security assessment
-- File encryption verification
-- Network security validation
-"""
 
 import json
 import os
@@ -25,11 +10,9 @@ import warnings
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-# Handle imports for standalone and module usage
 try:
     from ..utils.logging_config import get_logger
 except ImportError:
-    # Standalone usage - create simple logger
     import logging
     logging.basicConfig(level=logging.INFO)
     def get_logger(name):
@@ -37,17 +20,14 @@ except ImportError:
 
 
 class SecurityValidationError(Exception):
-    """Raised when critical security validation fails."""
     pass
 
 
 class SecurityWarning(UserWarning):
-    """Warning for non-critical security issues."""
     pass
 
 
 class RuntimeSecurityChecker:
-    """Performs runtime security checks and validation."""
     
     def __init__(self):
         self.logger = get_logger(__name__)
@@ -55,27 +35,13 @@ class RuntimeSecurityChecker:
         self._warnings: List[str] = []
         
     def perform_startup_checks(self, config_path: Optional[str] = None) -> bool:
-        """
-        Perform comprehensive security checks at application startup.
-        
-        Args:
-            config_path: Path to configuration file
-            
-        Returns:
-            True if all critical checks pass, False otherwise
-            
-        Raises:
-            SecurityValidationError: If critical security issues are found
-        """
         self.logger.info("Starting runtime security validation...")
         
-        # Load configuration
         if not config_path:
             config_path = self._find_config_file()
             
         config = self._load_configuration(config_path)
         
-        # Perform security checks
         checks = [
             ("TLS Configuration", self._check_tls_configuration, config),
             ("Authentication Setup", self._check_authentication_config, config),
@@ -104,7 +70,6 @@ class RuntimeSecurityChecker:
                 self.logger.error(f"Security check error for {check_name}: {e}")
                 critical_failures.append(check_name)
         
-        # Report results
         self._report_security_status(critical_failures)
         
         if critical_failures:
@@ -114,7 +79,6 @@ class RuntimeSecurityChecker:
         return True
     
     def _find_config_file(self) -> str:
-        """Find the protocol configuration file."""
         possible_paths = [
             Path(__file__).parent.parent.parent / "protocol" / "config.json",
             Path(__file__).parent.parent / "config" / "config.json",
@@ -129,7 +93,6 @@ class RuntimeSecurityChecker:
         raise FileNotFoundError("Protocol configuration file not found")
     
     def _load_configuration(self, config_path: str) -> Dict:
-        """Load and validate configuration file."""
         try:
             with open(config_path, 'r') as f:
                 config = json.load(f)
@@ -140,33 +103,27 @@ class RuntimeSecurityChecker:
             raise
     
     def _check_tls_configuration(self, config: Dict) -> bool:
-        """Check TLS/SSL configuration for security compliance."""
         security_config = config.get("security", {})
         
         issues = []
         
-        # Check if encryption is enabled
         if not security_config.get("encryption_enabled", False):
             issues.append("TLS encryption is disabled")
             self._add_security_issue("critical", "TLS encryption disabled", 
                                    "Enable encryption_enabled in security configuration")
         
-        # Check TLS version
         tls_version = security_config.get("tls_version")
         if not tls_version or tls_version not in ["1.2", "1.3"]:
             issues.append(f"Insecure TLS version: {tls_version}")
             self._add_security_issue("high", "Weak TLS version",
                                    "Use TLS 1.2 or 1.3 for secure communications")
         
-        # Check certificate pinning
         if not security_config.get("certificate_pinning_enabled", False):
             self._add_warning("Certificate pinning is disabled - consider enabling for production")
         
-        # Test actual SSL context creation
         try:
             context = ssl.create_default_context()
             if hasattr(ssl, 'PROTOCOL_TLSv1_2'):
-                # Verify modern TLS is available
                 context.minimum_version = ssl.TLSVersion.TLSv1_2
         except Exception as e:
             issues.append(f"SSL context creation failed: {e}")
@@ -181,14 +138,11 @@ class RuntimeSecurityChecker:
         return True
     
     def _check_authentication_config(self, config: Dict) -> bool:
-        """Check authentication configuration."""
         security_config = config.get("security", {})
         
-        # Check if authentication is required
         if not security_config.get("authentication_required", False):
             self._add_warning("Authentication is not required - consider enabling for production")
         
-        # Check token requirements
         min_token_length = security_config.get("auth_token_min_length", 0)
         if min_token_length < 32:
             self._add_security_issue("medium", "Weak token requirements",
@@ -199,7 +153,6 @@ class RuntimeSecurityChecker:
         return True
     
     def _check_default_passwords(self, config: Dict) -> bool:
-        """Check for default or weak passwords in configuration."""
         config_str = json.dumps(config, indent=2).lower()
         
         default_patterns = [
@@ -222,27 +175,22 @@ class RuntimeSecurityChecker:
         return True
     
     def _check_environment_security(self) -> bool:
-        """Check environment security settings."""
         issues = []
         
-        # Check if running as root (dangerous)
         if hasattr(os, 'getuid') and os.getuid() == 0:
             issues.append("Running as root user")
             self._add_security_issue("medium", "Root execution",
                                    "Run application with limited user privileges")
         
-        # Check debug environment variables
         debug_vars = ['DEBUG', 'FLASK_DEBUG', 'DJANGO_DEBUG', 'MSR_DEBUG']
         for var in debug_vars:
             if os.environ.get(var, '').lower() in ['true', '1', 'yes', 'on']:
                 issues.append(f"Debug mode enabled via {var}")
                 self._add_warning(f"Debug mode enabled via environment variable {var}")
         
-        # Check for development mode indicators
         if os.environ.get('NODE_ENV') == 'development':
             self._add_warning("Development environment detected")
         
-        # Check file system permissions
         try:
             current_dir = Path.cwd()
             if oct(current_dir.stat().st_mode)[-3:] == '777':
@@ -258,7 +206,6 @@ class RuntimeSecurityChecker:
         return len(issues) == 0
     
     def _check_file_permissions(self) -> bool:
-        """Check file permissions for security compliance."""
         project_root = Path(__file__).parent.parent.parent
         sensitive_files = [
             "protocol/config.json",
@@ -274,10 +221,9 @@ class RuntimeSecurityChecker:
             if full_path.exists():
                 try:
                     mode = oct(full_path.stat().st_mode)[-3:]
-                    # Check if file is world-readable or world-writable
-                    if mode[-1] in ['4', '5', '6', '7']:  # World-readable
+                    if mode[-1] in ['4', '5', '6', '7']:
                         issues.append(f"{file_path} is world-readable")
-                    if mode[-1] in ['2', '3', '6', '7']:  # World-writable
+                    if mode[-1] in ['2', '3', '6', '7']:
                         issues.append(f"{file_path} is world-writable")
                         self._add_security_issue("high", "World-writable sensitive file",
                                                f"Restrict permissions on {file_path}")
@@ -291,13 +237,11 @@ class RuntimeSecurityChecker:
         return True
     
     def _check_network_security(self, config: Dict) -> bool:
-        """Check network security configuration."""
         network_config = config.get("network", {})
         security_config = config.get("security", {})
         
         issues = []
         
-        # Check if binding to all interfaces
         host = network_config.get("host", "localhost")
         if host in ["0.0.0.0", "::"]:
             if not security_config.get("authentication_required", False):
@@ -305,12 +249,10 @@ class RuntimeSecurityChecker:
                 self._add_security_issue("high", "Insecure network binding",
                                        "Enable authentication when binding to all interfaces")
         
-        # Check port configuration
         port = network_config.get("port", 8080)
         if port < 1024 and hasattr(os, 'getuid') and os.getuid() != 0:
             self._add_warning(f"Using privileged port {port} without root privileges")
         
-        # Check for HTTP usage (should be HTTPS)
         if not security_config.get("secure_transfer", False):
             issues.append("Secure transfer is disabled")
             self._add_security_issue("high", "Insecure transfer protocol",
@@ -323,8 +265,6 @@ class RuntimeSecurityChecker:
         return True
     
     def _check_debug_mode(self, config: Dict) -> bool:
-        """Check for debug mode configuration."""
-        # Check various debug configurations
         debug_indicators = [
             config.get("debug", False),
             config.get("testing", {}).get("fake_device_enabled", False),
@@ -335,10 +275,9 @@ class RuntimeSecurityChecker:
             self._add_warning("Debug mode indicators found - ensure this is not production")
             self.logger.warning("🔒 [SECURITY WARNING] Debug mode detected - verify this is not production")
             
-        return True  # Non-critical for now
+        return True
     
     def check_android_device_security(self) -> Dict[str, bool]:
-        """Check Android device security if available."""
         results = {
             "device_encrypted": False,
             "screen_lock_enabled": False,
@@ -347,14 +286,12 @@ class RuntimeSecurityChecker:
         }
         
         try:
-            # Try to check if ADB is available and get device info
             result = subprocess.run(['adb', 'devices'], 
                                   capture_output=True, text=True, timeout=5)
             
             if "device" in result.stdout:
                 self.logger.info("Android device detected via ADB")
                 
-                # Check encryption status
                 encrypt_result = subprocess.run(
                     ['adb', 'shell', 'getprop', 'ro.crypto.state'],
                     capture_output=True, text=True, timeout=5
@@ -362,7 +299,6 @@ class RuntimeSecurityChecker:
                 if encrypt_result.returncode == 0:
                     results["device_encrypted"] = "encrypted" in encrypt_result.stdout
                     
-                # Check developer options
                 dev_result = subprocess.run(
                     ['adb', 'shell', 'settings', 'get', 'global', 'development_settings_enabled'],
                     capture_output=True, text=True, timeout=5
@@ -379,7 +315,6 @@ class RuntimeSecurityChecker:
         return results
     
     def _add_security_issue(self, severity: str, title: str, recommendation: str):
-        """Add a security issue to the report."""
         self._security_issues.append({
             "severity": severity,
             "title": title,
@@ -387,12 +322,10 @@ class RuntimeSecurityChecker:
         })
     
     def _add_warning(self, message: str):
-        """Add a security warning."""
         self._warnings.append(message)
         warnings.warn(message, SecurityWarning)
     
     def _report_security_status(self, critical_failures: List[str]):
-        """Report overall security status."""
         if not critical_failures and not self._security_issues:
             self.logger.info("🔒 All security checks passed")
             return
@@ -416,7 +349,6 @@ class RuntimeSecurityChecker:
                 self.logger.info(f"   - {warning}")
     
     def get_security_report(self) -> Dict:
-        """Get detailed security report."""
         return {
             "security_issues": self._security_issues,
             "warnings": self._warnings,
@@ -426,45 +358,25 @@ class RuntimeSecurityChecker:
 
 
 def validate_runtime_security(config_path: Optional[str] = None) -> bool:
-    """
-    Convenience function to perform runtime security validation.
-    
-    Args:
-        config_path: Optional path to configuration file
-        
-    Returns:
-        True if all critical security checks pass
-        
-    Raises:
-        SecurityValidationError: If critical security issues found
-    """
     checker = RuntimeSecurityChecker()
     return checker.perform_startup_checks(config_path)
 
 
 def check_production_readiness() -> Dict[str, bool]:
-    """
-    Check if system is ready for production deployment.
-    
-    Returns:
-        Dictionary with readiness indicators
-    """
     checker = RuntimeSecurityChecker()
     
     try:
-        # Try to run security checks
         checker.perform_startup_checks()
         security_ready = True
     except SecurityValidationError:
         security_ready = False
     
-    # Additional production checks
     android_security = checker.check_android_device_security()
     
     return {
         "security_validated": security_ready,
-        "tls_configured": True,  # Will be False if TLS check fails
-        "authentication_enabled": True,  # From config check
+        "tls_configured": True,
+        "authentication_enabled": True,
         "debug_mode_disabled": len(checker._warnings) == 0,
         "android_device_secure": android_security.get("device_encrypted", False),
         "overall_ready": security_ready and len(checker._warnings) == 0
@@ -472,7 +384,6 @@ def check_production_readiness() -> Dict[str, bool]:
 
 
 if __name__ == "__main__":
-    # Run standalone security check
     try:
         print("🔒 Running runtime security validation...")
         validate_runtime_security()

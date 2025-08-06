@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-"""
-Basic validation script for latency measurement features.
-
-This script validates the latency measurement implementation without
-requiring PyQt5 or complex dependencies.
-"""
 
 import json
 import time
@@ -12,7 +6,6 @@ from collections import deque
 
 
 class MockConnectionStats:
-    """Mock connection statistics for testing."""
 
     def __init__(self):
         self.latency_samples = deque(maxlen=100)
@@ -26,7 +19,6 @@ class MockConnectionStats:
 
 
 class MockMutex:
-    """Mock mutex for testing."""
 
     def __enter__(self):
         return self
@@ -36,7 +28,6 @@ class MockMutex:
 
 
 class MockQMutexLocker:
-    """Mock QMutexLocker for testing."""
 
     def __init__(self, mutex):
         self.mutex = mutex
@@ -49,7 +40,6 @@ class MockQMutexLocker:
 
 
 def validate_latency_calculation():
-    """Test basic latency calculation functionality."""
     print("Testing latency calculation...")
 
     stats = MockConnectionStats()
@@ -77,7 +67,6 @@ def validate_latency_calculation():
 
 
 def validate_jitter_calculation():
-    """Test jitter calculation with different latency patterns."""
     print("Testing jitter calculation...")
 
     high_jitter_stats = MockConnectionStats()
@@ -106,7 +95,6 @@ def validate_jitter_calculation():
 
 
 def validate_packet_loss_calculation():
-    """Test packet loss calculation."""
     print("Testing packet loss calculation...")
 
     stats = MockConnectionStats()
@@ -123,7 +111,6 @@ def validate_packet_loss_calculation():
 
 
 def validate_network_quality_assessment():
-    """Test network quality assessment logic."""
     print("Testing network quality assessment...")
 
     def assess_network_quality(avg_latency, jitter, packet_loss):
@@ -150,7 +137,6 @@ def validate_network_quality_assessment():
 
 
 def validate_ping_pong_timing():
-    """Test ping/pong timing accuracy."""
     print("Testing ping/pong timing...")
 
     ping_timestamp = time.time()
@@ -165,7 +151,6 @@ def validate_ping_pong_timing():
 
 
 def validate_adaptive_quality_logic():
-    """Test adaptive streaming quality logic."""
     print("Testing adaptive quality logic...")
 
     def adapt_streaming_quality(network_latency, error_rate):
@@ -189,7 +174,6 @@ def validate_adaptive_quality_logic():
 
 
 def main():
-    """Run all validation tests."""
     print("=== Latency Measurement Feature Validation ===\n")
 
     try:

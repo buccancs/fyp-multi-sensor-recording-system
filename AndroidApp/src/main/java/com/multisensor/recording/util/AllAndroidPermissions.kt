@@ -343,3 +343,4 @@ object AllAndroidPermissions {
             "Notifications" to "Show notifications to the user",
         )
 }
+

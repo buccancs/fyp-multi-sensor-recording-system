@@ -1,13 +1,3 @@
-"""
-Enhanced Main Window with PsychoPy-Inspired Stimulus Controller Integration
-
-This module extends the existing MainWindow to integrate the enhanced stimulus controller
-with VLC backend support, improved timing precision, and performance monitoring.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-29
-Milestone: 3.5 - Enhanced Stimulus Presentation Controller
-"""
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
@@ -36,7 +26,6 @@ from .stimulus_panel import StimulusControlPanel
 
 
 class EnhancedMainWindow(QMainWindow):
-    """Enhanced main window with PsychoPy-inspired stimulus controller integration."""
 
     def __init__(self):
         super().__init__()
@@ -72,7 +61,6 @@ class EnhancedMainWindow(QMainWindow):
         self.show_vlc_status()
 
     def init_ui(self):
-        """Initialize the enhanced user interface."""
         self.create_menu_bar()
 
         self.create_enhanced_toolbar()
@@ -84,7 +72,6 @@ class EnhancedMainWindow(QMainWindow):
         self.create_enhanced_status_bar()
 
     def create_menu_bar(self):
-        """Create the enhanced menu bar."""
         menubar = self.menuBar()
 
         file_menu = menubar.addMenu("File")
@@ -136,7 +123,6 @@ class EnhancedMainWindow(QMainWindow):
         help_menu.addAction(vlc_help_action)
 
     def create_enhanced_toolbar(self):
-        """Create the enhanced toolbar with additional controls."""
         toolbar = self.addToolBar("EnhancedControls")
         toolbar.setMovable(False)
 
@@ -182,7 +168,6 @@ class EnhancedMainWindow(QMainWindow):
         toolbar.addWidget(self.performance_indicator)
 
     def create_enhanced_central_widget(self):
-        """Create the enhanced central widget layout."""
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
@@ -228,7 +213,6 @@ class EnhancedMainWindow(QMainWindow):
         main_layout.addLayout(status_layout)
 
     def create_enhanced_log_dock(self):
-        """Create enhanced log dock widget with filtering."""
         self.log_dock = QDockWidget("Enhanced System Log", self)
         self.log_dock.setAllowedAreas(Qt.BottomDockWidgetArea | Qt.RightDockWidgetArea)
 
@@ -265,7 +249,6 @@ class EnhancedMainWindow(QMainWindow):
         self.log_dock.hide()
 
     def create_enhanced_status_bar(self):
-        """Create enhanced status bar with additional information."""
         status_bar = self.statusBar()
 
         self.status_message = QLabel("Enhanced Controller Ready")
@@ -287,7 +270,6 @@ class EnhancedMainWindow(QMainWindow):
         status_bar.addPermanentWidget(self.timing_status)
 
     def connect_server_signals(self):
-        """Connect server signals to GUI handlers."""
         self.json_server.client_connected.connect(self.on_client_connected)
         self.json_server.client_disconnected.connect(self.on_client_disconnected)
         self.json_server.message_received.connect(self.on_message_received)
@@ -296,7 +278,6 @@ class EnhancedMainWindow(QMainWindow):
         self.log_message("Server signals connected to GUI handlers")
 
     def connect_webcam_signals(self):
-        """Connect webcam signals to GUI handlers."""
         self.webcam_capture.frame_ready.connect(self.on_webcam_frame_ready)
         self.webcam_capture.recording_started.connect(self.on_webcam_recording_started)
         self.webcam_capture.recording_stopped.connect(self.on_webcam_recording_stopped)
@@ -304,7 +285,6 @@ class EnhancedMainWindow(QMainWindow):
         self.webcam_capture.status_changed.connect(self.on_webcam_status_changed)
 
     def connect_enhanced_stimulus_signals(self):
-        """Connect enhanced stimulus controller and panel signals."""
         self.stimulus_panel.file_loaded.connect(
             self.enhanced_stimulus_controller.load_video
         )
@@ -349,11 +329,9 @@ class EnhancedMainWindow(QMainWindow):
         )
 
     def init_placeholder_data(self):
-        """Initialize placeholder data for testing."""
         QTimer.singleShot(1000, self.update_timing_precision_display)
 
     def show_vlc_status(self):
-        """Show VLC availability status."""
         if VLC_AVAILABLE:
             self.log_message(
                 "VLC backend available - Enhanced codec support enabled", "Backend"
@@ -364,7 +342,6 @@ class EnhancedMainWindow(QMainWindow):
             )
 
     def on_enhanced_stimulus_seek_requested(self, position):
-        """Handle enhanced stimulus seek request from panel."""
         duration = self.enhanced_stimulus_controller.get_duration()
         if duration > 0:
             seek_position = int((position / 100.0) * duration)
@@ -382,14 +359,12 @@ class EnhancedMainWindow(QMainWindow):
             )
 
     def on_enhanced_stimulus_screen_changed(self, screen_index):
-        """Handle enhanced stimulus screen selection change."""
         self.log_message(
             f"Enhanced stimulus output screen changed to index {screen_index}",
             "Stimulus",
         )
 
     def on_enhanced_start_recording_play_requested(self):
-        """Handle enhanced synchronized recording start and stimulus playback."""
         try:
             screen_index = self.stimulus_panel.get_selected_screen()
 
@@ -425,7 +400,6 @@ class EnhancedMainWindow(QMainWindow):
             )
 
     def on_enhanced_mark_event_requested(self):
-        """Handle enhanced event marker request during stimulus presentation."""
         try:
             self.enhanced_stimulus_controller.mark_event()
             self.log_message("Enhanced event marker added", "Stimulus")
@@ -433,17 +407,14 @@ class EnhancedMainWindow(QMainWindow):
             self.log_message(f"Error adding enhanced event marker: {str(e)}", "Errors")
 
     def on_enhanced_stimulus_status_changed(self, status_message):
-        """Handle enhanced stimulus controller status changes."""
         self.status_message.setText(status_message)
         self.log_message(f"Enhanced Stimulus: {status_message}", "Stimulus")
 
     def on_enhanced_stimulus_experiment_started(self):
-        """Handle enhanced stimulus experiment start notification."""
         self.stimulus_panel.set_experiment_active(True)
         self.log_message("Enhanced stimulus experiment started", "Stimulus")
 
     def on_enhanced_stimulus_experiment_ended(self):
-        """Handle enhanced stimulus experiment end notification."""
         try:
             self.performance_timer.stop()
 
@@ -465,18 +436,15 @@ class EnhancedMainWindow(QMainWindow):
             self.log_message(f"Error stopping enhanced recordings: {str(e)}", "Errors")
 
     def on_enhanced_stimulus_error(self, error_message):
-        """Handle enhanced stimulus controller errors."""
         self.log_message(f"Enhanced Stimulus Error: {error_message}", "Errors")
         QMessageBox.warning(self, "Enhanced Stimulus Error", error_message)
 
     def on_backend_changed(self, backend_name):
-        """Handle video backend change."""
         self.backend_status_label.setText(backend_name.upper())
         self.backend_status.setText(f"Backend: {backend_name}")
         self.log_message(f"Video backend switched to: {backend_name}", "Backend")
 
     def test_timing_precision(self):
-        """Test and display timing precision."""
         try:
             timing_logger = self.enhanced_stimulus_controller.timing_logger
             timestamps = timing_logger.get_precise_timestamp()
@@ -496,7 +464,6 @@ class EnhancedMainWindow(QMainWindow):
             self.log_message(f"Timing precision test error: {str(e)}", "Errors")
 
     def toggle_performance_monitoring(self, enabled):
-        """Toggle performance monitoring display."""
         if enabled:
             self.performance_timer.start()
             self.log_message("Performance monitoring enabled", "Performance")
@@ -505,7 +472,6 @@ class EnhancedMainWindow(QMainWindow):
             self.log_message("Performance monitoring disabled", "Performance")
 
     def update_performance_metrics(self):
-        """Update performance metrics display."""
         try:
             if hasattr(self.enhanced_stimulus_controller, "frame_drop_count"):
                 frame_drops = self.enhanced_stimulus_controller.frame_drop_count
@@ -524,7 +490,6 @@ class EnhancedMainWindow(QMainWindow):
             self.log_message(f"Performance monitoring error: {str(e)}", "Errors")
 
     def update_timing_precision_display(self):
-        """Update timing precision display."""
         try:
             timing_logger = self.enhanced_stimulus_controller.timing_logger
             offset_ms = timing_logger.clock_offset * 1000
@@ -536,16 +501,13 @@ class EnhancedMainWindow(QMainWindow):
             self.log_message(f"Timing display update error: {str(e)}", "Errors")
 
     def filter_log_messages(self, filter_type):
-        """Filter log messages by type."""
         self.log_message(f"Log filter changed to: {filter_type}", "System")
 
     def clear_log(self):
-        """Clear the log display."""
         self.log_text.clear()
         self.log_message("Log cleared", "System")
 
     def show_enhanced_about(self):
-        """Show enhanced about dialog."""
         about_text = f"""
 Enhanced Multi-Sensor Recording System Controller
 
@@ -565,11 +527,6 @@ PsychoPy-Inspired Improvements:
 
 Author: Multi-Sensor Recording System Team
 Date: 2025-07-29
-        """
-        QMessageBox.about(self, "Enhanced Controller", about_text)
-
-    def show_vlc_setup_guide(self):
-        """Show VLC setup guide."""
         setup_text = """
 VLC Backend Setup Guide
 
@@ -597,11 +554,6 @@ Troubleshooting:
 • If VLC not detected, ensure VLC is in system PATH
 • For codec issues, try switching backends via menu
 • Check logs for detailed error information
-        """
-        QMessageBox.information(self, "VLC Setup Guide", setup_text)
-
-    def log_message(self, message, category="System"):
-        """Enhanced log message with categorization."""
         timestamp = time.strftime("%H:%M:%S")
         formatted_message = f"[{timestamp}] [{category}] {message}"
 
@@ -613,64 +565,49 @@ Troubleshooting:
         print(f"[DEBUG_LOG] {formatted_message}")
 
     def on_client_connected(self, client_info):
-        """Handle client connection."""
         self.log_message(f"Client connected: {client_info}", "Network")
 
     def on_client_disconnected(self, client_info):
-        """Handle client disconnection."""
         self.log_message(f"Client disconnected: {client_info}", "Network")
 
     def on_message_received(self, message):
-        """Handle received message."""
         self.log_message(f"Message received: {message}", "Network")
 
     def on_server_error(self, error):
-        """Handle server error."""
         self.log_message(f"Server error: {error}", "Errors")
 
     def on_webcam_frame_ready(self, frame):
-        """Handle webcam frame."""
 
     def on_webcam_recording_started(self):
-        """Handle webcam recording start."""
         self.webcam_recording = True
         self.log_message("Webcam recording started", "Recording")
 
     def on_webcam_recording_stopped(self):
-        """Handle webcam recording stop."""
         self.webcam_recording = False
         self.log_message("Webcam recording stopped", "Recording")
 
     def on_webcam_error(self, error):
-        """Handle webcam error."""
         self.log_message(f"Webcam error: {error}", "Errors")
 
     def on_webcam_status_changed(self, status):
-        """Handle webcam status change."""
         self.log_message(f"Webcam status: {status}", "Recording")
 
     def handle_connect(self):
-        """Handle connect action."""
         self.log_message("Connect action triggered", "Network")
 
     def handle_disconnect(self):
-        """Handle disconnect action."""
         self.log_message("Disconnect action triggered", "Network")
 
     def handle_start(self):
-        """Handle start session action."""
         self.log_message("Start session action triggered", "Session")
 
     def handle_stop(self):
-        """Handle stop action."""
         self.log_message("Stop action triggered", "Session")
 
     def show_settings_dialog(self):
-        """Show settings dialog."""
         self.log_message("Settings dialog requested", "System")
 
     def toggle_log_dock(self, visible):
-        """Toggle log dock visibility."""
         if visible:
             self.log_dock.show()
         else:

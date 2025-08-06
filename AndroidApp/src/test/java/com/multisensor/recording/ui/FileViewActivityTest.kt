@@ -145,3 +145,4 @@ class FileViewActivityTest {
             this.thermalEnabled = true
         }
 }
+

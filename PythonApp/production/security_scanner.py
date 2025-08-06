@@ -73,7 +73,6 @@ class SecurityScanner:
         for py_file in python_files:
             if any(part.startswith(".") for part in py_file.parts):
                 continue
-            # Skip scanning the security scanner itself to avoid false positives
             if py_file.name == "security_scanner.py":
                 continue
             self.scanned_files += 1
@@ -97,12 +96,10 @@ class SecurityScanner:
         dangerous_patterns = [
             ("(?<!subprocess_)eval\\s*\\(", "Use of eval() function"),
             ("(?<!subprocess_)(?<!create_subprocess_)exec\\s*\\(", "Use of exec() function"),
-            # Only flag __import__ with user input, not hardcoded imports
             ("__import__\\s*\\([^'\"]*input\\(.*\\)", "Dynamic import with user input"),
             ("pickle\\.loads?\\s*\\(", "Insecure pickle usage"),
             ("subprocess\\.call\\s*\\(.*shell\\s*=\\s*True", "Shell injection risk"),
             ("os\\.system\\s*\\(", "Command injection risk"),
-            # Only flag input() in network/security contexts, not general UI
             ("input\\s*\\([^)]*password[^)]*\\)", "Potential password input issue"),
         ]
         for pattern, description in dangerous_patterns:
@@ -495,7 +492,6 @@ class SecurityScanner:
             (r"import.*rc4", "Weak encryption algorithm RC4 import"),
         ]
         for file_path in self.project_root.rglob("*.py"):
-            # Skip scanning the security scanner itself to avoid false positives
             if file_path.name == "security_scanner.py":
                 continue
             try:
@@ -503,7 +499,6 @@ class SecurityScanner:
                 for pattern, description in crypto_patterns:
                     matches = re.finditer(pattern, content, re.IGNORECASE | re.MULTILINE)
                     for match in matches:
-                        # Find the line number
                         line_number = content[:match.start()].count('\n') + 1
                         self.issues.append(
                             SecurityIssue(

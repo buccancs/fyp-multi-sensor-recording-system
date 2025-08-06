@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-Demonstration of Enhanced Logging System Integration
-
-This script demonstrates the enhanced logging capabilities across both
-Python and Android components of the Multi-Sensor Recording System.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-30
-"""
 
 import os
 import sys
@@ -21,7 +12,6 @@ from bucika_gsr.utils.logging_config import (
 )
 
 def demonstrate_enhanced_logging():
-    """Demonstrate the enhanced logging system capabilities."""
 
     print("=" * 60)
     print("Multi-Sensor Recording System - Enhanced Logging Demo")
@@ -37,7 +27,6 @@ def demonstrate_enhanced_logging():
     @performance_timer("demonstration_operation")
     @log_function_entry
     def simulate_complex_operation():
-        """Simulate a complex operation that I want to monitor."""
         logger.info("Performing complex calculation...")
         time.sleep(0.1)
 
@@ -52,7 +41,6 @@ def demonstrate_enhanced_logging():
 
     @log_memory_usage("complex_operation_memory", __name__)
     def memory_intensive_operation():
-        """Simulate memory-intensive operation."""
         data = [i * i for i in range(10000)]
         logger.info(f"Created data structure with {len(data)} elements")
         return sum(data)
@@ -61,7 +49,6 @@ def demonstrate_enhanced_logging():
     logger.info(f"Memory intensive operation result: {memory_result}")
 
     def demonstrate_exception_handling():
-        """Show enhanced exception logging."""
         try:
             with log_exception_context("exception_demo"):
                 logger.info("About to trigger an exception for demonstration")

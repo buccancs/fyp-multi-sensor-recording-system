@@ -37,7 +37,7 @@ fun RecordingScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Recording Controls Card
+        
         RecordingControlsCard(
             isRecording = uiState.isRecording,
             sessionDuration = uiState.sessionDuration,
@@ -45,10 +45,8 @@ fun RecordingScreen(
             onStopRecording = { viewModel.stopRecording() }
         )
 
-        // Device Status Card
         DeviceStatusCard()
 
-        // Camera Preview Card
         CameraPreviewCard()
     }
 }
@@ -164,7 +162,6 @@ private fun DeviceStatusCard() {
                 )
             }
 
-            // Device status indicators
             DeviceStatusIndicator("Camera", true, Icons.Filled.Videocam)
             DeviceStatusIndicator("Thermal", false, Icons.Filled.Thermostat)
             DeviceStatusIndicator("GSR", false, Icons.Filled.Sensors)
@@ -235,7 +232,6 @@ private fun CameraPreviewCard() {
                 )
             }
 
-            // Placeholder for camera preview
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

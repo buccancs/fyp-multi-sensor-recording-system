@@ -1,14 +1,4 @@
 #!/usr/bin/env python3
-"""
-Code Complexity Analyzer and Documentation Enhancer
-
-This script identifies complex code sections that would benefit from inline documentation
-and automatically suggests or adds appropriate docstrings/comments.
-
-Usage:
-    python scripts/analyze_complexity.py --analyze-only
-    python scripts/analyze_complexity.py --add-docs --threshold 10
-"""
 
 import ast
 import argparse
@@ -23,12 +13,11 @@ from datetime import datetime
 
 @dataclass
 class ComplexityAnalysis:
-    """Represents complexity analysis results for a code element"""
     file_path: str
     function_name: str
     line_number: int
     complexity_score: int
-    type: str  # 'function', 'class', 'method'
+    type: str
     needs_docs: bool
     current_docs: str
     suggested_docs: str
@@ -36,7 +25,6 @@ class ComplexityAnalysis:
 
 
 class ComplexityAnalyzer(ast.NodeVisitor):
-    """AST visitor to analyze code complexity and documentation needs"""
     
     def __init__(self, file_path: str):
         self.file_path = file_path
@@ -44,7 +32,6 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         self.current_class = None
         
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
-        """Analyze function complexity and documentation needs"""
         complexity = self._calculate_complexity(node)
         needs_docs = self._needs_documentation(node, complexity)
         
@@ -68,11 +55,9 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
     
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """Analyze class complexity and documentation"""
         old_class = self.current_class
         self.current_class = node.name
         
-        # Analyze class itself
         complexity = len([n for n in ast.walk(node) if isinstance(n, (ast.If, ast.For, ast.While, ast.With))])
         needs_docs = not ast.get_docstring(node) and complexity > 5
         
@@ -94,8 +79,7 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         self.current_class = old_class
     
     def _calculate_complexity(self, node: ast.FunctionDef) -> int:
-        """Calculate cyclomatic complexity for a function"""
-        complexity = 1  # Base complexity
+        complexity = 1
         
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.AsyncFor, ast.With, ast.AsyncWith)):
@@ -110,24 +94,18 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         return complexity
     
     def _needs_documentation(self, node: ast.FunctionDef, complexity: int) -> bool:
-        """Determine if a function needs documentation based on complexity and other factors"""
-        # Always need docs if complexity > 10
         if complexity > 10:
             return True
         
-        # Check for complex patterns that warrant documentation
         has_complex_logic = self._has_complex_logic(node)
         has_no_docstring = not ast.get_docstring(node)
         is_public = not node.name.startswith('_')
         has_multiple_returns = len([n for n in ast.walk(node) if isinstance(n, ast.Return)]) > 1
         
-        # Needs docs if it's public, complex, and undocumented
         return (has_no_docstring and is_public and 
                 (complexity > 7 or has_complex_logic or has_multiple_returns))
     
     def _has_complex_logic(self, node: ast.FunctionDef) -> bool:
-        """Check for patterns that indicate complex logic"""
-        # Look for nested loops
         nested_loops = 0
         for child in ast.walk(node):
             if isinstance(child, (ast.For, ast.While)):
@@ -135,14 +113,11 @@ class ComplexityAnalyzer(ast.NodeVisitor):
                     if isinstance(grandchild, (ast.For, ast.While)) and grandchild != child:
                         nested_loops += 1
         
-        # Look for exception handling
         has_exception_handling = any(isinstance(n, ast.Try) for n in ast.walk(node))
         
-        # Look for async/await patterns
         has_async_patterns = any(isinstance(n, (ast.Await, ast.AsyncWith, ast.AsyncFor)) 
                                 for n in ast.walk(node))
         
-        # Look for complex conditionals
         complex_conditionals = len([n for n in ast.walk(node) 
                                   if isinstance(n, ast.BoolOp) and len(n.values) > 2])
         
@@ -150,7 +125,6 @@ class ComplexityAnalyzer(ast.NodeVisitor):
                 has_async_patterns or complex_conditionals > 0)
     
     def _get_complexity_reasons(self, node: ast.FunctionDef, complexity: int) -> List[str]:
-        """Get reasons why this function is considered complex"""
         reasons = []
         
         if complexity > 15:
@@ -175,14 +149,11 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         return reasons
     
     def _generate_docstring(self, node: ast.FunctionDef, complexity: int) -> str:
-        """Generate suggested docstring based on function analysis"""
         args = [arg.arg for arg in node.args.args if arg.arg != 'self']
         
-        # Determine return type from return statements
         return_stmts = [n for n in ast.walk(node) if isinstance(n, ast.Return)]
         has_returns = any(stmt.value is not None for stmt in return_stmts)
         
-        # Generate basic docstring template
         docstring_parts = []
         docstring_parts.append(f'"""{self._generate_function_summary(node, complexity)}')
         docstring_parts.append("")
@@ -203,7 +174,6 @@ class ComplexityAnalyzer(ast.NodeVisitor):
             docstring_parts.append("    [Return type and description needed]")
             docstring_parts.append("")
         
-        # Add complexity notes for high complexity functions
         if complexity > 12:
             docstring_parts.append("Note:")
             docstring_parts.append(f"    High complexity function (complexity: {complexity})")
@@ -219,7 +189,6 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         return "\n".join(docstring_parts)
     
     def _generate_class_docstring(self, node: ast.ClassDef) -> str:
-        """Generate suggested class docstring"""
         methods = [n for n in node.body if isinstance(n, ast.FunctionDef)]
         
         docstring_parts = []
@@ -238,7 +207,6 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         return "\n".join(docstring_parts)
     
     def _generate_function_summary(self, node: ast.FunctionDef, complexity: int) -> str:
-        """Generate a one-line summary for the function"""
         name_words = re.findall(r'[A-Z]?[a-z]+|[A-Z]{2,}', node.name)
         if name_words:
             action = name_words[0].lower()
@@ -257,7 +225,6 @@ class ComplexityAnalyzer(ast.NodeVisitor):
 
 
 def analyze_file(file_path: Path) -> List[ComplexityAnalysis]:
-    """Analyze a single Python file for complexity and documentation needs"""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -273,14 +240,12 @@ def analyze_file(file_path: Path) -> List[ComplexityAnalysis]:
 
 
 def analyze_project(root_path: Path, exclude_patterns: List[str] = None) -> List[ComplexityAnalysis]:
-    """Analyze all Python files in a project"""
     if exclude_patterns is None:
         exclude_patterns = ['test_', '__pycache__', '.git', 'venv', 'env', 'build']
     
     all_results = []
     
     for py_file in root_path.rglob('*.py'):
-        # Skip excluded patterns
         if any(pattern in str(py_file) for pattern in exclude_patterns):
             continue
         
@@ -291,9 +256,7 @@ def analyze_project(root_path: Path, exclude_patterns: List[str] = None) -> List
 
 
 def generate_documentation_report(results: List[ComplexityAnalysis], output_file: Path) -> None:
-    """Generate a comprehensive documentation needs report"""
     
-    # Sort by complexity score (highest first)
     results_by_complexity = sorted(results, key=lambda x: x.complexity_score, reverse=True)
     
     report = {
@@ -311,7 +274,6 @@ def generate_documentation_report(results: List[ComplexityAnalysis], output_file
         'detailed_analysis': []
     }
     
-    # Generate recommendations
     high_complexity_funcs = [r for r in results if r.complexity_score > 15]
     if high_complexity_funcs:
         report['recommendations'].append({
@@ -330,8 +292,7 @@ def generate_documentation_report(results: List[ComplexityAnalysis], output_file
             'action': 'Add comprehensive docstrings explaining logic and parameters'
         })
     
-    # Add detailed analysis for functions that need attention
-    for result in results_by_complexity[:20]:  # Top 20 most complex
+    for result in results_by_complexity[:20]:
         if result.needs_docs or result.complexity_score > 12:
             report['detailed_analysis'].append({
                 'file': result.file_path,
@@ -345,11 +306,9 @@ def generate_documentation_report(results: List[ComplexityAnalysis], output_file
                 'suggested_docstring': result.suggested_docs[:200] + '...' if result.suggested_docs else None
             })
     
-    # Save report
     with open(output_file, 'w') as f:
         json.dump(report, f, indent=2)
     
-    # Generate markdown summary
     md_file = output_file.with_suffix('.md')
     with open(md_file, 'w') as f:
         f.write(f"# Code Complexity and Documentation Analysis\n\n")
@@ -396,16 +355,13 @@ def main():
     
     print(f"🔍 Analyzing code complexity in {args.root}")
     
-    # Analyze project
     results = analyze_project(args.root)
     
     if args.verbose:
         print(f"Found {len(results)} functions/classes to analyze")
     
-    # Generate report
     generate_documentation_report(results, args.output)
     
-    # Print summary
     needs_docs = [r for r in results if r.needs_docs]
     high_complexity = [r for r in results if r.complexity_score > 15]
     
@@ -428,7 +384,6 @@ def main():
     print(f"\n📄 Detailed report saved to: {args.output}")
     print(f"📋 Markdown summary saved to: {args.output.with_suffix('.md')}")
     
-    # Fail if too many high complexity functions
     if len(high_complexity) > 5:
         print(f"\n❌ Too many high complexity functions ({len(high_complexity)}). Consider refactoring.")
         return 1

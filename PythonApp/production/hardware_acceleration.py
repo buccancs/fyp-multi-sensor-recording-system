@@ -1,9 +1,3 @@
-"""
-Hardware acceleration optimization utilities for the multi-sensor recording system.
-
-This module provides detection, configuration, and optimization of hardware acceleration
-features including GPU processing, hardware codecs, and specialized CPU optimizations.
-"""
 
 import logging
 import platform
@@ -36,7 +30,6 @@ except ImportError:
 
 
 class AccelerationType(Enum):
-    """Types of hardware acceleration available."""
     CPU_OPTIMIZED = "cpu_optimized"
     GPU_OPENCL = "gpu_opencl"
     GPU_CUDA = "gpu_cuda"
@@ -49,13 +42,12 @@ class AccelerationType(Enum):
 
 @dataclass
 class HardwareCapability:
-    """Hardware acceleration capability information."""
     
     acceleration_type: AccelerationType
     available: bool
     version: Optional[str] = None
     device_info: Optional[str] = None
-    performance_score: Optional[float] = None  # 0.0-1.0 relative performance
+    performance_score: Optional[float] = None
     memory_mb: Optional[int] = None
     recommended_usage: Optional[str] = None
     limitations: List[str] = None
@@ -67,29 +59,24 @@ class HardwareCapability:
 
 @dataclass
 class OptimizationProfile:
-    """Hardware acceleration optimization profile."""
     
     profile_name: str
     cpu_optimization: bool = True
     gpu_acceleration: bool = False
     hardware_codec: bool = False
     
-    # OpenCV optimizations
     opencv_use_opencl: bool = False
     opencv_use_cuda: bool = False
-    opencv_thread_count: int = -1  # -1 = auto
+    opencv_thread_count: int = -1
     
-    # Processing optimizations
     batch_processing: bool = False
     vectorized_operations: bool = True
     memory_optimization: bool = True
     
-    # Quality/performance trade-offs
     enable_fast_algorithms: bool = False
     reduce_precision: bool = False
     
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for serialization."""
         return {
             "profile_name": self.profile_name,
             "cpu_optimization": self.cpu_optimization,
@@ -107,50 +94,42 @@ class OptimizationProfile:
 
 
 class HardwareAccelerationDetector:
-    """Detects available hardware acceleration capabilities."""
     
     def __init__(self):
         self.logger = get_logger(__name__)
         self.detected_capabilities: List[HardwareCapability] = []
         
     def detect_all_capabilities(self) -> List[HardwareCapability]:
-        """Detect all available hardware acceleration capabilities."""
         self.logger.info("HardwareAccelerationDetector: Starting hardware capability detection")
         
         self.detected_capabilities = []
         
-        # CPU optimizations
         self._detect_cpu_optimizations()
         
-        # OpenCV accelerations
         if OPENCV_AVAILABLE:
             self._detect_opencv_accelerations()
         else:
             self.logger.warning("HardwareAccelerationDetector: OpenCV not available")
             
-        # Hardware codecs
         self._detect_hardware_codecs()
         
-        # Intel optimizations
         self._detect_intel_optimizations()
         
         self.logger.info(f"HardwareAccelerationDetector: Detected {len(self.detected_capabilities)} capabilities")
         return self.detected_capabilities
         
     def _detect_cpu_optimizations(self):
-        """Detect CPU-specific optimizations."""
         try:
             import multiprocessing
             cpu_count = multiprocessing.cpu_count()
             
-            # Check CPU features
             cpu_info = platform.processor()
             
             self.detected_capabilities.append(HardwareCapability(
                 acceleration_type=AccelerationType.CPU_OPTIMIZED,
                 available=True,
                 device_info=f"CPU: {cpu_info}, Cores: {cpu_count}",
-                performance_score=0.7,  # Base CPU performance
+                performance_score=0.7,
                 recommended_usage="Multi-threaded processing, vectorized operations"
             ))
             
@@ -160,12 +139,10 @@ class HardwareAccelerationDetector:
             self.logger.error(f"HardwareAccelerationDetector: Error detecting CPU optimizations: {e}")
             
     def _detect_opencv_accelerations(self):
-        """Detect OpenCV GPU acceleration capabilities."""
         if not OPENCV_AVAILABLE:
             return
             
         try:
-            # Check OpenCL support
             if cv2.ocl.haveOpenCL():
                 opencl_devices = cv2.ocl.getOpenCLPlatforms()
                 
@@ -187,7 +164,6 @@ class HardwareAccelerationDetector:
             self.logger.error(f"HardwareAccelerationDetector: Error detecting OpenCL: {e}")
             
         try:
-            # Check CUDA support
             cuda_devices = cv2.cuda.getCudaEnabledDeviceCount()
             if cuda_devices > 0:
                 device_info = []
@@ -215,7 +191,6 @@ class HardwareAccelerationDetector:
             self.logger.debug(f"HardwareAccelerationDetector: CUDA not available: {e}")
             
     def _detect_hardware_codecs(self):
-        """Detect hardware video codec support."""
         system = platform.system()
         
         if system == "Windows":
@@ -226,10 +201,7 @@ class HardwareAccelerationDetector:
             self._detect_macos_codecs()
             
     def _detect_windows_codecs(self):
-        """Detect Windows hardware codec support."""
         try:
-            # Check for Windows Media Foundation codecs
-            # This is simplified detection - real implementation would use Windows APIs
             
             self.detected_capabilities.append(HardwareCapability(
                 acceleration_type=AccelerationType.HARDWARE_CODEC,
@@ -246,9 +218,7 @@ class HardwareAccelerationDetector:
             self.logger.error(f"HardwareAccelerationDetector: Error detecting Windows codecs: {e}")
             
     def _detect_linux_codecs(self):
-        """Detect Linux hardware codec support."""
         try:
-            # Check for VA-API (Video Acceleration API)
             vaapi_available = False
             try:
                 result = subprocess.run(['vainfo'], capture_output=True, text=True, timeout=5)
@@ -275,9 +245,7 @@ class HardwareAccelerationDetector:
             self.logger.error(f"HardwareAccelerationDetector: Error detecting Linux codecs: {e}")
             
     def _detect_macos_codecs(self):
-        """Detect macOS hardware codec support."""
         try:
-            # Check for VideoToolbox
             self.detected_capabilities.append(HardwareCapability(
                 acceleration_type=AccelerationType.HARDWARE_CODEC,
                 available=True,
@@ -293,9 +261,7 @@ class HardwareAccelerationDetector:
             self.logger.error(f"HardwareAccelerationDetector: Error detecting macOS codecs: {e}")
             
     def _detect_intel_optimizations(self):
-        """Detect Intel-specific optimizations."""
         try:
-            # Check if OpenCV was built with Intel optimizations
             if OPENCV_AVAILABLE:
                 build_info = cv2.getBuildInformation()
                 
@@ -330,25 +296,21 @@ class HardwareAccelerationDetector:
             self.logger.error(f"HardwareAccelerationDetector: Error detecting Intel optimizations: {e}")
             
     def get_capability_by_type(self, acceleration_type: AccelerationType) -> Optional[HardwareCapability]:
-        """Get capability information for a specific acceleration type."""
         for capability in self.detected_capabilities:
             if capability.acceleration_type == acceleration_type:
                 return capability
         return None
         
     def get_available_capabilities(self) -> List[HardwareCapability]:
-        """Get only available hardware capabilities."""
         return [cap for cap in self.detected_capabilities if cap.available]
         
     def get_best_capabilities(self, limit: int = 3) -> List[HardwareCapability]:
-        """Get the best available capabilities by performance score."""
         available = self.get_available_capabilities()
         available.sort(key=lambda x: x.performance_score or 0, reverse=True)
         return available[:limit]
 
 
 class HardwareAccelerationOptimizer:
-    """Optimizes system configuration for hardware acceleration."""
     
     def __init__(self, detector: Optional[HardwareAccelerationDetector] = None):
         self.logger = get_logger(__name__)
@@ -356,12 +318,6 @@ class HardwareAccelerationOptimizer:
         self.current_profile: Optional[OptimizationProfile] = None
         
     def create_optimization_profile(self, target_performance: str = "balanced") -> OptimizationProfile:
-        """
-        Create an optimization profile based on detected hardware and target performance.
-        
-        Args:
-            target_performance: "conservative", "balanced", "aggressive", or "maximum"
-        """
         capabilities = self.detector.detect_all_capabilities()
         
         if target_performance == "conservative":
@@ -377,7 +333,6 @@ class HardwareAccelerationOptimizer:
             return self._create_balanced_profile(capabilities)
             
     def _create_conservative_profile(self, capabilities: List[HardwareCapability]) -> OptimizationProfile:
-        """Create a conservative optimization profile with minimal risk."""
         return OptimizationProfile(
             profile_name="conservative",
             cpu_optimization=True,
@@ -385,7 +340,7 @@ class HardwareAccelerationOptimizer:
             hardware_codec=False,
             opencv_use_opencl=False,
             opencv_use_cuda=False,
-            opencv_thread_count=2,  # Conservative thread count
+            opencv_thread_count=2,
             batch_processing=False,
             vectorized_operations=True,
             memory_optimization=True,
@@ -394,8 +349,6 @@ class HardwareAccelerationOptimizer:
         )
         
     def _create_balanced_profile(self, capabilities: List[HardwareCapability]) -> OptimizationProfile:
-        """Create a balanced optimization profile."""
-        # Check what's available
         has_opencl = any(cap.acceleration_type == AccelerationType.GPU_OPENCL and cap.available for cap in capabilities)
         has_cuda = any(cap.acceleration_type == AccelerationType.GPU_CUDA and cap.available for cap in capabilities)
         has_hardware_codec = any(cap.acceleration_type == AccelerationType.HARDWARE_CODEC and cap.available for cap in capabilities)
@@ -406,8 +359,8 @@ class HardwareAccelerationOptimizer:
             gpu_acceleration=has_opencl or has_cuda,
             hardware_codec=has_hardware_codec,
             opencv_use_opencl=has_opencl,
-            opencv_use_cuda=False,  # Prefer OpenCL for stability
-            opencv_thread_count=-1,  # Auto-detect
+            opencv_use_cuda=False,
+            opencv_thread_count=-1,
             batch_processing=True,
             vectorized_operations=True,
             memory_optimization=True,
@@ -416,7 +369,6 @@ class HardwareAccelerationOptimizer:
         )
         
     def _create_aggressive_profile(self, capabilities: List[HardwareCapability]) -> OptimizationProfile:
-        """Create an aggressive optimization profile."""
         has_opencl = any(cap.acceleration_type == AccelerationType.GPU_OPENCL and cap.available for cap in capabilities)
         has_cuda = any(cap.acceleration_type == AccelerationType.GPU_CUDA and cap.available for cap in capabilities)
         has_hardware_codec = any(cap.acceleration_type == AccelerationType.HARDWARE_CODEC and cap.available for cap in capabilities)
@@ -426,18 +378,17 @@ class HardwareAccelerationOptimizer:
             cpu_optimization=True,
             gpu_acceleration=has_opencl or has_cuda,
             hardware_codec=has_hardware_codec,
-            opencv_use_opencl=has_opencl and not has_cuda,  # Prefer CUDA if available
+            opencv_use_opencl=has_opencl and not has_cuda,
             opencv_use_cuda=has_cuda,
             opencv_thread_count=-1,
             batch_processing=True,
             vectorized_operations=True,
-            memory_optimization=False,  # Trade memory for speed
+            memory_optimization=False,
             enable_fast_algorithms=True,
             reduce_precision=True
         )
         
     def _create_maximum_profile(self, capabilities: List[HardwareCapability]) -> OptimizationProfile:
-        """Create a maximum performance profile (highest risk)."""
         has_opencl = any(cap.acceleration_type == AccelerationType.GPU_OPENCL and cap.available for cap in capabilities)
         has_cuda = any(cap.acceleration_type == AccelerationType.GPU_CUDA and cap.available for cap in capabilities)
         has_hardware_codec = any(cap.acceleration_type == AccelerationType.HARDWARE_CODEC and cap.available for cap in capabilities)
@@ -458,7 +409,6 @@ class HardwareAccelerationOptimizer:
         )
         
     def apply_optimization_profile(self, profile: OptimizationProfile) -> Dict[str, Any]:
-        """Apply an optimization profile to the system."""
         self.logger.info(f"HardwareAccelerationOptimizer: Applying optimization profile: {profile.profile_name}")
         
         results = {
@@ -468,16 +418,13 @@ class HardwareAccelerationOptimizer:
         }
         
         try:
-            # Apply OpenCV optimizations
             if OPENCV_AVAILABLE:
                 self._apply_opencv_optimizations(profile, results)
             else:
                 results["errors"].append("OpenCV not available for optimization")
                 
-            # Apply threading optimizations
             self._apply_threading_optimizations(profile, results)
             
-            # Apply memory optimizations
             if profile.memory_optimization:
                 self._apply_memory_optimizations(profile, results)
                 
@@ -491,20 +438,17 @@ class HardwareAccelerationOptimizer:
         return results
         
     def _apply_opencv_optimizations(self, profile: OptimizationProfile, results: Dict[str, Any]):
-        """Apply OpenCV-specific optimizations."""
         if not OPENCV_AVAILABLE:
             return
             
         try:
-            # Set thread count
             if profile.opencv_thread_count > 0:
                 cv2.setNumThreads(profile.opencv_thread_count)
                 results["optimizations_applied"].append(f"OpenCV threads set to {profile.opencv_thread_count}")
             else:
-                cv2.setNumThreads(0)  # Use all available threads
+                cv2.setNumThreads(0)
                 results["optimizations_applied"].append("OpenCV using all available threads")
                 
-            # Enable/disable OpenCL
             if profile.opencv_use_opencl and cv2.ocl.haveOpenCL():
                 cv2.ocl.setUseOpenCL(True)
                 results["optimizations_applied"].append("OpenCL acceleration enabled")
@@ -513,7 +457,6 @@ class HardwareAccelerationOptimizer:
                 if profile.opencv_use_opencl:
                     results["errors"].append("OpenCL requested but not available")
                     
-            # CUDA optimization (if available)
             if profile.opencv_use_cuda:
                 try:
                     if cv2.cuda.getCudaEnabledDeviceCount() > 0:
@@ -527,42 +470,35 @@ class HardwareAccelerationOptimizer:
             results["errors"].append(f"OpenCV optimization error: {e}")
             
     def _apply_threading_optimizations(self, profile: OptimizationProfile, results: Dict[str, Any]):
-        """Apply threading optimizations."""
         try:
             if NUMPY_AVAILABLE and profile.vectorized_operations:
-                # NumPy automatically uses optimized BLAS if available
                 results["optimizations_applied"].append("Vectorized operations enabled")
                 
         except Exception as e:
             results["errors"].append(f"Threading optimization error: {e}")
             
     def _apply_memory_optimizations(self, profile: OptimizationProfile, results: Dict[str, Any]):
-        """Apply memory optimizations."""
         try:
             import gc
             
             if profile.memory_optimization:
-                # Configure garbage collection for better memory management
-                gc.set_threshold(700, 10, 10)  # More aggressive GC
+                gc.set_threshold(700, 10, 10)
                 results["optimizations_applied"].append("Memory optimization enabled")
                 
         except Exception as e:
             results["errors"].append(f"Memory optimization error: {e}")
             
     def benchmark_acceleration(self, test_duration_seconds: float = 30.0) -> Dict[str, Any]:
-        """Benchmark different acceleration configurations."""
         self.logger.info("HardwareAccelerationOptimizer: Starting acceleration benchmark")
         
         if not OPENCV_AVAILABLE or not NUMPY_AVAILABLE:
             return {"error": "OpenCV and NumPy required for benchmarking"}
             
-        # Test configurations
         test_configs = [
             ("cpu_only", {"use_opencl": False, "threads": 1}),
             ("cpu_multi", {"use_opencl": False, "threads": -1}),
         ]
         
-        # Add GPU tests if available
         if cv2.ocl.haveOpenCL():
             test_configs.append(("opencl", {"use_opencl": True, "threads": -1}))
             
@@ -580,7 +516,6 @@ class HardwareAccelerationOptimizer:
                 self.logger.error(f"HardwareAccelerationOptimizer: Benchmark error for {config_name}: {e}")
                 results["configurations"][config_name] = {"error": str(e)}
                 
-        # Determine best configuration
         best_config = None
         best_fps = 0
         
@@ -595,25 +530,20 @@ class HardwareAccelerationOptimizer:
         return results
         
     def _benchmark_configuration(self, config: Dict[str, Any], duration: float) -> Dict[str, Any]:
-        """Benchmark a specific configuration."""
         import time
         
-        # Apply configuration
         cv2.ocl.setUseOpenCL(config.get("use_opencl", False))
         if config.get("threads", -1) > 0:
             cv2.setNumThreads(config["threads"])
         else:
             cv2.setNumThreads(0)
             
-        # Create test data
         test_image = np.random.randint(0, 255, (1080, 1920, 3), dtype=np.uint8)
         
-        # Benchmark
         start_time = time.time()
         frame_count = 0
         
         while time.time() - start_time < duration:
-            # Simulate typical image processing operations
             gray = cv2.cvtColor(test_image, cv2.COLOR_BGR2GRAY)
             blurred = cv2.GaussianBlur(gray, (15, 15), 0)
             edges = cv2.Canny(blurred, 50, 150)
@@ -632,15 +562,12 @@ class HardwareAccelerationOptimizer:
         }
         
     def get_current_profile(self) -> Optional[OptimizationProfile]:
-        """Get the currently applied optimization profile."""
         return self.current_profile
         
     def get_optimization_recommendations(self) -> List[str]:
-        """Get optimization recommendations based on detected hardware."""
         recommendations = []
         capabilities = self.detector.get_available_capabilities()
         
-        # Check for high-performance options
         cuda_available = any(cap.acceleration_type == AccelerationType.GPU_CUDA for cap in capabilities)
         opencl_available = any(cap.acceleration_type == AccelerationType.GPU_OPENCL for cap in capabilities)
         hardware_codec_available = any(cap.acceleration_type == AccelerationType.HARDWARE_CODEC for cap in capabilities)
@@ -677,22 +604,18 @@ class HardwareAccelerationOptimizer:
 
 
 def create_optimal_profile_for_system() -> OptimizationProfile:
-    """Create an optimal optimization profile for the current system."""
     detector = HardwareAccelerationDetector()
     optimizer = HardwareAccelerationOptimizer(detector)
     
-    # Auto-detect best profile
     return optimizer.create_optimization_profile("balanced")
 
 
 def benchmark_system_performance(duration_seconds: float = 30.0) -> Dict[str, Any]:
-    """Benchmark the system's hardware acceleration performance."""
     optimizer = HardwareAccelerationOptimizer()
     return optimizer.benchmark_acceleration(duration_seconds)
 
 
 def main():
-    """Command-line interface for hardware acceleration utilities."""
     import argparse
     import json
     
@@ -707,7 +630,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Configure logging
     level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(
         level=level,
@@ -772,7 +694,6 @@ def main():
                       
             results["benchmark"] = benchmark_results
             
-        # Save results if output file specified
         if args.output and results:
             with open(args.output, 'w') as f:
                 json.dump(results, f, indent=2)
