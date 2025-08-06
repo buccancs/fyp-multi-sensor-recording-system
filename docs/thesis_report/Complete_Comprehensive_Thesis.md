@@ -13917,7 +13917,7 @@ class EnhancedApplication:
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainFragmentsBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModelRefactored
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     @Inject
@@ -13938,7 +13938,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
 
         // Initialize system health monitoring
         lifecycleScope.launch {

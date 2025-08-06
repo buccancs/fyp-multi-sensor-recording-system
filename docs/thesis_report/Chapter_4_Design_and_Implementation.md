@@ -475,6 +475,8 @@ graph TD
 
 **Core Application Components:**
 
+**Clean MVVM Architecture with Specialized Controllers**: The Android application follows a refactored MVVM architecture with `MainViewModelRefactored` (451 lines) coordinating four specialized components: `RecordingSessionController` (218 lines), `DeviceConnectionManager` (389 lines), `FileTransferManager` (448 lines), and `CalibrationManager` (441 lines). This represents a 78% reduction from the original monolithic `MainViewModel` (2035 lines), achieving clean separation of concerns and single responsibility principle adherence.
+
 **Fragment-Based UI Architecture**: Modern Android architecture with RecordingFragment, DevicesFragment, and
 CalibrationFragment for comprehensive operational control, implementing Material Design 3 principles with accessibility
 compliance and responsive layout management.
@@ -4417,7 +4419,7 @@ try {
    - Added connection-specific error handling
    - Enhanced network recovery mechanisms
 
-3. **UI Components** (`MainActivity.kt`, `MainViewModel.kt`, UI Fragments):
+3. **UI Components** (`MainActivity.kt`, `MainViewModelRefactored.kt`, UI Fragments):
    - Fixed 15+ exception handlers in user interface operations
    - Improved state management error handling
    - Enhanced user feedback mechanisms
