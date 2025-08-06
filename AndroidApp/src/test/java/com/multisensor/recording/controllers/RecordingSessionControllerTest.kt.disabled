@@ -7,12 +7,13 @@ import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.any
+import org.mockito.kotlin.*
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.util.Logger
+import kotlin.test.*
 
 /**
  * Unit tests for RecordingSessionController
@@ -39,7 +40,7 @@ class RecordingSessionControllerTest {
     private lateinit var logger: Logger
 
     @Mock
-    private lateinit var mockSessionInfo: com.multisensor.recording.recording.SessionInformation
+    private lateinit var mockSessionInfo: com.multisensor.recording.recording.SessionInfo
 
     private lateinit var controller: RecordingSessionController
 
@@ -53,8 +54,6 @@ class RecordingSessionControllerTest {
             sessionManager,
             logger
         )
-
-        `when`(mockSessionInfo.getSummary()).thenReturn("Test Session Summary")
     }
 
     @Test

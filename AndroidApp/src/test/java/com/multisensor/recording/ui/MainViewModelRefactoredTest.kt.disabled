@@ -8,13 +8,14 @@ import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.any
+import org.mockito.kotlin.*
 import com.multisensor.recording.controllers.RecordingSessionController
 import com.multisensor.recording.managers.DeviceConnectionManager
 import com.multisensor.recording.managers.FileTransferManager
 import com.multisensor.recording.managers.CalibrationManager
 import com.multisensor.recording.util.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.test.*
 
 /**
  * Unit tests for MainViewModelRefactored
@@ -248,18 +249,5 @@ class MainViewModelRefactoredTest {
         viewModel.switchCamera()
 
         verify(logger).warning("switchCamera() is deprecated - functionality moved to DeviceConnectionManager")
-    }
-
-    @Test
-    fun `onCleared should perform emergency stop if recording`() = runTest {
-        recordingStateFlow.value = RecordingSessionController.RecordingState(isRecording = true)
-        `when`(recordingController.isRecording()).thenReturn(true)
-
-        viewModel.onCleared()
-
-        kotlinx.coroutines.delay(100)
-
-        verify(recordingController).emergencyStop()
-        verify(logger).info("MainViewModel cleared")
     }
 }

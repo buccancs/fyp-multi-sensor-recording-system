@@ -11,13 +11,14 @@ import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.any
+import org.mockito.kotlin.*
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.network.JsonSocketClient
 import com.multisensor.recording.network.NetworkConfiguration
 import com.multisensor.recording.util.Logger
+import kotlin.test.*
 
 /**
  * Unit tests for DeviceConnectionManager
