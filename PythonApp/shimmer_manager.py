@@ -845,7 +845,8 @@ class ShimmerManager:
                         test_port.close()
                         self.logger.info(f"Found available COM port: {port_name}")
                         return port_name
-                    except:
+                    except (OSError, serial.SerialException) as e:
+                        self.logger.debug(f"Port {port_name} not available: {e}")
                         continue
             elif system == "linux":
                 import glob
