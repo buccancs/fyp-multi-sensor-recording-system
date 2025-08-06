@@ -37,7 +37,6 @@ class RecordingComponentsComprehensiveTest {
         shimmerRecorder = ShimmerRecorder(mockContext)
     }
 
-    
     @Test
     fun `test camera recorder initialization`() {
         val config = CameraConfiguration(
@@ -138,7 +137,6 @@ class RecordingComponentsComprehensiveTest {
         assertNotNull(result.exceptionOrNull())
     }
 
-    
     @Test
     fun `test thermal recorder initialization`() {
         val config = ThermalConfiguration(
@@ -229,7 +227,6 @@ class RecordingComponentsComprehensiveTest {
         assertEquals(0, health.errorCount)
     }
 
-    
     @Test
     fun `test shimmer recorder initialization`() {
         val config = ShimmerConfiguration(
@@ -345,7 +342,6 @@ class RecordingComponentsComprehensiveTest {
         assertFalse(shimmerRecorder.validateSensorData(invalidData))
     }
 
-    
     @Test
     fun `test synchronized multi-modal recording`() = runTest {
         val recordingSession = MultiModalRecordingSession(
@@ -462,6 +458,5 @@ class RecordingComponentsComprehensiveTest {
         assertNotNull(overallQuality.recommendations)
     }
 
-    
 }
 */

@@ -182,7 +182,6 @@ class NTPTimeServer:
             return False
 
     def _parse_sync_request(self, data: bytes, client_addr: str) -> Optional[Dict]:
-        """Parse and validate sync request data."""
         try:
             request_data = json.loads(data.decode("utf-8"))
         except json.JSONDecodeError:
@@ -195,7 +194,6 @@ class NTPTimeServer:
         return request_data
 
     def _create_sync_response(self, request_data: Dict, request_receive_time: float) -> Dict:
-        """Create sync response data structure."""
         client_id = request_data.get("client_id")
         request_timestamp = request_data.get("timestamp", 0)
         sequence_number = request_data.get("sequence", 0)
@@ -213,7 +211,6 @@ class NTPTimeServer:
         }, client_id, sequence_number, response_send_time
 
     def _update_server_statistics(self, client_id: str, request_receive_time: float, response_send_time: float) -> None:
-        """Update server statistics and client tracking."""
         with self.stats_lock:
             self.status.requests_served += 1
             self.connected_clients[client_id] = time.time()
@@ -229,7 +226,6 @@ class NTPTimeServer:
                 self.status.average_response_time_ms = statistics.mean(self.response_times)
 
     def _trigger_sync_callbacks(self, response_data: Dict, sequence_number: int) -> None:
-        """Trigger registered sync callbacks."""
         sync_response = TimeSyncResponse(
             server_timestamp=response_data["server_timestamp"],
             request_timestamp=response_data["request_timestamp"],

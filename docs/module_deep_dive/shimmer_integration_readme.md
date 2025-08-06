@@ -1,35 +1,31 @@
 # Shimmer Integration Module
 
-The Shimmer Integration System provides comprehensive physiological data collection capabilities through Shimmer3 GSR+
-sensors, enabling high-precision galvanic skin response monitoring with seamless integration into the Multi-Sensor
-Recording System's multi-modal data collection framework.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Shimmer Integration System provides comprehensive physiological data collection capabilities through Shimmer3 GSR+ sensors, enabling high-precision galvanic skin response monitoring with seamless integration into the Multi-Sensor Recording System's multi-modal data collection framework for contactless GSR prediction research.
+
+### Research Context and Theoretical Foundation
+
+The Shimmer Integration System serves as the physiological data backbone, providing research-grade galvanic skin response (GSR) measurements that maintain precise temporal alignment with concurrent visual, thermal, and environmental sensor data streams. This component addresses fundamental requirements for psychophysiological research [Boucsein2012] where accurate physiological measurement serves as ground truth for developing contactless GSR prediction models.
+
+The system builds upon established psychophysiology and physiological computing principles:
+
+- **Psychophysiology Foundations** [Boucsein2012]: GSR as a reliable indicator of sympathetic nervous system activity and emotional arousal
+- **Affective Computing Theory** [Picard1997]: Automated emotion recognition through physiological measurements as foundation for human-computer interaction
+- **Signal Processing Methodologies** [Benedek2010]: Advanced artifact detection and signal quality enhancement techniques for research-grade data
+- **Wireless Sensor Networks** [Burns2010]: Shimmer platform development, validation, and research applications in physiological monitoring
 
 ### System Role and Responsibilities
 
-The Shimmer Integration System serves as the physiological data backbone of the Multi-Sensor Recording System, providing
-research-grade galvanic skin response (GSR) measurements that maintain precise temporal alignment with concurrent
-visual, thermal, and environmental sensor data streams.
+Within the established PC master-controller, offline-first recording architecture, the Shimmer Integration System provides:
 
 **Primary Functions:**
 
-- **High-Precision GSR Monitoring**: Research-grade physiological signal acquisition with configurable sampling rates
-- **Dual Integration Architecture**: Support for both direct PC Bluetooth connections and Android-mediated communication
-- **Real-Time Signal Processing**: Advanced artifact detection, quality assessment, and adaptive filtering
-- **Multi-Modal Synchronization**: Precise temporal coordination with other sensor modalities
-- **Research-Grade Calibration**: Comprehensive calibration protocols ensuring measurement accuracy
+- **High-Precision GSR Monitoring**: Research-grade physiological signal acquisition with configurable sampling rates supporting diverse research protocols
+- **Dual Integration Architecture**: Support for both direct PC Bluetooth connections and Android-mediated communication ensuring flexible deployment scenarios
+- **Real-Time Signal Processing**: Advanced artifact detection, quality assessment, and adaptive filtering maintaining research data quality standards
+- **Multi-Modal Synchronization**: Precise temporal coordination with visual and thermal sensor modalities through the JSON socket protocol
+- **Research-Grade Calibration**: Comprehensive calibration protocols ensuring measurement accuracy and inter-device consistency
 
 ### Research Foundation
 
@@ -1214,6 +1210,16 @@ python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 
 ---
 
-*This comprehensive documentation consolidates all Shimmer Integration information into a single authoritative
-reference. For related modules, see the [Multi-Device Synchronization](../multi-device-synchronization/README.md)
-and [Android Mobile Application](../android-mobile-application/README.md) documentation.*
+*This comprehensive documentation consolidates all Shimmer Integration information into a single authoritative reference. For related modules, see the [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
+
+## References
+
+[Beck2002] Beck, K. (2002). *Test Driven Development: By Example*. Addison-Wesley Professional.
+
+[Benedek2010] Benedek, M., & Kaernbach, C. (2010). A continuous measure of phasic electrodermal activity. *Journal of Neuroscience Methods*, 190(1), 80-91.
+
+[Boucsein2012] Boucsein, W. (2012). *Electrodermal Activity* (2nd ed.). Springer Science & Business Media.
+
+[Burns2010] Burns, A., Greene, B. R., McGrath, M. J., O'Shea, T. J., Kuris, B., Ayer, S. M., ... & Cionca, V. (2010). SHIMMER™–A wireless sensor platform for noninvasive biomedical research. *IEEE Sensors Journal*, 10(9), 1527-1534.
+
+[Picard1997] Picard, R. W. (1997). *Affective Computing*. MIT Press.

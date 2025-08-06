@@ -124,7 +124,6 @@ class MasterClockSynchronizer:
         return time.time()
 
     def _validate_recording_session(self, session_id: str, target_devices: Optional[List[str]]) -> Tuple[bool, List[str]]:
-        """Validate recording session parameters and return processed target devices."""
         if session_id in self.active_sessions:
             self.logger.error(f"Session {session_id} already active")
             return False, []
@@ -139,7 +138,6 @@ class MasterClockSynchronizer:
         return True, target_devices
 
     def _check_sync_quality(self, target_devices: List[str]) -> None:
-        """Check synchronization quality for target devices."""
         poor_sync_devices = []
         for device_id in target_devices:
             if device_id in self.connected_devices:
@@ -154,7 +152,6 @@ class MasterClockSynchronizer:
         self, target_devices: List[str], session_id: str, master_timestamp: float,
         record_video: bool, record_thermal: bool, record_shimmer: bool
     ) -> None:
-        """Send recording commands to Android devices."""
         android_devices = [
             d for d in target_devices
             if d in self.connected_devices and self.connected_devices[d].device_type == "android"
@@ -175,7 +172,6 @@ class MasterClockSynchronizer:
                 self.logger.info(f"Start recording command sent to {device_id}")
 
     def _trigger_sync_callbacks(self, master_timestamp: float, session_id: str, session: 'RecordingSession') -> None:
-        """Trigger webcam and session callbacks."""
         for callback in self.webcam_sync_callbacks:
             try:
                 callback(master_timestamp)

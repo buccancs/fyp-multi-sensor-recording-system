@@ -230,9 +230,7 @@ class CrossDeviceCalibrationCoordinator:
     def perform_stereo_calibration(
         self, session_id: str, camera_pair: Tuple[str, str]
     ) -> Optional[Dict[str, Any]]:
-        """Perform stereo calibration for a camera pair with comprehensive validation."""
         try:
-            # Validate inputs and prepare data
             validation_result = self._validate_stereo_calibration_inputs(session_id, camera_pair)
             if not validation_result:
                 return None
@@ -240,32 +238,27 @@ class CrossDeviceCalibrationCoordinator:
             
             self.logger.info(f"Performing stereo calibration for {camera_pair}")
             
-            # Extract corner points from image pairs
             corner_extraction_result = self._extract_stereo_corner_points(session, images1, images2)
             if not corner_extraction_result:
                 return None
             object_points, image_points1, image_points2 = corner_extraction_result
             
-            # Perform individual camera calibrations
             calibration_matrices = self._perform_individual_camera_calibrations(
                 object_points, image_points1, image_points2, images1[0].shape[:2][::-1]
             )
             if not calibration_matrices:
                 return None
             
-            # Perform stereo calibration
             stereo_params = self._perform_stereo_calculation(
                 object_points, image_points1, image_points2, calibration_matrices
             )
             if not stereo_params:
                 return None
             
-            # Format and store results
             stereo_result = self._format_stereo_calibration_results(
                 camera_pair, stereo_params, len(object_points)
             )
             
-            # Store results in session
             camera1_key, camera2_key = camera_pair
             stereo_key = f"stereo_{camera1_key}_{camera2_key}"
             session.calibration_results[stereo_key] = stereo_result
@@ -282,7 +275,6 @@ class CrossDeviceCalibrationCoordinator:
     def _validate_stereo_calibration_inputs(
         self, session_id: str, camera_pair: Tuple[str, str]
     ) -> Optional[Tuple[Any, List, List]]:
-        """Validate session and camera pair inputs for stereo calibration."""
         if session_id not in self.active_sessions:
             self.logger.error(f"Session {session_id} not found")
             return None
@@ -309,12 +301,10 @@ class CrossDeviceCalibrationCoordinator:
     def _extract_stereo_corner_points(
         self, session: Any, images1: List, images2: List
     ) -> Optional[Tuple[List, List, List]]:
-        """Extract corner points from stereo image pairs."""
         object_points = []
         image_points1 = []
         image_points2 = []
         
-        # Prepare calibration pattern
         if session.pattern_type == PatternType.CHESSBOARD:
             pattern_size = (6, 9)
             objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
@@ -325,7 +315,6 @@ class CrossDeviceCalibrationCoordinator:
             )
             return None
         
-        # Extract corners from each image pair
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
         
         for img1, img2 in zip(images1, images2):
@@ -354,7 +343,6 @@ class CrossDeviceCalibrationCoordinator:
     def _perform_individual_camera_calibrations(
         self, object_points: List, image_points1: List, image_points2: List, img_shape: Tuple
     ) -> Optional[Dict[str, Any]]:
-        """Perform individual camera calibrations for both cameras."""
         try:
             ret1, mtx1, dist1, rvecs1, tvecs1 = cv2.calibrateCamera(
                 object_points, image_points1, img_shape, None, None
@@ -376,7 +364,6 @@ class CrossDeviceCalibrationCoordinator:
         self, object_points: List, image_points1: List, image_points2: List, 
         calibration_matrices: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
-        """Perform the actual stereo calibration calculations."""
         try:
             flags = cv2.CALIB_FIX_INTRINSIC
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 1e-05)
@@ -406,7 +393,6 @@ class CrossDeviceCalibrationCoordinator:
     def _format_stereo_calibration_results(
         self, camera_pair: Tuple[str, str], stereo_params: Dict[str, Any], num_pairs: int
     ) -> Dict[str, Any]:
-        """Format stereo calibration results into standardized dictionary."""
         return {
             "camera_pair": camera_pair,
             "reprojection_error": stereo_params['ret'],

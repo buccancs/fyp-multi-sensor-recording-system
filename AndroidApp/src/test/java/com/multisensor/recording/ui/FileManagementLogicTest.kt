@@ -148,3 +148,4 @@ class FileManagementLogicTest {
             this.thermalEnabled = true
         }
 }
+

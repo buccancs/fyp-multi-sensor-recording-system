@@ -1,59 +1,80 @@
-# Android Mobile Application
+# Android Mobile Application Module
 
 ## Overview
 
-The Android Mobile Application serves as a sophisticated mobile data collection and sensor integration platform within
-the Multi-Sensor Recording System. Built using Kotlin and Jetpack Compose, it provides real-time sensor data
-acquisition, camera recording capabilities, and seamless communication with the Python Desktop Controller through a
-JSON-based networking protocol.
+The Android Mobile Application serves as a sophisticated mobile data collection and sensor integration platform within the Multi-Sensor Recording System for Contactless GSR Prediction Research. This component implements a distributed client architecture following established mobile computing principles [Satyanarayanan2001] and modern Android development best practices [Google2023].
+
+### Research Context
+
+Built using Kotlin and Jetpack Compose, this application provides real-time multi-modal sensor data acquisition, high-resolution camera recording capabilities, and seamless communication with the Python Desktop Controller through a standardized JSON-based networking protocol. The architecture enables synchronized data collection across multiple physiological and environmental sensors, supporting contactless GSR prediction research methodologies [Posada-Quintero2020].
+
+### Component Role in System Architecture
+
+The Android application functions as a distributed sensor node within the established PC master-controller, offline-first local recording architecture. It maintains temporal synchronization through the JSON socket protocol while ensuring robust local data persistence for research-grade data collection reliability.
 
 ## System Architecture
 
 ### Clean MVVM Architecture with Specialized Controllers
 
-The Android application implements a comprehensive refactored architecture following clean MVVM patterns and single responsibility principle. The original monolithic MainViewModel (2035 lines) was completely refactored into specialized controllers, achieving a **78% size reduction** while dramatically improving maintainability and testability.
+The Android application implements a comprehensive refactored architecture following established clean architecture principles [Martin2017] and Model-View-ViewModel (MVVM) patterns with strict adherence to the single responsibility principle [Martin2008]. The original monolithic MainViewModel (2035 lines) underwent systematic refactoring into specialized controllers, achieving a **78% code size reduction** while dramatically improving maintainability, testability, and architectural clarity.
+
+**Architectural Decision Rationale**: This refactoring addresses common anti-patterns in mobile development where monolithic view models become difficult to test and maintain [Fowler2018]. The specialized controller approach enables independent testing, clear separation of concerns, and improved code comprehension for research software development.
 
 ### Core Components
+
+The refactored architecture follows a hierarchical component organization that aligns with the established PC master-controller distributed architecture:
 
 ```
 Android Application (Refactored Architecture)
 ├── UI Layer (Jetpack Compose)
-│   ├── MainActivity
-│   ├── RecordingScreen
-│   ├── SettingsScreen
-│   └── ConnectionScreen
+│   ├── MainActivity                      # Primary application entry point
+│   ├── RecordingScreen                   # Real-time recording coordination interface
+│   ├── SettingsScreen                    # Device configuration and preferences
+│   └── ConnectionScreen                  # Network connectivity management
 ├── ViewModel Layer
-│   └── MainViewModelRefactored (451 lines) - Pure UI state coordination
+│   └── MainViewModelRefactored (451 lines) # Pure UI state coordination
 ├── Business Logic Layer
-│   ├── RecordingSessionController (218 lines) - Recording operations
-│   ├── DeviceConnectionManager (389 lines) - Device connectivity
-│   ├── FileTransferManager (448 lines) - File operations
-│   └── CalibrationManager (441 lines) - Calibration processes
+│   ├── RecordingSessionController (218 lines) # Recording lifecycle operations
+│   ├── DeviceConnectionManager (389 lines)    # Device connectivity coordination
+│   ├── FileTransferManager (448 lines)        # Data transfer and persistence
+│   └── CalibrationManager (441 lines)         # Sensor calibration workflows
 ├── Data Layer
-│   ├── LocalDatabase (Room)
-│   ├── PreferencesManager
-│   └── FileSystemManager
+│   ├── LocalDatabase (Room)              # Offline-first data persistence
+│   ├── PreferencesManager               # Configuration and user preferences
+│   └── FileSystemManager                # Local storage coordination
 └── Hardware Integration
-    ├── CameraAPI
-    ├── SensorAPI
-    └── NetworkingAPI
+    ├── CameraAPI                         # Android Camera2 API integration
+    ├── SensorAPI                         # Inertial and environmental sensors
+    └── NetworkingAPI                     # JSON socket protocol implementation
 ```
+
+**Architectural Rationale**: This layered approach ensures clear separation between presentation logic, business rules, and data persistence, following established software engineering principles for maintainable research software [Wilson2014].
 
 ### Specialized Controllers Architecture
 
 #### RecordingSessionController (218 lines)
-**Pure recording operation management**
-- Handles all recording lifecycle operations (start, stop, capture)
-- Manages recording state with reactive StateFlow patterns
-- Implements error handling and recovery mechanisms
-- Provides unified interface for multi-modal recording coordination
+
+**Design Pattern**: Pure recording operation management following the Command pattern [Gamma1994]
+
+**Responsibilities**:
+- Handles all recording lifecycle operations (start, stop, capture) with atomic state transitions
+- Manages recording state using reactive StateFlow patterns for consistent UI updates [Google2023]
+- Implements error handling and recovery mechanisms following fault-tolerant design principles [Saltzer1984]
+- Provides unified interface for multi-modal recording coordination across sensor types
+
+**Implementation Rationale**: The controller pattern separates recording logic from UI concerns, enabling independent testing and validation of critical research data collection workflows [Beck2002].
 
 #### DeviceConnectionManager (389 lines)
-**Device connectivity orchestration**
-- Manages device discovery and initialization procedures
-- Handles connection state management and monitoring
-- Implements automatic reconnection and fault tolerance
-- Coordinates multi-device synchronization protocols
+
+**Design Pattern**: Device connectivity orchestration implementing the Observer pattern [Gamma1994]
+
+**Responsibilities**:
+- Manages device discovery and initialization procedures following network service discovery protocols [Cheshire2013]
+- Handles connection state management and continuous monitoring with automatic health assessment
+- Implements automatic reconnection and fault tolerance using exponential backoff strategies [Stevens1994]
+- Coordinates multi-device synchronization protocols as defined in the JSON socket protocol specification
+
+**Implementation Rationale**: Centralized connection management ensures consistent network behavior and simplifies debugging of distributed system interactions [Tanenbaum2006].
 
 #### FileTransferManager (448 lines)
 **Data transfer and file operations**
@@ -907,4 +928,32 @@ android {
 ```
 
 This Android Mobile Application documentation provides comprehensive coverage of the mobile component's architecture,
-implementation, and operational procedures within the Multi-Sensor Recording System.
+implementation, and operational procedures within the Multi-Sensor Recording System for Contactless GSR Prediction Research.
+
+## References
+
+[Beck2002] Beck, K. (2002). *Test Driven Development: By Example*. Addison-Wesley Professional.
+
+[Cheshire2013] Cheshire, S., & Krochmal, M. (2013). DNS-Based Service Discovery. RFC 6763.
+
+[Fowler2018] Fowler, M. (2018). *Refactoring: Improving the Design of Existing Code* (2nd ed.). Addison-Wesley Professional.
+
+[Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
+
+[Google2023] Google. (2023). *Android Developers Guide: Modern Android Development*. Retrieved from https://developer.android.com/modern-android-development
+
+[Martin2008] Martin, R. C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall.
+
+[Martin2017] Martin, R. C. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. Prentice Hall.
+
+[Posada-Quintero2020] Posada-Quintero, H. F., & Chon, K. H. (2020). Innovations in electrodermal activity data collection and signal processing: A systematic review. *Sensors*, 20(2), 479.
+
+[Saltzer1984] Saltzer, J. H., Reed, D. P., & Clark, D. D. (1984). End-to-end arguments in system design. *ACM Transactions on Computer Systems*, 2(4), 277-288.
+
+[Satyanarayanan2001] Satyanarayanan, M. (2001). Pervasive computing: Vision and challenges. *IEEE Personal Communications*, 8(4), 10-17.
+
+[Stevens1994] Stevens, W. R. (1994). *TCP/IP Illustrated, Volume 1: The Protocols*. Addison-Wesley Professional.
+
+[Tanenbaum2006] Tanenbaum, A. S., & van Steen, M. (2006). *Distributed Systems: Principles and Paradigms* (2nd ed.). Prentice Hall.
+
+[Wilson2014] Wilson, G., Aruliah, D. A., Brown, C. T., Hong, N. P. C., Davis, M., Guy, R. T., ... & Wilson, P. (2014). Best practices for scientific computing. *PLOS Biology*, 12(1), e1001745.

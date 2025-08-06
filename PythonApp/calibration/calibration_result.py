@@ -211,7 +211,6 @@ class CalibrationResult:
             rvec, _ = cv2.Rodrigues(self.rotation_matrix)
             euler_angles = np.degrees(rvec.flatten())
         except (cv2.error, ValueError, TypeError) as e:
-            # Handle OpenCV errors or invalid rotation matrix
             logger.debug(f"Failed to compute euler angles: {e}")
             euler_angles = [0, 0, 0]
         return {

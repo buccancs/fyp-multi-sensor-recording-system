@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""
-Complete Hand Segmentation Integration Demo
-
-Demonstrates the full Android-Python hand segmentation workflow:
-1. Android real-time hand detection during recording
-2. Automatic cropped dataset creation on mobile device
-3. Post-session Python processing for high-quality outputs
-4. Cross-platform integration and compatibility
-
-This addresses the original requirement: "make it available to run it on the phone, and create a cropped dataset"
-"""
 
 import json
 import os
@@ -19,7 +8,6 @@ from pathlib import Path
 
 
 def demonstrate_android_integration():
-    """Demonstrate Android hand segmentation integration"""
 
     print("🤖 ANDROID HAND SEGMENTATION INTEGRATION DEMO")
     print("=" * 60)
@@ -58,7 +46,6 @@ def demonstrate_android_integration():
     print("✓ Cross-platform compatible file formats")
 
 def demonstrate_python_integration():
-    """Demonstrate Python post-processing integration"""
 
     print("\n🐍 PYTHON POST-PROCESSING INTEGRATION:")
     print("=" * 60)
@@ -99,7 +86,6 @@ def demonstrate_python_integration():
         print(f"✓ {output}")
 
 def demonstrate_integration_workflow():
-    """Show the complete integration workflow"""
 
     print("\n🔄 COMPLETE INTEGRATION WORKFLOW:")
     print("=" * 60)
@@ -121,7 +107,6 @@ def demonstrate_integration_workflow():
         time.sleep(0.1)
 
 def demonstrate_dataset_compatibility():
-    """Show dataset format compatibility between Android and Python"""
 
     print("\n🔗 CROSS-PLATFORM COMPATIBILITY:")
     print("=" * 60)
@@ -156,7 +141,6 @@ def demonstrate_dataset_compatibility():
     print("\n  Python Compatible: ✓ All fields supported by Python processors")
 
 def create_demo_dataset():
-    """Create a demo dataset showing the integration"""
 
     print("\n📁 CREATING DEMO DATASET:")
     print("=" * 60)
@@ -210,7 +194,6 @@ def create_demo_dataset():
     return demo_dir
 
 def show_integration_benefits():
-    """Show the benefits of the integrated system"""
 
     print("\n🎉 INTEGRATION BENEFITS:")
     print("=" * 60)
@@ -230,7 +213,6 @@ def show_integration_benefits():
         print(f"{icon_title}: {description}")
 
 def main():
-    """Run the complete integration demonstration"""
 
     print("🚀 ANDROID HAND SEGMENTATION INTEGRATION")
     print("   Addressing: 'make it available to run it on the phone, and create a cropped dataset'")

@@ -1,34 +1,24 @@
 # Session Management Module
 
-The Session Management System provides comprehensive coordination of recording sessions across all devices and sensors
-in the Multi-Sensor Recording System, ensuring consistent data organization, temporal alignment, and quality assurance
-throughout the complete data collection lifecycle.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Session Management System provides comprehensive coordination of recording sessions across all devices and sensors in the Multi-Sensor Recording System for contactless GSR prediction research. This component ensures consistent data organization, temporal alignment, and quality assurance throughout the complete data collection lifecycle, implementing established principles of research data management [Wilkinson2016] within the distributed PC master-controller architecture.
+
+### Research Context and Theoretical Foundation
+
+Modern multi-modal physiological research requires systematic session management that maintains data integrity, temporal consistency, and experimental reproducibility [Cacioppo2007]. The session management approach addresses fundamental challenges in coordinating heterogeneous sensor platforms while ensuring compliance with research data management best practices [Wilson2014].
 
 ### System Role and Responsibilities
 
-The Session Management System serves as the central coordinator for all recording activities, managing the complete
-lifecycle from session initialization through data finalization and export.
+The Session Management System serves as the central coordinator for all recording activities within the established offline-first local recording architecture, managing the complete lifecycle from session initialization through data finalization and export.
 
 **Primary Functions:**
 
-- **Session Lifecycle Management**: Creation, execution, and finalization of recording sessions
-- **Multi-Device Coordination**: Synchronized control across all connected devices
-- **Data Organization**: Structured storage and metadata management
-- **Quality Assurance**: Real-time monitoring and validation
-- **Export Management**: Multi-format data export and analysis preparation
+- **Session Lifecycle Management**: Coordinated creation, execution, and finalization of recording sessions with atomic state transitions
+- **Multi-Device Coordination**: Synchronized control across all connected devices ensuring temporal coherence and data consistency
+- **Data Organization**: Structured storage and comprehensive metadata management following research data standards [DataCite2019]
+- **Quality Assurance**: Real-time monitoring and validation with automated quality control mechanisms
+- **Export Management**: Multi-format data export and analysis preparation supporting diverse research workflows
 
 ### Session Architecture
 
@@ -601,5 +591,14 @@ class SessionManagementTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi_device_synchronization_readme.md)
-and [Networking Protocol](../networking_protocol_readme.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Networking Protocol](networking_protocol_readme.md) documentation.*
+
+## References
+
+[Cacioppo2007] Cacioppo, J. T., Tassinary, L. G., & Berntson, G. G. (Eds.). (2007). *Handbook of Psychophysiology* (3rd ed.). Cambridge University Press.
+
+[DataCite2019] DataCite Metadata Working Group. (2019). *DataCite Metadata Schema Documentation for the Publication and Citation of Research Data* (Version 4.3). DataCite e.V.
+
+[Wilkinson2016] Wilkinson, M. D., Dumontier, M., Aalbersberg, I. J., Appleton, G., Axton, M., Baak, A., ... & Mons, B. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3(1), 1-9.
+
+[Wilson2014] Wilson, G., Aruliah, D. A., Brown, C. T., Hong, N. P. C., Davis, M., Guy, R. T., ... & Wilson, P. (2014). Best practices for scientific computing. *PLOS Biology*, 12(1), e1001745.

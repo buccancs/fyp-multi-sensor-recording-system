@@ -626,3 +626,4 @@ class RecordingService : Service() {
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 }
+

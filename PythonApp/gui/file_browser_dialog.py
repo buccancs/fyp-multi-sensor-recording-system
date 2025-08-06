@@ -1,12 +1,3 @@
-"""
-File Browser Dialog for PyQt GUI
-
-This module implements a comprehensive file browser dialog for the Multi-Sensor Recording System.
-It provides file browsing, preview, and management capabilities similar to the web interface.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-01-01
-"""
 
 import os
 import sys
@@ -38,7 +29,6 @@ from PyQt5.QtWidgets import (
 
 
 class FilePreviewWidget(QFrame):
-    """Widget for previewing different file types"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -54,16 +44,6 @@ class FilePreviewWidget(QFrame):
         self.preview_label = QLabel("Select a file to preview")
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setStyleSheet(
-            """
-            QLabel {
-                color:
-                font-size: 14px;
-                padding: 20px;
-                border: 2px dashed
-                border-radius: 8px;
-                background-color:
-            }
-        """
         )
 
         self.preview_scroll.setWidget(self.preview_label)
@@ -82,7 +62,6 @@ class FilePreviewWidget(QFrame):
         self.current_file_path = None
 
     def preview_file(self, file_path: str):
-        """Preview a file based on its type"""
         self.current_file_path = file_path
 
         if not os.path.exists(file_path):
@@ -99,20 +78,6 @@ Size: {self.format_file_size(file_size)}
 Type: {file_suffix.upper() if file_suffix else 'Unknown'}
 Modified: {file_info.lastModified().toString(Qt.DefaultLocaleLongDate)}
 Path: {file_path}
-        """.strip()
-        self.info_text.setPlainText(info_text)
-
-        if file_suffix in ["jpg", "jpeg", "png", "gif", "bmp"]:
-            self.preview_image(file_path)
-        elif file_suffix in ["txt", "log", "json", "xml", "csv"]:
-            self.preview_text(file_path)
-        elif file_suffix in ["mp4", "avi", "mov", "mkv"]:
-            self.preview_video(file_path)
-        else:
-            self.show_generic_preview(file_path, file_suffix)
-
-    def preview_image(self, file_path: str):
-        """Preview image files"""
         try:
             pixmap = QPixmap(file_path)
             if not pixmap.isNull():
@@ -128,7 +93,6 @@ Path: {file_path}
             self.show_error(f"Error loading image: {str(e)}")
 
     def preview_text(self, file_path: str):
-        """Preview text files"""
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read(5000)
@@ -144,7 +108,6 @@ Path: {file_path}
             self.show_error(f"Error reading text file: {str(e)}")
 
     def preview_video(self, file_path: str):
-        """Preview video files (show file info only)"""
         self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText(
             f"""
@@ -154,14 +117,8 @@ Path: {file_path}
 
 Click 'Open' to play with external application
 or use the playback page for detailed analysis.
-        """
+"""
         )
-        self.preview_label.setAlignment(Qt.AlignCenter)
-        self.preview_label.setFont(QFont("Arial", 10))
-
-    def show_generic_preview(self, file_path: str, file_type: str):
-        """Show generic preview for unsupported file types"""
-        self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText(
             f"""
 📄 {file_type.upper()} File
@@ -170,13 +127,6 @@ or use the playback page for detailed analysis.
 
 Preview not available for this file type.
 Click 'Open' to open with external application.
-        """
-        )
-        self.preview_label.setAlignment(Qt.AlignCenter)
-        self.preview_label.setFont(QFont("Arial", 10))
-
-    def show_error(self, message: str):
-        """Show error message in preview area"""
         self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText(f"❌ {message}")
         self.preview_label.setAlignment(Qt.AlignCenter)
@@ -184,29 +134,17 @@ Click 'Open' to open with external application.
         self.preview_label.setStyleSheet("QLabel { color: #d32f2f; }")
 
     def clear_preview(self):
-        """Clear the preview area"""
         self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText("Select a file to preview")
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setFont(QFont("Arial", 10))
         self.preview_label.setStyleSheet(
-            """
-            QLabel {
-                color:
-                font-size: 14px;
-                padding: 20px;
-                border: 2px dashed
-                border-radius: 8px;
-                background-color:
-            }
-        """
         )
         self.info_text.clear()
         self.current_file_path = None
 
     @staticmethod
     def format_file_size(bytes_size: int) -> str:
-        """Format file size in human readable format"""
         if bytes_size < 1024:
             return f"{bytes_size} B"
         elif bytes_size < 1024 * 1024:
@@ -218,7 +156,6 @@ Click 'Open' to open with external application.
 
 
 class FileBrowserDialog(QDialog):
-    """Comprehensive file browser dialog for the Multi-Sensor Recording System"""
 
     def __init__(self, parent=None, initial_path: str = None):
         super().__init__(parent)
@@ -237,7 +174,6 @@ class FileBrowserDialog(QDialog):
         self.load_directory(self.current_path)
 
     def setup_ui(self):
-        """Setup the user interface"""
         layout = QVBoxLayout(self)
 
         header_layout = QHBoxLayout()
@@ -334,7 +270,6 @@ class FileBrowserDialog(QDialog):
         layout.addLayout(button_layout)
 
     def load_directory(self, path: str):
-        """Load directory contents"""
         try:
             self.current_path = path
             self.path_label.setText(path)
@@ -390,7 +325,6 @@ class FileBrowserDialog(QDialog):
             self.status_label.setText(f"Error: {str(e)}")
 
     def get_file_icon(self, extension: str) -> str:
-        """Get emoji icon for file type"""
         icons = {
             "jpg": "🖼️",
             "jpeg": "🖼️",
@@ -416,7 +350,6 @@ class FileBrowserDialog(QDialog):
         return icons.get(extension, "📄")
 
     def on_file_selected(self, item: QListWidgetItem):
-        """Handle file selection"""
         file_path = item.data(Qt.UserRole)
         file_type = item.data(Qt.UserRole + 1)
 
@@ -434,7 +367,6 @@ class FileBrowserDialog(QDialog):
             self.copy_path_btn.setEnabled(False)
 
     def on_file_double_clicked(self, item: QListWidgetItem):
-        """Handle file double-click"""
         file_path = item.data(Qt.UserRole)
         file_type = item.data(Qt.UserRole + 1)
 
@@ -444,33 +376,27 @@ class FileBrowserDialog(QDialog):
             self.open_selected_file()
 
     def go_back(self):
-        """Go back to previous directory"""
 
         parent = self.get_parent_directory(self.current_path)
         if parent:
             self.load_directory(parent)
 
     def go_up(self):
-        """Go up one directory level"""
         parent = self.get_parent_directory(self.current_path)
         if parent:
             self.load_directory(parent)
 
     def go_home(self):
-        """Go to recordings home directory"""
         self.load_directory(self.recordings_path)
 
     def refresh(self):
-        """Refresh current directory"""
         self.load_directory(self.current_path)
 
     def get_parent_directory(self, path: str) -> str:
-        """Get parent directory path"""
         parent = os.path.dirname(path)
         return parent if parent != path else ""
 
     def filter_files(self):
-        """Filter files based on search text"""
         search_text = self.search_box.text().lower()
         for i in range(self.file_list.count()):
             item = self.file_list.item(i)
@@ -478,17 +404,14 @@ class FileBrowserDialog(QDialog):
             item.setHidden(not visible)
 
     def apply_filter(self, filter_type: str):
-        """Apply file type filter"""
 
         self.load_directory(self.current_path)
 
     def open_selected_file(self):
-        """Open selected file and close dialog"""
         if self.selected_file:
             self.accept()
 
     def open_external(self):
-        """Open file with external application"""
         if self.selected_file:
             try:
                 import subprocess
@@ -503,7 +426,6 @@ class FileBrowserDialog(QDialog):
                 QMessageBox.warning(self, "Error", f"Failed to open file: {str(e)}")
 
     def copy_path(self):
-        """Copy file path to clipboard"""
         if self.selected_file:
             from PyQt5.QtWidgets import QApplication
 
@@ -512,21 +434,10 @@ class FileBrowserDialog(QDialog):
             self.status_label.setText("Path copied to clipboard")
 
     def get_selected_file(self) -> Optional[str]:
-        """Get the selected file path"""
         return self.selected_file
 
 
 def show_file_browser(parent=None, initial_path: str = None) -> Optional[str]:
-    """
-    Show file browser dialog and return selected file path
-
-    Args:
-        parent: Parent widget
-        initial_path: Initial directory to show
-
-    Returns:
-        Selected file path or None if cancelled
-    """
     dialog = FileBrowserDialog(parent, initial_path)
     if dialog.exec_() == QDialog.Accepted:
         return dialog.get_selected_file()

@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-Hand Segmentation Demo Script
-
-Demonstrates the hand segmentation functionality with real video processing
-and showcases the different algorithms available.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-31
-"""
 
 import cv2
 import numpy as np
@@ -25,7 +16,6 @@ from hand_segmentation import (
 
 
 def create_demo_video_with_hands(output_path: str, frames: int = 60):
-    """Create a demo video with simulated hand movements."""
     print(f"Creating demo video: {output_path}")
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -75,7 +65,6 @@ def create_demo_video_with_hands(output_path: str, frames: int = 60):
 
 
 def demonstrate_method(method_name: str, video_path: str):
-    """Demonstrate a specific segmentation method."""
     print(f"\n{'='*60}")
     print(f"DEMONSTRATING: {method_name.upper()} METHOD")
     print(f"{'='*60}")
@@ -117,7 +106,6 @@ def demonstrate_method(method_name: str, video_path: str):
 
 
 def compare_methods():
-    """Compare all available segmentation methods."""
     print(f"\n{'='*80}")
     print("HAND SEGMENTATION METHODS COMPARISON")
     print(f"{'='*80}")
@@ -190,7 +178,6 @@ def compare_methods():
 
 
 def main():
-    """Main demo function."""
     print("🖐️  HAND SEGMENTATION DEMONSTRATION")
     print("=" * 80)
     print("This demo showcases the hand segmentation capabilities")

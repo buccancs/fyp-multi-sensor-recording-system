@@ -87,7 +87,6 @@ class PreviewPanel(QTabWidget):
         return webcam_widget
 
     def create_ir_camera_tab(self, device_name):
-        """Create IR camera tab with controls"""
         ir_widget = QWidget()
         ir_layout = QVBoxLayout(ir_widget)
 
@@ -122,14 +121,12 @@ class PreviewPanel(QTabWidget):
         return ir_widget
 
     def toggle_ir_preview(self):
-        """Toggle IR camera preview"""
         if not self.ir_preview_active:
             self.start_ir_preview()
         else:
             self.stop_ir_preview()
 
     def start_ir_preview(self):
-        """Start IR camera preview"""
         try:
             self.ir_preview_active = True
             self.ir_start_btn.setText("Stop IR Preview")
@@ -145,7 +142,6 @@ class PreviewPanel(QTabWidget):
             self.ir_status_label.setText(f"IR Camera: Error - {str(e)}")
 
     def stop_ir_preview(self):
-        """Stop IR camera preview"""
         try:
             self.ir_preview_active = False
             self.ir_start_btn.setText("Start IR Preview")
@@ -163,7 +159,6 @@ class PreviewPanel(QTabWidget):
             logger.error(f"Failed to stop IR preview: {e}")
 
     def update_ir_preview(self):
-        """Update IR camera preview with simulated thermal data"""
         try:
 
             pixmap = self.generate_thermal_preview()
@@ -175,7 +170,6 @@ class PreviewPanel(QTabWidget):
             self.ir_status_label.setText(f"IR Camera: Error - {str(e)}")
 
     def generate_thermal_preview(self):
-        """Generate simulated thermal preview image"""
         try:
             import time
 
@@ -233,7 +227,6 @@ class PreviewPanel(QTabWidget):
             return None
 
     def capture_ir_frame(self):
-        """Capture current IR frame"""
         try:
             if self.ir_preview_active:
 
@@ -270,7 +263,6 @@ class PreviewPanel(QTabWidget):
             self.webcam_label.setText("PC RGB Camera Feed")
 
     def clear_ir_feed(self):
-        """Clear IR camera feed"""
         if hasattr(self, "ir_camera_label") and self.ir_camera_label:
             self.stop_ir_preview()
 

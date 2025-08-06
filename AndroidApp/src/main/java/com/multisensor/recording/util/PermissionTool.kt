@@ -510,3 +510,4 @@ object PermissionTool {
         fun onPermanentlyDeniedWithoutSettings(deniedPermissions: List<String>)
     }
 }
+
