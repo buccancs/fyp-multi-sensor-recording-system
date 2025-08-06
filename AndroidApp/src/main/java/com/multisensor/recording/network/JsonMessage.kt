@@ -31,6 +31,8 @@ abstract class JsonMessage {
                     "file_info" -> FileInfoMessage.fromJson(jsonObject)
                     "file_chunk" -> FileChunkMessage.fromJson(jsonObject)
                     "file_end" -> FileEndMessage.fromJson(jsonObject)
+                    "authenticate" -> com.multisensor.recording.network.AuthenticateMessage.fromJson(jsonObject)
+                    "auth_response" -> com.multisensor.recording.network.AuthResponseMessage.fromJson(jsonObject)
                     else -> null
                 }
             } catch (e: JSONException) {

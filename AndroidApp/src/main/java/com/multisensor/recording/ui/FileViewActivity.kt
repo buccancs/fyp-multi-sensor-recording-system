@@ -402,13 +402,13 @@ class FileViewActivity : AppCompatActivity() {
         isRgbPreviewActive = true
         rgbPreviewBtn.text = "Stop"
         rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
-        
+
         rgbPreviewPlaceholder.visibility = View.GONE
         rgbPreviewImage.visibility = View.VISIBLE
         
 
         cameraPreviewHandler.post(rgbPreviewRunnable)
-        
+
         logger.info("RGB camera preview started")
         showMessage("RGB camera preview started")
     }
@@ -417,12 +417,12 @@ class FileViewActivity : AppCompatActivity() {
         isRgbPreviewActive = false
         rgbPreviewBtn.text = "Start"
         rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_green_dark)
-        
+
         rgbPreviewImage.visibility = View.GONE
         rgbPreviewPlaceholder.visibility = View.VISIBLE
-        
+
         cameraPreviewHandler.removeCallbacks(rgbPreviewRunnable)
-        
+
         logger.info("RGB camera preview stopped")
         showMessage("RGB camera preview stopped")
     }
@@ -431,13 +431,13 @@ class FileViewActivity : AppCompatActivity() {
         isIrPreviewActive = true
         irPreviewBtn.text = "Stop"
         irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
-        
+
         irPreviewPlaceholder.visibility = View.GONE
         irPreviewImage.visibility = View.VISIBLE
         
 
         cameraPreviewHandler.post(irPreviewRunnable)
-        
+
         logger.info("IR camera preview started")
         showMessage("IR camera preview started")
     }
@@ -446,12 +446,12 @@ class FileViewActivity : AppCompatActivity() {
         isIrPreviewActive = false
         irPreviewBtn.text = "Start"
         irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_orange_dark)
-        
+
         irPreviewImage.visibility = View.GONE
         irPreviewPlaceholder.visibility = View.VISIBLE
-        
+
         cameraPreviewHandler.removeCallbacks(irPreviewRunnable)
-        
+
         logger.info("IR camera preview stopped")
         showMessage("IR camera preview stopped")
     }
@@ -494,7 +494,7 @@ class FileViewActivity : AppCompatActivity() {
         for (i in 0..10) {
             val x = ((time + i * 30) % (width + 100)).toFloat() - 50
             val y = (height * 0.2f + i * height * 0.05f).toFloat()
-            
+
             paint.color = Color.rgb(
                 (100 + i * 15) % 255,
                 (150 + i * 10) % 255,
@@ -533,7 +533,7 @@ class FileViewActivity : AppCompatActivity() {
                 val centerX = width / 2.0
                 val centerY = height / 2.0
                 val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-                
+
                 val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
                 
 
@@ -542,7 +542,7 @@ class FileViewActivity : AppCompatActivity() {
                     intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
                     else -> Color.rgb(255, (intensity - 170) * 3, 0)
                 }
-                
+
                 paint.color = color
                 canvas.drawPoint(x.toFloat(), y.toFloat(), paint)
             }
@@ -575,7 +575,7 @@ class FileViewActivity : AppCompatActivity() {
 
         stopRgbPreview()
         stopIrPreview()
-        
+
         logger.info("FileViewActivity destroyed")
     }
 }

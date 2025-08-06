@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Test calibration implementation functionality.
 This simulates the missing test_calibration_implementation.py file mentioned in README.
@@ -16,7 +15,6 @@ import numpy as np
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
-
 
 def test_pattern_detection():
     """Test chessboard and circle grid detection algorithms."""
@@ -70,7 +68,6 @@ def test_pattern_detection():
     except Exception as e:
         print(f"✗ Pattern detection test failed: {e}")
         return False
-
 
 def test_single_camera_calibration():
     """Test single camera calibration with intrinsic parameter calculation."""
@@ -148,7 +145,6 @@ def test_single_camera_calibration():
         print(f"✗ Single camera calibration test failed: {e}")
         traceback.print_exc()
         return False
-
 
 def test_stereo_calibration():
     """Test stereo calibration for RGB-thermal camera alignment."""
@@ -253,7 +249,6 @@ def test_stereo_calibration():
         traceback.print_exc()
         return False
 
-
 def test_calibration_quality_assessment():
     """Test calibration quality metrics and coverage analysis."""
     print("Testing calibration quality assessment...")
@@ -327,7 +322,6 @@ def test_calibration_quality_assessment():
         traceback.print_exc()
         return False
 
-
 def test_data_persistence():
     """Test JSON-based save/load with metadata validation."""
     print("Testing calibration data persistence...")
@@ -385,7 +379,6 @@ def test_data_persistence():
         traceback.print_exc()
         return False
 
-
 def main():
     """Run all calibration implementation tests."""
     print("=" * 60)
@@ -425,7 +418,6 @@ def main():
     else:
         print("✗ Some calibration tests failed. Check the output above for details.")
         return False
-
 
 if __name__ == "__main__":
     success = main()

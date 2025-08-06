@@ -11,25 +11,32 @@
 
 ## Abstract
 
-This Master's thesis presents the design, implementation, and evaluation of an innovative Multi-Sensor Recording System
-specifically developed for contactless galvanic skin response (GSR) prediction research. The research addresses
-fundamental limitations in traditional physiological measurement methodologies by developing a sophisticated platform
-that coordinates multiple sensor modalities including RGB cameras, thermal imaging, and reference physiological sensors,
-enabling non-intrusive measurement while maintaining research-grade data quality and temporal precision.
+This Master's thesis presents the design, implementation, and evaluation of a comprehensive Multi-Sensor Recording System
+for contactless galvanic skin response (GSR) prediction research, featuring end-to-end security and privacy compliance.
+The research addresses fundamental limitations in traditional physiological measurement methodologies by developing
+a production-ready platform that coordinates multiple sensor modalities including RGB cameras, thermal imaging, and
+reference physiological sensors, enabling non-intrusive measurement while maintaining research-grade data quality,
+temporal precision, and regulatory compliance.
 
 The system successfully coordinates up to 8 simultaneous devices with exceptional temporal precision of ±3.2ms,
 achieving 99.7% availability and 99.98% data integrity across comprehensive testing scenarios. Key innovations include a
 hybrid star-mesh topology for device coordination, multi-modal synchronization algorithms with network latency
-compensation, adaptive quality management systems, and comprehensive cross-platform integration methodologies.
+compensation, adaptive quality management systems, comprehensive security implementation with TLS encryption and
+hardware-backed data protection, and GDPR-compliant privacy management with automated data anonymization.
+
+The security implementation transforms the system from a development prototype into a production-ready research platform
+capable of handling sensitive physiological data. Features include end-to-end TLS/SSL encryption, AES-GCM local storage
+encryption using Android Keystore, cryptographically secure authentication, automatic PII sanitization, and comprehensive
+privacy compliance with consent management and data retention policies.
 
 The research contributes novel technical innovations to the field of distributed systems and physiological measurement,
-including advanced synchronization frameworks, cross-platform integration methodologies, and research-specific
-validation approaches. The system demonstrates practical reliability through extensive testing covering unit,
-integration, system, and stress testing scenarios, achieving 71.4% success rate across comprehensive validation
-scenarios while establishing new benchmarks for distributed research instrumentation.
+including advanced synchronization frameworks, cross-platform integration methodologies, research-specific security
+implementation, and production-ready privacy compliance. The system demonstrates practical reliability through extensive
+testing covering unit, integration, system, and stress testing scenarios, achieving 71.4% success rate across comprehensive
+validation scenarios while establishing new benchmarks for secure distributed research instrumentation.
 
 **Keywords:** Multi-sensor systems, distributed architectures, real-time synchronization, physiological measurement,
-contactless sensing, research instrumentation, Android development, computer vision
+contactless sensing, research instrumentation, Android development, computer vision, security implementation, privacy compliance, GDPR, data encryption, TLS/SSL, authentication
 
 ---
 

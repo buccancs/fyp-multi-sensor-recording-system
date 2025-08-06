@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Test Shimmer sensor integration functionality.
 This simulates the missing test_shimmer_implementation.py file mentioned in README.
@@ -16,7 +15,6 @@ from pathlib import Path
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
-
 
 def test_shimmer_libraries_availability():
     """Test availability of Shimmer libraries with fallback support."""
@@ -64,7 +62,6 @@ def test_shimmer_libraries_availability():
     else:
         print("✗ No Shimmer libraries available")
         return False
-
 
 def test_device_discovery_simulation():
     """Test Bluetooth device discovery simulation."""
@@ -125,7 +122,6 @@ def test_device_discovery_simulation():
         print(f"✗ Device discovery test failed: {e}")
         traceback.print_exc()
         return False
-
 
 def test_data_streaming_simulation():
     """Test Shimmer data streaming simulation."""
@@ -269,7 +265,6 @@ def test_data_streaming_simulation():
         print(f"✗ Data streaming test failed: {e}")
         traceback.print_exc()
         return False
-
 
 def test_session_management():
     """Test session-based data organization and CSV export."""
@@ -415,7 +410,6 @@ def test_session_management():
         traceback.print_exc()
         return False
 
-
 def test_error_handling():
     """Test graceful error handling for missing libraries and failures."""
     print("Testing error handling...")
@@ -527,7 +521,6 @@ def test_error_handling():
         traceback.print_exc()
         return False
 
-
 def test_multi_library_compatibility():
     """Test compatibility across different Shimmer library implementations."""
     print("Testing multi-library compatibility...")
@@ -637,7 +630,6 @@ def test_multi_library_compatibility():
         traceback.print_exc()
         return False
 
-
 def main():
     """Run all Shimmer implementation tests."""
     print("=" * 60)
@@ -678,7 +670,6 @@ def main():
     else:
         print("✗ Some Shimmer tests failed. Check the output above for details.")
         return False
-
 
 if __name__ == "__main__":
     success = main()

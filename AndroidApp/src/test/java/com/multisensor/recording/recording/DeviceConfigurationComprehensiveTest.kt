@@ -38,34 +38,34 @@ import java.io.File
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
 class DeviceConfigurationComprehensiveTest {
-    
+
     private lateinit var mockContext: Context
     private lateinit var mockSessionManager: SessionManager
     private lateinit var mockLogger: Logger
     private lateinit var deviceConfiguration: DeviceConfiguration
-    
+
     @Before
     fun setup() {
         mockContext = mockk(relaxed = true)
         mockSessionManager = mockk(relaxed = true)
         mockLogger = mockk(relaxed = true)
-        
+
         deviceConfiguration = DeviceConfiguration(mockContext, mockLogger)
     }
-    
+
     @After
     fun tearDown() {
         clearAllMocks()
     }
-    
+
     @Test
     fun `device configuration initialization should succeed`() = runTest {
         assertNotNull("DeviceConfiguration should be created", deviceConfiguration)
         assertTrue("Device should be initializable", deviceConfiguration.initialize())
-        
+
         verify { mockLogger.info("Initializing device configuration...") }
     }
-    
+
     @Test
     fun `sensor channels should be configured correctly`() = runTest {
         val testChannels = listOf(
@@ -77,7 +77,7 @@ class DeviceConfigurationComprehensiveTest {
         )
         
         val result = deviceConfiguration.configureSensorChannels(testChannels)
-        
+
         assertTrue("Sensor channels should be configured successfully", result)
         assertEquals("All channels should be configured", testChannels.size, 
                     deviceConfiguration.getConfiguredChannels().size)
@@ -87,7 +87,7 @@ class DeviceConfigurationComprehensiveTest {
                       deviceConfiguration.isChannelConfigured(channel))
         }
     }
-    
+
     @Test
     fun `device status tracking should work correctly`() = runTest {
         assertEquals("Initial status should be IDLE", 
@@ -98,18 +98,18 @@ class DeviceConfigurationComprehensiveTest {
         assertEquals("Status should update to INITIALIZING", 
                     DeviceConfiguration.DeviceStatus.INITIALIZING,
                     deviceConfiguration.getDeviceStatus())
-        
+
         deviceConfiguration.setDeviceStatus(DeviceConfiguration.DeviceStatus.READY)
         assertEquals("Status should update to READY", 
                     DeviceConfiguration.DeviceStatus.READY,
                     deviceConfiguration.getDeviceStatus())
-        
+
         deviceConfiguration.setDeviceStatus(DeviceConfiguration.DeviceStatus.RECORDING)
         assertEquals("Status should update to RECORDING", 
                     DeviceConfiguration.DeviceStatus.RECORDING,
                     deviceConfiguration.getDeviceStatus())
     }
-    
+
     @Test
     fun `sampling rate configuration should validate inputs`() = runTest {
         val validRates = listOf(50, 100, 200, 500, 1000)
@@ -127,7 +127,7 @@ class DeviceConfigurationComprehensiveTest {
             assertFalse("Sampling rate $rate should be invalid", result)
         }
     }
-    
+
     @Test
     fun `device calibration integration should work`() = runTest {
         val mockCalibrationManager = mockk<CalibrationCaptureManager>(relaxed = true)
@@ -147,7 +147,7 @@ class DeviceConfigurationComprehensiveTest {
         assertTrue("Calibration data should contain camera matrix", 
                   calibrationData.containsKey("camera_matrix"))
     }
-    
+
     @Test
     fun `performance metrics should be tracked`() = runTest {
         deviceConfiguration.initialize()
@@ -155,13 +155,13 @@ class DeviceConfigurationComprehensiveTest {
         repeat(10) {
             deviceConfiguration.recordPerformanceMetric("sensor_read", 1.5 + it * 0.1)
         }
-        
+
         repeat(5) {
             deviceConfiguration.recordPerformanceMetric("data_process", 0.8 + it * 0.05)
         }
         
         val performanceMetrics = deviceConfiguration.getPerformanceMetrics()
-        
+
         assertNotNull("Performance metrics should be available", performanceMetrics)
         assertTrue("Should have sensor_read metrics", 
                   performanceMetrics.containsKey("sensor_read"))
@@ -173,7 +173,7 @@ class DeviceConfigurationComprehensiveTest {
         assertTrue("Average should be reasonable", 
                   sensorReadMetrics["average"] as Double > 1.0)
     }
-    
+
     @Test
     fun `error handling should work correctly`() = runTest {
         val errorConditions = listOf(
@@ -182,10 +182,10 @@ class DeviceConfigurationComprehensiveTest {
             "SAMPLING_RATE_UNSUPPORTED",
             "MEMORY_ALLOCATION_FAILED"
         )
-        
+
         errorConditions.forEach { errorCode ->
             val result = deviceConfiguration.handleError(errorCode, "Test error: $errorCode")
-            
+
             assertTrue("Error $errorCode should be handled", result)
             verify { mockLogger.error(match { it.contains(errorCode) }) }
         }
@@ -194,14 +194,14 @@ class DeviceConfigurationComprehensiveTest {
         assertEquals("Should track all error conditions", 
                     errorConditions.size, errorHistory.size)
     }
-    
+
     @Test
     fun `device synchronization should work`() = runTest {
         val masterTimestamp = System.currentTimeMillis()
         val deviceId = "test_device_001"
         
         val syncResult = deviceConfiguration.synchronizeWithMaster(masterTimestamp, deviceId)
-        
+
         assertTrue("Synchronization should succeed", syncResult)
         
         val syncedTimestamp = deviceConfiguration.getSynchronizedTimestamp()
@@ -211,7 +211,7 @@ class DeviceConfigurationComprehensiveTest {
         val clockDrift = deviceConfiguration.calculateClockDrift()
         assertTrue("Clock drift should be calculated", clockDrift >= 0)
     }
-    
+
     @Test
     fun `configuration persistence should work`() = runTest {
         val testConfig = mapOf(
@@ -234,7 +234,7 @@ class DeviceConfigurationComprehensiveTest {
         assertEquals("Sensor channels should match", 
                     testConfig["sensor_channels"], loadedConfig["sensor_channels"])
     }
-    
+
     @Test
     fun `device health monitoring should work`() = runTest {
         deviceConfiguration.initialize()
@@ -245,7 +245,7 @@ class DeviceConfigurationComprehensiveTest {
         deviceConfiguration.updateHealthMetric("temperature", 42.5)
         
         val healthStatus = deviceConfiguration.getHealthStatus()
-        
+
         assertNotNull("Health status should be available", healthStatus)
         assertTrue("Should include CPU usage", healthStatus.containsKey("cpu_usage"))
         assertTrue("Should include memory usage", healthStatus.containsKey("memory_usage"))
@@ -256,11 +256,11 @@ class DeviceConfigurationComprehensiveTest {
         assertTrue("Overall health should be between 0 and 100", 
                   overallHealth in 0.0..100.0)
     }
-    
+
     @Test
     fun `concurrent operations should be handled safely`() = runTest {
         val threads = mutableListOf<Thread>()
-        
+
         repeat(5) { threadId ->
             val thread = Thread {
                 repeat(10) { iteration ->
@@ -268,7 +268,7 @@ class DeviceConfigurationComprehensiveTest {
                         "thread_${threadId}_metric", 
                         (threadId * 10 + iteration).toDouble()
                     )
-                    
+
                     deviceConfiguration.recordPerformanceMetric(
                         "thread_${threadId}_operation", 
                         (iteration * 0.1)
@@ -289,7 +289,7 @@ class DeviceConfigurationComprehensiveTest {
         assertTrue("Should have performance metrics from all threads", 
                   performanceMetrics.size >= 5)
     }
-    
+
     @Test
     fun `resource cleanup should work correctly`() = runTest {
         deviceConfiguration.initialize()
@@ -313,7 +313,7 @@ class DeviceConfigurationComprehensiveTest {
             assertFalse("Resource $resourceId should be released", 
                        deviceConfiguration.isResourceAllocated(resourceId))
         }
-        
+
         verify { mockLogger.info("Device configuration cleanup completed") }
     }
 }
