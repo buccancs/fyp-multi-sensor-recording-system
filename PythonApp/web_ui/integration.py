@@ -209,6 +209,7 @@ def stop_web_dashboard():
     global _web_integration_instance
     if _web_integration_instance:
         _web_integration_instance.stop_web_dashboard()
+        _web_integration_instance = None
 
 
 if __name__ == "__main__":
