@@ -402,7 +402,7 @@ flowchart TD
 | Component                  | Technology Stack                 | Primary Function                    | Performance Requirements           | Integration Method      |
 |----------------------------|----------------------------------|-------------------------------------|------------------------------------|-------------------------|
 | **PC Controller**          | Python 3.9+, FastAPI, SQLAlchemy | Central coordination and management | ≥8GB RAM, Quad-core CPU            | REST API + WebSocket    |
-| **Android Devices**        | Android 11+, Kotlin, Camera2 API | Video/thermal data acquisition      | ≥6GB RAM, 128GB storage            | WebSocket communication |
+| **Android Devices**        | Android 11+, Kotlin, Jetpack Compose, Camera2 API | Video/thermal data acquisition      | ≥6GB RAM, 128GB storage            | WebSocket communication |
 | **Shimmer3 GSR+**          | Bluetooth LE, proprietary SDK    | Reference physiological measurement | 128Hz sampling, ±0.1µS resolution  | Bluetooth LE protocol   |
 | **Topdon TC001**           | USB Video Class, thermal SDK     | Thermal imaging capture             | 256x192 resolution, 9Hz frame rate | USB integration         |
 | **USB Webcams**            | DirectShow/V4L2, OpenCV          | RGB video capture                   | 1920x1080@30fps, auto-focus        | OpenCV VideoCapture     |
@@ -438,14 +438,15 @@ The Android application follows Clean Architecture principles with clear separat
 data layers. This design ensures maintainability, testability, and flexibility for future enhancements while providing
 the sophisticated coordination capabilities required for research-grade multi-sensor data collection.
 
-**Figure 4.4: Android Application Architectural Layers**
+**Figure 4.4: Android Application Architectural Layers with Jetpack Compose**
 
 ```mermaid
 graph TD
-    subgraph "Presentation Layer"
-        UI[User Interface<br/>Activities & Fragments]
+    subgraph "Presentation Layer - Jetpack Compose"
+        UI[Compose UI<br/>Declarative Components]
         VM[ViewModels<br/>UI State Management]
-        BIND[View Binding<br/>UI Component Access]
+        NAV[Navigation Compose<br/>Screen Coordination]
+        THEME[Material 3 Theme<br/>Design System]
     end
     
     subgraph "Domain Layer"
@@ -465,6 +466,8 @@ graph TD
     VM --> UC
     UC --> REPO
     REPO --> ENTITY
+    NAV --> UI
+    THEME --> UI
     
     IMPL --> API
     IMPL --> LOCAL
@@ -477,11 +480,182 @@ graph TD
 
 **Clean MVVM Architecture with Specialized Controllers**: The Android application follows a refactored MVVM architecture with `MainViewModelRefactored` (451 lines) coordinating four specialized components: `RecordingSessionController` (218 lines), `DeviceConnectionManager` (389 lines), `FileTransferManager` (448 lines), and `CalibrationManager` (441 lines). This represents a 78% reduction from the original monolithic `MainViewModel` (2035 lines), achieving clean separation of concerns and single responsibility principle adherence.
 
-**Fragment-Based UI Architecture**: Modern Android architecture with RecordingFragment, DevicesFragment, and
-CalibrationFragment for comprehensive operational control, implementing Material Design 3 principles with accessibility
-compliance and responsive layout management.
+**Jetpack Compose Declarative UI Framework**: Modern declarative UI architecture built with Jetpack Compose (BOM 2024.12.01) and Material 3 design system, featuring comprehensive screen implementations with sophisticated state management:
 
-**Multi-Sensor Coordination Engine**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors
+- **RecordingScreen**: Recording controls with start/stop functionality, real-time device status indicators (Camera, Thermal, GSR, PC), camera preview integration, and session duration tracking with Material 3 Card components
+- **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features comprehensive status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
+- **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
+- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and comprehensive export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualization
+- **OnboardingActivity**: Modern multi-page onboarding flow with Material 3 design, featuring welcome screens, feature showcase, comprehensive permission management, and setup completion guide with horizontal pager navigation
+- **MainNavigation**: Compose Navigation implementation with bottom navigation bar, proper state preservation, and deep link support
+
+**Material 3 Design System Integration**: Comprehensive theme system with dynamic color support, custom color schemes (Purple80/Purple40 primary colors), typography definitions, and accessibility compliance. The theme automatically adapts to system dark/light mode preferences and supports Android 12+ dynamic theming. All UI components follow Material 3 design principles with proper elevation, spacing, and interaction patterns.
+
+### 4.2.2 Enhanced User Interface Implementation and User Experience
+
+The Android application implements a sophisticated user interface architecture that seamlessly integrates research-grade functionality with modern mobile design principles. The enhanced UI implementation represents a comprehensive approach to mobile research applications, prioritizing both usability and scientific rigor.
+
+#### 4.2.2.1 Advanced Screen Implementation Architecture
+
+**Device Management Interface (DevicesScreen):**
+
+The DevicesScreen implements comprehensive device management capabilities with real-time status monitoring and interactive control functionality:
+
+```kotlin
+@Composable
+fun DevicesScreen(viewModel: DevicesViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+    
+    LazyColumn {
+        item { DeviceOverviewCard(uiState, onRefresh = { viewModel.refreshAllDevices() }) }
+        
+        // Individual device cards with full functionality
+        item { 
+            DeviceCard(
+                title = "PC Connection",
+                icon = Icons.Filled.Computer,
+                isConnected = uiState.isPcConnected,
+                onConnect = { viewModel.connectPc() },
+                onTest = { viewModel.testPcConnection() }
+            ) 
+        }
+        // Additional device cards for Shimmer, Thermal, Network
+    }
+}
+```
+
+Key Features:
+- **Real-time Status Monitoring**: Live updates of device connection states, battery levels, signal strength, and operational parameters
+- **Interactive Connection Management**: One-touch connection/disconnection controls with progress indicators and status feedback
+- **Comprehensive Device Testing**: Built-in diagnostic functions for validating device functionality and connection quality
+- **Detailed Information Display**: Complete device specifications, configuration parameters, and connection metadata
+
+**Calibration Workflow Interface (CalibrationScreen):**
+
+The CalibrationScreen provides a sophisticated calibration management system with automated progress tracking and comprehensive validation capabilities:
+
+```kotlin
+@Composable
+fun CalibrationScreen(viewModel: CalibrationViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+    
+    LazyColumn {
+        item { CalibrationOverviewCard(uiState) }
+        
+        // Individual calibration components
+        item {
+            CalibrationItemCard(
+                title = "Camera Calibration",
+                isCalibrated = uiState.isCameraCalibrated,
+                progress = uiState.cameraCalibrationProgress,
+                onStart = { viewModel.startCameraCalibration() }
+            )
+        }
+    }
+}
+```
+
+Advanced Calibration Features:
+- **Multi-Device Calibration Support**: Independent calibration workflows for cameras, thermal sensors, and Shimmer devices
+- **Real-time Progress Tracking**: Linear progress indicators with percentage completion and estimated time remaining
+- **System Validation Integration**: Comprehensive validation with error reporting and quality assessment
+- **Calibration Data Management**: Save, load, and export functionality for calibration parameters and results
+
+**Advanced File Management System (FilesScreen):**
+
+The FilesScreen implements a comprehensive file management interface designed specifically for research data organization and analysis:
+
+```kotlin
+@Composable
+fun FilesScreen(viewModel: FileViewViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+    
+    Column {
+        FilesOverviewCard(
+            sessionCount = uiState.sessions.size,
+            totalStorage = uiState.totalStorageUsed
+        )
+        
+        SearchTextField(
+            value = uiState.searchQuery,
+            onValueChange = { viewModel.onSearchQueryChanged(it) }
+        )
+        
+        LazyColumn {
+            items(uiState.filteredSessions) { session ->
+                SessionCard(
+                    session = session,
+                    isSelected = uiState.selectedSession?.sessionId == session.sessionId,
+                    onClick = { viewModel.selectSession(session) }
+                )
+            }
+        }
+    }
+}
+```
+
+Research-Oriented File Management Features:
+- **Session-Based Organization**: Hierarchical organization by recording sessions with metadata preservation
+- **Advanced Search Functionality**: Real-time search across session IDs, device types, and file metadata
+- **Storage Monitoring**: Visual storage usage indicators with warning thresholds and cleanup recommendations
+- **Comprehensive Export Options**: Multiple export formats with metadata preservation for research analysis
+- **File Type Classification**: Automatic categorization of video, thermal, GSR, and metadata files
+
+#### 4.2.2.2 Modern Onboarding and User Orientation
+
+**Comprehensive Onboarding Flow (OnboardingActivity):**
+
+The OnboardingActivity implements a modern multi-page onboarding experience that educates users about system capabilities while managing complex permission requirements:
+
+```kotlin
+@Composable
+fun OnboardingFlow(onComplete: () -> Unit, onRequestPermissions: (List<String>) -> Unit) {
+    val pagerState = rememberPagerState(pageCount = { 4 })
+    
+    HorizontalPager(state = pagerState) { page ->
+        when (page) {
+            0 -> WelcomePage()
+            1 -> FeaturePage()
+            2 -> PermissionsPage(onRequestPermissions = onRequestPermissions)
+            3 -> SetupPage()
+        }
+    }
+}
+```
+
+Onboarding Experience Components:
+- **Welcome and Feature Showcase**: Interactive introduction to multi-sensor recording capabilities with visual demonstrations
+- **Permission Management**: Comprehensive permission requests with detailed explanations for research context
+- **Setup Guidance**: Step-by-step configuration assistance with validation and troubleshooting support
+- **Progress Tracking**: Visual progress indicators and navigation controls for seamless user experience
+
+#### 4.2.2.3 Advanced State Management and Performance Optimization
+
+The UI implementation leverages sophisticated state management patterns that ensure optimal performance during resource-intensive recording operations:
+
+**Efficient State Collection and Recomposition:**
+
+```kotlin
+@Composable
+fun RecordingScreen(viewModel: MainViewModelRefactored = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    // Optimized recomposition with stable composition
+    remember(uiState.isRecording) {
+        // Update only recording-specific UI components
+    }
+    
+    remember(uiState.deviceStates) {
+        // Update only device status indicators
+    }
+}
+```
+
+Performance Optimization Features:
+- **Selective Recomposition**: Minimal UI updates through strategic state partitioning and stable composition
+- **Memory Efficiency**: Optimized component lifecycle management with automatic resource cleanup
+- **Background Thread Integration**: Seamless integration with background sensor data processing without UI blocking
+- **Accessibility Compliance**: Built-in accessibility support with screen reader compatibility and dynamic text sizing**Multi-Sensor Coordination Engine**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors
 with real-time processing, providing coordinated data collection with precise temporal synchronization across all sensor
 modalities.
 
@@ -618,6 +792,56 @@ class PowerOptimizationManager @Inject constructor(
   overheating during intensive recording sessions
 - **Storage Optimization**: Intelligent data compression and local storage management with automatic cleanup and
   archival procedures
+
+### 4.2.3.1 Jetpack Compose Performance Optimization
+
+The migration to Jetpack Compose brings significant performance improvements and architectural advantages that directly benefit the multi-sensor recording application's real-time requirements and resource efficiency.
+
+**Compose Performance Architecture:**
+
+```kotlin
+@Composable
+fun RecordingScreen(
+    viewModel: MainViewModelRefactored = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    // Efficient recomposition with state-driven UI
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Components recompose only when relevant state changes
+        RecordingControlsCard(
+            isRecording = uiState.isRecording,
+            sessionDuration = uiState.sessionDuration,
+            onStartRecording = { viewModel.startRecording() },
+            onStopRecording = { viewModel.stopRecording() }
+        )
+        
+        DeviceStatusCard() // Stable components avoid unnecessary recomposition
+        CameraPreviewCard()
+    }
+}
+```
+
+**Performance Benefits Achieved:**
+
+- **Efficient Recomposition**: Compose's smart recomposition system ensures only affected UI components update when state changes, reducing CPU overhead during real-time sensor data updates
+- **Declarative State Management**: Direct integration with `StateFlow` and `LiveData` eliminates complex UI update coordination, improving responsiveness during high-frequency sensor data processing
+- **Memory Efficiency**: Elimination of View inflation and XML parsing reduces memory footprint, particularly beneficial during intensive multi-sensor recording sessions
+- **Reduced Thread Switching**: Compose's integration with Kotlin Coroutines minimizes context switching between UI and background threads during sensor data visualization
+- **Material 3 Optimization**: Built-in performance optimizations in Material 3 components, including efficient ripple effects and dynamic color calculations
+
+**Architectural Advantages for Research Applications:**
+
+- **Type Safety**: Compile-time verification of UI component properties reduces runtime errors during critical recording sessions
+- **Hot Reload**: Development efficiency improvements enable rapid iteration on research UI requirements
+- **Accessibility Integration**: Built-in accessibility support ensures compliance with research ethics requirements for inclusive study participation
+- **Testing Integration**: Compose testing framework enables comprehensive UI validation for research protocol compliance
 
 ### 4.2.4 Camera Recording Implementation
 
@@ -2837,14 +3061,19 @@ def _check_for_secrets(self, line: str, file_path: Path) -> bool:
 
 ### Android Technology Choices
 
-**Kotlin with Camera2 API**: Selected for professional-grade camera control with simultaneous video and RAW capture
-capability. The Camera2 API provides the low-level access required for precise timing and quality control.
+**Kotlin with Jetpack Compose and Camera2 API**: Modern Android development stack combining Kotlin's type safety with Jetpack Compose's declarative UI framework and Camera2 API for professional-grade camera control. The Compose BOM (2024.12.01) ensures consistent versioning across all Compose libraries, while Material 3 provides modern design system implementation with dynamic theming support.
+
+**Jetpack Compose Architecture**: Declarative UI toolkit that revolutionizes Android UI development by eliminating the need for XML layouts and complex View hierarchies. The implementation includes:
+- **Compose BOM 2024.12.01**: Ensures compatibility across all Compose libraries
+- **Material 3 Components**: Latest Material Design implementation with dynamic colors
+- **Navigation Compose**: Type-safe navigation with state preservation and deep linking
+- **Hilt Navigation Compose**: Seamless dependency injection integration
 
 **Hilt Dependency Injection**: Chosen for testability and modular architecture. Enables comprehensive unit testing and
-flexible component replacement.
+flexible component replacement, now enhanced with Navigation Compose integration for ViewModel scoping.
 
 **Coroutines for Concurrency**: Kotlin coroutines provide structured concurrency that simplifies complex asynchronous
-operations while maintaining readable code.
+operations while maintaining readable code, optimized for Compose's recomposition system.
 
 ### Python Technology Choices
 

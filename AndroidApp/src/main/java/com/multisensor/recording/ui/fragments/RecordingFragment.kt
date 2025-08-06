@@ -186,30 +186,26 @@ Try restarting the app or checking permissions."""
     }
 
     private fun updateSensorStatusIndicators() {
-
-        binding.apply {
-
-            val cameraConnected = rgbCameraPreview.visibility == View.VISIBLE
-            updateSensorStatus(
-                cameraStatusIcon, cameraStatusText,
-                cameraConnected, "Camera", "Connected", "Disconnected"
-            )
-
-            updateSensorStatus(
-                thermalStatusIcon, thermalStatusText,
-                false, "Thermal", "Connected", "Disconnected"
-            )
-
-            updateSensorStatus(
-                gsrStatusIcon, gsrStatusText,
-                false, "GSR", "Connected", "Disconnected"
-            )
-
-            updateSensorStatus(
-                pcStatusIcon, pcStatusText,
-                false, "PC", "Connected", "Disconnected"
-            )
-        }
+        // TODO: Re-implement with Compose UI components after migration
+        // binding.apply {
+        //     val cameraConnected = rgbCameraPreview.visibility == View.VISIBLE
+        //     updateSensorStatus(
+        //         cameraStatusIcon, cameraStatusText,
+        //         cameraConnected, "Camera", "Connected", "Disconnected"
+        //     )
+        //     updateSensorStatus(
+        //         thermalStatusIcon, thermalStatusText,
+        //         false, "Thermal", "Connected", "Disconnected"
+        //     )
+        //     updateSensorStatus(
+        //         gsrStatusIcon, gsrStatusText,
+        //         false, "GSR", "Connected", "Disconnected"
+        //     )
+        //     updateSensorStatus(
+        //         pcStatusIcon, pcStatusText,
+        //         false, "PC", "Connected", "Disconnected"
+        //     )
+        // }
     }
 
     private fun updateSensorStatus(

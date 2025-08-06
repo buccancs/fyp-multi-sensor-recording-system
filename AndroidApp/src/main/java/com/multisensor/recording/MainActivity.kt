@@ -5,9 +5,14 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +28,8 @@ import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModelRefactored
 import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
+import com.multisensor.recording.ui.compose.navigation.MainComposeNavigation
+import com.multisensor.recording.ui.theme.MultiSensorTheme
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -45,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
+        // Check if onboarding should be shown
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
@@ -53,6 +61,46 @@ class MainActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
 
+        // Check if user wants to use the new Compose UI
+        val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true) // Default to true for testing
+
+        if (useComposeUI) {
+            initializeComposeUI()
+        } else {
+            initializeFragmentUI()
+        }
+    }
+
+    private fun initializeComposeUI() {
+        try {
+            viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
+            
+            setContent {
+                MultiSensorTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        MainComposeNavigation()
+                    }
+                }
+            }
+
+            logger.info("MainActivity initialized with Compose UI")
+
+        } catch (e: SecurityException) {
+            logger.error("Permission error during MainActivity Compose initialization: ${e.message}", e)
+            showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state during MainActivity Compose initialization: ${e.message}", e)
+            showErrorDialog("State Error", "Failed to initialize application state: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error during MainActivity Compose initialization: ${e.message}", e)
+            showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
+        }
+    }
+
+    private fun initializeFragmentUI() {
         binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -172,9 +220,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        // Only handle fragment navigation if using fragment UI
+        val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true)
+        return if (!useComposeUI) {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        } else {
+            super.onSupportNavigateUp()
+        }
     }
 
     private fun showErrorDialog(title: String, message: String) {

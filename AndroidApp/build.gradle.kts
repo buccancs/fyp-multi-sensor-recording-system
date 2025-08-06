@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20"
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
@@ -110,6 +111,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 
     testOptions {
@@ -154,6 +156,14 @@ android {
 
 dependencies {
 
+    // Compose BOM
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose.ui)
+    
+    // Debug tooling for Compose
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
     implementation(libs.bundles.core.ui)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.material)
@@ -179,7 +189,7 @@ dependencies {
     
     // Security dependencies - Updated from alpha to stable versions
     // Addresses Low Priority recommendation: "Evaluate alpha/beta dependency risk"
-    implementation("androidx.security:security-crypto:1.0.0")  // Downgraded from 1.1.0-alpha06 to stable
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")  // Restored higher version for MasterKey support
     // Removed security-identity-credential as it's still alpha and not critical for core functionality
 
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
@@ -195,6 +205,8 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
     kspTest(libs.hilt.compiler)
 
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.bundles.enhanced.integration.testing)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil("androidx.test:orchestrator:1.5.0")
