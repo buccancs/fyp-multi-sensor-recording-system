@@ -1,0 +1,196 @@
+{
+  "timestamp": "2025-08-06T02:09:13.131145",
+  "scan_duration_seconds": 1.842813,
+  "total_issues": 18,
+  "critical_issues": 4,
+  "high_issues": 11,
+  "medium_issues": 3,
+  "low_issues": 0,
+  "issues": [
+    {
+      "severity": "critical",
+      "category": "credentials",
+      "title": "Potential base64 encoded secret",
+      "description": "Potential hardcoded credential found: Potential base64 encoded secret",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/evaluation_suite/foundation/android_tests.py",
+      "line_number": 726,
+      "recommendation": "Move secrets to environment variables or secure configuration",
+      "cve_id": null
+    },
+    {
+      "severity": "critical",
+      "category": "credentials",
+      "title": "Potential base64 encoded secret",
+      "description": "Potential hardcoded credential found: Potential base64 encoded secret",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/scripts/tools/validation/phase1_validation.py",
+      "line_number": 168,
+      "recommendation": "Move secrets to environment variables or secure configuration",
+      "cve_id": null
+    },
+    {
+      "severity": "critical",
+      "category": "credentials",
+      "title": "Potential base64 encoded secret",
+      "description": "Potential hardcoded credential found: Potential base64 encoded secret",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/scripts/tools/validation/phase1_validation.py",
+      "line_number": 365,
+      "recommendation": "Move secrets to environment variables or secure configuration",
+      "cve_id": null
+    },
+    {
+      "severity": "critical",
+      "category": "credentials",
+      "title": "Potential base64 encoded secret",
+      "description": "Potential hardcoded credential found: Potential base64 encoded secret",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/scripts/tools/validation/enhance_logging.py",
+      "line_number": 130,
+      "recommendation": "Move secrets to environment variables or secure configuration",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "data_storage",
+      "title": "Insecure data storage",
+      "description": "Insecure storage pattern: External storage usage",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt",
+      "line_number": 251,
+      "recommendation": "Use private storage modes and encrypt sensitive data",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/evaluation_results/latest_execution.json",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/security_reports/security_report_20250806_020050.json",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/security_reports/security_report_20250806_015842.json",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/security_reports/security_report_20250806_015549.json",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/security_reports/security_report_20250806_020258.json",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/res/xml/preferences.xml",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/detekt.yml",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/styles/Google/WordList.yml",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/styles/Microsoft/Terms.yml",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "configuration",
+      "title": "Potential credentials in config",
+      "description": "Configuration file may contain hardcoded credentials",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/styles/Microsoft/Wordiness.yml",
+      "line_number": null,
+      "recommendation": "Use environment variables or secure configuration management",
+      "cve_id": null
+    },
+    {
+      "severity": "high",
+      "category": "network_security",
+      "title": "Encryption disabled",
+      "description": "Network encryption is disabled in configuration",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/protocol/config.json",
+      "line_number": null,
+      "recommendation": "Enable encryption for network communications",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "network_security",
+      "title": "Authentication disabled",
+      "description": "Network authentication is disabled",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/protocol/config.json",
+      "line_number": null,
+      "recommendation": "Enable authentication for network connections",
+      "cve_id": null
+    },
+    {
+      "severity": "medium",
+      "category": "android_manifest",
+      "title": "Android manifest issue: Exported component",
+      "description": "Potentially insecure manifest setting: Exported component",
+      "file_path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/AndroidManifest.xml",
+      "line_number": null,
+      "recommendation": "Review and secure manifest configuration",
+      "cve_id": null
+    }
+  ],
+  "scanned_files": 486,
+  "recommendations": [
+    "Implement secure credential management using environment variables or secret management systems",
+    "Enable HTTPS/TLS encryption for all network communications and implement certificate pinning"
+  ]
+}

@@ -113,6 +113,12 @@
     "authentication_required": false,
     "allowed_devices": [],
     "device_whitelist_enabled": false,
-    "secure_transfer": false
+    "secure_transfer": false,
+    "_comments": {
+      "encryption_enabled": "Set to true for production deployments with sensitive data",
+      "authentication_required": "Enable for multi-user or shared network environments",
+      "device_whitelist_enabled": "Recommended for production to limit device access",
+      "security_notes": "Current settings optimized for research lab environments with controlled network access"
+    }
   }
 }
