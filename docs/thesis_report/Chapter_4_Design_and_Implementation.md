@@ -41,7 +41,7 @@
         - 4.9.1. [Exception Handling Strategy and Implementation](#491-exception-handling-strategy-and-implementation)
         - 4.9.2. [Logging Framework Integration and Observability](#492-logging-framework-integration-and-observability)
         - 4.9.3. [System Reliability and Maintainability Impact](#493-system-reliability-and-maintainability-impact)
-        - 4.9.4. [Error Recovery and Fault Tolerance Mechanisms](#494-error-recovery-and-fault-tolerance-mechanisms)
+        - 4.9.4. [Multi-Layer Exception Handling Architecture](#494-multi-layer-exception-handling-architecture)
 ---
 
 This comprehensive chapter presents the detailed design and implementation of the Multi-Sensor Recording System,
