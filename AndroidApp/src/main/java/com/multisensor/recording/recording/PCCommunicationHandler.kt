@@ -511,27 +511,23 @@ class PCCommunicationHandler(
                 return false
             }
             
-
             val decoded = android.util.Base64.decode(token, android.util.Base64.URL_SAFE or android.util.Base64.NO_WRAP)
             if (decoded.size < 24) {
                 logger.warning("Authentication token insufficient entropy")
                 return false
             }
             
-
             val configuredToken = getConfiguredAuthToken()
             if (configuredToken != null) {
                 return token == configuredToken
             }
             
-
             true
         } catch (e: Exception) {
             logger.error("Token validation failed", e)
             false
         }
     }
-    
     
     private fun getConfiguredAuthToken(): String? {
 

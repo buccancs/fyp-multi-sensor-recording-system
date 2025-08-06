@@ -188,48 +188,6 @@ from PythonApp.webcam.dual_webcam_capture import (
 )
 from PythonApp.webcam.webcam_capture import WebcamCapture, test_webcam_access
 
-"""
-Multi-Sensor Recording System - Enhanced Complete Test Suite
-
-This script orchestrates comprehensive recording session tests with extended capabilities
-as requested in the problem statement:
-
-"create a test, when booth the pc and android app is started and we start a
-recording session if a phone is connected to the pc/ide, what we start from
-the computer. use the available sensors and simulate the rest on the correct
-port, just like in real life. and test the communication, networking, file
-saving, post processing, button reaction and any freezing or crashing. also
-check the logs whether it logged correctly everything"
-
-Enhanced Test Coverage:
-1. ✅ PC and Android app coordination with multiple device scenarios
-2. ✅ Phone connected to PC/IDE simulation with connection recovery
-3. ✅ Recording session started from computer with various configurations
-4. ✅ Available sensors used, rest simulated on correct ports with realistic data
-5. ✅ Communication and networking testing with error conditions and recovery
-6. ✅ File saving and post processing validation with data integrity checks
-7. ✅ Button reaction and UI responsiveness testing with stress scenarios
-8. ✅ Freezing/crashing detection and error handling with comprehensive recovery
-9. ✅ Comprehensive logging verification with log analysis and validation
-10. ✅ Extended stress testing with memory and performance monitoring
-11. ✅ Network latency and dropout simulation for real-world conditions
-12. ✅ Concurrent multi-user session testing for scalability validation
-13. ✅ Data corruption and recovery testing for reliability assurance
-
-Extended Features:
-- Stress testing capabilities for high-load scenarios
-- Network simulation with configurable latency and packet loss
-- Memory and CPU performance monitoring during extended sessions
-- Automated log analysis with anomaly detection
-- Multi-session concurrent testing for scalability validation
-- Data integrity verification with checksum validation
-- Error injection testing for robustness validation
-- Performance regression detection and reporting
-
-Author: Multi-Sensor Recording System
-Date: 2025-01-16
-Version: 2.0 - Enhanced Testing Capabilities
-"""
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("INFO")
@@ -237,7 +195,6 @@ logger = get_logger(__name__)
 
 
 class TestSuiteRunner:
-    """Complete test suite runner for the recording system"""
 
     def __init__(self, output_dir: str = None):
         self.output_dir = Path(output_dir) if output_dir else Path("test_results")
@@ -319,7 +276,6 @@ class TestSuiteRunner:
         )
 
     async def run_single_test(self, test_info: Dict) -> Dict[str, Any]:
-        """Run a single test script and capture results"""
         test_name = test_info["name"]
         script_name = test_info["script"]
         script_path = Path(__file__).parent / script_name
@@ -393,7 +349,6 @@ class TestSuiteRunner:
         return result
 
     def analyze_requirements_coverage(self) -> Dict[str, Any]:
-        """Analyze how well the tests cover the original requirements"""
         requirements = {
             "pc_android_coordination": {
                 "description": "PC and Android app coordination with multiple device scenarios",
@@ -596,7 +551,6 @@ class TestSuiteRunner:
         }
 
     def generate_summary(self) -> Dict[str, Any]:
-        """Generate comprehensive test summary"""
         success_rate = self.results["passed_tests"] / self.results["total_tests"] * 100
         categories = {}
         for test_result in self.results["test_results"]:
@@ -629,7 +583,6 @@ class TestSuiteRunner:
         }
 
     async def run_complete_test_suite(self) -> Dict[str, Any]:
-        """Run the complete test suite"""
         self.results["suite_start_time"] = datetime.now().isoformat()
         suite_start = time.time()
         logger.info("=" * 80)
@@ -672,7 +625,6 @@ class TestSuiteRunner:
         return self.results
 
     def print_final_summary(self):
-        """Print comprehensive final summary"""
         print("\n" + "=" * 80)
         print("📊 MULTI-SENSOR RECORDING SYSTEM - FINAL TEST REPORT")
         print("=" * 80)
@@ -767,7 +719,6 @@ class TestSuiteRunner:
 
 
 async def main():
-    """Main test suite runner"""
     print("🚀 Starting Multi-Sensor Recording System Test Suite...")
     runner = TestSuiteRunner()
     results = await runner.run_complete_test_suite()
@@ -778,10 +729,6 @@ if __name__ == "__main__":
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
 
-"""
-Enhanced test runner for the multi-sensor recording system.
-Coordinates comprehensive testing across all components.
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 try:
     from tests.test_calibration_comprehensive import run_calibration_tests
@@ -812,7 +759,6 @@ except ImportError:
 
 
 class EnhancedTestRunner:
-    """Enhanced test runner with comprehensive reporting and analysis."""
 
     def __init__(self):
         self.results = {}
@@ -820,7 +766,6 @@ class EnhancedTestRunner:
         self.end_time = None
 
     def run_all_tests(self, include_performance=True, include_stress=True):
-        """Run all available test suites."""
         print("=" * 100)
         print("ENHANCED MULTI-SENSOR RECORDING SYSTEM TEST SUITE")
         print("=" * 100)
@@ -843,7 +788,6 @@ class EnhancedTestRunner:
         return self._overall_success()
 
     def _check_component_availability(self):
-        """Check availability of system components."""
         print("Component Availability Check:")
         print("-" * 40)
         components = {
@@ -858,7 +802,6 @@ class EnhancedTestRunner:
         print()
 
     def _validate_environment(self):
-        """Validate test environment and dependencies."""
         print("Environment Validation:")
         print("-" * 40)
         python_version = sys.version_info
@@ -901,7 +844,6 @@ class EnhancedTestRunner:
         print()
 
     def _run_unit_tests(self):
-        """Run basic unit tests using pytest if available."""
         print("Unit Tests:")
         print("-" * 40)
         try:
@@ -958,7 +900,6 @@ class EnhancedTestRunner:
         print()
 
     def _run_component_tests(self):
-        """Run component-specific test suites."""
         print("Component-Specific Tests:")
         print("-" * 40)
         if CALIBRATION_TESTS_AVAILABLE:
@@ -1006,7 +947,6 @@ class EnhancedTestRunner:
         print()
 
     def _run_integration_tests(self):
-        """Run integration test suite."""
         print("Integration Tests:")
         print("-" * 40)
         if INTEGRATION_TESTS_AVAILABLE:
@@ -1025,7 +965,6 @@ class EnhancedTestRunner:
         print()
 
     def _run_performance_tests(self):
-        """Run performance benchmarks."""
         print("Performance Tests:")
         print("-" * 40)
         import time
@@ -1097,7 +1036,6 @@ class EnhancedTestRunner:
         print()
 
     def _run_stress_tests(self):
-        """Run stress tests to validate system under load."""
         print("Stress Tests:")
         print("-" * 40)
         stress_results = {}
@@ -1194,7 +1132,6 @@ class EnhancedTestRunner:
         print()
 
     def _generate_report(self):
-        """Generate comprehensive test report."""
         print("Test Execution Summary:")
         print("=" * 80)
         total_time = self.end_time - self.start_time
@@ -1284,7 +1221,6 @@ class EnhancedTestRunner:
         print()
 
     def _overall_success(self):
-        """Determine overall test success."""
         critical_categories = [
             "calibration_tests",
             "shimmer_tests",
@@ -1300,7 +1236,6 @@ class EnhancedTestRunner:
 
 
 def main():
-    """Main test runner entry point."""
     runner = EnhancedTestRunner()
     include_performance = "--no-performance" not in sys.argv
     include_stress = "--no-stress" not in sys.argv
@@ -1328,23 +1263,6 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 
-"""
-Quick Recording Session Test
-
-A simplified version of the comprehensive recording session test that focuses
-on the core requirements without requiring additional dependencies.
-
-This test demonstrates:
-- PC and Android app startup simulation
-- Recording session initiated from computer
-- Sensor simulation on correct ports
-- Communication and networking testing
-- File saving validation
-- Basic logging verification
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-08-01
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 logging.basicConfig(
     level=logging.INFO,
@@ -1354,7 +1272,6 @@ logging.basicConfig(
 
 
 class SimpleDeviceSimulator:
-    """Simple device simulator for testing basic communication."""
 
     def __init__(self, device_id: str, host: str = "127.0.0.1", port: int = 9000):
         self.device_id = device_id
@@ -1366,7 +1283,6 @@ class SimpleDeviceSimulator:
         self.logger = logging.getLogger(f"Device.{device_id}")
 
     def connect(self) -> bool:
-        """Connect to server."""
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.settimeout(5.0)
@@ -1379,7 +1295,6 @@ class SimpleDeviceSimulator:
             return False
 
     def disconnect(self):
-        """Disconnect from server."""
         if self.socket:
             try:
                 self.socket.close()
@@ -1391,7 +1306,6 @@ class SimpleDeviceSimulator:
         self.logger.info("Disconnected")
 
     def send_message(self, message: dict) -> bool:
-        """Send JSON message."""
         if not self.connected or not self.socket:
             return False
         try:
@@ -1405,7 +1319,6 @@ class SimpleDeviceSimulator:
             return False
 
     def simulate_sensors(self, duration: int = 10):
-        """Simulate sensor data for specified duration."""
         if not self.connect():
             return False
         self.running = True
@@ -1453,7 +1366,6 @@ class SimpleDeviceSimulator:
 
 
 class SimpleSocketServer:
-    """Simple socket server to receive device messages."""
 
     def __init__(self, host: str = "127.0.0.1", port: int = 9000):
         self.host = host
@@ -1465,7 +1377,6 @@ class SimpleSocketServer:
         self.logger = logging.getLogger("Server")
 
     def start(self):
-        """Start the server."""
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -1489,7 +1400,6 @@ class SimpleSocketServer:
             self.logger.error(f"Server start error: {e}")
 
     def stop(self):
-        """Stop the server."""
         self.running = False
         if self.server_socket:
             try:
@@ -1499,7 +1409,6 @@ class SimpleSocketServer:
         self.logger.info("Server stopped")
 
     def _handle_client(self, client_socket, addr):
-        """Handle client connection."""
         self.logger.info(f"Client connected: {addr}")
         try:
             while self.running:
@@ -1530,7 +1439,6 @@ class SimpleSocketServer:
             self.logger.info(f"Client disconnected: {addr}")
 
     def _process_message(self, message: dict, addr):
-        """Process received message."""
         msg_type = message.get("type", "unknown")
         device_id = message.get("device_id", "unknown")
         if msg_type == "hello":
@@ -1548,17 +1456,14 @@ class SimpleSocketServer:
 
 
 class QuickRecordingSessionTest(unittest.TestCase):
-    """Quick test for recording session functionality."""
 
     def setUp(self):
-        """Set up test environment."""
         self.test_dir = tempfile.mkdtemp()
         self.server = None
         self.devices = []
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def tearDown(self):
-        """Clean up test environment."""
         for device in self.devices:
             device.running = False
             device.disconnect()
@@ -1569,7 +1474,6 @@ class QuickRecordingSessionTest(unittest.TestCase):
         shutil.rmtree(self.test_dir, ignore_errors=True)
 
     def test_recording_session_workflow(self):
-        """Test complete recording session workflow."""
         self.logger.info("=" * 80)
         self.logger.info("QUICK RECORDING SESSION TEST")
         self.logger.info("=" * 80)
@@ -1634,7 +1538,6 @@ class QuickRecordingSessionTest(unittest.TestCase):
 
 
 def run_quick_recording_session_test():
-    """Run the quick recording session test."""
     suite = unittest.TestLoader().loadTestsFromTestCase(QuickRecordingSessionTest)
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
@@ -1654,51 +1557,6 @@ if __name__ == "__main__":
         print("\n❌ Some tests failed. Check the output above for details.")
     sys.exit(0 if success else 1)
 
-"""
-Enhanced Recording Session Test Runner
-
-This comprehensive testing framework validates the complete multi-sensor recording system
-through realistic PC-Android simulation workflows. The test runner provides extensive
-configuration options to validate system behavior under various conditions including
-normal operation, stress scenarios, error conditions, and performance benchmarking.
-
-The test suite simulates both PC and Android application startup procedures, initiates
-recording sessions from the computer controller, creates realistic sensor data streams
-on production ports, and comprehensively validates all system components including
-communication protocols, networking stability, file persistence, post-processing
-workflows, user interface responsiveness, and system health monitoring.
-
-Features:
-• Comprehensive recording session validation with PC-Android coordination
-• Stress testing capabilities for high-load scenarios and extended duration sessions
-• Error condition simulation including network failures and device disconnections
-• Performance benchmarking with detailed metrics collection and analysis
-• Real-time health monitoring with freeze detection and resource usage tracking
-• Configurable test parameters for different validation scenarios
-
-Usage:
-    python run_recording_session_test.py [options]
-
-Standard Options:
-    --duration SECONDS    Duration for recording simulation (default: 30)
-    --devices COUNT       Number of Android devices to simulate (default: 2)
-    --port PORT          Server port to use (default: 9000)
-    --verbose            Enable verbose output with detailed progress information
-    --log-level LEVEL    Set logging level (DEBUG, INFO, WARNING, ERROR)
-    --save-logs          Save detailed logs to file for post-analysis
-    --health-check       Enable continuous health monitoring and reporting
-
-Advanced Testing Options:
-    --stress-test        Enable stress testing with high device count and load
-    --error-simulation   Simulate various error conditions and recovery scenarios
-    --performance-bench  Run performance benchmarking with detailed metrics
-    --long-duration      Extended testing for stability validation (300+ seconds)
-    --network-issues     Simulate network latency, packet loss, and interruptions
-    --memory-stress      Test memory usage under high data volume conditions
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-08-01
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tests"))
 try:
@@ -1721,7 +1579,6 @@ except ImportError:
 
 
 class RecordingSessionTestRunner:
-    """Enhanced test runner for comprehensive recording session tests."""
 
     def __init__(self, config):
         self.config = config
@@ -1741,7 +1598,6 @@ class RecordingSessionTestRunner:
         self.logger = get_logger(self.__class__.__name__)
 
     def run_comprehensive_test(self):
-        """Run the comprehensive recording session test."""
         self.start_time = time.time()
         self.logger.info("=" * 100)
         self.logger.info("COMPREHENSIVE RECORDING SESSION TEST RUNNER")
@@ -1761,7 +1617,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _perform_pre_test_checks(self):
-        """Perform pre-test system checks."""
         self.logger.info("Performing pre-test system checks...")
         if PSUTIL_AVAILABLE:
             memory = psutil.virtual_memory()
@@ -1817,7 +1672,6 @@ class RecordingSessionTestRunner:
         self.logger.info("✓ Pre-test checks completed successfully")
 
     def _run_main_test(self):
-        """Run the main comprehensive test with advanced scenarios."""
         self.logger.info("Running comprehensive recording session test...")
         if not RECORDING_SESSION_TEST_AVAILABLE:
             self.logger.error("Recording session test not available")
@@ -1869,7 +1723,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _determine_test_scenarios(self):
-        """Determine which test scenarios to run based on configuration."""
         scenarios = {}
         scenarios["basic_comprehensive"] = {
             "type": "basic",
@@ -1929,7 +1782,6 @@ class RecordingSessionTestRunner:
         return scenarios
 
     def _run_test_scenario(self, scenario_name, scenario_config):
-        """Run a specific test scenario."""
         scenario_type = scenario_config.get("type", "basic")
         if scenario_type == "basic":
             return self._run_basic_test(scenario_config)
@@ -1950,7 +1802,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_basic_test(self, config):
-        """Run the basic comprehensive recording session test."""
         self.logger.info("Executing basic comprehensive test...")
         try:
             success = run_comprehensive_recording_session_test()
@@ -1960,7 +1811,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_stress_test(self, config):
-        """Run stress testing with high load scenarios."""
         self.logger.info(
             f"Executing stress test with {config['devices']} devices for {config['duration']} seconds..."
         )
@@ -1976,7 +1826,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_error_simulation_test(self, config):
-        """Run error simulation and recovery testing."""
         self.logger.info("Executing error simulation test...")
         try:
             success = run_comprehensive_recording_session_test()
@@ -1990,7 +1839,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_performance_benchmark(self, config):
-        """Run performance benchmarking with detailed metrics."""
         self.logger.info("Executing performance benchmark...")
         try:
             benchmark_start = time.time()
@@ -2006,7 +1854,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_stability_test(self, config):
-        """Run long-duration stability testing."""
         self.logger.info(
             f"Executing stability test for {config['duration']} seconds..."
         )
@@ -2022,7 +1869,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_network_stress_test(self, config):
-        """Run network stress and connectivity testing."""
         self.logger.info("Executing network stress test...")
         try:
             success = run_comprehensive_recording_session_test()
@@ -2036,7 +1882,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _run_memory_stress_test(self, config):
-        """Run memory stress testing with high data volumes."""
         self.logger.info("Executing memory stress test...")
         try:
             success = run_comprehensive_recording_session_test()
@@ -2050,7 +1895,6 @@ class RecordingSessionTestRunner:
             return False
 
     def _perform_post_test_validation(self):
-        """Perform post-test validation."""
         self.logger.info("Performing post-test validation...")
         if PSUTIL_AVAILABLE:
             memory = psutil.virtual_memory()
@@ -2088,7 +1932,6 @@ class RecordingSessionTestRunner:
         self.logger.info("✓ Post-test validation completed")
 
     def _generate_final_report(self, success):
-        """Generate final test report."""
         total_duration = self.end_time - self.start_time
         self.logger.info("=" * 100)
         self.logger.info("COMPREHENSIVE RECORDING SESSION TEST REPORT")
@@ -2166,7 +2009,6 @@ class RecordingSessionTestRunner:
 
 
 def main():
-    """Main entry point for the recording session test runner."""
     parser = argparse.ArgumentParser(
         description="Run comprehensive recording session test for multi-sensor recording system",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -6072,7 +5914,6 @@ class TestEnhancedUI(unittest.TestCase):
 
             window = EnhancedMainWindow()
             self.assertIsNotNone(window)
-            # Updated test for enhanced UI components
             self.assertTrue(hasattr(window, "central_widget") or hasattr(window, "centralWidget"))
             window.close()
         except ImportError as e:
@@ -6088,7 +5929,6 @@ class TestEnhancedUI(unittest.TestCase):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
         try:
-            # Skip this test as RealTimeDataPlotter was part of simplified UI
             self.skipTest("RealTimeDataPlotter was part of simplified UI components that were removed")
             logger.info("✓ Real-time data plotter test passed")
         except Exception as e:
@@ -6098,7 +5938,6 @@ class TestEnhancedUI(unittest.TestCase):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
         try:
-            # Skip this test as SystemMonitor was part of simplified UI
             self.skipTest("SystemMonitor was part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test system monitor: {e}")
@@ -6107,7 +5946,6 @@ class TestEnhancedUI(unittest.TestCase):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
         try:
-            # Skip this test as DeviceConfigDialog was part of simplified UI
             self.skipTest("DeviceConfigDialog was part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test device config dialog: {e}")
@@ -6116,7 +5954,6 @@ class TestEnhancedUI(unittest.TestCase):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
         try:
-            # Skip this test as FileBrowserWidget was part of simplified UI
             self.skipTest("FileBrowserWidget was part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test file browser: {e}")
@@ -6127,7 +5964,6 @@ class TestEnhancedUI(unittest.TestCase):
 
             window = EnhancedMainWindow()
             self.assertIsNotNone(window)
-            # Test enhanced UI integration
             window.close()
         except ImportError as e:
             self.skipTest(f"Enhanced UI components not available: {e}")
@@ -6146,7 +5982,6 @@ class TestEnhancedUI(unittest.TestCase):
 
     def test_real_functionality_methods(self):
         try:
-            # Skip this test as these methods were part of simplified UI
             self.skipTest("Real functionality methods were part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test real functionality: {e}")
@@ -6163,7 +5998,6 @@ class TestEnhancedUI(unittest.TestCase):
             "Professional UI Components": False,
         }
         try:
-            # Skip comprehensive test as simplified UI components were removed
             self.skipTest("Comprehensive advanced features test skipped - simplified UI components were removed")
         except Exception as e:
             self.fail(f"Failed to verify critical features: {e}")
@@ -20642,35 +20476,22 @@ if __name__ == "__main__":
     success = test_network_protocol_integration()
     sys.exit(0 if success else 1)
 
-"""
-Comprehensive tests for NTPTimeServer functionality
-
-Tests cover server startup/shutdown, time synchronization, NTP integration,
-client handling, status monitoring, and integration with main application.
-
-Author: Multi-Sensor Recording System
-Date: 2025-07-30
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 
 class TestNTPTimeServer(unittest.TestCase):
-    """Test suite for NTPTimeServer class"""
 
     def setUp(self):
-        """Set up test fixtures"""
         self.mock_logger = Mock()
         self.test_port = 8890
         self.ntp_server = NTPTimeServer(logger=self.mock_logger, port=self.test_port)
 
     def tearDown(self):
-        """Clean up test fixtures"""
         if hasattr(self, "ntp_server"):
             self.ntp_server.stop_server()
             time.sleep(0.1)
 
     def test_server_initialization(self):
-        """Test NTP server initialization"""
         self.assertEqual(self.ntp_server.port, self.test_port)
         self.assertFalse(self.ntp_server.is_running)
         self.assertIsNotNone(self.ntp_server.ntp_client)
@@ -20678,7 +20499,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.mock_logger.info.assert_called()
 
     def test_server_start_stop(self):
-        """Test server start and stop functionality"""
         result = self.ntp_server.start_server()
         self.assertTrue(result)
         self.assertTrue(self.ntp_server.is_running)
@@ -20688,7 +20508,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.mock_logger.info.assert_called()
 
     def test_server_double_start(self):
-        """Test starting server when already running"""
         result1 = self.ntp_server.start_server()
         self.assertTrue(result1)
         result2 = self.ntp_server.start_server()
@@ -20696,7 +20515,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.mock_logger.warning.assert_called()
 
     def test_precise_timestamp(self):
-        """Test precise timestamp generation"""
         timestamp1 = self.ntp_server.get_precise_timestamp()
         time.sleep(0.01)
         timestamp2 = self.ntp_server.get_precise_timestamp()
@@ -20709,7 +20527,6 @@ class TestNTPTimeServer(unittest.TestCase):
 
     @patch("ntplib.NTPClient.request")
     def test_ntp_synchronization_success(self, mock_ntp_request):
-        """Test successful NTP synchronization"""
         mock_response = Mock()
         mock_response.tx_time = time.time() + 0.1
         mock_response.delay = 0.02
@@ -20724,7 +20541,6 @@ class TestNTPTimeServer(unittest.TestCase):
 
     @patch("ntplib.NTPClient.request")
     def test_ntp_synchronization_failure(self, mock_ntp_request):
-        """Test NTP synchronization failure handling"""
         mock_ntp_request.side_effect = Exception("NTP server unreachable")
         result = self.ntp_server.synchronize_with_ntp()
         self.assertFalse(result)
@@ -20733,7 +20549,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.assertEqual(status.reference_source, "system")
 
     def test_time_sync_request_handling(self):
-        """Test handling of time synchronization requests"""
         self.ntp_server.start_server()
         time.sleep(0.1)
         request_data = {
@@ -20759,7 +20574,6 @@ class TestNTPTimeServer(unittest.TestCase):
             self.fail(f"Time sync request failed: {e}")
 
     def test_invalid_request_handling(self):
-        """Test handling of invalid requests"""
         self.ntp_server.start_server()
         time.sleep(0.1)
         try:
@@ -20773,7 +20587,6 @@ class TestNTPTimeServer(unittest.TestCase):
             self.fail(f"Invalid request handling failed: {e}")
 
     def test_server_status_tracking(self):
-        """Test server status tracking and metrics"""
         status = self.ntp_server.get_server_status()
         self.assertFalse(status.is_running)
         self.assertEqual(status.client_count, 0)
@@ -20784,7 +20597,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.assertTrue(status.is_running)
 
     def test_callback_functionality(self):
-        """Test sync callback functionality"""
         callback_data = []
 
         def test_callback(response):
@@ -20814,7 +20626,6 @@ class TestNTPTimeServer(unittest.TestCase):
             self.fail(f"Callback test failed: {e}")
 
     def test_concurrent_requests(self):
-        """Test handling of concurrent sync requests"""
         self.ntp_server.start_server()
         time.sleep(0.1)
 
@@ -20851,7 +20662,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.assertTrue(all(results))
 
     def test_server_error_recovery(self):
-        """Test server error recovery scenarios"""
         self.ntp_server.start_server()
         server2 = NTPTimeServer(logger=Mock(), port=self.test_port)
         result = server2.start_server()
@@ -20860,26 +20670,21 @@ class TestNTPTimeServer(unittest.TestCase):
 
 
 class TestTimeServerManager(unittest.TestCase):
-    """Test suite for TimeServerManager class"""
 
     def setUp(self):
-        """Set up test fixtures"""
         self.mock_logger = Mock()
         self.manager = TimeServerManager(logger=self.mock_logger)
 
     def tearDown(self):
-        """Clean up test fixtures"""
         if hasattr(self, "manager"):
             self.manager.stop()
 
     def test_manager_initialization(self):
-        """Test TimeServerManager initialization"""
         result = self.manager.initialize(port=8891)
         self.assertTrue(result)
         self.assertIsNotNone(self.manager.time_server)
 
     def test_manager_start_stop(self):
-        """Test manager start and stop functionality"""
         self.manager.initialize(port=8892)
         result = self.manager.start()
         self.assertTrue(result)
@@ -20887,7 +20692,6 @@ class TestTimeServerManager(unittest.TestCase):
         self.mock_logger.info.assert_called()
 
     def test_manager_status(self):
-        """Test manager status retrieval"""
         status = self.manager.get_status()
         self.assertIsNone(status)
         self.manager.initialize(port=8893)
@@ -20897,7 +20701,6 @@ class TestTimeServerManager(unittest.TestCase):
         self.assertIsInstance(status, TimeServerStatus)
 
     def test_manager_timestamp(self):
-        """Test manager timestamp functionality"""
         timestamp = self.manager.get_timestamp_ms()
         self.assertIsInstance(timestamp, int)
         self.manager.initialize(port=8894)
@@ -20908,17 +20711,14 @@ class TestTimeServerManager(unittest.TestCase):
 
 
 class TestNTPTimeServerIntegration(unittest.TestCase):
-    """Integration tests for NTP server with main application"""
 
     def setUp(self):
-        """Set up integration test fixtures"""
         self.mock_logger = Mock()
 
     def tearDown(self):
-        """Clean up integration test fixtures"""
 
+        pass
     def test_main_application_integration(self):
-        """Test integration with main_backup.py patterns"""
         manager = TimeServerManager(logger=self.mock_logger)
         try:
             self.assertTrue(manager.initialize(port=8895))
@@ -20932,7 +20732,6 @@ class TestNTPTimeServerIntegration(unittest.TestCase):
             manager.stop()
 
     def test_android_sync_protocol_compatibility(self):
-        """Test compatibility with Android SyncClockManager protocol"""
         server = NTPTimeServer(logger=self.mock_logger, port=8896)
         try:
             server.start_server()
@@ -24619,23 +24418,12 @@ if __name__ == "__main__":
     success = run_simple_tests()
     exit(0 if success else 1)
 
-"""
-Comprehensive tests for StimulusManager functionality
-
-Tests cover multi-monitor detection, stimulus presentation, timing controls,
-audio-visual coordination, and event handling.
-
-Author: Multi-Sensor Recording System
-Date: 2025-07-30
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 
 class TestStimulusManager(unittest.TestCase):
-    """Test suite for StimulusManager class"""
 
     def setUp(self):
-        """Set up test fixtures"""
         self.mock_logger = Mock()
         self.mock_app = Mock()
         self.mock_screen1 = Mock()
@@ -24654,12 +24442,10 @@ class TestStimulusManager(unittest.TestCase):
         self.stimulus_manager = StimulusManager(logger=self.mock_logger)
 
     def tearDown(self):
-        """Clean up test fixtures"""
         if hasattr(self, "stimulus_manager"):
             self.stimulus_manager.cleanup()
 
     def test_initialization(self):
-        """Test StimulusManager initialization"""
         self.assertFalse(self.stimulus_manager.is_initialized)
         self.assertEqual(len(self.stimulus_manager.available_monitors), 0)
         self.mock_logger.info.assert_called()
@@ -24667,7 +24453,6 @@ class TestStimulusManager(unittest.TestCase):
     @patch("stimulus_manager.QApplication.instance")
     @patch("stimulus_manager.QDesktopWidget")
     def test_initialization_with_monitors(self, mock_desktop, mock_app_instance):
-        """Test initialization with monitor detection"""
         mock_app_instance.return_value = self.mock_app
         mock_desktop.return_value.primaryScreen.return_value = 0
         result = self.stimulus_manager.initialize()
@@ -24685,14 +24470,12 @@ class TestStimulusManager(unittest.TestCase):
 
     @patch("stimulus_manager.QApplication.instance")
     def test_initialization_no_app(self, mock_app_instance):
-        """Test initialization failure when no QApplication"""
         mock_app_instance.return_value = None
         result = self.stimulus_manager.initialize()
         self.assertFalse(result)
         self.assertFalse(self.stimulus_manager.is_initialized)
 
     def test_monitor_utilities(self):
-        """Test monitor utility methods"""
         self.stimulus_manager.available_monitors = [
             MonitorInfo(0, "Primary", Mock(), True, 96.0),
             MonitorInfo(1, "Secondary", Mock(), False, 96.0),
@@ -24710,7 +24493,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(secondary_id, 1)
 
     def test_stimulus_config(self):
-        """Test StimulusConfig dataclass"""
         config = StimulusConfig()
         self.assertEqual(config.stimulus_type, "video")
         self.assertEqual(config.duration_ms, 5000)
@@ -24732,7 +24514,6 @@ class TestStimulusManager(unittest.TestCase):
 
     @patch("stimulus_manager.StimulusWindow")
     def test_present_stimulus_not_initialized(self, mock_window):
-        """Test stimulus presentation when not initialized"""
         config = StimulusConfig(stimulus_type="pattern")
         result = self.stimulus_manager.present_stimulus(config)
         self.assertFalse(result)
@@ -24740,7 +24521,6 @@ class TestStimulusManager(unittest.TestCase):
 
     @patch("stimulus_manager.StimulusWindow")
     def test_present_stimulus_invalid_monitor(self, mock_window):
-        """Test stimulus presentation with invalid monitor ID"""
         self.stimulus_manager.is_initialized = True
         self.stimulus_manager.available_monitors = [
             MonitorInfo(0, "Primary", Mock(), True, 96.0)
@@ -24752,7 +24532,6 @@ class TestStimulusManager(unittest.TestCase):
     @patch("stimulus_manager.StimulusWindow")
     @patch("stimulus_manager.QTimer")
     def test_present_stimulus_success(self, mock_timer_class, mock_window_class):
-        """Test successful stimulus presentation"""
         self.stimulus_manager.is_initialized = True
         self.stimulus_manager.available_monitors = [
             MonitorInfo(0, "Primary", Mock(), True, 96.0)
@@ -24776,7 +24555,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(event.monitor_id, 0)
 
     def test_stop_stimulus(self):
-        """Test stopping stimulus presentation"""
         mock_window = Mock()
         self.stimulus_manager.stimulus_windows[0] = mock_window
         mock_timer = Mock()
@@ -24790,13 +24568,11 @@ class TestStimulusManager(unittest.TestCase):
         self.assertNotIn(0, self.stimulus_manager.presentation_timers)
 
     def test_stop_stimulus_not_active(self):
-        """Test stopping stimulus when none active"""
         result = self.stimulus_manager.stop_stimulus(0)
         self.assertFalse(result)
         self.mock_logger.warning.assert_called()
 
     def test_stop_all_stimuli(self):
-        """Test stopping all active stimuli"""
         mock_window1 = Mock()
         mock_window2 = Mock()
         self.stimulus_manager.stimulus_windows[0] = mock_window1
@@ -24806,7 +24582,6 @@ class TestStimulusManager(unittest.TestCase):
 
     @patch("stimulus_manager.StimulusWindow")
     def test_present_synchronized_stimuli(self, mock_window_class):
-        """Test synchronized stimulus presentation"""
         self.stimulus_manager.is_initialized = True
         self.stimulus_manager.available_monitors = [
             MonitorInfo(0, "Primary", Mock(), True, 96.0),
@@ -24829,7 +24604,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(len(self.stimulus_manager.presentation_history), 2)
 
     def test_event_callbacks(self):
-        """Test event callback functionality"""
         callback_data = []
 
         def test_callback(event):
@@ -24849,7 +24623,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(callback_data[0], test_event)
 
     def test_presentation_history(self):
-        """Test presentation history tracking"""
         history = self.stimulus_manager.get_presentation_history()
         self.assertEqual(len(history), 0)
         event1 = StimulusEvent("start", time.time(), 0, StimulusConfig())
@@ -24864,7 +24637,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(len(original_history), 2)
 
     def test_cleanup(self):
-        """Test cleanup functionality"""
         mock_window = Mock()
         mock_timer = Mock()
         self.stimulus_manager.stimulus_windows[0] = mock_window
@@ -24879,7 +24651,6 @@ class TestStimulusManager(unittest.TestCase):
         mock_timer.stop.assert_called_once()
 
     def test_error_handling(self):
-        """Test error handling scenarios"""
         self.stimulus_manager.is_initialized = True
         self.stimulus_manager.available_monitors = [Mock()]
         with patch(
@@ -24891,7 +24662,6 @@ class TestStimulusManager(unittest.TestCase):
             self.mock_logger.error.assert_called()
 
     def test_stimulus_event_dataclass(self):
-        """Test StimulusEvent dataclass"""
         config = StimulusConfig(stimulus_type="test")
         event = StimulusEvent(
             event_type="test_event",
@@ -24907,7 +24677,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(event.duration_actual_ms, 2500.0)
 
     def test_monitor_info_dataclass(self):
-        """Test MonitorInfo dataclass"""
         geometry = Mock()
         monitor = MonitorInfo(
             monitor_id=2,
@@ -24924,17 +24693,14 @@ class TestStimulusManager(unittest.TestCase):
 
 
 class TestStimulusManagerIntegration(unittest.TestCase):
-    """Integration tests for StimulusManager"""
 
     def setUp(self):
-        """Set up integration test fixtures"""
         self.mock_logger = Mock()
 
     def tearDown(self):
-        """Clean up integration test fixtures"""
 
+        pass
     def test_main_application_integration(self):
-        """Test integration with main application patterns"""
         manager = StimulusManager(logger=self.mock_logger)
         try:
             self.assertFalse(manager.is_initialized)
@@ -25756,19 +25522,9 @@ class TestNetworkComponents(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-"""
-Testing and QA Framework Document Validation
-
-This script validates the structure and completeness of the consolidated
-Testing and QA Framework document.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-01-03
-"""
 
 
 def validate_testing_qa_document():
-    """Validate the Testing and QA Framework document structure."""
     doc_path = Path(__file__).parent.parent / "docs" / "TESTING_QA_FRAMEWORK.md"
     print("🔍 Testing and QA Framework Document Validation")
     print("=" * 60)
@@ -26200,16 +25956,9 @@ if __name__ == "__main__":
     summary = main()
     sys.exit(0)
 
-"""
-Android-Python Hand Segmentation Integration Test
-
-Tests the integration between Android hand segmentation and Python post-processing.
-Validates that both systems can work together for complete hand segmentation workflow.
-"""
 
 
 def test_android_python_integration():
-    """Test Android-Python hand segmentation integration"""
     print("=== Android-Python Hand Segmentation Integration Test ===")
     try:
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "PythonApp", "src"))
@@ -26266,7 +26015,6 @@ def test_android_python_integration():
 
 
 def test_integration_features():
-    """Test specific integration features between Android and Python"""
     print("\n--- Testing Integration Features ---")
     print("1. Testing dataset format compatibility...")
     android_formats = ["PNG", "JPEG"]
@@ -26304,7 +26052,6 @@ def test_integration_features():
 
 
 def demonstrate_complete_workflow():
-    """Demonstrate complete Android-Python workflow"""
     print("\n=== Complete Workflow Demonstration ===")
     workflow_steps = [
         "1. Android app records video with hand detection",
@@ -26336,17 +26083,10 @@ if __name__ == "__main__":
         print(f"\n❌ Integration tests failed. Check implementation.")
         sys.exit(1)
 
-"""
-Test script for automated file collection trigger - Milestone 3.6
-
-This script tests the integration between the recording stop workflow
-and the automated file collection system.
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "PythonApp", "src"))
 
 
 def test_automated_file_collection():
-    """Test that file collection is triggered when recording stops"""
     print("Testing automated file collection trigger...")
     try:
         from gui.main_window import MainWindow
@@ -26394,7 +26134,6 @@ def test_automated_file_collection():
 
 
 def test_collect_session_files_method():
-    """Test the collect_session_files method directly"""
     print("\nTesting collect_session_files method...")
     try:
         from gui.main_window import MainWindow
@@ -26423,7 +26162,6 @@ def test_collect_session_files_method():
 
 
 def test_error_handling():
-    """Test error handling in collect_session_files"""
     print("\nTesting error handling...")
     try:
         from gui.main_window import MainWindow
@@ -26471,18 +26209,11 @@ if __name__ == "__main__":
         print("⚠️  Some tests failed - Check the implementation")
     print("=" * 60)
 
-"""
-Comprehensive Logging Test Suite for Phase 1
-=============================================
-
-Tests all logging enhancements and validates comprehensive coverage.
-"""
 sys.path.insert(0, str(Path(__file__).parent / "PythonApp" / "src"))
 logger = get_logger(__name__)
 
 
 class LoggingTestSuite:
-    """Comprehensive logging validation test suite."""
 
     def __init__(self):
         self.logger = get_logger(__name__)
@@ -26491,7 +26222,6 @@ class LoggingTestSuite:
 
     @performance_timer("logging_infrastructure_test")
     def test_logging_infrastructure(self):
-        """Test comprehensive logging infrastructure."""
         self.logger.info("=== Testing Logging Infrastructure ===")
         try:
             self.logger.debug("Debug level test")
@@ -26519,7 +26249,6 @@ class LoggingTestSuite:
             self.logger.error(f"❌ Logging infrastructure test FAILED: {e}")
 
     def test_component_logging(self):
-        """Test individual component logging."""
         self.logger.info("=== Testing Component Logging ===")
         components = [
             "session_manager",
@@ -26541,7 +26270,6 @@ class LoggingTestSuite:
         self.tests_passed += 1
 
     def test_performance_monitoring(self):
-        """Test performance monitoring capabilities."""
         self.logger.info("=== Testing Performance Monitoring ===")
         try:
             operations = ["file_io", "network_call", "data_processing"]
@@ -26559,7 +26287,6 @@ class LoggingTestSuite:
             self.logger.error(f"❌ Performance monitoring test FAILED: {e}")
 
     def test_log_file_creation(self):
-        """Test log file creation and structure."""
         self.logger.info("=== Testing Log File Creation ===")
         try:
             log_dir = AppLogger.get_log_dir()
@@ -26584,7 +26311,6 @@ class LoggingTestSuite:
             self.logger.error(f"❌ Log file creation test FAILED: {e}")
 
     def run_all_tests(self):
-        """Run all logging tests."""
         self.logger.info("🚀 Starting Comprehensive Logging Test Suite")
         self.logger.info("=" * 60)
         tests = [
@@ -26617,7 +26343,6 @@ class LoggingTestSuite:
 
 
 def main():
-    """Run comprehensive logging tests."""
     try:
         AppLogger.initialize(log_level="DEBUG", console_output=True, file_output=True)
         test_suite = LoggingTestSuite()
@@ -26631,17 +26356,10 @@ def main():
 if __name__ == "__main__":
     main()
 
-"""
-Test script for Session Directory Integration - Milestone 3.6 Fix
-
-This script tests that the JsonSocketServer now uses the SessionManager's
-session directory instead of creating its own timestamp-based directory.
-"""
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "PythonApp", "src"))
 
 
 def test_session_directory_integration():
-    """Test that JsonSocketServer uses SessionManager's session directory"""
     print("Testing Session Directory Integration...")
     try:
         from network.device_server import JsonSocketServer
@@ -26680,7 +26398,6 @@ def test_session_directory_integration():
 
 
 def test_fallback_behavior():
-    """Test fallback behavior when SessionManager has no active session"""
     print("\nTesting Fallback Behavior...")
     try:
         from network.device_server import JsonSocketServer
@@ -26706,7 +26423,6 @@ def test_fallback_behavior():
 
 
 def test_without_session_manager():
-    """Test behavior when no SessionManager is provided"""
     print("\nTesting Behavior Without SessionManager...")
     try:
         from network.device_server import JsonSocketServer
@@ -26730,7 +26446,6 @@ def test_without_session_manager():
 
 
 def test_main_window_integration():
-    """Test that MainWindow properly integrates SessionManager with JsonSocketServer"""
     print("\nTesting MainWindow Integration...")
     try:
         try:

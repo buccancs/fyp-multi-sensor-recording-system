@@ -401,7 +401,6 @@ class FileViewActivity : AppCompatActivity() {
         rgbPreviewPlaceholder.visibility = View.GONE
         rgbPreviewImage.visibility = View.VISIBLE
         
-
         cameraPreviewHandler.post(rgbPreviewRunnable)
 
         logger.info("RGB camera preview started")
@@ -430,7 +429,6 @@ class FileViewActivity : AppCompatActivity() {
         irPreviewPlaceholder.visibility = View.GONE
         irPreviewImage.visibility = View.VISIBLE
         
-
         cameraPreviewHandler.post(irPreviewRunnable)
 
         logger.info("IR camera preview started")
@@ -480,11 +478,9 @@ class FileViewActivity : AppCompatActivity() {
 
         val time = System.currentTimeMillis() / 100
         
-
         paint.color = Color.rgb(50, 50, 80)
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
         
-
         for (i in 0..10) {
             val x = ((time + i * 30) % (width + 100)).toFloat() - 50
             val y = (height * 0.2f + i * height * 0.05f).toFloat()
@@ -497,12 +493,10 @@ class FileViewActivity : AppCompatActivity() {
             canvas.drawCircle(x, y, 15f, paint)
         }
         
-
         paint.color = Color.RED
         paint.textSize = 24f
         canvas.drawText("● LIVE", 10f, 30f, paint)
         
-
         paint.color = Color.WHITE
         paint.textSize = 16f
         val timeStr = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
@@ -529,7 +523,6 @@ class FileViewActivity : AppCompatActivity() {
 
                 val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
                 
-
                 val color = when {
                     intensity < 85 -> Color.rgb(0, 0, intensity * 3)
                     intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
@@ -541,7 +534,6 @@ class FileViewActivity : AppCompatActivity() {
             }
         }
         
-
         paint.color = Color.YELLOW
         for (i in 0..3) {
             val hotX = Random.nextInt(50, width - 50).toFloat()
@@ -549,12 +541,10 @@ class FileViewActivity : AppCompatActivity() {
             canvas.drawCircle(hotX, hotY, 20f, paint)
         }
         
-
         paint.color = Color.WHITE
         paint.textSize = 18f
         canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
         
-
         val temp = (20 + Random.nextFloat() * 15).toInt()
         paint.textSize = 14f
         canvas.drawText("${temp}°C", width - 60f, height - 10f, paint)
@@ -565,7 +555,6 @@ class FileViewActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         
-
         stopRgbPreview()
         stopIrPreview()
 

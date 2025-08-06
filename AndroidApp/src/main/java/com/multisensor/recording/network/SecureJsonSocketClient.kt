@@ -166,7 +166,6 @@ constructor(
         val authMessage = AuthenticateMessage(token = token)
         sendMessage(authMessage)
         
-
         connectionScope?.launch {
             delay(AUTH_TIMEOUT_MS)
             if (!isAuthenticated) {
@@ -223,7 +222,6 @@ constructor(
                 val socketFactory = sslContext.socketFactory
                 sslSocket = socketFactory.createSocket() as SSLSocket
                 
-
                 sslSocket?.apply {
                     soTimeout = CONNECTION_TIMEOUT_MS
                     enabledProtocols = arrayOf("TLSv1.2", "TLSv1.3")
@@ -308,7 +306,6 @@ constructor(
                 if (message != null) {
                     logger.debug("Received secure message: ${message.type}")
                     
-
                     if (message is AuthResponseMessage) {
                         handleAuthenticationResponse(message)
                     } else {

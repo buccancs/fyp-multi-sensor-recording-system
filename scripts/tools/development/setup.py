@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-"""
-Cross-Platform Setup Entry Point
-Multi-Sensor Recording System
-
-This script automatically detects the platform and launches the appropriate setup script.
-"""
 
 import os
 import platform
@@ -14,7 +8,6 @@ from pathlib import Path
 
 
 def detect_platform():
-    """Detect the current platform and return appropriate setup script."""
     system = platform.system().lower()
 
     if system == "windows":
@@ -26,7 +19,6 @@ def detect_platform():
 
 
 def check_prerequisites():
-    """Check if basic prerequisites are available."""
     system = platform.system().lower()
 
     if system == "windows":
@@ -48,7 +40,6 @@ def check_prerequisites():
 
 
 def main():
-    """Main entry point."""
     print("=== Multi-Sensor Recording System - Setup Launcher ===")
     print(f"Detected platform: {platform.system()} {platform.release()}")
 

@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""
-Data Schema Validation Utility
-
-This script validates data files against their schemas to ensure data integrity
-and consistency across the multi-sensor recording system.
-
-Usage:
-    python validate_data_schemas.py [--session SESSION_PATH] [--schema-dir SCHEMA_DIR]
-    python validate_data_schemas.py --all-sessions
-    python validate_data_schemas.py --check-schema SCHEMA_FILE
-"""
 
 import argparse
 import json
@@ -22,16 +11,13 @@ from typing import Dict, List, Optional, Tuple
 
 
 class DataSchemaValidator:
-    """Validates data files against JSON schemas."""
 
     def __init__(self, schema_dir: str = "docs/schemas"):
-        """Initialize validator with schema directory."""
         self.schema_dir = Path(schema_dir)
         self.schemas = {}
         self.load_schemas()
 
     def load_schemas(self) -> None:
-        """Load all JSON schemas from the schema directory."""
         if not self.schema_dir.exists():
             print(f"Warning: Schema directory {self.schema_dir} not found")
             return
@@ -56,16 +42,6 @@ class DataSchemaValidator:
                 print(f"⚠ Schema file not found: {filename}")
 
     def validate_file(self, file_path: str, schema_name: str) -> Tuple[bool, Optional[str]]:
-        """
-        Validate a single file against its schema.
-
-        Args:
-            file_path: Path to the JSON file to validate
-            schema_name: Name of the schema to validate against
-
-        Returns:
-            Tuple of (is_valid, error_message)
-        """
         if schema_name not in self.schemas:
             return False, f"Schema '{schema_name}' not loaded"
 
@@ -84,15 +60,6 @@ class DataSchemaValidator:
             return False, f"Unexpected error: {e}"
 
     def validate_session(self, session_path: str) -> Dict[str, any]:
-        """
-        Validate all data files in a session folder.
-
-        Args:
-            session_path: Path to session folder
-
-        Returns:
-            Dictionary with validation results
-        """
         session_path = Path(session_path)
         results = {
             "session_path": str(session_path),
@@ -149,15 +116,6 @@ class DataSchemaValidator:
         return results
 
     def validate_calibration_session(self, calibration_path: str) -> Dict[str, any]:
-        """
-        Validate calibration session data.
-
-        Args:
-            calibration_path: Path to calibration session folder
-
-        Returns:
-            Dictionary with validation results
-        """
         calibration_path = Path(calibration_path)
         results = {
             "calibration_path": str(calibration_path),
@@ -185,7 +143,6 @@ class DataSchemaValidator:
         return results
 
     def find_all_sessions(self, base_dir: str = "PythonApp/recordings") -> List[Path]:
-        """Find all session folders in the recordings directory."""
         base_path = Path(base_dir)
         sessions = []
 
@@ -198,7 +155,6 @@ class DataSchemaValidator:
         return sessions
 
     def find_all_calibration_sessions(self, base_dir: str = "calibration_data") -> List[Path]:
-        """Find all calibration session folders."""
         base_path = Path(base_dir)
         sessions = []
 
@@ -211,7 +167,6 @@ class DataSchemaValidator:
 
 
 def main():
-    """Main entry point for the validation script."""
     parser = argparse.ArgumentParser(description="Validate data files against schemas")
     parser.add_argument("--session", help="Path to specific session to validate")
     parser.add_argument("--schema-dir", default="docs/schemas", help="Directory containing schema files")

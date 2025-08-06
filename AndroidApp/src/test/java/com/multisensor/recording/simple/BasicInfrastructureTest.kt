@@ -3,9 +3,6 @@ package com.multisensor.recording.simple
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
-/**
- * Basic infrastructure test to ensure JUnit 5 is working
- */
 class BasicInfrastructureTest {
 
     @Test
@@ -21,7 +18,7 @@ class BasicInfrastructureTest {
 
     @Test
     fun `kotlin coroutines should be available`() {
-        // Test that coroutines dependency is available
+        
         val result = kotlinx.coroutines.runBlocking {
             "coroutines working"
         }

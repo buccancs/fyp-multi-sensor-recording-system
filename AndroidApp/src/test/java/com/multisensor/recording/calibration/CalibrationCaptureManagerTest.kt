@@ -338,3 +338,4 @@ class CalibrationCaptureManagerTest {
             println("[DEBUG_LOG] Concurrent capture operations test passed")
         }
 }
+

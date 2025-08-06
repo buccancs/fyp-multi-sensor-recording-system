@@ -1,22 +1,4 @@
 #!/usr/bin/env python3
-"""
-Dual Webcam Recording System Launcher
-
-Quick launcher for testing the dual Logitech Brio webcam recording system
-with master clock synchronization.
-
-Usage:
-    python launch_dual_webcam.py [options]
-
-Options:
-    --test-only     Test webcam access without starting full application
-    --cameras N,M   Specify camera indices (default: 0,1)
-    --resolution WxH Set recording resolution (default: 3840x2160)
-    --fps N         Set recording FPS (default: 30)
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-31
-"""
 
 import argparse
 import os
@@ -33,7 +15,6 @@ logger = get_logger(__name__)
 
 
 def parse_arguments():
-    """Parse command line arguments."""
     parser = argparse.ArgumentParser(
         description='Dual Webcam Recording System Launcher',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -60,7 +41,6 @@ def parse_arguments():
 
 
 def test_system():
-    """Test the dual webcam system."""
     logger.info("=== Dual Webcam System Test ===")
 
     logger.info("Testing dual webcam access...")
@@ -80,7 +60,6 @@ def test_system():
 
 
 def main():
-    """Main launcher function."""
     args = parse_arguments()
 
     AppLogger.set_level(args.log_level)

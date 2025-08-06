@@ -289,3 +289,4 @@ constructor(
         val totalCaptures: Int,
     )
 }
+

@@ -39,7 +39,7 @@ class OnboardingActivity : ComponentActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        // Handle permission results
+        
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +106,6 @@ fun OnboardingFlow(
             }
         }
         
-        // Navigation buttons
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -128,7 +127,6 @@ fun OnboardingFlow(
                 Spacer(modifier = Modifier.width(64.dp))
             }
             
-            // Page indicators
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
