@@ -230,129 +230,204 @@ class CrossDeviceCalibrationCoordinator:
     def perform_stereo_calibration(
         self, session_id: str, camera_pair: Tuple[str, str]
     ) -> Optional[Dict[str, Any]]:
+        """Perform stereo calibration for a camera pair with comprehensive validation."""
         try:
-            if session_id not in self.active_sessions:
-                self.logger.error(f"Session {session_id} not found")
+            # Validate inputs and prepare data
+            validation_result = self._validate_stereo_calibration_inputs(session_id, camera_pair)
+            if not validation_result:
                 return None
-            session = self.active_sessions[session_id]
-            camera1_key, camera2_key = camera_pair
-            if (
-                camera1_key not in session.collected_images
-                or camera2_key not in session.collected_images
-            ):
-                self.logger.error(
-                    f"Missing images for stereo calibration: {camera_pair}"
-                )
-                return None
-            images1 = session.collected_images[camera1_key]
-            images2 = session.collected_images[camera2_key]
-            if len(images1) != len(images2):
-                self.logger.error(
-                    f"Mismatched image counts for stereo calibration: {len(images1)} vs {len(images2)}"
-                )
-                return None
+            session, images1, images2 = validation_result
+            
             self.logger.info(f"Performing stereo calibration for {camera_pair}")
-            object_points = []
-            image_points1 = []
-            image_points2 = []
-            if session.pattern_type == PatternType.CHESSBOARD:
-                pattern_size = 6, 9
-                objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
-                objp[:, :2] = np.mgrid[
-                    0 : pattern_size[0], 0 : pattern_size[1]
-                ].T.reshape(-1, 2)
-            else:
-                self.logger.error(
-                    f"Stereo calibration not implemented for pattern type: {session.pattern_type}"
-                )
+            
+            # Extract corner points from image pairs
+            corner_extraction_result = self._extract_stereo_corner_points(session, images1, images2)
+            if not corner_extraction_result:
                 return None
-            for img1, img2 in zip(images1, images2):
-                gray1 = (
-                    cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-                    if len(img1.shape) == 3
-                    else img1
-                )
-                gray2 = (
-                    cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-                    if len(img2.shape) == 3
-                    else img2
-                )
-                found1, corners1 = cv2.findChessboardCorners(gray1, pattern_size)
-                found2, corners2 = cv2.findChessboardCorners(gray2, pattern_size)
-                if found1 and found2:
-                    criteria = (
-                        cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
-                        30,
-                        0.001,
-                    )
-                    corners1 = cv2.cornerSubPix(
-                        gray1, corners1, (11, 11), (-1, -1), criteria
-                    )
-                    corners2 = cv2.cornerSubPix(
-                        gray2, corners2, (11, 11), (-1, -1), criteria
-                    )
-                    object_points.append(objp)
-                    image_points1.append(corners1)
-                    image_points2.append(corners2)
-            if len(object_points) < 10:
-                self.logger.error(
-                    f"Insufficient valid image pairs for stereo calibration: {len(object_points)}"
-                )
+            object_points, image_points1, image_points2 = corner_extraction_result
+            
+            # Perform individual camera calibrations
+            calibration_matrices = self._perform_individual_camera_calibrations(
+                object_points, image_points1, image_points2, images1[0].shape[:2][::-1]
+            )
+            if not calibration_matrices:
                 return None
-            img_shape = images1[0].shape[:2][::-1]
+            
+            # Perform stereo calibration
+            stereo_params = self._perform_stereo_calculation(
+                object_points, image_points1, image_points2, calibration_matrices
+            )
+            if not stereo_params:
+                return None
+            
+            # Format and store results
+            stereo_result = self._format_stereo_calibration_results(
+                camera_pair, stereo_params, len(object_points)
+            )
+            
+            # Store results in session
+            camera1_key, camera2_key = camera_pair
+            stereo_key = f"stereo_{camera1_key}_{camera2_key}"
+            session.calibration_results[stereo_key] = stereo_result
+            
+            self.logger.info(
+                f"Stereo calibration completed for {camera_pair}: error={stereo_params['ret']:.4f}, pairs={len(object_points)}"
+            )
+            return stereo_result
+            
+        except Exception as e:
+            self.logger.error(f"Error performing stereo calibration: {e}")
+            return None
+
+    def _validate_stereo_calibration_inputs(
+        self, session_id: str, camera_pair: Tuple[str, str]
+    ) -> Optional[Tuple[Any, List, List]]:
+        """Validate session and camera pair inputs for stereo calibration."""
+        if session_id not in self.active_sessions:
+            self.logger.error(f"Session {session_id} not found")
+            return None
+            
+        session = self.active_sessions[session_id]
+        camera1_key, camera2_key = camera_pair
+        
+        if (camera1_key not in session.collected_images or 
+            camera2_key not in session.collected_images):
+            self.logger.error(f"Missing images for stereo calibration: {camera_pair}")
+            return None
+            
+        images1 = session.collected_images[camera1_key]
+        images2 = session.collected_images[camera2_key]
+        
+        if len(images1) != len(images2):
+            self.logger.error(
+                f"Mismatched image counts for stereo calibration: {len(images1)} vs {len(images2)}"
+            )
+            return None
+            
+        return session, images1, images2
+
+    def _extract_stereo_corner_points(
+        self, session: Any, images1: List, images2: List
+    ) -> Optional[Tuple[List, List, List]]:
+        """Extract corner points from stereo image pairs."""
+        object_points = []
+        image_points1 = []
+        image_points2 = []
+        
+        # Prepare calibration pattern
+        if session.pattern_type == PatternType.CHESSBOARD:
+            pattern_size = (6, 9)
+            objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
+            objp[:, :2] = np.mgrid[0:pattern_size[0], 0:pattern_size[1]].T.reshape(-1, 2)
+        else:
+            self.logger.error(
+                f"Stereo calibration not implemented for pattern type: {session.pattern_type}"
+            )
+            return None
+        
+        # Extract corners from each image pair
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+        
+        for img1, img2 in zip(images1, images2):
+            gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY) if len(img1.shape) == 3 else img1
+            gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY) if len(img2.shape) == 3 else img2
+            
+            found1, corners1 = cv2.findChessboardCorners(gray1, pattern_size)
+            found2, corners2 = cv2.findChessboardCorners(gray2, pattern_size)
+            
+            if found1 and found2:
+                corners1 = cv2.cornerSubPix(gray1, corners1, (11, 11), (-1, -1), criteria)
+                corners2 = cv2.cornerSubPix(gray2, corners2, (11, 11), (-1, -1), criteria)
+                
+                object_points.append(objp)
+                image_points1.append(corners1)
+                image_points2.append(corners2)
+        
+        if len(object_points) < 10:
+            self.logger.error(
+                f"Insufficient valid image pairs for stereo calibration: {len(object_points)}"
+            )
+            return None
+            
+        return object_points, image_points1, image_points2
+
+    def _perform_individual_camera_calibrations(
+        self, object_points: List, image_points1: List, image_points2: List, img_shape: Tuple
+    ) -> Optional[Dict[str, Any]]:
+        """Perform individual camera calibrations for both cameras."""
+        try:
             ret1, mtx1, dist1, rvecs1, tvecs1 = cv2.calibrateCamera(
                 object_points, image_points1, img_shape, None, None
             )
             ret2, mtx2, dist2, rvecs2, tvecs2 = cv2.calibrateCamera(
                 object_points, image_points2, img_shape, None, None
             )
+            
+            return {
+                'mtx1': mtx1, 'dist1': dist1,
+                'mtx2': mtx2, 'dist2': dist2,
+                'img_shape': img_shape
+            }
+        except Exception as e:
+            self.logger.error(f"Error in individual camera calibrations: {e}")
+            return None
+
+    def _perform_stereo_calculation(
+        self, object_points: List, image_points1: List, image_points2: List, 
+        calibration_matrices: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Perform the actual stereo calibration calculations."""
+        try:
             flags = cv2.CALIB_FIX_INTRINSIC
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 1e-05)
+            
             ret, mtx1, dist1, mtx2, dist2, R, T, E, F = cv2.stereoCalibrate(
-                object_points,
-                image_points1,
-                image_points2,
-                mtx1,
-                dist1,
-                mtx2,
-                dist2,
-                img_shape,
-                criteria=criteria,
-                flags=flags,
+                object_points, image_points1, image_points2,
+                calibration_matrices['mtx1'], calibration_matrices['dist1'],
+                calibration_matrices['mtx2'], calibration_matrices['dist2'],
+                calibration_matrices['img_shape'],
+                criteria=criteria, flags=flags
             )
+            
             R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(
-                mtx1, dist1, mtx2, dist2, img_shape, R, T
+                mtx1, dist1, mtx2, dist2, calibration_matrices['img_shape'], R, T
             )
-            stereo_result = {
-                "camera_pair": camera_pair,
-                "reprojection_error": ret,
-                "camera1_matrix": mtx1.tolist(),
-                "camera1_distortion": dist1.tolist(),
-                "camera2_matrix": mtx2.tolist(),
-                "camera2_distortion": dist2.tolist(),
-                "rotation_matrix": R.tolist(),
-                "translation_vector": T.tolist(),
-                "essential_matrix": E.tolist(),
-                "fundamental_matrix": F.tolist(),
-                "rectification_R1": R1.tolist(),
-                "rectification_R2": R2.tolist(),
-                "projection_P1": P1.tolist(),
-                "projection_P2": P2.tolist(),
-                "disparity_to_depth_Q": Q.tolist(),
-                "valid_pixel_ROI1": validPixROI1,
-                "valid_pixel_ROI2": validPixROI2,
-                "image_pairs_used": len(object_points),
-                "timestamp": time.time(),
+            
+            return {
+                'ret': ret, 'mtx1': mtx1, 'dist1': dist1, 'mtx2': mtx2, 'dist2': dist2,
+                'R': R, 'T': T, 'E': E, 'F': F,
+                'R1': R1, 'R2': R2, 'P1': P1, 'P2': P2, 'Q': Q,
+                'validPixROI1': validPixROI1, 'validPixROI2': validPixROI2
             }
-            stereo_key = f"stereo_{camera1_key}_{camera2_key}"
-            session.calibration_results[stereo_key] = stereo_result
-            self.logger.info(
-                f"Stereo calibration completed for {camera_pair}: error={ret:.4f}, pairs={len(object_points)}"
-            )
-            return stereo_result
         except Exception as e:
-            self.logger.error(f"Error performing stereo calibration: {e}")
+            self.logger.error(f"Error in stereo calibration calculation: {e}")
             return None
+
+    def _format_stereo_calibration_results(
+        self, camera_pair: Tuple[str, str], stereo_params: Dict[str, Any], num_pairs: int
+    ) -> Dict[str, Any]:
+        """Format stereo calibration results into standardized dictionary."""
+        return {
+            "camera_pair": camera_pair,
+            "reprojection_error": stereo_params['ret'],
+            "camera1_matrix": stereo_params['mtx1'].tolist(),
+            "camera1_distortion": stereo_params['dist1'].tolist(),
+            "camera2_matrix": stereo_params['mtx2'].tolist(),
+            "camera2_distortion": stereo_params['dist2'].tolist(),
+            "rotation_matrix": stereo_params['R'].tolist(),
+            "translation_vector": stereo_params['T'].tolist(),
+            "essential_matrix": stereo_params['E'].tolist(),
+            "fundamental_matrix": stereo_params['F'].tolist(),
+            "rectification_R1": stereo_params['R1'].tolist(),
+            "rectification_R2": stereo_params['R2'].tolist(),
+            "projection_P1": stereo_params['P1'].tolist(),
+            "projection_P2": stereo_params['P2'].tolist(),
+            "disparity_to_depth_Q": stereo_params['Q'].tolist(),
+            "valid_pixel_ROI1": stereo_params['validPixROI1'],
+            "valid_pixel_ROI2": stereo_params['validPixROI2'],
+            "image_pairs_used": num_pairs,
+            "timestamp": time.time(),
+        }
 
     def get_session_status(self, session_id: str) -> Optional[Dict[str, Any]]:
         try:

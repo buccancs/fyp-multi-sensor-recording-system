@@ -312,96 +312,22 @@ class ShimmerManager:
         self, device_info: Union[List[str], Dict[str, List[str]]]
     ) -> bool:
         """
-        Establish connections to all discovered Shimmer devices with comprehensive error handling.
+        Establish connections to all discovered Shimmer devices.
         
-        This method orchestrates the complex device connection process including:
-        - Handling both legacy (list) and modern (dict) device info formats
-        - Iterating through all discovered devices across multiple connection types
-        - Attempting multiple connection protocols (USB, Bluetooth, network)
-        - Implementing retry logic with exponential backoff for failed connections
-        - Validating device compatibility and firmware versions
-        - Configuring optimal streaming parameters per device type
-        - Establishing synchronization baseline across all connected devices
-        
-        The connection process handles various failure scenarios:
-        - Device busy/in-use by other applications
-        - Bluetooth pairing issues and authentication failures
-        - USB permission problems on different operating systems
-        - Firmware compatibility mismatches requiring updates
-        - Network connectivity issues for Android-integrated devices
-        - Cross-platform timing synchronization challenges
-        
-        High complexity (16) due to multiple connection paths, nested error handling
-        branches, and complex device state management across different platforms.
+        Simplified main coordination method that delegates to specialized handlers
+        based on device info format (legacy list vs. modern dict).
         
         Args:
-            device_info: Device information in one of two formats:
-                        - List[str]: Legacy format with device addresses/IDs (backwards compatibility)
-                        - Dict[str, List[str]]: Modern format mapping connection types to device lists
-                          {"direct": [device_ids], "android": [device_ids], "simulated": [device_ids]}
+            device_info: Device information in legacy (List[str]) or modern (Dict[str, List[str]]) format
         
         Returns:
-            bool: True if at least one device connected successfully, False if all connections failed
-            
-        Raises:
-            ConnectionError: When no devices can be connected after all retry attempts
-            DeviceCompatibilityError: When device firmware is incompatible with current drivers
-            PermissionError: When insufficient permissions for device access (common on Linux/macOS)
-            SynchronizationError: When cross-device timing synchronization fails
-            ValueError: When device_info format is invalid or empty
-            
-        Note:
-            Consider refactoring this high-complexity method into smaller, focused functions:
-            - _attempt_direct_device_connection()
-            - _attempt_android_device_connection() 
-            - _validate_device_compatibility()
-            - _configure_streaming_parameters()
-            - _establish_synchronization_baseline()
+            bool: True if at least one device connected successfully
         """
         try:
             if isinstance(device_info, list):
-                device_addresses = device_info
-                self.logger.info(
-                    f"Connecting to {len(device_addresses)} devices (legacy mode)..."
-                )
-                success_count = 0
-                for mac_address in device_addresses:
-                    if self._connect_single_device(
-                        mac_address, ConnectionType.SIMULATION
-                    ):
-                        success_count += 1
-                all_connected = success_count == len(device_addresses)
-                self.logger.info(
-                    f"Connection results: {success_count}/{len(device_addresses)} successful"
-                )
-                return all_connected
+                return self._connect_legacy_devices(device_info)
             elif isinstance(device_info, dict):
-                total_devices = 0
-                success_count = 0
-                if "direct" in device_info:
-                    for mac_address in device_info["direct"]:
-                        total_devices += 1
-                        if self._connect_single_device(
-                            mac_address, ConnectionType.DIRECT_BLUETOOTH
-                        ):
-                            success_count += 1
-                if "android" in device_info and self.enable_android_integration:
-                    for android_device_id in device_info["android"]:
-                        total_devices += 1
-                        if self._connect_android_device(android_device_id):
-                            success_count += 1
-                if "simulated" in device_info:
-                    for mac_address in device_info["simulated"]:
-                        total_devices += 1
-                        if self._connect_single_device(
-                            mac_address, ConnectionType.SIMULATION
-                        ):
-                            success_count += 1
-                all_connected = success_count == total_devices
-                self.logger.info(
-                    f"Enhanced connection results: {success_count}/{total_devices} successful"
-                )
-                return all_connected
+                return self._connect_modern_devices(device_info)
             else:
                 self.logger.error("Invalid device_info format")
                 return False
@@ -409,105 +335,182 @@ class ShimmerManager:
             self.logger.error(f"Error connecting devices: {e}")
             return False
 
+    def _connect_legacy_devices(self, device_addresses: List[str]) -> bool:
+        """Handle legacy device connection format (backwards compatibility)."""
+        self.logger.info(f"Connecting to {len(device_addresses)} devices (legacy mode)...")
+        success_count = 0
+        
+        for mac_address in device_addresses:
+            if self._connect_single_device(mac_address, ConnectionType.SIMULATION):
+                success_count += 1
+        
+        all_connected = success_count == len(device_addresses)
+        self.logger.info(f"Connection results: {success_count}/{len(device_addresses)} successful")
+        return all_connected
+
+    def _connect_modern_devices(self, device_info: Dict[str, List[str]]) -> bool:
+        """Handle modern device connection format with multiple connection types."""
+        total_devices = 0
+        success_count = 0
+        
+        # Connect direct Bluetooth devices
+        if "direct" in device_info:
+            direct_success = self._connect_direct_devices(device_info["direct"])
+            total_devices += len(device_info["direct"])
+            success_count += direct_success
+        
+        # Connect Android-integrated devices
+        if "android" in device_info and self.enable_android_integration:
+            android_success = self._connect_android_devices(device_info["android"])
+            total_devices += len(device_info["android"])
+            success_count += android_success
+        
+        # Connect simulated devices
+        if "simulated" in device_info:
+            simulated_success = self._connect_simulated_devices(device_info["simulated"])
+            total_devices += len(device_info["simulated"])
+            success_count += simulated_success
+        
+        all_connected = success_count == total_devices
+        self.logger.info(f"Enhanced connection results: {success_count}/{total_devices} successful")
+        return all_connected
+
+    def _connect_direct_devices(self, device_addresses: List[str]) -> int:
+        """Connect to devices via direct Bluetooth connection."""
+        success_count = 0
+        for mac_address in device_addresses:
+            if self._connect_single_device(mac_address, ConnectionType.DIRECT_BLUETOOTH):
+                success_count += 1
+        return success_count
+
+    def _connect_android_devices(self, android_device_ids: List[str]) -> int:
+        """Connect to devices via Android integration."""
+        success_count = 0
+        for android_device_id in android_device_ids:
+            if self._connect_android_device(android_device_id):
+                success_count += 1
+        return success_count
+
+    def _connect_simulated_devices(self, device_addresses: List[str]) -> int:
+        """Connect to simulated devices for testing/development."""
+        success_count = 0
+        for mac_address in device_addresses:
+            if self._connect_single_device(mac_address, ConnectionType.SIMULATION):
+                success_count += 1
+        return success_count
+
     def _connect_single_device(
         self, mac_address: str, connection_type: ConnectionType
     ) -> bool:
+        """Connect to a single device using the specified connection type."""
         try:
             device_id = f"shimmer_{mac_address.replace(':', '_')}"
+            
             if connection_type == ConnectionType.SIMULATION or not PYSHIMMER_AVAILABLE:
-                self.device_status[device_id] = ShimmerStatus(
-                    is_available=True,
-                    is_connected=True,
-                    device_state=DeviceState.CONNECTED,
-                    connection_type=connection_type,
-                    device_name=f"Shimmer3_{device_id[-4:]}",
-                    mac_address=mac_address,
-                    firmware_version="1.0.0",
-                    sampling_rate=self.default_sampling_rate,
-                )
-                self.device_configurations[device_id] = DeviceConfiguration(
-                    device_id=device_id,
-                    mac_address=mac_address,
-                    enabled_channels={
-                        "GSR",
-                        "PPG_A13",
-                        "Accel_X",
-                        "Accel_Y",
-                        "Accel_Z",
-                    },
-                    connection_type=connection_type,
-                )
-                self.data_queues[device_id] = queue.Queue(maxsize=self.data_buffer_size)
-                self.logger.info(f"Simulated connection to {device_id}")
-                return True
+                return self._setup_simulated_device(device_id, mac_address, connection_type)
             elif connection_type == ConnectionType.DIRECT_BLUETOOTH:
-                if not PYSHIMMER_AVAILABLE:
-                    self.logger.error(
-                        f"pyshimmer library not available for direct connection to {device_id}"
-                    )
-                    return False
-                try:
-                    self.logger.info(
-                        f"Establishing direct Bluetooth connection to {mac_address}"
-                    )
-                    serial_port = self._find_serial_port_for_device(mac_address)
-                    if not serial_port:
-                        self.logger.error(
-                            f"Could not find serial port for device {mac_address}"
-                        )
-                        return False
-                    from pyshimmer import ShimmerBluetooth
-
-                    shimmer_device = ShimmerBluetooth(serial_port)
-                    connect_success = shimmer_device.connect(timeout=10.0)
-                    if not connect_success:
-                        self.logger.error(
-                            f"Failed to connect to Shimmer device at {mac_address}"
-                        )
-                        return False
-                    shimmer_device.set_data_callback(
-                        lambda data: self._on_shimmer_data_received(device_id, data)
-                    )
-                    default_config = self.device_configurations.get(device_id)
-                    if default_config:
-                        self._configure_shimmer_device(shimmer_device, default_config)
-                    self.shimmer_devices[device_id] = shimmer_device
-                    self.device_status[device_id] = DeviceStatus(
-                        device_id=device_id,
-                        mac_address=mac_address,
-                        connection_status=ConnectionStatus.CONNECTED,
-                        connection_type=connection_type,
-                        last_seen=datetime.now(),
-                    )
-                    if device_id not in self.device_configurations:
-                        self.device_configurations[device_id] = DeviceConfiguration(
-                            device_id=device_id,
-                            mac_address=mac_address,
-                            enabled_channels={
-                                "GSR",
-                                "PPG_A13",
-                                "Accel_X",
-                                "Accel_Y",
-                                "Accel_Z",
-                            },
-                            connection_type=connection_type,
-                        )
-                    self.data_queues[device_id] = queue.Queue(
-                        maxsize=self.data_buffer_size
-                    )
-                    self.logger.info(
-                        f"Successfully connected to Shimmer device {device_id} via Bluetooth"
-                    )
-                    return True
-                except Exception as e:
-                    self.logger.error(
-                        f"Exception during Bluetooth connection to {mac_address}: {e}"
-                    )
-                    return False
+                return self._setup_bluetooth_device(device_id, mac_address, connection_type)
+            
             return False
         except Exception as e:
             self.logger.error(f"Error connecting to device {mac_address}: {e}")
             return False
+
+    def _setup_simulated_device(
+        self, device_id: str, mac_address: str, connection_type: ConnectionType
+    ) -> bool:
+        """Set up a simulated device for testing/development."""
+        self.device_status[device_id] = ShimmerStatus(
+            is_available=True,
+            is_connected=True,
+            device_state=DeviceState.CONNECTED,
+            connection_type=connection_type,
+            device_name=f"Shimmer3_{device_id[-4:]}",
+            mac_address=mac_address,
+            firmware_version="1.0.0",
+            sampling_rate=self.default_sampling_rate,
+        )
+        
+        self.device_configurations[device_id] = DeviceConfiguration(
+            device_id=device_id,
+            mac_address=mac_address,
+            enabled_channels={"GSR", "PPG_A13", "Accel_X", "Accel_Y", "Accel_Z"},
+            connection_type=connection_type,
+        )
+        
+        self.data_queues[device_id] = queue.Queue(maxsize=self.data_buffer_size)
+        self.logger.info(f"Simulated connection to {device_id}")
+        return True
+
+    def _setup_bluetooth_device(
+        self, device_id: str, mac_address: str, connection_type: ConnectionType
+    ) -> bool:
+        """Set up a real Bluetooth device connection."""
+        if not PYSHIMMER_AVAILABLE:
+            self.logger.error(
+                f"pyshimmer library not available for direct connection to {device_id}"
+            )
+            return False
+        
+        try:
+            self.logger.info(f"Establishing direct Bluetooth connection to {mac_address}")
+            
+            # Find and connect to serial port
+            serial_port = self._find_serial_port_for_device(mac_address)
+            if not serial_port:
+                self.logger.error(f"Could not find serial port for device {mac_address}")
+                return False
+            
+            from pyshimmer import ShimmerBluetooth
+            shimmer_device = ShimmerBluetooth(serial_port)
+            
+            # Establish connection
+            connect_success = shimmer_device.connect(timeout=10.0)
+            if not connect_success:
+                self.logger.error(f"Failed to connect to Shimmer device at {mac_address}")
+                return False
+            
+            # Configure device
+            shimmer_device.set_data_callback(
+                lambda data: self._on_shimmer_data_received(device_id, data)
+            )
+            
+            default_config = self.device_configurations.get(device_id)
+            if default_config:
+                self._configure_shimmer_device(shimmer_device, default_config)
+            
+            # Store device and status
+            self.shimmer_devices[device_id] = shimmer_device
+            self._store_device_status_and_config(device_id, mac_address, connection_type)
+            
+            self.logger.info(f"Successfully connected to Shimmer device {device_id} via Bluetooth")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Exception during Bluetooth connection to {mac_address}: {e}")
+            return False
+
+    def _store_device_status_and_config(
+        self, device_id: str, mac_address: str, connection_type: ConnectionType
+    ) -> None:
+        """Store device status and configuration after successful connection."""
+        self.device_status[device_id] = DeviceStatus(
+            device_id=device_id,
+            mac_address=mac_address,
+            connection_status=ConnectionStatus.CONNECTED,
+            connection_type=connection_type,
+            last_seen=datetime.now(),
+        )
+        
+        if device_id not in self.device_configurations:
+            self.device_configurations[device_id] = DeviceConfiguration(
+                device_id=device_id,
+                mac_address=mac_address,
+                enabled_channels={"GSR", "PPG_A13", "Accel_X", "Accel_Y", "Accel_Z"},
+                connection_type=connection_type,
+            )
+        
+        self.data_queues[device_id] = queue.Queue(maxsize=self.data_buffer_size)
 
     def _connect_android_device(self, android_device_id: str) -> bool:
         try:
