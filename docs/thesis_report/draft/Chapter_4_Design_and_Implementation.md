@@ -67,7 +67,7 @@ device: it sends a timestamped sync request and the device responds with
 its local time, allowing the controller to calculate round-trip latency
 and clock offset. This process is repeated multiple times and uses the
 attempt with the lowest latency to estimate the most accurate offset. In
-code, this is handled by a dedicated `SynchronizationEngine` on the PC
+code, this is handled by a dedicated `SessionSynchronizer` on the PC
 that iteratively exchanges timing messages until the offset estimation
 converges within a target precision (5 ms
 deviation)[\[1\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=self.sync_precision%20%3D%200.005%20%20,5ms%20precision%20target).
@@ -732,7 +732,7 @@ Manager executes a well-defined sequence:
   sequence with an error detailing which device failed and why.
 
 - **Phase 2: Synchronization Setup.** Next, the Session Manager calls
-  the `SynchronizationEngine` (Section 4.6.2) to perform a final clock
+  the `SessionSynchronizer` (Section 4.6.2) to perform a final clock
   synchronization across devices immediately prior to recording. This
   provides a reference start time. The result of this step is a
   `synchronized_time` -- effectively the planned global timestamp at
