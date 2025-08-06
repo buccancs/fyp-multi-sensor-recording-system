@@ -18,37 +18,37 @@ class SecureLogger @Inject constructor(
 ) {
     
     companion object {
-        private val SENSITIVE_PATTERNS = listOf(
+        private val SENSITIVE_PATTERNS = mapOf<Regex, (MatchResult) -> String>(
             // Authentication tokens and passwords
-            Regex("(?i)(token|password|secret|key|auth)\\s*[:=]\\s*[\"']?([^\\s\"']{8,})[\"']?") { matchResult ->
+            Regex("(?i)(token|password|secret|key|auth)\\s*[:=]\\s*[\"']?([^\\s\"']{8,})[\"']?") to { matchResult ->
                 "${matchResult.groupValues[1]}=***"
             },
             
             // MAC addresses
-            Regex("([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})") { "**:**:**:**:**:**" },
+            Regex("([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})") to { _ -> "**:**:**:**:**:**" },
             
             // IP addresses (but preserve localhost)
-            Regex("\\b(?!127\\.0\\.0\\.1|localhost)(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b") { "***.***.***.***" },
+            Regex("\\b(?!127\\.0\\.0\\.1|localhost)(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b") to { _ -> "***.***.***.***" },
             
             // Phone numbers (international format)
-            Regex("\\+?[1-9]\\d{1,14}\\b") { "***-***-****" },
+            Regex("\\+?[1-9]\\d{1,14}\\b") to { _ -> "***-***-****" },
             
             // Email addresses
-            Regex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b") { "***@***.***" },
+            Regex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b") to { _ -> "***@***.***" },
             
             // Base64 encoded data (likely tokens or encrypted data)
-            Regex("[A-Za-z0-9+/]{20,}={0,2}") { "***[base64]***" },
+            Regex("[A-Za-z0-9+/]{20,}={0,2}") to { _ -> "***[base64]***" },
             
             // Hex strings that could be keys or hashes
-            Regex("\\b[0-9A-Fa-f]{32,}\\b") { "***[hex]***" },
+            Regex("\\b[0-9A-Fa-f]{32,}\\b") to { _ -> "***[hex]***" },
             
             // Device serial numbers (keeping only first and last 2 chars)
-            Regex("\\bserial[\"'\\s]*[:=][\"'\\s]*([A-Za-z0-9]{2})([A-Za-z0-9]+)([A-Za-z0-9]{2})[\"'\\s]*") { matchResult ->
+            Regex("\\bserial[\"'\\s]*[:=][\"'\\s]*([A-Za-z0-9]{2})([A-Za-z0-9]+)([A-Za-z0-9]{2})[\"'\\s]*") to { matchResult ->
                 "serial=${matchResult.groupValues[1]}***${matchResult.groupValues[3]}"
             },
             
             // Stack traces from sensitive packages (remove line numbers and method details)
-            Regex("at\\s+(com\\.multisensor\\.recording\\.security\\.[^\\s]+)\\([^)]+\\)") { matchResult ->
+            Regex("at\\s+(com\\.multisensor\\.recording\\.security\\.[^\\s]+)\\([^)]+\\)") to { matchResult ->
                 "at ${matchResult.groupValues[1].substringBeforeLast('.')}.**(***)"
             }
         )
@@ -112,11 +112,7 @@ class SecureLogger @Inject constructor(
         
         // Apply additional patterns specific to our application
         SENSITIVE_PATTERNS.forEach { (pattern, replacement) ->
-            sanitized = when (replacement) {
-                is String -> pattern.replace(sanitized, replacement)
-                is (MatchResult) -> String -> pattern.replace(sanitized, replacement)
-                else -> pattern.replace(sanitized, "***")
-            }
+            sanitized = pattern.replace(sanitized, replacement)
         }
         
         return sanitized

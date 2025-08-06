@@ -6,6 +6,7 @@ import com.multisensor.recording.security.SecurityUtils
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.IOException
@@ -13,6 +14,7 @@ import java.net.InetSocketAddress
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.inject.Inject
+import javax.inject.Singleton
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
@@ -20,7 +22,7 @@ import javax.net.ssl.SSLSocketFactory
  * Secure JSON socket client that uses TLS/SSL for encrypted communication.
  * Replaces the plain JsonSocketClient with security features.
  */
-@ServiceScoped
+@Singleton
 class SecureJsonSocketClient
 @Inject
 constructor(
@@ -229,10 +231,11 @@ constructor(
                 sslSocket?.apply {
                     soTimeout = CONNECTION_TIMEOUT_MS
                     enabledProtocols = arrayOf("TLSv1.2", "TLSv1.3")
-                    enabledCipherSuites = cipherSuites?.filter { cipher ->
+                    val supportedCiphers = supportedCipherSuites
+                    enabledCipherSuites = supportedCiphers?.filter { cipher ->
                         cipher.contains("AES") && cipher.contains("GCM") ||
                         cipher.contains("CHACHA20")
-                    }?.toTypedArray()
+                    }?.toTypedArray() ?: supportedCiphers
                     
                     connect(InetSocketAddress(serverIp, serverPort), CONNECTION_TIMEOUT_MS)
                     startHandshake()
@@ -336,7 +339,9 @@ constructor(
             isAuthenticated = false
             logger.error("Authentication failed: ${message.message}")
             authCallback?.invoke(false)
-            handleConnectionError()
+            connectionScope?.launch {
+                handleConnectionError()
+            }
         }
     }
 
@@ -398,6 +403,19 @@ data class AuthenticateMessage(
     val token: String
 ) : JsonMessage() {
     override val type: String = "authenticate"
+    
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
+            put("type", type)
+            put("token", token)
+        }
+    
+    companion object {
+        fun fromJson(json: JSONObject): AuthenticateMessage =
+            AuthenticateMessage(
+                token = json.getString("token")
+            )
+    }
 }
 
 data class AuthResponseMessage(
@@ -405,4 +423,19 @@ data class AuthResponseMessage(
     val message: String? = null
 ) : JsonMessage() {
     override val type: String = "auth_response"
+    
+    override fun toJsonObject(): JSONObject =
+        JSONObject().apply {
+            put("type", type)
+            put("success", success)
+            message?.let { put("message", it) }
+        }
+    
+    companion object {
+        fun fromJson(json: JSONObject): AuthResponseMessage =
+            AuthResponseMessage(
+                success = json.getBoolean("success"),
+                message = if (json.has("message")) json.getString("message") else null
+            )
+    }
 }
