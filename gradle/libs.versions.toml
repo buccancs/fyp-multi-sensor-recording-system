@@ -10,6 +10,7 @@ ksp = "2.0.20-1.0.24"
 composeBom = "2024.12.01"
 composeActivity = "1.9.3"
 composeNavigation = "2.8.5"
+hiltNavigationCompose = "1.2.0"
 
 
 coreKtx = "1.13.1"
@@ -73,6 +74,7 @@ androidx-compose-material3-compose = { module = "androidx.compose.material3:mate
 androidx-compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -162,7 +164,8 @@ compose-ui = [
     "androidx-compose-material3-compose",
     "androidx-compose-material-icons",
     "androidx-activity-compose",
-    "androidx-navigation-compose"
+    "androidx-navigation-compose",
+    "androidx-hilt-navigation-compose"
 ]
 
 
