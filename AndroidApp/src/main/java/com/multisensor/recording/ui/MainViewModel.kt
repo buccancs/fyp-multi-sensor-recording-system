@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.network.FileTransferHandler
+import com.multisensor.recording.network.JsonSocketClient
+import com.multisensor.recording.network.NetworkConfiguration
 import com.multisensor.recording.network.SendFileCommand
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
@@ -34,6 +36,8 @@ constructor(
     private val sessionManager: SessionManager,
     private val fileTransferHandler: FileTransferHandler,
     private val calibrationCaptureManager: CalibrationCaptureManager,
+    private val jsonSocketClient: JsonSocketClient,
+    private val networkConfiguration: NetworkConfiguration,
     private val logger: Logger,
 ) : ViewModel() {
 
@@ -776,12 +780,70 @@ constructor(
     fun connectToPC() {
         viewModelScope.launch {
             try {
-                logger.info("Connecting to PC")
+                logger.info("Connecting to PC server...")
                 updateUiState { currentState ->
-                    currentState.copy(isPcConnected = true)
+                    currentState.copy(
+                        statusText = "Connecting to PC server...",
+                        isConnecting = true
+                    )
                 }
+                
+                // Configure JsonSocketClient with network settings
+                val serverConfig = networkConfiguration.getServerConfiguration()
+                jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
+                
+                // Attempt connection
+                jsonSocketClient.connect()
+                
+                // Give connection time to establish
+                kotlinx.coroutines.delay(2000)
+                
+                // Check connection status
+                val isConnected = jsonSocketClient.isConnected()
+                
+                if (isConnected) {
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            isPcConnected = true,
+                            isConnecting = false,
+                            statusText = "Connected to PC at ${serverConfig.getJsonAddress()}",
+                            systemHealth = currentState.systemHealth.copy(
+                                pcConnection = SystemHealthStatus.HealthStatus.CONNECTED,
+                                networkConnection = SystemHealthStatus.HealthStatus.CONNECTED
+                            )
+                        )
+                    }
+                    logger.info("Successfully connected to PC server at ${serverConfig.getJsonAddress()}")
+                } else {
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            isPcConnected = false,
+                            isConnecting = false,
+                            statusText = "Failed to connect to PC at ${serverConfig.getJsonAddress()}",
+                            errorMessage = "Could not establish connection to PC server. Please check:\n• PC server is running\n• Network configuration is correct\n• Firewall settings allow connection",
+                            systemHealth = currentState.systemHealth.copy(
+                                pcConnection = SystemHealthStatus.HealthStatus.ERROR,
+                                networkConnection = SystemHealthStatus.HealthStatus.ERROR
+                            )
+                        )
+                    }
+                    logger.error("Failed to connect to PC server at ${serverConfig.getJsonAddress()}")
+                }
+                
             } catch (e: Exception) {
                 logger.error("Error connecting to PC", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        isPcConnected = false,
+                        isConnecting = false,
+                        statusText = "PC connection error: ${e.message}",
+                        errorMessage = "Connection failed: ${e.message}",
+                        systemHealth = currentState.systemHealth.copy(
+                            pcConnection = SystemHealthStatus.HealthStatus.ERROR,
+                            networkConnection = SystemHealthStatus.HealthStatus.ERROR
+                        )
+                    )
+                }
             }
         }
     }
@@ -789,12 +851,38 @@ constructor(
     fun disconnectFromPC() {
         viewModelScope.launch {
             try {
-                logger.info("Disconnecting from PC")
+                logger.info("Disconnecting from PC server...")
                 updateUiState { currentState ->
-                    currentState.copy(isPcConnected = false)
+                    currentState.copy(
+                        statusText = "Disconnecting from PC...",
+                        isConnecting = true
+                    )
                 }
+                
+                // Disconnect JsonSocketClient
+                jsonSocketClient.disconnect()
+                
+                updateUiState { currentState ->
+                    currentState.copy(
+                        isPcConnected = false,
+                        isConnecting = false,
+                        statusText = "Disconnected from PC server",
+                        systemHealth = currentState.systemHealth.copy(
+                            pcConnection = SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            networkConnection = SystemHealthStatus.HealthStatus.DISCONNECTED
+                        )
+                    )
+                }
+                logger.info("Successfully disconnected from PC server")
             } catch (e: Exception) {
                 logger.error("Error disconnecting from PC", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        isConnecting = false,
+                        statusText = "Disconnect error: ${e.message}",
+                        errorMessage = "Disconnect failed: ${e.message}"
+                    )
+                }
             }
         }
     }
@@ -1361,9 +1449,11 @@ constructor(
                 val shimmerStatus = shimmerRecorder.getShimmerStatus()
                 val shimmerConnected = shimmerStatus.isConnected
 
-                val pcConnected = false
+                // Check PC connection status
+                val pcConnected = jsonSocketClient.isConnected()
 
-                val networkConnected = false
+                // Network connected if PC is connected
+                val networkConnected = pcConnected
 
                 val statusMessage = buildString {
                     append("Status updated - ")
@@ -1379,7 +1469,25 @@ constructor(
                         isShimmerConnected = shimmerConnected,
                         isPcConnected = pcConnected,
                         isNetworkConnected = networkConnected,
-                        thermalPreviewAvailable = thermalAvailable
+                        thermalPreviewAvailable = thermalAvailable,
+                        systemHealth = currentState.systemHealth.copy(
+                            thermalCamera = if (thermalAvailable) 
+                                SystemHealthStatus.HealthStatus.CONNECTED 
+                            else 
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            shimmerConnection = if (shimmerConnected) 
+                                SystemHealthStatus.HealthStatus.CONNECTED 
+                            else 
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            pcConnection = if (pcConnected) 
+                                SystemHealthStatus.HealthStatus.CONNECTED 
+                            else 
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            networkConnection = if (networkConnected) 
+                                SystemHealthStatus.HealthStatus.CONNECTED 
+                            else 
+                                SystemHealthStatus.HealthStatus.DISCONNECTED
+                        )
                     )
                 }
 
@@ -1491,7 +1599,29 @@ constructor(
                     logger.error("Shimmer connection error", e)
                 }
                 
-                // Connect to thermal camera
+                // Connect to PC server
+                totalAttempts++
+                try {
+                    val serverConfig = networkConfiguration.getServerConfiguration()
+                    jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
+                    jsonSocketClient.connect()
+                    
+                    // Give connection time to establish
+                    kotlinx.coroutines.delay(1000)
+                    
+                    val pcConnected = jsonSocketClient.isConnected()
+                    if (pcConnected) {
+                        successCount++
+                        connectionResults.add("PC: Connected (${serverConfig.getJsonAddress()})")
+                        logger.info("PC server connected at ${serverConfig.getJsonAddress()}")
+                    } else {
+                        connectionResults.add("PC: Connection failed")
+                        logger.warning("PC server connection failed")
+                    }
+                } catch (e: Exception) {
+                    connectionResults.add("PC: Error - ${e.message}")
+                    logger.error("PC server connection error", e)
+                }
                 totalAttempts++
                 try {
                     val thermalAvailable = thermalRecorder.isThermalCameraAvailable()
@@ -1518,6 +1648,7 @@ constructor(
                         isCameraConnected = connectionResults.any { it.startsWith("Camera: Available") },
                         isShimmerConnected = connectionResults.any { it.startsWith("Shimmer: Connected") },
                         isThermalConnected = connectionResults.any { it.startsWith("Thermal: Available") },
+                        isPcConnected = connectionResults.any { it.startsWith("PC: Connected") },
                         systemHealth = currentState.systemHealth.copy(
                             shimmerConnection = if (connectionResults.any { it.startsWith("Shimmer: Connected") })
                                 SystemHealthStatus.HealthStatus.CONNECTED
@@ -1528,6 +1659,14 @@ constructor(
                             else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED,
                             rgbCamera = if (connectionResults.any { it.startsWith("Camera: Available") })
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            pcConnection = if (connectionResults.any { it.startsWith("PC: Connected") })
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
+                                SystemHealthStatus.HealthStatus.DISCONNECTED,
+                            networkConnection = if (connectionResults.any { it.startsWith("PC: Connected") })
                                 SystemHealthStatus.HealthStatus.CONNECTED
                             else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED
