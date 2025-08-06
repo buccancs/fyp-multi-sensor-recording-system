@@ -4246,26 +4246,58 @@ with detailed code snippets provided in **Appendix F**.
 - `PythonApp/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
   F.87)
 
+**Enhanced User Interface and Interaction Framework:**
+
+- `PythonApp/gui/enhanced_main_window.py` - PsychoPy-inspired stimulus controller integration with VLC backend support
+  and enhanced timing precision (See Appendix F.87.1)
+- `PythonApp/gui/enhanced_ui_main_window.py` - Comprehensive UI framework with real-time monitoring and advanced
+  session control capabilities (See Appendix F.87.2)
+- `PythonApp/gui/enhanced_stimulus_controller.py` - Advanced stimulus presentation system with performance monitoring
+  and precise temporal control (See Appendix F.87.3)
+- `PythonApp/gui/calibration_dialog.py` - Interactive calibration interface with real-time quality feedback and
+  guided user workflows (See Appendix F.87.4)
+- `PythonApp/gui/device_panel.py` - Real-time device status visualization with comprehensive health monitoring and
+  connectivity management (See Appendix F.87.5)
+- `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronized display and quality assessment (See
+  Appendix F.87.6)
+- `PythonApp/web_ui/` - Complete web-based interface system enabling remote monitoring and control through standard
+  browsers (See Appendix F.87.7)
+
 **Computer Vision Pipeline and Signal Processing:**
 
 - `PythonApp/hand_segmentation/hand_segmentation_processor.py` - MediaPipe and OpenCV integration for contactless
-  analysis (See Appendix F.88)
+  analysis (See Appendix F.95)
 - `PythonApp/webcam/dual_webcam_capture.py` - Stereo vision implementation with geometric calibration (See Appendix
-  F.89)
+  F.96)
 - `PythonApp/calibration/calibration_processor.py` - Advanced signal processing with statistical validation (See
-  Appendix F.90)
+  Appendix F.97)
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android computer
-  vision pipeline implementation (See Appendix F.91)
+  vision pipeline implementation (See Appendix F.98)
+
+**Android Advanced Architecture and Performance Optimization:**
+
+- `AndroidApp/src/main/java/com/multisensor/recording/di/` - Comprehensive Dagger Hilt dependency injection framework
+  providing modular architecture and enhanced testability (See Appendix F.98.1)
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Intelligent network traffic
+  optimization with adaptive bandwidth management (See Appendix F.98.2)
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Advanced power management with
+  thermal throttling and battery optimization (See Appendix F.98.3)
+- `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt` - Real-time
+  calibration quality evaluation with automated feedback systems (See Appendix F.98.4)
+- `AndroidApp/src/main/java/com/multisensor/recording/monitoring/` - Comprehensive system monitoring with predictive
+  analytics and health assessment (See Appendix F.98.5)
+- `AndroidApp/src/main/java/com/multisensor/recording/security/` - Enterprise-grade security framework with data
+  protection and access control (See Appendix F.98.6)
 
 **Communication Protocol Implementation and Data Management:**
 
-- `PythonApp/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.92)
+- `PythonApp/protocol/` - JSON schema definitions and protocol validation utilities (See Appendix F.99)
 - `PythonApp/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix
-  F.93)
+  F.100)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication
-  with state synchronization (See Appendix F.94)
+  with state synchronization (See Appendix F.101)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation with
-  schema compliance checking (See Appendix F.95)
+  schema compliance checking (See Appendix F.102)
 
 **Data Processing, Analysis, and Quality Assurance:**
 
