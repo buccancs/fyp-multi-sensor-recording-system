@@ -17,12 +17,9 @@ import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import com.multisensor.recording.handsegmentation.HandSegmentationManager
-import com.multisensor.recording.recording.RecordingState
-import com.multisensor.recording.recording.RecordingStateManager
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.streaming.PreviewStreamer
 import com.multisensor.recording.util.Logger
-import com.multisensor.recording.util.ResourceMonitor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
@@ -43,8 +40,6 @@ constructor(
     private val sessionManager: SessionManager,
     private val logger: Logger,
     private val handSegmentationManager: HandSegmentationManager,
-    private val recordingStateManager: RecordingStateManager,
-    private val resourceMonitor: ResourceMonitor
 ) {
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
@@ -142,18 +137,8 @@ constructor(
                 } finally {
                     cameraLock.release()
                 }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: SecurityException) {
-                logger.error("Security exception during camera initialization - check permissions", e)
-                cleanup()
-                false
-            } catch (e: IllegalStateException) {
-                logger.error("Invalid camera state during initialization", e)
-                cleanup()
-                false
-            } catch (e: RuntimeException) {
-                logger.error("Runtime error during camera initialization", e)
+            } catch (e: Exception) {
+                logger.error("Failed to initialize CameraRecorder", e)
                 cleanup()
                 false
             }
@@ -162,80 +147,54 @@ constructor(
     suspend fun startSession(
         recordVideo: Boolean,
         captureRaw: Boolean,
-    ): SessionInfo? = 
-        recordingStateManager.transitionToState(RecordingState.STARTING) {
-            startSessionInternal(recordVideo, captureRaw)
-        }.fold(
-            onSuccess = { currentSessionInfo },
-            onFailure = { error ->
-                logger.error("Failed to start camera session", error)
-                null
-            }
-        )
-
-    private suspend fun startSessionInternal(
-        recordVideo: Boolean,
-        captureRaw: Boolean,
-    ): Result<Unit> = withContext(cameraDispatcher) {
-        try {
-            // Check resources before starting
-            resourceMonitor.checkResourcesForRecording(estimatedDurationMinutes = 30).getOrElse { error ->
-                return@withContext Result.failure(Exception("Insufficient resources: ${error.message}"))
-            }
-            
-            if (!cameraLock.tryAcquire(CAMERA_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                return@withContext Result.failure(Exception("Camera lock timeout during session start"))
-            }
-
+    ): SessionInfo? =
+        withContext(cameraDispatcher) {
             try {
-                if (!isInitialized) {
-                    return@withContext Result.failure(Exception("CameraRecorder not initialized"))
-                }
-
-                if (isSessionActive) {
-                    logger.warning("Camera session already active")
-                    return@withContext Result.success(Unit)
-                }
-
-                val sessionId = "Session_${System.currentTimeMillis()}"
-                val sessionInfo = SessionInfo(
-                    sessionId = sessionId,
-                    videoEnabled = recordVideo,
-                    rawEnabled = captureRaw,
-                    startTime = System.currentTimeMillis(),
-                    cameraId = cameraId,
-                    videoResolution = if (recordVideo) "${videoSize.width}x${videoSize.height}" else null,
-                    rawResolution = if (captureRaw) "${rawSize?.width}x${rawSize?.height}" else null,
-                )
-
-                logger.info("Starting camera session: ${sessionInfo.getSummary()}")
-
-                // Register resources for tracking
-                recordingStateManager.registerResource("camera_device")
-                if (recordVideo) recordingStateManager.registerResource("media_recorder")
-                if (captureRaw) recordingStateManager.registerResource("raw_image_reader")
-
-                if (!openCamera()) {
-                    sessionInfo.markError("Failed to open camera")
-                    cleanupResources()
-                    return@withContext Result.failure(Exception("Failed to open camera"))
-                }
-
-                val surfaces = mutableListOf<Surface>()
-
-                previewSurface?.let { surfaces.add(it) }
-
-                if (recordVideo) {
-                    try {
-                        setupMediaRecorder(sessionInfo)
-                        mediaRecorder?.surface?.let { surfaces.add(it) }
-                    } catch (e: Exception) {
-                        cleanupResources()
-                        return@withContext Result.failure(Exception("Failed to setup media recorder: ${e.message}"))
-                    }
+                if (!cameraLock.tryAcquire(CAMERA_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+                    logger.error("Camera lock timeout during session start")
+                    return@withContext null
                 }
 
                 try {
+                    if (!isInitialized) {
+                        logger.error("CameraRecorder not initialized")
+                        return@withContext null
+                    }
+
+                    if (isSessionActive) {
+                        logger.warning("Camera session already active")
+                        return@withContext currentSessionInfo
+                    }
+
+                    val sessionId = "Session_${System.currentTimeMillis()}"
+                    val sessionInfo =
+                        SessionInfo(
+                            sessionId = sessionId,
+                            videoEnabled = recordVideo,
+                            rawEnabled = captureRaw,
+                            startTime = System.currentTimeMillis(),
+                            cameraId = cameraId,
+                            videoResolution = if (recordVideo) "${videoSize.width}x${videoSize.height}" else null,
+                            rawResolution = if (captureRaw) "${rawSize?.width}x${rawSize?.height}" else null,
+                        )
+
+                    logger.info("Starting camera session: ${sessionInfo.getSummary()}")
+
+                    if (!openCamera()) {
+                        sessionInfo.markError("Failed to open camera")
+                        logger.error("Failed to open camera")
+                        return@withContext null
+                    }
+
+                    val surfaces = mutableListOf<Surface>()
+
+                    previewSurface?.let { surfaces.add(it) }
+
+                    if (recordVideo) {
+                        setupMediaRecorder(sessionInfo)
+                        mediaRecorder?.surface?.let { surfaces.add(it) }
+                    }
+
                     setupPreviewImageReader()
                     previewImageReader?.surface?.let { surfaces.add(it) }
 
@@ -254,19 +213,9 @@ constructor(
                         try {
                             mediaRecorder?.start()
                             logger.info("Video recording started")
-                        } catch (e: CancellationException) {
-                            throw e
-                        } catch (e: IllegalStateException) {
-                            sessionInfo.markError("Invalid state during video recording start: ${e.message}")
-                            logger.error("Invalid state starting video recording", e)
-                            return@withContext null
-                        } catch (e: IOException) {
-                            sessionInfo.markError("IO error during video recording start: ${e.message}")
-                            logger.error("IO error starting video recording", e)
-                            return@withContext null
-                        } catch (e: RuntimeException) {
+                        } catch (e: Exception) {
                             sessionInfo.markError("Failed to start video recording: ${e.message}")
-                            logger.error("Runtime error starting video recording", e)
+                            logger.error("Failed to start video recording", e)
                             return@withContext null
                         }
                     }
@@ -280,153 +229,94 @@ constructor(
                 } finally {
                     cameraLock.release()
                 }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: SecurityException) {
-                logger.error("Security exception starting camera session - check permissions", e)
-                stopSession()
-                null
-            } catch (e: IllegalStateException) {
-                logger.error("Invalid state starting camera session", e)
-                stopSession()
-                null
-            } catch (e: IOException) {
-                logger.error("IO error starting camera session", e)
-                stopSession()
-                null
-            } catch (e: RuntimeException) {
-                logger.error("Runtime error starting camera session", e)
+            } catch (e: Exception) {
+                logger.error("Failed to start camera session", e)
                 stopSession()
                 null
             }
         }
 
-    suspend fun stopSession(): SessionInfo? = 
-        recordingStateManager.transitionToState(RecordingState.STOPPING) {
-            stopSessionInternal()
-        }.fold(
-            onSuccess = { currentSessionInfo },
-            onFailure = { error ->
-                logger.error("Failed to stop camera session properly", error)
-                // Force cleanup if normal stop failed
-                runCatching { forceCleanup() }
-                currentSessionInfo
-            }
-        )
-
-    private suspend fun stopSessionInternal(): Result<Unit> = withContext(cameraDispatcher) {
-        try {
-            if (!cameraLock.tryAcquire(CAMERA_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                return@withContext Result.failure(Exception("Camera lock timeout during session stop"))
-            }
-
+    suspend fun stopSession(): SessionInfo? =
+        withContext(cameraDispatcher) {
             try {
-                if (!isSessionActive) {
-                    logger.info("No active camera session to stop")
-                    return@withContext Result.success(Unit)
+                if (!cameraLock.tryAcquire(CAMERA_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+                    logger.error("Camera lock timeout during session stop")
+                    return@withContext currentSessionInfo
                 }
 
-                val sessionInfo = currentSessionInfo
-                logger.info("Stopping camera session: ${sessionInfo?.getSummary()}")
+                try {
+                    if (!isSessionActive) {
+                        logger.info("No active camera session to stop")
+                        return@withContext null
+                    }
 
-                // Stop video recording with error handling
-                if (sessionInfo?.videoEnabled == true) {
-                    try {
-                        mediaRecorder?.stop()
-                        logger.info("Video recording stopped and finalized")
-                    } catch (e: Exception) {
-                        sessionInfo?.markError("Error stopping video recording: ${e.message}")
-                        logger.warning("Error stopping MediaRecorder", e)
-                        // Continue with cleanup despite error
+                    val sessionInfo = currentSessionInfo
+                    logger.info("Stopping camera session: ${sessionInfo?.getSummary()}")
+
+                    if (sessionInfo?.videoEnabled == true) {
+                        try {
+                            mediaRecorder?.stop()
+                            logger.info("Video recording stopped and finalized")
+                        } catch (e: Exception) {
+                            sessionInfo?.markError("Error stopping video recording: ${e.message}")
+                            logger.warning("Error stopping MediaRecorder", e)
+                        }
+
+                        try {
+                            mediaRecorder?.reset()
+                            mediaRecorder?.release()
+                            mediaRecorder = null
+                        } catch (e: Exception) {
+                            logger.warning("Error releasing MediaRecorder", e)
+                        }
+                    }
+
+                    if (sessionInfo?.rawEnabled == true) {
+                        try {
+                            kotlinx.coroutines.delay(100)
+                            logger.info("RAW capture completed. Total images: ${sessionInfo.getRawImageCount()}")
+                        } catch (e: Exception) {
+                            sessionInfo?.markError("Error finalizing RAW captures: ${e.message}")
+                            logger.warning("Error finalizing RAW captures", e)
+                        }
                     }
 
                     try {
-                        mediaRecorder?.reset()
-                        mediaRecorder?.release()
-                        mediaRecorder = null
-                        recordingStateManager.unregisterResource("media_recorder")
+                        captureSession?.close()
+                        captureSession = null
+                        logger.debug("Capture session closed")
                     } catch (e: Exception) {
-                        logger.warning("Error releasing MediaRecorder", e)
+                        logger.warning("Error closing capture session", e)
                     }
-                }
 
-                // Finalize RAW capture with error handling
-                if (sessionInfo?.rawEnabled == true) {
                     try {
-                        kotlinx.coroutines.delay(100)
-                        logger.info("RAW capture completed. Total images: ${sessionInfo.getRawImageCount()}")
-                        recordingStateManager.unregisterResource("raw_image_reader")
+                        cameraDevice?.close()
+                        cameraDevice = null
+                        logger.debug("Camera device closed")
                     } catch (e: Exception) {
-                        sessionInfo?.markError("Error finalizing RAW captures: ${e.message}")
-                        logger.warning("Error finalizing RAW captures", e)
+                        logger.warning("Error closing camera device", e)
                     }
-                }
 
-                // Clean up camera resources with individual error handling
-                cleanupResources()
+                    try {
+                        rawImageReader?.close()
+                        rawImageReader = null
+                        logger.debug("RAW ImageReader closed")
+                    } catch (e: Exception) {
+                        logger.warning("Error closing RAW ImageReader", e)
+                    }
 
-                sessionInfo?.endTime = System.currentTimeMillis()
-                currentSessionInfo = null
-                isSessionActive = false
+                    try {
+                        previewImageReader?.close()
+                        previewImageReader = null
+                        logger.debug("Preview ImageReader closed")
+                    } catch (e: Exception) {
+                        logger.warning("Error closing Preview ImageReader", e)
+                    }
 
-                logger.info("Camera session stopped successfully")
-                Result.success(Unit)
-                
-            } finally {
-                cameraLock.release()
-            }
-        } catch (e: Exception) {
-            logger.error("Failed to stop camera session", e)
-            Result.failure(e)
-        }
-    }
-    
-    /**
-     * Safely cleans up all camera-related resources with individual error handling.
-     */
-    private suspend fun cleanupResources() {
-        // Close capture session
-        try {
-            captureSession?.close()
-            captureSession = null
-            logger.debug("Capture session closed")
-        } catch (e: Exception) {
-            logger.warning("Error closing capture session", e)
-        }
-
-        // Close camera device
-        try {
-            cameraDevice?.close()
-            cameraDevice = null
-            recordingStateManager.unregisterResource("camera_device")
-            logger.debug("Camera device closed")
-        } catch (e: Exception) {
-            logger.warning("Error closing camera device", e)
-        }
-
-        // Close RAW ImageReader
-        try {
-            rawImageReader?.close()
-            rawImageReader = null
-            logger.debug("RAW ImageReader closed")
-        } catch (e: Exception) {
-            logger.warning("Error closing RAW ImageReader", e)
-        }
-
-        // Close preview ImageReader
-        try {
-            previewImageReader?.close()
-            previewImageReader = null
-            logger.debug("Preview ImageReader closed")
-        } catch (e: Exception) {
-            logger.warning("Error closing Preview ImageReader", e)
-        }
-
-        // Release preview surface
-        try {
-            previewSurface?.release()
-            previewSurface = null
-            logger.debug("Preview surface released")
+                    try {
+                        previewSurface?.release()
+                        previewSurface = null
+                        logger.debug("Preview surface released")
                     } catch (e: Exception) {
                         logger.warning("Error releasing preview surface", e)
                     }
@@ -1834,61 +1724,6 @@ constructor(
             logger.error("Error checking RAW stage 3 availability", e)
             false
         }
-    }
-
-    /**
-     * Force cleanup of all resources in emergency situations.
-     * This method is more aggressive and doesn't wait for locks.
-     */
-    private suspend fun forceCleanup() {
-        logger.warning("Force cleanup initiated - releasing all camera resources")
-        
-        runCatching {
-            mediaRecorder?.apply {
-                stop()
-                reset()
-                release()
-            }
-            mediaRecorder = null
-            recordingStateManager.unregisterResource("media_recorder")
-        }
-        
-        runCatching {
-            captureSession?.close()
-            captureSession = null
-        }
-        
-        runCatching {
-            cameraDevice?.close()
-            cameraDevice = null
-            recordingStateManager.unregisterResource("camera_device")
-        }
-        
-        runCatching {
-            rawImageReader?.close()
-            rawImageReader = null
-            recordingStateManager.unregisterResource("raw_image_reader")
-        }
-        
-        runCatching {
-            previewImageReader?.close()
-            previewImageReader = null
-        }
-        
-        runCatching {
-            previewSurface?.release()
-            previewSurface = null
-        }
-        
-        currentSessionInfo = null
-        isSessionActive = false
-        
-        // Force state reset if available
-        runCatching {
-            recordingStateManager.forceCleanup()
-        }
-        
-        logger.info("Force cleanup completed")
     }
 
     private fun cleanup() {

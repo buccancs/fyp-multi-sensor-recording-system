@@ -31,17 +31,6 @@ class PerformanceMonitor @Inject constructor(
 
     private val activityReferences = ConcurrentHashMap<String, WeakReference<Any>>()
     private val viewReferences = ConcurrentHashMap<String, WeakReference<Any>>()
-    
-    // Stability action tracking
-    private var lastMemoryStabilityAction = 0L
-    private var lastPerformanceStabilityAction = 0L
-    private var consecutiveHighUtilizationCount = 0
-    private var stabilityActionsListener: StabilityActionsListener? = null
-    
-    // Thresholds for stability actions
-    private val memoryStabilityActionCooldown = 30_000L // 30 seconds
-    private val performanceStabilityActionCooldown = 15_000L // 15 seconds
-    private val sustainedHighUtilizationThreshold = 3 // 3 consecutive measurements
 
     private var frameRateMonitoring = false
     private var lastFrameTime = 0L
@@ -127,40 +116,22 @@ class PerformanceMonitor @Inject constructor(
     }
 
     private fun analyzePerformance(metrics: PerformanceMetrics) {
-        // Critical memory threshold - proactive action required
-        if (metrics.heapUtilization > 85) {
-            logger.error("CRITICAL: Memory usage at ${metrics.heapUtilization.toInt()}% - triggering stability actions")
-            triggerMemoryStabilityActions(metrics)
-        } else if (metrics.heapUtilization > 80) {
+        if (metrics.heapUtilization > 80) {
             logger.warning("High memory usage detected: ${metrics.heapUtilization.toInt()}%")
             triggerGarbageCollection()
         }
 
-        // Frame rate monitoring with adaptive response
-        if (metrics.currentFps > 0) {
-            if (metrics.currentFps < 30) {
-                logger.error("CRITICAL: Very low frame rate: ${metrics.currentFps} FPS - triggering performance actions")
-                triggerPerformanceStabilityActions(metrics)
-            } else if (metrics.currentFps < 45) {
-                logger.warning("Low frame rate detected: ${metrics.currentFps} FPS")
-                // Trigger lighter optimizations
-                triggerLightPerformanceOptimizations()
-            }
+        if (metrics.currentFps > 0 && metrics.currentFps < 45) {
+            logger.warning("Low frame rate detected: ${metrics.currentFps} FPS")
         }
 
-        // Potential memory leak detection
         if (metrics.activeActivityCount > 5) {
-            logger.warning("POTENTIAL LEAK: High activity reference count: ${metrics.activeActivityCount}")
-            triggerLeakDetectionActions()
+            logger.warning("High activity reference count: ${metrics.activeActivityCount}")
         }
 
         if (metrics.activeViewCount > 100) {
-            logger.warning("POTENTIAL LEAK: High view reference count: ${metrics.activeViewCount}")
-            triggerLeakDetectionActions()
+            logger.warning("High view reference count: ${metrics.activeViewCount}")
         }
-
-        // Check for sustained high utilization
-        checkForSustainedHighUtilization(metrics)
     }
 
     private fun checkForMemoryLeaks() {
@@ -323,162 +294,8 @@ class PerformanceMonitor @Inject constructor(
         stopFrameRateMonitoring()
         activityReferences.clear()
         viewReferences.clear()
-        stabilityActionsListener = null
         scope.cancel()
         logger.info("Performance monitor cleaned up")
-    }
-    
-    /**
-     * Interface for receiving stability action notifications.
-     */
-    interface StabilityActionsListener {
-        fun onMemoryPressureDetected(utilizationPercent: Double)
-        fun onPerformanceDegradation(fps: Double)
-        fun onSustainedHighUtilization()
-        fun onPotentialLeakDetected(activityCount: Int, viewCount: Int)
-        fun onStabilityActionRequired(actionType: StabilityActionType)
-    }
-    
-    /**
-     * Sets a listener for stability action notifications.
-     */
-    fun setStabilityActionsListener(listener: StabilityActionsListener) {
-        this.stabilityActionsListener = listener
-        logger.info("$TAG: Stability actions listener set")
-    }
-    
-    /**
-     * Triggers memory stability actions when critical thresholds are exceeded.
-     */
-    private fun triggerMemoryStabilityActions(metrics: PerformanceMetrics) {
-        val currentTime = System.currentTimeMillis()
-        
-        // Prevent too frequent stability actions
-        if (currentTime - lastMemoryStabilityAction < memoryStabilityActionCooldown) {
-            logger.debug("$TAG: Memory stability action skipped - cooldown period")
-            return
-        }
-        
-        lastMemoryStabilityAction = currentTime
-        logger.warning("$TAG: Triggering memory stability actions - utilization: ${metrics.heapUtilization.toInt()}%")
-        
-        // Immediate actions
-        triggerGarbageCollection()
-        
-        // Notify listener for additional actions
-        stabilityActionsListener?.let { listener ->
-            scope.launch(Dispatchers.Main) {
-                try {
-                    listener.onMemoryPressureDetected(metrics.heapUtilization)
-                    listener.onStabilityActionRequired(StabilityActionType.MEMORY_PRESSURE)
-                } catch (e: Exception) {
-                    logger.error("$TAG: Error notifying stability actions listener", e)
-                }
-            }
-        }
-    }
-    
-    /**
-     * Triggers performance stability actions when frame rate drops critically.
-     */
-    private fun triggerPerformanceStabilityActions(metrics: PerformanceMetrics) {
-        val currentTime = System.currentTimeMillis()
-        
-        if (currentTime - lastPerformanceStabilityAction < performanceStabilityActionCooldown) {
-            logger.debug("$TAG: Performance stability action skipped - cooldown period")
-            return
-        }
-        
-        lastPerformanceStabilityAction = currentTime
-        logger.warning("$TAG: Triggering performance stability actions - FPS: ${metrics.currentFps}")
-        
-        // Notify listener for performance-related actions
-        stabilityActionsListener?.let { listener ->
-            scope.launch(Dispatchers.Main) {
-                try {
-                    listener.onPerformanceDegradation(metrics.currentFps)
-                    listener.onStabilityActionRequired(StabilityActionType.PERFORMANCE_DEGRADATION)
-                } catch (e: Exception) {
-                    logger.error("$TAG: Error notifying stability actions listener", e)
-                }
-            }
-        }
-    }
-    
-    /**
-     * Triggers lighter performance optimizations for moderate issues.
-     */
-    private fun triggerLightPerformanceOptimizations() {
-        logger.info("$TAG: Triggering light performance optimizations")
-        
-        // Request garbage collection
-        triggerGarbageCollection()
-        
-        // Notify for light optimizations
-        stabilityActionsListener?.let { listener ->
-            scope.launch(Dispatchers.Main) {
-                try {
-                    listener.onStabilityActionRequired(StabilityActionType.LIGHT_OPTIMIZATION)
-                } catch (e: Exception) {
-                    logger.error("$TAG: Error notifying stability actions listener", e)
-                }
-            }
-        }
-    }
-    
-    /**
-     * Triggers actions when potential memory leaks are detected.
-     */
-    private fun triggerLeakDetectionActions() {
-        logger.warning("$TAG: Triggering leak detection actions")
-        
-        val activityCount = activityReferences.size
-        val viewCount = viewReferences.size
-        
-        // Force cleanup of dead references
-        checkForMemoryLeaks()
-        
-        // Notify listener
-        stabilityActionsListener?.let { listener ->
-            scope.launch(Dispatchers.Main) {
-                try {
-                    listener.onPotentialLeakDetected(activityCount, viewCount)
-                    listener.onStabilityActionRequired(StabilityActionType.LEAK_DETECTION)
-                } catch (e: Exception) {
-                    logger.error("$TAG: Error notifying stability actions listener", e)
-                }
-            }
-        }
-    }
-    
-    /**
-     * Checks for sustained high utilization and triggers appropriate actions.
-     */
-    private fun checkForSustainedHighUtilization(metrics: PerformanceMetrics) {
-        if (metrics.heapUtilization > 75 || (metrics.currentFps > 0 && metrics.currentFps < 40)) {
-            consecutiveHighUtilizationCount++
-            
-            if (consecutiveHighUtilizationCount >= sustainedHighUtilizationThreshold) {
-                logger.error("$TAG: Sustained high utilization detected for $consecutiveHighUtilizationCount measurements")
-                
-                stabilityActionsListener?.let { listener ->
-                    scope.launch(Dispatchers.Main) {
-                        try {
-                            listener.onSustainedHighUtilization()
-                            listener.onStabilityActionRequired(StabilityActionType.SUSTAINED_HIGH_UTILIZATION)
-                        } catch (e: Exception) {
-                            logger.error("$TAG: Error notifying stability actions listener", e)
-                        }
-                    }
-                }
-                
-                // Reset counter after triggering action
-                consecutiveHighUtilizationCount = 0
-            }
-        } else {
-            // Reset counter if metrics are good
-            consecutiveHighUtilizationCount = 0
-        }
     }
 }
 
@@ -515,17 +332,6 @@ enum class Priority {
     MEDIUM,
     HIGH,
     CRITICAL
-}
-
-/**
- * Types of stability actions that can be triggered by the performance monitor.
- */
-enum class StabilityActionType {
-    MEMORY_PRESSURE,                // Critical memory usage detected
-    PERFORMANCE_DEGRADATION,        // Significant frame rate drop
-    LIGHT_OPTIMIZATION,            // Minor optimizations needed
-    LEAK_DETECTION,                // Potential memory leak detected
-    SUSTAINED_HIGH_UTILIZATION     // Extended period of high resource usage
 }
 
 fun PerformanceMonitor.monitorCoroutine(

@@ -26,6 +26,7 @@ class StabilityImprovementsTest {
     private lateinit var logger: Logger
 
     private lateinit var recordingStateManager: RecordingStateManager
+    private lateinit var stabilityCoordinator: SimpleStabilityCoordinator
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
@@ -33,6 +34,7 @@ class StabilityImprovementsTest {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
         recordingStateManager = RecordingStateManager(logger)
+        stabilityCoordinator = SimpleStabilityCoordinator(recordingStateManager, logger)
     }
 
     @After
@@ -198,5 +200,28 @@ class StabilityImprovementsTest {
         
         val clearedError = recordingStateManager.lastError.value
         assertTrue(clearedError == null, "Error should be cleared")
+    }
+
+    @Test
+    fun `test stability coordinator system ready check`() = runTest {
+        // System should start as ready
+        assertTrue(stabilityCoordinator.isSystemReady(), "System should start ready")
+        
+        // Status should be READY
+        assertEquals("READY", stabilityCoordinator.getSystemStatus())
+    }
+
+    @Test
+    fun `test stability coordinator cleanup`() = runTest {
+        // Register some resources
+        recordingStateManager.registerResource("test_resource_1")
+        recordingStateManager.registerResource("test_resource_2")
+        
+        // Perform cleanup
+        stabilityCoordinator.performCleanup()
+        
+        // Resources should be cleared
+        val activeResources = recordingStateManager.getActiveResources()
+        assertTrue(activeResources.isEmpty(), "Resources should be cleared after cleanup")
     }
 }
