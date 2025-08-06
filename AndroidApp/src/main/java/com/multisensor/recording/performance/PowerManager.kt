@@ -50,8 +50,13 @@ class PowerManager @Inject constructor(
                     optimizePowerSettings()
 
                     delay(10000)
-                } catch (e: Exception) {
-                    logger.error("PowerManager: Error during monitoring cycle", e)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: SecurityException) {
+                    logger.error("PowerManager: Security error during monitoring cycle", e)
+                    delay(15000)
+                } catch (e: IllegalStateException) {
+                    logger.error("PowerManager: State error during monitoring cycle", e)
                     delay(15000)
                 }
             }
@@ -100,8 +105,10 @@ class PowerManager @Inject constructor(
 
                 logger.debug("PowerManager: Battery level: $currentBatteryLevel%, Charging: $isCharging")
             }
-        } catch (e: Exception) {
-            logger.error("PowerManager: Error updating battery status", e)
+        } catch (e: SecurityException) {
+            logger.error("PowerManager: Security error accessing battery status", e)
+        } catch (e: IllegalStateException) {
+            logger.error("PowerManager: State error updating battery status", e)
         }
     }
 

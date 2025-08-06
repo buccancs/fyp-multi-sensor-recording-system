@@ -32,7 +32,7 @@ class CalibrationResult:
         self.pattern_size = 9, 6
         self.square_size = 25.0
         self.num_images_used = 0
-        print(f"[DEBUG_LOG] CalibrationResult initialized for device: {device_id}")
+        logger.debug(f"CalibrationResult initialized for device: {device_id}")
 
     def is_valid(self) -> bool:
         rgb_valid = (
@@ -145,10 +145,10 @@ class CalibrationResult:
             data = self.to_dict()
             with open(filepath, "w") as f:
                 json.dump(data, f, indent=2)
-            print(f"[DEBUG_LOG] Calibration result saved to: {filepath}")
+            logger.debug(f"Calibration result saved to: {filepath}")
             return True
         except Exception as e:
-            print(f"[DEBUG_LOG] Failed to save calibration result: {e}")
+            logger.error(f"Failed to save calibration result: {e}")
             return False
 
     @classmethod
@@ -157,10 +157,10 @@ class CalibrationResult:
             with open(filepath, "r") as f:
                 data = json.load(f)
             result = cls.from_dict(data)
-            print(f"[DEBUG_LOG] Calibration result loaded from: {filepath}")
+            logger.debug(f"Calibration result loaded from: {filepath}")
             return result
         except Exception as e:
-            print(f"[DEBUG_LOG] Failed to load calibration result: {e}")
+            logger.error(f"Failed to load calibration result: {e}")
             return None
 
     def get_rgb_camera_info(self) -> Dict[str, Any]:
@@ -210,7 +210,9 @@ class CalibrationResult:
 
             rvec, _ = cv2.Rodrigues(self.rotation_matrix)
             euler_angles = np.degrees(rvec.flatten())
-        except:
+        except (cv2.error, ValueError, TypeError) as e:
+            # Handle OpenCV errors or invalid rotation matrix
+            logger.debug(f"Failed to compute euler angles: {e}")
             euler_angles = [0, 0, 0]
         return {
             "calibrated": True,

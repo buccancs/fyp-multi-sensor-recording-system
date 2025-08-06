@@ -146,8 +146,12 @@ constructor(
                         logger.debug("Received unknown Shimmer message: ${msg.what}")
                     }
                 }
-            } catch (e: Exception) {
-                logger.error("Error handling Shimmer callback", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state while handling Shimmer callback", e)
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error handling Shimmer callback", e)
             }
             true
         }
@@ -1169,13 +1173,20 @@ constructor(
 
                 while (streamingQueue.isNotEmpty()) {
                     val jsonData = streamingQueue.poll()
-                    streamingWriter?.println(jsonData)
-                    streamingWriter?.flush()
+                    streamingWriter?.let { writer ->
+                        writer.println(jsonData)
+                        writer.flush()
+                        logger.debug("ShimmerRecorder: Streamed data: ${jsonData.take(100)}...")
+                    }
                 }
 
                 delay(100)
-            } catch (e: Exception) {
-                logger.error("Error in network streaming process", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                logger.error("IO error in network streaming process", e)
+            } catch (e: IllegalStateException) {
+                logger.error("State error in network streaming process", e)
             }
         }
     }

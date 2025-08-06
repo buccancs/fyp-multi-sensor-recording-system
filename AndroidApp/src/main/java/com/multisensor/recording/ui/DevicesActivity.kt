@@ -29,8 +29,14 @@ class DevicesActivity : AppCompatActivity() {
 
         try {
             viewModel = ViewModelProvider(this)[DevicesViewModel::class.java]
-        } catch (e: Exception) {
-            showError("Failed to initialize devices: ${e.message}")
+        } catch (e: SecurityException) {
+            showError("Permission error initializing devices: ${e.message}")
+            return
+        } catch (e: IllegalStateException) {
+            showError("Invalid state initializing devices: ${e.message}")
+            return
+        } catch (e: RuntimeException) {
+            showError("Runtime error initializing devices: ${e.message}")
             return
         }
 
@@ -61,7 +67,9 @@ class DevicesActivity : AppCompatActivity() {
                 } else {
                     viewModel.connectPc()
                 }
-            } catch (e: Exception) {
+            } catch (e: IllegalStateException) {
+                showError("Invalid PC connection state: ${e.message}")
+            } catch (e: RuntimeException) {
                 showError("PC connection failed: ${e.message}")
             }
         }
