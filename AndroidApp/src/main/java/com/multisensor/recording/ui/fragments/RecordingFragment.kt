@@ -20,6 +20,7 @@ import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import android.widget.Toast
 import javax.inject.Inject
 

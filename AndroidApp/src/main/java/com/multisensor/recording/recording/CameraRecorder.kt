@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
