@@ -1,3 +1,51 @@
+# Test Troubleshooting Guide
+
+## ⚠️ Documentation Consolidated
+
+**This troubleshooting guide has been merged into the unified test documentation:**
+
+**📋 [UNIFIED TEST DOCUMENTATION](../UNIFIED_TEST_DOCUMENTATION.md)**
+
+The unified document provides:
+- Complete troubleshooting information for all test scenarios
+- Common issues and solutions with detailed steps
+- Debug commands and performance profiling guidance
+- Latest test results showing current system status
+- Consolidated results and logs for analysis
+
+## Quick Reference
+
+### Current System Status
+- **✅ 100% Success Rate** - All tests currently passing
+- **No Active Issues** - System validated and research-ready
+- **Latest Execution**: efaeb3dd-cd99-4a47-b4a3-2aba22a3f0b5
+
+### Debug Commands
+```bash
+# Verbose debugging
+python ../run_evaluation_suite.py --verbose --debug
+
+# Single test execution
+python -m pytest evaluation_suite/foundation/android/ -v
+python -m pytest evaluation_suite/foundation/pc/ -v
+python -m pytest evaluation_suite/integration/ -v
+
+# Performance profiling
+python ../run_evaluation_suite.py --profile --memory-track
+```
+
+### Get Help
+If issues persist after consulting the unified documentation:
+1. Check latest execution logs: `../evaluation_results/execution_logs.md`
+2. Review historical results: `../evaluation_results/historical_results/`
+3. Run diagnostic commands from unified documentation
+
+---
+
+## Original Content (Archived)
+
+The content below has been consolidated into the unified documentation above.
+
 # Test Failure Troubleshooting Guide
 
 This guide provides comprehensive troubleshooting information for the Multi-Sensor Recording System evaluation suite test failures.

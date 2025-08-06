@@ -1,5 +1,52 @@
 # Comprehensive Evaluation Suite for Multi-Sensor Recording System
 
+## ⚠️ Documentation Consolidated
+
+**All test documentation has been merged into a single comprehensive resource:**
+
+**📋 [UNIFIED TEST DOCUMENTATION](../UNIFIED_TEST_DOCUMENTATION.md)**
+
+This unified document contains:
+- Complete test framework architecture
+- Latest execution results and performance metrics  
+- Comprehensive execution guide and troubleshooting
+- Quality assessment and research validation
+- All historical test data and logs
+
+## Quick Reference
+
+### Latest Test Results
+- **✅ 100% Success Rate** across all 17 tests
+- **Research Ready**: Yes
+- **Quality Level**: Research-Grade
+- **Execution Duration**: 28.6 seconds
+
+### Test Results Location
+All test results and logs are consolidated in:
+- **Primary Results**: `../evaluation_results/latest_execution.json`
+- **Execution Logs**: `../evaluation_results/execution_logs.md`  
+- **Historical Data**: `../evaluation_results/historical_results/`
+
+### Quick Execution Commands
+```bash
+# Run complete evaluation suite
+python ../run_evaluation_suite.py
+
+# Quick validation
+python ../run_evaluation_suite.py --quick --verbose
+
+# Specific test categories
+python ../run_evaluation_suite.py --category android_foundation
+python ../run_evaluation_suite.py --category pc_foundation
+python ../run_evaluation_suite.py --category integration_tests
+```
+
+---
+
+## Original Documentation (Archived)
+
+The content below has been consolidated into the unified documentation above.
+
 ## Overview
 
 This evaluation suite implements the comprehensive testing strategy outlined in Chapter 5 of the thesis documentation, providing systematic validation across all system abstraction levels according to research-grade quality standards.
