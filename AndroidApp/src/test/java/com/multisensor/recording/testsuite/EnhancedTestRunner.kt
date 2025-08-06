@@ -389,7 +389,6 @@ object AndroidTestSuiteRunner {
     fun runComprehensiveTests() {
         println("🚀 Starting Enhanced Android Test Suite...")
 
-
         println("📋 Test Categories:")
         println("   • Unit Tests: Core functionality validation")
         println("   • Integration Tests: Component interaction validation")

@@ -289,7 +289,6 @@ class StatusDisplayController @Inject constructor() {
         }
     }
 
-
     private fun saveStatusState(context: Context) {
         try {
             val prefs = context.getSharedPreferences(STATUS_PREFS_NAME, Context.MODE_PRIVATE)

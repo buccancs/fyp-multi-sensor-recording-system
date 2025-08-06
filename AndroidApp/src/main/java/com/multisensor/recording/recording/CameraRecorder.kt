@@ -949,7 +949,6 @@ constructor(
             }.apply {
                 setVideoSource(MediaRecorder.VideoSource.SURFACE)
 
-
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setOutputFile(videoFile.absolutePath)
 

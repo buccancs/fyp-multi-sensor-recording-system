@@ -309,7 +309,6 @@ class RecordingAnalytics {
         )
     }
 
-
     private fun estimateCpuUsage(): Float {
         return kotlin.random.Random.nextFloat() * 100f
     }

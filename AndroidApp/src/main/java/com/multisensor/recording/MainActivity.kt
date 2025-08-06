@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        
-        // Check if onboarding should be shown
+
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
@@ -105,12 +104,12 @@ class MainActivity : AppCompatActivity() {
                         binding.drawerLayout.closeDrawers()
                         true
                     }
-                    // Hide "Coming Soon" items by not handling them or disable them
+
                     R.id.nav_network_config, 
                     R.id.nav_shimmer_config, 
                     R.id.nav_diagnostics, 
                     R.id.nav_about -> {
-                        // These are disabled - do nothing
+
                         binding.drawerLayout.closeDrawers()
                         false
                     }
@@ -139,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Disable "Coming Soon" menu items to avoid user confusion
+
         val menu = binding.navView.menu
         menu.findItem(R.id.nav_network_config)?.isEnabled = false
         menu.findItem(R.id.nav_shimmer_config)?.isEnabled = false
@@ -164,7 +163,6 @@ class MainActivity : AppCompatActivity() {
             else -> "Multi-Sensor Recording"
         }
 
-        // Lock orientation during recording to prevent camera disruption
         requestedOrientation = if (state.isRecording) {
             ActivityInfo.SCREEN_ORIENTATION_LOCKED
         } else {

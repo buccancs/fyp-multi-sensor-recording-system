@@ -15,7 +15,6 @@ logger = get_logger(__name__)
 if not JSONSCHEMA_AVAILABLE:
     logger.warning("jsonschema library not available. Using basic validation only.")
 
-
 class SchemaManager:
 
     def __init__(self, schema_path: Optional[str] = None):
@@ -164,9 +163,7 @@ class SchemaManager:
         }
         return templates.get(message_type, {"type": message_type, "timestamp": 0})
 
-
 _schema_manager: Optional[SchemaManager] = None
-
 
 def get_schema_manager() -> SchemaManager:
     global _schema_manager
@@ -174,18 +171,14 @@ def get_schema_manager() -> SchemaManager:
         _schema_manager = SchemaManager()
     return _schema_manager
 
-
 def validate_message(message: Dict[str, Any]) -> bool:
     return get_schema_manager().validate_message(message)
-
 
 def get_valid_message_types() -> List[str]:
     return get_schema_manager().get_valid_message_types()
 
-
 def create_message(message_type: str, **kwargs) -> Dict[str, Any]:
     return get_schema_manager().create_message(message_type, **kwargs)
-
 
 def create_command_message(command_type: str, **kwargs) -> Dict[str, Any]:
     return create_message(command_type, **kwargs)

@@ -36,7 +36,6 @@ class RecordingService : Service() {
     @Inject
     lateinit var sessionManager: SessionManager
 
-
     @Inject
     lateinit var jsonSocketClient: JsonSocketClient
 
@@ -115,7 +114,6 @@ class RecordingService : Service() {
         super.onCreate()
         logger.info("RecordingService created")
         createNotificationChannel()
-
 
         initializeJsonCommunication()
 
@@ -241,7 +239,6 @@ class RecordingService : Service() {
             logger.error("Runtime error stopping adaptive frame rate control: ${e.message}", e)
         }
 
-
         jsonSocketClient.disconnect()
 
         serviceScope.cancel()
@@ -255,7 +252,6 @@ class RecordingService : Service() {
                 logger.info("Broadcasting current status - Recording: $isRecording, Session: $currentSessionId")
 
                 val statusInfo = gatherStatusInformation()
-
 
                 broadcastStatusViaJsonSocket(statusInfo)
 
@@ -306,7 +302,6 @@ class RecordingService : Service() {
             DeviceStatusInfo.createErrorStatus("Runtime error: ${e.message}")
         }
 
-
     private fun broadcastStatusViaJsonSocket(statusInfo: DeviceStatusInfo) {
         try {
             jsonSocketClient.sendStatusUpdate(
@@ -352,7 +347,6 @@ class RecordingService : Service() {
             logger.error("Runtime error sending local status broadcast: ${e.message}", e)
         }
     }
-
 
     private fun getCameraStatus(): String =
         try {
@@ -469,7 +463,6 @@ class RecordingService : Service() {
             logger.error("Runtime error getting connection status: ${e.message}", e)
             "error"
         }
-
 
     private fun startRecording() {
         if (isRecording) {

@@ -799,7 +799,6 @@ class ShimmerManager @Inject constructor(
         try {
             android.util.Log.d(TAG_SD_LOGGING, "Configuring logging parameters for session: ${session.sessionId}")
 
-
             android.util.Log.d(TAG_SD_LOGGING, "Enabled sensors: ${session.enabledSensors}")
             android.util.Log.d(TAG_SD_LOGGING, "Sampling rate: ${session.samplingRate} Hz")
 
@@ -1065,7 +1064,6 @@ class ShimmerManager @Inject constructor(
             isConnected = false
             connectedShimmer = null
 
-
             android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Shimmer device disconnected successfully")
             callback.onConnectionStatusChanged(false)
 
@@ -1074,7 +1072,6 @@ class ShimmerManager @Inject constructor(
             callback.onError("Failed to disconnect: ${e.message}")
         }
     }
-
 
     private data class DeviceInfo(
         val address: String,
@@ -1165,7 +1162,6 @@ class ShimmerManager @Inject constructor(
             "None"
         }
     }
-
 
     fun getDeviceStatistics(): DeviceStatistics {
         return try {

@@ -81,8 +81,7 @@ class RecordingFragment : Fragment() {
                 }
                 
                 val textureView = binding.rgbCameraPreview
-                
-                // Add surface texture listener for better initialization
+
                 textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
                     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
                         lifecycleScope.launch {
@@ -94,8 +93,7 @@ class RecordingFragment : Fragment() {
                     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = true
                     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
                 }
-                
-                // If surface is already available, initialize immediately
+
                 if (textureView.isAvailable) {
                     initializeCameraWithRetry(textureView)
                 }
@@ -122,11 +120,10 @@ class RecordingFragment : Fragment() {
                 binding.previewPlaceholderText.visibility = View.GONE
                 Toast.makeText(requireContext(), "Camera preview ready", Toast.LENGTH_SHORT).show()
             } else {
-                // Try alternative initialization with basic camera
+
                 binding.previewPlaceholderText.text = "Trying fallback camera mode..."
                 kotlinx.coroutines.delay(1000)
-                
-                // Update UI to show camera failed but provide helpful info
+
                 binding.rgbCameraPreview.visibility = View.GONE
                 binding.previewPlaceholderText.apply {
                     visibility = View.VISIBLE
@@ -182,26 +179,21 @@ Try restarting the app or checking permissions."""
 
             sessionDurationText.text = state.sessionDuration
             currentFileSizeText.text = state.currentFileSize
-            
-            // Update sensor status indicators
+
             updateSensorStatusIndicators()
         }
     }
 
     private fun updateSensorStatusIndicators() {
-        // In a real implementation, these would be connected to actual sensor managers
-        // For now, we'll simulate status based on the camera initialization
-        
+
         binding.apply {
-            // Camera status - check if preview is visible
+
             val cameraConnected = rgbCameraPreview.visibility == View.VISIBLE
             updateSensorStatus(
                 cameraStatusIcon, cameraStatusText,
                 cameraConnected, "Camera", "Connected", "Disconnected"
             )
-            
-            // Simulate other sensor statuses for demonstration
-            // In real implementation, these would check actual sensor states
+
             updateSensorStatus(
                 thermalStatusIcon, thermalStatusText,
                 false, "Thermal", "Connected", "Disconnected"

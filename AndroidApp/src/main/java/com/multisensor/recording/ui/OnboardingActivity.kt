@@ -55,7 +55,7 @@ class OnboardingActivity : AppCompatActivity() {
         binding.viewPager.adapter = onboardingAdapter
         
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ ->
-            // Tab indicators are handled automatically
+
         }.attach()
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -134,7 +134,7 @@ class OnboardingActivity : AppCompatActivity() {
         if (allPermissionsGranted) {
             finishOnboarding()
         } else {
-            // Show dialog explaining that permissions are required
+
             androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("Permissions Required")
                 .setMessage("Some permissions are still missing. The app may not function properly without them. You can grant them later in Settings.")

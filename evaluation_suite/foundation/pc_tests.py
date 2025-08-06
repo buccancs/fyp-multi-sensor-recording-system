@@ -19,14 +19,13 @@ import cv2
 import numpy as np
 import threading
 
-# Add PythonApp to path for imports
 current_dir = Path(__file__).parent
 repo_root = current_dir.parent.parent
 python_app_path = repo_root / "PythonApp"
 sys.path.insert(0, str(python_app_path))
 
 try:
-    # Test that the real PC source files exist and have expected content
+
     calibration_manager_file = python_app_path / "calibration" / "calibration_manager.py"
     pc_server_file = python_app_path / "network" / "pc_server.py"
     shimmer_manager_file = python_app_path / "shimmer_manager.py"
@@ -50,7 +49,6 @@ from ..framework.test_categories import TestCategory, TestType, TestPriority
 
 logger = logging.getLogger(__name__)
 
-
 class PCComponentTest(BaseTest):
     """Base class for PC component tests that test real implementation"""
     
@@ -63,8 +61,7 @@ class PCComponentTest(BaseTest):
         if not REAL_IMPORTS_AVAILABLE:
             test_env['skip_reason'] = "Real PC components not available for import"
             return
-            
-        # Create temporary directory for test artifacts
+
         self.temp_dir = tempfile.mkdtemp(prefix="pc_test_")
         test_env['temp_dir'] = self.temp_dir
         test_env['real_components_available'] = True
@@ -73,7 +70,6 @@ class PCComponentTest(BaseTest):
         """Cleanup test environment"""
         if self.temp_dir and os.path.exists(self.temp_dir):
             shutil.rmtree(self.temp_dir, ignore_errors=True)
-
 
 class CalibrationSystemTest(PCComponentTest):
     """Test real calibration system implementation"""
@@ -90,23 +86,19 @@ class CalibrationSystemTest(PCComponentTest):
         start_time = time.time()
         
         try:
-            # Skip if real components not available
+
             if not REAL_IMPORTS_AVAILABLE:
                 result.success = False
                 result.status = TestStatus.SKIPPED
                 result.error_message = "Real PC components not available for testing"
                 return result
-            
-            # Test real CalibrationManager functionality by analyzing source code
+
             calibration_manager_exists = await self._test_real_calibration_manager_exists()
-            
-            # Test 2: Test calibration pattern detection by checking code
+
             pattern_detection_valid = await self._test_real_pattern_detection_code()
-            
-            # Test 3: Test calibration processor exists
+
             processor_valid = await self._test_real_calibration_processor_exists()
-            
-            # Test 4: Test file operations code
+
             file_ops_valid = await self._test_calibration_file_operations_code()
             
             all_valid = all([calibration_manager_exists, pattern_detection_valid, processor_valid, file_ops_valid])
@@ -127,8 +119,8 @@ class CalibrationSystemTest(PCComponentTest):
             
             result.performance_metrics = PerformanceMetrics(
                 execution_time=execution_time,
-                memory_usage_mb=25.0,  # Real memory usage estimate
-                cpu_usage_percent=35.0,  # Real CPU usage estimate  
+                memory_usage_mb=25.0,
+                cpu_usage_percent=35.0,
                 measurement_accuracy=0.95 if all_valid else 0.72,
                 data_quality_score=0.91 if all_valid else 0.65
             )
@@ -154,8 +146,7 @@ class CalibrationSystemTest(PCComponentTest):
                 return False
             
             content = calibration_manager_file.read_text()
-            
-            # Check for key class and methods
+
             required_elements = [
                 "class CalibrationManager",
                 "def start_calibration_session",
@@ -165,8 +156,7 @@ class CalibrationSystemTest(PCComponentTest):
             ]
             
             elements_found = sum(1 for element in required_elements if element.lower() in content.lower())
-            
-            # Should find most key elements
+
             return elements_found >= 3
             
         except Exception as e:
@@ -183,8 +173,7 @@ class CalibrationSystemTest(PCComponentTest):
                 return False
             
             content = calibration_processor_file.read_text()
-            
-            # Check for pattern detection functionality
+
             pattern_elements = [
                 "chessboard",
                 "cv2",
@@ -210,8 +199,7 @@ class CalibrationSystemTest(PCComponentTest):
                 return False
             
             content = calibration_processor_file.read_text()
-            
-            # Check for CalibrationProcessor class
+
             has_class = "class CalibrationProcessor" in content
             has_methods = "def" in content
             
@@ -230,8 +218,7 @@ class CalibrationSystemTest(PCComponentTest):
                 return False
             
             content = calibration_manager_file.read_text()
-            
-            # Check for file operations
+
             file_operations = [
                 "Path",
                 "mkdir",
@@ -247,7 +234,6 @@ class CalibrationSystemTest(PCComponentTest):
         except Exception as e:
             logger.error(f"File operations test failed: {e}")
             return False
-
 
 class PCServerTest(PCComponentTest):
     """Test real PC server network functionality"""
@@ -269,8 +255,7 @@ class PCServerTest(PCComponentTest):
                 result.status = TestStatus.SKIPPED
                 result.error_message = "Real PC components not available for testing"
                 return result
-            
-            # Test real PCServer functionality by checking source code
+
             server_init_valid = await self._test_server_source_exists()
             server_config_valid = await self._test_server_configuration_code()
             message_handling_valid = await self._test_message_handling_code()
@@ -319,8 +304,7 @@ class PCServerTest(PCComponentTest):
                 return False
             
             content = pc_server_file.read_text()
-            
-            # Check for key server elements
+
             server_elements = [
                 "class PCServer",
                 "socket",
@@ -346,8 +330,7 @@ class PCServerTest(PCComponentTest):
                 return False
             
             content = pc_server_file.read_text()
-            
-            # Check for configuration functionality
+
             config_elements = [
                 "port",
                 "timeout",
@@ -373,8 +356,7 @@ class PCServerTest(PCComponentTest):
                 return False
             
             content = pc_server_file.read_text()
-            
-            # Check for message handling
+
             message_elements = [
                 "JsonMessage",
                 "json",
@@ -390,7 +372,6 @@ class PCServerTest(PCComponentTest):
         except Exception as e:
             logger.error(f"Message handling test failed: {e}")
             return False
-
 
 class ShimmerManagerTest(PCComponentTest):
     """Test real Shimmer device manager functionality"""
@@ -412,8 +393,7 @@ class ShimmerManagerTest(PCComponentTest):
                 result.status = TestStatus.SKIPPED
                 result.error_message = "Real PC components not available for testing"
                 return result
-            
-            # Test real ShimmerManager functionality by checking source code
+
             manager_init_valid = await self._test_shimmer_manager_source_exists()
             device_management_valid = await self._test_device_management_code()
             data_handling_valid = await self._test_data_handling_code()
@@ -462,8 +442,7 @@ class ShimmerManagerTest(PCComponentTest):
                 return False
             
             content = shimmer_file.read_text()
-            
-            # Check for shimmer elements
+
             shimmer_elements = [
                 "class ShimmerManager",
                 "bluetooth",
@@ -489,8 +468,7 @@ class ShimmerManagerTest(PCComponentTest):
                 return False
             
             content = shimmer_file.read_text()
-            
-            # Check for device management functionality
+
             device_elements = [
                 "connected_devices",
                 "device",
@@ -516,8 +494,7 @@ class ShimmerManagerTest(PCComponentTest):
                 return False
             
             content = shimmer_file.read_text()
-            
-            # Check for data handling
+
             data_elements = [
                 "ShimmerDataSample",
                 "gsr_value",
@@ -533,7 +510,6 @@ class ShimmerManagerTest(PCComponentTest):
         except Exception as e:
             logger.error(f"Data handling code test failed: {e}")
             return False
-
 
 class NetworkServerTest(PCComponentTest):
     """Test real network server implementation"""
@@ -555,8 +531,7 @@ class NetworkServerTest(PCComponentTest):
                 result.status = TestStatus.SKIPPED
                 result.error_message = "Real PC components not available for testing"
                 return result
-            
-            # Test real network server components
+
             pc_server_valid = await self._test_pc_server_implementation()
             device_manager_valid = await self._test_device_manager()
             websocket_handling_valid = await self._test_websocket_handling()
@@ -612,8 +587,7 @@ class NetworkServerTest(PCComponentTest):
                 return False
             
             content = pc_server_file.read_text()
-            
-            # Check for server implementation patterns
+
             server_patterns = [
                 "class PCServer",
                 "socket",
@@ -639,8 +613,7 @@ class NetworkServerTest(PCComponentTest):
                 return False
             
             content = device_manager_file.read_text()
-            
-            # Check for device management patterns
+
             device_patterns = [
                 "AndroidDeviceManager",
                 "device",
@@ -660,7 +633,7 @@ class NetworkServerTest(PCComponentTest):
     async def _test_websocket_handling(self) -> bool:
         """Test WebSocket handling implementation"""
         try:
-            # Check for WebSocket handling in network files
+
             network_dir = python_app_path / "network"
             
             if not network_dir.exists():
@@ -686,7 +659,7 @@ class NetworkServerTest(PCComponentTest):
     async def _test_protocol_implementation(self) -> bool:
         """Test protocol implementation"""
         try:
-            # Look for protocol handling in network or protocol directories
+
             protocol_dirs = [
                 python_app_path / "protocol",
                 python_app_path / "network"
@@ -716,7 +689,6 @@ class NetworkServerTest(PCComponentTest):
             logger.error(f"Protocol implementation test failed: {e}")
             return False
 
-
 class SessionCoordinationTest(PCComponentTest):
     """Test session coordination and management"""
     
@@ -737,8 +709,7 @@ class SessionCoordinationTest(PCComponentTest):
                 result.status = TestStatus.SKIPPED
                 result.error_message = "Real PC components not available for testing"
                 return result
-            
-            # Test session coordination components
+
             session_manager_valid = await self._test_session_manager()
             session_coordination_valid = await self._test_session_coordination()
             multi_device_session_valid = await self._test_multi_device_session()
@@ -805,7 +776,7 @@ class SessionCoordinationTest(PCComponentTest):
     async def _test_session_coordination(self) -> bool:
         """Test session coordination logic"""
         try:
-            # Look for session coordination in main files
+
             coordination_files = [
                 python_app_path / "application.py",
                 python_app_path / "main.py"
@@ -834,7 +805,7 @@ class SessionCoordinationTest(PCComponentTest):
     async def _test_multi_device_session(self) -> bool:
         """Test multi-device session capabilities"""
         try:
-            # Look for multi-device session handling
+
             multi_device_files = [
                 python_app_path / "network" / "android_device_manager.py",
                 python_app_path / "cross_device_calibration_coordinator.py"
@@ -863,7 +834,7 @@ class SessionCoordinationTest(PCComponentTest):
     async def _test_session_persistence(self) -> bool:
         """Test session persistence capabilities"""
         try:
-            # Look for session persistence implementation
+
             python_files = python_app_path.rglob("*.py")
             
             persistence_found = False
@@ -882,7 +853,6 @@ class SessionCoordinationTest(PCComponentTest):
         except Exception as e:
             logger.error(f"Session persistence test failed: {e}")
             return False
-
 
 class SynchronizationEngineTest(PCComponentTest):
     """Test synchronization engine implementation"""
@@ -904,8 +874,7 @@ class SynchronizationEngineTest(PCComponentTest):
                 result.status = TestStatus.SKIPPED
                 result.error_message = "Real PC components not available for testing"
                 return result
-            
-            # Test synchronization components
+
             clock_sync_valid = await self._test_clock_synchronization()
             ntp_server_valid = await self._test_ntp_server()
             time_coordination_valid = await self._test_time_coordination()
@@ -961,8 +930,7 @@ class SynchronizationEngineTest(PCComponentTest):
                 return False
             
             content = sync_file.read_text()
-            
-            # Check for synchronization patterns
+
             sync_patterns = [
                 "sync",
                 "clock",
@@ -988,8 +956,7 @@ class SynchronizationEngineTest(PCComponentTest):
                 return False
             
             content = ntp_file.read_text()
-            
-            # Check for NTP server patterns
+
             ntp_patterns = [
                 "ntp",
                 "time",
@@ -1009,7 +976,7 @@ class SynchronizationEngineTest(PCComponentTest):
     async def _test_time_coordination(self) -> bool:
         """Test time coordination capabilities"""
         try:
-            # Look for time coordination in various files
+
             time_files = [
                 python_app_path / "master_clock_synchronizer.py",
                 python_app_path / "ntp_time_server.py"
@@ -1038,7 +1005,7 @@ class SynchronizationEngineTest(PCComponentTest):
     async def _test_precision_timing(self) -> bool:
         """Test precision timing capabilities"""
         try:
-            # Look for precision timing implementation
+
             python_files = [
                 python_app_path / "master_clock_synchronizer.py",
                 python_app_path / "ntp_time_server.py"
@@ -1064,7 +1031,6 @@ class SynchronizationEngineTest(PCComponentTest):
             logger.error(f"Precision timing test failed: {e}")
             return False
 
-
 def create_pc_foundation_suite() -> TestSuite:
     """Create the PC foundation testing suite with comprehensive real component tests"""
     
@@ -1073,48 +1039,42 @@ def create_pc_foundation_suite() -> TestSuite:
         category=TestCategory.FOUNDATION,
         description="Comprehensive real PC component integration tests"
     )
-    
-    # Add real calibration system tests
+
     calibration_test = CalibrationSystemTest(
         name="real_calibration_system_test",
         description="Tests real CalibrationManager and calibration processing",
         timeout=120
     )
     suite.add_test(calibration_test)
-    
-    # Add real PC server tests
+
     server_test = PCServerTest(
         name="real_pc_server_test", 
         description="Tests real PCServer network functionality",
         timeout=90
     )
     suite.add_test(server_test)
-    
-    # Add real Shimmer manager tests
+
     shimmer_test = ShimmerManagerTest(
         name="real_shimmer_manager_test",
         description="Tests real ShimmerManager device communication",
         timeout=120
     )
     suite.add_test(shimmer_test)
-    
-    # Add network server tests
+
     network_test = NetworkServerTest(
         name="pc_network_server_test",
         description="Tests PC network server and device management",
         timeout=90
     )
     suite.add_test(network_test)
-    
-    # Add session coordination tests
+
     session_test = SessionCoordinationTest(
         name="pc_session_coordination_test",
         description="Tests session coordination and multi-device management",
         timeout=120
     )
     suite.add_test(session_test)
-    
-    # Add synchronization engine tests
+
     sync_test = SynchronizationEngineTest(
         name="pc_synchronization_engine_test",
         description="Tests synchronization engine and precision timing",

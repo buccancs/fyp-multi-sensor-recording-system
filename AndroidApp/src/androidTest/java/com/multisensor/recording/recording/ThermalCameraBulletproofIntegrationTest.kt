@@ -101,7 +101,6 @@ class ThermalCameraBulletproofIntegrationTest {
     fun testStateTransitionEdgeCases() = runBlocking {
         println("[BULLETPROOF_TEST] Testing state transition edge cases...")
 
-
         assertFalse(
             "Recording should fail before init",
             thermalRecorder.startRecording("test")
@@ -175,7 +174,6 @@ class ThermalCameraBulletproofIntegrationTest {
     @Test
     fun testErrorRecoveryMechanisms() = runBlocking {
         println("[BULLETPROOF_TEST] Testing error recovery mechanisms...")
-
 
         thermalRecorder.initialize()
         delay(500)
@@ -322,7 +320,6 @@ class ThermalCameraBulletproofIntegrationTest {
     @Test
     fun testEdgeCaseRecovery() = runBlocking {
         println("[BULLETPROOF_TEST] Testing edge case recovery...")
-
 
         thermalRecorder.cleanup()
 

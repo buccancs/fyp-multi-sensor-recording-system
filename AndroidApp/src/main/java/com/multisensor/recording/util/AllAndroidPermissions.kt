@@ -239,7 +239,6 @@ object AllAndroidPermissions {
             ),
         )
 
-
         dangerousPermissions.addAll(
             listOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,

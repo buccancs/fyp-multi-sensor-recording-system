@@ -8,7 +8,6 @@ class MultiSensorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-
         android.util.Log.i("MultiSensorApp", "Multi-Sensor Recording Application started")
     }
 }

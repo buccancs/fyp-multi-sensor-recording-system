@@ -27,11 +27,9 @@ except ImportError:
     VLC_AVAILABLE = False
     print("[DEBUG_LOG] VLC backend not available, using QMediaPlayer only")
 
-
 class VideoBackend(Enum):
     QT_MULTIMEDIA = "qt_multimedia"
     VLC = "vlc"
-
 
 class CodecInfo:
 
@@ -73,7 +71,6 @@ class CodecInfo:
         if ext in self.qt_supported:
             return VideoBackend.QT_MULTIMEDIA
         return None
-
 
 class EnhancedTimingLogger:
 
@@ -191,7 +188,6 @@ class EnhancedTimingLogger:
         except Exception as e:
             print(f"[DEBUG_LOG] Error writing to log file: {e}")
 
-
 class VLCVideoWidget(QWidget):
     position_changed = pyqtSignal(int)
     duration_changed = pyqtSignal(int)
@@ -273,7 +269,6 @@ class VLCVideoWidget(QWidget):
     def _update_position(self):
         if self.is_playing():
             self.position_changed.emit(self.get_position())
-
 
 class EnhancedStimulusController(QWidget):
     status_changed = pyqtSignal(str)

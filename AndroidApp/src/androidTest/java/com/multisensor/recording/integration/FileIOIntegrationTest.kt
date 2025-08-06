@@ -482,7 +482,6 @@ class FileIOIntegrationTest {
 
             assertNull("Current session should be null after finalization", sessionManager.getCurrentSession())
 
-
             logger.info("[DEBUG_LOG] File cleanup on session end verified")
         }
 }

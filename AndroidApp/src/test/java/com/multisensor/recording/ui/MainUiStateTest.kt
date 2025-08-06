@@ -22,7 +22,6 @@ class MainUiStateTest : BehaviorSpec({
             }
         }
 
-
         `when`("system is not initialized") {
             val state = MainUiState(
                 isInitialized = false,

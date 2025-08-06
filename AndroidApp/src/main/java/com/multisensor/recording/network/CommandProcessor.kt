@@ -392,7 +392,6 @@ constructor(
         }
     }
 
-
     private fun triggerAudioStimulusWithParameters(
         frequencyHz: Int,
         durationMs: Long,

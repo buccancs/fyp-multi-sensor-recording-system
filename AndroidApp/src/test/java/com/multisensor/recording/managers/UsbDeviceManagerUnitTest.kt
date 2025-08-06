@@ -302,7 +302,6 @@ class UsbDeviceManagerUnitTest {
         assertFalse("Should not contain unsupported device", supportedDevices.contains(unsupportedDevice))
     }
 
-
     private fun createMockUsbDevice(
         vendorId: Int,
         productId: Int,

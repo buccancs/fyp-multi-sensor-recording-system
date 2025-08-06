@@ -46,7 +46,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         networkController.setCallback(mockCallback)
     }
 
-
     @Test
     fun `should show streaming indicator correctly`() {
         networkController.showStreamingIndicator(mockContext)
@@ -92,7 +91,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         verify { mockStreamingDebugOverlay.visibility = View.GONE }
     }
 
-
     @Test
     fun `should update streaming metrics correctly`() {
         val frameRate = 60
@@ -125,7 +123,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         verify { mockStreamingLabel.visibility = View.GONE }
     }
 
-
     @Test
     fun `should handle network connectivity changes`() {
         networkController.showStreamingIndicator(mockContext)
@@ -152,7 +149,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         verify { mockCallback.onNetworkStatusChanged(false) }
         verify(exactly = 0) { mockCallback.onStreamingError(any()) }
     }
-
 
     @Test
     fun `should set streaming quality to LOW correctly`() {
@@ -189,7 +185,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         assertThat(dataSize).isEqualTo("0 KB/s")
     }
 
-
     @Test
     fun `should start streaming session successfully`() = runTest {
         networkController.startStreaming(mockContext)
@@ -218,7 +213,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         assertThat(dataSize).isEqualTo("0 KB/s")
     }
 
-
     @Test
     fun `should return valid network statistics`() {
         val statistics = networkController.getNetworkStatistics(mockContext)
@@ -245,7 +239,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         assertThat(status).contains("Network Type:")
         assertThat(status).contains("Bandwidth Estimate:")
     }
-
 
     @Test
     fun `should handle emergency streaming stop`() = runTest {
@@ -281,7 +274,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         networkController.handleNetworkConnectivityChange(false)
     }
 
-
     @Test
     fun `StreamingQuality enum should have correct display names`() {
         assertThat(NetworkController.StreamingQuality.LOW.displayName).isEqualTo("Low (480p, 15fps)")
@@ -289,7 +281,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         assertThat(NetworkController.StreamingQuality.HIGH.displayName).isEqualTo("High (1080p, 30fps)")
         assertThat(NetworkController.StreamingQuality.ULTRA.displayName).isEqualTo("Ultra (1080p, 60fps)")
     }
-
 
     @Test
     fun `should handle network statistics without context`() {
@@ -309,7 +300,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         assertThat(status).contains("Network Connected: false")
         assertThat(status).contains("Streaming Status:")
     }
-
 
     @Test
     fun `should set streaming protocol to RTMP successfully`() {
@@ -335,7 +325,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         verify { mockCallback.onProtocolChanged(NetworkController.StreamingProtocol.RTMP) }
     }
 
-
     @Test
     fun `should set bandwidth estimation method to ML successfully`() {
         networkController.setBandwidthEstimationMethod(NetworkController.BandwidthEstimationMethod.MACHINE_LEARNING)
@@ -356,7 +345,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
 
         verify { mockCallback.updateStatusText(match { it.contains("Hybrid") }) }
     }
-
 
     @Test
     fun `should enable adaptive bitrate streaming`() {
@@ -386,7 +374,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         verify { mockCallback.updateStatusText("Frame dropping: Disabled") }
     }
 
-
     @Test
     fun `should enable encryption successfully`() {
         networkController.setEncryptionEnabled(true)
@@ -402,7 +389,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         verify { mockCallback.onEncryptionStatusChanged(false) }
         verify { mockCallback.updateStatusText("Encryption: Disabled") }
     }
-
 
     @Test
     fun `StreamingProtocol enum should have correct display names`() {
@@ -421,7 +407,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         assertThat(NetworkController.BandwidthEstimationMethod.MACHINE_LEARNING.displayName).isEqualTo("ML-based Prediction")
         assertThat(NetworkController.BandwidthEstimationMethod.HYBRID.displayName).isEqualTo("Hybrid Multi-method Approach")
     }
-
 
     @Test
     fun `should handle advanced streaming with all features enabled`() = runTest {
@@ -453,7 +438,6 @@ class NetworkControllerTest : BaseRobolectricTest() {
         networkController.setStreamingProtocol(NetworkController.StreamingProtocol.UDP)
         verify { mockCallback.onProtocolChanged(NetworkController.StreamingProtocol.UDP) }
     }
-
 
     @Test
     fun `should handle bandwidth estimation callback correctly`() {

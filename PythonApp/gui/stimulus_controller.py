@@ -30,7 +30,6 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-
 class TimingLogger:
     """Handles experiment timing and event logging."""
 
@@ -170,7 +169,6 @@ class TimingLogger:
         except Exception as e:
             print(f"[DEBUG_LOG] Error writing to log file: {e}")
 
-
 class StimulusVideoWidget(QVideoWidget):
     """Custom QVideoWidget with keyboard shortcut support."""
 
@@ -199,7 +197,6 @@ class StimulusVideoWidget(QVideoWidget):
         else:
             self.showFullScreen()
         event.accept()
-
 
 class StimulusController(QWidget):
     """

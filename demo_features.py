@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Demonstration script for the new file browsing and camera preview features.
 
@@ -16,7 +16,6 @@ import os
 import time
 from pathlib import Path
 
-# Add the PythonApp directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'PythonApp'))
 
 def demo_file_browser():
@@ -28,12 +27,10 @@ def demo_file_browser():
         from gui.file_browser_dialog import show_file_browser
         
         app = QApplication(sys.argv)
-        
-        # Create some test files in recordings directory
+
         recordings_dir = Path("recordings/demo")
         recordings_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Create demo files
+
         (recordings_dir / "test_session_1.txt").write_text("Demo session file 1\nTimestamp: 2025-01-01 10:00:00")
         (recordings_dir / "test_session_2.txt").write_text("Demo session file 2\nTimestamp: 2025-01-01 11:00:00")
         (recordings_dir / "demo_video.mp4").touch()
@@ -41,8 +38,7 @@ def demo_file_browser():
         
         print(f"✅ Created demo files in {recordings_dir}")
         print("📂 Opening file browser dialog...")
-        
-        # Show file browser
+
         selected_file = show_file_browser(None, str(recordings_dir))
         if selected_file:
             print(f"✅ File selected: {selected_file}")
@@ -64,14 +60,13 @@ def demo_web_dashboard():
     
     try:
         from web_ui.web_dashboard import create_web_dashboard
-        
-        # Create and start web dashboard
+
         dashboard = create_web_dashboard(host='127.0.0.1', port=5001, debug=False)
         
         print("🚀 Starting web dashboard server...")
         dashboard.start_server()
         
-        time.sleep(2)  # Give server time to start
+        time.sleep(2)
         
         if dashboard.is_running():
             print("✅ Web dashboard is running!")
@@ -81,7 +76,7 @@ def demo_web_dashboard():
             print("\nPress Ctrl+C to stop the server")
             
             try:
-                # Keep server running for demonstration
+
                 while True:
                     time.sleep(1)
             except KeyboardInterrupt:
@@ -111,13 +106,11 @@ def demo_preview_panel():
         from gui.preview_panel import PreviewPanel
         
         app = QApplication(sys.argv)
-        
-        # Create main window with preview panel
+
         window = QMainWindow()
         window.setWindowTitle("Camera Preview Demo - Multi-Sensor Recording System")
         window.resize(800, 600)
-        
-        # Add preview panel
+
         preview_panel = PreviewPanel()
         window.setCentralWidget(preview_panel)
         
@@ -145,21 +138,18 @@ def main():
     """Main demonstration function"""
     print("🎯 Multi-Sensor Recording System - Feature Demonstration")
     print("=" * 60)
-    
-    # Test which features are available
+
     features_available = []
     
     print("\n🔍 Checking available components...")
-    
-    # Check PyQt5
+
     try:
         import PyQt5
         print("✅ PyQt5 is available")
         features_available.append("pyqt")
     except ImportError:
         print("❌ PyQt5 not available")
-    
-    # Check Flask
+
     try:
         import flask
         print("✅ Flask is available")
@@ -173,8 +163,7 @@ def main():
         return
     
     print(f"\n📋 Available demonstrations: {', '.join(features_available)}")
-    
-    # Ask user which demo to run
+
     print("\nSelect demonstration:")
     options = []
     
