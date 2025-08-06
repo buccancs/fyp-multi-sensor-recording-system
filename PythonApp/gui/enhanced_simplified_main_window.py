@@ -1397,7 +1397,302 @@ Duration: {duration:.1f} seconds""",
         self.status_bar.showMessage("Save session dialog would open here")
 
     def show_settings_real(self):
+        QMessageBox.information(self, "Settings", "Settings dialog would open here")
         self.status_bar.showMessage("Settings dialog would open here")
+
+    def browse_files_real(self):
+        """Open file browser dialog to browse and manage recording files."""
+        try:
+            # Get the recordings directory
+            recordings_dir = os.path.expanduser("~/recordings")
+            if not os.path.exists(recordings_dir):
+                recordings_dir = os.path.expanduser("~")
+            
+            # Open file dialog
+            file_dialog = QFileDialog(self)
+            file_dialog.setFileMode(QFileDialog.ExistingFiles)
+            file_dialog.setViewMode(QFileDialog.Detail)
+            file_dialog.setDirectory(recordings_dir)
+            file_dialog.setNameFilters([
+                "All Files (*.*)",
+                "Video Files (*.mp4 *.avi *.mov)",
+                "Image Files (*.jpg *.png *.bmp)",
+                "Data Files (*.json *.csv *.txt)"
+            ])
+            
+            if file_dialog.exec_():
+                selected_files = file_dialog.selectedFiles()
+                if selected_files:
+                    file_list = "\n".join([os.path.basename(f) for f in selected_files[:5]])
+                    if len(selected_files) > 5:
+                        file_list += f"\n... and {len(selected_files) - 5} more files"
+                    
+                    QMessageBox.information(
+                        self, 
+                        "Files Selected", 
+                        f"Selected {len(selected_files)} file(s):\n\n{file_list}"
+                    )
+                    self.status_bar.showMessage(f"Selected {len(selected_files)} files")
+                    
+                    # Update file count indicator if it exists
+                    if hasattr(self, 'file_count_indicator'):
+                        self.file_count_indicator.set_status(True, f"{len(selected_files)} files selected")
+                else:
+                    self.status_bar.showMessage("No files selected")
+            else:
+                self.status_bar.showMessage("File browser cancelled")
+                
+        except Exception as e:
+            self.logger.error(f"Error in browse_files_real: {e}")
+            QMessageBox.critical(self, "Error", f"Failed to open file browser:\n{str(e)}")
+            self.status_bar.showMessage("Error opening file browser")
+
+    def open_recordings_folder_real(self):
+        """Open the recordings folder in system file manager."""
+        try:
+            import subprocess
+            import platform
+            
+            # Define possible recordings directories
+            recordings_dirs = [
+                os.path.expanduser("~/recordings"),
+                os.path.join(os.getcwd(), "recordings"),
+                os.path.join(os.getcwd(), "data"),
+                os.path.expanduser("~/Documents/recordings")
+            ]
+            
+            # Find the first existing directory
+            target_dir = None
+            for dir_path in recordings_dirs:
+                if os.path.exists(dir_path):
+                    target_dir = dir_path
+                    break
+            
+            # If no recordings directory exists, create one
+            if target_dir is None:
+                target_dir = os.path.expanduser("~/recordings")
+                os.makedirs(target_dir, exist_ok=True)
+                
+            # Open in system file manager
+            system = platform.system()
+            if system == "Windows":
+                os.startfile(target_dir)
+            elif system == "Darwin":  # macOS
+                subprocess.run(["open", target_dir])
+            else:  # Linux and others
+                subprocess.run(["xdg-open", target_dir])
+                
+            self.status_bar.showMessage(f"Opened recordings folder: {target_dir}")
+            self.logger.info(f"Opened recordings folder: {target_dir}")
+            
+        except Exception as e:
+            self.logger.error(f"Error opening recordings folder: {e}")
+            # Fallback - show directory path
+            QMessageBox.information(
+                self, 
+                "Recordings Folder", 
+                f"Recordings folder location:\n{target_dir if 'target_dir' in locals() else 'Not found'}\n\nNote: Could not open automatically: {str(e)}"
+            )
+            self.status_bar.showMessage("Could not open recordings folder automatically")
+
+    def compress_files_real(self):
+        """Compress selected files or recordings folder."""
+        try:
+            import zipfile
+            from datetime import datetime
+            
+            # Get recordings directory
+            recordings_dir = os.path.expanduser("~/recordings")
+            if not os.path.exists(recordings_dir):
+                QMessageBox.warning(self, "Warning", "No recordings folder found to compress.")
+                return
+                
+            # Create output filename with timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = os.path.join(os.path.expanduser("~"), f"recordings_backup_{timestamp}.zip")
+            
+            # Show progress
+            self.status_bar.showMessage("Compressing files...")
+            
+            # Create zip file
+            with zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for root, dirs, files in os.walk(recordings_dir):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        arcname = os.path.relpath(file_path, recordings_dir)
+                        zipf.write(file_path, arcname)
+            
+            file_size = os.path.getsize(output_file) / (1024 * 1024)  # MB
+            QMessageBox.information(
+                self, 
+                "Compression Complete", 
+                f"Files compressed successfully!\n\nOutput: {os.path.basename(output_file)}\nSize: {file_size:.1f} MB\nLocation: {os.path.dirname(output_file)}"
+            )
+            self.status_bar.showMessage(f"Compression complete: {os.path.basename(output_file)}")
+            
+        except Exception as e:
+            self.logger.error(f"Error compressing files: {e}")
+            QMessageBox.critical(self, "Error", f"Failed to compress files:\n{str(e)}")
+            self.status_bar.showMessage("Compression failed")
+
+    def delete_session_real(self):
+        """Delete selected session files."""
+        try:
+            # Show confirmation dialog
+            reply = QMessageBox.question(
+                self,
+                "Delete Session",
+                "Are you sure you want to delete the selected session?\n\nThis will permanently delete all recording files, data, and logs for this session.\n\nThis action cannot be undone.",
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                # In a real implementation, this would delete actual session files
+                # For now, simulate the operation
+                self.status_bar.showMessage("Session deletion simulated (no actual files deleted)")
+                
+                # Update file count if indicator exists
+                if hasattr(self, 'file_count_indicator'):
+                    self.file_count_indicator.set_status(True, "Session files removed")
+                    
+                QMessageBox.information(
+                    self,
+                    "Session Deleted",
+                    "Session deletion completed.\n\n(Note: This is a simulation - no actual files were deleted)"
+                )
+                
+                self.logger.info("Session deletion simulated")
+            else:
+                self.status_bar.showMessage("Session deletion cancelled")
+                
+        except Exception as e:
+            self.logger.error(f"Error in delete_session_real: {e}")
+            QMessageBox.critical(self, "Error", f"Failed to delete session:\n{str(e)}")
+            self.status_bar.showMessage("Session deletion failed")
+
+    # Add other missing methods with basic implementations
+    def show_calibration_settings_real(self):
+        """Show calibration settings dialog."""
+        QMessageBox.information(self, "Calibration Settings", "Calibration settings dialog would open here.")
+        self.status_bar.showMessage("Calibration settings accessed")
+
+    def view_calibration_results_real(self):
+        """View calibration results."""
+        QMessageBox.information(self, "Calibration Results", "Calibration results viewer would open here.")
+        self.status_bar.showMessage("Calibration results viewed")
+
+    def undo_action_real(self):
+        """Undo last action."""
+        self.status_bar.showMessage("Undo action (not implemented)")
+
+    def redo_action_real(self):
+        """Redo last action."""
+        self.status_bar.showMessage("Redo action (not implemented)")
+
+    def copy_action_real(self):
+        """Copy action."""
+        self.status_bar.showMessage("Copy action (not implemented)")
+
+    def paste_action_real(self):
+        """Paste action."""
+        self.status_bar.showMessage("Paste action (not implemented)")
+
+    def toggle_fullscreen_real(self):
+        """Toggle fullscreen mode."""
+        if self.isFullScreen():
+            self.showNormal()
+            self.status_bar.showMessage("Exited fullscreen mode")
+        else:
+            self.showFullScreen()
+            self.status_bar.showMessage("Entered fullscreen mode")
+
+    def zoom_in_real(self):
+        """Zoom in."""
+        self.status_bar.showMessage("Zoom in (not implemented)")
+
+    def zoom_out_real(self):
+        """Zoom out."""
+        self.status_bar.showMessage("Zoom out (not implemented)")
+
+    def reset_zoom_real(self):
+        """Reset zoom (not implemented)")
+
+    def show_device_manager_real(self):
+        """Show device manager."""
+        QMessageBox.information(self, "Device Manager", "Device manager would open here.")
+        self.status_bar.showMessage("Device manager accessed")
+
+    def show_calibration_tool_real(self):
+        """Show calibration tool."""
+        QMessageBox.information(self, "Calibration Tool", "Calibration tool would open here.")
+        self.status_bar.showMessage("Calibration tool accessed")
+
+    def show_data_viewer_real(self):
+        """Show data viewer."""
+        QMessageBox.information(self, "Data Viewer", "Data viewer would open here.")
+        self.status_bar.showMessage("Data viewer accessed")
+
+    def show_preferences_real(self):
+        """Show preferences."""
+        QMessageBox.information(self, "Preferences", "Preferences dialog would open here.")
+        self.status_bar.showMessage("Preferences accessed")
+
+    def show_documentation_real(self):
+        """Show documentation."""
+        QMessageBox.information(self, "Documentation", "Documentation would open here.")
+        self.status_bar.showMessage("Documentation accessed")
+
+    def show_shortcuts_real(self):
+        """Show keyboard shortcuts."""
+        shortcuts_text = """
+Keyboard Shortcuts:
+
+File Menu:
+Ctrl+N - New Session
+Ctrl+O - Open Session  
+Ctrl+S - Save Session
+
+Edit Menu:
+Ctrl+Z - Undo
+Ctrl+Y - Redo
+Ctrl+C - Copy
+Ctrl+V - Paste
+
+View Menu:
+F11 - Toggle Fullscreen
+Ctrl++ - Zoom In
+Ctrl+- - Zoom Out
+Ctrl+0 - Reset Zoom
+
+Recording:
+Space - Start/Stop Recording
+R - Quick Record
+S - Stop Recording
+"""
+        QMessageBox.information(self, "Keyboard Shortcuts", shortcuts_text)
+        self.status_bar.showMessage("Keyboard shortcuts displayed")
+
+    def show_about_real(self):
+        """Show about dialog."""
+        about_text = """Multi-Sensor Recording System
+Enhanced Simplified Interface
+
+Version: 1.0.0
+Author: Multi-Sensor Recording System Team
+
+A comprehensive system for synchronized recording
+and analysis of multi-modal sensor data.
+
+Features:
+- Multi-device synchronization
+- Real-time preview and monitoring  
+- Calibration tools
+- Data export and analysis
+- Advanced file management
+"""
+        QMessageBox.about(self, "About", about_text)
+        self.status_bar.showMessage("About dialog displayed")
 
 
 def main():
