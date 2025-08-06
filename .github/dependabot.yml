@@ -1,0 +1,106 @@
+version: 2
+updates:
+  # Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "security"
+      - "python"
+    reviewers:
+      - "security-team"
+    assignees:
+      - "security-team"
+    commit-message:
+      prefix: "security:"
+      prefix-development: "deps:"
+      include: "scope"
+    # Group security updates
+    groups:
+      security-updates:
+        patterns:
+          - "safety*"
+          - "bandit*"
+          - "cryptography*"
+          - "requests*"
+          - "urllib3*"
+          - "certifi*"
+          - "pyjwt*"
+          - "pillow*"
+        update-types:
+          - "security-update"
+    # Allow automatic merging for patch-level security updates
+    # (requires branch protection rules and status checks)
+    
+  # Gradle dependencies (Android)
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "android"
+      - "security"
+    reviewers:
+      - "android-team"
+      - "security-team"
+    commit-message:
+      prefix: "security(android):"
+      prefix-development: "deps(android):"
+      include: "scope"
+    # Group Android security updates
+    groups:
+      android-security:
+        patterns:
+          - "*security*"
+          - "*crypto*"
+          - "androidx.security:*"
+          - "com.google.android.material:*"
+          - "androidx.core:*"
+        update-types:
+          - "security-update"
+          - "minor"
+    # Ignore alpha/beta versions for security-critical dependencies
+    ignore:
+      - dependency-name: "androidx.security:security-crypto"
+        versions: ["1.1.0-alpha*", "1.1.0-beta*", "1.1.0-rc*"]
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+        
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+    open-pull-requests-limit: 2
+    labels:
+      - "dependencies"
+      - "ci-cd"
+      - "security"
+    commit-message:
+      prefix: "ci:"
+      include: "scope"
+    # Group action updates
+    groups:
+      actions-security:
+        patterns:
+          - "actions/checkout*"
+          - "actions/setup-*"
+          - "github/codeql-action*"
+        update-types:
+          - "minor"
+          - "patch"
+
+# Global settings
+# Enable security updates for all ecosystems
+# This ensures critical security patches are prioritized
