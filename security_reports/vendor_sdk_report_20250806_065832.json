@@ -1,0 +1,119 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-08-06T06:58:32.234219",
+    "project_root": "/home/runner/work/bucika_gsr/bucika_gsr",
+    "libs_directory": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs",
+    "include_update_check": false
+  },
+  "vendor_sdks": {
+    "shimmer": {
+      "description": "Shimmer GSR Sensor SDK",
+      "files": [
+        "shimmerandroidinstrumentdriver-3.2.3_beta.aar",
+        "shimmerbluetoothmanager-0.11.4_beta.jar",
+        "shimmerdriver-0.11.4_beta.jar",
+        "shimmerdriverpc-0.11.4_beta.jar"
+      ],
+      "current_version": "0.11.4_beta",
+      "vendor_url": "https://github.com/ShimmerEngineering/Shimmer-Java-Android-API",
+      "update_check_url": "https://api.github.com/repos/ShimmerEngineering/Shimmer-Java-Android-API/releases/latest",
+      "risk_level": "medium",
+      "notes": "Beta version in use - consider moving to stable when available",
+      "found_files": [
+        {
+          "filename": "shimmerandroidinstrumentdriver-3.2.3_beta.aar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar",
+          "size_mb": 1.27,
+          "modified": "2025-08-06T06:44:54.640661",
+          "exists": true
+        },
+        {
+          "filename": "shimmerbluetoothmanager-0.11.4_beta.jar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar",
+          "size_mb": 0.03,
+          "modified": "2025-08-06T06:44:54.641661",
+          "exists": true
+        },
+        {
+          "filename": "shimmerdriver-0.11.4_beta.jar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/shimmerdriver-0.11.4_beta.jar",
+          "size_mb": 1.77,
+          "modified": "2025-08-06T06:44:54.648661",
+          "exists": true
+        },
+        {
+          "filename": "shimmerdriverpc-0.11.4_beta.jar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/shimmerdriverpc-0.11.4_beta.jar",
+          "size_mb": 0.12,
+          "modified": "2025-08-06T06:44:54.648661",
+          "exists": true
+        }
+      ],
+      "missing_files": [],
+      "scan_timestamp": "2025-08-06T06:58:32.234123"
+    },
+    "thermal_camera": {
+      "description": "Thermal Camera SDK (TopDon)",
+      "files": [
+        "topdon_1.3.7.aar",
+        "libusbdualsdk_1.3.4_2406271906_standard.aar",
+        "opengl_1.3.2_standard.aar",
+        "suplib-release.aar"
+      ],
+      "current_version": "1.3.7",
+      "vendor_url": "https://www.topdon.com/",
+      "update_check_url": null,
+      "risk_level": "low",
+      "notes": "Proprietary SDK - manual monitoring required",
+      "found_files": [
+        {
+          "filename": "topdon_1.3.7.aar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/topdon_1.3.7.aar",
+          "size_mb": 3.84,
+          "modified": "2025-08-06T06:44:54.723663",
+          "exists": true
+        },
+        {
+          "filename": "libusbdualsdk_1.3.4_2406271906_standard.aar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar",
+          "size_mb": 7.72,
+          "modified": "2025-08-06T06:44:54.638661",
+          "exists": true
+        },
+        {
+          "filename": "opengl_1.3.2_standard.aar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/opengl_1.3.2_standard.aar",
+          "size_mb": 0.03,
+          "modified": "2025-08-06T06:44:54.638661",
+          "exists": true
+        },
+        {
+          "filename": "suplib-release.aar",
+          "path": "/home/runner/work/bucika_gsr/bucika_gsr/AndroidApp/src/main/libs/suplib-release.aar",
+          "size_mb": 29.66,
+          "modified": "2025-08-06T06:44:54.711662",
+          "exists": true
+        }
+      ],
+      "missing_files": [],
+      "scan_timestamp": "2025-08-06T06:58:32.234214"
+    }
+  },
+  "update_checks": {},
+  "risk_analysis": {
+    "risks": [
+      {
+        "vendor": "shimmer",
+        "risk_type": "beta_version",
+        "severity": "medium",
+        "description": "Shimmer GSR Sensor SDK is using beta version 0.11.4_beta",
+        "recommendation": "Monitor for stable release and plan migration testing"
+      }
+    ],
+    "total_risks": 1,
+    "high_severity_count": 0,
+    "medium_severity_count": 1,
+    "low_severity_count": 0,
+    "analysis_timestamp": "2025-08-06T06:58:32.234289"
+  }
+}

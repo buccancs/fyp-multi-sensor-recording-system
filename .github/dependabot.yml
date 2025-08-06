@@ -1,47 +1,117 @@
+
+# GitHub Dependabot configuration for automated dependency management
+# Addresses Medium Priority recommendation: "Automate dependency alerts"
+
 version: 2
 updates:
-  # Python dependencies
+  # Python dependencies (pip)
+
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "09:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
+    reviewers:
+      - "buccancs"
     labels:
       - "dependencies"
-      - "security"
       - "python"
-    reviewers:
-      - "security-team"
-    assignees:
-      - "security-team"
+      - "security"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      # Pin major version updates for critical dependencies
+      - dependency-name: "PyQt5"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "opencv-python"
+        update-types: ["version-update:semver-major"]
     commit-message:
-      prefix: "security:"
-      prefix-development: "deps:"
+      prefix: "deps(python)"
       include: "scope"
-    # Group security updates
-    groups:
-      security-updates:
-        patterns:
-          - "safety*"
-          - "bandit*"
-          - "cryptography*"
-          - "requests*"
-          - "urllib3*"
-          - "certifi*"
-          - "pyjwt*"
-          - "pillow*"
-        update-types:
-          - "security-update"
-    # Allow automatic merging for patch-level security updates
-    # (requires branch protection rules and status checks)
-    
-  # Gradle dependencies (Android)
+
+  # Android Gradle dependencies
+  - package-ecosystem: "gradle"
+    directory: "/AndroidApp"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "buccancs"
+    labels:
+      - "dependencies"
+      - "android"
+      - "gradle"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      # Pin Android API level updates for stability
+      - dependency-name: "com.android.application"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin.android"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "deps(android)"
+      include: "scope"
+
+  # Root Gradle configuration
+
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "buccancs"
+    labels:
+      - "dependencies"
+      - "gradle"
+      - "build-tools"
+    commit-message:
+      prefix: "deps(gradle)"
+      include: "scope"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "buccancs"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci-cd"
+    commit-message:
+      prefix: "deps(actions)"
+      include: "scope"
+
+  # Docker dependencies (if any Dockerfiles exist)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "first-monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "buccancs"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "deps(docker)"
+      include: "scope"
       day: "monday"
       time: "10:00"
     open-pull-requests-limit: 3
@@ -101,6 +171,3 @@ updates:
           - "minor"
           - "patch"
 
-# Global settings
-# Enable security updates for all ecosystems
-# This ensures critical security patches are prioritized
