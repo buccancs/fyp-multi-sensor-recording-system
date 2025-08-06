@@ -38,6 +38,7 @@ def _create_argument_parser():
 
 def _get_help_examples():
     return """
+"""
 Examples:
   python hand_segmentation_cli.py list-sessions
 

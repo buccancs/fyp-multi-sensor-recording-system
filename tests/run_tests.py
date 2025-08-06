@@ -257,6 +257,7 @@ class ComprehensiveTestRunner:
     
     def generate_html_report(self) -> str:
         html_content = f"""
+"""
 <!DOCTYPE html>
 <html>
 <head>

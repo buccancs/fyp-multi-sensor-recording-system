@@ -20717,6 +20717,7 @@ class TestNTPTimeServerIntegration(unittest.TestCase):
 
     def tearDown(self):
 
+        pass
     def test_main_application_integration(self):
         manager = TimeServerManager(logger=self.mock_logger)
         try:
@@ -24698,6 +24699,7 @@ class TestStimulusManagerIntegration(unittest.TestCase):
 
     def tearDown(self):
 
+        pass
     def test_main_application_integration(self):
         manager = StimulusManager(logger=self.mock_logger)
         try:

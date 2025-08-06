@@ -432,6 +432,14 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 
 For technical support and updates, please refer to the project documentation
 or contact the development team.
+"""
+        )
+        self.logger.info("User manual created")
+
+    async def _create_deployment_guide(self):
+        deployment_guide = self.docs_build_dir / "DEPLOYMENT_GUIDE.md"
+        deployment_guide.write_text(
+            f"""# Deployment Guide
 
 Version: {self.version}
 
@@ -675,3 +683,63 @@ echo "2. Install: android/MultiSensorRecording-{self.version}.apk"
 echo
 echo "See USER_MANUAL.md for detailed instructions"
 echo
+"""
+            )
+            try:
+                unix_installer.chmod(493)
+            except (OSError, PermissionError) as e:
+                self.logger.warning(f"Could not set executable permissions on installer: {e}")
+            self.logger.info("Deployment scripts created")
+        except Exception as e:
+            self.logger.warning(f"Deployment script creation failed: {e}")
+
+    async def _create_zip_archive(self, source_dir: Path, zip_path: Path):
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            for file_path in source_dir.rglob("*"):
+                if file_path.is_file():
+                    arc_name = file_path.relative_to(source_dir)
+                    zip_file.write(file_path, arc_name)
+
+    def _calculate_checksum(self, file_path: Path) -> str:
+        sha256_hash = hashlib.sha256()
+        with open(file_path, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                sha256_hash.update(chunk)
+        return sha256_hash.hexdigest()
+
+
+async def main():
+    project_root = Path(__file__).parent.parent.parent
+    version = sys.argv[1] if len(sys.argv) > 1 else None
+    print("Starting Phase 4 Production Deployment...")
+    deployment = DeploymentAutomation(str(project_root), version)
+    try:
+        package = await deployment.build_all_components()
+        print(f"\\nDeployment package created successfully!")
+        print(f"Version: {package.version}")
+        print(f"Package: {Path(package.package_path).name}")
+        print(f"Total size: {package.total_size_mb:.1f}MB")
+        print(
+            f"Components built: {len([r for r in package.components if r.success])}/{len(package.components)}"
+        )
+        print(f"\\nComponent results:")
+        for result in package.components:
+            status = "✓" if result.success else "✗"
+            size_info = (
+                f" ({result.build_size_mb:.1f}MB)" if result.build_size_mb else ""
+            )
+            print(f"  {status} {result.component}{size_info}")
+        if any(not r.success for r in package.components):
+            print(f"\\n⚠️  Some components failed to build. Check logs for details.")
+        print(f"\\nDeployment instructions:")
+        for i, instruction in enumerate(package.deployment_instructions, 1):
+            print(f"  {i}. {instruction}")
+    except Exception as e:
+        print(f"Deployment failed: {e}")
+        import traceback
+
+        traceback.print_exc()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

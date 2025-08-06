@@ -400,6 +400,7 @@ class StimulusController(QWidget):
 
     def on_position_changed(self, position):
 
+        pass
     def on_duration_changed(self, duration):
         if duration > 0:
             duration_s = duration / 1000.0

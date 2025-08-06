@@ -224,8 +224,19 @@ class PrivacyComplianceTests(unittest.TestCase):
         2025-01-16 10:30:00 INFO User john.doe@example.com connected
         2025-01-16 10:30:01 DEBUG Device ID: SAMSUNG123456
         2025-01-16 10:30:02 ERROR Failed for +1-555-123-4567
-    
-    def __init__(self):
+        """
+        
+        privacy_violations = self.privacy_manager.scan_logs_for_privacy_violations(safe_log_content)
+        
+        self.assertIsInstance(privacy_violations, list, "Should return list of violations")
+        self.assertGreater(len(privacy_violations), 0, "Should detect privacy violations")
+        
+        violation_types = {v['type'] for v in privacy_violations}
+        expected_types = {'email', 'phone', 'device_id'}
+        self.assertTrue(expected_types.issubset(violation_types), "Should detect known violation types")
+
+
+class MockPrivacyManager:
         self.data_store = {}
         self.anonymization_settings = {
             "data_anonymization_enabled": False,

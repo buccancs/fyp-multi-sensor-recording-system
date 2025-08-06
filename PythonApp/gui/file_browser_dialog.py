@@ -117,7 +117,8 @@ Path: {file_path}
 
 Click 'Open' to play with external application
 or use the playback page for detailed analysis.
-        self.preview_label.setPixmap(QPixmap())
+"""
+        )
         self.preview_label.setText(
             f"""
 📄 {file_type.upper()} File

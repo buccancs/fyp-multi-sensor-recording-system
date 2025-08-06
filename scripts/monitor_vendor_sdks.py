@@ -283,6 +283,7 @@ def main():
         description="Monitor vendor SDK versions and health",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
+"""
 Examples:
   python scripts/monitor_vendor_sdks.py
   python scripts/monitor_vendor_sdks.py --check-updates

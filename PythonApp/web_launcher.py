@@ -38,6 +38,7 @@ def main():
         description="Multi-Sensor Recording System Web Dashboard",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
+"""
 Examples:
   python web_launcher.py
   python web_launcher.py --port 8080

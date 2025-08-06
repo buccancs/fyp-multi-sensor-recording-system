@@ -434,6 +434,7 @@ def create_ci_security_workflow(project_root: str) -> bool:
     logger = get_logger(__name__)
     
     workflow_content = """
+"""
 name: Security Dependency Scan
 
 on:

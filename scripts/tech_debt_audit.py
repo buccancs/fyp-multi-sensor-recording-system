@@ -994,6 +994,7 @@ def main():
         description="Technical Debt Audit for Multi-Sensor Recording System",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
+"""
 Examples:
   python scripts/tech_debt_audit.py --report
   python scripts/tech_debt_audit.py --fix --category python

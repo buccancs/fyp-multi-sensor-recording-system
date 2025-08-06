@@ -689,3 +689,40 @@ class PerformanceBenchmarkSuite:
                 f.write(
                     f"""  Average Throughput: {stats['throughput_ops_per_sec']['mean']:.1f} ops/sec
 
+"""
+                )
+            f.write("Recommendations:\n")
+            for rec in report["recommendations"]:
+                f.write(f"  - {rec}\n")
+
+
+async def main():
+    print("Starting Phase 4 Performance Benchmark Suite...")
+    benchmark = PerformanceBenchmark()
+    report = await benchmark.run_complete_suite()
+    
+    print(f"\nBenchmark completed!")
+    print(f"Total tests: {report['summary']['total_tests']}")
+    print(f"Successful: {report['summary']['successful_tests']}")
+    print(f"Failed: {report['summary']['failed_tests']}")
+    print(f"Success rate: {report['summary']['success_rate']:.1%}")
+    
+    if report['performance_statistics']:
+        stats = report['performance_statistics']
+        print(f"\nPerformance Summary:")
+        print(f"  Average duration: {stats['duration']['mean']:.2f}s")
+        print(f"  Average memory: {stats['memory_usage_mb']['mean']:.1f}MB")
+        print(f"  Average CPU: {stats['cpu_usage_percent']['mean']:.1f}%")
+        print(f"  Average throughput: {stats['throughput_ops_per_sec']['mean']:.1f} ops/sec")
+    
+    if report['recommendations']:
+        print(f"\nRecommendations:")
+        for rec in report['recommendations']:
+            print(f"  • {rec}")
+    
+    print(f"\nDetailed report saved to: performance_benchmark_report.txt")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+

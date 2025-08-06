@@ -56,6 +56,7 @@ class CalibrationDialog(QDialog):
         instructions_group = QGroupBox("Calibration Instructions")
         instructions_layout = QVBoxLayout(instructions_group)
         instructions_text = """
+"""
         <b>Camera Calibration Procedure:</b><br><br>
         1. Place the calibration pattern (chessboard) in view of both RGB and thermal cameras<br>
         2. Capture at least 5-10 images from different angles and positions<br>

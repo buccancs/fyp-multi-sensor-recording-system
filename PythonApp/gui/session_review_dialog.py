@@ -371,6 +371,7 @@ class SessionReviewDialog(QDialog):
 
     def populate_session_info(self):
 
+        pass
     def populate_file_list(self):
         self.file_list.clear()
 
@@ -397,6 +398,7 @@ class SessionReviewDialog(QDialog):
 
     def populate_event_timeline(self):
 
+        pass
     def format_event_for_display(self, event: Dict) -> str:
         event_type = event.get("event", "unknown")
         time_str = event.get("time", "unknown")
