@@ -26,7 +26,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from .calibration.calibration_manager import CalibrationManager
 from .calibration.calibration_result import CalibrationResult
 
-
 class CalibrationDialog(QDialog):
     calibration_completed = pyqtSignal(str, CalibrationResult)
     overlay_toggled = pyqtSignal(str, bool)

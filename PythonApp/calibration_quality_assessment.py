@@ -7,12 +7,10 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 
-
 class PatternType(Enum):
     CHESSBOARD = "chessboard"
     CIRCLE_GRID = "circle_grid"
     ASYMMETRIC_CIRCLE_GRID = "asymmetric_circle_grid"
-
 
 @dataclass
 class PatternDetectionResult:
@@ -24,14 +22,12 @@ class PatternDetectionResult:
     completeness: float
     corners: Optional[np.ndarray] = None
 
-
 @dataclass
 class SharpnessMetrics:
     laplacian_variance: float
     gradient_magnitude: float
     edge_density: float
     sharpness_score: float
-
 
 @dataclass
 class ContrastMetrics:
@@ -40,14 +36,12 @@ class ContrastMetrics:
     local_contrast: float
     contrast_score: float
 
-
 @dataclass
 class AlignmentMetrics:
     feature_match_count: int
     alignment_error_pixels: float
     transformation_matrix: Optional[np.ndarray]
     alignment_score: float
-
 
 @dataclass
 class CalibrationQualityResult:
@@ -59,7 +53,6 @@ class CalibrationQualityResult:
     alignment_metrics: Optional[AlignmentMetrics] = None
     recommendations: List[str] = field(default_factory=list)
     processing_time_ms: float = 0.0
-
 
 class CalibrationQualityAssessment:
     MIN_SHARPNESS_SCORE = 0.3
@@ -545,7 +538,6 @@ class CalibrationQualityAssessment:
             self.logger.error(f"Error generating recommendations: {e}")
             recommendations.append("Error generating recommendations")
         return recommendations
-
 
 if __name__ == "__main__":
     pass

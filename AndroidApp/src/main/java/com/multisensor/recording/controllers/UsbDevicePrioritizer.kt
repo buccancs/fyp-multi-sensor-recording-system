@@ -249,7 +249,6 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
         }
     }
 
-
     private fun calculateQualityScore(deviceKey: String): Double {
         val qualityMetrics = performanceAnalytics.calculateConnectionQuality(deviceKey)
         return qualityMetrics.overallQuality

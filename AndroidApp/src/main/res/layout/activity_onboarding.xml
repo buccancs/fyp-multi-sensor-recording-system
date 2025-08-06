@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/md_theme_background">
+
+    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:tabBackground="@android:color/transparent"
+            app:tabIndicatorColor="@color/md_theme_primary"
+            app:tabIndicatorHeight="4dp"
+            app:tabGravity="center"
+            app:tabMode="fixed"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="@color/md_theme_surface">
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRequestPermissions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Grant Permissions"
+                android:contentDescription="Grant required permissions for camera, microphone, and Bluetooth access"
+                style="@style/Widget.Material3.Button"
+                android:visibility="gone"/>
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Open Settings"
+                android:contentDescription="Open app settings to configure permissions manually"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:visibility="gone"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSkip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="Skip"
+                    android:contentDescription="Skip onboarding tutorial"
+                    style="@style/Widget.Material3.Button.TextButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNext"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Next"
+                    android:contentDescription="Continue to next tutorial step"
+                    style="@style/Widget.Material3.Button"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

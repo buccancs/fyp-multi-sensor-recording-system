@@ -17,23 +17,6 @@ import org.robolectric.annotation.Config
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 
-/**
- * Comprehensive Connection Manager Tests
- * =====================================
- * 
- * This test class provides comprehensive testing for connection management,
- * network communication, and device coordination functionality.
- * 
- * Test coverage:
- * - Network connection establishment and management
- * - Device discovery and pairing
- * - Message handling and communication protocols
- * - Connection resilience and error recovery
- * - Performance monitoring and optimization
- * 
- * Author: Multi-Sensor Recording System
- * Date: 2025-01-16
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
@@ -72,7 +55,7 @@ class ConnectionManagerComprehensiveTest {
     
     @Test
     fun `device discovery should find available devices`() = runTest {
-        // Mock network discovery response
+
         val mockDevices = listOf(
             mapOf(
                 "device_id" to "android_001",
@@ -96,17 +79,14 @@ class ConnectionManagerComprehensiveTest {
                 "capabilities" to listOf("processing", "storage", "coordination")
             )
         )
-        
-        // Mock the discovery process
+
         every { connectionManager.discoverDevices(any()) } returns mockDevices
-        
-        // Test device discovery
+
         val discoveredDevices = connectionManager.discoverDevices(timeout = 5000)
         
         assertNotNull("Device discovery should return results", discoveredDevices)
         assertEquals("Should discover all mock devices", mockDevices.size, discoveredDevices.size)
-        
-        // Verify device properties
+
         val androidDevice = discoveredDevices.find { it["device_id"] == "android_001" }
         assertNotNull("Should find android_001 device", androidDevice)
         assertEquals("Device type should be android", "android", androidDevice!!["device_type"])
@@ -121,16 +101,13 @@ class ConnectionManagerComprehensiveTest {
             "ip_address" to "192.168.1.10",
             "port" to 8000
         )
-        
-        // Mock successful connection
+
         every { connectionManager.connectToDevice(any()) } returns true
         every { connectionManager.isConnected(any()) } returns true
-        
-        // Test connection establishment
+
         val connectionResult = connectionManager.connectToDevice(targetDevice)
         assertTrue("Connection should be established successfully", connectionResult)
-        
-        // Verify connection status
+
         val isConnected = connectionManager.isConnected(targetDevice["device_id"] as String)
         assertTrue("Device should be marked as connected", isConnected)
         
@@ -140,16 +117,14 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `message sending should handle different message types`() = runTest {
         val deviceId = "pc_master"
-        
-        // Test different message types
+
         val messageTypes = listOf(
             mapOf("type" to "hello", "device_id" to "android_001", "capabilities" to listOf("camera")),
             mapOf("type" to "sensor_data", "gsr" to 1000, "ppg" to 2000, "timestamp" to System.currentTimeMillis()),
             mapOf("type" to "status", "status" to "recording", "battery" to 85),
             mapOf("type" to "error", "error_code" to "SENSOR_FAILURE", "message" to "GSR sensor disconnected")
         )
-        
-        // Mock successful message sending
+
         every { connectionManager.sendMessage(any(), any()) } returns true
         
         messageTypes.forEach { message ->
@@ -170,8 +145,7 @@ class ConnectionManagerComprehensiveTest {
             """{"type":"calibration","pattern_type":"chessboard","square_size":25.0}""",
             """{"type":"file_request","session_id":"test_123","file_types":["sensor_data","video"]}"""
         )
-        
-        // Mock message receiving
+
         receivedMessages.forEachIndexed { index, messageJson ->
             every { connectionManager.receiveMessage() } returnsMany listOf(messageJson)
             
@@ -187,11 +161,9 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `connection resilience should handle network issues`() = runTest {
         val deviceId = "pc_master"
-        
-        // Simulate connection established
+
         every { connectionManager.isConnected(deviceId) } returns true
-        
-        // Simulate network issues
+
         val networkIssues = listOf(
             "CONNECTION_TIMEOUT",
             "PACKET_LOSS", 
@@ -200,7 +172,7 @@ class ConnectionManagerComprehensiveTest {
         )
         
         networkIssues.forEach { issueType ->
-            // Mock connection issue
+
             every { connectionManager.handleConnectionIssue(deviceId, issueType) } returns true
             
             val recoveryResult = connectionManager.handleConnectionIssue(deviceId, issueType)
@@ -208,8 +180,7 @@ class ConnectionManagerComprehensiveTest {
             
             verify { mockLogger.warning(match { it.contains(issueType) }) }
         }
-        
-        // Test automatic reconnection
+
         every { connectionManager.attemptReconnection(deviceId) } returns true
         
         val reconnectionResult = connectionManager.attemptReconnection(deviceId)
@@ -219,19 +190,16 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `connection quality monitoring should track metrics`() = runTest {
         val deviceId = "pc_master" 
-        
-        // Initialize connection
+
         every { connectionManager.isConnected(deviceId) } returns true
-        
-        // Simulate connection quality metrics
+
         val qualityMetrics = listOf(
             mapOf("latency" to 25.5, "packet_loss" to 0.01, "bandwidth" to 1000.0),
             mapOf("latency" to 30.2, "packet_loss" to 0.02, "bandwidth" to 950.0),
             mapOf("latency" to 28.8, "packet_loss" to 0.015, "bandwidth" to 980.0),
             mapOf("latency" to 35.1, "packet_loss" to 0.03, "bandwidth" to 900.0)
         )
-        
-        // Record quality metrics
+
         qualityMetrics.forEach { metrics ->
             connectionManager.recordConnectionQuality(
                 deviceId,
@@ -240,16 +208,14 @@ class ConnectionManagerComprehensiveTest {
                 metrics["bandwidth"] as Double
             )
         }
-        
-        // Get quality statistics
+
         val qualityStats = connectionManager.getConnectionQualityStats(deviceId)
         
         assertNotNull("Quality stats should be available", qualityStats)
         assertTrue("Should include average latency", qualityStats.containsKey("avg_latency"))
         assertTrue("Should include average packet loss", qualityStats.containsKey("avg_packet_loss"))
         assertTrue("Should include average bandwidth", qualityStats.containsKey("avg_bandwidth"))
-        
-        // Verify reasonable values
+
         val avgLatency = qualityStats["avg_latency"] as Double
         assertTrue("Average latency should be reasonable", avgLatency > 20.0 && avgLatency < 40.0)
     }
@@ -257,21 +223,18 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `priority message handling should work correctly`() = runTest {
         val deviceId = "pc_master"
-        
-        // Create messages with different priorities
+
         val priorityMessages = listOf(
             mapOf("type" to "status", "priority" to "LOW", "message" to "Routine status update"),
             mapOf("type" to "emergency", "priority" to "CRITICAL", "message" to "System failure detected"),
             mapOf("type" to "command", "priority" to "NORMAL", "message" to "Start recording"),
             mapOf("type" to "sync", "priority" to "HIGH", "message" to "Time synchronization")
         )
-        
-        // Queue priority messages
+
         priorityMessages.forEach { message ->
             connectionManager.queuePriorityMessage(deviceId, message)
         }
-        
-        // Mock message processing order (should be CRITICAL > HIGH > NORMAL > LOW)
+
         val expectedOrder = listOf("CRITICAL", "HIGH", "NORMAL", "LOW")
         val processedOrder = mutableListOf<String>()
         
@@ -290,13 +253,11 @@ class ConnectionManagerComprehensiveTest {
             mapOf("device_id" to "android_002", "type" to "android"),
             mapOf("device_id" to "desktop_001", "type" to "desktop")
         )
-        
-        // Mock device connections
+
         devices.forEach { device ->
             every { connectionManager.isConnected(device["device_id"] as String) } returns true
         }
-        
-        // Test broadcast message to all devices
+
         val broadcastMessage = mapOf(
             "type" to "sync_command",
             "command" to "start_recording",
@@ -308,8 +269,7 @@ class ConnectionManagerComprehensiveTest {
         
         val broadcastResult = connectionManager.broadcastMessage(broadcastMessage)
         assertEquals("Should broadcast to all devices", devices.size, broadcastResult)
-        
-        // Test device coordination
+
         every { connectionManager.coordinateDevices(any(), any()) } returns true
         
         val coordinationResult = connectionManager.coordinateDevices("start_recording", mapOf("session_id" to "test"))
@@ -319,11 +279,9 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `connection pool management should work`() = runTest {
         val maxConnections = 5
-        
-        // Configure connection pool
-        connectionManager.configureConnectionPool(maxConnections, 60000) // 60 second timeout
-        
-        // Test adding connections to pool
+
+        connectionManager.configureConnectionPool(maxConnections, 60000)
+
         repeat(maxConnections) { index ->
             val deviceId = "device_${index + 1}"
             every { connectionManager.addToConnectionPool(deviceId) } returns true
@@ -331,15 +289,13 @@ class ConnectionManagerComprehensiveTest {
             val addResult = connectionManager.addToConnectionPool(deviceId)
             assertTrue("Should add device $deviceId to pool", addResult)
         }
-        
-        // Test pool capacity limits
+
         val extraDeviceId = "device_extra"
         every { connectionManager.addToConnectionPool(extraDeviceId) } returns false
         
         val capacityResult = connectionManager.addToConnectionPool(extraDeviceId)
         assertFalse("Should reject connection when pool is full", capacityResult)
-        
-        // Test connection pool statistics
+
         val poolStats = connectionManager.getConnectionPoolStats()
         
         assertNotNull("Pool stats should be available", poolStats)
@@ -352,14 +308,12 @@ class ConnectionManagerComprehensiveTest {
     fun `security and authentication should work`() = runTest {
         val deviceId = "secure_device_001"
         val authToken = "test_auth_token_123456"
-        
-        // Test authentication
+
         every { connectionManager.authenticateDevice(deviceId, authToken) } returns true
         
         val authResult = connectionManager.authenticateDevice(deviceId, authToken)
         assertTrue("Device authentication should succeed", authResult)
-        
-        // Test secure message transmission
+
         val secureMessage = mapOf(
             "type" to "secure_data",
             "encrypted" to true,
@@ -370,8 +324,7 @@ class ConnectionManagerComprehensiveTest {
         
         val secureResult = connectionManager.sendSecureMessage(deviceId, secureMessage)
         assertTrue("Secure message should be sent successfully", secureResult)
-        
-        // Test encryption/decryption
+
         val plainText = "test_data_to_encrypt"
         every { connectionManager.encryptData(plainText) } returns "encrypted_$plainText"
         every { connectionManager.decryptData("encrypted_$plainText") } returns plainText
@@ -385,8 +338,7 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `performance optimization should work`() = runTest {
         val deviceId = "performance_test_device"
-        
-        // Configure performance settings
+
         val performanceConfig = mapOf(
             "compression_enabled" to true,
             "batching_enabled" to true,
@@ -398,8 +350,7 @@ class ConnectionManagerComprehensiveTest {
         
         val configResult = connectionManager.configurePerformance(deviceId, performanceConfig)
         assertTrue("Performance configuration should succeed", configResult)
-        
-        // Test message batching
+
         val messageBatch = List(100) { index ->
             mapOf(
                 "type" to "sensor_data",
@@ -413,10 +364,9 @@ class ConnectionManagerComprehensiveTest {
         
         val batchResult = connectionManager.sendMessageBatch(deviceId, messageBatch)
         assertTrue("Message batch should be sent successfully", batchResult)
-        
-        // Test compression
+
         val largeData = "x".repeat(10000)
-        every { connectionManager.compressData(largeData) } returns ByteArray(1000) // Simulated compression
+        every { connectionManager.compressData(largeData) } returns ByteArray(1000)
         
         val compressedData = connectionManager.compressData(largeData)
         assertTrue("Compressed data should be smaller", compressedData.size < largeData.length)
@@ -425,21 +375,18 @@ class ConnectionManagerComprehensiveTest {
     @Test
     fun `connection cleanup should work correctly`() = runTest {
         val deviceIds = listOf("device_001", "device_002", "device_003")
-        
-        // Establish connections
+
         deviceIds.forEach { deviceId ->
             every { connectionManager.isConnected(deviceId) } returns true
         }
-        
-        // Test graceful disconnect
+
         deviceIds.forEach { deviceId ->
             every { connectionManager.disconnectDevice(deviceId, graceful = true) } returns true
             
             val disconnectResult = connectionManager.disconnectDevice(deviceId, graceful = true)
             assertTrue("Graceful disconnect should succeed for $deviceId", disconnectResult)
         }
-        
-        // Test cleanup all connections
+
         every { connectionManager.cleanup() } returns true
         
         val cleanupResult = connectionManager.cleanup()

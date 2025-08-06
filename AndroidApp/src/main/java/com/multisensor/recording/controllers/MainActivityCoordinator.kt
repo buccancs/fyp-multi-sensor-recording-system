@@ -574,7 +574,6 @@ class MainActivityCoordinator @Inject constructor(
         android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] MenuController not used in new UI")
     }
 
-
     fun checkPermissions(context: Context) {
         android.util.Log.d("MainActivityCoordinator", "[DEBUG_LOG] Coordinating permission check")
         permissionController.checkPermissions(context)
@@ -744,7 +743,6 @@ class MainActivityCoordinator @Inject constructor(
         isInitialized = false
     }
 
-
     private fun saveCoordinatorState(context: Context, state: CoordinatorState) {
         try {
             val prefs = context.getSharedPreferences(COORDINATOR_PREFS_NAME, Context.MODE_PRIVATE)
@@ -808,7 +806,6 @@ class MainActivityCoordinator @Inject constructor(
             lastErrorTimestamp = currentState?.lastErrorTimestamp ?: 0
         )
     }
-
 
     private fun handleCoordinatorError(operation: String, error: Exception) {
         errorRecoveryAttempts++
@@ -874,7 +871,6 @@ class MainActivityCoordinator @Inject constructor(
             callback?.showToast("System error: Please restart the application", Toast.LENGTH_LONG)
         }
     }
-
 
     fun validateFeatureDependencies(featureToActivate: String): DependencyValidationResult {
         val missingDependencies = mutableListOf<String>()
@@ -977,7 +973,6 @@ class MainActivityCoordinator @Inject constructor(
                 "MainActivityCoordinator",
                 "Cannot stop recording in resetAllStates without viewModel access"
             )
-
 
             callback?.getContext()?.let { context ->
                 saveCoordinatorState(context, createFinalState())

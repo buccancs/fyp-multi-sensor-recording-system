@@ -66,7 +66,6 @@ class ShimmerControllerTest {
         clearAllMocks()
     }
 
-
     @Test
     fun `setCallback should initialize controller and load saved states`() = runTest {
         val savedDevice = createTestDeviceState()
@@ -92,7 +91,6 @@ class ShimmerControllerTest {
         coVerify { mockRepository.getAllDeviceStates() }
         assertEquals(2, shimmerController.getConnectedDevices().size)
     }
-
 
     @Test
     fun `handleDeviceSelectionResult should save device state on successful selection`() = runTest {
@@ -124,7 +122,6 @@ class ShimmerControllerTest {
 
         assertTrue(true)
     }
-
 
     @Test
     fun `connectToSelectedDevice should connect when device is selected`() = runTest {
@@ -160,7 +157,6 @@ class ShimmerControllerTest {
 
         verify { mockCallback.onShimmerError("Device $testDeviceName is already connected") }
     }
-
 
     @Test
     fun `getConnectedDevices should return only connected devices`() = runTest {
@@ -214,7 +210,6 @@ class ShimmerControllerTest {
         verify(exactly = 2) { mockViewModel.disconnectShimmerDevice(any(), any()) }
     }
 
-
     @Test
     fun `configureSensorChannels should update device configuration`() = runTest {
         shimmerController.setCallback(mockCallback)
@@ -249,7 +244,6 @@ class ShimmerControllerTest {
         verify { mockViewModel.setShimmerSamplingRate(testDeviceAddress, samplingRate, any()) }
     }
 
-
     @Test
     fun `setAutoReconnectEnabled should update persistence`() = runTest {
         shimmerController.setCallback(mockCallback)
@@ -283,7 +277,6 @@ class ShimmerControllerTest {
         coVerify { mockRepository.getAllDeviceStates() }
     }
 
-
     @Test
     fun `connectToDevice should use error handler for failures`() = runTest {
         shimmerController.setCallback(mockCallback)
@@ -308,7 +301,6 @@ class ShimmerControllerTest {
             )
         }
     }
-
 
     @Test
     fun `getConnectionStatus should return comprehensive status`() = runTest {
@@ -348,7 +340,6 @@ class ShimmerControllerTest {
         assertNull(name)
         assertEquals(ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC, shimmerController.getPreferredBtType())
     }
-
 
     private fun createTestDeviceState(
         address: String = testDeviceAddress,

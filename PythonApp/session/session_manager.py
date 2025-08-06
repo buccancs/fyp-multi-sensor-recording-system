@@ -7,7 +7,6 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-
 class SessionManager:
 
     def __init__(self, base_recordings_dir: str = "recordings"):
@@ -261,7 +260,6 @@ class SessionManager:
                 json.dump(self.current_session, f, indent=2)
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to update session metadata: {e}")
-
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing SessionManager...")

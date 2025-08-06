@@ -13,7 +13,6 @@ import uuid
 
 from .test_categories import TestCategory, TestType, TestPriority
 
-
 class TestStatus(Enum):
     """Test execution status"""
     PENDING = "pending"
@@ -22,7 +21,6 @@ class TestStatus(Enum):
     FAILED = "failed"
     SKIPPED = "skipped"
     ERROR = "error"
-
 
 @dataclass
 class PerformanceMetrics:
@@ -33,14 +31,12 @@ class PerformanceMetrics:
     network_latency_ms: float = 0.0
     disk_io_mb_per_sec: float = 0.0
     gpu_usage_percent: float = 0.0
-    
-    # Research-specific metrics
+
     synchronization_precision_ms: float = 0.0
     data_quality_score: float = 0.0
     measurement_accuracy: float = 0.0
     frame_rate_fps: float = 0.0
     data_throughput_mb_per_sec: float = 0.0
-
 
 @dataclass
 class TestResult:
@@ -62,16 +58,14 @@ class TestResult:
     
     performance_metrics: PerformanceMetrics = field(default_factory=PerformanceMetrics)
     custom_metrics: Dict[str, Any] = field(default_factory=dict)
-    
-    # Validation and quality data
+
     validation_passed: bool = False
     quality_score: float = 0.0
     coverage_percentage: float = 0.0
-    
-    # Additional context
+
     environment_info: Dict[str, Any] = field(default_factory=dict)
     test_data: Dict[str, Any] = field(default_factory=dict)
-    artifacts: List[str] = field(default_factory=list)  # File paths to generated artifacts
+    artifacts: List[str] = field(default_factory=list)
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert test result to dictionary for serialization"""
@@ -110,7 +104,6 @@ class TestResult:
             "artifacts": self.artifacts
         }
 
-
 @dataclass
 class SuiteResults:
     """Results for a complete test suite"""
@@ -121,8 +114,7 @@ class SuiteResults:
     total_execution_time: float = 0.0
     
     test_results: List[TestResult] = field(default_factory=list)
-    
-    # Summary statistics
+
     total_tests: int = 0
     passed_tests: int = 0
     failed_tests: int = 0
@@ -133,8 +125,7 @@ class SuiteResults:
     average_execution_time: float = 0.0
     total_coverage: float = 0.0
     overall_quality_score: float = 0.0
-    
-    # Performance summary
+
     peak_memory_mb: float = 0.0
     average_cpu_percent: float = 0.0
     average_latency_ms: float = 0.0
@@ -159,15 +150,13 @@ class SuiteResults:
         
         execution_times = [r.execution_time for r in self.test_results if r.execution_time > 0]
         self.average_execution_time = sum(execution_times) / len(execution_times) if execution_times else 0.0
-        
-        # Calculate coverage and quality averages
+
         coverages = [r.coverage_percentage for r in self.test_results if r.coverage_percentage > 0]
         self.total_coverage = sum(coverages) / len(coverages) if coverages else 0.0
         
         quality_scores = [r.quality_score for r in self.test_results if r.quality_score > 0]
         self.overall_quality_score = sum(quality_scores) / len(quality_scores) if quality_scores else 0.0
-        
-        # Performance metrics
+
         memory_values = [r.performance_metrics.memory_usage_mb for r in self.test_results]
         self.peak_memory_mb = max(memory_values) if memory_values else 0.0
         
@@ -176,7 +165,6 @@ class SuiteResults:
         
         latency_values = [r.performance_metrics.network_latency_ms for r in self.test_results]
         self.average_latency_ms = sum(latency_values) / len(latency_values) if latency_values else 0.0
-
 
 @dataclass 
 class TestResults:
@@ -187,15 +175,13 @@ class TestResults:
     total_execution_time: float = 0.0
     
     suite_results: Dict[str, SuiteResults] = field(default_factory=dict)
-    
-    # Overall statistics
+
     total_suites: int = 0
     total_tests: int = 0
     overall_success_rate: float = 0.0
     overall_quality_score: float = 0.0
     overall_coverage: float = 0.0
-    
-    # System-wide metrics
+
     system_performance_score: float = 0.0
     reliability_score: float = 0.0
     usability_score: float = 0.0
@@ -213,8 +199,7 @@ class TestResults:
         if self.total_tests > 0:
             total_passed = sum(suite.passed_tests for suite in self.suite_results.values())
             self.overall_success_rate = total_passed / self.total_tests
-            
-            # Calculate weighted averages
+
             suite_weights = [(suite.total_tests, suite) for suite in self.suite_results.values()]
             total_weight = sum(weight for weight, _ in suite_weights)
             

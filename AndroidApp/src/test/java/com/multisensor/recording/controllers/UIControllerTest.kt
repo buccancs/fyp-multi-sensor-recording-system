@@ -413,7 +413,6 @@ class UIControllerTest {
         assertTrue("Operations should handle null callback gracefully", true)
     }
 
-
     @Test
     fun `validateUIComponents should return valid result when all components available`() {
         uiController.setCallback(mockCallback)
@@ -479,7 +478,6 @@ class UIControllerTest {
             "Should have failure message",
             result.recoveryActions.any { it.contains("Cannot recover - UI callback is null") })
     }
-
 
     @Test
     fun `validateUIState should detect inconsistent recording state`() {
@@ -555,7 +553,6 @@ class UIControllerTest {
             "Should have error dialog issue",
             result.issues.any { it.contains("Error dialog should be shown but no error message") })
     }
-
 
     @Test
     fun `enableAccessibilityFeatures should apply accessibility settings`() {

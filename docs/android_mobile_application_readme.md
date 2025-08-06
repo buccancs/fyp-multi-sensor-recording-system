@@ -1,49 +1,190 @@
 # Android Mobile Application
 
+# Android Mobile Application
+
 ## Overview
 
 The Android Mobile Application serves as a sophisticated mobile data collection and sensor integration platform within
-the Multi-Sensor Recording System. Built using Kotlin and Jetpack Compose, it provides real-time sensor data
-acquisition, camera recording capabilities, and seamless communication with the Python Desktop Controller through a
-JSON-based networking protocol.
+the Multi-Sensor Recording System. Built using Kotlin and Android's modern architecture patterns, it provides 
+real-time multi-modal sensor data acquisition, camera recording capabilities, comprehensive user onboarding, 
+accessibility features, and seamless communication with the Python Desktop Controller through a JSON-based 
+networking protocol over WebSocket connections.
+
+## User Experience & Accessibility
+
+### Comprehensive Onboarding System
+
+The application implements a research-grade onboarding experience designed to minimize user confusion and ensure 
+proper system configuration for multi-modal data collection [Nielsen1994]. The onboarding system follows modern 
+Android UI/UX patterns and accessibility guidelines [Google2023].
+
+#### Interactive Tutorial Flow
+
+```kotlin
+@AndroidEntryPoint
+class OnboardingActivity : AppCompatActivity() {
+    private lateinit var onboardingAdapter: OnboardingAdapter
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityOnboardingBinding.inflate(layoutInflater)
+        
+        setupViewPager()
+        setupPermissionHandling()
+        checkFirstLaunch()
+    }
+    
+    private fun setupViewPager() {
+        onboardingAdapter = OnboardingAdapter(this)
+        binding.viewPager.adapter = onboardingAdapter
+        
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            // Configure tab indicators
+        }.attach()
+    }
+}
+```
+
+**Onboarding Features:**
+- **3-Page Progressive Introduction**: Systematic introduction to app capabilities, setup requirements, and permissions
+- **Smart First-Launch Detection**: SharedPreferences-based tracking prevents unnecessary onboarding repetition
+- **Modern Permission Handling**: ActivityResultContracts implementation with educational explanations
+- **Responsive Design**: Tablet-optimized layouts using `layout-sw600dp` qualifiers
+
+#### Accessibility Implementation
+
+The application achieves WCAG 2.1 AA compliance through comprehensive accessibility features [W3C2018]:
+
+```xml
+<ImageView
+    android:id="@+id/cameraStatusIcon"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:src="@drawable/ic_videocam"
+    android:contentDescription="@string/camera_status_description"
+    app:tint="@color/statusIndicatorConnected" />
+
+<TextView
+    android:id="@+id/sensorStatusTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/sensor_status_title"
+    android:textSize="18sp"
+    android:contentDescription="@string/sensor_status_overview_description" />
+```
+
+**Accessibility Features:**
+- **Screen Reader Support**: Comprehensive content descriptions for all interactive elements
+- **Scalable Typography**: Text sizing using `sp` units for proper scaling with system settings
+- **Touch Accessibility**: Minimum 48dp touch targets following Material Design guidelines
+- **High Contrast Support**: Material Design 3 color system ensuring 4.5:1 contrast ratios
+
+### Real-Time Status Interface
+
+#### Sensor Status Dashboard
+
+The recording interface provides real-time visual feedback on system status through a comprehensive sensor 
+monitoring dashboard implemented using Material Design 3 components:
+
+```xml
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+        
+        <!-- Camera Status Indicator -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            
+            <ImageView
+                android:id="@+id/cameraStatusIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_videocam"
+                android:contentDescription="@string/camera_status_indicator"
+                app:tint="@color/statusIndicatorDisconnected" />
+                
+            <TextView
+                android:id="@+id/cameraStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/camera_disconnected"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:contentDescription="@string/camera_connection_status" />
+        </LinearLayout>
+        
+        <!-- Additional sensor status indicators... -->
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+```
+
+**Status Dashboard Features:**
+- **📊 Four-Sensor Monitoring**: Visual indicators for RGB Camera, Thermal Camera, GSR Sensor, and PC Controller
+- **🟢🔴 Color-Coded Feedback**: Immediate visual indication of connection states using semantic colors
+- **⚡ Live Updates**: Automatic status refresh based on actual sensor connection monitoring
+- **📱 Responsive Layout**: Adaptive design for various screen sizes and orientations
 
 ## System Architecture
 
 ### Core Components
 
 ```
-Android Application
-├── UI Layer (Jetpack Compose)
-│   ├── MainActivity
-│   ├── RecordingScreen
-│   ├── SettingsScreen
-│   └── ConnectionScreen
+Android Application (Kotlin + Android Architecture Components)
+├── User Experience Layer
+│   ├── OnboardingActivity (First-launch tutorial system)
+│   ├── OnboardingAdapter (ViewPager2 page management)
+│   ├── OnboardingPageFragment (Individual tutorial pages)
+│   └── MainActivity (Main application entry point)
+├── UI Layer (Fragment-based Navigation)
+│   ├── RecordingFragment (Sensor status dashboard + controls)
+│   ├── SettingsFragment (Configuration management)
+│   └── Navigation Components (Material Design 3)
 ├── Business Logic Layer
-│   ├── RecordingManager
-│   ├── SensorManager
-│   ├── NetworkManager
-│   └── FileManager
-├── Data Layer
-│   ├── LocalDatabase (Room)
-│   ├── PreferencesManager
-│   └── FileSystemManager
-└── Hardware Integration
-    ├── CameraAPI
-    ├── SensorAPI
-    └── NetworkingAPI
+│   ├── RecordingController (Session coordination)
+│   ├── SessionManager (Data collection management)
+│   ├── MainViewModel (UI state management)
+│   └── CameraRecorder (Video capture coordination)
+├── Network Layer
+│   ├── JsonSocketClient (WebSocket communication)
+│   ├── CommandProcessor (PC protocol handling)
+│   └── ConnectionManager (Network state management)
+├── Sensor Integration Layer
+│   ├── CameraRecorder (Camera2 API integration)
+│   ├── ThermalRecorder (Topdon thermal camera)
+│   ├── ShimmerRecorder (Bluetooth GSR sensors)
+│   └── HandSegmentation (MediaPipe integration)
+└── Data Persistence Layer
+    ├── SharedPreferences (Onboarding state)
+    ├── Local File Storage (Recording data)
+    └── Session Metadata Management
 ```
 
 ### Technical Stack
 
-- **Language**: Kotlin 1.9.0
-- **UI Framework**: Jetpack Compose 1.5.4
-- **Architecture**: MVVM with Repository Pattern
-- **Database**: Room Database
-- **Networking**: OkHttp3 + Retrofit2
-- **Camera**: CameraX API
-- **Sensors**: Android Sensor API
-- **Dependency Injection**: Hilt
+- **Language**: Kotlin 2.0.20
+- **UI Framework**: Fragment-based Architecture with Material Design 3
+- **Architecture Pattern**: MVVM with Repository Pattern
+- **Dependency Injection**: Dagger Hilt
+- **Networking**: WebSocket with JSON protocol
+- **Camera**: Camera2 API for professional video recording
+- **Thermal Integration**: Topdon TC001 via USB-C OTG
+- **Physiological Sensors**: Shimmer3 GSR+ via Bluetooth
+- **Computer Vision**: MediaPipe for hand segmentation
 - **Reactive Programming**: Kotlin Coroutines + Flow
+- **Testing**: AndroidX Test + Espresso
 
 ## Protocol Specification
 

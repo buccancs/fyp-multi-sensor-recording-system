@@ -320,7 +320,6 @@ class UsbControllerUnitTest {
         verify { mockCallback.updateStatusText(match { it.contains("disconnected") }) }
     }
 
-
     @Test
     fun `should track multiple simultaneous devices`() {
         val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
@@ -565,7 +564,6 @@ class UsbControllerUnitTest {
         assertTrue(connectedDevices.contains(device1))
         assertTrue(connectedDevices.contains(device2))
     }
-
 
     @Test
     fun `should generate device priority assessments for connected devices`() {
@@ -816,7 +814,6 @@ class UsbControllerUnitTest {
         assertTrue("Should have no secondary devices", selectionResult.secondaryDevices.isEmpty())
         assertEquals("No devices available for selection", selectionResult.selectionRationale)
     }
-
 
     private fun createMockUsbDevice(
         vendorId: Int,

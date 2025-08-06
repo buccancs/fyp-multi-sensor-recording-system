@@ -155,13 +155,11 @@ class PowerManager @Inject constructor(
     private fun optimizeBackgroundProcessing() {
         logger.info("PowerManager: Optimizing background processing")
 
-
         logger.debug("PowerManager: Background processing optimized for power save mode: $powerSaveMode")
     }
 
     private fun implementAdaptiveFrameRates() {
         logger.info("PowerManager: Implementing adaptive frame rates")
-
 
         logger.debug("PowerManager: Adaptive frame rates enabled for power conservation")
     }

@@ -46,7 +46,7 @@
             android:allowBackup="false"
             android:allowClearUserData="true"
             android:theme="@style/Theme.MultiSensorRecording"
-            tools:replace="android:label"
+            tools:replace="android:label,android:allowBackup"
             tools:targetApi="23">
 
         <activity
@@ -64,6 +64,13 @@
                     android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                     android:resource="@xml/device_filter"/>
         </activity>
+
+        <activity
+                android:name=".ui.OnboardingActivity"
+                android:exported="false"
+                android:label="Setup"
+                android:theme="@style/Theme.MultiSensorRecording"
+                android:screenOrientation="portrait"/>
 
         <activity
                 android:name=".ui.NetworkConfigActivity"

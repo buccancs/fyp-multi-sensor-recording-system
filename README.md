@@ -184,6 +184,10 @@ bucika_gsr/
 - **Shimmer Manager**: Bluetooth GSR sensor communication and data streaming
 - **Network Client**: Real-time communication with PC controller
 - **Session Management**: Local recording coordination and synchronization
+- **📱 Onboarding Experience**: Comprehensive 3-page tutorial system for new users
+- **♿ Accessibility Features**: WCAG 2.1 AA compliant with screen reader support
+- **📊 Real-Time Status Indicators**: Visual dashboard showing sensor connection states
+- **🎯 Smart Permissions**: Modern permission handling with clear explanations
 
 ### Communication Protocol
 - **JSON-based Messaging**: Structured communication between PC and Android
@@ -210,6 +214,33 @@ bucika_gsr/
 - **Data Export**: Structured data formats for analysis pipeline integration
 - **Metadata Management**: Complete session documentation and traceability
 - **Analysis Integration**: Compatible with common research analysis tools
+
+## 🎨 User Experience & Accessibility
+
+### Mobile App Onboarding
+- **🚀 First-Launch Tutorial**: Interactive 3-page onboarding flow introducing app capabilities
+- **📋 Setup Guidance**: Step-by-step PC controller setup and Wi-Fi configuration instructions
+- **🔐 Permission Education**: Clear explanations for camera, microphone, location, and Bluetooth access
+- **💾 Smart Detection**: Uses SharedPreferences to show onboarding only on first app launch
+
+### Accessibility Enhancements
+- **♿ WCAG 2.1 AA Compliance**: Full accessibility standards compliance for inclusive research
+- **🗣️ Screen Reader Support**: Comprehensive content descriptions for all interactive elements
+- **📏 Scalable Typography**: Proper text scaling with system accessibility settings (`sp` units)
+- **👆 Touch Optimization**: Minimum 48dp touch targets for enhanced usability
+- **🎨 High Contrast Support**: Material Design 3 color system ensuring proper contrast ratios
+
+### Real-Time Monitoring Interface
+- **📊 Sensor Status Dashboard**: Visual indicators for RGB camera, thermal camera, GSR sensor, and PC controller
+- **🟢🔴 Color-Coded Feedback**: Immediate visual feedback on sensor connection states
+- **⚡ Live Updates**: Status refreshes automatically based on actual sensor connections
+- **🔒 Orientation Lock**: Prevents camera disruption during active recording sessions
+
+### Enhanced User Experience
+- **🧭 Intuitive Navigation**: Clean interface with disabled "Coming Soon" placeholders
+- **📱 Responsive Design**: Tablet-optimized layouts for screens ≥600dp
+- **🔄 State Preservation**: Proper UI state maintenance during configuration changes
+- **🛡️ Resource Protection**: Camera resource management prevents recording interruption
 
 ## 📈 Performance Characteristics
 

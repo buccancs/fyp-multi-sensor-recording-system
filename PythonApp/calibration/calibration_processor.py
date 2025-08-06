@@ -3,7 +3,6 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 
-
 class CalibrationProcessor:
 
     def __init__(self):
@@ -279,7 +278,6 @@ class CalibrationProcessor:
         result_image = image.copy()
         cv2.drawChessboardCorners(result_image, pattern_size, corners, pattern_found)
         return result_image
-
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing CalibrationProcessor...")

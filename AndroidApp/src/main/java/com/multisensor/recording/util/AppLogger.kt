@@ -629,7 +629,6 @@ object AppLogger {
 
 }
 
-
 fun Any.getLogTag(): String = this::class.java.simpleName
 
 fun Any.logV(message: String, throwable: Throwable? = null, context: Map<String, Any>? = null) =

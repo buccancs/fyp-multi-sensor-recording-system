@@ -37,7 +37,6 @@ class DevicesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         Toast.makeText(requireContext(), "Devices Fragment Loaded", Toast.LENGTH_SHORT).show()
 
         setupUI()

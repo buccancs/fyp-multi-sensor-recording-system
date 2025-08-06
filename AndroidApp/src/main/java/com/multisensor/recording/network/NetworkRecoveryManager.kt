@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 data class NetworkConnectionState(
     val isConnected: Boolean = false,
     val networkType: String = "unknown",

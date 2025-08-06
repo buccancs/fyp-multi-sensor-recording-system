@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Cross-Platform Setup Entry Point
 Multi-Sensor Recording System
@@ -12,7 +12,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 def detect_platform():
     """Detect the current platform and return appropriate setup script."""
     system = platform.system().lower()
@@ -23,7 +22,6 @@ def detect_platform():
         return "setup.sh", "bash"
     else:
         raise RuntimeError(f"Unsupported platform: {system}")
-
 
 def check_prerequisites():
     """Check if basic prerequisites are available."""
@@ -45,7 +43,6 @@ def check_prerequisites():
         except (subprocess.CalledProcessError, FileNotFoundError):
             print("ERROR: Bash not found or not working")
             return False
-
 
 def main():
     """Main entry point."""
@@ -73,7 +70,6 @@ def main():
     except Exception as e:
         print(f"ERROR: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
