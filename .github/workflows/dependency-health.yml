@@ -117,11 +117,11 @@ jobs:
           if [ -f security_reports/vendor_sdk_report_*.json ]; then
             REPORT_FILE=$(ls -t security_reports/vendor_sdk_report_*.json | head -1)
             HIGH_RISKS=$(python -c "
-import json
-with open('$REPORT_FILE') as f:
-    data = json.load(f)
-    print(data['risk_analysis']['high_severity_count'])
-")
+            import json
+            with open('$REPORT_FILE') as f:
+                data = json.load(f)
+                print(data['risk_analysis']['high_severity_count'])
+            ")
             echo "high_risks=$HIGH_RISKS" >> $GITHUB_OUTPUT
             
             if [ "$HIGH_RISKS" -gt 0 ]; then
