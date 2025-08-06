@@ -13,6 +13,7 @@ The Multi-Sensor Recording System represents a comprehensive platform for contac
 - [Quality Assurance and Validation](#quality-assurance-and-validation)
 - [Performance Characteristics](#performance-characteristics)
 - [Implementation References](#implementation-references)
+- [Appendices](#appendices)
 
 ## System Architecture
 
@@ -257,6 +258,41 @@ The system implements advanced computer vision capabilities for contactless phys
 - International collaboration support through standardized data formats
 - Technology transfer resources facilitating adoption by research teams
 - Sustainable development practices ensuring long-term project viability
+
+## Appendices
+
+For detailed technical specifications, implementation details, and comprehensive evaluation data, refer to the following appendices:
+
+### [Appendix A: System Manual](thesis_report/Chapter_7_Appendices.md#appendix-a-system-manual)
+- **[A.1 Component Documentation Reference](thesis_report/Chapter_7_Appendices.md#a1-component-documentation-reference)**: Comprehensive technical documentation for system maintenance and extension
+- **[A.2 Literature Review and Technical Foundation Tables](thesis_report/Chapter_7_Appendices.md#a2-literature-review-and-technical-foundation-tables)**: Academic foundation references and technical specifications
+- **[A.3 Network Communication Protocol Specifications](thesis_report/Chapter_7_Appendices.md#a3-network-communication-protocol-specifications)**: Detailed protocol specifications and performance metrics
+- **[A.4 System Performance Specifications](thesis_report/Chapter_7_Appendices.md#a4-system-performance-specifications)**: Performance benchmarks and target specifications
+- **[A.5 Technology Stack Justification Matrix](thesis_report/Chapter_7_Appendices.md#a5-technology-stack-justification-matrix)**: Technology selection rationale and alternatives analysis
+
+### [Appendix B: Testing and Evaluation Results](thesis_report/Chapter_7_Appendices.md#appendix-b-testing-and-evaluation-results)
+- **[B.1 Multi-Level Testing Coverage Analysis](thesis_report/Chapter_7_Appendices.md#b1-multi-level-testing-coverage-analysis)**: Comprehensive testing framework results
+- **[B.2 Algorithm Validation Results](thesis_report/Chapter_7_Appendices.md#b2-algorithm-validation-results)**: Performance validation for core algorithms
+- **[B.3 Multi-Device Coordination Test Results](thesis_report/Chapter_7_Appendices.md#b3-multi-device-coordination-test-results)**: Scalability and coordination testing
+- **[B.9 Performance Validation Summary](thesis_report/Chapter_7_Appendices.md#b9-performance-validation-summary)**: Overall system performance assessment
+
+### [Appendix C: User Manual](thesis_report/Chapter_7_Appendices.md#appendix-c-user-manual)
+- **[C.1 Getting Started - First-Time Setup](thesis_report/Chapter_7_Appendices.md#c1-getting-started---first-time-setup)**: Complete installation and configuration guide
+- **[C.2 Recording Session Management](thesis_report/Chapter_7_Appendices.md#c2-recording-session-management)**: Operational procedures for research sessions
+- **[C.3 Data Export and Analysis](thesis_report/Chapter_7_Appendices.md#c3-data-export-and-analysis)**: Data processing and analysis workflows
+
+### [Appendix G: Code Listing](thesis_report/Chapter_7_Appendices.md#appendix-g-code-listing)
+- **[G.1 Key Implementation Components](thesis_report/Chapter_7_Appendices.md#g1-key-implementation-components)**: Core system architecture code examples
+- **Implementation References**: Complete code listings for all components referenced throughout this document
+
+### Technical Implementation Details
+
+For researchers and developers requiring detailed technical information:
+
+- **Hardware Specifications**: See [Appendix A.4](thesis_report/Chapter_7_Appendices.md#a4-system-performance-specifications) for validated hardware configurations and performance characteristics
+- **Network Protocol Details**: See [Appendix A.3](thesis_report/Chapter_7_Appendices.md#a3-network-communication-protocol-specifications) for JSON-based WebSocket communication specifications
+- **Testing Framework**: See [Appendix B](thesis_report/Chapter_7_Appendices.md#appendix-b-testing-and-evaluation-results) for comprehensive testing methodology and results
+- **User Operations**: See [Appendix C](thesis_report/Chapter_7_Appendices.md#appendix-c-user-manual) for complete operational procedures and troubleshooting guides
 
 ## References
 
