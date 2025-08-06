@@ -26,6 +26,7 @@ import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
