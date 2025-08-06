@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 import cv2
 import numpy as np
 
-from ..utils.logging_config import get_logger
+from ..utils.import_utils import get_safe_logger as get_logger
 from .calibration_processor import CalibrationProcessor
 from .calibration_result import CalibrationResult
 

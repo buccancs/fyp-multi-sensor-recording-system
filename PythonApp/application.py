@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication
 from ..network.device_server import JsonSocketServer
 from ..session.session_logger import get_session_logger
 from ..session.session_manager import SessionManager
-from ..utils.logging_config import get_logger
+from .utils.import_utils import get_safe_logger as get_logger
 from .gui.enhanced_ui_main_window import EnhancedMainWindow
 from .webcam.webcam_capture import WebcamCapture
 

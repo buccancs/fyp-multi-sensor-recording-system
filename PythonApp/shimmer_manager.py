@@ -14,7 +14,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Union
 
 from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
 from ..network.pc_server import PCServer
-from ..utils.logging_config import get_logger
+from .utils.import_utils import get_safe_logger as get_logger
 
 sys.path.append(
     os.path.join(
