@@ -21,21 +21,21 @@ unconscious stress or emotional responses. Even consumer technology has
 begun to leverage skin conductance: modern wearable devices (e.g. recent
 smartwatches by Apple and Samsung) incorporate sensors for continuous
 stress monitoring based on GSR or related
-metrics[\[2\]\[3\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L2-L5).
+metrics[\[2\]\[3\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L2-L5).
 This surge of interest underscores the *motivation* to harness
 physiological signals like GSR in everyday contexts.
 
 Despite its value, traditional GSR measurement requires skin-contact
 electrodes (typically attached to fingers or palms with conductive
-gel)[\[4\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18).
+gel)[\[4\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18).
 This method is inherently obtrusive -- the wires and electrodes can
 restrict natural movement and comfort, and long-term use may cause
 discomfort or skin
-irritation[\[5\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)[\[6\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26).
+irritation[\[5\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)[\[6\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26).
 These practical limitations make it difficult to use GSR in natural,
 real-world settings outside the lab. Consequently, **contactless
 measurement techniques** for GSR have become an appealing research
-direction[\[7\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31).
+direction[\[7\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31).
 The idea is to infer GSR (or the underlying psychophysiological arousal)
 using remote sensors that do not require physical contact with the user.
 For example, thermal infrared cameras can detect subtle temperature
@@ -50,7 +50,7 @@ Similarly, high-resolution RGB cameras with advanced computer vision
 algorithms can non-invasively capture other physiological signals --
 prior work has demonstrated heart rate and breathing can be measured
 from video of a person's face or
-body[\[10\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L41-L45)[\[11\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L13-L17).
+body[\[10\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L41-L45)[\[11\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L13-L17).
 These developments suggest that *multi-modal sensing*, combining
 traditional biosensors with imaging, could enable **contactless
 physiological monitoring** in the future. Research in affective
@@ -65,7 +65,7 @@ to collect and synchronize these diverse data streams. Most prior
 studies have tackled contactless GSR estimation in isolation or under
 highly controlled conditions, often using separate devices that are not
 synchronized in real
-time[\[13\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)[\[14\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34).
+time[\[13\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)[\[14\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34).
 For instance, thermal cameras and wearable GSR sensors have typically
 been used independently, with any fusion of their data done post hoc.
 This piecemeal approach complicates the development of machine learning
@@ -95,7 +95,7 @@ which hinders the development of machine learning models for contactless
 GSR prediction*. While traditional GSR sensors provide reliable
 ground-truth measurements, they are intrusive for real-world use, and
 purely contactless approaches remain unvalidated or
-imprecise[\[13\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32).
+imprecise[\[13\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32).
 To bridge this gap, researchers require a platform that can record
 **multiple modalities simultaneously** -- for example, capturing a
 person's skin conductance with a wearable sensor while concurrently
@@ -122,10 +122,10 @@ following specific objectives have been defined to achieve this aim:
   **wearable GSR sensor** and **camera-based sensors** into one
   platform. In practice, the system will use a research-grade Shimmer3
   GSR+ device for ground-truth skin conductance
-  measurement[\[15\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L2-L5),
+  measurement[\[15\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L2-L5),
   a thermal infrared camera (Topdon TC001) attached to a smartphone for
   capturing thermal
-  video[\[15\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L2-L5),
+  video[\[15\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L2-L5),
   and the smartphone's own RGB camera for high-resolution video. A
   **smartphone-based sensor node** will be coordinated with a **desktop
   controller** application to start/stop recordings in unison and
@@ -141,7 +141,7 @@ following specific objectives have been defined to achieve this aim:
   synchronized timestamps. This objective includes establishing a
   reliable communication protocol between the smartphone and the PC
   controller to transmit control commands and streaming
-  data[\[16\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/AndroidApp/README.md#L2-L5).
+  data[\[16\]](https://github.com/buccancs/bucika_gsr/blob/master/AndroidApp/README.md#L2-L5).
   It also involves data management aspects: storing the multi-modal data
   with appropriate formats and metadata so that they can be easily
   combined for analysis. By the end, the platform should produce a
@@ -216,7 +216,7 @@ evaluation:
   components and software modules interact. Key design decisions are
   discussed, such as the choice of a distributed setup with an Android
   smartphone as a sensor hub and a PC as a central
-  controller[\[16\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/AndroidApp/README.md#L2-L5).
+  controller[\[16\]](https://github.com/buccancs/bucika_gsr/blob/master/AndroidApp/README.md#L2-L5).
   The chapter covers how the **hardware integration** is achieved
   (mounting and connecting the thermal camera to the phone, Bluetooth
   pairing with the GSR sensor, etc.) and how the software is structured
@@ -288,26 +288,26 @@ physiological consistency among subjects - PMC
 
 <https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/>
 
-[\[2\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L2-L5)
-[\[3\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L2-L5)
-[\[10\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L41-L45)
-[\[11\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L13-L17)
-[\[15\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md#L2-L5)
+[\[2\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L2-L5)
+[\[3\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L2-L5)
+[\[10\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L41-L45)
+[\[11\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L13-L17)
+[\[15\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md#L2-L5)
 bibliography.md
 
-<https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/bibliography.md>
+<https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/bibliography.md>
 
-[\[4\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18)
-[\[5\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)
-[\[6\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26)
-[\[7\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31)
-[\[13\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)
-[\[14\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34)
+[\[4\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18)
+[\[5\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)
+[\[6\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26)
+[\[7\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31)
+[\[13\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)
+[\[14\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34)
 Chapter_1\_\_Introduction.md
 
-<https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_1__Introduction.md>
+<https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/draft/Chapter_1__Introduction.md>
 
-[\[16\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/AndroidApp/README.md#L2-L5)
+[\[16\]](https://github.com/buccancs/bucika_gsr/blob/master/AndroidApp/README.md#L2-L5)
 README.md
 
-<https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/AndroidApp/README.md>
+<https://github.com/buccancs/bucika_gsr/blob/master/AndroidApp/README.md>
