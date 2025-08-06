@@ -6,9 +6,11 @@ import com.multisensor.recording.persistence.*
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
