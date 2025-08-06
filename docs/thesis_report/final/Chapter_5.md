@@ -49,7 +49,7 @@ coverage of functional correctness verification, performance and
 reliability assessment under stress conditions, and integration quality
 evaluation across diverse hardware platforms, network configurations,
 and environmental conditions that characterize real-world deployment
-scenarios[\[1\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)[\[2\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94).
+scenarios[\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)[\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94).
 It incorporates lessons from traditional software testing while
 introducing novel approaches designed to meet the unique challenges of
 validating research-grade distributed systems that coordinate consumer
@@ -63,7 +63,7 @@ validating the complex, multi-dimensional interactions between hardware
 components, software systems, environmental factors, and human
 participants that characterize multi-sensor research systems in dynamic
 real-world
-contexts[\[3\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100).
+contexts[\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100).
 This philosophy emphasizes **empirical validation through realistic
 testing scenarios** that accurately replicate the conditions,
 challenges, and constraints of actual research applications across
@@ -73,7 +73,7 @@ The methodological foundation integrates principles from software
 engineering, experimental design, statistical analysis, and research
 methodology to create a validation framework that ensures both technical
 correctness and scientific
-validity[\[4\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109).
+validity[\[4\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109).
 This interdisciplinary approach recognizes that research software
 testing must address not only traditional software quality attributes
 but also scientific methodology validation, experimental
@@ -86,7 +86,7 @@ research-specific quality attributes including measurement accuracy,
 temporal precision, data integrity, long-term reliability, and
 scientific reproducibility, which often have requirements far exceeding
 typical software quality
-standards[\[5\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115).
+standards[\[5\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115).
 These stringent attributes necessitate specialized testing
 methodologies, precise measurement techniques, and statistical
 validation methods that provide confidence intervals, uncertainty
@@ -95,7 +95,7 @@ affecting research validity. Research-grade quality assurance extends
 beyond functional correctness to encompass validation of scientific
 methodology, experimental design principles, and reproducibility
 requirements that enable independent verification of research
-results[\[6\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120).
+results[\[6\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120).
 The framework implements sophisticated statistical validation such as
 hypothesis testing and confidence interval analysis, ensuring that the
 system's performance is not only qualitatively acceptable but also
@@ -108,12 +108,12 @@ methodologically rigorous approach that validates system functionality
 at multiple levels of abstraction, from individual component operation
 and isolated function verification through complete end-to-end research
 workflows and realistic experimental
-scenarios[\[7\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L177-L185).
+scenarios[\[7\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L177-L185).
 This hierarchical approach ensures that quality issues are detected at
 the appropriate level of detail, while providing full validation of
 component interactions and emergent behaviors that arise in a complex
 distributed
-environment[\[8\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L179-L187).
+environment[\[8\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L179-L187).
 In practice, issues are caught early during unit and component tests,
 preventing them from propagating to integration and system levels;
 meanwhile, higher-level tests verify that all parts work together under
@@ -180,7 +180,7 @@ scientific validity criteria.
 **Statistical Validation Framework:** The methodology implements
 comprehensive statistical validation approaches to provide quantitative
 confidence measures for critical system performance
-characteristics[\[9\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L400-L408).
+characteristics[\[9\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L400-L408).
 Appropriate statistical tests are applied for different measurements,
 accounting for sample size, statistical power, and necessary confidence
 intervals. This includes measurement uncertainty analysis that
@@ -193,7 +193,7 @@ interpretation of experimental results.
 **Measurement Accuracy and Precision Validation:** Rigorous procedures
 compare the system's sensor outputs against established reference
 standards under controlled
-conditions[\[10\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L410-L419).
+conditions[\[10\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L410-L419).
 For example, the thermal camera's readings can be validated against a
 high-precision thermometer or blackbody reference, and the GSR sensor's
 output can be compared to a laboratory-grade GSR measurement device.
@@ -211,7 +211,7 @@ and GSR data loss below 0.1% as specified in requirements).
 **Reproducibility and Replicability Testing:** The methodology includes
 procedures to validate that results obtained with the system can be
 independently
-reproduced[\[11\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L420-L429).
+reproduced[\[11\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L420-L429).
 This involves demonstrating consistency of measurements across different
 hardware units (e.g., multiple Shimmer GSR sensors produce consistent
 readings on the same stimuli), stability of performance over time (the
@@ -244,7 +244,7 @@ a real experiment.
 **Specialized Testing for Research Needs:** Additional layers address
 quality attributes critical to research applications but not covered by
 standard
-tests[\[12\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L453-L461).
+tests[\[12\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L453-L461).
 This includes performance and load testing designed around realistic
 usage patterns of experiments (e.g., many sensors streaming
 simultaneously), reliability tests simulating long experiments or
@@ -322,7 +322,7 @@ targets that the system needed to meet or exceed during testing:
 **Coverage Target Justification:** These coverage targets reflect the
 higher reliability requirements of research software while acknowledging
 practical constraints in achieving perfect coverage across all
-components[\[13\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486).
+components[\[13\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486).
 The targets prioritize full coverage of critical and high-risk
 components (e.g., 100% interface coverage for integration means every
 defined interaction between components is tested) and allow a bit of
@@ -335,7 +335,7 @@ quality or system stability is thoroughly tested.
 
 **Quality Metric Selection:** The selected metrics emphasize
 characteristics that directly impact research validity and
-reproducibility[\[14\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L482-L490).
+reproducibility[\[14\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L482-L490).
 This includes measurement accuracy (e.g., how close are sensor readings
 to true values), temporal precision (e.g., how well synchronized are
 data streams), data integrity (no data loss or corruption), and system
@@ -350,7 +350,7 @@ at least 99.5% over long runs).
 **Acceptance Criteria Validation:** The acceptance criteria serve as
 minimum thresholds derived from the system requirements and comparisons
 to similar research systems in
-literature[\[15\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L488-L496).
+literature[\[15\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L488-L496).
 They include absolute thresholds (like "\< 0.1°C difference from
 reference" for thermal accuracy) and relative or statistical criteria
 (like the 95th percentile of response time under load). During testing,
@@ -390,7 +390,7 @@ maintaining tightly synchronized timing and centralized result
 collection. The architecture implements a sophisticated orchestration
 system to manage test execution, data collection, and result analysis
 across the entire system
-topology[\[16\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L510-L519)[\[17\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L522-L529).
+topology[\[16\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L510-L519)[\[17\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L522-L529).
 
     graph TB
         subgraph "Test Orchestration Layer"
@@ -477,12 +477,12 @@ appropriately) and continue with the rest of the suite, rather than
 crashing the entire test run. It logs detailed information for debugging
 and metrics, allowing the developers to optimize test efficiency and
 resource usage over
-time[\[18\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L581-L589).
+time[\[18\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L581-L589).
 
 **Platform-Specific Testing Engines:** Each platform (Android,
 Python/PC, integration, hardware) has its own testing engine integrated
 under the
-coordinator[\[19\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L591-L600)[\[20\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L601-L609).
+coordinator[\[19\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L591-L600)[\[20\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L601-L609).
 
 - The **Android Testing Engine** ties into Android's instrumentation and
   UI testing frameworks. It allows the coordinator to trigger and
@@ -507,7 +507,7 @@ coordinator[\[19\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thes
   device at the protocol level to test the Python controller's handling
   of device messages, or vice versa. It also provides tools to introduce
   controlled network conditions like latency or packet loss to test
-  robustness[\[21\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L606-L614).
+  robustness[\[21\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L606-L614).
   This engine is crucial for verifying the custom JSON protocol and
   ensuring that any change on one side (Android or PC) remains
   compatible with the other.
@@ -534,7 +534,7 @@ temperature chamber for the thermal camera, or a resistor for the GSR
 sensor to simulate skin conductance changes); and a network simulator
 can introduce various network conditions (latency, jitter, bandwidth
 limits) to test network
-resilience[\[22\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L511-L519)[\[23\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L532-L540).
+resilience[\[22\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L511-L519)[\[23\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L532-L540).
 By controlling these environments, tests can be run under reproducible
 conditions and also stress conditions that mimic real-world extremes
 (e.g., poor Wi-Fi connectivity or high ambient temperatures).
@@ -544,7 +544,7 @@ performance metrics and log outputs) are collected centrally. A
 **Metrics Collector** service aggregates metrics like timing
 measurements, resource usage, error counts, etc., coming from each test
 node (Android or
-PC)[\[24\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L538-L546).
+PC)[\[24\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L538-L546).
 A **Log Aggregator** gathers logs from all devices (for example, Android
 logcat outputs, Python debug logs) so that the entire system's activity
 during a test can be analyzed in one place. An **Analysis Engine** then
@@ -568,7 +568,7 @@ adding a new feature did not increase CPU usage beyond acceptable
 levels). An **alert system** is configured to notify developers (via
 logs or even emails) if a critical test fails or if a key metric goes
 out of bounds, ensuring rapid response to
-regressions[\[25\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L580-L589).
+regressions[\[25\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L580-L589).
 
 Overall, this architecture was vital in managing the complexity of
 testing a system that spans different platforms and devices. It allowed
@@ -596,7 +596,7 @@ data in a controlled, privacy-compliant manner.
 
 **Synthetic Test Data Generation:** The framework can generate realistic
 physiological signal data for testing
-purposes[\[26\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L622-L630).
+purposes[\[26\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L622-L630).
 For example, a synthetic GSR signal generator produces data sequences
 that mimic how real GSR might behave (including baseline level,
 spontaneous fluctuations, and responses to simulated stimuli). It
@@ -620,7 +620,7 @@ variety of inputs, not just a narrow set of recorded cases.
 **Real Data Integration and Privacy Protection:** In addition to
 synthetic data, the framework allows incorporation of anonymized real
 physiological datasets into
-tests[\[27\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L631-L639).
+tests[\[27\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L631-L639).
 For example, a small sample of real GSR recordings from a pilot study or
 publicly available dataset can be used to verify that the system
 correctly handles authentic signal idiosyncrasies (like occasional
@@ -638,7 +638,7 @@ valuable real examples without risking confidentiality or bias.
 
 **Test Data Validation and Quality Assurance:** Whether data is
 synthetic or real, the framework validates it before use in
-tests[\[28\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L640-L648).
+tests[\[28\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L640-L648).
 It performs statistical checks on the data to ensure it\'s suitable: for
 instance, verifying that synthetic data has the expected mean and
 variance or that it covers the necessary range of values. It also checks
@@ -679,7 +679,7 @@ scenarios.
 
 **Dynamic Environment Provisioning:** The framework provides automated
 provisioning of complete test environments on
-demand[\[29\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L656-L664).
+demand[\[29\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L656-L664).
 For example, if a test requires four Android devices and one PC, the
 system can automatically launch four Android emulator instances (or
 allocate four physical test devices if available), ensure they have the
@@ -694,7 +694,7 @@ each test starts from a known baseline state.
 
 As part of provisioning, **health checks** and **baseline validation**
 are
-run[\[30\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L661-L670).
+run[\[30\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L661-L670).
 Before tests start, the system verifies that each device and component
 is reachable and functioning. It might check, for example, that each
 Android device can connect to the Wi-Fi network, or that the PC's camera
@@ -706,7 +706,7 @@ error, rather than running under unknown conditions.
 
 **Configuration Management and Version Control:** Test environments are
 maintained under strict configuration
-management[\[31\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L665-L673).
+management[\[31\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L665-L673).
 This means that all software versions (the Android app build, the Python
 code version, even the operating system versions on devices) are tracked
 and, when possible, fixed for a given test run. The framework automates
@@ -728,7 +728,7 @@ scripts, and get the same results.
 
 **Resource Optimization and Scheduling:** The framework uses intelligent
 scheduling to make efficient use of testing
-resources[\[32\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L674-L682).
+resources[\[32\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L674-L682).
 For example, if multiple test suites can run in parallel on different
 devices without interfering, the scheduler will deploy them
 simultaneously to reduce total test time. It also handles resource
@@ -1782,7 +1782,7 @@ measuring response times, resource utilization, throughput, and
 observing system behavior under prolonged operation or extreme
 conditions. Our performance evaluation methodology follows established
 techniques in computer systems performance
-analysis[\[33\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1501-L1509),
+analysis[\[33\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1501-L1509),
 adapted to the specific demands of a multi-device physiological data
 collection system.
 
@@ -2212,27 +2212,27 @@ We have already discussed many performance results. In summary: -
 **Response Times:** The average session start time on the PC was \~1.23
 s (with four devices), well under our 2 s target, and even the max
 observed (p95) was \~2.45
-s[\[34\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1969-L1977),
+s[\[34\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1969-L1977),
 which is acceptable. Stopping sessions was faster (\~0.87 s avg). -
 **Device Sync Response:** Each sync cycle on average took \~0.34 s, max
 \~0.67 s, target was \<1.0 s -- so syncing is quick. - **Throughput:**
 We measured network throughput when all sensors are active. The system
 handled \~45.2 Mbps on average and peaks \~78 Mbps without issue, within
 the 100 Mbps theoretical Wi-Fi
-budget[\[35\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1974-L1982).
+budget[\[35\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1974-L1982).
 This shows we can comfortably stream multiple video feeds and sensor
 data concurrently on a standard network. - **Resource Utilization:** CPU
 usage on the PC averaged \~67% during heavy recording (peak \~79%),
 under our 80%
-target[\[36\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983).
+target[\[36\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983).
 Memory usage averaged \~2.1 GB (peak \~3.4 GB) out of a 4 GB
-budget[\[36\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983),
+budget[\[36\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983),
 which is fine (the PC used had 16 GB RAM, so plenty of headroom). On
 Android devices, CPU stayed under \~70% and no out-of-memory issues were
 observed. - **Storage Rate:** Data was written to disk at \~3.2 GB/hour
 on average (with video + thermal + GSR from multiple devices) and peaked
 at \~7.8 GB/hour when using highest
-settings[\[36\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983).
+settings[\[36\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983).
 This is manageable -- a typical experiment of 1 hour can produce a few
 GB of data, which is expected for high-res video; the system's storage
 management (like splitting files) worked properly.
@@ -2269,7 +2269,7 @@ their status:
   delivered essentially continuous data; any tiny gaps were negligible.
   Cross-correlation with a reference GSR instrument gave r ≈ 0.89, p \<
   0.001, indicating strong
-  agreement[\[37\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L62-L65).)
+  agreement[\[37\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L62-L65).)
 - **FR-005 Session Management**: ✅ *Complete lifecycle management
   validated.* (Including session creation, configuration, start, stop,
   pause, resume, and data export -- all tested in sequence and
@@ -2339,19 +2339,19 @@ Our test suite provides comprehensive coverage across different
 dimensions: - **Functional coverage:** All core features (100%) were
 tested; most edge cases (\~87%) and error handling paths (\~92%) were
 tested, as estimated by our coverage analysis
-script[\[38\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2056-L2064).
+script[\[38\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2056-L2064).
 Some minor edge scenarios remain (e.g., extremely unlikely error
 combinations) but those are tracked. - **Code coverage:** As noted, we
 attained \~93% statement coverage overall, \~89% branch coverage, \~95%
 function
-coverage[\[39\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2060-L2068).
+coverage[\[39\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2060-L2068).
 These high numbers mean very little of the implementation is untested.
 The few untested lines are typically defensive code or platform-specific
 fallbacks that are hard to trigger but also low risk. - **Platform
 coverage:** We tested on multiple Android versions (7.0 through 12.0)
 and multiple OS for the desktop (Windows 10 & 11, Ubuntu 20.04 LTS, and
 macOS
-12)[\[40\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2069-L2073).
+12)[\[40\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2069-L2073).
 All tested platforms ran the system successfully, with only minor
 platform-specific issues (like a macOS virtual camera permission quirk,
 which was documented). This broad platform coverage is important for
@@ -2362,7 +2362,7 @@ conditions) and stress conditions (long runs, many sessions
 back-to-back). We also tested under resource constraints (running the PC
 app on a lower-end laptop to see if it still meets timing -- it did,
 albeit using more CPU). We covered \~95% of intended load
-scenarios[\[41\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2074-L2079);
+scenarios[\[41\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2074-L2079);
 a couple of extreme scenarios (like \>8 devices or 48-hour continuous
 with \>4 devices) were not tested due to practical limits, but those can
 be extrapolated from current results or tested in future if needed.
@@ -2383,20 +2383,20 @@ categorize them here for completeness:
   example, an early critical defect was a memory overflow when recording
   very long videos -- this was resolved by implementing streaming writes
   to disk. By test completion, no known critical bugs existed in the
-  system[\[42\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2089-L2097).
+  system[\[42\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2089-L2097).
 - **Major Defects:** *2 resolved.* These were significant issues but
   with workarounds; e.g.,
 - A memory leak in extended sessions (fixed by better resource
-  cleanup)[\[43\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102).
+  cleanup)[\[43\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102).
 - A synchronization drift over long periods (fixed by periodic re-sync
   and clock correction
-  algorithms)[\[43\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102).
+  algorithms)[\[43\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102).
 - **Minor Defects:** *5 resolved, 2 tracked.* Minor issues were things
   like UI responsiveness under high CPU load (improved by moving some
   work to background threads), handling of edge-case calibration
   patterns (improved with additional user guidance if detection fails),
   a slight delay on network reconnection
-  (optimized)[\[44\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107),
+  (optimized)[\[44\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107),
   and file format compatibility with third-party tools (addressed by
   offering alternative export formats).
 - Two minor issues remain tracked:
@@ -2404,11 +2404,11 @@ categorize them here for completeness:
     limited, the real-time video preview can lag or drop quality; we
     plan an enhancement for adaptive quality scaling (not critical to
     data recording, only to the live view, so it's
-    acceptable)[\[45\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110).
+    acceptable)[\[45\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110).
   - Another is **calibration pattern detection in exotic scenarios** --
     very complex patterns or reflections might still pose difficulty; we
     consider this an improvement opportunity, but standard use is
-    fine[\[45\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110).
+    fine[\[45\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110).
 - **Tracked Issues (Non-critical):** These are essentially the to-do
   enhancements mentioned above and any other nice-to-have improvements
   that weren't essential for meeting thesis objectives. None of them
@@ -2417,7 +2417,7 @@ categorize them here for completeness:
 
 The defect resolution rate was \~94.3% (i.e., that percentage of all
 identified issues have been
-resolved)[\[46\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2109-L2117).
+resolved)[\[46\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2109-L2117).
 Importantly, **no known defect compromises the system's core
 requirements or scientific use**. The remaining tracked items are either
 cosmetic or enhancements to be addressed in future versions.
@@ -2429,7 +2429,7 @@ multi-layered methodology caught issues at appropriate stages (many bugs
 were fixed during unit tests or integration tests before ever doing a
 full system run). Early defect detection (we estimate \~89% of defects
 were found and fixed before system testing) improved development
-speed[\[47\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2120-L2128).
+speed[\[47\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2120-L2128).
 The realistic end-to-end tests gave us confidence in real usage. And by
 quantifying everything (timings, success rates), we have concrete
 evidence rather than just anecdotal assurance. - **Areas for
@@ -2439,7 +2439,7 @@ one-click test of everything is still being finalized (mostly due to
 needing certain hardware or environment setups). We could invest in
 better CI/CD integration to run all tests in a controlled lab
 environment
-regularly[\[48\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2125-L2132).
+regularly[\[48\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2125-L2132).
 Also, expanding cross-platform testing to more device models and
 conditions (we tested the main ones, but perhaps adding Android 13, or
 testing on different phone brands for camera differences, etc.). Lastly,
@@ -2447,7 +2447,7 @@ extending long-term reliability tests even further (e.g., a month-long
 test) could be done, though 1 week already gave a solid indication. -
 **Testing ROI:** We estimate about 35% of the total development effort
 was spent on testing and test
-automation[\[49\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2131-L2139).
+automation[\[49\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2131-L2139).
 This investment is justified by the outcome: a robust system with very
 few issues in deployment. The payoff is that likely \<0.1% of defects
 have escaped into the "field" (if any -- so far none observed in pilot
@@ -2455,7 +2455,7 @@ usage), meaning near-zero troubleshooting during actual experiments.
 Also, a small user acceptance test (pilot study with a couple of
 researchers using the system) yielded a 94% satisfaction rate -- much of
 that due to the system's reliability which comes from thorough
-testing[\[50\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2132-L2139).
+testing[\[50\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2132-L2139).
 
 One aspect not yet directly tested is the **end-user's ability to use
 the system easily** in terms of workflow. While we did usability tests
@@ -2650,56 +2650,56 @@ collection for advanced emotion analysis studies.
 
 ------------------------------------------------------------------------
 
-[\[1\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)
-[\[2\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94)
-[\[3\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100)
-[\[4\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109)
-[\[5\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115)
-[\[6\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120)
-[\[7\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L177-L185)
-[\[8\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L179-L187)
-[\[9\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L400-L408)
-[\[10\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L410-L419)
-[\[11\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L420-L429)
-[\[12\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L453-L461)
-[\[13\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486)
-[\[14\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L482-L490)
-[\[15\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L488-L496)
-[\[16\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L510-L519)
-[\[17\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L522-L529)
-[\[18\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L581-L589)
-[\[19\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L591-L600)
-[\[20\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L601-L609)
-[\[21\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L606-L614)
-[\[22\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L511-L519)
-[\[23\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L532-L540)
-[\[24\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L538-L546)
-[\[25\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L580-L589)
-[\[26\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L622-L630)
-[\[27\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L631-L639)
-[\[28\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L640-L648)
-[\[29\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L656-L664)
-[\[30\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L661-L670)
-[\[31\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L665-L673)
-[\[32\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L674-L682)
-[\[33\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1501-L1509)
-[\[34\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1969-L1977)
-[\[35\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1974-L1982)
-[\[36\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983)
-[\[37\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L62-L65)
-[\[38\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2056-L2064)
-[\[39\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2060-L2068)
-[\[40\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2069-L2073)
-[\[41\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2074-L2079)
-[\[42\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2089-L2097)
-[\[43\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102)
-[\[44\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107)
-[\[45\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110)
-[\[46\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2109-L2117)
-[\[47\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2120-L2128)
-[\[48\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2125-L2132)
-[\[49\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2131-L2139)
-[\[50\]](https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2132-L2139)
+[\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)
+[\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94)
+[\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100)
+[\[4\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109)
+[\[5\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115)
+[\[6\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120)
+[\[7\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L177-L185)
+[\[8\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L179-L187)
+[\[9\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L400-L408)
+[\[10\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L410-L419)
+[\[11\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L420-L429)
+[\[12\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L453-L461)
+[\[13\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486)
+[\[14\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L482-L490)
+[\[15\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L488-L496)
+[\[16\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L510-L519)
+[\[17\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L522-L529)
+[\[18\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L581-L589)
+[\[19\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L591-L600)
+[\[20\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L601-L609)
+[\[21\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L606-L614)
+[\[22\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L511-L519)
+[\[23\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L532-L540)
+[\[24\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L538-L546)
+[\[25\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L580-L589)
+[\[26\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L622-L630)
+[\[27\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L631-L639)
+[\[28\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L640-L648)
+[\[29\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L656-L664)
+[\[30\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L661-L670)
+[\[31\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L665-L673)
+[\[32\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L674-L682)
+[\[33\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1501-L1509)
+[\[34\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1969-L1977)
+[\[35\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1974-L1982)
+[\[36\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983)
+[\[37\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L62-L65)
+[\[38\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2056-L2064)
+[\[39\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2060-L2068)
+[\[40\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2069-L2073)
+[\[41\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2074-L2079)
+[\[42\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2089-L2097)
+[\[43\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102)
+[\[44\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107)
+[\[45\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110)
+[\[46\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2109-L2117)
+[\[47\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2120-L2128)
+[\[48\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2125-L2132)
+[\[49\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2131-L2139)
+[\[50\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2132-L2139)
 Chapter_5_Testing_and_Results_Evaluation.md
 
-<https://github.com/buccancs/bucika_gsr/blob/master/docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md>
+<docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md>
