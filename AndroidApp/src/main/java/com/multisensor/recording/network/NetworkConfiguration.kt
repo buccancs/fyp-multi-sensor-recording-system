@@ -18,7 +18,7 @@ constructor(
         private const val KEY_LEGACY_PORT = "legacy_port"
         private const val KEY_JSON_PORT = "json_port"
 
-        private const val DEFAULT_SERVER_IP = "192.168.1.100"
+        private const val DEFAULT_SERVER_IP = "192.168.0.100"
         private const val DEFAULT_LEGACY_PORT = 8080
         private const val DEFAULT_JSON_PORT = 9000
     }
