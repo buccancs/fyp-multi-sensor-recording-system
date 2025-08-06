@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
@@ -286,67 +286,67 @@ graph TB
         CAL[Camera Calibration System<br/>Multi-Device Coordination]
         ML[Machine Learning Pipeline<br/>Real-Time Inference]
     end
-    
+
     subgraph "Distributed Mobile Sensors"
         M1[Mobile Device 1<br/>Android Application]
         M2[Mobile Device 2<br/>Android Application]
         M3[Mobile Device N<br/>Android Application]
     end
-    
+
     subgraph "Camera Systems"
         CAM1[USB Camera 1<br/>Logitech Brio 4K]
         CAM2[USB Camera 2<br/>Logitech Brio 4K]
     end
-    
+
     subgraph "Thermal Imaging"
         THERM1[Thermal Camera 1<br/>TopDon TC001+]
         THERM2[Thermal Camera 2<br/>TopDon TC001+]
     end
-    
+
     subgraph "Physiological Sensors"
         GSR1[Shimmer3 GSR+ 1<br/>Reference Physiological]
         GSR2[Shimmer3 GSR+ 2<br/>Reference Physiological]
     end
-    
+
     subgraph "Data Processing Pipeline"
         VISION[Computer Vision Engine<br/>OpenCV + MediaPipe]
         THERMAL[Thermal Analysis<br/>Temperature Processing]
         SIGNAL[Signal Processing<br/>Physiological Analysis]
         FUSION[Multi-Modal Fusion<br/>Data Integration]
     end
-    
+
     PC --- SYNC
     PC --- STORE
     PC --- CAL
     PC --- ML
-    
+
     SYNC -.->|Network Time Protocol| M1
     SYNC -.->|Network Time Protocol| M2
     SYNC -.->|Network Time Protocol| M3
-    
+
     PC -.->|JSON WebSocket| M1
     PC -.->|JSON WebSocket| M2
     PC -.->|JSON WebSocket| M3
-    
+
     CAM1 --> PC
     CAM2 --> PC
-    
+
     M1 --> THERM1
     M2 --> THERM2
-    
+
     M1 --> GSR1
     M2 --> GSR2
-    
+
     PC --> VISION
     THERM1 --> THERMAL
     THERM2 --> THERMAL
     GSR1 --> SIGNAL
     GSR2 --> SIGNAL
-    
+
     VISION --> FUSION
     THERMAL --> FUSION
     SIGNAL --> FUSION
-    
+
     FUSION --> STORE
 \end{verbatim}
 
@@ -356,63 +356,63 @@ graph TB
 flowchart TD
     subgraph "Data Acquisition Layer"
         CAM[Camera Sensors]
-        THERMAL[Thermal Sensors] 
+        THERMAL[Thermal Sensors]
         GSR[GSR Sensors]
     end
-    
+
     subgraph "Local Processing Layer"
         ANDROID[Android Processing]
         BUFFER[Local Buffering]
         COMPRESS[Data Compression]
         VALIDATE[Quality Validation]
     end
-    
+
     subgraph "Network Communication Layer"
         PROTOCOL[WebSocket Protocol]
         ENCRYPT[Data Encryption]
         SYNC[Time Synchronization]
         TRANSFER[Data Transfer]
     end
-    
+
     subgraph "Central Processing Layer"
         RECEIVE[Data Reception]
         AGGREGATE[Data Aggregation]
         ANALYSIS[Real-time Analysis]
         STORAGE[Persistent Storage]
     end
-    
+
     subgraph "Quality Assurance Layer"
         MONITOR[Quality Monitoring]
         ALERT[Alert System]
         RECOVERY[Error Recovery]
         REPORT[Status Reporting]
     end
-    
+
     CAM --> ANDROID
     THERMAL --> ANDROID
     GSR --> ANDROID
-    
+
     ANDROID --> BUFFER
     BUFFER --> COMPRESS
     COMPRESS --> VALIDATE
-    
+
     VALIDATE --> PROTOCOL
     PROTOCOL --> ENCRYPT
     ENCRYPT --> SYNC
     SYNC --> TRANSFER
-    
+
     TRANSFER --> RECEIVE
     RECEIVE --> AGGREGATE
     AGGREGATE --> ANALYSIS
     ANALYSIS --> STORAGE
-    
+
     ANALYSIS --> MONITOR
     MONITOR --> ALERT
     ALERT --> RECOVERY
     RECOVERY --> REPORT
-    
+
     REPORT -.-> ANDROID
-    
+
     style CAM fill:#ffeb3b
     style THERMAL fill:#ff5722
     style GSR fill:#4caf50
@@ -471,29 +471,29 @@ graph TD
         VM[ViewModels<br/>UI State Management]
         BIND[View Binding<br/>UI Component Access]
     end
-    
+
     subgraph "Domain Layer"
         UC[Use Cases<br/>Business Logic]
         REPO[Repository Interfaces<br/>Abstractions]
         ENTITY[Domain Entities<br/>Data Models]
     end
-    
+
     subgraph "Data Layer"
         IMPL[Repository Implementations]
         API[Network API<br/>PC Communication]
         LOCAL[Local Storage<br/>Session Data]
         SENSOR[Sensor Managers<br/>Camera, Thermal, GSR]
     end
-    
+
     UI --> VM
     VM --> UC
     UC --> REPO
     REPO --> ENTITY
-    
+
     IMPL --> API
     IMPL --> LOCAL
     IMPL --> SENSOR
-    
+
     REPO -.-> IMPL
 \end{verbatim}
 
@@ -529,7 +529,7 @@ class MultiSensorCoordinator @Inject constructor(
     private val networkService: NetworkService
 ) {
     private val coordinatorScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    
+
     suspend fun startCoordinatedRecording(sessionConfig: SessionConfiguration): Result<Unit> {
         return withContext(Dispatchers.Default) {
             try {
@@ -539,15 +539,15 @@ class MultiSensorCoordinator @Inject constructor(
                     async { thermalService.startRecording(sessionConfig.thermalConfig) },
                     async { shimmerService.startRecording(sessionConfig.shimmerConfig) }
                 )
-                
+
                 // Start background monitoring
                 launch { monitorSystemPerformance() }
                 launch { manageDataFlow() }
                 launch { maintainNetworkSync() }
-                
+
                 // Wait for all sensors to initialize
                 val results = sensorOperations.awaitAll()
-                
+
                 if (results.all { it.isSuccess }) {
                     Result.success(Unit)
                 } else {
@@ -558,7 +558,7 @@ class MultiSensorCoordinator @Inject constructor(
             }
         }
     }
-    
+
     private suspend fun monitorSystemPerformance() {
         while (coordinatorScope.isActive) {
             val performance = SystemPerformanceMonitor.getCurrentMetrics()
@@ -600,7 +600,7 @@ class PowerOptimizationManager @Inject constructor(
     suspend fun optimizePowerConsumption(): PowerOptimizationResult {
         val currentBatteryLevel = batteryMonitor.getCurrentLevel()
         val estimatedSessionDuration = calculateEstimatedDuration()
-        
+
         return when {
             currentBatteryLevel < CRITICAL_BATTERY_THRESHOLD -> {
                 applyCriticalPowerMode()
@@ -616,17 +616,17 @@ class PowerOptimizationManager @Inject constructor(
             }
         }
     }
-    
+
     private suspend fun applyCriticalPowerMode(): PowerOptimizationResult {
         // Reduce sensor sampling rates
         sensorManager.reduceSamplingRates(CRITICAL_MODE_REDUCTION)
-        
+
         // Lower video quality settings
         performanceController.adjustVideoQuality(VideoQuality.POWER_SAVING)
-        
+
         // Minimize background processing
         performanceController.pauseNonEssentialOperations()
-        
+
         return PowerOptimizationResult.criticalMode()
     }
 }
@@ -671,23 +671,23 @@ class CameraRecorder @Inject constructor(
     private var mediaRecorder: MediaRecorder? = null
     private var imageReader: ImageReader? = null
     private var captureSession: CameraCaptureSession? = null
-    
+
     suspend fun startRecording(config: CameraConfiguration): Result<Unit> {
         return withContext(Dispatchers.Main) {
             try {
                 // Validate configuration parameters
                 configValidator.validate(config)
-                
+
                 // Setup dual capture: video + RAW images
                 setupMediaRecorder(config)
                 setupImageReader(config)
-                
+
                 // Create capture session with multiple targets
                 val surfaces = listOf(
                     mediaRecorder!!.surface,
                     imageReader!!.surface
                 )
-                
+
                 cameraDevice.createCaptureSession(
                     surfaces,
                     object : CameraCaptureSession.StateCallback() {
@@ -701,14 +701,14 @@ class CameraRecorder @Inject constructor(
                     },
                     backgroundHandler
                 )
-                
+
                 Result.success(Unit)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
-    
+
     private fun setupMediaRecorder(config: CameraConfiguration) {
         mediaRecorder = MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
@@ -721,7 +721,7 @@ class CameraRecorder @Inject constructor(
             prepare()
         }
     }
-    
+
     private fun setupImageReader(config: CameraConfiguration) {
         imageReader = ImageReader.newInstance(
             config.imageWidth,
@@ -788,36 +788,36 @@ class ThermalRecorder @Inject constructor(
 ) {
     private var thermalDevice: TopdonDevice? = null
     private var frameProcessor: ThermalFrameProcessor? = null
-    
+
     suspend fun connectDevice(): Result<TopdonDevice> {
         return withContext(Dispatchers.IO) {
             try {
                 val availableDevices = usbManager.deviceList.values
                     .filter { it.vendorId == TOPDON_VENDOR_ID }
-                
+
                 if (availableDevices.isEmpty()) {
                     return@withContext Result.failure(
                         NoThermalDeviceException("No Topdon devices found")
                     )
                 }
-                
+
                 val device = availableDevices.first()
                 val connection = usbManager.openDevice(device)
-                
+
                 thermalDevice = TopdonDevice(device, connection).apply {
                     initialize()
                     setFrameCallback { frame ->
                         processFrame(frame)
                     }
                 }
-                
+
                 Result.success(thermalDevice!!)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
-    
+
     private fun processFrame(frame: ThermalFrame) {
         frameProcessor?.process(frame) { processedFrame ->
             // Save frame data and update preview
@@ -866,7 +866,7 @@ class ShimmerRecorder @Inject constructor(
     private val shimmerManager: ShimmerManager
 ) {
     private var connectedShimmers: MutableMap<String, Shimmer> = mutableMapOf()
-    
+
     suspend fun discoverAndConnect(): Result<List<Shimmer>> {
         return withContext(Dispatchers.IO) {
             try {
@@ -874,17 +874,17 @@ class ShimmerRecorder @Inject constructor(
                 val connectionResults = discoveredDevices.map { device ->
                     async { connectToShimmer(device) }
                 }.awaitAll()
-                
+
                 val connectedDevices = connectionResults.mapNotNull { it.getOrNull() }
                 connectedShimmers.putAll(connectedDevices.associateBy { it.macAddress })
-                
+
                 Result.success(connectedDevices)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
-    
+
     private suspend fun connectToShimmer(device: BluetoothDevice): Result<Shimmer> {
         return try {
             val shimmer = shimmerManager.createShimmer(device)
@@ -898,14 +898,14 @@ class ShimmerRecorder @Inject constructor(
             Result.failure(e)
         }
     }
-    
+
     private fun processGSRData(data: ShimmerData) {
         // Process and validate GSR data
         val processedData = SignalProcessor.processGSRSignal(data)
-        
+
         // Apply quality assessment
         val qualityMetrics = QualityAssessor.assessSignalQuality(processedData)
-        
+
         // Store data with metadata
         DataManager.storeGSRData(processedData, qualityMetrics)
     }

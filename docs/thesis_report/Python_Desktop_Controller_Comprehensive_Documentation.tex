@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
@@ -555,14 +555,14 @@ class USBDeviceManager:
     def __init__(self):
         self.connected_devices = {}
         self.device_handlers = {}
-    
+
     def detect_devices(self):
         """Automatic USB device detection and classification"""
         devices = usb.core.find(find_all=True)
         for device in devices:
             if self.is_supported_device(device):
                 self.register_device(device)
-    
+
     def register_device(self, device):
         """Device registration and initialization"""
         handler = self.create_device_handler(device)
@@ -667,7 +667,7 @@ class RecoveryManager:
             'device_failure': self.device_recovery,
             'data_corruption': self.data_recovery
         }
-    
+
     def handle_error(self, error_type, error_context):
         """Intelligent error handling and recovery"""
         if error_type in self.recovery_strategies:
@@ -1152,7 +1152,7 @@ graph TB
             MAIN[Main Controller<br/>Workflow Coordination]
             SESSION[Session Manager<br/>Recording Orchestration]
         end
-        
+
         subgraph "Service Layer"
             NETWORK[Network Layer<br/>JsonSocketServer]
             WEBCAM[Webcam Service<br/>USB Camera Control]
@@ -1160,14 +1160,14 @@ graph TB
             SHIMMER[Shimmer Manager<br/>Physiological Sensors]
             WEB_SRV[Web Service<br/>Flask + SocketIO]
         end
-        
+
         subgraph "Infrastructure Layer"
             LOGGING[Logging System<br/>Centralized Logging]
             CONFIG[Configuration<br/>Settings Management]
             UTILS[Utilities<br/>Helper Functions]
             MONITOR[System Monitor<br/>Performance Tracking]
         end
-        
+
         subgraph "User Interface Layer"
             SIMP_UI[Simplified UI<br/>Modern Interface]
             ENH_UI[Enhanced UI<br/>PsychoPy-Inspired]
@@ -1175,7 +1175,7 @@ graph TB
             WEB_UI[Web Interface<br/>Remote Access]
         end
     end
-    
+
     subgraph "Connected Device Network"
         subgraph "Android Devices"
             ANDROID1[Android Device 1<br/>Camera + Thermal + Shimmer]
@@ -1183,20 +1183,20 @@ graph TB
             ANDROID3[Android Device 3<br/>Camera Only]
             ANDROIDN[Android Device N<br/>Up to 8 total]
         end
-        
+
         subgraph "USB Devices"
             WEBCAM1[USB Webcam 1<br/>High-Quality Recording]
             WEBCAM2[USB Webcam 2<br/>Secondary Angle]
             WEBCAMN[USB Webcam N<br/>Up to 4 simultaneous]
         end
-        
+
         subgraph "Physiological Sensors"
             SHIMMER_DIR[Shimmer3 GSR+<br/>Direct PC Connection]
             SHIMMER_AND[Shimmer via Android<br/>Bridge Connection]
             THERMAL[TopDon TC001<br/>Thermal Camera]
         end
     end
-    
+
     subgraph "Data Storage & Processing"
         subgraph "Local Storage"
             SESSIONS[Session Directories<br/>Organized by Date/ID]
@@ -1204,7 +1204,7 @@ graph TB
             CALIBRATION[Calibration Data<br/>Camera Parameters]
             SHIMMER_DATA[Shimmer Data<br/>CSV + Real-time]
         end
-        
+
         subgraph "Real-Time Processing"
             QUALITY[Quality Assessment<br/>Live Monitoring]
             SYNC[Synchronization<br/>Temporal Alignment]
@@ -1212,7 +1212,7 @@ graph TB
             ANALYSIS[Real-time Analysis<br/>Signal Processing]
         end
     end
-    
+
     subgraph "Remote Access"
         subgraph "Web Clients"
             BROWSER[Web Browser<br/>Any Device]
@@ -1220,7 +1220,7 @@ graph TB
             REMOTE[Remote Access<br/>External Networks]
         end
     end
-    
+
     %% Application Layer Connections
     APP --> MAIN
     MAIN --> SESSION
@@ -1229,34 +1229,34 @@ graph TB
     SESSION --> CALIB
     SESSION --> SHIMMER
     SESSION --> WEB_SRV
-    
+
     %% Service Layer Connections
     NETWORK --> LOGGING
     WEBCAM --> CONFIG
     CALIB --> UTILS
     SHIMMER --> MONITOR
     WEB_SRV --> LOGGING
-    
+
     %% UI Layer Connections
     SIMP_UI --> APP
     ENH_UI --> MAIN
     TRAD_UI --> SESSION
     WEB_UI --> WEB_SRV
-    
+
     %% Device Connections
     NETWORK <==> ANDROID1
     NETWORK <==> ANDROID2
     NETWORK <==> ANDROID3
     NETWORK <==> ANDROIDN
-    
+
     WEBCAM <==> WEBCAM1
     WEBCAM <==> WEBCAM2
     WEBCAM <==> WEBCAMN
-    
+
     SHIMMER <==> SHIMMER_DIR
     ANDROID1 <==> SHIMMER_AND
     ANDROID1 <==> THERMAL
-    
+
     %% Data Flow Connections
     SESSION --> SESSIONS
     CALIB --> CALIBRATION
@@ -1264,19 +1264,19 @@ graph TB
     QUALITY --> METADATA
     SYNC --> VALIDATION
     VALIDATION --> ANALYSIS
-    
+
     %% Web Access Connections
     WEB_UI <==> BROWSER
     WEB_UI <==> MOBILE
     WEB_UI <==> REMOTE
-    
+
     %% Styling
     classDef controller fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef device fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef storage fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef processing fill:#fff3e0,stroke:#FF9800,stroke-width:2px
     classDef web fill:#fce4ec,stroke:#E91E63,stroke-width:2px
-    
+
     class APP,MAIN,SESSION,NETWORK,WEBCAM,CALIB,SHIMMER,WEB_SRV,LOGGING,CONFIG,UTILS,MONITOR,SIMP_UI,ENH_UI,TRAD_UI,WEB_UI controller
     class ANDROID1,ANDROID2,ANDROID3,ANDROIDN,WEBCAM1,WEBCAM2,WEBCAMN,SHIMMER_DIR,SHIMMER_AND,THERMAL device
     class SESSIONS,METADATA,CALIBRATION,SHIMMER_DATA storage
@@ -1331,13 +1331,13 @@ class Application(QObject):
     """
     def __init__(self, use_simplified_ui=True):
         super().__init__()
-        
+
         # Core service initialization with dependency injection
         self.session_manager = SessionManager()
         self.json_server = JsonSocketServer(session_manager=self.session_manager)
         self.webcam_capture = WebcamCapture()
         self.calibration_manager = CalibrationManager()
-        
+
         # Service dependency configuration
         self.main_controller = MainController(
             session_manager=self.session_manager,
@@ -1345,7 +1345,7 @@ class Application(QObject):
             webcam_capture=self.webcam_capture,
             calibration_manager=self.calibration_manager
         )
-        
+
         # UI initialization with service injection
         if use_simplified_ui:
             self.main_window = SimplifiedMainWindow(self.main_controller)
@@ -1389,7 +1389,7 @@ class RecordingCommand:
         self.timestamp = datetime.now()
         self.executed = False
         self.result = None
-    
+
     def execute(self, devices: List[RemoteDevice]) -> bool:
         """Execute command on specified devices with error handling."""
         try:
@@ -1402,12 +1402,12 @@ class RecordingCommand:
         except Exception as e:
             logger.error(f"Command execution failed: {e}")
             return False
-    
+
     def undo(self, devices: List[RemoteDevice]) -> bool:
         """Undo command execution if possible."""
         if not self.executed:
             return True
-        
+
         try:
             if self.operation_type == "start_recording":
                 return self._undo_start_recording(devices)
@@ -1416,7 +1416,7 @@ class RecordingCommand:
         except Exception as e:
             logger.error(f"Command undo failed: {e}")
             return False
-    
+
     def can_execute(self, devices: List[RemoteDevice]) -> bool:
         """Validate if command can be executed on current device state."""
         return all(device.is_ready_for_command(self.operation_type) for device in devices)
@@ -1445,7 +1445,7 @@ class Application(QObject):
     Central application container implementing dependency injection
     for backend services and coordinating system lifecycle.
     """
-    
+
     def __init__(self, use_simplified_ui=True):
         super().__init__()
         self.logger = get_logger(__name__)
@@ -1458,7 +1458,7 @@ class Application(QObject):
         self.main_window = None
         self._create_services()
         self.logger.info("application initialized")
-    
+
     def _create_services(self):
         """Create backend services with dependency injection."""
         try:
@@ -1466,7 +1466,7 @@ class Application(QObject):
             self.session_manager = SessionManager()
             self.json_server = JsonSocketServer(session_manager=self.session_manager)
             self.webcam_capture = WebcamCapture()
-            
+
             # UI coordination (only for traditional interface)
             self.stimulus_controller = None
             if not self.use_simplified_ui:
@@ -1474,7 +1474,7 @@ class Application(QObject):
         except Exception as e:
             self.logger.error(f"failed to create services: {e}")
             raise
-    
+
     def create_main_window(self):
         """Create main window and complete dependency injection."""
         try:
@@ -1520,7 +1520,7 @@ def startup_services(self):
         ('Network Server', self.json_server.start),
         ('Main Controller', self.main_controller.initialize)
     ]
-    
+
     for service_name, startup_method in startup_sequence:
         try:
             self.logger.info(f"Starting {service_name}...")
@@ -1542,7 +1542,7 @@ def shutdown_services(self):
         ('Session Manager', self.session_manager.shutdown),
         ('Performance Monitor', self.performance_monitor.stop)
     ]
-    
+
     for service_name, shutdown_method in shutdown_sequence:
         try:
             self.logger.info(f"Shutting down {service_name}...")
@@ -1568,21 +1568,21 @@ graph TB
             TRAD_UI[Traditional UI<br/>Full-Feature Interface]
             WEB_UI[Web UI<br/>Browser-Based Control]
         end
-        
+
         subgraph "Common Components"
             MOD_BTN[Modern Button<br/>Styled Interactions]
             STATUS_IND[Status Indicator<br/>Visual Feedback]
             DEV_PANEL[Device Panel<br/>Hardware Status]
             PREV_PANEL[Preview Panel<br/>Live Video]
         end
-        
+
         subgraph "Specialized Features"
             CALIB_DLG[Calibration Dialog<br/>Camera Setup]
             SESSION_REV[Session Review<br/>Data Analysis]
             STIM_CTRL[Stimulus Controller<br/>Experiment Management]
             CONNECTION_MGR[Connection Manager<br/>Device Control]
         end
-        
+
         subgraph "Backend Integration"
             APP_CONT[Application Container<br/>Service Coordination]
             JSON_SRV[JsonSocketServer<br/>Device Communication]
@@ -1590,31 +1590,31 @@ graph TB
             WEBCAM_CAP[Webcam Capture<br/>PC Recording]
         end
     end
-    
+
     %% Interface relationships
     SIMP_UI --> MOD_BTN
     ENH_UI --> STATUS_IND
     TRAD_UI --> DEV_PANEL
     WEB_UI --> PREV_PANEL
-    
+
     %% Component usage
     SIMP_UI --> CALIB_DLG
     ENH_UI --> SESSION_REV
     TRAD_UI --> STIM_CTRL
     WEB_UI --> CONNECTION_MGR
-    
+
     %% Backend connections
     SIMP_UI --> APP_CONT
     ENH_UI --> JSON_SRV
     TRAD_UI --> SESSION_MGR
     WEB_UI --> WEBCAM_CAP
-    
+
     %% Styling
     classDef interface fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef component fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef feature fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef backend fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    
+
     class SIMP_UI,ENH_UI,TRAD_UI,WEB_UI interface
     class MOD_BTN,STATUS_IND,DEV_PANEL,PREV_PANEL component
     class CALIB_DLG,SESSION_REV,STIM_CTRL,CONNECTION_MGR feature
@@ -1634,17 +1634,17 @@ class SimplifiedMainWindow(QMainWindow):
     This is the default interface providing essential functionality with
     minimal complexity.
     """
-    
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Multi-Sensor Recording System")
         self.setMinimumSize(1000, 700)
-        
+
         # Initialize core components
         self.device_server = None
         self.session_manager = None
         self.recording_active = False
-        
+
         # Setup modern styling and interface
         self.setup_modern_styling()
         self.create_simplified_interface()
@@ -1661,22 +1661,22 @@ class EnhancedMainWindow(QMainWindow):
     Enhanced main window with PsychoPy-inspired design for advanced
     research applications requiring comprehensive control and monitoring.
     """
-    
+
     # Signals for component communication
     device_connected = pyqtSignal(str)
     recording_started = pyqtSignal()
     recording_stopped = pyqtSignal()
-    
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Multi-Sensor Recording System - Enhanced Interface")
         self.setGeometry(100, 100, 1400, 900)
-        
+
         # Initialize advanced components
         self.device_server = None
         self.session_manager = None
         self.recording_active = False
-        
+
         # Setup professional styling and comprehensive interface
         self.setup_professional_styling()
         self.create_enhanced_interface()
@@ -1693,12 +1693,12 @@ class WebController:
     Web-based interface controller providing browser access to
     system functionality for remote operation and integration.
     """
-    
+
     def __init__(self, app_instance):
         self.app = app_instance
         self.flask_app = Flask(__name__)
         self.socketio = SocketIO(self.flask_app, cors_allowed_origins="*")
-        
+
         # Setup web routes and real-time communication
         self.setup_web_routes()
         self.setup_websocket_handlers()
@@ -1722,56 +1722,56 @@ graph TB
             MSG_ROUTER[Message Router<br/>Protocol Handling]
             CONN_POOL[Connection Pool<br/>Resource Management]
         end
-        
+
         subgraph "Communication Protocols"
             HANDSHAKE[Device Handshake<br/>Capability Negotiation]
             COMMAND[Command Protocol<br/>Device Control]
             STATUS[Status Updates<br/>Real-time Monitoring]
             STREAM[Data Streaming<br/>Preview & Sensors]
         end
-        
+
         subgraph "Quality Management"
             QOS[Quality of Service<br/>Bandwidth Management]
             RETRY[Retry Logic<br/>Fault Tolerance]
             BUFFER[Buffer Management<br/>Flow Control]
             COMPRESS[Data Compression<br/>Efficiency Optimization]
         end
-        
+
         subgraph "Connected Devices"
             ANDROID_1[Android Device 1]
             ANDROID_2[Android Device 2]
             ANDROID_N[Android Device N]
         end
     end
-    
+
     %% Core service relationships
     JSON_SERVER --> DEVICE_MGR
     DEVICE_MGR --> MSG_ROUTER
     MSG_ROUTER --> CONN_POOL
-    
+
     %% Protocol implementations
     JSON_SERVER --> HANDSHAKE
     JSON_SERVER --> COMMAND
     JSON_SERVER --> STATUS
     JSON_SERVER --> STREAM
-    
+
     %% Quality management integration
     MSG_ROUTER --> QOS
     CONN_POOL --> RETRY
     STATUS --> BUFFER
     STREAM --> COMPRESS
-    
+
     %% Device connections
     JSON_SERVER <==> ANDROID_1
     JSON_SERVER <==> ANDROID_2
     JSON_SERVER <==> ANDROID_N
-    
+
     %% Styling
     classDef core fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef protocol fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef quality fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef device fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    
+
     class JSON_SERVER,DEVICE_MGR,MSG_ROUTER,CONN_POOL core
     class HANDSHAKE,COMMAND,STATUS,STREAM protocol
     class QOS,RETRY,BUFFER,COMPRESS quality
@@ -1788,7 +1788,7 @@ class JsonSocketServer(QThread):
     """
     JSON Socket Server implementing length-prefixed JSON message protocol
     for bidirectional communication with Android devices on port 9000.
-    
+
     Handles multiple device connections using multi-threading and emits
     PyQt signals for thread-safe GUI integration.
     """
@@ -1806,7 +1806,7 @@ class JsonSocketServer(QThread):
     def __init__(self, host="0.0.0.0", port=9000, use_newline_protocol=False, session_manager=None):
         """
         Initialize the JSON Socket Server.
-        
+
         Args:
             host (str): Host address to bind to (default: '0.0.0.0' for all interfaces)
             port (int): Port number to listen on (default: 9000)
@@ -1882,11 +1882,11 @@ class JsonSocketServer(QThread):
     def send_message_to_device(self, device_id: str, message: dict) -> bool:
         """
         Send message to specific device with error handling.
-        
+
         Args:
             device_id: Target device identifier
             message: Message dictionary to send
-            
+
         Returns:
             True if message sent successfully, False otherwise
         """
@@ -1909,11 +1909,11 @@ class JsonSocketServer(QThread):
     def broadcast_message(self, message: dict, exclude_devices: List[str] = None) -> Dict[str, bool]:
         """
         Broadcast message to all connected devices.
-        
+
         Args:
             message: Message dictionary to broadcast
             exclude_devices: List of device IDs to exclude from broadcast
-            
+
         Returns:
             Dictionary mapping device_id to success status
         """
@@ -1974,7 +1974,7 @@ numbering for message ordering and duplicate detection.
 \begin{verbatim}
 {
   "message_type": "string",
-  "timestamp": "ISO8601_timestamp", 
+  "timestamp": "ISO8601_timestamp",
   "device_id": "unique_device_identifier",
   "session_id": "session_identifier",
   "sequence": 123,
@@ -2217,21 +2217,21 @@ graph TB
             ANDROID_MED[Android-Mediated<br/>Network Protocol]
             HYBRID[Hybrid Mode<br/>Redundant Connections]
         end
-        
+
         subgraph "Shimmer Manager"
             DISCOVERY[Device Discovery<br/>Bluetooth Scanning]
             PAIRING[Device Pairing<br/>Authentication]
             CONFIG[Configuration<br/>Sensor Settings]
             STREAMING[Data Streaming<br/>Real-time Collection]
         end
-        
+
         subgraph "Data Processing"
             RAW_DATA[Raw Sensor Data<br/>GSR, Accelerometer, etc.]
             PROCESSING[Signal Processing<br/>Filtering, Calibration]
             STORAGE[Data Storage<br/>CSV Format]
             SYNC[Synchronization<br/>Temporal Alignment]
         end
-        
+
         subgraph "Quality Control"
             SIGNAL_QC[Signal Quality<br/>Real-time Assessment]
             ERROR_HANDLE[Error Handling<br/>Connection Recovery]
@@ -2239,30 +2239,30 @@ graph TB
             MONITORING[Health Monitoring<br/>Device Status]
         end
     end
-    
+
     %% Connection flows
     DIRECT --> DISCOVERY
     ANDROID_MED --> PAIRING
     HYBRID --> CONFIG
-    
+
     %% Data flow
     DISCOVERY --> RAW_DATA
     PAIRING --> PROCESSING
     CONFIG --> STORAGE
     STREAMING --> SYNC
-    
+
     %% Quality control
     RAW_DATA --> SIGNAL_QC
     PROCESSING --> ERROR_HANDLE
     STORAGE --> VALIDATION
     SYNC --> MONITORING
-    
+
     %% Styling
     classDef connection fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef manager fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef data fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef quality fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    
+
     class DIRECT,ANDROID_MED,HYBRID connection
     class DISCOVERY,PAIRING,CONFIG,STREAMING manager
     class RAW_DATA,PROCESSING,STORAGE,SYNC data
@@ -2275,46 +2275,46 @@ graph TB
 class ShimmerManager:
     """
     Comprehensive Shimmer sensor management for multi-modal physiological recording.
-    
+
     Supports both direct PC connections via Bluetooth and Android-mediated
     connections through the network protocol for maximum deployment flexibility.
     """
-    
+
     def __init__(self, session_manager=None):
         """Initialize the Shimmer manager with comprehensive configuration."""
         self.logger = get_logger(__name__)
         self.session_manager = session_manager
-        
+
         # Connection management
         self.connected_devices = {}
         self.device_configs = {}
         self.data_streams = {}
-        
+
         # Data collection
         self.recording_active = False
         self.data_queues = {}
         self.csv_writers = {}
-        
+
         # Android integration
         self.android_device_manager = AndroidDeviceManager()
         self.pc_server = PCServer()
-        
+
         # Initialize Shimmer library
         self._initialize_shimmer_library()
-        
+
     def discover_direct_devices(self) -> List[Dict[str, Any]]:
         """
         Discover Shimmer devices available for direct PC connection.
-        
+
         Returns:
             List of discovered device information dictionaries
         """
         discovered_devices = []
-        
+
         try:
             # Bluetooth device discovery
             bluetooth_devices = self._scan_bluetooth_devices()
-            
+
             for device in bluetooth_devices:
                 if self._is_shimmer_device(device):
                     device_info = {
@@ -2326,20 +2326,20 @@ class ShimmerManager:
                         'capabilities': ['gsr', 'accelerometer', 'temperature']
                     }
                     discovered_devices.append(device_info)
-                    
+
         except Exception as e:
             self.logger.error(f"Direct device discovery failed: {e}")
-            
+
         return discovered_devices
-    
+
     def connect_device(self, device_id: str, connection_type: str = 'auto') -> bool:
         """
         Connect to a Shimmer device using specified connection type.
-        
+
         Args:
             device_id: Unique device identifier
             connection_type: 'direct', 'android', or 'auto'
-            
+
         Returns:
             True if connection successful, False otherwise
         """
@@ -2355,61 +2355,61 @@ class ShimmerManager:
                 return self._connect_android_mediated_device(device_id)
             else:
                 raise ValueError(f"Invalid connection type: {connection_type}")
-                
+
         except Exception as e:
             self.logger.error(f"Failed to connect to device {device_id}: {e}")
             return False
-    
+
     def start_data_collection(self, session_id: str) -> bool:
         """
         Start data collection from all connected Shimmer devices.
-        
+
         Args:
             session_id: Recording session identifier
-            
+
         Returns:
             True if data collection started successfully
         """
         if not self.connected_devices:
             self.logger.warning("No Shimmer devices connected")
             return False
-        
+
         try:
             # Setup data storage
             self._setup_data_storage(session_id)
-            
+
             # Configure and start streaming for each device
             for device_id, device in self.connected_devices.items():
                 self._configure_device_sensors(device_id)
                 self._start_device_streaming(device_id)
-            
+
             self.recording_active = True
             self.logger.info(f"Shimmer data collection started for session {session_id}")
             return True
-            
+
         except Exception as e:
             self.logger.error(f"Failed to start data collection: {e}")
             return False
-    
+
     def _setup_data_storage(self, session_id: str):
         """Setup CSV writers for data storage."""
         if self.session_manager:
             session_dir = self.session_manager.get_session_directory(session_id)
             shimmer_dir = os.path.join(session_dir, 'shimmer')
             os.makedirs(shimmer_dir, exist_ok=True)
-            
+
             for device_id in self.connected_devices:
                 csv_filename = os.path.join(shimmer_dir, f'{device_id}_data.csv')
                 csv_file = open(csv_filename, 'w', newline='')
                 csv_writer = csv.writer(csv_file)
-                
+
                 # Write header
                 csv_writer.writerow([
-                    'timestamp', 'gsr_raw', 'gsr_resistance', 
+                    'timestamp', 'gsr_raw', 'gsr_resistance',
                     'accel_x', 'accel_y', 'accel_z',
                     'skin_temperature', 'device_temperature'
                 ])
-                
+
                 self.csv_writers[device_id] = csv_writer
 \end{verbatim}
 
@@ -2419,7 +2419,7 @@ class ShimmerManager:
 def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
     """
     Process incoming Shimmer sensor data with quality control.
-    
+
     Args:
         device_id: Source device identifier
         raw_data: Raw sensor data from Shimmer device
@@ -2428,19 +2428,19 @@ def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
         # Extract sensor values
         gsr_raw = raw_data.get('gsr_raw', 0)
         gsr_resistance = self._calculate_gsr_resistance(gsr_raw)
-        
+
         accel_data = raw_data.get('accelerometer', {})
         accel_x = accel_data.get('x', 0)
         accel_y = accel_data.get('y', 0)
         accel_z = accel_data.get('z', 0)
-        
+
         temperature_data = raw_data.get('temperature', {})
         skin_temp = temperature_data.get('skin', 0)
         device_temp = temperature_data.get('device', 0)
-        
+
         # Quality assessment
         signal_quality = self._assess_signal_quality(device_id, raw_data)
-        
+
         # Data validation
         if self._validate_data_integrity(raw_data):
             # Store processed data
@@ -2455,7 +2455,7 @@ def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
                 'device_temperature': device_temp,
                 'signal_quality': signal_quality
             }
-            
+
             # Write to CSV
             if device_id in self.csv_writers:
                 self.csv_writers[device_id].writerow([
@@ -2468,10 +2468,10 @@ def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
                     processed_data['skin_temperature'],
                     processed_data['device_temperature']
                 ])
-            
+
             # Emit real-time data signal
             self.data_received.emit(device_id, processed_data)
-        
+
     except Exception as e:
         self.logger.error(f"Error processing Shimmer data from {device_id}: {e}")
 \end{verbatim}
@@ -2498,7 +2498,7 @@ def process_shimmer_data(self, device_id: str, raw_data: Dict[str, Any]):
         "frame_rates": [15, 30, 60]
       },
       {
-        "format": "YUV2", 
+        "format": "YUV2",
         "resolutions": ["1920x1080", "1280x720"],
         "frame_rates": [30, 60]
       },
@@ -2561,14 +2561,14 @@ graph TB
             SES_ERR[Session Errors<br/>Configuration, State, Data]
             SYS_ERR[System Errors<br/>Resource, Performance, Security]
         end
-        
+
         subgraph "Severity Levels"
             CRITICAL[Critical<br/>System Failure]
             HIGH[High<br/>Feature Failure]
             MEDIUM[Medium<br/>Degraded Performance]
             LOW[Low<br/>Minor Issues]
         end
-        
+
         subgraph "Recovery Strategies"
             AUTO_REC[Automatic Recovery<br/>Retry, Reconnect, Restart]
             USER_INT[User Intervention<br/>Manual Resolution Required]
@@ -2576,29 +2576,29 @@ graph TB
             SHUTDOWN[Safe Shutdown<br/>Preserve Data Integrity]
         end
     end
-    
+
     %% Error routing
     NET_ERR --> HIGH
     DEV_ERR --> MEDIUM
     SES_ERR --> CRITICAL
     SYS_ERR --> HIGH
-    
+
     %% Recovery routing
     CRITICAL --> SHUTDOWN
     HIGH --> AUTO_REC
     MEDIUM --> GRACEFUL
     LOW --> AUTO_REC
-    
+
     %% Fallback paths
     AUTO_REC -.-> USER_INT
     GRACEFUL -.-> AUTO_REC
     USER_INT -.-> SHUTDOWN
-    
+
     %% Styling
     classDef error fill:#ffebee,stroke:#f44336,stroke-width:2px
     classDef severity fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     classDef recovery fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
-    
+
     class NET_ERR,DEV_ERR,SES_ERR,SYS_ERR error
     class CRITICAL,HIGH,MEDIUM,LOW severity
     class AUTO_REC,USER_INT,GRACEFUL,SHUTDOWN recovery
@@ -2721,7 +2721,7 @@ recordings/
     "experiment_type": "stress_induction",
     "experimental_conditions": [
       "baseline_rest",
-      "cognitive_stress_task", 
+      "cognitive_stress_task",
       "recovery_period"
     ],
     "stimulus_timing": {
@@ -2819,7 +2819,7 @@ recordings/
     "quality_analysis_completed": true,
     "export_formats_generated": [
       "matlab",
-      "python_pickle", 
+      "python_pickle",
       "csv_tabular",
       "video_compilation"
     ]
@@ -2849,51 +2849,51 @@ graph TB
             STREAMING[Live Video Streams<br/>Multi-device Preview]
             SETTINGS[Configuration Interface<br/>System Settings]
         end
-        
+
         subgraph "Backend Services"
             FLASK_APP[Flask Application<br/>HTTP Server]
             SOCKETIO[Socket.IO Server<br/>Real-time Communication]
             WEB_CTRL[Web Controller<br/>Interface Coordination]
             API_LAYER[REST API Layer<br/>System Integration]
         end
-        
+
         subgraph "Integration Layer"
             APP_BRIDGE[Application Bridge<br/>Desktop Integration]
             JSON_SRV[JsonSocketServer<br/>Device Communication]
             SESSION_MGR[Session Manager<br/>Recording Control]
             DATA_MGR[Data Manager<br/>File Operations]
         end
-        
+
         subgraph "Client Access"
             BROWSER[Web Browser<br/>Any Device]
             MOBILE[Mobile Access<br/>Tablet/Phone]
             REMOTE[Remote Access<br/>External Networks]
         end
     end
-    
+
     %% Frontend to Backend connections
     DASHBOARD --> FLASK_APP
     CONTROL --> SOCKETIO
     STREAMING --> WEB_CTRL
     SETTINGS --> API_LAYER
-    
+
     %% Backend to Integration connections
     FLASK_APP --> APP_BRIDGE
     SOCKETIO --> JSON_SRV
     WEB_CTRL --> SESSION_MGR
     API_LAYER --> DATA_MGR
-    
+
     %% Client connections
     BROWSER --> DASHBOARD
     MOBILE --> CONTROL
     REMOTE --> STREAMING
-    
+
     %% Styling
     classDef frontend fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef backend fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef integration fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef client fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    
+
     class DASHBOARD,CONTROL,STREAMING,SETTINGS frontend
     class FLASK_APP,SOCKETIO,WEB_CTRL,API_LAYER backend
     class APP_BRIDGE,JSON_SRV,SESSION_MGR,DATA_MGR integration
@@ -3109,16 +3109,16 @@ The web interface enables comprehensive remote operation including:
 \begin{verbatim}
 class WebSecurityManager:
     """Security management for web interface access."""
-    
+
     def __init__(self):
         self.authorized_ips = set()
         self.session_tokens = {}
         self.access_log = []
-    
+
     def authenticate_request(self, request):
         """Authenticate incoming web requests."""
         client_ip = request.remote_addr
-        
+
         # Log access attempt
         self.access_log.append({
             'timestamp': datetime.now().isoformat(),
@@ -3126,12 +3126,12 @@ class WebSecurityManager:
             'user_agent': request.headers.get('User-Agent'),
             'endpoint': request.endpoint
         })
-        
+
         # Check IP authorization
         if self.authorized_ips and client_ip not in self.authorized_ips:
             logger.warning(f"Unauthorized access attempt from {client_ip}")
             return False
-        
+
         return True
 \end{verbatim}
 
@@ -3227,7 +3227,7 @@ while accommodating diverse research protocols.
    # Start the Desktop Controller
    cd PythonApp/src
    python main.py
-   
+
    # Verify system status in the GUI
    # - Check status bar for green system indicators
    # - Confirm all services are operational
@@ -3341,48 +3341,48 @@ graph TB
             MANUAL_ADD[Manual Addition<br/>IP Address Entry]
             CAPABILITY[Capability Detection<br/>Feature Enumeration]
         end
-        
+
         subgraph "Connection Phase"
             HANDSHAKE[Device Handshake<br/>Protocol Negotiation]
             AUTH[Authentication<br/>Security Verification]
             CONFIG[Configuration Sync<br/>Parameter Exchange]
         end
-        
+
         subgraph "Operation Phase"
             MONITOR[Status Monitoring<br/>Health Checking]
             CONTROL[Remote Control<br/>Command Execution]
             STREAM[Data Streaming<br/>Real-time Transfer]
         end
-        
+
         subgraph "Maintenance Phase"
             UPDATE[Software Updates<br/>Version Management]
             CALIB[Calibration<br/>Accuracy Maintenance]
             BACKUP[Configuration Backup<br/>Settings Preservation]
         end
     end
-    
+
     %% Workflow progression
     AUTO_DISC --> HANDSHAKE
     MANUAL_ADD --> HANDSHAKE
     CAPABILITY --> AUTH
-    
+
     HANDSHAKE --> CONFIG
     AUTH --> MONITOR
     CONFIG --> CONTROL
-    
+
     MONITOR --> STREAM
     CONTROL --> UPDATE
     STREAM --> CALIB
-    
+
     UPDATE --> BACKUP
     CALIB --> MONITOR
-    
+
     %% Styling
     classDef discovery fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef connection fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef operation fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef maintenance fill:#fff3e0,stroke:#FF9800,stroke-width:2px
-    
+
     class AUTO_DISC,MANUAL_ADD,CAPABILITY discovery
     class HANDSHAKE,AUTH,CONFIG connection
     class MONITOR,CONTROL,STREAM operation
@@ -3398,13 +3398,13 @@ class WebcamConfiguration:
     Comprehensive webcam configuration management with
     automatic optimization and manual override capabilities.
     """
-    
+
     def __init__(self, camera_index=0):
         self.camera_index = camera_index
         self.capture = cv2.VideoCapture(camera_index)
         self.supported_configurations = self._enumerate_capabilities()
         self.current_configuration = self._get_current_config()
-        
+
     def optimize_for_research(self, research_type="general"):
         """
         Automatically configure camera settings optimized for research applications.
@@ -3447,7 +3447,7 @@ class WebcamConfiguration:
                 "saturation": 25
             }
         }
-        
+
         profile = optimization_profiles.get(research_type, optimization_profiles["general"])
         return self.apply_configuration(profile)
 \end{verbatim}
@@ -3465,7 +3465,7 @@ class RecordingProfileManager:
     Comprehensive recording profile management system enabling
     reusable configurations for different research protocols.
     """
-    
+
     def create_custom_profile(self, profile_name, configuration):
         """
         Create custom recording profile with comprehensive parameter specification.
@@ -3527,7 +3527,7 @@ class RecordingProfileManager:
                 "compression_level": configuration.get("compression", "medium")
             }
         }
-        
+
         return self.save_profile(profile_name, profile)
 
 # Example usage for different research scenarios
@@ -3545,7 +3545,7 @@ stress_study_profile = {
 
 motion_study_profile = {
     "description": "High-speed recording for motion analysis",
-    "video_resolution": "1920x1080", 
+    "video_resolution": "1920x1080",
     "video_fps": 60,
     "enable_thermal": False,
     "enable_gsr": False,
@@ -3564,7 +3564,7 @@ class BatchSessionManager:
     Advanced batch session management for longitudinal studies
     and multi-participant research protocols.
     """
-    
+
     def create_batch_template(self, study_design):
         """
         Create batch session template for systematic data collection.
@@ -3591,7 +3591,7 @@ class BatchSessionManager:
                 },
                 "intervention": {
                     "duration": 600,
-                    "profile": "stress_study_profile", 
+                    "profile": "stress_study_profile",
                     "conditions": ["pre_intervention", "intervention", "post_intervention"]
                 },
                 "followup": {
@@ -3607,28 +3607,28 @@ class BatchSessionManager:
                 "retention_policy": "7_years"
             }
         }
-        
+
         return template
-    
+
     def execute_batch_session(self, participant_id, session_type):
         """
         Execute pre-configured batch session with automatic parameter loading.
         """
         session_config = self.get_session_template(session_type)
         session_name = self.generate_session_name(participant_id, session_type)
-        
+
         # Automatic session preparation
         self.prepare_devices(session_config["profile"])
         self.validate_prerequisites(session_config["requirements"])
-        
+
         # Session execution with monitoring
         session_id = self.start_recording_session(session_name, session_config)
         self.monitor_session_progress(session_id)
-        
+
         # Automatic post-processing
         self.finalize_session(session_id)
         self.export_session_data(session_id, session_config["export_format"])
-        
+
         return session_id
 \end{verbatim}
 
@@ -3656,28 +3656,28 @@ graph TB
             UTIL_TEST[Utility Tests<br/>Helper Function Validation]
             SHIMMER_TEST[Shimmer Tests<br/>Sensor Integration Validation]
         end
-        
+
         subgraph "Integration Testing Layer"
             INTER_TEST[Interface Tests<br/>Component Interaction]
             NET_TEST[Network Tests<br/>Communication Validation]
             DATA_TEST[Data Flow Tests<br/>Pipeline Verification]
             WEB_TEST[Web Interface Tests<br/>Browser Integration]
         end
-        
+
         subgraph "System Testing Layer"
             E2E_TEST[End-to-End Tests<br/>Complete Workflow]
             PERF_TEST[Performance Tests<br/>Resource Utilization]
             STRESS_TEST[Stress Tests<br/>Load Validation]
             CALIB_TEST[Calibration Tests<br/>OpenCV Integration]
         end
-        
+
         subgraph "Research-Specific Testing"
             ACC_TEST[Accuracy Tests<br/>Measurement Precision]
             SYNC_TEST[Synchronization Tests<br/>Timing Validation]
             QUAL_TEST[Quality Tests<br/>Data Integrity]
             SESSION_TEST[Session Tests<br/>Recording Validation]
         end
-        
+
         subgraph "Automated Testing Infrastructure"
             CI_PIPELINE[CI Pipeline<br/>GitHub Actions]
             TEST_RUNNER[Enhanced Test Runner<br/>Comprehensive Reporting]
@@ -3685,35 +3685,35 @@ graph TB
             BENCH_SUITE[Benchmark Suite<br/>Performance Tracking]
         end
     end
-    
+
     %% Testing flow
     COMP_TEST --> INTER_TEST
     SER_TEST --> NET_TEST
     UTIL_TEST --> DATA_TEST
     SHIMMER_TEST --> WEB_TEST
-    
+
     INTER_TEST --> E2E_TEST
     NET_TEST --> PERF_TEST
     DATA_TEST --> STRESS_TEST
     WEB_TEST --> CALIB_TEST
-    
+
     E2E_TEST --> ACC_TEST
     PERF_TEST --> SYNC_TEST
     STRESS_TEST --> QUAL_TEST
     CALIB_TEST --> SESSION_TEST
-    
+
     ACC_TEST --> CI_PIPELINE
     SYNC_TEST --> TEST_RUNNER
     QUAL_TEST --> COVERAGE
     SESSION_TEST --> BENCH_SUITE
-    
+
     %% Styling
     classDef unit fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
     classDef integration fill:#e1f5fe,stroke:#2196F3,stroke-width:2px
     classDef system fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
     classDef research fill:#fff3e0,stroke:#FF9800,stroke-width:2px
     classDef automation fill:#fce4ec,stroke:#E91E63,stroke-width:2px
-    
+
     class COMP_TEST,SER_TEST,UTIL_TEST,SHIMMER_TEST unit
     class INTER_TEST,NET_TEST,DATA_TEST,WEB_TEST integration
     class E2E_TEST,PERF_TEST,STRESS_TEST,CALIB_TEST system
@@ -3856,7 +3856,7 @@ class PerformanceBenchmarkSuite:
     Comprehensive performance benchmarking for research software validation
     with automated threshold checking and regression detection.
     """
-    
+
     def run_performance_benchmarks(self):
         """Execute comprehensive performance benchmark suite."""
         benchmark_results = {
@@ -3868,12 +3868,12 @@ class PerformanceBenchmarkSuite:
             'memory_efficiency': self._benchmark_memory_usage(),
             'scalability_limits': self._benchmark_scalability()
         }
-        
+
         # Validate against research requirements
         benchmark_results['validation_summary'] = self._validate_benchmarks(benchmark_results)
-        
+
         return benchmark_results
-    
+
     def _benchmark_synchronization(self):
         """Benchmark temporal synchronization accuracy."""
         sync_results = {
@@ -3882,15 +3882,15 @@ class PerformanceBenchmarkSuite:
             'measurements': [],
             'statistical_analysis': {}
         }
-        
+
         for iteration in range(sync_results['test_iterations']):
             # Simulate multi-device synchronization
             start_time = time.time_ns()
-            
+
             # Coordination delay measurement
             coordination_delay = self._measure_coordination_delay()
             sync_results['measurements'].append(coordination_delay / 1_000_000)  # Convert to ms
-        
+
         # Statistical analysis
         measurements = np.array(sync_results['measurements'])
         sync_results['statistical_analysis'] = {
@@ -3902,7 +3902,7 @@ class PerformanceBenchmarkSuite:
             'percentile_99_ms': float(np.percentile(measurements, 99)),
             'target_achieved': float(np.mean(measurements)) <= sync_results['target_precision_ms']
         }
-        
+
         return sync_results
 \end{verbatim}
 
@@ -3916,7 +3916,7 @@ class ResearchValidationSuite:
     Research-specific validation ensuring scientific measurement compliance
     and academic research standards adherence.
     """
-    
+
     def validate_research_compliance(self):
         """Comprehensive research compliance validation."""
         validation_results = {
@@ -3927,12 +3927,12 @@ class ResearchValidationSuite:
             'quality_metrics': self._validate_quality_metrics(),
             'documentation_completeness': self._validate_documentation()
         }
-        
+
         # Overall compliance score
         validation_results['compliance_score'] = self._calculate_compliance_score(validation_results)
-        
+
         return validation_results
-    
+
     def _validate_data_integrity(self):
         """Validate data integrity across recording sessions."""
         integrity_tests = {
@@ -3942,12 +3942,12 @@ class ResearchValidationSuite:
             'cross_device_consistency': self._test_cross_device_consistency(),
             'temporal_alignment': self._test_temporal_alignment()
         }
-        
+
         # Calculate integrity score
         passed_tests = sum(1 for test in integrity_tests.values() if test.get('passed', False))
         total_tests = len(integrity_tests)
         integrity_score = (passed_tests / total_tests) * 100
-        
+
         return {
             'tests': integrity_tests,
             'integrity_score': integrity_score,
@@ -3975,7 +3975,7 @@ configuration.
 \begin{verbatim}
 class StructuredFormatter(logging.Formatter):
     """Custom formatter that outputs structured JSON logs for machine parsing."""
-    
+
     def format(self, record):
         """Format log record as structured JSON."""
         log_entry = {
@@ -3989,7 +3989,7 @@ class StructuredFormatter(logging.Formatter):
             'thread_name': record.threadName,
             'message': record.getMessage()
         }
-        
+
         # Add exception information if present
         if record.exc_info:
             log_entry['exception'] = {
@@ -3997,15 +3997,15 @@ class StructuredFormatter(logging.Formatter):
                 'message': str(record.exc_info[1]),
                 'traceback': traceback.format_exception(*record.exc_info)
             }
-        
+
         # Add performance metrics if available
         if hasattr(record, 'performance_metrics'):
             log_entry['performance'] = record.performance_metrics
-        
+
         # Add research context if available
         if hasattr(record, 'research_context'):
             log_entry['research_context'] = record.research_context
-        
+
         return json.dumps(log_entry)
 
 
@@ -4014,35 +4014,35 @@ class AppLogger:
     Centralized application logger with structured logging and
     research-specific context management.
     """
-    
+
     _instance = None
     _logger = None
     _log_level = logging.INFO
-    
+
     @classmethod
     def get_logger(cls, name: str = None) -> logging.Logger:
         """Get logger instance with proper configuration."""
         if cls._logger is None:
             cls._setup_logging()
-        
+
         if name:
             return logging.getLogger(f"multisensor.{name}")
         return cls._logger
-    
+
     @classmethod
     def _setup_logging(cls):
         """Setup comprehensive logging configuration."""
         # Create logs directory
         log_dir = Path("logs")
         log_dir.mkdir(exist_ok=True)
-        
+
         # Configure root logger
         root_logger = logging.getLogger("multisensor")
         root_logger.setLevel(cls._log_level)
-        
+
         # Clear existing handlers
         root_logger.handlers.clear()
-        
+
         # Console handler with human-readable format
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.INFO)
@@ -4052,7 +4052,7 @@ class AppLogger:
         )
         console_handler.setFormatter(console_formatter)
         root_logger.addHandler(console_handler)
-        
+
         # File handler with structured JSON format
         file_handler = logging.handlers.RotatingFileHandler(
             log_dir / "multisensor.log",
@@ -4062,13 +4062,13 @@ class AppLogger:
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(StructuredFormatter())
         root_logger.addHandler(file_handler)
-        
+
         # Error-specific handler
         error_handler = logging.FileHandler(log_dir / "errors.log")
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(StructuredFormatter())
         root_logger.addHandler(error_handler)
-        
+
         cls._logger = root_logger
 
 
@@ -4098,7 +4098,7 @@ def get_logger(name: str = None) -> logging.Logger:
 \begin{verbatim}
 class PerformanceLogger:
     """Performance-aware logging with automatic metrics collection."""
-    
+
     @staticmethod
     def log_with_performance(logger, level, message, **kwargs):
         """Log message with automatic performance metrics."""
@@ -4109,23 +4109,23 @@ class PerformanceLogger:
             'thread_count': threading.active_count(),
             'timestamp': time.time()
         }
-        
+
         # Create log record with performance data
         record = logger.makeRecord(
-            logger.name, level, '', 0, message, (), None, 
+            logger.name, level, '', 0, message, (), None,
             func='', extra={'performance_metrics': performance_metrics, **kwargs}
         )
-        
+
         logger.handle(record)
 
 class SessionContextLogger:
     """Session-aware logging with research context."""
-    
+
     def __init__(self, session_id: str, researcher_id: str = None):
         self.session_id = session_id
         self.researcher_id = researcher_id
         self.session_start = datetime.now()
-        
+
     def log_session_event(self, logger, level, message, **kwargs):
         """Log event with session research context."""
         research_context = {
@@ -4134,13 +4134,13 @@ class SessionContextLogger:
             'session_duration': (datetime.now() - self.session_start).total_seconds(),
             'event_category': kwargs.get('category', 'general')
         }
-        
+
         # Add research context to log record
         extra_data = {
             'research_context': research_context,
             **kwargs
         }
-        
+
         if level == logging.INFO:
             logger.info(message, extra=extra_data)
         elif level == logging.WARNING:
@@ -4161,17 +4161,17 @@ hardware detection capabilities. The implementation includes actual system monit
 \begin{verbatim}
 class SystemMonitor:
     """Real system monitoring and hardware detection for research operations."""
-    
+
     def __init__(self):
         """Initialize the system monitor with comprehensive hardware detection."""
         self.logger = get_logger(__name__)
         self.monitoring_active = False
         self.metrics_history = []
         self.hardware_inventory = {}
-        
+
         # Initialize hardware detection
         self._detect_system_hardware()
-        
+
     def get_comprehensive_system_info(self) -> Dict[str, Any]:
         """
         Get comprehensive system information including hardware,
@@ -4186,7 +4186,7 @@ class SystemMonitor:
             'storage_info': self._get_storage_info(),
             'python_environment': self._get_python_environment()
         }
-    
+
     def _get_platform_info(self) -> Dict[str, str]:
         """Get detailed platform information."""
         return {
@@ -4198,7 +4198,7 @@ class SystemMonitor:
             'python_version': platform.python_version(),
             'python_implementation': platform.python_implementation()
         }
-    
+
     def _get_hardware_info(self) -> Dict[str, Any]:
         """Get comprehensive hardware information."""
         hardware_info = {
@@ -4216,7 +4216,7 @@ class SystemMonitor:
             'disk': {},
             'network': {}
         }
-        
+
         # Disk information
         for disk in psutil.disk_partitions():
             try:
@@ -4231,9 +4231,9 @@ class SystemMonitor:
             except PermissionError:
                 # Skip inaccessible disks
                 continue
-        
+
         return hardware_info
-    
+
     def _detect_connected_devices(self) -> Dict[str, List[Dict[str, Any]]]:
         """Detect connected hardware devices."""
         connected_devices = {
@@ -4242,16 +4242,16 @@ class SystemMonitor:
             'usb_devices': self._detect_usb_devices(),
             'network_devices': self._detect_network_devices()
         }
-        
+
         return connected_devices
-    
+
     def _detect_webcams(self) -> List[Dict[str, Any]]:
         """Detect available webcam devices."""
         webcams = []
-        
+
         if not OPENCV_AVAILABLE:
             return webcams
-        
+
         # Test camera indices 0-5
         for camera_index in range(6):
             try:
@@ -4261,7 +4261,7 @@ class SystemMonitor:
                     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                     fps = int(cap.get(cv2.CAP_PROP_FPS))
-                    
+
                     webcam_info = {
                         'index': camera_index,
                         'name': f'Camera {camera_index}',
@@ -4270,19 +4270,19 @@ class SystemMonitor:
                         'backend': cap.getBackendName() if hasattr(cap, 'getBackendName') else 'Unknown'
                     }
                     webcams.append(webcam_info)
-                    
+
                 cap.release()
-                
+
             except Exception as e:
                 self.logger.debug(f"Error testing camera {camera_index}: {e}")
                 continue
-        
+
         return webcams
-    
+
     def _detect_bluetooth_devices(self) -> List[Dict[str, Any]]:
         """Detect available Bluetooth devices."""
         bluetooth_devices = []
-        
+
         try:
             if platform.system() == "Windows":
                 # Windows Bluetooth detection
@@ -4295,9 +4295,9 @@ class SystemMonitor:
                 bluetooth_devices = self._detect_macos_bluetooth()
         except Exception as e:
             self.logger.debug(f"Bluetooth detection error: {e}")
-        
+
         return bluetooth_devices
-    
+
     def get_real_time_performance_metrics(self) -> Dict[str, Any]:
         """
         Get real-time performance metrics suitable for research monitoring.
@@ -4348,50 +4348,50 @@ class SystemMonitor:
                 'connections': len(psutil.Process().connections())
             }
         }
-        
+
         return metrics
-    
+
     def start_continuous_monitoring(self, interval_seconds: float = 1.0):
         """
         Start continuous system monitoring with specified interval.
-        
+
         Args:
             interval_seconds: Monitoring interval in seconds
         """
         if self.monitoring_active:
             self.logger.warning("Monitoring already active")
             return
-        
+
         self.monitoring_active = True
         self.logger.info(f"Starting continuous monitoring (interval: {interval_seconds}s)")
-        
+
         def monitoring_loop():
             while self.monitoring_active:
                 try:
                     metrics = self.get_real_time_performance_metrics()
                     self.metrics_history.append(metrics)
-                    
+
                     # Keep only last 1000 measurements to prevent memory growth
                     if len(self.metrics_history) > 1000:
                         self.metrics_history = self.metrics_history[-1000:]
-                    
+
                     # Check for performance alerts
                     self._check_performance_alerts(metrics)
-                    
+
                     time.sleep(interval_seconds)
-                    
+
                 except Exception as e:
                     self.logger.error(f"Monitoring loop error: {e}")
                     time.sleep(interval_seconds)
-        
+
         # Start monitoring in separate thread
         monitoring_thread = threading.Thread(target=monitoring_loop, daemon=True)
         monitoring_thread.start()
-    
+
     def _check_performance_alerts(self, metrics: Dict[str, Any]):
         """Check performance metrics against thresholds and generate alerts."""
         alerts = []
-        
+
         # CPU usage alert
         if metrics['cpu']['usage_percent'] > 90:
             alerts.append({
@@ -4399,7 +4399,7 @@ class SystemMonitor:
                 'message': f"High CPU usage: {metrics['cpu']['usage_percent']:.1f}%",
                 'severity': 'warning'
             })
-        
+
         # Memory usage alert
         if metrics['memory']['virtual']['percent'] > 85:
             alerts.append({
@@ -4407,7 +4407,7 @@ class SystemMonitor:
                 'message': f"High memory usage: {metrics['memory']['virtual']['percent']:.1f}%",
                 'severity': 'warning'
             })
-        
+
         # Disk space alert (for system drive)
         try:
             disk_usage = psutil.disk_usage('/')
@@ -4419,7 +4419,7 @@ class SystemMonitor:
                 })
         except:
             pass
-        
+
         # Process alerts for research applications
         process_memory_mb = metrics['process_info']['memory_rss'] / (1024 * 1024)
         if process_memory_mb > 1000:  # More than 1GB
@@ -4428,7 +4428,7 @@ class SystemMonitor:
                 'message': f"Application memory usage: {process_memory_mb:.1f} MB",
                 'severity': 'info'
             })
-        
+
         # Log alerts
         for alert in alerts:
             if alert['severity'] == 'critical':
@@ -4561,7 +4561,7 @@ class ResearchProtocolManager:
     Comprehensive research protocol management system supporting
     diverse experimental designs with standardized data collection.
     """
-    
+
     def design_stress_response_protocol(self):
         """
         Example protocol design for stress response research
@@ -4656,7 +4656,7 @@ class ResearchProtocolManager:
                 ]
             }
         }
-        
+
         return protocol
 \end{verbatim}
 
@@ -4673,7 +4673,7 @@ class ResearchDataManager:
     Comprehensive research data management system implementing
     best practices for scientific data organization and preservation.
     """
-    
+
     def implement_data_management_plan(self, study_configuration):
         """
         Implement comprehensive data management plan following
@@ -4718,9 +4718,9 @@ class ResearchDataManager:
                 "repository_submission": self._prepare_repository_submission()
             }
         }
-        
+
         return data_management_plan
-    
+
     def _design_directory_structure(self):
         """
         Design standardized directory structure for research data organization.
@@ -4776,7 +4776,7 @@ class ReproducibilityManager:
     Comprehensive reproducibility management system ensuring
     scientific transparency and methodological rigor.
     """
-    
+
     def generate_methods_section(self, study_configuration):
         """
         Generate standardized methods section for academic publication
@@ -4792,9 +4792,9 @@ class ReproducibilityManager:
             "software_and_versions": self._document_software_versions(),
             "reproducibility_statement": self._generate_reproducibility_statement()
         }
-        
+
         return methods_section
-    
+
     def _describe_apparatus(self):
         """
         Generate standardized apparatus description for publication.
@@ -4853,12 +4853,12 @@ class AdvancedAnalyticsEngine:
     Next-generation analytics engine for real-time physiological
     measurement analysis with machine learning integration.
     """
-    
+
     def __init__(self):
         self.ml_models = MLModelManager()
         self.real_time_processor = RealTimeProcessor()
         self.feature_extractor = AdvancedFeatureExtractor()
-        
+
     def implement_real_time_analysis(self):
         """
         Implement real-time physiological analysis with
@@ -4890,7 +4890,7 @@ class AdvancedAnalyticsEngine:
                 "intervention_effectiveness": "Treatment response prediction"
             }
         }
-        
+
         return analysis_framework
 \end{verbatim}
 
@@ -4906,7 +4906,7 @@ class LongitudinalStudyManager:
     Comprehensive longitudinal study management system supporting
     extended research protocols with participant tracking.
     """
-    
+
     def design_longitudinal_framework(self):
         """
         Design framework for longitudinal physiological studies
@@ -4938,7 +4938,7 @@ class LongitudinalStudyManager:
                 "protocol_adherence": "Systematic protocol compliance assessment"
             }
         }
-        
+
         return longitudinal_framework
 \end{verbatim}
 
@@ -4955,7 +4955,7 @@ class CommunityDevelopmentFramework:
     Framework for community-driven development and contribution
     to the Multi-Sensor Recording System ecosystem.
     """
-    
+
     def establish_contribution_guidelines(self):
         """
         Establish comprehensive guidelines for community contributions
@@ -4989,7 +4989,7 @@ class CommunityDevelopmentFramework:
                 "user_acceptance_testing": "Community testing with real research applications"
             }
         }
-        
+
         return contribution_framework
 \end{verbatim}
 
@@ -5021,7 +5021,7 @@ class SustainabilityPlan:
     Long-term sustainability plan ensuring continued development
     and maintenance of the research platform.
     """
-    
+
     def establish_sustainability_framework(self):
         """
         Establish comprehensive framework for long-term platform sustainability.
@@ -5052,7 +5052,7 @@ class SustainabilityPlan:
                 "educational_integration": "Integration into academic curricula and training programs"
             }
         }
-        
+
         return sustainability_framework
 \end{verbatim}
 
@@ -5222,10 +5222,10 @@ methodologies for the benefit of diverse research applications and educational e
 
 \textbf{Document Information}
 
-\textbf{Title}: Python Desktop Controller Application - Comprehensive Academic Documentation  
-\textbf{Version}: 1.0  
-\textbf{Date}: January 2025  
-\textbf{Classification}: Academic Research Documentation  
+\textbf{Title}: Python Desktop Controller Application - Comprehensive Academic Documentation
+\textbf{Version}: 1.0
+\textbf{Date}: January 2025
+\textbf{Classification}: Academic Research Documentation
 \textbf{Intended Audience}: Academic researchers, software developers, research operators, students
 
 \textbf{Keywords}: Multi-sensor systems, distributed architectures, real-time synchronization, physiological measurement,
@@ -5234,12 +5234,12 @@ contactless sensing, research instrumentation, Python development, PyQt5, comput
 \textbf{Citation Format}:
 
 \begin{verbatim}
-Python Desktop Controller Application - Comprehensive Academic Documentation. 
+Python Desktop Controller Application - Comprehensive Academic Documentation.
 Multi-Sensor Recording System Project. Version 1.0. January 2025.
 \end{verbatim}
 
-\textbf{License}: Open Source - Academic and Research Use  
-\textbf{Repository}: https://github.com/buccancs/bucika\_gsr  
+\textbf{License}: Open Source - Academic and Research Use
+\textbf{Repository}: https://github.com/buccancs/bucika\_gsr
 \textbf{Documentation Path}: docs/thesis\_report/Python\_Desktop\_Controller\_Comprehensive\_Documentation.md
 
 
