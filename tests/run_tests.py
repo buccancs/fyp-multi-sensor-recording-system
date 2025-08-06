@@ -30,56 +30,33 @@ from typing import Dict, List, Any
 # Add PythonApp src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Import test modules
+# Import test modules from consolidated tests
 try:
-    from test_calibration_comprehensive import create_calibration_test_suite
-    from test_network_comprehensive import create_network_test_suite
-    from test_session_comprehensive import create_session_test_suite
+    from consolidated_tests import (
+        create_calibration_test_suite,
+        create_network_test_suite, 
+        create_session_test_suite,
+        create_shimmer_test_suite,
+        create_gui_test_suite,
+        create_hand_segmentation_test_suite,
+        create_time_sync_test_suite
+    )
     CORE_TEST_MODULES_AVAILABLE = True
+    SHIMMER_TEST_AVAILABLE = True
+    GUI_TEST_AVAILABLE = True
+    HAND_SEGMENTATION_TEST_AVAILABLE = True
+    TIME_SYNC_TEST_AVAILABLE = True
+    GUI_TESTS_AVAILABLE = True
+    WEBCAM_TESTS_AVAILABLE = True
 except ImportError as e:
     CORE_TEST_MODULES_AVAILABLE = False
-    print(f"Warning: Core test modules not available: {e}")
-
-try:
-    from test_shimmer_comprehensive import create_shimmer_test_suite
-    SHIMMER_TEST_AVAILABLE = True
-except ImportError as e:
     SHIMMER_TEST_AVAILABLE = False
-    print(f"Warning: Shimmer test module not available: {e}")
-
-try:
-    from test_gui_comprehensive import create_gui_test_suite
-    GUI_TEST_AVAILABLE = True
-except ImportError as e:
     GUI_TEST_AVAILABLE = False
-    print(f"Warning: GUI test module not available: {e}")
-
-try:
-    from test_hand_segmentation_comprehensive import create_hand_segmentation_test_suite
-    HAND_SEGMENTATION_TEST_AVAILABLE = True
-except ImportError as e:
     HAND_SEGMENTATION_TEST_AVAILABLE = False
-    print(f"Warning: Hand segmentation test module not available: {e}")
-
-try:
-    from test_time_sync_comprehensive import create_time_sync_test_suite
-    TIME_SYNC_TEST_AVAILABLE = True
-except ImportError as e:
     TIME_SYNC_TEST_AVAILABLE = False
-    print(f"Warning: Time sync test module not available: {e}")
-
-# Try to import additional test modules
-try:
-    from test_gui_comprehensive import run_gui_tests
-    GUI_TESTS_AVAILABLE = True
-except ImportError:
     GUI_TESTS_AVAILABLE = False
-
-try:
-    from test_webcam_comprehensive import run_webcam_tests
-    WEBCAM_TESTS_AVAILABLE = True
-except ImportError:
     WEBCAM_TESTS_AVAILABLE = False
+    print(f"Warning: Test modules not available: {e}")
 
 try:
     from test_hand_segmentation_comprehensive import run_hand_segmentation_tests
