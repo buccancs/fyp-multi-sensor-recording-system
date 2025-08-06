@@ -250,9 +250,10 @@ wearable Shimmer GSR sensor. The application's architecture follows a
 modular, layered design that separates concerns into different
 components, making the system easier to extend and maintain. At a high
 level, it employs a clean MVVM (Model-View-ViewModel) architecture with Kotlin and
-Android Jetpack libraries, where `MainViewModelRefactored` (451 lines) coordinates specialized controllers:
+Jetpack Compose, where `MainViewModelRefactored` (451 lines) coordinates specialized controllers:
 `RecordingSessionController`, `DeviceConnectionManager`, `FileTransferManager`, and `CalibrationManager`.
 This refactored architecture achieves a 78% reduction from the original monolithic approach (2035 lines),
+while the migration to Jetpack Compose with Material 3 design system provides modern declarative UI capabilities,
 ensuring single responsibility principle adherence and improved testability.
 
 ### 4.3.0 Clean MVVM Architecture with Specialized Controllers
@@ -268,17 +269,81 @@ that coordinates four specialized components:
 - **FileTransferManager** (448 lines): Handles file operations, storage management, and data export
 - **CalibrationManager** (441 lines): Manages calibration processes for all device types
 
+**Jetpack Compose UI Layer:**
+- **RecordingScreen**: Main interface with recording controls, device status indicators, and camera preview
+- **DevicesScreen**: Device management with scanning and connection capabilities
+- **CalibrationScreen**: Calibration workflow with progress tracking and validation
+- **FilesScreen**: File management with browse, export, and session organization
+- **MainNavigation**: Compose Navigation with bottom navigation bar and state preservation
+- **Material 3 Theme**: Comprehensive design system with dynamic theming and accessibility support
+
 **Benefits of Refactored Architecture:**
 1. **Maintainability**: Each component has a single, well-defined responsibility
 2. **Testability**: Controllers can be unit tested independently with proper dependency injection
 3. **Scalability**: New features can be added to specific controllers without affecting others
 4. **Code Clarity**: Self-documenting architecture with clear separation of concerns
-5. **Performance**: Reduced memory footprint and improved separation of concerns
+5. **Performance**: Reduced memory footprint, improved separation of concerns, and efficient Compose recomposition
+6. **Modern UI**: Declarative UI with Material 3 design patterns and reactive state management
 
 The refactored architecture demonstrates proper MVVM implementation suitable for a Master's thesis
 on multi-sensor recording systems, with clear separation between data collection, device management,
-and user interface concerns. All fragments now use `MainViewModelRefactored` instead of the original
-monolithic approach, ensuring consistent architecture throughout the application.
+and user interface concerns. The application now utilizes modern Jetpack Compose declarative UI
+instead of the original Fragment-based approach, ensuring consistent architecture throughout the application.
+
+### 4.3.0.1 Jetpack Compose UI Architecture
+
+The Android application has been upgraded to use **Jetpack Compose with Material 3 design system**,
+representing a significant advancement in UI architecture from traditional View-based systems to
+modern declarative UI patterns. This migration brings substantial benefits for research applications
+requiring responsive, maintainable user interfaces.
+
+**Compose Architecture Implementation:**
+
+```kotlin
+@Composable
+fun RecordingScreen(
+    viewModel: MainViewModelRefactored = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        RecordingControlsCard(
+            isRecording = uiState.isRecording,
+            sessionDuration = uiState.sessionDuration,
+            onStartRecording = { viewModel.startRecording() },
+            onStopRecording = { viewModel.stopRecording() }
+        )
+        
+        DeviceStatusCard()
+        CameraPreviewCard()
+    }
+}
+```
+
+**Technical Specifications:**
+- **Compose BOM**: 2024.12.01 ensuring library compatibility
+- **Material 3**: Latest design system with dynamic theming
+- **Navigation Compose**: Type-safe navigation with state preservation
+- **Hilt Navigation Compose**: Seamless dependency injection integration
+- **Kotlin Compose Compiler**: Version 2.0.20 for optimal performance
+
+**Performance Benefits for Research Applications:**
+- **Efficient Recomposition**: Only relevant UI components update when sensor data changes
+- **Reduced Memory Footprint**: Elimination of View inflation overhead critical during intensive recording
+- **Improved Responsiveness**: Direct StateFlow integration enhances real-time sensor data visualization
+- **Type Safety**: Compile-time verification reduces runtime errors during critical recording sessions
+
+**Screen Implementations:**
+- **RecordingScreen**: Real-time recording controls with device status monitoring
+- **DevicesScreen**: Device discovery and connection management interface
+- **CalibrationScreen**: Calibration workflow with progress tracking and validation
+- **FilesScreen**: Session management with file operations and storage monitoring
 
 ### 4.3.1 Recording Management Component
 
@@ -1812,18 +1877,32 @@ For the Android mobile application, we selected **Kotlin** as the
 programming language, leveraging its modern features and null-safety
 guarantees to write robust code. Kotlin also integrates seamlessly with
 Android Studio and Jetpack libraries, which sped up development. The
-camera subsystem was built on the **Camera2 API** (Android's low-level
+UI framework has been upgraded to **Jetpack Compose with Material 3 design system**,
+representing a significant advancement from traditional View-based architecture to
+modern declarative UI patterns. The camera subsystem was built on the **Camera2 API** (Android's low-level
 camera interface) because it offers the fine-grained control needed for
 4K video and RAW
-capture[\[60\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=,precise%20timing%20and%20quality%20control).
-Camera2 is more complex than the older Camera API or the newer CameraX,
+capture. Camera2 is more complex than the older Camera API or the newer CameraX,
 but its use was justified by the requirement for simultaneous video+RAW
 streams and manual sensor control. We paired this with **Android's
 MediaCodec** for efficient video encoding, offloading that work to the
 hardware encoder.
 
+**Jetpack Compose Technology Stack:**
+- **Compose BOM 2024.12.01**: Ensures compatibility across all Compose libraries
+- **Material 3**: Latest Material Design implementation with dynamic theming
+- **Navigation Compose 2.8.5**: Type-safe navigation with state preservation
+- **Hilt Navigation Compose 1.2.0**: Seamless dependency injection integration
+- **Kotlin Compose Compiler 2.0.20**: Optimized compilation for performance
+
+The Compose migration brings significant benefits for research applications:
+efficient recomposition reduces CPU overhead during real-time sensor updates,
+declarative state management simplifies UI coordination with sensor data streams,
+and Material 3 components provide accessible, professional interfaces suitable
+for research environments.
+
 We used **Dagger Hilt** for dependency injection in the Android
-app[\[61\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=low,timing%20and%20quality%20control).
+app, now enhanced with Navigation Compose integration for ViewModel scoping.
 This decision was made to manage the complexity of having multiple
 loosely coupled services (camera manager, networking client, sensor
 managers). Hilt allowed us to inject these dependencies wherever needed
