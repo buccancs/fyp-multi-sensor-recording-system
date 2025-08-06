@@ -163,7 +163,7 @@ class NetworkRecoveryManager @Inject constructor(
         _sessionPreservationState.value = preservationState
         currentSessionId = sessionId
 
-        AppLogger.i(TAG, "Session state preserved for $sessionId")
+        logger.info("Session state preserved for $sessionId")
     }
 
     fun restoreSessionState(sessionId: String): SessionPreservationState? {
@@ -173,11 +173,11 @@ class NetworkRecoveryManager @Inject constructor(
             val timeSinceDisconnect = System.currentTimeMillis() - preservedState.connectionLostTime
 
             if (timeSinceDisconnect < SESSION_PRESERVATION_TIMEOUT_MS) {
-                AppLogger.i(TAG, "Restored session state for $sessionId (${timeSinceDisconnect}ms offline)")
+                logger.info("Restored session state for $sessionId (${timeSinceDisconnect}ms offline)")
                 return preservedState
             } else {
                 preservedSessions.remove(sessionId)
-                AppLogger.logNetwork(TAG, "Session $sessionId expired, removed from preservation")
+                logger.info("Session $sessionId expired, removed from preservation")
             }
         }
 
@@ -210,7 +210,7 @@ class NetworkRecoveryManager @Inject constructor(
     }
 
     fun forceRecovery(): Boolean {
-        AppLogger.logNetwork(TAG, "Manual recovery forced")
+        logger.info("Manual recovery forced")
         reconnectAttempts.set(0)
         return attemptReconnection()
     }
@@ -271,7 +271,7 @@ class NetworkRecoveryManager @Inject constructor(
             if (isRecovering.getAndSet(false)) {
                 successfulRecoveries++
                 reconnectAttempts.set(0)
-                AppLogger.logNetwork(TAG, "Recovery successful, connection restored")
+                logger.info("Recovery successful, connection restored")
 
                 restoreActiveSession()
             }
@@ -323,12 +323,12 @@ class NetworkRecoveryManager @Inject constructor(
                 val attempts = reconnectAttempts.get()
                 val delay = calculateRetryDelay(attempts)
 
-                AppLogger.logNetwork(TAG, "Recovery attempt $attempts failed, retrying in ${delay}ms")
+                logger.info("Recovery attempt $attempts failed, retrying in ${delay}ms")
                 delay(delay)
             }
 
             if (reconnectAttempts.get() >= MAX_RECONNECT_ATTEMPTS) {
-                AppLogger.e(TAG, "Maximum recovery attempts reached, manual intervention required")
+                logger.error("Maximum recovery attempts reached, manual intervention required")
                 isRecovering.set(false)
             }
         }
@@ -358,7 +358,7 @@ class NetworkRecoveryManager @Inject constructor(
             }
 
             RecoveryStrategy.MANUAL_INTERVENTION -> {
-                AppLogger.e(TAG, "Manual intervention required for network recovery")
+                logger.error("Manual intervention required for network recovery")
                 false
             }
         }
@@ -390,7 +390,7 @@ class NetworkRecoveryManager @Inject constructor(
         currentSessionId?.let { sessionId ->
             val preservedState = restoreSessionState(sessionId)
             if (preservedState != null) {
-                AppLogger.i(TAG, "Active session restored: $sessionId")
+                logger.info("Active session restored: $sessionId")
             }
         }
     }
