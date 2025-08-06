@@ -38,6 +38,8 @@ The system implements a **distributed star-mesh topology** with PC master-contro
 
 ### Installation
 
+#### Basic Installation
+
 1. **Clone Repository**
    ```bash
    git clone https://github.com/buccancs/bucika_gsr.git
@@ -46,10 +48,56 @@ The system implements a **distributed star-mesh topology** with PC master-contro
 
 2. **Setup PC Controller**
    ```bash
-   cd PythonApp
-   pip install -r requirements.txt
-   python main.py
+   # Basic installation with core dependencies
+   pip install -e .
+   
+   # Or install with all optional dependencies
+   pip install -e ".[dev,shimmer,calibration,android]"
    ```
+
+#### Optional Dependencies
+
+The system includes several optional dependency groups for specific functionality:
+
+##### 🔧 Development Tools (`dev`)
+```bash
+pip install -e ".[dev]"
+```
+**Includes**: pytest, coverage tools, linters (black, isort, mypy), security scanners (bandit)
+**Use when**: Contributing to development, running tests, code quality checks
+
+##### 📟 Shimmer GSR Sensors (`shimmer`) 
+```bash
+pip install -e ".[shimmer]"
+```
+**Includes**: pyshimmer, pybluez, bleak (Bluetooth communication)
+**Use when**: Working with Shimmer GSR sensors, Bluetooth device integration
+
+##### 📷 Advanced Calibration (`calibration`)
+```bash
+pip install -e ".[calibration]"
+```
+**Includes**: opencv-contrib-python (extended OpenCV features)
+**Use when**: Using advanced computer vision features, specialized calibration algorithms
+
+##### 📱 Android Integration (`android`)
+```bash
+pip install -e ".[android]"
+```
+**Includes**: adb-shell, pure-python-adb (Android Debug Bridge communication)
+**Use when**: Direct Android device communication, debugging, automated testing
+
+##### 🎯 Common Combinations
+```bash
+# Research setup with all sensors
+pip install -e ".[shimmer,calibration]"
+
+# Full development environment  
+pip install -e ".[dev,shimmer,calibration,android]"
+
+# Production deployment (minimal)
+pip install -e .
+```
 
 3. **Setup Android Application**
    ```bash
