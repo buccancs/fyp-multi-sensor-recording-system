@@ -1,0 +1,316 @@
+{
+  "timestamp": "2025-08-06T07:46:54.088479",
+  "repo_path": "/home/runner/work/bucika_gsr/bucika_gsr",
+  "overall_score": 84,
+  "total_issues": 0,
+  "critical_issues": 0,
+  "categories": {
+    "python": {
+      "score": 84.78260869565217,
+      "issues_count": 42,
+      "issues": [
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'init_ui' is 61 lines long",
+          "file": "PythonApp/real_time_calibration_feedback.py",
+          "line": 217
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_find_serial_port_for_device' is 69 lines long",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 905
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'get_session_info' is 73 lines long",
+          "file": "PythonApp/test_shimmer_implementation.py",
+          "line": 340
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'handle_sync_request' is 66 lines long",
+          "file": "PythonApp/ntp_time_server.py",
+          "line": 184
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'assess_calibration_quality' is 69 lines long",
+          "file": "PythonApp/calibration_quality_assessment.py",
+          "line": 83
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'assess_calibration_quality' is 80 lines long",
+          "file": "PythonApp/calibration/calibration.py",
+          "line": 175
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'perform_complete_calibration' is 120 lines long",
+          "file": "PythonApp/calibration/calibration.py",
+          "line": 385
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_generate_version' is 807 lines long",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 59
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'create_sample_device_profiles' is 100 lines long",
+          "file": "PythonApp/production/device_diversity_testing.py",
+          "line": 667
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_signal_handler' is 156 lines long",
+          "file": "PythonApp/production/endurance_testing.py",
+          "line": 329
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_extract_cpu_temperature' is 177 lines long",
+          "file": "PythonApp/production/endurance_testing.py",
+          "line": 485
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_create_failure_result' is 61 lines long",
+          "file": "PythonApp/production/endurance_testing.py",
+          "line": 707
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_create_default_degradation_actions' is 61 lines long",
+          "file": "PythonApp/production/graceful_degradation.py",
+          "line": 321
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'register_queue_for_backpressure' is 105 lines long",
+          "file": "PythonApp/production/graceful_degradation.py",
+          "line": 390
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_determine_performance_level' is 172 lines long",
+          "file": "PythonApp/production/graceful_degradation.py",
+          "line": 495
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'scan_gradle_dependencies' is 65 lines long",
+          "file": "PythonApp/production/dependency_scanner.py",
+          "line": 244
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_get_system_info' is 442 lines long",
+          "file": "PythonApp/production/performance_benchmark.py",
+          "line": 96
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_validate_build_system' is 66 lines long",
+          "file": "PythonApp/production/phase4_validator.py",
+          "line": 273
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_validate_production_config' is 61 lines long",
+          "file": "PythonApp/production/phase4_validator.py",
+          "line": 339
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_generate_final_report' is 82 lines long",
+          "file": "PythonApp/production/phase4_validator.py",
+          "line": 400
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_setup_logging' is 143 lines long",
+          "file": "PythonApp/production/endurance_test_suite.py",
+          "line": 265
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_detect_cpu_degradation' is 146 lines long",
+          "file": "PythonApp/production/endurance_test_suite.py",
+          "line": 505
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'detect_capabilities' is 65 lines long",
+          "file": "PythonApp/production/device_capability_detector.py",
+          "line": 127
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'generate_performance_profile' is 76 lines long",
+          "file": "PythonApp/production/device_capability_detector.py",
+          "line": 485
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_on_performance_level_change' is 154 lines long",
+          "file": "PythonApp/production/performance_monitor_integration.py",
+          "line": 145
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '__init__' is 532 lines long",
+          "file": "PythonApp/production/security_scanner.py",
+          "line": 46
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_format_event_for_ui' is 74 lines long",
+          "file": "PythonApp/session/session_logger.py",
+          "line": 247
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'api_webcam_configure' is 69 lines long",
+          "file": "PythonApp/web_ui/web_dashboard.py",
+          "line": 418
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_check_device_status' is 93 lines long",
+          "file": "PythonApp/web_ui/web_controller.py",
+          "line": 305
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'detect_bluetooth_devices' is 64 lines long",
+          "file": "PythonApp/utils/system_monitor.py",
+          "line": 210
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'export_logs' is 73 lines long",
+          "file": "PythonApp/utils/logger.py",
+          "line": 204
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'cleanup_old_logs' is 65 lines long",
+          "file": "PythonApp/utils/logger.py",
+          "line": 277
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'initialize' is 63 lines long",
+          "file": "PythonApp/utils/logging_config.py",
+          "line": 141
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'export_logs' is 77 lines long",
+          "file": "PythonApp/utils/logging_config.py",
+          "line": 263
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '__init__' is 71 lines long",
+          "file": "PythonApp/webcam/dual_webcam_capture.py",
+          "line": 60
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'run' is 64 lines long",
+          "file": "PythonApp/webcam/dual_webcam_capture.py",
+          "line": 318
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'process_video' is 113 lines long",
+          "file": "PythonApp/hand_segmentation/segmentation_engine.py",
+          "line": 56
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'setup_styling' is 99 lines long",
+          "file": "PythonApp/gui/enhanced_ui_main_window.py",
+          "line": 192
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'create_statistics_tab' is 94 lines long",
+          "file": "PythonApp/gui/session_review_dialog.py",
+          "line": 199
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'setup_ui' is 97 lines long",
+          "file": "PythonApp/gui/file_browser_dialog.py",
+          "line": 239
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_handle_client' is 63 lines long",
+          "file": "PythonApp/network/pc_server.py",
+          "line": 388
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'process_json_message' is 187 lines long",
+          "file": "PythonApp/network/device_server.py",
+          "line": 212
+        }
+      ],
+      "checks": {
+        "file_count": 92,
+        "syntax_errors": 0,
+        "import_issues": 0,
+        "complexity_issues": 42
+      },
+      "recommendations": []
+    }
+  }
+}

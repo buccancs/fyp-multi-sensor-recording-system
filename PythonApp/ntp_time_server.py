@@ -181,64 +181,92 @@ class NTPTimeServer:
             self.logger.error("Error during NTP synchronization: %s", e)
             return False
 
-    def handle_sync_request(
-        self, client_socket: socket.socket, client_addr: str
-    ) -> None:
+    def _parse_sync_request(self, data: bytes, client_addr: str) -> Optional[Dict]:
+        """Parse and validate sync request data."""
+        try:
+            request_data = json.loads(data.decode("utf-8"))
+        except json.JSONDecodeError:
+            self.logger.error("Invalid JSON in sync request from %s", client_addr)
+            return None
+        
+        if request_data.get("type") != "time_sync_request":
+            return None
+        
+        return request_data
+
+    def _create_sync_response(self, request_data: Dict, request_receive_time: float) -> Dict:
+        """Create sync response data structure."""
+        client_id = request_data.get("client_id")
+        request_timestamp = request_data.get("timestamp", 0)
+        sequence_number = request_data.get("sequence", 0)
+        response_send_time = self.get_precise_timestamp()
+        
+        return {
+            "type": "time_sync_response",
+            "server_timestamp": response_send_time,
+            "request_timestamp": request_timestamp,
+            "receive_timestamp": request_receive_time,
+            "response_timestamp": response_send_time,
+            "server_precision_ms": self.time_precision_ms,
+            "sequence": sequence_number,
+            "server_time_ms": self.get_timestamp_milliseconds(),
+        }, client_id, sequence_number, response_send_time
+
+    def _update_server_statistics(self, client_id: str, request_receive_time: float, response_send_time: float) -> None:
+        """Update server statistics and client tracking."""
+        with self.stats_lock:
+            self.status.requests_served += 1
+            self.connected_clients[client_id] = time.time()
+            self.status.client_count = len(self.connected_clients)
+            
+            response_time = (response_send_time - request_receive_time) * 1000
+            self.response_times.append(response_time)
+            
+            if len(self.response_times) > self.max_response_time_history:
+                self.response_times.pop(0)
+            
+            if self.response_times:
+                self.status.average_response_time_ms = statistics.mean(self.response_times)
+
+    def _trigger_sync_callbacks(self, response_data: Dict, sequence_number: int) -> None:
+        """Trigger registered sync callbacks."""
+        sync_response = TimeSyncResponse(
+            server_timestamp=response_data["server_timestamp"],
+            request_timestamp=response_data["request_timestamp"],
+            response_timestamp=response_data["response_timestamp"],
+            server_precision_ms=self.time_precision_ms,
+            sequence_number=sequence_number,
+        )
+        
+        for callback in self.sync_callbacks:
+            try:
+                callback(sync_response)
+            except Exception as e:
+                self.logger.error("Error in sync callback: %s", e)
+
+    def handle_sync_request(self, client_socket: socket.socket, client_addr: str) -> None:
         try:
             data = client_socket.recv(4096)
             if not data:
                 return
+            
             request_receive_time = self.get_precise_timestamp()
-            try:
-                request_data = json.loads(data.decode("utf-8"))
-            except json.JSONDecodeError:
-                self.logger.error("Invalid JSON in sync request from %s", client_addr)
+            request_data = self._parse_sync_request(data, client_addr)
+            if not request_data:
                 return
-            if request_data.get("type") != "time_sync_request":
-                return
-            client_id = request_data.get("client_id", client_addr)
-            request_timestamp = request_data.get("timestamp", 0)
-            sequence_number = request_data.get("sequence", 0)
-            response_send_time = self.get_precise_timestamp()
-            response = {
-                "type": "time_sync_response",
-                "server_timestamp": response_send_time,
-                "request_timestamp": request_timestamp,
-                "receive_timestamp": request_receive_time,
-                "response_timestamp": response_send_time,
-                "server_precision_ms": self.time_precision_ms,
-                "sequence": sequence_number,
-                "server_time_ms": self.get_timestamp_milliseconds(),
-            }
-            response_json = json.dumps(response)
+            
+            response_data, client_id, sequence_number, response_send_time = (
+                self._create_sync_response(request_data, request_receive_time)
+            )
+            
+            response_json = json.dumps(response_data)
             client_socket.send(response_json.encode("utf-8"))
-            with self.stats_lock:
-                self.status.requests_served += 1
-                self.connected_clients[client_id] = time.time()
-                self.status.client_count = len(self.connected_clients)
-                response_time = (response_send_time - request_receive_time) * 1000
-                self.response_times.append(response_time)
-                if len(self.response_times) > self.max_response_time_history:
-                    self.response_times.pop(0)
-                if self.response_times:
-                    self.status.average_response_time_ms = statistics.mean(
-                        self.response_times
-                    )
-            sync_response = TimeSyncResponse(
-                server_timestamp=response_send_time,
-                request_timestamp=request_timestamp,
-                response_timestamp=response_send_time,
-                server_precision_ms=self.time_precision_ms,
-                sequence_number=sequence_number,
-            )
-            for callback in self.sync_callbacks:
-                try:
-                    callback(sync_response)
-                except Exception as e:
-                    self.logger.error("Error in sync callback: %s", e)
-            self.logger.debug(
-                "Served time sync request from %s (seq=%d)", client_id, sequence_number
-            )
+            
+            self._update_server_statistics(client_id, request_receive_time, response_send_time)
+            self._trigger_sync_callbacks(response_data, sequence_number)
+            
+            self.logger.debug("Served time sync request from %s (seq=%d)", client_id, sequence_number)
+            
         except Exception as e:
             self.logger.error("Error handling sync request from %s: %s", client_addr, e)
         finally:

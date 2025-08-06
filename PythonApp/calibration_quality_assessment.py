@@ -80,6 +80,63 @@ class CalibrationQualityAssessment:
         self.bf_matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         self.logger.info("CalibrationQualityAssessment initialized")
 
+    def _perform_quality_analysis(
+        self, gray_image: np.ndarray, pattern_type: PatternType, reference_image: Optional[np.ndarray]
+    ) -> Tuple[PatternDetectionResult, SharpnessMetrics, ContrastMetrics, Optional[AlignmentMetrics]]:
+        """Perform comprehensive quality analysis on the image."""
+        pattern_result = self._detect_calibration_pattern(gray_image, pattern_type)
+        sharpness_metrics = self._analyze_sharpness(gray_image)
+        contrast_metrics = self._analyze_contrast(gray_image)
+        
+        alignment_metrics = None
+        if reference_image is not None:
+            alignment_metrics = self._analyze_alignment(gray_image, reference_image)
+        
+        return pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
+
+    def _create_quality_result(
+        self, overall_score: float, pattern_result: PatternDetectionResult,
+        sharpness_metrics: SharpnessMetrics, contrast_metrics: ContrastMetrics,
+        alignment_metrics: Optional[AlignmentMetrics], processing_time: float
+    ) -> CalibrationQualityResult:
+        """Create the final quality assessment result."""
+        is_acceptable = self._is_quality_acceptable(
+            overall_score, pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
+        )
+        recommendations = self._generate_recommendations(
+            pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
+        )
+        
+        return CalibrationQualityResult(
+            overall_quality_score=overall_score,
+            is_acceptable=is_acceptable,
+            pattern_detection=pattern_result,
+            sharpness_metrics=sharpness_metrics,
+            contrast_metrics=contrast_metrics,
+            alignment_metrics=alignment_metrics,
+            recommendations=recommendations,
+            processing_time_ms=processing_time,
+        )
+
+    def _create_error_result(self, pattern_type: PatternType, start_time: float) -> CalibrationQualityResult:
+        """Create error result when assessment fails."""
+        return CalibrationQualityResult(
+            overall_quality_score=0.0,
+            is_acceptable=False,
+            pattern_detection=PatternDetectionResult(
+                pattern_found=False,
+                pattern_type=pattern_type,
+                corner_count=0,
+                pattern_score=0.0,
+                geometric_distortion=1.0,
+                completeness=0.0,
+            ),
+            sharpness_metrics=SharpnessMetrics(0.0, 0.0, 0.0, 0.0),
+            contrast_metrics=ContrastMetrics(0, 0.0, 0.0, 0.0),
+            recommendations=["Error during assessment - please retry"],
+            processing_time_ms=(time.time() - start_time) * 1000,
+        )
+
     def assess_calibration_quality(
         self,
         image: np.ndarray,
@@ -88,66 +145,33 @@ class CalibrationQualityAssessment:
     ) -> CalibrationQualityResult:
         start_time = time.time()
         try:
-            self.logger.info(
-                f"Starting calibration quality assessment for {pattern_type.value} pattern"
+            self.logger.info(f"Starting calibration quality assessment for {pattern_type.value} pattern")
+            
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if len(image.shape) == 3 else image
+            
+            pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics = (
+                self._perform_quality_analysis(gray_image, pattern_type, reference_image)
             )
-            gray_image = (
-                cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                if len(image.shape) == 3
-                else image
-            )
-            pattern_result = self._detect_calibration_pattern(gray_image, pattern_type)
-            sharpness_metrics = self._analyze_sharpness(gray_image)
-            contrast_metrics = self._analyze_contrast(gray_image)
-            alignment_metrics = None
-            if reference_image is not None:
-                alignment_metrics = self._analyze_alignment(image, reference_image)
+            
             overall_score = self._calculate_overall_quality(
                 pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
             )
-            is_acceptable = self._is_quality_acceptable(
-                overall_score,
-                pattern_result,
-                sharpness_metrics,
-                contrast_metrics,
-                alignment_metrics,
-            )
-            recommendations = self._generate_recommendations(
-                pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
-            )
+            
             processing_time = (time.time() - start_time) * 1000
-            result = CalibrationQualityResult(
-                overall_quality_score=overall_score,
-                is_acceptable=is_acceptable,
-                pattern_detection=pattern_result,
-                sharpness_metrics=sharpness_metrics,
-                contrast_metrics=contrast_metrics,
-                alignment_metrics=alignment_metrics,
-                recommendations=recommendations,
-                processing_time_ms=processing_time,
+            result = self._create_quality_result(
+                overall_score, pattern_result, sharpness_metrics, contrast_metrics,
+                alignment_metrics, processing_time
             )
+            
             self.logger.info(
-                f"Quality assessment completed: score={overall_score:.3f}, acceptable={is_acceptable}, time={processing_time:.1f}ms"
+                f"Quality assessment completed: score={overall_score:.3f}, "
+                f"acceptable={result.is_acceptable}, time={processing_time:.1f}ms"
             )
             return result
+            
         except Exception as e:
             self.logger.error(f"Error during calibration quality assessment: {e}")
-            return CalibrationQualityResult(
-                overall_quality_score=0.0,
-                is_acceptable=False,
-                pattern_detection=PatternDetectionResult(
-                    pattern_found=False,
-                    pattern_type=pattern_type,
-                    corner_count=0,
-                    pattern_score=0.0,
-                    geometric_distortion=1.0,
-                    completeness=0.0,
-                ),
-                sharpness_metrics=SharpnessMetrics(0.0, 0.0, 0.0, 0.0),
-                contrast_metrics=ContrastMetrics(0, 0.0, 0.0, 0.0),
-                recommendations=["Error during assessment - please retry"],
-                processing_time_ms=(time.time() - start_time) * 1000,
-            )
+            return self._create_error_result(pattern_type, start_time)
 
     def _detect_calibration_pattern(
         self, gray_image: np.ndarray, pattern_type: PatternType

@@ -271,74 +271,100 @@ def test_data_processing():
         traceback.print_exc()
         return False
 
+def _create_test_session_metadata():
+    """Create test session metadata for file operations testing."""
+    from datetime import datetime
+    
+    return {
+        "session_id": f"test_session_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+        "start_time": datetime.now().isoformat(),
+        "devices": ["Android-01", "Android-02", "PC-Webcam-01", "PC-Webcam-02"],
+        "sensors": ["Camera", "Thermal", "GSR", "PPG"],
+        "configuration": {
+            "resolution": "1920x1080",
+            "fps": 30,
+            "sampling_rate": 512,
+        },
+    }
+
+
+def _test_json_operations(session_metadata):
+    """Test JSON export and import functionality."""
+    import json
+    import tempfile
+    import os
+    
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+        json.dump(session_metadata, f, indent=2)
+        json_file = f.name
+    
+    with open(json_file, "r") as f:
+        loaded_metadata = json.load(f)
+    
+    assert loaded_metadata == session_metadata
+    print("✓ JSON session metadata export/import works")
+    os.unlink(json_file)
+
+
+def _test_csv_operations():
+    """Test CSV export and import functionality."""
+    import csv
+    import tempfile
+    import os
+    
+    sensor_data = [
+        {"timestamp": 1.0, "GSR": 1000, "PPG": 2048, "temp": 25.5},
+        {"timestamp": 1.1, "GSR": 1001, "PPG": 2049, "temp": 25.6},
+        {"timestamp": 1.2, "GSR": 1002, "PPG": 2050, "temp": 25.7},
+    ]
+    
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+        writer = csv.DictWriter(f, fieldnames=sensor_data[0].keys())
+        writer.writeheader()
+        writer.writerows(sensor_data)
+        csv_file = f.name
+    
+    with open(csv_file, "r") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+    
+    assert len(rows) == len(sensor_data)
+    assert float(rows[0]["GSR"]) == 1000
+    print("✓ CSV sensor data export/import works")
+    os.unlink(csv_file)
+
+
+def _test_directory_structure(session_metadata):
+    """Test session directory structure creation."""
+    import tempfile
+    from pathlib import Path
+    
+    with tempfile.TemporaryDirectory() as temp_dir:
+        session_dir = Path(temp_dir) / "sessions" / session_metadata["session_id"]
+        session_dir.mkdir(parents=True, exist_ok=True)
+        
+        subdirs = ["video", "thermal", "sensor_data", "logs"]
+        for subdir in subdirs:
+            (session_dir / subdir).mkdir(exist_ok=True)
+        
+        for subdir in subdirs:
+            assert (session_dir / subdir).exists()
+        
+        print("✓ Session directory structure creation works")
+
+
 def test_file_operations():
     """Test file I/O and session management."""
     print("\nTesting file operations...")
-
+    
     try:
-        import csv
-        import json
-        from datetime import datetime
-
-        session_metadata = {
-            "session_id": f"test_session_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-            "start_time": datetime.now().isoformat(),
-            "devices": ["Android-01", "Android-02", "PC-Webcam-01", "PC-Webcam-02"],
-            "sensors": ["Camera", "Thermal", "GSR", "PPG"],
-            "configuration": {
-                "resolution": "1920x1080",
-                "fps": 30,
-                "sampling_rate": 512,
-            },
-        }
-
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
-            json.dump(session_metadata, f, indent=2)
-            json_file = f.name
-
-        with open(json_file, "r") as f:
-            loaded_metadata = json.load(f)
-
-        assert loaded_metadata == session_metadata
-        print("✓ JSON session metadata export/import works")
-        os.unlink(json_file)
-
-        sensor_data = [
-            {"timestamp": 1.0, "GSR": 1000, "PPG": 2048, "temp": 25.5},
-            {"timestamp": 1.1, "GSR": 1001, "PPG": 2049, "temp": 25.6},
-            {"timestamp": 1.2, "GSR": 1002, "PPG": 2050, "temp": 25.7},
-        ]
-
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
-            writer = csv.DictWriter(f, fieldnames=sensor_data[0].keys())
-            writer.writeheader()
-            writer.writerows(sensor_data)
-            csv_file = f.name
-
-        with open(csv_file, "r") as f:
-            reader = csv.DictReader(f)
-            rows = list(reader)
-
-        assert len(rows) == len(sensor_data)
-        assert float(rows[0]["GSR"]) == 1000
-        print("✓ CSV sensor data export/import works")
-        os.unlink(csv_file)
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-            session_dir = Path(temp_dir) / "sessions" / session_metadata["session_id"]
-            session_dir.mkdir(parents=True, exist_ok=True)
-
-            subdirs = ["video", "thermal", "sensor_data", "logs"]
-            for subdir in subdirs:
-                (session_dir / subdir).mkdir(exist_ok=True)
-
-            for subdir in subdirs:
-                assert (session_dir / subdir).exists()
-
-            print("✓ Session directory structure creation works")
-
+        session_metadata = _create_test_session_metadata()
+        _test_json_operations(session_metadata)
+        _test_csv_operations()
+        _test_directory_structure(session_metadata)
+        
         return True
-
+        
     except Exception as e:
         print(f"✗ File operations test failed: {e}")
         traceback.print_exc()
