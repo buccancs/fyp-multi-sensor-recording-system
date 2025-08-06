@@ -18,10 +18,7 @@ import javax.inject.Singleton
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
-/**
- * Secure JSON socket client that uses TLS/SSL for encrypted communication.
- * Replaces the plain JsonSocketClient with security features.
- */
+
 @Singleton
 class SecureJsonSocketClient
 @Inject

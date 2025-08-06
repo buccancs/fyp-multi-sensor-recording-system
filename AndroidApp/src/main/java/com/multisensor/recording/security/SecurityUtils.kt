@@ -22,10 +22,7 @@ import javax.net.ssl.X509TrustManager
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 
-/**
- * Utility class for security operations including encryption, TLS setup, and certificate handling.
- * Implements AES-GCM encryption for data at rest and TLS configuration for secure communication.
- */
+
 class SecurityUtils(
     private val context: Context,
     private val logger: Logger
@@ -39,18 +36,14 @@ class SecurityUtils(
         private const val GCM_TAG_LENGTH = 16
         private const val AUTH_TOKEN_LENGTH = 32
         
-        // Certificate pinning - in production, these should be your actual certificate fingerprints
         private val PINNED_CERTIFICATES = setOf(
-            // Add your server certificate SHA-256 fingerprints here
             "sha256/YOUR_SERVER_CERT_FINGERPRINT_HERE"
         )
     }
     
     private val secureRandom = SecureRandom()
     
-    /**
-     * Initialize encryption key in Android Keystore
-     */
+
     fun initializeEncryptionKey(): Boolean {
         return try {
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
@@ -64,7 +57,7 @@ class SecurityUtils(
                 )
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setUserAuthenticationRequired(false) // For automatic operation
+                    .setUserAuthenticationRequired(false)
                     .build()
                 
                 keyGenerator.init(keyGenParameterSpec)
@@ -78,9 +71,7 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Encrypt data using AES-GCM algorithm
-     */
+
     fun encryptData(data: ByteArray): EncryptedData? {
         return try {
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
@@ -100,9 +91,7 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Decrypt data using AES-GCM algorithm
-     */
+
     fun decryptData(encryptedData: EncryptedData): ByteArray? {
         return try {
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
@@ -120,19 +109,15 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Encrypt file and save to encrypted format
-     */
+
     fun encryptFile(inputFile: File, outputFile: File): Boolean {
         return try {
             val data = inputFile.readBytes()
             val encryptedData = encryptData(data) ?: return false
             
             FileOutputStream(outputFile).use { fos ->
-                // Write IV length and IV
                 fos.write(encryptedData.iv.size)
                 fos.write(encryptedData.iv)
-                // Write encrypted data
                 fos.write(encryptedData.data)
             }
             
@@ -144,18 +129,14 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Decrypt file from encrypted format
-     */
+
     fun decryptFile(inputFile: File, outputFile: File): Boolean {
         return try {
             FileInputStream(inputFile).use { fis ->
-                // Read IV
                 val ivLength = fis.read()
                 val iv = ByteArray(ivLength)
                 fis.read(iv)
                 
-                // Read encrypted data
                 val encryptedData = fis.readBytes()
                 
                 val decryptedData = decryptData(EncryptedData(encryptedData, iv)) ?: return false
@@ -170,38 +151,30 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Generate secure authentication token
-     */
+
     fun generateAuthToken(): String {
         val tokenBytes = ByteArray(AUTH_TOKEN_LENGTH)
         secureRandom.nextBytes(tokenBytes)
         return Base64.encodeToString(tokenBytes, Base64.URL_SAFE or Base64.NO_WRAP)
     }
     
-    /**
-     * Validate authentication token format and strength
-     */
+
     fun validateAuthToken(token: String): Boolean {
         return try {
             if (token.length < 32) return false
             val decoded = Base64.decode(token, Base64.URL_SAFE or Base64.NO_WRAP)
-            decoded.size >= 24 // At least 24 bytes (192 bits)
+            decoded.size >= 24
         } catch (e: Exception) {
             logger.warning("Invalid auth token format")
             false
         }
     }
     
-    /**
-     * Create SSL context with certificate pinning
-     */
+
     fun createSecureSSLContext(): SSLContext? {
         return try {
             val sslContext = SSLContext.getInstance("TLS")
             
-            // For development/testing, we'll use a more permissive trust manager
-            // In production, implement proper certificate pinning
             val trustManager = createTrustManager()
             
             sslContext.init(null, arrayOf(trustManager), secureRandom)
@@ -213,25 +186,17 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Create custom trust manager for certificate validation
-     * Note: In production, implement proper certificate pinning here
-     */
+
     private fun createTrustManager(): X509TrustManager {
         return object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-                // For development - accept all client certificates
-                // In production: validate client certificates properly
             }
             
             override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-                // For development - basic validation
-                // In production: implement certificate pinning validation
                 if (chain.isEmpty()) {
                     throw java.security.cert.CertificateException("Certificate chain is empty")
                 }
                 
-                // Basic certificate validation
                 try {
                     chain[0].checkValidity()
                 } catch (e: Exception) {
@@ -246,17 +211,14 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Hash password/token securely for storage
-     */
+
     fun hashToken(token: String, salt: ByteArray): String {
-        // Use a proper password hashing algorithm like PBKDF2
         return try {
             val spec = javax.crypto.spec.PBEKeySpec(
                 token.toCharArray(),
                 salt,
-                10000, // iterations
-                256 // key length
+                10000,
+                256
             )
             val factory = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
             val hash = factory.generateSecret(spec).encoded
@@ -267,24 +229,20 @@ class SecurityUtils(
         }
     }
     
-    /**
-     * Generate salt for password hashing
-     */
+
     fun generateSalt(): ByteArray {
         val salt = ByteArray(16)
         secureRandom.nextBytes(salt)
         return salt
     }
     
-    /**
-     * Sanitize string for logging (remove PII)
-     */
+
     fun sanitizeForLogging(input: String): String {
         return input
-            .replace(Regex("[0-9]{10,}"), "***") // Phone numbers
-            .replace(Regex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"), "***@***.***") // Emails
-            .replace(Regex("\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b"), "***.***.***.***") // IP addresses
-            .replace(Regex("[A-Za-z0-9+/]{20,}={0,2}"), "***") // Base64 tokens
+            .replace(Regex("[0-9]{10,}"), "***")
+            .replace(Regex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"), "***@***.***")
+            .replace(Regex("\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b"), "***.***.***.***")
+            .replace(Regex("[A-Za-z0-9+/]{20,}={0,2}"), "***")
     }
     
     data class EncryptedData(

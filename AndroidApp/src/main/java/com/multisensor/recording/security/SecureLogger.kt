@@ -6,10 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Secure logger wrapper that sanitizes sensitive information before logging.
- * Prevents PII and sensitive data from being written to log files.
- */
+
 @Singleton
 class SecureLogger @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -19,35 +16,26 @@ class SecureLogger @Inject constructor(
     
     companion object {
         private val SENSITIVE_PATTERNS = mapOf<Regex, (MatchResult) -> String>(
-            // Authentication tokens and passwords
             Regex("(?i)(token|password|secret|key|auth)\\s*[:=]\\s*[\"']?([^\\s\"']{8,})[\"']?") to { matchResult ->
                 "${matchResult.groupValues[1]}=***"
             },
             
-            // MAC addresses
             Regex("([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})") to { _ -> "**:**:**:**:**:**" },
             
-            // IP addresses (but preserve localhost)
             Regex("\\b(?!127\\.0\\.0\\.1|localhost)(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b") to { _ -> "***.***.***.***" },
             
-            // Phone numbers (international format)
             Regex("\\+?[1-9]\\d{1,14}\\b") to { _ -> "***-***-****" },
             
-            // Email addresses
             Regex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b") to { _ -> "***@***.***" },
             
-            // Base64 encoded data (likely tokens or encrypted data)
             Regex("[A-Za-z0-9+/]{20,}={0,2}") to { _ -> "***[base64]***" },
             
-            // Hex strings that could be keys or hashes
             Regex("\\b[0-9A-Fa-f]{32,}\\b") to { _ -> "***[hex]***" },
             
-            // Device serial numbers (keeping only first and last 2 chars)
             Regex("\\bserial[\"'\\s]*[:=][\"'\\s]*([A-Za-z0-9]{2})([A-Za-z0-9]+)([A-Za-z0-9]{2})[\"'\\s]*") to { matchResult ->
                 "serial=${matchResult.groupValues[1]}***${matchResult.groupValues[3]}"
             },
             
-            // Stack traces from sensitive packages (remove line numbers and method details)
             Regex("at\\s+(com\\.multisensor\\.recording\\.security\\.[^\\s]+)\\([^)]+\\)") to { matchResult ->
                 "at ${matchResult.groupValues[1].substringBeforeLast('.')}.**(***)"
             }
@@ -74,9 +62,7 @@ class SecureLogger @Inject constructor(
         baseLogger.error(sanitizeMessage(message), sanitizeThrowable(throwable))
     }
     
-    /**
-     * Log security-related events with additional context
-     */
+
     fun logSecurityEvent(event: SecurityEvent, details: String = "") {
         val sanitizedDetails = sanitizeMessage(details)
         val logMessage = "SECURITY EVENT: ${event.name} - $sanitizedDetails"
@@ -89,9 +75,7 @@ class SecureLogger @Inject constructor(
         }
     }
     
-    /**
-     * Log authentication events with sanitized information
-     */
+
     fun logAuthEvent(event: AuthEvent, remoteAddress: String? = null, success: Boolean = false) {
         val sanitizedAddress = remoteAddress?.let { sanitizeMessage(it) } ?: "unknown"
         val status = if (success) "SUCCESS" else "FAILURE"
@@ -104,13 +88,10 @@ class SecureLogger @Inject constructor(
         }
     }
     
-    /**
-     * Sanitize a message by removing or masking sensitive information
-     */
+
     private fun sanitizeMessage(message: String): String {
         var sanitized = securityUtils.sanitizeForLogging(message)
         
-        // Apply additional patterns specific to our application
         SENSITIVE_PATTERNS.forEach { (pattern, replacement) ->
             sanitized = pattern.replace(sanitized, replacement)
         }
@@ -118,27 +99,22 @@ class SecureLogger @Inject constructor(
         return sanitized
     }
     
-    /**
-     * Sanitize throwable by removing sensitive information from stack traces
-     */
+
     private fun sanitizeThrowable(throwable: Throwable?): Throwable? {
         if (throwable == null) return null
         
-        // For security-related exceptions, create a sanitized version
         if (throwable.message?.contains("password", ignoreCase = true) == true ||
             throwable.message?.contains("token", ignoreCase = true) == true ||
             throwable.message?.contains("secret", ignoreCase = true) == true) {
             
             val sanitizedMessage = sanitizeMessage(throwable.message ?: "")
-            return RuntimeException(sanitizedMessage, null) // Remove original stack trace
+            return RuntimeException(sanitizedMessage, null)
         }
         
         return throwable
     }
     
-    /**
-     * Log network communication events with sanitized data
-     */
+
     fun logNetworkEvent(event: NetworkEvent, remoteAddress: String? = null, dataSize: Long = 0) {
         val sanitizedAddress = remoteAddress?.let { sanitizeMessage(it) } ?: "unknown"
         val logMessage = "NETWORK EVENT: ${event.name} with $sanitizedAddress, ${dataSize} bytes"
@@ -150,11 +126,8 @@ class SecureLogger @Inject constructor(
         }
     }
     
-    /**
-     * Log file operations with sanitized paths
-     */
+
     fun logFileEvent(event: FileEvent, filePath: String, success: Boolean = true) {
-        // Only log filename, not full path to avoid exposing directory structure
         val fileName = filePath.substringAfterLast('/')
         val status = if (success) "SUCCESS" else "FAILURE"
         val logMessage = "FILE EVENT: ${event.name} - $fileName - $status"
@@ -166,7 +139,6 @@ class SecureLogger @Inject constructor(
         }
     }
     
-    // Delegate other methods to base logger
     fun getCurrentLogFilePath(): String? = baseLogger.getCurrentLogFilePath()
     fun getLogStatistics(): Logger.LogStatistics = baseLogger.getLogStatistics()
     fun logSystemInfo() = baseLogger.logSystemInfo()

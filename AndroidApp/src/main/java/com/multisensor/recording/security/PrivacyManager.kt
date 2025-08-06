@@ -12,10 +12,7 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manages user privacy preferences, consent, and data anonymization features.
- * Implements GDPR compliance features and user privacy controls.
- */
+
 @Singleton
 class PrivacyManager @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -57,9 +54,7 @@ class PrivacyManager @Inject constructor(
         }
     }
     
-    /**
-     * Check if user has given valid consent
-     */
+
     fun hasValidConsent(): Boolean {
         val consentGiven = securePrefs.getBoolean(KEY_CONSENT_GIVEN, false)
         val consentVersion = securePrefs.getInt(KEY_CONSENT_VERSION, 0)
@@ -67,9 +62,7 @@ class PrivacyManager @Inject constructor(
         return consentGiven && consentVersion >= CURRENT_CONSENT_VERSION
     }
     
-    /**
-     * Record user consent
-     */
+
     fun recordConsent(participantId: String? = null, studyId: String? = null) {
         securePrefs.edit()
             .putBoolean(KEY_CONSENT_GIVEN, true)
@@ -84,9 +77,7 @@ class PrivacyManager @Inject constructor(
         logger.info("User consent recorded for study: ${studyId ?: "unknown"}")
     }
     
-    /**
-     * Withdraw consent and mark for data deletion
-     */
+
     fun withdrawConsent(): Boolean {
         return try {
             securePrefs.edit()
@@ -102,9 +93,7 @@ class PrivacyManager @Inject constructor(
         }
     }
     
-    /**
-     * Get consent information
-     */
+
     fun getConsentInfo(): ConsentInfo {
         return ConsentInfo(
             consentGiven = securePrefs.getBoolean(KEY_CONSENT_GIVEN, false),
@@ -115,9 +104,7 @@ class PrivacyManager @Inject constructor(
         )
     }
     
-    /**
-     * Configure data anonymization options
-     */
+
     fun configureAnonymization(
         enableDataAnonymization: Boolean,
         enableFaceBlurring: Boolean,
@@ -132,9 +119,7 @@ class PrivacyManager @Inject constructor(
         logger.info("Data anonymization configured: anonymize=$enableDataAnonymization, blur=$enableFaceBlurring, strip=$enableMetadataStripping")
     }
     
-    /**
-     * Get current anonymization settings
-     */
+
     fun getAnonymizationSettings(): AnonymizationSettings {
         return AnonymizationSettings(
             dataAnonymizationEnabled = securePrefs.getBoolean(KEY_DATA_ANONYMIZATION, false),
@@ -143,9 +128,7 @@ class PrivacyManager @Inject constructor(
         )
     }
     
-    /**
-     * Set data retention period
-     */
+
     fun setDataRetentionPeriod(days: Int) {
         securePrefs.edit()
             .putInt(KEY_DATA_RETENTION_DAYS, days)
@@ -175,16 +158,12 @@ class PrivacyManager @Inject constructor(
         return anonymousId
     }
     
-    /**
-     * Get current participant ID (anonymous or provided)
-     */
+
     fun getParticipantId(): String? {
         return securePrefs.getString(KEY_PARTICIPANT_ID, null)
     }
     
-    /**
-     * Check if data should be deleted based on retention policy
-     */
+
     fun shouldDeleteData(dataTimestamp: Long): Boolean {
         val retentionPeriodMs = getDataRetentionDays() * 24 * 60 * 60 * 1000L
         val currentTime = System.currentTimeMillis()
@@ -192,14 +171,11 @@ class PrivacyManager @Inject constructor(
         return (currentTime - dataTimestamp) > retentionPeriodMs
     }
     
-    /**
-     * Anonymize metadata by removing or replacing identifying information
-     */
+
     suspend fun anonymizeMetadata(metadata: Map<String, Any>): Map<String, Any> = withContext(Dispatchers.Default) {
         val anonymizedMetadata = metadata.toMutableMap()
         
         if (getAnonymizationSettings().metadataStrippingEnabled) {
-            // Remove potentially identifying metadata
             val keysToRemove = listOf(
                 "device_id", "serial_number", "mac_address", "imei",
                 "phone_number", "email", "user_name", "device_name",
@@ -210,7 +186,6 @@ class PrivacyManager @Inject constructor(
                 anonymizedMetadata.remove(key)
             }
             
-            // Replace with anonymous versions
             anonymizedMetadata["participant_id"] = getParticipantId() ?: generateAnonymousParticipantId()
             anonymizedMetadata["session_id"] = "SESSION_${UUID.randomUUID().toString().substring(0, 8)}"
             anonymizedMetadata["device_type"] = android.os.Build.MODEL.replace(Regex("[0-9]+"), "X")
@@ -219,9 +194,7 @@ class PrivacyManager @Inject constructor(
         anonymizedMetadata.toMap()
     }
     
-    /**
-     * Create a privacy report for GDPR compliance
-     */
+
     suspend fun generatePrivacyReport(): PrivacyReport = withContext(Dispatchers.Default) {
         val consentInfo = getConsentInfo()
         val anonymizationSettings = getAnonymizationSettings()
@@ -245,9 +218,7 @@ class PrivacyManager @Inject constructor(
         )
     }
     
-    /**
-     * Clear all privacy-related data (for GDPR deletion requests)
-     */
+
     suspend fun clearAllPrivacyData(): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
             securePrefs.edit().clear().apply()

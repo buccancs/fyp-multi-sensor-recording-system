@@ -11,10 +11,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Manages encrypted file storage for sensitive recording data.
- * Provides transparent encryption/decryption for video files, sensor data, and metadata.
- */
+
 @Singleton
 class EncryptedFileManager @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -28,15 +25,12 @@ class EncryptedFileManager @Inject constructor(
     }
     
     init {
-        // Initialize encryption on startup
         if (!securityUtils.initializeEncryptionKey()) {
             logger.error("Failed to initialize encryption for file storage")
         }
     }
     
-    /**
-     * Save data to an encrypted file
-     */
+
     suspend fun saveEncryptedFile(data: ByteArray, file: File): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
             val tempFile = File(file.parentFile, file.name + TEMP_EXTENSION)
@@ -68,9 +62,7 @@ class EncryptedFileManager @Inject constructor(
         }
     }
     
-    /**
-     * Read data from an encrypted file
-     */
+
     suspend fun readEncryptedFile(file: File): ByteArray? = withContext(Dispatchers.IO) {
         return@withContext try {
             val encryptedFile = File(file.parentFile, file.name + ENCRYPTED_EXTENSION)
@@ -82,17 +74,16 @@ class EncryptedFileManager @Inject constructor(
             
             val tempFile = File(file.parentFile, file.name + TEMP_EXTENSION)
             
-            // Decrypt to temp file
             val success = securityUtils.decryptFile(encryptedFile, tempFile)
             
             if (success && tempFile.exists()) {
                 val data = tempFile.readBytes()
-                tempFile.delete() // Clean up temp file
+                tempFile.delete()
                 logger.debug("File decrypted and read: ${file.name}")
                 data
             } else {
                 logger.error("Failed to decrypt file: ${file.name}")
-                tempFile.delete() // Clean up temp file if it exists
+                tempFile.delete()
                 null
             }
         } catch (e: Exception) {
@@ -101,9 +92,7 @@ class EncryptedFileManager @Inject constructor(
         }
     }
     
-    /**
-     * Encrypt an existing file in place
-     */
+
     suspend fun encryptExistingFile(file: File): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
             if (!file.exists()) {
@@ -113,7 +102,6 @@ class EncryptedFileManager @Inject constructor(
             
             val encryptedFile = File(file.parentFile, file.name + ENCRYPTED_EXTENSION)
             
-            // Don't re-encrypt if already encrypted
             if (encryptedFile.exists()) {
                 logger.debug("File already encrypted: ${file.name}")
                 return@withContext true
@@ -122,7 +110,6 @@ class EncryptedFileManager @Inject constructor(
             val success = securityUtils.encryptFile(file, encryptedFile)
             
             if (success) {
-                // Remove original unencrypted file
                 file.delete()
                 logger.info("File encrypted in place: ${file.name}")
             } else {
@@ -136,9 +123,7 @@ class EncryptedFileManager @Inject constructor(
         }
     }
     
-    /**
-     * Decrypt an encrypted file to its original location
-     */
+
     suspend fun decryptFileToOriginal(file: File): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
             val encryptedFile = File(file.parentFile, file.name + ENCRYPTED_EXTENSION)
@@ -163,31 +148,24 @@ class EncryptedFileManager @Inject constructor(
         }
     }
     
-    /**
-     * Check if a file exists in encrypted form
-     */
+
     fun isFileEncrypted(file: File): Boolean {
         val encryptedFile = File(file.parentFile, file.name + ENCRYPTED_EXTENSION)
         return encryptedFile.exists()
     }
     
-    /**
-     * Get the encrypted version of a file
-     */
+
     fun getEncryptedFile(file: File): File {
         return File(file.parentFile, file.name + ENCRYPTED_EXTENSION)
     }
     
-    /**
-     * Secure delete - overwrite file data before deletion
-     */
+
     suspend fun secureDelete(file: File): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
             if (!file.exists()) {
                 return@withContext true
             }
             
-            // Overwrite file with random data
             val fileSize = file.length()
             val randomData = ByteArray(fileSize.toInt())
             java.security.SecureRandom().nextBytes(randomData)
@@ -195,10 +173,9 @@ class EncryptedFileManager @Inject constructor(
             FileOutputStream(file).use { fos ->
                 fos.write(randomData)
                 fos.flush()
-                fos.fd.sync() // Force write to disk
+                fos.fd.sync()
             }
             
-            // Delete the file
             val deleted = file.delete()
             
             if (deleted) {
