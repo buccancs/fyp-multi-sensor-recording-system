@@ -6,6 +6,7 @@ import com.multisensor.recording.persistence.*
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CancellationException

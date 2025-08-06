@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.util.NetworkUtils
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

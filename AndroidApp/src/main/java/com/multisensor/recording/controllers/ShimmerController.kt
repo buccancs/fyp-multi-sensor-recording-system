@@ -17,7 +17,6 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class ShimmerController @Inject constructor(
     private val shimmerManager: ShimmerManager,
@@ -686,7 +685,6 @@ class ShimmerController @Inject constructor(
         android.util.Log.d("ShimmerController", "[DEBUG_LOG] Preferred BT type set to: $btType")
     }
 
-
     fun getConnectedDevices(): List<ShimmerDeviceState> {
         return connectedDevices.values.filter { it.isConnected }
     }
@@ -790,7 +788,6 @@ class ShimmerController @Inject constructor(
             else -> "$connectedCount devices connected"
         }
     }
-
 
     suspend fun exportDeviceConfigurations(): List<ShimmerDeviceState> {
         return shimmerDeviceStateRepository.getAllDeviceStates()

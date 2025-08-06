@@ -9,7 +9,6 @@ from .schema_utils import get_schema_manager
 
 logger = get_logger(__name__)
 
-
 class HandshakeManager:
 
     def __init__(self):
@@ -142,9 +141,7 @@ class HandshakeManager:
     ) -> bool:
         return client_version == server_version
 
-
 _handshake_manager = None
-
 
 def get_handshake_manager() -> HandshakeManager:
     global _handshake_manager
@@ -152,20 +149,16 @@ def get_handshake_manager() -> HandshakeManager:
         _handshake_manager = HandshakeManager()
     return _handshake_manager
 
-
 def send_handshake(sock: socket.socket) -> bool:
     return get_handshake_manager().send_handshake(sock)
 
-
 def process_handshake(handshake_message: Dict[str, Any]) -> Tuple[bool, str]:
     return get_handshake_manager().process_handshake(handshake_message)
-
 
 def send_handshake_ack(
     sock: socket.socket, compatible: bool, message: str = ""
 ) -> bool:
     return get_handshake_manager().send_handshake_ack(sock, compatible, message)
-
 
 def process_handshake_ack(ack_message: Dict[str, Any]) -> bool:
     return get_handshake_manager().process_handshake_ack(ack_message)

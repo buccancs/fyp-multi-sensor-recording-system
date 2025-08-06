@@ -1,6 +1,8 @@
 package com.multisensor.recording
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +21,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,12 +34,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainFragmentsBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var sharedPreferences: SharedPreferences
 
     @Inject
     lateinit var logger: Logger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+
+        if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+        
         enableEdgeToEdge()
 
         binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
@@ -91,25 +104,14 @@ class MainActivity : AppCompatActivity() {
                         binding.drawerLayout.closeDrawers()
                         true
                     }
-                    R.id.nav_network_config -> {
-                        showToast("Network Config - Coming Soon")
-                        binding.drawerLayout.closeDrawers()
-                        true
-                    }
-                    R.id.nav_shimmer_config -> {
-                        showToast("Shimmer Config - Coming Soon")
-                        binding.drawerLayout.closeDrawers()
-                        true
-                    }
-                    R.id.nav_diagnostics -> {
-                        showToast("Diagnostics - Coming Soon")
-                        binding.drawerLayout.closeDrawers()
-                        true
-                    }
+
+                    R.id.nav_network_config, 
+                    R.id.nav_shimmer_config, 
+                    R.id.nav_diagnostics, 
                     R.id.nav_about -> {
-                        showToast("About - Coming Soon")
+
                         binding.drawerLayout.closeDrawers()
-                        true
+                        false
                     }
                     else -> {
                         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -137,6 +139,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupUI() {
 
+        val menu = binding.navView.menu
+        menu.findItem(R.id.nav_network_config)?.isEnabled = false
+        menu.findItem(R.id.nav_shimmer_config)?.isEnabled = false
+        menu.findItem(R.id.nav_diagnostics)?.isEnabled = false
+        menu.findItem(R.id.nav_about)?.isEnabled = false
     }
 
     private fun observeViewModel() {
@@ -156,6 +163,11 @@ class MainActivity : AppCompatActivity() {
             else -> "Multi-Sensor Recording"
         }
 
+        requestedOrientation = if (state.isRecording) {
+            ActivityInfo.SCREEN_ORIENTATION_LOCKED
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

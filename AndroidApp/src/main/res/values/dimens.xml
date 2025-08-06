@@ -23,4 +23,10 @@
 
     <dimen name="touch_target_min">48dp</dimen>
 
+    <!-- Text sizes that scale with user accessibility settings -->
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_caption">12sp</dimen>
+
 </resources>

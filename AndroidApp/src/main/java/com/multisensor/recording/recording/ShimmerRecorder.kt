@@ -1119,7 +1119,6 @@ constructor(
         recordingScope?.launch {
             logger.info("Started data processing pipeline")
 
-
             launch { processFileWriting() }
 
             launch { processNetworkStreaming() }

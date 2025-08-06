@@ -3,7 +3,6 @@ package com.multisensor.recording.network
 import org.json.JSONException
 import org.json.JSONObject
 
-
 abstract class JsonMessage {
     abstract val type: String
 
@@ -44,7 +43,6 @@ abstract class JsonMessage {
 
     abstract fun toJsonObject(): JSONObject
 }
-
 
 data class StartRecordCommand(
     override val type: String = "start_record",
@@ -241,7 +239,6 @@ data class FileReceivedCommand(
             )
     }
 }
-
 
 data class HelloMessage(
     override val type: String = "hello",
