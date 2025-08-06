@@ -286,12 +286,20 @@ class PrivacyManager(context: Context, logger: Logger) {
 - **[Test Execution Guide](./docs/TEST_EXECUTION_GUIDE.md)**: Comprehensive testing procedures
 - **[Troubleshooting Guide](./docs/TEST_TROUBLESHOOTING.md)**: Solutions for common issues
 - **[API Documentation](./docs/api/)**: Detailed API reference
-- **[Architecture Overview](./docs/ARCHITECTURE.md)**: System design and components
+- **[Architecture Overview](./docs/ARCHITECTURE.md)**: System design and layer separation
+- **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Infrastructure utilities and patterns
+- **[Scaling Architecture](./docs/SCALING_ARCHITECTURE.md)**: Scaling beyond 8 devices
 
 ### Research Documentation
 - **[Calibration Procedures](./docs/calibration_system_readme.md)**: Camera calibration methodology
 - **[Synchronization Analysis](./docs/multi_device_synchronization_readme.md)**: Timing precision validation
 - **[Data Quality Assessment](./evaluation_suite/README.md)**: Quality metrics and validation
+
+### Architecture & Design
+- **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**: Visual system overview
+- **[Layer Architecture](./docs/diagrams/14_layer_architecture.png)**: 6-layer system architecture
+- **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Logging, synchronization, error handling
+- **[Scaling Considerations](./docs/SCALING_ARCHITECTURE.md)**: Multi-controller and distributed architectures
 
 ## 🤝 Contributing
 
