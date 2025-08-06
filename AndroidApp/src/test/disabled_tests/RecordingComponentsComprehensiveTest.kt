@@ -1,12 +1,10 @@
 package com.multisensor.recording.recording
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlinx.coroutines.test.runTest
 import android.content.Context
@@ -19,7 +17,6 @@ import kotlin.test.assertTrue
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
-@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class RecordingComponentsComprehensiveTest {
 
@@ -42,7 +39,7 @@ class RecordingComponentsComprehensiveTest {
     private lateinit var thermalRecorder: ThermalRecorder
     private lateinit var shimmerRecorder: ShimmerRecorder
 
-    @Before
+    @BeforeEach
     fun setUp() {
         MockitoAnnotations.openMocks(this)
 

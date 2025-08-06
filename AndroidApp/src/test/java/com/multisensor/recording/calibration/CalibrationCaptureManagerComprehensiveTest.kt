@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
-import com.multisensor.recording.sync.SyncClockManager
-import com.multisensor.recording.recording.thermal.ThermalCameraSettings
+import com.multisensor.recording.calibration.SyncClockManager
+import com.multisensor.recording.util.ThermalCameraSettings
 import com.multisensor.recording.util.Logger
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -72,20 +72,20 @@ class CalibrationCaptureManagerComprehensiveTest {
     
     @Test
     fun `calibration manager should be created successfully`() = runTest {
-        assertNotNull("CalibrationCaptureManager should be created", calibrationManager)
+        assertNotNull(calibrationManager, "CalibrationCaptureManager should be created")
     }
     
     @Test
     fun `getCalibrationSessions should return empty list initially`() = runTest {
         val sessions = calibrationManager.getCalibrationSessions()
-        assertTrue("Initial sessions list should be empty", sessions.isEmpty())
+        assertTrue(sessions.isEmpty(), "Initial sessions list should be empty")
     }
     
     @Test
     fun `getCalibrationStatistics should return valid statistics`() = runTest {
         val stats = calibrationManager.getCalibrationStatistics()
-        assertNotNull("Statistics should not be null", stats)
-        assertEquals("Initial session count should be 0", 0, stats.totalSessions)
+        assertNotNull(stats, "Statistics should not be null")
+        assertEquals(0, stats.totalSessions, "Initial session count should be 0")
     }
     
     // Note: Other tests disabled due to interface changes

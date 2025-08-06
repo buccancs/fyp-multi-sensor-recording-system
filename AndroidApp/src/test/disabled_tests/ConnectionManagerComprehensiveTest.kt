@@ -7,17 +7,14 @@ import com.multisensor.recording.util.Logger
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.robolectric.annotation.Config
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
 class ConnectionManagerComprehensiveTest {
@@ -28,7 +25,7 @@ class ConnectionManagerComprehensiveTest {
     private lateinit var mockPCHandler: PCCommunicationHandler
     private lateinit var connectionManager: ConnectionManager
 
-    @Before
+    @BeforeEach
     fun setup() {
         mockContext = mockk(relaxed = true)
         mockSessionManager = mockk(relaxed = true)
@@ -38,7 +35,7 @@ class ConnectionManagerComprehensiveTest {
         connectionManager = ConnectionManager(mockContext, mockSessionManager, mockLogger)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         clearAllMocks()
     }

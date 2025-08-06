@@ -8,16 +8,13 @@ import com.multisensor.recording.util.Logger
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.robolectric.annotation.Config
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
 class DeviceConfigurationComprehensiveTest {
@@ -27,7 +24,7 @@ class DeviceConfigurationComprehensiveTest {
     private lateinit var mockLogger: Logger
     private lateinit var deviceConfiguration: DeviceConfiguration
 
-    @Before
+    @BeforeEach
     fun setup() {
         mockContext = mockk(relaxed = true)
         mockSessionManager = mockk(relaxed = true)
@@ -36,7 +33,7 @@ class DeviceConfigurationComprehensiveTest {
         deviceConfiguration = DeviceConfiguration(mockContext, mockLogger)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         clearAllMocks()
     }
