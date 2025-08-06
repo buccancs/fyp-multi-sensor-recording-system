@@ -15,10 +15,8 @@
 
 3.3. [Functional Requirements Overview](#33-functional-requirements-overview)
 
--
-3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
--
-3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
+- 3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
+- 3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
 - 3.3.3. [Real-Time Data Processing and Analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
 - 3.3.4. [User Interface and Session Management Requirements](#334-user-interface-and-session-management-requirements)
 
@@ -71,29 +69,21 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.3. [Hardware Integration Requirements](#hardware-integration-requirements)
 - 3.4. [Detailed Functional Requirements Specifications](#detailed-functional-requirements-specifications)
 - 3.5. [Core System Coordination Requirements](#core-system-coordination-requirements)
-    -
-    3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
-    -
-    3.5.2. [FR-002: Advanced Temporal Synchronization and Precision Management](#fr-002-advanced-temporal-synchronization-and-precision-management)
-    -
-    3.5.3. [FR-003: Comprehensive Session Management and Lifecycle Control](#fr-003-comprehensive-session-management-and-lifecycle-control)
+    - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
+    - 3.5.2. [FR-002: Advanced Temporal Synchronization and Precision Management](#fr-002-advanced-temporal-synchronization-and-precision-management)
+    - 3.5.3. [FR-003: Comprehensive Session Management and Lifecycle Control](#fr-003-comprehensive-session-management-and-lifecycle-control)
 - 3.6. [Data Acquisition and Processing Requirements](#data-acquisition-and-processing-requirements)
-    -
-    3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
-    -
-    3.6.2. [FR-011: Comprehensive Thermal Imaging Integration and Physiological Analysis](#fr-011-comprehensive-thermal-imaging-integration-and-physiological-analysis)
-    -
-    3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
+    - 3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
+    - 3.6.2. [FR-011: Comprehensive Thermal Imaging Integration and Physiological Analysis](#fr-011-comprehensive-thermal-imaging-integration-and-physiological-analysis)
+    - 3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
 - 3.7. [Advanced Processing and Analysis Requirements](#advanced-processing-and-analysis-requirements)
-    -
-    3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
+    - 3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
     - 3.7.2. [FR-021: Machine Learning Inference and Prediction](#fr-021-machine-learning-inference-and-prediction)
 - 3.8. [Core System Functions](#core-system-functions)
-    -
-    3.8.1. [FR-001: Multi-Device Coordination and Synchronization](#fr-001-multi-device-coordination-and-synchronization)
-    - 3.8.2. [FR-002: High-Quality RGB Video Data Acquisition](#fr-002-high-quality-rgb-video-data-acquisition)
-    - 3.8.3. [FR-003: Thermal Imaging Integration and Analysis](#fr-003-thermal-imaging-integration-and-analysis)
-    - 3.8.4. [FR-004: Reference GSR Measurement Integration](#fr-004-reference-gsr-measurement-integration)
+    - 3.8.1. [FR-030: Multi-Device Coordination and Synchronization](#fr-030-multi-device-coordination-and-synchronization)
+    - 3.8.2. [FR-031: High-Quality RGB Video Data Acquisition](#fr-031-high-quality-rgb-video-data-acquisition)
+    - 3.8.3. [FR-032: Thermal Imaging Integration and Analysis](#fr-032-thermal-imaging-integration-and-analysis)
+    - 3.8.4. [FR-033: Reference GSR Measurement Integration](#fr-033-reference-gsr-measurement-integration)
     - 3.8.5. [FR-005: Comprehensive Session Management](#fr-005-comprehensive-session-management)
 - 3.9. [Advanced Data Processing Requirements](#advanced-data-processing-requirements)
     - 3.9.1. [FR-010: Real-Time Hand Detection and Tracking](#fr-010-real-time-hand-detection-and-tracking)
@@ -1057,7 +1047,7 @@ The core system functions represent the fundamental capabilities required for mu
 data collection. These requirements form the foundation upon which all other system capabilities are built and represent
 the minimum functionality required for basic system operation.
 
-#### FR-001: Multi-Device Coordination and Synchronization
+#### FR-030: Multi-Device Coordination and Synchronization
 
 **Comprehensive Requirement Description**: The system must provide sophisticated coordination capabilities that enable
 simultaneous operation of multiple heterogeneous recording devices while maintaining precise temporal synchronization
@@ -1090,7 +1080,7 @@ cannot be compromised without fundamentally altering the system's research utili
 **Validation Criteria**: Successful coordination of the maximum supported device count with empirical measurement of
 synchronization accuracy across multiple session scenarios.
 
-#### FR-002: High-Quality RGB Video Data Acquisition
+#### FR-031: High-Quality RGB Video Data Acquisition
 
 **Comprehensive Requirement Description**: The system must capture high-resolution RGB video streams that provide
 sufficient quality and temporal resolution for detailed physiological analysis through computer vision techniques. This
@@ -1124,7 +1114,7 @@ analysis techniques.
 **Validation Criteria**: Successful capture of physiological events with sufficient quality for computer vision analysis
 and correlation with reference measurements.
 
-#### FR-003: Thermal Imaging Integration and Analysis
+#### FR-032: Thermal Imaging Integration and Analysis
 
 **Comprehensive Requirement Description**: The system must integrate thermal imaging capabilities that enable
 non-contact detection of temperature variations associated with vascular responses and autonomic nervous system
@@ -1156,7 +1146,7 @@ modalities but is not absolutely essential for basic system operation.
 **Validation Criteria**: Demonstrated correlation between thermal measurements and known physiological responses with
 accuracy meeting research standards.
 
-#### FR-004: Reference GSR Measurement Integration
+#### FR-033: Reference GSR Measurement Integration
 
 **Comprehensive Requirement Description**: The system must integrate traditional contact-based GSR sensors to provide
 ground truth measurements essential for machine learning model training, validation, and comparative analysis. This
