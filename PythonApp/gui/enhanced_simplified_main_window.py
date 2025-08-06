@@ -1616,7 +1616,8 @@ Duration: {duration:.1f} seconds""",
         self.status_bar.showMessage("Zoom out (not implemented)")
 
     def reset_zoom_real(self):
-        """Reset zoom (not implemented)")
+        """Reset zoom."""
+        self.status_bar.showMessage("Reset zoom (not implemented)")
 
     def show_device_manager_real(self):
         """Show device manager."""
@@ -1675,7 +1676,7 @@ S - Stop Recording
 
     def show_about_real(self):
         """Show about dialog."""
-        about_text = """Multi-Sensor Recording System
+        about_text = '''Multi-Sensor Recording System
 Enhanced Simplified Interface
 
 Version: 1.0.0
@@ -1690,7 +1691,7 @@ Features:
 - Calibration tools
 - Data export and analysis
 - Advanced file management
-"""
+'''
         QMessageBox.about(self, "About", about_text)
         self.status_bar.showMessage("About dialog displayed")
 
