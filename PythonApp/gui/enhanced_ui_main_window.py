@@ -372,10 +372,10 @@ class EnhancedMainWindow(QMainWindow):
         self.preview_label.setStyleSheet(
             """
             QLabel {
-                border: 2px dashed
-                background-color:
+                border: 2px dashed #d2d0ce;
+                background-color: #f3f2f1;
                 font-size: 16px;
-                color:
+                color: #605e5c;
                 border-radius: 4px;
             }
         """
