@@ -24,7 +24,6 @@ from .pc_server import (
     StopRecordCommand,
 )
 
-
 @dataclass
 class AndroidDevice:
     device_id: str
@@ -43,7 +42,6 @@ class AndroidDevice:
     pending_files: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     transfer_progress: Dict[str, float] = field(default_factory=dict)
 
-
 @dataclass
 class ShimmerDataSample:
     timestamp: float
@@ -52,7 +50,6 @@ class ShimmerDataSample:
     sensor_values: Dict[str, float]
     session_id: Optional[str] = None
     raw_message: Optional[SensorDataMessage] = None
-
 
 @dataclass
 class SessionInfo:
@@ -63,7 +60,6 @@ class SessionInfo:
     shimmer_devices: Set[str] = field(default_factory=set)
     data_samples: int = 0
     files_collected: Dict[str, List[str]] = field(default_factory=dict)
-
 
 class AndroidDeviceManager:
 
@@ -512,7 +508,6 @@ class AndroidDeviceManager:
             except Exception as e:
                 self.logger.error(f"Error in data processing loop: {e}")
                 time.sleep(5.0)
-
 
 if __name__ == "__main__":
     logging.basicConfig(

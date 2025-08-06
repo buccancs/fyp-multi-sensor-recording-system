@@ -138,18 +138,8 @@ constructor(
                 } finally {
                     cameraLock.release()
                 }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: SecurityException) {
-                logger.error("Security exception during camera initialization - check permissions", e)
-                cleanup()
-                false
-            } catch (e: IllegalStateException) {
-                logger.error("Invalid camera state during initialization", e)
-                cleanup()
-                false
-            } catch (e: RuntimeException) {
-                logger.error("Runtime error during camera initialization", e)
+            } catch (e: Exception) {
+                logger.error("Failed to initialize CameraRecorder", e)
                 cleanup()
                 false
             }
@@ -224,19 +214,9 @@ constructor(
                         try {
                             mediaRecorder?.start()
                             logger.info("Video recording started")
-                        } catch (e: CancellationException) {
-                            throw e
-                        } catch (e: IllegalStateException) {
-                            sessionInfo.markError("Invalid state during video recording start: ${e.message}")
-                            logger.error("Invalid state starting video recording", e)
-                            return@withContext null
-                        } catch (e: IOException) {
-                            sessionInfo.markError("IO error during video recording start: ${e.message}")
-                            logger.error("IO error starting video recording", e)
-                            return@withContext null
-                        } catch (e: RuntimeException) {
+                        } catch (e: Exception) {
                             sessionInfo.markError("Failed to start video recording: ${e.message}")
-                            logger.error("Runtime error starting video recording", e)
+                            logger.error("Failed to start video recording", e)
                             return@withContext null
                         }
                     }
@@ -250,22 +230,8 @@ constructor(
                 } finally {
                     cameraLock.release()
                 }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: SecurityException) {
-                logger.error("Security exception starting camera session - check permissions", e)
-                stopSession()
-                null
-            } catch (e: IllegalStateException) {
-                logger.error("Invalid state starting camera session", e)
-                stopSession()
-                null
-            } catch (e: IOException) {
-                logger.error("IO error starting camera session", e)
-                stopSession()
-                null
-            } catch (e: RuntimeException) {
-                logger.error("Runtime error starting camera session", e)
+            } catch (e: Exception) {
+                logger.error("Failed to start camera session", e)
                 stopSession()
                 null
             }
@@ -948,7 +914,6 @@ constructor(
                 MediaRecorder()
             }.apply {
                 setVideoSource(MediaRecorder.VideoSource.SURFACE)
-
 
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setOutputFile(videoFile.absolutePath)

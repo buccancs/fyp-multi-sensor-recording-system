@@ -1,6 +1,5 @@
 package com.multisensor.recording.recording
 
-
 data class DataQualityMetrics(
     val deviceId: String,
     val samplesAnalyzed: Int,

@@ -332,7 +332,6 @@ class AnalyticsManager @Inject constructor(
     }
 }
 
-
 data class SessionMetrics(
     val recordingCount: Int = 0,
     val totalDataSizeMB: Double = 0.0,
@@ -412,7 +411,6 @@ data class AnalyticsEvent(
         put("session_id", sessionId)
     }
 }
-
 
 interface AnalyticsEventType {
     val eventName: String

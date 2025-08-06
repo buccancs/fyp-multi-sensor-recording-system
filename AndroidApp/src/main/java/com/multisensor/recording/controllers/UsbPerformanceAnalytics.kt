@@ -237,7 +237,6 @@ class UsbPerformanceAnalytics {
         )
     }
 
-
     private fun calculateTrimmedMean(values: List<Long>, trimRatio: Double): Double {
         if (values.isEmpty()) return 0.0
 

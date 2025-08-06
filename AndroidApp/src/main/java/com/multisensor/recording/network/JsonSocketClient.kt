@@ -3,6 +3,7 @@ package com.multisensor.recording.network
 import android.annotation.SuppressLint
 import android.os.Build
 import com.multisensor.recording.util.Logger
+import javax.inject.Singleton
 import kotlinx.coroutines.*
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream

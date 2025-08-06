@@ -70,7 +70,6 @@ class CalibrationControllerTest {
         println("[DEBUG_LOG] CalibrationControllerTest teardown complete")
     }
 
-
     @Test
     fun testInitialization() {
         println("[DEBUG_LOG] Testing CalibrationController initialization")
@@ -93,7 +92,6 @@ class CalibrationControllerTest {
 
         println("[DEBUG_LOG] Set callback test passed")
     }
-
 
     @Test
     fun testSuccessfulCalibrationCapture() = runTest {
@@ -203,7 +201,6 @@ class CalibrationControllerTest {
         println("[DEBUG_LOG] Calibration capture exception test passed")
     }
 
-
     @Test
     fun testFlashSyncTest() = runTest {
         println("[DEBUG_LOG] Testing flash sync test")
@@ -287,7 +284,6 @@ class CalibrationControllerTest {
         println("[DEBUG_LOG] Clock sync test failure passed")
     }
 
-
     @Test
     fun testCalibrationHistoryPersistence() {
         println("[DEBUG_LOG] Testing calibration history persistence")
@@ -304,7 +300,6 @@ class CalibrationControllerTest {
 
         println("[DEBUG_LOG] Calibration history persistence test passed")
     }
-
 
     @Test
     fun testSyncValidationForCalibration() {
@@ -332,7 +327,6 @@ class CalibrationControllerTest {
         println("[DEBUG_LOG] Sync statistics test passed")
     }
 
-
     @Test
     fun testStateReset() {
         println("[DEBUG_LOG] Testing state reset")
@@ -354,7 +348,6 @@ class CalibrationControllerTest {
 
         println("[DEBUG_LOG] Cleanup test passed")
     }
-
 
     @Test
     fun testShowSyncStatus() {
@@ -415,7 +408,6 @@ class CalibrationControllerTest {
         println("[DEBUG_LOG] Get calibration status test passed")
     }
 
-
     @Test
     fun testScreenFlashFeedback() = runTest {
         println("[DEBUG_LOG] Testing screen flash feedback")
@@ -452,7 +444,6 @@ class CalibrationControllerTest {
 
         println("[DEBUG_LOG] Screen flash feedback test passed")
     }
-
 
     @Test
     fun testCalibrationWithContextAccessIssue() = runTest {
@@ -535,7 +526,6 @@ class CalibrationControllerTest {
 
         println("[DEBUG_LOG] Multiple concurrent calibrations test passed")
     }
-
 
     @Test
     fun testAdvancedQualityAssessment() = runTest {

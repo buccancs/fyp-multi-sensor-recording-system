@@ -1,11 +1,10 @@
-#!/usr/bin/env python3
+
 """Simple test to debug the evaluation suite."""
 
 import asyncio
 import sys
 from pathlib import Path
 
-# Add the evaluation suite to Python path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from evaluation_suite.foundation.pc_tests import CalibrationSystemTest
@@ -13,18 +12,15 @@ from evaluation_suite.framework.test_results import TestResult
 
 async def test_simple():
     """Test a single component to see what happens."""
-    
-    # Create test instance
+
     test = CalibrationSystemTest(
         name="simple_calibration_test",
         description="Simple test to debug issues"
     )
-    
-    # Setup test environment
+
     test_env = {}
     await test.setup(test_env)
-    
-    # Execute test
+
     try:
         result = await test.execute(test_env)
         print(f"Test result: {result}")

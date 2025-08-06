@@ -43,7 +43,6 @@ class ShimmerErrorHandlerTest {
         clearAllMocks()
     }
 
-
     @Test
     fun `classifyError should identify connection timeout`() {
         val errorMessage = "Connection timed out after 30 seconds"
@@ -96,7 +95,6 @@ class ShimmerErrorHandlerTest {
         assertEquals(ShimmerErrorHandler.ShimmerErrorType.UNKNOWN_ERROR, errorType)
     }
 
-
     @Test
     fun `getErrorHandlingStrategy should return retry strategy for connection timeout`() {
         val errorType = ShimmerErrorHandler.ShimmerErrorType.CONNECTION_TIMEOUT
@@ -139,7 +137,6 @@ class ShimmerErrorHandlerTest {
 
         assertTrue(strategy.shouldRetry)
     }
-
 
     @Test
     fun `handleError should attempt retry for retryable errors`() = runTest {
@@ -234,7 +231,6 @@ class ShimmerErrorHandlerTest {
         assertTrue(finalFailureCalled)
     }
 
-
     @Test
     fun `checkDeviceHealth should identify low battery`() = runTest {
         val deviceState = createTestDeviceState(batteryLevel = 15)
@@ -298,7 +294,6 @@ class ShimmerErrorHandlerTest {
         assertTrue(recommendations.isEmpty())
     }
 
-
     @Test
     fun `generateDiagnosticReport should include device information`() = runTest {
         val deviceState = createTestDeviceState()
@@ -335,7 +330,6 @@ class ShimmerErrorHandlerTest {
         assertTrue(report.contains("Battery level is low"))
     }
 
-
     @Test
     fun `resetErrorState should clear error state`() = runTest {
         shimmerErrorHandler.resetErrorState(testDeviceAddress)
@@ -343,7 +337,6 @@ class ShimmerErrorHandlerTest {
         coVerify { mockRepository.getDeviceState(testDeviceAddress) }
         coVerify { mockRepository.saveDeviceState(any()) }
     }
-
 
     private fun createTestDeviceState(
         batteryLevel: Int = 50,

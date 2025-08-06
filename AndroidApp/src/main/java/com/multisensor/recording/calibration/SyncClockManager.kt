@@ -211,7 +211,6 @@ constructor(
         return true
     }
 
-
     private suspend fun performNTPStyleSync(pcTimestamp: Long): SyncResult {
         return try {
             val t1 = System.currentTimeMillis()

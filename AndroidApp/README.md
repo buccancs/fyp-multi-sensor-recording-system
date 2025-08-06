@@ -28,6 +28,8 @@ A sophisticated Android application for synchronized multi-sensor data collectio
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Features](#features)
+  - [User Experience & Onboarding](#user-experience--onboarding)
+  - [Core Recording Capabilities](#core-recording-capabilities)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
@@ -200,6 +202,96 @@ sequenceDiagram
 ```
 
 ## Features
+
+### User Experience & Onboarding
+
+The Multi-Sensor Android Application prioritizes user accessibility and provides a comprehensive onboarding experience designed to reduce user confusion and ensure proper system setup for research-grade data collection.
+
+#### Interactive Onboarding System
+The application implements a modern onboarding flow using AndroidX ViewPager2 and Material Design 3 components:
+
+```kotlin
+@AndroidEntryPoint
+class OnboardingActivity : AppCompatActivity() {
+    private val requiredPermissions = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_CONNECT
+    )
+    
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        updatePermissionStatus()
+    }
+}
+```
+
+**Onboarding Features:**
+- **📱 3-Page Tutorial System**: Progressive introduction to app capabilities and setup requirements
+- **🔐 Smart Permission Management**: Modern ActivityResultContracts with educational explanations
+- **💾 First-Launch Detection**: SharedPreferences-based tracking prevents onboarding repetition
+- **📋 Setup Guidance**: Step-by-step PC controller configuration and Wi-Fi network requirements
+- **📱 Responsive Design**: Tablet-optimized layouts for screens ≥600dp wide
+
+#### Accessibility & Inclusive Design
+The application implements comprehensive accessibility features following WCAG 2.1 AA guidelines [W3C2018]:
+
+**Accessibility Features:**
+- **♿ Screen Reader Support**: Comprehensive content descriptions for all interactive elements
+- **📏 Scalable Typography**: Proper text scaling using `sp` units for system accessibility settings
+- **👆 Touch Accessibility**: Minimum 48dp touch targets for enhanced usability
+- **🎨 High Contrast Support**: Material Design 3 color system ensuring 4.5:1 contrast ratios
+- **⌨️ Keyboard Navigation**: Proper focus ordering and keyboard accessibility
+
+```xml
+<!-- Example accessibility implementation -->
+<ImageView
+    android:id="@+id/cameraStatusIcon"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:contentDescription="Camera status indicator showing connection state"
+    android:src="@drawable/ic_videocam"
+    app:tint="@color/statusIndicatorConnected" />
+```
+
+#### Real-Time Sensor Status Interface
+The recording interface provides comprehensive real-time feedback on sensor connectivity and system status:
+
+**Status Dashboard Features:**
+- **📊 Visual Status Cards**: Four dedicated indicators for Camera, Thermal, GSR, and PC Controller
+- **🟢🔴 Color-Coded Feedback**: Immediate visual indication of connection states
+- **⚡ Live Updates**: Automatic status refresh based on actual sensor connections
+- **📍 Detailed Information**: Connection quality, data rates, and error indicators
+
+```xml
+<!-- Sensor status implementation -->
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+        
+        <!-- Camera, Thermal, GSR, PC Controller status indicators -->
+        
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+```
+
+#### Enhanced User Experience Features
+- **🔒 Orientation Lock**: Prevents camera resource conflicts during active recording sessions
+- **🧭 Clean Navigation**: Disabled non-functional menu items instead of confusing "Coming Soon" messages
+- **🔄 State Preservation**: Proper UI state maintenance during configuration changes
+- **📱 Responsive Layouts**: Adaptive design for various screen sizes and orientations
 
 ### Core Recording Capabilities
 
