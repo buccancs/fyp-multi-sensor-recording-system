@@ -1,0 +1,26 @@
+{
+  "test_id": "endurance_20250806_065958",
+  "start_time": "2025-08-06 06:59:58.344469",
+  "end_time": "2025-08-06 07:00:28.347909",
+  "duration_hours": 0.00833428888888889,
+  "success": true,
+  "total_measurements": 1,
+  "average_cpu_percent": 0.0,
+  "peak_memory_mb": 62.2578125,
+  "memory_growth_mb": 0,
+  "memory_leak_detected": false,
+  "cpu_degradation_percent": 0,
+  "memory_degradation_percent": 0.0,
+  "response_time_degradation_percent": 0,
+  "process_crashes": 0,
+  "unexpected_restarts": 0,
+  "file_descriptor_leaks": 0,
+  "thread_leaks": 0,
+  "total_errors": 0,
+  "error_categories": {},
+  "recommendations": [
+    "System performed well during endurance testing. Continue monitoring performance in production environments."
+  ],
+  "detailed_metrics_file": "performance_reports/endurance_20250806_065958_detailed_metrics.json",
+  "memory_snapshots_file": null
+}
