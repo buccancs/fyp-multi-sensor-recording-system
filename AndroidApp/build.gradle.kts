@@ -128,8 +128,6 @@ android {
                 it.maxHeapSize = "2048m"
                 it.useJUnitPlatform {
                     includeEngines("junit-jupiter", "junit-vintage", "kotest")
-                    includeTags("unit", "integration", "performance")
-                    excludeTags("manual", "stress")
                 }
                 it.systemProperty("robolectric.useWindowsCompatibleTempDir", "true")
                 it.reports.html.required.set(true)

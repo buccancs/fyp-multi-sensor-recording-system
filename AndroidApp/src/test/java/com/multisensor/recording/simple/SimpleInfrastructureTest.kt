@@ -1,7 +1,7 @@
 package com.multisensor.recording.simple
 
 import com.google.common.truth.Truth.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * Simple test to verify test infrastructure is working
