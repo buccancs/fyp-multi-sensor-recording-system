@@ -64,8 +64,19 @@ constructor(
                         logger.warning("Received unsupported command: ${message.type}")
                     }
                 }
-            } catch (e: Exception) {
-                logger.error("Error processing command: ${message.type}", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                logger.error("IO error processing command: ${message.type}", e)
+                jsonSocketClient?.sendAck(message.type, false, "Network error: ${e.message}")
+            } catch (e: SecurityException) {
+                logger.error("Security exception processing command: ${message.type}", e)
+                jsonSocketClient?.sendAck(message.type, false, "Permission error: ${e.message}")
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state processing command: ${message.type}", e)
+                jsonSocketClient?.sendAck(message.type, false, "State error: ${e.message}")
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error processing command: ${message.type}", e)
                 jsonSocketClient?.sendAck(message.type, false, "Processing error: ${e.message}")
             }
         }
@@ -104,8 +115,16 @@ constructor(
             sendStatusUpdate()
 
             logger.info("Recording started successfully: ${command.session_id}")
-        } catch (e: Exception) {
-            logger.error("Failed to start recording", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Security exception starting recording - check permissions", e)
+            jsonSocketClient?.sendAck("start_record", false, "Permission error: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state starting recording", e)
+            jsonSocketClient?.sendAck("start_record", false, "Service state error: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error starting recording", e)
             jsonSocketClient?.sendAck("start_record", false, "Failed to start recording: ${e.message}")
         }
     }
@@ -135,8 +154,16 @@ constructor(
             sendStatusUpdate()
 
             logger.info("Recording stopped successfully")
-        } catch (e: Exception) {
-            logger.error("Failed to stop recording", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Security exception stopping recording - check permissions", e)
+            jsonSocketClient?.sendAck("stop_record", false, "Permission error: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state stopping recording", e)
+            jsonSocketClient?.sendAck("stop_record", false, "Service state error: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error stopping recording", e)
             jsonSocketClient?.sendAck("stop_record", false, "Failed to stop recording: ${e.message}")
         }
     }
