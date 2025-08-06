@@ -1,0 +1,564 @@
+{
+  "report_timestamp": "2025-08-06T07:05:21.193154",
+  "diversity_analysis": {
+    "total_devices": 3,
+    "tier_distribution": {
+      "distribution": {
+        "low_end": 1,
+        "high_end": 2
+      },
+      "average_scores": {
+        "low_end": 28.45,
+        "high_end": 69.25999999999999
+      }
+    },
+    "performance_analysis": {
+      "low_end": [
+        {
+          "device": "Budget Phone A",
+          "overall_grade": "D",
+          "avg_throughput": 27.363514285714285,
+          "avg_cpu_usage": 55.80571428571429,
+          "avg_success_rate": 0.9081142857142857
+        }
+      ],
+      "high_end": [
+        {
+          "device": "Mid-Range Phone B",
+          "overall_grade": "D",
+          "avg_throughput": 77.37984685714287,
+          "avg_cpu_usage": 48.668571428571425,
+          "avg_success_rate": 0.94
+        },
+        {
+          "device": "Flagship Phone C",
+          "overall_grade": "C",
+          "avg_throughput": 114.87599714285714,
+          "avg_cpu_usage": 44.114285714285714,
+          "avg_success_rate": 0.9685714285714285
+        }
+      ]
+    },
+    "category_analysis": {
+      "cpu_intensive": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "D",
+            "throughput": 5.04,
+            "success_rate": 0.85
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 19.360000000000003,
+            "success_rate": 0.96
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 26.400000000000002,
+            "success_rate": 0.96
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 16.933333333333334,
+          "min_throughput": 5.04,
+          "max_throughput": 26.400000000000002,
+          "avg_success_rate": 0.9233333333333333,
+          "performance_variance": 10.884802861482305
+        }
+      },
+      "memory_intensive": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "D",
+            "throughput": 25.6,
+            "success_rate": 0.8768
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 50.0,
+            "success_rate": 0.9500000000000001
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 50.0,
+            "success_rate": 0.9500000000000001
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 41.86666666666667,
+          "min_throughput": 25.6,
+          "max_throughput": 50.0,
+          "avg_success_rate": 0.9256000000000001,
+          "performance_variance": 14.087346568226868
+        }
+      },
+      "camera_processing": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "D",
+            "throughput": 5.5296,
+            "success_rate": 0.96
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "C",
+            "throughput": 106.748928,
+            "success_rate": 1.0
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 97.04448000000002,
+            "success_rate": 1.0
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 69.774336,
+          "min_throughput": 5.5296,
+          "max_throughput": 106.748928,
+          "avg_success_rate": 0.9866666666666667,
+          "performance_variance": 55.848756973888406
+        }
+      },
+      "thermal_processing": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "F",
+            "throughput": 5.0,
+            "success_rate": 0.75
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "F",
+            "throughput": 5.0,
+            "success_rate": 0.75
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 20.0,
+            "success_rate": 0.95
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 10.0,
+          "min_throughput": 5.0,
+          "max_throughput": 20.0,
+          "avg_success_rate": 0.8166666666666667,
+          "performance_variance": 8.660254037844387
+        }
+      },
+      "network_throughput": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "C",
+            "throughput": 50.0,
+            "success_rate": 0.95
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "C",
+            "throughput": 110.00000000000001,
+            "success_rate": 0.95
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "C",
+            "throughput": 110.00000000000001,
+            "success_rate": 0.95
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 90.00000000000001,
+          "min_throughput": 50.0,
+          "max_throughput": 110.00000000000001,
+          "avg_success_rate": 0.95,
+          "performance_variance": 34.641016151377556
+        }
+      },
+      "storage_io": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "C",
+            "throughput": 100.0,
+            "success_rate": 0.98
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "B",
+            "throughput": 250.0,
+            "success_rate": 0.98
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "A",
+            "throughput": 500.0,
+            "success_rate": 0.98
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 283.3333333333333,
+          "min_throughput": 100.0,
+          "max_throughput": 500.0,
+          "avg_success_rate": 0.98,
+          "performance_variance": 202.07259421636903
+        }
+      },
+      "battery_efficiency": {
+        "results": [
+          {
+            "device": "Budget Phone A",
+            "tier": "low_end",
+            "grade": "D",
+            "throughput": 0.375,
+            "success_rate": 0.99
+          },
+          {
+            "device": "Mid-Range Phone B",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 0.55,
+            "success_rate": 0.99
+          },
+          {
+            "device": "Flagship Phone C",
+            "tier": "high_end",
+            "grade": "D",
+            "throughput": 0.6875,
+            "success_rate": 0.99
+          }
+        ],
+        "statistics": {
+          "avg_throughput": 0.5375,
+          "min_throughput": 0.375,
+          "max_throughput": 0.6875,
+          "avg_success_rate": 0.99,
+          "performance_variance": 0.15662455107677084
+        }
+      }
+    },
+    "optimization_recommendations": [
+      "High percentage of low-end devices detected. Implement conservative default settings and provide performance optimization options.",
+      "High performance variance detected in: camera_processing, storage_io. Implement adaptive quality settings based on device capabilities."
+    ],
+    "compatibility_matrix": {
+      "low_end": {
+        "cpu_intensive": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D"
+          ]
+        },
+        "memory_intensive": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D"
+          ]
+        },
+        "camera_processing": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D"
+          ]
+        },
+        "thermal_processing": {
+          "compatibility": "Poor",
+          "average_grade_score": 0,
+          "sample_grades": [
+            "F"
+          ]
+        },
+        "network_throughput": {
+          "compatibility": "Good",
+          "average_grade_score": 2,
+          "sample_grades": [
+            "C"
+          ]
+        },
+        "storage_io": {
+          "compatibility": "Good",
+          "average_grade_score": 2,
+          "sample_grades": [
+            "C"
+          ]
+        },
+        "battery_efficiency": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D"
+          ]
+        }
+      },
+      "high_end": {
+        "cpu_intensive": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D",
+            "D"
+          ]
+        },
+        "memory_intensive": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D",
+            "D"
+          ]
+        },
+        "camera_processing": {
+          "compatibility": "Fair",
+          "average_grade_score": 1.5,
+          "sample_grades": [
+            "C",
+            "D"
+          ]
+        },
+        "thermal_processing": {
+          "compatibility": "Poor",
+          "average_grade_score": 0.5,
+          "sample_grades": [
+            "F",
+            "D"
+          ]
+        },
+        "network_throughput": {
+          "compatibility": "Good",
+          "average_grade_score": 2,
+          "sample_grades": [
+            "C",
+            "C"
+          ]
+        },
+        "storage_io": {
+          "compatibility": "Excellent",
+          "average_grade_score": 3.5,
+          "sample_grades": [
+            "B",
+            "A"
+          ]
+        },
+        "battery_efficiency": {
+          "compatibility": "Fair",
+          "average_grade_score": 1,
+          "sample_grades": [
+            "D",
+            "D"
+          ]
+        }
+      }
+    }
+  },
+  "device_profiles": [
+    {
+      "device_model": "Budget Phone A",
+      "tier": "low_end",
+      "performance_score": 28.45,
+      "overall_grade": "D",
+      "test_results": [
+        {
+          "category": "cpu_intensive",
+          "grade": "D",
+          "throughput": 5.04,
+          "success_rate": 0.85
+        },
+        {
+          "category": "memory_intensive",
+          "grade": "D",
+          "throughput": 25.6,
+          "success_rate": 0.8768
+        },
+        {
+          "category": "camera_processing",
+          "grade": "D",
+          "throughput": 5.5296,
+          "success_rate": 0.96
+        },
+        {
+          "category": "thermal_processing",
+          "grade": "F",
+          "throughput": 5.0,
+          "success_rate": 0.75
+        },
+        {
+          "category": "network_throughput",
+          "grade": "C",
+          "throughput": 50.0,
+          "success_rate": 0.95
+        },
+        {
+          "category": "storage_io",
+          "grade": "C",
+          "throughput": 100.0,
+          "success_rate": 0.98
+        },
+        {
+          "category": "battery_efficiency",
+          "grade": "D",
+          "throughput": 0.375,
+          "success_rate": 0.99
+        }
+      ],
+      "optimization_recommendations": [
+        "Use conservative quality settings to maintain performance",
+        "Enable aggressive frame dropping to prevent memory overflow",
+        "Reduce recording resolution to 720p or lower",
+        "Disable real-time preview to save CPU resources",
+        "Use lower camera frame rates (15 FPS or less)",
+        "CPU performance is limited - reduce processing complexity",
+        "Memory performance is limited - enable aggressive cleanup and reduce buffers",
+        "Camera processing performance is poor - reduce resolution or frame rate",
+        "Moderate RAM available - monitor memory usage closely"
+      ]
+    },
+    {
+      "device_model": "Mid-Range Phone B",
+      "tier": "high_end",
+      "performance_score": 65.22,
+      "overall_grade": "D",
+      "test_results": [
+        {
+          "category": "cpu_intensive",
+          "grade": "D",
+          "throughput": 19.360000000000003,
+          "success_rate": 0.96
+        },
+        {
+          "category": "memory_intensive",
+          "grade": "D",
+          "throughput": 50.0,
+          "success_rate": 0.9500000000000001
+        },
+        {
+          "category": "camera_processing",
+          "grade": "C",
+          "throughput": 106.748928,
+          "success_rate": 1.0
+        },
+        {
+          "category": "thermal_processing",
+          "grade": "F",
+          "throughput": 5.0,
+          "success_rate": 0.75
+        },
+        {
+          "category": "network_throughput",
+          "grade": "C",
+          "throughput": 110.00000000000001,
+          "success_rate": 0.95
+        },
+        {
+          "category": "storage_io",
+          "grade": "B",
+          "throughput": 250.0,
+          "success_rate": 0.98
+        },
+        {
+          "category": "battery_efficiency",
+          "grade": "D",
+          "throughput": 0.55,
+          "success_rate": 0.99
+        }
+      ],
+      "optimization_recommendations": [
+        "Can use high-quality settings for best results",
+        "Enable hardware acceleration where available",
+        "Consider 4K recording if supported",
+        "Use advanced processing features",
+        "CPU performance is limited - reduce processing complexity",
+        "Memory performance is limited - enable aggressive cleanup and reduce buffers"
+      ]
+    },
+    {
+      "device_model": "Flagship Phone C",
+      "tier": "high_end",
+      "performance_score": 73.3,
+      "overall_grade": "C",
+      "test_results": [
+        {
+          "category": "cpu_intensive",
+          "grade": "D",
+          "throughput": 26.400000000000002,
+          "success_rate": 0.96
+        },
+        {
+          "category": "memory_intensive",
+          "grade": "D",
+          "throughput": 50.0,
+          "success_rate": 0.9500000000000001
+        },
+        {
+          "category": "camera_processing",
+          "grade": "D",
+          "throughput": 97.04448000000002,
+          "success_rate": 1.0
+        },
+        {
+          "category": "thermal_processing",
+          "grade": "D",
+          "throughput": 20.0,
+          "success_rate": 0.95
+        },
+        {
+          "category": "network_throughput",
+          "grade": "C",
+          "throughput": 110.00000000000001,
+          "success_rate": 0.95
+        },
+        {
+          "category": "storage_io",
+          "grade": "A",
+          "throughput": 500.0,
+          "success_rate": 0.98
+        },
+        {
+          "category": "battery_efficiency",
+          "grade": "D",
+          "throughput": 0.6875,
+          "success_rate": 0.99
+        }
+      ],
+      "optimization_recommendations": [
+        "Can use high-quality settings for best results",
+        "Enable hardware acceleration where available",
+        "Consider 4K recording if supported",
+        "Use advanced processing features",
+        "CPU performance is limited - reduce processing complexity",
+        "Memory performance is limited - enable aggressive cleanup and reduce buffers",
+        "Camera processing performance is poor - reduce resolution or frame rate"
+      ]
+    }
+  ]
+}

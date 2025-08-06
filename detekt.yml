@@ -7,6 +7,27 @@ build:
     style: 1
     comments: 1
 
+# Custom Architecture Enforcement Rules
+# Maintains strict separation of concerns following clean MVVM architecture
+custom-rules:
+  active: true
+  # Architecture layer violations will be flagged as issues
+  ForbiddenArchitectureImport:
+    active: true
+    # Prevent UI layer from importing network/service layers directly
+    includes: [ '**/ui/**' ]
+    excludes: [ '**/test/**', '**/androidTest/**' ]
+    forbiddenImports: 
+      - 'com.multisensor.recording.network'
+      - 'com.multisensor.recording.service'
+    # Prevent network/service layers from importing UI layer
+  ForbiddenReverseImport:
+    active: true
+    includes: [ '**/network/**', '**/service/**' ]
+    excludes: [ '**/test/**', '**/androidTest/**' ]
+    forbiddenImports:
+      - 'com.multisensor.recording.ui'
+
 config:
   validation: true
   warningsAsErrors: false
@@ -547,9 +568,19 @@ style:
       - 'STOPSHIP:'
     allowedPatterns: ''
   ForbiddenImport:
-    active: false
-    imports: [ ]
+    active: true
+    imports: 
+      # Architecture enforcement - UI layer should not directly import service/network layers
+      - 'com.multisensor.recording.network.**'
+      - 'com.multisensor.recording.service.**'
+      - 'android.util.Log'  # Use centralized logging utility instead
     forbiddenPatterns: ''
+    # Exclude specific packages where these imports are allowed
+    excludes: 
+      - '**/network/**'
+      - '**/service/**'
+      - '**/util/**'
+      - '**/di/**'
   ForbiddenMethodCall:
     active: false
     methods:

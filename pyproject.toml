@@ -192,6 +192,7 @@ markers = [
     "unit: marks tests as unit tests",
     "performance: marks tests as performance benchmarks",
     "security: marks tests as security validation tests",
+    "privacy: marks tests as privacy compliance tests",
     "gui: marks tests that require GUI components",
     "network: marks tests that require network connectivity",
     "hardware: marks tests that require physical hardware",
