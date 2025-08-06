@@ -4532,7 +4532,6 @@ class DataGenerator:
             metadata={"format": "JSON", "schema_version": "1.0"},
         )
 
-    def _calculate_sha256(self, file_path: Path) -> str:
 
     def _calculate_sha256(self, file_path: Path) -> str:
         hash_sha256 = hashlib.sha256()
@@ -4761,7 +4760,6 @@ class DataIntegrityValidator:
         except Exception as e:
             return {"valid": False, "error": str(e)}
 
-    def _calculate_sha256(self, file_path: Path) -> str:
 
     def _calculate_sha256(self, file_path: Path) -> str:
         hash_sha256 = hashlib.sha256()
