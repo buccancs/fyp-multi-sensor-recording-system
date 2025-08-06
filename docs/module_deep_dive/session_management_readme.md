@@ -591,5 +591,14 @@ class SessionManagementTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi_device_synchronization_readme.md)
-and [Networking Protocol](../networking_protocol_readme.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Networking Protocol](networking_protocol_readme.md) documentation.*
+
+## References
+
+[Cacioppo2007] Cacioppo, J. T., Tassinary, L. G., & Berntson, G. G. (Eds.). (2007). *Handbook of Psychophysiology* (3rd ed.). Cambridge University Press.
+
+[DataCite2019] DataCite Metadata Working Group. (2019). *DataCite Metadata Schema Documentation for the Publication and Citation of Research Data* (Version 4.3). DataCite e.V.
+
+[Wilkinson2016] Wilkinson, M. D., Dumontier, M., Aalbersberg, I. J., Appleton, G., Axton, M., Baak, A., ... & Mons, B. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3(1), 1-9.
+
+[Wilson2014] Wilson, G., Aruliah, D. A., Brown, C. T., Hong, N. P. C., Davis, M., Guy, R. T., ... & Wilson, P. (2014). Best practices for scientific computing. *PLOS Biology*, 12(1), e1001745.

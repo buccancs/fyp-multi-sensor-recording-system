@@ -1240,13 +1240,13 @@ def monitor_resources():
 
 **Development Resources**:
 
-- [Testing Framework](../testing-framework/README.md)
-- [Calibration System](../calibration-system/README.md)
-- [Session Management](../session-management/README.md)
+- [Testing Framework](testing_framework_readme.md)
+- [Calibration System](calibration_system_readme.md)  
+- [Session Management](session_management_readme.md)
 
 ---
 
-*This comprehensive documentation consolidates all Python Desktop Controller information from multiple sources into a single authoritative reference. For related modules, see the [Android Mobile Application](../android-mobile-application/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*This comprehensive documentation consolidates all Python Desktop Controller information from multiple sources into a single authoritative reference. For related modules, see the [Android Mobile Application](android_mobile_application_readme.md) and [Multi-Device Synchronization](multi_device_synchronization_readme.md) documentation.*
 
 ## References
 

@@ -553,7 +553,7 @@ class NetworkProtocolTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md) and [Session Management](../session-management/README.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Session Management](session_management_readme.md) documentation.*
 
 ## References
 

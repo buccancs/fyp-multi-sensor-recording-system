@@ -1186,7 +1186,7 @@ python sync_network_test.py \
 
 ---
 
-*This comprehensive documentation consolidates all Multi-Device Synchronization information from multiple sources into a single authoritative reference. For related modules, see the [Networking Protocol](../networking-protocol/README.md) and [Session Management](../session-management/README.md) documentation.*
+*This comprehensive documentation consolidates all Multi-Device Synchronization information from multiple sources into a single authoritative reference. For related modules, see the [Networking Protocol](networking_protocol_readme.md) and [Session Management](session_management_readme.md) documentation.*
 
 ## References
 

@@ -1229,7 +1229,7 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 
 ---
 
-*This comprehensive documentation consolidates all Calibration System information into a single authoritative reference. For related modules, see the [Camera Recording System](../camera-recording-system/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*This comprehensive documentation consolidates all Calibration System information into a single authoritative reference. For related modules, see the [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
 
 ## References
 

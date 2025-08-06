@@ -1,33 +1,31 @@
 # Testing Framework Module
 
-The Testing Framework provides comprehensive validation and quality assurance for the Multi-Sensor Recording System,
-ensuring system reliability, performance, and data integrity across all components and integration scenarios.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Testing Categories](#testing-categories)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Continuous Integration](#continuous-integration)
-- [Quality Metrics](#quality-metrics)
-
 ## Overview
+
+The Testing Framework provides comprehensive validation and quality assurance for the Multi-Sensor Recording System, ensuring system reliability, performance, and data integrity across all components and integration scenarios. This component implements established software testing methodologies [Myers2011] adapted for research software quality assurance in multi-modal sensor systems.
+
+### Research Context and Quality Assurance Foundation
+
+The Testing Framework addresses critical quality assurance requirements for research software [Pinto2018], where system reliability directly impacts research validity and reproducibility [Wilson2014]. Modern multi-modal sensing systems require systematic validation approaches that ensure both individual component functionality and system-level integration quality.
+
+The framework implements established testing principles:
+
+- **Software Testing Theory** [Myers2011]: Systematic testing methodologies ensuring comprehensive validation coverage
+- **Research Software Quality** [Pinto2018]: Quality assurance practices specifically adapted for scientific computing applications  
+- **Test-Driven Development** [Beck2002]: Iterative development with continuous validation ensuring maintainable, reliable code
+- **Continuous Integration Principles** [Fowler2006]: Automated testing and quality monitoring for research software development
 
 ### System Role and Responsibilities
 
-The Testing Framework serves as the quality assurance backbone, providing systematic validation of all system components
-from individual units to complete end-to-end scenarios.
+The Testing Framework serves as the quality assurance backbone within the distributed PC master-controller architecture, providing systematic validation of all system components from individual units to complete end-to-end research scenarios.
 
 **Primary Functions:**
 
-- **Unit Testing**: Individual component validation
-- **Integration Testing**: Cross-component interaction testing
-- **Performance Testing**: System performance under load
-- **End-to-End Testing**: Complete workflow validation
-- **Quality Assurance**: Automated quality monitoring
+- **Unit Testing**: Individual component validation ensuring correct implementation of specified functionality with comprehensive test coverage
+- **Integration Testing**: Cross-component interaction testing validating the JSON socket protocol and multi-device coordination
+- **Performance Testing**: System performance validation under realistic load conditions ensuring research-grade data collection reliability
+- **End-to-End Testing**: Complete workflow validation simulating actual research scenarios with multi-modal sensor coordination
+- **Quality Assurance**: Automated quality monitoring with continuous assessment of system reliability and data integrity
 
 ### Testing Architecture
 
@@ -586,5 +584,16 @@ jobs:
 
 ---
 
-*For related modules, see [Session Management](../session-management/README.md)
-and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*For related modules, see [Session Management](session_management_readme.md) and [Multi-Device Synchronization](multi_device_synchronization_readme.md) documentation.*
+
+## References
+
+[Beck2002] Beck, K. (2002). *Test Driven Development: By Example*. Addison-Wesley Professional.
+
+[Fowler2006] Fowler, M., & Foemmel, M. (2006). Continuous integration. *Thought-Works*. Retrieved from https://www.martinfowler.com/articles/continuousIntegration.html
+
+[Myers2011] Myers, G. J., Sandler, C., & Badgett, T. (2011). *The Art of Software Testing* (3rd ed.). John Wiley & Sons.
+
+[Pinto2018] Pinto, G., Wiese, I., & Dias, L. F. (2018). How do scientists develop and use scientific software? In *Proceedings of the 2018 IEEE/ACM 40th International Conference on Software Engineering: Software Engineering in Society* (pp. 81-90).
+
+[Wilson2014] Wilson, G., Aruliah, D. A., Brown, C. T., Hong, N. P. C., Davis, M., Guy, R. T., ... & Wilson, P. (2014). Best practices for scientific computing. *PLOS Biology*, 12(1), e1001745.
