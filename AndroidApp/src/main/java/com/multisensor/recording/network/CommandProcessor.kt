@@ -200,9 +200,17 @@ constructor(
                 jsonSocketClient?.sendAck("capture_calibration", false, "Calibration capture failed: $errorMessage")
                 logger.error("Calibration capture failed: $errorMessage")
             }
-        } catch (e: Exception) {
-            logger.error("Failed to capture calibration", e)
-            jsonSocketClient?.sendAck("capture_calibration", false, "Calibration capture failed: ${e.message}")
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Permission error capturing calibration: ${e.message}", e)
+            jsonSocketClient?.sendAck("capture_calibration", false, "Permission error: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state capturing calibration: ${e.message}", e)
+            jsonSocketClient?.sendAck("capture_calibration", false, "Invalid state: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error capturing calibration: ${e.message}", e)
+            jsonSocketClient?.sendAck("capture_calibration", false, "Runtime error: ${e.message}")
         }
     }
 
@@ -230,9 +238,17 @@ constructor(
 
             val statusMessage = "Stimulus time processed (offset: ${timeOffset}ms)"
             jsonSocketClient?.sendAck("set_stimulus_time", true, statusMessage)
-        } catch (e: Exception) {
-            logger.error("Failed to set stimulus time", e)
-            jsonSocketClient?.sendAck("set_stimulus_time", false, "Failed to set stimulus time: ${e.message}")
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Permission error setting stimulus time: ${e.message}", e)
+            jsonSocketClient?.sendAck("set_stimulus_time", false, "Permission error: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state setting stimulus time: ${e.message}", e)
+            jsonSocketClient?.sendAck("set_stimulus_time", false, "Invalid state: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error setting stimulus time: ${e.message}", e)
+            jsonSocketClient?.sendAck("set_stimulus_time", false, "Runtime error: ${e.message}")
         }
     }
 
