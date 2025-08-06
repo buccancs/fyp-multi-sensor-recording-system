@@ -1679,7 +1679,7 @@ The session manager orchestrates complex multi-device recording sessions:
 class SessionManager:
     def __init__(self):
         self.device_coordinator = DeviceCoordinator()
-        self.sync_engine = SynchronizationEngine()
+        self.sync_engine = SessionSynchronizer()
         self.data_manager = DataManager()
         self.quality_monitor = QualityMonitor()
 
@@ -2140,7 +2140,7 @@ graph LR
 The synchronization engine maintains precise temporal alignment across all data sources:
 
 \begin{verbatim}
-class SynchronizationEngine:
+class SessionSynchronizer:
     def __init__(self):
         self.reference_clock = ReferenceClock()
         self.device_clocks = {}

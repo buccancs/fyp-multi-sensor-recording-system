@@ -1095,11 +1095,11 @@ class TestCalibrationManager:
 \paragraph{Synchronization Engine Tests}
 
 \begin{verbatim}
-class TestSynchronizationEngine:
+class TestSessionSynchronizer:
     
     @pytest.fixture
     def sync_engine(self):
-        return SynchronizationEngine()
+        return SessionSynchronizer()
     
     @pytest.fixture
     def mock_devices(self):
@@ -1321,7 +1321,7 @@ class TestNetworkCommunication:
         for latency_ms in latency_scenarios:
             with NetworkLatencySimulator(latency_ms):
                 # Perform synchronization test
-                sync_engine = SynchronizationEngine()
+                sync_engine = SessionSynchronizer()
                 devices = [MockDevice(f"device_{i}") for i in range(2)]
                 
                 result = await sync_engine.synchronize_devices(devices)

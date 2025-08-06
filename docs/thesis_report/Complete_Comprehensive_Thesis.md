@@ -5809,7 +5809,7 @@ The session manager orchestrates complex multi-device recording sessions:
 class SessionManager:
     def __init__(self):
         self.device_coordinator = DeviceCoordinator()
-        self.sync_engine = SynchronizationEngine()
+        self.sync_engine = SessionSynchronizer()
         self.data_manager = DataManager()
         self.quality_monitor = QualityMonitor()
 
@@ -6270,7 +6270,7 @@ graph LR
 The synchronization engine maintains precise temporal alignment across all data sources:
 
 ```python
-class SynchronizationEngine:
+class SessionSynchronizer:
     def __init__(self):
         self.reference_clock = ReferenceClock()
         self.device_clocks = {}
@@ -9170,11 +9170,11 @@ class TestCalibrationManager:
 #### Synchronization Engine Tests
 
 ```python
-class TestSynchronizationEngine:
+class TestSessionSynchronizer:
 
     @pytest.fixture
     def sync_engine(self):
-        return SynchronizationEngine()
+        return SessionSynchronizer()
 
     @pytest.fixture
     def mock_devices(self):
@@ -9396,7 +9396,7 @@ class TestNetworkCommunication:
         for latency_ms in latency_scenarios:
             with NetworkLatencySimulator(latency_ms):
                 # Perform synchronization test
-                sync_engine = SynchronizationEngine()
+                sync_engine = SessionSynchronizer()
                 devices = [MockDevice(f"device_{i}") for i in range(2)]
 
                 result = await sync_engine.synchronize_devices(devices)
