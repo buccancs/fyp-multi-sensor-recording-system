@@ -1,8 +1,12 @@
 # Python Desktop Controller Module
 
-The Python Desktop Controller Application serves as the central command and control hub for the Multi-Sensor Recording
-System, orchestrating device coordination, data aggregation, real-time monitoring, and post-session analysis across
-multiple sensor modalities including Android smartphones, USB webcams, thermal cameras, and physiological sensors.
+## Overview
+
+The Python Desktop Controller Application serves as the central command and control hub for the Multi-Sensor Recording System, implementing a distributed master-controller architecture for contactless GSR prediction research. This component orchestrates device coordination, real-time data aggregation, multi-modal monitoring, and post-session analysis across heterogeneous sensor platforms including Android smartphones, USB webcams, thermal cameras, and physiological sensors.
+
+### Research Context and Theoretical Foundation
+
+The controller implementation addresses fundamental challenges in distributed physiological sensing systems [Picard2001], particularly the coordination of heterogeneous sensors for psychophysiological research [Cacioppo2007]. The system architecture follows established principles of distributed systems design [Tanenbaum2006] while maintaining the offline-first recording capability essential for research-grade data collection reliability.
 
 ## Table of Contents
 
@@ -19,18 +23,16 @@ multiple sensor modalities including Android smartphones, USB webcams, thermal c
 
 ### System Role and Responsibilities
 
-The Python Desktop Controller encompasses comprehensive orchestration capabilities designed for complex multi-modal
-research environments. It serves as the master coordinator in the distributed Multi-Sensor Recording System, providing:
+The Python Desktop Controller encompasses comprehensive orchestration capabilities designed for complex multi-modal research environments. Operating as the master coordinator in the established distributed star-mesh topology, it provides centralized control while maintaining the system's offline-first recording capability.
 
 **Primary Functions:**
 
-- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal
-  sensors, and physiological monitoring equipment
-- **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status,
-  data quality, synchronization precision, and system performance
-- **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with
-  automated device configuration
-- **Data Integration and Analysis**: Comprehensive data collection coordination and post-session analysis capabilities
+- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment through standardized protocols
+- **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status, data quality, synchronization precision, and system performance metrics
+- **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with automated device configuration and temporal coordination
+- **Data Integration and Analysis**: Comprehensive data collection coordination with post-session analysis capabilities supporting research workflows
+
+**Architectural Decision Rationale**: The centralized control approach balances the need for coordinated multi-device operation with distributed resilience, following established patterns in scientific computing systems [Hey2009].
 
 ### Technology Stack
 
@@ -1244,7 +1246,14 @@ def monitor_resources():
 
 ---
 
-*This comprehensive documentation consolidates all Python Desktop Controller information from multiple sources into a
-single authoritative reference. For related modules, see
-the [Android Mobile Application](../android-mobile-application/README.md)
-and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*This comprehensive documentation consolidates all Python Desktop Controller information from multiple sources into a single authoritative reference. For related modules, see the [Android Mobile Application](../android-mobile-application/README.md) and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+
+## References
+
+[Cacioppo2007] Cacioppo, J. T., Tassinary, L. G., & Berntson, G. G. (Eds.). (2007). *Handbook of Psychophysiology* (3rd ed.). Cambridge University Press.
+
+[Hey2009] Hey, T., Tansley, S., & Tolle, K. (Eds.). (2009). *The Fourth Paradigm: Data-Intensive Scientific Discovery*. Microsoft Research.
+
+[Picard2001] Picard, R. W. (2001). *Affective Computing*. MIT Press.
+
+[Tanenbaum2006] Tanenbaum, A. S., & van Steen, M. (2006). *Distributed Systems: Principles and Paradigms* (2nd ed.). Prentice Hall.

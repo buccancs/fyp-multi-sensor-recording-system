@@ -1,35 +1,24 @@
 # Networking Protocol Module
 
-The Networking Protocol System defines the communication framework that enables coordinated operation across all devices
-in the Multi-Sensor Recording System, providing reliable message exchange, temporal synchronization, and data streaming
-capabilities between PC controllers and mobile devices.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Networking Protocol System defines the communication framework that enables coordinated operation across all devices in the Multi-Sensor Recording System for contactless GSR prediction research. This component implements a standardized message exchange protocol providing reliable communication, temporal synchronization, and data streaming capabilities between PC master controllers and distributed mobile sensor nodes.
+
+### Theoretical Foundation and Design Rationale
+
+The protocol design addresses fundamental challenges in distributed sensor networks [Akyildiz2002], particularly the coordination of heterogeneous devices with varying computational capabilities and network characteristics. The implementation follows established distributed systems principles [Lamport1978] while incorporating specific requirements for research-grade data collection including temporal precision, fault tolerance, and offline operation capability.
 
 ### System Role and Responsibilities
 
-The Networking Protocol System provides the communication backbone for the distributed Multi-Sensor Recording System,
-enabling coordination between PC controllers and Android mobile devices through standardized JSON-based messaging over
-TCP/UDP sockets.
+The Networking Protocol System provides the communication backbone for the distributed Multi-Sensor Recording System, implementing the JSON socket protocol specification that maintains consistency with the established PC master-controller, offline-first local recording architecture.
 
 **Primary Functions:**
 
-- **Reliable Message Exchange**: JSON-based command and status communication
-- **Device Discovery**: Automatic detection and registration of network devices
-- **Session Coordination**: Distributed session management and synchronization
-- **Quality Monitoring**: Network performance assessment and optimization
-- **Security Framework**: Secure communication protocols and authentication
+- **Reliable Message Exchange**: JSON-based command and status communication with guaranteed delivery semantics
+- **Device Discovery and Registration**: Automatic detection and registration of network devices using standardized protocols
+- **Session Coordination**: Distributed session management with temporal synchronization across heterogeneous sensors
+- **Quality Monitoring and Adaptation**: Network performance assessment and adaptive quality control mechanisms
+- **Security Framework**: Secure communication protocols with authentication and data integrity validation
 
 ### Protocol Stack Overview
 
@@ -564,5 +553,12 @@ class NetworkProtocolTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md)
-and [Session Management](../session-management/README.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md) and [Session Management](../session-management/README.md) documentation.*
+
+## References
+
+[Akyildiz2002] Akyildiz, I. F., Su, W., Sankarasubramaniam, Y., & Cayirci, E. (2002). Wireless sensor networks: a survey. *Computer Networks*, 38(4), 393-422.
+
+[Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. *Communications of the ACM*, 21(7), 558-565.
+
+[Tanenbaum2006] Tanenbaum, A. S., & van Steen, M. (2006). *Distributed Systems: Principles and Paradigms* (2nd ed.). Prentice Hall.

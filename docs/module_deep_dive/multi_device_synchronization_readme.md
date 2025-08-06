@@ -1,36 +1,31 @@
 # Multi-Device Synchronization Module
 
-The Multi-Device Synchronization System serves as the temporal backbone of the Multi-Sensor Recording System, ensuring
-precise temporal alignment (sub-millisecond) of data streams from all sensors across distributed devices including RGB
-cameras, thermal cameras, Shimmer sensors, and webcams.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Multi-Device Synchronization System serves as the temporal backbone of the Multi-Sensor Recording System, ensuring precise temporal alignment (sub-millisecond accuracy) of data streams from all sensors across distributed devices. This component addresses fundamental challenges in distributed temporal coordination for physiological sensing applications [Cacioppo2007], implementing proven synchronization algorithms adapted for research-grade data collection.
+
+### Theoretical Foundation and Research Context
+
+The synchronization system addresses comprehensive temporal coordination needs of heterogeneous sensor platforms in psychophysiological research environments. Modern multi-modal sensing applications require precise temporal alignment of data streams from different devices, where even minor time misalignments can compromise analysis validity [Picard2001] or lead to erroneous research conclusions.
+
+The system builds upon established distributed systems principles while addressing specific requirements of physiological data collection:
+
+- **Lamport's Logical Clocks** [Lamport1978]: Foundational event ordering principles adapted for sensor event coordination without requiring global clock consensus
+- **Cristian's Clock Synchronization Algorithm** [Cristian1989]: Network delay estimation and compensation techniques for accurate time distribution
+- **Network Time Protocol (NTP) Principles** [Mills1991]: Internet-scale clock synchronization methodologies adapted for local research network environments  
+- **IEEE 1588 Precision Time Protocol Concepts** [IEEE1588-2008]: Sub-microsecond hardware-assisted timing principles applied to software-based coordination
 
 ### System Role and Responsibilities
 
-The Multi-Device Synchronization System addresses the comprehensive temporal coordination needs of heterogeneous sensor
-platforms in research environments. Modern multi-modal sensing applications require precise temporal alignment of data
-streams from different devices, where even slight time misalignments can lead to corrupted analyses or misleading
-conclusions.
+The Multi-Device Synchronization System ensures temporal coherence across the established PC master-controller, offline-first recording architecture, providing:
 
 **Primary Functions:**
 
-- **Sub-millisecond temporal synchronization** across heterogeneous sensors and devices
-- **Coordinated recording start/stop** across distributed Android devices and PC
-- **Master clock distribution** with PC-centric authoritative time source
-- **Adaptive drift compensation** using machine learning-based prediction algorithms
-- **Quality monitoring** with continuous synchronization precision assessment
+- **Sub-millisecond temporal synchronization** across heterogeneous sensors maintaining research-grade temporal precision
+- **Coordinated recording lifecycle management** ensuring atomic start/stop operations across distributed Android devices and PC components
+- **Master clock distribution** with PC-centric authoritative time source implementing hierarchical time distribution [Mills1991]
+- **Adaptive drift compensation** using statistical prediction algorithms to maintain synchronization quality over extended recording sessions
+- **Continuous quality monitoring** with real-time synchronization precision assessment and automatic quality degradation detection
 
 ### Research Foundation
 
@@ -1191,6 +1186,18 @@ python sync_network_test.py \
 
 ---
 
-*This comprehensive documentation consolidates all Multi-Device Synchronization information from multiple sources into a
-single authoritative reference. For related modules, see the [Networking Protocol](../networking-protocol/README.md)
-and [Session Management](../session-management/README.md) documentation.*
+*This comprehensive documentation consolidates all Multi-Device Synchronization information from multiple sources into a single authoritative reference. For related modules, see the [Networking Protocol](../networking-protocol/README.md) and [Session Management](../session-management/README.md) documentation.*
+
+## References
+
+[Cacioppo2007] Cacioppo, J. T., Tassinary, L. G., & Berntson, G. G. (Eds.). (2007). *Handbook of Psychophysiology* (3rd ed.). Cambridge University Press.
+
+[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronization. *Distributed Computing*, 3(3), 146-158.
+
+[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
+
+[Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. *Communications of the ACM*, 21(7), 558-565.
+
+[Mills1991] Mills, D. L. (1991). Internet time synchronization: The network time protocol. *IEEE Transactions on Communications*, 39(10), 1482-1493.
+
+[Picard2001] Picard, R. W. (2001). *Affective Computing*. MIT Press.

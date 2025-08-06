@@ -1,34 +1,24 @@
 # Session Management Module
 
-The Session Management System provides comprehensive coordination of recording sessions across all devices and sensors
-in the Multi-Sensor Recording System, ensuring consistent data organization, temporal alignment, and quality assurance
-throughout the complete data collection lifecycle.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Session Management System provides comprehensive coordination of recording sessions across all devices and sensors in the Multi-Sensor Recording System for contactless GSR prediction research. This component ensures consistent data organization, temporal alignment, and quality assurance throughout the complete data collection lifecycle, implementing established principles of research data management [Wilkinson2016] within the distributed PC master-controller architecture.
+
+### Research Context and Theoretical Foundation
+
+Modern multi-modal physiological research requires systematic session management that maintains data integrity, temporal consistency, and experimental reproducibility [Cacioppo2007]. The session management approach addresses fundamental challenges in coordinating heterogeneous sensor platforms while ensuring compliance with research data management best practices [Wilson2014].
 
 ### System Role and Responsibilities
 
-The Session Management System serves as the central coordinator for all recording activities, managing the complete
-lifecycle from session initialization through data finalization and export.
+The Session Management System serves as the central coordinator for all recording activities within the established offline-first local recording architecture, managing the complete lifecycle from session initialization through data finalization and export.
 
 **Primary Functions:**
 
-- **Session Lifecycle Management**: Creation, execution, and finalization of recording sessions
-- **Multi-Device Coordination**: Synchronized control across all connected devices
-- **Data Organization**: Structured storage and metadata management
-- **Quality Assurance**: Real-time monitoring and validation
-- **Export Management**: Multi-format data export and analysis preparation
+- **Session Lifecycle Management**: Coordinated creation, execution, and finalization of recording sessions with atomic state transitions
+- **Multi-Device Coordination**: Synchronized control across all connected devices ensuring temporal coherence and data consistency
+- **Data Organization**: Structured storage and comprehensive metadata management following research data standards [DataCite2019]
+- **Quality Assurance**: Real-time monitoring and validation with automated quality control mechanisms
+- **Export Management**: Multi-format data export and analysis preparation supporting diverse research workflows
 
 ### Session Architecture
 
