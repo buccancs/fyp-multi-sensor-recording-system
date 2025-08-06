@@ -17,14 +17,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/**
- * Unit tests for SessionManager core functionality
- * 
- * Tests the high-priority functionality mentioned in the problem statement:
- * - Session creation and finalization
- * - Session lifecycle management
- * - Error handling in session operations
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
@@ -59,7 +51,6 @@ class SessionManagerUnitTest {
         assertThat(sessionId).isNotEmpty()
         assertThat(sessionId).startsWith("session_")
         
-        // Verify session was logged
         verify { mockLogger.info(match { it.contains("Creating new session") }) }
     }
 
@@ -94,7 +85,6 @@ class SessionManagerUnitTest {
         
         sessionManager.finalizeCurrentSession()
         
-        // Session should be finalized
         verify { mockLogger.info(match { it.contains("Finalizing session") }) }
     }
 
@@ -119,7 +109,6 @@ class SessionManagerUnitTest {
     fun `hasSufficientStorage should check available space`() = runTest {
         val hasSufficientSpace = sessionManager.hasSufficientStorage()
         
-        // Should return boolean result (true or false)
         assertThat(hasSufficientSpace is Boolean).isTrue()
     }
 
@@ -135,7 +124,7 @@ class SessionManagerUnitTest {
         val sessions = sessionManager.getAllSessions()
         
         assertThat(sessions).isNotNull()
-        // Should return empty list initially
+        
         assertThat(sessions).isEmpty()
     }
 
@@ -149,37 +138,31 @@ class SessionManagerUnitTest {
 
     @Test
     fun `session lifecycle should work end to end`() = runTest {
-        // Create session
+        
         val sessionId = sessionManager.createNewSession()
         assertThat(sessionId).isNotEmpty()
         
-        // Check session exists
         val session = sessionManager.getCurrentSession()
         assertThat(session).isNotNull()
         assertThat(session?.sessionId).isEqualTo(sessionId)
         
-        // Get output directory
         val outputDir = sessionManager.getSessionOutputDir()
         assertThat(outputDir).isNotNull()
         
-        // Finalize session
         sessionManager.finalizeCurrentSession()
         
-        // Verify logging
         verify { mockLogger.info(match { it.contains("Creating new session") }) }
         verify { mockLogger.info(match { it.contains("Finalizing session") }) }
     }
 
     @Test
     fun `multiple sessions should work sequentially`() = runTest {
-        // Create first session
+        
         val sessionId1 = sessionManager.createNewSession()
         sessionManager.finalizeCurrentSession()
         
-        // Create second session
         val sessionId2 = sessionManager.createNewSession()
         
-        // Sessions should be different
         assertThat(sessionId1).isNotEqualTo(sessionId2)
         
         val currentSession = sessionManager.getCurrentSession()

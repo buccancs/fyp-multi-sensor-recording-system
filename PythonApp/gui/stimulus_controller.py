@@ -1,14 +1,3 @@
-"""
-Stimulus Controller for Multi-Sensor Recording System Controller
-
-This module implements the StimulusController class which manages video stimulus presentation
-using Qt Multimedia components (QMediaPlayer and QVideoWidget). It provides functionality for
-video loading, playback control, full-screen display, keyboard shortcuts, and timing logging.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-29
-Milestone: 3.5 - Stimulus Presentation Controller
-"""
 
 import json
 import os
@@ -32,7 +21,6 @@ from PyQt5.QtWidgets import (
 
 
 class TimingLogger:
-    """Handles experiment timing and event logging."""
 
     def __init__(self, log_directory: str = "logs"):
         self.log_directory = log_directory
@@ -43,15 +31,6 @@ class TimingLogger:
         os.makedirs(log_directory, exist_ok=True)
 
     def start_experiment_log(self, video_file: str) -> str:
-        """
-        Start a new experiment log file.
-
-        Args:
-            video_file (str): Path to the stimulus video file
-
-        Returns:
-            str: Path to the created log file
-        """
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         self.current_log_file = os.path.join(
             self.log_directory, f"experiment_log_{timestamp}.json"
@@ -78,12 +57,6 @@ class TimingLogger:
         return self.current_log_file
 
     def log_stimulus_start(self, video_duration_ms: int):
-        """
-        Log stimulus playback start.
-
-        Args:
-            video_duration_ms (int): Video duration in milliseconds
-        """
         if not self.current_log_file or not self.experiment_start_time:
             return
 
@@ -101,13 +74,6 @@ class TimingLogger:
         self._append_event(event)
 
     def log_event_marker(self, video_position_ms: int, marker_label: str = ""):
-        """
-        Log an event marker during stimulus presentation.
-
-        Args:
-            video_position_ms (int): Current video position in milliseconds
-            marker_label (str): Optional label for the marker
-        """
         if not self.current_log_file or not self.experiment_start_time:
             return
 
@@ -129,13 +95,6 @@ class TimingLogger:
         self._append_event(event)
 
     def log_stimulus_end(self, video_position_ms: int, reason: str = "completed"):
-        """
-        Log stimulus playback end.
-
-        Args:
-            video_position_ms (int): Final video position in milliseconds
-            reason (str): Reason for ending (completed, stopped, error)
-        """
         if not self.current_log_file or not self.experiment_start_time:
             return
 
@@ -155,7 +114,6 @@ class TimingLogger:
         self._append_event(event)
 
     def _append_event(self, event: Dict[str, Any]):
-        """Append an event to the current log file."""
         if not self.current_log_file:
             return
 
@@ -172,7 +130,6 @@ class TimingLogger:
 
 
 class StimulusVideoWidget(QVideoWidget):
-    """Custom QVideoWidget with keyboard shortcut support."""
 
     space_pressed = pyqtSignal()
     escape_pressed = pyqtSignal()
@@ -182,7 +139,6 @@ class StimulusVideoWidget(QVideoWidget):
         self.setFocusPolicy(Qt.StrongFocus)
 
     def keyPressEvent(self, event):
-        """Handle keyboard events for shortcuts."""
         if event.key() == Qt.Key_Space:
             self.space_pressed.emit()
             event.accept()
@@ -193,7 +149,6 @@ class StimulusVideoWidget(QVideoWidget):
             super().keyPressEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        """Handle double-click to toggle full-screen."""
         if self.isFullScreen():
             self.setFullScreen(False)
         else:
@@ -202,12 +157,6 @@ class StimulusVideoWidget(QVideoWidget):
 
 
 class StimulusController(QWidget):
-    """
-    Main controller for stimulus presentation functionality.
-
-    This class manages video playback using QMediaPlayer and QVideoWidget,
-    handles full-screen display, keyboard shortcuts, and timing logging.
-    """
 
     status_changed = pyqtSignal(str)
     experiment_started = pyqtSignal()
@@ -234,7 +183,6 @@ class StimulusController(QWidget):
         self.connect_signals()
 
     def init_ui(self):
-        """Initialize the user interface."""
         layout = QVBoxLayout(self)
 
         self.video_widget.hide()
@@ -264,7 +212,6 @@ class StimulusController(QWidget):
         layout.addLayout(button_layout)
 
     def connect_signals(self):
-        """Connect media player and widget signals."""
         self.media_player.stateChanged.connect(self.on_state_changed)
         self.media_player.mediaStatusChanged.connect(self.on_media_status_changed)
         self.media_player.positionChanged.connect(self.on_position_changed)
@@ -281,15 +228,6 @@ class StimulusController(QWidget):
         self.escape_shortcut.activated.connect(self.exit_fullscreen)
 
     def load_video(self, file_path: str) -> bool:
-        """
-        Load a video file for stimulus presentation.
-
-        Args:
-            file_path (str): Path to the video file
-
-        Returns:
-            bool: True if loading was successful, False otherwise
-        """
         if not os.path.exists(file_path):
             self.error_occurred.emit(f"Video file not found: {file_path}")
             return False
@@ -326,15 +264,6 @@ class StimulusController(QWidget):
             return False
 
     def start_stimulus_playback(self, screen_index: int = 0) -> bool:
-        """
-        Start stimulus playback with experiment logging.
-
-        Args:
-            screen_index (int): Index of screen to display on (0 = primary)
-
-        Returns:
-            bool: True if playback started successfully, False otherwise
-        """
         if not self.current_video_file:
             self.error_occurred.emit("No video file loaded")
             return False
@@ -369,12 +298,6 @@ class StimulusController(QWidget):
             return False
 
     def stop_stimulus_playback(self, reason: str = "stopped"):
-        """
-        Stop stimulus playback and end experiment logging.
-
-        Args:
-            reason (str): Reason for stopping (stopped, completed, error)
-        """
         if not self.is_experiment_active:
             return
 
@@ -398,12 +321,6 @@ class StimulusController(QWidget):
             print(f"[DEBUG_LOG] Error stopping stimulus playback: {e}")
 
     def mark_event(self, label: str = ""):
-        """
-        Mark an event during stimulus presentation.
-
-        Args:
-            label (str): Optional label for the event marker
-        """
         if not self.is_experiment_active:
             return
 
@@ -423,12 +340,6 @@ class StimulusController(QWidget):
             print(f"[DEBUG_LOG] Error marking event: {e}")
 
     def position_video_on_screen(self, screen_index: int):
-        """
-        Position the video widget on the specified screen.
-
-        Args:
-            screen_index (int): Index of the target screen
-        """
         screens = QApplication.screens()
         if 0 <= screen_index < len(screens):
             target_screen = screens[screen_index]
@@ -441,7 +352,6 @@ class StimulusController(QWidget):
             )
 
     def toggle_play_pause(self):
-        """Toggle between play and pause states."""
         if self.media_player.state() == QMediaPlayer.PlayingState:
             self.media_player.pause()
             print("[DEBUG_LOG] Playback paused via shortcut")
@@ -450,7 +360,6 @@ class StimulusController(QWidget):
             print("[DEBUG_LOG] Playback resumed via shortcut")
 
     def exit_fullscreen(self):
-        """Exit full-screen mode."""
         if self.video_widget.isFullScreen():
             self.video_widget.setFullScreen(False)
             self.video_widget.hide()
@@ -460,22 +369,18 @@ class StimulusController(QWidget):
                 self.stop_stimulus_playback("user_exit")
 
     def test_play(self):
-        """Test play functionality."""
         self.media_player.play()
         self.video_widget.show()
 
     def test_pause(self):
-        """Test pause functionality."""
         self.media_player.pause()
 
     def test_fullscreen(self):
-        """Test full-screen functionality."""
         self.video_widget.show()
         self.video_widget.showFullScreen()
         self.video_widget.setFocus()
 
     def on_state_changed(self, state):
-        """Handle media player state changes."""
         state_names = {
             QMediaPlayer.StoppedState: "Stopped",
             QMediaPlayer.PlayingState: "Playing",
@@ -489,22 +394,18 @@ class StimulusController(QWidget):
             self.timing_logger.log_stimulus_start(duration)
 
     def on_media_status_changed(self, status):
-        """Handle media status changes."""
         if status == QMediaPlayer.EndOfMedia and self.is_experiment_active:
             print("[DEBUG_LOG] Video reached end of media")
             self.stop_stimulus_playback("completed")
 
     def on_position_changed(self, position):
-        """Handle position changes during playback."""
 
     def on_duration_changed(self, duration):
-        """Handle duration changes when media is loaded."""
         if duration > 0:
             duration_s = duration / 1000.0
             print(f"[DEBUG_LOG] Video duration: {duration_s:.1f} seconds")
 
     def on_media_error(self, error):
-        """Handle media player errors."""
         error_messages = {
             QMediaPlayer.NoError: "No error",
             QMediaPlayer.ResourceError: "Resource error - file not found or corrupted",
@@ -522,7 +423,6 @@ class StimulusController(QWidget):
             self.stop_stimulus_playback("error")
 
     def update_position(self):
-        """Update position information during playback."""
         if (
             self.is_experiment_active
             and self.media_player.state() == QMediaPlayer.PlayingState
@@ -537,17 +437,13 @@ class StimulusController(QWidget):
                 )
 
     def get_current_position(self) -> int:
-        """Get current playback position in milliseconds."""
         return self.media_player.position()
 
     def get_duration(self) -> int:
-        """Get video duration in milliseconds."""
         return self.media_player.duration()
 
     def is_playing(self) -> bool:
-        """Check if video is currently playing."""
         return self.media_player.state() == QMediaPlayer.PlayingState
 
     def is_experiment_running(self) -> bool:
-        """Check if an experiment is currently active."""
         return self.is_experiment_active

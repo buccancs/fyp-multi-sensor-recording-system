@@ -83,7 +83,6 @@ class CalibrationQualityAssessment:
     def _perform_quality_analysis(
         self, gray_image: np.ndarray, pattern_type: PatternType, reference_image: Optional[np.ndarray]
     ) -> Tuple[PatternDetectionResult, SharpnessMetrics, ContrastMetrics, Optional[AlignmentMetrics]]:
-        """Perform comprehensive quality analysis on the image."""
         pattern_result = self._detect_calibration_pattern(gray_image, pattern_type)
         sharpness_metrics = self._analyze_sharpness(gray_image)
         contrast_metrics = self._analyze_contrast(gray_image)
@@ -99,7 +98,6 @@ class CalibrationQualityAssessment:
         sharpness_metrics: SharpnessMetrics, contrast_metrics: ContrastMetrics,
         alignment_metrics: Optional[AlignmentMetrics], processing_time: float
     ) -> CalibrationQualityResult:
-        """Create the final quality assessment result."""
         is_acceptable = self._is_quality_acceptable(
             overall_score, pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
         )
@@ -119,7 +117,6 @@ class CalibrationQualityAssessment:
         )
 
     def _create_error_result(self, pattern_type: PatternType, start_time: float) -> CalibrationQualityResult:
-        """Create error result when assessment fails."""
         return CalibrationQualityResult(
             overall_quality_score=0.0,
             is_acceptable=False,

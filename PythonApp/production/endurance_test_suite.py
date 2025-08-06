@@ -1,10 +1,3 @@
-"""
-Endurance Test Suite for Long-Duration Performance Validation
-
-This module implements 8+ hour stress testing to detect memory leaks,
-performance degradation, and system stability issues during extended
-recording sessions as recommended in the performance optimization guidelines.
-"""
 
 import asyncio
 import gc
@@ -21,7 +14,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Callable
 import psutil
 
-# GPU monitoring imports (optional)
 try:
     import GPUtil
     GPU_AVAILABLE = True
@@ -74,7 +66,7 @@ class EnduranceTestConfig:
     enable_gpu_monitoring: bool = True
     enable_temperature_monitoring: bool = True
     enable_simulated_workload: bool = True
-    workload_intensity: str = "medium"  # low, medium, high
+    workload_intensity: str = "medium"
     enable_automatic_gc: bool = True
     gc_interval_minutes: float = 5.0
     checkpoint_interval_hours: float = 1.0
@@ -82,7 +74,6 @@ class EnduranceTestConfig:
 
 
 class SimulatedWorkload:
-    """Simulates the typical workload of the multi-sensor recording system"""
     
     def __init__(self, intensity: str = "medium", logger: Optional[logging.Logger] = None):
         self.intensity = intensity
@@ -95,7 +86,6 @@ class SimulatedWorkload:
             "data_written_mb": 0.0
         }
         
-        # Workload parameters based on intensity
         self.workload_params = {
             "low": {
                 "fps": 10,
@@ -121,7 +111,6 @@ class SimulatedWorkload:
         }[intensity]
     
     async def start_workload(self):
-        """Start the simulated workload"""
         self.is_running = True
         tasks = [
             self._simulate_video_processing(),
@@ -132,21 +121,17 @@ class SimulatedWorkload:
         await asyncio.gather(*tasks)
     
     def stop_workload(self):
-        """Stop the simulated workload"""
         self.is_running = False
     
     async def _simulate_video_processing(self):
-        """Simulate video frame processing"""
         try:
             import cv2
             import numpy as np
             
             while self.is_running:
-                # Simulate frame processing
                 frame = np.random.randint(0, 255, 
                     (*self.workload_params["resolution"], 3), dtype=np.uint8)
                 
-                # Simulate typical operations
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 blurred = cv2.GaussianBlur(gray, (5, 5), 0)
                 _, encoded = cv2.imencode('.jpg', frame, 
@@ -154,13 +139,10 @@ class SimulatedWorkload:
                 
                 self.metrics["frames_processed"] += 1
                 
-                # Simulate frame rate
                 await asyncio.sleep(1.0 / self.workload_params["fps"])
                 
         except ImportError:
-            # Fallback without OpenCV
             while self.is_running:
-                # Simulate basic image processing
                 data = bytearray(self.workload_params["resolution"][0] * 
                                self.workload_params["resolution"][1] * 3)
                 self.metrics["frames_processed"] += 1
@@ -169,10 +151,8 @@ class SimulatedWorkload:
             self.logger.error(f"Video processing simulation error: {e}")
     
     async def _simulate_network_communication(self):
-        """Simulate network message processing"""
         while self.is_running:
             try:
-                # Simulate JSON message creation and processing
                 for device_id in range(self.workload_params["devices"]):
                     message = {
                         "type": "device_status",
@@ -196,16 +176,13 @@ class SimulatedWorkload:
                 self.logger.error(f"Network simulation error: {e}")
     
     async def _simulate_data_storage(self):
-        """Simulate data writing operations"""
-        data_chunk_size = 1024 * 1024  # 1MB chunks
+        data_chunk_size = 1024 * 1024
         
         while self.is_running:
             try:
-                # Simulate writing data
                 data = bytearray(data_chunk_size)
                 self.metrics["data_written_mb"] += len(data) / (1024 * 1024)
                 
-                # Simulate data rate throttling
                 expected_interval = data_chunk_size / (
                     self.workload_params["data_rate_mb_per_sec"] * 1024 * 1024)
                 await asyncio.sleep(expected_interval)
@@ -214,13 +191,10 @@ class SimulatedWorkload:
                 self.logger.error(f"Data storage simulation error: {e}")
     
     async def _simulate_sensor_processing(self):
-        """Simulate sensor data processing"""
         while self.is_running:
             try:
-                # Simulate calibration every 10 minutes
                 await asyncio.sleep(600)
                 if self.is_running:
-                    # Simulate calibration processing
                     for _ in range(100):
                         result = sum(range(1000))
                     self.metrics["calibrations_performed"] += 1
@@ -230,9 +204,6 @@ class SimulatedWorkload:
 
 
 class EnduranceTestSuite:
-    """
-    Comprehensive endurance testing suite for long-duration performance validation
-    """
     
     def __init__(self, config: EnduranceTestConfig, 
                  output_dir: str = "endurance_test_results"):
@@ -246,15 +217,12 @@ class EnduranceTestSuite:
         self.start_time: Optional[float] = None
         self.is_running = False
         
-        # Memory leak detection
         self.initial_memory = 0.0
         self.gc_stats = {"collections": 0, "unreachable": 0}
         
-        # Performance baselines
         self.baseline_cpu = 0.0
         self.baseline_memory = 0.0
         
-        # GPU monitoring
         self.gpu_available = GPU_AVAILABLE or NVML_AVAILABLE
         if NVML_AVAILABLE:
             try:
@@ -263,16 +231,13 @@ class EnduranceTestSuite:
                 self.gpu_available = False
     
     def _setup_logging(self) -> logging.Logger:
-        """Setup detailed logging for endurance testing"""
         logger = logging.getLogger(f"{__name__}.endurance")
         logger.setLevel(logging.DEBUG if self.config.save_detailed_logs else logging.INFO)
         
-        # Create file handler
         log_file = self.output_dir / f"endurance_test_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(logging.DEBUG)
         
-        # Create formatter
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
@@ -282,35 +247,24 @@ class EnduranceTestSuite:
         return logger
     
     async def run_endurance_test(self) -> Dict[str, Any]:
-        """
-        Run the complete endurance test suite
-        
-        Returns:
-            Comprehensive test results including memory leak analysis
-        """
         self.logger.info(f"Starting endurance test - Target duration: {self.config.target_duration_hours} hours")
         
-        # Initialize monitoring
         tracemalloc.start()
         self.start_time = time.time()
         self.is_running = True
         
-        # Capture baseline metrics
         await self._capture_baseline_metrics()
         
-        # Start simulated workload if enabled
         if self.config.enable_simulated_workload:
             self.workload = SimulatedWorkload(
                 self.config.workload_intensity, self.logger)
             workload_task = asyncio.create_task(self.workload.start_workload())
         
-        # Start monitoring tasks
         monitoring_task = asyncio.create_task(self._monitoring_loop())
         gc_task = asyncio.create_task(self._garbage_collection_loop())
         checkpoint_task = asyncio.create_task(self._checkpoint_loop())
         
         try:
-            # Wait for target duration
             target_seconds = self.config.target_duration_hours * 3600
             await asyncio.sleep(target_seconds)
             
@@ -319,7 +273,6 @@ class EnduranceTestSuite:
         finally:
             self.is_running = False
             
-            # Stop workload
             if self.workload:
                 self.workload.stop_workload()
                 try:
@@ -327,19 +280,15 @@ class EnduranceTestSuite:
                 except asyncio.TimeoutError:
                     self.logger.warning("Workload shutdown timed out")
             
-            # Stop monitoring
             monitoring_task.cancel()
             gc_task.cancel()
             checkpoint_task.cancel()
             
-            # Generate final report
             return await self._generate_endurance_report()
     
     async def _capture_baseline_metrics(self):
-        """Capture baseline performance metrics"""
         process = psutil.Process()
         
-        # Capture CPU baseline (average over 30 seconds)
         cpu_samples = []
         for _ in range(6):
             cpu_samples.append(process.cpu_percent())
@@ -352,13 +301,11 @@ class EnduranceTestSuite:
         self.logger.info(f"Baseline metrics - CPU: {self.baseline_cpu:.1f}%, Memory: {self.baseline_memory:.1f}MB")
     
     async def _monitoring_loop(self):
-        """Main monitoring loop for collecting metrics"""
         while self.is_running:
             try:
                 metrics = await self._collect_metrics()
                 self.metrics_history.append(metrics)
                 
-                # Check for concerning trends
                 await self._analyze_trends(metrics)
                 
                 await asyncio.sleep(self.config.monitoring_interval_seconds)
@@ -368,22 +315,17 @@ class EnduranceTestSuite:
                 await asyncio.sleep(self.config.monitoring_interval_seconds)
     
     async def _collect_metrics(self) -> EnduranceMetrics:
-        """Collect comprehensive system metrics"""
         process = psutil.Process()
         
-        # Basic system metrics
         memory_info = process.memory_info()
         
-        # Disk I/O
         disk_io = psutil.disk_io_counters()
         
-        # GPU metrics
         gpu_usage = None
         gpu_memory = None
         if self.gpu_available:
             gpu_usage, gpu_memory = self._get_gpu_metrics()
         
-        # Temperature (if available)
         cpu_temp = self._get_cpu_temperature()
         
         elapsed_hours = (time.time() - self.start_time) / 3600
@@ -406,7 +348,6 @@ class EnduranceTestSuite:
         )
     
     def _get_gpu_metrics(self) -> tuple[Optional[float], Optional[float]]:
-        """Get GPU usage and memory metrics"""
         try:
             if NVML_AVAILABLE:
                 device_count = pynvml.nvmlDeviceGetCount()
@@ -426,7 +367,6 @@ class EnduranceTestSuite:
         return None, None
     
     def _get_cpu_temperature(self) -> Optional[float]:
-        """Get CPU temperature if available"""
         try:
             if hasattr(psutil, "sensors_temperatures"):
                 temps = psutil.sensors_temperatures()
@@ -437,18 +377,15 @@ class EnduranceTestSuite:
         return None
     
     async def _analyze_trends(self, current_metrics: EnduranceMetrics):
-        """Analyze metrics for concerning trends"""
-        if len(self.metrics_history) < 10:  # Need some history
+        if len(self.metrics_history) < 10:
             return
         
-        # Memory leak detection
         memory_trend = self._detect_memory_leak(current_metrics)
         if memory_trend.is_leak_suspected:
             self.logger.warning(
                 f"Potential memory leak detected: {memory_trend.leak_rate_mb_per_hour:.2f} MB/hour"
             )
         
-        # CPU degradation detection
         cpu_degradation = self._detect_cpu_degradation(current_metrics)
         if cpu_degradation > self.config.cpu_degradation_threshold_percent:
             self.logger.warning(
@@ -456,8 +393,7 @@ class EnduranceTestSuite:
             )
     
     def _detect_memory_leak(self, current_metrics: EnduranceMetrics) -> MemoryLeakDetection:
-        """Detect potential memory leaks"""
-        recent_metrics = self.metrics_history[-60:]  # Last 60 samples
+        recent_metrics = self.metrics_history[-60:]
         
         if len(recent_metrics) < 10:
             return MemoryLeakDetection(
@@ -471,11 +407,9 @@ class EnduranceTestSuite:
                 trend_analysis="Insufficient data"
             )
         
-        # Calculate memory growth rate
         memory_values = [m.memory_rss_mb for m in recent_metrics]
         time_values = [m.elapsed_hours for m in recent_metrics]
         
-        # Simple linear regression to find trend
         n = len(memory_values)
         sum_x = sum(time_values)
         sum_y = sum(memory_values)
@@ -503,8 +437,7 @@ class EnduranceTestSuite:
         )
     
     def _detect_cpu_degradation(self, current_metrics: EnduranceMetrics) -> float:
-        """Detect CPU performance degradation"""
-        recent_metrics = self.metrics_history[-20:]  # Last 20 samples
+        recent_metrics = self.metrics_history[-20:]
         if len(recent_metrics) < 10:
             return 0.0
         
@@ -514,7 +447,6 @@ class EnduranceTestSuite:
         return max(0.0, degradation_percent)
     
     async def _garbage_collection_loop(self):
-        """Periodic garbage collection"""
         if not self.config.enable_automatic_gc:
             return
         
@@ -535,7 +467,6 @@ class EnduranceTestSuite:
                 self.logger.error(f"Error in garbage collection loop: {e}")
     
     async def _checkpoint_loop(self):
-        """Periodic checkpoint reporting"""
         interval_seconds = self.config.checkpoint_interval_hours * 3600
         
         while self.is_running:
@@ -548,14 +479,12 @@ class EnduranceTestSuite:
                 self.logger.error(f"Error in checkpoint loop: {e}")
     
     async def _generate_checkpoint_report(self):
-        """Generate intermediate checkpoint report"""
         if not self.metrics_history:
             return
         
         current_metrics = self.metrics_history[-1]
         elapsed_hours = current_metrics.elapsed_hours
         
-        # Calculate averages for last hour
         hour_metrics = [m for m in self.metrics_history 
                        if current_metrics.elapsed_hours - m.elapsed_hours <= 1.0]
         
@@ -574,7 +503,6 @@ class EnduranceTestSuite:
                 "workload_metrics": self.workload.metrics if self.workload else None
             }
             
-            # Save checkpoint
             checkpoint_file = self.output_dir / f"checkpoint_{elapsed_hours:.1f}h.json"
             with open(checkpoint_file, 'w') as f:
                 json.dump(checkpoint_data, f, indent=2, default=str)
@@ -587,14 +515,12 @@ class EnduranceTestSuite:
             )
     
     async def _generate_endurance_report(self) -> Dict[str, Any]:
-        """Generate comprehensive endurance test report"""
         if not self.metrics_history:
             return {"error": "No metrics collected"}
         
         final_metrics = self.metrics_history[-1]
         memory_leak_analysis = self._detect_memory_leak(final_metrics)
         
-        # Performance analysis
         total_duration = final_metrics.elapsed_hours
         memory_values = [m.memory_rss_mb for m in self.metrics_history]
         cpu_values = [m.cpu_percent for m in self.metrics_history]
@@ -637,12 +563,10 @@ class EnduranceTestSuite:
             "detailed_metrics": [asdict(m) for m in self.metrics_history]
         }
         
-        # Save report
         report_file = self.output_dir / f"endurance_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2, default=str)
         
-        # Save summary
         await self._save_endurance_summary(report)
         
         self.logger.info(f"Endurance test completed - Report saved to {report_file}")
@@ -650,10 +574,8 @@ class EnduranceTestSuite:
     
     def _generate_endurance_recommendations(self, memory_analysis: MemoryLeakDetection, 
                                           final_metrics: EnduranceMetrics) -> List[str]:
-        """Generate specific recommendations based on endurance test results"""
         recommendations = []
         
-        # Memory recommendations
         if memory_analysis.is_leak_suspected:
             recommendations.append(
                 f"CRITICAL: Memory leak detected ({memory_analysis.leak_rate_mb_per_hour:.1f} MB/hour). "
@@ -664,7 +586,6 @@ class EnduranceTestSuite:
                 "WARNING: Significant memory growth detected. Review memory usage patterns and implement cleanup strategies."
             )
         
-        # CPU recommendations
         cpu_degradation = self._detect_cpu_degradation(final_metrics)
         if cpu_degradation > 10:
             recommendations.append(
@@ -672,7 +593,6 @@ class EnduranceTestSuite:
                 "Consider optimizing algorithms or implementing performance throttling."
             )
         
-        # Resource recommendations
         if final_metrics.thread_count > 50:
             recommendations.append(
                 f"High thread count ({final_metrics.thread_count}). Review thread pool usage and implement thread limits."
@@ -683,7 +603,6 @@ class EnduranceTestSuite:
                 f"High number of open files ({final_metrics.open_files}). Ensure proper file handle cleanup."
             )
         
-        # GPU recommendations
         if final_metrics.gpu_usage_percent and final_metrics.gpu_usage_percent > 80:
             recommendations.append(
                 "High GPU usage detected. Consider GPU-based optimizations or workload distribution."
@@ -695,7 +614,6 @@ class EnduranceTestSuite:
         return recommendations
     
     async def _save_endurance_summary(self, report: Dict[str, Any]):
-        """Save human-readable endurance test summary"""
         summary_file = self.output_dir / f"endurance_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
         
         with open(summary_file, 'w') as f:
@@ -738,17 +656,6 @@ async def run_endurance_test(
     workload_intensity: str = "medium",
     output_dir: str = "endurance_test_results"
 ) -> Dict[str, Any]:
-    """
-    Convenience function to run an endurance test with default settings
-    
-    Args:
-        duration_hours: Target test duration in hours
-        workload_intensity: Workload intensity (low, medium, high)
-        output_dir: Output directory for results
-    
-    Returns:
-        Comprehensive test results
-    """
     config = EnduranceTestConfig(
         target_duration_hours=duration_hours,
         workload_intensity=workload_intensity,
@@ -777,7 +684,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.quick:
-        duration = 10.0 / 60.0  # 10 minutes
+        duration = 10.0 / 60.0
         print("Running quick endurance test (10 minutes)")
     else:
         duration = args.duration

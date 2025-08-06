@@ -243,63 +243,9 @@ class DeploymentAutomation:
     async def _create_python_startup_scripts(self, python_dist: Path):
         windows_script = python_dist / "start.bat"
         windows_script.write_text(
-            """@echo off
-echo Starting Multi-Sensor Recording System...
-echo.
-
-REM Check if Python is installed
-python --version >nul 2>&1
-if errorlevel 1 (
-    echo Error: Python is not installed or not in PATH
-    echo Please install Python 3.8 or later
-    pause
-    exit /b 1
-)
-
-REM Install requirements if needed
-if not exist "venv" (
-    echo Creating virtual environment...
-    python -m venv venv
-)
-
-echo Activating virtual environment...
-call venv\\Scripts\\activate.bat
-
-echo Installing requirements...
-pip install -r requirements.txt
-
-echo Starting application...
-python src\\application.py
-
-pause
-"""
         )
         unix_script = python_dist / "start.sh"
         unix_script.write_text(
-            """#!/bin/bash
-echo "Starting Multi-Sensor Recording System..."
-echo
-
-if ! command -v python3 &> /dev/null; then
-    echo "Error: Python 3 is not installed"
-    echo "Please install Python 3.8 or later"
-    exit 1
-fi
-
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
-fi
-
-echo "Activating virtual environment..."
-source venv/bin/activate
-
-echo "Installing requirements..."
-pip install -r requirements.txt
-
-echo "Starting application..."
-python src/application.py
-"""
         )
         try:
             unix_script.chmod(493)
@@ -403,39 +349,6 @@ python src/application.py
             api_docs_dir.mkdir(exist_ok=True)
             api_overview = api_docs_dir / "python_api.md"
             api_overview.write_text(
-                """# Python API Documentation
-
-
-Main application entry point and GUI management.
-
-- `session_manager.py` - Recording session management
-- `session_logger.py` - Session logging and persistence
-- `session_synchronizer.py` - Cross-device synchronization
-
-- `calibration_manager.py` - Camera calibration management
-- `calibration_processor.py` - Calibration algorithms
-- `calibration_result.py` - Calibration data structures
-
-- `json_socket_server.py` - JSON-based socket server
-- `device_server.py` - Device communication management
-
-- `performance_benchmark.py` - Performance benchmarking tools
-- `security_scanner.py` - Security assessment tools
-
-
-See `protocol/config.json` for runtime configuration options.
-See `protocol/message_schema.json` for network message definitions.
-
-
-```python
-from src.application import Application
-
-app = Application()
-app.run()
-```
-
-For detailed usage examples, see the user manual.
-"""
             )
             self.logger.info("API documentation generated")
         except Exception as e:
@@ -519,14 +432,6 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 
 For technical support and updates, please refer to the project documentation
 or contact the development team.
-"""
-        )
-        self.logger.info("User manual created")
-
-    async def _create_deployment_guide(self):
-        deployment_guide = self.docs_build_dir / "DEPLOYMENT_GUIDE.md"
-        deployment_guide.write_text(
-            f"""# Deployment Guide
 
 Version: {self.version}
 
@@ -607,14 +512,6 @@ If deployment issues occur:
 - Keep deployment guide with installation
 - Document any configuration changes
 - Maintain version compatibility between PC and Android apps
-"""
-        )
-        self.logger.info("Deployment guide created")
-
-    async def _create_distribution_readme(self):
-        readme = self.build_dir / "README.md"
-        readme.write_text(
-            f"""# Multi-Sensor Recording System - Production Release
 
 Version: {self.version}
 Build Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
@@ -660,16 +557,6 @@ Package integrity can be verified using the provided checksums in `checksums.txt
 
 Multi-Sensor Recording System v{self.version}
 Phase 4: Production Ready
-"""
-        )
-        self.logger.info("Distribution README created")
-
-    async def _create_deployment_scripts(self):
-        self.logger.info("Creating deployment scripts...")
-        try:
-            windows_installer = self.build_dir / "install.bat"
-            windows_installer.write_text(
-                f"""@echo off
 echo ============================================
 echo Multi-Sensor Recording System Installer
 echo Version: {self.version}
@@ -726,11 +613,6 @@ echo.
 echo See USER_MANUAL.md for detailed instructions
 echo.
 pause
-"""
-            )
-            unix_installer = self.build_dir / "install.sh"
-            unix_installer.write_text(
-                f"""#!/bin/bash
 echo "============================================"
 echo "Multi-Sensor Recording System Installer"
 echo "Version: {self.version}"
@@ -793,116 +675,3 @@ echo "2. Install: android/MultiSensorRecording-{self.version}.apk"
 echo
 echo "See USER_MANUAL.md for detailed instructions"
 echo
-"""
-            )
-            try:
-                unix_installer.chmod(493)
-            except (OSError, PermissionError) as e:
-                self.logger.warning(f"Could not set executable permissions on installer: {e}")
-                pass
-            self.logger.info("Deployment scripts created")
-        except Exception as e:
-            self.logger.error(f"Failed to create deployment scripts: {e}")
-
-    async def _create_deployment_package(self) -> DeploymentPackage:
-        self.logger.info("Creating deployment package...")
-        total_size = 0
-        for result in self.build_results:
-            if result.success and result.build_size_mb:
-                total_size += result.build_size_mb
-        await self._create_checksums_file()
-        package_name = f"MultiSensorRecording-{self.version}-Complete.zip"
-        package_path = self.build_dir.parent / package_name
-        await self._create_zip_archive(self.build_dir, package_path)
-        package_checksum = self._calculate_checksum(package_path)
-        deployment_instructions = [
-            "1. Extract the complete package to your desired location",
-            "2. Run the appropriate installer script (install.bat for Windows, install.sh for Linux/macOS)",
-            "3. Follow the on-screen instructions",
-            "4. Refer to USER_MANUAL.md for detailed setup and usage",
-            "5. Install the Android APK on target devices",
-            "6. Configure network settings as needed",
-        ]
-        package = DeploymentPackage(
-            version=self.version,
-            build_timestamp=datetime.now().isoformat(),
-            components=self.build_results,
-            total_size_mb=total_size,
-            package_path=str(package_path),
-            checksum=package_checksum,
-            deployment_instructions=deployment_instructions,
-        )
-        manifest_file = (
-            self.build_dir.parent / f"deployment_manifest_{self.version}.json"
-        )
-        with open(manifest_file, "w") as f:
-            json.dump(asdict(package), f, indent=2, default=str)
-        self.logger.info(f"Deployment package created: {package_name}")
-        self.logger.info(
-            f"Total package size: {package_path.stat().st_size / (1024 * 1024):.1f}MB"
-        )
-        return package
-
-    async def _create_checksums_file(self):
-        checksums_file = self.build_dir / "checksums.txt"
-        with open(checksums_file, "w") as f:
-            f.write(
-                f"# Multi-Sensor Recording System {self.version} - File Checksums\\n"
-            )
-            f.write(f"# Generated: {datetime.now().isoformat()}\\n\\n")
-            for result in self.build_results:
-                if result.success and result.output_path and result.checksum:
-                    filename = Path(result.output_path).name
-                    f.write(f"{result.checksum}  {filename}\\n")
-        self.logger.info("Checksums file created")
-
-    async def _create_zip_archive(self, source_dir: Path, zip_path: Path):
-        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
-            for file_path in source_dir.rglob("*"):
-                if file_path.is_file():
-                    arc_name = file_path.relative_to(source_dir)
-                    zip_file.write(file_path, arc_name)
-
-    def _calculate_checksum(self, file_path: Path) -> str:
-        sha256_hash = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                sha256_hash.update(chunk)
-        return sha256_hash.hexdigest()
-
-
-async def main():
-    project_root = Path(__file__).parent.parent.parent
-    version = sys.argv[1] if len(sys.argv) > 1 else None
-    print("Starting Phase 4 Production Deployment...")
-    deployment = DeploymentAutomation(str(project_root), version)
-    try:
-        package = await deployment.build_all_components()
-        print(f"\\nDeployment package created successfully!")
-        print(f"Version: {package.version}")
-        print(f"Package: {Path(package.package_path).name}")
-        print(f"Total size: {package.total_size_mb:.1f}MB")
-        print(
-            f"Components built: {len([r for r in package.components if r.success])}/{len(package.components)}"
-        )
-        print(f"\\nComponent results:")
-        for result in package.components:
-            status = "✓" if result.success else "✗"
-            size_info = (
-                f" ({result.build_size_mb:.1f}MB)" if result.build_size_mb else ""
-            )
-            print(f"  {status} {result.component}{size_info}")
-        if any(not r.success for r in package.components):
-            print(f"\\n⚠️  Some components failed to build. Check logs for details.")
-        print(f"\\nDeployment instructions:")
-        for i, instruction in enumerate(package.deployment_instructions, 1):
-            print(f"  {i}. {instruction}")
-    except Exception as e:
-        print(f"Deployment failed: {e}")
-        import traceback
-
-        traceback.print_exc()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

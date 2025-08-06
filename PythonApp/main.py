@@ -22,7 +22,6 @@ def main():
     logger.info(f"Python version: {sys.version}")
     logger.info(f"PyQt5 available, Qt version: {qVersion()}")
     
-    # Perform runtime security validation before starting application
     try:
         logger.info("🔒 Performing runtime security validation...")
         validate_runtime_security()

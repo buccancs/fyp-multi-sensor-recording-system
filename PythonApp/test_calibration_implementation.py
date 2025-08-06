@@ -1,7 +1,3 @@
-"""
-Test calibration implementation functionality.
-This simulates the missing test_calibration_implementation.py file mentioned in README.
-"""
 
 import json
 import os
@@ -17,7 +13,6 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 def test_pattern_detection():
-    """Test chessboard and circle grid detection algorithms."""
     print("Testing pattern detection...")
 
     try:
@@ -70,7 +65,6 @@ def test_pattern_detection():
         return False
 
 def _setup_single_camera_parameters():
-    """Setup parameters for single camera calibration test."""
     import numpy as np
     
     pattern_size = (9, 6)
@@ -93,7 +87,6 @@ def _setup_single_camera_parameters():
 
 
 def _generate_single_camera_data(params):
-    """Generate synthetic data for single camera calibration."""
     import cv2
     import numpy as np
     
@@ -118,7 +111,6 @@ def _generate_single_camera_data(params):
 
 
 def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coeffs, rvecs, tvecs):
-    """Evaluate calibration quality using reprojection error."""
     import cv2
     
     total_error = 0
@@ -140,7 +132,6 @@ def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coef
 
 
 def test_single_camera_calibration():
-    """Test single camera calibration with intrinsic parameter calculation."""
     print("Testing single camera calibration...")
     
     try:
@@ -167,7 +158,6 @@ def test_single_camera_calibration():
         return False
 
 def _setup_stereo_calibration_parameters():
-    """Setup parameters for stereo calibration test."""
     import numpy as np
     
     pattern_size = (9, 6)
@@ -199,7 +189,6 @@ def _setup_stereo_calibration_parameters():
 
 
 def _generate_synthetic_stereo_data(params):
-    """Generate synthetic stereo calibration data."""
     import cv2
     import numpy as np
     
@@ -235,7 +224,6 @@ def _generate_synthetic_stereo_data(params):
 
 
 def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, params):
-    """Perform the actual stereo calibration computation."""
     import cv2
     import numpy as np
     
@@ -268,7 +256,6 @@ def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, p
 
 
 def test_stereo_calibration():
-    """Test stereo calibration for RGB-thermal camera alignment."""
     print("Testing stereo calibration...")
     
     try:
@@ -285,7 +272,6 @@ def test_stereo_calibration():
         return False
 
 def test_calibration_quality_assessment():
-    """Test calibration quality metrics and coverage analysis."""
     print("Testing calibration quality assessment...")
 
     try:
@@ -358,7 +344,6 @@ def test_calibration_quality_assessment():
         return False
 
 def test_data_persistence():
-    """Test JSON-based save/load with metadata validation."""
     print("Testing calibration data persistence...")
 
     try:
@@ -415,7 +400,6 @@ def test_data_persistence():
         return False
 
 def main():
-    """Run all calibration implementation tests."""
     print("=" * 60)
     print("Calibration Implementation Test Suite")
     print("=" * 60)

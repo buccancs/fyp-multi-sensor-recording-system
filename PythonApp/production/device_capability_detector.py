@@ -1,9 +1,3 @@
-"""
-Device Capability Detection and Performance Adaptation
-
-This module implements device-specific performance monitoring and adaptation
-capabilities to ensure optimal performance across diverse hardware configurations.
-"""
 
 import logging
 import platform
@@ -17,9 +11,7 @@ import json
 
 @dataclass
 class DeviceCapabilities:
-    """Comprehensive device capability profile"""
     
-    # System Information
     platform_name: str
     architecture: str
     processor: str
@@ -27,37 +19,30 @@ class DeviceCapabilities:
     cpu_cores_logical: int
     cpu_max_frequency_mhz: float
     
-    # Memory Information
     total_memory_gb: float
     available_memory_gb: float
-    memory_type: str  # DDR3, DDR4, etc.
+    memory_type: str
     
-    # Storage Information
-    storage_type: str  # SSD, HDD, NVMe
+    storage_type: str
     storage_total_gb: float
     storage_available_gb: float
     
-    # Performance Characteristics
-    cpu_performance_score: float  # Normalized 0-100
+    cpu_performance_score: float
     memory_performance_score: float
     storage_performance_score: float
-    overall_performance_tier: str  # "low", "medium", "high"
+    overall_performance_tier: str
     
-    # Graphics Capabilities
     gpu_available: bool
     gpu_names: List[str]
     gpu_memory_mb: List[float]
     
-    # Network Capabilities
     network_interfaces: List[str]
     max_network_speed_mbps: float
     
-    # Thermal Characteristics
     thermal_monitoring_available: bool
     current_cpu_temperature: Optional[float]
     thermal_throttling_detected: bool
     
-    # Battery Information (for mobile devices)
     battery_available: bool
     battery_percent: Optional[float]
     power_plugged: bool
@@ -65,39 +50,32 @@ class DeviceCapabilities:
 
 @dataclass
 class PerformanceProfile:
-    """Device-specific performance optimization profile"""
     
     device_tier: str
     
-    # Recording Settings
     max_concurrent_devices: int
     recommended_fps: int
     recommended_resolution: Tuple[int, int]
     enable_preview: bool
     preview_quality: str
     
-    # Processing Settings
     max_parallel_operations: int
     buffer_size_mb: int
     gc_frequency_seconds: int
     
-    # Quality Settings
-    video_quality: float  # 0.1 to 1.0
-    compression_level: int  # 1-9
+    video_quality: float
+    compression_level: int
     enable_hardware_acceleration: bool
     
-    # Monitoring Settings
     monitoring_frequency_hz: float
     detailed_logging: bool
     
-    # Degradation Thresholds
     cpu_warning_threshold: float
     memory_warning_threshold: float
     frame_drop_threshold: float
 
 
 class DeviceCapabilityDetector:
-    """Detects and analyzes device capabilities for performance optimization"""
     
     def __init__(self, logger: Optional[logging.Logger] = None):
         self.logger = logger or logging.getLogger(__name__)
@@ -105,7 +83,6 @@ class DeviceCapabilityDetector:
         self.performance_profile: Optional[PerformanceProfile] = None
         self._benchmarked = False
         
-        # Performance tier definitions
         self.tier_definitions = {
             "low": {
                 "cpu_score_min": 0,
@@ -125,10 +102,8 @@ class DeviceCapabilityDetector:
         }
     
     def detect_capabilities(self) -> DeviceCapabilities:
-        """Perform comprehensive device capability detection"""
         self.logger.info("Starting device capability detection...")
         
-        # System information
         cpu_info = self._get_cpu_info()
         memory_info = self._get_memory_info()
         storage_info = self._get_storage_info()
@@ -137,12 +112,10 @@ class DeviceCapabilityDetector:
         thermal_info = self._get_thermal_info()
         battery_info = self._get_battery_info()
         
-        # Performance benchmarking
         cpu_score = self._benchmark_cpu_performance()
         memory_score = self._benchmark_memory_performance()
         storage_score = self._benchmark_storage_performance()
         
-        # Determine performance tier
         overall_tier = self._determine_performance_tier(
             cpu_score, memory_info["total_gb"], gpu_info["available"]
         )
@@ -190,7 +163,6 @@ class DeviceCapabilityDetector:
         return self.capabilities
     
     def _get_cpu_info(self) -> Dict[str, Any]:
-        """Get detailed CPU information"""
         try:
             cpu_freq = psutil.cpu_freq()
             return {
@@ -211,27 +183,23 @@ class DeviceCapabilityDetector:
             }
     
     def _get_memory_info(self) -> Dict[str, Any]:
-        """Get memory information"""
         try:
             mem = psutil.virtual_memory()
             return {
                 "total_gb": mem.total / (1024**3),
                 "available_gb": mem.available / (1024**3),
-                "type": "Unknown"  # Would need platform-specific detection
+                "type": "Unknown"
             }
         except Exception as e:
             self.logger.warning(f"Error getting memory info: {e}")
             return {"total_gb": 0.0, "available_gb": 0.0, "type": "Unknown"}
     
     def _get_storage_info(self) -> Dict[str, Any]:
-        """Get storage information"""
         try:
             disk = psutil.disk_usage('/')
             
-            # Simple SSD detection heuristic (not 100% accurate)
             storage_type = "Unknown"
             try:
-                # On Linux, check if it's an SSD
                 with open('/proc/mounts', 'r') as f:
                     mounts = f.read()
                     if 'ssd' in mounts.lower() or 'nvme' in mounts.lower():
@@ -239,7 +207,6 @@ class DeviceCapabilityDetector:
                     else:
                         storage_type = "HDD"
             except:
-                # Fallback heuristic based on disk performance
                 storage_type = "Unknown"
             
             return {
@@ -252,16 +219,13 @@ class DeviceCapabilityDetector:
             return {"type": "Unknown", "total_gb": 0.0, "available_gb": 0.0}
     
     def _get_gpu_info(self) -> Dict[str, Any]:
-        """Get GPU information"""
         gpu_info = {
             "available": False,
             "names": [],
             "memory_mb": []
         }
         
-        # Try different GPU detection methods
         try:
-            # NVIDIA GPU detection
             import pynvml
             pynvml.nvmlInit()
             device_count = pynvml.nvmlDeviceGetCount()
@@ -281,7 +245,6 @@ class DeviceCapabilityDetector:
             self.logger.debug(f"NVIDIA GPU detection failed: {e}")
         
         try:
-            # Alternative GPU detection using GPUtil
             import GPUtil
             gpus = GPUtil.getGPUs()
             
@@ -299,15 +262,13 @@ class DeviceCapabilityDetector:
         return gpu_info
     
     def _get_network_info(self) -> Dict[str, Any]:
-        """Get network interface information"""
         try:
             interfaces = []
             max_speed = 0.0
             
-            # Get network interface statistics
             net_if_stats = psutil.net_if_stats()
             for interface, stats in net_if_stats.items():
-                if stats.isup and interface != 'lo':  # Skip loopback
+                if stats.isup and interface != 'lo':
                     interfaces.append(interface)
                     if stats.speed > max_speed:
                         max_speed = stats.speed
@@ -321,7 +282,6 @@ class DeviceCapabilityDetector:
             return {"interfaces": [], "max_speed": 0.0}
     
     def _get_thermal_info(self) -> Dict[str, Any]:
-        """Get thermal monitoring information"""
         thermal_info = {
             "available": False,
             "cpu_temp": None,
@@ -334,12 +294,10 @@ class DeviceCapabilityDetector:
                 if temps:
                     thermal_info["available"] = True
                     
-                    # Get CPU temperature
                     for name, entries in temps.items():
                         if 'cpu' in name.lower() or 'core' in name.lower():
                             if entries:
                                 thermal_info["cpu_temp"] = entries[0].current
-                                # Check for throttling (temperature > 80°C)
                                 if entries[0].current > 80:
                                     thermal_info["throttling"] = True
                                 break
@@ -349,7 +307,6 @@ class DeviceCapabilityDetector:
         return thermal_info
     
     def _get_battery_info(self) -> Dict[str, Any]:
-        """Get battery information (for mobile/laptop devices)"""
         battery_info = {
             "available": False,
             "percent": None,
@@ -368,14 +325,12 @@ class DeviceCapabilityDetector:
         return battery_info
     
     def _benchmark_cpu_performance(self) -> float:
-        """Benchmark CPU performance and return normalized score"""
         if self._benchmarked:
             return getattr(self, '_cpu_score', 50.0)
         
         try:
             start_time = time.time()
             
-            # CPU-intensive calculation
             result = 0
             iterations = 1000000
             for i in range(iterations):
@@ -383,8 +338,6 @@ class DeviceCapabilityDetector:
             
             duration = time.time() - start_time
             
-            # Normalize score (lower time = higher score)
-            # Reference: 1 second = 50 points, scale accordingly
             score = min(100, max(0, 100 - (duration - 1.0) * 50))
             
             self._cpu_score = score
@@ -393,30 +346,24 @@ class DeviceCapabilityDetector:
             
         except Exception as e:
             self.logger.warning(f"CPU benchmark failed: {e}")
-            return 50.0  # Default score
+            return 50.0
     
     def _benchmark_memory_performance(self) -> float:
-        """Benchmark memory performance"""
         try:
-            # Memory allocation and access test
             start_time = time.time()
             
-            # Allocate and access memory
-            data_size = 10 * 1024 * 1024  # 10MB
+            data_size = 10 * 1024 * 1024
             data = bytearray(data_size)
             
-            # Write test
             for i in range(0, data_size, 1024):
                 data[i] = i % 256
             
-            # Read test
             checksum = 0
             for i in range(0, data_size, 1024):
                 checksum += data[i]
             
             duration = time.time() - start_time
             
-            # Normalize score
             score = min(100, max(0, 100 - duration * 20))
             
             self.logger.debug(f"Memory benchmark: {duration:.2f}s -> {score:.1f}/100")
@@ -427,32 +374,27 @@ class DeviceCapabilityDetector:
             return 50.0
     
     def _benchmark_storage_performance(self) -> float:
-        """Benchmark storage performance"""
         try:
             import tempfile
             import os
             
-            # Create temporary file for testing
             with tempfile.NamedTemporaryFile(delete=False) as tmp:
                 tmp_path = tmp.name
             
             try:
                 start_time = time.time()
                 
-                # Write test
-                data = b'0' * (1024 * 1024)  # 1MB
+                data = b'0' * (1024 * 1024)
                 with open(tmp_path, 'wb') as f:
-                    for _ in range(10):  # Write 10MB
+                    for _ in range(10):
                         f.write(data)
                 
-                # Read test
                 with open(tmp_path, 'rb') as f:
                     while f.read(1024 * 1024):
                         pass
                 
                 duration = time.time() - start_time
                 
-                # Normalize score (SSD should be <1s, HDD might be 3-5s)
                 score = min(100, max(0, 100 - duration * 20))
                 
                 self.logger.debug(f"Storage benchmark: {duration:.2f}s -> {score:.1f}/100")
@@ -470,26 +412,20 @@ class DeviceCapabilityDetector:
     
     def _determine_performance_tier(self, cpu_score: float, memory_gb: float, 
                                    has_gpu: bool) -> str:
-        """Determine overall performance tier"""
-        # High tier criteria
         if (cpu_score >= 60 and memory_gb >= 8) or has_gpu:
             return "high"
         
-        # Medium tier criteria
         if cpu_score >= 30 and memory_gb >= 4:
             return "medium"
         
-        # Low tier (everything else)
         return "low"
     
     def generate_performance_profile(self) -> PerformanceProfile:
-        """Generate optimized performance profile for this device"""
         if not self.capabilities:
             self.detect_capabilities()
         
         tier = self.capabilities.overall_performance_tier
         
-        # Define profiles based on tier
         profiles = {
             "low": PerformanceProfile(
                 device_tier="low",
@@ -552,25 +488,21 @@ class DeviceCapabilityDetector:
         
         self.performance_profile = profiles[tier]
         
-        # Apply specific adjustments based on capabilities
         self._adjust_profile_for_device()
         
         self.logger.info(f"Generated {tier} performance profile")
         return self.performance_profile
     
     def _adjust_profile_for_device(self):
-        """Apply device-specific adjustments to the performance profile"""
         if not self.capabilities or not self.performance_profile:
             return
         
-        # Adjust for thermal throttling
         if self.capabilities.thermal_throttling_detected:
             self.performance_profile.recommended_fps = max(10, 
                 self.performance_profile.recommended_fps - 5)
             self.performance_profile.cpu_warning_threshold -= 10
             self.logger.info("Adjusted profile for thermal throttling")
         
-        # Adjust for battery operation
         if (self.capabilities.battery_available and 
             not self.capabilities.power_plugged and 
             self.capabilities.battery_percent and 
@@ -582,7 +514,6 @@ class DeviceCapabilityDetector:
                 self.performance_profile.max_parallel_operations // 2)
             self.logger.info("Adjusted profile for low battery")
         
-        # Adjust for limited memory
         if self.capabilities.available_memory_gb < 2:
             self.performance_profile.buffer_size_mb = max(16, 
                 self.performance_profile.buffer_size_mb // 2)
@@ -591,7 +522,6 @@ class DeviceCapabilityDetector:
             self.logger.info("Adjusted profile for limited memory")
     
     def save_device_profile(self, filename: str):
-        """Save device capabilities and profile to file"""
         if not self.capabilities or not self.performance_profile:
             self.logger.error("No capabilities or profile to save")
             return
@@ -611,16 +541,13 @@ class DeviceCapabilityDetector:
             self.logger.error(f"Failed to save device profile: {e}")
     
     def load_device_profile(self, filename: str) -> bool:
-        """Load device capabilities and profile from file"""
         try:
             with open(filename, 'r') as f:
                 profile_data = json.load(f)
             
-            # Reconstruct capabilities
             caps_dict = profile_data["capabilities"]
             self.capabilities = DeviceCapabilities(**caps_dict)
             
-            # Reconstruct performance profile
             profile_dict = profile_data["performance_profile"]
             self.performance_profile = PerformanceProfile(**profile_dict)
             
@@ -632,43 +559,36 @@ class DeviceCapabilityDetector:
             return False
     
     def get_optimization_recommendations(self) -> List[str]:
-        """Get device-specific optimization recommendations"""
         if not self.capabilities:
             return ["Run device detection first"]
         
         recommendations = []
         
-        # CPU recommendations
         if self.capabilities.cpu_performance_score < 30:
             recommendations.append(
                 "Low CPU performance detected. Consider reducing frame rates and parallel operations."
             )
         
-        # Memory recommendations
         if self.capabilities.total_memory_gb < 4:
             recommendations.append(
                 "Limited memory available. Enable aggressive garbage collection and reduce buffer sizes."
             )
         
-        # GPU recommendations
         if not self.capabilities.gpu_available:
             recommendations.append(
                 "No GPU detected. CPU-only processing will be used, which may limit performance."
             )
         
-        # Thermal recommendations
         if self.capabilities.thermal_throttling_detected:
             recommendations.append(
                 "Thermal throttling detected. Reduce processing intensity to prevent overheating."
             )
         
-        # Storage recommendations
         if self.capabilities.storage_performance_score < 30:
             recommendations.append(
                 "Slow storage detected. Consider reducing video quality or using external storage."
             )
         
-        # Battery recommendations
         if (self.capabilities.battery_available and 
             not self.capabilities.power_plugged):
             recommendations.append(
@@ -682,16 +602,12 @@ class DeviceCapabilityDetector:
 
 
 def detect_device_and_generate_profile(save_to_file: bool = True) -> Tuple[DeviceCapabilities, PerformanceProfile]:
-    """Convenience function to detect device and generate performance profile"""
     detector = DeviceCapabilityDetector()
     
-    # Detect capabilities
     capabilities = detector.detect_capabilities()
     
-    # Generate performance profile
     profile = detector.generate_performance_profile()
     
-    # Save to file if requested
     if save_to_file:
         filename = f"device_profile_{int(time.time())}.json"
         detector.save_device_profile(filename)
@@ -700,7 +616,6 @@ def detect_device_and_generate_profile(save_to_file: bool = True) -> Tuple[Devic
 
 
 if __name__ == "__main__":
-    # Run device detection and profiling
     logging.basicConfig(level=logging.INFO)
     
     print("=== Device Capability Detection ===")

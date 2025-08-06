@@ -48,13 +48,6 @@ class CameraPreviewWidget(QFrame):
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setMinimumSize(300, 200)
         self.preview_label.setStyleSheet(
-            """
-            QLabel {
-                background-color:
-                color: white;
-                border: 1px solid
-            }
-        """
         )
         layout.addWidget(self.preview_label, 1)
         status_layout = QHBoxLayout()
@@ -200,17 +193,6 @@ class DualWebcamMainWindow(QMainWindow):
         self.record_button = QPushButton("Start Recording")
         self.record_button.clicked.connect(self.toggle_recording)
         self.record_button.setStyleSheet(
-            """
-            QPushButton {
-                background-color:
-                color: white;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:pressed {
-                background-color:
-            }
-        """
         )
         controls_layout.addWidget(self.record_button)
         left_panel.addWidget(controls_group)
@@ -352,17 +334,6 @@ class DualWebcamMainWindow(QMainWindow):
                     self.is_recording = True
                     self.record_button.setText("Stop Recording")
                     self.record_button.setStyleSheet(
-                        """
-                        QPushButton {
-                            background-color:
-                            color: white;
-                            font-weight: bold;
-                            padding: 10px;
-                        }
-                        QPushButton:pressed {
-                            background-color:
-                        }
-                    """
                     )
                     self.status_bar.showMessage("Recording...")
                     logger.info("Recording started")
@@ -382,17 +353,6 @@ class DualWebcamMainWindow(QMainWindow):
             self.is_recording = False
             self.record_button.setText("Start Recording")
             self.record_button.setStyleSheet(
-                """
-                QPushButton {
-                    background-color:
-                    color: white;
-                    font-weight: bold;
-                    padding: 10px;
-                }
-                QPushButton:pressed {
-                    background-color:
-                }
-            """
             )
             self.status_bar.showMessage("Recording stopped")
             logger.info("Recording stopped")

@@ -17,23 +17,6 @@ import org.junit.jupiter.api.Test
 import org.robolectric.annotation.Config
 import java.io.File
 
-/**
- * Comprehensive Calibration System Tests
- * =====================================
- * 
- * This test class provides comprehensive testing for the calibration system,
- * including pattern detection, camera calibration, and quality assessment.
- * 
- * Test coverage:
- * - Calibration capture management and coordination
- * - Pattern detection and validation
- * - Camera parameter calculation and optimization
- * - Calibration quality assessment and validation
- * - Multi-camera calibration scenarios
- * 
- * Author: Multi-Sensor Recording System
- * Date: 2025-01-16
- */
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi  
 class CalibrationCaptureManagerComprehensiveTest {
@@ -88,6 +71,4 @@ class CalibrationCaptureManagerComprehensiveTest {
         assertEquals("Initial session count should be 0", 0, stats.totalSessions)
     }
     
-    // Note: Other tests disabled due to interface changes
-    // The actual captureCalibrationImages method requires real dependencies to work properly
 }

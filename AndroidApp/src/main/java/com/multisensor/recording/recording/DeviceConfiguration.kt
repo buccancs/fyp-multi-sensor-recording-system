@@ -134,3 +134,4 @@ data class DeviceConfiguration(
         "DeviceConfiguration(rate=${samplingRate}Hz, sensors=${enabledSensors.size}, " +
                 "channels=[${enabledSensors.joinToString { it.displayName }}])"
 }
+

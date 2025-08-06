@@ -1,14 +1,3 @@
-"""
-Session Review Dialog for Multi-Sensor Recording System Controller
-
-This module implements the SessionReviewDialog class for Milestone 3.8: Session Metadata Logging and Review.
-It provides a comprehensive post-session review interface that displays session files, statistics,
-and allows opening files with default applications.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-07-30
-Milestone: 3.8 - Session Metadata Logging and Review
-"""
 
 import json
 import os
@@ -40,28 +29,10 @@ from PyQt5.QtWidgets import (
 
 
 class SessionReviewDialog(QDialog):
-    """
-    Post-session review dialog for comprehensive session analysis.
-
-    This dialog provides:
-    - Session file listing with file opening capabilities
-    - Session summary statistics and metadata
-    - Calibration results display
-    - Event timeline review
-    - File size and duration analysis
-    """
 
     file_open_requested = pyqtSignal(str)
 
     def __init__(self, session_data: Dict, session_folder: str, parent=None):
-        """
-        Initialize session review dialog.
-
-        Args:
-            session_data (Dict): Complete session data from SessionLogger
-            session_folder (str): Path to session folder containing files
-            parent: Parent widget
-        """
         super().__init__(parent)
         self.session_data = session_data
         self.session_folder = Path(session_folder)
@@ -85,7 +56,6 @@ class SessionReviewDialog(QDialog):
         )
 
     def init_ui(self):
-        """Initialize the user interface."""
         layout = QVBoxLayout(self)
 
         self.create_header(layout)
@@ -95,18 +65,9 @@ class SessionReviewDialog(QDialog):
         self.create_button_bar(layout)
 
     def create_header(self, parent_layout):
-        """Create header section with session title and basic info."""
         header_frame = QFrame()
         header_frame.setFrameStyle(QFrame.StyledPanel)
         header_frame.setStyleSheet(
-            """
-            QFrame {
-                background-color:
-                border: 1px solid
-                border-radius: 5px;
-                padding: 10px;
-            }
-        """
         )
 
         header_layout = QVBoxLayout(header_frame)
@@ -137,7 +98,6 @@ class SessionReviewDialog(QDialog):
         parent_layout.addWidget(header_frame)
 
     def create_main_content(self, parent_layout):
-        """Create main content area with tabbed interface."""
         self.tab_widget = QTabWidget()
 
         self.create_files_tab()
@@ -152,7 +112,6 @@ class SessionReviewDialog(QDialog):
         parent_layout.addWidget(self.tab_widget)
 
     def create_files_tab(self):
-        """Create files tab with file listing and preview."""
         files_widget = QWidget()
         layout = QHBoxLayout(files_widget)
 
@@ -197,7 +156,6 @@ class SessionReviewDialog(QDialog):
         self.tab_widget.addTab(files_widget, "Files")
 
     def create_statistics_tab(self):
-        """Create statistics tab with session metrics."""
         stats_widget = QWidget()
         layout = QVBoxLayout(stats_widget)
 
@@ -291,7 +249,6 @@ class SessionReviewDialog(QDialog):
         self.tab_widget.addTab(stats_widget, "Statistics")
 
     def create_events_tab(self):
-        """Create events tab with timeline view."""
         events_widget = QWidget()
         layout = QVBoxLayout(events_widget)
 
@@ -326,7 +283,6 @@ class SessionReviewDialog(QDialog):
         self.tab_widget.addTab(events_widget, "Events")
 
     def create_calibration_tab(self):
-        """Create calibration tab if calibration data exists."""
         calib_widget = QWidget()
         layout = QVBoxLayout(calib_widget)
 
@@ -362,7 +318,6 @@ class SessionReviewDialog(QDialog):
         self.tab_widget.addTab(calib_widget, "Calibration")
 
     def create_button_bar(self, parent_layout):
-        """Create bottom button bar."""
         button_layout = QHBoxLayout()
 
         export_btn = QPushButton("Export Session Data")
@@ -379,7 +334,6 @@ class SessionReviewDialog(QDialog):
         parent_layout.addLayout(button_layout)
 
     def load_session_files(self):
-        """Load all files from the session folder."""
         self.session_files = []
 
         if not self.session_folder.exists():
@@ -402,7 +356,6 @@ class SessionReviewDialog(QDialog):
         print(f"[DEBUG_LOG] Loaded {len(self.session_files)} files from session folder")
 
     def get_file_type(self, file_path: Path) -> str:
-        """Determine file type based on extension."""
         suffix = file_path.suffix.lower()
 
         if suffix in [".mp4", ".avi", ".mov", ".mkv", ".wmv"]:
@@ -417,10 +370,8 @@ class SessionReviewDialog(QDialog):
             return "Other"
 
     def populate_session_info(self):
-        """Populate session information displays."""
 
     def populate_file_list(self):
-        """Populate the file list widget."""
         self.file_list.clear()
 
         for file_info in self.session_files:
@@ -445,10 +396,8 @@ class SessionReviewDialog(QDialog):
             self.file_list.addItem(item)
 
     def populate_event_timeline(self):
-        """Populate event timeline (already done in create_events_tab)."""
 
     def format_event_for_display(self, event: Dict) -> str:
-        """Format event for display in timeline."""
         event_type = event.get("event", "unknown")
         time_str = event.get("time", "unknown")
 
@@ -486,7 +435,6 @@ class SessionReviewDialog(QDialog):
             return f"[{time_str}] {event_type}: {str(event)}"
 
     def on_file_selection_changed(self, current, previous):
-        """Handle file selection change."""
         if current:
             self.open_file_btn.setEnabled(True)
 
@@ -506,11 +454,9 @@ class SessionReviewDialog(QDialog):
             self.file_details.clear()
 
     def on_file_double_clicked(self, item):
-        """Handle file double-click to open file."""
         self.open_selected_file()
 
     def open_selected_file(self):
-        """Open the selected file with default application."""
         current_item = self.file_list.currentItem()
         if not current_item:
             return
@@ -541,7 +487,6 @@ class SessionReviewDialog(QDialog):
             print(f"[DEBUG_LOG] Failed to open file {file_path}: {e}")
 
     def open_session_folder(self):
-        """Open the session folder in file explorer."""
         try:
             if platform.system() == "Windows":
                 os.startfile(str(self.session_folder))
@@ -563,7 +508,6 @@ class SessionReviewDialog(QDialog):
             )
 
     def export_session_data(self):
-        """Export session data to a summary file."""
         try:
             summary = {
                 "session_info": self.session_data,
@@ -597,17 +541,6 @@ class SessionReviewDialog(QDialog):
 def show_session_review_dialog(
     session_data: Dict, session_folder: str, parent=None
 ) -> Optional[SessionReviewDialog]:
-    """
-    Convenience function to show session review dialog.
-
-    Args:
-        session_data (Dict): Session data from SessionLogger
-        session_folder (str): Path to session folder
-        parent: Parent widget
-
-    Returns:
-        SessionReviewDialog: The dialog instance, or None if creation failed
-    """
     try:
         dialog = SessionReviewDialog(session_data, session_folder, parent)
         dialog.exec_()

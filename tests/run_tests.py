@@ -1,22 +1,4 @@
 #!/usr/bin/env python3
-"""
-Comprehensive Test Runner for All Python Tests
-==============================================
-
-This module orchestrates the execution of all comprehensive test suites
-for the Python components of the Multi-Sensor Recording System.
-
-Test suites included:
-- Calibration module comprehensive tests
-- Network module comprehensive tests  
-- Session management comprehensive tests
-- GUI component tests (if available)
-- Hand segmentation tests (if available)
-- Webcam capture tests (if available)
-
-Author: Multi-Sensor Recording System
-Date: 2025-01-16
-"""
 
 import json
 import os
@@ -27,10 +9,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any
 
-# Add PythonApp src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Import test modules from consolidated tests
 try:
     from consolidated_tests import (
         create_calibration_test_suite,
@@ -66,7 +46,6 @@ except ImportError:
 
 
 class ComprehensiveTestRunner:
-    """Comprehensive test runner for all Python modules."""
     
     def __init__(self):
         self.results = {
@@ -112,7 +91,6 @@ class ComprehensiveTestRunner:
         }
     
     def _get_environment_info(self) -> Dict[str, Any]:
-        """Get environment information for test context."""
         env_info = {
             "python_version": sys.version_info[:3],
             "platform": sys.platform,
@@ -120,7 +98,6 @@ class ComprehensiveTestRunner:
             "available_modules": {}
         }
         
-        # Check for key dependencies
         dependencies = [
             ("opencv-python", "cv2"),
             ("numpy", "numpy"),
@@ -141,7 +118,6 @@ class ComprehensiveTestRunner:
         return env_info
     
     def run_single_test_suite(self, suite_name: str) -> Dict[str, Any]:
-        """Run a single test suite and return results."""
         suite_info = self.available_test_suites[suite_name]
         
         result = {
@@ -190,7 +166,6 @@ class ComprehensiveTestRunner:
         return result
     
     def run_all_test_suites(self, filter_suites: List[str] = None) -> Dict[str, Any]:
-        """Run all available test suites."""
         print("=" * 80)
         print("🚀 COMPREHENSIVE PYTHON TEST SUITE RUNNER")
         print("=" * 80)
@@ -198,13 +173,11 @@ class ComprehensiveTestRunner:
         print(f"🐍 Python: {sys.version.split()[0]}")
         print(f"📂 Working directory: {Path.cwd()}")
         
-        # Show available test suites
         print(f"\n📋 Available test suites:")
         for suite_name, suite_info in self.available_test_suites.items():
             status = "✅ Available" if suite_info["available"] else "❌ Not Available"
             print(f"   {suite_name:20} - {status} - {suite_info['description']}")
         
-        # Determine which suites to run
         if filter_suites:
             suites_to_run = [s for s in filter_suites if s in self.available_test_suites]
         else:
@@ -214,7 +187,6 @@ class ComprehensiveTestRunner:
         
         print(f"\n🎯 Running {len(available_suites)} test suites...")
         
-        # Run each test suite
         suite_results = {}
         overall_start_time = time.time()
         
@@ -225,7 +197,6 @@ class ComprehensiveTestRunner:
         
         overall_duration = time.time() - overall_start_time
         
-        # Calculate summary statistics
         total_suites = len(suite_results)
         passed_suites = sum(1 for r in suite_results.values() if r["success"])
         failed_suites = total_suites - passed_suites
@@ -242,7 +213,6 @@ class ComprehensiveTestRunner:
         
         self.results["overall_summary"] = summary
         
-        # Print summary
         print("\n" + "=" * 80)
         print("📊 COMPREHENSIVE TEST RESULTS SUMMARY")
         print("=" * 80)
@@ -267,13 +237,11 @@ class ComprehensiveTestRunner:
         else:
             print(f"\n⚠️  SOME PYTHON TESTS FAILED - CHECK RESULTS ABOVE")
         
-        # Save detailed results
         self._save_results()
         
         return self.results
     
     def _save_results(self) -> None:
-        """Save test results to JSON file."""
         results_dir = Path("test_results")
         results_dir.mkdir(exist_ok=True)
         
@@ -288,7 +256,6 @@ class ComprehensiveTestRunner:
             print(f"\n⚠️  Could not save results: {e}")
     
     def generate_html_report(self) -> str:
-        """Generate an HTML report of test results."""
         html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -296,15 +263,15 @@ class ComprehensiveTestRunner:
     <title>Python Comprehensive Test Results</title>
     <style>
         body {{ font-family: Arial, sans-serif; margin: 20px; }}
-        .header {{ background-color: #f0f0f0; padding: 20px; border-radius: 5px; }}
-        .summary {{ background-color: #e8f5e8; padding: 15px; margin: 20px 0; border-radius: 5px; }}
-        .test-suite {{ margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }}
-        .passed {{ background-color: #d4edda; }}
-        .failed {{ background-color: #f8d7da; }}
-        .unavailable {{ background-color: #f0f0f0; color: #666; }}
+        .header {{ background-color:
+        .summary {{ background-color:
+        .test-suite {{ margin: 10px 0; padding: 10px; border: 1px solid
+        .passed {{ background-color:
+        .failed {{ background-color:
+        .unavailable {{ background-color:
         table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
-        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
-        th {{ background-color: #f2f2f2; }}
+        th, td {{ border: 1px solid
+        th {{ background-color:
     </style>
 </head>
 <body>
@@ -332,23 +299,12 @@ class ComprehensiveTestRunner:
             <th>Duration</th>
             <th>Description</th>
         </tr>
-"""
-        
-        for suite_name, result in self.results["test_suites"].items():
-            status_class = "passed" if result["success"] else "failed"
-            status_text = "PASSED" if result["success"] else "FAILED"
-            duration = f"{result['duration']:.2f}s"
-            
-            html_content += f"""
         <tr class="{status_class}">
             <td>{suite_name}</td>
             <td>{status_text}</td>
             <td>{duration}</td>
             <td>{result['description']}</td>
         </tr>
-"""
-        
-        html_content += """
     </table>
     
     <h2>Environment Information</h2>
@@ -357,45 +313,13 @@ class ComprehensiveTestRunner:
             <th>Module</th>
             <th>Available</th>
         </tr>
-"""
-        
-        for module, available in self.results["environment_info"]["available_modules"].items():
-            status = "Yes" if available else "No"
-            status_class = "passed" if available else "failed"
-            
-            html_content += f"""
         <tr class="{status_class}">
             <td>{module}</td>
             <td>{status}</td>
         </tr>
-"""
-        
-        html_content += """
     </table>
 </body>
 </html>
-"""
-        
-        # Save HTML report
-        results_dir = Path("test_results")
-        results_dir.mkdir(exist_ok=True)
-        
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        html_file = results_dir / f"python_test_report_{timestamp}.html"
-        
-        try:
-            with open(html_file, 'w') as f:
-                f.write(html_content)
-            print(f"📄 HTML report saved to: {html_file}")
-            return str(html_file)
-        except Exception as e:
-            print(f"⚠️  Could not save HTML report: {e}")
-            return ""
-
-
-def main():
-    """Main test runner entry point."""
-    # Parse command line arguments
     import argparse
     
     parser = argparse.ArgumentParser(description="Comprehensive Python Test Runner")
@@ -408,15 +332,12 @@ def main():
     
     args = parser.parse_args()
     
-    # Create and run test runner
     runner = ComprehensiveTestRunner()
     results = runner.run_all_test_suites(filter_suites=args.suites)
     
-    # Generate HTML report if requested
     if args.html:
         runner.generate_html_report()
     
-    # Return appropriate exit code
     overall_success = results["overall_summary"]["overall_success"]
     return 0 if overall_success else 1
 
