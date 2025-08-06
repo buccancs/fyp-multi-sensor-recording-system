@@ -105,9 +105,18 @@ class ConnectionManager(
                     recordConnectionAttempt(deviceId, attempt, false, "Connection function returned false", duration)
                 }
 
-            } catch (e: Exception) {
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
                 val duration = System.currentTimeMillis() - startTime
-                val errorMessage = e.message ?: "Unknown error"
+                val errorMessage = e.message ?: "Connection IO error"
+
+                logger.warning("Connection attempt $attempt failed for device $deviceId: $errorMessage")
+                recordConnectionAttempt(deviceId, attempt, false, errorMessage, duration)
+                updateConnectionHealth(deviceId, false)
+            } catch (e: SecurityException) {
+                val duration = System.currentTimeMillis() - startTime
+                val errorMessage = e.message ?: "Connection security error"
 
                 logger.warning("Connection attempt $attempt failed for device $deviceId: $errorMessage")
                 recordConnectionAttempt(deviceId, attempt, false, errorMessage, duration)

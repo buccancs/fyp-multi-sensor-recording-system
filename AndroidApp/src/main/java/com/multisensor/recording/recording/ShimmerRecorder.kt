@@ -1169,13 +1169,20 @@ constructor(
 
                 while (streamingQueue.isNotEmpty()) {
                     val jsonData = streamingQueue.poll()
-                    streamingWriter?.println(jsonData)
-                    streamingWriter?.flush()
+                    streamingWriter?.let { writer ->
+                        writer.println(jsonData)
+                        writer.flush()
+                        logger.debug("ShimmerRecorder: Streamed data: ${jsonData.take(100)}...")
+                    }
                 }
 
                 delay(100)
-            } catch (e: Exception) {
-                logger.error("Error in network streaming process", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                logger.error("IO error in network streaming process", e)
+            } catch (e: IllegalStateException) {
+                logger.error("State error in network streaming process", e)
             }
         }
     }
