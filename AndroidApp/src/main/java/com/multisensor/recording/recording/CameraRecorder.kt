@@ -51,6 +51,9 @@ constructor(
         logger.info("PreviewStreamer injected into CameraRecorder")
     }
 
+    val isConnected: Boolean
+        get() = cameraDevice != null
+
     private var cameraCharacteristics: CameraCharacteristics? = null
 
     private var mediaRecorder: MediaRecorder? = null

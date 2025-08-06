@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (
     QProgressBar,
     QPushButton,
     QSizePolicy,
-    QTextEdit,
+    QPlainTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -227,12 +227,12 @@ class LogViewer(QWidget):
             "font-weight: 600; font-size: 14px; margin-bottom: 5px;"
         )
         layout.addWidget(title_label)
-        self.log_text = QTextEdit()
+        self.log_text = QPlainTextEdit()
         self.log_text.setReadOnly(True)
         self.log_text.setMaximumBlockCount(self.max_lines)
         self.log_text.setStyleSheet(
             """
-            QTextEdit {
+            QPlainTextEdit {
                 background-color:
                 color:
                 border: 1px solid
@@ -269,7 +269,7 @@ class LogViewer(QWidget):
         formatted_message = (
             f'<span style="color: {color};">[{timestamp}] {level}: {message}</span>'
         )
-        self.log_text.append(formatted_message)
+        self.log_text.appendPlainText(formatted_message)
         scrollbar = self.log_text.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
 

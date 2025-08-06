@@ -89,6 +89,8 @@ data class MainUiState(
 
     val isDiagnosticsRunning: Boolean = false,
     val diagnosticsCompleted: Boolean = false,
+    val isScanning: Boolean = false,
+    val isConnecting: Boolean = false,
 
     val storageUsed: Long = 0L,
     val storageAvailable: Long = 0L,
