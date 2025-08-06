@@ -1,0 +1,293 @@
+{
+  "generated_at": "2025-08-06T06:55:47.275674",
+  "total_analyzed": 1499,
+  "needs_documentation": 493,
+  "high_complexity": 67,
+  "medium_complexity": 39,
+  "summary": {
+    "undocumented_complex_functions": 106,
+    "average_complexity": 4.553702468312208,
+    "max_complexity": 152
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "category": "Complexity Reduction",
+      "description": "67 functions have very high complexity (>15)",
+      "action": "Refactor these functions into smaller, focused functions"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Documentation",
+      "description": "106 complex functions lack documentation",
+      "action": "Add comprehensive docstrings explaining logic and parameters"
+    }
+  ],
+  "detailed_analysis": [
+    {
+      "file": "PythonApp/shimmer_manager.py",
+      "function": "ShimmerManager",
+      "line": 130,
+      "type": "class",
+      "complexity": 152,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 152 control structures"
+      ],
+      "suggested_docstring": "\"\"\"ShimmerManager class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes and..."
+    },
+    {
+      "file": "PythonApp/web_ui/web_dashboard.py",
+      "function": "_setup_routes",
+      "line": 96,
+      "type": "method",
+      "complexity": 143,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Very high cyclomatic complexity (143)",
+        "Contains complex logic patterns (nested loops, exception handling, or async operations)",
+        "Multiple return paths (143)",
+        "Missing documentation"
+      ],
+      "suggested_docstring": "\"\"\"Handle  setup routes functionality\n\nThis function has high complexity and handles multiple responsibilities.\nConsider refactoring into smaller functions.\n\nReturns:\n    [Return type and description ..."
+    },
+    {
+      "file": "PythonApp/web_ui/web_dashboard.py",
+      "function": "WebDashboardServer",
+      "line": 40,
+      "type": "class",
+      "complexity": 73,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 73 control structures"
+      ],
+      "suggested_docstring": "\"\"\"WebDashboardServer class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes..."
+    },
+    {
+      "file": "PythonApp/production/security_scanner.py",
+      "function": "SecurityScanner",
+      "line": 44,
+      "type": "class",
+      "complexity": 68,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 68 control structures"
+      ],
+      "suggested_docstring": "\"\"\"SecurityScanner class with specialized functionality.\n\nThis class handles [describe main responsibility].\n\nAttributes:\n    [Add main attributes and their descriptions]\n\"\"\"..."
+    },
+    {
+      "file": "PythonApp/network/enhanced_device_server.py",
+      "function": "EnhancedDeviceServer",
+      "line": 213,
+      "type": "class",
+      "complexity": 60,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 60 control structures"
+      ],
+      "suggested_docstring": "\"\"\"EnhancedDeviceServer class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attribut..."
+    },
+    {
+      "file": "PythonApp/webcam/dual_webcam_capture.py",
+      "function": "DualWebcamCapture",
+      "line": 51,
+      "type": "class",
+      "complexity": 55,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 55 control structures"
+      ],
+      "suggested_docstring": "\"\"\"DualWebcamCapture class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes ..."
+    },
+    {
+      "file": "PythonApp/network/device_server.py",
+      "function": "JsonSocketServer",
+      "line": 93,
+      "type": "class",
+      "complexity": 55,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 55 control structures"
+      ],
+      "suggested_docstring": "\"\"\"JsonSocketServer class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes a..."
+    },
+    {
+      "file": "PythonApp/session/session_recovery.py",
+      "function": "SessionRecoveryManager",
+      "line": 12,
+      "type": "class",
+      "complexity": 53,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 53 control structures"
+      ],
+      "suggested_docstring": "\"\"\"SessionRecoveryManager class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attrib..."
+    },
+    {
+      "file": "PythonApp/gui/enhanced_stimulus_controller.py",
+      "function": "EnhancedStimulusController",
+      "line": 278,
+      "type": "class",
+      "complexity": 52,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 52 control structures"
+      ],
+      "suggested_docstring": "\"\"\"EnhancedStimulusController class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main at..."
+    },
+    {
+      "file": "PythonApp/web_ui/web_controller.py",
+      "function": "WebController",
+      "line": 73,
+      "type": "class",
+      "complexity": 50,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 50 control structures"
+      ],
+      "suggested_docstring": "\"\"\"WebController class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes and ..."
+    },
+    {
+      "file": "PythonApp/network/device_client.py",
+      "function": "DeviceClient",
+      "line": 13,
+      "type": "class",
+      "complexity": 48,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 48 control structures"
+      ],
+      "suggested_docstring": "\"\"\"DeviceClient class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes and t..."
+    },
+    {
+      "file": "PythonApp/network/android_device_manager.py",
+      "function": "AndroidDeviceManager",
+      "line": 68,
+      "type": "class",
+      "complexity": 48,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 48 control structures"
+      ],
+      "suggested_docstring": "\"\"\"AndroidDeviceManager class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attribut..."
+    },
+    {
+      "file": "PythonApp/calibration/calibration.py",
+      "function": "CalibrationManager",
+      "line": 10,
+      "type": "class",
+      "complexity": 47,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 47 control structures"
+      ],
+      "suggested_docstring": "\"\"\"CalibrationManager class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes..."
+    },
+    {
+      "file": "PythonApp/production/performance_benchmark.py",
+      "function": "PerformanceBenchmarkSuite",
+      "line": 87,
+      "type": "class",
+      "complexity": 42,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 42 control structures"
+      ],
+      "suggested_docstring": "\"\"\"PerformanceBenchmarkSuite class with specialized functionality.\n\nThis class handles [describe main responsibility].\n\nAttributes:\n    [Add main attributes and their descriptions]\n\"\"\"..."
+    },
+    {
+      "file": "PythonApp/cross_device_calibration_coordinator.py",
+      "function": "CrossDeviceCalibrationCoordinator",
+      "line": 77,
+      "type": "class",
+      "complexity": 38,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 38 control structures"
+      ],
+      "suggested_docstring": "\"\"\"CrossDeviceCalibrationCoordinator class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add ..."
+    },
+    {
+      "file": "PythonApp/utils/logger.py",
+      "function": "LoggerManager",
+      "line": 12,
+      "type": "class",
+      "complexity": 38,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 38 control structures"
+      ],
+      "suggested_docstring": "\"\"\"LoggerManager class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes and ..."
+    },
+    {
+      "file": "PythonApp/session/session_synchronizer.py",
+      "function": "SessionSynchronizer",
+      "line": 57,
+      "type": "class",
+      "complexity": 37,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 37 control structures"
+      ],
+      "suggested_docstring": "\"\"\"SessionSynchronizer class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attribute..."
+    },
+    {
+      "file": "PythonApp/network/device_server.py",
+      "function": "process_json_message",
+      "line": 212,
+      "type": "method",
+      "complexity": 36,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Very high cyclomatic complexity (36)",
+        "Contains complex logic patterns (nested loops, exception handling, or async operations)",
+        "Missing documentation"
+      ],
+      "suggested_docstring": "\"\"\"Handle json message\n\nThis function has high complexity and handles multiple responsibilities.\nConsider refactoring into smaller functions.\n\nArgs:\n    client_socket: [Type and description needed]\n  ..."
+    },
+    {
+      "file": "PythonApp/calibration_quality_assessment.py",
+      "function": "CalibrationQualityAssessment",
+      "line": 64,
+      "type": "class",
+      "complexity": 35,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 35 control structures"
+      ],
+      "suggested_docstring": "\"\"\"CalibrationQualityAssessment class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main ..."
+    },
+    {
+      "file": "PythonApp/calibration/calibration_manager.py",
+      "function": "CalibrationManager",
+      "line": 16,
+      "type": "class",
+      "complexity": 35,
+      "needs_docs": true,
+      "current_docs_length": 0,
+      "reasons": [
+        "Complex class with 35 control structures"
+      ],
+      "suggested_docstring": "\"\"\"CalibrationManager class with specialized functionality.\n\nThis class handles [describe main responsibility].\nLarge class - consider splitting responsibilities.\n\nAttributes:\n    [Add main attributes..."
+    }
+  ]
+}

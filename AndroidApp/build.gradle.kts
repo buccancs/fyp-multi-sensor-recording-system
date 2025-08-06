@@ -128,8 +128,6 @@ android {
                 it.maxHeapSize = "2048m"
                 it.useJUnitPlatform {
                     includeEngines("junit-jupiter", "junit-vintage", "kotest")
-                    includeTags("unit", "integration", "performance")
-                    excludeTags("manual", "stress")
                 }
                 it.systemProperty("robolectric.useWindowsCompatibleTempDir", "true")
                 it.reports.html.required.set(true)
@@ -179,9 +177,10 @@ dependencies {
 
     implementation(libs.bundles.networking)
     
-    // Security dependencies
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation("androidx.security:security-identity-credential:1.0.0-alpha03")
+    // Security dependencies - Updated from alpha to stable versions
+    // Addresses Low Priority recommendation: "Evaluate alpha/beta dependency risk"
+    implementation("androidx.security:security-crypto:1.0.0")  // Downgraded from 1.1.0-alpha06 to stable
+    // Removed security-identity-credential as it's still alpha and not critical for core functionality
 
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
     implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))

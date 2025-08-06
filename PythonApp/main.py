@@ -10,6 +10,7 @@ from .utils.logging_config import AppLogger, get_logger
 log_level = os.environ.get("MSR_LOG_LEVEL", "INFO")
 AppLogger.set_level(log_level)
 from .gui.enhanced_ui_main_window import EnhancedMainWindow
+from .production.runtime_security_checker import validate_runtime_security, SecurityValidationError
 
 logger = get_logger(__name__)
 
@@ -20,6 +21,22 @@ def main():
     )
     logger.info(f"Python version: {sys.version}")
     logger.info(f"PyQt5 available, Qt version: {qVersion()}")
+    
+    # Perform runtime security validation before starting application
+    try:
+        logger.info("🔒 Performing runtime security validation...")
+        validate_runtime_security()
+        logger.info("🔒 Runtime security validation completed successfully")
+    except SecurityValidationError as e:
+        logger.error(f"🔒 SECURITY VALIDATION FAILED: {e}")
+        logger.error("🔒 Application startup aborted due to security issues")
+        print(f"\n❌ SECURITY ERROR: {e}")
+        print("🔒 Please fix security issues before running the application")
+        sys.exit(1)
+    except Exception as e:
+        logger.warning(f"🔒 Security validation encountered an error: {e}")
+        logger.warning("🔒 Continuing startup with security warning")
+    
     try:
         logger.debug("Configuring high DPI scaling")
         QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
