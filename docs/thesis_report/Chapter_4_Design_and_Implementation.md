@@ -41,7 +41,7 @@
         - 4.9.1. [Exception Handling Strategy and Implementation](#491-exception-handling-strategy-and-implementation)
         - 4.9.2. [Logging Framework Integration and Observability](#492-logging-framework-integration-and-observability)
         - 4.9.3. [System Reliability and Maintainability Impact](#493-system-reliability-and-maintainability-impact)
-        - 4.9.4. [Multi-Layer Exception Handling Architecture](#494-multi-layer-exception-handling-architecture)
+        - 4.9.4. [Error Recovery and Fault Tolerance Mechanisms](#494-error-recovery-and-fault-tolerance-mechanisms)
 ---
 
 This comprehensive chapter presents the detailed design and implementation of the Multi-Sensor Recording System,
@@ -3953,14 +3953,14 @@ employed throughout the design and implementation phase, providing concrete evid
 architecture and advanced implementation techniques that enable the Multi-Sensor Recording System's exceptional
 capabilities and research-grade performance.
 
-## 4.8 Code Quality and Exception Handling Architecture
+## 4.9 Code Quality and Exception Handling Architecture
 
 A critical aspect of the Multi-Sensor Recording System's implementation involves sophisticated error handling and
 code quality assurance mechanisms that ensure reliable operation in research environments. This section examines
 the comprehensive exception handling architecture and code quality improvements implemented across both Python
 desktop and Android mobile applications.
 
-### 4.8.1 Exception Handling Strategy and Implementation
+### 4.9.1 Exception Handling Strategy and Implementation
 
 The system implements a multi-layered exception handling strategy based on modern software engineering best practices
 [McConnell2004, Martin2008], designed to provide specific error diagnosis while maintaining system stability and
@@ -4090,7 +4090,7 @@ try {
    - Enhanced device discovery error handling
    - Improved connection recovery capabilities
 
-### 4.8.2 Logging Framework Integration and Observability
+### 4.9.2 Logging Framework Integration and Observability
 
 The system implements comprehensive logging frameworks across both platforms to enhance debugging capabilities and
 operational observability:
@@ -4105,7 +4105,7 @@ operational observability:
 - **Crash reporting** mechanisms for production debugging
 - **Performance profiling** integration for optimization identification
 
-### 4.8.3 System Reliability and Maintainability Impact
+### 4.9.3 System Reliability and Maintainability Impact
 
 The comprehensive exception handling improvements deliver measurable benefits to system reliability and
 maintainability:
@@ -4133,7 +4133,7 @@ maintainability:
 - **Simplified Debugging**: Structured logging reduces time to identify and resolve issues
 - **Professional Code Quality**: Industry-standard exception handling practices
 
-### 4.8.4 Error Recovery and Fault Tolerance Mechanisms
+### 4.9.4 Error Recovery and Fault Tolerance Mechanisms
 
 The system implements sophisticated error recovery mechanisms that enable graceful degradation and automatic recovery
 from transient failures:

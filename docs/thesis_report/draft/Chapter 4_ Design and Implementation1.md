@@ -355,7 +355,7 @@ imaging conditions (e.g. to avoid flicker or focus shifts during an
 experiment). The advanced implementation of camera control in the app
 includes features such as **manual exposure and focus** settings and
 real-time histogram analysis for exposure monitoring (these features are
-further discussed in Section 4.9.1 on multi-sensor data collection).
+further discussed in Section 4.10.1 on multi-sensor data collection).
 
 During recording, each video frame is timestamped by the camera
 hardware, and those timestamps are aligned with the device's clock
@@ -1763,7 +1763,7 @@ recorder. It demonstrates a professional handling of system resources,
 akin to what commercial mobile apps or embedded systems do, which was
 necessary to reach the reliability expected for a research-grade system.
 
-## 4.9 Technology Stack and Design Decisions
+## 4.10 Technology Stack and Design Decisions
 
 The development of this project required making informed choices about
 the technologies and frameworks to use on each platform. These decisions
@@ -1774,7 +1774,7 @@ we outline the major components of the technology stack and rationalize
 our design decisions, highlighting how each choice contributed to the
 project's success.
 
-### 4.9.1 Android Platform and Library Choices
+### 4.10.1 Android Platform and Library Choices
 
 For the Android mobile application, we selected **Kotlin** as the
 programming language, leveraging its modern features and null-safety
@@ -1848,7 +1848,7 @@ instance, Hilt reduced boilerplate, coroutines prevented callback hell,
 and Camera2 delivered on the technical requirement for advanced camera
 control.
 
-### 4.9.2 Desktop (Python) Framework Choices
+### 4.10.2 Desktop (Python) Framework Choices
 
 The desktop application is built in **Python 3.9** (at the time of
 development), primarily to take advantage of Python's rapid development,
@@ -1919,7 +1919,7 @@ implement complex logic like synchronization algorithms and multi-modal
 analysis succinctly and in a readable form (which aids verification and
 maintenance, as academic projects might be handed over to others).
 
-### 4.9.3 Communication Protocol Selection
+### 4.10.3 Communication Protocol Selection
 
 When designing the communication between the Android devices and the
 desktop, we evaluated several options -- REST APIs over HTTP, MQTT
@@ -1990,7 +1990,7 @@ stack optimized for our use case, instead of forcing the system into a
 pattern like request-response or pub-sub that didn't naturally fit the
 real-time coordination requirement.
 
-### 4.9.4 Database/Storage Design Decision
+### 4.10.4 Database/Storage Design Decision
 
 Managing the data produced by the system required choices around how to
 store that data both during and after sessions. We decided against using
@@ -2137,11 +2137,11 @@ the system and doing subsequent analysis on the collected data.
 [\[68\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=Communication%20Technology)
 [\[69\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=CTRL%20,UDP)
 
-## 4.8 Code Quality and Exception Handling Architecture
+## 4.9 Code Quality and Exception Handling Architecture
 
 A critical component of the system implementation involves comprehensive code quality improvements and sophisticated exception handling mechanisms that ensure reliable operation in research environments. These improvements address fundamental issues that could compromise system stability and debugging capabilities.
 
-### 4.8.1 Python Desktop Application Exception Handling Improvements
+### 4.9.1 Python Desktop Application Exception Handling Improvements
 
 The Python desktop controller underwent systematic exception handling refinement to eliminate problematic patterns:
 
@@ -2171,7 +2171,7 @@ except ValueError as e:
     handle_configuration_error(e)
 ```
 
-### 4.8.2 Android Application Exception Handling Transformation
+### 4.9.2 Android Application Exception Handling Transformation
 
 The Android application required systematic replacement of over 590 broad exception handlers that were masking critical system exceptions and hampering debugging capabilities.
 
@@ -2210,7 +2210,7 @@ try {
 }
 ```
 
-### 4.8.3 System Reliability and Maintainability Impact
+### 4.9.3 System Reliability and Maintainability Impact
 
 **Quantitative Improvements:**
 - **Python Desktop**: 100% elimination of problematic exception patterns
@@ -2226,9 +2226,9 @@ try {
 
 These comprehensive code quality improvements establish a robust foundation for reliable research operations, significantly reducing maintenance overhead while enhancing the system's capability to provide clear diagnostic information when issues occur.
 
-## 4.9 Comprehensive Code Quality and Exception Handling Architecture
+## 4.11 Comprehensive Code Quality and Exception Handling Architecture
 
-### 4.9.1 Systematic Exception Handling Enhancement
+### 4.11.1 Systematic Exception Handling Enhancement
 
 The Multi-Sensor Recording System implements a comprehensive code quality framework that addresses fundamental software engineering challenges in distributed research instrumentation. Through systematic enhancement of 590+ exception handlers across Android and Python platforms, the system achieves significant improvements in reliability, debugging efficiency, and maintenance effectiveness.
 
@@ -2244,7 +2244,7 @@ The Multi-Sensor Recording System implements a comprehensive code quality framew
 - **Specific exception categorization**: SecurityException, IllegalStateException, IOException
 - **35% overall performance improvement** in error handling and recovery
 
-### 4.9.2 Multi-Layer Exception Handling Architecture
+### 4.11.2 Multi-Layer Exception Handling Architecture
 
 The system implements sophisticated multi-layer exception handling that coordinates error management across distributed components:
 
@@ -2253,7 +2253,7 @@ The system implements sophisticated multi-layer exception handling that coordina
 3. **Protocol Layer**: Network error recovery with communication resilience
 4. **Hardware Abstraction Layer**: Device-specific error isolation
 
-### 4.9.3 Quantified Reliability Improvements
+### 4.11.3 Quantified Reliability Improvements
 
 **Comprehensive Validation Results:**
 - **98.4% system reliability** under diverse failure conditions
