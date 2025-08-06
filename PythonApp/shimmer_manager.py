@@ -62,6 +62,13 @@ class DeviceState(Enum):
     ERROR = "error"
 
 
+class ConnectionStatus(Enum):
+    DISCONNECTED = "disconnected"
+    CONNECTING = "connecting"
+    CONNECTED = "connected"
+    ERROR = "error"
+
+
 @dataclass
 class ShimmerStatus:
     is_available: bool = False
@@ -125,6 +132,18 @@ class DeviceConfiguration:
     auto_reconnect: bool = True
     data_validation: bool = True
     buffer_size: int = 1000
+
+
+@dataclass
+class DeviceStatus:
+    device_id: str
+    mac_address: str
+    connection_status: ConnectionStatus
+    connection_type: ConnectionType
+    last_seen: datetime
+    is_streaming: bool = False
+    samples_count: int = 0
+    last_error: Optional[str] = None
 
 
 class ShimmerManager:
