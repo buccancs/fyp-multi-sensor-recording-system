@@ -229,18 +229,18 @@ class CodecValidator:
                 cap.release()
                 try:
                     os.remove(test_file)
-                except:
+                except (OSError, FileNotFoundError):
                     pass
                 return ret and frame is not None
             return False
         except Exception as e:
-            print(f"[DEBUG_LOG] Codec test failed for {codec.value}: {e}")
+            logger.debug(f"Codec test failed for {codec.value}: {e}")
             return False
         finally:
             try:
                 if os.path.exists(test_file):
                     os.remove(test_file)
-            except:
+            except (OSError, FileNotFoundError):
                 pass
 
     @staticmethod

@@ -303,7 +303,8 @@ python src/application.py
         )
         try:
             unix_script.chmod(493)
-        except:
+        except (OSError, PermissionError) as e:
+            self.logger.warning(f"Could not set executable permissions on script: {e}")
             pass
 
     async def _create_locked_requirements(self, python_dist: Path):
@@ -796,7 +797,8 @@ echo
             )
             try:
                 unix_installer.chmod(493)
-            except:
+            except (OSError, PermissionError) as e:
+                self.logger.warning(f"Could not set executable permissions on installer: {e}")
                 pass
             self.logger.info("Deployment scripts created")
         except Exception as e:

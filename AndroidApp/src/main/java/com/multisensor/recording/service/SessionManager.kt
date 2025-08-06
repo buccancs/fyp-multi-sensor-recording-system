@@ -97,8 +97,19 @@ constructor(
                 logger.info("Session created successfully: $sessionId at ${sessionFolder.absolutePath}")
 
                 sessionId
-            } catch (e: Exception) {
-                logger.error("Failed to create new session", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Permission error creating session: ${e.message}", e)
+                throw e
+            } catch (e: java.io.IOException) {
+                logger.error("IO error creating session: ${e.message}", e)
+                throw e
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state creating session: ${e.message}", e)
+                throw e
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error creating session: ${e.message}", e)
                 throw e
             }
         }
@@ -126,8 +137,16 @@ constructor(
                 )
 
                 logger.info("Stimulus event recorded in: ${stimulusFile.absolutePath}")
-            } catch (e: Exception) {
-                logger.error("Failed to add stimulus event to session", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Permission error adding stimulus event: ${e.message}", e)
+            } catch (e: java.io.IOException) {
+                logger.error("IO error adding stimulus event: ${e.message}", e)
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state adding stimulus event: ${e.message}", e)
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error adding stimulus event: ${e.message}", e)
             }
         }
     }
@@ -156,8 +175,22 @@ constructor(
                     logSessionSummary(session)
 
                     logger.info("Session finalized: ${session.sessionId}")
-                } catch (e: Exception) {
-                    logger.error("Failed to finalize session: ${session.sessionId}", e)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: SecurityException) {
+                    logger.error("Permission error finalizing session ${session.sessionId}: ${e.message}", e)
+                    session.status = SessionStatus.FAILED
+                    writeSessionInfo(session)
+                } catch (e: java.io.IOException) {
+                    logger.error("IO error finalizing session ${session.sessionId}: ${e.message}", e)
+                    session.status = SessionStatus.FAILED
+                    writeSessionInfo(session)
+                } catch (e: IllegalStateException) {
+                    logger.error("Invalid state finalizing session ${session.sessionId}: ${e.message}", e)
+                    session.status = SessionStatus.FAILED
+                    writeSessionInfo(session)
+                } catch (e: RuntimeException) {
+                    logger.error("Runtime error finalizing session ${session.sessionId}: ${e.message}", e)
                     session.status = SessionStatus.FAILED
                     writeSessionInfo(session)
                 } finally {

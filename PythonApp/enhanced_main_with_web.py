@@ -21,12 +21,8 @@ except ImportError:
 try:
     from gui.enhanced_ui_main_window import EnhancedMainWindow
 except ImportError:
-    logger.error("Enhanced UI main window not available, falling back to standard")
-    try:
-        from gui.main_window import MainWindow as EnhancedMainWindow
-    except ImportError:
-        logger.error("No GUI components available")
-        EnhancedMainWindow = None
+    logger.error("Enhanced UI main window not available")
+    EnhancedMainWindow = None
 try:
     from gui.main_controller import MainController
 

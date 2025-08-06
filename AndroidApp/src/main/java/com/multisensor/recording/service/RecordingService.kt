@@ -153,8 +153,14 @@ class RecordingService : Service() {
             adaptiveFrameRateController.start()
 
             logger.info("[DEBUG_LOG] Adaptive frame rate control system initialized successfully")
-        } catch (e: Exception) {
-            logger.error("Failed to initialize adaptive frame rate control system", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Permission error initializing adaptive frame rate control: ${e.message}", e)
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state during adaptive frame rate control initialization: ${e.message}", e)
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error during adaptive frame rate control initialization: ${e.message}", e)
         }
     }
 
@@ -172,8 +178,16 @@ class RecordingService : Service() {
 
             logger.info("JSON communication system initialized successfully: ${serverConfig.getJsonAddress()}")
             logger.info("Network configuration: ${networkConfiguration.getConfigurationSummary()}")
-        } catch (e: Exception) {
-            logger.error("Failed to initialize JSON communication system", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Network permission error initializing JSON communication: ${e.message}", e)
+        } catch (e: java.net.ConnectException) {
+            logger.error("Connection error initializing JSON communication: ${e.message}", e)
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state during JSON communication initialization: ${e.message}", e)
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error during JSON communication initialization: ${e.message}", e)
         }
     }
 
@@ -219,8 +233,12 @@ class RecordingService : Service() {
             adaptiveFrameRateController.stop()
             networkQualityMonitor.stopMonitoring()
             logger.info("[DEBUG_LOG] Adaptive frame rate control system stopped")
-        } catch (e: Exception) {
-            logger.error("Error stopping adaptive frame rate control system", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state stopping adaptive frame rate control: ${e.message}", e)
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error stopping adaptive frame rate control: ${e.message}", e)
         }
 
 
@@ -244,8 +262,14 @@ class RecordingService : Service() {
                 sendLocalStatusBroadcast(statusInfo)
 
                 logger.info("Status broadcast completed successfully")
-            } catch (e: Exception) {
-                logger.error("Failed to broadcast current status", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Permission error broadcasting status: ${e.message}", e)
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state during status broadcast: ${e.message}", e)
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error during status broadcast: ${e.message}", e)
             }
         }
     }
@@ -269,9 +293,17 @@ class RecordingService : Service() {
                 deviceModel = android.os.Build.MODEL,
                 androidVersion = android.os.Build.VERSION.RELEASE,
             )
-        } catch (e: Exception) {
-            logger.error("Error gathering status information", e)
-            DeviceStatusInfo.createErrorStatus(e.message ?: "Unknown error")
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Permission error gathering status information: ${e.message}", e)
+            DeviceStatusInfo.createErrorStatus("Permission error: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state gathering status information: ${e.message}", e)
+            DeviceStatusInfo.createErrorStatus("Invalid state: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error gathering status information: ${e.message}", e)
+            DeviceStatusInfo.createErrorStatus("Runtime error: ${e.message}")
         }
 
 
@@ -285,8 +317,14 @@ class RecordingService : Service() {
             )
 
             logger.debug("JSON status broadcast sent successfully")
-        } catch (e: Exception) {
-            logger.error("Failed to broadcast status via JSON socket", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: java.net.ConnectException) {
+            logger.error("Connection error broadcasting status via JSON socket: ${e.message}", e)
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state broadcasting status via JSON socket: ${e.message}", e)
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error broadcasting status via JSON socket: ${e.message}", e)
         }
     }
 
@@ -304,8 +342,14 @@ class RecordingService : Service() {
 
             sendBroadcast(intent)
             logger.debug("Local status broadcast sent")
-        } catch (e: Exception) {
-            logger.error("Failed to send local status broadcast", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Permission error sending local status broadcast: ${e.message}", e)
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state sending local status broadcast: ${e.message}", e)
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error sending local status broadcast: ${e.message}", e)
         }
     }
 
@@ -313,7 +357,14 @@ class RecordingService : Service() {
     private fun getCameraStatus(): String =
         try {
             if (isRecording) "recording" else "ready"
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            logger.error("Permission error getting camera status: ${e.message}", e)
+            "error"
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state getting camera status: ${e.message}", e)
+            "error"
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting camera status: ${e.message}", e)
             "error"
         }
 
@@ -327,7 +378,14 @@ class RecordingService : Service() {
             } else {
                 "unavailable"
             }
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            logger.error("Permission error getting thermal status: ${e.message}", e)
+            "error"
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state getting thermal status: ${e.message}", e)
+            "error"
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting thermal status: ${e.message}", e)
             "error"
         }
 
@@ -341,7 +399,14 @@ class RecordingService : Service() {
                 status.isConnected -> "ready"
                 else -> "unknown"
             }
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            logger.error("Permission error getting shimmer status: ${e.message}", e)
+            "error"
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state getting shimmer status: ${e.message}", e)
+            "error"
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting shimmer status: ${e.message}", e)
             "error"
         }
 
@@ -349,7 +414,14 @@ class RecordingService : Service() {
         try {
             val batteryManager = getSystemService(Context.BATTERY_SERVICE) as android.os.BatteryManager
             batteryManager.getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY)
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            logger.error("Permission error getting battery level: ${e.message}", e)
+            null
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state getting battery level: ${e.message}", e)
+            null
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting battery level: ${e.message}", e)
             null
         }
 
@@ -364,14 +436,25 @@ class RecordingService : Service() {
             } else {
                 null
             }
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            logger.error("Permission error getting available storage: ${e.message}", e)
+            null
+        } catch (e: java.io.IOException) {
+            logger.error("IO error getting available storage: ${e.message}", e)
+            null
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting available storage: ${e.message}", e)
             null
         }
 
     private fun getDeviceTemperature(): Double? =
         try {
             null
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            logger.error("Permission error getting device temperature: ${e.message}", e)
+            null
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting device temperature: ${e.message}", e)
             null
         }
 
@@ -379,7 +462,11 @@ class RecordingService : Service() {
         try {
             val jsonConnected = jsonSocketClient.isConnected()
             if (jsonConnected) "connected" else "disconnected"
-        } catch (e: Exception) {
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state getting connection status: ${e.message}", e)
+            "error"
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error getting connection status: ${e.message}", e)
             "error"
         }
 
@@ -416,8 +503,16 @@ class RecordingService : Service() {
                 }
 
                 logger.info("Recording status - Camera: ${cameraSessionInfo != null}, Thermal: $thermalStarted, Shimmer: $shimmerStarted")
-            } catch (e: Exception) {
-                logger.error("Error starting recording", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Permission error starting recording: ${e.message}", e)
+                stopRecordingInternal()
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state starting recording: ${e.message}", e)
+                stopRecordingInternal()
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error starting recording: ${e.message}", e)
                 stopRecordingInternal()
             }
         }
@@ -464,8 +559,14 @@ class RecordingService : Service() {
             stopSelf()
 
             logger.info("Recording stopped successfully")
-        } catch (e: Exception) {
-            logger.error("Error stopping recording", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Permission error stopping recording: ${e.message}", e)
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state stopping recording: ${e.message}", e)
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error stopping recording: ${e.message}", e)
         }
     }
 

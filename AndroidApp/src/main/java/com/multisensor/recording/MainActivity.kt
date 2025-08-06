@@ -65,8 +65,14 @@ class MainActivity : AppCompatActivity() {
 
             logger.info("MainActivity initialized with fragment architecture")
 
-        } catch (e: Exception) {
-            logger.error("Error during MainActivity initialization", e)
+        } catch (e: SecurityException) {
+            logger.error("Permission error during MainActivity initialization: ${e.message}", e)
+            showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state during MainActivity initialization: ${e.message}", e)
+            showErrorDialog("State Error", "Failed to initialize application state: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error during MainActivity initialization: ${e.message}", e)
             showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
         }
     }
@@ -120,8 +126,14 @@ class MainActivity : AppCompatActivity() {
 
             logger.info("Navigation setup completed successfully")
             
-        } catch (e: Exception) {
-            logger.error("Error during navigation setup", e)
+        } catch (e: SecurityException) {
+            logger.error("Permission error during navigation setup: ${e.message}", e)
+            showErrorDialog("Permission Error", "Failed to setup navigation permissions: ${e.message}")
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state during navigation setup: ${e.message}", e)
+            showErrorDialog("Navigation State Error", "Failed to setup navigation state: ${e.message}")
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error during navigation setup: ${e.message}", e)
             showErrorDialog("Navigation Error", "Failed to setup navigation: ${e.message}")
         }
     }
