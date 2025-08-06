@@ -5,7 +5,8 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import com.multisensor.recording.util.AppLogger
+import com.multisensor.recording.recording.RecordingStateManager
+import com.multisensor.recording.util.Logger
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +51,9 @@ enum class RecoveryStrategy {
 @Singleton
 class NetworkRecoveryManager @Inject constructor(
     private val context: Context,
-    private val jsonSocketClient: JsonSocketClient
+    private val jsonSocketClient: JsonSocketClient,
+    private val logger: Logger,
+    private val recordingStateManager: RecordingStateManager
 ) {
     companion object {
         private const val TAG = "NetworkRecoveryManager"
@@ -103,25 +106,40 @@ class NetworkRecoveryManager @Inject constructor(
         }
 
         totalConnectionLosses++
-        AppLogger.logNetwork(TAG, "Connection loss detected, starting recovery process")
+        logger.warning("$TAG: Connection loss detected, starting recovery process")
+        
+        // Notify recording state manager of network issue
+        coroutineScope.launch {
+            recordingStateManager.registerResource("network_recovery")
+        }
     }
 
     fun attemptReconnection(): Boolean {
         if (isRecovering.get()) {
-            AppLogger.logNetwork(TAG, "Recovery already in progress")
+            logger.debug("$TAG: Recovery already in progress")
             return false
         }
 
         val attempts = reconnectAttempts.incrementAndGet()
         totalRecoveryAttempts++
 
-        AppLogger.logNetwork(TAG, "Attempting reconnection #$attempts")
+        logger.info("$TAG: Attempting reconnection #$attempts")
 
         return try {
             val strategy = determineRecoveryStrategy(attempts)
-            executeRecoveryStrategy(strategy)
+            val result = executeRecoveryStrategy(strategy)
+            
+            if (result) {
+                // Successful reconnection
+                coroutineScope.launch {
+                    recordingStateManager.unregisterResource("network_recovery")
+                }
+                logger.info("$TAG: Reconnection successful on attempt $attempts")
+            }
+            
+            result
         } catch (e: Exception) {
-            AppLogger.logError(TAG, "Reconnection attempt failed", e)
+            logger.error("$TAG: Reconnection attempt failed", e)
             false
         }
     }

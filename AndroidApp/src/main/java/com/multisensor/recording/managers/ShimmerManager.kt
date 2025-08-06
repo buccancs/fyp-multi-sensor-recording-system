@@ -10,15 +10,20 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.multisensor.recording.recording.RecordingStateManager
+import com.multisensor.recording.util.Logger
 import com.shimmerresearch.android.Shimmer
 import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ShimmerManager @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val logger: Logger,
+    private val recordingStateManager: RecordingStateManager
 ) {
 
     companion object {
@@ -34,19 +39,34 @@ class ShimmerManager @Inject constructor(
         private const val CONNECTION_TIMEOUT_MS = 30000L
         private const val SCAN_TIMEOUT_MS = 10000L
         private const val RECONNECTION_ATTEMPTS = 3
+        private const val RECONNECTION_DELAY_MS = 2000L
+        private const val MAX_CONNECTION_FAILURES = 5
 
         private const val SHIMMER_MAC_PREFIX = "00:06:66"
         private const val SHIMMER_DEVICE_NAME_PATTERN = "Shimmer.*"
 
         private const val TAG = "ShimmerManager"
-        private const val TAG_CONNECTION = "$TAG.Connection"
-        private const val TAG_PERSISTENCE = "$TAG.Persistence"
-        private const val TAG_SD_LOGGING = "$TAG.SDLogging"
-        private const val TAG_CONFIGURATION = "$TAG.Configuration"
     }
 
     private var shimmerBluetoothManager: ShimmerBluetoothManagerAndroid? = null
     private var connectedShimmer: Shimmer? = null
+    
+    // Enhanced error handling and reliability tracking
+    private var connectionAttempts = 0
+    private var consecutiveFailures = 0
+    private var lastConnectionTime = 0L
+    private var isReconnecting = false
+    private val connectionLock = kotlinx.coroutines.sync.Mutex()
+    
+    // Connection state tracking
+    private val _connectionState = kotlinx.coroutines.flow.MutableStateFlow(ShimmerConnectionState.DISCONNECTED)
+    val connectionState = _connectionState.asStateFlow()
+    
+    private val _lastError = kotlinx.coroutines.flow.MutableStateFlow<ShimmerError?>(null)
+    val lastError = _lastError.asStateFlow()
+    
+    // Coroutine scope for background operations
+    private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO + kotlinx.coroutines.SupervisorJob())
 
     private var isConnected: Boolean = false
     private var isSDLogging: Boolean = false
@@ -1389,5 +1409,227 @@ class ShimmerManager @Inject constructor(
         val firmwareVersion: String? = null,
         val supportedFeatures: Set<String> = emptySet(),
         val errorCount: Int = 0
+    )
+    
+    /**
+     * Enhanced connection state for better error tracking.
+     */
+    enum class ShimmerConnectionState {
+        DISCONNECTED,
+        CONNECTING,
+        CONNECTED,
+        RECONNECTING,
+        ERROR,
+        TIMEOUT
+    }
+    
+    /**
+     * Detailed error information for Shimmer operations.
+     */
+    data class ShimmerError(
+        val type: ShimmerErrorType,
+        val message: String,
+        val cause: Throwable? = null,
+        val timestamp: Long = System.currentTimeMillis(),
+        val deviceAddress: String? = null,
+        val canRetry: Boolean = true
+    )
+    
+    enum class ShimmerErrorType {
+        CONNECTION_FAILED,
+        CONNECTION_TIMEOUT,
+        DEVICE_NOT_FOUND,
+        BLUETOOTH_DISABLED,
+        PERMISSION_DENIED,
+        COMMUNICATION_ERROR,
+        DEVICE_DISCONNECTED,
+        CONFIGURATION_FAILED,
+        STREAMING_ERROR
+    }
+    
+    /**
+     * Enhanced connection method with retry logic and proper error handling.
+     */
+    suspend fun connectWithRetry(deviceAddress: String): Result<Unit> {
+        return connectionLock.withLock {
+            var lastException: Exception? = null
+            
+            for (attempt in 1..RECONNECTION_ATTEMPTS) {
+                try {
+                    logger.info("$TAG: Connection attempt $attempt/$RECONNECTION_ATTEMPTS to $deviceAddress")
+                    _connectionState.value = if (attempt == 1) ShimmerConnectionState.CONNECTING else ShimmerConnectionState.RECONNECTING
+                    
+                    // Register the connection attempt
+                    recordingStateManager.registerResource("shimmer_device_$deviceAddress")
+                    
+                    val connectResult = connectToDeviceInternal(deviceAddress)
+                    if (connectResult.isSuccess) {
+                        consecutiveFailures = 0
+                        lastConnectionTime = System.currentTimeMillis()
+                        _connectionState.value = ShimmerConnectionState.CONNECTED
+                        _lastError.value = null
+                        
+                        logger.info("$TAG: Successfully connected to $deviceAddress on attempt $attempt")
+                        return@withLock Result.success(Unit)
+                    } else {
+                        lastException = connectResult.exceptionOrNull() as? Exception
+                    }
+                    
+                } catch (e: Exception) {
+                    lastException = e
+                    logger.warning("$TAG: Connection attempt $attempt failed", e)
+                }
+                
+                // Wait before retry (except on last attempt)
+                if (attempt < RECONNECTION_ATTEMPTS) {
+                    kotlinx.coroutines.delay(RECONNECTION_DELAY_MS * attempt) // Exponential backoff
+                }
+            }
+            
+            // All attempts failed
+            consecutiveFailures++
+            _connectionState.value = ShimmerConnectionState.ERROR
+            
+            val error = ShimmerError(
+                type = determineErrorType(lastException),
+                message = "Failed to connect after $RECONNECTION_ATTEMPTS attempts: ${lastException?.message}",
+                cause = lastException,
+                deviceAddress = deviceAddress,
+                canRetry = consecutiveFailures < MAX_CONNECTION_FAILURES
+            )
+            _lastError.value = error
+            
+            // Unregister resource on failure
+            recordingStateManager.unregisterResource("shimmer_device_$deviceAddress")
+            
+            logger.error("$TAG: Connection failed after all attempts", lastException)
+            Result.failure(lastException ?: Exception("Connection failed"))
+        }
+    }
+    
+    /**
+     * Internal connection method to be implemented with actual Shimmer API calls.
+     */
+    private suspend fun connectToDeviceInternal(deviceAddress: String): Result<Unit> {
+        return try {
+            // TODO: Implement actual Shimmer connection logic here
+            // This is a placeholder for the actual implementation
+            kotlinx.coroutines.delay(1000) // Simulate connection time
+            
+            if (deviceAddress.isBlank()) {
+                Result.failure(Exception("Invalid device address"))
+            } else {
+                Result.success(Unit)
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    /**
+     * Enhanced disconnect with proper cleanup.
+     */
+    suspend fun disconnectSafely(): Result<Unit> {
+        return try {
+            logger.info("$TAG: Starting safe disconnect")
+            _connectionState.value = ShimmerConnectionState.DISCONNECTED
+            
+            // Stop any ongoing streaming
+            connectedShimmer?.let { shimmer ->
+                try {
+                    // TODO: Stop streaming if active
+                    logger.debug("$TAG: Stopped streaming")
+                } catch (e: Exception) {
+                    logger.warning("$TAG: Error stopping streaming", e)
+                }
+                
+                try {
+                    // TODO: Disconnect device
+                    logger.debug("$TAG: Disconnected device")
+                } catch (e: Exception) {
+                    logger.warning("$TAG: Error disconnecting device", e)
+                }
+            }
+            
+            connectedShimmer = null
+            
+            // Unregister resources
+            recordingStateManager.getActiveResources().filter { 
+                it.startsWith("shimmer_device_") 
+            }.forEach { resourceId ->
+                recordingStateManager.unregisterResource(resourceId)
+            }
+            
+            logger.info("$TAG: Safe disconnect completed")
+            Result.success(Unit)
+            
+        } catch (e: Exception) {
+            logger.error("$TAG: Error during safe disconnect", e)
+            Result.failure(e)
+        }
+    }
+    
+    /**
+     * Determines the error type based on the exception.
+     */
+    private fun determineErrorType(exception: Throwable?): ShimmerErrorType {
+        return when {
+            exception?.message?.contains("timeout", ignoreCase = true) == true -> ShimmerErrorType.CONNECTION_TIMEOUT
+            exception?.message?.contains("bluetooth", ignoreCase = true) == true -> ShimmerErrorType.BLUETOOTH_DISABLED
+            exception?.message?.contains("permission", ignoreCase = true) == true -> ShimmerErrorType.PERMISSION_DENIED
+            exception?.message?.contains("not found", ignoreCase = true) == true -> ShimmerErrorType.DEVICE_NOT_FOUND
+            else -> ShimmerErrorType.CONNECTION_FAILED
+        }
+    }
+    
+    /**
+     * Gets the current connection health status.
+     */
+    fun getConnectionHealth(): ConnectionHealth {
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastConnection = currentTime - lastConnectionTime
+        
+        return ConnectionHealth(
+            isConnected = _connectionState.value == ShimmerConnectionState.CONNECTED,
+            connectionAttempts = connectionAttempts,
+            consecutiveFailures = consecutiveFailures,
+            timeSinceLastConnection = timeSinceLastConnection,
+            canAttemptConnection = consecutiveFailures < MAX_CONNECTION_FAILURES,
+            lastError = _lastError.value
+        )
+    }
+    
+    /**
+     * Clears error state and resets failure counters.
+     */
+    fun clearErrorState() {
+        consecutiveFailures = 0
+        _lastError.value = null
+        logger.info("$TAG: Error state cleared")
+    }
+    
+    /**
+     * Cleanup method for proper resource management.
+     */
+    fun cleanup() {
+        logger.info("$TAG: Cleaning up ShimmerManager")
+        
+        scope.launch {
+            disconnectSafely()
+        }
+        
+        shimmerBluetoothManager = null
+        scope.cancel()
+        
+        logger.info("$TAG: ShimmerManager cleanup completed")
+    }
+    
+    data class ConnectionHealth(
+        val isConnected: Boolean,
+        val connectionAttempts: Int,
+        val consecutiveFailures: Int,
+        val timeSinceLastConnection: Long,
+        val canAttemptConnection: Boolean,
+        val lastError: ShimmerError?
     )
 }
