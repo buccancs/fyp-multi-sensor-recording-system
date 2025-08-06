@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Comprehensive System Test for Multi-Sensor Recording System
 This test validates that all major components are working correctly.
@@ -16,7 +16,6 @@ from pathlib import Path
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
-
 
 def test_python_environment():
     """Test Python environment and dependencies."""
@@ -57,7 +56,6 @@ def test_python_environment():
         print(f"Missing: {', '.join(missing)}")
 
     return len(missing) == 0
-
 
 def test_gui_components():
     """Test GUI component creation and basic functionality."""
@@ -104,7 +102,6 @@ def test_gui_components():
         traceback.print_exc()
         return False
 
-
 def test_opencv_functionality():
     """Test OpenCV computer vision functionality."""
     print("\nTesting OpenCV functionality...")
@@ -145,7 +142,6 @@ def test_opencv_functionality():
         print(f"✗ OpenCV functionality test failed: {e}")
         traceback.print_exc()
         return False
-
 
 def test_network_capabilities():
     """Test network and communication functionality."""
@@ -224,7 +220,6 @@ def test_network_capabilities():
         traceback.print_exc()
         return False
 
-
 def test_data_processing():
     """Test data processing and analysis capabilities."""
     print("\nTesting data processing...")
@@ -276,7 +271,6 @@ def test_data_processing():
         print(f"✗ Data processing test failed: {e}")
         traceback.print_exc()
         return False
-
 
 def test_file_operations():
     """Test file I/O and session management."""
@@ -350,7 +344,6 @@ def test_file_operations():
         print(f"✗ File operations test failed: {e}")
         traceback.print_exc()
         return False
-
 
 def test_system_integration():
     """Test system integration and coordination."""
@@ -443,7 +436,6 @@ def test_system_integration():
         traceback.print_exc()
         return False
 
-
 def generate_test_report():
     """Generate a comprehensive test report."""
     print("\n" + "=" * 60)
@@ -498,12 +490,10 @@ def generate_test_report():
 
     return passed == total
 
-
 def main():
     """Run comprehensive system test."""
     success = generate_test_report()
     return success
-
 
 if __name__ == "__main__":
     success = main()

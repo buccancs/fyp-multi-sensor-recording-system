@@ -54,7 +54,6 @@ class PermissionControllerTest {
         unmockkAll()
     }
 
-
     @Test
     fun `setCallback should initialize state storage when callback is Context`() {
         every { mockContext.getSharedPreferences(any(), any()) } returns mockSharedPreferences
@@ -73,7 +72,6 @@ class PermissionControllerTest {
 
         verify(exactly = 0) { mockContext.getSharedPreferences(any(), any()) }
     }
-
 
     @Test
     fun `areAllPermissionsGranted should delegate to PermissionManager`() {
@@ -119,7 +117,6 @@ class PermissionControllerTest {
         verify { mockCallback.onPermissionCheckStarted() }
         verify(exactly = 0) { mockPermissionManager.requestPermissions(any(), any()) }
     }
-
 
     @Test
     fun `PermissionManager onAllPermissionsGranted should trigger callback`() = runTest {
@@ -168,7 +165,6 @@ class PermissionControllerTest {
         verify { mockCallback.onPermissionRequestCompleted() }
     }
 
-
     @Test
     fun `requestPermissionsManually should reset state and call checkPermissions`() = runTest {
         every { mockPermissionManager.areAllPermissionsGranted(mockContext) } returns false
@@ -194,7 +190,6 @@ class PermissionControllerTest {
 
         assertEquals(0, permissionController.getPermissionRetryCount())
     }
-
 
     @Test
     fun `resetState should clear internal state and persist changes`() {
@@ -248,7 +243,6 @@ class PermissionControllerTest {
         verify(exactly = 0) { mockCallback.onAllPermissionsGranted() }
     }
 
-
     @Test
     fun `updatePermissionButtonVisibility should show button when permissions missing`() {
         every { mockPermissionManager.areAllPermissionsGranted(mockContext) } returns false
@@ -268,7 +262,6 @@ class PermissionControllerTest {
 
         verify { mockCallback.showPermissionButton(false) }
     }
-
 
     @Test
     fun `storePermanentlyDeniedPermissions should save to SharedPreferences`() {
@@ -311,7 +304,6 @@ class PermissionControllerTest {
         assertEquals(emptySet<String>(), result)
     }
 
-
     @Test
     fun `state should be loaded from SharedPreferences on initialization`() {
         every { mockSharedPreferences.getBoolean("has_checked_permissions_on_startup", false) } returns true
@@ -339,7 +331,6 @@ class PermissionControllerTest {
         verify { mockEditor.putInt("permission_retry_count", 0) }
     }
 
-
     @Test
     fun `getPermissionDisplayName should delegate to PermissionManager`() {
         val permission = "android.permission.CAMERA"
@@ -350,7 +341,6 @@ class PermissionControllerTest {
         assertEquals("Camera", result)
         verify { mockPermissionManager.getPermissionDisplayName(permission) }
     }
-
 
     @Test
     fun `getPermissionStatus should return comprehensive status string`() {
@@ -373,7 +363,6 @@ class PermissionControllerTest {
 
         verify { mockPermissionManager.logCurrentPermissionStates(mockContext) }
     }
-
 
     @Test
     fun `operations should not crash when callback is null`() {
@@ -416,7 +405,6 @@ class PermissionControllerTest {
 
         verify { mockCallback2.onAllPermissionsGranted() }
     }
-
 
     @Test
     fun `complete permission flow - all granted scenario`() = runTest {

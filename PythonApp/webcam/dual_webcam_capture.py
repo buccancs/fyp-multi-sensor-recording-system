@@ -25,7 +25,6 @@ from .webcam.cv_preprocessing_pipeline import (
 
 logger = get_logger(__name__)
 
-
 @dataclass
 class DualFrameData:
     timestamp: float
@@ -36,7 +35,6 @@ class DualFrameData:
     camera2_timestamp: float
     sync_quality: float
 
-
 @dataclass
 class CameraStatus:
     camera_index: int
@@ -46,7 +44,6 @@ class CameraStatus:
     frames_captured: int
     last_error: Optional[str]
     temperature: Optional[float]
-
 
 class DualWebcamCapture(QThread):
     dual_frame_ready = pyqtSignal(QPixmap, QPixmap)
@@ -672,7 +669,6 @@ class DualWebcamCapture(QThread):
         except Exception:
             pass
 
-
 def test_dual_webcam_access(camera_indices: List[int] = None):
     if camera_indices is None:
         camera_indices = [0, 1]
@@ -719,7 +715,6 @@ def test_dual_webcam_access(camera_indices: List[int] = None):
         f"SUCCESS: Both cameras ({camera1_index}, {camera2_index}) accessible for dual recording"
     )
     return True
-
 
 if __name__ == "__main__":
     test_dual_webcam_access()

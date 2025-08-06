@@ -10,7 +10,6 @@ from ..utils.logging_config import get_logger
 from .gui.enhanced_ui_main_window import EnhancedMainWindow
 from .webcam.webcam_capture import WebcamCapture
 
-
 class Application(QObject):
 
     def __init__(self):
@@ -61,7 +60,6 @@ class Application(QObject):
         except Exception as e:
             self.logger.error(f"cleanup error: {e}")
 
-
 def main():
     logger = get_logger(__name__)
     qt_app = QApplication(sys.argv)
@@ -73,7 +71,6 @@ def main():
     except Exception as e:
         logger.error(f"application failed: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

@@ -56,7 +56,6 @@ except ImportError:
 
     logger = logging.getLogger(__name__)
 
-
 class ModernButton(QPushButton):
 
     def __init__(self, text="", icon_path=None, primary=False, parent=None):
@@ -75,7 +74,7 @@ class ModernButton(QPushButton):
             self.setStyleSheet(
                 """
                 QPushButton {
-                    background-color: #0078d4;
+                    background-color:
                     color: white;
                     border: none;
                     border-radius: 4px;
@@ -83,14 +82,14 @@ class ModernButton(QPushButton):
                     font-weight: 600;
                 }
                 QPushButton:hover {
-                    background-color: #106ebe;
+                    background-color:
                 }
                 QPushButton:pressed {
-                    background-color: #005a9e;
+                    background-color:
                 }
                 QPushButton:disabled {
-                    background-color: #f3f2f1;
-                    color: #a19f9d;
+                    background-color:
+                    color:
                 }
             """
             )
@@ -98,28 +97,27 @@ class ModernButton(QPushButton):
             self.setStyleSheet(
                 """
                 QPushButton {
-                    background-color: #ffffff;
-                    color: #323130;
-                    border: 1px solid #8a8886;
+                    background-color:
+                    color:
+                    border: 1px solid
                     border-radius: 4px;
                     padding: 8px 16px;
                     font-weight: 400;
                 }
                 QPushButton:hover {
-                    background-color: #f3f2f1;
-                    border-color: #323130;
+                    background-color:
+                    border-color:
                 }
                 QPushButton:pressed {
-                    background-color: #edebe9;
+                    background-color:
                 }
                 QPushButton:disabled {
-                    background-color: #f3f2f1;
-                    color: #a19f9d;
-                    border-color: #c8c6c4;
+                    background-color:
+                    color:
+                    border-color:
                 }
             """
             )
-
 
 class StatusIndicator(QWidget):
 
@@ -146,7 +144,6 @@ class StatusIndicator(QWidget):
         self.status = status
         self.update()
 
-
 class ModernGroupBox(QGroupBox):
 
     def __init__(self, title="", parent=None):
@@ -156,21 +153,20 @@ class ModernGroupBox(QGroupBox):
             """
             QGroupBox {
                 font-weight: 600;
-                border: 1px solid #d2d0ce;
+                border: 1px solid
                 border-radius: 4px;
                 margin-top: 12px;
                 padding-top: 12px;
-                background-color: #ffffff;
+                background-color:
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 12px;
                 padding: 0 8px 0 8px;
-                color: #323130;
+                color:
             }
         """
         )
-
 
 class EnhancedMainWindow(QMainWindow):
     device_connected = pyqtSignal(str)
@@ -193,13 +189,13 @@ class EnhancedMainWindow(QMainWindow):
         self.setStyleSheet(
             """
             QMainWindow {
-                background-color: #faf9f8;
-                color: #323130;
+                background-color:
+                color:
             }
 
             QMenuBar {
-                background-color: #f3f2f1;
-                border-bottom: 1px solid #d2d0ce;
+                background-color:
+                border-bottom: 1px solid
                 padding: 4px;
             }
 
@@ -210,60 +206,60 @@ class EnhancedMainWindow(QMainWindow):
             }
 
             QMenuBar::item:selected {
-                background-color: #edebe9;
+                background-color:
             }
 
             QStatusBar {
-                background-color: #f3f2f1;
-                border-top: 1px solid #d2d0ce;
-                color: #323130;
+                background-color:
+                border-top: 1px solid
+                color:
             }
 
             QSplitter::handle {
-                background-color: #d2d0ce;
+                background-color:
                 width: 2px;
                 height: 2px;
             }
 
             QSplitter::handle:hover {
-                background-color: #8a8886;
+                background-color:
             }
 
             QLabel {
-                color: #323130;
+                color:
             }
 
             QTextEdit {
-                border: 1px solid #d2d0ce;
+                border: 1px solid
                 border-radius: 4px;
-                background-color: #ffffff;
+                background-color:
                 padding: 8px;
                 font-family: 'Consolas', 'Monaco', monospace;
                 font-size: 9pt;
             }
 
             QComboBox {
-                border: 1px solid #8a8886;
+                border: 1px solid
                 border-radius: 4px;
                 padding: 6px 12px;
-                background-color: #ffffff;
+                background-color:
                 min-height: 20px;
             }
 
             QComboBox:hover {
-                border-color: #323130;
+                border-color:
             }
 
             QSlider::groove:horizontal {
-                border: 1px solid #d2d0ce;
+                border: 1px solid
                 height: 4px;
-                background: #f3f2f1;
+                background:
                 border-radius: 2px;
             }
 
             QSlider::handle:horizontal {
-                background: #0078d4;
-                border: 1px solid #005a9e;
+                background:
+                border: 1px solid
                 width: 16px;
                 height: 16px;
                 border-radius: 8px;
@@ -271,18 +267,18 @@ class EnhancedMainWindow(QMainWindow):
             }
 
             QSlider::handle:horizontal:hover {
-                background: #106ebe;
+                background:
             }
 
             QProgressBar {
-                border: 1px solid #d2d0ce;
+                border: 1px solid
                 border-radius: 4px;
                 text-align: center;
-                background-color: #f3f2f1;
+                background-color:
             }
 
             QProgressBar::chunk {
-                background-color: #0078d4;
+                background-color:
                 border-radius: 3px;
             }
         """
@@ -372,10 +368,10 @@ class EnhancedMainWindow(QMainWindow):
         self.preview_label.setStyleSheet(
             """
             QLabel {
-                border: 2px dashed #d2d0ce;
-                background-color: #f3f2f1;
+                border: 2px dashed
+                background-color:
                 font-size: 16px;
-                color: #605e5c;
+                color:
                 border-radius: 4px;
             }
         """
@@ -498,8 +494,7 @@ class EnhancedMainWindow(QMainWindow):
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
         tools_menu = menubar.addMenu("Tools")
-        
-        # Add the missing functionality to Tools menu
+
         scan_devices_action = QAction("Scan for Devices", self)
         scan_devices_action.triggered.connect(self.scan_for_devices)
         tools_menu.addAction(scan_devices_action)
@@ -675,19 +670,11 @@ inspired by PsychoPy design principles.""",
         """Scan for available devices."""
         try:
             self.log_message("Scanning for devices...")
-            
-            # Simulate device scanning
+
             discovered_devices = []
-            
-            # In a real implementation, this would:
-            # 1. Scan for USB webcams
-            # 2. Scan for Android devices over ADB
-            # 3. Scan for Shimmer sensors over Bluetooth
-            # 4. Update device status indicators
-            
-            # For now, simulate some devices
+
             import time
-            time.sleep(1)  # Simulate scanning time
+            time.sleep(1)
             
             discovered_devices = [
                 {"name": "USB Webcam", "type": "camera", "status": "available"},
@@ -714,13 +701,7 @@ inspired by PsychoPy design principles.""",
         """Refresh the status of connected devices."""
         try:
             self.log_message("Refreshing device status...")
-            
-            # In a real implementation, this would:
-            # 1. Query each connected device for current status
-            # 2. Update battery levels, connection status, etc.
-            # 3. Refresh the device status indicators in the UI
-            
-            # For now, show a confirmation that status was refreshed
+
             QMessageBox.information(
                 self, 
                 "Status Refreshed", 
@@ -740,13 +721,11 @@ inspired by PsychoPy design principles.""",
             from PyQt5.QtWidgets import QFileDialog
             
             self.log_message("Opening file browser for recording files...")
-            
-            # Get recordings directory
+
             recordings_dir = os.path.expanduser("~/recordings")
             if not os.path.exists(recordings_dir):
                 recordings_dir = os.path.expanduser("~")
-            
-            # Open file dialog
+
             files, _ = QFileDialog.getOpenFileNames(
                 self,
                 "Browse Recording Files",
@@ -781,35 +760,31 @@ inspired by PsychoPy design principles.""",
             import platform
             
             self.log_message("Opening data folder...")
-            
-            # Define possible data directories
+
             data_dirs = [
                 os.path.expanduser("~/recordings"),
                 os.path.join(os.getcwd(), "recordings"),
                 os.path.join(os.getcwd(), "data"),
                 os.path.expanduser("~/Documents/recordings")
             ]
-            
-            # Find the first existing directory
+
             target_dir = None
             for dir_path in data_dirs:
                 if os.path.exists(dir_path):
                     target_dir = dir_path
                     break
-            
-            # If no directory exists, create one
+
             if target_dir is None:
                 target_dir = os.path.expanduser("~/recordings")
                 os.makedirs(target_dir, exist_ok=True)
                 self.log_message(f"Created recordings directory: {target_dir}")
-                
-            # Open in system file manager
+
             system = platform.system()
             if system == "Windows":
                 os.startfile(target_dir)
-            elif system == "Darwin":  # macOS
+            elif system == "Darwin":
                 subprocess.run(["open", target_dir])
-            else:  # Linux and others
+            else:
                 subprocess.run(["xdg-open", target_dir])
                 
             self.log_message(f"Opened data folder: {target_dir}")
@@ -822,13 +797,12 @@ inspired by PsychoPy design principles.""",
             
         except Exception as e:
             self.log_message(f"Error opening data folder: {e}")
-            # Fallback - show directory path
+
             QMessageBox.information(
                 self, 
                 "Data Folder", 
                 f"Data folder location:\n{target_dir if 'target_dir' in locals() else 'Not found'}\n\nNote: Could not open automatically: {str(e)}"
             )
-
 
 def main():
     import sys
@@ -844,7 +818,6 @@ def main():
     screenshot.save(screenshot_path)
     print(f"Enhanced UI screenshot saved to: {screenshot_path}")
     return True
-
 
 if __name__ == "__main__":
     main()

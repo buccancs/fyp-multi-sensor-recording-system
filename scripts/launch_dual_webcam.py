@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Dual Webcam Recording System Launcher
 
@@ -31,7 +31,6 @@ from PythonApp.gui.dual_webcam_main_window import DualWebcamMainWindow
 
 logger = get_logger(__name__)
 
-
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -58,7 +57,6 @@ def parse_arguments():
 
     return parser.parse_args()
 
-
 def test_system():
     """Test the dual webcam system."""
     logger.info("=== Dual Webcam System Test ===")
@@ -77,7 +75,6 @@ def test_system():
         print("  2. Webcams are not in use by other applications")
         print("  3. Camera drivers are properly installed")
         return False
-
 
 def main():
     """Main launcher function."""
@@ -153,7 +150,6 @@ def main():
         logger.error(f"Fatal error during application startup: {e}", exc_info=True)
         print(f"FATAL ERROR: {e}")
         return 1
-
 
 if __name__ == "__main__":
     sys.exit(main())

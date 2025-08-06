@@ -167,7 +167,6 @@ class MainActivityCoordinatorTest {
         val menuCreated = coordinator.createOptionsMenu(mockMenu, mockActivity)
         val menuHandled = coordinator.handleOptionsItemSelected(mockMenuItem)
 
-
         assertFalse(menuCreated)
         assertFalse(menuHandled)
     }

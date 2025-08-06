@@ -33,7 +33,6 @@ class ShimmerRecorderManualTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-
     @get:Rule
     var permissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(
@@ -228,7 +227,6 @@ class ShimmerRecorderManualTest {
             val shimmerStatus = shimmerRecorder.getShimmerStatus()
             assertTrue("ShimmerRecorder should report as connected", shimmerStatus.isConnected)
             assertTrue("ShimmerRecorder should be available", shimmerStatus.isAvailable)
-
 
             connectedDevices = discoveredDevices
 

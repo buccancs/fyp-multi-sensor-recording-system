@@ -13,6 +13,7 @@
         - 4.2.2. [Multi-Threading and Performance Optimization](#422-multi-threading-and-performance-optimization)
         - 4.2.3. [Resource Management and Power Optimization](#423-resource-management-and-power-optimization)
         - 4.2.4. [Camera Recording Implementation](#424-camera-recording-implementation)
+        - 4.2.5. [User Experience and Accessibility Design](#425-user-experience-and-accessibility-design)
     - 4.3. [Android Application Sensor Integration](#43-android-application-sensor-integration)
         - 4.3.1. [Thermal Camera Integration (Topdon)](#431-thermal-camera-integration-topdon)
         - 4.3.2. [GSR Sensor Integration (Shimmer)](#432-gsr-sensor-integration-shimmer)
@@ -723,6 +724,191 @@ class CameraRecorder @Inject constructor(
 The camera recording system provides comprehensive error handling, quality validation, and performance monitoring to
 ensure reliable data collection throughout extended research sessions while maintaining optimal battery efficiency and
 thermal management.
+
+### 4.2.5 User Experience and Accessibility Design
+
+The Android application implements comprehensive user experience enhancements and accessibility features designed to 
+facilitate research deployment while ensuring inclusivity and usability across diverse user populations [Nielsen1994, 
+Cooper2014]. The user experience design follows established human-computer interaction principles [Shneiderman2016] and 
+accessibility guidelines [W3C2018] to create an interface that supports both novice and expert users in complex 
+research environments.
+
+#### Interactive Onboarding System
+
+The application implements a sophisticated onboarding system that addresses the complexity of multi-sensor setup through 
+progressive disclosure and educational guidance [Miller1956]. The onboarding architecture uses modern Android 
+development patterns to create an intuitive first-use experience:
+
+```kotlin
+// OnboardingActivity implementation using ViewPager2
+@AndroidEntryPoint
+class OnboardingActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityOnboardingBinding
+    private lateinit var onboardingAdapter: OnboardingAdapter
+    
+    private val requiredPermissions = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_CONNECT
+    )
+    
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        updatePermissionStatus()
+    }
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityOnboardingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        setupViewPager()
+        setupPermissionHandling()
+    }
+}
+```
+
+**Onboarding System Features:**
+
+- **Progressive Tutorial System**: Three-page introduction covering app capabilities, PC controller setup requirements, 
+  and permission explanations using Material Design 3 components
+- **Smart First-Launch Detection**: SharedPreferences-based tracking system prevents unnecessary onboarding repetition 
+  while maintaining user preference flexibility
+- **Modern Permission Management**: Implementation of ActivityResultContracts providing streamlined permission requests 
+  with educational context and fallback to system settings
+- **Responsive Design Architecture**: Tablet-optimized layouts using `layout-sw600dp` resource qualifiers for enhanced 
+  usability on research tablets
+
+#### Accessibility Implementation Framework
+
+The application achieves comprehensive accessibility compliance following WCAG 2.1 AA guidelines [W3C2018] through 
+systematic implementation of inclusive design principles:
+
+```xml
+<!-- Comprehensive accessibility implementation example -->
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp"
+    android:contentDescription="@string/sensor_status_card_description">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sensor_status_title"
+            android:textSize="18sp"
+            android:textColor="@color/md_theme_on_surface"
+            android:textStyle="bold"
+            android:contentDescription="@string/sensor_status_overview_description"
+            android:layout_marginBottom="12dp"/>
+            
+        <!-- Sensor status indicators with accessibility -->
+        <ImageView
+            android:id="@+id/cameraStatusIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_videocam"
+            android:contentDescription="@string/camera_status_indicator_description"
+            app:tint="@color/statusIndicatorConnected" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+```
+
+**Accessibility Features Implementation:**
+
+- **Screen Reader Compatibility**: Comprehensive `contentDescription` attributes for all interactive elements following 
+  semantic markup principles
+- **Scalable Typography**: Consistent use of `sp` units enabling proper text scaling with system accessibility settings
+- **Touch Accessibility**: Minimum 48dp touch targets following Material Design guidelines [Google2023] for enhanced 
+  usability across motor impairments
+- **High Contrast Support**: Material Design 3 color system implementation ensuring 4.5:1 contrast ratios for 
+  WCAG AA compliance
+- **Keyboard Navigation**: Proper focus ordering and keyboard accessibility for users with motor limitations
+
+#### Real-Time Status Interface Design
+
+The application implements a comprehensive real-time monitoring interface that provides immediate visual feedback on 
+system status through a sophisticated sensor dashboard using Material Design 3 components:
+
+```xml
+<!-- Real-time sensor status implementation -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+    
+    <!-- Camera Status Indicator -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="8dp">
+        
+        <ImageView
+            android:id="@+id/cameraStatusIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_videocam"
+            android:contentDescription="@string/camera_status_indicator"
+            app:tint="@color/statusIndicatorDisconnected"
+            android:layout_marginBottom="4dp"/>
+            
+        <TextView
+            android:id="@+id/cameraStatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/camera_disconnected"
+            android:textSize="12sp"
+            android:textColor="@color/textColorSecondary"
+            android:gravity="center"
+            android:contentDescription="@string/camera_connection_status"/>
+    </LinearLayout>
+    
+    <!-- Additional sensor indicators for Thermal, GSR, PC Controller... -->
+</LinearLayout>
+```
+
+**Status Interface Capabilities:**
+
+- **Four-Sensor Monitoring Dashboard**: Visual indicators for RGB Camera, Thermal Camera, GSR Sensor, and PC Controller 
+  connection states with real-time updates
+- **Semantic Color Coding**: Green indicators for connected sensors, red for disconnected states using accessible color 
+  combinations with sufficient contrast
+- **Live Update Mechanism**: Automatic status refresh based on actual sensor connection monitoring using reactive 
+  programming patterns
+- **Responsive Layout Architecture**: Adaptive design supporting various screen sizes and orientations for research 
+  deployment flexibility
+
+#### Enhanced User Experience Features
+
+**Operational Enhancements:**
+
+- **Orientation Lock Management**: Dynamic orientation locking during active recording sessions preventing camera resource 
+  conflicts and ensuring recording stability
+- **Navigation Cleanup**: Disabled non-functional menu items replacing confusing "Coming Soon" toast messages with clear 
+  interface states
+- **State Preservation**: Comprehensive UI state maintenance during configuration changes using proper Android lifecycle 
+  management
+- **Resource Protection**: Advanced camera resource management preventing recording interruption through orientation changes
+
+The user experience implementation represents a sophisticated balance between research-grade functionality and inclusive 
+design principles, ensuring the application supports diverse research environments while maintaining accessibility 
+standards essential for broad research adoption [Trewin2019].
 
 ## 4.3 Android Application Sensor Integration
 

@@ -12,7 +12,6 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-
 class SessionSyncState(Enum):
     IDLE = "idle"
     SYNCING = "syncing"
@@ -21,13 +20,11 @@ class SessionSyncState(Enum):
     RECOVERING = "recovering"
     ERROR = "error"
 
-
 class MessagePriority(Enum):
     LOW = 1
     NORMAL = 2
     HIGH = 3
     CRITICAL = 4
-
 
 @dataclass
 class SessionState:
@@ -42,7 +39,6 @@ class SessionState:
     sync_timestamp: datetime
     metadata: Dict[str, Any]
 
-
 @dataclass
 class QueuedMessage:
     device_id: str
@@ -52,7 +48,6 @@ class QueuedMessage:
     timestamp: datetime
     retry_count: int = 0
     max_retries: int = 3
-
 
 class SessionSynchronizer:
 
@@ -397,13 +392,10 @@ class SessionSynchronizer:
                         str(e),
                     )
 
-
 session_synchronizer = SessionSynchronizer()
-
 
 def get_session_synchronizer() -> SessionSynchronizer:
     return session_synchronizer
-
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing Session Synchronizer...")

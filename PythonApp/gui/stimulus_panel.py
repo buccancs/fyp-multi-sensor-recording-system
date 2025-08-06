@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import (
     QSlider,
 )
 
-
 class StimulusControlPanel(QGroupBox):
     file_loaded = pyqtSignal(str)
     play_requested = pyqtSignal()

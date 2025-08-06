@@ -383,7 +383,6 @@ class SamsungS21S22CameraRawExtractionTest {
         }
     }
 
-
     private fun getHardwareLevelName(level: Int?): String {
         return when (level) {
             CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY -> "LEGACY"

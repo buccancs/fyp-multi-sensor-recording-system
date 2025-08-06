@@ -68,7 +68,6 @@ class PermissionControllerAcademicTest {
         clearAllMocks()
     }
 
-
     @Test
     fun `validateInternalState should return valid result for consistent state`() {
         permissionController.setCallback(mockCallback)
@@ -130,7 +129,6 @@ class PermissionControllerAcademicTest {
             validationResult.violations.any { it.contains("differs from persisted") })
     }
 
-
     @Test
     fun `analyzeComplexity should compute correct metrics for all denied permissions`() {
         permissionController.setCallback(mockCallback)
@@ -174,7 +172,6 @@ class PermissionControllerAcademicTest {
         assertEquals("Transition complexity should be intermediate", 5, complexityAnalysis.transitionComplexity)
     }
 
-
     @Test
     fun `checkPermissions should follow formal state machine transitions for granted state`() {
         permissionController.setCallback(mockCallback)
@@ -201,7 +198,6 @@ class PermissionControllerAcademicTest {
         verify { mockCallback.showPermissionButton(false) }
         verify { mockCallback.updateStatusText("Requesting permissions...") }
     }
-
 
     @Test
     fun `permission operations should maintain O(1) time complexity for state operations`() {
@@ -251,7 +247,6 @@ class PermissionControllerAcademicTest {
             assertTrue("Time complexity ratio should be reasonable for linear algorithm", ratio < 5.0)
         }
     }
-
 
     @Test
     fun `complete permission flow should maintain formal consistency`() {

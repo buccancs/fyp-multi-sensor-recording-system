@@ -480,7 +480,6 @@ class UsbController @Inject constructor(
         }
     }
 
-
     private fun getDeviceKey(device: UsbDevice): String {
         return "${device.vendorId}_${device.productId}_${device.deviceName}"
     }
@@ -620,7 +619,6 @@ class UsbController @Inject constructor(
         }
     }
 
-
     fun getDevicePriorityAssessments(): List<UsbDevicePrioritizer.DevicePriorityAssessment> {
         return connectedSupportedDevices.map { (deviceKey, device) ->
             val connectionTime = deviceConnectionTimes[deviceKey]
@@ -701,7 +699,6 @@ class UsbController @Inject constructor(
             }
         }
     }
-
 
     private fun saveDeviceProfiles(context: Context) {
         try {

@@ -17,23 +17,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
 
-/**
- * Comprehensive Device Configuration Tests
- * =======================================
- * 
- * This test class provides comprehensive testing for device configuration
- * management, sensor setup, and recording coordination.
- * 
- * Test coverage:
- * - Device initialization and setup
- * - Sensor channel configuration
- * - Recording state management
- * - Error handling and recovery
- * - Performance monitoring
- * 
- * Author: Multi-Sensor Recording System
- * Date: 2025-01-16
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
@@ -60,7 +43,7 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `device configuration initialization should succeed`() = runTest {
-        // Test device configuration creation
+
         assertNotNull("DeviceConfiguration should be created", deviceConfiguration)
         assertTrue("Device should be initializable", deviceConfiguration.initialize())
         
@@ -76,15 +59,13 @@ class DeviceConfigurationComprehensiveTest {
             SensorChannel.ACCELEROMETER_Y,
             SensorChannel.ACCELEROMETER_Z
         )
-        
-        // Configure sensor channels
+
         val result = deviceConfiguration.configureSensorChannels(testChannels)
         
         assertTrue("Sensor channels should be configured successfully", result)
         assertEquals("All channels should be configured", testChannels.size, 
                     deviceConfiguration.getConfiguredChannels().size)
-        
-        // Verify each channel is properly configured
+
         testChannels.forEach { channel ->
             assertTrue("Channel $channel should be configured", 
                       deviceConfiguration.isChannelConfigured(channel))
@@ -93,12 +74,11 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `device status tracking should work correctly`() = runTest {
-        // Test initial status
+
         assertEquals("Initial status should be IDLE", 
                     DeviceConfiguration.DeviceStatus.IDLE, 
                     deviceConfiguration.getDeviceStatus())
-        
-        // Test status transitions
+
         deviceConfiguration.setDeviceStatus(DeviceConfiguration.DeviceStatus.INITIALIZING)
         assertEquals("Status should update to INITIALIZING", 
                     DeviceConfiguration.DeviceStatus.INITIALIZING,
@@ -119,16 +99,14 @@ class DeviceConfigurationComprehensiveTest {
     fun `sampling rate configuration should validate inputs`() = runTest {
         val validRates = listOf(50, 100, 200, 500, 1000)
         val invalidRates = listOf(-1, 0, 10000, 50000)
-        
-        // Test valid sampling rates
+
         validRates.forEach { rate ->
             val result = deviceConfiguration.setSamplingRate(rate)
             assertTrue("Sampling rate $rate should be valid", result)
             assertEquals("Sampling rate should be set correctly", rate, 
                         deviceConfiguration.getSamplingRate())
         }
-        
-        // Test invalid sampling rates
+
         invalidRates.forEach { rate ->
             val result = deviceConfiguration.setSamplingRate(rate)
             assertFalse("Sampling rate $rate should be invalid", result)
@@ -143,15 +121,12 @@ class DeviceConfigurationComprehensiveTest {
             "camera_matrix" to arrayOf(arrayOf(1000.0, 0.0, 320.0)),
             "rms_error" to 0.45
         )
-        
-        // Set calibration manager
+
         deviceConfiguration.setCalibrationManager(mockCalibrationManager)
-        
-        // Test calibration validation
+
         assertTrue("Device should accept valid calibration", 
                   deviceConfiguration.validateCalibration())
-        
-        // Test calibration data retrieval
+
         val calibrationData = deviceConfiguration.getCalibrationData()
         assertNotNull("Calibration data should be available", calibrationData)
         assertTrue("Calibration data should contain camera matrix", 
@@ -160,10 +135,9 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `performance metrics should be tracked`() = runTest {
-        // Initialize device for performance tracking
+
         deviceConfiguration.initialize()
-        
-        // Simulate some operations
+
         repeat(10) {
             deviceConfiguration.recordPerformanceMetric("sensor_read", 1.5 + it * 0.1)
         }
@@ -171,8 +145,7 @@ class DeviceConfigurationComprehensiveTest {
         repeat(5) {
             deviceConfiguration.recordPerformanceMetric("data_process", 0.8 + it * 0.05)
         }
-        
-        // Get performance summary
+
         val performanceMetrics = deviceConfiguration.getPerformanceMetrics()
         
         assertNotNull("Performance metrics should be available", performanceMetrics)
@@ -180,8 +153,7 @@ class DeviceConfigurationComprehensiveTest {
                   performanceMetrics.containsKey("sensor_read"))
         assertTrue("Should have data_process metrics", 
                   performanceMetrics.containsKey("data_process"))
-        
-        // Verify metric calculations
+
         val sensorReadMetrics = performanceMetrics["sensor_read"]!!
         assertEquals("Should have 10 sensor read samples", 10, sensorReadMetrics["count"])
         assertTrue("Average should be reasonable", 
@@ -190,7 +162,7 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `error handling should work correctly`() = runTest {
-        // Test handling of various error conditions
+
         val errorConditions = listOf(
             "SENSOR_CONNECTION_FAILED",
             "CALIBRATION_INVALID", 
@@ -204,8 +176,7 @@ class DeviceConfigurationComprehensiveTest {
             assertTrue("Error $errorCode should be handled", result)
             verify { mockLogger.error(match { it.contains(errorCode) }) }
         }
-        
-        // Verify error history tracking
+
         val errorHistory = deviceConfiguration.getErrorHistory()
         assertEquals("Should track all error conditions", 
                     errorConditions.size, errorHistory.size)
@@ -215,41 +186,35 @@ class DeviceConfigurationComprehensiveTest {
     fun `device synchronization should work`() = runTest {
         val masterTimestamp = System.currentTimeMillis()
         val deviceId = "test_device_001"
-        
-        // Test time synchronization
+
         val syncResult = deviceConfiguration.synchronizeWithMaster(masterTimestamp, deviceId)
         
         assertTrue("Synchronization should succeed", syncResult)
-        
-        // Verify synchronized timestamp
+
         val syncedTimestamp = deviceConfiguration.getSynchronizedTimestamp()
         assertTrue("Synchronized timestamp should be set", syncedTimestamp > 0)
-        
-        // Test clock drift calculation
-        Thread.sleep(10) // Small delay to create clock drift
+
+        Thread.sleep(10)
         val clockDrift = deviceConfiguration.calculateClockDrift()
         assertTrue("Clock drift should be calculated", clockDrift >= 0)
     }
     
     @Test
     fun `configuration persistence should work`() = runTest {
-        // Create test configuration
+
         val testConfig = mapOf(
             "sampling_rate" to 1000,
             "device_id" to "test_device_001",
             "sensor_channels" to listOf("GSR", "PPG", "ACCEL_X", "ACCEL_Y", "ACCEL_Z"),
             "calibration_enabled" to true
         )
-        
-        // Save configuration
+
         val saveResult = deviceConfiguration.saveConfiguration(testConfig)
         assertTrue("Configuration should be saved successfully", saveResult)
-        
-        // Load configuration
+
         val loadedConfig = deviceConfiguration.loadConfiguration()
         assertNotNull("Configuration should be loaded", loadedConfig)
-        
-        // Verify configuration data
+
         assertEquals("Sampling rate should match", 
                     testConfig["sampling_rate"], loadedConfig["sampling_rate"])
         assertEquals("Device ID should match", 
@@ -260,16 +225,14 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `device health monitoring should work`() = runTest {
-        // Initialize device
+
         deviceConfiguration.initialize()
-        
-        // Simulate health data
+
         deviceConfiguration.updateHealthMetric("cpu_usage", 25.5)
         deviceConfiguration.updateHealthMetric("memory_usage", 65.2)
         deviceConfiguration.updateHealthMetric("battery_level", 80.0)
         deviceConfiguration.updateHealthMetric("temperature", 42.5)
-        
-        // Get health status
+
         val healthStatus = deviceConfiguration.getHealthStatus()
         
         assertNotNull("Health status should be available", healthStatus)
@@ -277,8 +240,7 @@ class DeviceConfigurationComprehensiveTest {
         assertTrue("Should include memory usage", healthStatus.containsKey("memory_usage"))
         assertTrue("Should include battery level", healthStatus.containsKey("battery_level"))
         assertTrue("Should include temperature", healthStatus.containsKey("temperature"))
-        
-        // Test health assessment
+
         val overallHealth = deviceConfiguration.assessOverallHealth()
         assertTrue("Overall health should be between 0 and 100", 
                   overallHealth in 0.0..100.0)
@@ -286,7 +248,7 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `concurrent operations should be handled safely`() = runTest {
-        // Test concurrent configuration updates
+
         val threads = mutableListOf<Thread>()
         
         repeat(5) { threadId ->
@@ -306,15 +268,12 @@ class DeviceConfigurationComprehensiveTest {
             threads.add(thread)
             thread.start()
         }
-        
-        // Wait for all threads to complete
+
         threads.forEach { it.join() }
-        
-        // Verify concurrent operations didn't cause corruption
+
         val healthStatus = deviceConfiguration.getHealthStatus()
         val performanceMetrics = deviceConfiguration.getPerformanceMetrics()
-        
-        // Should have metrics from all threads
+
         assertTrue("Should have health metrics from all threads", 
                   healthStatus.size >= 5)
         assertTrue("Should have performance metrics from all threads", 
@@ -323,28 +282,24 @@ class DeviceConfigurationComprehensiveTest {
     
     @Test
     fun `resource cleanup should work correctly`() = runTest {
-        // Initialize device with resources
+
         deviceConfiguration.initialize()
-        
-        // Simulate resource allocation
+
         val resourceIds = mutableListOf<String>()
         repeat(5) { index ->
             val resourceId = "resource_$index"
             deviceConfiguration.allocateResource(resourceId, "test_resource_type")
             resourceIds.add(resourceId)
         }
-        
-        // Verify resources are allocated
+
         resourceIds.forEach { resourceId ->
             assertTrue("Resource $resourceId should be allocated", 
                       deviceConfiguration.isResourceAllocated(resourceId))
         }
-        
-        // Test cleanup
+
         val cleanupResult = deviceConfiguration.cleanup()
         assertTrue("Cleanup should succeed", cleanupResult)
-        
-        // Verify resources are released
+
         resourceIds.forEach { resourceId ->
             assertFalse("Resource $resourceId should be released", 
                        deviceConfiguration.isResourceAllocated(resourceId))

@@ -16,29 +16,26 @@ from .test_categories import QualityThresholds, TestCategory, TestType
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class ValidationRule:
     """Individual validation rule for test assessment"""
     name: str
     description: str
     threshold: float
-    comparison: str  # 'gt', 'gte', 'lt', 'lte', 'eq', 'range'
-    threshold_max: Optional[float] = None  # For range comparisons
-    weight: float = 1.0  # Weight for overall quality calculation
-    critical: bool = False  # Critical rules must pass
-
+    comparison: str
+    threshold_max: Optional[float] = None
+    weight: float = 1.0
+    critical: bool = False
 
 @dataclass
 class ValidationIssue:
     """Represents a validation issue found during assessment"""
     rule_name: str
-    severity: str  # 'critical', 'warning', 'info'
+    severity: str
     message: str
     measured_value: float
     threshold_value: float
     test_names: List[str]
-
 
 @dataclass
 class SuiteValidation:
@@ -63,7 +60,6 @@ class SuiteValidation:
         if self.recommendations is None:
             self.recommendations = []
 
-
 @dataclass
 class ValidationReport:
     """Comprehensive validation report for test execution"""
@@ -77,8 +73,7 @@ class ValidationReport:
     critical_issues: List[ValidationIssue] = None
     quality_issues: List[ValidationIssue] = None
     recommendations: List[str] = None
-    
-    # Statistical validation results
+
     statistical_summary: Dict[str, float] = None
     confidence_intervals: Dict[str, Tuple[float, float]] = None
     
@@ -96,7 +91,6 @@ class ValidationReport:
         if self.confidence_intervals is None:
             self.confidence_intervals = {}
 
-
 class QualityValidator:
     """
     Automated quality validation for test results
@@ -109,14 +103,12 @@ class QualityValidator:
         self.quality_thresholds = quality_thresholds or QualityThresholds()
         self.validation_rules: Dict[str, List[ValidationRule]] = {}
         self.logger = logging.getLogger(__name__)
-        
-        # Initialize default validation rules
+
         self._initialize_default_rules()
     
     def _initialize_default_rules(self):
         """Initialize default validation rules for all test categories"""
-        
-        # Foundation layer rules
+
         foundation_rules = [
             ValidationRule(
                 name="success_rate_foundation",
@@ -129,7 +121,7 @@ class QualityValidator:
             ValidationRule(
                 name="execution_time_foundation", 
                 description="Foundation tests should execute quickly",
-                threshold=300.0,  # 5 minutes
+                threshold=300.0,
                 comparison="lte",
                 weight=1.0
             ),
@@ -143,8 +135,7 @@ class QualityValidator:
             )
         ]
         self.validation_rules[TestCategory.FOUNDATION.name] = foundation_rules
-        
-        # Integration layer rules
+
         integration_rules = [
             ValidationRule(
                 name="success_rate_integration",
@@ -171,8 +162,7 @@ class QualityValidator:
             )
         ]
         self.validation_rules[TestCategory.INTEGRATION.name] = integration_rules
-        
-        # System layer rules
+
         system_rules = [
             ValidationRule(
                 name="success_rate_system",
@@ -200,8 +190,7 @@ class QualityValidator:
             )
         ]
         self.validation_rules[TestCategory.SYSTEM.name] = system_rules
-        
-        # Performance layer rules
+
         performance_rules = [
             ValidationRule(
                 name="success_rate_performance",
@@ -259,27 +248,22 @@ class QualityValidator:
             execution_id=test_results.execution_id,
             timestamp=datetime.now()
         )
-        
-        # Validate each test suite
+
         for suite_name, suite_results in test_results.suite_results.items():
             suite_validation = self._validate_suite_results(suite_results)
             validation_report.suite_validations[suite_name] = suite_validation
-            
-            # Collect critical issues
+
             for issue in suite_validation.issues:
                 if issue.severity == 'critical':
                     validation_report.critical_issues.append(issue)
                 else:
                     validation_report.quality_issues.append(issue)
-        
-        # Calculate overall quality score
+
         validation_report.overall_quality = self._calculate_overall_quality(validation_report)
         validation_report.overall_valid = len(validation_report.critical_issues) == 0
-        
-        # Generate statistical validation
+
         self._perform_statistical_validation(test_results, validation_report)
-        
-        # Generate recommendations
+
         validation_report.recommendations = self._generate_recommendations(validation_report)
         
         self.logger.info(f"Validation completed. Overall quality: {validation_report.overall_quality:.3f}")
@@ -298,16 +282,14 @@ class QualityValidator:
         
         for rule in rules:
             self._apply_validation_rule(rule, suite_results, suite_validation)
-        
-        # Determine overall suite validity
+
         suite_validation.overall_valid = (
             suite_validation.success_rate_valid and
             suite_validation.performance_valid and
             suite_validation.quality_valid and
             suite_validation.coverage_valid
         )
-        
-        # Calculate suite quality score
+
         suite_validation.quality_score = self._calculate_suite_quality_score(
             suite_results, suite_validation
         )
@@ -317,18 +299,15 @@ class QualityValidator:
     def _apply_validation_rule(self, rule: ValidationRule, suite_results: SuiteResults, 
                               suite_validation: SuiteValidation):
         """Apply a specific validation rule to suite results"""
-        
-        # Extract measurement value based on rule name
+
         measured_value = self._extract_measurement_value(rule.name, suite_results)
         
         if measured_value is None:
             self.logger.warning(f"Could not extract value for rule {rule.name}")
             return
-        
-        # Perform comparison
+
         valid = self._compare_value(measured_value, rule.threshold, rule.comparison, rule.threshold_max)
-        
-        # Update suite validation flags
+
         if "success_rate" in rule.name:
             suite_validation.success_rate_valid = valid
         elif any(keyword in rule.name for keyword in ["latency", "cpu", "memory", "throughput"]):
@@ -337,8 +316,7 @@ class QualityValidator:
             suite_validation.quality_valid = valid
         elif "coverage" in rule.name:
             suite_validation.coverage_valid = valid
-        
-        # Create validation issue if rule failed
+
         if not valid:
             severity = "critical" if rule.critical else "warning"
             issue = ValidationIssue(
@@ -359,7 +337,7 @@ class QualityValidator:
         elif "execution_time" in rule_name:
             return suite_results.average_execution_time
         elif "coverage" in rule_name:
-            return suite_results.total_coverage / 100.0  # Convert percentage to fraction
+            return suite_results.total_coverage / 100.0
         elif "latency" in rule_name:
             return suite_results.average_latency_ms
         elif "memory" in rule_name:
@@ -369,7 +347,7 @@ class QualityValidator:
         elif "quality" in rule_name:
             return suite_results.overall_quality_score
         elif "sync_precision" in rule_name:
-            # Calculate average synchronization precision from test results
+
             sync_values = [
                 r.performance_metrics.synchronization_precision_ms 
                 for r in suite_results.test_results
@@ -377,7 +355,7 @@ class QualityValidator:
             ]
             return statistics.mean(sync_values) if sync_values else None
         elif "throughput" in rule_name:
-            # Calculate average data throughput
+
             throughput_values = [
                 r.performance_metrics.data_throughput_mb_per_sec
                 for r in suite_results.test_results
@@ -412,20 +390,18 @@ class QualityValidator:
         
         if not validation_report.suite_validations:
             return 0.0
-        
-        # Weight quality scores by test count in each suite
+
         total_weight = 0.0
         weighted_sum = 0.0
         
         for suite_validation in validation_report.suite_validations.values():
-            # Use suite test count as weight (if available from suite results)
-            weight = 1.0  # Default weight
+
+            weight = 1.0
             weighted_sum += weight * suite_validation.quality_score
             total_weight += weight
         
         overall_quality = weighted_sum / total_weight if total_weight > 0 else 0.0
-        
-        # Apply penalty for critical issues
+
         critical_penalty = len(validation_report.critical_issues) * 0.1
         overall_quality = max(0.0, overall_quality - critical_penalty)
         
@@ -434,27 +410,22 @@ class QualityValidator:
     def _calculate_suite_quality_score(self, suite_results: SuiteResults, 
                                      suite_validation: SuiteValidation) -> float:
         """Calculate quality score for individual test suite"""
-        
-        # Base score from success rate
+
         base_score = suite_results.success_rate
-        
-        # Performance factor
+
         performance_factor = 1.0
         if suite_results.average_cpu_percent > 0:
             performance_factor *= max(0.5, 1.0 - suite_results.average_cpu_percent / 100.0)
-        
-        # Coverage factor
+
         coverage_factor = suite_results.total_coverage / 100.0 if suite_results.total_coverage > 0 else 0.5
-        
-        # Quality factor from test-specific quality scores
+
         quality_factor = suite_results.overall_quality_score if suite_results.overall_quality_score > 0 else 0.5
-        
-        # Calculate weighted score
+
         quality_score = (
-            0.4 * base_score +           # 40% success rate
-            0.2 * performance_factor +   # 20% performance
-            0.2 * coverage_factor +      # 20% coverage
-            0.2 * quality_factor         # 20% test quality
+            0.4 * base_score +
+            0.2 * performance_factor +
+            0.2 * coverage_factor +
+            0.2 * quality_factor
         )
         
         return min(1.0, quality_score)
@@ -462,8 +433,7 @@ class QualityValidator:
     def _perform_statistical_validation(self, test_results: TestResults, 
                                        validation_report: ValidationReport):
         """Perform statistical validation and confidence analysis"""
-        
-        # Collect all execution times
+
         execution_times = []
         for suite in test_results.suite_results.values():
             execution_times.extend([r.execution_time for r in suite.test_results if r.execution_time > 0])
@@ -472,17 +442,15 @@ class QualityValidator:
             validation_report.statistical_summary["mean_execution_time"] = statistics.mean(execution_times)
             validation_report.statistical_summary["median_execution_time"] = statistics.median(execution_times)
             validation_report.statistical_summary["std_execution_time"] = statistics.stdev(execution_times) if len(execution_times) > 1 else 0.0
-            
-            # Calculate 95% confidence interval for execution time
+
             if len(execution_times) > 1:
                 mean_time = statistics.mean(execution_times)
                 std_time = statistics.stdev(execution_times)
-                margin = 1.96 * std_time / (len(execution_times) ** 0.5)  # 95% CI
+                margin = 1.96 * std_time / (len(execution_times) ** 0.5)
                 validation_report.confidence_intervals["execution_time"] = (
                     max(0, mean_time - margin), mean_time + margin
                 )
-        
-        # Statistical validation for success rates
+
         success_rates = [suite.success_rate for suite in test_results.suite_results.values()]
         if success_rates:
             validation_report.statistical_summary["mean_success_rate"] = statistics.mean(success_rates)
@@ -492,15 +460,13 @@ class QualityValidator:
         """Generate actionable recommendations based on validation results"""
         
         recommendations = []
-        
-        # Critical issue recommendations
+
         if validation_report.critical_issues:
             recommendations.append(
                 f"CRITICAL: Address {len(validation_report.critical_issues)} critical issues "
                 "before system deployment"
             )
-        
-        # Performance recommendations
+
         performance_issues = [
             issue for issue in validation_report.quality_issues 
             if any(keyword in issue.rule_name for keyword in ["cpu", "memory", "latency"])
@@ -509,8 +475,7 @@ class QualityValidator:
             recommendations.append(
                 "Consider performance optimization for CPU/memory usage and network latency"
             )
-        
-        # Coverage recommendations
+
         coverage_issues = [
             issue for issue in validation_report.quality_issues
             if "coverage" in issue.rule_name
@@ -519,8 +484,7 @@ class QualityValidator:
             recommendations.append(
                 "Increase test coverage to meet research-grade quality standards"
             )
-        
-        # Quality score recommendations
+
         if validation_report.overall_quality < 0.85:
             recommendations.append(
                 f"Overall quality score ({validation_report.overall_quality:.3f}) below target (0.85). "

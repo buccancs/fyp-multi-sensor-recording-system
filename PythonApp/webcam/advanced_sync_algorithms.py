@@ -13,13 +13,11 @@ from ..utils.logging_config import get_logger, performance_timer
 
 logger = get_logger(__name__)
 
-
 class SynchronizationStrategy(Enum):
     MASTER_SLAVE = "master_slave"
     CROSS_CORRELATION = "cross_corr"
     HARDWARE_SYNC = "hardware_sync"
     ADAPTIVE_HYBRID = "adaptive_hybrid"
-
 
 @dataclass
 class TimingMetrics:
@@ -35,7 +33,6 @@ class TimingMetrics:
     frames_processed: int = 0
     sync_violations: int = 0
     recovery_time_ms: float = 0.0
-
 
 @dataclass
 class SyncFrame:
@@ -53,7 +50,6 @@ class SyncFrame:
         if self.camera1_hardware_ts and self.camera2_hardware_ts:
             return abs(self.camera1_hardware_ts - self.camera2_hardware_ts) * 1000
         return 0.0
-
 
 class AdaptiveSynchronizer:
 
@@ -261,7 +257,6 @@ class AdaptiveSynchronizer:
             f"Synchronization strategy changed: {old_strategy.value} -> {strategy.value}"
         )
 
-
 def test_dual_camera_sync(
     camera1_index: int = 0, camera2_index: int = 1, duration_seconds: int = 10
 ) -> Dict:
@@ -331,7 +326,6 @@ def test_dual_camera_sync(
     except Exception as e:
         logger.error(f"Synchronization test failed: {e}")
         return {"error": str(e), "success": False}
-
 
 if __name__ == "__main__":
     results = test_dual_camera_sync()

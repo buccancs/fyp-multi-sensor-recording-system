@@ -56,7 +56,6 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var emptyStateText: TextView
     private lateinit var refreshButton: Button
 
-
     private lateinit var rgbPreviewBtn: Button
     private lateinit var irPreviewBtn: Button
     private lateinit var rgbPreviewImage: ImageView
@@ -66,7 +65,6 @@ class FileViewActivity : AppCompatActivity() {
 
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
-
 
     private var isRgbPreviewActive = false
     private var isIrPreviewActive = false
@@ -155,14 +153,12 @@ class FileViewActivity : AppCompatActivity() {
         emptyStateText = findViewById(R.id.empty_state_text)
         refreshButton = findViewById(R.id.refresh_button)
 
-
         rgbPreviewBtn = findViewById(R.id.rgb_preview_btn)
         irPreviewBtn = findViewById(R.id.ir_preview_btn)
         rgbPreviewImage = findViewById(R.id.rgb_preview_image)
         irPreviewImage = findViewById(R.id.ir_preview_image)
         rgbPreviewPlaceholder = findViewById(R.id.rgb_preview_placeholder)
         irPreviewPlaceholder = findViewById(R.id.ir_preview_placeholder)
-
 
         rgbPreviewBtn.setOnClickListener { toggleRgbPreview() }
         irPreviewBtn.setOnClickListener { toggleIrPreview() }
@@ -381,7 +377,6 @@ class FileViewActivity : AppCompatActivity() {
         }
     }
 
-
     private fun toggleRgbPreview() {
         if (!isRgbPreviewActive) {
             startRgbPreview()
@@ -405,7 +400,6 @@ class FileViewActivity : AppCompatActivity() {
         
         rgbPreviewPlaceholder.visibility = View.GONE
         rgbPreviewImage.visibility = View.VISIBLE
-        
 
         cameraPreviewHandler.post(rgbPreviewRunnable)
         
@@ -434,7 +428,6 @@ class FileViewActivity : AppCompatActivity() {
         
         irPreviewPlaceholder.visibility = View.GONE
         irPreviewImage.visibility = View.VISIBLE
-        
 
         cameraPreviewHandler.post(irPreviewRunnable)
         
@@ -483,13 +476,10 @@ class FileViewActivity : AppCompatActivity() {
         val canvas = Canvas(bitmap)
         val paint = Paint()
 
-
         val time = System.currentTimeMillis() / 100
-        
 
         paint.color = Color.rgb(50, 50, 80)
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        
 
         for (i in 0..10) {
             val x = ((time + i * 30) % (width + 100)).toFloat() - 50
@@ -502,12 +492,10 @@ class FileViewActivity : AppCompatActivity() {
             )
             canvas.drawCircle(x, y, 15f, paint)
         }
-        
 
         paint.color = Color.RED
         paint.textSize = 24f
         canvas.drawText("● LIVE", 10f, 30f, paint)
-        
 
         paint.color = Color.WHITE
         paint.textSize = 16f
@@ -526,7 +514,6 @@ class FileViewActivity : AppCompatActivity() {
 
         val time = System.currentTimeMillis() / 200.0
 
-
         for (y in 0 until height) {
             for (x in 0 until width) {
 
@@ -535,7 +522,6 @@ class FileViewActivity : AppCompatActivity() {
                 val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
                 
                 val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
-                
 
                 val color = when {
                     intensity < 85 -> Color.rgb(0, 0, intensity * 3)
@@ -547,7 +533,6 @@ class FileViewActivity : AppCompatActivity() {
                 canvas.drawPoint(x.toFloat(), y.toFloat(), paint)
             }
         }
-        
 
         paint.color = Color.YELLOW
         for (i in 0..3) {
@@ -555,12 +540,10 @@ class FileViewActivity : AppCompatActivity() {
             val hotY = Random.nextInt(50, height - 50).toFloat()
             canvas.drawCircle(hotX, hotY, 20f, paint)
         }
-        
 
         paint.color = Color.WHITE
         paint.textSize = 18f
         canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
-        
 
         val temp = (20 + Random.nextFloat() * 15).toInt()
         paint.textSize = 14f
@@ -571,7 +554,6 @@ class FileViewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        
 
         stopRgbPreview()
         stopIrPreview()

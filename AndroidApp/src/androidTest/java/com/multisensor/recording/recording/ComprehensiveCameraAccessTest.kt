@@ -38,7 +38,6 @@ class ComprehensiveCameraAccessTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-
     @get:Rule
     var permissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Phase 1 Implementation Validation Script
 ========================================
@@ -38,7 +38,6 @@ except ImportError as e:
     import logging
     logging.basicConfig(level=logging.INFO)
     get_logger = lambda x: logging.getLogger(x)
-
 
 class Phase1Validator:
     """
@@ -577,7 +576,6 @@ class Phase1Validator:
 
         return overall_success
 
-
 def main():
     """Main entry point for Phase 1 validation."""
     print("🚀 Multi-Sensor Recording System - Phase 1 Validation")
@@ -598,7 +596,6 @@ def main():
         print(f"\n💥 Validation failed with exception: {e}")
         traceback.print_exc()
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

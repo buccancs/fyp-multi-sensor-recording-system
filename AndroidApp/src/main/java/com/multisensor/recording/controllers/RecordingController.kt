@@ -8,6 +8,7 @@ import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.util.NetworkUtils
 import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -185,14 +186,8 @@ class RecordingController @Inject constructor() {
 
             currentRecordingState = recordingState
             android.util.Log.d("RecordingController", "[DEBUG_LOG] Enhanced recording state saved")
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: SecurityException) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Security exception saving recording state - check permissions: ${e.message}")
-        } catch (e: IOException) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] IO error saving recording state: ${e.message}")
-        } catch (e: RuntimeException) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Runtime error saving recording state: ${e.message}")
+        } catch (e: Exception) {
+            android.util.Log.e("RecordingController", "[DEBUG_LOG] Failed to save recording state: ${e.message}")
         }
     }
 

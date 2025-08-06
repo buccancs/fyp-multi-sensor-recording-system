@@ -19,22 +19,6 @@ import kotlin.test.assertTrue
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
-/**
- * Comprehensive Recording Components Tests
- * =======================================
- * 
- * This test suite provides comprehensive coverage for all recording-related
- * components in the Android application.
- * 
- * Test coverage:
- * - CameraRecorder: Video recording, configuration, quality management
- * - ThermalRecorder: Thermal sensor data recording, calibration
- * - ShimmerRecorder: Shimmer device integration, data synchronization
- * - Recording coordination: Multi-modal recording synchronization
- * 
- * Author: Multi-Sensor Recording System
- * Date: 2025-01-16
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class RecordingComponentsComprehensiveTest {
@@ -61,24 +45,18 @@ class RecordingComponentsComprehensiveTest {
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-        
-        // Setup mock context
+
         whenever(mockContext.getSystemService(Context.CAMERA_SERVICE))
             .thenReturn(mockCameraManager)
-        
-        // Setup mock camera manager
+
         whenever(mockCameraManager.cameraIdList)
             .thenReturn(arrayOf("0", "1"))
-        
-        // Initialize recorders
+
         cameraRecorder = CameraRecorder(mockContext)
         thermalRecorder = ThermalRecorder(mockContext)
         shimmerRecorder = ShimmerRecorder(mockContext)
     }
 
-    /**
-     * Camera Recorder Tests
-     */
     @Test
     fun `test camera recorder initialization`() {
         val config = CameraConfiguration(
@@ -97,19 +75,16 @@ class RecordingComponentsComprehensiveTest {
     @Test
     fun `test camera recording start and stop`() = runTest {
         val outputFile = File(mockContext.filesDir, "test_video.mp4")
-        
-        // Setup mock media recorder
+
         whenever(mockMediaRecorder.start()).then { }
         whenever(mockMediaRecorder.stop()).then { }
         
         cameraRecorder.setMediaRecorder(mockMediaRecorder)
-        
-        // Start recording
+
         val startResult = cameraRecorder.startRecording(outputFile)
         assertTrue(startResult.isSuccess)
         assertTrue(cameraRecorder.isRecording())
-        
-        // Stop recording
+
         val stopResult = cameraRecorder.stopRecording()
         assertTrue(stopResult.isSuccess)
         assertFalse(cameraRecorder.isRecording())
@@ -128,10 +103,10 @@ class RecordingComponentsComprehensiveTest {
         )
         
         val invalidConfig = CameraConfiguration(
-            cameraId = "999", // Invalid camera ID
-            resolution = Resolution(8000, 6000), // Unsupported resolution
-            frameRate = 120, // Unsupported frame rate
-            bitRate = -1 // Invalid bit rate
+            cameraId = "999",
+            resolution = Resolution(8000, 6000),
+            frameRate = 120,
+            bitRate = -1
         )
         
         assertTrue(cameraRecorder.validateConfiguration(validConfig))
@@ -153,8 +128,8 @@ class RecordingComponentsComprehensiveTest {
 
     @Test
     fun `test camera focus and exposure control`() {
-        val focusPoint = FocusPoint(0.5f, 0.5f) // Center focus
-        val exposureValue = 0 // Auto exposure
+        val focusPoint = FocusPoint(0.5f, 0.5f)
+        val exposureValue = 0
         
         val focusResult = cameraRecorder.setFocus(focusPoint)
         val exposureResult = cameraRecorder.setExposure(exposureValue)
@@ -166,7 +141,7 @@ class RecordingComponentsComprehensiveTest {
 
     @Test
     fun `test camera error handling`() {
-        // Simulate camera error
+
         whenever(mockCameraManager.openCamera(any(), any(), any()))
             .thenThrow(RuntimeException("Camera access denied"))
         
@@ -183,13 +158,10 @@ class RecordingComponentsComprehensiveTest {
         assertNotNull(result.exceptionOrNull())
     }
 
-    /**
-     * Thermal Recorder Tests
-     */
     @Test
     fun `test thermal recorder initialization`() {
         val config = ThermalConfiguration(
-            samplingRate = 10, // 10 Hz
+            samplingRate = 10,
             temperatureRange = TemperatureRange(-10f, 60f),
             calibrationEnabled = true
         )
@@ -206,10 +178,9 @@ class RecordingComponentsComprehensiveTest {
     @Test
     fun `test thermal data recording`() = runTest {
         val outputFile = File(mockContext.filesDir, "thermal_data.csv")
-        
-        // Setup mock thermal sensor
+
         val mockTemperatureData = listOf(
-            TemperatureReading(1642425600000, 25.5f, 0.1f), // timestamp, temp, confidence
+            TemperatureReading(1642425600000, 25.5f, 0.1f),
             TemperatureReading(1642425600100, 25.7f, 0.1f),
             TemperatureReading(1642425600200, 25.6f, 0.1f)
         )
@@ -218,19 +189,15 @@ class RecordingComponentsComprehensiveTest {
             .thenReturn(mockTemperatureData)
         
         thermalRecorder.setThermalSensor(mockThermalSensor)
-        
-        // Start recording
+
         val startResult = thermalRecorder.startRecording(outputFile)
         assertTrue(startResult.isSuccess)
-        
-        // Simulate data collection
+
         thermalRecorder.collectData()
-        
-        // Stop recording
+
         val stopResult = thermalRecorder.stopRecording()
         assertTrue(stopResult.isSuccess)
-        
-        // Verify data was written
+
         assertTrue(outputFile.exists())
         assertTrue(outputFile.length() > 0)
     }
@@ -239,7 +206,7 @@ class RecordingComponentsComprehensiveTest {
     fun `test thermal calibration process`() {
         val calibrationConfig = ThermalCalibrationConfig(
             referenceTemperature = 25.0f,
-            calibrationDuration = 30000, // 30 seconds
+            calibrationDuration = 30000,
             stabilityThreshold = 0.1f
         )
         
@@ -281,14 +248,11 @@ class RecordingComponentsComprehensiveTest {
         assertEquals(0, health.errorCount)
     }
 
-    /**
-     * Shimmer Recorder Tests
-     */
     @Test
     fun `test shimmer recorder initialization`() {
         val config = ShimmerConfiguration(
             deviceMacAddress = "00:06:66:AA:BB:CC",
-            samplingRate = 512, // 512 Hz
+            samplingRate = 512,
             enabledSensors = listOf(SensorType.GSR, SensorType.ECG, SensorType.EMG),
             bluetoothTimeout = 30000
         )
@@ -305,8 +269,7 @@ class RecordingComponentsComprehensiveTest {
     @Test
     fun `test shimmer data streaming`() = runTest {
         val outputFile = File(mockContext.filesDir, "shimmer_data.json")
-        
-        // Setup mock shimmer data
+
         val mockSensorData = listOf(
             ShimmerSensorData(
                 timestamp = 1642425600000,
@@ -328,16 +291,13 @@ class RecordingComponentsComprehensiveTest {
         whenever(mockShimmerDevice.getLatestData()).thenReturn(mockSensorData)
         
         shimmerRecorder.setShimmerDevice(mockShimmerDevice)
-        
-        // Start streaming
+
         val startResult = shimmerRecorder.startStreaming(outputFile)
         assertTrue(startResult.isSuccess)
-        
-        // Collect data
+
         val collectedData = shimmerRecorder.collectStreamingData()
         assertEquals(2, collectedData.size)
-        
-        // Stop streaming
+
         val stopResult = shimmerRecorder.stopStreaming()
         assertTrue(stopResult.isSuccess)
         
@@ -363,20 +323,18 @@ class RecordingComponentsComprehensiveTest {
 
     @Test
     fun `test shimmer connection recovery`() {
-        // Simulate connection loss and recovery
+
         whenever(mockShimmerDevice.isConnected())
             .thenReturn(true)
-            .thenReturn(false) // Lost connection
-            .thenReturn(true)  // Reconnected
+            .thenReturn(false)
+            .thenReturn(true)
         
         whenever(mockShimmerDevice.reconnect()).thenReturn(true)
         
         shimmerRecorder.setShimmerDevice(mockShimmerDevice)
-        
-        // Check initial connection
+
         assertTrue(shimmerRecorder.checkConnectionHealth())
-        
-        // Detect disconnection and trigger recovery
+
         assertFalse(shimmerRecorder.checkConnectionHealth())
         val recoveryResult = shimmerRecorder.attemptRecovery()
         
@@ -395,20 +353,17 @@ class RecordingComponentsComprehensiveTest {
         )
         
         val invalidData = ShimmerSensorData(
-            timestamp = -1, // Invalid timestamp
-            gsr = Float.NaN, // Invalid GSR value
-            ecg = Float.POSITIVE_INFINITY, // Invalid ECG value
+            timestamp = -1,
+            gsr = Float.NaN,
+            ecg = Float.POSITIVE_INFINITY,
             emg = 0.890f,
-            deviceId = "" // Empty device ID
+            deviceId = ""
         )
         
         assertTrue(shimmerRecorder.validateSensorData(validData))
         assertFalse(shimmerRecorder.validateSensorData(invalidData))
     }
 
-    /**
-     * Multi-Modal Recording Coordination Tests
-     */
     @Test
     fun `test synchronized multi-modal recording`() = runTest {
         val recordingSession = MultiModalRecordingSession(
@@ -420,8 +375,7 @@ class RecordingComponentsComprehensiveTest {
                 RecordingComponent.SHIMMER
             )
         )
-        
-        // Setup all recorders
+
         cameraRecorder.setMediaRecorder(mockMediaRecorder)
         thermalRecorder.setThermalSensor(mockThermalSensor)
         shimmerRecorder.setShimmerDevice(mockShimmerDevice)
@@ -431,17 +385,14 @@ class RecordingComponentsComprehensiveTest {
             thermalRecorder = thermalRecorder,
             shimmerRecorder = shimmerRecorder
         )
-        
-        // Start synchronized recording
+
         val startResult = coordinator.startSynchronizedRecording(recordingSession)
         assertTrue(startResult.isSuccess)
-        
-        // Verify all components started
+
         assertTrue(coordinator.isRecording())
         verify(mockMediaRecorder).start()
         verify(mockShimmerDevice).startStreaming()
-        
-        // Stop synchronized recording
+
         val stopResult = coordinator.stopSynchronizedRecording()
         assertTrue(stopResult.isSuccess)
         
@@ -453,20 +404,17 @@ class RecordingComponentsComprehensiveTest {
     fun `test recording timestamp synchronization`() {
         val masterTimestamp = System.currentTimeMillis()
         val synchronizer = RecordingTimestampSynchronizer()
-        
-        // Synchronize all components
+
         val syncResults = synchronizer.synchronizeComponents(
             masterTimestamp,
             listOf(cameraRecorder, thermalRecorder, shimmerRecorder)
         )
         
         assertTrue(syncResults.all { it.success })
-        
-        // Check timestamp alignment
+
         val timestamps = syncResults.map { it.synchronizedTimestamp }
         val maxOffset = timestamps.maxOrNull()!! - timestamps.minOrNull()!!
-        
-        // All components should be synchronized within 10ms
+
         assertTrue(maxOffset <= 10)
     }
 
@@ -477,8 +425,7 @@ class RecordingComponentsComprehensiveTest {
             thermalRecorder = thermalRecorder,
             shimmerRecorder = shimmerRecorder
         )
-        
-        // Simulate camera error during recording
+
         whenever(mockMediaRecorder.start()).thenThrow(RuntimeException("Camera error"))
         
         val recordingSession = MultiModalRecordingSession(
@@ -488,12 +435,10 @@ class RecordingComponentsComprehensiveTest {
         )
         
         val result = coordinator.startSynchronizedRecording(recordingSession)
-        
-        // Should handle error gracefully
+
         assertTrue(result.isFailure)
         assertFalse(coordinator.isRecording())
-        
-        // Should attempt recovery
+
         val recoveryResult = coordinator.attemptRecovery()
         assertNotNull(recoveryResult)
     }
@@ -541,20 +486,17 @@ class RecordingComponentsComprehensiveTest {
         
         val session = RecordingSession(
             sessionId = "session_003",
-            duration = 300000, // 5 minutes
-            estimatedFileSize = 500 * 1024 * 1024 // 500 MB
+            duration = 300000,
+            estimatedFileSize = 500 * 1024 * 1024
         )
-        
-        // Check available storage
+
         val storageInfo = storageManager.getStorageInfo()
         assertNotNull(storageInfo.availableSpace)
         assertNotNull(storageInfo.totalSpace)
-        
-        // Validate storage capacity
+
         val hasCapacity = storageManager.validateStorageCapacity(session)
         assertTrue(hasCapacity is StorageValidationResult)
-        
-        // Cleanup old recordings if needed
+
         if (!hasCapacity.hasCapacity) {
             val cleanupResult = storageManager.cleanupOldRecordings(session.estimatedFileSize)
             assertTrue(cleanupResult.isSuccess)

@@ -36,7 +36,6 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
 )
 
-
 class FilePreviewWidget(QFrame):
     """Widget for previewing different file types"""
 
@@ -215,7 +214,6 @@ Click 'Open' to open with external application.
             return f"{bytes_size / (1024 * 1024):.1f} MB"
         else:
             return f"{bytes_size / (1024 * 1024 * 1024):.1f} GB"
-
 
 class FileBrowserDialog(QDialog):
     """Comprehensive file browser dialog for the Multi-Sensor Recording System"""
@@ -515,7 +513,6 @@ class FileBrowserDialog(QDialog):
         """Get the selected file path"""
         return self.selected_file
 
-
 def show_file_browser(parent=None, initial_path: str = None) -> Optional[str]:
     """
     Show file browser dialog and return selected file path
@@ -531,7 +528,6 @@ def show_file_browser(parent=None, initial_path: str = None) -> Optional[str]:
     if dialog.exec_() == QDialog.Accepted:
         return dialog.get_selected_file()
     return None
-
 
 if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
