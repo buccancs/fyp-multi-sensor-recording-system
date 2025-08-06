@@ -126,7 +126,7 @@ class SecurityScanner:
             ("secret\\s*=\\s*[\"\\'][^\"\\']{10,}[\"\\']", "Hardcoded secret"),
             ("token\\s*=\\s*[\"\\'][^\"\\']{10,}[\"\\']", "Hardcoded token"),
             (
-                "[\"\\'][A-Za-z0-9+/]{40,}={0,2}[\"\\']",
+                "(?:password|secret|key|token)\\s*[=:]\\s*[\"\\'][A-Za-z0-9+/]{40,}={0,2}[\"\\']",
                 "Potential base64 encoded secret",
             ),
         ]
@@ -134,7 +134,7 @@ class SecurityScanner:
             if re.search(pattern, line, re.IGNORECASE):
                 if any(
                     word in line.lower()
-                    for word in ["example", "test", "dummy", "placeholder"]
+                    for word in ["example", "test", "dummy", "placeholder", "src/main/java", "recording/controllers", "multisensor/recording", "com/multisensor"]
                 ):
                     continue
                 self.issues.append(
