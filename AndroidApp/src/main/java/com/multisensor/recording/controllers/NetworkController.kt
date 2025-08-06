@@ -138,9 +138,17 @@ class NetworkController @Inject constructor() {
                 handleNetworkConnectivityChange(isConnected)
             }
 
-        } catch (e: Exception) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Failed to start network monitoring: ${e.message}")
-            callback?.onStreamingError("Failed to start network monitoring: ${e.message}")
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            android.util.Log.e("NetworkController", "[DEBUG_LOG] Permission error starting network monitoring: ${e.message}")
+            callback?.onStreamingError("Permission error starting network monitoring: ${e.message}")
+        } catch (e: IllegalStateException) {
+            android.util.Log.e("NetworkController", "[DEBUG_LOG] Invalid state starting network monitoring: ${e.message}")
+            callback?.onStreamingError("Invalid state starting network monitoring: ${e.message}")
+        } catch (e: RuntimeException) {
+            android.util.Log.e("NetworkController", "[DEBUG_LOG] Runtime error starting network monitoring: ${e.message}")
+            callback?.onStreamingError("Runtime error starting network monitoring: ${e.message}")
         }
     }
 
@@ -156,8 +164,14 @@ class NetworkController @Inject constructor() {
             connectivityManager = null
             android.util.Log.i("NetworkController", "[DEBUG_LOG] Network monitoring stopped")
 
-        } catch (e: Exception) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Error stopping network monitoring: ${e.message}")
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            android.util.Log.e("NetworkController", "[DEBUG_LOG] Permission error stopping network monitoring: ${e.message}")
+        } catch (e: IllegalStateException) {
+            android.util.Log.e("NetworkController", "[DEBUG_LOG] Invalid state stopping network monitoring: ${e.message}")
+        } catch (e: RuntimeException) {
+            android.util.Log.e("NetworkController", "[DEBUG_LOG] Runtime error stopping network monitoring: ${e.message}")
         }
     }
 
