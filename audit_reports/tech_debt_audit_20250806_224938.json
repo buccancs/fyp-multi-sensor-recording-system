@@ -1,0 +1,1429 @@
+{
+  "timestamp": "2025-08-06T22:49:39.822461",
+  "repo_path": "/home/runner/work/bucika_gsr/bucika_gsr",
+  "overall_score": 44,
+  "total_issues": 0,
+  "critical_issues": 0,
+  "categories": {
+    "python": {
+      "score": 85.5072463768116,
+      "issues_count": 40,
+      "issues": [
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'init_ui' is 61 lines long",
+          "file": "PythonApp/real_time_calibration_feedback.py",
+          "line": 217
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_find_serial_port_for_device' is 69 lines long",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 924
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'get_session_info' is 73 lines long",
+          "file": "PythonApp/test_shimmer_implementation.py",
+          "line": 340
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'assess_calibration_quality' is 80 lines long",
+          "file": "PythonApp/calibration/calibration.py",
+          "line": 175
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'perform_complete_calibration' is 120 lines long",
+          "file": "PythonApp/calibration/calibration.py",
+          "line": 385
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_generate_version' is 807 lines long",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 59
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'create_sample_device_profiles' is 100 lines long",
+          "file": "PythonApp/production/device_diversity_testing.py",
+          "line": 667
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_signal_handler' is 156 lines long",
+          "file": "PythonApp/production/endurance_testing.py",
+          "line": 329
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_extract_cpu_temperature' is 177 lines long",
+          "file": "PythonApp/production/endurance_testing.py",
+          "line": 485
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_create_failure_result' is 61 lines long",
+          "file": "PythonApp/production/endurance_testing.py",
+          "line": 707
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_create_default_degradation_actions' is 61 lines long",
+          "file": "PythonApp/production/graceful_degradation.py",
+          "line": 321
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'register_queue_for_backpressure' is 105 lines long",
+          "file": "PythonApp/production/graceful_degradation.py",
+          "line": 390
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_determine_performance_level' is 172 lines long",
+          "file": "PythonApp/production/graceful_degradation.py",
+          "line": 495
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'scan_gradle_dependencies' is 65 lines long",
+          "file": "PythonApp/production/dependency_scanner.py",
+          "line": 244
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_get_system_info' is 442 lines long",
+          "file": "PythonApp/production/performance_benchmark.py",
+          "line": 96
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_validate_build_system' is 66 lines long",
+          "file": "PythonApp/production/phase4_validator.py",
+          "line": 273
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_validate_production_config' is 61 lines long",
+          "file": "PythonApp/production/phase4_validator.py",
+          "line": 339
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_generate_final_report' is 82 lines long",
+          "file": "PythonApp/production/phase4_validator.py",
+          "line": 400
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_setup_logging' is 143 lines long",
+          "file": "PythonApp/production/endurance_test_suite.py",
+          "line": 265
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_detect_cpu_degradation' is 146 lines long",
+          "file": "PythonApp/production/endurance_test_suite.py",
+          "line": 505
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'detect_capabilities' is 65 lines long",
+          "file": "PythonApp/production/device_capability_detector.py",
+          "line": 127
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'generate_performance_profile' is 76 lines long",
+          "file": "PythonApp/production/device_capability_detector.py",
+          "line": 485
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_on_performance_level_change' is 154 lines long",
+          "file": "PythonApp/production/performance_monitor_integration.py",
+          "line": 145
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '__init__' is 532 lines long",
+          "file": "PythonApp/production/security_scanner.py",
+          "line": 46
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_format_event_for_ui' is 74 lines long",
+          "file": "PythonApp/session/session_logger.py",
+          "line": 247
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'api_webcam_configure' is 69 lines long",
+          "file": "PythonApp/web_ui/web_dashboard.py",
+          "line": 418
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_check_device_status' is 93 lines long",
+          "file": "PythonApp/web_ui/web_controller.py",
+          "line": 305
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'detect_bluetooth_devices' is 64 lines long",
+          "file": "PythonApp/utils/system_monitor.py",
+          "line": 210
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'export_logs' is 73 lines long",
+          "file": "PythonApp/utils/logger.py",
+          "line": 204
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'cleanup_old_logs' is 65 lines long",
+          "file": "PythonApp/utils/logger.py",
+          "line": 277
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'initialize' is 63 lines long",
+          "file": "PythonApp/utils/logging_config.py",
+          "line": 141
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'export_logs' is 77 lines long",
+          "file": "PythonApp/utils/logging_config.py",
+          "line": 263
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '__init__' is 71 lines long",
+          "file": "PythonApp/webcam/dual_webcam_capture.py",
+          "line": 60
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'run' is 64 lines long",
+          "file": "PythonApp/webcam/dual_webcam_capture.py",
+          "line": 318
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'process_video' is 113 lines long",
+          "file": "PythonApp/hand_segmentation/segmentation_engine.py",
+          "line": 56
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'setup_styling' is 99 lines long",
+          "file": "PythonApp/gui/enhanced_ui_main_window.py",
+          "line": 192
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'create_statistics_tab' is 94 lines long",
+          "file": "PythonApp/gui/session_review_dialog.py",
+          "line": 199
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'setup_ui' is 97 lines long",
+          "file": "PythonApp/gui/file_browser_dialog.py",
+          "line": 239
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function '_handle_client' is 63 lines long",
+          "file": "PythonApp/network/pc_server.py",
+          "line": 388
+        },
+        {
+          "type": "long_function",
+          "priority": "P2",
+          "description": "Function 'process_json_message' is 187 lines long",
+          "file": "PythonApp/network/device_server.py",
+          "line": 212
+        }
+      ],
+      "checks": {
+        "file_count": 92,
+        "syntax_errors": 0,
+        "import_issues": 0,
+        "complexity_issues": 40
+      },
+      "recommendations": []
+    },
+    "android": {
+      "score": 92.20183486238533,
+      "issues_count": 34,
+      "issues": [
+        {
+          "type": "large_activity",
+          "priority": "P2",
+          "description": "Activity file has 574 lines (consider refactoring)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/FileViewActivity.kt"
+        },
+        {
+          "type": "large_activity",
+          "priority": "P2",
+          "description": "Activity file has 309 lines (consider refactoring)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/CalibrationActivity.kt"
+        },
+        {
+          "type": "large_activity",
+          "priority": "P2",
+          "description": "Activity file has 473 lines (consider refactoring)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/OnboardingActivity.kt"
+        },
+        {
+          "type": "large_activity",
+          "priority": "P2",
+          "description": "Activity file has 590 lines (consider refactoring)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/SettingsActivity.kt"
+        },
+        {
+          "type": "large_activity",
+          "priority": "P2",
+          "description": "Activity file has 386 lines (consider refactoring)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/DevicesActivity.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 838 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/test/java/com/multisensor/recording/controllers/UsbControllerUnitTest.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 598 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/test/java/com/multisensor/recording/controllers/UIControllerTest.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 782 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/test/java/com/multisensor/recording/controllers/CalibrationControllerTest.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 579 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/androidTest/java/com/multisensor/recording/IDEIntegrationUITest.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 582 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/androidTest/java/com/multisensor/recording/recording/ShimmerRecorderManualTest.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1054 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 2010 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 524 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 552 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1767 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 937 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 574 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/FileViewActivity.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 590 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/SettingsActivity.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 2035 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 628 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/service/RecordingService.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 604 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 916 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/UsbController.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1346 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/RecordingController.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 992 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/MainActivityCoordinator.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1030 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/UIController.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 806 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/ShimmerController.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1615 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/NetworkController.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1345 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/controllers/CalibrationController.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 662 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/util/AppLogger.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 512 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/util/PermissionTool.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1389 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/managers/ShimmerManager.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1008 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/network/EnhancedJsonSocketClient.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 855 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/network/CommandProcessor.kt"
+        },
+        {
+          "type": "long_file",
+          "priority": "P2",
+          "description": "File has 1163 lines (exceeds 500 line threshold)",
+          "file": "AndroidApp/src/main/java/com/multisensor/recording/ui/compose/screens/OtherScreens.kt"
+        }
+      ],
+      "checks": {
+        "kotlin_files": 218,
+        "architecture_issues": 5,
+        "long_files": 29,
+        "build_issues": 0
+      },
+      "recommendations": []
+    },
+    "dependencies": {
+      "score": 0,
+      "issues_count": 24,
+      "issues": [
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): opencv",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pillow",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): scipy",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): matplotlib",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pandas",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): requests",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): websockets",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pytest",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pytest-cov",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): flake8",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): black",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pytest-mock",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pytest-qt",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): mypy",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): bandit",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): memory-profiler",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): psutil",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): isort",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pre-commit",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): sphinx",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): sphinx-rtd-theme",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pyshimmer",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): bleak",
+          "file": "dependencies"
+        },
+        {
+          "type": "unpinned_dependency",
+          "priority": "P3",
+          "description": "Unpinned dependency (consider version constraints): pybluez",
+          "file": "dependencies"
+        }
+      ],
+      "checks": {
+        "python_dependencies": 36,
+        "dependency_issues": 24,
+        "android_dependencies": 27
+      },
+      "recommendations": []
+    },
+    "documentation": {
+      "score": 0,
+      "issues_count": 28,
+      "issues": [
+        {
+          "type": "missing_documentation",
+          "priority": "P1",
+          "description": "Missing essential document: CONTRIBUTOR_GUIDE.md",
+          "file": "CONTRIBUTOR_GUIDE.md"
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/TEST_EXECUTION_GUIDE.md",
+          "file": "README.md",
+          "line": 5
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./UNIFIED_TEST_DOCUMENTATION.md",
+          "file": "README.md",
+          "line": 149
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./evaluation_results/latest_execution.json",
+          "file": "README.md",
+          "line": 176
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./evaluation_results/execution_logs.md",
+          "file": "README.md",
+          "line": 176
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/TEST_EXECUTION_GUIDE.md",
+          "file": "README.md",
+          "line": 352
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/TEST_TROUBLESHOOTING.md",
+          "file": "README.md",
+          "line": 353
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/api/",
+          "file": "README.md",
+          "line": 354
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/ARCHITECTURE.md",
+          "file": "README.md",
+          "line": 355
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/CROSS_CUTTING_CONCERNS.md",
+          "file": "README.md",
+          "line": 356
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/SCALING_ARCHITECTURE.md",
+          "file": "README.md",
+          "line": 357
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/calibration_system_readme.md",
+          "file": "README.md",
+          "line": 360
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/multi_device_synchronization_readme.md",
+          "file": "README.md",
+          "line": 361
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/ARCHITECTURE_DIAGRAMS.md",
+          "file": "README.md",
+          "line": 365
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/CROSS_CUTTING_CONCERNS.md",
+          "file": "README.md",
+          "line": 367
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/SCALING_ARCHITECTURE.md",
+          "file": "README.md",
+          "line": 368
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/ARCHITECTURE_MAINTENANCE.md",
+          "file": "README.md",
+          "line": 369
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./docs/TEST_TROUBLESHOOTING.md",
+          "file": "README.md",
+          "line": 439
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-004-distributed-synchronization.md",
+          "file": "docs/adr/ADR-002-strict-type-safety.md",
+          "line": 234
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-001-reactive-state-management.md",
+          "file": "docs/adr/README.md",
+          "line": 69
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-002-strict-type-safety.md",
+          "file": "docs/adr/README.md",
+          "line": 70
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-003-clean-mvvm-architecture.md",
+          "file": "docs/adr/README.md",
+          "line": 71
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-004-distributed-synchronization.md",
+          "file": "docs/adr/README.md",
+          "line": 72
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-005-offline-first-recording.md",
+          "file": "docs/adr/README.md",
+          "line": 73
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-006-json-websocket-protocol.md",
+          "file": "docs/adr/README.md",
+          "line": 74
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-007-hardware-backed-encryption.md",
+          "file": "docs/adr/README.md",
+          "line": 75
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-008-zero-mocking-test-strategy.md",
+          "file": "docs/adr/README.md",
+          "line": 76
+        },
+        {
+          "type": "broken_link",
+          "priority": "P2",
+          "description": "Potentially broken link: ./ADR-003-clean-mvvm-architecture.md",
+          "file": "docs/adr/ADR-001-reactive-state-management.md",
+          "line": 162
+        }
+      ],
+      "checks": {
+        "doc_files": 65,
+        "missing_essential_docs": 1,
+        "quality_issues": 27,
+        "adr_count": 4
+      },
+      "recommendations": []
+    },
+    "performance": {
+      "score": 0,
+      "issues_count": 60,
+      "issues": [
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/real_time_calibration_feedback.py",
+          "line": 111
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/real_time_calibration_feedback.py",
+          "line": 134
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1254
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1257
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1265
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1268
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1307
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1312
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1376
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1396
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_manager.py",
+          "line": 1402
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/web_launcher.py",
+          "line": 96
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/test_shimmer_implementation.py",
+          "line": 148
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/test_shimmer_implementation.py",
+          "line": 204
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/test_shimmer_implementation.py",
+          "line": 243
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/cross_device_calibration_coordinator.py",
+          "line": 606
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/cross_device_calibration_coordinator.py",
+          "line": 696
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 84
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 89
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 239
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 242
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 253
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 256
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 317
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/shimmer_pc_app.py",
+          "line": 322
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/master_clock_synchronizer.py",
+          "line": 375
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/master_clock_synchronizer.py",
+          "line": 378
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/master_clock_synchronizer.py",
+          "line": 418
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/performance_optimizer.py",
+          "line": 835
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/performance_optimizer.py",
+          "line": 838
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/performance_optimizer.py",
+          "line": 1112
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/ntp_time_server.py",
+          "line": 399
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/session/session_synchronizer.py",
+          "line": 268
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/session/session_synchronizer.py",
+          "line": 271
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/session/session_synchronizer.py",
+          "line": 443
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/error_handling/recovery_manager.py",
+          "line": 124
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/error_handling/recovery_manager.py",
+          "line": 208
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/web_ui/web_dashboard.py",
+          "line": 1603
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/web_ui/integration.py",
+          "line": 223
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/web_ui/web_controller.py",
+          "line": 276
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/web_ui/web_controller.py",
+          "line": 279
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/web_ui/web_controller.py",
+          "line": 604
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/webcam/webcam_capture.py",
+          "line": 177
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/webcam/advanced_sync_algorithms.py",
+          "line": 300
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/webcam/dual_webcam_capture.py",
+          "line": 374
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/gui/enhanced_ui_main_window.py",
+          "line": 690
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/gui/enhanced_stimulus_controller.py",
+          "line": 95
+        },
+        {
+          "type": "string_concatenation_in_loop",
+          "priority": "P2",
+          "description": "Potential inefficient string concatenation in loop",
+          "file": "PythonApp/gui/file_browser_dialog.py",
+          "line": 136
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/android_device_manager.py",
+          "line": 497
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/android_device_manager.py",
+          "line": 500
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/android_device_manager.py",
+          "line": 511
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/android_device_manager.py",
+          "line": 514
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/android_device_manager.py",
+          "line": 548
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/android_device_manager.py",
+          "line": 559
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/pc_server.py",
+          "line": 491
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/pc_server.py",
+          "line": 494
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/pc_server.py",
+          "line": 522
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/pc_server.py",
+          "line": 527
+        },
+        {
+          "type": "potential_async_opportunity",
+          "priority": "P3",
+          "description": "Consider async alternatives for I/O operations",
+          "file": "PythonApp/network/device_server.py",
+          "line": 521
+        },
+        {
+          "type": "large_code_file",
+          "priority": "P2",
+          "description": "Large code file (1071 KB) - consider splitting",
+          "file": "tests/consolidated_tests.py"
+        }
+      ],
+      "checks": {
+        "python_performance_issues": 59,
+        "large_files": 1
+      },
+      "recommendations": []
+    },
+    "security": {
+      "score": 0,
+      "issues_count": 15,
+      "issues": [
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "tests/consolidated_tests.py",
+          "line": 363
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "tests/consolidated_tests.py",
+          "line": 11451
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of eval() is dangerous",
+          "file": "scripts/tech_debt_audit.py",
+          "line": 751
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "scripts/tech_debt_audit.py",
+          "line": 752
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Shell injection risk",
+          "file": "scripts/tech_debt_audit.py",
+          "line": 753
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Command injection risk",
+          "file": "scripts/tech_debt_audit.py",
+          "line": 754
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "scripts/tech_debt_audit.py",
+          "line": 757
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 104
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 166
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 312
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 329
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/deployment_automation.py",
+          "line": 339
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of eval() is dangerous",
+          "file": "PythonApp/production/security_scanner.py",
+          "line": 98
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/security_scanner.py",
+          "line": 99
+        },
+        {
+          "type": "security_pattern",
+          "priority": "P1",
+          "description": "Use of exec() is dangerous",
+          "file": "PythonApp/production/security_scanner.py",
+          "line": 223
+        }
+      ],
+      "checks": {
+        "potential_secrets": 0,
+        "security_patterns": 15
+      },
+      "recommendations": []
+    }
+  }
+}
