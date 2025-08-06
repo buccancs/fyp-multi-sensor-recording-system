@@ -12,13 +12,11 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-
 class ErrorSeverity(Enum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
-
 
 class ErrorCategory(Enum):
     CAMERA_HARDWARE = "camera_hardware"
@@ -30,7 +28,6 @@ class ErrorCategory(Enum):
     CONFIGURATION = "configuration"
     UNKNOWN = "unknown"
 
-
 @dataclass
 class ErrorEvent:
     timestamp: datetime
@@ -41,7 +38,6 @@ class ErrorEvent:
     recovery_attempted: bool = False
     recovery_successful: bool = False
     retry_count: int = 0
-
 
 class CameraResourceManager:
 
@@ -143,7 +139,6 @@ class CameraResourceManager:
                 "total_active": len(self.active_cameras),
             }
 
-
 class NetworkRecoveryManager:
 
     def __init__(self):
@@ -237,7 +232,6 @@ class NetworkRecoveryManager:
                     "needs_recovery": self.should_attempt_recovery(device_id),
                 }
             return status
-
 
 class ErrorRecoveryManager:
 
@@ -441,15 +435,12 @@ class ErrorRecoveryManager:
         self.recovery_strategies[category] = strategy_func
         print(f"[DEBUG_LOG] Custom recovery strategy registered for {category.value}")
 
-
 error_recovery_manager = ErrorRecoveryManager()
-
 
 def handle_error_with_recovery(
     error_message: str, **context
 ) -> Tuple[bool, Optional[str]]:
     return error_recovery_manager.handle_error(error_message, context)
-
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing Error Handling and Recovery System...")

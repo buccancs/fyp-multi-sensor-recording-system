@@ -4,12 +4,10 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-
 class SegmentationMethod(Enum):
     MEDIAPIPE = "mediapipe"
     COLOR_BASED = "color_based"
     CONTOUR_BASED = "contour_based"
-
 
 @dataclass
 class HandRegion:
@@ -18,7 +16,6 @@ class HandRegion:
     landmarks: Optional[List[Tuple[float, float]]] = None
     confidence: float = 0.0
     hand_label: str = "Unknown"
-
 
 @dataclass
 class SegmentationConfig:
@@ -35,7 +32,6 @@ class SegmentationConfig:
     contour_min_area: int = 1000
     contour_max_area: int = 50000
 
-
 @dataclass
 class ProcessingResult:
     input_video_path: str
@@ -50,7 +46,6 @@ class ProcessingResult:
     def __post_init__(self):
         if self.output_files is None:
             self.output_files = {}
-
 
 def create_bounding_box_from_landmarks(
     landmarks: List[Tuple[float, float]],
@@ -72,19 +67,16 @@ def create_bounding_box_from_landmarks(
     height = max_y - min_y
     return min_x, min_y, width, height
 
-
 def crop_frame_to_region(
     frame: np.ndarray, bbox: Tuple[int, int, int, int]
 ) -> np.ndarray:
     x, y, w, h = bbox
     return frame[y : y + h, x : x + w]
 
-
 def resize_frame(frame: np.ndarray, target_size: Tuple[int, int]) -> np.ndarray:
     import cv2
 
     return cv2.resize(frame, target_size, interpolation=cv2.INTER_AREA)
-
 
 def create_hand_mask_from_landmarks(
     landmarks: List[Tuple[float, float]], frame_shape: Tuple[int, int]
@@ -104,7 +96,6 @@ def create_hand_mask_from_landmarks(
     hull = cv2.convexHull(points)
     cv2.fillPoly(mask, [hull], 255)
     return mask
-
 
 def save_processing_metadata(result: ProcessingResult, output_path: str):
     import json

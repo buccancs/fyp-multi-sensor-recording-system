@@ -25,6 +25,7 @@ import kotlinx.coroutines.*
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
+import java.io.IOException
 import java.io.PrintWriter
 import java.net.Socket
 import java.text.SimpleDateFormat
@@ -1117,7 +1118,6 @@ constructor(
     private fun startDataProcessing() {
         recordingScope?.launch {
             logger.info("Started data processing pipeline")
-
 
             launch { processFileWriting() }
 

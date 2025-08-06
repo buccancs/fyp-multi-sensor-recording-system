@@ -2,6 +2,7 @@ package com.multisensor.recording.recording
 
 import com.multisensor.recording.util.Logger
 import kotlinx.coroutines.*
+import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong

@@ -12,7 +12,6 @@ from .calibration_result import CalibrationResult
 
 logger = get_logger(__name__)
 
-
 class CalibrationManager:
 
     def __init__(self, output_dir: str = "calibration_data"):
@@ -445,7 +444,6 @@ class CalibrationManager:
                 json.dump(data, f, indent=2)
             return True
         return False
-
 
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing CalibrationManager...")

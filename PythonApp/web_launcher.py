@@ -32,7 +32,6 @@ except ImportError as e:
         print(f"Failed to install dependencies: {install_error}")
         sys.exit(1)
 
-
 def main():
     parser = argparse.ArgumentParser(
         description="Multi-Sensor Recording System Web Dashboard",
@@ -109,7 +108,6 @@ Examples:
         print(f"✗ Error starting web dashboard: {e}")
         logger.error(f"Web dashboard startup error: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

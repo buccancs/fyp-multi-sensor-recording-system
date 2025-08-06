@@ -19,7 +19,6 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-
 class PreviewPanel(QTabWidget):
 
     def __init__(self, parent=None):

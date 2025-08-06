@@ -47,12 +47,10 @@ except ImportError as e:
 
     DEFAULT_BAUDRATE = 115200
 
-
 class ConnectionType(Enum):
     DIRECT_BLUETOOTH = "direct_bluetooth"
     ANDROID_MEDIATED = "android_mediated"
     SIMULATION = "simulation"
-
 
 class DeviceState(Enum):
     DISCONNECTED = "disconnected"
@@ -60,7 +58,6 @@ class DeviceState(Enum):
     CONNECTED = "connected"
     STREAMING = "streaming"
     ERROR = "error"
-
 
 @dataclass
 class ShimmerStatus:
@@ -87,7 +84,6 @@ class ShimmerStatus:
         if self.enabled_channels is None:
             self.enabled_channels = set()
 
-
 @dataclass
 class ShimmerSample:
     timestamp: float
@@ -113,7 +109,6 @@ class ShimmerSample:
     raw_data: Optional[Dict[str, Any]] = None
     session_id: Optional[str] = None
 
-
 @dataclass
 class DeviceConfiguration:
     device_id: str
@@ -125,7 +120,6 @@ class DeviceConfiguration:
     auto_reconnect: bool = True
     data_validation: bool = True
     buffer_size: int = 1000
-
 
 class ShimmerManager:
 
@@ -1219,7 +1213,6 @@ class ShimmerManager:
             accel_z=accel_z,
             battery_percentage=battery_percentage,
         )
-
 
 if __name__ == "__main__":
     logger = get_logger(__name__)

@@ -536,7 +536,6 @@ class UIController @Inject constructor() {
         }
     }
 
-
     fun validateUIComponents(): UIValidationResult {
         val errors = mutableListOf<String>()
         val warnings = mutableListOf<String>()
@@ -836,7 +835,6 @@ class UIController @Inject constructor() {
         }
     }
 
-
     data class UIValidationResult(
         val isValid: Boolean,
         val errors: List<String>,
@@ -857,7 +855,6 @@ class UIController @Inject constructor() {
         val suggestions: List<String>,
         val validationTimestamp: Long
     )
-
 
     fun setThemeMode(themeMode: ThemeMode) {
         currentThemeMode = themeMode

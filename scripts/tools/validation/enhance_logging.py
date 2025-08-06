@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Enhanced Logging Integration for Phase 1
 =========================================
@@ -30,7 +30,6 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
 
 class LoggingEnhancer:
     """
@@ -624,7 +623,6 @@ object LoggingTestUtility {
 
         return overall_success
 
-
 def main():
     """Main entry point for logging enhancement."""
     print("🔧 Multi-Sensor Recording System - Logging Enhancement for Phase 1")
@@ -644,7 +642,6 @@ def main():
         import traceback
         traceback.print_exc()
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

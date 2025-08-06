@@ -22,7 +22,6 @@ from .quality_validator import QualityValidator, ValidationReport
 
 logger = logging.getLogger(__name__)
 
-
 class TestSuite:
     """Base class for test suites"""
     
@@ -46,7 +45,6 @@ class TestSuite:
         """Add teardown function to run after tests"""
         self.teardown_functions.append(teardown_func)
 
-
 class BaseTest:
     """Base class for individual tests"""
     
@@ -68,7 +66,6 @@ class BaseTest:
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute the test - to be implemented by subclasses"""
         raise NotImplementedError("Subclasses must implement execute method")
-
 
 class PerformanceMonitor:
     """Real-time performance metrics collection"""
@@ -101,7 +98,7 @@ class PerformanceMonitor:
         """Continuous monitoring loop"""
         while self.monitoring:
             try:
-                # Collect system metrics
+
                 cpu_percent = psutil.cpu_percent(interval=0.1)
                 memory = psutil.virtual_memory()
                 disk_io = psutil.disk_io_counters()
@@ -120,15 +117,15 @@ class PerformanceMonitor:
                 
                 with self._lock:
                     self.metrics_history.append(metrics)
-                    # Keep only last 1000 measurements
+
                     if len(self.metrics_history) > 1000:
                         self.metrics_history = self.metrics_history[-1000:]
                 
-                time.sleep(1.0)  # Monitor every second
+                time.sleep(1.0)
                 
             except Exception as e:
                 logger.error(f"Error in performance monitoring: {e}")
-                time.sleep(5.0)  # Wait longer on error
+                time.sleep(5.0)
     
     def get_current_metrics(self) -> PerformanceMetrics:
         """Get current performance metrics"""
@@ -136,7 +133,7 @@ class PerformanceMonitor:
             if not self.metrics_history:
                 return PerformanceMetrics()
             
-            recent_metrics = self.metrics_history[-10:]  # Last 10 seconds
+            recent_metrics = self.metrics_history[-10:]
             
             return PerformanceMetrics(
                 memory_usage_mb=sum(m['memory_mb'] for m in recent_metrics) / len(recent_metrics),
@@ -146,7 +143,6 @@ class PerformanceMonitor:
                     - recent_metrics[0]['disk_read_mb'] - recent_metrics[0]['disk_write_mb'], 0
                 ) / len(recent_metrics) if len(recent_metrics) > 1 else 0
             )
-
 
 class TestEnvironment:
     """Test execution environment with resource management"""
@@ -177,23 +173,20 @@ class TestEnvironment:
     def cleanup(self):
         """Clean up test environment resources"""
         logger.debug("Cleaning up test environment")
-        
-        # Run custom cleanup functions
+
         for cleanup_func in self.cleanup_functions:
             try:
                 cleanup_func()
             except Exception as e:
                 logger.error(f"Error in cleanup function: {e}")
-        
-        # Clean up temporary files
+
         for file_path in self.temp_files:
             try:
                 if file_path.exists():
                     file_path.unlink()
             except Exception as e:
                 logger.error(f"Error cleaning up temp file {file_path}: {e}")
-        
-        # Clean up temporary directories
+
         for dir_path in self.temp_dirs:
             try:
                 if dir_path.exists():
@@ -201,10 +194,8 @@ class TestEnvironment:
                     shutil.rmtree(dir_path)
             except Exception as e:
                 logger.error(f"Error cleaning up temp dir {dir_path}: {e}")
-        
-        # Clear resources
-        self.resources.clear()
 
+        self.resources.clear()
 
 class TestFramework:
     """
@@ -219,17 +210,14 @@ class TestFramework:
         self.quality_validator = QualityValidator(quality_thresholds)
         self.performance_monitor = PerformanceMonitor()
         self.config = TestConfiguration()
-        
-        # Execution state
+
         self.is_running = False
         self.current_execution_id = None
-        
-        # Results storage
+
         self.execution_history: List[TestResults] = []
         
         self.logger = logging.getLogger(__name__)
-        
-        # Set up logging
+
         self._setup_logging()
     
     def _setup_logging(self):
@@ -266,11 +254,9 @@ class TestFramework:
             results = TestResults()
             results.start_time = datetime.now()
             self.current_execution_id = results.execution_id
-            
-            # Start performance monitoring
+
             self.performance_monitor.start_monitoring()
-            
-            # Execute test suites by category order (Foundation -> Integration -> System -> Performance)
+
             execution_order = [
                 TestCategory.FOUNDATION,
                 TestCategory.INTEGRATION,
@@ -290,8 +276,7 @@ class TestFramework:
                     for suite_name, test_suite in category_suites.items():
                         suite_results = await self._run_test_suite(suite_name, test_suite)
                         results.add_suite_results(suite_name, suite_results)
-                        
-                        # Check for critical failures
+
                         if suite_results.success_rate < 0.5:
                             self.logger.warning(
                                 f"Suite {suite_name} has low success rate ({suite_results.success_rate:.2%})"
@@ -299,14 +284,11 @@ class TestFramework:
             
             results.end_time = datetime.now()
             results.total_execution_time = (results.end_time - results.start_time).total_seconds()
-            
-            # Perform quality validation
+
             validation_report = self.quality_validator.validate_test_results(results)
-            
-            # Store results
+
             self.execution_history.append(results)
-            
-            # Generate final report
+
             self._generate_execution_report(results, validation_report)
             
             self.logger.info(
@@ -360,12 +342,11 @@ class TestFramework:
             suite_category=test_suite.category,
             start_time=datetime.now()
         )
-        
-        # Setup test environment
+
         test_env = TestEnvironment(self.config)
         
         try:
-            # Run suite setup functions
+
             for setup_func in test_suite.setup_functions:
                 try:
                     if asyncio.iscoroutinefunction(setup_func):
@@ -375,16 +356,14 @@ class TestFramework:
                 except Exception as e:
                     self.logger.error(f"Suite setup failed for {name}: {e}")
                     raise
-            
-            # Execute tests
+
             if self.config.parallel_execution and len(test_suite.tests) > 1:
-                # Parallel execution for independent tests
+
                 suite_results = await self._run_tests_parallel(test_suite, test_env, suite_results)
             else:
-                # Sequential execution
+
                 suite_results = await self._run_tests_sequential(test_suite, test_env, suite_results)
-            
-            # Run suite teardown functions
+
             for teardown_func in test_suite.teardown_functions:
                 try:
                     if asyncio.iscoroutinefunction(teardown_func):
@@ -398,7 +377,7 @@ class TestFramework:
             self.logger.error(f"Test suite {name} failed with exception: {e}")
         
         finally:
-            # Cleanup test environment
+
             if self.config.cleanup_on_failure or suite_results.success_rate > 0.5:
                 test_env.cleanup()
             
@@ -421,8 +400,7 @@ class TestFramework:
         for test in test_suite.tests:
             test_result = await self._execute_single_test(test, test_env)
             suite_results.add_test_result(test_result)
-            
-            # Force garbage collection between tests
+
             gc.collect()
         
         return suite_results
@@ -430,22 +408,20 @@ class TestFramework:
     async def _run_tests_parallel(self, test_suite: TestSuite, test_env: TestEnvironment,
                                  suite_results: SuiteResults) -> SuiteResults:
         """Run tests in parallel"""
-        
-        # Create separate environment for each test
+
         tasks = []
         for test in test_suite.tests:
-            # Create isolated test environment
+
             isolated_env = TestEnvironment(self.config)
             isolated_env.resources.update(test_env.resources)
             task = asyncio.create_task(self._execute_single_test(test, isolated_env))
             tasks.append(task)
-        
-        # Wait for all tests to complete
+
         test_results = await asyncio.gather(*tasks, return_exceptions=True)
         
         for result in test_results:
             if isinstance(result, Exception):
-                # Create error test result
+
                 error_result = TestResult(
                     test_name="unknown_parallel_test",
                     status=TestStatus.ERROR,
@@ -467,17 +443,15 @@ class TestFramework:
         )
         
         try:
-            # Run test setup
+
             for setup_func in test.setup_functions:
                 if asyncio.iscoroutinefunction(setup_func):
                     await setup_func(test_env)
                 else:
                     setup_func(test_env)
-            
-            # Collect baseline performance metrics
+
             baseline_metrics = self.performance_monitor.get_current_metrics()
-            
-            # Execute test with timeout
+
             execution_start = time.time()
             
             try:
@@ -501,19 +475,16 @@ class TestFramework:
             
             execution_end = time.time()
             test_result.execution_time = execution_end - execution_start
-            
-            # Collect final performance metrics
+
             final_metrics = self.performance_monitor.get_current_metrics()
-            
-            # Calculate performance delta
+
             test_result.performance_metrics = PerformanceMetrics(
                 execution_time=test_result.execution_time,
                 memory_usage_mb=final_metrics.memory_usage_mb - baseline_metrics.memory_usage_mb,
                 cpu_usage_percent=final_metrics.cpu_usage_percent,
                 disk_io_mb_per_sec=final_metrics.disk_io_mb_per_sec
             )
-            
-            # Run test teardown
+
             for teardown_func in test.teardown_functions:
                 try:
                     if asyncio.iscoroutinefunction(teardown_func):
@@ -531,8 +502,7 @@ class TestFramework:
         
         finally:
             test_result.end_time = datetime.now()
-            
-            # Collect environment info
+
             import platform
             test_result.environment_info = {
                 "python_version": platform.python_version(),
@@ -592,9 +562,7 @@ class TestFramework:
         for execution in self.execution_history:
             trends["success_rates"].append(execution.overall_success_rate)
             trends["execution_times"].append(execution.total_execution_time)
-            
-            # Calculate quality from validation (would need to store validation results)
-            # For now, use success rate as proxy
+
             trends["overall_quality"].append(execution.overall_success_rate)
         
         return trends

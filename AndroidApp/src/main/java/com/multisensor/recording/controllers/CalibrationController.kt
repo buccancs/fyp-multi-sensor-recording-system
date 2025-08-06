@@ -521,7 +521,6 @@ class CalibrationController @Inject constructor(
         }
     }
 
-
     private fun saveSessionState(context: Context, sessionState: CalibrationSessionState) {
         try {
             val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
@@ -610,7 +609,6 @@ class CalibrationController @Inject constructor(
             android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to clear session state: ${e.message}")
         }
     }
-
 
     private fun calculateCalibrationQuality(result: CalibrationCaptureManager.CalibrationCaptureResult): CalibrationQuality {
         val syncStatus = syncClockManager.getSyncStatus()
@@ -833,7 +831,6 @@ class CalibrationController @Inject constructor(
         return Pair(lowerBound, upperBound)
     }
 
-
     private fun calculateSkewness(values: List<Float>, mean: Float, std: Float): Float {
         if (std == 0.0f || values.size < 3) return 0.0f
         val n = values.size
@@ -868,7 +865,6 @@ class CalibrationController @Inject constructor(
 
         return if (denomTime > 0 && denomValue > 0) numerator / (denomTime * denomValue) else 0.0f
     }
-
 
     private fun calculateTemporalStabilityFactor(syncStatus: SyncClockManager.SyncStatus): Float {
         val age = syncStatus.syncAge
@@ -963,7 +959,6 @@ class CalibrationController @Inject constructor(
             }
         }
     }
-
 
     fun setCalibrationPattern(pattern: CalibrationPattern) {
         currentPattern = pattern
@@ -1167,7 +1162,6 @@ class CalibrationController @Inject constructor(
         )
     }
 
-
     private fun getQualityMetricsForPattern(pattern: CalibrationPattern): List<CalibrationQuality> {
         return qualityMetrics.take(min(5, qualityMetrics.size))
     }
@@ -1315,7 +1309,6 @@ class CalibrationController @Inject constructor(
             memoryEfficiency = 0.95f
         )
     }
-
 
     data class ValidationResult(
         val isValid: Boolean,

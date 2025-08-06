@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Complete Hand Segmentation Integration Demo
 
@@ -16,7 +16,6 @@ import os
 import sys
 import time
 from pathlib import Path
-
 
 def demonstrate_android_integration():
     """Demonstrate Android hand segmentation integration"""

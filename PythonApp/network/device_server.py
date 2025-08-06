@@ -13,7 +13,6 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-
 class RemoteDevice:
 
     def __init__(
@@ -88,7 +87,6 @@ class RemoteDevice:
         logger.info(
             f"RemoteDevice {self.device_id} disconnected after {self.get_connection_duration():.1f} seconds"
         )
-
 
 class JsonSocketServer(QThread):
     device_connected = pyqtSignal(str, list)
@@ -552,7 +550,6 @@ class JsonSocketServer(QThread):
         self.client_threads.clear()
         logger.info("JSON socket server cleanup completed")
 
-
 def decode_base64_image(base64_data: str) -> Optional[bytes]:
     try:
         if base64_data.startswith("data:image/"):
@@ -561,7 +558,6 @@ def decode_base64_image(base64_data: str) -> Optional[bytes]:
     except Exception as e:
         logger.error(f"Error decoding base64 image: {e}")
         return None
-
 
 def create_command_message(command_type: str, **kwargs) -> Dict[str, Any]:
     import time

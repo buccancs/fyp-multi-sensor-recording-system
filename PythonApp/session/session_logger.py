@@ -9,7 +9,6 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 from ..utils.logging_config import get_logger
 
-
 class SessionLogger(QObject):
     log_entry_added = pyqtSignal(str)
     session_started = pyqtSignal(str)
@@ -314,16 +313,13 @@ class SessionLogger(QObject):
         else:
             return f"{time_str} - {event_type}: {str(event_entry)}"
 
-
 _session_logger_instance: Optional[SessionLogger] = None
-
 
 def get_session_logger() -> SessionLogger:
     global _session_logger_instance
     if _session_logger_instance is None:
         _session_logger_instance = SessionLogger()
     return _session_logger_instance
-
 
 def reset_session_logger() -> None:
     global _session_logger_instance

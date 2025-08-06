@@ -1024,7 +1024,6 @@ class NetworkController @Inject constructor() {
         }
     }
 
-
     fun setStreamingProtocol(protocol: StreamingProtocol) {
         android.util.Log.d("NetworkController", "[DEBUG_LOG] Setting streaming protocol: $protocol")
 
@@ -1119,7 +1118,6 @@ class NetworkController @Inject constructor() {
             }
         }
     }
-
 
     fun setBandwidthEstimationMethod(method: BandwidthEstimationMethod) {
         android.util.Log.d("NetworkController", "[DEBUG_LOG] Setting bandwidth estimation method: $method")
@@ -1305,7 +1303,6 @@ class NetworkController @Inject constructor() {
         }
     }
 
-
     fun setAdaptiveBitrateEnabled(enabled: Boolean) {
         adaptiveBitrateEnabled = enabled
         android.util.Log.d("NetworkController", "[DEBUG_LOG] Adaptive bitrate: $enabled")
@@ -1341,7 +1338,6 @@ class NetworkController @Inject constructor() {
             else -> 0.5
         }
     }
-
 
     fun setEncryptionEnabled(enabled: Boolean) {
         encryptionEnabled = enabled
@@ -1413,7 +1409,6 @@ class NetworkController @Inject constructor() {
             null
         }
     }
-
 
     private class NetworkPredictionModel {
         private var trainingData = mutableListOf<NetworkDataPoint>()
