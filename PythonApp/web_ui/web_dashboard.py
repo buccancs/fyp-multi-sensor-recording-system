@@ -1402,7 +1402,8 @@ Generated at: {datetime.now().isoformat()}"""
                 response = Response(io.BytesIO(buffer).read(), mimetype="image/jpeg")
                 response.headers["Cache-Control"] = "no-cache"
                 return response
-        except:
+        except (cv2.error, ValueError, TypeError) as e:
+            self.logger.debug(f"Failed to generate camera preview: {e}")
             pass
 
         from flask import Response
@@ -1445,7 +1446,8 @@ Generated at: {datetime.now().isoformat()}"""
                 response = Response(io.BytesIO(buffer).read(), mimetype="image/jpeg")
                 response.headers["Cache-Control"] = "no-cache"
                 return response
-        except:
+        except (cv2.error, ValueError, TypeError) as e:
+            self.logger.debug(f"Failed to generate thermal preview: {e}")
             pass
 
         return self._generate_placeholder_image("IR Camera\nThermal Preview")

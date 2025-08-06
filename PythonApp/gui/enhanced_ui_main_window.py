@@ -75,7 +75,7 @@ class ModernButton(QPushButton):
             self.setStyleSheet(
                 """
                 QPushButton {
-                    background-color:
+                    background-color: #0078d4;
                     color: white;
                     border: none;
                     border-radius: 4px;
@@ -83,14 +83,14 @@ class ModernButton(QPushButton):
                     font-weight: 600;
                 }
                 QPushButton:hover {
-                    background-color:
+                    background-color: #106ebe;
                 }
                 QPushButton:pressed {
-                    background-color:
+                    background-color: #005a9e;
                 }
                 QPushButton:disabled {
-                    background-color:
-                    color:
+                    background-color: #f3f2f1;
+                    color: #a19f9d;
                 }
             """
             )
@@ -98,24 +98,24 @@ class ModernButton(QPushButton):
             self.setStyleSheet(
                 """
                 QPushButton {
-                    background-color:
-                    color:
-                    border: 1px solid
+                    background-color: #ffffff;
+                    color: #323130;
+                    border: 1px solid #8a8886;
                     border-radius: 4px;
                     padding: 8px 16px;
                     font-weight: 400;
                 }
                 QPushButton:hover {
-                    background-color:
-                    border-color:
+                    background-color: #f3f2f1;
+                    border-color: #323130;
                 }
                 QPushButton:pressed {
-                    background-color:
+                    background-color: #edebe9;
                 }
                 QPushButton:disabled {
-                    background-color:
-                    color:
-                    border-color:
+                    background-color: #f3f2f1;
+                    color: #a19f9d;
+                    border-color: #c8c6c4;
                 }
             """
             )
@@ -156,17 +156,17 @@ class ModernGroupBox(QGroupBox):
             """
             QGroupBox {
                 font-weight: 600;
-                border: 1px solid
+                border: 1px solid #d2d0ce;
                 border-radius: 4px;
                 margin-top: 12px;
                 padding-top: 12px;
-                background-color:
+                background-color: #ffffff;
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 12px;
                 padding: 0 8px 0 8px;
-                color:
+                color: #323130;
             }
         """
         )
@@ -193,13 +193,13 @@ class EnhancedMainWindow(QMainWindow):
         self.setStyleSheet(
             """
             QMainWindow {
-                background-color:
-                color:
+                background-color: #faf9f8;
+                color: #323130;
             }
 
             QMenuBar {
-                background-color:
-                border-bottom: 1px solid
+                background-color: #f3f2f1;
+                border-bottom: 1px solid #d2d0ce;
                 padding: 4px;
             }
 
@@ -210,60 +210,60 @@ class EnhancedMainWindow(QMainWindow):
             }
 
             QMenuBar::item:selected {
-                background-color:
+                background-color: #edebe9;
             }
 
             QStatusBar {
-                background-color:
-                border-top: 1px solid
-                color:
+                background-color: #f3f2f1;
+                border-top: 1px solid #d2d0ce;
+                color: #323130;
             }
 
             QSplitter::handle {
-                background-color:
+                background-color: #d2d0ce;
                 width: 2px;
                 height: 2px;
             }
 
             QSplitter::handle:hover {
-                background-color:
+                background-color: #8a8886;
             }
 
             QLabel {
-                color:
+                color: #323130;
             }
 
             QTextEdit {
-                border: 1px solid
+                border: 1px solid #d2d0ce;
                 border-radius: 4px;
-                background-color:
+                background-color: #ffffff;
                 padding: 8px;
                 font-family: 'Consolas', 'Monaco', monospace;
                 font-size: 9pt;
             }
 
             QComboBox {
-                border: 1px solid
+                border: 1px solid #8a8886;
                 border-radius: 4px;
                 padding: 6px 12px;
-                background-color:
+                background-color: #ffffff;
                 min-height: 20px;
             }
 
             QComboBox:hover {
-                border-color:
+                border-color: #323130;
             }
 
             QSlider::groove:horizontal {
-                border: 1px solid
+                border: 1px solid #d2d0ce;
                 height: 4px;
-                background:
+                background: #f3f2f1;
                 border-radius: 2px;
             }
 
             QSlider::handle:horizontal {
-                background:
-                border: 1px solid
+                background: #0078d4;
+                border: 1px solid #005a9e;
                 width: 16px;
                 height: 16px;
                 border-radius: 8px;
@@ -271,18 +271,18 @@ class EnhancedMainWindow(QMainWindow):
             }
 
             QSlider::handle:horizontal:hover {
-                background:
+                background: #106ebe;
             }
 
             QProgressBar {
-                border: 1px solid
+                border: 1px solid #d2d0ce;
                 border-radius: 4px;
                 text-align: center;
-                background-color:
+                background-color: #f3f2f1;
             }
 
             QProgressBar::chunk {
-                background-color:
+                background-color: #0078d4;
                 border-radius: 3px;
             }
         """
@@ -372,10 +372,10 @@ class EnhancedMainWindow(QMainWindow):
         self.preview_label.setStyleSheet(
             """
             QLabel {
-                border: 2px dashed
-                background-color:
+                border: 2px dashed #d2d0ce;
+                background-color: #f3f2f1;
                 font-size: 16px;
-                color:
+                color: #605e5c;
                 border-radius: 4px;
             }
         """
