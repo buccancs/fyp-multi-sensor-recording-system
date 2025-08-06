@@ -568,9 +568,19 @@ style:
       - 'STOPSHIP:'
     allowedPatterns: ''
   ForbiddenImport:
-    active: false
-    imports: [ ]
+    active: true
+    imports: 
+      # Architecture enforcement - UI layer should not directly import service/network layers
+      - 'com.multisensor.recording.network.**'
+      - 'com.multisensor.recording.service.**'
+      - 'android.util.Log'  # Use centralized logging utility instead
     forbiddenPatterns: ''
+    # Exclude specific packages where these imports are allowed
+    excludes: 
+      - '**/network/**'
+      - '**/service/**'
+      - '**/util/**'
+      - '**/di/**'
   ForbiddenMethodCall:
     active: false
     methods:

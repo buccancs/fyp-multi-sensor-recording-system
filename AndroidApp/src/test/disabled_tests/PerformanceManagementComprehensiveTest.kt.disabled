@@ -1,12 +1,10 @@
 package com.multisensor.recording.performance
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlinx.coroutines.test.runTest
 import android.content.Context
@@ -22,6 +20,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import java.util.concurrent.TimeUnit
 
+<<<<<<<< HEAD:AndroidApp/src/test/disabled_tests/PerformanceManagementComprehensiveTest.kt
+========
 /**
  * Comprehensive Performance Management Tests
  * =========================================
@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit
  * Date: 2025-01-16
  */
 @RunWith(RobolectricTestRunner::class)
+>>>>>>>> master:AndroidApp/src/test/disabled_tests/PerformanceManagementComprehensiveTest.kt.disabled
 @Config(sdk = [28])
 class PerformanceManagementComprehensiveTest {
 
@@ -61,7 +62,7 @@ class PerformanceManagementComprehensiveTest {
     private lateinit var networkOptimizer: NetworkOptimizer
     private lateinit var performanceMonitor: PerformanceMonitor
 
-    @Before
+    @BeforeEach
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         

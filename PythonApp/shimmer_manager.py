@@ -128,6 +128,53 @@ class DeviceConfiguration:
 
 
 class ShimmerManager:
+    """
+    Comprehensive Shimmer GSR sensor management system for multi-device coordination.
+    
+    This class handles the complete lifecycle of Shimmer wireless GSR sensors including
+    device discovery, connection management, data streaming, synchronization, and 
+    integration with Android recording devices. It provides both direct USB/Bluetooth
+    connectivity and network-based Android device integration.
+    
+    The manager supports multiple operational modes:
+    - Direct sensor connection via USB/Bluetooth
+    - Network-based Android device communication
+    - Hybrid mode with both direct and networked devices
+    - Session-based recording coordination
+    
+    Complex functionality includes:
+    - Multi-threaded device discovery and connection handling
+    - Real-time data streaming with timestamp synchronization
+    - Cross-platform communication protocol management
+    - Error recovery and device reconnection logic
+    - Configuration persistence and device profiling
+    
+    Note:
+        This is a high complexity class (complexity: 152) that coordinates multiple
+        subsystems. Consider refactoring into specialized managers for:
+        - Device discovery and connection
+        - Data streaming and synchronization  
+        - Android integration
+        - Configuration management
+    
+    Attributes:
+        session_manager: Session coordination interface for multi-device recording
+        logger: Logging interface for debugging and monitoring
+        enable_android_integration: Enable network-based Android device support
+        connected_devices: Active device connections mapped by device ID
+        shimmer_devices: Shimmer-specific device instances and state
+        device_configurations: Persistent device configuration profiles
+        android_devices: Network-connected Android devices with Shimmer integration
+        streaming_status: Real-time streaming state for all connected devices
+        data_callbacks: Registered callbacks for real-time data processing
+        synchronization_manager: Cross-device timestamp synchronization
+        
+    Raises:
+        ConnectionError: When device discovery or connection fails
+        TimeoutError: When device operations exceed configured timeouts
+        DataFormatError: When received data doesn't match expected format
+        SynchronizationError: When cross-device timing cannot be established
+    """
 
     def __init__(
         self, session_manager=None, logger=None, enable_android_integration=True
@@ -264,6 +311,53 @@ class ShimmerManager:
     def connect_devices(
         self, device_info: Union[List[str], Dict[str, List[str]]]
     ) -> bool:
+        """
+        Establish connections to all discovered Shimmer devices with comprehensive error handling.
+        
+        This method orchestrates the complex device connection process including:
+        - Handling both legacy (list) and modern (dict) device info formats
+        - Iterating through all discovered devices across multiple connection types
+        - Attempting multiple connection protocols (USB, Bluetooth, network)
+        - Implementing retry logic with exponential backoff for failed connections
+        - Validating device compatibility and firmware versions
+        - Configuring optimal streaming parameters per device type
+        - Establishing synchronization baseline across all connected devices
+        
+        The connection process handles various failure scenarios:
+        - Device busy/in-use by other applications
+        - Bluetooth pairing issues and authentication failures
+        - USB permission problems on different operating systems
+        - Firmware compatibility mismatches requiring updates
+        - Network connectivity issues for Android-integrated devices
+        - Cross-platform timing synchronization challenges
+        
+        High complexity (16) due to multiple connection paths, nested error handling
+        branches, and complex device state management across different platforms.
+        
+        Args:
+            device_info: Device information in one of two formats:
+                        - List[str]: Legacy format with device addresses/IDs (backwards compatibility)
+                        - Dict[str, List[str]]: Modern format mapping connection types to device lists
+                          {"direct": [device_ids], "android": [device_ids], "simulated": [device_ids]}
+        
+        Returns:
+            bool: True if at least one device connected successfully, False if all connections failed
+            
+        Raises:
+            ConnectionError: When no devices can be connected after all retry attempts
+            DeviceCompatibilityError: When device firmware is incompatible with current drivers
+            PermissionError: When insufficient permissions for device access (common on Linux/macOS)
+            SynchronizationError: When cross-device timing synchronization fails
+            ValueError: When device_info format is invalid or empty
+            
+        Note:
+            Consider refactoring this high-complexity method into smaller, focused functions:
+            - _attempt_direct_device_connection()
+            - _attempt_android_device_connection() 
+            - _validate_device_compatibility()
+            - _configure_streaming_parameters()
+            - _establish_synchronization_baseline()
+        """
         try:
             if isinstance(device_info, list):
                 device_addresses = device_info
