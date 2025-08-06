@@ -29,8 +29,8 @@ object LoggingTest {
         AppLogger.logLifecycle("LoggingTest", "onStart", "TestActivity")
         AppLogger.logLifecycle("LoggingTest", "onResume", "TestActivity")
 
-        AppLogger.logNetwork("LoggingTest", "HTTP GET", "http://example.com", "200 OK")
-        AppLogger.logNetwork("LoggingTest", "HTTP POST", "http://api.example.com", "403 Forbidden")
+        AppLogger.logNetwork("LoggingTest", "HTTP GET", "https://example.com", "200 OK")
+        AppLogger.logNetwork("LoggingTest", "HTTP POST", "https://api.example.com", "403 Forbidden")
 
         AppLogger.logRecording("LoggingTest", "start recording", "camera_front")
         AppLogger.logRecording("LoggingTest", "stop recording", "camera_front")
