@@ -61,7 +61,7 @@ accomplishments and technical contributions of this project include:
   temporal precision on the order of only a few milliseconds of drift
   between devices, surpassing the initial requirement of ±5 ms tolerance
   (achieving approximately ±3 ms in
-  practice[\[1\]](https://github.com/buccancs/bucika_gsr/blob/b970e5d7b40ac9d7ac5b5155baa707224528d654/docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md#L91-L100)).
+  practice[\[1\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md#L91-L100)).
   This level of precision is comparable to research-grade wired
   acquisition systems and validates that distributed, wireless sensing
   nodes can be used for rigorous physiological measurements without loss
@@ -230,7 +230,7 @@ light of the project outcomes:
   tests: it maintained **99.7% uptime availability** and **99.98% data
   integrity** (meaning virtually no data packets or samples were lost)
   under various test
-  scenarios[\[2\]](https://github.com/buccancs/bucika_gsr/blob/b970e5d7b40ac9d7ac5b5155baa707224528d654/docs/README.md#L2-L9).
+  scenarios[\[2\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/README.md#L2-L9).
   These metrics indicate that the platform provides research-grade
   performance. In practice, the data captured by different sensors can
   be considered effectively simultaneous, and no significant gaps or
@@ -615,12 +615,12 @@ monitoring and validate its benefits in real-world applications.
 
 ------------------------------------------------------------------------
 
-[\[1\]](https://github.com/buccancs/bucika_gsr/blob/b970e5d7b40ac9d7ac5b5155baa707224528d654/docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md#L91-L100)
+[\[1\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md#L91-L100)
 Chapter_6\_\_Conclusions_and_Evaluation1.md
 
-<https://github.com/buccancs/bucika_gsr/blob/b970e5d7b40ac9d7ac5b5155baa707224528d654/docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md>
+<https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md>
 
-[\[2\]](https://github.com/buccancs/bucika_gsr/blob/b970e5d7b40ac9d7ac5b5155baa707224528d654/docs/README.md#L2-L9)
+[\[2\]](https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/README.md#L2-L9)
 README.md
 
-<https://github.com/buccancs/bucika_gsr/blob/b970e5d7b40ac9d7ac5b5155baa707224528d654/docs/README.md>
+<https://github.com/buccancs/bucika_gsr/blob/d466bcfa17062fa7f2e081dacd3ea6542ee7fd37/docs/README.md>
