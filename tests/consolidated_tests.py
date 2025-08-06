@@ -4381,7 +4381,7 @@ class DataGenerator:
                 chunk_size = min(4096, file_size - f.tell())
                 chunk = bytes([random.randint(0, 255) for _ in range(chunk_size)])
                 f.write(chunk)
-        md5_hash = self._calculate_md5(file_path)
+        sha256_hash = self._calculate_sha256(file_path)
         sha256_hash = self._calculate_sha256(file_path)
         metadata = {
             "format": "MP4",
@@ -4419,7 +4419,7 @@ class DataGenerator:
                         temp_value = int(20000 + 20000 * (x + y) / (width + height))
                         temp_value += random.randint(-1000, 1000)
                         f.write(struct.pack("<H", temp_value))
-        md5_hash = self._calculate_md5(file_path)
+        sha256_hash = self._calculate_sha256(file_path)
         sha256_hash = self._calculate_sha256(file_path)
         metadata = {
             "format": "Binary",
@@ -4460,7 +4460,7 @@ class DataGenerator:
                 f.write(
                     f"{timestamp:.3f},{resistance:.1f},{conductance:.3f},{skin_temp:.2f}\n"
                 )
-        md5_hash = self._calculate_md5(file_path)
+        sha256_hash = self._calculate_sha256(file_path)
         sha256_hash = self._calculate_sha256(file_path)
         metadata = {
             "format": "CSV",
@@ -4518,7 +4518,7 @@ class DataGenerator:
         }
         with open(file_path, "w") as f:
             json.dump(session_metadata, f, indent=2)
-        md5_hash = self._calculate_md5(file_path)
+        sha256_hash = self._calculate_sha256(file_path)
         sha256_hash = self._calculate_sha256(file_path)
         return DataFile(
             file_path=file_path,
@@ -4532,12 +4532,6 @@ class DataGenerator:
             metadata={"format": "JSON", "schema_version": "1.0"},
         )
 
-    def _calculate_md5(self, file_path: Path) -> str:
-        hash_md5 = hashlib.md5()
-        with open(file_path, "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                hash_md5.update(chunk)
-        return hash_md5.hexdigest()
 
     def _calculate_sha256(self, file_path: Path) -> str:
         hash_sha256 = hashlib.sha256()
@@ -4627,7 +4621,7 @@ class DataIntegrityValidator:
             validation_result["integrity_checks"]["size_match"] = (
                 current_size == data_file.size_bytes
             )
-            current_md5 = self._calculate_md5(data_file.file_path)
+            current_sha256 = self._calculate_sha256(data_file.file_path)
             current_sha256 = self._calculate_sha256(data_file.file_path)
             validation_result["current_md5"] = current_md5
             validation_result["current_sha256"] = current_sha256
@@ -4766,12 +4760,6 @@ class DataIntegrityValidator:
         except Exception as e:
             return {"valid": False, "error": str(e)}
 
-    def _calculate_md5(self, file_path: Path) -> str:
-        hash_md5 = hashlib.md5()
-        with open(file_path, "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                hash_md5.update(chunk)
-        return hash_md5.hexdigest()
 
     def _calculate_sha256(self, file_path: Path) -> str:
         hash_sha256 = hashlib.sha256()
