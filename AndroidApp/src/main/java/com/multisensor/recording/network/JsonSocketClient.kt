@@ -3,7 +3,6 @@ package com.multisensor.recording.network
 import android.annotation.SuppressLint
 import android.os.Build
 import com.multisensor.recording.util.Logger
-import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.*
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -12,8 +11,9 @@ import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ServiceScoped
+@Singleton
 class JsonSocketClient
 @Inject
 constructor(
