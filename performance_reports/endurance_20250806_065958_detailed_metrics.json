@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": 1754463598.3460777,
+    "elapsed_hours": 4.468361536661784e-07,
+    "memory_rss_mb": 62.2578125,
+    "memory_vms_mb": 437.76953125,
+    "memory_percent": 0.38921889545645916,
+    "memory_available_mb": 14734.34765625,
+    "cpu_percent": 0.0,
+    "open_files": 3,
+    "thread_count": 4,
+    "process_count": 156,
+    "network_connections": 0,
+    "tracemalloc_current_mb": 0.17182540893554688,
+    "tracemalloc_peak_mb": 0.22764873504638672,
+    "cpu_frequency_mhz": 2445.432,
+    "load_average": [
+      0.09619140625,
+      0.06396484375,
+      0.02490234375
+    ],
+    "response_time_ms": null,
+    "throughput_ops_per_sec": null,
+    "error_count": 0,
+    "cpu_temperature": null,
+    "active_recording_sessions": 0,
+    "connected_devices": 0,
+    "data_processing_queue_size": 0
+  }
+]
