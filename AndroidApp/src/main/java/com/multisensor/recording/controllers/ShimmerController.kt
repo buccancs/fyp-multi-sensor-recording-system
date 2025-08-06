@@ -71,8 +71,14 @@ class ShimmerController @Inject constructor(
 
                     attemptAutoReconnection()
                 }
-            } catch (e: Exception) {
-                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Failed to load saved device states: ${e.message}")
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: java.io.IOException) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] IO error loading saved device states: ${e.message}")
+            } catch (e: SecurityException) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Permission error loading saved device states: ${e.message}")
+            } catch (e: RuntimeException) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Runtime error loading saved device states: ${e.message}")
             }
         }
     }
@@ -102,8 +108,14 @@ class ShimmerController @Inject constructor(
                         }
                     }
                 }
-            } catch (e: Exception) {
-                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Auto-reconnection failed: ${e.message}")
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Permission error during auto-reconnection: ${e.message}")
+            } catch (e: IllegalStateException) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Invalid state during auto-reconnection: ${e.message}")
+            } catch (e: RuntimeException) {
+                android.util.Log.e("ShimmerController", "[DEBUG_LOG] Runtime error during auto-reconnection: ${e.message}")
             }
         }
     }

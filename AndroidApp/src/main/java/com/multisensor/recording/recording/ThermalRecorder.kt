@@ -233,8 +233,19 @@ constructor(
             isInitialized.set(true)
             logger.info("ThermalRecorder initialized successfully")
             true
-        } catch (e: Exception) {
-            logger.error("Failed to initialize ThermalRecorder", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Security exception initializing thermal recorder - check permissions", e)
+            false
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state initializing thermal recorder", e)
+            false
+        } catch (e: IOException) {
+            logger.error("IO error initializing thermal recorder", e)
+            false
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error initializing thermal recorder", e)
             false
         }
 
@@ -305,8 +316,22 @@ constructor(
 
             logger.info("Thermal recording started successfully with configuration: ${config.dataFormat}")
             true
-        } catch (e: Exception) {
-            logger.error("Failed to start thermal recording", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SecurityException) {
+            logger.error("Security exception starting thermal recording - check permissions", e)
+            cleanup()
+            false
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state starting thermal recording", e)
+            cleanup()
+            false
+        } catch (e: IOException) {
+            logger.error("IO error starting thermal recording", e)
+            cleanup()
+            false
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error starting thermal recording", e)
             cleanup()
             false
         }
@@ -340,8 +365,16 @@ constructor(
             thermalDataFile = null
 
             true
-        } catch (e: Exception) {
-            logger.error("Failed to stop thermal recording", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: IllegalStateException) {
+            logger.error("Invalid state stopping thermal recording", e)
+            false
+        } catch (e: IOException) {
+            logger.error("IO error stopping thermal recording", e)
+            false
+        } catch (e: RuntimeException) {
+            logger.error("Runtime error stopping thermal recording", e)
             false
         }
     }

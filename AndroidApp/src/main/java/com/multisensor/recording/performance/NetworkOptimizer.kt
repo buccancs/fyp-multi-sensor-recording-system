@@ -43,8 +43,13 @@ class NetworkOptimizer @Inject constructor(
                     optimizeNetworkSettings()
 
                     delay(5000)
-                } catch (e: Exception) {
-                    logger.error("NetworkOptimizer: Error during monitoring cycle", e)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: SecurityException) {
+                    logger.error("NetworkOptimizer: Security error during monitoring cycle", e)
+                    delay(10000)
+                } catch (e: IllegalStateException) {
+                    logger.error("NetworkOptimizer: State error during monitoring cycle", e)
                     delay(10000)
                 }
             }
@@ -88,8 +93,10 @@ class NetworkOptimizer @Inject constructor(
 
                 logger.debug("NetworkOptimizer: Bandwidth: ${currentBandwidth}bps, Latency: ${currentLatency}ms")
             }
-        } catch (e: Exception) {
-            logger.error("NetworkOptimizer: Error measuring network performance", e)
+        } catch (e: SecurityException) {
+            logger.error("NetworkOptimizer: Security error accessing network capabilities", e)
+        } catch (e: IllegalStateException) {
+            logger.error("NetworkOptimizer: State error measuring network performance", e)
         }
     }
 

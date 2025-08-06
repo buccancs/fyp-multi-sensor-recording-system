@@ -7,24 +7,18 @@ from ..network.device_server import JsonSocketServer
 from ..session.session_logger import get_session_logger
 from ..session.session_manager import SessionManager
 from ..utils.logging_config import get_logger
-from .gui.main_controller import MainController
-from .gui.main_window import MainWindow
-from .gui.simplified_main_window import SimplifiedMainWindow
-from .gui.stimulus_controller import StimulusController
+from .gui.enhanced_ui_main_window import EnhancedMainWindow
 from .webcam.webcam_capture import WebcamCapture
 
 
 class Application(QObject):
 
-    def __init__(self, use_simplified_ui=True):
+    def __init__(self):
         super().__init__()
         self.logger = get_logger(__name__)
-        self.use_simplified_ui = use_simplified_ui
         self.session_manager = None
         self.json_server = None
         self.webcam_capture = None
-        self.stimulus_controller = None
-        self.main_controller = None
         self.main_window = None
         self._create_services()
         self.logger.info("application initialized")
@@ -34,29 +28,14 @@ class Application(QObject):
             self.session_manager = SessionManager()
             self.json_server = JsonSocketServer(session_manager=self.session_manager)
             self.webcam_capture = WebcamCapture()
-            self.stimulus_controller = None
-            if not self.use_simplified_ui:
-                self.main_controller = MainController()
         except Exception as e:
             self.logger.error(f"failed to create services: {e}")
             raise
 
     def create_main_window(self):
         try:
-            if self.use_simplified_ui:
-                self.main_window = SimplifiedMainWindow()
-                self.logger.info("Created simplified main window")
-            else:
-                self.main_window = MainWindow()
-                self.stimulus_controller = StimulusController(self.main_window)
-                self.main_controller.inject_dependencies(
-                    session_manager=self.session_manager,
-                    json_server=self.json_server,
-                    webcam_capture=self.webcam_capture,
-                    stimulus_controller=self.stimulus_controller,
-                )
-                self.main_window.set_controller(self.main_controller)
-                self.logger.info("Created traditional main window")
+            self.main_window = EnhancedMainWindow()
+            self.logger.info("Created enhanced main window")
             return self.main_window
         except Exception as e:
             self.logger.error(f"failed to create main window: {e}")
@@ -74,8 +53,6 @@ class Application(QObject):
 
     def cleanup(self):
         try:
-            if self.main_controller:
-                self.main_controller.cleanup()
             if self.json_server:
                 self.json_server.cleanup()
             if self.webcam_capture:
@@ -89,7 +66,7 @@ def main():
     logger = get_logger(__name__)
     qt_app = QApplication(sys.argv)
     try:
-        app = Application(use_simplified_ui=True)
+        app = Application()
         main_window = app.run()
         qt_app.aboutToQuit.connect(app.cleanup)
         sys.exit(qt_app.exec_())
