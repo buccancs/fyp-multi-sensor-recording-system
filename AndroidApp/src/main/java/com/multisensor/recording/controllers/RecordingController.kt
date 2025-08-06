@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.multisensor.recording.service.RecordingService
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.util.NetworkUtils
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
