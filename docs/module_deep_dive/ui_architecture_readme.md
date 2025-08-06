@@ -1,34 +1,31 @@
 # UI Architecture Module
 
-The UI Architecture System provides comprehensive user interface frameworks for both Android mobile applications and
-Python desktop controllers, implementing modern design patterns and ensuring consistent user experience across all
-platform interfaces.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Design Systems](#design-systems)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Accessibility](#accessibility)
-- [Performance](#performance)
-
 ## Overview
+
+The UI Architecture System provides comprehensive user interface frameworks for both Android mobile applications and Python desktop controllers within the Multi-Sensor Recording System, implementing modern design patterns and ensuring consistent user experience across all platform interfaces. This component addresses critical usability requirements for research software interfaces [Shneiderman2016] while maintaining accessibility and performance standards.
+
+### Research Context and Design Foundation
+
+The UI Architecture System defines and implements user interface frameworks that provide intuitive, accessible, and responsive interfaces across both Android and Python desktop platforms, supporting complex multi-modal research workflows. Modern research software requires sophisticated interface design that balances functionality with usability [Nielsen1994], particularly for systems coordinating multiple devices and sensors.
+
+The architecture implements established HCI principles:
+
+- **Human-Computer Interaction Design** [Shneiderman2016]: User-centered design principles ensuring effective research software interfaces
+- **Usability Engineering** [Nielsen1994]: Systematic usability evaluation and iterative design improvement methodologies  
+- **Accessibility Standards** [W3C2018]: WCAG 2.1 AA compliance ensuring inclusive interface design for diverse research environments
+- **Cross-Platform Design Systems** [Atomic2016]: Consistent design language implementation across heterogeneous platforms
 
 ### System Role and Responsibilities
 
-The UI Architecture System defines and implements the user interface frameworks that provide intuitive, accessible, and
-responsive interfaces across both Android and Python desktop platforms.
+Within the distributed PC master-controller architecture, the UI Architecture System provides unified interface frameworks that support complex research workflows while maintaining consistency with established offline-first recording principles.
 
 **Primary Functions:**
 
-- **Cross-Platform Design System**: Consistent visual language and interaction patterns
-- **Component Libraries**: Reusable UI components with standardized behavior
-- **Navigation Architecture**: Intuitive navigation patterns and state management
-- **Accessibility Framework**: WCAG 2.1 AA compliant interface design
-- **Performance Optimization**: Responsive interfaces with efficient resource usage
+- **Cross-Platform Design System**: Consistent visual language and interaction patterns ensuring cohesive user experience across Android and desktop platforms
+- **Component Libraries**: Reusable UI components with standardized behavior supporting efficient research software development
+- **Navigation Architecture**: Intuitive navigation patterns and state management facilitating complex multi-device coordination workflows
+- **Accessibility Framework**: WCAG 2.1 AA compliant interface design ensuring research software accessibility for diverse user populations
+- **Performance Optimization**: Responsive interfaces with efficient resource usage supporting real-time multi-modal data monitoring
 
 ### Architecture Overview
 
@@ -703,5 +700,14 @@ class AccessibilityHelper {
 
 ---
 
-*For related modules, see [Android Mobile Application](../android-mobile-application/README.md)
-and [Python Desktop Controller](../python-desktop-controller/README.md) documentation.*
+*For related modules, see [Android Mobile Application](android_mobile_application_readme.md) and [Python Desktop Controller](python_desktop_controller_readme.md) documentation.*
+
+## References
+
+[Atomic2016] Frost, B. (2016). *Atomic Design*. Brad Frost Web. Retrieved from https://atomicdesign.bradfrost.com/
+
+[Nielsen1994] Nielsen, J. (1994). *Usability Engineering*. Morgan Kaufmann Publishers.
+
+[Shneiderman2016] Shneiderman, B., Plaisant, C., Cohen, M., Jacobs, S., Elmqvist, N., & Diakopoulos, N. (2016). *Designing the User Interface: Strategies for Effective Human-Computer Interaction* (6th ed.). Pearson.
+
+[W3C2018] W3C Web Accessibility Initiative. (2018). *Web Content Accessibility Guidelines (WCAG) 2.1*. Retrieved from https://www.w3.org/WAI/WCAG21/quickref/

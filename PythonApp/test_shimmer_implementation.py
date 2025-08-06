@@ -1,7 +1,3 @@
-"""
-Test Shimmer sensor integration functionality.
-This simulates the missing test_shimmer_implementation.py file mentioned in README.
-"""
 
 import json
 import os
@@ -17,7 +13,6 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 def test_shimmer_libraries_availability():
-    """Test availability of Shimmer libraries with fallback support."""
     print("Testing Shimmer libraries availability...")
 
     available_libraries = []
@@ -64,13 +59,11 @@ def test_shimmer_libraries_availability():
         return False
 
 def test_device_discovery_simulation():
-    """Test Bluetooth device discovery simulation."""
     print("Testing device discovery simulation...")
 
     try:
 
         def simulate_bluetooth_scan():
-            """Simulate discovering Shimmer devices."""
 
             mock_devices = [
                 {
@@ -124,7 +117,6 @@ def test_device_discovery_simulation():
         return False
 
 def test_data_streaming_simulation():
-    """Test Shimmer data streaming simulation."""
     print("Testing data streaming simulation...")
 
     try:
@@ -133,7 +125,6 @@ def test_data_streaming_simulation():
         from collections import deque
 
         class MockShimmerDevice:
-            """Mock Shimmer device for testing."""
 
             def __init__(self, device_id="Shimmer3-01"):
                 self.device_id = device_id
@@ -144,27 +135,23 @@ def test_data_streaming_simulation():
                 self.callback = None
 
             def connect(self):
-                """Simulate connection to device."""
                 time.sleep(0.1)
                 self.is_connected = True
                 return True
 
             def configure_sensors(self, sensors=None):
-                """Configure which sensors to enable."""
                 if sensors is None:
                     sensors = ["GSR", "PPG", "Accelerometer"]
                 self.enabled_sensors = sensors
                 return True
 
             def set_sampling_rate(self, rate):
-                """Set the sampling rate."""
                 if 1 <= rate <= 1024:
                     self.sampling_rate = rate
                     return True
                 return False
 
             def start_streaming(self, callback=None):
-                """Start data streaming."""
                 if not self.is_connected:
                     return False
 
@@ -208,12 +195,10 @@ def test_data_streaming_simulation():
                 return True
 
             def stop_streaming(self):
-                """Stop data streaming."""
                 self.is_streaming = False
                 return True
 
             def disconnect(self):
-                """Disconnect from device."""
                 self.stop_streaming()
                 self.is_connected = False
                 return True
@@ -267,7 +252,6 @@ def test_data_streaming_simulation():
         return False
 
 def test_session_management():
-    """Test session-based data organization and CSV export."""
     print("Testing session management...")
 
     try:
@@ -276,14 +260,12 @@ def test_session_management():
         from datetime import datetime
 
         class SessionManager:
-            """Mock session manager for Shimmer data."""
 
             def __init__(self):
                 self.sessions = {}
                 self.current_session = None
 
             def start_session(self, session_name=None):
-                """Start a new recording session."""
                 if session_name is None:
                     session_name = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
@@ -302,12 +284,10 @@ def test_session_management():
                 return session_name
 
             def add_sample(self, sample):
-                """Add a sample to the current session."""
                 if self.current_session:
                     self.current_session["data"].append(sample)
 
             def stop_session(self):
-                """Stop the current session."""
                 if self.current_session:
                     self.current_session["end_time"] = datetime.now()
                     duration = (
@@ -318,7 +298,6 @@ def test_session_management():
                     self.current_session = None
 
             def export_session_csv(self, session_name, filename):
-                """Export session data to CSV."""
                 if session_name not in self.sessions:
                     return False
 
@@ -338,7 +317,6 @@ def test_session_management():
                 return True
 
             def get_session_info(self, session_name):
-                """Get session metadata and statistics."""
                 if session_name not in self.sessions:
                     return None
 
@@ -411,19 +389,16 @@ def test_session_management():
         return False
 
 def test_error_handling():
-    """Test graceful error handling for missing libraries and failures."""
     print("Testing error handling...")
 
     try:
 
         class RobustShimmerManager:
-            """Shimmer manager with robust error handling."""
 
             def __init__(self):
                 self.available_libraries = self._detect_libraries()
 
             def _detect_libraries(self):
-                """Detect available Shimmer libraries."""
                 libraries = []
 
                 try:
@@ -443,7 +418,6 @@ def test_error_handling():
                 return libraries
 
             def connect_with_fallback(self, device_address):
-                """Attempt connection with library fallback."""
                 for library in self.available_libraries:
                     try:
                         if library == "pyshimmer":
@@ -457,7 +431,6 @@ def test_error_handling():
                 return {"success": False, "error": "No compatible libraries available"}
 
             def _connect_pyshimmer(self, device_address):
-                """Mock pyshimmer connection."""
 
                 if device_address == "invalid":
                     raise ConnectionError("Invalid device address")
@@ -469,7 +442,6 @@ def test_error_handling():
                 }
 
             def _connect_bluetooth(self, device_address):
-                """Mock bluetooth connection."""
 
                 if device_address == "unreachable":
                     raise TimeoutError("Device unreachable")
@@ -481,7 +453,6 @@ def test_error_handling():
                 }
 
             def handle_connection_error(self, error):
-                """Provide user-friendly error messages."""
                 error_messages = {
                     "ConnectionError": "Device not found or not responding. Check device power and pairing.",
                     "TimeoutError": "Connection timeout. Device may be out of range.",
@@ -522,13 +493,11 @@ def test_error_handling():
         return False
 
 def test_multi_library_compatibility():
-    """Test compatibility across different Shimmer library implementations."""
     print("Testing multi-library compatibility...")
 
     try:
 
         class UnifiedShimmerInterface:
-            """Unified interface for different Shimmer libraries."""
 
             def __init__(self):
                 self.library_adapters = {
@@ -538,7 +507,6 @@ def test_multi_library_compatibility():
                 }
 
             def _get_pyshimmer_adapter(self):
-                """Get pyshimmer library adapter."""
                 return {
                     "connect": lambda addr: {"connected": True, "library": "pyshimmer"},
                     "start_streaming": lambda: {"streaming": True},
@@ -547,7 +515,6 @@ def test_multi_library_compatibility():
                 }
 
             def _get_bluetooth_adapter(self):
-                """Get bluetooth library adapter."""
                 return {
                     "connect": lambda addr: {"connected": True, "library": "bluetooth"},
                     "start_streaming": lambda: {"streaming": True},
@@ -556,7 +523,6 @@ def test_multi_library_compatibility():
                 }
 
             def _get_mock_adapter(self):
-                """Get mock adapter for testing."""
                 return {
                     "connect": lambda addr: {"connected": True, "library": "mock"},
                     "start_streaming": lambda: {"streaming": True},
@@ -565,7 +531,6 @@ def test_multi_library_compatibility():
                 }
 
             def connect(self, device_address, preferred_library=None):
-                """Connect using specified or best available library."""
                 if preferred_library and preferred_library in self.library_adapters:
                     adapter = self.library_adapters[preferred_library]
                     return adapter["connect"](device_address)
@@ -581,7 +546,6 @@ def test_multi_library_compatibility():
                 return {"connected": False, "error": "No compatible library found"}
 
             def test_library_compatibility(self):
-                """Test that all adapters provide consistent interface."""
                 results = {}
 
                 for library_name, adapter in self.library_adapters.items():
@@ -631,7 +595,6 @@ def test_multi_library_compatibility():
         return False
 
 def main():
-    """Run all Shimmer implementation tests."""
     print("=" * 60)
     print("Shimmer Implementation Test Suite")
     print("=" * 60)

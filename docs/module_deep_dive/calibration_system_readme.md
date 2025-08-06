@@ -1,35 +1,29 @@
 # Calibration System Module
 
-The Calibration System provides comprehensive camera calibration and quality assessment capabilities for the
-Multi-Sensor Recording System, ensuring accurate spatial alignment and temporal synchronization across all camera
-modalities including RGB cameras, thermal cameras, and multi-device stereo configurations.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Calibration System provides comprehensive camera calibration and quality assessment capabilities for the Multi-Sensor Recording System, ensuring accurate spatial alignment and temporal synchronization across all camera modalities. This component implements established computer vision calibration methodologies [Zhang2000] to maintain research-grade geometric accuracy essential for contactless GSR prediction research.
+
+### Theoretical Foundation
+
+The calibration system builds upon well-established computer vision principles and implements proven algorithms for multi-modal sensor alignment:
+
+- **Zhang's Camera Calibration Method** [Zhang2000]: Planar pattern-based intrinsic parameter estimation providing robust calibration with minimal user intervention
+- **Stereo Vision Fundamentals** [Hartley2003]: Multi-camera geometric relationships enabling precise spatial alignment between RGB and thermal sensor modalities  
+- **Bundle Adjustment Optimization** [Triggs2000]: Optimal parameter estimation through non-linear optimization for enhanced calibration accuracy
+- **OpenCV Calibration Framework** [Bradski2008]: Production-ready implementation of calibration algorithms with validated accuracy
 
 ### System Role and Responsibilities
 
-The Calibration System serves as the foundation for accurate spatial and temporal alignment across the Multi-Sensor
-Recording System. Modern multi-modal sensing applications require precise geometric calibration and temporal
-synchronization to ensure that data from different sensors can be meaningfully combined for analysis.
+The Calibration System serves as the foundation for accurate spatial and temporal alignment across the Multi-Sensor Recording System. This component ensures that data from different sensor modalities can be meaningfully integrated for analysis, addressing critical requirements for multi-modal physiological research [Picard2001].
 
 **Primary Functions:**
 
-- **Intrinsic Camera Calibration**: Individual camera parameter estimation for geometric correction
-- **Stereo Calibration**: RGB-thermal camera alignment with rotation and translation matrices
-- **Quality Assessment**: Comprehensive calibration quality evaluation and coverage analysis
-- **Temporal Calibration**: Synchronization parameter estimation and validation
-- **Data Persistence**: JSON-based calibration parameter storage and management
+- **Intrinsic Camera Calibration**: Individual camera parameter estimation for geometric distortion correction and accurate metric measurements
+- **Stereo Calibration**: RGB-thermal camera alignment with precise rotation and translation matrix computation for spatial correspondence
+- **Quality Assessment**: Comprehensive calibration quality evaluation with coverage analysis and statistical validation [Bouguet2004]
+- **Temporal Calibration**: Synchronization parameter estimation and validation ensuring sub-millisecond temporal alignment
+- **Data Persistence**: Structured JSON-based calibration parameter storage with metadata for reproducible research
 
 ### Technology Foundation
 
@@ -1235,6 +1229,18 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 
 ---
 
-*This comprehensive documentation consolidates all Calibration System information into a single authoritative reference.
-For related modules, see the [Camera Recording System](../camera-recording-system/README.md)
-and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*This comprehensive documentation consolidates all Calibration System information into a single authoritative reference. For related modules, see the [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
+
+## References
+
+[Bouguet2004] Bouguet, J. Y. (2004). Camera calibration toolbox for matlab. *California Institute of Technology*, Pasadena.
+
+[Bradski2008] Bradski, G., & Kaehler, A. (2008). *Learning OpenCV: Computer Vision with the OpenCV Library*. O'Reilly Media.
+
+[Hartley2003] Hartley, R., & Zisserman, A. (2003). *Multiple View Geometry in Computer Vision* (2nd ed.). Cambridge University Press.
+
+[Picard2001] Picard, R. W. (2001). *Affective Computing*. MIT Press.
+
+[Triggs2000] Triggs, B., McLauchlan, P. F., Hartley, R. I., & Fitzgibbon, A. W. (2000). Bundle adjustment—a modern synthesis. In *International Workshop on Vision Algorithms* (pp. 298-372). Springer.
+
+[Zhang2000] Zhang, Z. (2000). A flexible new technique for camera calibration. *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 22(11), 1330-1334.

@@ -297,3 +297,4 @@ private fun getDeviceSerial(): String {
         Build.SERIAL
     }
 }
+

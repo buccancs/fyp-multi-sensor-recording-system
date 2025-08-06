@@ -1,21 +1,10 @@
 #!/usr/bin/env python3
-"""
-Simple Documentation Validation for Python Desktop Controller
-
-This test validates that the documentation is complete and accurate
-without requiring complex dependencies like PyQt5 or OpenCV.
-
-Author: Multi-Sensor Recording System Team
-Date: 2025-08-01
-Purpose: Validate documentation completeness
-"""
 
 import os
 import sys
 
 
 def validate_documentation_files():
-    """Validate that all required documentation files exist"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     new_docs_dir = os.path.join(docs_dir, 'new_documentation')
 
@@ -56,7 +45,6 @@ def validate_documentation_files():
 
 
 def validate_source_structure():
-    """Validate that documented source structure exists"""
     src_dir = os.path.join(os.path.dirname(__file__), 'src')
 
     expected_structure = {
@@ -100,7 +88,6 @@ def validate_source_structure():
 
 
 def validate_documentation_content():
-    """Validate key content exists in documentation"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     new_docs_dir = os.path.join(docs_dir, 'new_documentation')
 
@@ -167,7 +154,6 @@ def validate_documentation_content():
 
 
 def validate_mermaid_diagrams():
-    """Validate that Mermaid diagrams are present"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     new_docs_dir = os.path.join(docs_dir, 'new_documentation')
 
@@ -196,7 +182,6 @@ def validate_mermaid_diagrams():
 
 
 def check_documentation_index_references():
-    """Check that documentation index references the new files"""
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     index_file = os.path.join(docs_dir, 'DOCUMENTATION_INDEX.md')
 
@@ -229,7 +214,6 @@ def check_documentation_index_references():
 
 
 def main():
-    """Run all documentation validation checks"""
     print("🔍 Python Desktop Controller Documentation Validation")
     print("=" * 60)
 

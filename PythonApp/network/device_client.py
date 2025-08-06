@@ -372,16 +372,6 @@ class DeviceClient(QThread):
             "ssl_enabled": self._ssl_enabled,
             "rate_limit_per_minute": self._max_requests_per_minute,
         }
-        """
-        Get list of currently connected devices with their information.
-
-        Returns:
-            dict: Dictionary of connected devices with their information including:
-                  - Device IP and port
-                  - Connection status
-                  - Last heartbeat timestamp
-                  - Device capabilities and status
-        """
         with self._device_lock:
             devices_info = {}
             for device_id, device_data in self.devices.items():

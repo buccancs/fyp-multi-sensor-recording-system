@@ -56,7 +56,6 @@ class OptimizationConfig:
     history_retention_minutes: int = 60
     alert_threshold_violations: int = 3
     
-    # Resource limits (added back for compatibility)
     max_memory_mb: float = 2048.0
     max_cpu_percent: float = 80.0
     max_network_mbps: float = 100.0
@@ -65,13 +64,11 @@ class OptimizationConfig:
     cpu_warning_threshold: float = 0.7
     cleanup_interval_seconds: int = 300
     
-    # Graceful degradation thresholds
     frame_drop_cpu_threshold: float = 85.0
     frame_drop_memory_threshold: float = 90.0
     quality_reduction_threshold: float = 80.0
     preview_disable_threshold: float = 95.0
     
-    # Hardware acceleration settings
     prefer_gpu_processing: bool = True
     use_hardware_codecs: bool = True
     detect_device_capabilities: bool = True
@@ -337,7 +334,6 @@ class NetworkOptimizer:
 
 
 class GracefulDegradationManager:
-    """Manages graceful degradation strategies under performance pressure"""
     
     def __init__(self, config: OptimizationConfig, logger=None):
         self.config = config
@@ -358,12 +354,10 @@ class GracefulDegradationManager:
         }
     
     def register_callback(self, event_type: str, callback: Callable):
-        """Register callbacks for degradation events"""
         if event_type in self.callbacks:
             self.callbacks[event_type].append(callback)
     
     def should_drop_frame(self, cpu_percent: float, memory_percent: float) -> bool:
-        """Determine if frame should be dropped based on system load"""
         if not self.config.enable_graceful_degradation:
             return False
         
@@ -388,7 +382,6 @@ class GracefulDegradationManager:
         return should_drop
     
     def should_reduce_quality(self, cpu_percent: float, memory_percent: float) -> bool:
-        """Determine if quality should be reduced"""
         should_reduce = (
             cpu_percent > self.config.quality_reduction_threshold or
             memory_percent > self.config.quality_reduction_threshold
@@ -406,7 +399,6 @@ class GracefulDegradationManager:
         return should_reduce
     
     def should_disable_preview(self, cpu_percent: float, memory_percent: float) -> bool:
-        """Determine if preview should be disabled"""
         should_disable = (
             cpu_percent > self.config.preview_disable_threshold or
             memory_percent > self.config.preview_disable_threshold
@@ -424,7 +416,6 @@ class GracefulDegradationManager:
         return should_disable
     
     def _trigger_callbacks(self, event_type: str, enabled: bool):
-        """Trigger registered callbacks for degradation events"""
         for callback in self.callbacks.get(event_type, []):
             try:
                 callback(enabled)
@@ -432,13 +423,11 @@ class GracefulDegradationManager:
                 self.logger.error(f"Error in degradation callback: {e}")
     
     def get_frame_drop_rate(self) -> float:
-        """Get current frame drop rate percentage"""
         if self.total_frames == 0:
             return 0.0
         return (self.frame_drop_count / self.total_frames) * 100
     
     def get_degradation_status(self) -> Dict[str, Any]:
-        """Get current degradation status"""
         return {
             "state": self.degradation_state.copy(),
             "frame_drop_rate": self.get_frame_drop_rate(),
@@ -448,7 +437,6 @@ class GracefulDegradationManager:
 
 
 class HardwareAccelerationManager:
-    """Manages hardware acceleration detection and utilization"""
     
     def __init__(self, config: OptimizationConfig, logger=None):
         self.config = config
@@ -463,11 +451,9 @@ class HardwareAccelerationManager:
         self._detect_capabilities()
     
     def _detect_capabilities(self):
-        """Detect available hardware acceleration capabilities"""
         if not self.config.enable_hardware_acceleration:
             return
         
-        # Check OpenCV GPU support
         try:
             import cv2
             self.capabilities["opencv_gpu"] = cv2.cuda.getCudaEnabledDeviceCount() > 0
@@ -476,7 +462,6 @@ class HardwareAccelerationManager:
         except:
             pass
         
-        # Check CUDA availability
         try:
             import torch
             self.capabilities["cuda_available"] = torch.cuda.is_available()
@@ -489,7 +474,6 @@ class HardwareAccelerationManager:
         except ImportError:
             pass
         
-        # Check OpenCL
         try:
             import pyopencl as cl
             platforms = cl.get_platforms()
@@ -499,21 +483,17 @@ class HardwareAccelerationManager:
         except ImportError:
             pass
         
-        # Check hardware codecs (platform specific)
         self._detect_hardware_codecs()
     
     def _detect_hardware_codecs(self):
-        """Detect available hardware video codecs"""
         try:
             import cv2
-            # Try to detect hardware encoders
             fourcc_codes = ['H264', 'HEVC', 'VP8', 'VP9']
             available_codecs = []
             
             for codec in fourcc_codes:
                 try:
                     fourcc = cv2.VideoWriter_fourcc(*codec)
-                    # Test if codec is available (this is a simplified check)
                     available_codecs.append(codec)
                 except:
                     pass
@@ -525,7 +505,6 @@ class HardwareAccelerationManager:
             pass
     
     def get_optimal_processing_device(self) -> str:
-        """Get the optimal device for processing"""
         if self.config.prefer_gpu_processing:
             if self.capabilities["cuda_available"]:
                 return "cuda"
@@ -537,12 +516,10 @@ class HardwareAccelerationManager:
         return "cpu"
     
     def create_optimized_video_writer(self, filename: str, fps: float, frame_size: tuple):
-        """Create optimized video writer using hardware acceleration if available"""
         try:
             import cv2
             
             if self.config.use_hardware_codecs and self.capabilities["hardware_codecs"]:
-                # Try hardware accelerated codecs first
                 for codec in ['H264', 'HEVC']:
                     if codec in self.capabilities["hardware_codecs"]:
                         try:
@@ -554,7 +531,6 @@ class HardwareAccelerationManager:
                         except:
                             continue
             
-            # Fallback to software codec
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
             writer = cv2.VideoWriter(filename, fourcc, fps, frame_size)
             self.logger.info("Using software codec")
@@ -565,7 +541,6 @@ class HardwareAccelerationManager:
             return None
     
     def get_capabilities_report(self) -> Dict[str, Any]:
-        """Get comprehensive hardware capabilities report"""
         return {
             "acceleration_enabled": self.config.enable_hardware_acceleration,
             "optimal_device": self.get_optimal_processing_device(),
@@ -574,7 +549,6 @@ class HardwareAccelerationManager:
         }
     
     def _get_acceleration_recommendations(self) -> List[str]:
-        """Get recommendations for hardware acceleration"""
         recommendations = []
         
         if not self.capabilities["cuda_available"] and not self.capabilities["opencl_available"]:
@@ -599,7 +573,6 @@ class HardwareAccelerationManager:
 
 
 class ProfilingIntegrationManager:
-    """Manages integration with profiling tools for hotspot identification"""
     
     def __init__(self, config: OptimizationConfig, logger=None):
         self.config = config
@@ -613,11 +586,9 @@ class ProfilingIntegrationManager:
         self._setup_profilers()
     
     def _setup_profilers(self):
-        """Setup available profiling tools"""
         if not self.config.enable_profiling_integration:
             return
         
-        # Setup cProfile
         try:
             import cProfile
             self.profilers["cprofile"] = cProfile.Profile()
@@ -625,7 +596,6 @@ class ProfilingIntegrationManager:
         except ImportError:
             pass
         
-        # Setup PyInstrument
         try:
             from pyinstrument import Profiler
             self.profilers["pyinstrument"] = Profiler()
@@ -633,7 +603,6 @@ class ProfilingIntegrationManager:
         except ImportError:
             pass
         
-        # Setup memory profiler
         try:
             import memory_profiler
             self.profilers["memory_profiler"] = True
@@ -642,7 +611,6 @@ class ProfilingIntegrationManager:
             pass
     
     def start_profiling(self, profiler_type: str = "cprofile"):
-        """Start profiling with specified profiler"""
         if profiler_type not in self.profilers or not self.profilers[profiler_type]:
             self.logger.warning(f"Profiler {profiler_type} not available")
             return False
@@ -660,7 +628,6 @@ class ProfilingIntegrationManager:
             return False
     
     def stop_profiling(self, profiler_type: str = "cprofile", save_results: bool = True):
-        """Stop profiling and optionally save results"""
         if profiler_type not in self.profilers or not self.profilers[profiler_type]:
             return None
         
@@ -682,15 +649,12 @@ class ProfilingIntegrationManager:
             return None
     
     def _save_cprofile_results(self) -> str:
-        """Save cProfile results"""
         import pstats
         import io
         
-        # Save binary stats
         stats_file = f"profile_results_{int(time.time())}.prof"
         self.profilers["cprofile"].dump_stats(stats_file)
         
-        # Generate text report
         s = io.StringIO()
         ps = pstats.Stats(self.profilers["cprofile"], stream=s)
         ps.sort_stats('cumulative').print_stats(20)
@@ -699,21 +663,17 @@ class ProfilingIntegrationManager:
         with open(report_file, 'w') as f:
             f.write(s.getvalue())
         
-        # Extract hotspots
         self._extract_hotspots_from_cprofile(ps)
         
         return report_file
     
     def _save_pyinstrument_results(self) -> str:
-        """Save PyInstrument results"""
         session = self.profilers["pyinstrument"].last_session
         
-        # HTML report
         html_file = f"pyinstrument_report_{int(time.time())}.html"
         with open(html_file, 'w') as f:
             f.write(session.output_html())
         
-        # Text report
         text_file = f"pyinstrument_report_{int(time.time())}.txt"
         with open(text_file, 'w') as f:
             f.write(session.output_text())
@@ -721,13 +681,11 @@ class ProfilingIntegrationManager:
         return html_file
     
     def _extract_hotspots_from_cprofile(self, stats):
-        """Extract performance hotspots from cProfile data"""
         stats.sort_stats('cumulative')
         
-        # Get top functions by cumulative time
         hotspots = []
         for func, (cc, nc, tt, ct, callers) in stats.stats.items():
-            if ct > 0.1:  # Functions taking more than 0.1 seconds
+            if ct > 0.1:
                 hotspots.append({
                     "function": f"{func[0]}:{func[1]}({func[2]})",
                     "cumulative_time": ct,
@@ -736,14 +694,12 @@ class ProfilingIntegrationManager:
                     "per_call_time": ct / cc if cc > 0 else 0
                 })
         
-        # Sort by cumulative time
         hotspots.sort(key=lambda x: x["cumulative_time"], reverse=True)
-        self.hotspots = hotspots[:10]  # Keep top 10
+        self.hotspots = hotspots[:10]
         
         self.logger.info(f"Identified {len(self.hotspots)} performance hotspots")
     
     def get_optimization_recommendations(self) -> List[str]:
-        """Get optimization recommendations based on profiling data"""
         recommendations = []
         
         for hotspot in self.hotspots:
@@ -767,7 +723,6 @@ class ProfilingIntegrationManager:
         return recommendations
     
     def get_profiling_status(self) -> Dict[str, Any]:
-        """Get current profiling status"""
         return {
             "available_profilers": [k for k, v in self.profilers.items() if v],
             "hotspots_count": len(self.hotspots),
@@ -796,7 +751,6 @@ class PerformanceMonitor:
         self.cpu_optimizer = CPUOptimizer(logger)
         self.network_optimizer = NetworkOptimizer(logger)
         
-        # Enhanced performance capabilities
         self.degradation_manager = GracefulDegradationManager(config, logger)
         self.hardware_manager = HardwareAccelerationManager(config, logger)
         self.profiling_manager = ProfilingIntegrationManager(config, logger)
@@ -857,7 +811,6 @@ class PerformanceMonitor:
     def _check_violations(self, metrics: PerformanceMetrics):
         violations = []
         
-        # Check graceful degradation conditions
         if self.config.enable_graceful_degradation:
             should_drop = self.degradation_manager.should_drop_frame(
                 metrics.cpu_percent, metrics.memory_percent)
@@ -944,7 +897,6 @@ class PerformanceMonitor:
             "violation_counts": dict(self.violation_counts),
             "optimization_recommendations": self._generate_recommendations(),
             
-            # Enhanced performance insights
             "graceful_degradation": self.degradation_manager.get_degradation_status(),
             "hardware_acceleration": self.hardware_manager.get_capabilities_report(),
             "profiling_status": self.profiling_manager.get_profiling_status(),
@@ -1043,31 +995,25 @@ class PerformanceManager:
         return results
     
     def get_degradation_manager(self):
-        """Get access to graceful degradation manager"""
         return self.monitor.degradation_manager if self.monitor else None
     
     def get_hardware_manager(self):
-        """Get access to hardware acceleration manager"""
         return self.monitor.hardware_manager if self.monitor else None
     
     def get_profiling_manager(self):
-        """Get access to profiling integration manager"""
         return self.monitor.profiling_manager if self.monitor else None
     
     def start_profiling(self, profiler_type: str = "cprofile") -> bool:
-        """Start performance profiling"""
         if self.monitor and self.monitor.profiling_manager:
             return self.monitor.profiling_manager.start_profiling(profiler_type)
         return False
     
     def stop_profiling(self, profiler_type: str = "cprofile", save_results: bool = True):
-        """Stop performance profiling and get results"""
         if self.monitor and self.monitor.profiling_manager:
             return self.monitor.profiling_manager.stop_profiling(profiler_type, save_results)
         return None
     
     def should_drop_frame(self) -> bool:
-        """Check if frame should be dropped due to performance pressure"""
         if not self.monitor or not self.monitor.metrics_history:
             return False
         
@@ -1076,13 +1022,11 @@ class PerformanceManager:
             latest_metrics.cpu_percent, latest_metrics.memory_percent)
     
     def get_recommended_quality_settings(self) -> Dict[str, Any]:
-        """Get recommended quality settings based on current performance"""
         if self.monitor:
             return self.monitor.network_optimizer.get_recommended_settings()
         return {}
     
     async def run_endurance_test(self, duration_hours: float = 1.0) -> Dict[str, Any]:
-        """Run endurance test for memory leak detection"""
         from .endurance_test_suite import run_endurance_test
         return await run_endurance_test(duration_hours)
 

@@ -18,12 +18,6 @@ class CalibrationManager:
     def __init__(self, output_dir: str = "calibration_data"):
         self.logger = get_logger(__name__)
         self.logger.info(f"for initialized")
-        """
-        Initialize calibration manager.
-
-        Args:
-            output_dir (str): Directory to store calibration data and images
-        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.processor = CalibrationProcessor()
@@ -214,7 +208,6 @@ class CalibrationManager:
     def _detect_calibration_patterns(
         self, rgb_images: List[np.ndarray], thermal_images: List[np.ndarray]
     ) -> Tuple[List, List, List]:
-        """Detect chessboard patterns in RGB and thermal images."""
         object_points = self.processor.create_object_points(
             self.chessboard_size, self.square_size
         )
@@ -244,7 +237,6 @@ class CalibrationManager:
         thermal_image_points: List, rgb_images: List[np.ndarray], 
         thermal_images: List[np.ndarray], result: CalibrationResult
     ) -> Tuple[bool, bool]:
-        """Calibrate RGB and thermal cameras individually."""
         rgb_image_size = rgb_images[0].shape[1], rgb_images[0].shape[0]
         rgb_ret, rgb_camera_matrix, rgb_dist_coeffs, _, _ = cv2.calibrateCamera(
             valid_object_points, rgb_image_points, rgb_image_size, None, None
@@ -279,7 +271,6 @@ class CalibrationManager:
         self, valid_object_points: List, rgb_image_points: List, 
         thermal_image_points: List, result: CalibrationResult, rgb_images: List[np.ndarray]
     ) -> None:
-        """Perform stereo calibration between RGB and thermal cameras."""
         rgb_image_size = rgb_images[0].shape[1], rgb_images[0].shape[0]
         stereo_ret, _, _, _, _, R, T, E, F = cv2.stereoCalibrate(
             valid_object_points, rgb_image_points, thermal_image_points,

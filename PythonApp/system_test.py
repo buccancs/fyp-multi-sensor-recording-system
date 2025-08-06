@@ -1,7 +1,3 @@
-"""
-Comprehensive System Test for Multi-Sensor Recording System
-This test validates that all major components are working correctly.
-"""
 
 import json
 import os
@@ -17,7 +13,6 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 def test_python_environment():
-    """Test Python environment and dependencies."""
     print("Testing Python environment...")
 
     dependencies = {
@@ -57,7 +52,6 @@ def test_python_environment():
     return len(missing) == 0
 
 def test_gui_components():
-    """Test GUI component creation and basic functionality."""
     print("\nTesting GUI components...")
 
     try:
@@ -102,7 +96,6 @@ def test_gui_components():
         return False
 
 def test_opencv_functionality():
-    """Test OpenCV computer vision functionality."""
     print("\nTesting OpenCV functionality...")
 
     try:
@@ -143,7 +136,6 @@ def test_opencv_functionality():
         return False
 
 def test_network_capabilities():
-    """Test network and communication functionality."""
     print("\nTesting network capabilities...")
 
     try:
@@ -220,7 +212,6 @@ def test_network_capabilities():
         return False
 
 def test_data_processing():
-    """Test data processing and analysis capabilities."""
     print("\nTesting data processing...")
 
     try:
@@ -272,7 +263,6 @@ def test_data_processing():
         return False
 
 def _create_test_session_metadata():
-    """Create test session metadata for file operations testing."""
     from datetime import datetime
     
     return {
@@ -289,7 +279,6 @@ def _create_test_session_metadata():
 
 
 def _test_json_operations(session_metadata):
-    """Test JSON export and import functionality."""
     import json
     import tempfile
     import os
@@ -307,7 +296,6 @@ def _test_json_operations(session_metadata):
 
 
 def _test_csv_operations():
-    """Test CSV export and import functionality."""
     import csv
     import tempfile
     import os
@@ -335,7 +323,6 @@ def _test_csv_operations():
 
 
 def _test_directory_structure(session_metadata):
-    """Test session directory structure creation."""
     import tempfile
     from pathlib import Path
     
@@ -354,7 +341,6 @@ def _test_directory_structure(session_metadata):
 
 
 def test_file_operations():
-    """Test file I/O and session management."""
     print("\nTesting file operations...")
     
     try:
@@ -371,7 +357,6 @@ def test_file_operations():
         return False
 
 def test_system_integration():
-    """Test system integration and coordination."""
     print("\nTesting system integration...")
 
     try:
@@ -462,7 +447,6 @@ def test_system_integration():
         return False
 
 def generate_test_report():
-    """Generate a comprehensive test report."""
     print("\n" + "=" * 60)
     print("COMPREHENSIVE SYSTEM TEST REPORT")
     print("=" * 60)
@@ -516,7 +500,6 @@ def generate_test_report():
     return passed == total
 
 def main():
-    """Run comprehensive system test."""
     success = generate_test_report()
     return success
 

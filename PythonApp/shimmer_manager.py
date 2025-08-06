@@ -147,53 +147,6 @@ class DeviceStatus:
 
 
 class ShimmerManager:
-    """
-    Comprehensive Shimmer GSR sensor management system for multi-device coordination.
-    
-    This class handles the complete lifecycle of Shimmer wireless GSR sensors including
-    device discovery, connection management, data streaming, synchronization, and 
-    integration with Android recording devices. It provides both direct USB/Bluetooth
-    connectivity and network-based Android device integration.
-    
-    The manager supports multiple operational modes:
-    - Direct sensor connection via USB/Bluetooth
-    - Network-based Android device communication
-    - Hybrid mode with both direct and networked devices
-    - Session-based recording coordination
-    
-    Complex functionality includes:
-    - Multi-threaded device discovery and connection handling
-    - Real-time data streaming with timestamp synchronization
-    - Cross-platform communication protocol management
-    - Error recovery and device reconnection logic
-    - Configuration persistence and device profiling
-    
-    Note:
-        This is a high complexity class (complexity: 152) that coordinates multiple
-        subsystems. Consider refactoring into specialized managers for:
-        - Device discovery and connection
-        - Data streaming and synchronization  
-        - Android integration
-        - Configuration management
-    
-    Attributes:
-        session_manager: Session coordination interface for multi-device recording
-        logger: Logging interface for debugging and monitoring
-        enable_android_integration: Enable network-based Android device support
-        connected_devices: Active device connections mapped by device ID
-        shimmer_devices: Shimmer-specific device instances and state
-        device_configurations: Persistent device configuration profiles
-        android_devices: Network-connected Android devices with Shimmer integration
-        streaming_status: Real-time streaming state for all connected devices
-        data_callbacks: Registered callbacks for real-time data processing
-        synchronization_manager: Cross-device timestamp synchronization
-        
-    Raises:
-        ConnectionError: When device discovery or connection fails
-        TimeoutError: When device operations exceed configured timeouts
-        DataFormatError: When received data doesn't match expected format
-        SynchronizationError: When cross-device timing cannot be established
-    """
 
     def __init__(
         self, session_manager=None, logger=None, enable_android_integration=True
@@ -330,18 +283,6 @@ class ShimmerManager:
     def connect_devices(
         self, device_info: Union[List[str], Dict[str, List[str]]]
     ) -> bool:
-        """
-        Establish connections to all discovered Shimmer devices.
-        
-        Simplified main coordination method that delegates to specialized handlers
-        based on device info format (legacy list vs. modern dict).
-        
-        Args:
-            device_info: Device information in legacy (List[str]) or modern (Dict[str, List[str]]) format
-        
-        Returns:
-            bool: True if at least one device connected successfully
-        """
         try:
             if isinstance(device_info, list):
                 return self._connect_legacy_devices(device_info)
@@ -355,7 +296,6 @@ class ShimmerManager:
             return False
 
     def _connect_legacy_devices(self, device_addresses: List[str]) -> bool:
-        """Handle legacy device connection format (backwards compatibility)."""
         self.logger.info(f"Connecting to {len(device_addresses)} devices (legacy mode)...")
         success_count = 0
         
@@ -368,23 +308,19 @@ class ShimmerManager:
         return all_connected
 
     def _connect_modern_devices(self, device_info: Dict[str, List[str]]) -> bool:
-        """Handle modern device connection format with multiple connection types."""
         total_devices = 0
         success_count = 0
         
-        # Connect direct Bluetooth devices
         if "direct" in device_info:
             direct_success = self._connect_direct_devices(device_info["direct"])
             total_devices += len(device_info["direct"])
             success_count += direct_success
         
-        # Connect Android-integrated devices
         if "android" in device_info and self.enable_android_integration:
             android_success = self._connect_android_devices(device_info["android"])
             total_devices += len(device_info["android"])
             success_count += android_success
         
-        # Connect simulated devices
         if "simulated" in device_info:
             simulated_success = self._connect_simulated_devices(device_info["simulated"])
             total_devices += len(device_info["simulated"])
@@ -395,7 +331,6 @@ class ShimmerManager:
         return all_connected
 
     def _connect_direct_devices(self, device_addresses: List[str]) -> int:
-        """Connect to devices via direct Bluetooth connection."""
         success_count = 0
         for mac_address in device_addresses:
             if self._connect_single_device(mac_address, ConnectionType.DIRECT_BLUETOOTH):
@@ -403,7 +338,6 @@ class ShimmerManager:
         return success_count
 
     def _connect_android_devices(self, android_device_ids: List[str]) -> int:
-        """Connect to devices via Android integration."""
         success_count = 0
         for android_device_id in android_device_ids:
             if self._connect_android_device(android_device_id):
@@ -411,7 +345,6 @@ class ShimmerManager:
         return success_count
 
     def _connect_simulated_devices(self, device_addresses: List[str]) -> int:
-        """Connect to simulated devices for testing/development."""
         success_count = 0
         for mac_address in device_addresses:
             if self._connect_single_device(mac_address, ConnectionType.SIMULATION):
@@ -421,7 +354,6 @@ class ShimmerManager:
     def _connect_single_device(
         self, mac_address: str, connection_type: ConnectionType
     ) -> bool:
-        """Connect to a single device using the specified connection type."""
         try:
             device_id = f"shimmer_{mac_address.replace(':', '_')}"
             
@@ -438,7 +370,6 @@ class ShimmerManager:
     def _setup_simulated_device(
         self, device_id: str, mac_address: str, connection_type: ConnectionType
     ) -> bool:
-        """Set up a simulated device for testing/development."""
         self.device_status[device_id] = ShimmerStatus(
             is_available=True,
             is_connected=True,
@@ -464,7 +395,6 @@ class ShimmerManager:
     def _setup_bluetooth_device(
         self, device_id: str, mac_address: str, connection_type: ConnectionType
     ) -> bool:
-        """Set up a real Bluetooth device connection."""
         if not PYSHIMMER_AVAILABLE:
             self.logger.error(
                 f"pyshimmer library not available for direct connection to {device_id}"
@@ -474,7 +404,6 @@ class ShimmerManager:
         try:
             self.logger.info(f"Establishing direct Bluetooth connection to {mac_address}")
             
-            # Find and connect to serial port
             serial_port = self._find_serial_port_for_device(mac_address)
             if not serial_port:
                 self.logger.error(f"Could not find serial port for device {mac_address}")
@@ -483,13 +412,11 @@ class ShimmerManager:
             from pyshimmer import ShimmerBluetooth
             shimmer_device = ShimmerBluetooth(serial_port)
             
-            # Establish connection
             connect_success = shimmer_device.connect(timeout=10.0)
             if not connect_success:
                 self.logger.error(f"Failed to connect to Shimmer device at {mac_address}")
                 return False
             
-            # Configure device
             shimmer_device.set_data_callback(
                 lambda data: self._on_shimmer_data_received(device_id, data)
             )
@@ -498,7 +425,6 @@ class ShimmerManager:
             if default_config:
                 self._configure_shimmer_device(shimmer_device, default_config)
             
-            # Store device and status
             self.shimmer_devices[device_id] = shimmer_device
             self._store_device_status_and_config(device_id, mac_address, connection_type)
             
@@ -512,7 +438,6 @@ class ShimmerManager:
     def _store_device_status_and_config(
         self, device_id: str, mac_address: str, connection_type: ConnectionType
     ) -> None:
-        """Store device status and configuration after successful connection."""
         self.device_status[device_id] = DeviceStatus(
             device_id=device_id,
             mac_address=mac_address,

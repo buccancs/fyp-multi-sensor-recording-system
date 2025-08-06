@@ -24,14 +24,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/**
- * Unit tests for MainViewModel recording state transitions
- * 
- * Tests the high-priority functionality mentioned in the problem statement:
- * - isRecording flags update properly
- * - Status texts update correctly
- * - Recording state transitions work as expected
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 @ExperimentalCoroutinesApi
@@ -55,7 +47,6 @@ class MainViewModelRecordingStateTest {
         every { mockLogger.debug(any()) } returns Unit
         every { mockLogger.error(any()) } returns Unit
         
-        // Mock default states
         coEvery { mockSessionManager.createNewSession() } returns "test-session-123"
         coEvery { mockSessionManager.finalizeCurrentSession() } returns Unit
         
@@ -101,7 +92,6 @@ class MainViewModelRecordingStateTest {
         viewModel.setRecordVideoEnabled(true)
         advanceUntilIdle()
         
-        // Should not throw an exception
         verify { mockLogger.info(any()) }
     }
 
@@ -110,24 +100,21 @@ class MainViewModelRecordingStateTest {
         viewModel.setCaptureRawEnabled(true)
         advanceUntilIdle()
         
-        // Should not throw an exception
         verify { mockLogger.info(any()) }
     }
 
     @Test
     fun `startRecording should update recording state`() = runTest {
-        // First initialize the system
+        
         val mockTextureView: TextureView = mockk(relaxed = true)
         viewModel.initializeSystem(mockTextureView)
         advanceUntilIdle()
         
-        // Then start recording
         viewModel.startRecording()
         advanceUntilIdle()
         
         val state = viewModel.uiState.first()
-        // Check that it's either recording or attempting to record
-        // (the actual behavior depends on mock setup)
+        
         verify { mockLogger.info(any()) }
     }
 
@@ -136,7 +123,6 @@ class MainViewModelRecordingStateTest {
         viewModel.stopRecording()
         advanceUntilIdle()
         
-        // Should not throw an exception
         verify { mockLogger.info(any()) }
     }
 
@@ -145,7 +131,6 @@ class MainViewModelRecordingStateTest {
         viewModel.captureRawImage()
         advanceUntilIdle()
         
-        // Should not throw an exception
         verify { mockLogger.info(any()) }
     }
 
@@ -171,7 +156,6 @@ class MainViewModelRecordingStateTest {
         viewModel.initializeSystem(mockTextureView, mockSurfaceView)
         advanceUntilIdle()
         
-        // Verify initialization was attempted
         verify { mockLogger.info(any()) }
     }
 
@@ -180,7 +164,6 @@ class MainViewModelRecordingStateTest {
         viewModel.initializeSystemWithFallback()
         advanceUntilIdle()
         
-        // Should not throw an exception
         verify { mockLogger.info(any()) }
     }
 
@@ -188,20 +171,17 @@ class MainViewModelRecordingStateTest {
     fun `ui state properties should have expected types`() = runTest {
         val state = viewModel.uiState.first()
         
-        // Verify basic properties exist and have expected types
         assertThat(state.isRecording is Boolean).isTrue()
         assertThat(state.statusText is String).isTrue()
         assertThat(state.isInitialized is Boolean).isTrue()
         assertThat(state.recordingDuration is Long).isTrue()
         assertThat(state.isReadyToRecord is Boolean).isTrue()
         
-        // Verify connection states
         assertThat(state.isPcConnected is Boolean).isTrue()
         assertThat(state.isShimmerConnected is Boolean).isTrue()
         assertThat(state.isThermalConnected is Boolean).isTrue()
         assertThat(state.isCameraConnected is Boolean).isTrue()
         
-        // Verify computed properties
         assertThat(state.canStartRecording is Boolean).isTrue()
         assertThat(state.canStopRecording is Boolean).isTrue()
         assertThat(state.canRunCalibration is Boolean).isTrue()
@@ -209,15 +189,13 @@ class MainViewModelRecordingStateTest {
 
     @Test
     fun `recording session management should work with session manager`() = runTest {
-        // Start recording should create session
+        
         viewModel.startRecording()
         advanceUntilIdle()
         
-        // Stop recording should finalize session  
         viewModel.stopRecording()
         advanceUntilIdle()
         
-        // Verify session lifecycle was managed
         verify { mockLogger.info(any()) }
     }
 
@@ -225,8 +203,7 @@ class MainViewModelRecordingStateTest {
     fun `error states should be handled properly`() = runTest {
         val state = viewModel.uiState.first()
         
-        // Should have error message field
-        assertThat(state.errorMessage).isNull() // Initially no error
+        assertThat(state.errorMessage).isNull() 
         assertThat(state.showErrorDialog is Boolean).isTrue()
     }
 
@@ -234,7 +211,6 @@ class MainViewModelRecordingStateTest {
     fun `loading states should be tracked properly`() = runTest {
         val state = viewModel.uiState.first()
         
-        // Should have loading state fields
         assertThat(state.isLoadingRecording is Boolean).isTrue()
         assertThat(state.isLoadingCalibration is Boolean).isTrue()
         assertThat(state.isLoadingPermissions is Boolean).isTrue()

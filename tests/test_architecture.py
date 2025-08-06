@@ -1,18 +1,3 @@
-"""
-Architecture Tests for Multi-Sensor Recording System
-
-These tests enforce clean architecture principles and prevent dependency violations
-between different layers of the system.
-
-Architecture Rules:
-1. UI layer should not directly access data/persistence layer
-2. Business logic should not depend on specific UI frameworks
-3. Network layer should be isolated from UI concerns
-4. Utilities should not import from business logic
-5. Test code should not be imported by production code
-
-Run with: python -m pytest tests/test_architecture.py -v
-"""
 
 import ast
 import os
@@ -23,12 +8,10 @@ import pytest
 
 
 class ArchitectureViolation(Exception):
-    """Raised when architecture rules are violated"""
     pass
 
 
 class DependencyAnalyzer(ast.NodeVisitor):
-    """AST visitor to analyze import dependencies"""
     
     def __init__(self, file_path: str):
         self.file_path = file_path
@@ -36,20 +19,17 @@ class DependencyAnalyzer(ast.NodeVisitor):
         self.from_imports: Set[str] = set()
     
     def visit_Import(self, node: ast.Import):
-        """Track regular imports"""
         for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
     
     def visit_ImportFrom(self, node: ast.ImportFrom):
-        """Track from imports"""
         if node.module:
             self.from_imports.add(node.module)
         self.generic_visit(node)
 
 
 def analyze_file_dependencies(file_path: Path) -> Tuple[Set[str], Set[str]]:
-    """Analyze import dependencies in a Python file"""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -60,12 +40,10 @@ def analyze_file_dependencies(file_path: Path) -> Tuple[Set[str], Set[str]]:
         
         return analyzer.imports, analyzer.from_imports
     except Exception:
-        # Skip files that can't be parsed
         return set(), set()
 
 
 def get_project_structure() -> Dict[str, List[Path]]:
-    """Analyze project structure and categorize files by layer"""
     
     project_root = Path(__file__).parent.parent
     
@@ -79,7 +57,6 @@ def get_project_structure() -> Dict[str, List[Path]]:
         'config': []
     }
     
-    # Define layer patterns
     layer_patterns = {
         'ui': [
             r'.*gui.*',
@@ -133,7 +110,6 @@ def get_project_structure() -> Dict[str, List[Path]]:
         ]
     }
     
-    # Analyze Python files
     for py_file in project_root.rglob('*.py'):
         if 'venv' in str(py_file) or '__pycache__' in str(py_file):
             continue
@@ -148,7 +124,6 @@ def get_project_structure() -> Dict[str, List[Path]]:
                 break
         
         if not categorized:
-            # Default categorization based on directory structure
             if 'gui' in str(py_file) or 'ui' in str(py_file):
                 structure['ui'].append(py_file)
             elif 'test' in str(py_file):
@@ -160,33 +135,27 @@ def get_project_structure() -> Dict[str, List[Path]]:
 
 
 def check_layer_dependencies(structure: Dict[str, List[Path]]) -> List[str]:
-    """Check for architecture violations between layers"""
     violations = []
     
-    # Define forbidden dependencies (source_layer -> forbidden_targets)
     forbidden_deps = {
-        'ui': ['data'],  # UI should not directly access data layer
-        'utils': ['business', 'ui', 'network'],  # Utils should be independent
-        'config': ['business', 'ui', 'network'],  # Config should be independent
+        'ui': ['data'],
+        'utils': ['business', 'ui', 'network'],
+        'config': ['business', 'ui', 'network'],
     }
     
-    # Analyze dependencies for each layer
     for source_layer, files in structure.items():
         if source_layer in forbidden_deps:
             for file_path in files:
                 imports, from_imports = analyze_file_dependencies(file_path)
                 all_imports = imports.union(from_imports)
                 
-                # Check against files in forbidden layers
                 for forbidden_layer in forbidden_deps[source_layer]:
                     forbidden_files = structure[forbidden_layer]
                     
                     for forbidden_file in forbidden_files:
-                        # Extract module name patterns - handle different directory structures
                         try:
                             relative_path = str(forbidden_file.relative_to(file_path.parent.parent))
                         except ValueError:
-                            # Files in different directory trees - use absolute comparison
                             relative_path = str(forbidden_file)
                         
                         module_patterns = [
@@ -195,7 +164,6 @@ def check_layer_dependencies(structure: Dict[str, List[Path]]) -> List[str]:
                             forbidden_file.name.replace('.py', '')
                         ]
                         
-                        # Check if any imports violate the rule
                         for imp in all_imports:
                             for pattern in module_patterns:
                                 if pattern in imp:
@@ -209,16 +177,14 @@ def check_layer_dependencies(structure: Dict[str, List[Path]]) -> List[str]:
 
 
 def check_cross_platform_dependencies() -> List[str]:
-    """Check for platform-specific dependencies that break portability"""
     violations = []
     
     project_root = Path(__file__).parent.parent
     
-    # Platform-specific modules that should be avoided in business logic
     platform_specific = {
-        'win32api', 'win32con', 'winsound', 'msvcrt',  # Windows
-        'termios', 'tty', 'grp', 'pwd',  # Unix/Linux
-        'CoreFoundation', 'Foundation', 'AppKit'  # macOS
+        'win32api', 'win32con', 'winsound', 'msvcrt',
+        'termios', 'tty', 'grp', 'pwd',
+        'CoreFoundation', 'Foundation', 'AppKit'
     }
     
     business_files = []
@@ -241,18 +207,15 @@ def check_cross_platform_dependencies() -> List[str]:
 
 
 def check_test_isolation() -> List[str]:
-    """Ensure test code is not imported by production code"""
     violations = []
     
     project_root = Path(__file__).parent.parent
     
-    # Find all test files
     test_files = []
     for py_file in project_root.rglob('*.py'):
         if 'test' in str(py_file).lower() or py_file.name.startswith('test_'):
             test_files.append(py_file)
     
-    # Find all production files
     production_files = []
     for py_file in project_root.rglob('*.py'):
         if ('test' not in str(py_file).lower() and 
@@ -261,7 +224,6 @@ def check_test_isolation() -> List[str]:
             '__pycache__' not in str(py_file)):
             production_files.append(py_file)
     
-    # Check if production code imports test code
     for prod_file in production_files:
         imports, from_imports = analyze_file_dependencies(prod_file)
         all_imports = imports.union(from_imports)
@@ -280,12 +242,10 @@ def check_test_isolation() -> List[str]:
 
 
 def check_circular_dependencies() -> List[str]:
-    """Check for circular dependencies between modules"""
     violations = []
     
     project_root = Path(__file__).parent.parent
     
-    # Build dependency graph
     dependency_graph = {}
     
     for py_file in project_root.rglob('*.py'):
@@ -299,18 +259,16 @@ def check_circular_dependencies() -> List[str]:
         dependency_graph[module_name] = []
         
         for imp in all_imports:
-            # Extract module name from import
             imported_module = imp.split('.')[0] if '.' in imp else imp
-            if imported_module != module_name:  # Avoid self-references
+            if imported_module != module_name:
                 dependency_graph[module_name].append(imported_module)
     
-    # Simple cycle detection (can be improved with more sophisticated algorithms)
     def has_cycle(graph, start, visited, rec_stack):
         visited[start] = True
         rec_stack[start] = True
         
         for neighbor in graph.get(start, []):
-            if neighbor in graph:  # Only check modules we know about
+            if neighbor in graph:
                 if not visited.get(neighbor, False):
                     if has_cycle(graph, neighbor, visited, rec_stack):
                         return True
@@ -331,10 +289,8 @@ def check_circular_dependencies() -> List[str]:
     return violations
 
 
-# Test Cases
 
 def test_layer_separation():
-    """Test that layers don't violate dependency rules"""
     structure = get_project_structure()
     violations = check_layer_dependencies(structure)
     
@@ -343,7 +299,6 @@ def test_layer_separation():
 
 
 def test_platform_independence():
-    """Test that business logic doesn't use platform-specific modules"""
     violations = check_cross_platform_dependencies()
     
     if violations:
@@ -351,7 +306,6 @@ def test_platform_independence():
 
 
 def test_test_isolation():
-    """Test that production code doesn't import test modules"""
     violations = check_test_isolation()
     
     if violations:
@@ -359,11 +313,9 @@ def test_test_isolation():
 
 
 def test_no_circular_dependencies():
-    """Test for circular dependencies between modules"""
     violations = check_circular_dependencies()
     
-    # Allow some expected cycles (common in large projects)
-    allowed_cycles = {'manager', 'controller', 'service'}  # These often need to reference each other
+    allowed_cycles = {'manager', 'controller', 'service'}
     
     significant_violations = [v for v in violations 
                             if not any(allowed in v.lower() for allowed in allowed_cycles)]
@@ -373,32 +325,26 @@ def test_no_circular_dependencies():
 
 
 def test_project_structure_completeness():
-    """Test that project structure analysis is comprehensive"""
     structure = get_project_structure()
     
     total_files = sum(len(files) for files in structure.values())
     
-    # Ensure we're analyzing a reasonable number of files
     assert total_files > 10, f"Only {total_files} files found - check analysis patterns"
     
-    # Ensure each layer has some files (unless it's a very small project)
     important_layers = ['business', 'ui']
     for layer in important_layers:
         assert len(structure[layer]) > 0, f"No files found in {layer} layer"
 
 
 def test_architecture_documentation():
-    """Test that architecture decisions are documented"""
     project_root = Path(__file__).parent.parent
     
-    # Check for architecture documentation
     arch_docs = list(project_root.rglob('*ARCHITECTURE*')) + list(project_root.rglob('*architecture*'))
     
     assert len(arch_docs) > 0, "No architecture documentation found. Add ARCHITECTURE.md or similar."
 
 
 if __name__ == '__main__':
-    # Run manual analysis
     print("🏗️  Architecture Analysis")
     print("=" * 50)
     
@@ -410,7 +356,6 @@ if __name__ == '__main__':
     
     all_violations = []
     
-    # Check each rule
     layer_violations = check_layer_dependencies(structure)
     all_violations.extend(layer_violations)
     

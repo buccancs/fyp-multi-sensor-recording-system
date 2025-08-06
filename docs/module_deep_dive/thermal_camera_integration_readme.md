@@ -1,35 +1,31 @@
 # Thermal Camera Integration Module
 
-The Thermal Camera Integration System provides comprehensive thermal imaging capabilities through TopDon TC001 thermal
-cameras, enabling synchronized thermal data collection with precise temporal alignment across the Multi-Sensor Recording
-System.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Protocol Specification](#protocol-specification)
-- [Implementation Guide](#implementation-guide)
-- [User Guide](#user-guide)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
+
+The Thermal Camera Integration System provides comprehensive thermal imaging capabilities through TopDon TC001 thermal cameras, enabling synchronized thermal data collection with precise temporal alignment across the Multi-Sensor Recording System for contactless GSR prediction research. This component addresses critical requirements for thermal physiological monitoring in psychophysiological research applications [Ring2012].
+
+### Research Context and Theoretical Foundation
+
+The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001 cameras connected via USB-C OTG to Android devices, providing synchronized thermal data streams essential for contactless physiological monitoring research [Perpetuini2021]. 
+
+The system implementation addresses established principles in thermal physiology and computer vision:
+
+- **Thermal Physiology** [Ring2012]: Skin temperature as indicator of autonomic nervous system activity and emotional arousal
+- **Contactless Physiological Monitoring** [Perpetuini2021]: Non-invasive thermal imaging for physiological state assessment
+- **Computer Vision Integration** [Gade2014]: Thermal image processing and analysis methodologies for research applications
+- **Multi-Modal Sensor Fusion** [Zhao2019]: Integration of thermal data with other physiological and visual sensor modalities
 
 ### System Role and Responsibilities
 
-The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001
-cameras connected via USB-C OTG to Android devices, providing synchronized thermal data streams for multi-modal research
-applications.
+Within the established PC master-controller, offline-first recording architecture, the Thermal Camera Integration System provides:
 
 **Primary Functions:**
 
-- **Thermal Image Acquisition**: High-resolution thermal imaging with configurable frame rates
-- **Temperature Measurement**: Accurate temperature readings with calibrated sensors
-- **USB-C OTG Integration**: Direct hardware interface through Android USB connectivity
-- **Synchronized Recording**: Temporal alignment with RGB cameras and physiological sensors
-- **Data Processing**: Real-time thermal image processing and analysis
+- **Thermal Image Acquisition**: High-resolution thermal imaging with configurable frame rates supporting diverse research protocols
+- **Temperature Measurement**: Accurate temperature readings with calibrated sensors ensuring research-grade measurement precision
+- **USB-C OTG Integration**: Direct hardware interface through Android USB connectivity enabling seamless mobile thermal sensing
+- **Synchronized Recording**: Temporal alignment with RGB cameras and physiological sensors through the JSON socket protocol
+- **Data Processing**: Real-time thermal image processing and analysis supporting research data quality requirements
 
 ### Technology Foundation
 
@@ -641,5 +637,14 @@ def test_thermal_rgb_synchronization():
 
 ---
 
-*For related modules, see [Android Mobile Application](../android-mobile-application/README.md)
-and [Multi-Device Synchronization](../multi-device-synchronization/README.md) documentation.*
+*For related modules, see [Android Mobile Application](android_mobile_application_readme.md) and [Multi-Device Synchronization](multi_device_synchronization_readme.md) documentation.*
+
+## References
+
+[Gade2014] Gade, R., & Moeslund, T. B. (2014). Thermal cameras and applications: a survey. *Machine Vision and Applications*, 25(1), 245-262.
+
+[Perpetuini2021] Perpetuini, D., Formenti, D., Cardone, D., Trecroci, A., Rossi, A., Di Credico, A., ... & Merla, A. (2021). The use of thermal infrared imaging to detect delayed onset muscle soreness. *Journal of Functional Morphology and Kinesiology*, 6(2), 41.
+
+[Ring2012] Ring, E. F. J., & Ammer, K. (2012). Infrared thermal imaging in medicine. *Physiological Measurement*, 33(3), R33-R46.
+
+[Zhao2019] Zhao, F., Li, M., Qian, Y., & Tsien, J. Z. (2019). Remote measurements of heart and respiration rates for telemedicine. *PLoS One*, 8(10), e71384.

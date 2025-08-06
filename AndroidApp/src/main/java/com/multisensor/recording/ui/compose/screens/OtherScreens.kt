@@ -28,13 +28,12 @@ fun DevicesScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Device overview card
+        
         DeviceOverviewCard(
             uiState = uiState,
             onRefreshClicked = { viewModel.refreshAllDevices() }
         )
         
-        // Device list
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -115,7 +114,6 @@ fun DevicesScreen(
                 )
             }
             
-            // Test results
             if (uiState.testResults.isNotEmpty()) {
                 item {
                     TestResultsCard(testResults = uiState.testResults)
@@ -371,13 +369,12 @@ fun CalibrationScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Calibration overview
+        
         CalibrationOverviewCard(
             uiState = uiState,
             onValidateSystem = { viewModel.validateSystem() }
         )
         
-        // Calibration items
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -433,14 +430,12 @@ fun CalibrationScreen(
                 )
             }
             
-            // Validation results
             if (uiState.validationErrors.isNotEmpty()) {
                 item {
                     ValidationResultsCard(validationErrors = uiState.validationErrors)
                 }
             }
             
-            // Calibration actions
             item {
                 CalibrationActionsCard(
                     onSave = { viewModel.saveCalibrationData() },
@@ -786,14 +781,13 @@ fun FilesScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Files overview
+        
         FilesOverviewCard(
             uiState = uiState,
             onRefresh = { viewModel.refreshSessions() },
             onDeleteAll = { viewModel.deleteAllSessions() }
         )
         
-        // Search bar
         OutlinedTextField(
             value = uiState.searchQuery,
             onValueChange = { viewModel.onSearchQueryChanged(it) },
@@ -816,7 +810,7 @@ fun FilesScreen(
         } else if (uiState.showEmptyState) {
             EmptyStateCard()
         } else {
-            // Sessions list
+            
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -828,7 +822,6 @@ fun FilesScreen(
                     )
                 }
                 
-                // Selected session files
                 if (uiState.selectedSession != null && uiState.sessionFiles.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -850,17 +843,16 @@ fun FilesScreen(
             }
         }
         
-        // Error/Success messages
         uiState.errorMessage?.let { error ->
             LaunchedEffect(error) {
-                // Show snackbar or handle error
+                
                 viewModel.clearError()
             }
         }
         
         uiState.successMessage?.let { success ->
             LaunchedEffect(success) {
-                // Show snackbar or handle success
+                
                 viewModel.clearSuccess()
             }
         }
@@ -1046,7 +1038,6 @@ private fun SessionCard(
                 )
             }
             
-            // Device types
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {

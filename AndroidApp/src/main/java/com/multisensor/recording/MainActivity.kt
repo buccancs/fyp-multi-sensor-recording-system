@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
-        // Check if onboarding should be shown
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
@@ -61,8 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
 
-        // Check if user wants to use the new Compose UI
-        val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true) // Default to true for testing
+        val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true) 
 
         if (useComposeUI) {
             initializeComposeUI()
@@ -220,7 +218,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // Only handle fragment navigation if using fragment UI
+        
         val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true)
         return if (!useComposeUI) {
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

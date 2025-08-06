@@ -1,10 +1,3 @@
-"""
-Graceful degradation manager for the multi-sensor recording system.
-
-This module implements strategies to handle performance limits gracefully by implementing
-backpressure mechanisms, frame dropping, and adaptive quality reduction to maintain
-system stability under high load conditions.
-"""
 
 import asyncio
 import logging
@@ -32,7 +25,6 @@ except ImportError:
 
 
 class PerformanceLevel(Enum):
-    """System performance levels for adaptive degradation."""
     OPTIMAL = "optimal"
     GOOD = "good"
     DEGRADED = "degraded"
@@ -40,7 +32,6 @@ class PerformanceLevel(Enum):
 
 
 class DegradationStrategy(Enum):
-    """Available degradation strategies."""
     FRAME_DROPPING = "frame_dropping"
     QUALITY_REDUCTION = "quality_reduction"
     RESOLUTION_REDUCTION = "resolution_reduction"
@@ -53,34 +44,27 @@ class DegradationStrategy(Enum):
 
 @dataclass
 class PerformanceThresholds:
-    """Thresholds for triggering performance degradation measures."""
     
-    # CPU usage thresholds (percentage)
     cpu_good_threshold: float = 60.0
     cpu_degraded_threshold: float = 75.0
     cpu_critical_threshold: float = 90.0
     
-    # Memory usage thresholds (percentage)
     memory_good_threshold: float = 70.0
     memory_degraded_threshold: float = 85.0
     memory_critical_threshold: float = 95.0
     
-    # Disk I/O thresholds (MB/s)
     disk_write_good_threshold: float = 50.0
     disk_write_degraded_threshold: float = 20.0
     disk_write_critical_threshold: float = 10.0
     
-    # Network thresholds (Mbps)
     network_good_threshold: float = 50.0
     network_degraded_threshold: float = 20.0
     network_critical_threshold: float = 5.0
     
-    # Queue size thresholds (number of items)
     queue_good_threshold: int = 100
     queue_degraded_threshold: int = 500
     queue_critical_threshold: int = 1000
     
-    # Response time thresholds (milliseconds)
     response_time_good_threshold: float = 100.0
     response_time_degraded_threshold: float = 500.0
     response_time_critical_threshold: float = 2000.0
@@ -88,27 +72,23 @@ class PerformanceThresholds:
 
 @dataclass
 class DegradationAction:
-    """A specific degradation action to take when thresholds are exceeded."""
     
     strategy: DegradationStrategy
     level: PerformanceLevel
     description: str
     enabled: bool = True
-    priority: int = 5  # Lower number = higher priority
+    priority: int = 5
     
-    # Action-specific parameters
-    frame_drop_rate: Optional[float] = None  # 0.0-1.0, fraction of frames to drop
-    quality_reduction_factor: Optional[float] = None  # 0.0-1.0, quality multiplier
-    resolution_scale_factor: Optional[float] = None  # 0.0-1.0, resolution multiplier
-    framerate_reduction_factor: Optional[float] = None  # 0.0-1.0, FPS multiplier
+    frame_drop_rate: Optional[float] = None
+    quality_reduction_factor: Optional[float] = None
+    resolution_scale_factor: Optional[float] = None
+    framerate_reduction_factor: Optional[float] = None
     
-    # Callback for custom actions
     custom_action: Optional[Callable[[], None]] = None
 
 
 @dataclass
 class SystemMetrics:
-    """Current system performance metrics."""
     
     timestamp: float
     cpu_percent: float
@@ -118,7 +98,6 @@ class SystemMetrics:
     queue_sizes: Dict[str, int] = field(default_factory=dict)
     response_times: Dict[str, float] = field(default_factory=dict)
     
-    # Application-specific metrics
     active_recordings: int = 0
     frame_processing_rate: float = 0.0
     preview_enabled: bool = True
@@ -126,7 +105,6 @@ class SystemMetrics:
 
 
 class FrameDropManager:
-    """Manages intelligent frame dropping to prevent memory overflow."""
     
     def __init__(self, logger: logging.Logger):
         self.logger = logger
@@ -136,13 +114,11 @@ class FrameDropManager:
         self.last_reset = time.time()
         
     def should_drop_frame(self) -> bool:
-        """Determine if the current frame should be dropped."""
         self.frames_received += 1
         
         if self.drop_rate <= 0.0:
             return False
             
-        # Use deterministic dropping based on frame count
         drop_interval = int(1.0 / self.drop_rate) if self.drop_rate > 0 else float('inf')
         
         if self.frames_received % drop_interval == 0:
@@ -153,14 +129,12 @@ class FrameDropManager:
         return False
         
     def set_drop_rate(self, rate: float):
-        """Set the frame drop rate (0.0 = no dropping, 1.0 = drop all frames)."""
         rate = max(0.0, min(1.0, rate))
         if rate != self.drop_rate:
             self.logger.info(f"FrameDropManager: Drop rate changed from {self.drop_rate:.2f} to {rate:.2f}")
             self.drop_rate = rate
             
     def get_drop_statistics(self) -> Dict[str, Any]:
-        """Get frame dropping statistics."""
         elapsed = time.time() - self.last_reset
         return {
             "frames_received": self.frames_received,
@@ -171,14 +145,12 @@ class FrameDropManager:
         }
         
     def reset_statistics(self):
-        """Reset frame dropping statistics."""
         self.frames_received = 0
         self.frames_dropped = 0
         self.last_reset = time.time()
 
 
 class AdaptiveQualityManager:
-    """Manages adaptive quality reduction based on system performance."""
     
     def __init__(self, logger: logging.Logger):
         self.logger = logger
@@ -188,21 +160,18 @@ class AdaptiveQualityManager:
         self.baseline_values = {}
         
     def set_quality_factor(self, factor: float):
-        """Set overall quality reduction factor."""
         factor = max(0.1, min(1.0, factor))
         if factor != self.current_quality_factor:
             self.logger.info(f"AdaptiveQualityManager: Quality factor changed to {factor:.2f}")
             self.current_quality_factor = factor
             
     def set_resolution_factor(self, factor: float):
-        """Set resolution reduction factor."""
         factor = max(0.25, min(1.0, factor))
         if factor != self.current_resolution_factor:
             self.logger.info(f"AdaptiveQualityManager: Resolution factor changed to {factor:.2f}")
             self.current_resolution_factor = factor
             
     def set_framerate_factor(self, factor: float):
-        """Set framerate reduction factor."""
         factor = max(0.1, min(1.0, factor))
         if factor != self.current_framerate_factor:
             self.logger.info(f"AdaptiveQualityManager: Framerate factor changed to {factor:.2f}")
@@ -211,7 +180,6 @@ class AdaptiveQualityManager:
     def get_adapted_settings(self, baseline_quality: int = 85, 
                            baseline_resolution: Tuple[int, int] = (1920, 1080),
                            baseline_framerate: float = 30.0) -> Dict[str, Any]:
-        """Get current adapted quality settings."""
         return {
             "quality": int(baseline_quality * self.current_quality_factor),
             "resolution": (
@@ -225,7 +193,6 @@ class AdaptiveQualityManager:
         }
         
     def reset_to_optimal(self):
-        """Reset all quality factors to optimal levels."""
         self.current_quality_factor = 1.0
         self.current_resolution_factor = 1.0
         self.current_framerate_factor = 1.0
@@ -233,7 +200,6 @@ class AdaptiveQualityManager:
 
 
 class BackpressureManager:
-    """Manages backpressure in data processing pipelines."""
     
     def __init__(self, logger: logging.Logger):
         self.logger = logger
@@ -243,7 +209,6 @@ class BackpressureManager:
         
     def register_queue(self, name: str, queue_obj: queue.Queue, 
                       limit: int, backpressure_callback: Optional[Callable] = None):
-        """Register a queue for backpressure monitoring."""
         self.monitored_queues[name] = queue_obj
         self.queue_limits[name] = limit
         
@@ -255,7 +220,6 @@ class BackpressureManager:
         self.logger.info(f"BackpressureManager: Registered queue '{name}' with limit {limit}")
         
     def check_backpressure(self) -> Dict[str, Any]:
-        """Check all registered queues for backpressure conditions."""
         results = {}
         
         for name, queue_obj in self.monitored_queues.items():
@@ -275,7 +239,6 @@ class BackpressureManager:
             if has_backpressure:
                 self.logger.warning(f"BackpressureManager: Backpressure detected in queue '{name}': {current_size}/{limit}")
                 
-                # Trigger callbacks
                 if name in self.backpressure_callbacks:
                     for callback in self.backpressure_callbacks[name]:
                         try:
@@ -286,42 +249,33 @@ class BackpressureManager:
         return results
         
     def get_queue_status(self) -> Dict[str, int]:
-        """Get current status of all monitored queues."""
         return {name: queue_obj.qsize() for name, queue_obj in self.monitored_queues.items()}
 
 
 class GracefulDegradationManager:
-    """Main manager for implementing graceful performance degradation strategies."""
     
     def __init__(self, thresholds: Optional[PerformanceThresholds] = None):
         self.logger = get_logger(__name__)
         self.thresholds = thresholds or PerformanceThresholds()
         
-        # Sub-managers
         self.frame_drop_manager = FrameDropManager(self.logger)
         self.quality_manager = AdaptiveQualityManager(self.logger)
         self.backpressure_manager = BackpressureManager(self.logger)
         
-        # Current state
         self.current_level = PerformanceLevel.OPTIMAL
         self.active_degradations: List[DegradationAction] = []
         self.monitoring_enabled = False
         self.monitoring_task: Optional[asyncio.Task] = None
         
-        # Degradation strategies
         self.degradation_actions = self._create_default_degradation_actions()
         
-        # Callbacks for system integration
         self.level_change_callbacks: List[Callable[[PerformanceLevel], None]] = []
         self.metrics_callbacks: List[Callable[[], SystemMetrics]] = []
         
-        # Performance history
-        self.metrics_history = deque(maxlen=60)  # Last 60 measurements
+        self.metrics_history = deque(maxlen=60)
         
     def _create_default_degradation_actions(self) -> List[DegradationAction]:
-        """Create default degradation actions for different performance levels."""
         return [
-            # Good -> Degraded level actions
             DegradationAction(
                 strategy=DegradationStrategy.PREVIEW_DISABLING,
                 level=PerformanceLevel.DEGRADED,
@@ -343,7 +297,6 @@ class GracefulDegradationManager:
                 quality_reduction_factor=0.7
             ),
             
-            # Degraded -> Critical level actions
             DegradationAction(
                 strategy=DegradationStrategy.FRAME_DROPPING,
                 level=PerformanceLevel.CRITICAL,
@@ -356,14 +309,14 @@ class GracefulDegradationManager:
                 level=PerformanceLevel.CRITICAL,
                 description="Reduce resolution to 720p",
                 priority=2,
-                resolution_scale_factor=0.67  # 1080p -> 720p
+                resolution_scale_factor=0.67
             ),
             DegradationAction(
                 strategy=DegradationStrategy.FRAMERATE_REDUCTION,
                 level=PerformanceLevel.CRITICAL,
                 description="Reduce framerate to 15 FPS",
                 priority=3,
-                framerate_reduction_factor=0.5  # 30 FPS -> 15 FPS
+                framerate_reduction_factor=0.5
             ),
             DegradationAction(
                 strategy=DegradationStrategy.NON_ESSENTIAL_DISABLING,
@@ -380,20 +333,16 @@ class GracefulDegradationManager:
         ]
         
     def add_metrics_callback(self, callback: Callable[[], SystemMetrics]):
-        """Add a callback to provide system metrics."""
         self.metrics_callbacks.append(callback)
         
     def add_level_change_callback(self, callback: Callable[[PerformanceLevel], None]):
-        """Add a callback to be notified of performance level changes."""
         self.level_change_callbacks.append(callback)
         
     def register_queue_for_backpressure(self, name: str, queue_obj: queue.Queue, 
                                       limit: int, callback: Optional[Callable] = None):
-        """Register a queue for backpressure monitoring."""
         self.backpressure_manager.register_queue(name, queue_obj, limit, callback)
         
     async def start_monitoring(self, interval_seconds: float = 5.0):
-        """Start continuous performance monitoring and degradation management."""
         if self.monitoring_enabled:
             self.logger.warning("GracefulDegradationManager: Monitoring already enabled")
             return
@@ -403,7 +352,6 @@ class GracefulDegradationManager:
         self.logger.info("GracefulDegradationManager: Started performance monitoring")
         
     async def stop_monitoring(self):
-        """Stop performance monitoring."""
         self.monitoring_enabled = False
         if self.monitoring_task:
             self.monitoring_task.cancel()
@@ -414,21 +362,16 @@ class GracefulDegradationManager:
         self.logger.info("GracefulDegradationManager: Stopped performance monitoring")
         
     async def _monitoring_loop(self, interval_seconds: float):
-        """Main monitoring loop that checks performance and applies degradation."""
         while self.monitoring_enabled:
             try:
-                # Collect metrics
                 metrics = await self._collect_system_metrics()
                 self.metrics_history.append(metrics)
                 
-                # Determine current performance level
                 new_level = self._determine_performance_level(metrics)
                 
-                # Apply degradation if level changed
                 if new_level != self.current_level:
                     await self._handle_level_change(self.current_level, new_level, metrics)
                     
-                # Check backpressure regardless of level
                 backpressure_status = self.backpressure_manager.check_backpressure()
                 if any(status["has_backpressure"] for status in backpressure_status.values()):
                     await self._handle_backpressure(backpressure_status)
@@ -442,10 +385,8 @@ class GracefulDegradationManager:
                 await asyncio.sleep(interval_seconds)
                 
     async def _collect_system_metrics(self) -> SystemMetrics:
-        """Collect current system performance metrics."""
         current_time = time.time()
         
-        # Default metrics
         metrics = SystemMetrics(
             timestamp=current_time,
             cpu_percent=0.0,
@@ -454,13 +395,11 @@ class GracefulDegradationManager:
             network_speed_mbps=0.0
         )
         
-        # Use psutil if available
         if psutil:
             try:
                 metrics.cpu_percent = psutil.cpu_percent(interval=0.1)
                 metrics.memory_percent = psutil.virtual_memory().percent
                 
-                # Estimate disk write speed (simplified)
                 disk_io = psutil.disk_io_counters()
                 if disk_io and hasattr(self, '_last_disk_io'):
                     elapsed = current_time - self._last_disk_io_time
@@ -473,12 +412,10 @@ class GracefulDegradationManager:
             except Exception as e:
                 self.logger.error(f"GracefulDegradationManager: Error collecting psutil metrics: {e}")
                 
-        # Collect application-specific metrics from callbacks
         for callback in self.metrics_callbacks:
             try:
                 app_metrics = callback()
                 if isinstance(app_metrics, SystemMetrics):
-                    # Merge application metrics
                     metrics.queue_sizes.update(app_metrics.queue_sizes)
                     metrics.response_times.update(app_metrics.response_times)
                     metrics.active_recordings = app_metrics.active_recordings
@@ -486,27 +423,22 @@ class GracefulDegradationManager:
             except Exception as e:
                 self.logger.error(f"GracefulDegradationManager: Error in metrics callback: {e}")
                 
-        # Add backpressure queue status
         queue_status = self.backpressure_manager.get_queue_status()
         metrics.queue_sizes.update(queue_status)
         
         return metrics
         
     def _determine_performance_level(self, metrics: SystemMetrics) -> PerformanceLevel:
-        """Determine current performance level based on metrics."""
-        # Check critical thresholds first
         if (metrics.cpu_percent >= self.thresholds.cpu_critical_threshold or
             metrics.memory_percent >= self.thresholds.memory_critical_threshold or
             metrics.disk_write_speed_mbps <= self.thresholds.disk_write_critical_threshold):
             return PerformanceLevel.CRITICAL
             
-        # Check degraded thresholds
         if (metrics.cpu_percent >= self.thresholds.cpu_degraded_threshold or
             metrics.memory_percent >= self.thresholds.memory_degraded_threshold or
             metrics.disk_write_speed_mbps <= self.thresholds.disk_write_degraded_threshold):
             return PerformanceLevel.DEGRADED
             
-        # Check good thresholds
         if (metrics.cpu_percent >= self.thresholds.cpu_good_threshold or
             metrics.memory_percent >= self.thresholds.memory_good_threshold or
             metrics.disk_write_speed_mbps <= self.thresholds.disk_write_good_threshold):
@@ -516,22 +448,16 @@ class GracefulDegradationManager:
         
     async def _handle_level_change(self, old_level: PerformanceLevel, 
                                  new_level: PerformanceLevel, metrics: SystemMetrics):
-        """Handle performance level changes by applying or removing degradation actions."""
         self.logger.info(f"GracefulDegradationManager: Performance level changed from {old_level.value} to {new_level.value}")
         
-        # Update current level
         old_level_obj = self.current_level
         self.current_level = new_level
         
-        # Determine which actions to apply or remove
         if new_level.value != old_level.value:
-            # Apply new degradation actions for the current level
             await self._apply_degradation_for_level(new_level, metrics)
             
-            # Remove degradation actions that are no longer needed
             await self._remove_unnecessary_degradations(new_level)
             
-        # Notify callbacks
         for callback in self.level_change_callbacks:
             try:
                 callback(new_level)
@@ -539,12 +465,9 @@ class GracefulDegradationManager:
                 self.logger.error(f"GracefulDegradationManager: Error in level change callback: {e}")
                 
     async def _apply_degradation_for_level(self, level: PerformanceLevel, metrics: SystemMetrics):
-        """Apply degradation actions appropriate for the given performance level."""
-        # Get relevant actions for this level
         relevant_actions = [action for action in self.degradation_actions 
                           if action.level == level and action.enabled]
         
-        # Sort by priority
         relevant_actions.sort(key=lambda x: x.priority)
         
         for action in relevant_actions:
@@ -553,7 +476,6 @@ class GracefulDegradationManager:
                 self.active_degradations.append(action)
                 
     async def _remove_unnecessary_degradations(self, current_level: PerformanceLevel):
-        """Remove degradation actions that are no longer necessary."""
         level_order = [PerformanceLevel.OPTIMAL, PerformanceLevel.GOOD, 
                       PerformanceLevel.DEGRADED, PerformanceLevel.CRITICAL]
         current_index = level_order.index(current_level)
@@ -561,7 +483,7 @@ class GracefulDegradationManager:
         actions_to_remove = []
         for action in self.active_degradations:
             action_index = level_order.index(action.level)
-            if action_index > current_index:  # Action is for a worse level than current
+            if action_index > current_index:
                 actions_to_remove.append(action)
                 
         for action in actions_to_remove:
@@ -569,7 +491,6 @@ class GracefulDegradationManager:
             self.active_degradations.remove(action)
             
     async def _execute_degradation_action(self, action: DegradationAction, metrics: SystemMetrics):
-        """Execute a specific degradation action."""
         self.logger.info(f"GracefulDegradationManager: Applying degradation - {action.description}")
         
         try:
@@ -593,14 +514,11 @@ class GracefulDegradationManager:
                 await self._perform_memory_cleanup()
                 
             elif action.strategy == DegradationStrategy.PREVIEW_DISABLING:
-                # This would typically integrate with the UI system
                 self.logger.info("GracefulDegradationManager: Preview disabled to save resources")
                 
             elif action.strategy == DegradationStrategy.NON_ESSENTIAL_DISABLING:
-                # This would disable non-essential features
                 self.logger.info("GracefulDegradationManager: Non-essential features disabled")
                 
-            # Execute custom action if provided
             if action.custom_action:
                 action.custom_action()
                 
@@ -608,7 +526,6 @@ class GracefulDegradationManager:
             self.logger.error(f"GracefulDegradationManager: Error executing degradation action: {e}")
             
     async def _revert_degradation_action(self, action: DegradationAction):
-        """Revert a degradation action when performance improves."""
         self.logger.info(f"GracefulDegradationManager: Reverting degradation - {action.description}")
         
         try:
@@ -618,7 +535,6 @@ class GracefulDegradationManager:
             elif action.strategy in [DegradationStrategy.QUALITY_REDUCTION,
                                    DegradationStrategy.RESOLUTION_REDUCTION,
                                    DegradationStrategy.FRAMERATE_REDUCTION]:
-                # Only reset if no other quality-related degradations are active
                 other_quality_actions = [a for a in self.active_degradations 
                                        if a != action and a.strategy in [
                                            DegradationStrategy.QUALITY_REDUCTION,
@@ -632,27 +548,22 @@ class GracefulDegradationManager:
             self.logger.error(f"GracefulDegradationManager: Error reverting degradation action: {e}")
             
     async def _perform_memory_cleanup(self):
-        """Perform aggressive memory cleanup."""
         import gc
         
         self.logger.info("GracefulDegradationManager: Performing memory cleanup")
         
-        # Force garbage collection
         collected = gc.collect()
         self.logger.debug(f"GracefulDegradationManager: Garbage collection freed {collected} objects")
         
-        # Clear frame drop statistics to free some memory
         self.frame_drop_manager.reset_statistics()
         
     async def _handle_backpressure(self, backpressure_status: Dict[str, Any]):
-        """Handle detected backpressure conditions."""
         critical_queues = [name for name, status in backpressure_status.items() 
                           if status["has_backpressure"]]
         
         if critical_queues:
             self.logger.warning(f"GracefulDegradationManager: Handling backpressure in queues: {critical_queues}")
             
-            # Apply emergency frame dropping if not already active
             if not any(action.strategy == DegradationStrategy.FRAME_DROPPING 
                       for action in self.active_degradations):
                 emergency_action = DegradationAction(
@@ -665,7 +576,6 @@ class GracefulDegradationManager:
                 self.active_degradations.append(emergency_action)
                 
     def get_current_status(self) -> Dict[str, Any]:
-        """Get current degradation manager status."""
         return {
             "current_level": self.current_level.value,
             "active_degradations": [
@@ -683,20 +593,16 @@ class GracefulDegradationManager:
         }
         
     def should_drop_frame(self) -> bool:
-        """Check if the current frame should be dropped."""
         return self.frame_drop_manager.should_drop_frame()
         
     def get_adapted_quality_settings(self, **baseline_settings) -> Dict[str, Any]:
-        """Get quality settings adapted for current performance level."""
         return self.quality_manager.get_adapted_settings(**baseline_settings)
 
 
-# Global instance for easy access
 _degradation_manager: Optional[GracefulDegradationManager] = None
 
 
 def get_degradation_manager(thresholds: Optional[PerformanceThresholds] = None) -> GracefulDegradationManager:
-    """Get the global graceful degradation manager instance."""
     global _degradation_manager
     if _degradation_manager is None:
         _degradation_manager = GracefulDegradationManager(thresholds)
@@ -704,29 +610,25 @@ def get_degradation_manager(thresholds: Optional[PerformanceThresholds] = None) 
 
 
 async def main():
-    """Example usage of the graceful degradation manager."""
     import asyncio
     
-    # Configure logging
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
     
-    # Create degradation manager with custom thresholds
     thresholds = PerformanceThresholds(
-        cpu_degraded_threshold=60.0,  # Lower threshold for demo
+        cpu_degraded_threshold=60.0,
         memory_degraded_threshold=70.0
     )
     
     manager = GracefulDegradationManager(thresholds)
     
-    # Add a simple metrics callback
     def get_test_metrics():
         return SystemMetrics(
             timestamp=time.time(),
-            cpu_percent=65.0,  # Simulate moderate CPU load
-            memory_percent=75.0,  # Simulate high memory usage
+            cpu_percent=65.0,
+            memory_percent=75.0,
             disk_write_speed_mbps=30.0,
             network_speed_mbps=40.0,
             queue_sizes={"video_processing": 150},
@@ -735,17 +637,14 @@ async def main():
     
     manager.add_metrics_callback(get_test_metrics)
     
-    # Start monitoring
     await manager.start_monitoring(interval_seconds=2.0)
     
     print("Degradation manager started. Monitoring for 30 seconds...")
     await asyncio.sleep(30)
     
-    # Get status
     status = manager.get_current_status()
     print(f"Final status: {status}")
     
-    # Stop monitoring
     await manager.stop_monitoring()
     print("Degradation manager stopped.")
 

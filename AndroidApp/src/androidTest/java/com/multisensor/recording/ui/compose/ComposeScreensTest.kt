@@ -11,9 +11,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Simple tests to verify Compose screens can be composed without crashes
- */
 @RunWith(AndroidJUnit4::class)
 class ComposeScreensTest {
 

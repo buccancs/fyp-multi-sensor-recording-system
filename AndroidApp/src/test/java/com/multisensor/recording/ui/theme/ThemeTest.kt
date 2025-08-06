@@ -9,9 +9,6 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Unit tests for Compose theme components
- */
 @RunWith(AndroidJUnit4::class)
 class ThemeTest {
 
