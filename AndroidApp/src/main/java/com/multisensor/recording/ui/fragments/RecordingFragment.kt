@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.multisensor.recording.R
 import com.multisensor.recording.databinding.FragmentRecordingBinding
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.ui.MainUiState
@@ -179,6 +182,60 @@ Try restarting the app or checking permissions."""
 
             sessionDurationText.text = state.sessionDuration
             currentFileSizeText.text = state.currentFileSize
+            
+            // Update sensor status indicators
+            updateSensorStatusIndicators()
+        }
+    }
+
+    private fun updateSensorStatusIndicators() {
+        // In a real implementation, these would be connected to actual sensor managers
+        // For now, we'll simulate status based on the camera initialization
+        
+        binding.apply {
+            // Camera status - check if preview is visible
+            val cameraConnected = rgbCameraPreview.visibility == View.VISIBLE
+            updateSensorStatus(
+                cameraStatusIcon, cameraStatusText,
+                cameraConnected, "Camera", "Connected", "Disconnected"
+            )
+            
+            // Simulate other sensor statuses for demonstration
+            // In real implementation, these would check actual sensor states
+            updateSensorStatus(
+                thermalStatusIcon, thermalStatusText,
+                false, "Thermal", "Connected", "Disconnected"
+            )
+            
+            updateSensorStatus(
+                gsrStatusIcon, gsrStatusText,
+                false, "GSR", "Connected", "Disconnected"
+            )
+            
+            updateSensorStatus(
+                pcStatusIcon, pcStatusText,
+                false, "PC", "Connected", "Disconnected"
+            )
+        }
+    }
+
+    private fun updateSensorStatus(
+        icon: ImageView,
+        text: TextView,
+        isConnected: Boolean,
+        sensorName: String,
+        connectedText: String,
+        disconnectedText: String
+    ) {
+        val context = requireContext()
+        if (isConnected) {
+            icon.setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.color.statusIndicatorConnected))
+            text.text = "$sensorName\n$connectedText"
+            text.contentDescription = "$sensorName sensor is $connectedText"
+        } else {
+            icon.setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.color.statusIndicatorDisconnected))
+            text.text = "$sensorName\n$disconnectedText"
+            text.contentDescription = "$sensorName sensor is $disconnectedText"
         }
     }
 
