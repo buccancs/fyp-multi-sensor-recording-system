@@ -300,6 +300,7 @@ class PrivacyManager(context: Context, logger: Logger) {
 - **[Layer Architecture](./docs/diagrams/14_layer_architecture.png)**: 6-layer system architecture
 - **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Logging, synchronization, error handling
 - **[Scaling Considerations](./docs/SCALING_ARCHITECTURE.md)**: Multi-controller and distributed architectures
+- **[Architecture Maintenance](./docs/ARCHITECTURE_MAINTENANCE.md)**: Guidelines for maintaining architectural integrity
 
 ## 🤝 Contributing
 
