@@ -146,8 +146,12 @@ constructor(
                         logger.debug("Received unknown Shimmer message: ${msg.what}")
                     }
                 }
-            } catch (e: Exception) {
-                logger.error("Error handling Shimmer callback", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state while handling Shimmer callback", e)
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error handling Shimmer callback", e)
             }
             true
         }

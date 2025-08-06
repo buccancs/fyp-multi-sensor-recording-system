@@ -134,8 +134,18 @@ constructor(
                 } finally {
                     cameraLock.release()
                 }
-            } catch (e: Exception) {
-                logger.error("Failed to initialize CameraRecorder", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Security exception during camera initialization - check permissions", e)
+                cleanup()
+                false
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid camera state during initialization", e)
+                cleanup()
+                false
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error during camera initialization", e)
                 cleanup()
                 false
             }

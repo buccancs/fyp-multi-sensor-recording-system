@@ -123,8 +123,34 @@ constructor(
                 }
 
                 logger.info("System initialization complete: $statusMessage")
-            } catch (e: Exception) {
-                logger.error("System initialization error", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Security exception during system initialization - check permissions", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        errorMessage = "Permission denied: ${e.message}",
+                        statusText = "Initialization failed - permissions",
+                        isLoadingPermissions = false,
+                        showErrorDialog = true,
+                        isInitialized = true,
+                        showManualControls = true
+                    )
+                }
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state during system initialization", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        errorMessage = "Device state error: ${e.message}",
+                        statusText = "Initialization failed - state",
+                        isLoadingPermissions = false,
+                        showErrorDialog = true,
+                        isInitialized = true,
+                        showManualControls = true
+                    )
+                }
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error during system initialization", e)
                 updateUiState { currentState ->
                     currentState.copy(
                         errorMessage = "System initialization failed: ${e.message}",
@@ -155,8 +181,32 @@ constructor(
                 }
 
                 logger.info("Fallback initialization complete - UI should be functional")
-            } catch (e: Exception) {
-                logger.error("Fallback initialization error", e)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Security exception during fallback initialization - check permissions", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = "Error during initialization - permissions",
+                        isInitialized = true,
+                        showManualControls = true,
+                        showPermissionsButton = true,
+                        errorMessage = "Permission denied: ${e.message}"
+                    )
+                }
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state during fallback initialization", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        statusText = "Error during initialization - state",
+                        isInitialized = true,
+                        showManualControls = true,
+                        showPermissionsButton = true,
+                        errorMessage = "Device state error: ${e.message}"
+                    )
+                }
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error during fallback initialization", e)
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Error during initialization",
@@ -221,7 +271,30 @@ constructor(
                     }
                     logger.error("Failed to start camera recording session")
                 }
-            } catch (e: Exception) {
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                logger.error("Security exception during recording start - check permissions", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        errorMessage = "Permission denied for recording: ${e.message}",
+                        statusText = "Recording start failed - permissions",
+                        showErrorDialog = true,
+                        isLoadingRecording = false
+                    )
+                }
+            } catch (e: IllegalStateException) {
+                logger.error("Invalid state during recording start", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        errorMessage = "Device not ready for recording: ${e.message}",
+                        statusText = "Recording start failed - state",
+                        showErrorDialog = true,
+                        isLoadingRecording = false
+                    )
+                }
+            } catch (e: RuntimeException) {
+                logger.error("Runtime error during recording start", e)
                 updateUiState { currentState ->
                     currentState.copy(
                         errorMessage = "Failed to start recording: ${e.message}",
@@ -230,7 +303,6 @@ constructor(
                         isLoadingRecording = false
                     )
                 }
-                logger.error("Recording start error", e)
             }
         }
     }
