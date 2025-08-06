@@ -601,5 +601,5 @@ class SessionManagementTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](../multi-device-synchronization/README.md)
-and [Networking Protocol](../networking-protocol/README.md) documentation.*
+*For related modules, see [Multi-Device Synchronization](../multi_device_synchronization_readme.md)
+and [Networking Protocol](../networking_protocol_readme.md) documentation.*
