@@ -83,19 +83,12 @@ graph TB
 
 ### Android UI Architecture
 
-#### Fragment-Based Navigation with Onboarding System
+#### Fragment-Based Navigation
 
 ```mermaid
 graph TB
     subgraph "Android Navigation Architecture"
-        OA[OnboardingActivity<br/>First-Launch Tutorial]
         MA[MainActivity<br/>Host Activity]
-        
-        subgraph "Onboarding Components"
-            OAD[OnboardingAdapter<br/>ViewPager2 Management]
-            OPF[OnboardingPageFragment<br/>Tutorial Pages]
-            PM[PermissionManager<br/>Modern Permission Handling]
-        end
         
         subgraph "Navigation Components"
             ND[Navigation Drawer<br/>Primary Navigation]
@@ -104,7 +97,7 @@ graph TB
         end
         
         subgraph "Fragment Destinations"
-            RF[RecordingFragment<br/>Recording Controls + Status Dashboard]
+            RF[RecordingFragment<br/>Recording Controls]
             DF[DevicesFragment<br/>Device Management]
             CF[CalibrationFragment<br/>Calibration Workflow]
             FF[FilesFragment<br/>Data Management]
@@ -114,14 +107,8 @@ graph TB
             UC[UIController<br/>State Management]
             MAC[MainActivityCoordinator<br/>Navigation Logic]
             NU[NavigationUtils<br/>Helper Functions]
-            SM[StatusManager<br/>Real-time Sensor Status]
         end
     end
-    
-    OA --> OAD
-    OA --> OPF
-    OA --> PM
-    OA -->|First Launch Complete| MA
     
     MA --> ND
     MA --> BN
@@ -139,101 +126,6 @@ graph TB
     MA --> UC
     UC --> MAC
     UC --> NU
-    UC --> SM
-    
-    RF --> SM
-```
-
-#### Enhanced User Experience Architecture
-
-The Android application implements comprehensive user experience enhancements including onboarding, accessibility, and real-time status monitoring following Material Design 3 principles:
-
-**Onboarding System Architecture:**
-
-```kotlin
-// Onboarding system implementation
-@AndroidEntryPoint
-class OnboardingActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityOnboardingBinding
-    private lateinit var onboardingAdapter: OnboardingAdapter
-    
-    // First-launch detection using SharedPreferences
-    private val isFirstLaunch: Boolean
-        get() = getSharedPreferences("app_prefs", MODE_PRIVATE)
-            .getBoolean("onboarding_completed", true)
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        if (!isFirstLaunch) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
-        }
-        
-        setupOnboardingFlow()
-    }
-    
-    private fun setupOnboardingFlow() {
-        binding = ActivityOnboardingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        
-        onboardingAdapter = OnboardingAdapter(this)
-        binding.viewPager.adapter = onboardingAdapter
-        
-        // Setup modern permission handling
-        setupPermissionManagement()
-    }
-}
-```
-
-**Real-Time Status Dashboard:**
-
-```kotlin
-// Enhanced RecordingFragment with sensor status dashboard
-class RecordingFragment : Fragment() {
-    private lateinit var binding: FragmentRecordingBinding
-    private lateinit var statusManager: StatusManager
-    
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRecordingBinding.inflate(inflater, container, false)
-        
-        setupSensorStatusDashboard()
-        setupAccessibilityFeatures()
-        
-        return binding.root
-    }
-    
-    private fun setupSensorStatusDashboard() {
-        statusManager = StatusManager()
-        
-        // Setup real-time status indicators
-        statusManager.observeStatus { status ->
-            updateCameraStatus(status.cameraConnected)
-            updateThermalStatus(status.thermalConnected)
-            updateGSRStatus(status.gsrConnected)
-            updatePCStatus(status.pcConnected)
-        }
-    }
-    
-    private fun setupAccessibilityFeatures() {
-        // WCAG 2.1 AA compliance setup
-        binding.apply {
-            // Content descriptions for screen readers
-            cameraStatusIcon.contentDescription = getString(R.string.camera_status_description)
-            thermalStatusIcon.contentDescription = getString(R.string.thermal_status_description)
-            gsrStatusIcon.contentDescription = getString(R.string.gsr_status_description)
-            pcStatusIcon.contentDescription = getString(R.string.pc_status_description)
-            
-            // Ensure minimum touch targets (48dp)
-            ensureMinimumTouchTargets()
-        }
-    }
-}
 ```
 
 #### Component Architecture
@@ -734,105 +626,25 @@ class StatusIndicator(QWidget):
 
 ## Accessibility
 
-### WCAG 2.1 AA Compliance Implementation
-
-The Android application achieves comprehensive WCAG 2.1 AA compliance through systematic implementation of accessibility features including onboarding accessibility, real-time status indicators, and inclusive design patterns.
+### WCAG 2.1 AA Compliance
 
 #### Visual Accessibility
 
-1. **Color Contrast**: All text-background combinations exceed 4.5:1 ratio using Material Design 3 color system
-2. **Color Independence**: Sensor status uses both color and iconography (green/red indicators + check/x symbols)
-3. **Focus Indicators**: Clear visual focus for keyboard navigation with proper focus ordering
-4. **Text Scaling**: Support for up to 200% zoom using `sp` units throughout the application
+1. **Color Contrast**: Minimum 4.5:1 ratio for normal text, 3:1 for large text
+2. **Color Independence**: Information not conveyed by color alone
+3. **Focus Indicators**: Clear visual focus for keyboard navigation
+4. **Text Scaling**: Support for up to 200% zoom without horizontal scrolling
 
-```xml
-<!-- Example Material Design 3 color implementation -->
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="@color/md_theme_on_surface"
-    android:textSize="18sp"
-    android:background="@color/md_theme_surface"
-    android:contentDescription="@string/sensor_status_overview" />
-```
+#### Screen Reader Support
 
-#### Screen Reader Support Implementation
+1. **Content Labels**: Descriptive labels for all interactive elements
+2. **Semantic Structure**: Proper heading hierarchy and landmarks
+3. **State Announcements**: Status changes announced to screen readers
+4. **Navigation Assistance**: Skip links and navigation shortcuts
 
-The application provides comprehensive screen reader compatibility through detailed content descriptions and semantic markup:
+#### Keyboard Navigation
 
-```kotlin
-// Screen reader support implementation
-class AccessibilityManager {
-    fun setupAccessibility(fragment: Fragment) {
-        fragment.view?.apply {
-            // Setup content descriptions for status indicators
-            findViewById<ImageView>(R.id.cameraStatusIcon)?.apply {
-                contentDescription = when (isConnected) {
-                    true -> context.getString(R.string.camera_connected_description)
-                    false -> context.getString(R.string.camera_disconnected_description)
-                }
-            }
-            
-            // Setup semantic grouping for sensor dashboard
-            findViewById<LinearLayout>(R.id.sensorStatusContainer)?.apply {
-                contentDescription = context.getString(R.string.sensor_dashboard_description)
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            }
-        }
-    }
-    
-    fun announceStatusChange(context: Context, sensorType: String, connected: Boolean) {
-        val announcement = context.getString(
-            if (connected) R.string.sensor_connected_announcement
-            else R.string.sensor_disconnected_announcement,
-            sensorType
-        )
-        
-        // Use AccessibilityManager to announce changes
-        val accessibilityManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) 
-            as AccessibilityManager
-        if (accessibilityManager.isEnabled) {
-            announceForAccessibility(announcement)
-        }
-    }
-}
-```
-
-1. **Content Labels**: Descriptive labels for all interactive elements including sensor status indicators
-2. **Semantic Structure**: Proper grouping of related elements with appropriate headings
-3. **State Announcements**: Real-time sensor status changes announced to screen readers
-4. **Navigation Assistance**: Clear navigation flow through onboarding and main interface
-
-#### Keyboard Navigation Enhancement
-
-```kotlin
-// Keyboard navigation setup
-class KeyboardNavigationManager {
-    fun setupKeyboardNavigation(activity: Activity) {
-        // Ensure proper tab order through onboarding
-        val onboardingElements = listOf(
-            activity.findViewById<ViewPager2>(R.id.viewPager),
-            activity.findViewById<Button>(R.id.skipButton),
-            activity.findViewById<Button>(R.id.nextButton),
-            activity.findViewById<Button>(R.id.grantPermissionsButton)
-        )
-        
-        onboardingElements.forEachIndexed { index, view ->
-            view?.apply {
-                isFocusable = true
-                nextFocusDownId = onboardingElements.getOrNull(index + 1)?.id ?: View.NO_ID
-            }
-        }
-        
-        // Setup sensor status navigation
-        setupSensorStatusNavigation(activity)
-    }
-}
-```
-
-1. **Tab Order**: Logical tab sequence through onboarding tutorial and main interface
-2. **Focus Management**: Proper focus handling during screen transitions
-3. **Keyboard Shortcuts**: Essential actions accessible via keyboard
+1. **Tab Order**: Logical tab sequence through interface
 2. **Keyboard Shortcuts**: Essential functions accessible via keyboard
 3. **Focus Management**: Proper focus handling in dynamic content
 4. **Escape Paths**: Clear exit routes from modal dialogs

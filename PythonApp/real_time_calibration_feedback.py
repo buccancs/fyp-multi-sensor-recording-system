@@ -24,6 +24,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+
 @dataclass
 class CalibrationFeedback:
     timestamp: float
@@ -36,6 +37,7 @@ class CalibrationFeedback:
     contrast_score: float
     alignment_score: Optional[float] = None
 
+
 @dataclass
 class CameraFeedConfig:
     camera_id: int
@@ -45,6 +47,7 @@ class CameraFeedConfig:
     resolution: Tuple[int, int] = (640, 480)
     enable_preview: bool = True
     quality_threshold: float = 0.7
+
 
 class CalibrationFeedbackProcessor(QThread):
     feedback_updated = pyqtSignal(str, CalibrationFeedback)
@@ -199,6 +202,7 @@ class CalibrationFeedbackProcessor(QThread):
             ),
         }
         return stats
+
 
 class RealTimeCalibrationWidget(QWidget):
 
@@ -376,6 +380,7 @@ class RealTimeCalibrationWidget(QWidget):
         if self.processor:
             self.processor.stop_processing()
 
+
 class MultiCameraCalibrationManager:
 
     def __init__(self, logger=None):
@@ -428,6 +433,7 @@ class MultiCameraCalibrationManager:
             widget.cleanup()
         self.camera_widgets.clear()
         self.feedback_history.clear()
+
 
 if __name__ == "__main__":
     import sys

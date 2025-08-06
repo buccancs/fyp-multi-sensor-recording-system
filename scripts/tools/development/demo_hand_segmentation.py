@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 """
 Hand Segmentation Demo Script
 
@@ -22,6 +22,7 @@ from hand_segmentation import (
     SessionPostProcessor,
     SegmentationMethod
 )
+
 
 def create_demo_video_with_hands(output_path: str, frames: int = 60):
     """Create a demo video with simulated hand movements."""
@@ -72,6 +73,7 @@ def create_demo_video_with_hands(output_path: str, frames: int = 60):
     writer.release()
     print(f"Demo video created with {frames} frames")
 
+
 def demonstrate_method(method_name: str, video_path: str):
     """Demonstrate a specific segmentation method."""
     print(f"\n{'='*60}")
@@ -112,6 +114,7 @@ def demonstrate_method(method_name: str, video_path: str):
         print(f"   Error: {result.error_message}")
 
     engine.cleanup()
+
 
 def compare_methods():
     """Compare all available segmentation methods."""
@@ -185,6 +188,7 @@ def compare_methods():
         print(f"   🏃 Fastest method: {fastest} ({results[fastest]['time']:.2f}s)")
         print(f"   🎯 Most detections: {most_detections} ({results[most_detections]['detections']} hands)")
 
+
 def main():
     """Main demo function."""
     print("🖐️  HAND SEGMENTATION DEMONSTRATION")
@@ -227,6 +231,7 @@ def main():
     print("   - demo_output_* directories contain processed videos")
     print("   - comparison_* directories contain performance data")
     print(f"{'='*80}")
+
 
 if __name__ == '__main__':
     main()

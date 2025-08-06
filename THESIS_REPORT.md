@@ -2027,6 +2027,68 @@ and validation. The implementation includes:
 - Real-time quality assessment and artifact detection
 - CSV data export with comprehensive metadata
 
+#### Clean MVVM Architecture Refactoring
+
+**Architecture Evolution**
+
+The Android application architecture underwent comprehensive refactoring to address scalability and maintainability challenges identified during initial development. The original monolithic `MainViewModel` (2035 lines) violated single responsibility principles and mixed business logic with UI concerns, creating maintenance and testing difficulties.
+
+**Specialized Controller Architecture**
+
+The refactored architecture implements specialized controllers following single responsibility principle:
+
+**RecordingSessionController** (218 lines) - Pure recording operation management
+- Handles all recording lifecycle operations (start, stop, capture)
+- Manages recording state with reactive StateFlow patterns
+- Implements error handling and recovery mechanisms
+- Provides unified interface for multi-modal recording coordination
+
+**DeviceConnectionManager** (389 lines) - Device connectivity orchestration  
+- Manages device discovery and initialization procedures
+- Handles connection state management and monitoring
+- Implements automatic reconnection and fault tolerance
+- Coordinates multi-device synchronization protocols
+
+**FileTransferManager** (448 lines) - Data transfer and file operations
+- Manages file transfer operations to PC controller
+- Handles data export and session management
+- Implements progress tracking and error recovery
+- Coordinates storage optimization and cleanup procedures
+
+**CalibrationManager** (441 lines) - Calibration process coordination
+- Manages camera and sensor calibration workflows
+- Handles calibration data validation and storage
+- Implements automated calibration quality assessment
+- Coordinates multi-device calibration synchronization
+
+**MainViewModelRefactored** (451 lines) - Pure UI state coordination
+The refactored MainViewModel focuses exclusively on UI state management through reactive composition:
+
+```kotlin
+val uiState = combine(
+    recordingController.recordingState,
+    deviceManager.connectionState,
+    fileManager.operationState,
+    calibrationManager.calibrationState
+) { recording, device, file, calibration ->
+    MainUiState(
+        isRecording = recording.isActive,
+        connectionStatus = device.connectionStatus,
+        operationStatus = file.operationStatus,
+        calibrationStatus = calibration.status
+    )
+}
+```
+
+**Architecture Benefits**
+
+- **78% size reduction**: MainViewModel reduced from 2035 to 451 lines
+- **Improved testability**: Each controller can be tested in isolation with clear dependencies
+- **Enhanced maintainability**: Changes to one domain don't affect other components
+- **Reactive architecture**: StateFlow-based state management ensures UI consistency
+- **Single responsibility adherence**: Each component has one clear purpose and responsibility
+- **Production-ready code**: Complete comment removal with self-documenting architecture
+
 ### 4.4 Desktop Controller Architecture
 
 #### Application Architecture

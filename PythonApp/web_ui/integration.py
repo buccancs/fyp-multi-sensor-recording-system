@@ -28,6 +28,7 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+
 class WebDashboardIntegration:
 
     def __init__(
@@ -160,7 +161,9 @@ class WebDashboardIntegration:
         else:
             return "android_devices"
 
+
 _web_integration_instance: Optional[WebDashboardIntegration] = None
+
 
 def get_web_integration(
     enable_web_ui: bool = True,
@@ -182,6 +185,7 @@ def get_web_integration(
         )
     return _web_integration_instance
 
+
 def start_web_dashboard(
     enable_web_ui: bool = True,
     web_port: int = 5000,
@@ -200,10 +204,12 @@ def start_web_dashboard(
     )
     return integration.start_web_dashboard()
 
+
 def stop_web_dashboard():
     global _web_integration_instance
     if _web_integration_instance:
         _web_integration_instance.stop_web_dashboard()
+
 
 if __name__ == "__main__":
     print("Starting Web Dashboard Integration Demo...")

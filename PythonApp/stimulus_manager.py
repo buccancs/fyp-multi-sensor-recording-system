@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+
 @dataclass
 class MonitorInfo:
     monitor_id: int
@@ -25,6 +26,7 @@ class MonitorInfo:
     geometry: QRect
     is_primary: bool = False
     dpi: float = 96.0
+
 
 @dataclass
 class StimulusConfig:
@@ -40,6 +42,7 @@ class StimulusConfig:
     font_size: int = 48
     synchronization_markers: List[int] = field(default_factory=list)
 
+
 @dataclass
 class StimulusEvent:
     event_type: str
@@ -47,6 +50,7 @@ class StimulusEvent:
     monitor_id: int
     stimulus_config: StimulusConfig
     duration_actual_ms: Optional[float] = None
+
 
 class StimulusWindow(QMainWindow):
 
@@ -135,6 +139,7 @@ class StimulusWindow(QMainWindow):
     def stop_presentation(self):
         if self.media_player:
             self.media_player.stop()
+
 
 class StimulusManager:
 
@@ -354,6 +359,7 @@ class StimulusManager:
             self.logger.info("StimulusManager cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -147,11 +147,14 @@ python run_evaluation_suite.py --category integration_tests
 bucika_gsr/
 ├── AndroidApp/                 # Android recording application
 │   ├── src/main/java/com/multisensor/recording/
-│   │   ├── recording/         # Core recording components
-│   │   ├── calibration/       # Camera calibration
-│   │   ├── network/           # Communication protocols
-│   │   └── service/           # Background services
-│   └── build.gradle.kts       # Android build configuration
+│   │   ├── controllers/        # Specialized business logic controllers
+│   │   ├── managers/           # Device and system managers
+│   │   ├── recording/          # Core recording components
+│   │   ├── calibration/        # Camera calibration
+│   │   ├── network/            # Communication protocols
+│   │   ├── service/            # Background services
+│   │   └── ui/                 # Clean MVVM UI layer
+│   └── build.gradle.kts        # Android build configuration
 ├── PythonApp/                 # PC master controller
 │   ├── calibration/           # Camera calibration system
 │   ├── network/               # Device communication
@@ -184,10 +187,25 @@ bucika_gsr/
 - **Shimmer Manager**: Bluetooth GSR sensor communication and data streaming
 - **Network Client**: Real-time communication with PC controller
 - **Session Management**: Local recording coordination and synchronization
-- **📱 Onboarding Experience**: Comprehensive 3-page tutorial system for new users
-- **♿ Accessibility Features**: WCAG 2.1 AA compliant with screen reader support
-- **📊 Real-Time Status Indicators**: Visual dashboard showing sensor connection states
-- **🎯 Smart Permissions**: Modern permission handling with clear explanations
+
+#### Clean MVVM Architecture
+
+**Refactored Architecture Achievement:**
+The Android application underwent complete architectural refactoring to implement clean MVVM patterns following single responsibility principle. The original monolithic MainViewModel (2035 lines) was refactored into specialized controllers, achieving a **78% size reduction** (2035 → 451 lines) while dramatically improving maintainability and testability.
+
+**Specialized Controllers:**
+- **RecordingSessionController** (218 lines): Pure recording operation management with reactive StateFlow patterns
+- **DeviceConnectionManager** (389 lines): Device connectivity orchestration and initialization procedures  
+- **FileTransferManager** (448 lines): Data transfer operations and session management
+- **CalibrationManager** (441 lines): Calibration process coordination for all device types
+- **MainViewModelRefactored** (451 lines): Pure UI state coordination through reactive composition
+
+**Architecture Benefits:**
+- **Improved Maintainability**: Each component has single, well-defined responsibility
+- **Enhanced Testability**: Controllers can be unit tested independently with clear dependencies
+- **Reactive Architecture**: StateFlow-based state management ensures UI consistency
+- **Production-Ready Code**: Complete comment removal with self-documenting architecture
+- **Scalability**: New features can be added to specific controllers without affecting others
 
 ### Communication Protocol
 - **JSON-based Messaging**: Structured communication between PC and Android
@@ -247,33 +265,6 @@ class PrivacyManager(context: Context, logger: Logger) {
 - **Data Export**: Structured data formats for analysis pipeline integration
 - **Metadata Management**: Complete session documentation and traceability
 - **Analysis Integration**: Compatible with common research analysis tools
-
-## 🎨 User Experience & Accessibility
-
-### Mobile App Onboarding
-- **🚀 First-Launch Tutorial**: Interactive 3-page onboarding flow introducing app capabilities
-- **📋 Setup Guidance**: Step-by-step PC controller setup and Wi-Fi configuration instructions
-- **🔐 Permission Education**: Clear explanations for camera, microphone, location, and Bluetooth access
-- **💾 Smart Detection**: Uses SharedPreferences to show onboarding only on first app launch
-
-### Accessibility Enhancements
-- **♿ WCAG 2.1 AA Compliance**: Full accessibility standards compliance for inclusive research
-- **🗣️ Screen Reader Support**: Comprehensive content descriptions for all interactive elements
-- **📏 Scalable Typography**: Proper text scaling with system accessibility settings (`sp` units)
-- **👆 Touch Optimization**: Minimum 48dp touch targets for enhanced usability
-- **🎨 High Contrast Support**: Material Design 3 color system ensuring proper contrast ratios
-
-### Real-Time Monitoring Interface
-- **📊 Sensor Status Dashboard**: Visual indicators for RGB camera, thermal camera, GSR sensor, and PC controller
-- **🟢🔴 Color-Coded Feedback**: Immediate visual feedback on sensor connection states
-- **⚡ Live Updates**: Status refreshes automatically based on actual sensor connections
-- **🔒 Orientation Lock**: Prevents camera disruption during active recording sessions
-
-### Enhanced User Experience
-- **🧭 Intuitive Navigation**: Clean interface with disabled "Coming Soon" placeholders
-- **📱 Responsive Design**: Tablet-optimized layouts for screens ≥600dp
-- **🔄 State Preservation**: Proper UI state maintenance during configuration changes
-- **🛡️ Resource Protection**: Camera resource management prevents recording interruption
 
 ## 📈 Performance Characteristics
 

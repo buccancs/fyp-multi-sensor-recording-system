@@ -1,0 +1,267 @@
+package com.multisensor.recording.controllers
+
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+import org.junit.Assert.*
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.*
+import com.multisensor.recording.recording.CameraRecorder
+import com.multisensor.recording.recording.ThermalRecorder
+import com.multisensor.recording.recording.ShimmerRecorder
+import com.multisensor.recording.service.SessionManager
+import com.multisensor.recording.util.Logger
+import kotlin.test.*
+
+/**
+ * Unit tests for RecordingSessionController
+ * 
+ * Tests the single responsibility principle implementation by verifying
+ * that the controller properly manages recording sessions across devices
+ * without handling UI concerns or other responsibilities.
+ */
+class RecordingSessionControllerTest {
+
+    @Mock
+    private lateinit var cameraRecorder: CameraRecorder
+
+    @Mock
+    private lateinit var thermalRecorder: ThermalRecorder
+
+    @Mock
+    private lateinit var shimmerRecorder: ShimmerRecorder
+
+    @Mock
+    private lateinit var sessionManager: SessionManager
+
+    @Mock
+    private lateinit var logger: Logger
+
+    @Mock
+    private lateinit var mockSessionInfo: com.multisensor.recording.recording.SessionInfo
+
+    private lateinit var controller: RecordingSessionController
+
+    @Before
+    fun setUp() {
+        MockitoAnnotations.openMocks(this)
+        controller = RecordingSessionController(
+            cameraRecorder,
+            thermalRecorder,
+            shimmerRecorder,
+            sessionManager,
+            logger
+        )
+    }
+
+    @Test
+    fun `initial state should be not recording`() {
+        val state = controller.getCurrentState()
+        
+        assertFalse("Should not be recording initially", state.isRecording)
+        assertFalse("Should not be paused initially", state.isPaused)
+        assertNull("Session ID should be null initially", state.sessionId)
+        assertNull("Recording error should be null initially", state.recordingError)
+    }
+
+    @Test
+    fun `startRecording should succeed with default config`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(true, false)).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        `when`(thermalRecorder.startRecording(sessionId)).thenReturn(true)
+        `when`(shimmerRecorder.startRecording(sessionId)).thenReturn(true)
+
+        val result = controller.startRecording()
+
+        assertTrue("Recording should start successfully", result.isSuccess)
+        assertEquals("Should return session summary", "Session started: Test Session Summary", result.getOrNull())
+        
+        val state = controller.getCurrentState()
+        assertTrue("Should be recording", state.isRecording)
+        assertEquals("Session ID should be set", sessionId, state.sessionId)
+        assertEquals("Session info should be set", "Test Session Summary", state.sessionInfo)
+        assertTrue("Camera should be recording", state.deviceStatuses.cameraRecording)
+        assertTrue("Thermal should be recording", state.deviceStatuses.thermalRecording)
+        assertTrue("Shimmer should be recording", state.deviceStatuses.shimmerRecording)
+
+        verify(cameraRecorder).startSession(true, false)
+        verify(sessionManager).createNewSession()
+        verify(thermalRecorder).startRecording(sessionId)
+        verify(shimmerRecorder).startRecording(sessionId)
+    }
+
+    @Test
+    fun `startRecording should fail if already recording`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        controller.startRecording()
+
+        val result = controller.startRecording()
+
+        assertTrue("Should fail when already recording", result.isFailure)
+        assertTrue("Should be IllegalStateException", result.exceptionOrNull() is IllegalStateException)
+    }
+
+    @Test
+    fun `startRecording should fail if camera fails to start`() = runTest {
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(null)
+
+        val result = controller.startRecording()
+
+        assertTrue("Recording should fail when camera fails", result.isFailure)
+        assertTrue("Should be RuntimeException", result.exceptionOrNull() is RuntimeException)
+        
+        val state = controller.getCurrentState()
+        assertFalse("Should not be recording", state.isRecording)
+        assertNotNull("Should have error message", state.recordingError)
+    }
+
+    @Test
+    fun `stopRecording should succeed when recording`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        `when`(cameraRecorder.stopSession()).thenReturn(mockSessionInfo)
+        controller.startRecording()
+
+        val result = controller.stopRecording()
+
+        assertTrue("Recording should stop successfully", result.isSuccess)
+        assertEquals("Should return session summary", "Test Session Summary", result.getOrNull())
+        
+        val state = controller.getCurrentState()
+        assertFalse("Should not be recording", state.isRecording)
+        assertEquals("Session info should be updated", "Test Session Summary", state.sessionInfo)
+        assertFalse("Camera should not be recording", state.deviceStatuses.cameraRecording)
+        assertFalse("Thermal should not be recording", state.deviceStatuses.thermalRecording)
+        assertFalse("Shimmer should not be recording", state.deviceStatuses.shimmerRecording)
+
+        verify(cameraRecorder).stopSession()
+        verify(thermalRecorder).stopRecording()
+        verify(shimmerRecorder).stopRecording()
+        verify(sessionManager).finalizeCurrentSession()
+    }
+
+    @Test
+    fun `stopRecording should fail if not recording`() = runTest {
+        val result = controller.stopRecording()
+
+        assertTrue("Should fail when not recording", result.isFailure)
+        assertTrue("Should be IllegalStateException", result.exceptionOrNull() is IllegalStateException)
+    }
+
+    @Test
+    fun `captureRawImage should succeed when recording`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        `when`(cameraRecorder.captureRawImage()).thenReturn(true)
+        controller.startRecording()
+
+        val result = controller.captureRawImage()
+
+        assertTrue("RAW capture should succeed", result.isSuccess)
+        verify(cameraRecorder).captureRawImage()
+    }
+
+    @Test
+    fun `captureRawImage should fail if not recording`() = runTest {
+        val result = controller.captureRawImage()
+
+        assertTrue("Should fail when not recording", result.isFailure)
+        assertTrue("Should be IllegalStateException", result.exceptionOrNull() is IllegalStateException)
+    }
+
+    @Test
+    fun `pauseRecording should succeed when recording`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        controller.startRecording()
+
+        val result = controller.pauseRecording()
+
+        assertTrue("Pause should succeed", result.isSuccess)
+        
+        val state = controller.getCurrentState()
+        assertTrue("Should still be recording", state.isRecording)
+        assertTrue("Should be paused", state.isPaused)
+    }
+
+    @Test
+    fun `resumeRecording should succeed when paused`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        controller.startRecording()
+        controller.pauseRecording()
+
+        val result = controller.resumeRecording()
+
+        assertTrue("Resume should succeed", result.isSuccess)
+        
+        val state = controller.getCurrentState()
+        assertTrue("Should still be recording", state.isRecording)
+        assertFalse("Should not be paused", state.isPaused)
+    }
+
+    @Test
+    fun `emergencyStop should clean up all devices`() = runTest {
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(any(), any())).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+        controller.startRecording()
+
+        val result = controller.emergencyStop()
+
+        assertTrue("Emergency stop should succeed", result.isSuccess)
+        
+        val state = controller.getCurrentState()
+        assertFalse("Should not be recording", state.isRecording)
+        assertFalse("Should not be paused", state.isPaused)
+        assertNull("Session ID should be null", state.sessionId)
+
+        verify(cameraRecorder).stopSession()
+        verify(thermalRecorder).stopRecording()
+        verify(shimmerRecorder).stopRecording()
+        verify(sessionManager).finalizeCurrentSession()
+    }
+
+    @Test
+    fun `clearError should reset error state`() {
+        controller.clearError()
+
+        val state = controller.getCurrentState()
+        assertNull("Error should be cleared", state.recordingError)
+    }
+
+    @Test
+    fun `recording with custom config should respect settings`() = runTest {
+        val config = RecordingSessionController.RecordingConfig(
+            recordVideo = false,
+            captureRaw = true,
+            enableThermal = false,
+            enableShimmer = false
+        )
+        val sessionId = "test_session_123"
+        `when`(cameraRecorder.startSession(false, true)).thenReturn(mockSessionInfo)
+        `when`(sessionManager.createNewSession()).thenReturn(sessionId)
+
+        val result = controller.startRecording(config)
+
+        assertTrue("Recording should start successfully", result.isSuccess)
+        
+        val state = controller.getCurrentState()
+        assertTrue("Camera should be recording", state.deviceStatuses.cameraRecording)
+        assertFalse("Thermal should not be recording", state.deviceStatuses.thermalRecording)
+        assertFalse("Shimmer should not be recording", state.deviceStatuses.shimmerRecording)
+
+        verify(cameraRecorder).startSession(false, true)
+        verify(thermalRecorder, never()).startRecording(any())
+        verify(shimmerRecorder, never()).startRecording(any())
+    }
+}

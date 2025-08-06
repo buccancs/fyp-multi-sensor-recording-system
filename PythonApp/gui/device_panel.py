@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QGroupBox, QListWidget, QVBoxLayout
 
+
 class DeviceStatusPanel(QGroupBox):
 
     def __init__(self, parent=None):

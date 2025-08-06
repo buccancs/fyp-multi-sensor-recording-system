@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 """
 Comprehensive Test Runner for All Python Tests
 ==============================================
@@ -27,8 +27,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any
 
+# Add PythonApp src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Import test modules from consolidated tests
 try:
     from consolidated_tests import (
         create_calibration_test_suite,
@@ -61,6 +63,7 @@ try:
     HAND_SEGMENTATION_TESTS_AVAILABLE = True
 except ImportError:
     HAND_SEGMENTATION_TESTS_AVAILABLE = False
+
 
 class ComprehensiveTestRunner:
     """Comprehensive test runner for all Python modules."""
@@ -116,7 +119,8 @@ class ComprehensiveTestRunner:
             "working_directory": str(Path.cwd()),
             "available_modules": {}
         }
-
+        
+        # Check for key dependencies
         dependencies = [
             ("opencv-python", "cv2"),
             ("numpy", "numpy"),
@@ -193,12 +197,14 @@ class ComprehensiveTestRunner:
         print(f"⏰ Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"🐍 Python: {sys.version.split()[0]}")
         print(f"📂 Working directory: {Path.cwd()}")
-
+        
+        # Show available test suites
         print(f"\n📋 Available test suites:")
         for suite_name, suite_info in self.available_test_suites.items():
             status = "✅ Available" if suite_info["available"] else "❌ Not Available"
             print(f"   {suite_name:20} - {status} - {suite_info['description']}")
-
+        
+        # Determine which suites to run
         if filter_suites:
             suites_to_run = [s for s in filter_suites if s in self.available_test_suites]
         else:
@@ -207,7 +213,8 @@ class ComprehensiveTestRunner:
         available_suites = [s for s in suites_to_run if self.available_test_suites[s]["available"]]
         
         print(f"\n🎯 Running {len(available_suites)} test suites...")
-
+        
+        # Run each test suite
         suite_results = {}
         overall_start_time = time.time()
         
@@ -217,7 +224,8 @@ class ComprehensiveTestRunner:
             self.results["test_suites"][suite_name] = suite_result
         
         overall_duration = time.time() - overall_start_time
-
+        
+        # Calculate summary statistics
         total_suites = len(suite_results)
         passed_suites = sum(1 for r in suite_results.values() if r["success"])
         failed_suites = total_suites - passed_suites
@@ -233,7 +241,8 @@ class ComprehensiveTestRunner:
         }
         
         self.results["overall_summary"] = summary
-
+        
+        # Print summary
         print("\n" + "=" * 80)
         print("📊 COMPREHENSIVE TEST RESULTS SUMMARY")
         print("=" * 80)
@@ -257,7 +266,8 @@ class ComprehensiveTestRunner:
             print(f"\n🎉 ALL PYTHON TESTS PASSED! 🎉")
         else:
             print(f"\n⚠️  SOME PYTHON TESTS FAILED - CHECK RESULTS ABOVE")
-
+        
+        # Save detailed results
         self._save_results()
         
         return self.results
@@ -286,15 +296,15 @@ class ComprehensiveTestRunner:
     <title>Python Comprehensive Test Results</title>
     <style>
         body {{ font-family: Arial, sans-serif; margin: 20px; }}
-        .header {{ background-color:
-        .summary {{ background-color:
-        .test-suite {{ margin: 10px 0; padding: 10px; border: 1px solid
-        .passed {{ background-color:
-        .failed {{ background-color:
-        .unavailable {{ background-color:
+        .header {{ background-color: #f0f0f0; padding: 20px; border-radius: 5px; }}
+        .summary {{ background-color: #e8f5e8; padding: 15px; margin: 20px 0; border-radius: 5px; }}
+        .test-suite {{ margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }}
+        .passed {{ background-color: #d4edda; }}
+        .failed {{ background-color: #f8d7da; }}
+        .unavailable {{ background-color: #f0f0f0; color: #666; }}
         table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
-        th, td {{ border: 1px solid
-        th {{ background-color:
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+        th {{ background-color: #f2f2f2; }}
     </style>
 </head>
 <body>
@@ -365,7 +375,8 @@ class ComprehensiveTestRunner:
 </body>
 </html>
 """
-
+        
+        # Save HTML report
         results_dir = Path("test_results")
         results_dir.mkdir(exist_ok=True)
         
@@ -381,9 +392,10 @@ class ComprehensiveTestRunner:
             print(f"⚠️  Could not save HTML report: {e}")
             return ""
 
+
 def main():
     """Main test runner entry point."""
-
+    # Parse command line arguments
     import argparse
     
     parser = argparse.ArgumentParser(description="Comprehensive Python Test Runner")
@@ -395,15 +407,19 @@ def main():
                        help="Verbose output")
     
     args = parser.parse_args()
-
+    
+    # Create and run test runner
     runner = ComprehensiveTestRunner()
     results = runner.run_all_test_suites(filter_suites=args.suites)
-
+    
+    # Generate HTML report if requested
     if args.html:
         runner.generate_html_report()
-
+    
+    # Return appropriate exit code
     overall_success = results["overall_summary"]["overall_success"]
     return 0 if overall_success else 1
+
 
 if __name__ == '__main__':
     exit_code = main()

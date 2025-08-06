@@ -23,6 +23,7 @@ from .webcam.dual_webcam_capture import DualWebcamCapture, test_dual_webcam_acce
 
 logger = get_logger(__name__)
 
+
 class CameraPreviewWidget(QFrame):
 
     def __init__(self, camera_id: int, parent=None):
@@ -82,6 +83,7 @@ class CameraPreviewWidget(QFrame):
             self.status_label.setText("Disconnected")
             self.status_label.setStyleSheet("color: red; font-weight: bold;")
         self.fps_label.setText(f"{fps:.1f} FPS")
+
 
 class DualWebcamSettingsPanel(QGroupBox):
     settings_changed = pyqtSignal(dict)
@@ -157,6 +159,7 @@ class DualWebcamSettingsPanel(QGroupBox):
         except (ValueError, IndexError):
             logger.warning(f"Could not parse resolution: {resolution_text}")
             return 1920, 1080
+
 
 class DualWebcamMainWindow(QMainWindow):
 

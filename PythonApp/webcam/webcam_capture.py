@@ -13,6 +13,7 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class WebcamCapture(QThread):
     frame_ready = pyqtSignal(QPixmap)
     recording_started = pyqtSignal(str)
@@ -251,6 +252,7 @@ class WebcamCapture(QThread):
         except Exception:
             pass
 
+
 def test_webcam_access():
     print("[DEBUG_LOG] Testing webcam access...")
     cap = cv2.VideoCapture(0)
@@ -267,6 +269,7 @@ def test_webcam_access():
         return False
     cap.release()
     return True
+
 
 if __name__ == "__main__":
     test_webcam_access()

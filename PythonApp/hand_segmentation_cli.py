@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from hand_segmentation import SessionPostProcessor, create_session_post_processor
 
+
 def main():
     parser = argparse.ArgumentParser(
         description="Hand Segmentation CLI Tool for Post-Session Processing",
@@ -86,6 +87,7 @@ Examples:
         print(f"[ERROR] {e}")
         return 1
 
+
 def add_processing_args(parser):
     parser.add_argument(
         "--method",
@@ -126,6 +128,7 @@ def add_processing_args(parser):
         help="Padding around detected hand regions (default: 20)",
     )
 
+
 def cmd_list_sessions(processor: SessionPostProcessor) -> int:
     sessions = processor.discover_sessions()
     if not sessions:
@@ -140,6 +143,7 @@ def cmd_list_sessions(processor: SessionPostProcessor) -> int:
         if processed_count > 0:
             print(f"    - {processed_count}/{len(videos)} videos already processed")
     return 0
+
 
 def cmd_process_session(processor: SessionPostProcessor, args) -> int:
     print(f"Processing session: {args.session_id}")
@@ -178,6 +182,7 @@ def cmd_process_session(processor: SessionPostProcessor, args) -> int:
         print("No videos processed.")
         return 1
 
+
 def cmd_process_video(processor: SessionPostProcessor, args) -> int:
     video_path = Path(args.video_path)
     if not video_path.exists():
@@ -211,6 +216,7 @@ def cmd_process_video(processor: SessionPostProcessor, args) -> int:
         print(f"[ERROR] Processing failed: {result.error_message}")
         return 1
 
+
 def cmd_status(processor: SessionPostProcessor, args) -> int:
     sessions = processor.discover_sessions()
     if args.session_id not in sessions:
@@ -230,6 +236,7 @@ def cmd_status(processor: SessionPostProcessor, args) -> int:
     print(f"\nSummary: {processed_count}/{len(status)} videos processed")
     return 0
 
+
 def cmd_cleanup(processor: SessionPostProcessor, args) -> int:
     sessions = processor.discover_sessions()
     if args.session_id not in sessions:
@@ -239,6 +246,7 @@ def cmd_cleanup(processor: SessionPostProcessor, args) -> int:
     processor.cleanup_session_outputs(args.session_id)
     print("Cleanup completed.")
     return 0
+
 
 if __name__ == "__main__":
     exit_code = main()

@@ -6,6 +6,7 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class ConfigManager:
 
     def __init__(self, config_path: Optional[str] = None):
@@ -150,7 +151,9 @@ class ConfigManager:
         logger.info("Configuration validation passed")
         return True
 
+
 _config_manager: Optional[ConfigManager] = None
+
 
 def get_config_manager() -> ConfigManager:
     global _config_manager
@@ -158,44 +161,58 @@ def get_config_manager() -> ConfigManager:
         _config_manager = ConfigManager()
     return _config_manager
 
+
 def get_config(key: str, default: Any = None) -> Any:
     return get_config_manager().get(key, default)
+
 
 def get_network_config() -> Dict[str, Any]:
     return get_config_manager().get_network_config()
 
+
 def get_devices_config() -> Dict[str, Any]:
     return get_config_manager().get_devices_config()
+
 
 def get_ui_config() -> Dict[str, Any]:
     return get_config_manager().get_ui_config()
 
+
 def get_calibration_config() -> Dict[str, Any]:
     return get_config_manager().get_calibration_config()
+
 
 def get_host() -> str:
     return get_config_manager().get_host()
 
+
 def get_port() -> int:
     return get_config_manager().get_port()
+
 
 def get_frame_rate() -> int:
     return get_config_manager().get_frame_rate()
 
+
 def get_resolution() -> tuple:
     return get_config_manager().get_resolution()
+
 
 def get_preview_scale() -> float:
     return get_config_manager().get_preview_scale()
 
+
 def get_calibration_pattern_size() -> tuple:
     return get_config_manager().get_calibration_pattern_size()
+
 
 def get_calibration_error_threshold() -> float:
     return get_config_manager().get_calibration_error_threshold()
 
+
 def reload_config() -> None:
     get_config_manager().reload_config()
+
 
 def validate_config() -> bool:
     return get_config_manager().validate_config()

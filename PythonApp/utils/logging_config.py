@@ -11,6 +11,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+
 class StructuredFormatter(logging.Formatter):
 
     def format(self, record):
@@ -64,6 +65,7 @@ class StructuredFormatter(logging.Formatter):
             log_entry["extra"] = extra_fields
         return json.dumps(log_entry, default=str)
 
+
 class PerformanceMonitor:
     _timing_data = {}
     _lock = threading.Lock()
@@ -109,6 +111,7 @@ class PerformanceMonitor:
         with cls._lock:
             return cls._timing_data.copy()
 
+
 class ColoredFormatter(logging.Formatter):
     COLORS = {
         "DEBUG": "\x1b[36m",
@@ -126,6 +129,7 @@ class ColoredFormatter(logging.Formatter):
         formatted = super().format(record)
         record.levelname = original_levelname
         return formatted
+
 
 class AppLogger:
     _initialized = False
@@ -383,8 +387,10 @@ class AppLogger:
             logger.error(error_msg)
             return cleanup_report
 
+
 def get_logger(name: str) -> logging.Logger:
     return AppLogger.get_logger(name)
+
 
 def performance_timer(operation_name: str = None, context: str = None):
 
@@ -406,6 +412,7 @@ def performance_timer(operation_name: str = None, context: str = None):
 
     return decorator
 
+
 def log_function_entry(func):
 
     @wraps(func)
@@ -426,6 +433,7 @@ def log_function_entry(func):
             raise
 
     return wrapper
+
 
 def log_method_entry(method):
 
@@ -452,6 +460,7 @@ def log_method_entry(method):
 
     return wrapper
 
+
 def log_exception_context(logger_name: str = None):
 
     class ExceptionLogger:
@@ -470,6 +479,7 @@ def log_exception_context(logger_name: str = None):
             return False
 
     return ExceptionLogger(logger_name)
+
 
 def log_memory_usage(context: str, logger_name: str = None):
 
@@ -495,5 +505,6 @@ def log_memory_usage(context: str, logger_name: str = None):
         return wrapper
 
     return decorator
+
 
 AppLogger.initialize()

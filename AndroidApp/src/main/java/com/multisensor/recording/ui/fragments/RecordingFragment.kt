@@ -17,7 +17,7 @@ import com.multisensor.recording.R
 import com.multisensor.recording.databinding.FragmentRecordingBinding
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModel
+import com.multisensor.recording.ui.MainViewModelRefactored
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import android.widget.Toast
@@ -29,7 +29,7 @@ class RecordingFragment : Fragment() {
     private var _binding: FragmentRecordingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModelRefactored by activityViewModels()
 
     @Inject
     lateinit var cameraRecorder: CameraRecorder

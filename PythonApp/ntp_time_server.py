@@ -10,6 +10,7 @@ from typing import Callable, Dict, List, Optional
 
 import ntplib
 
+
 @dataclass
 class TimeServerStatus:
     is_running: bool = False
@@ -21,11 +22,13 @@ class TimeServerStatus:
     requests_served: int = 0
     average_response_time_ms: float = 0.0
 
+
 @dataclass
 class TimeSyncRequest:
     client_id: str
     request_timestamp: float
     sequence_number: int = 0
+
 
 @dataclass
 class TimeSyncResponse:
@@ -34,6 +37,7 @@ class TimeSyncResponse:
     response_timestamp: float
     server_precision_ms: float
     sequence_number: int = 0
+
 
 class NTPTimeServer:
 
@@ -311,6 +315,7 @@ class NTPTimeServer:
         sync_thread.daemon = True
         sync_thread.start()
 
+
 class TimeServerManager:
 
     def __init__(self, logger=None):
@@ -343,6 +348,7 @@ class TimeServerManager:
         if self.time_server:
             return self.time_server.get_timestamp_milliseconds()
         return int(time.time() * 1000)
+
 
 if __name__ == "__main__":
     logging.basicConfig(

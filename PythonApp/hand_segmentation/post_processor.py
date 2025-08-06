@@ -7,6 +7,7 @@ from typing import Dict, List, Optional, Tuple
 from .segmentation_engine import create_segmentation_engine
 from .utils import ProcessingResult, SegmentationMethod
 
+
 class SessionPostProcessor:
 
     def __init__(self, base_recordings_dir: str = "recordings"):
@@ -189,6 +190,7 @@ class SessionPostProcessor:
         for file_path in session_dir.glob("hand_segmentation_summary_*.json"):
             print(f"[INFO] Removing summary file: {file_path}")
             file_path.unlink()
+
 
 def create_session_post_processor(
     base_recordings_dir: str = "recordings",

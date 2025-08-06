@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
+
 @dataclass
 class ConnectedDevice:
     device_id: str
@@ -19,6 +20,7 @@ class ConnectedDevice:
     status: Dict[str, Any]
     socket: socket.socket
     address: tuple
+
 
 @dataclass
 class JsonMessage:
@@ -62,6 +64,7 @@ class JsonMessage:
             logging.error(f"Error parsing JSON message: {e}")
             return None
 
+
 @dataclass
 class HelloMessage(JsonMessage):
     device_id: str = ""
@@ -82,6 +85,7 @@ class HelloMessage(JsonMessage):
             capabilities=data.get("capabilities", []),
             timestamp=data.get("timestamp"),
         )
+
 
 @dataclass
 class StatusMessage(JsonMessage):
@@ -107,6 +111,7 @@ class StatusMessage(JsonMessage):
             connected=data.get("connected", True),
             timestamp=data.get("timestamp"),
         )
+
 
 @dataclass
 class SensorDataMessage(JsonMessage):
@@ -135,6 +140,7 @@ class SensorDataMessage(JsonMessage):
             timestamp=data.get("timestamp"),
         )
 
+
 @dataclass
 class AckMessage(JsonMessage):
     cmd: str = ""
@@ -156,6 +162,7 @@ class AckMessage(JsonMessage):
             timestamp=data.get("timestamp"),
         )
 
+
 @dataclass
 class FileInfoMessage(JsonMessage):
     name: str = ""
@@ -174,6 +181,7 @@ class FileInfoMessage(JsonMessage):
             size=data.get("size", 0),
             timestamp=data.get("timestamp"),
         )
+
 
 @dataclass
 class FileChunkMessage(JsonMessage):
@@ -194,6 +202,7 @@ class FileChunkMessage(JsonMessage):
             timestamp=data.get("timestamp"),
         )
 
+
 @dataclass
 class FileEndMessage(JsonMessage):
     name: str = ""
@@ -211,6 +220,7 @@ class FileEndMessage(JsonMessage):
             timestamp=data.get("timestamp"),
         )
 
+
 @dataclass
 class StartRecordCommand(JsonMessage):
     session_id: str = ""
@@ -222,12 +232,14 @@ class StartRecordCommand(JsonMessage):
         super().__post_init__()
         self.type = "start_record"
 
+
 @dataclass
 class StopRecordCommand(JsonMessage):
 
     def __post_init__(self):
         super().__post_init__()
         self.type = "stop_record"
+
 
 @dataclass
 class FlashSyncCommand(JsonMessage):
@@ -237,6 +249,7 @@ class FlashSyncCommand(JsonMessage):
     def __post_init__(self):
         super().__post_init__()
         self.type = "flash_sync"
+
 
 @dataclass
 class BeepSyncCommand(JsonMessage):
@@ -248,6 +261,7 @@ class BeepSyncCommand(JsonMessage):
     def __post_init__(self):
         super().__post_init__()
         self.type = "beep_sync"
+
 
 class PCServer:
 
@@ -478,6 +492,7 @@ class PCServer:
             except Exception as e:
                 self.logger.error(f"Error in heartbeat monitor: {e}")
                 time.sleep(5.0)
+
 
 if __name__ == "__main__":
     logging.basicConfig(

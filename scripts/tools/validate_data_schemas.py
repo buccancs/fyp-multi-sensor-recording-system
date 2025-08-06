@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 """
 Data Schema Validation Utility
 
@@ -19,6 +19,7 @@ import sys
 from jsonschema import ValidationError
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
 
 class DataSchemaValidator:
     """Validates data files against JSON schemas."""
@@ -208,6 +209,7 @@ class DataSchemaValidator:
 
         return sessions
 
+
 def main():
     """Main entry point for the validation script."""
     parser = argparse.ArgumentParser(description="Validate data files against schemas")
@@ -296,6 +298,7 @@ def main():
         return 1
 
     return 0
+
 
 if __name__ == "__main__":
     try:

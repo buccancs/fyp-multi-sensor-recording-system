@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QApplication
 
 from .gui.enhanced_ui_main_window import EnhancedMainWindow
 
+
 def create_enhanced_ui_demo():
     print("Creating PsychoPy-inspired Enhanced UI demo...")
     app = QApplication([])
@@ -35,6 +36,7 @@ def create_enhanced_ui_demo():
     app.quit()
     return True
 
+
 if __name__ == "__main__":
     try:
         success = create_enhanced_ui_demo()
@@ -50,8 +52,10 @@ if __name__ == "__main__":
         traceback.print_exc()
         sys.exit(1)
 
+
 def main():
     create_enhanced_ui_demo()
+
 
 if __name__ == "__main__":
     main()

@@ -2167,6 +2167,62 @@ and validation. The implementation includes:
 \item CSV data export with comprehensive metadata
 
 \end{itemize}
+
+\paragraph{Clean MVVM Architecture Refactoring}
+
+\textbf{Architecture Evolution}
+
+The Android application architecture underwent significant refactoring to address scalability and maintainability challenges identified during initial development. The original monolithic \texttt{MainViewModel} (2000+ lines) violated single responsibility principles and mixed business logic with UI concerns, creating maintenance and testing difficulties.
+
+\textbf{Specialized Controller Architecture}
+
+The refactored architecture implements specialized controllers following single responsibility principle:
+
+\textbf{RecordingSessionController} - Pure recording operation management
+\begin{itemize}
+\item Handles all recording lifecycle operations (start, stop, capture)
+\item Manages recording state with reactive StateFlow patterns
+\item Implements error handling and recovery mechanisms
+\item Provides unified interface for multi-modal recording coordination
+\end{itemize}
+
+\textbf{DeviceConnectionManager} - Device connectivity orchestration
+\begin{itemize}
+\item Manages device discovery and initialization procedures
+\item Handles connection state management and monitoring
+\item Implements automatic reconnection and fault tolerance
+\item Coordinates multi-device synchronization protocols
+\end{itemize}
+
+\textbf{FileTransferManager} - Data transfer and file operations
+\begin{itemize}
+\item Manages file transfer operations to PC controller
+\item Handles data export and session management
+\item Implements progress tracking and error recovery
+\item Coordinates storage optimization and cleanup procedures
+\end{itemize}
+
+\textbf{CalibrationManager} - Calibration process coordination
+\begin{itemize}
+\item Manages camera and sensor calibration workflows
+\item Handles calibration data validation and storage
+\item Implements automated calibration quality assessment
+\item Coordinates multi-device calibration synchronization
+\end{itemize}
+
+\textbf{MainViewModelRefactored} - Pure UI state coordination
+
+The refactored MainViewModel focuses exclusively on UI state management through reactive composition, combining states from all controllers into unified UI state using Kotlin's \texttt{combine} operator.
+
+\textbf{Architecture Benefits}
+\begin{itemize}
+\item \textbf{75\% size reduction}: MainViewModel reduced from 2000+ to 500 lines
+\item \textbf{Improved testability}: Each controller can be tested in isolation with clear dependencies
+\item \textbf{Enhanced maintainability}: Changes to one domain don't affect other components
+\item \textbf{Reactive architecture}: StateFlow-based state management ensures UI consistency
+\item \textbf{Single responsibility adherence}: Each component has one clear purpose and responsibility
+\end{itemize}
+
 \subsubsection{4.4 Desktop Controller Architecture}
 
 \paragraph{Application Architecture}
