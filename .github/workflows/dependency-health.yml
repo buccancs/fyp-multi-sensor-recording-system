@@ -1,0 +1,328 @@
+name: Dependency Health Monitoring
+# Addresses Medium Priority recommendation: "Automate dependency alerts"
+# and High Priority recommendation: "Regularly update vendor SDKs"
+
+on:
+  schedule:
+    # Run weekly on Mondays at 09:00 UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      check_updates:
+        description: 'Check for vendor SDK updates online'
+        required: false
+        default: 'true'
+        type: boolean
+      generate_detailed_report:
+        description: 'Generate detailed security report'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  security-events: write
+
+jobs:
+  python-dependency-health:
+    name: Python Dependency Health Check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Test against multiple Python versions as recommended
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install safety bandit pip-audit
+          
+      - name: Check for vulnerable dependencies
+        run: |
+          echo "🔍 Checking for known vulnerabilities with Safety..."
+          safety check --json --output safety-report-py${{ matrix.python-version }}.json || true
+          
+          echo "🔍 Checking for vulnerabilities with pip-audit..."
+          pip-audit --format=json --output=pip-audit-py${{ matrix.python-version }}.json || true
+          
+      - name: Run security analysis with Bandit
+        run: |
+          echo "🔍 Running Bandit security analysis..."
+          bandit -r PythonApp/ -f json -o bandit-report-py${{ matrix.python-version }}.json || true
+          
+      - name: Upload security artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-security-reports-${{ matrix.python-version }}
+          path: |
+            *-report-py${{ matrix.python-version }}.json
+          retention-days: 30
+
+  vendor-sdk-monitoring:
+    name: Vendor SDK Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install monitoring dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+          
+      - name: Make scripts executable
+        run: chmod +x scripts/monitor_vendor_sdks.py
+        
+      - name: Run vendor SDK monitoring
+        env:
+          CHECK_UPDATES: ${{ github.event.inputs.check_updates || 'true' }}
+          GENERATE_REPORT: ${{ github.event.inputs.generate_detailed_report || 'true' }}
+        run: |
+          echo "🔍 Monitoring vendor SDKs..."
+          
+          # Run with appropriate flags based on inputs
+          if [ "$CHECK_UPDATES" = "true" ] && [ "$GENERATE_REPORT" = "true" ]; then
+            python scripts/monitor_vendor_sdks.py --check-updates --generate-report
+          elif [ "$CHECK_UPDATES" = "true" ]; then
+            python scripts/monitor_vendor_sdks.py --check-updates
+          elif [ "$GENERATE_REPORT" = "true" ]; then
+            python scripts/monitor_vendor_sdks.py --generate-report
+          else
+            python scripts/monitor_vendor_sdks.py
+          fi
+          
+      - name: Check for vendor SDK issues
+        id: vendor_check
+        run: |
+          # Check if any high-risk issues were found
+          if [ -f security_reports/vendor_sdk_report_*.json ]; then
+            REPORT_FILE=$(ls -t security_reports/vendor_sdk_report_*.json | head -1)
+            HIGH_RISKS=$(python -c "
+            import json
+            with open('$REPORT_FILE') as f:
+                data = json.load(f)
+                print(data['risk_analysis']['high_severity_count'])
+            ")
+            echo "high_risks=$HIGH_RISKS" >> $GITHUB_OUTPUT
+            
+            if [ "$HIGH_RISKS" -gt 0 ]; then
+              echo "⚠️  Found $HIGH_RISKS high-severity vendor SDK issues"
+              exit 1
+            fi
+          fi
+          
+      - name: Upload vendor SDK reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor-sdk-reports
+          path: security_reports/
+          retention-days: 90
+
+  android-dependency-health:
+    name: Android Dependency Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+          
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v4
+        
+      - name: Check for outdated dependencies
+        run: |
+          echo "🔍 Checking for outdated Gradle dependencies..."
+          cd AndroidApp
+          ./gradlew dependencyUpdates --info
+          
+      - name: Run Gradle dependency analysis
+        run: |
+          echo "🔍 Analyzing Gradle dependencies..."
+          cd AndroidApp
+          ./gradlew dependencies --configuration releaseRuntimeClasspath > gradle-dependencies.txt
+          
+      - name: Upload Android dependency reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-dependency-reports
+          path: |
+            AndroidApp/build/dependencyUpdates/
+            AndroidApp/gradle-dependencies.txt
+          retention-days: 30
+
+  generate-summary-report:
+    name: Generate Summary Report
+    needs: [python-dependency-health, vendor-sdk-monitoring, android-dependency-health]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dependency-reports/
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Generate comprehensive summary
+        run: |
+          echo "📊 Generating dependency health summary..."
+          
+          cat > dependency_summary.md << 'EOF'
+          # Dependency Health Report
+          
+          **Generated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Workflow**: ${{ github.workflow }}
+          **Run**: ${{ github.run_number }}
+          
+          ## 🐍 Python Dependency Status
+          
+          - **Versions Tested**: 3.9, 3.10, 3.11, 3.12
+          - **Security Scans**: Safety, Bandit, pip-audit
+          - **Status**: ${{ needs.python-dependency-health.result }}
+          
+          ## 📱 Android Dependency Status
+          
+          - **Gradle Dependencies**: Analyzed for updates
+          - **Build Tools**: Validated and checked
+          - **Status**: ${{ needs.android-dependency-health.result }}
+          
+          ## 🔧 Vendor SDK Status
+          
+          - **Shimmer SDK**: Monitored for beta → stable migration
+          - **Thermal Camera SDK**: Checked for updates
+          - **Risk Analysis**: Completed
+          - **Status**: ${{ needs.vendor-sdk-monitoring.result }}
+          
+          ## 📋 Recommendations
+          
+          1. **High Priority**: Review vendor SDK reports for update opportunities
+          2. **Medium Priority**: Monitor Dependabot PRs for security updates
+          3. **Low Priority**: Consider upgrading alpha/beta dependencies when stable versions are available
+          
+          ## 🔗 Detailed Reports
+          
+          - Vendor SDK reports available in workflow artifacts
+          - Python security scans available for each supported version
+          - Android dependency analysis available in artifacts
+          
+          ---
+          
+          *This report is generated automatically by the Dependency Health Monitoring workflow.*
+          EOF
+          
+      - name: Create or update issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('dependency_summary.md', 'utf8');
+            
+            // Look for existing issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['dependencies', 'automated-report'],
+              state: 'open'
+            });
+            
+            if (issues.data.length > 0) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                title: `Dependency Health Report - ${new Date().toISOString().split('T')[0]}`,
+                body: summary
+              });
+            } else {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Dependency Health Report - ${new Date().toISOString().split('T')[0]}`,
+                body: summary,
+                labels: ['dependencies', 'automated-report', 'maintenance']
+              });
+            }
+
+  notify-on-critical-issues:
+    name: Notify on Critical Issues
+    needs: [python-dependency-health, vendor-sdk-monitoring, android-dependency-health]
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+      - name: Create critical dependency issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `🚨 Critical Dependency Issues Detected - ${new Date().toISOString().split('T')[0]}`;
+            const body = `
+            # Critical Dependency Health Issues
+            
+            **Alert**: The automated dependency health check has detected critical issues that require immediate attention.
+            
+            ## ⚠️ Failed Checks
+            
+            - **Python Dependencies**: ${{ needs.python-dependency-health.result }}
+            - **Vendor SDKs**: ${{ needs.vendor-sdk-monitoring.result }} 
+            - **Android Dependencies**: ${{ needs.android-dependency-health.result }}
+            
+            ## 🔧 Immediate Actions Required
+            
+            1. Review the workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            2. Check downloaded artifacts for detailed error reports
+            3. Address any high-severity security vulnerabilities immediately
+            4. Update vendor SDKs if critical issues are found
+            
+            ## 📋 Next Steps
+            
+            - [ ] Review security scan results
+            - [ ] Update vulnerable dependencies
+            - [ ] Test updated dependencies in staging
+            - [ ] Deploy security fixes to production
+            
+            **Auto-generated by**: Dependency Health Monitoring workflow
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['critical', 'security', 'dependencies', 'high-priority']
+            });

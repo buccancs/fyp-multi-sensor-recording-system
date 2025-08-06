@@ -123,6 +123,71 @@ class MasterClockSynchronizer:
     def get_master_timestamp(self) -> float:
         return time.time()
 
+    def _validate_recording_session(self, session_id: str, target_devices: Optional[List[str]]) -> Tuple[bool, List[str]]:
+        """Validate recording session parameters and return processed target devices."""
+        if session_id in self.active_sessions:
+            self.logger.error(f"Session {session_id} already active")
+            return False, []
+        
+        if target_devices is None:
+            target_devices = list(self.connected_devices.keys())
+        
+        if not target_devices:
+            self.logger.error("No target devices available for recording")
+            return False, []
+        
+        return True, target_devices
+
+    def _check_sync_quality(self, target_devices: List[str]) -> None:
+        """Check synchronization quality for target devices."""
+        poor_sync_devices = []
+        for device_id in target_devices:
+            if device_id in self.connected_devices:
+                status = self.connected_devices[device_id]
+                if status.sync_quality < self.quality_threshold:
+                    poor_sync_devices.append(device_id)
+        
+        if poor_sync_devices:
+            self.logger.warning(f"Devices with poor sync quality: {poor_sync_devices}")
+
+    def _send_android_recording_commands(
+        self, target_devices: List[str], session_id: str, master_timestamp: float,
+        record_video: bool, record_thermal: bool, record_shimmer: bool
+    ) -> None:
+        """Send recording commands to Android devices."""
+        android_devices = [
+            d for d in target_devices
+            if d in self.connected_devices and self.connected_devices[d].device_type == "android"
+        ]
+        
+        for device_id in android_devices:
+            start_cmd = StartRecordCommand(
+                session_id=session_id,
+                record_video=record_video,
+                record_thermal=record_thermal,
+                record_shimmer=record_shimmer,
+            )
+            start_cmd.timestamp = master_timestamp
+            success = self.pc_server.send_message(device_id, start_cmd)
+            if not success:
+                self.logger.error(f"Failed to send start command to {device_id}")
+            else:
+                self.logger.info(f"Start recording command sent to {device_id}")
+
+    def _trigger_sync_callbacks(self, master_timestamp: float, session_id: str, session: 'RecordingSession') -> None:
+        """Trigger webcam and session callbacks."""
+        for callback in self.webcam_sync_callbacks:
+            try:
+                callback(master_timestamp)
+            except Exception as e:
+                self.logger.error(f"Error in webcam sync callback: {e}")
+        
+        for callback in self.session_callbacks:
+            try:
+                callback(session_id, session)
+            except Exception as e:
+                self.logger.error(f"Error in session callback: {e}")
+
     def start_synchronized_recording(
         self,
         session_id: str,
@@ -132,24 +197,12 @@ class MasterClockSynchronizer:
         record_shimmer: bool = False,
     ) -> bool:
         try:
-            if session_id in self.active_sessions:
-                self.logger.error(f"Session {session_id} already active")
+            valid, target_devices = self._validate_recording_session(session_id, target_devices)
+            if not valid:
                 return False
-            if target_devices is None:
-                target_devices = list(self.connected_devices.keys())
-            if not target_devices:
-                self.logger.error("No target devices available for recording")
-                return False
-            poor_sync_devices = []
-            for device_id in target_devices:
-                if device_id in self.connected_devices:
-                    status = self.connected_devices[device_id]
-                    if status.sync_quality < self.quality_threshold:
-                        poor_sync_devices.append(device_id)
-            if poor_sync_devices:
-                self.logger.warning(
-                    f"Devices with poor sync quality: {poor_sync_devices}"
-                )
+            
+            self._check_sync_quality(target_devices)
+            
             master_timestamp = self.get_master_timestamp()
             session = RecordingSession(
                 session_id=session_id,
@@ -161,39 +214,18 @@ class MasterClockSynchronizer:
                 sync_quality=1.0,
             )
             self.active_sessions[session_id] = session
-            android_devices = [
-                d
-                for d in target_devices
-                if d in self.connected_devices
-                and self.connected_devices[d].device_type == "android"
-            ]
-            for device_id in android_devices:
-                start_cmd = StartRecordCommand(
-                    session_id=session_id,
-                    record_video=record_video,
-                    record_thermal=record_thermal,
-                    record_shimmer=record_shimmer,
-                )
-                start_cmd.timestamp = master_timestamp
-                success = self.pc_server.send_message(device_id, start_cmd)
-                if not success:
-                    self.logger.error(f"Failed to send start command to {device_id}")
-                else:
-                    self.logger.info(f"Start recording command sent to {device_id}")
-            for callback in self.webcam_sync_callbacks:
-                try:
-                    callback(master_timestamp)
-                except Exception as e:
-                    self.logger.error(f"Error in webcam sync callback: {e}")
-            for callback in self.session_callbacks:
-                try:
-                    callback(session_id, session)
-                except Exception as e:
-                    self.logger.error(f"Error in session callback: {e}")
+            
+            self._send_android_recording_commands(
+                target_devices, session_id, master_timestamp, record_video, record_thermal, record_shimmer
+            )
+            
+            self._trigger_sync_callbacks(master_timestamp, session_id, session)
+            
             self.logger.info(
                 f"Synchronized recording started: session {session_id}, timestamp {master_timestamp}, devices: {target_devices}"
             )
             return True
+            
         except Exception as e:
             self.logger.error(f"Error starting synchronized recording: {e}")
             return False

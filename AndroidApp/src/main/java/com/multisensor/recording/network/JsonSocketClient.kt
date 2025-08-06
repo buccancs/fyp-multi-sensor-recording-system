@@ -11,7 +11,6 @@ import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class JsonSocketClient

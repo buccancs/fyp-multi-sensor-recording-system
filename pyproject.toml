@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
     "PyQt5>=5.15.11",
@@ -73,7 +74,7 @@ include = ["PythonApp*"]
 
 [tool.black]
 line-length = 88
-target-version = ['py39', 'py310', 'py311']
+target-version = ['py39', 'py310', 'py311', 'py312']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -191,6 +192,7 @@ markers = [
     "unit: marks tests as unit tests",
     "performance: marks tests as performance benchmarks",
     "security: marks tests as security validation tests",
+    "privacy: marks tests as privacy compliance tests",
     "gui: marks tests that require GUI components",
     "network: marks tests that require network connectivity",
     "hardware: marks tests that require physical hardware",

@@ -1,0 +1,58 @@
+[
+  {
+    "timestamp": 1754463397.2892766,
+    "elapsed_hours": 3.8180086347791886e-07,
+    "memory_rss_mb": 62.015625,
+    "memory_vms_mb": 437.828125,
+    "memory_percent": 0.3877048051365758,
+    "memory_available_mb": 14706.828125,
+    "cpu_percent": 0.0,
+    "open_files": 3,
+    "thread_count": 4,
+    "process_count": 155,
+    "network_connections": 0,
+    "tracemalloc_current_mb": 0.16987037658691406,
+    "tracemalloc_peak_mb": 0.22541332244873047,
+    "cpu_frequency_mhz": 2482.7275,
+    "load_average": [
+      0.05126953125,
+      0.03955078125,
+      0.02099609375
+    ],
+    "response_time_ms": null,
+    "throughput_ops_per_sec": null,
+    "error_count": 0,
+    "cpu_temperature": null,
+    "active_recording_sessions": 0,
+    "connected_devices": 0,
+    "data_processing_queue_size": 0
+  },
+  {
+    "timestamp": 1754463427.3089645,
+    "elapsed_hours": 0.00833918399280972,
+    "memory_rss_mb": 62.8203125,
+    "memory_vms_mb": 438.33203125,
+    "memory_percent": 0.3927354923284462,
+    "memory_available_mb": 14711.03125,
+    "cpu_percent": 0.0,
+    "open_files": 3,
+    "thread_count": 4,
+    "process_count": 155,
+    "network_connections": 0,
+    "tracemalloc_current_mb": 0.23652172088623047,
+    "tracemalloc_peak_mb": 1.211334228515625,
+    "cpu_frequency_mhz": 2662.298,
+    "load_average": [
+      0.02978515625,
+      0.03369140625,
+      0.01806640625
+    ],
+    "response_time_ms": null,
+    "throughput_ops_per_sec": null,
+    "error_count": 0,
+    "cpu_temperature": null,
+    "active_recording_sessions": 0,
+    "connected_devices": 0,
+    "data_processing_queue_size": 0
+  }
+]

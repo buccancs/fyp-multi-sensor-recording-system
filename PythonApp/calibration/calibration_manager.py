@@ -211,20 +211,17 @@ class CalibrationManager:
             computation_results["message"] = "Some device calibrations failed"
         return computation_results
 
-    def _compute_device_calibration(
-        self,
-        device_id: str,
-        rgb_images: List[np.ndarray],
-        thermal_images: List[np.ndarray],
-    ) -> CalibrationResult:
-        print(f"[DEBUG_LOG] Computing calibration for device {device_id}")
-        result = CalibrationResult(device_id)
+    def _detect_calibration_patterns(
+        self, rgb_images: List[np.ndarray], thermal_images: List[np.ndarray]
+    ) -> Tuple[List, List, List]:
+        """Detect chessboard patterns in RGB and thermal images."""
         object_points = self.processor.create_object_points(
             self.chessboard_size, self.square_size
         )
         rgb_image_points = []
         thermal_image_points = []
         valid_object_points = []
+        
         for i, (rgb_img, thermal_img) in enumerate(zip(rgb_images, thermal_images)):
             rgb_success, rgb_corners = self.processor.detect_chessboard_corners(
                 rgb_img, self.chessboard_size
@@ -239,61 +236,96 @@ class CalibrationManager:
                 print(f"[DEBUG_LOG] Pattern detected in frame {i} for both cameras")
             else:
                 print(f"[DEBUG_LOG] Pattern detection failed in frame {i}")
-        if len(valid_object_points) < self.min_images:
-            print(
-                f"[DEBUG_LOG] Insufficient valid frames: {len(valid_object_points)}/{self.min_images}"
-            )
-            return result
+        
+        return valid_object_points, rgb_image_points, thermal_image_points
+
+    def _calibrate_individual_cameras(
+        self, valid_object_points: List, rgb_image_points: List, 
+        thermal_image_points: List, rgb_images: List[np.ndarray], 
+        thermal_images: List[np.ndarray], result: CalibrationResult
+    ) -> Tuple[bool, bool]:
+        """Calibrate RGB and thermal cameras individually."""
         rgb_image_size = rgb_images[0].shape[1], rgb_images[0].shape[0]
         rgb_ret, rgb_camera_matrix, rgb_dist_coeffs, _, _ = cv2.calibrateCamera(
             valid_object_points, rgb_image_points, rgb_image_size, None, None
         )
+        
+        rgb_calibrated = False
         if rgb_ret:
             result.rgb_camera_matrix = rgb_camera_matrix
             result.rgb_distortion_coeffs = rgb_dist_coeffs
             result.rgb_rms_error = rgb_ret
             print(f"[DEBUG_LOG] RGB camera calibrated with RMS error: {rgb_ret:.3f}")
+            rgb_calibrated = True
+        
         thermal_image_size = thermal_images[0].shape[1], thermal_images[0].shape[0]
         thermal_ret, thermal_camera_matrix, thermal_dist_coeffs, _, _ = (
             cv2.calibrateCamera(
-                valid_object_points,
-                thermal_image_points,
-                thermal_image_size,
-                None,
-                None,
+                valid_object_points, thermal_image_points, thermal_image_size, None, None
             )
         )
+        
+        thermal_calibrated = False
         if thermal_ret:
             result.thermal_camera_matrix = thermal_camera_matrix
             result.thermal_distortion_coeffs = thermal_dist_coeffs
             result.thermal_rms_error = thermal_ret
-            print(
-                f"[DEBUG_LOG] Thermal camera calibrated with RMS error: {thermal_ret:.3f}"
+            print(f"[DEBUG_LOG] Thermal camera calibrated with RMS error: {thermal_ret:.3f}")
+            thermal_calibrated = True
+        
+        return rgb_calibrated, thermal_calibrated
+
+    def _perform_stereo_calibration(
+        self, valid_object_points: List, rgb_image_points: List, 
+        thermal_image_points: List, result: CalibrationResult, rgb_images: List[np.ndarray]
+    ) -> None:
+        """Perform stereo calibration between RGB and thermal cameras."""
+        rgb_image_size = rgb_images[0].shape[1], rgb_images[0].shape[0]
+        stereo_ret, _, _, _, _, R, T, E, F = cv2.stereoCalibrate(
+            valid_object_points, rgb_image_points, thermal_image_points,
+            result.rgb_camera_matrix, result.rgb_distortion_coeffs,
+            result.thermal_camera_matrix, result.thermal_distortion_coeffs,
+            rgb_image_size, flags=cv2.CALIB_FIX_INTRINSIC,
+        )
+        
+        if stereo_ret:
+            result.rotation_matrix = R
+            result.translation_vector = T
+            result.essential_matrix = E
+            result.fundamental_matrix = F
+            result.stereo_rms_error = stereo_ret
+            print(f"[DEBUG_LOG] Stereo calibration completed with RMS error: {stereo_ret:.3f}")
+            result.homography_matrix = self.processor.compute_homography(
+                thermal_image_points[0], rgb_image_points[0]
             )
-        if rgb_ret and thermal_ret:
-            stereo_ret, _, _, _, _, R, T, E, F = cv2.stereoCalibrate(
-                valid_object_points,
-                rgb_image_points,
-                thermal_image_points,
-                rgb_camera_matrix,
-                rgb_dist_coeffs,
-                thermal_camera_matrix,
-                thermal_dist_coeffs,
-                rgb_image_size,
-                flags=cv2.CALIB_FIX_INTRINSIC,
+
+    def _compute_device_calibration(
+        self,
+        device_id: str,
+        rgb_images: List[np.ndarray],
+        thermal_images: List[np.ndarray],
+    ) -> CalibrationResult:
+        print(f"[DEBUG_LOG] Computing calibration for device {device_id}")
+        result = CalibrationResult(device_id)
+        
+        valid_object_points, rgb_image_points, thermal_image_points = (
+            self._detect_calibration_patterns(rgb_images, thermal_images)
+        )
+        
+        if len(valid_object_points) < self.min_images:
+            print(f"[DEBUG_LOG] Insufficient valid frames: {len(valid_object_points)}/{self.min_images}")
+            return result
+        
+        rgb_calibrated, thermal_calibrated = self._calibrate_individual_cameras(
+            valid_object_points, rgb_image_points, thermal_image_points, 
+            rgb_images, thermal_images, result
+        )
+        
+        if rgb_calibrated and thermal_calibrated:
+            self._perform_stereo_calibration(
+                valid_object_points, rgb_image_points, thermal_image_points, result, rgb_images
             )
-            if stereo_ret:
-                result.rotation_matrix = R
-                result.translation_vector = T
-                result.essential_matrix = E
-                result.fundamental_matrix = F
-                result.stereo_rms_error = stereo_ret
-                print(
-                    f"[DEBUG_LOG] Stereo calibration completed with RMS error: {stereo_ret:.3f}"
-                )
-                result.homography_matrix = self.processor.compute_homography(
-                    thermal_image_points[0], rgb_image_points[0]
-                )
+        
         result.quality_assessment = self._assess_calibration_quality(result)
         result.calibration_timestamp = datetime.now().isoformat()
         return result

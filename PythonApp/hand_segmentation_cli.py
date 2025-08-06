@@ -8,10 +8,39 @@ from hand_segmentation import SessionPostProcessor, create_session_post_processo
 
 
 def main():
+    """Main entry point for hand segmentation CLI tool."""
+    parser = _create_argument_parser()
+    args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        return 1
+    
+    processor = create_session_post_processor(args.recordings_dir)
+    return _execute_command(processor, args)
+
+
+def _create_argument_parser():
+    """Create and configure the argument parser with all subcommands."""
     parser = argparse.ArgumentParser(
         description="Hand Segmentation CLI Tool for Post-Session Processing",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
+        epilog=_get_help_examples(),
+    )
+    
+    parser.add_argument(
+        "--recordings-dir",
+        default="recordings",
+        help="Base directory containing session recordings (default: recordings)",
+    )
+    
+    _add_subcommands(parser)
+    return parser
+
+
+def _get_help_examples():
+    """Return formatted help examples for the CLI."""
+    return """
 Examples:
   python hand_segmentation_cli.py list-sessions
 
@@ -29,57 +58,56 @@ Examples:
     --max-hands 2 \\
     --output-cropped \\
     --output-masks
-        """,
-    )
-    parser.add_argument(
-        "--recordings-dir",
-        default="recordings",
-        help="Base directory containing session recordings (default: recordings)",
-    )
+        """
+
+
+def _add_subcommands(parser):
+    """Add all subcommands to the parser."""
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
-    list_parser = subparsers.add_parser(
-        "list-sessions", help="List available sessions that contain videos"
-    )
-    session_parser = subparsers.add_parser(
-        "process-session", help="Process all videos in a session"
-    )
+    
+    # List sessions command
+    subparsers.add_parser("list-sessions", help="List available sessions that contain videos")
+    
+    # Process session command
+    session_parser = subparsers.add_parser("process-session", help="Process all videos in a session")
     session_parser.add_argument("session_id", help="Session ID to process")
     add_processing_args(session_parser)
-    video_parser = subparsers.add_parser(
-        "process-video", help="Process a single video file"
-    )
+    
+    # Process video command
+    video_parser = subparsers.add_parser("process-video", help="Process a single video file")
     video_parser.add_argument("video_path", help="Path to video file")
-    video_parser.add_argument(
-        "--output-dir", help="Output directory (default: same directory as video)"
-    )
+    video_parser.add_argument("--output-dir", help="Output directory (default: same directory as video)")
     add_processing_args(video_parser)
-    status_parser = subparsers.add_parser(
-        "status", help="Check processing status of a session"
-    )
+    
+    # Status command
+    status_parser = subparsers.add_parser("status", help="Check processing status of a session")
     status_parser.add_argument("session_id", help="Session ID to check")
-    cleanup_parser = subparsers.add_parser(
-        "cleanup", help="Clean up segmentation outputs for a session"
-    )
+    
+    # Cleanup command
+    cleanup_parser = subparsers.add_parser("cleanup", help="Clean up segmentation outputs for a session")
     cleanup_parser.add_argument("session_id", help="Session ID to clean up")
-    args = parser.parse_args()
-    if not args.command:
-        parser.print_help()
-        return 1
-    processor = create_session_post_processor(args.recordings_dir)
+
+
+def _execute_command(processor, args):
+    """Execute the specified command with error handling."""
     try:
-        if args.command == "list-sessions":
-            return cmd_list_sessions(processor)
-        elif args.command == "process-session":
-            return cmd_process_session(processor, args)
-        elif args.command == "process-video":
-            return cmd_process_video(processor, args)
-        elif args.command == "status":
-            return cmd_status(processor, args)
-        elif args.command == "cleanup":
-            return cmd_cleanup(processor, args)
+        command_map = {
+            "list-sessions": cmd_list_sessions,
+            "process-session": cmd_process_session,
+            "process-video": cmd_process_video,
+            "status": cmd_status,
+            "cleanup": cmd_cleanup,
+        }
+        
+        if args.command in command_map:
+            if args.command == "list-sessions":
+                return command_map[args.command](processor)
+            else:
+                return command_map[args.command](processor, args)
         else:
             print(f"Unknown command: {args.command}")
             return 1
+            
     except KeyboardInterrupt:
         print("\n[INFO] Processing interrupted by user")
         return 1

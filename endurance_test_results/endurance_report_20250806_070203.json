@@ -1,0 +1,70 @@
+{
+  "test_summary": {
+    "start_time": "2025-08-06T07:00:33.500026",
+    "end_time": "2025-08-06T07:02:03.564900",
+    "total_duration_hours": 0.008343005710177952,
+    "target_duration_hours": 0.008333333333333333,
+    "completion_percentage": 100.11606852213542,
+    "samples_collected": 1
+  },
+  "memory_analysis": {
+    "initial_memory_mb": 62.28515625,
+    "final_memory_mb": 62.28515625,
+    "peak_memory_mb": 62.28515625,
+    "memory_growth_mb": 0.0,
+    "memory_growth_percent": 0.0,
+    "leak_detection": {
+      "start_memory_mb": 62.28515625,
+      "current_memory_mb": 62.28515625,
+      "peak_memory_mb": 62.28515625,
+      "leak_rate_mb_per_hour": 0.0,
+      "gc_collections": 0,
+      "unreachable_objects": 0,
+      "is_leak_suspected": false,
+      "trend_analysis": "Insufficient data"
+    }
+  },
+  "performance_analysis": {
+    "baseline_cpu_percent": 0.0,
+    "final_cpu_percent": 0.0,
+    "average_cpu_percent": 0.0,
+    "peak_cpu_percent": 0.0,
+    "cpu_degradation": 0.0,
+    "thread_count_final": 4,
+    "open_files_final": 1
+  },
+  "system_stability": {
+    "gc_collections": 0,
+    "objects_collected": 0,
+    "network_connections": 0,
+    "disk_io_total_read_mb": 829.1259765625,
+    "disk_io_total_write_mb": 1965.205078125
+  },
+  "workload_performance": {
+    "frames_processed": 288,
+    "messages_sent": 300,
+    "calibrations_performed": 0,
+    "data_written_mb": 15.0
+  },
+  "recommendations": [
+    "System performed well during endurance testing. No major issues detected."
+  ],
+  "detailed_metrics": [
+    {
+      "timestamp": 1754463663.534849,
+      "elapsed_hours": 0.008343005710177952,
+      "memory_rss_mb": 62.28515625,
+      "memory_vms_mb": 518.03515625,
+      "memory_percent": 0.3893898411377363,
+      "cpu_percent": 0.0,
+      "thread_count": 4,
+      "open_files": 1,
+      "network_connections": 0,
+      "disk_io_read_mb": 829.1259765625,
+      "disk_io_write_mb": 1965.205078125,
+      "gpu_usage_percent": null,
+      "gpu_memory_mb": null,
+      "temperature_cpu": null
+    }
+  ]
+}
