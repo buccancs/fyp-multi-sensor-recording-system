@@ -79,7 +79,7 @@ class RecordingFragment : Fragment() {
                     visibility = View.VISIBLE
                     text = "Initializing camera..."
                 }
-                
+
                 val textureView = binding.rgbCameraPreview
 
                 textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
@@ -88,7 +88,7 @@ class RecordingFragment : Fragment() {
                             initializeCameraWithRetry(textureView)
                         }
                     }
-                    
+
                     override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
                     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = true
                     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
@@ -97,7 +97,7 @@ class RecordingFragment : Fragment() {
                 if (textureView.isAvailable) {
                     initializeCameraWithRetry(textureView)
                 }
-                
+
             } catch (e: Exception) {
                 binding.rgbCameraPreview.visibility = View.GONE
                 binding.previewPlaceholderText.apply {
@@ -108,11 +108,11 @@ class RecordingFragment : Fragment() {
             }
         }
     }
-    
+
     private suspend fun initializeCameraWithRetry(textureView: TextureView) {
         try {
             binding.previewPlaceholderText.text = "Connecting to camera..."
-            
+
             val initialized = cameraRecorder.initialize(textureView)
 
             if (initialized) {
@@ -128,7 +128,7 @@ class RecordingFragment : Fragment() {
                 binding.previewPlaceholderText.apply {
                     visibility = View.VISIBLE
                     text = """Camera initialization failed
-                    
+
 This device may not support:
 • RAW image capture
 • Advanced camera features
@@ -198,12 +198,12 @@ Try restarting the app or checking permissions."""
                 thermalStatusIcon, thermalStatusText,
                 false, "Thermal", "Connected", "Disconnected"
             )
-            
+
             updateSensorStatus(
                 gsrStatusIcon, gsrStatusText,
                 false, "GSR", "Connected", "Disconnected"
             )
-            
+
             updateSensorStatus(
                 pcStatusIcon, pcStatusText,
                 false, "PC", "Connected", "Disconnected"

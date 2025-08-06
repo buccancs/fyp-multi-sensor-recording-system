@@ -28,19 +28,19 @@ class PerformanceManagementComprehensiveTest {
 
     @Mock
     private lateinit var mockContext: Context
-    
+
     @Mock
     private lateinit var mockPowerManager: PowerManager
-    
+
     @Mock
     private lateinit var mockBatteryManager: BatteryManager
-    
+
     @Mock
     private lateinit var mockConnectivityManager: ConnectivityManager
-    
+
     @Mock
     private lateinit var mockNetworkInfo: NetworkInfo
-    
+
     private lateinit var powerManager: com.multisensor.recording.performance.PowerManager
     private lateinit var networkOptimizer: NetworkOptimizer
     private lateinit var performanceMonitor: PerformanceMonitor
@@ -69,9 +69,9 @@ class PerformanceManagementComprehensiveTest {
             wakeLocksEnabled = true,
             backgroundProcessingAllowed = true
         )
-        
+
         val result = powerManager.initialize(config)
-        
+
         assertTrue(result.isSuccess)
         assertTrue(powerManager.isInitialized())
     }
@@ -85,12 +85,12 @@ class PerformanceManagementComprehensiveTest {
             putExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_DISCHARGING)
             putExtra(BatteryManager.EXTRA_TEMPERATURE, 280)
         }
-        
+
         whenever(mockContext.registerReceiver(any(), any()))
             .thenReturn(batteryIntent)
-        
+
         val batteryInfo = powerManager.getCurrentBatteryInfo()
-        
+
         assertEquals(75, batteryInfo.level)
         assertEquals(BatteryStatus.DISCHARGING, batteryInfo.status)
         assertEquals(28.0f, batteryInfo.temperature, 0.1f)
@@ -105,15 +105,15 @@ class PerformanceManagementComprehensiveTest {
             ThermalState.HOT to 45.0f,
             ThermalState.CRITICAL to 55.0f
         )
-        
+
         for ((expectedState, temperature) in thermalStates) {
             val thermalInfo = ThermalInfo(temperature, expectedState)
-            
+
             whenever(mockPowerManager.currentThermalStatus)
                 .thenReturn(expectedState.androidThermalStatus)
-            
+
             val managementAction = powerManager.handleThermalState(thermalInfo)
-            
+
             when (expectedState) {
                 ThermalState.NORMAL -> {
                     assertEquals(ThermalAction.NONE, managementAction.primaryAction)
@@ -139,9 +139,9 @@ class PerformanceManagementComprehensiveTest {
             temperature = 30.0f,
             voltage = 3.7f
         )
-        
+
         val optimizationStrategy = powerManager.createOptimizationStrategy(lowBatteryScenario)
-        
+
         assertTrue(optimizationStrategy.reduceCpuUsage)
         assertTrue(optimizationStrategy.limitBackgroundTasks)
         assertTrue(optimizationStrategy.reduceScreenBrightness)
@@ -159,9 +159,9 @@ class PerformanceManagementComprehensiveTest {
             prioritizationEnabled = true,
             latencyOptimizationEnabled = true
         )
-        
+
         val result = networkOptimizer.initialize(config)
-        
+
         assertTrue(result.isSuccess)
         assertTrue(networkOptimizer.isInitialized())
     }
@@ -175,9 +175,9 @@ class PerformanceManagementComprehensiveTest {
             .thenReturn(true)
         whenever(mockNetworkInfo.type)
             .thenReturn(ConnectivityManager.TYPE_WIFI)
-        
+
         val networkAnalysis = networkOptimizer.analyzeNetworkPerformance()
-        
+
         assertNotNull(networkAnalysis.connectionType)
         assertNotNull(networkAnalysis.bandwidth)
         assertNotNull(networkAnalysis.latency)

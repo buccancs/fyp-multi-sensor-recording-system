@@ -178,6 +178,10 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.bundles.networking)
+    
+    // Security dependencies
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("androidx.security:security-identity-credential:1.0.0-alpha03")
 
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
     implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))

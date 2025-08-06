@@ -109,16 +109,21 @@
     "file_transfer_queue_size": 50
   },
   "security": {
-    "encryption_enabled": false,
-    "authentication_required": false,
+    "encryption_enabled": true,
+    "authentication_required": true,
     "allowed_devices": [],
     "device_whitelist_enabled": false,
-    "secure_transfer": false,
+    "secure_transfer": true,
+    "tls_version": "1.3",
+    "certificate_pinning_enabled": true,
+    "auth_token_min_length": 32,
+    "session_timeout_minutes": 30,
     "_comments": {
-      "encryption_enabled": "Set to true for production deployments with sensitive data",
-      "authentication_required": "Enable for multi-user or shared network environments",
-      "device_whitelist_enabled": "Recommended for production to limit device access",
-      "security_notes": "Current settings optimized for research lab environments with controlled network access"
+      "encryption_enabled": "Now enabled for production deployments with sensitive data",
+      "authentication_required": "Enabled for secure multi-user or shared network environments",
+      "device_whitelist_enabled": "Can be enabled for production to limit device access",
+      "secure_transfer": "TLS/SSL enabled for all network communications",
+      "security_notes": "Enhanced security settings for research data protection and privacy compliance"
     }
   }
 }

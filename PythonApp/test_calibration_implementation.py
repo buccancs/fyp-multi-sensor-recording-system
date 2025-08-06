@@ -1,4 +1,3 @@
-
 """
 Test calibration implementation functionality.
 This simulates the missing test_calibration_implementation.py file mentioned in README.

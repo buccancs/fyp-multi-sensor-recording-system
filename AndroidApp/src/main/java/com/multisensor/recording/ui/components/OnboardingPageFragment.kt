@@ -42,10 +42,10 @@ class OnboardingPageFragment : Fragment() {
         binding.apply {
             titleText.text = title
             titleText.contentDescription = "Tutorial page title: $title"
-            
+
             descriptionText.text = description
             descriptionText.contentDescription = "Tutorial description: $description"
-            
+
             iconImage.setImageResource(iconRes)
             iconImage.contentDescription = "Tutorial page icon"
 
