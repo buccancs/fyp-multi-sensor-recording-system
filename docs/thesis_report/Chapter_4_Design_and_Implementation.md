@@ -949,6 +949,186 @@ The camera recording system provides comprehensive error handling, quality valid
 ensure reliable data collection throughout extended research sessions while maintaining optimal battery efficiency and
 thermal management.
 
+### 4.2.5 Advanced Architecture Features
+
+**Dependency Injection Framework** (`AndroidApp/src/main/java/com/multisensor/recording/di/`):
+
+The Android application implements a comprehensive dependency injection framework using Hilt, providing sophisticated component lifecycle management and testability enhancements essential for research-grade applications.
+
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    
+    @Provides
+    @Singleton
+    fun provideSessionManager(
+        networkManager: NetworkManager,
+        storageManager: StorageManager,
+        securityManager: SecurityManager
+    ): SessionManager = SessionManagerImpl(networkManager, storageManager, securityManager)
+    
+    @Provides
+    @Singleton
+    fun providePerformanceOptimizer(
+        context: Context,
+        systemMonitor: SystemMonitor
+    ): PerformanceOptimizer = PerformanceOptimizerImpl(context, systemMonitor)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object SecurityModule {
+    
+    @Provides
+    @Singleton
+    fun provideSecurityManager(
+        encryptionManager: EncryptionManager,
+        privacyManager: PrivacyManager
+    ): SecurityManager = SecurityManagerImpl(encryptionManager, privacyManager)
+}
+```
+
+**Performance Optimization Framework** (`AndroidApp/src/main/java/com/multisensor/recording/performance/`):
+
+Advanced performance optimization capabilities include intelligent power management, network optimization, and adaptive resource allocation for sustained recording sessions.
+
+```kotlin
+@Singleton
+class PowerManager @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val logger: Logger
+) {
+    
+    private var powerSaveMode: PowerSaveMode = PowerSaveMode.NORMAL
+    private var adaptiveFrameRateEnabled: Boolean = true
+    private var backgroundProcessingOptimized: Boolean = false
+    
+    enum class PowerSaveMode {
+        NORMAL,
+        OPTIMIZED,
+        AGGRESSIVE
+    }
+    
+    fun startOptimization() {
+        monitoringJob = scope.launch {
+            while (isActive) {
+                updateBatteryStatus()
+                optimizePowerSettings()
+                adjustPerformanceParameters()
+                delay(5000) // 5-second monitoring interval
+            }
+        }
+    }
+    
+    private suspend fun optimizePowerSettings() {
+        when {
+            currentBatteryLevel < 20 -> setPowerSaveMode(PowerSaveMode.AGGRESSIVE)
+            currentBatteryLevel < 50 && !isCharging -> setPowerSaveMode(PowerSaveMode.OPTIMIZED)
+            else -> setPowerSaveMode(PowerSaveMode.NORMAL)
+        }
+    }
+}
+
+class NetworkOptimizer @Inject constructor(
+    private val connectivityManager: ConnectivityManager,
+    private val logger: Logger
+) {
+    
+    fun optimizeNetworkUsage() {
+        val networkInfo = connectivityManager.activeNetworkInfo
+        when {
+            networkInfo?.type == ConnectivityManager.TYPE_WIFI -> {
+                enableHighBandwidthMode()
+            }
+            networkInfo?.type == ConnectivityManager.TYPE_MOBILE -> {
+                enableDataSavingMode()
+            }
+        }
+    }
+}
+```
+
+**Comprehensive Monitoring Framework** (`AndroidApp/src/main/java/com/multisensor/recording/monitoring/`):
+
+Real-time analytics and performance monitoring provide detailed insights into system behavior and data quality metrics throughout recording sessions.
+
+```kotlin
+@Singleton
+class AnalyticsManager @Inject constructor(
+    private val context: Context,
+    private val logger: Logger
+) {
+    
+    private val metricsCollector = MetricsCollector()
+    private val performanceAnalyzer = PerformanceAnalyzer()
+    
+    fun trackRecordingSession(sessionConfig: SessionConfiguration) {
+        val sessionMetrics = SessionMetrics(
+            sessionId = sessionConfig.sessionId,
+            startTime = System.currentTimeMillis(),
+            deviceCapabilities = getDeviceCapabilities(),
+            networkConditions = getCurrentNetworkConditions()
+        )
+        
+        metricsCollector.startCollection(sessionMetrics)
+    }
+    
+    fun analyzeDataQuality(datastream: DataStream): QualityReport {
+        return performanceAnalyzer.assessQuality(
+            datastream = datastream,
+            qualityThresholds = getQualityThresholds(),
+            historicalBaseline = getHistoricalBaseline()
+        )
+    }
+}
+```
+
+**Advanced Security Implementation** (`AndroidApp/src/main/java/com/multisensor/recording/security/`):
+
+Enterprise-grade security features include encrypted file management, privacy protection, and secure logging capabilities essential for research applications handling sensitive physiological data.
+
+```kotlin
+class PrivacyManager @Inject constructor(
+    private val encryptedFileManager: EncryptedFileManager,
+    private val secureLogger: SecureLogger
+) {
+    
+    fun enablePrivacyMode() {
+        // Enable comprehensive privacy protections
+        encryptedFileManager.enableEncryption()
+        secureLogger.enableSecureLogging()
+        disableScreenCapture()
+        enableDataAnonymization()
+    }
+    
+    private fun enableDataAnonymization() {
+        // Implement real-time data anonymization for sensitive research data
+        anonymizationEngine.enableRealTimeProcessing()
+    }
+}
+
+class SecurityUtils @Inject constructor() {
+    
+    fun validateDataIntegrity(data: ByteArray): Boolean {
+        val checksum = calculateChecksum(data)
+        return verifyDataIntegrity(data, checksum)
+    }
+    
+    fun encryptSensitiveData(data: ByteArray, keyId: String): EncryptedData {
+        return cryptographyManager.encryptWithKey(data, keyId)
+    }
+}
+```
+
+**Key Architectural Advantages:**
+
+- **Modular Design**: Complete separation of concerns through dependency injection enabling independent testing and maintenance
+- **Performance Optimization**: Automatic resource management and adaptive performance tuning for extended recording sessions
+- **Security-First Approach**: Comprehensive encryption, privacy protection, and secure data handling throughout the application lifecycle
+- **Real-time Monitoring**: Continuous system health and data quality assessment with proactive issue detection and resolution
+- **Research-Grade Reliability**: Enterprise-level error handling, logging, and recovery mechanisms ensuring data integrity in critical research applications
+
 ## 4.3 Android Application Sensor Integration
 
 The Android application implements sophisticated sensor integration capabilities that provide research-grade measurement
@@ -1123,16 +1303,143 @@ class ShimmerRecorder @Inject constructor(
 
 ## 4.4 Desktop Controller Design and Functionality
 
+The desktop application implements advanced distributed systems patterns while providing comprehensive user interfaces including both native PyQt5 GUI components and a web-based dashboard interface (implemented in `PythonApp/web_ui/`) for remote monitoring and control. The architecture demonstrates sophisticated integration of multiple UI paradigms, performance optimization frameworks, and distributed coordination mechanisms within a unified research platform.
+
 **Table 4.1: System Component Specifications**
 
 | Component                  | Technology Stack                 | Primary Function                    | Performance Requirements           | Integration Method      |
 |----------------------------|----------------------------------|-------------------------------------|------------------------------------|-------------------------|
 | **PC Controller**          | Python 3.9+, FastAPI, SQLAlchemy | Central coordination and management | ≥8GB RAM, Quad-core CPU            | REST API + WebSocket    |
+| **Web Dashboard**          | Flask-SocketIO, EventLet, WebRTC | Remote monitoring and control       | Browser-based, real-time updates   | WebSocket + HTTP API    |
+| **Performance Optimizer**  | PSUtil, AsyncIO, ThreadPoolExecutor | System resource optimization     | Adaptive memory/CPU management      | Background monitoring   |
 | **Android Devices**        | Android 11+, Kotlin, Camera2 API | Video/thermal data acquisition      | ≥6GB RAM, 128GB storage            | WebSocket communication |
 | **Shimmer3 GSR+**          | Bluetooth LE, proprietary SDK    | Reference physiological measurement | 128Hz sampling, ±0.1µS resolution  | Bluetooth LE protocol   |
 | **Topdon TC001**           | USB Video Class, thermal SDK     | Thermal imaging capture             | 256x192 resolution, 9Hz frame rate | USB integration         |
 | **USB Webcams**            | DirectShow/V4L2, OpenCV          | RGB video capture                   | 1920x1080@30fps, auto-focus        | OpenCV VideoCapture     |
 | **Network Infrastructure** | WiFi 802.11ac, Gigabit Ethernet  | Data communication backbone         | ≥100Mbps throughput, <10ms latency | TCP/WebSocket protocols |
+
+### 4.4.1 Enhanced Architecture with Dual-Interface Design
+
+**Multi-Interface Integration**: The desktop controller implements a sophisticated dual-interface architecture that seamlessly integrates traditional desktop GUI applications with modern web-based dashboards. This design enables both local operator control through the PyQt5 interface and remote monitoring capabilities through the web dashboard, providing flexibility for different research scenarios and operational requirements.
+
+**Native GUI Implementation** (`PythonApp/enhanced_main_with_web.py`):
+```python
+class EnhancedMainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.web_dashboard = None
+        self.performance_optimizer = PerformanceOptimizer()
+        self.session_manager = SessionManager()
+        self.setup_enhanced_ui()
+        self.setup_web_integration()
+        
+    def setup_web_integration(self):
+        """Initialize web dashboard with native GUI integration"""
+        from web_ui.web_dashboard import WebDashboardServer
+        self.web_dashboard = WebDashboardServer(
+            host="0.0.0.0",
+            port=5000,
+            controller=self
+        )
+        
+    def start_web_server(self):
+        """Start web dashboard server with integrated control"""
+        if self.web_dashboard:
+            self.web_dashboard.start_server()
+            self.status_bar.showMessage(
+                "Web dashboard available at http://localhost:5000"
+            )
+```
+
+**Web Dashboard Architecture** (`PythonApp/web_ui/web_dashboard.py`):
+
+The web dashboard provides comprehensive remote access to all system functions through a sophisticated Flask-SocketIO implementation that enables real-time bidirectional communication between web clients and the central controller. The dashboard includes:
+
+- **Real-time Device Monitoring**: Live status updates for all connected devices with WebSocket-based communication
+- **Session Management Interface**: Complete recording session control with start/stop functionality and configuration management
+- **Data Visualization Dashboard**: Real-time sensor data plotting with synchronized multi-device viewing capabilities
+- **File Management System**: Comprehensive file browser with download, preview, and batch operation capabilities
+- **System Performance Monitoring**: Live CPU, memory, and network utilization tracking with optimization controls
+
+```python
+class WebDashboardServer:
+    def __init__(self, host="0.0.0.0", port=5000, controller=None):
+        self.app = Flask(__name__)
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+        self.controller = controller
+        self.device_status = {
+            "android_devices": {},
+            "usb_webcams": {},
+            "shimmer_sensors": {},
+            "pc_controller": {"status": "idle"}
+        }
+        self._setup_comprehensive_api()
+        
+    def _setup_comprehensive_api(self):
+        """Setup complete API for session, device, and system management"""
+        @self.app.route("/api/session/start", methods=["POST"])
+        def start_session():
+            config = request.get_json() or {}
+            session_id = f"web_session_{int(time.time())}"
+            if self.controller:
+                success = self.controller.start_recording_session(session_id)
+                return jsonify({"success": success, "session_id": session_id})
+                
+        @self.app.route("/api/devices")
+        def get_devices():
+            return jsonify(self.device_status)
+            
+        @self.socketio.on("connect")
+        def handle_connect():
+            emit("status_update", {
+                "devices": self.device_status,
+                "timestamp": datetime.now().isoformat()
+            })
+```
+
+### 4.4.2 Performance Optimization Framework
+
+**Adaptive Resource Management** (`PythonApp/performance_optimizer.py`):
+
+The performance optimization framework implements sophisticated resource monitoring and adaptive management capabilities that ensure optimal system performance during intensive multi-sensor recording sessions. The optimizer provides automatic memory management, CPU load balancing, and network bandwidth optimization.
+
+```python
+@dataclass
+class PerformanceMetrics:
+    timestamp: float
+    cpu_percent: float
+    memory_mb: float
+    memory_percent: float
+    network_bytes_sent: int
+    network_bytes_recv: int
+    disk_io_read: int
+    disk_io_write: int
+    thread_count: int
+    gpu_usage: Optional[float] = None
+
+class PerformanceOptimizer:
+    def __init__(self, config: OptimizationConfig):
+        self.config = config
+        self.metrics_history = deque(maxlen=1000)
+        self.optimization_strategies = [
+            MemoryOptimizationStrategy(),
+            CPUOptimizationStrategy(),
+            NetworkOptimizationStrategy()
+        ]
+        
+    async def optimize_system_performance(self):
+        """Real-time performance optimization with adaptive strategies"""
+        current_metrics = await self.collect_system_metrics()
+        self.metrics_history.append(current_metrics)
+        
+        for strategy in self.optimization_strategies:
+            if strategy.should_apply(current_metrics):
+                await strategy.apply_optimization(current_metrics)
+```
+
+**System Resource Monitoring**: The performance optimizer continuously monitors system resources including CPU utilization, memory consumption, network bandwidth, and disk I/O operations. Advanced algorithms detect performance bottlenecks and automatically apply optimization strategies to maintain optimal recording performance.
+
+**Adaptive Load Balancing**: The framework implements dynamic load balancing across multiple worker threads and processes, automatically adjusting resource allocation based on current system demands and recording requirements. This ensures consistent performance during high-intensity multi-device recording sessions.
 
 The comprehensive performance evaluation demonstrates exceptional system capabilities across all major operational
 scenarios. Performance specifications and detailed system component analysis are documented in Appendix A.4.
