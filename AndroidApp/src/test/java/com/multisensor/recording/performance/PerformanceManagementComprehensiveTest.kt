@@ -65,7 +65,6 @@ class PerformanceManagementComprehensiveTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         
-        // Setup mock context
         whenever(mockContext.getSystemService(Context.POWER_SERVICE))
             .thenReturn(mockPowerManager)
         whenever(mockContext.getSystemService(Context.BATTERY_SERVICE))
@@ -73,7 +72,6 @@ class PerformanceManagementComprehensiveTest {
         whenever(mockContext.getSystemService(Context.CONNECTIVITY_SERVICE))
             .thenReturn(mockConnectivityManager)
         
-        // Initialize performance components
         powerManager = com.multisensor.recording.performance.PowerManager(mockContext)
         networkOptimizer = NetworkOptimizer(mockContext)
         performanceMonitor = PerformanceMonitor(mockContext)
@@ -99,12 +97,11 @@ class PerformanceManagementComprehensiveTest {
 
     @Test
     fun `test battery level monitoring`() {
-        // Mock battery intent
         val batteryIntent = Intent().apply {
             putExtra(BatteryManager.EXTRA_LEVEL, 75)
             putExtra(BatteryManager.EXTRA_SCALE, 100)
             putExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_DISCHARGING)
-            putExtra(BatteryManager.EXTRA_TEMPERATURE, 280) // 28.0°C
+            putExtra(BatteryManager.EXTRA_TEMPERATURE, 280)
         }
         
         whenever(mockContext.registerReceiver(any(), any()))
@@ -119,7 +116,6 @@ class PerformanceManagementComprehensiveTest {
 
     @Test
     fun `test thermal management`() {
-        // Simulate different thermal states
         val thermalStates = listOf(
             ThermalState.NORMAL to 25.0f,
             ThermalState.WARM to 35.0f,
@@ -168,7 +164,6 @@ class PerformanceManagementComprehensiveTest {
         assertTrue(optimizationStrategy.reduceScreenBrightness)
         assertTrue(optimizationStrategy.disableNonEssentialSensors)
         
-        // Apply optimization
         val applicationResult = powerManager.applyOptimizationStrategy(optimizationStrategy)
         assertTrue(applicationResult.isSuccess)
     }
@@ -190,7 +185,6 @@ class PerformanceManagementComprehensiveTest {
 
     @Test
     fun `test network performance analysis`() {
-        // Setup mock network info
         whenever(mockConnectivityManager.activeNetworkInfo)
             .thenReturn(mockNetworkInfo)
         whenever(mockNetworkInfo.isConnected)
@@ -211,18 +205,15 @@ class PerformanceManagementComprehensiveTest {
     fun `test system performance monitoring`() {
         val performanceMetrics = performanceMonitor.collectSystemMetrics()
         
-        // CPU metrics
         assertNotNull(performanceMetrics.cpu.usage)
         assertTrue(performanceMetrics.cpu.usage >= 0.0)
         assertTrue(performanceMetrics.cpu.usage <= 100.0)
         
-        // Memory metrics
         assertNotNull(performanceMetrics.memory.usedMB)
         assertNotNull(performanceMetrics.memory.availableMB)
         assertTrue(performanceMetrics.memory.usedMB >= 0)
         assertTrue(performanceMetrics.memory.availableMB >= 0)
         
-        // Storage metrics
         assertNotNull(performanceMetrics.storage.usedGB)
         assertNotNull(performanceMetrics.storage.availableGB)
         assertTrue(performanceMetrics.storage.usedGB >= 0)

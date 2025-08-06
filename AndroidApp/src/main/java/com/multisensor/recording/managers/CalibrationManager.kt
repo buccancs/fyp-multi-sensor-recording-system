@@ -108,11 +108,9 @@ class CalibrationManager @Inject constructor(
                 progress = CalibrationProgress("Initializing calibration...", 1, 4, 0)
             )
             
-            // Step 1: Prepare calibration
             updateProgress("Preparing calibration setup...", 1, 4, 25)
             delay(1000)
             
-            // Step 2: Capture calibration images
             updateProgress("Capturing calibration images...", 2, 4, 50)
             val captureResult = calibrationCaptureManager.captureCalibrationImages(
                 calibrationId = calibrationId,
@@ -130,11 +128,9 @@ class CalibrationManager @Inject constructor(
                 return Result.failure(RuntimeException(errorMsg))
             }
             
-            // Step 3: Process calibration data
             updateProgress("Processing calibration data...", 3, 4, 75)
-            delay(2000) // Simulate processing time
+            delay(2000)
             
-            // Step 4: Validate calibration
             updateProgress("Validating calibration results...", 4, 4, 100)
             delay(1000)
             
@@ -191,11 +187,9 @@ class CalibrationManager @Inject constructor(
                 progress = CalibrationProgress("Starting camera calibration...", 1, 3, 0)
             )
             
-            // Step 1: Setup
             updateProgress("Setting up camera calibration...", 1, 3, 33)
             delay(1000)
             
-            // Step 2: Capture
             updateProgress("Capturing calibration images...", 2, 3, 66)
             val calibrationId = "camera_calibration_${System.currentTimeMillis()}"
             
@@ -206,7 +200,6 @@ class CalibrationManager @Inject constructor(
                 highResolution = true
             )
             
-            // Step 3: Complete
             updateProgress("Finalizing camera calibration...", 3, 3, 100)
             delay(1000)
             
@@ -268,7 +261,6 @@ class CalibrationManager @Inject constructor(
                 progress = CalibrationProgress("Starting thermal calibration...", 1, 3, 0)
             )
             
-            // Simulate thermal calibration process
             updateProgress("Setting up thermal calibration...", 1, 3, 33)
             delay(2000)
             
@@ -324,7 +316,6 @@ class CalibrationManager @Inject constructor(
                 progress = CalibrationProgress("Starting Shimmer calibration...", 1, 4, 0)
             )
             
-            // Simulate Shimmer calibration process
             updateProgress("Initializing Shimmer sensors...", 1, 4, 25)
             delay(2000)
             
@@ -379,7 +370,6 @@ class CalibrationManager @Inject constructor(
             
             _calibrationState.value = _calibrationState.value.copy(isValidating = true)
             
-            // Simulate validation process
             delay(3000)
             
             val isValid = _calibrationState.value.completedCalibrations.isNotEmpty()
@@ -456,7 +446,6 @@ class CalibrationManager @Inject constructor(
         return try {
             logger.info("Saving calibration data...")
             
-            // In a real implementation, this would save calibration parameters to file
             delay(1000)
             
             logger.info("Calibration data saved successfully")
@@ -475,7 +464,6 @@ class CalibrationManager @Inject constructor(
         return try {
             logger.info("Loading calibration data...")
             
-            // In a real implementation, this would load calibration parameters from file
             delay(1000)
             
             logger.info("Calibration data loaded successfully")
@@ -494,7 +482,6 @@ class CalibrationManager @Inject constructor(
         return try {
             logger.info("Exporting calibration data...")
             
-            // In a real implementation, this would create export file
             delay(2000)
             
             val exportPath = "calibration_export_${System.currentTimeMillis()}.json"
@@ -531,7 +518,6 @@ class CalibrationManager @Inject constructor(
         _calibrationState.value = _calibrationState.value.copy(calibrationError = null)
     }
     
-    // Private helper methods
     
     private fun updateProgress(step: String, stepNumber: Int, totalSteps: Int, percent: Int) {
         _calibrationState.value = _calibrationState.value.copy(

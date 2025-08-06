@@ -79,7 +79,6 @@ class RecordingFragment : Fragment() {
                 
                 val textureView = binding.rgbCameraPreview
                 
-                // Add surface texture listener for better initialization
                 textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
                     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
                         lifecycleScope.launch {
@@ -92,7 +91,6 @@ class RecordingFragment : Fragment() {
                     override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
                 }
                 
-                // If surface is already available, initialize immediately
                 if (textureView.isAvailable) {
                     initializeCameraWithRetry(textureView)
                 }
@@ -119,11 +117,9 @@ class RecordingFragment : Fragment() {
                 binding.previewPlaceholderText.visibility = View.GONE
                 Toast.makeText(requireContext(), "Camera preview ready", Toast.LENGTH_SHORT).show()
             } else {
-                // Try alternative initialization with basic camera
                 binding.previewPlaceholderText.text = "Trying fallback camera mode..."
                 kotlinx.coroutines.delay(1000)
                 
-                // Update UI to show camera failed but provide helpful info
                 binding.rgbCameraPreview.visibility = View.GONE
                 binding.previewPlaceholderText.apply {
                     visibility = View.VISIBLE

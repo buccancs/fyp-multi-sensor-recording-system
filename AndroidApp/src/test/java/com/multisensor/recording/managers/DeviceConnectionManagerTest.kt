@@ -76,7 +76,6 @@ class DeviceConnectionManagerTest {
             logger
         )
 
-        // Setup default mock behavior
         `when`(context.getSystemService(Context.CAMERA_SERVICE)).thenReturn(cameraManager)
         `when`(cameraManager.cameraIdList).thenReturn(arrayOf("0", "1"))
         `when`(networkConfiguration.getServerConfiguration()).thenReturn(serverConfig)
@@ -100,16 +99,13 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `initializeAllDevices should succeed with all devices available`() = runTest {
-        // Arrange
         `when`(cameraRecorder.initialize(textureView)).thenReturn(true)
         `when`(thermalRecorder.initialize(surfaceView)).thenReturn(true)
         `when`(thermalRecorder.startPreview()).thenReturn(true)
         `when`(shimmerRecorder.initialize()).thenReturn(true)
 
-        // Act
         val result = manager.initializeAllDevices(textureView, surfaceView)
 
-        // Assert
         assertTrue("Initialization should succeed", result.isSuccess)
         assertTrue("Result should contain success message", result.getOrNull()?.contains("3/3 successful") == true)
         
@@ -119,7 +115,6 @@ class DeviceConnectionManagerTest {
         assertTrue("Shimmer should be connected", state.shimmerConnected)
         assertFalse("Should not be initializing", state.isInitializing)
 
-        // Verify interactions
         verify(cameraRecorder).initialize(textureView)
         verify(thermalRecorder).initialize(surfaceView)
         verify(thermalRecorder).startPreview()
@@ -128,16 +123,13 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `initializeAllDevices should handle camera failure gracefully`() = runTest {
-        // Arrange
         `when`(cameraRecorder.initialize(textureView)).thenReturn(false)
         `when`(thermalRecorder.initialize(surfaceView)).thenReturn(true)
         `when`(thermalRecorder.startPreview()).thenReturn(true)
         `when`(shimmerRecorder.initialize()).thenReturn(true)
 
-        // Act
         val result = manager.initializeAllDevices(textureView, surfaceView)
 
-        // Assert
         assertTrue("Initialization should still succeed", result.isSuccess)
         assertTrue("Result should show partial success", result.getOrNull()?.contains("2/3 successful") == true)
         
@@ -149,23 +141,18 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `initializeAllDevices should fail without TextureView for camera`() = runTest {
-        // Act
         val result = manager.initializeAllDevices(null, surfaceView)
 
-        // Assert
         assertTrue("Initialization should still succeed", result.isSuccess)
         assertTrue("Result should show camera failure", result.getOrNull()?.contains("Camera: TextureView required") == true)
     }
 
     @Test
     fun `connectToPC should succeed with valid server config`() = runTest {
-        // Arrange
         `when`(jsonSocketClient.isConnected()).thenReturn(true)
 
-        // Act
         val result = manager.connectToPC()
 
-        // Assert
         assertTrue("PC connection should succeed", result.isSuccess)
         assertEquals("Should return connection message", "Connected to PC at 192.168.1.100:9000", result.getOrNull())
         
@@ -173,7 +160,6 @@ class DeviceConnectionManagerTest {
         assertTrue("PC should be connected", state.pcConnected)
         assertEquals("Server address should be set", "192.168.1.100:9000", state.deviceInfo.pcServerAddress)
 
-        // Verify interactions
         verify(jsonSocketClient).configure("192.168.1.100", 9000)
         verify(jsonSocketClient).connect()
         verify(jsonSocketClient).isConnected()
@@ -181,13 +167,10 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `connectToPC should fail when connection is not established`() = runTest {
-        // Arrange
         `when`(jsonSocketClient.isConnected()).thenReturn(false)
 
-        // Act
         val result = manager.connectToPC()
 
-        // Assert
         assertTrue("PC connection should fail", result.isFailure)
         assertTrue("Should be RuntimeException", result.exceptionOrNull() is RuntimeException)
         
@@ -197,14 +180,11 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `disconnectFromPC should succeed when connected`() = runTest {
-        // Arrange - connect first
         `when`(jsonSocketClient.isConnected()).thenReturn(true)
         manager.connectToPC()
 
-        // Act
         val result = manager.disconnectFromPC()
 
-        // Assert
         assertTrue("PC disconnection should succeed", result.isSuccess)
         
         val state = manager.getCurrentState()
@@ -216,7 +196,6 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `scanForDevices should discover available devices`() = runTest {
-        // Arrange
         val shimmerDevices = listOf(
             Pair("00:11:22:33:44:55", "Shimmer3"),
             Pair("AA:BB:CC:DD:EE:FF", "Shimmer4")
@@ -224,10 +203,8 @@ class DeviceConnectionManagerTest {
         `when`(shimmerRecorder.scanForDevices()).thenReturn(shimmerDevices)
         `when`(thermalRecorder.isThermalCameraAvailable()).thenReturn(true)
 
-        // Act
         val result = manager.scanForDevices()
 
-        // Assert
         assertTrue("Scan should succeed", result.isSuccess)
         
         val deviceInfo = result.getOrNull()!!
@@ -239,7 +216,6 @@ class DeviceConnectionManagerTest {
         assertFalse("Should not be scanning", state.isScanning)
         assertEquals("Device info should be updated", deviceInfo, state.deviceInfo)
 
-        // Verify interactions
         verify(cameraManager).cameraIdList
         verify(shimmerRecorder).scanForDevices()
         verify(thermalRecorder).isThermalCameraAvailable()
@@ -247,15 +223,12 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `scanForDevices should handle exceptions gracefully`() = runTest {
-        // Arrange
         `when`(cameraManager.cameraIdList).thenThrow(RuntimeException("Camera access denied"))
         `when`(shimmerRecorder.scanForDevices()).thenThrow(RuntimeException("Bluetooth disabled"))
         `when`(thermalRecorder.isThermalCameraAvailable()).thenThrow(RuntimeException("Thermal not available"))
 
-        // Act
         val result = manager.scanForDevices()
 
-        // Assert
         assertTrue("Scan should still succeed despite exceptions", result.isSuccess)
         
         val deviceInfo = result.getOrNull()!!
@@ -266,17 +239,14 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `connectShimmerDevice should succeed with valid device info`() = runTest {
-        // Arrange
         val macAddress = "00:11:22:33:44:55"
         val deviceName = "Shimmer3"
         val connectionType = com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
         
         `when`(shimmerRecorder.connectSingleDevice(macAddress, deviceName, connectionType)).thenReturn(true)
 
-        // Act
         val result = manager.connectShimmerDevice(macAddress, deviceName, connectionType)
 
-        // Assert
         assertTrue("Shimmer connection should succeed", result.isSuccess)
         
         val state = manager.getCurrentState()
@@ -287,7 +257,6 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `refreshDeviceStatus should update all connection states`() = runTest {
-        // Arrange
         `when`(cameraRecorder.isConnected).thenReturn(true)
         `when`(thermalRecorder.isThermalCameraAvailable()).thenReturn(false)
         `when`(shimmerRecorder.getShimmerStatus()).thenReturn(
@@ -295,10 +264,8 @@ class DeviceConnectionManagerTest {
         )
         `when`(jsonSocketClient.isConnected()).thenReturn(true)
 
-        // Act
         val result = manager.refreshDeviceStatus()
 
-        // Assert
         assertTrue("Status refresh should succeed", result.isSuccess)
         assertTrue("Result should contain status info", result.getOrNull()?.contains("Status:") == true)
         
@@ -308,7 +275,6 @@ class DeviceConnectionManagerTest {
         assertTrue("Shimmer should be connected", state.shimmerConnected)
         assertTrue("PC should be connected", state.pcConnected)
 
-        // Verify interactions
         verify(cameraRecorder).isConnected
         verify(thermalRecorder).isThermalCameraAvailable()
         verify(shimmerRecorder).getShimmerStatus()
@@ -317,16 +283,13 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `checkDeviceCapabilities should return capability information`() = runTest {
-        // Arrange
         `when`(cameraRecorder.isRawStage3Available()).thenReturn(true)
         `when`(thermalRecorder.isThermalCameraAvailable()).thenReturn(false)
         `when`(shimmerRecorder.isAnyDeviceStreaming()).thenReturn(true)
         `when`(shimmerRecorder.isAnyDeviceSDLogging()).thenReturn(false)
 
-        // Act
         val result = manager.checkDeviceCapabilities()
 
-        // Assert
         assertTrue("Capability check should succeed", result.isSuccess)
         
         val capabilities = result.getOrNull()!!
@@ -338,10 +301,8 @@ class DeviceConnectionManagerTest {
 
     @Test
     fun `clearError should reset error state`() {
-        // Act
         manager.clearError()
 
-        // Assert
         val state = manager.getCurrentState()
         assertNull("Error should be cleared", state.connectionError)
     }

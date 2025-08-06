@@ -103,7 +103,6 @@ class DeviceConnectionManager @Inject constructor(
             var successCount = 0
             var totalDevices = 0
             
-            // Initialize RGB Camera
             totalDevices++
             val cameraResult = initializeCamera(textureView)
             if (cameraResult.isSuccess) {
@@ -113,7 +112,6 @@ class DeviceConnectionManager @Inject constructor(
                 results.add("Camera: ${cameraResult.exceptionOrNull()?.message ?: "Failed"}")
             }
             
-            // Initialize Thermal Camera
             totalDevices++
             val thermalResult = initializeThermalCamera(thermalSurfaceView)
             if (thermalResult.isSuccess) {
@@ -123,7 +121,6 @@ class DeviceConnectionManager @Inject constructor(
                 results.add("Thermal: ${thermalResult.exceptionOrNull()?.message ?: "N/A"}")
             }
             
-            // Initialize Shimmer Sensors
             totalDevices++
             val shimmerResult = initializeShimmerSensors()
             if (shimmerResult.isSuccess) {
@@ -226,7 +223,6 @@ class DeviceConnectionManager @Inject constructor(
             jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
             jsonSocketClient.connect()
             
-            // Allow time for connection to establish
             delay(2000)
             
             val isConnected = jsonSocketClient.isConnected()
@@ -285,7 +281,6 @@ class DeviceConnectionManager @Inject constructor(
             logger.info("Scanning for devices...")
             _connectionState.value = _connectionState.value.copy(isScanning = true)
             
-            // Scan for cameras
             val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val availableCameras = try {
                 cameraManager.cameraIdList.toList()
@@ -294,7 +289,6 @@ class DeviceConnectionManager @Inject constructor(
                 emptyList()
             }
             
-            // Scan for Shimmer devices
             val shimmerDevices = try {
                 shimmerRecorder.scanForDevices().map { (mac, name) ->
                     ShimmerDeviceInfo(
@@ -309,7 +303,6 @@ class DeviceConnectionManager @Inject constructor(
                 emptyList()
             }
             
-            // Check thermal camera
             val thermalModel = try {
                 if (thermalRecorder.isThermalCameraAvailable()) "Topdon Camera" else null
             } catch (e: Exception) {
@@ -357,7 +350,6 @@ class DeviceConnectionManager @Inject constructor(
             val success = shimmerRecorder.connectSingleDevice(macAddress, deviceName, connectionType)
             
             if (success) {
-                // Update device info
                 val updatedDevices = _connectionState.value.deviceInfo.shimmerDevices.map { device ->
                     if (device.macAddress == macAddress) {
                         device.copy(isConnected = true)
@@ -388,17 +380,13 @@ class DeviceConnectionManager @Inject constructor(
         return try {
             logger.info("Refreshing device status...")
             
-            // Check camera status
             val cameraConnected = cameraRecorder.isConnected
             
-            // Check thermal camera
             val thermalConnected = thermalRecorder.isThermalCameraAvailable()
             
-            // Check Shimmer status
             val shimmerStatus = shimmerRecorder.getShimmerStatus()
             val shimmerConnected = shimmerStatus.isConnected
             
-            // Check PC connection
             val pcConnected = jsonSocketClient.isConnected()
             
             _connectionState.value = _connectionState.value.copy(
@@ -438,21 +426,18 @@ class DeviceConnectionManager @Inject constructor(
         return try {
             val capabilities = mutableMapOf<String, Boolean>()
             
-            // Check RAW capture capability
             try {
                 capabilities["raw_stage3"] = cameraRecorder.isRawStage3Available()
             } catch (e: Exception) {
                 capabilities["raw_stage3"] = false
             }
             
-            // Check thermal camera availability
             try {
                 capabilities["thermal_camera"] = thermalRecorder.isThermalCameraAvailable()
             } catch (e: Exception) {
                 capabilities["thermal_camera"] = false
             }
             
-            // Check Shimmer streaming capabilities
             try {
                 capabilities["shimmer_streaming"] = shimmerRecorder.isAnyDeviceStreaming()
                 capabilities["shimmer_sd_logging"] = shimmerRecorder.isAnyDeviceSDLogging()

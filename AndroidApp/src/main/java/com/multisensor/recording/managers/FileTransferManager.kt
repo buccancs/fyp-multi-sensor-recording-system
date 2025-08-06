@@ -142,7 +142,6 @@ class FileTransferManager @Inject constructor(
             var totalBytes = 0L
             val errors = mutableListOf<String>()
             
-            // Calculate total files and size first
             for (session in sessions) {
                 try {
                     val sessionFiles = fileTransferHandler.getAvailableFiles(session.sessionId)
@@ -155,7 +154,6 @@ class FileTransferManager @Inject constructor(
             
             logger.info("Found $totalFiles files (${formatBytes(totalBytes)}) across ${sessions.size} sessions")
             
-            // Transfer files
             for (session in sessions) {
                 try {
                     val sessionFiles = fileTransferHandler.getAvailableFiles(session.sessionId)
@@ -165,7 +163,6 @@ class FileTransferManager @Inject constructor(
                             val file = File(filePath)
                             val fileType = FileType.fromPath(filePath)
                             
-                            // Update progress
                             _operationState.value = _operationState.value.copy(
                                 transferProgress = TransferProgress(
                                     totalFiles = totalFiles,
@@ -176,7 +173,6 @@ class FileTransferManager @Inject constructor(
                                 )
                             )
                             
-                            // Transfer file
                             fileTransferHandler.handleSendFileCommand(
                                 SendFileCommand(
                                     filepath = filePath,
@@ -188,7 +184,6 @@ class FileTransferManager @Inject constructor(
                             transferredBytes += file.length()
                             logger.debug("Transferred file: ${file.name}")
                             
-                            // Small delay to allow UI updates
                             delay(100)
                             
                         } catch (e: Exception) {
@@ -258,7 +253,6 @@ class FileTransferManager @Inject constructor(
             
             logger.info("Exporting $fileCount files (${formatBytes(totalSize)})")
             
-            // Simulate export process (in real implementation, this would create archive or copy files)
             delay(2000)
             
             val summary = "Export completed: $fileCount files (${formatBytes(totalSize)}) from ${recordingsDir.absolutePath}"
@@ -319,7 +313,6 @@ class FileTransferManager @Inject constructor(
                 0
             }
             
-            // Finalize session in session manager
             sessionManager.finalizeCurrentSession()
             
             val summary = "Session deleted: $deletedFiles files removed"
@@ -329,7 +322,6 @@ class FileTransferManager @Inject constructor(
                 lastOperation = summary
             )
             
-            // Refresh storage info
             refreshStorageInfo()
             
             logger.info("Current session deleted: $summary")
@@ -380,7 +372,6 @@ class FileTransferManager @Inject constructor(
                 lastOperation = summary
             )
             
-            // Refresh storage info
             refreshStorageInfo()
             
             logger.info("All data deletion completed: $summary")
@@ -488,7 +479,6 @@ class FileTransferManager @Inject constructor(
      */
     fun isTransferring(): Boolean = _operationState.value.isTransferring
     
-    // Private helper methods
     
     private fun getSessionCount(): Int {
         return try {

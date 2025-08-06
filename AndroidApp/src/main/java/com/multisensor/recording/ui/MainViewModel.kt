@@ -830,7 +830,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Switching camera")
-                // Implementation delegated to CameraRecorder
             } catch (e: Exception) {
                 logger.error("Error switching camera", e)
             }
@@ -861,17 +860,13 @@ constructor(
                     )
                 }
                 
-                // Configure JsonSocketClient with network settings
                 val serverConfig = networkConfiguration.getServerConfiguration()
                 jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
                 
-                // Attempt connection
                 jsonSocketClient.connect()
                 
-                // Give connection time to establish
                 kotlinx.coroutines.delay(2000)
                 
-                // Check connection status
                 val isConnected = jsonSocketClient.isConnected()
                 
                 if (isConnected) {
@@ -932,7 +927,6 @@ constructor(
                     )
                 }
                 
-                // Disconnect JsonSocketClient
                 jsonSocketClient.disconnect()
                 
                 updateUiState { currentState ->
@@ -964,7 +958,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Scanning for Shimmer devices")
-                // Implementation delegated to ShimmerRecorder
             } catch (e: Exception) {
                 logger.error("Error scanning for Shimmer", e)
             }
@@ -1046,7 +1039,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Exporting all files")
-                // Implementation moved to FileTransferManager
             } catch (e: Exception) {
                 logger.error("Error exporting files", e)
             }
@@ -1178,7 +1170,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Clearing cache")
-                // Implementation can be added here
             } catch (e: Exception) {
                 logger.error("Error clearing cache", e)
             }
@@ -1367,7 +1358,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Saving calibration data")
-                // Implementation moved to CalibrationManager
             } catch (e: Exception) {
                 logger.error("Error saving calibration data", e)
             }
@@ -1378,7 +1368,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Loading calibration data")
-                // Implementation moved to CalibrationManager
             } catch (e: Exception) {
                 logger.error("Error loading calibration data", e)
             }
@@ -1389,7 +1378,6 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Exporting calibration data")
-                // Implementation moved to CalibrationManager
             } catch (e: Exception) {
                 logger.error("Error exporting calibration data", e)
             }
@@ -1517,10 +1505,8 @@ constructor(
                 val shimmerStatus = shimmerRecorder.getShimmerStatus()
                 val shimmerConnected = shimmerStatus.isConnected
 
-                // Check PC connection status
                 val pcConnected = jsonSocketClient.isConnected()
 
-                // Network connected if PC is connected
                 val networkConnected = pcConnected
 
                 val statusMessage = buildString {
@@ -1621,12 +1607,10 @@ constructor(
                     )
                 }
                 
-                // Track connection results
                 var successCount = 0
                 var totalAttempts = 0
                 val connectionResults = mutableListOf<String>()
                 
-                // Check camera status (can't "connect" but can check if initialized)
                 totalAttempts++
                 try {
                     val cameraConnected = cameraRecorder.isConnected
@@ -1643,10 +1627,8 @@ constructor(
                     logger.error("Camera status check error", e)
                 }
                 
-                // Connect to Shimmer devices
                 totalAttempts++
                 try {
-                    // Scan for devices first, then connect
                     val discoveredDevices = shimmerRecorder.scanAndPairDevices()
                     if (discoveredDevices.isNotEmpty()) {
                         val shimmerConnected = shimmerRecorder.connectDevices(discoveredDevices)
@@ -1667,14 +1649,12 @@ constructor(
                     logger.error("Shimmer connection error", e)
                 }
                 
-                // Connect to PC server
                 totalAttempts++
                 try {
                     val serverConfig = networkConfiguration.getServerConfiguration()
                     jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
                     jsonSocketClient.connect()
                     
-                    // Give connection time to establish
                     kotlinx.coroutines.delay(1000)
                     
                     val pcConnected = jsonSocketClient.isConnected()
@@ -1694,7 +1674,6 @@ constructor(
                 try {
                     val thermalAvailable = thermalRecorder.isThermalCameraAvailable()
                     if (thermalAvailable) {
-                        // Thermal camera is available, no explicit connect needed
                         successCount++
                         connectionResults.add("Thermal: Available")
                         logger.info("Thermal camera is available")
@@ -1707,7 +1686,6 @@ constructor(
                     logger.error("Thermal camera check error", e)
                 }
                 
-                // Update UI state with results
                 val statusMessage = "Device connections: $successCount/$totalAttempts successful"
                 updateUiState { currentState ->
                     currentState.copy(
@@ -1769,10 +1747,8 @@ constructor(
                     )
                 }
                 
-                // Scan for different device types
                 var devicesFound = 0
                 
-                // Check camera availability
                 val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
                 try {
                     val cameraIds = cameraManager.cameraIdList
@@ -1784,13 +1760,11 @@ constructor(
                     logger.warning("Camera scan failed: ${e.message}")
                 }
                 
-                // Scan for Shimmer devices (placeholder for real implementation)
                 scanForShimmerDevicesEnhanced { shimmerDevices ->
                     devicesFound += shimmerDevices.size
                     logger.info("Found ${shimmerDevices.size} Shimmer device(s)")
                 }
                 
-                // Update final results
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Scan complete: found $devicesFound device(s)",
@@ -1855,13 +1829,11 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Opening file browser...")
-                // Get recordings directory
                 val recordingsDir = File(context.getExternalFilesDir(null), "recordings")
                 if (!recordingsDir.exists()) {
                     recordingsDir.mkdirs()
                 }
                 
-                // Update UI state to indicate files are being browsed
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "File browser opened - ${recordingsDir.absolutePath}",
@@ -1894,7 +1866,6 @@ constructor(
                     )
                 }
                 
-                // Get recordings directory
                 val recordingsDir = File(context.getExternalFilesDir(null), "recordings")
                 if (!recordingsDir.exists() || recordingsDir.listFiles()?.isEmpty() == true) {
                     updateUiState { currentState ->
@@ -1907,7 +1878,6 @@ constructor(
                     return@launch
                 }
                 
-                // Count files to export
                 val fileCount = recordingsDir.walkTopDown().count { it.isFile }
                 val totalSize = getDirSize(recordingsDir)
                 
@@ -1918,7 +1888,6 @@ constructor(
                     )
                 }
                 
-                // Simulate export process (in real implementation, this would transfer files)
                 kotlinx.coroutines.delay(2000)
                 
                 updateUiState { currentState ->
@@ -1953,7 +1922,6 @@ constructor(
                     )
                 }
                 
-                // Get current session from session manager
                 val currentSession = sessionManager.getCurrentSession()
                 if (currentSession == null) {
                     updateUiState { currentState ->
@@ -1966,7 +1934,6 @@ constructor(
                     return@launch
                 }
                 
-                // Delete session files
                 val sessionDir = File(context.getExternalFilesDir(null), "recordings/${currentSession.sessionId}")
                 val deletedFiles = if (sessionDir.exists()) {
                     val fileCount = sessionDir.walkTopDown().count { it.isFile }
@@ -1976,7 +1943,6 @@ constructor(
                     0
                 }
                 
-                // Stop current session if active
                 sessionManager.finalizeCurrentSession()
                 
                 updateUiState { currentState ->
@@ -2006,13 +1972,11 @@ constructor(
         viewModelScope.launch {
             try {
                 logger.info("Opening data folder...")
-                // Get recordings directory
                 val recordingsDir = File(context.getExternalFilesDir(null), "recordings")
                 if (!recordingsDir.exists()) {
                     recordingsDir.mkdirs()
                 }
                 
-                // Update UI to show folder was opened
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Data folder: ${recordingsDir.absolutePath}",

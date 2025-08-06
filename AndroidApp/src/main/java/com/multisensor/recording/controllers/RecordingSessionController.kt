@@ -83,17 +83,14 @@ class RecordingSessionController @Inject constructor(
             
             logger.info("Starting recording session with config: $config")
             
-            // Start camera recording first (primary device)
             val sessionInfo = cameraRecorder.startSession(config.recordVideo, config.captureRaw)
             if (sessionInfo == null) {
                 return Result.failure(RuntimeException("Failed to start camera recording"))
             }
             
-            // Create session in session manager
             val sessionId = sessionManager.createNewSession()
             logger.info("Created session: $sessionId")
             
-            // Start secondary devices
             val thermalStarted = if (config.enableThermal) {
                 thermalRecorder.startRecording(sessionId)
             } else false
@@ -102,7 +99,6 @@ class RecordingSessionController @Inject constructor(
                 shimmerRecorder.startRecording(sessionId)
             } else false
             
-            // Update state
             _recordingState.value = RecordingState(
                 isRecording = true,
                 sessionId = sessionId,
@@ -140,19 +136,15 @@ class RecordingSessionController @Inject constructor(
             
             logger.info("Stopping recording session")
             
-            // Stop camera recording (primary device)
             val finalSessionInfo = cameraRecorder.stopSession()
             
-            // Stop secondary devices
             thermalRecorder.stopRecording()
             shimmerRecorder.stopRecording()
             
-            // Finalize session
             sessionManager.finalizeCurrentSession()
             
             val summary = finalSessionInfo?.getSummary() ?: "Recording stopped"
             
-            // Update state
             _recordingState.value = RecordingState(
                 isRecording = false,
                 sessionInfo = summary,
@@ -183,8 +175,6 @@ class RecordingSessionController @Inject constructor(
             
             logger.info("Pausing recording session")
             
-            // Note: Actual pause implementation would depend on recorder capabilities
-            // For now, just update state
             _recordingState.value = _recordingState.value.copy(isPaused = true)
             
             logger.info("Recording session paused")
@@ -207,7 +197,6 @@ class RecordingSessionController @Inject constructor(
             
             logger.info("Resuming recording session")
             
-            // Note: Actual resume implementation would depend on recorder capabilities
             _recordingState.value = _recordingState.value.copy(isPaused = false)
             
             logger.info("Recording session resumed")
@@ -271,7 +260,6 @@ class RecordingSessionController @Inject constructor(
         return try {
             logger.warning("Emergency stop requested")
             
-            // Force stop all devices
             try { cameraRecorder.stopSession() } catch (e: Exception) { logger.error("Emergency camera stop failed", e) }
             try { thermalRecorder.stopRecording() } catch (e: Exception) { logger.error("Emergency thermal stop failed", e) }
             try { shimmerRecorder.stopRecording() } catch (e: Exception) { logger.error("Emergency shimmer stop failed", e) }
