@@ -721,6 +721,82 @@ modules for each major function, from `MasterClockSynchronizer`
 will address non-functional requirements, which are just as crucial for
 a research-grade system.
 
+### 3.3.5 Advanced System Integration Requirements
+
+The current implementation has evolved to include sophisticated advanced features that enhance the core functionality
+described in the previous sections. These requirements reflect the actual system capabilities as implemented in
+`PythonApp/` and `AndroidApp/src/main/java/com/multisensor/recording/` and represent critical enhancements to the
+original functional specification that emerged during development and testing phases.
+
+#### FR-034: Web-Based Interface Integration
+
+**Requirement Statement**: The desktop controller application shall provide comprehensive web-based interface capabilities
+that enable remote access, monitoring, and control of recording sessions through standard web browsers while maintaining
+full security and performance parity with native desktop interfaces.
+
+**Technical Implementation**: The web interface is implemented through `PythonApp/enhanced_main_with_web.py` and the
+comprehensive `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualization,
+and remote control capabilities that maintain synchronization precision with the native desktop application.
+
+**Validation Criteria**: Web interface accessibility from multiple browsers simultaneously, real-time status updates
+with <1 second latency, and complete functional parity with desktop interface for all core recording operations.
+
+#### FR-035: Advanced Performance Optimization Framework
+
+**Requirement Statement**: The system shall implement comprehensive performance optimization capabilities that dynamically
+adapt resource utilization, frame rates, and processing load based on real-time system performance metrics and
+available computational resources across all connected devices.
+
+**Technical Implementation**: Performance optimization is achieved through `PythonApp/performance_optimizer.py` for
+desktop coordination and `AndroidApp/src/main/java/com/multisensor/recording/performance/` module system including
+`NetworkOptimizer.kt`, `PowerManager.kt`, and adaptive frame rate control through
+`AdaptiveFrameRateController.kt`.
+
+**Validation Criteria**: Automatic frame rate adaptation maintaining recording quality under varying computational load,
+power consumption optimization extending mobile device recording sessions by >30%, and network traffic optimization
+reducing bandwidth usage by >25% without quality degradation.
+
+#### FR-036: Enterprise-Grade Dependency Injection Architecture
+
+**Requirement Statement**: The Android application shall implement comprehensive dependency injection architecture
+that provides modular component management, testability enhancement, and runtime configuration flexibility for
+research-specific customizations and experimental protocol variations.
+
+**Technical Implementation**: Full dependency injection framework implemented through Dagger Hilt integration in
+`AndroidApp/src/main/java/com/multisensor/recording/di/` providing automatic dependency resolution, scoped component
+lifecycles, and configuration-driven component selection for diverse research scenarios.
+
+**Validation Criteria**: Runtime component substitution for testing scenarios, configuration-driven feature enablement,
+and comprehensive unit test coverage >90% enabled by dependency injection architecture.
+
+#### FR-037: Advanced Calibration Quality Assessment System
+
+**Requirement Statement**: The system shall provide sophisticated calibration quality assessment capabilities that
+automatically evaluate calibration accuracy, detect calibration degradation, and provide real-time feedback for
+optimal measurement precision throughout extended recording sessions.
+
+**Technical Implementation**: Advanced calibration system implemented through `PythonApp/calibration/` comprehensive
+module system and `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt`
+providing automated quality metrics, drift detection, and precision validation algorithms.
+
+**Validation Criteria**: Automatic calibration quality scoring with objective metrics, detection of calibration drift
+within 30 seconds of occurrence, and automated recalibration recommendations that maintain measurement precision
+throughout 4+ hour recording sessions.
+
+#### FR-038: Master Clock Synchronization with Precision Timing
+
+**Requirement Statement**: The system shall implement high-precision master clock synchronization that maintains
+temporal alignment across all connected devices with sub-millisecond accuracy while providing automatic drift
+correction and synchronization quality monitoring throughout extended recording sessions.
+
+**Technical Implementation**: Precision timing system implemented through `PythonApp/master_clock_synchronizer.py`
+and coordinated with `AndroidApp/src/main/java/com/multisensor/recording/calibration/SyncClockManager.kt` providing
+NTP-based time synchronization, automatic drift compensation, and real-time synchronization quality assessment.
+
+**Validation Criteria**: Synchronization precision <1 millisecond across all devices, automatic drift correction
+maintaining precision over 8+ hour sessions, and comprehensive synchronization quality metrics with real-time
+monitoring and alerting capabilities.
+
 ## 3.4 Non-Functional Requirements
 
 Non-functional requirements (NFRs) specify the quality attributes and
