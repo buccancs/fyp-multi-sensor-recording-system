@@ -65,6 +65,12 @@
         </activity>
 
         <activity
+                android:name=".ui.OnboardingActivity"
+                android:exported="false"
+                android:label="Welcome"
+                android:theme="@style/Theme.MultiSensorRecording"/>
+
+        <activity
                 android:name=".ui.ComposeMainActivity"
                 android:exported="false"
                 android:label="Multi-Sensor Recording (Compose)"
