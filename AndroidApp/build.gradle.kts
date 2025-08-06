@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20"
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
@@ -110,6 +111,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 
     testOptions {
@@ -156,6 +158,14 @@ android {
 
 dependencies {
 
+    // Compose BOM
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose.ui)
+    
+    // Debug tooling for Compose
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
     implementation(libs.bundles.core.ui)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.material)
@@ -196,6 +206,8 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
     kspTest(libs.hilt.compiler)
 
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.bundles.enhanced.integration.testing)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil("androidx.test:orchestrator:1.5.0")

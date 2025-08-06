@@ -21,7 +21,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModelRefactored
-import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,11 +43,12 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
-        if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
-            startActivity(Intent(this, OnboardingActivity::class.java))
-            finish()
-            return
-        }
+        // TODO: Re-enable onboarding after Compose migration
+        // if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
+        //     startActivity(Intent(this, OnboardingActivity::class.java))
+        //     finish()
+        //     return
+        // }
 
         enableEdgeToEdge()
 
