@@ -189,7 +189,7 @@ dependencies {
     
     // Security dependencies - Updated from alpha to stable versions
     // Addresses Low Priority recommendation: "Evaluate alpha/beta dependency risk"
-    implementation("androidx.security:security-crypto:1.0.0")  // Downgraded from 1.1.0-alpha06 to stable
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")  // Restored higher version for MasterKey support
     // Removed security-identity-credential as it's still alpha and not critical for core functionality
 
     implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
