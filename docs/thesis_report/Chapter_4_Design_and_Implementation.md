@@ -129,7 +129,7 @@ Based on comprehensive testing, the current system demonstrates:
 - **Network Resilience**: Latency tolerance from 1ms to 500ms across diverse network conditions
 - **Cross-Platform Integration**: Robust Android-Python coordination with WebSocket-based communication
 - **Data Integrity**: 100% data integrity verification across corruption testing scenarios
-- **Test Coverage**: 71.4% success rate across comprehensive test scenarios with ongoing improvements
+- **Test Coverage**: 71.4% success rate across comprehensive test scenarios with ongoing improvements (based on initial implementation testing as documented in DOCUMENTATION_GAP_ANALYSIS.md)
 
 The comprehensive system architecture draws from established distributed systems patterns while introducing adaptations
 specifically tailored for physiological measurement applications that require coordination between consumer-grade
@@ -257,7 +257,7 @@ the entire measurement chain.
 graph TB
     subgraph "Central Coordination Hub"
         PC[PC Controller<br/>Python Desktop Application]
-        SYNC[Synchronization Engine<br/>Network Time Protocol]
+        SYNC[MasterClockSynchronizer<br/>Network Time Protocol]
         STORE[Data Storage Manager<br/>Structured File Organization]
         CAL[Camera Calibration System<br/>Multi-Device Coordination]
         ML[Machine Learning Pipeline<br/>Real-Time Inference]
@@ -1824,7 +1824,7 @@ graph TD
     end
 
     subgraph "Core Processing Layer"
-        SYNC[Synchronization Engine]
+        SYNC[SessionSynchronizer]
         VISION[Computer Vision Pipeline]
         SHIMMER[Shimmer Management]
         WEBCAM[Webcam Integration]
@@ -1861,7 +1861,7 @@ The session manager orchestrates complex multi-device recording sessions:
 class SessionManager:
     def __init__(self):
         self.device_coordinator = DeviceCoordinator()
-        self.sync_engine = SynchronizationEngine()
+        self.sync_engine = SessionSynchronizer()
         self.data_manager = DataManager()
         self.quality_monitor = QualityMonitor()
 
@@ -2841,12 +2841,12 @@ graph LR
     VALIDATE --> EXPORT
 ```
 
-### Synchronization Engine
+### SessionSynchronizer Implementation
 
-The synchronization engine maintains precise temporal alignment across all data sources:
+The SessionSynchronizer maintains precise temporal alignment across all data sources:
 
 ```python
-class SynchronizationEngine:
+class SessionSynchronizer:
     def __init__(self):
         self.reference_clock = ReferenceClock()
         self.device_clocks = {}
@@ -3547,7 +3547,9 @@ The Python Desktop Controller serves as the sophisticated central command and co
 coordination, data aggregation, real-time monitoring, and comprehensive post-session analysis across the entire
 multi-sensor network [CITE - Van Rossum, G., & Drake Jr, F.L. (2009). Python 3 reference manual]. The desktop
 application implements advanced distributed systems patterns specifically adapted for research applications while
-providing comprehensive user interfaces and automated quality assurance procedures.
+providing comprehensive user interfaces including both native PyQt5 GUI components and a web-based dashboard 
+interface (implemented in `PythonApp/web_ui/`) for remote monitoring and control, along with automated quality 
+assurance procedures.
 
 ### Advanced Application Architecture and Dependency Injection
 
@@ -4472,6 +4474,8 @@ with detailed code snippets provided in **Appendix F**.
   Appendix F.85)
 - `PythonApp/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
   validation (See Appendix F.86)
+- `PythonApp/performance_optimizer.py` - System performance monitoring and optimization with adaptive resource 
+  management (See Appendix F.86.1)
 - `PythonApp/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
   F.87)
 
