@@ -15,10 +15,8 @@
 
 3.3. [Functional Requirements Overview](#33-functional-requirements-overview)
 
--
-3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
--
-3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
+- 3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
+- 3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
 - 3.3.3. [Real-Time Data Processing and Analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
 - 3.3.4. [User Interface and Session Management Requirements](#334-user-interface-and-session-management-requirements)
 
@@ -71,29 +69,21 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.3. [Hardware Integration Requirements](#hardware-integration-requirements)
 - 3.4. [Detailed Functional Requirements Specifications](#detailed-functional-requirements-specifications)
 - 3.5. [Core System Coordination Requirements](#core-system-coordination-requirements)
-    -
-    3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
-    -
-    3.5.2. [FR-002: Advanced Temporal Synchronization and Precision Management](#fr-002-advanced-temporal-synchronization-and-precision-management)
-    -
-    3.5.3. [FR-003: Comprehensive Session Management and Lifecycle Control](#fr-003-comprehensive-session-management-and-lifecycle-control)
+    - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
+    - 3.5.2. [FR-002: Advanced Temporal Synchronization and Precision Management](#fr-002-advanced-temporal-synchronization-and-precision-management)
+    - 3.5.3. [FR-003: Comprehensive Session Management and Lifecycle Control](#fr-003-comprehensive-session-management-and-lifecycle-control)
 - 3.6. [Data Acquisition and Processing Requirements](#data-acquisition-and-processing-requirements)
-    -
-    3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
-    -
-    3.6.2. [FR-011: Comprehensive Thermal Imaging Integration and Physiological Analysis](#fr-011-comprehensive-thermal-imaging-integration-and-physiological-analysis)
-    -
-    3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
+    - 3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
+    - 3.6.2. [FR-011: Comprehensive Thermal Imaging Integration and Physiological Analysis](#fr-011-comprehensive-thermal-imaging-integration-and-physiological-analysis)
+    - 3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
 - 3.7. [Advanced Processing and Analysis Requirements](#advanced-processing-and-analysis-requirements)
-    -
-    3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
+    - 3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
     - 3.7.2. [FR-021: Machine Learning Inference and Prediction](#fr-021-machine-learning-inference-and-prediction)
 - 3.8. [Core System Functions](#core-system-functions)
-    -
-    3.8.1. [FR-001: Multi-Device Coordination and Synchronization](#fr-001-multi-device-coordination-and-synchronization)
-    - 3.8.2. [FR-002: High-Quality RGB Video Data Acquisition](#fr-002-high-quality-rgb-video-data-acquisition)
-    - 3.8.3. [FR-003: Thermal Imaging Integration and Analysis](#fr-003-thermal-imaging-integration-and-analysis)
-    - 3.8.4. [FR-004: Reference GSR Measurement Integration](#fr-004-reference-gsr-measurement-integration)
+    - 3.8.1. [FR-030: Multi-Device Coordination and Synchronization](#fr-030-multi-device-coordination-and-synchronization)
+    - 3.8.2. [FR-031: High-Quality RGB Video Data Acquisition](#fr-031-high-quality-rgb-video-data-acquisition)
+    - 3.8.3. [FR-032: Thermal Imaging Integration and Analysis](#fr-032-thermal-imaging-integration-and-analysis)
+    - 3.8.4. [FR-033: Reference GSR Measurement Integration](#fr-033-reference-gsr-measurement-integration)
     - 3.8.5. [FR-005: Comprehensive Session Management](#fr-005-comprehensive-session-management)
 - 3.9. [Advanced Data Processing Requirements](#advanced-data-processing-requirements)
     - 3.9.1. [FR-010: Real-Time Hand Detection and Tracking](#fr-010-real-time-hand-detection-and-tracking)
@@ -821,7 +811,7 @@ experimental conditions change or new participants join the study.
 - Metadata completeness verification ensuring all session parameters and environmental conditions are recorded
 - Performance impact assessment ensuring session management overhead <5% of system resources
 
-#### FR-002: Temporal Synchronization and Precision Management
+#### FR-002A: Temporal Synchronization and Precision Management
 
 **Requirement Statement**: The system shall maintain temporal synchronization across all connected devices with maximum
 deviation of ≤5ms from the reference timeline throughout recording sessions.
@@ -848,7 +838,7 @@ characteristics.
 - Latency measurement and compensation algorithms [CITE - Network latency compensation techniques]
 - Clock drift detection and correction mechanisms
 
-#### FR-003: Session Management and Lifecycle Control
+#### FR-003A: Session Management and Lifecycle Control
 
 **Requirement Statement**: The system shall provide comprehensive session lifecycle management including session
 creation, configuration, execution monitoring, and controlled termination with automatic data preservation.
@@ -1057,7 +1047,7 @@ The core system functions represent the fundamental capabilities required for mu
 data collection. These requirements form the foundation upon which all other system capabilities are built and represent
 the minimum functionality required for basic system operation.
 
-#### FR-001: Multi-Device Coordination and Synchronization
+#### FR-030: Multi-Device Coordination and Synchronization
 
 **Comprehensive Requirement Description**: The system must provide sophisticated coordination capabilities that enable
 simultaneous operation of multiple heterogeneous recording devices while maintaining precise temporal synchronization
@@ -1090,7 +1080,7 @@ cannot be compromised without fundamentally altering the system's research utili
 **Validation Criteria**: Successful coordination of the maximum supported device count with empirical measurement of
 synchronization accuracy across multiple session scenarios.
 
-#### FR-002: High-Quality RGB Video Data Acquisition
+#### FR-031: High-Quality RGB Video Data Acquisition
 
 **Comprehensive Requirement Description**: The system must capture high-resolution RGB video streams that provide
 sufficient quality and temporal resolution for detailed physiological analysis through computer vision techniques. This
@@ -1124,7 +1114,7 @@ analysis techniques.
 **Validation Criteria**: Successful capture of physiological events with sufficient quality for computer vision analysis
 and correlation with reference measurements.
 
-#### FR-003: Thermal Imaging Integration and Analysis
+#### FR-032: Thermal Imaging Integration and Analysis
 
 **Comprehensive Requirement Description**: The system must integrate thermal imaging capabilities that enable
 non-contact detection of temperature variations associated with vascular responses and autonomic nervous system
@@ -1156,7 +1146,7 @@ modalities but is not absolutely essential for basic system operation.
 **Validation Criteria**: Demonstrated correlation between thermal measurements and known physiological responses with
 accuracy meeting research standards.
 
-#### FR-004: Reference GSR Measurement Integration
+#### FR-033: Reference GSR Measurement Integration
 
 **Comprehensive Requirement Description**: The system must integrate traditional contact-based GSR sensors to provide
 ground truth measurements essential for machine learning model training, validation, and comparative analysis. This
@@ -1225,7 +1215,7 @@ The advanced data processing requirements define the sophisticated analysis capa
 into meaningful physiological insights. These requirements represent the technical innovations that enable contactless
 physiological measurement through computational analysis of multi-modal data streams.
 
-#### FR-010: Real-Time Hand Detection and Tracking
+#### FR-010A: Real-Time Hand Detection and Tracking
 
 **Comprehensive Requirement Description**: The system must implement sophisticated computer vision algorithms for
 real-time detection and tracking of hand regions within the video streams. Hand detection serves as a critical
@@ -1257,7 +1247,7 @@ required for basic data collection.
 **Validation Criteria**: Demonstrated reliable hand detection across diverse participant populations with accuracy
 sufficient for physiological analysis applications.
 
-#### FR-011: Advanced Camera Calibration System
+#### FR-011A: Advanced Camera Calibration System
 
 **Comprehensive Requirement Description**: The system must provide sophisticated camera calibration capabilities that
 ensure accurate spatial and temporal alignment between different imaging modalities, particularly RGB and thermal
@@ -1290,7 +1280,7 @@ single-modality operation.
 **Validation Criteria**: Demonstrated calibration accuracy through geometric validation tests and successful multi-modal
 alignment verification.
 
-#### FR-012: Precision Data Synchronization Framework
+#### FR-012A: Precision Data Synchronization Framework
 
 **Comprehensive Requirement Description**: The system must implement advanced synchronization algorithms that maintain
 precise temporal alignment across all data modalities despite the inherent timing variations and network latencies
@@ -1336,6 +1326,82 @@ The non-functional requirements specification recognizes that research software 
 typical commercial applications. Research applications often require extended operation periods, handle valuable and
 irreplaceable data, and must operate reliably in diverse environments with varying technical support availability. These
 constraints necessitate higher reliability and quality standards than might be acceptable in other application domains.
+
+### 3.3.5 Advanced System Integration Requirements
+
+The current implementation has evolved to include sophisticated advanced features that enhance the core functionality
+described in the previous sections. These requirements reflect the actual system capabilities as implemented in
+`PythonApp/` and `AndroidApp/src/main/java/com/multisensor/recording/` and represent critical enhancements to the
+original functional specification that emerged during development and testing phases.
+
+#### FR-034: Web-Based Interface Integration
+
+**Requirement Statement**: The desktop controller application shall provide comprehensive web-based interface capabilities
+that enable remote access, monitoring, and control of recording sessions through standard web browsers while maintaining
+full security and performance parity with native desktop interfaces.
+
+**Technical Implementation**: The web interface is implemented through `PythonApp/enhanced_main_with_web.py` and the
+comprehensive `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualization,
+and remote control capabilities that maintain synchronization precision with the native desktop application.
+
+**Validation Criteria**: Web interface accessibility from multiple browsers simultaneously, real-time status updates
+with <1 second latency, and complete functional parity with desktop interface for all core recording operations.
+
+#### FR-035: Advanced Performance Optimization Framework
+
+**Requirement Statement**: The system shall implement comprehensive performance optimization capabilities that dynamically
+adapt resource utilization, frame rates, and processing load based on real-time system performance metrics and
+available computational resources across all connected devices.
+
+**Technical Implementation**: Performance optimization is achieved through `PythonApp/performance_optimizer.py` for
+desktop coordination and `AndroidApp/src/main/java/com/multisensor/recording/performance/` module system including
+`NetworkOptimizer.kt`, `PowerManager.kt`, and adaptive frame rate control through
+`AdaptiveFrameRateController.kt`.
+
+**Validation Criteria**: Automatic frame rate adaptation maintaining recording quality under varying computational load,
+power consumption optimization extending mobile device recording sessions by >30%, and network traffic optimization
+reducing bandwidth usage by >25% without quality degradation.
+
+#### FR-036: Enterprise-Grade Dependency Injection Architecture
+
+**Requirement Statement**: The Android application shall implement comprehensive dependency injection architecture
+that provides modular component management, testability enhancement, and runtime configuration flexibility for
+research-specific customizations and experimental protocol variations.
+
+**Technical Implementation**: Full dependency injection framework implemented through Dagger Hilt integration in
+`AndroidApp/src/main/java/com/multisensor/recording/di/` providing automatic dependency resolution, scoped component
+lifecycles, and configuration-driven component selection for diverse research scenarios.
+
+**Validation Criteria**: Runtime component substitution for testing scenarios, configuration-driven feature enablement,
+and comprehensive unit test coverage >90% enabled by dependency injection architecture.
+
+#### FR-037: Advanced Calibration Quality Assessment System
+
+**Requirement Statement**: The system shall provide sophisticated calibration quality assessment capabilities that
+automatically evaluate calibration accuracy, detect calibration degradation, and provide real-time feedback for
+optimal measurement precision throughout extended recording sessions.
+
+**Technical Implementation**: Advanced calibration system implemented through `PythonApp/calibration/` comprehensive
+module system and `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt`
+providing automated quality metrics, drift detection, and precision validation algorithms.
+
+**Validation Criteria**: Automatic calibration quality scoring with objective metrics, detection of calibration drift
+within 30 seconds of occurrence, and automated recalibration recommendations that maintain measurement precision
+throughout 4+ hour recording sessions.
+
+#### FR-038: Master Clock Synchronization with Precision Timing
+
+**Requirement Statement**: The system shall implement high-precision master clock synchronization that maintains
+temporal alignment across all connected devices with sub-millisecond accuracy while providing automatic drift
+correction and synchronization quality monitoring throughout extended recording sessions.
+
+**Technical Implementation**: Precision timing system implemented through `PythonApp/master_clock_synchronizer.py`
+and coordinated with `AndroidApp/src/main/java/com/multisensor/recording/calibration/SyncClockManager.kt` providing
+NTP-based time synchronization, automatic drift compensation, and real-time synchronization quality assessment.
+
+**Validation Criteria**: Synchronization precision <1 millisecond across all devices, automatic drift correction
+maintaining precision over 8+ hour sessions, and comprehensive synchronization quality metrics with real-time
+monitoring and alerting capabilities.
 
 ### 3.4.1 Performance and Scalability Requirements
 

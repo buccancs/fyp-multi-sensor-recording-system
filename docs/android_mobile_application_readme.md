@@ -197,7 +197,7 @@ The Android application communicates with the Python Desktop Controller using a 
 ```
 AndroidApp/
 ├── app/
-│   ├── src/main/java/com/buccancs/bucikagsr/
+│   ├── src/main/java/com/multisensor/recording/
 │   │   ├── MainActivity.kt
 │   │   ├── ui/
 │   │   │   ├── components/
@@ -769,7 +769,7 @@ adb shell netstat -an | grep 8080
 **Check Storage Usage**
 
 ```bash
-adb shell df -h /data/data/com.buccancs.bucikagsr
+adb shell df -h /data/data/com.multisensor.recording
 ```
 
 **Verify Sensor Functionality**
@@ -864,7 +864,7 @@ android {
     compileSdk = 34
     
     defaultConfig {
-        applicationId = "com.buccancs.bucikagsr"
+        applicationId = "com.multisensor.recording"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

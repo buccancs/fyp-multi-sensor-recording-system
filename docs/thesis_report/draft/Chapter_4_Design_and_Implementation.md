@@ -1938,6 +1938,56 @@ replace or upgrade components (for instance, swapping out the websockets
 library if needed, or updating the calibration methods) without
 affecting unrelated parts.
 
+**Enhanced User Interface and Interaction Framework:**
+
+The current implementation has evolved to include sophisticated user interface components that provide comprehensive
+control and monitoring capabilities. The enhanced GUI framework includes:
+
+- `PythonApp/gui/enhanced_main_window.py` - PsychoPy-inspired stimulus controller integration with VLC backend support
+  and enhanced timing precision for precise experimental control
+- `PythonApp/gui/enhanced_ui_main_window.py` - Comprehensive UI framework with real-time monitoring and advanced
+  session control capabilities providing intuitive researcher workflows
+- `PythonApp/gui/enhanced_stimulus_controller.py` - Advanced stimulus presentation system with performance monitoring
+  and precise temporal control for psychological research applications
+- `PythonApp/gui/calibration_dialog.py` - Interactive calibration interface with real-time quality feedback and
+  guided user workflows ensuring optimal measurement precision
+- `PythonApp/gui/device_panel.py` - Real-time device status visualization with comprehensive health monitoring and
+  connectivity management for multi-device coordination
+- `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronized display and quality assessment
+  enabling real-time monitoring during recording sessions
+- `PythonApp/web_ui/` - Complete web-based interface system enabling remote monitoring and control through standard
+  browsers with full functional parity to desktop interface
+
+**Advanced Performance and Integration Components:**
+
+The system incorporates sophisticated performance optimization and integration capabilities:
+
+- `PythonApp/enhanced_main_with_web.py` - Web-integrated main application providing remote access and control
+  capabilities while maintaining full synchronization precision
+- `PythonApp/performance_optimizer.py` - Comprehensive performance optimization framework dynamically adapting
+  resource utilization and processing load based on real-time system metrics
+- `PythonApp/master_clock_synchronizer.py` - High-precision master clock synchronization maintaining temporal alignment
+  across all devices with sub-millisecond accuracy and automatic drift correction
+- `PythonApp/calibration/` - Advanced calibration system with automated quality assessment, drift detection, and
+  precision validation algorithms ensuring measurement accuracy throughout extended sessions
+
+**Android Advanced Architecture and Performance Optimization:**
+
+The Android application has evolved to incorporate enterprise-grade architectural patterns and performance optimization:
+
+- `AndroidApp/src/main/java/com/multisensor/recording/di/` - Comprehensive Dagger Hilt dependency injection framework
+  providing modular architecture, enhanced testability, and runtime configuration flexibility for research scenarios
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Intelligent network traffic
+  optimization with adaptive bandwidth management and quality-of-service control for optimal data transmission
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Advanced power management with
+  thermal throttling and battery optimization extending recording sessions while maintaining performance
+- `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt` - Real-time
+  calibration quality evaluation with automated feedback systems and precision validation algorithms
+- `AndroidApp/src/main/java/com/multisensor/recording/monitoring/` - Comprehensive system monitoring with predictive
+  analytics and health assessment providing proactive optimization and alert generation
+- `AndroidApp/src/main/java/com/multisensor/recording/security/` - Enterprise-grade security framework with data
+  protection, access control, and compliance monitoring for research data protection
+
 We considered using other frameworks, for example, Node.js for the
 server or C++ for heavy lifting, but Python proved to be a good balance
 for our needs. The availability of machine learning libraries (like if
