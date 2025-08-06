@@ -17,9 +17,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import psutil
 
 current_dir = Path(__file__).parent
-src_dir = current_dir.parent
-sys.path.insert(0, str(src_dir))
-from ..utils.logging_config import get_logger
+# Use consolidated import utility to eliminate code duplication
+from ..utils.import_utils import get_safe_logger as get_logger
 
 try:
     import cv2

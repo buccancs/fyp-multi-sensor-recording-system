@@ -25,15 +25,8 @@ import warnings
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-# Handle imports for standalone and module usage
-try:
-    from ..utils.logging_config import get_logger
-except ImportError:
-    # Standalone usage - create simple logger
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    def get_logger(name):
-        return logging.getLogger(name)
+# Use consolidated import utility to eliminate code duplication
+from ..utils.import_utils import get_safe_logger as get_logger
 
 
 class SecurityValidationError(Exception):

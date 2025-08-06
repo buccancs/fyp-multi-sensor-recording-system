@@ -25,9 +25,11 @@ import weakref
 
 import psutil
 
+# Import consolidated logger utility
+from ..utils.import_utils import get_safe_logger as get_logger
+
 # Import existing system components
 try:
-    from ..utils.logging_config import get_logger
     from ..utils.system_monitor import get_system_monitor
     from .performance_benchmark import PerformanceProfiler
     from ..performance_optimizer import PerformanceManager, OptimizationConfig
@@ -36,7 +38,6 @@ except ImportError:
     import sys
     current_dir = Path(__file__).parent
     sys.path.insert(0, str(current_dir.parent))
-    from utils.logging_config import get_logger
     from utils.system_monitor import get_system_monitor
     from performance_optimizer import PerformanceManager, OptimizationConfig
 

@@ -23,12 +23,8 @@ try:
 except ImportError:
     psutil = None
 
-try:
-    from ..utils.logging_config import get_logger
-except ImportError:
-    import logging
-    def get_logger(name):
-        return logging.getLogger(name)
+# Use consolidated import utility to eliminate code duplication
+from ..utils.import_utils import get_safe_logger as get_logger
 
 
 class PerformanceLevel(Enum):

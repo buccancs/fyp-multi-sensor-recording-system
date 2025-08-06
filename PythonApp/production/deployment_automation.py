@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from ..utils.logging_config import get_logger
+from ..utils.import_utils import get_safe_logger as get_logger
 
 
 @dataclass

@@ -14,13 +14,15 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any, Callable
 from dataclasses import asdict
 
+# Import consolidated logger utility
+from ..utils.import_utils import get_safe_logger as get_logger
+
 try:
     from .endurance_testing import EnduranceTestRunner, EnduranceTestConfig, EnduranceTestResult
     from .graceful_degradation import (
         GracefulDegradationManager, PerformanceThresholds, 
         SystemMetrics, PerformanceLevel
     )
-    from ..utils.logging_config import get_logger
 except ImportError:
     # Fallback for testing
     import sys
@@ -31,7 +33,6 @@ except ImportError:
         GracefulDegradationManager, PerformanceThresholds, 
         SystemMetrics, PerformanceLevel
     )
-    from utils.logging_config import get_logger
 
 
 class PerformanceMonitorIntegration:
