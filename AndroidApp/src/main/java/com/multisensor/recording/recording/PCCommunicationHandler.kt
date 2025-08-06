@@ -1,5 +1,6 @@
 package com.multisensor.recording.recording
 
+import com.multisensor.recording.security.SecurityUtils
 import com.multisensor.recording.util.Logger
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 class PCCommunicationHandler(
-    private val logger: Logger
+    private val logger: Logger,
+    private val securityUtils: SecurityUtils
 ) {
 
     enum class PCConnectionState {
@@ -536,9 +538,9 @@ class PCCommunicationHandler(
      * In production, this should retrieve from Android Keystore or secure preferences
      */
     private fun getConfiguredAuthToken(): String? {
-        // TODO: Implement secure token storage/retrieval
-        // This is a placeholder - in production, retrieve from secure storage
-        return null
+        // Implementation: Use SecurityUtils to generate a secure token for this session
+        // In a production environment, this would retrieve a stored token from secure storage
+        return securityUtils.generateAuthToken()
     }
 
     private fun notifyDevicePairedWithPC(deviceId: String, paired: Boolean) {

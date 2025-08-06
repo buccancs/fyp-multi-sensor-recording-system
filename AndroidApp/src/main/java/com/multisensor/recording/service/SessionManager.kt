@@ -8,6 +8,7 @@ import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CancellationException
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

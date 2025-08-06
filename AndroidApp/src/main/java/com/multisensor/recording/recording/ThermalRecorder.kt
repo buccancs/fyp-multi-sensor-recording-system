@@ -28,6 +28,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import java.io.BufferedOutputStream
 import java.io.File
+import java.io.IOException
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentLinkedQueue
