@@ -22,10 +22,10 @@ Within the distributed PC master-controller architecture, the UI Architecture Sy
 **Primary Functions:**
 
 - **Cross-Platform Design System**: Consistent visual language and interaction patterns ensuring cohesive user experience across Android and desktop platforms
-- **Component Libraries**: Reusable UI components with standardized behavior supporting efficient research software development
+- **Component Libraries**: Reusable UI components with standardized behaviour supporting efficient research software development
 - **Navigation Architecture**: Intuitive navigation patterns and state management facilitating complex multi-device coordination workflows
 - **Accessibility Framework**: WCAG 2.1 AA compliant interface design ensuring research software accessibility for diverse user populations
-- **Performance Optimization**: Responsive interfaces with efficient resource usage supporting real-time multi-modal data monitoring
+- **Performance Optimisation**: Responsive interfaces with efficient resource usage supporting real-time multi-modal data monitoring
 
 ### Architecture Overview
 
@@ -197,22 +197,22 @@ graph TB
 
 ### Visual Design Language
 
-#### Color System
+#### Colour System
 
 ```python
-# Design System Colors
+# Design System Colours
 class DesignTokens:
-    # Primary Brand Colors
+    # Primary Brand Colours
     PRIMARY_BLUE = "#1976D2"
     PRIMARY_BLUE_LIGHT = "#42A5F5"
     PRIMARY_BLUE_DARK = "#1565C0"
     
-    # Secondary Colors
+    # Secondary Colours
     SECONDARY_GREEN = "#388E3C"
     SECONDARY_ORANGE = "#F57C00"
     SECONDARY_RED = "#D32F2F"
     
-    # Neutral Colors
+    # Neutral Colours
     GRAY_50 = "#FAFAFA"
     GRAY_100 = "#F5F5F5"
     GRAY_200 = "#EEEEEE"
@@ -221,7 +221,7 @@ class DesignTokens:
     GRAY_700 = "#616161"
     GRAY_900 = "#212121"
     
-    # Semantic Colors
+    # Semantic Colours
     SUCCESS = "#4CAF50"
     WARNING = "#FF9800"
     ERROR = "#F44336"
@@ -294,7 +294,7 @@ class ModernButton @JvmOverloads constructor(
     private fun setupDefaultStyling() {
         cornerRadius = resources.getDimensionPixelSize(R.dimen.button_corner_radius)
         elevation = resources.getDimension(R.dimen.button_elevation)
-        setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.primary_blue)))
+        setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.colour.primary_blue)))
     }
     
     fun setButtonStyle(style: ButtonStyle) {
@@ -320,8 +320,8 @@ class ModernButton(QPushButton):
         """Apply modern button styling"""
         style = f"""
         QPushButton {{
-            background-color: {self.get_background_color()};
-            color: {self.get_text_color()};
+            background-colour: {self.get_background_color()};
+            colour: {self.get_text_color()};
             border: none;
             border-radius: 8px;
             padding: 12px 24px;
@@ -331,16 +331,16 @@ class ModernButton(QPushButton):
         }}
         
         QPushButton:hover {{
-            background-color: {self.get_hover_color()};
+            background-colour: {self.get_hover_color()};
         }}
         
         QPushButton:pressed {{
-            background-color: {self.get_pressed_color()};
+            background-colour: {self.get_pressed_color()};
         }}
         
         QPushButton:disabled {{
-            background-color: #E0E0E0;
-            color: #9E9E9E;
+            background-colour: #E0E0E0;
+            colour: #9E9E9E;
         }}
         """
         self.setStyleSheet(style)
@@ -434,7 +434,7 @@ class MainWindow(QMainWindow):
         self.setup_event_handlers()
     
     def setup_ui(self):
-        """Initialize main window UI"""
+        """Initialise main window UI"""
         self.setWindowTitle("Multi-Sensor Recording System")
         self.setMinimumSize(1200, 800)
         
@@ -518,14 +518,14 @@ class StatusIndicator(QWidget):
             "unknown": "#9E9E9E"
         }
         
-        color = status_colors.get(self.status, "#9E9E9E")
+        colour = status_colors.get(self.status, "#9E9E9E")
         
         # Update icon
-        pixmap = self.create_status_icon(color)
+        pixmap = self.create_status_icon(colour)
         self.icon_label.setPixmap(pixmap)
         
-        # Update text color
-        self.text_label.setStyleSheet(f"color: {color}; font-weight: 500;")
+        # Update text colour
+        self.text_label.setStyleSheet(f"colour: {colour}; font-weight: 500;")
 ```
 
 ## User Guide
@@ -627,8 +627,8 @@ class StatusIndicator(QWidget):
 
 #### Visual Accessibility
 
-1. **Color Contrast**: Minimum 4.5:1 ratio for normal text, 3:1 for large text
-2. **Color Independence**: Information not conveyed by color alone
+1. **Colour Contrast**: Minimum 4.5:1 ratio for normal text, 3:1 for large text
+2. **Colour Independence**: Information not conveyed by colour alone
 3. **Focus Indicators**: Clear visual focus for keyboard navigation
 4. **Text Scaling**: Support for up to 200% zoom without horizontal scrolling
 
@@ -644,7 +644,7 @@ class StatusIndicator(QWidget):
 1. **Tab Order**: Logical tab sequence through interface
 2. **Keyboard Shortcuts**: Essential functions accessible via keyboard
 3. **Focus Management**: Proper focus handling in dynamic content
-4. **Escape Paths**: Clear exit routes from modal dialogs
+4. **Escape Paths**: Clear exit routes from modal dialogues
 
 ### Implementation Example
 
@@ -675,18 +675,18 @@ class AccessibilityHelper {
 
 ## Performance
 
-### UI Performance Optimization
+### UI Performance Optimisation
 
-#### Android Optimization
+#### Android Optimisation
 
 1. **ViewBinding**: Efficient view references without findViewById
 2. **RecyclerView**: Efficient list rendering with view recycling
-3. **Layout Optimization**: Minimal view hierarchy depth
+3. **Layout Optimisation**: Minimal view hierarchy depth
 4. **Animation Performance**: Hardware-accelerated animations
 
-#### Python Optimization
+#### Python Optimisation
 
-1. **Widget Reuse**: Minimize widget creation and destruction
+1. **Widget Reuse**: Minimis\1 widget creation and destruction
 2. **Efficient Updates**: Update only changed elements
 3. **Threading**: Keep UI thread responsive with background processing
 4. **Memory Management**: Proper cleanup of UI resources

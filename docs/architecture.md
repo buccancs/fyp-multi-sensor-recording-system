@@ -10,13 +10,13 @@ The Multi-Sensor Recording System implements a distributed star-mesh topology wi
 - **Star-mesh topology**: PC controller coordinates multiple Android recording devices
 - **Offline-first recording**: Local data storage with synchronized timestamps
 - **JSON protocol communication**: WebSocket-based real-time communication
-- **Multi-modal synchronization**: <1ms precision across all data streams
+- **Multi-modal synchronisation**: <1ms precision across all data streams
 
 ### Research-Grade Design
 - **Data integrity**: 97.8% preservation during failure scenarios
 - **System reliability**: 98.4% under diverse failure conditions  
 - **Error recovery**: 99.3% success rate for handled exceptions
-- **Timing precision**: <1ms synchronization accuracy
+- **Timing precision**: <1ms synchronisation accuracy
 
 ## System Components
 
@@ -54,7 +54,7 @@ The Multi-Sensor Recording System implements a distributed star-mesh topology wi
 **SessionManager** (`PythonApp/session/`)
 - Multi-device session coordination
 - Recording lifecycle management
-- Data synchronization orchestration
+- Data synchronisation orchestration
 - Session metadata management
 
 **NetworkServer** (`PythonApp/network/`)
@@ -99,7 +99,7 @@ The Android application underwent complete architectural refactoring implementin
 
 **DeviceConnectionManager** (389 lines)  
 - Device connectivity orchestration
-- Initialization procedures
+- Initialisation procedures
 - Connection state management
 - Error recovery handling
 
@@ -176,11 +176,11 @@ PC Controller                    Android Device
 - **Error handling**: Graceful degradation and recovery
 - **Security**: TLS encryption and authentication
 
-#### Synchronization Engine
-- **NTP synchronization**: Network time protocol integration
+#### Synchronisation Engine
+- **NTP synchronisation**: Network time protocol integration
 - **Precision timing**: <1ms accuracy across devices
 - **Drift compensation**: Automatic clock drift correction
-- **Cross-platform coordination**: PC/Android synchronization
+- **Cross-platform coordination**: PC/Android synchronisation
 
 ## Data Architecture
 
@@ -189,14 +189,14 @@ PC Controller                    Android Device
 #### RGB Video Data
 - **Format**: H.264/MP4 encoding
 - **Resolution**: 1920x1080 @ 30fps
-- **Synchronization**: Frame-level timestamps
+- **Synchronisation**: Frame-level timestamps
 - **Storage**: Local with metadata
 
 #### Thermal Imaging Data  
 - **Format**: Raw thermal matrix + processed video
 - **Resolution**: Device-dependent (e.g., 160x120)
 - **Calibration**: Temperature calibration applied
-- **Synchronization**: Thermal frame timestamps
+- **Synchronisation**: Thermal frame timestamps
 
 #### Shimmer GSR Data
 - **Format**: CSV with multiple sensor channels
@@ -204,7 +204,7 @@ PC Controller                    Android Device
 - **Channels**: GSR, PPG, Accelerometer, Gyroscope
 - **Precision**: 16-bit ADC resolution
 
-#### Synchronization Metadata
+#### Synchronisation Metadata
 ```json
 {
     "session_id": "session_uuid",
@@ -277,7 +277,7 @@ PC 1       PC 2       PC N
 #### Real-Time Monitoring
 - **Device Status**: Connection state, data quality
 - **System Health**: Resource usage, performance metrics
-- **Data Quality**: Synchronization accuracy, validation results
+- **Data Quality**: Synchronisation accuracy, validation results
 - **Error Tracking**: Error rates, recovery success
 
 #### Logging Architecture
@@ -308,23 +308,23 @@ PC 1       PC 2       PC N
 
 ## Performance Architecture
 
-### Optimization Strategies
+### Optimisation Strategies
 
 #### Memory Management
-- **Streaming Processing**: Minimize memory footprint
+- **Streaming Processing**: Minimis\1 memory footprint
 - **Buffer Management**: Adaptive buffer sizing
 - **Garbage Collection**: Optimized for real-time processing
 - **Resource Pools**: Reusable resource management
 
-#### CPU Optimization
+#### CPU Optimisation
 - **Multi-threading**: Parallel processing where possible
 - **Async Processing**: Non-blocking I/O operations
 - **Load Balancing**: Distribute processing across cores
 - **Priority Scheduling**: Critical tasks prioritized
 
-#### Storage Optimization
+#### Storage Optimisation
 - **Compression**: Lossless compression for non-critical data
-- **Streaming Writes**: Minimize storage latency
+- **Streaming Writes**: Minimis\1 storage latency
 - **Index Management**: Fast data retrieval
 - **Cleanup Policies**: Automatic old data management
 

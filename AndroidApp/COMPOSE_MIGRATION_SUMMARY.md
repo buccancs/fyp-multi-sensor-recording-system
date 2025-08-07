@@ -13,9 +13,9 @@ This document summarizes the successful migration of the Multi-Sensor Recording 
 
 ### 2. Theme System
 Created a complete Material 3 theme system:
-- **Colors**: `Color.kt` with custom app colors and Material 3 color scheme
+- **Colours**: `Colour.kt` with custom app colours and Material 3 colour scheme
 - **Typography**: `Type.kt` with Material 3 typography definitions  
-- **Theme**: `Theme.kt` with dynamic color support and system integration
+- **Theme**: `Theme.kt` with dynamic colour support and system integration
 
 ### 3. UI Components and Screens
 Migrated core functionality to Compose:
@@ -94,7 +94,7 @@ plugins {
 ## Files Modified/Created
 
 ### New Compose Files
-- `ui/theme/Color.kt` - Color definitions
+- `ui/theme/Colour.kt` - Colour definitions
 - `ui/theme/Type.kt` - Typography definitions  
 - `ui/theme/Theme.kt` - Main theme setup
 - `ui/compose/screens/RecordingScreen.kt` - Main recording interface
@@ -105,7 +105,7 @@ plugins {
 ### Modified Files
 - `MainActivity.kt` - Added Compose support with toggle
 - `build.gradle.kts` - Added Compose dependencies and configuration
-- `gradle/libs.versions.toml` - Added Compose version catalog entries
+- `gradle/libs.versions.toml` - Added Compose version catalogue entries
 - `AndroidManifest.xml` - Added ComposeMainActivity declaration
 
 ### Test Files
@@ -127,6 +127,6 @@ The application now successfully builds and runs with Jetpack Compose while main
 2. **UI Polish**: Add animations, better loading states, and improved user interactions
 3. **Complete Migration**: Gradually phase out Fragment-based UI
 4. **Testing**: complete UI and integration testing
-5. **Performance Optimization**: Optimize Compose performance for production use
+5. **Performance Optimisation**: Optimise Compose performance for production use
 
 This migration successfully demonstrates a modern, maintainable approach to Android UI development while preserving all existing application functionality.

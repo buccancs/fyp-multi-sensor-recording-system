@@ -16,7 +16,7 @@ Android device can operate independently for local sensor management and
 data logging, yet all devices participate in coordinated sessions
 managed by the desktop controller for unified timing and control.
 
-The architecture emphasizes **temporal synchronization, reliability, and
+The architecture emphasizes **temporal synchronisation, reliability, and
 modularity**. A custom network communication layer links the mobile and
 desktop components, enabling command-and-control messages, status
 updates, and data previews over a Wi-Fi or LAN connection. The system
@@ -38,7 +38,7 @@ communicating with one or more* *Android devices* *over a network. Each
 Android device interfaces with onboard and external sensors (cameras,
 thermal sensor, GSR sensor) and handles local data acquisition and
 storage. The desktop controller provides a GUI for the user and runs
-coordination services (network server, synchronization engine, data
+coordination services (network server, synchronisation engine, data
 manager), sending control commands to the Android app and receiving live
 status and preview data. The design shows a* *hybrid star topology: the
 PC is the hub coordinating distributed mobile nodes, enabling
@@ -53,7 +53,7 @@ external devices. It is developed in Kotlin and structured using a clear
 **layered architecture** to separate concerns. The app follows an MVVM
 (Model--View--ViewModel) design, where a thin UI layer
 (Activities/Fragments and ViewModels) interacts with a robust **business
-logic layer** of managers and controllers, which in turn utilize
+logic layer** of managers and controllers, which in turn utilise
 lower-level sensor interfacing components. This design maximizes
 modularity and maintainability, allowing each sensor modality to be
 managed independently while ensuring all subsystems remain synchronized.
@@ -139,7 +139,7 @@ available resolution and a frame rate that matches typical thermal
 camera capabilities.
 
 Captured thermal frames consist of both a thermal image (usually
-represented as a color or grayscale thermogram) and underlying
+represented as a colour or grayscale thermogram) and underlying
 temperature data for each pixel. The `ThermalRecorder` obtains each
 frame from the SDK callback in a background thread to avoid stalling the
 UI. Each frame is timestamped with a high-resolution timestamp
@@ -168,7 +168,7 @@ mobile device had to be considered -- the app monitors device
 attach/detach events and gracefully handles unexpected disconnects (for
 example, if the camera is unplugged mid-session, the system logs a
 warning and the recorder stops, but other sensors continue unaffected).
-Additionally, to maintain synchronization with other data, the thermal
+Additionally, to maintain synchronisation with other data, the thermal
 frames are timestamped in the same epoch as the phone's video frames and
 GSR samples; this enables the **thermal data to be temporally aligned**
 with the RGB video and physiological signals during analysis. The result
@@ -176,9 +176,9 @@ is a tightly coupled thermal imaging module that extends the Android
 phone's sensing capabilities with minimal latency. **Thermal camera
 integration is fully incorporated into the session workflow** -- the
 user can toggle thermal recording on or off for a session, and if
-enabled, the system will automatically initialize the Topdon device and
+enabled, the system will automatically initialise the Topdon device and
 begin capturing when the session starts (under PC command), then
-finalize and close the device when the session ends. All these steps
+finalise and close the device when the session ends. All these steps
 occur behind the scenes, preserving a seamless user experience.
 
 *(Figure 4.3: Thermal camera integration flow. This figure illustrates
@@ -190,7 +190,7 @@ camera at \~25 Hz. Each frame is time-stamped and written to local
 storage as part of a thermal data file, and simultaneously a scaled
 preview image is sent over the network to the PC for real-time
 monitoring. The diagram also highlights the coordination required: the
-PC's "start recording" command triggers the camera initialization
+PC's "start recording" command triggers the camera initialisation
 (opening the USB device and starting capture) almost concurrently with
 other sensors, ensuring the thermal stream is synchronized with the
 overall session timeline.)*
@@ -275,7 +275,7 @@ the capability to capture high-quality physiological signals in sync
 with video and thermal data. The modular design of the `ShimmerRecorder`
 means this component can start and stop recording in tandem with other
 sensors under the control of the central session manager. When a session
-begins, the app (upon receiving the command from PC) will initialize the
+begins, the app (upon receiving the command from PC) will initialise the
 Bluetooth link, start the data stream, and begin logging GSR. When the
 session ends, it closes the connection and finalizes the CSV file. The
 data recorded provides a ground-truth physiological timeline (skin
@@ -289,7 +289,7 @@ Bluetooth. In a recording session, the Android app subscribes to the
 Shimmer's data stream, receiving packets that contain GSR and PPG
 readings. These data packets are timestamped and logged on the phone.
 The figure highlights the flow from* *sensor electrodes on the subject,
-through the Shimmer device's analog front-end (measuring skin
+through the Shimmer device's analogue front-end (measuring skin
 conductance), transmitted over Bluetooth to the phone, and then into the
 app's data recording pipeline. Any loss of connection triggers the app's
 reconnection logic, ensuring continuity of data. A small real-time graph
@@ -299,10 +299,10 @@ GSR level) are also sent to the desktop for live display.*)
 ## 4.3 Desktop Controller Design and Functionality
 
 The **desktop controller** is a Python application with a rich graphical
-user interface that serves as the command center for the entire
+user interface that serves as the command centre for the entire
 multi-sensor system. It is built using the PyQt5 framework for the GUI,
 combined with a suite of backend services and managers that handle
-device communication, data management, and synchronization.
+device communication, data management, and synchronisation.
 Architecturally, the desktop application is divided into layers and
 components that mirror many responsibilities of the Android app, but at
 a higher coordination level. A **Presentation Layer** includes the main
@@ -360,10 +360,10 @@ has an issue, the data can still be collected via the
 other[\[30\]](docs/python_desktop_controller_readme.md#L145-L153).
 
 All these services feed into the **Infrastructure Layer** on the PC,
-which includes cross-cutting concerns like logging, synchronization, and
+which includes cross-cutting concerns like logging, synchronisation, and
 error
 handling[\[31\]](PythonApp/README.md#L94-L101).
-A dedicated **Synchronization Engine** runs on the desktop to maintain
+A dedicated **Synchronisation Engine** runs on the desktop to maintain
 the master clock and align time across devices (details in Section 4.4).
 A global **Logging system** records events from all parts of the
 application (e.g., device connect/disconnect, commands sent, errors,
@@ -431,26 +431,26 @@ Device Management, Calibration, etc.), an* *application logic layer*
 calibration), and a* *service layer* *(which includes the network socket
 server, webcam interface, Shimmer interface, file and data management
 services). The diagram also shows an* *infrastructure layer* *beneath,
-containing the synchronization engine, logging system, and error
+containing the synchronisation engine, logging system, and error
 handling modules that support the entire application. Arrows in the
 figure illustrate how user actions in the GUI propagate to the
 application layer (e.g., "Start Session" triggers the Session Manager),
 which then calls into various services (sending network commands,
-initializing webcams, etc.). Similarly, data flows upward: e.g., a
+initialising webcams, etc.). Similarly, data flows upward: e.g., a
 preview frame from an Android device comes in through the Network
 Service and is passed to the GUI for display. The figure emphasizes
 modular design -- each sensor or function has a dedicated service,
 coordinated by the central application logic, enabling easy maintenance
 and future scalability.)*
 
-## 4.4 Communication Protocol and Synchronization Mechanism
+## 4.4 Communication Protocol and Synchronisation Mechanism
 
 A core challenge of this project is enabling **reliable, low-latency
 communication** between the PC controller and the Android devices, along
-with a mechanism to synchronize their clocks for coordinated actions.
+with a mechanism to synchronise their clocks for coordinated actions.
 The system addresses this with a custom-designed **communication
 protocol** built on standard networking protocols, and an integrated
-**synchronization service** that keeps all devices aligned to a master
+**synchronisation service** that keeps all devices aligned to a master
 clock.
 
 **Communication Protocol:** The Android app and desktop controller
@@ -508,13 +508,13 @@ Ethernet LAN). Security is not heavily emphasized in this research
 prototype (messages are unencrypted JSON), but the system can be
 isolated on a private network during experiments for safety.
 
-**Synchronization Mechanism:** Achieving **time synchronization** across
+**Synchronisation Mechanism:** Achieving **time synchronisation** across
 devices is critical because we want, for instance, a thermal frame and a
 GSR sample that occur at the "same time" to truly represent the same
 moment. In a distributed system with independent clocks, our approach is
-to designate the desktop PC as the **master clock** and synchronize all
+to designate the desktop PC as the **master clock** and synchronise all
 other devices to it. The desktop controller runs a component called the
-`MasterClockSynchronizer` (or Synchronization Engine) which fulfills two
+`MasterClockSynchronizer` (or Synchronisation Engine) which fulfills two
 primary roles: it distributes the current master time to clients
 (devices) and coordinates simultaneous actions based on that time.
 Concretely, the PC launches a lightweight **NTP (Network Time Protocol)
@@ -533,7 +533,7 @@ The `SynchronizationEngine` on the PC possibly refines this by periodic
 pings (e.g., every 5 seconds) to adjust for any drift during a long
 session[\[44\]](PythonApp/master_clock_synchronizer.py#L62-L71)[\[45\]](PythonApp/master_clock_synchronizer.py#L80-L88).
 In practice, the Android device will apply any calculated offset to its
-own timestamps for data labeling, meaning if its clock was 5 ms ahead of
+own timestamps for data labelling, meaning if its clock was 5 ms ahead of
 the PC, it will subtract 5 ms from all timestamps to align with the
 master timeline.
 
@@ -556,8 +556,8 @@ status update from device to PC may include the device's current clock
 vs. the master clock (or implicitly, the PC knows when it sent a sync
 and what the device's last offset was). If any device's clock starts to
 drift beyond an acceptable tolerance (say more than a few milliseconds),
-the PC can issue a re-synchronization or simply record the drift for
-later correction. The synchronization engine might incorporate simple
+the PC can issue a re-synchronisation or simply record the drift for
+later correction. The synchronisation engine might incorporate simple
 drift compensation -- for instance, if one phone tends to run its clock
 slightly faster, the system can predict and adjust timing gradually
 (rather than waiting for a large error to
@@ -568,7 +568,7 @@ clocks, straightforward NTP-based periodic correction is sufficient to
 maintain sub-millisecond
 alignment[\[50\]](docs/multi_device_synchronization_readme.md#L29-L37).
 
-Finally, the communication protocol assists synchronization by carrying
+Finally, the communication protocol assists synchronisation by carrying
 timing info in every message. The JSON messages often include
 timestamps. For example, when an Android sends a preview frame to the
 PC, it tags it with the timestamp of frame capture; the PC can compare
@@ -582,24 +582,24 @@ post-processing using interpolation or offset adjustment.
 
 In summary, the **PC--Android communication** is realized via a reliable
 JSON/TCP socket protocol, enabling complete remote control and live
-data streaming, while the **synchronization mechanism** ensures all
+data streaming, while the **synchronisation mechanism** ensures all
 devices operate on a unified timeline. Together, these allow the system
 to achieve a high degree of temporal precision: tests have shown the
 system tolerates network latency variations from \~1 ms up to hundreds
 of milliseconds without losing
-synchronization[\[52\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L128-L136).
+synchronisation[\[52\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L128-L136).
 This is accomplished by designing for asynchronous, non-blocking
 communication and by decoupling the *command* from the *execution* time
 (i.e., schedule actions in the future on a shared clock). The result is
 a robust coordination layer that underpins the multi-modal data
 collection with the necessary timing guarantees.
 
-*(Figure 4.6: Communication and synchronization sequence. This figure
+*(Figure 4.6: Communication and synchronisation sequence. This figure
 illustrates the sequence of interactions for device connection and a
 synchronized session start. Initially, each Android device connects to
 the desktop's socket server and sends a JSON handshake (including device
 ID and sensor capabilities). The desktop acknowledges and lists the
-device as ready. The figure then shows the* *synchronization phase: the
+device as ready. The figure then shows the* *synchronisation phase: the
 desktop (master) sends a time sync request or NTP response to the phone,
 and the phone adjusts its clock offset. When the researcher clicks
 "Start" on the PC, the desktop broadcasts a* *StartRecording* *message
@@ -689,7 +689,7 @@ The desktop's **Data Processing components** then take over. A
 `DataProcessor` module on the PC can parse each data file (using
 knowledge of the format -- for example, it knows how to read the thermal
 .raw file and extract frames and timestamps, or read the Shimmer CSV)
-and then perform multi-modal synchronization
+and then perform multi-modal synchronisation
 verification[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
 Because all data streams were independently recorded, the system
 double-checks that the timelines align: it may, for instance, compare
@@ -697,16 +697,16 @@ the timestamp of the first frame of the phone video with the master
 start time to compute an offset, and do the same for the first thermal
 frame and first GSR sample. Minor adjustments (order of tens of
 milliseconds) can be handled by shifting timestamps in software to
-perfect the alignment. This post-processing synchronization step is
+perfect the alignment. This post-processing synchronisation step is
 important if any device started a fraction of a second late or if there
-was clock drift -- the Synchronization Engine on the PC assists by
+was clock drift -- the Synchronisation Engine on the PC assists by
 providing logs of the offset of each device over time, which the
 DataProcessor can use to correct timestamps. The result is that each
 piece of data can be assigned a **global timestamp** in a common
 reference (e.g., milliseconds since session start or an absolute UTC
 time).
 
-Following synchronization, the pipeline can branch into different **data
+Following synchronisation, the pipeline can branch into different **data
 export and analysis preparation** tasks. A `DataExporter` component
 handles converting the data into formats needed for
 analysis[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
@@ -737,7 +737,7 @@ trustworthy. The QA results might be included in a session report
 automatically.
 
 To facilitate iterative analysis, the desktop application also supports
-**post-session visualization**. The Files/Data tab can load a session's
+**post-session visualisation**. The Files/Data tab can load a session's
 data and plot it (e.g., graph the GSR over time and allow overlaying
 markers where certain events happened, or scrub through the video with
 the corresponding thermal images). This isn't so much a part of the
@@ -758,14 +758,14 @@ knowing that the incoming data has been properly collected and
 synchronized by the system. The pipeline thus transforms raw multi-modal
 data into an integrated dataset suitable for tasks like machine learning
 model training, statistical analysis of physiological responses, or
-visualization in publications.
+visualisation in publications.
 
 *(Figure 4.7: Data processing pipeline from data capture to analysis.
 The figure depicts the flow of data through various stages: at the left,
 raw data acquisition on each Android device (camera frames, thermal
 readings, GSR samples) along with initial processing (video encoding,
 thermal calibration, formatting of GSR values). These are saved as local
-files on the device. In the middle, the* *synchronization and
+files on the device. In the middle, the* *synchronisation and
 aggregation* *step: the PC collects the metadata and possibly the data
 files from all devices, aligning them on a common timeline (using the
 master clock and timestamps). At the right, the* *output stage* *shows
@@ -781,12 +781,12 @@ analysis.)*
 
 Building a complex multi-sensor system like this inevitably came with
 several implementation challenges. Throughout the development, we
-encountered issues related to synchronization, data volume,
+encountered issues related to synchronisation, data volume,
 cross-platform integration, and sensor hardware quirks. This section
 outlines the key challenges and the solutions or design decisions we
 adopted to address them:
 
-- **Precise Time Synchronization Across Platforms:** Ensuring that an
+- **Precise Time Synchronisation Across Platforms:** Ensuring that an
   Android phone and a PC (and possibly other devices) agree on time
   within a few milliseconds is non-trivial, given differences in
   operating system scheduling and clock
@@ -798,7 +798,7 @@ adopted to address them:
   for time, we avoided the need for continuous tight coupling. We also
   added drift monitoring -- if a device's clock started to stray, the
   system would either resync it or account for the offset in data
-  post-processing. This approach yielded sub-millisecond synchronization
+  post-processing. This approach yielded sub-millisecond synchronisation
   accuracy in tests, meeting the project's requirements. An added
   benefit is that each device could operate independently if needed (in
   case of connection loss) and still later align via the timestamps,
@@ -825,7 +825,7 @@ adopted to address them:
   Additionally, our **data schema** ensured integration after the fact:
   because every data point had a timestamp, we could merge streams
   offline without ambiguity. This design choice turned what could have
-  been a complex synchronization problem into a straightforward data
+  been a complex synchronisation problem into a straightforward data
   merge task using timestamps.
 
 - **Bluetooth Reliability and Sensor Connectivity:** The wireless nature
@@ -854,11 +854,11 @@ adopted to address them:
 - **Cross-Platform Integration and Compatibility:** Developing and
   debugging two separate applications (Android and Python) that must
   work in concert posed compatibility issues -- differences in
-  programming languages, data serialization, and even how each handles
+  programming languages, data serialisation, and even how each handles
   threading. A specific example was ensuring that the JSON protocol was
   interpreted exactly the same on both ends, and that special data types
   (like binary image frames or high-precision timestamps) survived the
-  journey. We addressed this by **standardizing the communication and
+  journey. We addressed this by **standardising the communication and
   using well-tested libraries**. Python's use of the `json` library and
   Android's use of Kotlin's JSON handling (or manual parsing) were
   aligned by a strict schema: we defined, in documentation, every
@@ -877,14 +877,14 @@ adopted to address them:
   testing, where we ran both the Android and Python components in test
   scenarios, helped catch incompatibilities early.
 
-- **Resource Constraints and Performance Optimization:** Running
+- **Resource Constraints and Performance Optimisation:** Running
   intensive tasks (recording video, processing images, streaming data)
   on a mobile device for extended periods can lead to performance
   degradation or even crashes due to memory, CPU, or thermal
   constraints. We encountered issues like the phone's CPU heating up and
   throttling during long sessions, or the garbage collector pausing the
   app if too much memory was used improperly. Our solution was two-fold:
-  **optimize and monitor**. We optimized by using efficient data
+  **optimise and monitor**. We optimized by using efficient data
   structures and avoiding unnecessary copies of data (for instance,
   reusing byte buffers for thermal frames rather than allocating new
   ones each time). We also leveraged lower-level APIs when possible
@@ -895,7 +895,7 @@ adopted to address them:
   time[\[57\]](AndroidApp/README.md#L94-L101).
   If any metric exceeded a threshold (for example, if frame processing
   was taking too long and queue lengths were growing), the system would
-  log it and could adjust behavior (like dropping preview frames to
+  log it and could adjust behaviour (like dropping preview frames to
   catch up). Additionally, we exposed some of these stats on the PC UI
   so the user could see if a device was struggling. With these
   strategies, we managed to keep the system running within the devices'
@@ -910,7 +910,7 @@ architecture greatly facilitated this: we could improve or fix one part
 of the system (say, the Bluetooth reconnection logic) without needing to
 overhaul unrelated parts (like the video recorder). This flexibility
 allowed iterative refinement. Many of these challenges, especially
-synchronization and multi-threaded performance, are common in
+synchronisation and multi-threaded performance, are common in
 distributed sensing systems; our implementation demonstrated effective
 strategies by combining well-known techniques (like NTP time sync,
 buffering, multithreading) with custom engineering (like our JSON

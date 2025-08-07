@@ -15,7 +15,7 @@
 
 3.3. [Functional Requirements Overview](#33-functional-requirements-overview)
 
-- 3.3.1. [Multi-Device Coordination and Synchronization Requirements](#331-multi-device-coordination-and-synchronization-requirements)
+- 3.3.1. [Multi-Device Coordination and Synchronisation Requirements](#331-multi-device-coordination-and-synchronisation-requirements)
 - 3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
 - 3.3.3. [Real-Time Data Processing and Analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
 - 3.3.4. [User Interface and Session Management Requirements](#334-user-interface-and-session-management-requirements)
@@ -70,7 +70,7 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.4. [Detailed Functional Requirements Specifications](#detailed-functional-requirements-specifications)
 - 3.5. [Core System Coordination Requirements](#core-system-coordination-requirements)
     - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
-    - 3.5.2. [FR-002: Advanced Temporal Synchronization and Precision Management](#fr-002-advanced-temporal-synchronization-and-precision-management)
+    - 3.5.2. [FR-002: Advanced Temporal Synchronisation and Precision Management](#fr-002-advanced-temporal-synchronisation-and-precision-management)
     - 3.5.3. [FR-003: complete Session Management and Lifecycle Control](#fr-003-complete-session-management-and-lifecycle-control)
 - 3.6. [Data Acquisition and Processing Requirements](#data-acquisition-and-processing-requirements)
     - 3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
@@ -80,7 +80,7 @@ and operational foundation that guides all subsequent design and implementation 
     - 3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
     - 3.7.2. [FR-021: Machine Learning Inference and Prediction](#fr-021-machine-learning-inference-and-prediction)
 - 3.8. [Core System Functions](#core-system-functions)
-    - 3.8.1. [FR-030: Multi-Device Coordination and Synchronization](#fr-030-multi-device-coordination-and-synchronization)
+    - 3.8.1. [FR-030: Multi-Device Coordination and Synchronisation](#fr-030-multi-device-coordination-and-synchronisation)
     - 3.8.2. [FR-031: High-Quality RGB Video Data Acquisition](#fr-031-high-quality-rgb-video-data-acquisition)
     - 3.8.3. [FR-032: Thermal Imaging Integration and Analysis](#fr-032-thermal-imaging-integration-and-analysis)
     - 3.8.4. [FR-033: Reference GSR Measurement Integration](#fr-033-reference-gsr-measurement-integration)
@@ -88,14 +88,14 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.9. [Advanced Data Processing Requirements](#advanced-data-processing-requirements)
     - 3.9.1. [FR-010: Real-Time Hand Detection and Tracking](#fr-010-real-time-hand-detection-and-tracking)
     - 3.9.2. [FR-011: Advanced Camera Calibration System](#fr-011-advanced-camera-calibration-system)
-    - 3.9.3. [FR-012: Precision Data Synchronization Framework](#fr-012-precision-data-synchronization-framework)
+    - 3.9.3. [FR-012: Precision Data Synchronisation Framework](#fr-012-precision-data-synchronisation-framework)
 
 4. [Non-Functional Requirements](#non-functional-requirements)
     - 4.1. [Performance Requirements](#performance-requirements)
         - 4.1.1. [NFR-001: System Throughput and Scalability](#nfr-001-system-throughput-and-scalability)
         -
         4.1.2. [NFR-002: Response Time and Interactive Performance](#nfr-002-response-time-and-interactive-performance)
-        - 4.1.3. [NFR-003: Resource Utilization and Efficiency](#nfr-003-resource-utilization-and-efficiency)
+        - 4.1.3. [NFR-003: Resource Utilisation and Efficiency](#nfr-003-resource-utilisation-and-efficiency)
     - 4.2. [Reliability and Quality Requirements](#reliability-and-quality-requirements)
         - 4.2.1. [NFR-010: System Availability and Uptime](#nfr-010-system-availability-and-uptime)
         - 4.2.2. [NFR-011: Data Integrity and Protection](#nfr-011-data-integrity-and-protection)
@@ -162,7 +162,7 @@ timeline
             : Féré's Phenomenon
             : Galvanometer Measurements
             : Laboratory-Only Applications
-    1930-1960: Standardization Era
+    1930-1960: Standardisation Era
             : Electrode Development
             : Amplifier Technology
             : Clinical Applications
@@ -225,7 +225,7 @@ dynamic ways in which their needs would evolve throughout the system lifecycle a
 applications [CITE - Mitchell, R.K., Agle, B.R., & Wood, D.J. (1997). Toward a theory of stakeholder identification and salience: Defining the principle of who and what really counts. Academy of Management Review, 22(4), 853-886].
 
 The systematic stakeholder engagement process revealed critical insights that fundamentally shaped the system
-architecture, influenced feature prioritization decisions, and guided technology selection processes in ways that
+architecture, influenced feature prioritisation decisions, and guided technology selection processes in ways that
 ensured the final system would satisfy diverse stakeholder needs while maintaining technical coherence and scientific
 validity [CITE - Cleland-Huang, J., Settimi, R., Zou, X., & Solc, P. (2007). Automated classification of non-functional requirements. Requirements Engineering, 12(2), 103-120].
 The engagement methodology employed structured interview protocols, collaborative design sessions, and iterative
@@ -255,7 +255,7 @@ contact-based methodologies while simultaneously enabling innovative forms of ex
 impossible with conventional measurement
 approaches [CITE - Levenson, R.W. (2003). Blood, sweat, and fears: The autonomic architecture of emotion. Annals of the New York Academy of Sciences, 1000(1), 348-366].
 Their expert feedback highlighted the absolutely critical need for complete data validation capabilities,
-systematic error detection and correction mechanisms, and the essential ability to customize experimental protocols for
+systematic error detection and correction mechanisms, and the essential ability to customis\1 experimental protocols for
 diverse research applications spanning multiple scientific disciplines and experimental paradigms.
 
 **Study Participants and Research Subjects** constitute a unique and often underrepresented stakeholder group whose
@@ -280,7 +280,7 @@ the factors that influence willingness to participate in physiological research 
 **Technical Operators and Research Assistants** bring essential practical operational perspectives focused on system
 reliability, operational efficiency, ease of use, and complete maintenance requirements that directly impact
 research productivity and data quality [CITE - Nielsen, J. (1994). Usability engineering. Morgan Kaufmann]. Their
-extensive input emphasized the critical importance of rapid setup procedures that minimize experimental overhead,
+extensive input emphasized the critical importance of rapid setup procedures that minimis\1 experimental overhead,
 automated error detection and recovery systems that reduce operator burden, and complete troubleshooting
 capabilities that enable effective problem resolution without requiring specialized technical
 expertise [CITE - Karat, J. (1997). Evolving the scope of user-centered design. Communications of the ACM, 40(7), 33-38].
@@ -289,7 +289,7 @@ The requirements analysis process revealed that operator efficiency and system r
 throughput, data quality, and overall research productivity in ways that fundamentally affect research outcomes and
 scientific
 progress [CITE - Norman, D.A. (2013). The design of everyday things: Revised and expanded edition. Basic Books]. This
-understanding led to specific requirements for intuitive user interfaces that minimize training requirements, automated
+understanding led to specific requirements for intuitive user interfaces that minimis\1 training requirements, automated
 system validation procedures that detect and prevent common operational errors, and complete documentation that
 enables effective system operation by personnel with diverse technical backgrounds and experience levels.
 
@@ -361,15 +361,15 @@ peer-reviewed research papers spanning contactless physiological measurement, ad
 distributed systems architecture, machine learning applications in physiological sensing, and human-computer interaction
 provided the essential foundational understanding of state-of-the-art techniques, commonly encountered challenges, and
 emerging research
-opportunities [CITE - Webster, J., & Watson, R.T. (2002). Analyzing the past to prepare for the future: Writing a literature review. MIS Quarterly, 26(2), xiii-xxiii].
+opportunities [CITE - Webster, J., & Watson, R.T. (2002). Analysing the past to prepare for the future: Writing a literature review. MIS Quarterly, 26(2), xiii-xxiii].
 This complete literature analysis systematically identified significant gaps in current technological solutions,
 established rigorous technical benchmarks for system performance evaluation, and revealed critical requirements related
-to measurement accuracy, temporal synchronization precision, and validation methodologies that might not have emerged
+to measurement accuracy, temporal synchronisation precision, and validation methodologies that might not have emerged
 from stakeholder interviews
-alone [CITE - Cooper, H.M. (1988). Organizing knowledge syntheses: A taxonomy of literature reviews. Knowledge in Society, 1(1), 104-126].
+alone [CITE - Cooper, H.M. (1988). Organising knowledge syntheses: A taxonomy of literature reviews. Knowledge in Society, 1(1), 104-126].
 
 The literature review process employed systematic search strategies across multiple academic databases including IEEE
-Xplore, PubMed, ACM Digital Library, and SpringerLink, utilizing carefully constructed search terms and inclusion
+Xplore, PubMed, ACM Digital Library, and SpringerLink, utilising carefully constructed search terms and inclusion
 criteria to ensure full coverage of relevant research
 domains [CITE - Kitchenham, B. (2004). Procedures for performing systematic reviews. Keele University Technical Report TR/SE-0401].
 The analysis revealed critical insights about measurement validation requirements, experimental design constraints, and
@@ -435,7 +435,7 @@ applicability [CITE - Boehm, B.W., & Bose, P. (1994). A collaborative spiral sof
 This detailed analysis systematically identified critical trade-offs between ideal stakeholder requirements and
 practical implementation limitations, leading to carefully prioritized requirement sets that balanced scientific needs
 with technical reality and resource
-constraints [CITE - Karlsson, J., & Ryan, K. (1997). A cost-value approach for prioritizing requirements. IEEE Software, 14(5), 67-74].
+constraints [CITE - Karlsson, J., & Ryan, K. (1997). A cost-value approach for prioritising requirements. IEEE Software, 14(5), 67-74].
 
 The feasibility assessment process included detailed analysis of computational requirements, network bandwidth
 limitations, device capability constraints, and integration complexity factors that could affect system performance and
@@ -452,7 +452,7 @@ Multi-Sensor Recording System must reliably provide to achieve its ambitious res
 advances in contactless physiological measurement
 science [CITE - Robertson, S., & Robertson, J. (2012). Mastering the requirements process: Getting requirements right. Addison-Wesley Professional].
 These meticulously defined requirements emerged from the extensive stakeholder analysis process and represent the
-fundamental behaviors, operations, and capabilities that are absolutely essential for enabling sophisticated contactless
+fundamental behaviours, operations, and capabilities that are absolutely essential for enabling sophisticated contactless
 GSR prediction research while maintaining the scientific rigor and measurement precision required for peer-reviewed
 publication and clinical application [CITE - Wiegers, K., & Beatty, J. (2013). Software requirements. Microsoft Press].
 
@@ -473,14 +473,14 @@ traditional commercial applications, requiring specialized validation criteria, 
 measures that directly support scientific methodology, reproducible research outcomes, and peer review
 standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
-### 3.3.1 Multi-Device Coordination and Synchronization Requirements
+### 3.3.1 Multi-Device Coordination and Synchronisation Requirements
 
 **Table 3.3: Functional Requirements Summary Matrix**
 
 | ID     | Requirement Category        | Priority | Complexity | Implementation Status | Validation Method      |
 |--------|-----------------------------|----------|------------|-----------------------|------------------------|
 | FR-001 | Multi-Device Coordination   | Critical | High       | Complete              | Integration Testing    |
-| FR-002 | Temporal Synchronization    | Critical | High       | Complete              | Precision Measurement  |
+| FR-002 | Temporal Synchronisation    | Critical | High       | Complete              | Precision Measurement  |
 | FR-003 | Video Data Acquisition      | Critical | Medium     | Complete              | Quality Assessment     |
 | FR-004 | Thermal Imaging Integration | High     | Medium     | Complete              | Calibration Testing    |
 | FR-005 | Reference GSR Measurement   | Critical | Low        | Complete              | Accuracy Validation    |
@@ -498,7 +498,7 @@ standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007
 graph TB
     subgraph "Core Infrastructure Requirements"
         FR001[FR-001: Multi-Device Coordination]
-        FR002[FR-002: Temporal Synchronization]
+        FR002[FR-002: Temporal Synchronisation]
         FR010[FR-010: Network Communication]
     end
 
@@ -542,13 +542,13 @@ graph TB
 
 | Performance Category         | Target Specification   | Minimum Acceptable | Test Method                     | Validation Criteria                                      |
 |------------------------------|------------------------|--------------------|---------------------------------|----------------------------------------------------------|
-| **Temporal Synchronization** | ±18.7ms accuracy       | ±50ms              | Network Time Protocol testing   | Statistical analysis across 1000+ synchronization events |
+| **Temporal Synchronisation** | ±18.7ms accuracy       | ±50ms              | Network Time Protocol testing   | Statistical analysis across 1000+ synchronisation events |
 | **Video Frame Rate**         | 30 FPS consistent      | 24 FPS minimum     | Frame timing analysis           | 99.5% of frames within timing tolerance                  |
 | **Thermal Resolution**       | 320x240 pixels         | 160x120 pixels     | Thermal calibration protocol    | Spatial accuracy validation with reference targets       |
 | **GSR Sampling Rate**        | 128 Hz                 | 64 Hz              | Signal analysis validation      | Nyquist frequency compliance testing                     |
 | **System Latency**           | <200ms end-to-end      | <500ms             | Real-time response measurement  | Response time percentile analysis                        |
 | **Data Throughput**          | 50 MB/s aggregate      | 25 MB/s            | Network bandwidth testing       | Sustained throughput under load                          |
-| **Storage Capacity**         | 2TB per 8-hour session | 500GB              | Capacity utilization monitoring | Storage efficiency analysis                              |
+| **Storage Capacity**         | 2TB per 8-hour session | 500GB              | Capacity utilisation monitoring | Storage efficiency analysis                              |
 | **Battery Life**             | 6 hours continuous     | 4 hours            | Power consumption profiling     | Real-world usage validation                              |
 
 **Table 3.5: Multi-Device Coordination Specifications**
@@ -559,7 +559,7 @@ graph TB
 | **Network Topology** | Hybrid star-mesh     | Adaptive routing protocols | Network resilience testing |
 | **Failover Time**    | <30 seconds          | Automatic reconnection     | Fault injection testing    |
 | **Data Consistency** | 99.9% integrity      | Checksums and validation   | Data corruption detection  |
-| **Session Recovery** | Complete restoration | State serialization        | Recovery scenario testing  |
+| **Session Recovery** | Complete restoration | State serialisation        | Recovery scenario testing  |
 
 ### Hardware Integration Requirements
 
@@ -593,7 +593,7 @@ graph TB
 
     subgraph "Network Infrastructure"
         WIFI[WiFi Router<br/>802.11ac/ax]
-        SYNC[NTP Server<br/>Time Synchronization]
+        SYNC[NTP Server<br/>Time Synchronisation]
     end
 
     THERMAL --> ANDROID
@@ -614,7 +614,7 @@ graph TB
 | Requirement ID | Description               | Acceptance Criteria                                                                                | Performance Metrics                                        | Validation Method                                   |
 |----------------|---------------------------|----------------------------------------------------------------------------------------------------|------------------------------------------------------------|-----------------------------------------------------|
 | **FR-001**     | Multi-Device Coordination | System shall coordinate up to 12 devices simultaneously with automatic discovery and configuration | 99.9% coordination success rate, <30s device addition time | Integration testing with maximum device load        |
-| **FR-002**     | Temporal Synchronization  | System shall maintain ±18.7ms synchronization accuracy across all devices                          | ≤50ms maximum deviation, 95% within ±25ms                  | Statistical analysis of timestamp accuracy          |
+| **FR-002**     | Temporal Synchronisation  | System shall maintain ±18.7ms synchronisation accuracy across all devices                          | ≤50ms maximum deviation, 95% within ±25ms                  | Statistical analysis of timestamp accuracy          |
 | **FR-003**     | Video Data Acquisition    | System shall capture 1080p video at 30 FPS with quality validation                                 | >95% frames within quality threshold, <1% frame drops      | Automated quality assessment algorithms             |
 | **FR-005**     | Reference GSR Measurement | System shall acquire GSR data at 128 Hz with calibrated accuracy                                   | ±2% accuracy vs. reference standard, <0.1% data loss       | Comparative validation against laboratory standards |
 | **FR-009**     | Data Storage and Export   | System shall store all data with integrity validation and multiple export formats                  | 100% data integrity, support for CSV/JSON/MATLAB formats   | Data validation checksums and format testing        |
@@ -653,7 +653,7 @@ graph TB
 | FR-001         | Device Discovery Time      | <30 seconds      | ±5 seconds | Automated Testing      | Network Conditions      |
 | FR-001         | Maximum Concurrent Devices | 12 devices       | N/A        | Load Testing           | Hardware Limitations    |
 | FR-001         | Connection Stability       | >99.5% uptime    | ±0.2%      | Reliability Testing    | Network Quality         |
-| FR-002         | Temporal Synchronization   | ≤25ms deviation  | ±5ms       | Precision Measurement  | Clock Accuracy          |
+| FR-002         | Temporal Synchronisation   | ≤25ms deviation  | ±5ms       | Precision Measurement  | Clock Accuracy          |
 | FR-002         | Drift Correction           | <1ms/hour        | ±0.2ms     | Long-term Testing      | Hardware Stability      |
 | FR-003         | Video Frame Rate           | 30 FPS           | ±2 FPS     | Performance Testing    | Processing Power        |
 | FR-003         | Video Resolution           | 1920x1080        | N/A        | Quality Assessment     | Camera Capability       |
@@ -686,7 +686,7 @@ The coordination system must provide automated device discovery, capability asse
 that enables researchers to rapidly deploy measurement sessions without requiring specialized technical expertise or
 extensive setup procedures.
 
-**Performance Requirements**: Device coordination must maintain temporal synchronization within ±25 milliseconds across
+**Performance Requirements**: Device coordination must maintain temporal synchronisation within ±25 milliseconds across
 all connected devices, support automatic reconnection procedures that restore full coordination within 5 seconds of
 temporary disconnection, and provide complete status monitoring that detects and reports device health,
 connectivity status, and measurement quality in
@@ -697,7 +697,7 @@ while maintaining the temporal precision required for physiological research. Th
 limitations of traditional single-device measurement systems while providing the redundancy and validation opportunities
 essential for research-grade data collection [CITE - Lynch, N.A. (1996). Distributed algorithms. Morgan Kaufmann].
 
-**Validation Criteria**: Successful coordination of at least 8 devices simultaneously, maintenance of synchronization
+**Validation Criteria**: Successful coordination of at least 8 devices simultaneously, maintenance of synchronisation
 precision under normal network conditions, and demonstration of automatic recovery from temporary connectivity
 interruptions without data loss or measurement artifacts.
 
@@ -720,40 +720,40 @@ impacts experimental efficiency and participant comfort.
 
 **Implementation Dependencies**:
 
-- Network service discovery protocols utilizing multicast DNS (mDNS) and Bonjour service
+- Network service discovery protocols utilising multicast DNS (mDNS) and Bonjour service
   discovery [CITE - Cheshire, S., & Krochmal, M. (2013). DNS-based service discovery. RFC 6763]
 - WebSocket-based communication infrastructure with JSON message protocols
 - Device capability negotiation and compatibility validation systems
 - complete error handling and recovery mechanisms with detailed logging
 - Network security protocols including TLS encryption for sensitive data transmission
 
-#### FR-002: Advanced Temporal Synchronization and Precision Management
+#### FR-002: Advanced Temporal Synchronisation and Precision Management
 
-**Requirement Statement**: The system shall establish and maintain precise temporal synchronization across all connected
+**Requirement Statement**: The system shall establish and maintain precise temporal synchronisation across all connected
 devices with maximum deviation of ≤25 milliseconds from the reference timeline throughout recording sessions, ensuring
 research-grade temporal precision for multi-modal data
 analysis [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565].
 
-**Technical Rationale**: Precise temporal synchronization constitutes an absolutely critical requirement for
+**Technical Rationale**: Precise temporal synchronisation constitutes an absolutely critical requirement for
 sophisticated multi-modal physiological research where advanced data fusion techniques require exact temporal alignment
 between diverse sensor modalities to enable meaningful correlation analysis and scientific
-interpretation [CITE - Mills, D.L. (2006). Computer network time synchronization: the network time protocol on earth and in space. CRC Press].
+interpretation [CITE - Mills, D.L. (2006). Computer network time synchronisation: the network time protocol on earth and in space. CRC Press].
 The 25ms tolerance specification reflects detailed analysis of physiological signal characteristics, network
 latency variations, and the temporal resolution requirements for accurate correlation analysis between contactless
 measurements and reference GSR
-data [CITE - Cristian, F. (1989). Probabilistic clock synchronization. Distributed Computing, 3(3), 146-158].
+data [CITE - Cristian, F. (1989). Probabilistic clock synchronisation. Distributed Computing, 3(3), 146-158].
 
-This precision requirement necessitated the development of sophisticated synchronization algorithms that systematically
+This precision requirement necessitated the development of sophisticated synchronisation algorithms that systematically
 compensate for network latency variations, device-specific timing characteristics, and clock drift phenomena that could
 compromise measurement
-validity [CITE - Elson, J., & Estrin, D. (2001). Time synchronization for wireless sensor networks. Proceedings 15th International Parallel and Distributed Processing Symposium, 1965-1970].
-The synchronization approach combines Network Time Protocol (NTP) foundations with custom latency compensation
+validity [CITE - Elson, J., & Estrin, D. (2001). Time synchronisation for wireless sensor networks. Proceedings 15th International Parallel and Distributed Processing Symposium, 1965-1970].
+The synchronisation approach combines Network Time Protocol (NTP) foundations with custom latency compensation
 techniques specifically adapted for Android device coordination in research environments.
 
 **Performance Specifications**:
 
-- Initial synchronization establishment within 10 seconds of session initiation with statistical confidence intervals
-- Continuous synchronization monitoring with automated drift detection and correction capabilities
+- Initial synchronisation establishment within 10 seconds of session initiation with statistical confidence intervals
+- Continuous synchronisation monitoring with automated drift detection and correction capabilities
 - Temporal precision validation using reference timing signals and complete statistical analysis
 - complete timing metadata generation for post-session temporal analysis and validation procedures
 - Support for dynamic latency compensation based on real-time network condition assessment and adaptation
@@ -761,18 +761,18 @@ techniques specifically adapted for Android device coordination in research envi
 **Validation Criteria**:
 
 - Demonstrated temporal precision ≤25ms across all devices under normal operating conditions
-- Synchronization stability maintenance during extended sessions (>4 hours) with complete drift monitoring
+- Synchronisation stability maintenance during extended sessions (>4 hours) with complete drift monitoring
 - Automatic drift detection and correction with response times <5 seconds
 - Statistical validation of temporal precision using multiple independent timing reference sources
 - complete temporal metadata generation enabling post-session accuracy verification and analysis
 
 **Implementation Dependencies**:
 
-- Network Time Protocol (NTP) synchronization services with customized implementation for mobile platforms
+- Network Time Protocol (NTP) synchronisation services with customized implementation for mobile platforms
 - High-resolution timestamp generation capabilities across heterogeneous Android platforms and API levels
 - Advanced latency measurement and compensation algorithms with real-time adaptation capabilities
-- Clock drift detection and correction mechanisms incorporating statistical analysis and predictive modeling
-- Cross-platform timing libraries ensuring consistent temporal behavior across diverse hardware configurations
+- Clock drift detection and correction mechanisms incorporating statistical analysis and predictive modelling
+- Cross-platform timing libraries ensuring consistent temporal behaviour across diverse hardware configurations
 
 #### FR-003: complete Session Management and Lifecycle Control
 
@@ -811,29 +811,29 @@ experimental conditions change or new participants join the study.
 - Metadata completeness verification ensuring all session parameters and environmental conditions are recorded
 - Performance impact assessment ensuring session management overhead <5% of system resources
 
-#### FR-002A: Temporal Synchronization and Precision Management
+#### FR-002A: Temporal Synchronisation and Precision Management
 
-**Requirement Statement**: The system shall maintain temporal synchronization across all connected devices with maximum
+**Requirement Statement**: The system shall maintain temporal synchronisation across all connected devices with maximum
 deviation of ≤5ms from the reference timeline throughout recording sessions.
 
-**Technical Rationale**: Precise temporal synchronization constitutes a critical requirement for multi-modal
+**Technical Rationale**: Precise temporal synchronisation constitutes a critical requirement for multi-modal
 physiological research where data fusion requires exact temporal alignment between sensor
 modalities [CITE - Temporal precision requirements in physiological measurement]. The 5ms tolerance specification
 reflects analysis of physiological signal characteristics and the temporal resolution required for accurate correlation
 analysis between contactless measurements and reference GSR data. This precision requirement necessitated development of
-sophisticated synchronization algorithms that compensate for network latency variations and device-specific timing
+sophisticated synchronisation algorithms that compensate for network latency variations and device-specific timing
 characteristics.
 
 **Validation Criteria**:
 
-- Initial synchronization establishment within 10 seconds of session initiation
-- Continuous synchronization monitoring with drift detection and correction
+- Initial synchronisation establishment within 10 seconds of session initiation
+- Continuous synchronisation monitoring with drift detection and correction
 - Temporal precision validation using reference timing signals
 - complete timing metadata generation for post-session analysis
 
 **Implementation Dependencies**:
 
-- Network Time Protocol (NTP) synchronization services
+- Network Time Protocol (NTP) synchronisation services
 - High-resolution timestamp generation capabilities across platforms
 - Latency measurement and compensation algorithms [CITE - Network latency compensation techniques]
 - Clock drift detection and correction mechanisms
@@ -868,7 +868,7 @@ validity and scientific reproducibility across diverse experimental contexts.
 
 **Requirement Statement**: The system shall provide sophisticated RGB video data capture capabilities at minimum 30
 frames per second with resolution of at least 1920×1080 pixels, including advanced camera control features, real-time
-quality assessment, and adaptive optimization for diverse research
+quality assessment, and adaptive optimisation for diverse research
 environments [CITE - Szeliski, R. (2010). Computer vision: algorithms and applications. Springer Science & Business Media].
 
 **Technical Rationale**: Video data capture specifications reflect detailed analysis of computational requirements
@@ -876,14 +876,14 @@ for extracting physiological indicators from visual data while carefully balanci
 capabilities typically available in research
 environments [CITE - Hartley, R., & Zisserman, A. (2003). Multiple view geometry in computer vision. Cambridge University Press].
 The resolution and frame rate specifications ensure adequate temporal and spatial resolution for detecting subtle
-physiological changes including micro-expressions, color variations, and movement patterns while remaining within the
+physiological changes including micro-expressions, colour variations, and movement patterns while remaining within the
 processing capabilities of standard Android devices used in research settings.
 
 Advanced camera control capabilities enable systematic adaptation to varying lighting conditions, participant
 positioning, and environmental factors commonly encountered in research settings, ensuring consistent data quality
 across diverse experimental
 conditions [CITE - Forsyth, D.A., & Ponce, J. (2002). Computer vision: a modern approach. Prentice Hall]. The real-time
-quality assessment functionality provides immediate feedback about capture quality, enabling researchers to optimize
+quality assessment functionality provides immediate feedback about capture quality, enabling researchers to optimise
 recording conditions and ensure data validity throughout experimental sessions.
 
 **complete Performance Specifications**:
@@ -892,7 +892,7 @@ recording conditions and ensure data validity throughout experimental sessions.
 |-------------------|---------------------|---------------------|--------------------------|-----------------------------------------------------------------|
 | **Frame Rate**    | 30 fps              | 60 fps              | 120 fps                  | Adequate temporal resolution for physiological change detection |
 | **Resolution**    | 1920×1080 (Full HD) | 3840×2160 (4K UHD)  | 7680×4320 (8K UHD)       | Sufficient spatial detail for facial region analysis            |
-| **Color Depth**   | 8 bits per channel  | 10 bits per channel | 12 bits per channel      | Enhanced color discrimination for physiological indicators      |
+| **Colour Depth**   | 8 bits per channel  | 10 bits per channel | 12 bits per channel      | Enhanced colour discrimination for physiological indicators      |
 | **Dynamic Range** | Standard (8 stops)  | High Dynamic Range  | Extended HDR (12+ stops) | Improved performance under varied lighting conditions           |
 | **Compression**   | H.264 (AVC)         | H.265 (HEVC)        | AV1 (future)             | Efficient storage with minimal quality degradation              |
 
@@ -901,23 +901,23 @@ recording conditions and ensure data validity throughout experimental sessions.
 - Automatic exposure control with manual override capabilities for experimental consistency
 - Continuous autofocus with face detection priority and manual focus lock options
 - White balance adaptation with custom presets for laboratory lighting conditions
-- Real-time histogram analysis for exposure optimization and quality monitoring
-- Motion detection capabilities for identifying movement artifacts and participant behavior changes
+- Real-time histogram analysis for exposure optimisation and quality monitoring
+- Motion detection capabilities for identifying movement artifacts and participant behaviour changes
 
 **Validation Criteria**:
 
 - Video quality assessment using objective metrics (PSNR, SSIM) and subjective evaluation protocols
 - Frame rate stability verification under varying processing loads with <2% frame drop tolerance
-- Color accuracy validation using standard color charts and physiological skin tone references
+- Colour accuracy validation using standard colour charts and physiological skin tone references
 - Compression efficiency analysis ensuring <5% quality degradation for research applications
-- Storage optimization verification achieving target compression ratios while maintaining analysis-suitable quality
+- Storage optimisation verification achieving target compression ratios while maintaining analysis-suitable quality
 
 **Implementation Dependencies**:
 
 - Android Camera2 API integration with advanced control parameter access [CITE - Android Camera2 API documentation]
-- Real-time video processing capabilities utilizing hardware acceleration (GPU/NPU) where available
-- Adaptive exposure and focus control algorithms incorporating machine learning optimization
-- Video compression and storage optimization systems designed for extended recording sessions
+- Real-time video processing capabilities utilising hardware acceleration (GPU/NPU) where available
+- Adaptive exposure and focus control algorithms incorporating machine learning optimisation
+- Video compression and storage optimisation systems designed for extended recording sessions
 - Integration with computer vision libraries for real-time image analysis and quality assessment
 
 #### FR-011: complete Thermal Imaging Integration and Physiological Analysis
@@ -944,7 +944,7 @@ laboratory adoption.
 
 **Technical Specifications**:
 
-- Temperature measurement range: -20°C to +550°C with physiological optimization
+- Temperature measurement range: -20°C to +550°C with physiological optimisation
 - Thermal sensitivity: ≤40mK (0.04°C) for optimal physiological detection
 - Spatial resolution: 256×192 thermal pixels with visible light overlay capability
 - Calibration accuracy: ±2°C or ±2% of reading with drift compensation
@@ -952,7 +952,7 @@ laboratory adoption.
 **Implementation Dependencies**:
 
 - USB-C OTG integration for thermal camera connectivity
-- Thermal camera SDK integration and optimization [CITE - Topdon TC001 SDK documentation]
+- Thermal camera SDK integration and optimisation [CITE - Topdon TC001 SDK documentation]
 - Temperature calibration and environmental compensation algorithms
 - Real-time thermal data processing and feature extraction capabilities
 
@@ -978,9 +978,9 @@ established validation in research applications and compatibility with standard 
 **Implementation Dependencies**:
 
 - PyShimmer library integration for sensor communication [CITE - PyShimmer library documentation]
-- Bluetooth communication protocol optimization for low-latency data transfer
+- Bluetooth communication protocol optimisation for low-latency data transfer
 - Real-time signal processing for quality assessment and artifact detection
-- Cross-platform data synchronization with video and thermal measurements
+- Cross-platform data synchronisation with video and thermal measurements
 
 ### 3.3.3 Real-Time Data Processing and Analysis Requirements
 
@@ -1009,7 +1009,7 @@ techniques specifically optimized for contactless physiological measurement appl
 - OpenCV computer vision library for advanced image processing [CITE - OpenCV documentation]
 - SciPy signal processing libraries for physiological signal analysis [CITE - SciPy signal processing]
 - Machine learning frameworks for real-time feature extraction and classification
-- Multi-threading and parallel processing optimization for real-time performance
+- Multi-threading and parallel processing optimisation for real-time performance
 
 #### FR-021: Machine Learning Inference and Prediction
 
@@ -1032,13 +1032,13 @@ accuracy with computational efficiency constraints imposed by real-time operatio
 **Implementation Dependencies**:
 
 - TensorFlow Lite or PyTorch Mobile for optimized mobile inference [CITE - Mobile machine learning frameworks]
-- Model optimization techniques for real-time performance on mobile platforms
+- Model optimisation techniques for real-time performance on mobile platforms
 - Feature engineering pipelines optimized for multi-modal physiological data
 - Model validation and testing frameworks ensuring prediction reliability
 
 Each functional requirement includes detailed specifications that provide measurable criteria for validation and
 acceptance testing. The requirement specifications balance the need for precision with sufficient flexibility to
-accommodate the diverse research applications that the system must support. The prioritization scheme reflects both the
+accommodate the diverse research applications that the system must support. The prioritisation scheme reflects both the
 technical dependencies between requirements and their relative importance for achieving the primary research objectives.
 
 ### 3.3.4 User Interface and Session Management Requirements
@@ -1047,10 +1047,10 @@ The core system functions represent the fundamental capabilities required for mu
 data collection. These requirements form the foundation upon which all other system capabilities are built and represent
 the minimum functionality required for basic system operation.
 
-#### FR-030: Multi-Device Coordination and Synchronization
+#### FR-030: Multi-Device Coordination and Synchronisation
 
 **complete Requirement Description**: The system must provide sophisticated coordination capabilities that enable
-simultaneous operation of multiple heterogeneous recording devices while maintaining precise temporal synchronization
+simultaneous operation of multiple heterogeneous recording devices while maintaining precise temporal synchronisation
 across all data streams. This requirement addresses one of the most technically challenging aspects of the system
 design, as it requires real-time coordination of devices with different processing capabilities, network
 characteristics, and timing precision.
@@ -1065,10 +1065,10 @@ research environments.
 
 - **Minimum Device Support**: The system shall support coordination of at least 4 simultaneous recording devices, with
   architecture designed to scale to 8 or more devices without fundamental modifications
-- **Temporal Synchronization Accuracy**: Maintain synchronization precision of ≤5ms across all devices, measured as the
+- **Temporal Synchronisation Accuracy**: Maintain synchronisation precision of ≤5ms across all devices, measured as the
   maximum time difference between corresponding data points from different devices
 - **Centralized Session Control**: Provide unified start/stop control that ensures all devices begin and end recording
-  within the synchronization tolerance
+  within the synchronisation tolerance
 - **Graceful Failure Handling**: Continue operation when individual devices fail, maintaining session integrity while
   logging detailed failure information for post-session analysis
 - **Dynamic Device Management**: Support device addition and removal during active sessions without requiring session
@@ -1078,7 +1078,7 @@ research environments.
 cannot be compromised without fundamentally altering the system's research utility.
 
 **Validation Criteria**: Successful coordination of the maximum supported device count with empirical measurement of
-synchronization accuracy across multiple session scenarios.
+synchronisation accuracy across multiple session scenarios.
 
 #### FR-031: High-Quality RGB Video Data Acquisition
 
@@ -1089,11 +1089,11 @@ visual changes that may indicate autonomic nervous system activation. The video 
 requirements with practical constraints such as storage capacity, network bandwidth, and real-time processing
 capabilities.
 
-The RGB video acquisition requirement encompasses multiple technical challenges including color accuracy, temporal
-consistency, exposure control, and storage efficiency. The system must maintain consistent color representation across
+The RGB video acquisition requirement encompasses multiple technical challenges including colour accuracy, temporal
+consistency, exposure control, and storage efficiency. The system must maintain consistent colour representation across
 different devices and lighting conditions while providing the temporal resolution necessary for detecting rapid
 physiological changes. The acquisition system must also integrate seamlessly with the multi-device coordination
-framework to ensure proper synchronization with other data streams.
+framework to ensure proper synchronisation with other data streams.
 
 **Detailed Technical Specifications**:
 
@@ -1101,8 +1101,8 @@ framework to ensure proper synchronization with other data streams.
   when device capabilities permit
 - **Frame Rate Standards**: Maintain ≥30 fps minimum with target performance of 60 fps for enhanced temporal resolution
   of physiological events
-- **Color Depth and Accuracy**: Support 8-bit color depth minimum with preference for 10-bit when available, maintaining
-  color consistency across devices
+- **Colour Depth and Accuracy**: Support 8-bit colour depth minimum with preference for 10-bit when available, maintaining
+  colour consistency across devices
 - **Multi-Device Coordination**: Enable simultaneous recording from multiple Android devices with synchronized timing
   and coordinated session control
 - **Storage and Compression**: Implement efficient storage mechanisms that balance quality preservation with practical
@@ -1123,7 +1123,7 @@ temperature changes that may not be visible in the optical spectrum. This capabi
 detecting stress responses and emotional states that manifest through peripheral blood flow changes.
 
 The thermal imaging integration requirement presents unique technical challenges related to sensor calibration,
-temperature accuracy, and synchronization with other data modalities. The system must account for environmental
+temperature accuracy, and synchronisation with other data modalities. The system must account for environmental
 temperature variations, maintain calibration across different operating conditions, and provide real-time temperature
 measurement with accuracy sufficient for physiological research applications.
 
@@ -1131,11 +1131,11 @@ measurement with accuracy sufficient for physiological research applications.
 
 - **Temperature Measurement Accuracy**: Achieve ≤0.1°C measurement precision across the physiological temperature range
   relevant for human subjects
-- **Temporal Synchronization**: Maintain ≥25 fps frame rate synchronized with RGB video capture to enable multi-modal
+- **Temporal Synchronisation**: Maintain ≥25 fps frame rate synchronized with RGB video capture to enable multi-modal
   analysis
 - **Physiological Temperature Range**: Operate effectively across 20-45°C range covering normal environmental and
   physiological temperature variations
-- **Real-Time Overlay Capability**: Provide real-time thermal overlay on RGB video for enhanced visualization and
+- **Real-Time Overlay Capability**: Provide real-time thermal overlay on RGB video for enhanced visualisation and
   immediate feedback during recording sessions
 - **Environmental Compensation**: Implement algorithms to compensate for ambient temperature variations and maintain
   measurement accuracy across different environmental conditions
@@ -1155,7 +1155,7 @@ established measurement techniques. The reference measurement system must mainta
 while integrating seamlessly with the contactless measurement modalities.
 
 The reference GSR integration presents challenges related to wireless connectivity, real-time data streaming, and
-synchronization with the distributed measurement system. The integration must preserve the measurement quality
+synchronisation with the distributed measurement system. The integration must preserve the measurement quality
 characteristics of professional research equipment while adapting to the distributed architecture and multi-device
 coordination requirements of the overall system.
 
@@ -1163,19 +1163,19 @@ coordination requirements of the overall system.
 
 - **High-Precision Sampling**: Support sampling rates ≥50 Hz with configurability up to 512 Hz to capture rapid
   physiological responses
-- **Professional-Grade Resolution**: Utilize 16-bit ADC measurement providing precision comparable to laboratory-grade
+- **Professional-Grade Resolution**: Utilis\1 16-bit ADC measurement providing precision comparable to laboratory-grade
   equipment
 - **Wireless Connectivity**: Implement robust Bluetooth connectivity with error detection and recovery capabilities
 - **Real-Time Data Streaming**: Provide continuous data streaming to the central coordinator with minimal latency and
   complete error handling
-- **Synchronization Integration**: Ensure precise temporal alignment with contactless measurement modalities through the
-  central synchronization system
+- **Synchronisation Integration**: Ensure precise temporal alignment with contactless measurement modalities through the
+  central synchronisation system
 
 **Priority Classification**: Critical - Reference measurements are essential for model training and validation of
 contactless prediction accuracy.
 
 **Validation Criteria**: Successful integration with demonstration of measurement quality equivalent to standalone
-operation and proper synchronization with other data streams.
+operation and proper synchronisation with other data streams.
 
 #### FR-005: complete Session Management
 
@@ -1198,7 +1198,7 @@ organization and enabling efficient post-session analysis workflows.
   notification of issues or anomalies
 - **Automatic Data Organization**: Implement automatic file organization with standardized naming conventions and
   complete metadata generation
-- **Session Pause and Resume**: Support session pause and resume functionality without data loss or synchronization
+- **Session Pause and Resume**: Support session pause and resume functionality without data loss or synchronisation
   issues
 - **complete Audit Trails**: Generate detailed logs of all system activities, configuration changes, and
   operational events for research documentation and troubleshooting
@@ -1220,7 +1220,7 @@ physiological measurement through computational analysis of multi-modal data str
 **complete Requirement Description**: The system must implement sophisticated computer vision algorithms for
 real-time detection and tracking of hand regions within the video streams. Hand detection serves as a critical
 preprocessing step for physiological analysis, as many autonomic responses manifest through changes in hand appearance,
-color, and movement patterns. The hand detection system must operate reliably across diverse participants, lighting
+colour, and movement patterns. The hand detection system must operate reliably across diverse participants, lighting
 conditions, and hand positions while providing the accuracy needed for subsequent physiological analysis.
 
 The hand detection requirement encompasses challenges related to real-time performance, accuracy across diverse
@@ -1230,7 +1230,7 @@ recording sessions.
 
 **Detailed Technical Specifications**:
 
-- **MediaPipe Integration**: Utilize proven MediaPipe hand landmark detection algorithms providing state-of-the-art
+- **MediaPipe Integration**: Utilis\1 proven MediaPipe hand landmark detection algorithms providing state-of-the-art
   accuracy and performance
 - **Real-Time Performance**: Achieve processing latency <100ms to enable real-time feedback and immediate quality
   assessment
@@ -1280,36 +1280,36 @@ single-modality operation.
 **Validation Criteria**: Demonstrated calibration accuracy through geometric validation tests and successful multi-modal
 alignment verification.
 
-#### FR-012A: Precision Data Synchronization Framework
+#### FR-012A: Precision Data Synchronisation Framework
 
-**complete Requirement Description**: The system must implement advanced synchronization algorithms that maintain
+**complete Requirement Description**: The system must implement advanced synchronisation algorithms that maintain
 precise temporal alignment across all data modalities despite the inherent timing variations and network latencies
-present in distributed recording systems. Data synchronization represents one of the most technically challenging
+present in distributed recording systems. Data synchronisation represents one of the most technically challenging
 requirements, as it must account for device-specific timing characteristics, network propagation delays, and clock drift
 across multiple independent systems while achieving accuracy comparable to dedicated laboratory equipment.
 
-The synchronization framework must provide both real-time coordination during data collection and post-processing
+The synchronisation framework must provide both real-time coordination during data collection and post-processing
 alignment capabilities for maximum temporal accuracy. The system must implement sophisticated algorithms that can
-compensate for various sources of timing error while providing complete metrics for synchronization quality
+compensate for various sources of timing error while providing complete metrics for synchronisation quality
 assessment.
 
 **Detailed Technical Specifications**:
 
 - **High-Precision Timestamp Accuracy**: Achieve ≤5ms timestamp accuracy across all sensors through advanced clock
-  synchronization algorithms
+  synchronisation algorithms
 - **Network Latency Compensation**: Implement dynamic latency measurement and compensation algorithms accounting for
   variable network conditions
-- **Clock Drift Correction**: Provide ongoing clock drift detection and correction maintaining synchronization accuracy
+- **Clock Drift Correction**: Provide ongoing clock drift detection and correction maintaining synchronisation accuracy
   throughout extended recording sessions
-- **Synchronization Quality Metrics**: Generate complete synchronization quality assessments enabling objective
+- **Synchronisation Quality Metrics**: Generate complete synchronisation quality assessments enabling objective
   evaluation of temporal alignment accuracy
-- **Multi-Protocol Support**: Support synchronization across diverse communication protocols and device types with
+- **Multi-Protocol Support**: Support synchronisation across diverse communication protocols and device types with
   unified timing reference
 
-**Priority Classification**: Critical - Temporal synchronization is fundamental to multi-modal physiological analysis
+**Priority Classification**: Critical - Temporal synchronisation is fundamental to multi-modal physiological analysis
 and cannot be compromised.
 
-**Validation Criteria**: Empirical validation of synchronization accuracy through controlled timing tests and
+**Validation Criteria**: Empirical validation of synchronisation accuracy through controlled timing tests and
 correlation analysis across modalities.
 
 ---
@@ -1341,25 +1341,25 @@ that enable remote access, monitoring, and control of recording sessions through
 full security and performance parity with native desktop interfaces.
 
 **Technical Implementation**: The web interface is implemented through `PythonApp/enhanced_main_with_web.py` and the
-complete `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualization,
-and remote control capabilities that maintain synchronization precision with the native desktop application.
+complete `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualisation,
+and remote control capabilities that maintain synchronisation precision with the native desktop application.
 
 **Validation Criteria**: Web interface accessibility from multiple browsers simultaneously, real-time status updates
 with <1 second latency, and complete functional parity with desktop interface for all core recording operations.
 
-#### FR-035: Advanced Performance Optimization Framework
+#### FR-035: Advanced Performance Optimisation Framework
 
-**Requirement Statement**: The system shall implement complete performance optimization capabilities that dynamically
-adapt resource utilization, frame rates, and processing load based on real-time system performance metrics and
+**Requirement Statement**: The system shall implement complete performance optimisation capabilities that dynamically
+adapt resource utilisation, frame rates, and processing load based on real-time system performance metrics and
 available computational resources across all connected devices.
 
-**Technical Implementation**: Performance optimization is achieved through `PythonApp/performance_optimizer.py` for
+**Technical Implementation**: Performance optimisation is achieved through `PythonApp/performance_optimizer.py` for
 desktop coordination and `AndroidApp/src/main/java/com/multisensor/recording/performance/` module system including
 `NetworkOptimizer.kt`, `PowerManager.kt`, and adaptive frame rate control through
 `AdaptiveFrameRateController.kt`.
 
 **Validation Criteria**: Automatic frame rate adaptation maintaining recording quality under varying computational load,
-power consumption optimization extending mobile device recording sessions by >30%, and network traffic optimization
+power consumption optimisation extending mobile device recording sessions by >30%, and network traffic optimisation
 reducing bandwidth usage by >25% without quality degradation.
 
 #### FR-036: Enterprise-Grade Dependency Injection Architecture
@@ -1389,18 +1389,18 @@ providing automated quality metrics, drift detection, and precision validation a
 within 30 seconds of occurrence, and automated recalibration recommendations that maintain measurement precision
 throughout 4+ hour recording sessions.
 
-#### FR-038: Master Clock Synchronization with Precision Timing
+#### FR-038: Master Clock Synchronisation with Precision Timing
 
-**Requirement Statement**: The system shall implement high-precision master clock synchronization that maintains
+**Requirement Statement**: The system shall implement high-precision master clock synchronisation that maintains
 temporal alignment across all connected devices with sub-millisecond accuracy while providing automatic drift
-correction and synchronization quality monitoring throughout extended recording sessions.
+correction and synchronisation quality monitoring throughout extended recording sessions.
 
 **Technical Implementation**: Precision timing system implemented through `PythonApp/master_clock_synchronizer.py`
 and coordinated with `AndroidApp/src/main/java/com/multisensor/recording/calibration/SyncClockManager.kt` providing
-NTP-based time synchronization, automatic drift compensation, and real-time synchronization quality assessment.
+NTP-based time synchronisation, automatic drift compensation, and real-time synchronisation quality assessment.
 
-**Validation Criteria**: Synchronization precision <1 millisecond across all devices, automatic drift correction
-maintaining precision over 8+ hour sessions, and complete synchronization quality metrics with real-time
+**Validation Criteria**: Synchronisation precision <1 millisecond across all devices, automatic drift correction
+maintaining precision over 8+ hour sessions, and complete synchronisation quality metrics with real-time
 monitoring and alerting capabilities.
 
 ### 3.4.1 Performance and Scalability Requirements
@@ -1420,7 +1420,7 @@ operation.
 
 The throughput requirement encompasses both instantaneous processing capability and sustained performance over extended
 recording periods typical of research studies. The system must maintain consistent performance characteristics
-regardless of session duration while providing predictable resource utilization that enables reliable capacity planning
+regardless of session duration while providing predictable resource utilisation that enables reliable capacity planning
 for research studies.
 
 **Detailed Performance Specifications**:
@@ -1429,7 +1429,7 @@ for research studies.
   5% compared to single-device operation
 - **Sustained Operation**: Maintain consistent performance characteristics during extended recording sessions up to 2
   hours duration
-- **Resource Predictability**: Provide predictable resource utilization patterns enabling accurate capacity planning for
+- **Resource Predictability**: Provide predictable resource utilisation patterns enabling accurate capacity planning for
   research studies
 - **Linear Scalability**: Demonstrate linear scaling characteristics for device additions within the supported device
   count range
@@ -1464,29 +1464,29 @@ experimental control.
 **Validation Criteria**: Empirical measurement of response times across diverse operational scenarios with statistical
 validation of consistency.
 
-#### NFR-003: Resource Utilization and Efficiency
+#### NFR-003: Resource Utilisation and Efficiency
 
 **complete Requirement Description**: The system must operate efficiently within the hardware resource constraints
-typical of research environments while providing predictable resource utilization patterns. Resource efficiency is
+typical of research environments while providing predictable resource utilisation patterns. Resource efficiency is
 particularly critical for research applications that may require extended operation periods or deployment in
 resource-constrained environments. The system must balance processing capability with resource conservation to ensure
 reliable operation across diverse hardware platforms.
 
 **Detailed Resource Specifications**:
 
-- **CPU Utilization Management**: Maintain average CPU usage ≤80% during recording operations with peak usage ≤95% for
+- **CPU Utilisation Management**: Maintain average CPU usage ≤80% during recording operations with peak usage ≤95% for
   brief intervals
 - **Memory Efficiency**: Limit memory consumption to ≤4GB on coordinator systems enabling operation on standard research
   hardware
-- **Storage Rate Optimization**: Maintain storage requirements ≤10GB per hour maximum through efficient compression and
+- **Storage Rate Optimisation**: Maintain storage requirements ≤10GB per hour maximum through efficient compression and
   data management
-- **Network Bandwidth Optimization**: Limit peak network usage to ≤500Mbps enabling operation on standard research
+- **Network Bandwidth Optimisation**: Limit peak network usage to ≤500Mbps enabling operation on standard research
   network infrastructure
 
 **Priority Classification**: Medium - Resource efficiency affects deployment flexibility and operational cost but does
 not directly impact core functionality.
 
-**Validation Criteria**: Resource utilization monitoring across extended operation periods with validation of efficiency
+**Validation Criteria**: Resource utilisation monitoring across extended operation periods with validation of efficiency
 targets.
 
 ### 3.4.2 Reliability and Data Integrity Requirements
@@ -1498,10 +1498,10 @@ for scientific applications where reliability directly impacts research validity
 #### NFR-010: System Availability and Uptime
 
 **complete Requirement Description**: The system must maintain exceptionally high availability during scheduled
-research sessions, recognizing that system downtime during data collection can result in loss of irreplaceable
+research sessions, recognising that system downtime during data collection can result in loss of irreplaceable
 experimental data. The availability requirement encompasses both planned availability during research sessions and
 overall system reliability across extended deployment periods. The system must implement complete fault detection
-and recovery mechanisms that minimize the impact of component failures on ongoing research activities.
+and recovery mechanisms that minimis\1 the impact of component failures on ongoing research activities.
 
 **Detailed Availability Specifications**:
 
@@ -1509,7 +1509,7 @@ and recovery mechanisms that minimize the impact of component failures on ongoin
   uptime monitoring
 - **Planned Downtime Management**: Limit planned maintenance activities to designated maintenance windows outside
   research operation periods
-- **Failure Recovery Capability**: Implement automatic failure detection and recovery mechanisms minimizing manual
+- **Failure Recovery Capability**: Implement automatic failure detection and recovery mechanisms minimising manual
   intervention requirements
 - **Redundancy Planning**: Provide redundant operation capabilities for critical components enabling continued operation
   during component failures
@@ -1534,7 +1534,7 @@ requirements encompass both technical measures for corruption detection and proc
   cryptographic verification
 - **Automatic Backup Systems**: Implement automatic backup and recovery mechanisms with versioning and integrity
   verification
-- **Cryptographic Protection**: Utilize cryptographic checksums for all data files with automated integrity verification
+- **Cryptographic Protection**: Utilis\1 cryptographic checksums for all data files with automated integrity verification
   during storage and retrieval
 
 **Priority Classification**: Critical - Data integrity is fundamental to research validity and cannot be compromised
@@ -1675,7 +1675,7 @@ precise temporal coordination:
 ```mermaid
 graph TD
     A[Data Sources] --> B[Collection Layer]
-    B --> C[Synchronization Engine]
+    B --> C[Synchronisation Engine]
     C --> D[Processing Pipeline]
     D --> E[Storage System]
     E --> F[Export Interface]
@@ -1701,7 +1701,7 @@ graph TD
 |---------------------------|------------|---------------------|------------------------------|
 | PC ↔ Android Devices      | Continuous | ≤10ms               | High - Session disruption    |
 | Android ↔ Shimmer Sensors | 50+ Hz     | ≤20ms               | Medium - Data quality loss   |
-| Synchronization Engine    | 1 Hz       | ≤5ms                | Critical - Temporal accuracy |
+| Synchronisation Engine    | 1 Hz       | ≤5ms                | Critical - Temporal accuracy |
 | Storage Operations        | Variable   | ≤100ms              | Low - Buffering available    |
 
 ### 3.6.3 Scalability Considerations
@@ -1749,7 +1749,7 @@ The system architecture must accommodate growth in several dimensions:
 1. **Stakeholder Review**: Requirements validated through structured stakeholder sessions
 2. **Prototype Testing**: Key requirements validated through working prototypes
 3. **Technical Feasibility**: Engineering analysis of implementation complexity
-4. **Performance Modeling**: Quantitative analysis of performance requirements
+4. **Performance Modelling**: Quantitative analysis of performance requirements
 
 ### Requirements Traceability
 
@@ -1765,7 +1765,7 @@ Each requirement is traced through the development lifecycle:
 
 The analysis identifies several critical requirements that drive system architecture:
 
-1. **Temporal Synchronization** (FR-012): Requires dedicated synchronization infrastructure
+1. **Temporal Synchronisation** (FR-012): Requires dedicated synchronisation infrastructure
 2. **Multi-Device Coordination** (FR-001): Drives distributed system architecture
 3. **Data Integrity** (NFR-011): Requires thorough validation framework
 4. **Real-Time Performance** (NFR-002): Influences processing pipeline design
@@ -1807,12 +1807,12 @@ code snippets available in **Appendix F**.
 
 **Non-Functional Requirements Implementation:**
 
-- `PythonApp/session/session_synchronizer.py` - Microsecond-precision temporal synchronization implementing
+- `PythonApp/session/session_synchronizer.py` - Microsecond-precision temporal synchronisation implementing
   NFR-002 (See Appendix F.52)
 - `PythonApp/production/security_scanner.py` - complete security validation implementing NFR-003 (See Appendix
   F.53)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Network performance
-  optimization implementing NFR-001 (See Appendix F.54)
+  optimisation implementing NFR-001 (See Appendix F.54)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Power management and efficiency
   implementing NFR-005 (See Appendix F.55)
 - `PythonApp/session/session_recovery.py` - Reliability and fault tolerance mechanisms implementing NFR-004 (See
@@ -1841,7 +1841,7 @@ code snippets available in **Appendix F**.
 - `PythonApp/production/phase4_validator.py` - System-wide constraint validation with compliance checking (See
   Appendix F.65)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt` - Dynamic constraint
-  adaptation for performance optimization (See Appendix F.66)
+  adaptation for performance optimisation (See Appendix F.66)
 
 **Requirements Traceability and Quality Assurance:**
 
@@ -1949,7 +1949,7 @@ Edition." Addison-Wesley Professional, 2012.
 
 | Research Domain                  | Current Limitations                    | Gap Severity | Opportunity Impact | Technical Feasibility |
 |----------------------------------|----------------------------------------|--------------|--------------------|-----------------------|
-| **Natural Behavior Studies**     | Contact artifacts alter behavior       | Critical     | High               | High                  |
+| **Natural Behaviour Studies**     | Contact artifacts alter behaviour       | Critical     | High               | High                  |
 | **Group Dynamics Research**      | Limited multi-participant capability   | High         | High               | Medium                |
 | **Pediatric Research**           | Child discomfort with electrodes       | Critical     | High               | High                  |
 | **Long-Duration Studies**        | Electrode degradation over time        | High         | Medium             | High                  |
@@ -1974,7 +1974,7 @@ quadrantChart
     quadrant-2 Major Projects
     quadrant-3 Fill-ins
     quadrant-4 Questionable
-    Natural Behavior Studies: [0.8, 0.9]
+    Natural Behaviour Studies: [0.8, 0.9]
     Group Dynamics Research: [0.6, 0.8]
     Pediatric Research: [0.3, 0.9]
     Long-Duration Studies: [0.4, 0.7]

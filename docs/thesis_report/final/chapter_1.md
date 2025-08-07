@@ -59,9 +59,9 @@ modalities (e.g. GSR, heart rate, facial thermal signals) to more
 robustly capture emotional or stress
 states[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have)[\[12\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=compliments%20the%20traditional%20measures%20is,results%20in%20affective%20research%2031%E2%80%939).
 
-However, realizing such a vision requires overcoming significant
+However, realising such a vision requires overcoming significant
 challenges. A key *research gap* is the lack of an integrated platform
-to collect and synchronize these diverse data streams. Most prior
+to collect and synchronise these diverse data streams. Most prior
 studies have tackled contactless GSR estimation in isolation or under
 highly controlled conditions, often using separate devices that are not
 synchronized in real
@@ -134,8 +134,8 @@ following specific objectives have been defined to achieve this aim:
   millisecond-level timestamp alignment.
 
 - **Objective 2: Synchronized Data Acquisition and Management.**
-  *Implement methods for precise time synchronization and data handling
-  across devices.* A custom **control and synchronization layer**
+  *Implement methods for precise time synchronisation and data handling
+  across devices.* A custom **control and synchronisation layer**
   (developed in Python) will coordinate the sensor node(s) and ensure
   that GSR readings, thermal frames, and RGB frames are logged with
   synchronized timestamps. This objective includes establishing a
@@ -156,11 +156,11 @@ following specific objectives have been defined to achieve this aim:
   be conducted. For example, pilot experiments might involve human
   participants performing tasks designed to elicit varying GSR responses
   (stress, stimuli, etc.) while the platform records all modalities. The
-  **validation** will focus on checking temporal synchronization
+  **validation** will focus on checking temporal synchronisation
   accuracy (e.g. confirming that events are correctly aligned across
   sensor streams) and the quality of the recorded signals (such as
   signal-to-noise ratio of GSR, resolution of thermal data, etc.). We
-  will analyze the collected data to ensure that the GSR signals and the
+  will analyse the collected data to ensure that the GSR signals and the
   corresponding thermal/RGB data show the expected correlations or
   time-locked changes. Successful validation will demonstrate that the
   platform can reliably capture synchronized multi-modal data suitable
@@ -202,7 +202,7 @@ evaluation:
   requirements for the data collection platform are defined. The
   research problem is analyzed in detail to derive both **functional
   requirements** (such as the ability to record multiple streams
-  concurrently, synchronization accuracy, user interface needs for the
+  concurrently, synchronisation accuracy, user interface needs for the
   recording system) and **non-functional requirements** (such as system
   reliability, timing precision, and data storage considerations).
   Use-case scenarios and user stories are presented to ground the
@@ -221,19 +221,19 @@ evaluation:
   (mounting and connecting the thermal camera to the phone, Bluetooth
   pairing with the GSR sensor, etc.) and how the software is structured
   into modules for camera capture, sensor communication, network
-  synchronization, and data logging. Diagrams are provided to illustrate
+  synchronisation, and data logging. Diagrams are provided to illustrate
   the flow of data and control commands between the Android app and the
   Python desktop application. The design ensures modularity, so that
   each sensing component (thermal, RGB, GSR) can operate in sync under
   the coordination of the central controller. Important considerations
-  like timestamp synchronization protocols, latency handling, and error
+  like timestamp synchronisation protocols, latency handling, and error
   recovery mechanisms are also described here.
 
 - **Chapter 5 -- Implementation Testing and Validation:** In this
   chapter, the focus is on evaluating the implemented platform and
   demonstrating that it meets the thesis objectives. The **evaluation
   methodology** is first outlined, including the test setup and metrics
-  for assessing synchronization and data quality. Results from pilot
+  for assessing synchronisation and data quality. Results from pilot
   recordings are then presented: for example, timing logs verifying that
   the disparity between camera frame timestamps and GSR signal
   timestamps is within acceptable bounds (on the order of milliseconds),
@@ -245,7 +245,7 @@ evaluation:
   reliably produce synchronized multi-modal datasets. This validation
   demonstrates the platform's capability to serve as a data collection
   tool for future GSR prediction research. Any limitations observed
-  (such as minor synchronization offsets or sensor noise issues) are
+  (such as minor synchronisation offsets or sensor noise issues) are
   also noted to inform future improvements.
 
 - **Chapter 6 -- Conclusion and Future Work:** The final chapter
@@ -271,7 +271,7 @@ identifying the motivation and research problem, and the subsequent
 chapters proceed to address that problem through systematic development
 and evaluation of the multi-modal GSR data collection platform.
 Together, these chapters document the journey from concept to
-realization of a synchronized sensing system that will enable advanced
+realisation of a synchronized sensing system that will enable advanced
 research into predicting GSR from multiple sensor modalities. The
 outcome is a valuable tool and dataset for the community, marking a step
 toward more ubiquitous and contact-free physiological monitoring in the

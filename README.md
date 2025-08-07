@@ -10,7 +10,7 @@ A complete multi-sensor recording system designed for contactless GSR (Galvanic 
 
 The system implements a **distributed star-mesh topology** with PC master-controller coordination:
 
-- **PC Master Controller**: Python desktop application managing session coordination, device synchronization, and data aggregation
+- **PC Master Controller**: Python desktop application managing session coordination, device synchronisation, and data aggregation
 - **Android Recording Devices**: Mobile applications handling multi-sensor data collection (camera, thermal, Shimmer GSR)
 - **JSON Protocol Communication**: WebSocket-based real-time communication between PC and Android devices
 - **Offline-First Recording**: Local data storage with synchronized timestamps for reliable data collection
@@ -27,7 +27,7 @@ The system implements a **distributed star-mesh topology** with PC master-contro
 - **High-Resolution Thermal Imaging**: Contactless skin temperature monitoring
 - **Synchronized Video Recording**: Visual context for physiological responses  
 - **Shimmer GSR Sensors**: Gold-standard physiological measurements
-- **Precision Timestamps**: <1ms synchronization accuracy across all data streams
+- **Precision Timestamps**: <1ms synchronisation accuracy across all data streams
 
 ## 🚀 Quick Start
 
@@ -190,12 +190,12 @@ python run_evaluation_suite.py --category integration_tests
   - Network server with PCServer implementation testing
   - Shimmer manager with device communication validation
   - Session coordination with multi-device management testing
-  - Synchronization engine with precision timing validation
+  - Synchronisation engine with precision timing validation
 
 #### Integration Tests (Cross-Component)
 - **Multi-Device Coordination**: Device discovery, session management, scalability (up to 8 devices)
-- **Network Performance**: WebSocket protocols, resilience testing, bandwidth optimization
-- **Synchronization Precision**: <1ms temporal accuracy, cross-platform timing validation
+- **Network Performance**: WebSocket protocols, resilience testing, bandwidth optimisation
+- **Synchronisation Precision**: <1ms temporal accuracy, cross-platform timing validation
 - **End-to-End Workflows**: Complete recording lifecycle validation
 - **Error Handling & Recovery**: Connection failures, device errors, network interruptions
 - **Performance Under Stress**: High device counts, data rates, extended sessions
@@ -203,7 +203,7 @@ python run_evaluation_suite.py --category integration_tests
 ### Quality Standards
 - **Success Rate**: 100% for foundation tests, 100% for integration tests (after compilation fixes)
 - **Build Status**: All compilation errors resolved, all imports satisfied
-- **Synchronization**: <1ms temporal accuracy, <0.5ms RMS deviation
+- **Synchronisation**: <1ms temporal accuracy, <0.5ms RMS deviation
 - **Real Implementation Testing**: 100% tests validate actual source code
 - **Research Readiness**: Fully validated and deployment-ready
 
@@ -242,7 +242,7 @@ bucika_gsr/
 
 ### PC Master Controller (Python)
 - **Calibration Manager**: OpenCV-based camera calibration for precise measurements
-- **Session Coordinator**: Multi-device session management and synchronization
+- **Session Coordinator**: Multi-device session management and synchronisation
 - **Network Server**: WebSocket-based device communication and control
 - **Data Aggregator**: Synchronized data collection and storage
 - **Real-time Monitor**: Live status monitoring and quality assessment
@@ -252,7 +252,7 @@ bucika_gsr/
 - **Thermal Integration**: Thermal camera data collection and processing
 - **Shimmer Manager**: Bluetooth GSR sensor communication and data streaming
 - **Network Client**: Real-time communication with PC controller
-- **Session Management**: Local recording coordination and synchronization
+- **Session Management**: Local recording coordination and synchronisation
 
 #### Clean MVVM Architecture
 
@@ -261,7 +261,7 @@ The Android application underwent complete architectural refactoring to implemen
 
 **Specialized Controllers:**
 - **RecordingSessionController** (218 lines): Pure recording operation management with reactive StateFlow patterns
-- **DeviceConnectionManager** (389 lines): Device connectivity orchestration and initialization procedures  
+- **DeviceConnectionManager** (389 lines): Device connectivity orchestration and initialisation procedures  
 - **FileTransferManager** (448 lines): Data transfer operations and session management
 - **CalibrationManager** (441 lines): Calibration process coordination for all device types
 - **MainViewModelRefactored** (451 lines): Pure UI state coordination through reactive composition
@@ -276,7 +276,7 @@ The Android application underwent complete architectural refactoring to implemen
 ### Communication Protocol
 - **JSON-based Messaging**: Structured communication between PC and Android
 - **WebSocket Transport**: Real-time bidirectional communication
-- **Synchronization Protocol**: Precision timestamp coordination
+- **Synchronisation Protocol**: Precision timestamp coordination
 - **Error Recovery**: Automatic reconnection and data integrity validation
 - **🔒 TLS Encryption**: Secure data transmission with certificate validation
 - **🔐 Authentication**: Token-based authentication with cryptographic validation
@@ -292,7 +292,7 @@ The Android application underwent complete architectural refactoring to implemen
 #### Privacy Compliance
 - **GDPR Compliance**: Full compliance with EU privacy regulations including consent management
 - **Data Anonymization**: Automatic PII removal and participant ID anonymization
-- **Secure Logging**: PII-aware log sanitization with sensitive data pattern recognition
+- **Secure Logging**: PII-aware log sanitisation with sensitive data pattern recognition
 - **Data Retention**: Configurable retention policies with automatic deletion recommendations
 
 #### Security Implementation
@@ -358,13 +358,13 @@ class PrivacyManager(context: Context, logger: Logger) {
 
 ### Research Documentation
 - **[Calibration Procedures](./docs/calibration_system_readme.md)**: Camera calibration methodology
-- **[Synchronization Analysis](./docs/multi_device_synchronization_readme.md)**: Timing precision validation
+- **[Synchronisation Analysis](./docs/multi_device_synchronization_readme.md)**: Timing precision validation
 - **[Data Quality Assessment](./evaluation_suite/README.md)**: Quality metrics and validation
 
 ### Architecture & Design
 - **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**: Visual system overview
 - **[Layer Architecture](./docs/diagrams/14_layer_architecture.png)**: 6-layer system architecture
-- **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Logging, synchronization, error handling
+- **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Logging, synchronisation, error handling
 - **[Scaling Considerations](./docs/SCALING_ARCHITECTURE.md)**: Multi-controller and distributed architectures
 - **[Architecture Maintenance](./docs/ARCHITECTURE_MAINTENANCE.md)**: Guidelines for maintaining architectural integrity
 
@@ -411,7 +411,7 @@ The Multi-Sensor Recording System maintains exceptional code quality through sys
 #### Validation Results
 - **Test Coverage**: >95% for critical components, 99.5% overall success rate
 - **Documentation**: complete documentation with academic rigor
-- **Performance**: Research-grade timing precision (<1ms synchronization)
+- **Performance**: Research-grade timing precision (<1ms synchronisation)
 - **Quality Assurance**: Multi-dimensional reliability assessment at 97% confidence
 
 ## 📄 License

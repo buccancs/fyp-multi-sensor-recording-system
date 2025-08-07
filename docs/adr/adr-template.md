@@ -3,7 +3,7 @@
 **Status**: [Proposed | Accepted | Deprecated | Superseded]
 **Date**: YYYY-MM-DD
 **Authors**: [Name(s)]
-**Tags**: [relevant, tags, for, categorization]
+**Tags**: [relevant, tags, for, categorisation]
 
 ## Context
 

@@ -10,7 +10,7 @@ requirements that ensure both technical correctness and scientific
 validity. In particular, given this system's focus on capturing
 physiological signals (Galvanic Skin Response and thermal imaging) for
 emotion analysis, the testing strategy emphasizes the fidelity,
-synchronization, and accuracy of these modalities to guarantee that
+synchronisation, and accuracy of these modalities to guarantee that
 meaningful emotional insights can be derived from the data.
 
 The chapter demonstrates how established testing methodologies have been
@@ -35,7 +35,7 @@ inaccuracies can result in irreplaceable loss of experimental data and
 fundamentally compromise scientific validity. The testing approach
 balances thorough coverage with practical implementation constraints,
 ensuring that all critical system functions, performance
-characteristics, and behaviors meet the stringent standards of
+characteristics, and behaviours meet the stringent standards of
 reproducibility, accuracy, and reliability demanded by scientific
 research across diverse experimental contexts.
 
@@ -48,7 +48,7 @@ real-world research environments. The resulting strategy provides
 coverage of functional correctness verification, performance and
 reliability assessment under stress conditions, and integration quality
 evaluation across diverse hardware platforms, network configurations,
-and environmental conditions that characterize real-world deployment
+and environmental conditions that characterise real-world deployment
 scenarios[\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)[\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94).
 It incorporates lessons from traditional software testing while
 introducing novel approaches designed to meet the unique challenges of
@@ -61,7 +61,7 @@ The testing philosophy emerges from the recognition that traditional
 software testing approaches, while valuable, are insufficient for
 validating the complex, multi-dimensional interactions between hardware
 components, software systems, environmental factors, and human
-participants that characterize multi-sensor research systems in dynamic
+participants that characterise multi-sensor research systems in dynamic
 real-world
 contexts[\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100).
 This philosophy emphasizes **empirical validation through realistic
@@ -111,7 +111,7 @@ workflows and realistic experimental
 scenarios[\[7\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L177-L185).
 This hierarchical approach ensures that quality issues are detected at
 the appropriate level of detail, while providing full validation of
-component interactions and emergent behaviors that arise in a complex
+component interactions and emergent behaviours that arise in a complex
 distributed
 environment[\[8\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L179-L187).
 In practice, issues are caught early during unit and component tests,
@@ -137,8 +137,8 @@ distinct layers of validation, each with clear scope and objectives:
   components and subsystems, especially across the PC--Android boundary
   and between software and hardware. Integration tests ensure that the
   Android app, desktop controller, and sensors communicate and
-  synchronize correctly (e.g., verifying the JSON socket protocol,
-  cross-device time synchronization, and data format compatibility).
+  synchronise correctly (e.g., verifying the JSON socket protocol,
+  cross-device time synchronisation, and data format compatibility).
   This layer is critical for multi-device coordination and catches
   interface mismatches or communication issues.
 - **System Testing:** End-to-end testing of the entire system in
@@ -221,7 +221,7 @@ operates reliably in different ambient temperatures or network
 conditions). For example, *inter-device consistency* might be tested by
 comparing readings from two identical GSR sensors on the same subject,
 *temporal stability* by running the system continuously and verifying
-that synchronization drift or sensor noise does not accumulate
+that synchronisation drift or sensor noise does not accumulate
 significantly over hours, and *environmental robustness* by operating
 devices in different rooms or network setups to ensure performance is
 maintained.
@@ -323,7 +323,7 @@ targets that the system needed to meet or exceed during testing:
 higher reliability requirements of research software while acknowledging
 practical constraints in achieving perfect coverage across all
 components[\[13\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486).
-The targets prioritize full coverage of critical and high-risk
+The targets prioritise full coverage of critical and high-risk
 components (e.g., 100% interface coverage for integration means every
 defined interaction between components is tested) and allow a bit of
 flexibility in less critical areas. For instance, achieving 95% line
@@ -422,7 +422,7 @@ topology[\[16\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#
         end
 
         subgraph "Reporting and Documentation"
-            DASHBOARD[Real-Time Dashboard<br/>Test Progress Visualization]
+            DASHBOARD[Real-Time Dashboard<br/>Test Progress Visualisation]
             REPORTS[Automated Report Generation<br/>complete Test Documentation]
             TRENDS[Trend Analysis<br/>Quality Trend Tracking]
             ALERTS[Alert System<br/>Failure Notification]
@@ -475,7 +475,7 @@ device disconnects mid-test, the system can gracefully handle it (e.g.,
 skip dependent tests, restart the device, or mark the result
 appropriately) and continue with the rest of the suite, rather than
 crashing the entire test run. It logs detailed information for debugging
-and metrics, allowing the developers to optimize test efficiency and
+and metrics, allowing the developers to optimise test efficiency and
 resource usage over
 time[\[18\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L581-L589).
 
@@ -503,7 +503,7 @@ coordinator[\[19\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.
   and sensor polling in the system.
 - The **Integration Testing Engine** focuses on cross-platform and
   network interactions. It can simulate or stub parts of the system to
-  test end-to-end behavior: for example, it might simulate an Android
+  test end-to-end behaviour: for example, it might simulate an Android
   device at the protocol level to test the Python controller's handling
   of device messages, or vice versa. It also provides tools to introduce
   controlled network conditions like latency or packet loss to test
@@ -549,7 +549,7 @@ A **Log Aggregator** gathers logs from all devices (for example, Android
 logcat outputs, Python debug logs) so that the entire system's activity
 during a test can be analyzed in one place. An **Analysis Engine** then
 processes this data to compute statistics (e.g., average response times,
-distribution of synchronization error) and to detect any trends or
+distribution of synchronisation error) and to detect any trends or
 anomalies across runs. Finally, a **Validation Framework** automatically
 checks the collected metrics against the predefined acceptance criteria
 and requirements. This means that after a test run, the framework can
@@ -557,7 +557,7 @@ immediately tell which requirements are met and which (if any) are
 violated by looking at the data.
 
 **Reporting and Documentation:** The framework includes automated
-reporting tools. A real-time **dashboard** can visualize ongoing test
+reporting tools. A real-time **dashboard** can visualise ongoing test
 progress and intermediate results (useful during development to see, for
 instance, if a long-running endurance test is still meeting performance
 targets at hour 100). Automated **report generation** produces detailed
@@ -614,7 +614,7 @@ cover a range of scenarios: different participant characteristics (e.g.,
 someone who naturally has higher or lower baseline GSR), different
 environmental conditions (e.g., overall temperature drift to mimic a
 room warming up), etc. This breadth of synthetic data helps ensure that
-algorithms like synchronization or filtering are tested against a wide
+algorithms like synchronisation or filtering are tested against a wide
 variety of inputs, not just a narrow set of recorded cases.
 
 **Real Data Integration and Privacy Protection:** In addition to
@@ -644,7 +644,7 @@ instance, verifying that synthetic data has the expected mean and
 variance or that it covers the necessary range of values. It also checks
 multi-modal consistency -- e.g., if a test uses both GSR and thermal
 data streams, it validates that their timestamp sequences are aligned
-and there are no unexpected gaps (temporal synchronization in test
+and there are no unexpected gaps (temporal synchronisation in test
 data). Outlier detection might be employed to ensure the synthetic
 generator didn\'t produce any impossible values (like negative
 resistance in GSR, or a human temperature of 60°C). By validating test
@@ -674,7 +674,7 @@ The test environment management system handles the provisioning,
 configuration, and maintenance of the complex test setups needed,
 including multiple mobile devices, desktop systems, and sensor hardware.
 Its goal is to maintain consistent testing conditions across runs and
-simplify the otherwise labor-intensive process of setting up test
+simplify the otherwise labour-intensive process of setting up test
 scenarios.
 
 **Dynamic Environment Provisioning:** The framework provides automated
@@ -686,7 +686,7 @@ allocate four physical test devices if available), ensure they have the
 correct app version installed, and configure their settings (such as
 permissions or developer options). Similarly, it sets up the Python
 environment: installing any needed packages, loading test configuration
-files, and initializing dummy sensor inputs if necessary. Network setup
+files, and initialising dummy sensor inputs if necessary. Network setup
 can also be automated -- for instance, configuring a virtual network
 with specified latency and bandwidth for a particular test. This
 automation eliminates human error in environment setup and ensures that
@@ -726,15 +726,15 @@ rigorous control supports reproducibility -- any researcher or developer
 can set up the same environment from scratch using the automation
 scripts, and get the same results.
 
-**Resource Optimization and Scheduling:** The framework uses intelligent
+**Resource Optimisation and Scheduling:** The framework uses intelligent
 scheduling to make efficient use of testing
 resources[\[32\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L674-L682).
 For example, if multiple test suites can run in parallel on different
 devices without interfering, the scheduler will deploy them
 simultaneously to reduce total test time. It also handles resource
 conflicts: if two tests both need exclusive access to a particular
-physical sensor rig, the scheduler will serialize them to avoid
-collision. The system can prioritize tests (for instance, critical
+physical sensor rig, the scheduler will serialise them to avoid
+collision. The system can prioritise tests (for instance, critical
 nightly integration tests might run before longer performance tests) and
 also interrupt or postpone tests if higher-priority tasks come up (like
 a quick re-test of a bug fix).
@@ -834,7 +834,7 @@ programmatically.
             try:
                 # Configure test environment
                 await environment.configure(config)
-                # Initialize required resources (devices, network, etc.)
+                # Initialise required resources (devices, network, etc.)
                 await environment.initialize_resources()
                 # Validate environment readiness
                 validation_result = await environment.validate()
@@ -856,7 +856,7 @@ programmatically.
 This code illustrates how each test category (unit, integration, system,
 etc.) is associated with a specific environment configuration. Setting
 up an environment involves configuring it (loading any required
-parameters or deploying software), initializing resources (starting
+parameters or deploying software), initialising resources (starting
 simulators, connecting to devices), and validating that everything is
 ready. If any step fails, it cleans up and throws an exception, ensuring
 that no partial state lingers. The cleanup function reverses any setup
@@ -887,7 +887,7 @@ thermal-based emotion data collection.
 Unit testing was performed on both the Android application components
 and the Python desktop application components. Each unit test targets a
 small piece of functionality, using test doubles (mocks/stubs) to
-isolate the unit under test and ensure deterministic behavior. We
+isolate the unit under test and ensure deterministic behaviour. We
 employed modern testing frameworks and libraries on each platform to
 create thorough and maintainable unit test suites.
 
@@ -904,7 +904,7 @@ UI, except where using Espresso for small integration tests as needed.
 
 One crucial component is the Android camera recorder, responsible for
 capturing video (and thermal data via an external camera) on the mobile
-device. We wrote unit tests to validate the CameraRecorder's behavior,
+device. We wrote unit tests to validate the CameraRecorder's behaviour,
 especially configuration management and error handling. Below is an
 example of such a test class:
 
@@ -1032,7 +1032,7 @@ the sensor.
             `when`(bluetoothAdapter.isEnabled).thenReturn(true)
             `when`(bluetoothAdapter.startDiscovery()).thenReturn(true)
 
-            // Mock the device discovery callback behavior
+            // Mock the device discovery callback behaviour
             shimmerRecorder.setDiscoveryCallback { callback ->
                 discoveredDevices.forEach { device ->
                     callback.onDeviceFound(device)
@@ -1085,7 +1085,7 @@ to the device. This ensures the code is enabling the correct sensor
 modules on the Shimmer unit.
 
 These unit tests gave confidence that the Shimmer integration logic on
-Android can discover devices and initialize them properly. They also
+Android can discover devices and initialise them properly. They also
 help ensure that if the Bluetooth adapter is off or other conditions
 aren't met, our code can handle it (we have tests for those not shown
 here, e.g., if `bluetoothAdapter.isEnabled` is false,
@@ -1231,7 +1231,7 @@ testing. They uncovered, for example, that we needed to handle cases
 where OpenCV fails to find a pattern (ensuring our code doesn't crash
 but returns a clear error).
 
-#### Synchronization Engine Tests
+#### Synchronisation Engine Tests
 
 Another vital part of the Python application is the
 **SynchronizationEngine**, which ensures all devices (PC and Androids)
@@ -1240,7 +1240,7 @@ akin to NTP (Network Time Protocol) or a custom sync handshake,
 exchanging timestamps and computing offsets.
 
 We wrote unit tests to simulate devices and verify that the
-synchronization engine brings their clocks into alignment within the
+synchronisation engine brings their clocks into alignment within the
 required precision.
 
     class TestSynchronizationEngine:
@@ -1251,7 +1251,7 @@ required precision.
 
         @pytest.fixture
         def mock_devices(self):
-            """Create mock devices for synchronization testing."""
+            """Create mock devices for synchronisation testing."""
             devices = []
             for i in range(4):
                 device = Mock()
@@ -1262,7 +1262,7 @@ required precision.
 
         @pytest.mark.asyncio
         async def test_device_synchronization_success(self, sync_engine, mock_devices):
-            """Test successful multi-device synchronization within precision requirements."""
+            """Test successful multi-device synchronisation within precision requirements."""
             # Arrange
             reference_time = time.time()
             # Simulate each device responding with a timestamp close to reference_time
@@ -1288,7 +1288,7 @@ required precision.
 
         @pytest.mark.asyncio
         async def test_sync_handles_device_timeouts(self, sync_engine, mock_devices):
-            """Test that synchronization continues even if a device fails to respond."""
+            """Test that synchronisation continues even if a device fails to respond."""
             # Arrange
             # Let one device timeout (send_sync_request never returns)
             mock_devices[0].send_sync_request = AsyncMock(side_effect=asyncio.TimeoutError)
@@ -1312,21 +1312,21 @@ participate in sync (perhaps by sending back its current time). - In the
 success test, we simulate each device returning a timestamp within ±1ms
 of a reference time (which is simulating that all devices were roughly
 in sync already, or maybe that the network delays are small). We assert
-that the synchronization result shows a maximum deviation under 5ms,
+that the synchronisation result shows a maximum deviation under 5ms,
 etc., which were our requirements (for FR-002 sync precision,
 presumably). This test ensures that when things are going well, the
 engine indeed achieves high precision. It also verifies that the engine
 calls each device's sync method exactly once, meaning it didn't loop
 indefinitely or skip any device. - In the timeout test, we simulate one
 device not responding (raising a TimeoutError). The others respond
-normally. We expect the synchronization to still complete and indicate
+normally. We expect the synchronisation to still complete and indicate
 success (maybe with reduced confidence or a warning). We assert that the
 results contain a warning about the device that timed out. This checks
 that one uncooperative device doesn't prevent the others from syncing,
 which is important for robustness -- if one node drops out, the system
 should still function with the remaining ones.
 
-These unit tests for synchronization give confidence that the algorithm
+These unit tests for synchronisation give confidence that the algorithm
 handles both ideal and error conditions. They were especially helpful to
 fine-tune how the engine deals with outliers or missing data (we
 adjusted the implementation to skip a device if it timed out and to
@@ -1399,11 +1399,11 @@ kicks in and the device resumes sending data without crashing the
 session. We verify that the total data loss during the outage is within
 acceptable limits (e.g., buffered locally and sent later if designed so,
 or at least that the system logs it and continues). 5. **Time
-Synchronization in Integration:** While unit tests validate the sync
+Synchronisation in Integration:** While unit tests validate the sync
 algorithm in isolation, integration tests verify it in practice. We
 perform a full multi-device sync procedure across actual sockets and
 measure the offsets computed. The test asserts that after
-synchronization, the timestamps from devices align within the target
+synchronisation, the timestamps from devices align within the target
 precision (for example, if device A's clock says t and device B's says
 t\', the difference \|t - t\'\| is consistently below 5 ms across the
 test duration).
@@ -1503,7 +1503,7 @@ e.g., if one device disconnects mid-session, the PC logs it and
 continues with the remaining devices; when the device reconnects, it can
 optionally rejoin the session. - **Time alignment:** all data streams
 have proper timestamps that align across devices (within a few
-milliseconds after synchronization). - **No deadlocks or crashes:** the
+milliseconds after synchronisation). - **No deadlocks or crashes:** the
 system remained running in our longest integration test (which was a
 10-minute simulated recording with multiple reconnects) and correctly
 terminated at the end.
@@ -1526,7 +1526,7 @@ from start to finish of a typical use case.
 End-to-end tests simulate real workflows that a researcher would
 perform. This includes starting the system, connecting devices,
 calibrating if needed, recording data for a period (possibly with
-induced events), stopping the recording, and exporting or analyzing the
+induced events), stopping the recording, and exporting or analysing the
 data. The purpose is to validate that the system can successfully
 complete all steps of an experiment and produce valid outputs.
 
@@ -1544,7 +1544,7 @@ For example, one full system test scenario we executed was a
         @pytest.fixture
         async def full_system_setup(self):
             system = SystemTestHarness()
-            # Initialize PC controller (headless mode)
+            # Initialise PC controller (headless mode)
             await system.start_pc_controller()
             # Set up 4 simulated Android devices
             await system.setup_android_simulators(count=4)
@@ -1640,7 +1640,7 @@ This complete system test touches on every major aspect of the
 system in one sweep. It's essentially a dry run of an experiment. By
 automating this, we caught issues such as: - A race condition where not
 all devices would start recording if the start signals were sent too
-quickly; we solved it by implementing a short synchronization delay and
+quickly; we solved it by implementing a short synchronisation delay and
 the test confirmed the fix (previously, `len(prep_result.ready_devices)`
 might be less than 4 occasionally -- after the fix it was always 4). -
 Ensuring calibration was done: initially, our `prepare_research_session`
@@ -1666,22 +1666,22 @@ data quality post-hoc. Some of these were covered in the system test
 validation above, but we also have standalone tests focusing on data
 quality aspects in isolation.
 
-One example is a test focusing on **temporal synchronization accuracy**
+One example is a test focusing on **temporal synchronisation accuracy**
 across all data sources:
 
     class TestDataQualityValidation:
 
         @pytest.mark.asyncio
         async def test_temporal_synchronization_accuracy(self):
-            """Test temporal synchronization accuracy across all data sources."""
+            """Test temporal synchronisation accuracy across all data sources."""
             session = TestSession()
             await session.start_recording(duration=60)  # record for 60 seconds with, say, 2 devices
             # Collect temporal logs from all sources
             temporal_data = await session.extract_temporal_data()
 
-            # Analyze synchronization
+            # Analyse synchronisation
             sync_analysis = TemporalSynchronizationAnalyzer()
-            sync_results = sync_analysis.analyze(temporal_data)
+            sync_results = sync_analysis.analyse(temporal_data)
 
             assert sync_results.max_deviation < 0.005  # max deviation < 5ms
             assert sync_results.mean_deviation < 0.002  # mean deviation < 2ms
@@ -1697,7 +1697,7 @@ across all data sources:
         def _calculate_timestamp_gaps(self, timestamps):
             return [timestamps[i+1] - timestamps[i] for i in range(len(timestamps)-1)]
 
-This test essentially re-checks that the synchronization mechanism kept
+This test essentially re-checks that the synchronisation mechanism kept
 all device clocks aligned over a 60-second recording. It uses a
 `TemporalSynchronizationAnalyzer` to compute deviations between
 timestamp streams. The assertions enforce the strict criteria: even over
@@ -1713,8 +1713,8 @@ We wrote tests that examine recorded signals to ensure they meet noise
 and stability criteria. For example, after a test session, we run a GSR
 quality analyzer:
 
-    # Analyze GSR signal quality
-    gsr_quality = GSRQualityAnalyzer().analyze(recorded_gsr_samples)
+    # Analyse GSR signal quality
+    gsr_quality = GSRQualityAnalyzer().analyse(recorded_gsr_samples)
     assert gsr_quality.signal_to_noise_ratio > 20  # >20 dB SNR required
     assert gsr_quality.sampling_rate_consistency > 0.99  # >99% of samples at correct rate
     assert gsr_quality.baseline_stability > 0.8  # baseline drift within acceptable range
@@ -1732,7 +1732,7 @@ low-frequency trend is mostly flat).
 Similarly, for the thermal camera data, we had a
 `ThermalQualityAnalyzer`:
 
-    thermal_quality = ThermalQualityAnalyzer().analyze(recorded_thermal_frames)
+    thermal_quality = ThermalQualityAnalyzer().analyse(recorded_thermal_frames)
     assert thermal_quality.temperature_accuracy < 0.1  # within 0.1°C of reference
     assert thermal_quality.spatial_resolution >= 160   # at least 160x120 effective resolution
     assert thermal_quality.temporal_stability > 0.9    # minimal fluctuation when scene is static
@@ -1757,7 +1757,7 @@ One outcome was identifying a slight timing jitter in the thermal image
 timestamps relative to video frames; the data quality test flagged an
 average deviation around 7--8ms initially (above our 5ms goal).
 Investigating, we found that the thread capturing thermal data had an
-unpredictable slight delay. We modified the synchronization algorithm to
+unpredictable slight delay. We modified the synchronisation algorithm to
 correct for that by timestamping at the source (device) and trusting
 those stamps more, and the next test run showed thermal vs video
 alignment within \~3ms, thus passing the \<5ms criterion. This
@@ -1778,15 +1778,15 @@ that technical problems are unlikely to confound the research.
 Performance testing evaluates how the system behaves under various loads
 and stress conditions, ensuring that it not only works, but works
 efficiently and reliably within expected usage parameters. This includes
-measuring response times, resource utilization, throughput, and
-observing system behavior under prolonged operation or extreme
+measuring response times, resource utilisation, throughput, and
+observing system behaviour under prolonged operation or extreme
 conditions. Our performance evaluation methodology follows established
 techniques in computer systems performance
 analysis[\[33\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1501-L1509),
 adapted to the specific demands of a multi-device physiological data
 collection system.
 
-We carried out a series of benchmark tests to characterize system
+We carried out a series of benchmark tests to characterise system
 performance, using both automated scripts and observation of system
 metrics. Table 5.2 summarizes several key performance results against
 their target values:
@@ -1878,11 +1878,11 @@ not performed due to hardware limits):
   **8+        *Not tested* N/A        N/A          N/A          N/A        Future work
   Devices**                                                                (expected need
                                                                            for
-                                                                           optimization)
+                                                                           optimisation)
   ----------------------------------------------------------------------------------------
 
 Up to 4 devices, the system scaled well: all connections successful,
-synchronization remained good (though we noticed a slight increase in
+synchronisation remained good (though we noticed a slight increase in
 sync deviation at 4 devices, still within requirements), and network
 latency per device remained low on average (though with 4 devices
 saturating Wi-Fi, we saw occasional spikes up to \~0.2 s latency for
@@ -2126,7 +2126,7 @@ module and a race condition in another, which were fixed). -
 (like mismatches in message formats and a time sync bug), but those were
 resolved and now integration tests pass with high confidence. - **System
 tests** likewise had one critical issue at first (the multi-device start
-synchronization glitch mentioned earlier), which was fixed. -
+synchronisation glitch mentioned earlier), which was fixed. -
 **Performance and Reliability tests** had no critical issues -- they
 more so provided metrics. They all passed in the sense that performance
 remained within acceptable ranges. - **Security tests** (covering things
@@ -2221,7 +2221,7 @@ handled \~45.2 Mbps on average and peaks \~78 Mbps without issue, within
 the 100 Mbps theoretical Wi-Fi
 budget[\[35\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1974-L1982).
 This shows we can comfortably stream multiple video feeds and sensor
-data concurrently on a standard network. - **Resource Utilization:** CPU
+data concurrently on a standard network. - **Resource Utilisation:** CPU
 usage on the PC averaged \~67% during heavy recording (peak \~79%),
 under our 80%
 target[\[36\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983).
@@ -2375,7 +2375,7 @@ critical or slated for future work).
 ##### Defect Analysis
 
 Throughout testing, various defects were identified and resolved. We
-categorize them here for completeness:
+categorise them here for completeness:
 
 - **Critical Defects:** *None remaining.* All critical issues (those
   causing crashes, data loss, or requirement failures) found during
@@ -2388,7 +2388,7 @@ categorize them here for completeness:
   with workarounds; e.g.,
 - A memory leak in extended sessions (fixed by better resource
   cleanup)[\[43\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102).
-- A synchronization drift over long periods (fixed by periodic re-sync
+- A synchronisation drift over long periods (fixed by periodic re-sync
   and clock correction
   algorithms)[\[43\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102).
 - **Minor Defects:** *5 resolved, 2 tracked.* Minor issues were things
@@ -2433,7 +2433,7 @@ speed[\[47\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L21
 The realistic end-to-end tests gave us confidence in real usage. And by
 quantifying everything (timings, success rates), we have concrete
 evidence rather than just anecdotal assurance. - **Areas for
-Improvement:** One improvement would be further optimizing automated
+Improvement:** One improvement would be further optimising automated
 test execution -- while we automated a lot, the "overall system"
 one-click test of everything is still being finalized (mostly due to
 needing certain hardware or environment setups). We could invest in
@@ -2497,7 +2497,7 @@ same thoroughness).
 The table below lists the key test implementations (with references to
 code in Appendix F) that were used to achieve these validation results,
 demonstrating the tangible link between the testing strategy described
-and its realization in code:
+and its realisation in code:
 
 - `PythonApp/test_integration_logging.py` -- Integration framework tests
   ensuring complete logging of events (Appendix F.104)
@@ -2515,7 +2515,7 @@ and its realization in code:
 - `PythonApp/test_hardware_sensor_simulation.py` -- Hardware integration
   tests using simulated sensor input (Appendix F.109)
 - `PythonApp/test_dual_webcam_integration.py` -- Dual-camera integration
-  tests for synchronization (Appendix F.110)
+  tests for synchronisation (Appendix F.110)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/ConnectionManagerTestSimple.kt`
   -- Network connection and reconnection tests (Appendix F.111)
 - `PythonApp/test_advanced_dual_webcam_system.py` -- Advanced system
@@ -2525,7 +2525,7 @@ and its realization in code:
 - `PythonApp/production/performance_benchmark.py` -- System performance
   benchmarking tests with statistical analysis (Appendix F.114)
 - `AndroidApp/src/test/java/com/multisensor/recording/recording/AdaptiveFrameRateControllerTest.kt`
-  -- Tests for dynamic performance optimization under load (Appendix
+  -- Tests for dynamic performance optimisation under load (Appendix
   F.115)
 - `PythonApp/production/phase4_validator.py` -- System-wide validation
   framework tests (Appendix F.116)
@@ -2614,7 +2614,7 @@ settings. With an overall test pass rate of \~99.5% across more than 240
 test cases and all critical issues resolved, the system can be
 considered **research-ready**. It meets or exceeds all technical
 requirements identified in the thesis, providing empirical evidence in
-support of the system's capability to capture and synchronize
+support of the system's capability to capture and synchronise
 multi-modal physiological data accurately and consistently.
 
 The thorough testing approach not only verified the system's
@@ -2634,7 +2634,7 @@ in the resulting research, aligning with the rigorous standards of
 academic work.
 
 In summary, the thorough evaluation confirms that the system is fully
-prepared for deployment in experimental studies. Researchers can utilize
+prepared for deployment in experimental studies. Researchers can utilise
 the Multi-Sensor Recording System knowing it has been vetted under
 conditions simulating real experimental workflows, and that it includes
 safeguards and reliability features proven effective through testing.

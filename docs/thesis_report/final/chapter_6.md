@@ -44,17 +44,17 @@ accomplishments and technical contributions of this project include:
   approach in the context of physiological monitoring systems, which
   traditionally rely on either a single device or purely centralized
   data loggers. The project demonstrated that such a distributed
-  approach can maintain strict synchronization and reliability across
+  approach can maintain strict synchronisation and reliability across
   devices, effectively expanding the scope of experiments (for example,
   allowing multiple camera angles or multiple participants to be
   recorded in sync).
 
-- **High-Precision Synchronization Mechanisms:** Achieving tight
+- **High-Precision Synchronisation Mechanisms:** Achieving tight
   temporal alignment across all data streams was a critical technical
   challenge that the system overcame. A custom **multi-modal
-  synchronization framework** was developed, combining techniques such
+  synchronisation framework** was developed, combining techniques such
   as timestamp alignment with a network time protocol, latency
-  compensation, and periodic clock calibration. This synchronization
+  compensation, and periodic clock calibration. This synchronisation
   engine ensures that video frames, thermal images, and GSR sensor
   readings are all timestamped against a common clock with minimal
   drift. Empirical tests show that the system consistently maintains
@@ -75,7 +75,7 @@ accomplishments and technical contributions of this project include:
   thermal frame saturations). Upon detecting an anomaly, the software
   logs warnings or alerts the user via the interface, and in some cases
   can proactively adjust parameters (for instance, downsampling video
-  frame rate if CPU load is too high, or re-synchronizing clocks if
+  frame rate if CPU load is too high, or re-synchronising clocks if
   drift is detected). This adaptive quality management ensures that the
   data collected is reliable and alerts researchers to any problems in
   real time, which is a novel feature beyond the basic requirements for
@@ -105,7 +105,7 @@ accomplishments and technical contributions of this project include:
   custom **networking protocol** for coordinating devices, built on JSON
   message exchange over TCP/UDP sockets. This protocol supports
   automatic device discovery, command dissemination (e.g. start/stop
-  recording signals to all devices), time synchronization broadcasts,
+  recording signals to all devices), time synchronisation broadcasts,
   and data streaming to the central controller. A **Session Manager** on
   the PC and corresponding clients on mobile devices handle session
   configuration and status updates. This networking layer was optimized
@@ -155,8 +155,8 @@ accomplishments and technical contributions of this project include:
   which is a notable practical contribution given the increasing
   importance of data security in research software.
 
-- **Performance Optimization and Scalability:** Throughout the
-  development, careful optimization techniques were applied to ensure
+- **Performance Optimisation and Scalability:** Throughout the
+  development, careful optimisation techniques were applied to ensure
   the system performs well under the high data rates of video and sensor
   streaming. The final implementation uses multi-threaded processing and
   asynchronous I/O on both the PC and mobile ends, which allows it to
@@ -174,9 +174,9 @@ accomplishments and technical contributions of this project include:
   data-intensive tasks in real time on commodity hardware.
 
 In summary, the project's technical contributions span a broad range --
-from novel architectural design and synchronization algorithms to
+from novel architectural design and synchronisation algorithms to
 pragmatic engineering solutions for calibration, quality control,
-security, and usability. The successful realization of this multi-sensor
+security, and usability. The successful realisation of this multi-sensor
 platform establishes new benchmarks for **non-intrusive physiological
 data acquisition**. Notably, the system illustrates that low-cost,
 off-the-shelf components (smartphone cameras, a compact thermal camera,
@@ -220,11 +220,11 @@ light of the project outcomes:
   primary research goal of enabling contactless GSR measurement for
   research purposes.
 
-- **Objective 2: Achieve High Synchronization Accuracy and Data
+- **Objective 2: Achieve High Synchronisation Accuracy and Data
   Integrity.** The outcomes **meet or exceed** this objective. The
-  system was designed with strict synchronization and reliability
+  system was designed with strict synchronisation and reliability
   requirements, and testing confirms that these requirements were met.
-  As noted, the synchronization error between devices remains on the
+  As noted, the synchronisation error between devices remains on the
   order of a few milliseconds, better than the target threshold of 5 ms.
   Likewise, the system proved to be highly reliable during controlled
   tests: it maintained **99.7% uptime availability** and **99.98% data
@@ -260,7 +260,7 @@ light of the project outcomes:
   3). These include occasional instability in the user interface and
   less-than-perfect automatic device discovery. Despite those issues,
   the core design proves that the system is practical for real-world
-  use: researchers can utilize it to collect synchronized data from
+  use: researchers can utilise it to collect synchronized data from
   sensors without needing specialized technical support. The scalability
   aspect was confirmed by running sessions with up to eight devices in
   parallel, fulfilling the objective of a flexible, extensible platform
@@ -274,7 +274,7 @@ light of the project outcomes:
   evaluation phase (detailed in Chapter 5) provided quantitative
   evidence that the system meets its design specifications under lab
   conditions. All primary requirements traced from the design were
-  satisfied in tests -- for example, the performance and synchronization
+  satisfied in tests -- for example, the performance and synchronisation
   metrics mentioned above, as well as stability over extended recording
   durations, were validated. These results serve as a proof-of-concept
   that the system works as intended. On the other hand, **a planned
@@ -298,7 +298,7 @@ light of the project outcomes:
 In evaluating the outcomes against the original aims, it can be
 concluded that **the project's main objectives were achieved to a very
 high degree**. The system performs as designed and meets the key
-requirements that were set (multi-sensor integration, synchronization,
+requirements that were set (multi-sensor integration, synchronisation,
 reliability, and usability). In some aspects, the results even exceed
 expectations -- for example, the timing precision and the breadth of
 features (such as security and adaptive quality control) go beyond what
@@ -364,7 +364,7 @@ below:
   detection runs in isolation and can process camera frames to identify
   hand regions, it has not been incorporated into the live data pipeline
   during recording sessions. This means that currently the system does
-  not utilize the hand segmentation results in real time -- for
+  not utilise the hand segmentation results in real time -- for
   instance, it does not annotate the recorded video with hand region
   data or use it to trigger any adaptive logic. The omission is due to
   time constraints and the need for further testing to ensure the hand
@@ -395,13 +395,13 @@ below:
   By the time the system was operational, there was insufficient time
   remaining to properly plan and execute a pilot study (including
   obtaining any necessary ethical approvals, recruiting participants,
-  and analyzing pilot data). Thus, schedule constraints forced the pilot
+  and analysing pilot data). Thus, schedule constraints forced the pilot
   to be postponed beyond the project's official end.
 
 - *Delays in hardware delivery:* Certain hardware components (notably
   the thermal camera device) arrived later than expected, compressing
   the integration and testing period. These delays left less buffer to
-  organize a pilot. Additionally, some contingency plans (like testing
+  organise a pilot. Additionally, some contingency plans (like testing
   alternative sensors) could not be realized in time, further reducing
   the opportunity to conduct a meaningful pilot experiment.
 
@@ -463,11 +463,11 @@ efforts could be directed:
   feedback to the user during device connection. Another extension could
   be to implement a manual device addition option as a fallback, so that
   if automatic discovery fails, users can still easily register a device
-  by ID or IP address. Additionally, optimizing network communication --
+  by ID or IP address. Additionally, optimising network communication --
   for example, by using more fault-tolerant libraries or peer-to-peer
   connection methods -- could reduce reliance on a perfect network
   environment. In the longer term, one might explore a more
-  decentralized or mesh-based synchronization approach that does not
+  decentralized or mesh-based synchronisation approach that does not
   rely as heavily on a single PC controller, thereby removing any single
   point of failure in coordinating devices. By making the device linking
   process more robust, the system will become easier to set up and more
@@ -503,7 +503,7 @@ efforts could be directed:
   scenarios (for example, inducing stress or emotional responses while
   recording). The pilot study would serve multiple purposes: it would
   validate the system's end-to-end functionality with real users,
-  provide initial data to analyze the correlation between contactless
+  provide initial data to analyse the correlation between contactless
   measures and true GSR, and likely reveal any practical issues not
   discovered in lab tests (such as usability hurdles or sensor
   performance in varied conditions). Based on pilot data, the system's
@@ -511,7 +511,7 @@ efforts could be directed:
   settings for different environmental conditions or improving signal
   processing algorithms. Importantly, the data collected will enable
   **quantitative evaluation of contactless GSR estimation**. Future work
-  should apply machine learning or statistical modeling to the
+  should apply machine learning or statistical modelling to the
   multi-modal dataset (thermal imagery, maybe visible video, and
   reference GSR) to develop and test predictive models that estimate GSR
   from the contactless signals. This was the ultimate scientific aim of
@@ -538,19 +538,19 @@ efforts could be directed:
   arousal. Additionally, supporting multiple thermal cameras or
   higher-resolution imaging devices in the future could improve the
   quality of contactless measurement (covering multiple angles or larger
-  areas of the body). Each new modality would come with synchronization
+  areas of the body). Each new modality would come with synchronisation
   and data management challenges, but the existing framework is a strong
   base to build upon. Future work might also explore using newer
   hardware: as mobile devices and cameras improve (e.g., higher frame
   rates, better thermal sensitivity), the system can be updated to
   leverage those for better performance or accuracy.
 
-- **Optimization and Technical Debt Reduction:** As with many prototype
+- **Optimisation and Technical Debt Reduction:** As with many prototype
   systems, there are areas of the codebase and design that can benefit
-  from further optimization and cleanup. Future development should
+  from further optimisation and cleanup. Future development should
   address any **technical debt**, such as sections of code that were
   implemented as proofs-of-concept and could be rewritten for efficiency
-  or clarity. For example, optimizing the image processing pipeline
+  or clarity. For example, optimising the image processing pipeline
   (perhaps using GPU acceleration on the mobile device for handling
   video frames) could reduce latency and power consumption. Another
   target is the network protocol efficiency: implementing compression
@@ -610,7 +610,7 @@ modalities in a non-intrusive manner. The work completed in this thesis
 is therefore both an endpoint -- delivering a functioning system -- and
 a starting point for ongoing innovation and research using that system.
 The expectation is that future efforts, building on this foundation,
-will fully realize the vision of robust contactless physiological
+will fully realise the vision of robust contactless physiological
 monitoring and validate its benefits in real-world applications.
 
 ------------------------------------------------------------------------

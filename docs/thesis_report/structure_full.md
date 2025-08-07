@@ -79,7 +79,7 @@ Version B: Full Structure
 
 - 3.3 Functional Requirements
 
-  - 3.3.1 Multi-Device Coordination and Synchronization Requirements
+  - 3.3.1 Multi-Device Coordination and Synchronisation Requirements
 
   - 3.3.2 Sensor Integration and Data Acquisition Requirements
 
@@ -125,7 +125,7 @@ Version B: Full Structure
 
 - 4.2 Distributed System Design
 
-  - 4.2.1 Synchronization Architecture (Multi-Device Coordination)
+  - 4.2.1 Synchronisation Architecture (Multi-Device Coordination)
 
   - 4.2.2 Fault Tolerance and Recovery Mechanisms
 
@@ -159,15 +159,15 @@ Version B: Full Structure
 
   - 4.6.1 Real-Time Signal Processing Framework
 
-  - 4.6.2 Synchronization Engine Design
+  - 4.6.2 Synchronisation Engine Design
 
 - 4.7 Implementation Challenges and Solutions
 
   - 4.7.1 Multi-Platform Compatibility
 
-  - 4.7.2 Real-Time Synchronization Challenges
+  - 4.7.2 Real-Time Synchronisation Challenges
 
-  - 4.7.3 Resource Management and Optimization
+  - 4.7.3 Resource Management and Optimisation
 
 - 4.8 Technology Stack and Design Decisions
 
@@ -213,9 +213,9 @@ Version B: Full Structure
 
   - 4.12.1 Built-in Testing Strategy and Framework
 
-  - 4.12.2 Performance Monitoring and Optimization
+  - 4.12.2 Performance Monitoring and Optimisation
 
-- 4.13 Multi-Device Synchronization Implementation
+- 4.13 Multi-Device Synchronisation Implementation
 
   - 4.13.1 Temporal Coordination Algorithm
 
@@ -241,7 +241,7 @@ Version B: Full Structure
 
 - 5.4 Integration Testing
 
-  - 5.4.1 Multi-Device Integration Testing (Android--PC Synchronization)
+  - 5.4.1 Multi-Device Integration Testing (Android--PC Synchronisation)
 
   - 5.4.2 Network Communication Testing
 
@@ -357,7 +357,7 @@ Version B: Full Structure
 
 - **Appendix F: Code Listings**
 
-  - F.1 Core Synchronization Algorithm Code
+  - F.1 Core Synchronisation Algorithm Code
 
   - F.2 Multi-Modal Data Pipeline Implementation
 

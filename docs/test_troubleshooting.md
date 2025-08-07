@@ -89,12 +89,12 @@ python run_evaluation_suite.py --category android_foundation
 2. Increase system memory allocation
 3. Use quick test mode to reduce resource usage
 
-### Data and Synchronization Issues
+### Data and Synchronisation Issues
 
-#### Timestamp Synchronization Failures
+#### Timestamp Synchronisation Failures
 **Problem**: Timing precision below requirements
 **Solution**:
-1. Ensure NTP synchronization is working
+1. Ensure NTP synchronisation is working
 2. Check system clock accuracy
 3. Reduce network latency between devices
 

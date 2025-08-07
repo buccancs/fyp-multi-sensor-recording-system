@@ -24,7 +24,7 @@ graph TB
             NS[Network Server<br/>WebSocket Communication]
             CM[Calibration Manager<br/>Multi-Modal Alignment]
             ShM[Shimmer Manager<br/>Physiological Sensors]
-            SE[Synchronization Engine<br/>Temporal Coordination]
+            SE[Synchronisation Engine<br/>Temporal Coordination]
             DA[Data Aggregator<br/>Multi-Stream Integration]
             GUI[User Interface<br/>PyQt5 Control Panel]
             Monitor[Real-Time Monitor<br/>Quality Assessment]
@@ -35,7 +35,7 @@ graph TB
             WS[WebSocket Protocol<br/>Bidirectional Communication]
             JSON[JSON Message Format<br/>Structured Commands]
             TLS[TLS Security Layer<br/>Encrypted Transmission]
-            SYNC[Synchronization Protocol<br/>Temporal Alignment]
+            SYNC[Synchronisation Protocol<br/>Temporal Alignment]
         end
         
         subgraph "Android Recording Devices"
@@ -58,7 +58,7 @@ graph TB
                     NetM[Network Manager<br/>Communication Stack]
                     StorM[Storage Manager<br/>Local Persistence]
                     SecM[Security Manager<br/>Data Protection]
-                    PerM[Performance Manager<br/>Resource Optimization]
+                    PerM[Performance Manager<br/>Resource Optimisation]
                 end
             end
         end
@@ -128,7 +128,7 @@ graph TB
     QM --> Validation
     SecM --> TLS
     
-    %% Synchronization
+    %% Synchronisation
     SE --> SYNC
     SYNC --> NetM
     
@@ -175,10 +175,10 @@ The PC Master Controller serves as the central command and coordination hub, imp
 - **Integration**: Provides physiological ground truth data for contactless prediction research
 - **Research Application**: Research-grade GSR measurement with 256Hz sampling and 16-bit resolution
 
-**Synchronization Engine** (`PythonApp/master_clock_synchronizer.py`)
+**Synchronisation Engine** (`PythonApp/master_clock_synchronizer.py`)
 - **Responsibility**: Temporal coordination across all system components
-- **Features**: NTP synchronization, drift compensation, precision timing validation
-- **Integration**: Ensures <1ms synchronization accuracy across heterogeneous devices
+- **Features**: NTP synchronisation, drift compensation, precision timing validation
+- **Integration**: Ensures <1ms synchronisation accuracy across heterogeneous devices
 - **Performance**: Maintains temporal alignment with RMS deviation <0.5ms
 
 **Data Aggregator** (`PythonApp/session/`)
@@ -212,12 +212,12 @@ The Android application underwent architectural refactoring, transforming from a
 **FileTransferManager** (448 lines)
 - **Responsibility**: Data transfer operations and local persistence management
 - **Features**: File integrity validation, transfer progress monitoring, storage coordination
-- **Integration**: Handles data synchronization between local storage and PC controller
+- **Integration**: Handles data synchronisation between local storage and PC controller
 - **Performance**: Supports >10MB/s per device data transfer rates
 
 **CalibrationManager** (441 lines)
 - **Responsibility**: Local calibration process coordination and validation
-- **Features**: Multi-device calibration synchronization, quality assessment, result validation
+- **Features**: Multi-device calibration synchronisation, quality assessment, result validation
 - **Integration**: Coordinates with PC controller for system-wide calibration
 - **Quality**: Ensures calibration accuracy through validation protocols
 
@@ -225,7 +225,7 @@ The Android application underwent architectural refactoring, transforming from a
 
 **CameraRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
 - **Responsibility**: High-resolution video capture using Camera2 API
-- **Features**: 1920x1080@30fps recording, real-time preview, format optimization
+- **Features**: 1920x1080@30fps recording, real-time preview, format optimisation
 - **Integration**: Synchronized frame capture with temporal metadata
 - **Performance**: Optimized for continuous recording with minimal battery impact
 
@@ -347,7 +347,7 @@ graph LR
             TEMP[Temperature Streams<br/>Environmental Conditions]
         end
         
-        subgraph "Synchronization Metadata"
+        subgraph "Synchronisation Metadata"
             MASTER[Master Clock Timestamps<br/>Sub-millisecond Precision]
             OFFSET[Device Offset Corrections<br/>Drift Compensation]
             QUALITY[Quality Metrics<br/>Data Validity Assessment]
@@ -364,18 +364,18 @@ graph LR
     OFFSET --> QUALITY
 ```
 
-#### Synchronization Architecture
+#### Synchronisation Architecture
 
-The synchronization system ensures temporal alignment across all data streams with research-grade precision requirements.
+The synchronisation system ensures temporal alignment across all data streams with research-grade precision requirements.
 
 **Temporal Coordination Methodology**:
-- **Master Clock**: PC controller maintains authoritative time reference using NTP synchronization
+- **Master Clock**: PC controller maintains authoritative time reference using NTP synchronisation
 - **Device Offsets**: Individual device timing offsets calculated and continuously updated
 - **Drift Compensation**: Automatic correction for clock drift across extended recording sessions
-- **Quality Validation**: Continuous monitoring of synchronization accuracy with statistical validation
+- **Quality Validation**: Continuous monitoring of synchronisation accuracy with statistical validation
 
 **Performance Characteristics**:
-- **Synchronization Accuracy**: <1ms across all devices
+- **Synchronisation Accuracy**: <1ms across all devices
 - **Drift Compensation**: <0.1ms/hour typical drift correction
 - **Quality Metrics**: RMS deviation <0.5ms, 99.8% confidence intervals
 - **Scalability**: Maintains precision with up to 8 concurrent devices
@@ -500,7 +500,7 @@ graph TB
         subgraph "Integration Tests (Cross-Component)"
             MULTI[Multi-Device Coordination<br/>Device Discovery & Session Management]
             NETWORK[Network Performance<br/>WebSocket Protocols & Resilience]
-            SYNC[Synchronization Precision<br/>Sub-millisecond Temporal Accuracy]
+            SYNC[Synchronisation Precision<br/>Sub-millisecond Temporal Accuracy]
             E2E[End-to-End Workflows<br/>Complete Recording Lifecycle]
         end
         
@@ -512,7 +512,7 @@ graph TB
         
         subgraph "Quality Metrics (Research Standards)"
             SUCCESS[Success Rate<br/>100% Foundation & Integration]
-            PRECISION[Temporal Precision<br/><1ms Synchronization Accuracy]
+            PRECISION[Temporal Precision<br/><1ms Synchronisation Accuracy]
             RELIABILITY[System Reliability<br/>98.4% Under Diverse Conditions]
         end
     end
@@ -605,7 +605,7 @@ graph TB
 ### ADR-001: Reactive State Management
 - **Decision**: Implement reactive StateFlow patterns for UI state coordination
 - **Rationale**: Provides consistent UI updates and simplified state management
-- **Consequences**: Improved maintainability and predictable state behavior
+- **Consequences**: Improved maintainability and predictable state behaviour
 
 ### ADR-002: Strict Type Safety
 - **Decision**: Enforce complete type safety across all system components
@@ -641,8 +641,8 @@ graph LR
         
         subgraph "Processing Layer"
             VALIDATE[Data Validation<br/>Quality Assessment]
-            SYNC[Synchronization<br/>Temporal Alignment]
-            FORMAT[Format Processing<br/>Standardization]
+            SYNC[Synchronisation<br/>Temporal Alignment]
+            FORMAT[Format Processing<br/>Standardisation]
         end
         
         subgraph "Storage Layer"
@@ -671,23 +671,23 @@ graph LR
     EXPORT --> RESEARCH
 ```
 
-## Performance Optimization Strategies
+## Performance Optimisation Strategies
 
 ### Memory Management
-- **Streaming Processing**: Minimize memory footprint through real-time data streaming
+- **Streaming Processing**: Minimise memory footprint through real-time data streaming
 - **Buffer Management**: Adaptive buffer sizing based on data throughput requirements
-- **Garbage Collection**: Optimized for real-time processing with minimal latency impact
-- **Resource Pools**: Reusable resource management for efficient memory utilization
+- **Garbage Collection**: Optimised for real-time processing with minimal latency impact
+- **Resource Pools**: Reusable resource management for efficient memory utilisation
 
-### CPU Optimization
+### CPU Optimisation
 - **Multi-threading**: Parallel processing across available CPU cores
 - **Async Processing**: Non-blocking I/O operations for responsive user experience
 - **Load Balancing**: Distribute processing load across system components
 - **Priority Scheduling**: Critical research tasks prioritized over background operations
 
-### Storage Optimization
+### Storage Optimisation
 - **Compression**: Lossless compression for non-critical data streams
-- **Streaming Writes**: Minimize storage latency through optimized write operations
+- **Streaming Writes**: Minimise storage latency through optimised write operations
 - **Index Management**: Fast data retrieval through efficient indexing strategies
 - **Cleanup Policies**: Automatic management of storage resources
 
@@ -697,11 +697,11 @@ graph LR
 - **Automated Testing**: 100% success rate across all test categories
 - **Static Analysis**: Continuous code quality monitoring with detailed metrics
 - **Dependency Management**: Regular security updates and compatibility maintenance
-- **Performance Monitoring**: Continuous performance tracking and optimization
+- **Performance Monitoring**: Continuous performance tracking and optimisation
 
 ### Documentation Maintenance
 - **Architecture Decision Records**: Systematic documentation of major architectural decisions
-- **API Documentation**: Complete API reference with automated synchronization
+- **API Documentation**: Complete API reference with automated synchronisation
 - **Research Documentation**: Academic-grade documentation following established standards
 - **User Guides**: Practical usage documentation with step-by-step procedures
 

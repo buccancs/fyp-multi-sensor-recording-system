@@ -1,44 +1,44 @@
-# Multi-Device Synchronization Module
+# Multi-Device Synchronisation Module
 
 ## Overview
 
-The Multi-Device Synchronization System serves as the temporal backbone of the Multi-Sensor Recording System, ensuring precise temporal alignment (sub-millisecond accuracy) of data streams from all sensors across distributed devices. This component addresses fundamental challenges in distributed temporal coordination for physiological sensing applications [Cacioppo2007], implementing proven synchronization algorithms adapted for research-grade data collection.
+The Multi-Device Synchronisation System serves as the temporal backbone of the Multi-Sensor Recording System, ensuring precise temporal alignment (sub-millisecond accuracy) of data streams from all sensors across distributed devices. This component addresses fundamental challenges in distributed temporal coordination for physiological sensing applications [Cacioppo2007], implementing proven synchronisation algorithms adapted for research-grade data collection.
 
 ### Theoretical Foundation and Research Context
 
-The synchronization system addresses complete temporal coordination needs of heterogeneous sensor platforms in psychophysiological research environments. Modern multi-modal sensing applications require precise temporal alignment of data streams from different devices, where even minor time misalignments can compromise analysis validity [Picard2001] or lead to erroneous research conclusions.
+The synchronisation system addresses complete temporal coordination needs of heterogeneous sensor platforms in psychophysiological research environments. Modern multi-modal sensing applications require precise temporal alignment of data streams from different devices, where even minor time misalignments can compromise analysis validity [Picard2001] or lead to erroneous research conclusions.
 
 The system builds upon established distributed systems principles while addressing specific requirements of physiological data collection:
 
 - **Lamport's Logical Clocks** [Lamport1978]: Foundational event ordering principles adapted for sensor event coordination without requiring global clock consensus
-- **Cristian's Clock Synchronization Algorithm** [Cristian1989]: Network delay estimation and compensation techniques for accurate time distribution
-- **Network Time Protocol (NTP) Principles** [Mills1991]: Internet-scale clock synchronization methodologies adapted for local research network environments  
+- **Cristian's Clock Synchronisation Algorithm** [Cristian1989]: Network delay estimation and compensation techniques for accurate time distribution
+- **Network Time Protocol (NTP) Principles** [Mills1991]: Internet-scale clock synchronisation methodologies adapted for local research network environments  
 - **IEEE 1588 Precision Time Protocol Concepts** [IEEE1588-2008]: Sub-microsecond hardware-assisted timing principles applied to software-based coordination
 
 ### System Role and Responsibilities
 
-The Multi-Device Synchronization System ensures temporal coherence across the established PC master-controller, offline-first recording architecture, providing:
+The Multi-Device Synchronisation System ensures temporal coherence across the established PC master-controller, offline-first recording architecture, providing:
 
 **Primary Functions:**
 
-- **Sub-millisecond temporal synchronization** across heterogeneous sensors maintaining research-grade temporal precision
+- **Sub-millisecond temporal synchronisation** across heterogeneous sensors maintaining research-grade temporal precision
 - **Coordinated recording lifecycle management** ensuring atomic start/stop operations across distributed Android devices and PC components
 - **Master clock distribution** with PC-centric authoritative time source implementing hierarchical time distribution [Mills1991]
-- **Adaptive drift compensation** using statistical prediction algorithms to maintain synchronization quality over extended recording sessions
-- **Continuous quality monitoring** with real-time synchronization precision assessment and automatic quality degradation detection
+- **Adaptive drift compensation** using statistical prediction algorithms to maintain synchronisation quality over extended recording sessions
+- **Continuous quality monitoring** with real-time synchronisation precision assessment and automatic quality degradation detection
 
 ### Research Foundation
 
 The system builds upon established distributed systems principles:
 
 - **Lamport's Logical Clocks** [Lamport1978]: Foundational event ordering without global clock
-- **Cristian's Clock Synchronization** [Cristian1989]: Network delay estimation algorithms
-- **Network Time Protocol (NTP)** [Mills1991]: Internet-scale clock synchronization
+- **Cristian's Clock Synchronisation** [Cristian1989]: Network delay estimation algorithms
+- **Network Time Protocol (NTP)** [Mills1991]: Internet-scale clock synchronisation
 - **IEEE 1588 Precision Time Protocol** [IEEE1588-2008]: Sub-microsecond hardware-assisted timing
 
 ### Device Architecture
 
-The synchronization system coordinates the following device categories:
+The synchronisation system coordinates the following device categories:
 
 #### Android Mobile Devices
 
@@ -73,7 +73,7 @@ The synchronization system coordinates the following device categories:
 
 ```mermaid
 graph TB
-    subgraph "Synchronization Architecture"
+    subgraph "Synchronisation Architecture"
         subgraph "Master Clock Layer"
             MCS[MasterClockSynchronizer<br/>Authoritative Time Source]
             NTP[NTP Time Server<br/>Reference Distribution]
@@ -113,35 +113,35 @@ graph TB
     AO --> CDC
 ```
 
-### Hierarchical Synchronization Model
+### Hierarchical Synchronisation Model
 
-The system implements a hierarchical master-slave synchronization model:
+The system implements a hierarchical master-slave synchronisation model:
 
 #### Master Level (PC Controller)
 
 - **Primary Time Source**: Windows PC with stable crystal oscillator
 - **NTP Server**: Local network time distribution at microsecond precision
 - **Command Coordination**: Centralized session management and device control
-- **Quality Assessment**: Continuous monitoring of synchronization precision
+- **Quality Assessment**: Continuous monitoring of synchronisation precision
 
 #### Slave Level (Connected Devices)
 
-- **Android Devices**: Socket-based time synchronization with compensation algorithms
+- **Android Devices**: Socket-based time synchronisation with compensation algorithms
 - **USB Webcams**: Direct hardware interface with calibrated timing offsets
-- **Bluetooth Sensors**: Wireless synchronization with adaptive latency compensation
+- **Bluetooth Sensors**: Wireless synchronisation with adaptive latency compensation
 
 ### Temporal Coordination Framework
 
-#### Clock Synchronization Protocol
+#### Clock Synchronisation Protocol
 
-1. **Initial Synchronization**: Network Time Protocol handshake with round-trip delay measurement
+1. **Initial Synchronisation**: Network Time Protocol handshake with round-trip delay measurement
 2. **Periodic Resynchronization**: Adaptive interval based on measured drift characteristics
-3. **Drift Compensation**: Machine learning algorithms predicting individual device behavior
-4. **Quality Monitoring**: Continuous assessment of synchronization precision and network quality
+3. **Drift Compensation**: Machine learning algorithms predicting individual device behaviour
+4. **Quality Monitoring**: Continuous assessment of synchronisation precision and network quality
 
 #### Event Coordination Protocol
 
-1. **Session Initialization**: Distributed session creation with synchronized parameters
+1. **Session Initialisation**: Distributed session creation with synchronized parameters
 2. **Recording Start**: Coordinated start commands with precise timing alignment
 3. **Data Collection**: Continuous temporal validation during recording sessions
 4. **Session Completion**: Synchronized stop commands with data integrity verification
@@ -157,7 +157,7 @@ graph TB
     subgraph "Protocol Architecture"
         subgraph "Application Layer"
             JSON[JSON Message Protocol<br/>Type-Safe Communication]
-            NTP[NTP Time Protocol<br/>Clock Synchronization]
+            NTP[NTP Time Protocol<br/>Clock Synchronisation]
             FILE[File Transfer Protocol<br/>Data Exchange]
         end
 
@@ -185,7 +185,7 @@ graph TB
 | Service          | Protocol | Port | Purpose               | Implementation               |
 |------------------|----------|------|-----------------------|------------------------------|
 | Command Channel  | TCP      | 9000 | JSON message exchange | Primary device communication |
-| NTP Server       | UDP      | 8889 | Time synchronization  | Clock distribution           |
+| NTP Server       | UDP      | 8889 | Time synchronisation  | Clock distribution           |
 | Device Discovery | UDP      | 8888 | Device identification | Network scanning             |
 | File Transfer    | TCP      | 9001 | Data exchange         | Session file sharing         |
 
@@ -193,7 +193,7 @@ graph TB
 
 #### Message Structure
 
-All synchronization messages follow a standardized JSON format:
+All synchronisation messages follow a standardized JSON format:
 
 ```json
 {
@@ -221,14 +221,14 @@ All synchronization messages follow a standardized JSON format:
 | `session_id` | String | No | Current recording session identifier |
 | `device_id` | String | Yes | Unique device identifier |
 | `sequence_number` | Integer | Yes | Message ordering sequence |
-| `sync_data` | Object | Yes | Synchronization-specific metadata |
+| `sync_data` | Object | Yes | Synchronisation-specific metadata |
 | `payload` | Object | Yes | Command-specific data content |
 
-### Synchronization Commands
+### Synchronisation Commands
 
-#### Clock Synchronization Messages
+#### Clock Synchronisation Messages
 
-**Time Synchronization Request:**
+**Time Synchronisation Request:**
 
 ```json
 {
@@ -254,7 +254,7 @@ All synchronization messages follow a standardized JSON format:
 }
 ```
 
-**Time Synchronization Response:**
+**Time Synchronisation Response:**
 
 ```json
 {
@@ -354,7 +354,7 @@ All synchronization messages follow a standardized JSON format:
 }
 ```
 
-### NTP Time Synchronization Protocol
+### NTP Time Synchronisation Protocol
 
 #### NTP Server Implementation
 
@@ -386,7 +386,7 @@ The PC controller implements a local NTP server for high-precision time distribu
 
 ### Quality Monitoring Protocol
 
-#### Synchronization Quality Metrics
+#### Synchronisation Quality Metrics
 
 **Quality Assessment Message:**
 
@@ -441,7 +441,7 @@ The PC controller implements a local NTP server for high-precision time distribu
 
 ```python
 class MasterClockSynchronizer:
-    """Central synchronization coordinator with NTP server and drift compensation"""
+    """Central synchronisation coordinator with NTP server and drift compensation"""
 
     def __init__(self):
         self.ntp_server = NTPTimeServer(port=8889)
@@ -450,29 +450,29 @@ class MasterClockSynchronizer:
         self.sync_quality_monitor = SyncQualityMonitor()
 
     def start_synchronization_service(self) -> bool:
-        """Initialize NTP server and begin synchronization coordination"""
+        """Initialise NTP server and begin synchronisation coordination"""
         try:
             self.ntp_server.start()
-            self.drift_compensator.initialize()
+            self.drift_compensator.initialise()
             self.sync_quality_monitor.start()
-            logger.info("Synchronization service started successfully")
+            logger.info("Synchronisation service started successfully")
             return True
         except Exception as e:
-            logger.error(f"Failed to start synchronization service: {e}")
+            logger.error(f"Failed to start synchronisation service: {e}")
             return False
 
     def register_device(self, device_info: DeviceInfo) -> bool:
-        """Register new device for synchronization coordination"""
+        """Register new device for synchronisation coordination"""
         device_id = device_info.device_id
 
-        # Create device-specific synchronization context
+        # Create device-specific synchronisation context
         sync_context = DeviceSyncContext(
             device_id=device_id,
             device_type=device_info.device_type,
             capabilities=device_info.sync_capabilities
         )
 
-        # Initialize drift compensation for device
+        # Initialise drift compensation for device
         self.drift_compensator.add_device(device_id, sync_context)
 
         # Register with quality monitor
@@ -482,7 +482,7 @@ class MasterClockSynchronizer:
         return True
 
     def synchronize_device(self, device_id: str) -> SyncResult:
-        """Perform clock synchronization with specified device"""
+        """Perform clock synchronisation with specified device"""
         if device_id not in self.device_registry:
             return SyncResult(success=False, error="Device not registered")
 
@@ -496,7 +496,7 @@ class MasterClockSynchronizer:
             device_id, sync_measurement
         )
 
-        # Send synchronization command
+        # Send synchronisation command
         sync_command = self._create_sync_command(compensation)
         result = self._send_sync_command(device_id, sync_command)
 
@@ -518,7 +518,7 @@ class ClockDriftCompensator:
         self.drift_history = {}
 
     def add_device(self, device_id: str, sync_context: DeviceSyncContext):
-        """Initialize drift compensation for new device"""
+        """Initialise drift compensation for new device"""
         # Create Kalman filter for drift prediction
         kalman_filter = KalmanFilter(
             initial_state=[0.0, 0.0],  # [offset, drift_rate]
@@ -531,7 +531,7 @@ class ClockDriftCompensator:
         self.kalman_filters[device_id] = kalman_filter
         self.drift_history[device_id] = []
 
-        # Initialize device-specific model
+        # Initialise device-specific model
         self.device_models[device_id] = DriftModel(
             device_type=sync_context.device_type,
             oscillator_type=sync_context.capabilities.oscillator_type
@@ -582,7 +582,7 @@ class SessionSynchronizer:
         """Create new session with synchronized parameters across devices"""
         session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
-        # Synchronize all devices before session creation
+        # Synchronise all devices before session creation
         sync_results = {}
         for device_id in session_config.devices:
             sync_result = self.master_clock.synchronize_device(device_id)
@@ -646,13 +646,13 @@ class SessionSynchronizer:
 
 ```
 PythonApp/src/
-├── master_clock_synchronizer.py     # Primary synchronization coordinator
+├── master_clock_synchronizer.py     # Primary synchronisation coordinator
 ├── ntp_time_server.py               # Local NTP server implementation
 ├── session/
 │   ├── session_synchronizer.py      # Session coordination
 │   └── sync_quality_monitor.py      # Quality assessment
 ├── network/
-│   ├── sync_protocol_handler.py     # Synchronization message protocol
+│   ├── sync_protocol_handler.py     # Synchronisation message protocol
 │   └── device_discovery.py          # Network device discovery
 ├── compensation/
 │   ├── drift_compensator.py         # Adaptive drift compensation
@@ -665,7 +665,7 @@ PythonApp/src/
 
 ### Android Integration
 
-#### Synchronization Client Implementation
+#### Synchronisation Client Implementation
 
 ```kotlin
 class SynchronizationClient {
@@ -676,8 +676,8 @@ class SynchronizationClient {
 
     suspend fun synchronizeWithMaster(masterAddress: String, masterPort: Int): SyncResult {
         try {
-            // Perform NTP synchronization
-            val ntpResult = ntpClient.synchronize("$masterAddress:8889")
+            // Perform NTP synchronisation
+            val ntpResult = ntpClient.synchronise("$masterAddress:8889")
 
             if (ntpResult.success) {
                 clockOffset = ntpResult.offset
@@ -728,16 +728,16 @@ class SynchronizationClient {
 
 ### Setup and Configuration
 
-#### Initial Synchronization Setup
+#### Initial Synchronisation Setup
 
 1. **Network Configuration**:
     - Ensure all devices are connected to the same WiFi network
     - Configure PC controller as master clock source
     - Verify network connectivity between all devices
 
-2. **Master Clock Initialization**:
+2. **Master Clock Initialisation**:
    ```bash
-   # Start master synchronization service
+   # Start master synchronisation service
    python master_clock_synchronizer.py --start-service
    
    # Verify NTP server is running
@@ -749,107 +749,107 @@ class SynchronizationClient {
     - Use automatic device discovery or manual IP configuration
     - Verify each device successfully registers with master clock
 
-#### Synchronization Quality Assessment
+#### Synchronisation Quality Assessment
 
-**Pre-Recording Synchronization Check**:
+**Pre-Recording Synchronisation Check**:
 
 1. Navigate to Calibration tab in PC controller
-2. Select "System Synchronization" option
-3. Execute synchronization quality assessment
+2. Select "System Synchronisation" option
+3. Execute synchronisation quality assessment
 4. Review quality metrics and precision measurements
-5. Address any devices showing poor synchronization quality
+5. Address any devices showing poor synchronisation quality
 
 **Quality Metrics Interpretation**:
 
 - **Excellent (>95%)**: Sub-millisecond precision, suitable for all research applications
 - **Good (85-95%)**: Millisecond precision, suitable for most research scenarios
 - **Fair (70-85%)**: Multi-millisecond precision, may require manual correction
-- **Poor (<70%)**: Synchronization unreliable, device troubleshooting required
+- **Poor (<70%)**: Synchronisation unreliable, device troubleshooting required
 
 ### Recording Session Coordination
 
 #### Synchronized Recording Workflow
 
-1. **Pre-Recording Synchronization**:
+1. **Pre-Recording Synchronisation**:
    ```python
-   # Execute complete synchronization
+   # Execute complete synchronisation
    sync_result = session_synchronizer.synchronize_all_devices()
    if sync_result.overall_quality < 0.90:
-       logger.warning("Synchronization quality below threshold")
+       logger.warning("Synchronisation quality below threshold")
    ```
 
 2. **Coordinated Session Start**:
     - PC controller sends countdown commands to all devices
-    - Devices acknowledge readiness and synchronization status
+    - Devices acknowledge readiness and synchronisation status
     - Synchronized recording begins at precise master timestamp
     - Real-time quality monitoring during recording
 
 3. **Recording Monitoring**:
-    - Continuous synchronization quality assessment
+    - Continuous synchronisation quality assessment
     - Automatic drift compensation during recording
-    - Alert notifications for synchronization degradation
-    - Emergency stop coordination if synchronization fails
+    - Alert notifications for synchronisation degradation
+    - Emergency stop coordination if synchronisation fails
 
-#### Manual Synchronization Procedures
+#### Manual Synchronisation Procedures
 
-**Individual Device Synchronization**:
+**Individual Device Synchronisation**:
 
 1. Select device from device list in PC controller
-2. Click "Synchronize Device" button
-3. Monitor synchronization progress and quality metrics
-4. Verify synchronization success before proceeding
+2. Click "Synchronise Device" button
+3. Monitor synchronisation progress and quality metrics
+4. Verify synchronisation success before proceeding
 
-**Network Synchronization Diagnostics**:
+**Network Synchronisation Diagnostics**:
 
 1. Use built-in network diagnostic tools
 2. Test round-trip latency to each device
 3. Verify NTP server accessibility from mobile devices
 4. Check for network interference or congestion
 
-### Quality Monitoring and Optimization
+### Quality Monitoring and Optimisation
 
-#### Real-Time Synchronization Monitoring
+#### Real-Time Synchronisation Monitoring
 
 **Quality Dashboard**:
 
 - **Precision Indicators**: Real-time offset measurements for each device
 - **Stability Metrics**: Clock drift rates and compensation effectiveness
 - **Network Health**: Latency, jitter, and packet loss measurements
-- **Device Status**: Individual device synchronization health indicators
+- **Device Status**: Individual device synchronisation health indicators
 
-**Optimization Procedures**:
+**Optimisation Procedures**:
 
-1. **Network Optimization**:
+1. **Network Optimisation**:
     - Use dedicated WiFi network for research equipment
-    - Configure Quality of Service (QoS) prioritization
-    - Minimize network traffic during recording sessions
+    - Configure Quality of Service (QoS) prioritisation
+    - Minimis\1 network traffic during recording sessions
 
 2. **Environmental Control**:
     - Maintain stable temperature conditions
-    - Minimize electromagnetic interference
+    - Minimis\1 electromagnetic interference
     - Ensure stable power supply to all devices
 
 ## API Reference
 
-### Core Synchronization Classes
+### Core Synchronisation Classes
 
 #### MasterClockSynchronizer
 
 ```python
 class MasterClockSynchronizer:
-    """Central synchronization coordinator and time authority"""
+    """Central synchronisation coordinator and time authority"""
 
     def start_synchronization_service(self) -> bool:
-        """Initialize NTP server and synchronization coordination"""
+        """Initialise NTP server and synchronisation coordination"""
 
     def register_device(self, device_info: DeviceInfo) -> bool:
-        """Register new device for synchronization management"""
+        """Register new device for synchronisation management"""
 
     def synchronize_device(self, device_id: str) -> SyncResult:
-        """Perform clock synchronization with specified device"""
+        """Perform clock synchronisation with specified device"""
 
     def get_sync_quality(self, device_id: str) -> QualityMetrics:
-        """Get current synchronization quality metrics for device"""
+        """Get current synchronisation quality metrics for device"""
 
     def update_compensation(self, device_id: str, measurement: SyncMeasurement):
         """Update drift compensation based on new measurement"""
@@ -868,10 +868,10 @@ class SessionSynchronizer:
         """Start recording across all devices with precise coordination"""
 
     def stop_coordinated_recording(self, session_id: str) -> bool:
-        """Stop recording and synchronize session completion"""
+        """Stop recording and synchronise session completion"""
 
     def get_session_sync_status(self, session_id: str) -> SyncStatus:
-        """Get current synchronization status for recording session"""
+        """Get current synchronisation status for recording session"""
 ```
 
 #### ClockDriftCompensator
@@ -881,7 +881,7 @@ class ClockDriftCompensator:
     """Adaptive drift compensation using predictive algorithms"""
 
     def add_device(self, device_id: str, sync_context: DeviceSyncContext):
-        """Initialize drift compensation for new device"""
+        """Initialise drift compensation for new device"""
 
     def calculate_compensation(self, device_id: str, measurement: SyncMeasurement) -> Compensation:
         """Calculate drift compensation based on current measurement"""
@@ -900,7 +900,7 @@ class ClockDriftCompensator:
 ```python
 @dataclass
 class SyncResult:
-    """Synchronization operation result with quality metrics"""
+    """Synchronisation operation result with quality metrics"""
     success: bool
     timestamp: float
     offset: float
@@ -915,7 +915,7 @@ class SyncResult:
 ```python
 @dataclass
 class DeviceInfo:
-    """Device information for synchronization registration"""
+    """Device information for synchronisation registration"""
     device_id: str
     device_type: DeviceType
     network_address: str
@@ -928,7 +928,7 @@ class DeviceInfo:
 ```python
 @dataclass
 class SyncMeasurement:
-    """Synchronization quality measurement data"""
+    """Synchronisation quality measurement data"""
     timestamp: float
     clock_offset: float
     round_trip_time: float
@@ -953,12 +953,12 @@ class SynchronizationClient {
 
 ## Testing
 
-### Synchronization Testing Framework
+### Synchronisation Testing Framework
 
 #### Precision Testing
 
 ```bash
-# Test synchronization precision across all devices
+# Test synchronisation precision across all devices
 python test_synchronization_precision.py --devices all --duration 300
 
 # Measure drift compensation effectiveness
@@ -973,7 +973,7 @@ python test_sync_network_resilience.py --latency-range 1-100 --packet-loss 0.1-5
 ```python
 class SynchronizationBenchmark:
     def test_precision_accuracy(self):
-        """Test synchronization precision under ideal conditions"""
+        """Test synchronisation precision under ideal conditions"""
         results = []
         for i in range(1000):
             sync_result = master_clock.synchronize_device("test_device")
@@ -1048,9 +1048,9 @@ class MultiDeviceTest:
 
 ## Troubleshooting
 
-### Common Synchronization Issues
+### Common Synchronisation Issues
 
-#### Poor Synchronization Precision
+#### Poor Synchronisation Precision
 
 **Symptoms**: High offset variance, precision warnings
 **Diagnosis**:
@@ -1062,7 +1062,7 @@ class MultiDeviceTest:
 
 **Solutions**:
 
-1. **Network Optimization**:
+1. **Network Optimisation**:
    ```bash
    # Test network latency
    ping -c 100 192.168.1.100
@@ -1071,14 +1071,14 @@ class MultiDeviceTest:
    python network_diagnostics.py --test-packet-loss
    ```
 
-2. **Device Optimization**:
+2. **Device Optimisation**:
     - Disable power management on Android devices
     - Reduce background application activity
     - Ensure stable temperature conditions
 
-#### Synchronization Failures
+#### Synchronisation Failures
 
-**Symptoms**: Devices unable to synchronize, connection timeouts
+**Symptoms**: Devices unable to synchronise, connection timeouts
 **Diagnosis**:
 
 1. Verify network connectivity
@@ -1099,13 +1099,13 @@ class MultiDeviceTest:
 
 2. **Service Restart**:
    ```bash
-   # Restart synchronization services
+   # Restart synchronisation services
    python master_clock_synchronizer.py --restart-service
    ```
 
 #### Clock Drift Issues
 
-**Symptoms**: Increasing synchronization offsets over time
+**Symptoms**: Increasing synchronisation offsets over time
 **Diagnosis**:
 
 1. Monitor drift rates and compensation effectiveness
@@ -1120,24 +1120,24 @@ class MultiDeviceTest:
    # Update drift compensation model
    compensator.update_model(device_id, historical_measurements)
    
-   # Increase synchronization frequency
+   # Increase synchronisation frequency
    compensator.set_sync_interval(device_id, 30)  # 30 seconds
    ```
 
 ### Advanced Diagnostics
 
-#### Synchronization Quality Analysis
+#### Synchronisation Quality Analysis
 
 ```python
 def analyze_sync_quality(session_id: str):
-    """complete synchronization quality analysis"""
+    """complete synchronisation quality analysis"""
     session_data = load_session_data(session_id)
 
-    # Analyze precision over time
+    # Analyse precision over time
     precision_timeline = extract_precision_timeline(session_data)
     precision_trend = calculate_trend(precision_timeline)
 
-    # Analyze drift compensation effectiveness
+    # Analyse drift compensation effectiveness
     drift_analysis = analyze_drift_compensation(session_data)
 
     # Generate quality report
@@ -1175,29 +1175,29 @@ python sync_network_test.py \
 **Diagnostic Tools**:
 
 - Network connectivity tester
-- Synchronization quality analyzer
+- Synchronisation quality analyzer
 - Drift compensation validator
 - Performance benchmarking suite
 
 **Community Support**:
 
-- GitHub Issues: [Synchronization Issues](https://github.com/buccancs/bucika_gsr/issues?q=label%3Asynchronization)
-- Discussion Forum: [Synchronization Discussion](https://github.com/buccancs/bucika_gsr/discussions)
+- GitHub Issues: [Synchronisation Issues](https://github.com/buccancs/bucika_gsr/issues?q=label%3Asynchronization)
+- Discussion Forum: [Synchronisation Discussion](https://github.com/buccancs/bucika_gsr/discussions)
 
 ---
 
-*This complete documentation consolidates all Multi-Device Synchronization information from multiple sources into a single authoritative reference. For related modules, see the [Networking Protocol](networking_protocol_readme.md) and [Session Management](session_management_readme.md) documentation.*
+*This complete documentation consolidates all Multi-Device Synchronisation information from multiple sources into a single authoritative reference. For related modules, see the [Networking Protocol](networking_protocol_readme.md) and [Session Management](session_management_readme.md) documentation.*
 
 ## References
 
 [Cacioppo2007] Cacioppo, J. T., Tassinary, L. G., & Berntson, G. G. (Eds.). (2007). *Handbook of Psychophysiology* (3rd ed.). Cambridge University Press.
 
-[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronization. *Distributed Computing*, 3(3), 146-158.
+[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronisation. *Distributed Computing*, 3(3), 146-158.
 
-[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
+[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronisation Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
 
 [Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. *Communications of the ACM*, 21(7), 558-565.
 
-[Mills1991] Mills, D. L. (1991). Internet time synchronization: The network time protocol. *IEEE Transactions on Communications*, 39(10), 1482-1493.
+[Mills1991] Mills, D. L. (1991). Internet time synchronisation: The network time protocol. *IEEE Transactions on Communications*, 39(10), 1482-1493.
 
 [Picard2001] Picard, R. W. (2001). *Affective Computing*. MIT Press.

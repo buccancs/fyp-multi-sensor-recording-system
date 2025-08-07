@@ -6,7 +6,7 @@ Modern physiological monitoring techniques often rely on **Galvanic Skin
 Response (GSR)** sensors attached directly to a subject's skin to
 measure electrodermal activity. While GSR is a proven indicator of
 stress and arousal, traditional contact-based measurement is intrusive
-and limits natural behavior. The research problem addressed is how to
+and limits natural behaviour. The research problem addressed is how to
 **predict GSR in a contactless manner** using alternative sensing
 modalities (such as thermal imaging and visual cameras) without
 sacrificing accuracy. In the current state of physiological measurement,
@@ -34,7 +34,7 @@ for training and evaluating machine learning models that estimate stress
 (or related physiological signals) from camera data alone. This research
 context demands a solution that is *both* scientifically rigorous
 (accurate timing, reliable signals) and practical for field use (mobile
-devices, untethered subjects). In summary, the problem statement centers
+devices, untethered subjects). In summary, the problem statement centres
 on building a **distributed data acquisition system** that can capture
 synchronized physiological and imaging data to enable **contactless GSR
 measurement** research. The remainder of this chapter details the
@@ -54,7 +54,7 @@ maintainers/developers** of the system who need the software to be
 maintainable, extensible, and testable; and (4) **Institutional review
 boards / ethics committees**, concerned with data security and
 participant safety. Each stakeholder group introduced distinct
-requirements. For example, researchers emphasized data synchronization
+requirements. For example, researchers emphasized data synchronisation
 accuracy and multi-modal integration, participants motivated
 requirements for comfort and privacy, and developers focused on modular
 architecture and high code quality standards to ensure reliability.
@@ -70,7 +70,7 @@ the need for automated device re-connection on failure, or a method to
 log stimulus events during recording). The repository's commit history
 reflects these iterations -- each commit often corresponded to
 implementing or refining a specific requirement (e.g. adding the Shimmer
-sensor integration or improving time synchronization). This evolutionary
+sensor integration or improving time synchronisation). This evolutionary
 process ensured continuous alignment between requirements and
 implementation.
 
@@ -94,9 +94,9 @@ Table 3.1 lists the **Functional Requirements (FR)** identified for the
 multi-sensor recording system. Each requirement is labeled with a unique
 ID and a priority (H = High, M = Medium) indicating its importance.
 These functional requirements capture the intended capabilities and
-behaviors of the system. They were derived to ensure the system meets
+behaviours of the system. They were derived to ensure the system meets
 the needs of coordinating multiple devices, acquiring various sensor
-data streams, synchronizing and storing data, and supporting the
+data streams, synchronising and storing data, and supporting the
 research workflow.
 
 **Table 3.1 -- Functional Requirements**
@@ -108,7 +108,7 @@ research workflow.
 
   FR-02                   **User Interface for Session Control:** The PC master controller shall offer an intuitive graphical user interface (GUI) for configuring sessions, displaying device status, and controlling recordings (start/stop). The GUI should show connected device indicators and allow the user to easily monitor the recording process in real time.                                     H
 
-  FR-03                   **High-Precision Synchronization:** The system shall synchronize all data streams (video frames, thermal frames, GSR samples) with a unified timeline. Recording on all devices must start nearly simultaneously, achieving time alignment with an accuracy on the order of 1 millisecond or better. Each data sample/frame will be timestamped to enable precise cross-modal      H
+  FR-03                   **High-Precision Synchronisation:** The system shall synchronise all data streams (video frames, thermal frames, GSR samples) with a unified timeline. Recording on all devices must start nearly simultaneously, achieving time alignment with an accuracy on the order of 1 millisecond or better. Each data sample/frame will be timestamped to enable precise cross-modal      H
                           correlation [\[1\]](PythonApp/shimmer_manager.py#L144-L151).                                                                                                                                                                                                                                  
 
   FR-04                   **Visual Video Capture:** Each Android recording device shall capture high-resolution **RGB video** of the participant during the session. The system should support at least 30 frames per second at HD (720p) resolution or higher (up to the device's capabilities, e.g. 1080p or 4K) for detailed visual data. The video recording is to be continuous for the session         H
@@ -123,7 +123,7 @@ research workflow.
   FR-07                   **Session Management and Metadata:** The system shall allow the user to create a new *recording session* and automatically assign it a unique Session ID. During a session, the controller will maintain metadata including session start time, configured duration (if applicable), and the list of active devices/sensors. Upon session start, each device and sensor is         H
                           registered in the session metadata, and upon stop, the session is finalized with end time and duration                                                                                                                                                                                                                                                                             
                           recorded[\[3\]](PythonApp/session/session_manager.py#L74-L81)[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342). A session metadata file (e.g. JSON or      
-                          text) shall be saved, summarizing the session details for future reference.                                                                                                                                                                                                                                                                                                        
+                          text) shall be saved, summarising the session details for future reference.                                                                                                                                                                                                                                                                                                        
 
   FR-08                   **Local Data Storage (Offline-First):** All recording devices shall store their captured data **locally on-device** during the session to avoid reliance on continuous network streaming. Video streams are saved as files on the smartphones (and any PC-local video source) and GSR data is logged (e.g. to CSV) on the PC or device collecting it. Each data file is            H
                           timestamped or contains timestamps internally. This *offline-first* design ensures no data loss in case of network disruption and maximizes reliability of recording.                                                                                                                                                                                                              
@@ -154,7 +154,7 @@ capabilities of the system. Together, they ensure that the
 **multi-sensor recording system can capture synchronized data from
 multiple devices and sensors** and manage that data effectively for
 research use. The design addresses multi-device coordination (FR-01,
-FR-02) and tight time synchronization (FR-03) as top priorities, since
+FR-02) and tight time synchronisation (FR-03) as top priorities, since
 these are critical for aligning different data modalities. Requirements
 FR-04 through FR-06 enumerate the data acquisition needs for each sensor
 modality -- visual video, thermal imaging, and GSR -- reflecting the
@@ -182,7 +182,7 @@ these functional goals.
 
 ## 3.4 Non-Functional Requirements
 
-In addition to the explicit features and behaviors, the system must
+In addition to the explicit features and behaviours, the system must
 fulfill several **Non-Functional Requirements (NFR)** that define
 qualities such as performance, reliability, and usability. Table 3.2
 summarizes the key non-functional requirements for the multi-sensor
@@ -199,8 +199,8 @@ mobile or field environments, with human participants involved).
   NFR-01                  **Real-Time Performance:** The system shall operate in real time, handling data streams without undue delay. All components must be efficient enough to **capture video at full frame rate and sensor data at full sampling rate** without buffering issues or frame drops. For example, the Android  High
                           app should sustain 30 FPS video recording and \~50 Hz GSR sampling simultaneously. The end-to-end latency from capturing a sensor sample/frame to logging it with a timestamp should be minimal (well below 100 ms), ensuring a responsive system.                                                    
 
-  NFR-02                  **Synchronization Accuracy:** The system's clock synchronization and triggering mechanisms shall be precise, as reflected in FR-03. The design should ensure that any timestamp discrepancies between devices are below acceptable thresholds (on the order of milliseconds). In practice, this may   High
-                          involve time synchronization protocols or timestamp calibration. Each data sample is tagged with both device-local time and a unified time reference to permit alignment during                                                                                                                       
+  NFR-02                  **Synchronisation Accuracy:** The system's clock synchronisation and triggering mechanisms shall be precise, as reflected in FR-03. The design should ensure that any timestamp discrepancies between devices are below acceptable thresholds (on the order of milliseconds). In practice, this may   High
+                          involve time synchronisation protocols or timestamp calibration. Each data sample is tagged with both device-local time and a unified time reference to permit alignment during                                                                                                                       
                           analysis[\[12\]](PythonApp/shimmer_manager.py#L91-L99). This requirement guarantees the **temporal integrity** of the multi-modal dataset.                                                                       
 
   NFR-03                  **Reliability and Fault Tolerance:** The system must be reliable during long recording sessions. It shall handle errors gracefully -- for instance, if a device temporarily disconnects (due to network drop or power issues), the system will attempt to reconnect automatically and continue the    High
@@ -217,7 +217,7 @@ mobile or field environments, with human participants involved).
                           modification[\[14\]](PythonApp/network/device_server.py#L424-L432)[\[15\]](PythonApp/network/device_server.py#L484-L492).   
 
   NFR-06                  **Usability and Accessibility:** The system's user interface and workflow shall be designed for **ease of use** by researchers who may not be software experts. This means the PC application should be straightforward to install and run, and the process to start a session is simple (e.g.,       High
-                          devices auto-discover the PC, one-click to start recording). Visual feedback (FR-10) is provided to reduce user uncertainty. The Android app should require minimal user interaction -- ideally launching and automatically connecting to the PC. Clear notifications or dialogs guide the user if    
+                          devices auto-discover the PC, one-click to start recording). Visual feedback (FR-10) is provided to reduce user uncertainty. The Android app should require minimal user interaction -- ideally launching and automatically connecting to the PC. Clear notifications or dialogues guide the user if    
                           any issues occur (e.g. permission requests, errors). The system should also be documented well enough that new users can learn to operate it quickly.                                                                                                                                                 
 
   NFR-07                  **Maintainability and Extensibility:** The software shall be designed following clean code and modular architecture principles to facilitate maintenance and future extension. For example, the Android app follows an MVVM (Model-View-ViewModel) architecture with dependency injection (Hilt) to   Medium
@@ -239,7 +239,7 @@ mobile or field environments, with human participants involved).
 
 **Discussion:** These non-functional requirements underline the system's
 quality attributes that make it suitable for research use. Performance
-(NFR-01) and synchronization accuracy (NFR-02) ensure that the **data
+(NFR-01) and synchronisation accuracy (NFR-02) ensure that the **data
 quality** meets scientific standards -- the system can capture
 high-resolution, high-frequency data in sync, which is essential for
 meaningful analysis. Reliability and data integrity (NFR-03, NFR-04) are
@@ -276,7 +276,7 @@ describes several primary **use case scenarios**. These scenarios
 represent typical workflows for the multi-sensor recording system,
 demonstrating how the functional requirements come together to support
 research activities. *(Figure 3.1 provides a use case diagram
-summarizing the actors and interactions in these scenarios
+summarising the actors and interactions in these scenarios
 \[Placeholder\].)* The main actor in these use cases is the
 **Researcher** operating the system via the PC Master Controller, with
 secondary actors being the **Recording Devices** (Android phones with
@@ -379,7 +379,7 @@ involving physiological monitoring. The steps are as follows:
     duration)[\[21\]](PythonApp/session/session_manager.py#L82-L91),
     and presents a summary to the researcher (e.g., "Session completed:
     2 devices, 2 video files, 1 sensor file, duration 5:00"). The
-    researcher can then proceed to analyze the data offline.
+    researcher can then proceed to analyse the data offline.
 
 6.  **Post-conditions:** The outcome of this use case is that **all
     relevant multi-modal data has been recorded and centralized**. The
@@ -412,7 +412,7 @@ aligned to collect high-quality data.
     transformation that maps thermal images to the RGB frame (this
     computation might be done by an external script or a provided
     calibration tool). The resulting calibration parameters (e.g., a
-    matrix or alignment file) can be stored and used in analyzing the
+    matrix or alignment file) can be stored and used in analysing the
     recorded data (so that features in the thermal and visual data can
     be compared pixel-to-pixel after alignment).
 
@@ -495,7 +495,7 @@ the data quality in real time.
     timestamp[\[8\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L124-L133).
     Multiple events can be logged: e.g., "Questionnaire start",
     "Questionnaire end", "Unexpected noise", etc., each at specific
-    times. These annotations are invaluable later when analyzing the
+    times. These annotations are invaluable later when analysing the
     physiological data, as they mark when external stimuli or notable
     participant actions occurred.
 
@@ -576,7 +576,7 @@ the PC (via Bluetooth) or with an Android phone (via the phone's
 Bluetooth). The PC and phones are connected via a **Wireless LAN**
 (e.g., a dedicated Wi-Fi router or hotspot), forming a private network
 for the system. This network enables low-latency communication required
-for synchronization and data transfer.
+for synchronisation and data transfer.
 
 On the software side, the PC runs a **Master Controller Application**
 which includes several components working together: a **GUI Module**
@@ -859,8 +859,8 @@ final data aggregation \[Placeholder\].* Here is the sequence:
     distribution balances load across the system.
 
 In summary, the system's architecture is a **star topology** with
-intelligent clients, and the data flow is designed to minimize latency
-and maintain synchronization. The PC orchestrates the process (command
+intelligent clients, and the data flow is designed to minimis\1 latency
+and maintain synchronisation. The PC orchestrates the process (command
 flows out, data flows back), which aligns well with the requirement of
 central control and monitoring. The use of standard formats (MP4, CSV,
 JSON) in the data flow ensures that once data reaches the PC, it's
@@ -1022,7 +1022,7 @@ for analysis.
 
 In conclusion, the system's data management strategy creates a
 **self-contained record** of each session that is easy to navigate and
-analyze. By structuring the files logically and including metadata and
+analyse. By structuring the files logically and including metadata and
 logs, the system meets all requirements for data completeness,
 integrity, and usability. Even if months later a researcher or a
 different team examines the files, they should be able to understand the

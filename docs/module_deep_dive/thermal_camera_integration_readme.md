@@ -45,7 +45,7 @@ graph TB
         end
         
         subgraph "Integration Layer"
-            SYNC[Synchronization<br/>Temporal Alignment]
+            SYNC[Synchronisation<br/>Temporal Alignment]
             CAL[Calibration<br/>RGB-Thermal Alignment]
             PROC[Processing<br/>Image Analysis]
         end
@@ -77,7 +77,7 @@ sequenceDiagram
     
     App->>USB: Request USB permission
     USB->>App: Permission granted
-    App->>OTG: Initialize OTG connection
+    App->>OTG: Initialise OTG connection
     OTG->>TC: Establish camera connection
     TC->>OTG: Camera ready
     OTG->>App: Connection established
@@ -127,12 +127,12 @@ class ThermalManager {
     
     fun initializeThermalCamera(): Boolean {
         return try {
-            // Initialize USB connection
+            // Initialise USB connection
             val usbConnection = setupUSBConnection()
             if (!usbConnection.success) return false
             
-            // Initialize TopDon device
-            topdonDevice.initialize(usbConnection.device)
+            // Initialise TopDon device
+            topdonDevice.initialise(usbConnection.device)
             
             // Configure camera settings
             configureCameraSettings()
@@ -142,7 +142,7 @@ class ThermalManager {
             
             true
         } catch (e: Exception) {
-            logger.error("Failed to initialize thermal camera: ${e.message}")
+            logger.error("Failed to initialise thermal camera: ${e.message}")
             false
         }
     }
@@ -154,7 +154,7 @@ class ThermalManager {
             topdonDevice.setResolution(config.resolution)
             topdonDevice.setTemperatureRange(config.temperatureRange)
             
-            // Start recording with synchronization
+            // Start recording with synchronisation
             synchronizer.startSynchronizedRecording(config.syncTimestamp)
             
             // Begin data capture
@@ -173,7 +173,7 @@ class ThermalManager {
         // Apply calibration
         val calibratedFrame = thermalProcessor.applyCalibration(frame)
         
-        // Synchronize timestamp
+        // Synchronise timestamp
         val syncedFrame = synchronizer.synchronizeFrame(calibratedFrame)
         
         // Store frame data
@@ -366,7 +366,7 @@ class ThermalProcessor {
 }
 ```
 
-### Synchronization Implementation
+### Synchronisation Implementation
 
 ```kotlin
 class ThermalSynchronizer {
@@ -445,7 +445,7 @@ class ThermalSynchronizer {
        resolution = "320x240",  // Standard thermal resolution
        temperatureRange = "auto", // Automatic range adjustment
        emissivity = 0.95,       // Human skin emissivity
-       colorPalette = "iron"    // Iron color mapping
+       colorPalette = "iron"    // Iron colour mapping
    )
    ```
 
@@ -461,22 +461,22 @@ class ThermalSynchronizer {
 
 1. **Environment Preparation**:
     - Ensure stable ambient temperature
-    - Minimize heat sources in background
+    - Minimis\1 heat sources in background
     - Position subjects at appropriate distance
     - Allow thermal camera warmup time (2-3 minutes)
 
 2. **Quality Verification**:
     - Check thermal image clarity
     - Verify temperature measurement accuracy
-    - Test synchronization with RGB camera
+    - Test synchronisation with RGB camera
     - Validate frame rate stability
 
 #### Recording Execution
 
 1. **Start Recording**:
-    - Initialize thermal recording from PC controller
+    - Initialise thermal recording from PC controller
     - Monitor real-time thermal display
-    - Verify synchronization indicators
+    - Verify synchronisation indicators
     - Check data quality metrics
 
 2. **During Recording**:
@@ -490,7 +490,7 @@ class ThermalSynchronizer {
 1. **Data Validation**:
     - Verify thermal data completeness
     - Check temperature range validity
-    - Validate synchronization accuracy
+    - Validate synchronisation accuracy
     - Review quality metrics
 
 2. **Export Options**:
@@ -579,18 +579,18 @@ class ThermalCameraTest {
 }
 ```
 
-#### Synchronization Test
+#### Synchronisation Test
 
 ```python
 def test_thermal_rgb_synchronization():
-    """Test synchronization between thermal and RGB cameras"""
+    """Test synchronisation between thermal and RGB cameras"""
     thermal_timestamps = load_thermal_timestamps()
     rgb_timestamps = load_rgb_timestamps()
     
-    # Calculate synchronization offset
+    # Calculate synchronisation offset
     sync_offset = calculate_sync_offset(thermal_timestamps, rgb_timestamps)
     
-    # Verify synchronization quality
+    # Verify synchronisation quality
     assert abs(sync_offset) < 5.0  # Less than 5ms offset
     
     # Check temporal consistency
@@ -625,19 +625,19 @@ def test_thermal_rgb_synchronization():
 3. Allow sufficient camera warmup time
 4. Calibrate against known temperature reference
 
-#### Synchronization Problems
+#### Synchronisation Problems
 
 **Symptoms**: Thermal and RGB data misaligned
 **Solutions**:
 
-1. Verify synchronization timestamp accuracy
+1. Verify synchronisation timestamp accuracy
 2. Check network latency compensation
-3. Validate master clock synchronization
+3. Validate master clock synchronisation
 4. Review frame rate consistency
 
 ---
 
-*For related modules, see [Android Mobile Application](android_mobile_application_readme.md) and [Multi-Device Synchronization](multi_device_synchronization_readme.md) documentation.*
+*For related modules, see [Android Mobile Application](android_mobile_application_readme.md) and [Multi-Device Synchronisation](multi_device_synchronization_readme.md) documentation.*
 
 ## References
 
