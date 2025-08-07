@@ -5,35 +5,35 @@
 \textbf{Topdon TC001 and TC001 Plus} are portable infrared thermal cameras
 that attach to Android devices (via USB Type-C) to transform a
 smartphone or tablet into a high-tech thermal
-imager\cite{ref1}.
+imager\cite{Boucsein2012}.
 They capture heat radiation as images, allowing non-contact temperature
 measurement across a scene. The TC001 series features a 256×192 IR
 sensor resolution, producing clear thermal images and detecting
 temperature differences as small as
-0.1 °C\cite{ref2}\cite{ref3}.
+0.1 °C\cite{AppleHealthWatch2019}\cite{SamsungHealth2020}.
 The TC001 Plus model includes a dual-lens system (an IR sensor plus a
 visible-light camera) enabling image fusion for sharper detail and
 contours in the thermal
-image\cite{ref4}\cite{ref3}.
+image\cite{Fowles1981}\cite{SamsungHealth2020}.
 Both cameras support a wide temperature detection range from about
 \textbf{-20 °C to 550 °C} (≈ -4 °F to
-1022 °F)\cite{ref5}\cite{ref6},
+1022 °F)\cite{Healey2005}\cite{Picard2001},
 making them suitable for various applications --- from industrial
 inspections to biomedical and physiological sensing.
 
 In \textbf{physiological sensing}, infrared thermography provides a
 noninvasive, contact-free way to monitor subtle temperature changes on
 the
-body\cite{ref7}\cite{ref8}.
+body\cite{DriverStressThermal2020}\cite{GSRFacialThermal2021}.
 Many physiological signals manifest as thermal patterns: for example,
 breathing rate can be measured by the cyclical temperature changes near
 the nostrils, heart pulse by tiny thermal pulsations, and stress-induced
 blood flow changes by temperature shifts in facial
-regions\cite{ref9}.
+regions\cite{StressDefinitionHH}.
 Indeed, thermal imaging has been used in psychophysiology to observe
 stress responses --- e.g. a drop in nose tip temperature under acute
 stress or increased forehead temperature from
-vasodilation\cite{ref10}.
+vasodilation\cite{CortisolStressIndicator2020}.
 With the Topdon TC001 cameras, researchers can capture such thermal
 phenomena in real time, alongside other biosignals, for multimodal
 analysis of human physiological states.
@@ -59,7 +59,7 @@ commands, so developers can work with high-level objects (like a
 By using this SDK, developers can \textbf{stream thermal imagery} into their
 apps for visualization or analysis, obtain per-pixel temperature
 readings, and synchronously capture frames at up to 25 Hz (depending on
-device)\cite{ref3}.
+device)\cite{SamsungHealth2020}.
 The SDK is designed to support \textbf{both} the TC001 and TC001 Plus models,
 abstracting their dual-lens or single-lens differences. For instance,
 when a TC001 Plus is connected, the SDK can fetch the simultaneous
@@ -75,7 +75,7 @@ modalities.
 To integrate the Topdon TC001 SDK into an Android project, begin by
 obtaining the SDK package. Topdon provides an Android SDK (e.g. as a
 \texttt{.zip} archive) containing the library binaries and sample
-code\cite{ref11}.
+code\cite{WHOStressDefinition}.
 This typically includes a precompiled AAR library (or JAR with native
 \texttt{.so} files) and documentation. Import the SDK library into your Android
 Studio project by copying the AAR into your app module's \texttt{libs} folder
@@ -121,7 +121,7 @@ Android 7.0 or above for full compatibility with the UVC library.
 \texttt{Usbcontorl} and \texttt{Usbjni}, which are used for low-level USB power
 management on certain devices. These must retain their package name
 (\texttt{android.yt.jni}) if
-used\cite{ref12}.
+used\cite{CortisolStressIndicator2020}.
 In most cases, you won't need to modify these; just ensure they are
 included if your project structure doesn't already include them. (They
 handle loading a native library for USB hub control, used only on
@@ -148,23 +148,23 @@ configurations:
   the system may treat it as a camera source. It is advisable to declare
   the camera permission in your manifest and request it on devices
   running Android 6.0+ for completeness. For example:
-  \texttt{<uses-permission android:name="android.permission.CAMERA" />}\cite{ref13}.
+  \texttt{<uses-permission android:name="android.permission.CAMERA" />}\cite{ElectrodermalActivityWiki}.
 
 \item \textbf{Storage Permissions (optional):} If your application will save
   thermal images or videos to device storage, include read/write storage
   permissions. The SDK sample app requests:
 
 \item \texttt{WRITE_EXTERNAL_STORAGE} and \texttt{READ_EXTERNAL_STORAGE} (for saving
-  images/video)\cite{ref14}.
+  images/video)\cite{DeviceServer}.
   On Android 10+, you might use scoped storage or the MediaStore
   instead, but for broad access, include these permissions. (Also note
   the sample's use of \texttt{MANAGE_EXTERNAL_STORAGE} for legacy storage
-  support\cite{ref15},
+  support\cite{GSRPPGMachineLearning2024},
   though this may not be needed in a scoped storage environment.)
 
 \item \texttt{android.permission.WAKE_LOCK} to keep the CPU awake during capture
   (prevents the device from sleeping during a long
-  recording)\cite{ref16}
+  recording)\cite{SimulatorValidityPhysiological2025}
   --- this is optional, but can be useful if your app records data with
   the screen off.
 
@@ -303,7 +303,7 @@ In the above code:
   interface, which handles thermal sensor configuration and commands. We
   specify \texttt{IRCMDType.USB_IR_256_384} assuming a 256×192 sensor with
   image+temperature (256×384 output
-  frame)\cite{ref17}\cite{ref18}.
+  frame)\cite{GSRGuideIMotions}\cite{ElectrodermalActivityWiki}.
   (The SDK may have different \texttt{IRCMDType} enums if other sensor
   resolutions or dual-camera modes are supported.)
 \item We set an \texttt{IFrameCallback} on the camera. The SDK will invoke
@@ -312,20 +312,20 @@ In the above code:
   preview.
 \item Finally, we call \texttt{uvcCamera.onStartPreview()} and then use
   \texttt{irCmd.startPreview(...)} to begin the infrared data
-  stream\cite{ref19}\cite{ref20}.
+  stream\cite{ElectrodermalActivityWiki}\cite{ElectrodermalActivityWiki}.
   We pass parameters specifying the source (sensor), target frame rate,
   mode (here using VOC_DVP_MODE, a default mode for infrared output),
   and the data flow mode. In this example,
   \texttt{CommonParams.DataFlowMode.IMAGE_AND_TEMP_OUTPUT} is used, which means
   each frame will contain both the thermal image and temperature data
-  interleaved\cite{ref21}.
+  interleaved\cite{ElectrodermalActivityWiki}.
   After this call, the camera is actively streaming, and our \texttt{onFrame}
   callback will start receiving data.
 
 \end{itemize}
 \textbf{Note:} All USBMonitor callbacks (onAttach, onConnect, etc.) run on a
 background
-thread\cite{ref22}.
+thread\cite{ElectrodermalActivityWiki}.
 This means the \texttt{onFrame} callback is also on a background thread, so you
 should handle thread synchronization if updating UI elements with the
 thermal image. In a real app, you might use a handler or runOnUiThread
@@ -347,7 +347,7 @@ described next.
 
 \textbf{Frame Format:} The TC001 outputs thermal frames in a YUV format
 (specifically YUYV 4:2:2) by default for the infrared
-image\cite{ref23}.
+image\cite{ContactlessStressThermal2022}.
 When using \textbf{IMAGE_AND_TEMP_OUTPUT} mode (as in the example above),
 each frame delivered to \texttt{onFrame(byte[])} contains two parts: - The
 first half of the byte array is the infrared image data (thermal image)
@@ -361,10 +361,10 @@ images stacked). In memory this translates to a byte array length of
 average. The \textbf{first 98,304 bytes} correspond to a 256×192 YUV image,
 and the \textbf{next 98,304 bytes} correspond to a 256×192 array of
 temperature
-values\cite{ref24}\cite{ref25}.
+values\cite{ContactlessStressThermal2022}\cite{DriverStressThermal2020}.
 The SDK documentation confirms that "the frame array's front half is IR
 data, the latter half is temperature data" for image+temperature
-mode\cite{ref26}\cite{ref25}.
+mode\cite{DriverStressThermal2020}\cite{DriverStressThermal2020}.
 If you use image-only or temp-only modes, the frame will be half that
 size, containing just the single dataset.
 
@@ -372,7 +372,7 @@ size, containing just the single dataset.
 convert the YUYV data to a viewable format (e.g., ARGB8888). The SDK
 includes a \texttt{LibIRProcess} utility with methods like
 \texttt{convertYuyvMapToARGBPseudocolor(...)} and
-\texttt{convertArrayYuv422ToARGB(...)}\cite{ref23}.
+\texttt{convertArrayYuv422ToARGB(...)}\cite{ContactlessStressThermal2022}.
 In the provided sample, the raw YUV is converted to an ARGB bitmap as
 follows (pseudo-code):
 
@@ -400,13 +400,13 @@ follows (pseudo-code):
 
 This process is essentially what the SDK's sample \texttt{ImageThread} does:
 YUV -\> ARGB -\> rotate -\>
-Bitmap\cite{ref23}\cite{ref27}.
+Bitmap\cite{ContactlessStressThermal2022}\cite{ContactlessStressThermal2022}.
 You can then draw this Bitmap on an \texttt{ImageView} or a custom view
 (\texttt{CameraView} in the sample) to show the live thermal image. The SDK
 supports multiple \textbf{pseudo-color palettes} (ironbow, rainbow,
 grayscale, etc.), approximately 10 palettes including "white hot",
 "black hot", "medical" and
-others\cite{ref28}.
+others\cite{InstantStressSmartphone2019}.
 By selecting a palette (e.g., \texttt{CommonParams.PseudoColorType}), you can
 have the conversion routine apply that coloring to the image, enhancing
 contrast for visualization.
@@ -417,7 +417,7 @@ frame in temp-only mode). These are 16-bit raw data values that
 correspond to temperatures in either Kelvin or Celsius with a scaling
 factor. According to the SDK, in \textbf{Y16 format each unit corresponds to
 1/64 of a degree} (for 16-bit
-data)\cite{ref29}.
+data)\cite{InstantStressSmartphone2019}.
 In other words, to convert a raw 16-bit value to an absolute
 temperature:
 
@@ -428,10 +428,10 @@ temperature:
   = 468.75 K, which is 195.6 °C.
 \item If the camera or mode uses 14-bit data (scale 16, e.g. low-gain mode
   or IR fusion mode), divide by 16
-  instead\cite{ref29}.
+  instead\cite{InstantStressSmartphone2019}.
   The SDK's \texttt{LibIRTemp} class handles these conversions internally by
   setting the scale depending on mode (64 for Y16, 16 for
-  Y14)\cite{ref29}.
+  Y14)\cite{InstantStressSmartphone2019}.
 
 \end{itemize}
 Typically, you won't manually convert every pixel unless needed. A
@@ -450,36 +450,36 @@ methods to sample temperatures:
 
 The SDK can compute statistics like max, min, and average temperature
 over regions (rectangles, lines, or
-points)\cite{ref30}\cite{ref31}.
+points)\cite{InstantStressSmartphone2019}\cite{GSRPPGMachineLearning2024}.
 The sample's \texttt{TemperatureView} uses these methods to display values for
 user-selected points/areas on the image (up to 3 points, lines, or
 rectangles) --- for example, it draws the hottest and coldest point in a
 region with their temperature
-values\cite{ref32}\cite{ref33}.
+values\cite{GSRPPGMachineLearning2024}\cite{GSRPPGMachineLearning2024}.
 Using these utilities ensures the proper calibration and scale is
 applied (the SDK accounts for the camera's calibration data and any
 offset). The \textbf{accuracy} of the temperature readings is stated as ±2 °C
 or ±2% (whichever is greater) for the TC001
-series\cite{ref34}\cite{ref35},
+series\cite{TopdonTC001}\cite{DeviceServer},
 and the noise-equivalent temperature difference (NETD) is \<40 mK,
 meaning very small temperature differences (\~0.04 °C) are
-distinguishable\cite{ref2}.
+distinguishable\cite{AppleHealthWatch2019}.
 
 When visualizing the temperature data, you might overlay it as numeric
 values or a separate "temperature map". The TC001 Plus, with its visual
 camera, allows blending the thermal data with an RGB image --- the SDK
 can provide an aligned visual image so you can overlay temperature info
 on actual visible
-contours\cite{ref4}.
+contours\cite{Fowles1981}.
 In our context, if focusing on physiological data, one might not need
 the visible-light overlay, but it can help identify anatomical features
 (the SDK sample synchronizes RGB and thermal frames to locate facial
 landmarks in thermal
-images\cite{ref36}\cite{ref37}).
+images\cite{MainViewModel}\cite{MainViewModel}).
 
 \textbf{Thermal Range and Units:} As mentioned, the device can measure
 roughly -20 °C to 550 °C in two gain
-modes\cite{ref5}.
+modes\cite{Healey2005}.
 The camera will automatically switch between \textbf{high gain} (for lower
 temperatures, finer resolution) and \textbf{low gain} (for higher
 temperatures, extended range). The SDK provides callbacks
@@ -487,7 +487,7 @@ temperatures, extended range). The SDK provides callbacks
 internally. The raw values and scaling differ slightly in low-gain mode
 (14-bit data); the \texttt{LibIRTemp.setScale(16)} call in the sample is doing
 exactly that when IRISP (the dual-gain fusion mode) is
-on\cite{ref29}.
+on\cite{InstantStressSmartphone2019}.
 For most physiological use-cases (human body temperatures \~30---40 °C),
 the camera will be in high-gain mode for better sensitivity.
 
@@ -526,7 +526,7 @@ For example, when a recording session starts, the app would:
   GSR-focused experiment, one might extract features like }facial
   temperature averages\textit{, }nose tip temperature over time\textit{, or }rate of
   change of temperature\textit{ to indicate stress
-  responses\cite{ref9}.
+  responses\cite{StressDefinitionHH}.
   These features can be computed on each frame or every few frames and
   then logged alongside GSR data.
 
@@ -536,7 +536,7 @@ For example, when a recording session starts, the app would:
   25 Hz, you might down-sample or interpolate as needed. The sample
   research system described by Gioia }et al.\textit{ synchronized 5 Hz RGB
   frames with 25 Hz thermal frames for
-  analysis\cite{ref37},
+  analysis\cite{MainViewModel},
   so a similar strategy can be applied: for instance, record thermal
   data at its native rate and later align it to GSR's timeline via
   timestamps.
@@ -544,12 +544,12 @@ For example, when a recording session starts, the app would:
 \item \textbf{Data Fusion:} The GSR signal primarily reflects sympathetic nervous
   system arousal (sweat gland activity), whereas the thermal camera can
   capture peripheral blood flow changes and other heat-related
-  signals\cite{ref7}\cite{ref9}.
+  signals\cite{DriverStressThermal2020}\cite{StressDefinitionHH}.
   In \texttt{bucika_gsr}, the thermal stream could be used to enrich
   interpretation of GSR events. For example, a spike in GSR (indicating
   stress or startle) might be accompanied by a drop in facial skin
   temperature (due to stress-related
-  vasoconstriction)\cite{ref10}.
+  vasoconstriction)\cite{CortisolStressIndicator2020}.
   By integrating the two, the app could detect such patterns more
   reliably. The app's data model would store thermal features alongside
   GSR, allowing later analysis (e.g. plotting nose temperature and GSR
@@ -588,7 +588,7 @@ load. Instead, the integration can focus on \textbf{key features} relevant to
 the research questions. Common choices in research are: maximum facial
 temperature, temperature at the tip of the nose, or at the inner canthus
 of the eyes (as indicators of
-stress/fear)\cite{ref10},
+stress/fear)\cite{CortisolStressIndicator2020},
 or overall average skin temperature as an indicator of thermal comfort.
 The SDK makes it easy to compute these in real-time (using
 \texttt{LibIRTemp.getTemperatureOfPoint()} or small regions). Those values (a
@@ -601,12 +601,12 @@ activity and thermal physiology. This enables richer analysis such as
 correlating sudden GSR increases (sweat release) with subsequent changes
 in peripheral skin temperature, or detecting respiration rate from the
 thermal signal to see how it correlates with stress-induced GSR
-fluctuations\cite{ref36}\cite{ref9}.
+fluctuations\cite{MainViewModel}\cite{StressDefinitionHH}.
 Such integration opens the door to more robust and contactless stress or
 emotion monitoring: GSR requires skin contact electrodes, whereas
 thermal is contact-free --- combining them can validate findings and
 provide backup measurements if one signal is lost or
-noisy\cite{ref38}\cite{ref36}.
+noisy\cite{DeviceServer}\cite{MainViewModel}.
 
 In summary, within the \texttt{bucika_gsr} app, the Topdon camera's role is to
 provide a \textbf{thermal imaging stream} that complements the GSR data. The
@@ -654,7 +654,7 @@ some common issues. Here are troubleshooting tips and solutions:
   or mode issue}. The SDK allows adjusting USB bandwidth:
   \texttt{uvcCamera.setDefaultBandwidth(1.0f)} is used in the sample to request
   maximum
-  bandwidth\cite{ref39}.
+  bandwidth\cite{DeviceServer}.
   Some Android devices have limited USB bandwidth for external cameras.
   Try setting a lower bandwidth factor (closer to 0) if frames aren't
   coming through, or reduce the frame rate parameter in \texttt{startPreview()}
@@ -665,7 +665,7 @@ some common issues. Here are troubleshooting tips and solutions:
   mode on a single-camera device), it may not output. Use
   \texttt{uvcCamera.getSupportedSizeList()} to log what resolutions and modes
   the camera
-  provides\cite{ref40}.
+  provides\cite{DeviceServer}.
 
 \item \textbf{Heat or Calibration Issues:} The camera has an internal shutter
   that periodically calibrates the sensor (you might hear a soft }click\textit{
@@ -681,7 +681,7 @@ some common issues. Here are troubleshooting tips and solutions:
   a known behavior of }self-heating\textit{: after a minute or so, the device's
   body warms up, which can slightly raise the reported temperature in
   parts of the image (e.g., edges) due to its own
-  heat\cite{ref41}.
+  heat\cite{WebcamCapture}.
   To mitigate this, allow the camera to warm up for a minute before
   recording critical data, and keep the lens cover open to let the
   shutter calibrate. Using the camera in a stable ambient environment
@@ -698,7 +698,7 @@ some common issues. Here are troubleshooting tips and solutions:
   cause voltage drop or data errors. If you detect \textbf{frame errors} or
   the SDK flags a bad frame (the sample checks the last byte of the
   frame for a bad-frame
-  flag\cite{ref42}),
+  flag\cite{WebcamCapture}),
   it will attempt a sensor restart. Occasional bad frames can occur; the
   SDK handles them by restarting the stream if necessary.
 
@@ -709,7 +709,7 @@ some common issues. Here are troubleshooting tips and solutions:
   example above posts minimal work in the callback. The SDK sample uses
   a separate \texttt{ImageThread} for converting and drawing the image so that
   the USB thread isn't backed
-  up\cite{ref23}\cite{ref27}.
+  up\cite{ContactlessStressThermal2022}\cite{ContactlessStressThermal2022}.
   You should adopt a similar strategy: do the image conversion and any
   heavy analysis (e.g., running face detection on the thermal image) in
   a worker thread. This will prevent the frame queue from overflowing
@@ -745,7 +745,7 @@ some common issues. Here are troubleshooting tips and solutions:
   or mirrored, use the SDK's \texttt{rotate()} or mirror settings. The \texttt{IRUVC}
   helper class in the sample, for instance, has a \texttt{setRotate(true)}
   option which rotates the image 90°
-  right\cite{ref43}.
+  right\cite{ShimmerManager}.
   You can also manually rotate the Bitmap before displaying. For
   alignment (especially for TC001 Plus fusion of visual and IR), ensure
   you use the provided alignment method from the SDK so that the thermal
@@ -761,11 +761,11 @@ If problems persist, consult the official Topdon SDK documentation (a
 PDF is provided in the SDK package) and the community forums. The
 \textbf{Topdon community} site has Q&As --- for example, guidance for using
 the camera in custom
-apps\cite{ref44}
+apps\cite{ShimmerRecorder}
 --- and the official FAQ addresses issues like "camera not recognized by
 phone" (often solved by ensuring the phone has OTG support or using the
 correct
-app)\cite{ref45}.
+app)\cite{ShimmerRecorder}.
 By systematically addressing the above points, you should be able to
 reliably use the TC001/TC001 Plus in your Android project and collect
 high-quality thermal data for your thesis work.
@@ -775,123 +775,58 @@ high-quality thermal data for your thesis work.
 \begin{itemize}
 \item Topdon TC001 Product Page --- }Thermal Imaging Camera for Android
   Devices, 256×192 Resolution, -4 °F to 1022 °F
-  range\textit{\cite{ref1}\cite{ref5}.
+  range\textit{\cite{Boucsein2012}\cite{Healey2005}.
 \item Topdon TC001 Plus Specifications --- }Dual-Lens 256×192 IR Camera,
   25 Hz frame rate, image fusion, ±2 °C
-  accuracy\textit{\cite{ref46}\cite{ref47}.
+  accuracy\textit{\cite{DeviceServer}\cite{DeviceServer}.
 \item \textbf{Topdon Technology Thermal SDK (v1.3.7) --- Android Development
   Document}, Nov 2023. (Includes API reference and sample code for
   image acquisition, pseudocolor, and temperature
-  extraction).\cite{ref23}\cite{ref48}
+  extraction).\cite{ContactlessStressThermal2022}\cite{DeviceServer}
 \item Gioia, F. }et al.\textit{ (2022). \textbf{"Towards a Contactless Stress
   Classification Using Thermal Imaging."} }Sensors, 22\textit{(3), 976.\}
   (Discusses the use of thermal imaging alongside ECG, GSR (EDA), and
   respiration for stress
-  detection)\cite{ref7}\cite{ref9}.
+  detection)\cite{DriverStressThermal2020}\cite{StressDefinitionHH}.
 \item Topdon Community Forum --- \textbf{Developing Android Apps with TC001} (Q&A
-  thread)\cite{ref44}.
+  thread)\cite{ShimmerRecorder}.
   Guidance on SDK usage, known issues, and user experiences integrating
   the camera in custom applications.
 
 \end{itemize}
-------------------------------------------------------------------------------------------------------------
 
-\cite{ref1}
-\cite{ref5}
 TC001 (Android Devices) --- TOPDON USA
 
-<https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU>
 
-\cite{ref2}
-\cite{ref3}
-\cite{ref4}
-\cite{ref6}
-\cite{ref28}
-\cite{ref34}
-\cite{ref35}
-\cite{ref46}
-\cite{ref47}
 TC001 Plus (Android Devices) --- TOPDON USA
 
-<https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV>
 
-\cite{ref7}
-\cite{ref8}
-\cite{ref9}
-\cite{ref10}
-\cite{ref36}
-\cite{ref37}
-\cite{ref38}
 Towards a Contactless Stress Classification Using Thermal Imaging
 
-<https://www.mdpi.com/1424-8220/22/3/976>
 
-\cite{ref11}
 GitHub - TopdonTechnology/Thermal: Thermal SDK Document
 
-<https://github.com/TopdonTechnology/Thermal>
 
-\cite{ref12}
 Usbcontorl.java
 
-<https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/src/main/java/android/yt/jni/Usbcontorl.java>
 
-\cite{ref13}
-\cite{ref14}
-\cite{ref15}
-\cite{ref16}
 AndroidManifest.xml
 
-<https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/src/main/AndroidManifest.xml>
 
-\cite{ref17}
-\cite{ref18}
-\cite{ref19}
-\cite{ref20}
-\cite{ref21}
-\cite{ref24}
-\cite{ref25}
-\cite{ref26}
-\cite{ref39}
-\cite{ref40}
-\cite{ref42}
 IRUVC.java
 
-<https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/src/main/java/com/infisense/usbir/camera/IRUVC.java>
 
-\cite{ref22}
-\cite{ref23}
-\cite{ref27}
-README.md
 
-<https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/README.md>
-
-\cite{ref29}
-\cite{ref30}
-\cite{ref31}
-\cite{ref32}
-\cite{ref33}
-\cite{ref48}
 TemperatureView.java
 
-<https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/src/main/java/com/infisense/usbir/view/TemperatureView.java>
 
-\cite{ref41}
 Topdon TC001 Plus self heating gradient : r/Thermal - Reddit
 
-<https://www.reddit.com/r/Thermal/comments/1gc3nwc/topdon_tc001_plus_self_heating_gradient/>
 
-\cite{ref43}
 ImageOrTempDisplayActivity.java
 
-<https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/src/main/java/com/infisense/usbir/activity/ImageOrTempDisplayActivity.java>
 
-\cite{ref44}
 Developing a Flutter App with Topdon TC001 Thermal Camera \...
 
-<https://community.topdon.com/detail?id=352&type=1>
 
-\cite{ref45}
 Topdon TC001 Camera Special Commands · Issue #16 - GitHub
-
-<https://github.com/leswright1977/PyThermalCamera/issues/16>

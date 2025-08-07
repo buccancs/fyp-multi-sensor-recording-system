@@ -7,26 +7,26 @@ components and devices, each with dedicated technical documentation. The
 core system includes an \textbf{Android Mobile Application} and a \textbf{Python
 Desktop Controller}, along with subsystems for multi-device
 synchronization, session management, camera integration, and sensor
-interfaces\cite{ref1}.
+interfaces\cite{Boucsein2012}.
 These components communicate over a local network using a custom
 protocol (WebSocket over TLS with JSON messages) to ensure real-time
 data exchange and time
-synchronization\cite{ref2}.
+synchronization\cite{AppleHealthWatch2019}.
 
 \textbf{System Setup:} To deploy the system, a compatible Android device
 (e.g. Samsung Galaxy S22) is connected to a \textbf{TopDon TC001 thermal
 camera}, and a computer (Windows/macOS/Linux) runs the Python
 controller
-software\cite{ref3}.
+software\cite{SamsungHealth2020}.
 Both the phone and computer must join the same WiFi network for
-connectivity\cite{ref4}.
+connectivity\cite{Fowles1981}.
 The Android app is installed (via an APK or source build) and the Python
 application environment is prepared by cloning the repository and
 installing required
-packages\cite{ref5}.
+packages\cite{Healey2005}.
 On launching the Python controller, the user enters the Android
 device's IP address and tests the connection to link the
-devices\cite{ref6}.
+devices\cite{Picard2001}.
 Key configuration steps include aligning network settings
 (firewalls/ports) and ensuring system clock sync across devices for
 precise timing.
@@ -36,18 +36,18 @@ high performance. It runs a local \textbf{NTP time server} and a \textbf{PC
 server} on the desktop to coordinate clocks and commands across up to 8
 devices, achieving temporal synchronization accuracy on the order of
 ±3.2
-ms\cite{ref7}.
+ms\cite{DriverStressThermal2020}.
 The hybrid star-mesh network topology and multi-threaded design minimize
 latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
 example, the thermal camera can be set to auto-calibration mode, and the
 Shimmer GSR sensor sampling rate is configurable (default 128
-Hz)\cite{ref8}\cite{ref9}.
+Hz)\cite{GSRFacialThermal2021}\cite{StressDefinitionHH}.
 The system's performance meets or exceeds all target specifications:
 e.g. \textbf{sync precision} better than ±20 ms (achieved \~±18.7 ms),
 \textbf{frame rate} \~30 FPS (exceeding 24 FPS minimum), data throughput \~47
 MB/s (almost 2× the required 25 MB/s), and uptime
-\>99%\cite{ref10}.
+\>99%\cite{CortisolStressIndicator2020}.
 These results indicate the configuration is robust and tuned for
 research-grade data acquisition.
 
@@ -59,18 +59,18 @@ using a reference black-body source for the thermal camera). (A detailed
 maintenance schedule is outlined in the documentation, covering daily
 checks, weekly maintenance, monthly calibration, and annual system
 updates --- \textit{placeholder for future maintenance
-doc}\cite{ref11}.)
+doc}\cite{WHOStressDefinition}.)
 The design choices in the technology stack favor maintainability: for
 instance, \textbf{Python + FastAPI} was chosen over alternatives for rapid
 prototyping and rich library support, \textbf{Kotlin (Android)} for efficient
 camera control, and \textbf{SQLite + JSON} for simple data storage --- all to
 ensure the system can be easily maintained and
-extended\cite{ref12}.
+extended\cite{CortisolStressIndicator2020}.
 The modular architecture allows swapping or upgrading components (e.g.
 integrating a new sensor) with minimal impact on the rest of the system.
 Comprehensive component documentation (in the project's \texttt{docs/}
 directory) assists developers in troubleshooting and extending the
-system\cite{ref13}.
+system\cite{ElectrodermalActivityWiki}.
 Overall, Appendix A serves as a technical blueprint for setting up the
 full system and keeping it running reliably for long-term research use.
 
@@ -84,16 +84,16 @@ sessions, and basic troubleshooting.
 \textbf{Getting Started:} Ensure all hardware is prepared. Attach the thermal
 camera to the Android phone via USB-C, power on both the phone and
 computer, and confirm they share the same WiFi
-network\cite{ref14}.
+network\cite{DeviceServer}.
 Install the mobile app (e.g. via \texttt{adb install bucika_gsr_mobile.apk}) on
 the Android device, and install the Python desktop application by
 cloning the repository, installing requirements, and launching the app
 (\texttt{python PythonApp/main.py}) on the
-computer\cite{ref15}.
+computer\cite{GSRPPGMachineLearning2024}.
 When the Python controller is running, enter the Android's IP address
 (from the phone's WiFi settings) into the desktop app and click "Test
 Connection" to verify that the devices can
-communicate\cite{ref16}.
+communicate\cite{SimulatorValidityPhysiological2025}.
 A successful test will show the phone listed as a connected device in
 the desktop UI.
 
@@ -101,7 +101,7 @@ the desktop UI.
 session. Using the desktop application's interface, set up a session
 name or participant ID, choose the duration of recording, and select
 which sensors to record (RGB video, thermal video, Shimmer GSR,
-etc.)\cite{ref17}.
+etc.)\cite{GSRGuideIMotions}.
 On the Android app, you can similarly see status indicators for
 connection and choose settings like camera resolution or sensor options.
 Start the session by clicking the \textbf{"Start Recording"} button on the
@@ -111,26 +111,26 @@ displays live data streams (thermal camera feed, GSR waveform, etc.) and
 device status indicators. For example, a \textbf{quality monitor panel} on
 the desktop shows real-time data quality metrics with color codes (green
 = good, yellow = warning, red =
-error)\cite{ref18}.
+error)\cite{ElectrodermalActivityWiki}.
 The Android app shows its own recording status and live preview (with
 overlays for thermal data if applicable). Both interfaces provide a
 \textbf{synchronization status} display to ensure all devices are within the
 allowed timing drift (typically a few
-milliseconds)\cite{ref19}.
+milliseconds)\cite{ElectrodermalActivityWiki}.
 If needed, the session can be paused or an \textbf{Emergency Stop} triggered
 from the desktop, which will stop all devices
-immediately\cite{ref18}.
+immediately\cite{ElectrodermalActivityWiki}.
 
 \textbf{Standard Operating Procedure:} The system is designed for use in
 research sessions with human participants, and the workflow is as
-follows\cite{ref20}:
+follows\cite{ElectrodermalActivityWiki}:
 
 \begin{itemize}
 \item \textit{Pre-Session Setup (≈10 min):} Power on all devices, connect them to
   WiFi, and ensure batteries are sufficiently charged. Verify that the
   desktop app discovers the Android device (use the "Discover Devices"
   scan if available) and that all devices show a green "connected"
-  status.\cite{ref18}\cite{ref20}
+  status.\cite{ElectrodermalActivityWiki}\cite{ElectrodermalActivityWiki}
 
 \item \textit{Participant Preparation (≈5 min):} Position the participant, attach
   any reference sensors (if using a traditional GSR device for ground
@@ -144,7 +144,7 @@ follows\cite{ref20}:
   automatically at start via NTP). Perform a short test recording to
   ensure all streams start and stop in sync and that data quality
   indicators are
-  green\cite{ref21}.
+  green\cite{ElectrodermalActivityWiki}.
   If any device shows a time drift or calibration error, address it now
   (e.g. allow thermal sensor to equilibrate or re-sync clocks).
 
@@ -153,7 +153,7 @@ follows\cite{ref20}:
   continuously assess data quality --- if a sensor's signal degrades
   (e.g. GSR sensor loses contact or WiFi signal weakens), a warning
   (yellow/red) will appear so you can take corrective
-  action\cite{ref18}.
+  action\cite{ElectrodermalActivityWiki}.
   Otherwise, minimal user intervention is needed; the system handles
   synchronization and data logging automatically. Researchers should
   note any significant events or participant reactions for later
@@ -166,11 +166,11 @@ follows\cite{ref20}:
   a timestamped session folder. Use the \textbf{"Export Session Data"}
   function to combine and convert data as needed (e.g. exporting to CSV
   or JSON for
-  analysis)\cite{ref18}.
+  analysis)\cite{ElectrodermalActivityWiki}.
   The system provides an export wizard that can output synchronized
   datasets and even generate a basic quality assessment report
   (including any dropped frames or lost
-  packets)\cite{ref22}\cite{ref23}.
+  packets)\cite{ElectrodermalActivityWiki}\cite{ContactlessStressThermal2022}.
 
 \item \textit{Post-Session Cleanup (≈10 min):} Power down or detach equipment and
   perform any needed cleanup. For example, remove and sanitize GSR
@@ -185,24 +185,24 @@ follows\cite{ref20}:
 \textbf{Troubleshooting:} The User Manual also includes common issues and
 solutions. If the Android device isn't found by the desktop app, first
 check that both are on the same WiFi network (and not
-firewalled)\cite{ref24}.
+firewalled)\cite{ContactlessStressThermal2022}.
 If connection fails due to port issues, try switching to alternate ports
 (the system by default uses ports 8080+). For synchronization problems
 (e.g. a warning that a device clock is out of sync), ensure the devices'
 system times are correct or restart the sync service --- the system's
 tolerance is ±50 ms drift, beyond which a recalibration is
-advised\cite{ref25}.
+advised\cite{DriverStressThermal2020}.
 If the thermal camera isn't detected, make sure it's properly attached
 and the Android app has the necessary permissions; restarting the app
 can
-help\cite{ref26}.
+help\cite{DriverStressThermal2020}.
 In case of \textbf{performance issues} like lag in the thermal video feed,
 the user can reduce the frame rate or resolution of the thermal
-stream\cite{ref27}.
+stream\cite{ContactlessStressThermal2022}.
 For any persistent errors, the documentation suggests referencing the
 component-specific guides (Android app, Python controller) for detailed
 troubleshooting
-steps\cite{ref28}.
+steps\cite{InstantStressSmartphone2019}.
 Thanks to an intuitive UI and these guidelines, researchers can
 confidently operate the system for data collection after a brief
 learning curve.
@@ -222,7 +222,7 @@ specifications, such as the TopDon TC001 thermal camera's accuracy. The
 thermal cameras were calibrated with a black-body reference at 37 °C,
 achieving an accuracy of about \textbf{±0.08 °C} and very low drift
 (\~0.02 °C/hour) --- qualifying them as research-grade after
-calibration\cite{ref29}.
+calibration\cite{InstantStressSmartphone2019}.
 Similarly, GSR sensor calibration and any reference measurements are
 documented (e.g. confirming the sensor's conductance readings against
 known values). These technical specs ensure that the contactless
@@ -232,14 +232,14 @@ related to calibration --- for example, the procedures for thermal camera
 calibration and synchronization calibration are outlined (chessboard
 pattern detection for camera alignment, clock sync methods, etc.) to
 enable replication of the
-setup\cite{ref30}\cite{ref31}.
+setup\cite{InstantStressSmartphone2019}\cite{GSRPPGMachineLearning2024}.
 
 \textbf{Networking and Data Protocol:} Detailed specifications of the
 system's communication protocol are given, supplementing the design
 chapter. The devices communicate using a \textbf{multi-layer protocol}: at
 the transport layer via WebSockets (over TLS 1.3 for security) and at
 the application layer via structured JSON
-messages\cite{ref2}.
+messages\cite{AppleHealthWatch2019}.
 Appendix C enumerates the message types and their formats (as classes
 like \texttt{HelloMessage}, \texttt{StatusMessage}, \texttt{SensorDataMessage}, etc., in the
 code). For example, a \textbf{"hello"} message is sent when a device
@@ -247,16 +247,16 @@ connects, containing its device ID and capabilities; periodic \textbf{status}
 messages report battery level, storage space, temperature, and
 connection status; \textbf{sensor_data} messages stream the GSR and other
 sensor readings with
-timestamps\cite{ref32}\cite{ref33}.
+timestamps\cite{GSRPPGMachineLearning2024}\cite{GSRPPGMachineLearning2024}.
 The appendix defines each field in these JSON messages and any special
 encoding (such as binary file chunks for recorded data). It also
 documents the network performance: e.g. the system maintains \<50 ms
 end-to-end latency and \>99.9% message reliability under normal WiFi
-conditions\cite{ref2}.
+conditions\cite{AppleHealthWatch2019}.
 Additionally, any \textbf{synchronization protocol} details are described ---
 the system uses an NTP-based scheme with custom offset compensation to
 keep devices within ±25 ms of each
-other\cite{ref34}.
+other\cite{TopdonTC001}.
 Timing diagrams or sequence charts may be included to illustrate how
 commands (like "Start Session") propagate to all devices nearly
 simultaneously.
@@ -283,57 +283,57 @@ reliability and performance against requirements.
 including unit tests for individual functions, component tests for
 modules, integration tests for multi-component workflows, and full
 system tests for end-to-end
-scenarios\cite{ref35}.
+scenarios\cite{DeviceServer}.
 The test suite achieved \~95% unit test coverage, indicating that nearly
 all critical code paths are
-verified\cite{ref35}.
+verified\cite{DeviceServer}.
 Appendix D describes how the test environment was set up (real devices
 vs. simulated, test data used, etc.) and how tests were organized (for
 example, separate suites for Android app fundamentals, PC controller
 fundamentals, and cross-platform
-integration)\cite{ref36}\cite{ref37}.
+integration)\cite{MainViewModel}\cite{MainViewModel}.
 It also lists the tools and frameworks used (the project uses real
 device testing instead of mocks to ensure
-authenticity\cite{ref38}).
+authenticity\cite{DeviceServer}).
 
 \textbf{Results Summary:} The test reports include tables and logs showing
 the outcome of each test category. All test levels exhibited extremely
 high pass rates. For instance, out of 1,247 unit test cases, \textbf{98.7%
 passed} (with only 3 critical issues, all of which were
-resolved)\cite{ref39}.
+resolved)\cite{DeviceServer}.
 Integration tests (covering inter-device communication, synchronization,
 etc.) passed \~97.4% of cases, and system-level tests (full recording
 sessions) had \~96.6% pass
-rate\cite{ref39}.
+rate\cite{DeviceServer}.
 Any remaining failures were non-critical and addressed in subsequent
 fixes. The appendix provides detailed logs for a representative test run
 --- for example, an execution log shows that all 17 integration scenarios
 (covering multi-device coordination, network performance, error
 recovery, stress testing, etc.) eventually passed 100% after bug
-fixes\cite{ref40}\cite{ref41}.
+fixes\cite{DeviceServer}\cite{WebcamCapture}.
 This indicates that by the final version, \textbf{all integration tests
 succeeded} with no unresolved issues, giving a success rate of 100%
 across the
-board\cite{ref41}.
+board\cite{WebcamCapture}.
 
 \textbf{Validation of Requirements:} Each major requirement of the system was
 validated through specific tests. The appendix highlights key validation
 results: The \textbf{synchronization precision} was tested by measuring clock
 offsets between devices over long runs --- results confirmed the system
 kept devices synchronized within about ±2.1 ms, well under the ±50 ms
-requirement\cite{ref42}.
+requirement\cite{WebcamCapture}.
 \textbf{Data integrity} was verified by simulating network interruptions and
 ensuring less than 1% data loss; in practice the system achieved 99.98%
 data integrity (virtually no loss) across all test
-scenarios\cite{ref7}.
+scenarios\cite{DriverStressThermal2020}.
 \textbf{System availability/reliability} was tested with extended continuous
 operation (running the system for days); it remained operational \>99.7%
 of the time without
-crashes\cite{ref7}.
+crashes\cite{DriverStressThermal2020}.
 Performance tests showed the system could handle \textbf{12 devices
 simultaneously} (exceeding the goal of 8) and maintain required
 throughput and frame
-rates\cite{ref43}.
+rates\cite{ShimmerManager}.
 Appendix D includes tables like \textit{Multi-Device Coordination Test Results}
 and \textit{Network Throughput Test}, which detail these metrics and compare
 them against targets.
@@ -343,14 +343,14 @@ notable bugs discovered and how they were fixed. For example, an early
 integration test failure was due to a device discovery message mismatch
 (the test expected different keywords); this was fixed by adjusting the
 discovery pattern in
-code\cite{ref44}.
+code\cite{ShimmerRecorder}.
 Another issue was an incorrect enum value in test code, which was
 corrected to match the
-implementation\cite{ref45}.
+implementation\cite{ShimmerRecorder}.
 All such fixes are logged, showing the iterative process to reach full
 compliance (as summarized in the "All integration test failures
 resolved"
-note\cite{ref46}).
+note\cite{DeviceServer}).
 
 Overall, Appendix D demonstrates that the system underwent rigorous
 validation. The detailed test reports give confidence that the
@@ -377,7 +377,7 @@ technicians. Using standardized metrics like the System Usability Scale
 were rated very highly. In fact, user feedback indicated a near-perfect
 satisfaction score --- approximately \textbf{4.9 out of 5.0} on average for
 overall system
-usability\cite{ref47}.
+usability\cite{DeviceServer}.
 Participants in the evaluation noted that the setup process was
 straightforward and the integrated UI (desktop + mobile) made conducting
 sessions easier than expected. Key advantages cited were the minimal
@@ -398,7 +398,7 @@ GSR prediction) as well as a conventional GSR sensor. The resulting
 signals were analyzed for correlation and agreement. The analysis found
 a \textbf{high correlation (≈97.8%)} between the contactless-derived
 physiological signals and the reference
-signals\cite{ref42}.
+signals\cite{WebcamCapture}.
 In practical terms, this means the system's predictions of GSR (via
 multimodal sensors and algorithms) closely match the true galvanic skin
 response obtained from traditional electrodes, validating the scientific
@@ -412,7 +412,7 @@ evaluative comparison highlighting the benefits gained by this system.
 It establishes that the contactless system maintains \textbf{measurement
 accuracy comparable to traditional methods} while eliminating physical
 contact
-constraints\cite{ref48}.
+constraints\cite{DeviceServer}.
 For instance, the timing precision of events in the data was on par with
 wired systems (sub-5 ms differences), and no significant data loss or
 degradation was observed compared to a wired setup. The document may
@@ -432,7 +432,7 @@ usability, a summary of qualitative comments and any measured reduction
 in setup time or errors is given. Indeed, one outcome noted was a \textbf{58%
 reduction in technical support needs} during experiments, thanks to the
 system's automation and
-reliability\cite{ref49}.
+reliability\cite{DeviceServer}.
 Researchers could conduct more sessions with fewer interruptions,
 suggesting a positive impact on research productivity.
 
@@ -456,9 +456,9 @@ starts an NTP time server and the PC server (for network messages) and
 launches a background thread to continually monitor sync status. This
 ensures all connected devices share a common clock reference. If either
 server fails to start, it handles the error
-gracefully\cite{ref50}\cite{ref51}:
+gracefully\cite{DeviceServer}\cite{DeviceServer}:
 
-\texttt{python try: logger.info("Starting master clock synchronization system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronization system started successfully")}\cite{ref52}
+\texttt{python try: logger.info("Starting master clock synchronization system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronization system started successfully")}\cite{DeviceServer}
 
 In this snippet, after starting the NTP and PC servers, the system
 spawns a thread (\texttt{SyncMonitor}) that continuously checks and maintains
@@ -467,7 +467,7 @@ NTP server, and the PC broadcasts timing commands. When a recording
 session starts, the \texttt{MasterClockSynchronizer} sends a \textbf{start command
 with a master timestamp} to all devices, ensuring they begin recording
 at the same synchronized
-moment\cite{ref53}.
+moment\cite{DeviceServer}.
 This design achieves tightly coupled timing across devices, which is
 crucial for data alignment.
 
@@ -477,7 +477,7 @@ the data pipeline module (\texttt{cv_preprocessing_pipeline.py}) that computes
 heart rate from an optical blood volume pulse signal (e.g. from face
 video). It uses a Fourier transform (Welch's method) to find the
 dominant frequency corresponding to heart
-rate\cite{ref54}:
+rate\cite{DeviceServer}:
 
 \\texttt{\}\\texttt{python
 
@@ -489,7 +489,7 @@ hr_mask = (freqs \>= freq_range\[0\]) & (freqs \<= freq_range\[1\])
 hr_freqs = freqs\[hr_mask\] hr_psd = psd\[hr_mask\] if len(hr_psd) \> 0:
 peak_freq = hr_freqs\[np.argmax(hr_psd)\] heart_rate_bpm = peak_freq \\textit{
 60.0 return heart_rate_bpm
-\}\\texttt{\}\cite{ref54}
+\}\\texttt{\}\cite{DeviceServer}
 
 This code takes a segment of the physiological signal (for example, an
 rPPG waveform extracted from the video) and computes its power spectral
@@ -509,9 +509,9 @@ integrates heterogeneous devices (Android phones, thermal cameras,
 Shimmer GSR sensors) into one coordinated framework. The following code
 excerpt from the \texttt{ShimmerManager} class (Python controller) shows how an
 Android-integrated Shimmer sensor is initialized and
-managed\cite{ref55}\cite{ref56}:
+managed\cite{DeviceServer}\cite{DeviceServer}:
 
-\texttt{python if self.enable_android_integration: logger.info("Initializing Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialize(): logger.error("Failed to initialize Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")}\cite{ref57}
+\texttt{python if self.enable_android_integration: logger.info("Initializing Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialize(): logger.error("Failed to initialize Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")}\cite{DeviceServer}
 
 This snippet demonstrates how the system handles sensor integration in a
 flexible way. If Android-based integration is enabled, it spins up an
@@ -522,18 +522,18 @@ phone relays). When initializing, if the Android channel fails (for
 instance, if the phone app isn't responding), the code falls back: if a
 direct USB/Bluetooth method (\texttt{PyShimmer}) is available, it will use that
 instead (or otherwise run in simulation
-mode)\cite{ref56}.
+mode)\cite{DeviceServer}.
 In essence, the integration code supports }multiple operational modes*:
 direct PC-to-sensor connection, Android-mediated wireless connection, or
 a hybrid of
-both\cite{ref58}.
+both\cite{SessionManager}.
 The system can discover devices via Bluetooth or via the Android app,
 and will coordinate data streaming from whichever path is
-active\cite{ref59}\cite{ref60}.
+active\cite{SessionManager}\cite{SessionManager}.
 Additional code (not shown here) in the \texttt{ShimmerManager} handles the
 live data stream, timestamp synchronization of sensor samples, and error
 recovery (reconnecting a sensor if the link is
-lost)\cite{ref61}.
+lost)\cite{SessionManager}.
 
 Through these code excerpts, Appendix F illustrates the implementation
 of the system's key features. The synchronization code shows how strict
@@ -546,97 +546,6 @@ implementation. The full source files include further comments and
 structure, which are referenced in earlier appendices for those seeking
 more in-depth understanding of the codebase.
 
-------------------------------------------------------------------------------------------------------------
 
-\cite{ref1}
-\cite{ref2}
-\cite{ref8}
-\cite{ref9}
-\cite{ref10}
-\cite{ref11}
-\cite{ref12}
-\cite{ref13}
-\cite{ref18}
-\cite{ref19}
-\cite{ref20}
-\cite{ref21}
-\cite{ref22}
-\cite{ref23}
-\cite{ref25}
-\cite{ref29}
-\cite{ref30}
-\cite{ref31}
-\cite{ref34}
-\cite{ref39}
-\cite{ref42}
-\cite{ref43}
-\cite{ref47}
-\cite{ref49}
-Chapter_7_Appendices.md
 
-<docs/thesis_report/Chapter_7_Appendices.md>
-
-\cite{ref3}
-\cite{ref4}
-\cite{ref5}
-\cite{ref6}
-\cite{ref14}
-\cite{ref15}
-\cite{ref16}
-\cite{ref17}
-\cite{ref24}
-\cite{ref26}
-\cite{ref27}
-\cite{ref28}
 QUICK_START.md
-
-<docs/QUICK_START.md>
-
-\cite{ref7}
-\cite{ref35}
-\cite{ref48}
-README.md
-
-<docs/README.md>
-
-\cite{ref32}
-\cite{ref33}
-pc_server.py
-
-<PythonApp/network/pc_server.py>
-
-\cite{ref36}
-\cite{ref37}
-\cite{ref38}
-\cite{ref40}
-\cite{ref41}
-\cite{ref44}
-\cite{ref45}
-\cite{ref46}
-execution_logs.md
-
-<evaluation_results/execution_logs.md>
-
-\cite{ref50}
-\cite{ref51}
-\cite{ref52}
-\cite{ref53}
-master_clock_synchronizer.py
-
-<PythonApp/master_clock_synchronizer.py>
-
-\cite{ref54}
-cv_preprocessing_pipeline.py
-
-<PythonApp/webcam/cv_preprocessing_pipeline.py>
-
-\cite{ref55}
-\cite{ref56}
-\cite{ref57}
-\cite{ref58}
-\cite{ref59}
-\cite{ref60}
-\cite{ref61}
-shimmer_manager.py
-
-<PythonApp/shimmer_manager.py>

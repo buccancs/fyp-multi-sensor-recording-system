@@ -1,0 +1,27 @@
+% Example LaTeX document showing how to use the references.bib file
+% Add this to your main thesis document
+
+\documentclass{article}
+\usepackage{cite}
+
+\begin{document}
+
+\title{Multi-Sensor Recording System for Contactless GSR Prediction Research}
+\author{Your Name}
+\date{\today}
+\maketitle
+
+% Example text with citations
+GSR is a well-established physiological measure \cite{Boucsein2012}.
+Modern consumer devices increasingly incorporate stress monitoring \cite{AppleHealthWatch2019,SamsungHealth2020}.
+
+% Include all chapters
+\input{Chapter_1}
+\input{Chapter_2}
+% ... etc
+
+% Bibliography
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

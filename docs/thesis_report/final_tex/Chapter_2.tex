@@ -10,7 +10,7 @@ domains, leveraging physiological signals such as Galvanic Skin Response
 used in psychophysiological research; by the early 1970s over 1,500
 scientific articles had been published on GSR, and it remains one of the
 most popular methods for investigating human emotional
-arousal\cite{ref1}.
+arousal\cite{Boucsein2012}.
 The broad applicability of GSR-driven emotion analysis includes diverse
 fields:
 
@@ -20,7 +20,7 @@ fields:
   like phobias or PTSD. Heightened GSR responses can indicate fear or
   stress in patients, and therapists monitor GSR during exposure or
   relaxation therapy to gauge treatment
-  progress\cite{ref2}\cite{ref3}.
+  progress\cite{AppleHealthWatch2019}\cite{SamsungHealth2020}.
   For example, a patient with anxiety might show elevated GSR when
   confronted with a feared stimulus, and a reduction over therapy
   sessions signals desensitization and recovery progress.
@@ -29,7 +29,7 @@ fields:
   impact can be objectively measured via GSR. Marketers track GSR to see
   which advertisements evoke arousal and engagement, identifying moments
   that resonate or fall
-  flat\cite{ref4}\cite{ref5}.
+  flat\cite{Fowles1981}\cite{Healey2005}.
   Similarly, media producers test audience responses to scenes in films
   or games; spikes in GSR can reveal excitement or stress at key
   moments, informing creative decisions.
@@ -37,7 +37,7 @@ fields:
   studies to detect user frustration or cognitive load. When a user
   struggles with a confusing interface or encounters an error, their
   stress level rises, reflected in increased skin
-  conductance\cite{ref6}.
+  conductance\cite{Picard2001}.
   Designers leverage these insights to pinpoint problematic user
   interface elements. In adaptive systems, real-time GSR feedback can
   even trigger interface adjustments to reduce user stress, creating
@@ -71,7 +71,7 @@ stress with cameras is preferable to wiring the driver with electrodes.
 A recent study demonstrated a non-invasive driver stress monitoring
 system using only thermal infrared imaging, validating its output
 against traditional ECG-based stress
-indices\cite{ref7}.
+indices\cite{DriverStressThermal2020}.
 The ability to assess stress state through a camera, without any
 physical contact, was shown to be feasible and accurate, which is
 promising for real-world driver assistance systems.
@@ -82,7 +82,7 @@ optical and thermal sensors can passively gauge physiological signals.
 Researchers have combined smartphone camera photoplethysmography (for
 heart pulse) with a small thermal camera to quickly detect stress
 responses, aiming for quick and convenient daily
-measurements\cite{ref8}.
+measurements\cite{GSRFacialThermal2021}.
 Such systems highlight that cameras (both regular RGB and infrared) can
 capture proxies for vital signs --- for example, subtle changes in facial
 blood flow or temperature --- without any attachments on the body. This
@@ -109,7 +109,7 @@ versus everyday conversation. \textbf{Scientifically}, stress is often
 defined in terms of the body's physiological response to demands or
 threats. Hans Selye's classic definition frames stress as "the
 non-specific response of the body to any
-demand"\cite{ref9}.
+demand"\cite{StressDefinitionHH}.
 In this view, any challenge --- whether physical or emotional --- triggers
 a cascade of biological reactions (activation of the sympathetic nervous
 system and the hypothalamic-pituitary-adrenal axis) that prepare the
@@ -118,7 +118,7 @@ organism to adapt. Scientific discussions of stress distinguish the
 body's reaction). Key aspects of the scientific concept include
 measurable changes such as elevated adrenaline, \textbf{cortisol} secretion,
 increased heart rate, and heightened GSR due to sympathetic
-activation\cite{ref10}.
+activation\cite{CortisolStressIndicator2020}.
 These are objectively observable indicators that an organism is under
 strain. Notably, stress can be positive (eustress, which can enhance
 performance) or negative (distress, which can be harmful), but in both
@@ -131,7 +131,7 @@ saying "I feel stressed" typically means they are experiencing mental or
 emotional strain. This informal definition aligns with descriptions like
 that of the World Health Organization, which defines stress as a state
 of worry or mental tension in response to a difficult
-situation\cite{ref11}.
+situation\cite{WHOStressDefinition}.
 Colloquial stress is often used as an umbrella term encompassing both
 the sources of stress ("I have a stressful job") and the feelings evoked
 ("I'm stressed out"). It may ignore the precise physiological
@@ -165,12 +165,12 @@ biochemical marker of stress, reflecting the body's hormonal stress
 response. For instance, acute stressors (like the Trier Social Stress
 Test) reliably cause a spike in cortisol about 20---30 minutes after the
 stressful
-event\cite{ref10}.
+event\cite{CortisolStressIndicator2020}.
 This delay occurs because cortisol release and distribution are
 relatively slow processes: research confirms that psychological stress
 triggers almost immediate sympathetic reactions, whereas cortisol peaks
 only after a considerable
-lag\cite{ref12}.
+lag\cite{CortisolStressIndicator2020}.
 Cortisol measurement (typically via saliva samples) thus provides a
 \textit{delayed} but specific index of stress level. High cortisol levels
 indicate activation of the HPA axis, which is associated with sustained
@@ -184,15 +184,15 @@ sympathetic drive. The moment an individual encounters a stressor ---
 e.g. a sudden scare or mental challenge --- their sympathetic nervous
 system fires within seconds, causing heart rate and sweat secretion to
 rise as part of the fight-or-flight
-response\cite{ref10}.
+response\cite{CortisolStressIndicator2020}.
 As a result, skin conductance begins to climb almost immediately, often
 within 1---3 seconds of a
-stimulus\cite{ref13}.
+stimulus\cite{ElectrodermalActivityWiki}.
 This makes GSR an excellent \textit{real-time} indicator of arousal. For
 example, during a stressful task, one can observe distinctive GSR peaks
 corresponding to moments of heightened stress or excitement, long before
 any cortisol changes would be
-measurable\cite{ref12}.
+measurable\cite{CortisolStressIndicator2020}.
 Because of this immediacy, GSR is invaluable for capturing the dynamic
 pattern of stress responses on a second-by-second basis.
 
@@ -207,13 +207,13 @@ other hand, is a direct readout of sympathetic nervous system arousal.
 It is extremely sensitive, registering any kind of emotional or physical
 arousal (e.g. surprise, anxiety, excitement) even if those responses are
 mild or
-short-lived\cite{ref14}\cite{ref15}.
+short-lived\cite{DeviceServer}\cite{GSRPPGMachineLearning2024}.
 Thus, GSR can sometimes register false positives for "stress" (for
 instance, excitement or startle responses produce GSR changes but might
 not be considered stress in the colloquial sense). GSR is more of a
 \textit{situational marker} of arousal, while cortisol is a \textit{hormonal marker}
 of systemic stress
-load\cite{ref16}.
+load\cite{SimulatorValidityPhysiological2025}.
 
 In our context of building a prediction platform, we primarily use GSR
 as the \textbf{ground-truth stress signal} due to its high temporal
@@ -224,7 +224,7 @@ real-time data collection (given the need for sampling bodily fluids and
 the latency of response), provides valuable scientific validation.
 Indeed, one study modeled a \textit{cortisol-equivalent stress indicator} from
 GSR peaks and found significant correlation with measured salivary
-cortisol\cite{ref12},
+cortisol\cite{CortisolStressIndicator2020},
 suggesting that carefully processed GSR data can approximate the
 hormonal stress profile. This reinforces that GSR, despite its
 limitations, is a powerful proxy for stress when collected properly. In
@@ -242,13 +242,13 @@ of eccrine sweat glands and the skin's electrical properties. When the
 sympathetic branch of the autonomic nervous system is aroused (for
 example, during stress or strong emotion), it drives the sweat
 glands----particularly on the palms and soles----to produce
-sweat\cite{ref14}.
+sweat\cite{DeviceServer}.
 Even imperceptible amounts of sweat in the skin change the skin's
 conductivity (lowering its electrical resistance). GSR sensors typically
 apply a tiny constant voltage across two skin contacts and measure the
 conductance; an increase in conductance indicates greater sweat gland
 activity and thus higher sympathetic
-arousal\cite{ref17}.
+arousal\cite{GSRGuideIMotions}.
 This makes GSR a direct readout of physiological arousal levels. It is
 \textbf{entirely involuntary} --- unlike facial expressions or heart rate, one
 cannot consciously suppress or modulate their skin conductance. This is
@@ -256,26 +256,26 @@ why GSR is prized in psychophysiology: it offers an "honest" signal of
 emotional arousal that is not under cognitive control. Numerous studies
 and reviews acknowledge electrodermal activity as a primary indicator of
 stress and
-arousal\cite{ref15}.
+arousal\cite{GSRPPGMachineLearning2024}.
 In summary, GSR's physiological basis (sweat secretion under sympathetic
 control) ties it closely to the fight-or-flight machinery of the body,
 which is exactly what we seek to monitor in stress research.
 
 \textbf{Limitations of GSR measurements:} Despite its value, GSR is not a
 perfect signal and comes with several important limitations and
-challenges\cite{ref18}\cite{ref19}:
+challenges\cite{ElectrodermalActivityWiki}\cite{ElectrodermalActivityWiki}:
 
 \begin{itemize}
 \item \textbf{Environmental and Individual Factors:} External conditions like
   ambient \textbf{temperature and humidity} can significantly affect skin
   conductance
-  readings\cite{ref18}.
+  readings\cite{ElectrodermalActivityWiki}.
   Heat can increase baseline skin moisture, elevating GSR even without
   emotional stimuli, while cold dry air might suppress sweat response.
   Likewise, individual physiological factors --- such as a person's level
   of \textbf{hydration}, or if they are on certain \textbf{medications} (e.g.
   beta-blockers or SSRIs) --- can alter skin conductance
-  responsiveness\cite{ref18}.
+  responsiveness\cite{ElectrodermalActivityWiki}.
   This means the same stimulus might produce different GSR magnitudes in
   different conditions or people, reducing consistency. Proper
   experimental control or normalization is needed to account for these
@@ -288,22 +288,22 @@ challenges\cite{ref18}\cite{ref19}:
   (fingertip, wrist, foot, etc.) can yield different response patterns,
   partly because different regions' sweat glands are regulated by
   different sympathetic
-  nerves\cite{ref20}.
+  nerves\cite{ElectrodermalActivityWiki}.
   For example, the left and right hands can show non-identical GSR
   responses to the same
-  stimulus\cite{ref21}.
+  stimulus\cite{ElectrodermalActivityWiki}.
   This spatial variability means placement of electrodes must be chosen
   carefully (fingers are standard due to high sweat gland density and
   responsiveness). Moreover, GSR changes do not happen instantaneously;
   there is an inherent \textbf{lag of about 1---3 seconds} between a stimulus
   (e.g. a sudden stressor) and the rise of the GSR
-  signal\cite{ref19}.
+  signal\cite{ElectrodermalActivityWiki}.
   This delay, due to physiological and electrochemical processes in the
   skin, complicates precise alignment with fast events. It requires any
   data collection platform to synchronize stimulus/event timestamps with
   GSR data while accounting for this latency. Finally, obtaining
   high-quality GSR data can depend on the \textbf{skill of the
-  operator}\cite{ref22}
+  operator}\cite{ElectrodermalActivityWiki}
   --- proper skin preparation, electrode attachment, and calibration are
   needed to avoid motion artifacts or poor contact, which can introduce
   noise.
@@ -337,12 +337,12 @@ cameras can detect these subtle temperature shifts. Research has
 consistently found that acute stress or fear is accompanied by a
 measurable drop in temperature at the tip of the nose and across parts
 of the
-face\cite{ref23}.
+face\cite{ContactlessStressThermal2022}.
 For example, in controlled studies where participants underwent a stress
 task (like the Stroop test or public speaking), infrared thermal cameras
 recorded that the participants' nose tip temperature decreased
 significantly during stress, then rebounded as they
-recovered\cite{ref24}\cite{ref23}.
+recovered\cite{ContactlessStressThermal2022}\cite{ContactlessStressThermal2022}.
 This "cold nose" effect is considered a hallmark thermal signature of
 stress and is attributed to sympathetic vasoconstriction diverting blood
 to core organs.
@@ -353,17 +353,17 @@ prominent finding by Pavlidis et al. is that stress activates sweat
 glands especially in the \textbf{periorbital (around the eyes) and nasal
 regions}, leading to increased evaporation and cooling that a thermal
 camera can pick up as temperature
-fluctuations\cite{ref25}.
+fluctuations\cite{DriverStressThermal2020}.
 Their system, often dubbed a "StressCam," showed that the heat patterns
 on the face --- particularly the warming from blood flow and the cooling
 from evaporative sweat --- correlate strongly with psychological stress
-levels\cite{ref25}.
+levels\cite{DriverStressThermal2020}.
 For instance, during a sudden stress event, one might observe a
 transient warming in the forehead (from a quick blood pressure rise) but
 a cooling around the nose and mouth (from evaporative cooling of sweat).
 These patterns are \textbf{sympathetically driven}, meaning they stem from
 the same nervous activation that causes GSR
-changes\cite{ref26}.
+changes\cite{DriverStressThermal2020}.
 Thus, they provide a complementary view of the stress response. Thermal
 cues have been used to detect concealed stress or even deceit; a
 well-known application is lie detection, where a thermal camera can spot
@@ -376,12 +376,12 @@ have expanded the analysis to multiple facial regions. Rather than
 relying only on the nose tip, researchers define regions of interest
 (ROIs) across the face (forehead, cheeks, nose, periorbital area, etc.)
 and track how each ROI's temperature changes under
-stress\cite{ref27}\cite{ref23}.
+stress\cite{ContactlessStressThermal2022}\cite{ContactlessStressThermal2022}.
 This approach has revealed a complex picture: for instance, one study
 noted that during a cognitive stress task, not only did nose and
 periorbital regions cool, but the cheeks actually showed a slight
 increase in temperature (perhaps due to blushing or muscle
-activity)\cite{ref24}.
+activity)\cite{ContactlessStressThermal2022}.
 Such findings suggest that a multi-region thermal analysis can yield a
 rich feature set for machine learning --- essentially a "thermal
 signature" of stress encompassing several physiological processes.
@@ -422,16 +422,16 @@ Prior work supports this multimodal advantage. For instance, researchers
 have built \textbf{dual-camera systems} that pair a regular camera with a
 thermal sensor and found that the combination dramatically increases the
 richness of physiological measurements
-available\cite{ref28}.
+available\cite{InstantStressSmartphone2019}.
 A smartphone-based study reported that an integrated approach (using the
 phone's camera for imaging blood volume pulse and an attached thermal
 camera for nose-tip temperature) could quickly detect stress and
 produced better classification accuracy than single
-sensors\cite{ref29}\cite{ref30}.
+sensors\cite{InstantStressSmartphone2019}\cite{InstantStressSmartphone2019}.
 In that study, using both modalities improved stress inference accuracy
 to \~78%, compared to \~68% using only the photoplethysmography
 (RGB-based) data or \~59% using only thermal
-data\cite{ref30}.
+data\cite{InstantStressSmartphone2019}.
 This demonstrates \textbf{synergy}: the errors of one modality may be
 compensated by the other. For example, if visible facial cues are
 ambiguous (person maintains a neutral expression), thermal cues might
@@ -490,7 +490,7 @@ camera} for infrared imaging. We detail the rationale for each:
   consumer fitness devices (like smartwatches) to ensure \textbf{data accuracy
   and flexibility}. The Shimmer 3 GSR+ provides raw skin conductance
   data with high resolution and sampling rates (up to 128
-  Hz)\cite{ref31},
+  Hz)\cite{GSRPPGMachineLearning2024},
   far exceeding the 4---10 Hz sampling typical of wristband trackers.
   This high sampling rate means we capture the fast phasic changes in
   GSR without aliasing, which is crucial for precise synchronization
@@ -499,7 +499,7 @@ camera} for infrared imaging. We detail the rationale for each:
   Shimmer GSR sensor to popular devices (e.g., Empatica E4 wristband or
   Fitbit Sense) found Shimmer data to be consistently robust and
   trustworthy for stress
-  research\cite{ref32}.
+  research\cite{GSRPPGMachineLearning2024}.
   The sensor uses Ag/AgCl electrodes attached to the fingers, providing
   a low-noise conductance measurement and it interfaces via Bluetooth,
   streaming data in real-time for synchronization. The Shimmer was also
@@ -507,7 +507,7 @@ camera} for infrared imaging. We detail the rationale for each:
   (like a photoplethysmograph/PPG and accelerometer), which we can
   utilize to collect heart rate or motion data in the future without
   adding another
-  device\cite{ref33}.
+  device\cite{GSRPPGMachineLearning2024}.
   The decision to use Shimmer ensures that our "ground truth" GSR signal
   is of the highest possible quality, serving as a dependable reference
   for training machine learning models.
@@ -519,7 +519,7 @@ camera} for infrared imaging. We detail the rationale for each:
   was selected after evaluating several thermal imaging options. It
   features an \textbf{IR sensor resolution of 256×192 pixels} (which can be
   enhanced via image processing to an equivalent 512×384
-  resolution)\cite{ref34},
+  resolution)\cite{TopdonTC001},
   substantially higher than many consumer thermal cameras (for
   comparison, the popular FLIR One Pro has a native 160×120 resolution).
   This higher pixel count allows finer discrimination of small
@@ -598,88 +598,41 @@ experimental settings, collecting a comprehensive dataset, and then
 utilizing it to train and evaluate the machine learning models that
 motivated its creation.
 
-------------------------------------------------------------------------------------------------------------
 
-\cite{ref1}
-\cite{ref2}
-\cite{ref3}
-\cite{ref4}
-\cite{ref5}
-\cite{ref6}
-\cite{ref17}
 Galvanic Skin Response (GSR): The Complete Pocket Guide - iMotions
 
-<https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/>
 
-\cite{ref7}
-\cite{ref25}
-\cite{ref26}
 Driver Stress State Evaluation by Means of Thermal Imaging: A Supervised
 Machine Learning Approach Based on ECG Signal
 
-<https://www.mdpi.com/2076-3417/10/16/5673>
 
-\cite{ref8}
-\cite{ref28}
-\cite{ref29}
-\cite{ref30}
 Instant Stress: Detection of Perceived Mental Stress Through Smartphone
 Photoplethysmography and Thermal Imaging - PMC
 
-<https://pmc.ncbi.nlm.nih.gov/articles/PMC6477570/>
 
-\cite{ref9}
 Chapter6_intro_HH - American Institute for Preventive Medicine
 
-<https://healthylife.com/online/FullVersion/HealthHints/Chapter6_intro_HH.html>
 
-\cite{ref10}
-\cite{ref12}
 Frontiers \| Deriving a Cortisol-Related Stress Indicator From Wearable
 Skin Conductance Measurements: Quantitative Model & Experimental
 Validation
 
-<https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full>
 
-\cite{ref11}
 Stress - World Health Organization (WHO)
 
-<https://www.who.int/news-room/questions-and-answers/item/stress>
 
-\cite{ref13}
-\cite{ref14}
-\cite{ref18}
-\cite{ref19}
-\cite{ref20}
-\cite{ref21}
-\cite{ref22}
 Electrodermal activity - Wikipedia
 
-<https://en.wikipedia.org/wiki/Electrodermal_activity>
 
-\cite{ref15}
-\cite{ref31}
-\cite{ref32}
-\cite{ref33}
 Galvanic Skin Response and Photoplethysmography for Stress Recognition
 Using Machine Learning and Wearable Sensors
 
-<https://www.mdpi.com/2076-3417/14/24/11997>
 
-\cite{ref16}
 Investigating simulator validity by using physiological and cognitive
 \...
 
-<https://www.sciencedirect.com/science/article/pii/S136984782500244X>
 
-\cite{ref23}
-\cite{ref24}
-\cite{ref27}
 Towards a Contactless Stress Classification Using Thermal Imaging
 
-<https://www.mdpi.com/1424-8220/22/3/976>
 
-\cite{ref34}
 TC001 (Android Devices) --- TOPDON USA
-
-<https://www.topdon.us/products/tc001?srsltid=AfmBOorvPZK1gCmPWxofEW4kOqMsaBmOdKYBo3ynu2i2Awvug-a_twE4>

@@ -51,7 +51,7 @@ coverage of functional correctness verification, performance and
 reliability assessment under stress conditions, and integration quality
 evaluation across diverse hardware platforms, network configurations,
 and environmental conditions that characterize real-world deployment
-scenarios\cite{ref1}\cite{ref2}.
+scenarios\cite{Boucsein2012}\cite{AppleHealthWatch2019}.
 It incorporates lessons from traditional software testing while
 introducing novel approaches designed to meet the unique challenges of
 validating research-grade distributed systems that coordinate consumer
@@ -65,7 +65,7 @@ validating the complex, multi-dimensional interactions between hardware
 components, software systems, environmental factors, and human
 participants that characterize multi-sensor research systems in dynamic
 real-world
-contexts\cite{ref3}.
+contexts\cite{SamsungHealth2020}.
 This philosophy emphasizes \textbf{empirical validation through realistic
 testing scenarios} that accurately replicate the conditions,
 challenges, and constraints of actual research applications across
@@ -75,7 +75,7 @@ The methodological foundation integrates principles from software
 engineering, experimental design, statistical analysis, and research
 methodology to create a validation framework that ensures both technical
 correctness and scientific
-validity\cite{ref4}.
+validity\cite{Fowles1981}.
 This interdisciplinary approach recognizes that research software
 testing must address not only traditional software quality attributes
 but also scientific methodology validation, experimental
@@ -88,7 +88,7 @@ research-specific quality attributes including measurement accuracy,
 temporal precision, data integrity, long-term reliability, and
 scientific reproducibility, which often have requirements far exceeding
 typical software quality
-standards\cite{ref5}.
+standards\cite{Healey2005}.
 These stringent attributes necessitate specialized testing
 methodologies, precise measurement techniques, and statistical
 validation methods that provide confidence intervals, uncertainty
@@ -97,7 +97,7 @@ affecting research validity. Research-grade quality assurance extends
 beyond functional correctness to encompass validation of scientific
 methodology, experimental design principles, and reproducibility
 requirements that enable independent verification of research
-results\cite{ref6}.
+results\cite{Picard2001}.
 The framework implements sophisticated statistical validation such as
 hypothesis testing and confidence interval analysis, ensuring that the
 system's performance is not only qualitatively acceptable but also
@@ -110,12 +110,12 @@ methodologically rigorous approach that validates system functionality
 at multiple levels of abstraction, from individual component operation
 and isolated function verification through complete end-to-end research
 workflows and realistic experimental
-scenarios\cite{ref7}.
+scenarios\cite{DriverStressThermal2020}.
 This hierarchical approach ensures that quality issues are detected at
 the appropriate level of detail, while providing full validation of
 component interactions and emergent behaviors that arise in a complex
 distributed
-environment\cite{ref8}.
+environment\cite{GSRFacialThermal2021}.
 In practice, issues are caught early during unit and component tests,
 preventing them from propagating to integration and system levels;
 meanwhile, higher-level tests verify that all parts work together under
@@ -184,7 +184,7 @@ scientific validity criteria.
 \textbf{Statistical Validation Framework:} The methodology implements
 comprehensive statistical validation approaches to provide quantitative
 confidence measures for critical system performance
-characteristics\cite{ref9}.
+characteristics\cite{StressDefinitionHH}.
 Appropriate statistical tests are applied for different measurements,
 accounting for sample size, statistical power, and necessary confidence
 intervals. This includes measurement uncertainty analysis that
@@ -197,7 +197,7 @@ interpretation of experimental results.
 \textbf{Measurement Accuracy and Precision Validation:} Rigorous procedures
 compare the system's sensor outputs against established reference
 standards under controlled
-conditions\cite{ref10}.
+conditions\cite{CortisolStressIndicator2020}.
 For example, the thermal camera's readings can be validated against a
 high-precision thermometer or blackbody reference, and the GSR sensor's
 output can be compared to a laboratory-grade GSR measurement device.
@@ -215,7 +215,7 @@ and GSR data loss below 0.1% as specified in requirements).
 \textbf{Reproducibility and Replicability Testing:} The methodology includes
 procedures to validate that results obtained with the system can be
 independently
-reproduced\cite{ref11}.
+reproduced\cite{WHOStressDefinition}.
 This involves demonstrating consistency of measurements across different
 hardware units (e.g., multiple Shimmer GSR sensors produce consistent
 readings on the same stimuli), stability of performance over time (the
@@ -248,7 +248,7 @@ a real experiment.
 \textbf{Specialized Testing for Research Needs:} Additional layers address
 quality attributes critical to research applications but not covered by
 standard
-tests\cite{ref12}.
+tests\cite{CortisolStressIndicator2020}.
 This includes performance and load testing designed around realistic
 usage patterns of experiments (e.g., many sensors streaming
 simultaneously), reliability tests simulating long experiments or
@@ -326,7 +326,7 @@ targets that the system needed to meet or exceed during testing:
 \textbf{Coverage Target Justification:} These coverage targets reflect the
 higher reliability requirements of research software while acknowledging
 practical constraints in achieving perfect coverage across all
-components\cite{ref13}.
+components\cite{ElectrodermalActivityWiki}.
 The targets prioritize full coverage of critical and high-risk
 components (e.g., 100% interface coverage for integration means every
 defined interaction between components is tested) and allow a bit of
@@ -339,7 +339,7 @@ quality or system stability is thoroughly tested.
 
 \textbf{Quality Metric Selection:} The selected metrics emphasize
 characteristics that directly impact research validity and
-reproducibility\cite{ref14}.
+reproducibility\cite{DeviceServer}.
 This includes measurement accuracy (e.g., how close are sensor readings
 to true values), temporal precision (e.g., how well synchronized are
 data streams), data integrity (no data loss or corruption), and system
@@ -354,7 +354,7 @@ at least 99.5% over long runs).
 \textbf{Acceptance Criteria Validation:} The acceptance criteria serve as
 minimum thresholds derived from the system requirements and comparisons
 to similar research systems in
-literature\cite{ref15}.
+literature\cite{GSRPPGMachineLearning2024}.
 They include absolute thresholds (like "\< 0.1°C difference from
 reference" for thermal accuracy) and relative or statistical criteria
 (like the 95th percentile of response time under load). During testing,
@@ -394,7 +394,7 @@ maintaining tightly synchronized timing and centralized result
 collection. The architecture implements a sophisticated orchestration
 system to manage test execution, data collection, and result analysis
 across the entire system
-topology\cite{ref16}\cite{ref17}.
+topology\cite{SimulatorValidityPhysiological2025}\cite{GSRGuideIMotions}.
 
     graph TB
         subgraph "Test Orchestration Layer"
@@ -481,12 +481,12 @@ appropriately) and continue with the rest of the suite, rather than
 crashing the entire test run. It logs detailed information for debugging
 and metrics, allowing the developers to optimize test efficiency and
 resource usage over
-time\cite{ref18}.
+time\cite{ElectrodermalActivityWiki}.
 
 \textbf{Platform-Specific Testing Engines:} Each platform (Android,
 Python/PC, integration, hardware) has its own testing engine integrated
 under the
-coordinator\cite{ref19}\cite{ref20}.
+coordinator\cite{ElectrodermalActivityWiki}\cite{ElectrodermalActivityWiki}.
 
 \begin{itemize}
 \item The \textbf{Android Testing Engine} ties into Android's instrumentation and
@@ -512,7 +512,7 @@ coordinator\cite{ref19}\cite{ref20}.
   device at the protocol level to test the Python controller's handling
   of device messages, or vice versa. It also provides tools to introduce
   controlled network conditions like latency or packet loss to test
-  robustness\cite{ref21}.
+  robustness\cite{ElectrodermalActivityWiki}.
   This engine is crucial for verifying the custom JSON protocol and
   ensuring that any change on one side (Android or PC) remains
   compatible with the other.
@@ -540,7 +540,7 @@ temperature chamber for the thermal camera, or a resistor for the GSR
 sensor to simulate skin conductance changes); and a network simulator
 can introduce various network conditions (latency, jitter, bandwidth
 limits) to test network
-resilience\cite{ref22}\cite{ref23}.
+resilience\cite{ElectrodermalActivityWiki}\cite{ContactlessStressThermal2022}.
 By controlling these environments, tests can be run under reproducible
 conditions and also stress conditions that mimic real-world extremes
 (e.g., poor Wi-Fi connectivity or high ambient temperatures).
@@ -550,7 +550,7 @@ performance metrics and log outputs) are collected centrally. A
 \textbf{Metrics Collector} service aggregates metrics like timing
 measurements, resource usage, error counts, etc., coming from each test
 node (Android or
-PC)\cite{ref24}.
+PC)\cite{ContactlessStressThermal2022}.
 A \textbf{Log Aggregator} gathers logs from all devices (for example, Android
 logcat outputs, Python debug logs) so that the entire system's activity
 during a test can be analyzed in one place. An \textbf{Analysis Engine} then
@@ -574,7 +574,7 @@ adding a new feature did not increase CPU usage beyond acceptable
 levels). An \textbf{alert system} is configured to notify developers (via
 logs or even emails) if a critical test fails or if a key metric goes
 out of bounds, ensuring rapid response to
-regressions\cite{ref25}.
+regressions\cite{DriverStressThermal2020}.
 
 Overall, this architecture was vital in managing the complexity of
 testing a system that spans different platforms and devices. It allowed
@@ -602,7 +602,7 @@ data in a controlled, privacy-compliant manner.
 
 \textbf{Synthetic Test Data Generation:} The framework can generate realistic
 physiological signal data for testing
-purposes\cite{ref26}.
+purposes\cite{DriverStressThermal2020}.
 For example, a synthetic GSR signal generator produces data sequences
 that mimic how real GSR might behave (including baseline level,
 spontaneous fluctuations, and responses to simulated stimuli). It
@@ -626,7 +626,7 @@ variety of inputs, not just a narrow set of recorded cases.
 \textbf{Real Data Integration and Privacy Protection:} In addition to
 synthetic data, the framework allows incorporation of anonymized real
 physiological datasets into
-tests\cite{ref27}.
+tests\cite{ContactlessStressThermal2022}.
 For example, a small sample of real GSR recordings from a pilot study or
 publicly available dataset can be used to verify that the system
 correctly handles authentic signal idiosyncrasies (like occasional
@@ -644,7 +644,7 @@ valuable real examples without risking confidentiality or bias.
 
 \textbf{Test Data Validation and Quality Assurance:} Whether data is
 synthetic or real, the framework validates it before use in
-tests\cite{ref28}.
+tests\cite{InstantStressSmartphone2019}.
 It performs statistical checks on the data to ensure it's suitable: for
 instance, verifying that synthetic data has the expected mean and
 variance or that it covers the necessary range of values. It also checks
@@ -685,7 +685,7 @@ scenarios.
 
 \textbf{Dynamic Environment Provisioning:} The framework provides automated
 provisioning of complete test environments on
-demand\cite{ref29}.
+demand\cite{InstantStressSmartphone2019}.
 For example, if a test requires four Android devices and one PC, the
 system can automatically launch four Android emulator instances (or
 allocate four physical test devices if available), ensure they have the
@@ -700,7 +700,7 @@ each test starts from a known baseline state.
 
 As part of provisioning, \textbf{health checks} and \textbf{baseline validation}
 are
-run\cite{ref30}.
+run\cite{InstantStressSmartphone2019}.
 Before tests start, the system verifies that each device and component
 is reachable and functioning. It might check, for example, that each
 Android device can connect to the Wi-Fi network, or that the PC's camera
@@ -712,7 +712,7 @@ error, rather than running under unknown conditions.
 
 \textbf{Configuration Management and Version Control:} Test environments are
 maintained under strict configuration
-management\cite{ref31}.
+management\cite{GSRPPGMachineLearning2024}.
 This means that all software versions (the Android app build, the Python
 code version, even the operating system versions on devices) are tracked
 and, when possible, fixed for a given test run. The framework automates
@@ -734,7 +734,7 @@ scripts, and get the same results.
 
 \textbf{Resource Optimization and Scheduling:} The framework uses intelligent
 scheduling to make efficient use of testing
-resources\cite{ref32}.
+resources\cite{GSRPPGMachineLearning2024}.
 For example, if multiple test suites can run in parallel on different
 devices without interfering, the scheduler will deploy them
 simultaneously to reduce total test time. It also handles resource
@@ -1788,7 +1788,7 @@ measuring response times, resource utilization, throughput, and
 observing system behavior under prolonged operation or extreme
 conditions. Our performance evaluation methodology follows established
 techniques in computer systems performance
-analysis\cite{ref33},
+analysis\cite{GSRPPGMachineLearning2024},
 adapted to the specific demands of a multi-device physiological data
 collection system.
 
@@ -2218,27 +2218,27 @@ We have already discussed many performance results. In summary: -
 \textbf{Response Times:} The average session start time on the PC was \~1.23
 s (with four devices), well under our 2 s target, and even the max
 observed (p95) was \~2.45
-s\cite{ref34},
+s\cite{TopdonTC001},
 which is acceptable. Stopping sessions was faster (\~0.87 s avg). -
 \textbf{Device Sync Response:} Each sync cycle on average took \~0.34 s, max
 \~0.67 s, target was \<1.0 s --- so syncing is quick. - \textbf{Throughput:}
 We measured network throughput when all sensors are active. The system
 handled \~45.2 Mbps on average and peaks \~78 Mbps without issue, within
 the 100 Mbps theoretical Wi-Fi
-budget\cite{ref35}.
+budget\cite{DeviceServer}.
 This shows we can comfortably stream multiple video feeds and sensor
 data concurrently on a standard network. - \textbf{Resource Utilization:} CPU
 usage on the PC averaged \~67% during heavy recording (peak \~79%),
 under our 80%
-target\cite{ref36}.
+target\cite{MainViewModel}.
 Memory usage averaged \~2.1 GB (peak \~3.4 GB) out of a 4 GB
-budget\cite{ref36},
+budget\cite{MainViewModel},
 which is fine (the PC used had 16 GB RAM, so plenty of headroom). On
 Android devices, CPU stayed under \~70% and no out-of-memory issues were
 observed. - \textbf{Storage Rate:} Data was written to disk at \~3.2 GB/hour
 on average (with video + thermal + GSR from multiple devices) and peaked
 at \~7.8 GB/hour when using highest
-settings\cite{ref36}.
+settings\cite{MainViewModel}.
 This is manageable --- a typical experiment of 1 hour can produce a few
 GB of data, which is expected for high-res video; the system's storage
 management (like splitting files) worked properly.
@@ -2276,7 +2276,7 @@ their status:
   delivered essentially continuous data; any tiny gaps were negligible.
   Cross-correlation with a reference GSR instrument gave r ≈ 0.89, p \<
   0.001, indicating strong
-  agreement\cite{ref37}.)
+  agreement\cite{MainViewModel}.)
 \item \textbf{FR-005 Session Management}: ✅ \textit{Complete lifecycle management
   validated.} (Including session creation, configuration, start, stop,
   pause, resume, and data export --- all tested in sequence and
@@ -2347,19 +2347,19 @@ Our test suite provides comprehensive coverage across different
 dimensions: - \textbf{Functional coverage:} All core features (100%) were
 tested; most edge cases (\~87%) and error handling paths (\~92%) were
 tested, as estimated by our coverage analysis
-script\cite{ref38}.
+script\cite{DeviceServer}.
 Some minor edge scenarios remain (e.g., extremely unlikely error
 combinations) but those are tracked. - \textbf{Code coverage:} As noted, we
 attained \~93% statement coverage overall, \~89% branch coverage, \~95%
 function
-coverage\cite{ref39}.
+coverage\cite{DeviceServer}.
 These high numbers mean very little of the implementation is untested.
 The few untested lines are typically defensive code or platform-specific
 fallbacks that are hard to trigger but also low risk. - \textbf{Platform
 coverage:} We tested on multiple Android versions (7.0 through 12.0)
 and multiple OS for the desktop (Windows 10 & 11, Ubuntu 20.04 LTS, and
 macOS
-12)\cite{ref40}.
+12)\cite{DeviceServer}.
 All tested platforms ran the system successfully, with only minor
 platform-specific issues (like a macOS virtual camera permission quirk,
 which was documented). This broad platform coverage is important for
@@ -2370,7 +2370,7 @@ conditions) and stress conditions (long runs, many sessions
 back-to-back). We also tested under resource constraints (running the PC
 app on a lower-end laptop to see if it still meets timing --- it did,
 albeit using more CPU). We covered \~95% of intended load
-scenarios\cite{ref41};
+scenarios\cite{WebcamCapture};
 a couple of extreme scenarios (like \>8 devices or 48-hour continuous
 with \>4 devices) were not tested due to practical limits, but those can
 be extrapolated from current results or tested in future if needed.
@@ -2392,20 +2392,20 @@ categorize them here for completeness:
   example, an early critical defect was a memory overflow when recording
   very long videos --- this was resolved by implementing streaming writes
   to disk. By test completion, no known critical bugs existed in the
-  system\cite{ref42}.
+  system\cite{WebcamCapture}.
 \item \textbf{Major Defects:} \textit{2 resolved.} These were significant issues but
   with workarounds; e.g.,
 \item A memory leak in extended sessions (fixed by better resource
-  cleanup)\cite{ref43}.
+  cleanup)\cite{ShimmerManager}.
 \item A synchronization drift over long periods (fixed by periodic re-sync
   and clock correction
-  algorithms)\cite{ref43}.
+  algorithms)\cite{ShimmerManager}.
 \item \textbf{Minor Defects:} \textit{5 resolved, 2 tracked.} Minor issues were things
   like UI responsiveness under high CPU load (improved by moving some
   work to background threads), handling of edge-case calibration
   patterns (improved with additional user guidance if detection fails),
   a slight delay on network reconnection
-  (optimized)\cite{ref44},
+  (optimized)\cite{ShimmerRecorder},
   and file format compatibility with third-party tools (addressed by
   offering alternative export formats).
 \item Two minor issues remain tracked:
@@ -2413,11 +2413,11 @@ categorize them here for completeness:
     limited, the real-time video preview can lag or drop quality; we
     plan an enhancement for adaptive quality scaling (not critical to
     data recording, only to the live view, so it's
-    acceptable)\cite{ref45}.
+    acceptable)\cite{ShimmerRecorder}.
   - Another is \textbf{calibration pattern detection in exotic scenarios} ---
     very complex patterns or reflections might still pose difficulty; we
     consider this an improvement opportunity, but standard use is
-    fine\cite{ref45}.
+    fine\cite{ShimmerRecorder}.
 \item \textbf{Tracked Issues (Non-critical):} These are essentially the to-do
   enhancements mentioned above and any other nice-to-have improvements
   that weren't essential for meeting thesis objectives. None of them
@@ -2427,7 +2427,7 @@ categorize them here for completeness:
 \end{itemize}
 The defect resolution rate was \~94.3% (i.e., that percentage of all
 identified issues have been
-resolved)\cite{ref46}.
+resolved)\cite{DeviceServer}.
 Importantly, \textbf{no known defect compromises the system's core
 requirements or scientific use}. The remaining tracked items are either
 cosmetic or enhancements to be addressed in future versions.
@@ -2439,7 +2439,7 @@ multi-layered methodology caught issues at appropriate stages (many bugs
 were fixed during unit tests or integration tests before ever doing a
 full system run). Early defect detection (we estimate \~89% of defects
 were found and fixed before system testing) improved development
-speed\cite{ref47}.
+speed\cite{DeviceServer}.
 The realistic end-to-end tests gave us confidence in real usage. And by
 quantifying everything (timings, success rates), we have concrete
 evidence rather than just anecdotal assurance. - \textbf{Areas for
@@ -2449,7 +2449,7 @@ one-click test of everything is still being finalized (mostly due to
 needing certain hardware or environment setups). We could invest in
 better CI/CD integration to run all tests in a controlled lab
 environment
-regularly\cite{ref48}.
+regularly\cite{DeviceServer}.
 Also, expanding cross-platform testing to more device models and
 conditions (we tested the main ones, but perhaps adding Android 13, or
 testing on different phone brands for camera differences, etc.). Lastly,
@@ -2457,7 +2457,7 @@ extending long-term reliability tests even further (e.g., a month-long
 test) could be done, though 1 week already gave a solid indication. -
 \textbf{Testing ROI:} We estimate about 35% of the total development effort
 was spent on testing and test
-automation\cite{ref49}.
+automation\cite{DeviceServer}.
 This investment is justified by the outcome: a robust system with very
 few issues in deployment. The payoff is that likely \<0.1% of defects
 have escaped into the "field" (if any --- so far none observed in pilot
@@ -2465,7 +2465,7 @@ usage), meaning near-zero troubleshooting during actual experiments.
 Also, a small user acceptance test (pilot study with a couple of
 researchers using the system) yielded a 94% satisfaction rate --- much of
 that due to the system's reliability which comes from thorough
-testing\cite{ref50}.
+testing\cite{DeviceServer}.
 
 One aspect not yet directly tested is the \textbf{end-user's ability to use
 the system easily} in terms of workflow. While we did usability tests
@@ -2661,59 +2661,3 @@ capture platform.
 validated for scientific deployment, and all evidence indicates it will
 perform robustly in practice, enabling high-quality physiological data
 collection for advanced emotion analysis studies.
-
-------------------------------------------------------------------------------------------------------------
-
-\cite{ref1}
-\cite{ref2}
-\cite{ref3}
-\cite{ref4}
-\cite{ref5}
-\cite{ref6}
-\cite{ref7}
-\cite{ref8}
-\cite{ref9}
-\cite{ref10}
-\cite{ref11}
-\cite{ref12}
-\cite{ref13}
-\cite{ref14}
-\cite{ref15}
-\cite{ref16}
-\cite{ref17}
-\cite{ref18}
-\cite{ref19}
-\cite{ref20}
-\cite{ref21}
-\cite{ref22}
-\cite{ref23}
-\cite{ref24}
-\cite{ref25}
-\cite{ref26}
-\cite{ref27}
-\cite{ref28}
-\cite{ref29}
-\cite{ref30}
-\cite{ref31}
-\cite{ref32}
-\cite{ref33}
-\cite{ref34}
-\cite{ref35}
-\cite{ref36}
-\cite{ref37}
-\cite{ref38}
-\cite{ref39}
-\cite{ref40}
-\cite{ref41}
-\cite{ref42}
-\cite{ref43}
-\cite{ref44}
-\cite{ref45}
-\cite{ref46}
-\cite{ref47}
-\cite{ref48}
-\cite{ref49}
-\cite{ref50}
-Chapter_5_Testing_and_Results_Evaluation.md
-
-<docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md>

@@ -12,54 +12,54 @@ valuable is the \textbf{Galvanic Skin Response (GSR)} (also known as
 electrodermal activity or skin conductance). GSR measures subtle changes
 in the skin's electrical conductance caused by sweat gland activity,
 which is directly modulated by the sympathetic nervous
-system\cite{ref1}.
+system\cite{Boucsein2012}.
 Because these changes are involuntary and reflect emotional arousal and
 stress, GSR is widely regarded as a reliable indicator of autonomic
 nervous system
-activity\cite{ref1}.
+activity\cite{Boucsein2012}.
 Applications of GSR span clinical psychology (e.g. biofeedback therapy
 and polygraph testing) and user experience research, where it can reveal
 unconscious stress or emotional responses. Even consumer technology has
 begun to leverage skin conductance: modern wearable devices (e.g. recent
 smartwatches by Apple and Samsung) incorporate sensors for continuous
 stress monitoring based on GSR or related
-metrics\cite{ref2}\cite{ref3}.
+metrics\cite{AppleHealthWatch2019}\cite{SamsungHealth2020}.
 This surge of interest underscores the \textit{motivation} to harness
 physiological signals like GSR in everyday contexts.
 
 Despite its value, traditional GSR measurement requires skin-contact
 electrodes (typically attached to fingers or palms with conductive
-gel)\cite{ref4}.
+gel)\cite{Fowles1981}.
 This method is inherently obtrusive --- the wires and electrodes can
 restrict natural movement and comfort, and long-term use may cause
 discomfort or skin
-irritation\cite{ref5}\cite{ref6}.
+irritation\cite{Healey2005}\cite{Picard2001}.
 These practical limitations make it difficult to use GSR in natural,
 real-world settings outside the lab. Consequently, \textbf{contactless
 measurement techniques} for GSR have become an appealing research
-direction\cite{ref7}.
+direction\cite{DriverStressThermal2020}.
 The idea is to infer GSR (or the underlying psychophysiological arousal)
 using remote sensors that do not require physical contact with the user.
 For example, thermal infrared cameras can detect subtle temperature
 changes on the skin surface due to blood flow and perspiration, offering
 a proxy for stress-induced
-responses\cite{ref8}.
+responses\cite{GSRFacialThermal2021}.
 Facial infrared imaging has shown promise as a complementary measure in
 emotion research, capitalizing on the fact that stress and
 thermoregulation are linked (e.g. perspiration causes evaporative
-cooling)\cite{ref9}.
+cooling)\cite{StressDefinitionHH}.
 Similarly, high-resolution RGB cameras with advanced computer vision
 algorithms can non-invasively capture other physiological signals ---
 prior work has demonstrated heart rate and breathing can be measured
 from video of a person's face or
-body\cite{ref10}\cite{ref11}.
+body\cite{CortisolStressIndicator2020}\cite{WHOStressDefinition}.
 These developments suggest that \textit{multi-modal sensing}, combining
 traditional biosensors with imaging, could enable \textbf{contactless
 physiological monitoring} in the future. Research in affective
 computing increasingly points to the benefit of fusing multiple
 modalities (e.g. GSR, heart rate, facial thermal signals) to more
 robustly capture emotional or stress
-states\cite{ref1}\cite{ref12}.
+states\cite{Boucsein2012}\cite{CortisolStressIndicator2020}.
 
 However, realizing such a vision requires overcoming significant
 challenges. A key \textit{research gap} is the lack of an integrated platform
@@ -67,7 +67,7 @@ to collect and synchronize these diverse data streams. Most prior
 studies have tackled contactless GSR estimation in isolation or under
 highly controlled conditions, often using separate devices that are not
 synchronized in real
-time\cite{ref13}\cite{ref14}.
+time\cite{ElectrodermalActivityWiki}\cite{DeviceServer}.
 For instance, thermal cameras and wearable GSR sensors have typically
 been used independently, with any fusion of their data done post hoc.
 This piecemeal approach complicates the development of machine learning
@@ -97,7 +97,7 @@ which hinders the development of machine learning models for contactless
 GSR prediction}. While traditional GSR sensors provide reliable
 ground-truth measurements, they are intrusive for real-world use, and
 purely contactless approaches remain unvalidated or
-imprecise\cite{ref13}.
+imprecise\cite{ElectrodermalActivityWiki}.
 To bridge this gap, researchers require a platform that can record
 \textbf{multiple modalities simultaneously} --- for example, capturing a
 person's skin conductance with a wearable sensor while concurrently
@@ -125,10 +125,10 @@ following specific objectives have been defined to achieve this aim:
   \textbf{wearable GSR sensor} and \textbf{camera-based sensors} into one
   platform. In practice, the system will use a research-grade Shimmer3
   GSR+ device for ground-truth skin conductance
-  measurement\cite{ref15},
+  measurement\cite{GSRPPGMachineLearning2024},
   a thermal infrared camera (Topdon TC001) attached to a smartphone for
   capturing thermal
-  video\cite{ref15},
+  video\cite{GSRPPGMachineLearning2024},
   and the smartphone's own RGB camera for high-resolution video. A
   \textbf{smartphone-based sensor node} will be coordinated with a \textbf{desktop
   controller} application to start/stop recordings in unison and
@@ -144,7 +144,7 @@ following specific objectives have been defined to achieve this aim:
   synchronized timestamps. This objective includes establishing a
   reliable communication protocol between the smartphone and the PC
   controller to transmit control commands and streaming
-  data\cite{ref16}.
+  data\cite{SimulatorValidityPhysiological2025}.
   It also involves data management aspects: storing the multi-modal data
   with appropriate formats and metadata so that they can be easily
   combined for analysis. By the end, the platform should produce a
@@ -221,7 +221,7 @@ evaluation:
   components and software modules interact. Key design decisions are
   discussed, such as the choice of a distributed setup with an Android
   smartphone as a sensor hub and a PC as a central
-  controller\cite{ref16}.
+  controller\cite{SimulatorValidityPhysiological2025}.
   The chapter covers how the \textbf{hardware integration} is achieved
   (mounting and connecting the thermal camera to the phone, Bluetooth
   pairing with the GSR sensor, etc.) and how the software is structured
@@ -282,38 +282,3 @@ research into predicting GSR from multiple sensor modalities. The
 outcome is a valuable tool and dataset for the community, marking a step
 toward more ubiquitous and contact-free physiological monitoring in the
 future.
-
-------------------------------------------------------------------------------------------------------------
-
-\cite{ref1}
-\cite{ref8}
-\cite{ref9}
-\cite{ref12}
-Data-driven analysis of facial thermal responses and multimodal
-physiological consistency among subjects - PMC
-
-<https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/>
-
-\cite{ref2}
-\cite{ref3}
-\cite{ref10}
-\cite{ref11}
-\cite{ref15}
-bibliography.md
-
-<docs/thesis_report/draft/bibliography.md>
-
-\cite{ref4}
-\cite{ref5}
-\cite{ref6}
-\cite{ref7}
-\cite{ref13}
-\cite{ref14}
-Chapter_1\_\_Introduction.md
-
-<docs/thesis_report/draft/Chapter_1__Introduction.md>
-
-\cite{ref16}
-README.md
-
-<AndroidApp/README.md>
