@@ -1,7 +1,7 @@
 % Complete thesis example document showing how to use the references.bib file
 % This serves as a template for compiling the full thesis with proper academic formatting
 
-\documentclass[12pt,a4paper]{report}
+\documentclass[11pt,a4paper]{report}
 
 % Essential packages for thesis
 \usepackage[utf8]{inputenc}
@@ -48,17 +48,12 @@
 
 \vspace{0.5cm}
 
-{\Large\textbf{Your Name}}
+{\Large\textbf{Duy An Tran}}
+
 
 \vspace{2cm}
 
-{\large In Partial Fulfillment of the Requirements\\
-for the Degree of Master of Science\\
-in Computer Science}
-
-\vspace{2cm}
-
-{\large University Name\\
+{\large University College London\\
 Department of Computer Science}
 
 \vspace{1cm}
@@ -67,37 +62,18 @@ Department of Computer Science}
 
 \end{titlepage}
 
-% Abstract
-\begin{abstract}
-This thesis presents a comprehensive multi-sensor recording system designed for contactless Galvanic Skin Response (GSR) prediction research. The system integrates multiple sensing modalities including thermal imaging, RGB cameras, and environmental sensors to enable non-intrusive stress monitoring. The work addresses fundamental challenges in physiological computing by developing a robust, offline-first recording platform that supports distributed sensor networks and real-time data synchronization.
-
-Key contributions include: (1) a distributed recording architecture supporting multiple sensor types, (2) contactless GSR prediction algorithms utilizing computer vision and thermal analysis, (3) comprehensive validation studies comparing contactless predictions with traditional contact-based measurements, and (4) open-source implementation enabling reproducible research in physiological computing.
-
-The system demonstrates significant potential for applications in human-computer interaction, health monitoring, and stress assessment while maintaining user comfort and ecological validity through completely non-intrusive measurement approaches.
-\end{abstract}
-
 % Table of contents
 \tableofcontents
 \newpage
 
-% List of figures and tables (optional)
-\listoffigures
-\listoftables
-\newpage
 
 % Main content - Include all thesis chapters
-\input{1 Project Plan}
-
+\input{Chapter_0}
 \input{Chapter_1}
-
 \input{Chapter_2}
-
 \input{Chapter_3}
-
 \input{Chapter_4}
-
 \input{Chapter_5}
-
 \input{Chapter_6}
 
 % Include appendices
@@ -105,58 +81,17 @@ The system demonstrates significant potential for applications in human-computer
 \input{Appendices}
 
 % Include technical documentation as appendices
-\chapter{Technical Documentation}
-\section{Shimmer Device Documentation}
-\input{shimmer-readme}
+% \chapter{Technical Documentation}
+% \section{Shimmer Device Documentation}
+% \input{shimmer-readme}
 
-\section{Topdon Thermal Camera Documentation}
-\input{topdon-readme1}
-
-% Example of various citation styles used throughout the thesis
-\chapter*{Citation Examples}
-\addcontentsline{toc}{chapter}{Citation Examples}
-
-This thesis demonstrates various citation patterns used in academic writing:
-
-\section*{Core Physiological Computing References}
-The foundational work in electrodermal activity is provided by \cite{Boucsein2012}, while early pioneering work in affective computing was established by \cite{Picard2001}. Real-world physiological monitoring challenges are discussed in \cite{Healey2005}.
-
-\section*{Technology and Implementation}
-Modern consumer health monitoring approaches are exemplified by \cite{AppleHealthWatch2019} and \cite{SamsungHealth2020}. Advanced thermal imaging techniques for stress detection are demonstrated in \cite{DriverStressThermal2020} and \cite{ContactlessStressThermal2022}.
-
-\section*{Research Methodology}
-Smartphone-based stress detection methodologies are covered in \cite{InstantStressSmartphone2019}, while comprehensive reviews of physiological computing approaches can be found in \cite{ReviewPhysiologicalComputing2021} and \cite{StressRecognitionReview2019}.
-
-\section*{Technical Standards and Implementation}
-Software architecture patterns follow established practices documented in \cite{SoftwareArchitecturePatterns2017}, with distributed systems approaches based on \cite{DistributedSystems2017}. Real-time processing requirements are addressed using techniques from \cite{RealTimeProcessing2018}.
+% \section{Topdon Thermal Camera Documentation}
+% \input{topdon-readme1}
 
 % Bibliography
 \bibliographystyle{ieeetr}
 \bibliography{references}
 
-% Compilation instructions
-\chapter*{Compilation Instructions}
-\addcontentsline{toc}{chapter}{Compilation Instructions}
 
-To compile this thesis document:
-
-\begin{enumerate}
-\item Ensure all \texttt{.tex} files and \texttt{references.bib} are in the same directory
-\item Run the following commands in sequence:
-\begin{verbatim}
-pdflatex thesis_example.tex
-bibtex thesis_example
-pdflatex thesis_example.tex
-pdflatex thesis_example.tex
-\end{verbatim}
-\item The final PDF will be generated as \texttt{thesis\_example.pdf}
-\end{enumerate}
-
-Alternative compilation using \texttt{latexmk}:
-\begin{verbatim}
-latexmk -pdf thesis_example.tex
-\end{verbatim}
-
-This will automatically handle the multiple compilation passes required for proper bibliography and cross-reference generation.
 
 \end{document}
