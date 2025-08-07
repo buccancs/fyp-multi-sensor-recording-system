@@ -242,7 +242,7 @@ The evaluation suite enforces research-grade quality standards:
 - **Temporal Stability**: <1ms/hour drift over extended operation, automatic compensation
 - **Cross-Platform Consistency**: <50ms synchronisation variance between PC and Android
 - **Real Implementation Testing**: 100% tests validate actual source code and functionality
-- **Multi-Modal Coordination**: <50ms jitter for synchronized multi-sensor recording start/stop
+- **Multi-Modal Coordination**: <50ms jitter for synchronised multi-sensor recording start/stop
 
 ## Output and Reporting
 

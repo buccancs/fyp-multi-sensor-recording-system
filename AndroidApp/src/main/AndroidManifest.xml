@@ -95,6 +95,28 @@
                 android:theme="@style/Theme.AppCompat.DayNight"/>
 
         <activity
+                android:name=".ui.ShimmerSettingsActivity"
+                android:exported="false"
+                android:label="Shimmer Settings"
+                android:theme="@style/Theme.AppCompat.DayNight"
+                android:parentActivityName=".MainActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".MainActivity"/>
+        </activity>
+
+        <activity
+                android:name=".ui.ShimmerVisualizationActivity"
+                android:exported="false"
+                android:label="Shimmer Visualization"
+                android:theme="@style/Theme.AppCompat.DayNight"
+                android:parentActivityName=".MainActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".MainActivity"/>
+        </activity>
+
+        <activity
                 android:name=".ui.SettingsActivity"
                 android:exported="false"
                 android:label="Settings"

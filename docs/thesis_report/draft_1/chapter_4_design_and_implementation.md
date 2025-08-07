@@ -3,14 +3,14 @@
 ## 4.1 System Architecture Overview
 
 The Multi-Sensor Recording System is built as a distributed
-**PC--Android** platform designed for synchronized multi-modal data
+**PC--Android** platform designed for synchronised multi-modal data
 collection across heterogeneous devices. It consists of an Android
 mobile application for on-device sensor acquisition and a Python-based
 desktop controller as the central coordinator. Figure 4.1 illustrates
 the high-level topology: one or more Android devices serve as
 independent data collection nodes (capturing video, thermal, and GSR
 data), while a central PC controller orchestrates sessions and ensures
-all devices remain temporally synchronized. Each mobile device operates
+all devices remain temporally synchronised. Each mobile device operates
 autonomously for local data capture yet adheres to commands and timing
 signals from the desktop controller, achieving a **master-coordinator
 pattern** in the system design. This architecture balances **distributed
@@ -30,7 +30,7 @@ uncertainty, incorporates complete security controls for research data protectio
 and it leverages established patterns for reliability (e.g.
 buffering, redundant timing checks) to ensure no data loss. The approach
 is influenced by proven principles such as Lamport's work on clock
-ordering in distributed systems, defense-in-depth security architecture,
+ordering in distributed systems, defence-in-depth security architecture,
 and the Network Time Protocol (NTP) for
 clock sync, adapting them to a mobile, sensor-driven, research-secure
 environment.[\[1\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=self.sync_precision%20%3D%200.005%20%20,5ms%20precision%20target)[\[2\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=with%20comprehensive%20quality%20assessment%20and,events%20in%20a%20distributed%20system).
@@ -90,7 +90,7 @@ This multi-device coordination strategy ensures that all data -- whether
 high-frame-rate video or slower GSR samples -- can be correlated
 post-hoc with minimal temporal error. Indeed, the final implementation
 consistently meets sub-10 ms synchronisation accuracy in tests,
-satisfying the stringent requirements for synchronized physiological
+satisfying the stringent requirements for synchronised physiological
 measurements defined in Chapter 3.
 
 ### 4.2.2 Fault Tolerance and Recovery Mechanisms
@@ -250,17 +250,17 @@ wearable Shimmer GSR sensor. The application's architecture follows a
 modular, layered design that separates concerns into different
 components, making the system easier to extend and maintain. At a high
 level, it employs a clean MVVM (Model-View-ViewModel) architecture with Kotlin and
-Jetpack Compose, where `MainViewModelRefactored` (451 lines) coordinates specialized controllers:
+Jetpack Compose, where `MainViewModelRefactored` (451 lines) coordinates specialised controllers:
 `RecordingSessionController`, `DeviceConnectionManager`, `FileTransferManager`, and `CalibrationManager`.
 This refactored architecture achieves a 78% reduction from the original monolithic approach (2035 lines),
 while the migration to Jetpack Compose with Material 3 design system provides modern declarative UI capabilities,
 ensuring single responsibility principle adherence and improved testability.
 
-### 4.3.0 Clean MVVM Architecture with Specialized Controllers
+### 4.3.0 Clean MVVM Architecture with Specialised Controllers
 
 The Android application implements a **clean MVVM architecture** following single responsibility principles.
 The original monolithic `MainViewModel` (2035 lines) was refactored into `MainViewModelRefactored` (451 lines)
-that coordinates four specialized components:
+that coordinates four specialised components:
 
 **Architecture Components:**
 
@@ -275,7 +275,7 @@ that coordinates four specialized components:
 - **RecordingScreen**: Main interface with recording controls, device status indicators, and camera preview
 - **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features complete status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
 - **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
-- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualisation
+- **FilesScreen**: Advanced file management system with session browsing, file organisation by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualisation
 - **OnboardingActivity**: Modern multi-page onboarding flow with Material 3 design, featuring welcome screens, feature showcase, complete permission management, and setup completion guide with horizontal pager navigation
 - **MainNavigation**: Compose Navigation with bottom navigation bar and state preservation
 - **Material 3 Theme**: complete design system with dynamic theming and accessibility support
@@ -366,7 +366,7 @@ At the centre of the Android app is the **Recording Management System**,
 which is responsible for orchestrating all sensors during a recording
 session. This component ensures that when a session begins or ends, each
 sensor (camera, thermal, GSR) starts or stops in a coordinated fashion
-and that all data streams remain time-synchronized. The implementation
+and that all data streams remain time-synchronised. The implementation
 is handled by a `SessionManager` class (injected via Hilt for easy
 testing) that holds references to each sensor-specific recorder object.
 When a "start recording" command is received (either from the user or
@@ -409,7 +409,7 @@ The Recording Management component is crucial for **temporal
 coordination**. By design, it only signals a successful session start
 after all sensors are confirmed recording, meaning all data streams have
 effectively the same start timestamp (within a few milliseconds). This
-meets the requirement for synchronized multi-modal capture: even if
+meets the requirement for synchronised multi-modal capture: even if
 sensors inherently have different latencies, their initiation is aligned
 and any initial offsets are recorded. Moreover, the use of asynchronous,
 non-blocking calls in Kotlin means the app can scale -- if in the future
@@ -486,7 +486,7 @@ simultaneously without dropping frames, on a modern device (e.g. a
 Samsung S22 used in development).
 
 Overall, the video capture component meets the project requirements for
-high-quality visual data. It produces a synchronized 4K video stream and
+high-quality visual data. It produces a synchronised 4K video stream and
 accompanying RAW images that can later be used for precise analysis or
 calibration (such as aligning the video with the thermal imagery). This
 design choice -- using the Camera2 API with dual outputs -- was
@@ -588,7 +588,7 @@ sensors.
 The **Shimmer3 GSR+ sensor** provides the system's physiological data
 via galvanic skin response (electrodermal activity), and its integration
 into the Android app ensures we have a reference-quality physiological
-measurement synchronized with the video and thermal streams. The
+measurement synchronised with the video and thermal streams. The
 Shimmer3 GSR+ is a wearable sensor connected via Bluetooth. The Android
 app's integration is built around the Shimmer's official communication
 protocol using Bluetooth Low Energy (BLE). We developed a
@@ -637,7 +637,7 @@ command and notes the local time as well as the Shimmer's first sample
 timestamp). Any drift of the Shimmer's internal clock is negligible over
 typical session durations, but if needed, minor adjustments could be
 made by comparing the Shimmer data timing with periodic sync events. In
-practice, each GSR sample is simply labeled with the phone's timestamp
+practice, each GSR sample is simply labelled with the phone's timestamp
 upon reception, which after initial sync is aligned to the master clock.
 
 The integration is also **bi-directional** to some extent: the app can
@@ -697,7 +697,7 @@ interfaces with the larger distributed system through the PC controller.
 The desktop controller is the brain of the distributed system,
 responsible for coordinating devices, managing the experimental session,
 processing data streams, and providing a user interface for researchers.
-The architecture of the Python-based desktop application is organized
+The architecture of the Python-based desktop application is organised
 into layered modules, each handling a specific set of responsibilities,
 following principles of separation of concerns and dependency injection
 for flexibility. Figure 4.2 depicts the main layers: at the top is the
@@ -748,7 +748,7 @@ Manager executes a well-defined sequence:
   notify the user, since proceeding with poor synchronisation would
   violate the research requirements.
 
-- **Phase 3: Coordinated Start.** Given a synchronized start timestamp,
+- **Phase 3: Coordinated Start.** Given a synchronised start timestamp,
   the Session Manager generates a set of **recording commands** for each
   device[\[21\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=,startup_timeout).
   These commands (dispatched via the Network Control Protocol, see
@@ -788,7 +788,7 @@ if a device sends a *"error: low battery"* message, the Session Manager
 will catch that and could decide to safely terminate the session early
 or notify the user. Similarly, the Session Manager aggregates data
 endpoints -- it works closely with the Data Manager and Export Service
-to define how incoming data is labeled and stored (each sample or frame
+to define how incoming data is labelled and stored (each sample or frame
 is tagged with the session ID and device ID, ensuring traceability when
 writing to files or databases).
 
@@ -809,7 +809,7 @@ requirements**: each functional requirement from Chapter 3 regarding
 multi-device sync, simultaneous recording, error handling, etc., is
 implemented here as a concrete mechanism. For example, the requirement
 that *"the system shall coordinate start/stop of all sensors together"*
-is realized by the broadcast start/stop commands and aggregation of
+is realised by the broadcast start/stop commands and aggregation of
 their results, as described above. The benefit of centralizing this
 logic in the Session Manager is that it yields a single point of truth
 for the session status -- the GUI, the network layer, and other services
@@ -897,7 +897,7 @@ uses an object-oriented approach: `HandDetector`, `ROIExtractor`,
 `FaceDetector`, etc., and a coordinating pipeline class manages which to
 invoke based on the configured mode of operation.
 
-Importantly, all CV analysis is time-synchronized with the rest of the
+Importantly, all CV analysis is time-synchronised with the rest of the
 system. Each feature extracted from a video frame has the same master
 timestamp as that frame, so if we detect, say, an increase in average
 palm temperature from thermal images and simultaneously a spike in GSR,
@@ -964,7 +964,7 @@ thermal camera as a stereo pair: simultaneously capturing a scene that
 has both visual and thermal features (this is tricky, since thermal and
 visible spectrums are different -- we might use a custom calibration
 target that has a pattern with temperature contrasts). The desktop
-calibration tool can take synchronized shots from both cameras (for
+calibration tool can take synchronised shots from both cameras (for
 example, the user might present a board with a heated pattern on it),
 then use algorithms to find correspondences between the images. In
 practice, to simplify, we performed a one-time alignment by manually
@@ -1269,7 +1269,7 @@ incoming data from all sensors (video, thermal, and GSR) and processes
 them both in real time and for immediate quality assessment. The design
 of this pipeline is guided by the need to process heterogeneous data
 streams concurrently, each with different data rates and processing
-algorithms, yet to eventually integrate their outputs for synchronized
+algorithms, yet to eventually integrate their outputs for synchronised
 analysis.
 
 As depicted in Figure 4.3, the pipeline consists of sequential stages
@@ -1278,7 +1278,7 @@ pass[\[45\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=%60%60%60mermaid%20graph
 
 - **Input Buffering:** Each sensor's data enters an input buffer. This
   buffer absorbs any small timing differences so that subsequent stages
-  can fetch synchronized batches of data. For example, a video frame
+  can fetch synchronised batches of data. For example, a video frame
   might arrive slightly later than the corresponding GSR samples; the
   buffering ensures we pair the video frame with the correct range of
   GSR data once everything is in.
@@ -1337,7 +1337,7 @@ pass[\[45\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=%60%60%60mermaid%20graph
   metrics are output. They can be fed to real-time visualisation (like
   plotting estimated heart rate in real time) and are also stored
   alongside raw data for post-session analysis. The outputs are in a
-  synchronized format -- for instance, a data point might be a tuple:
+  synchronised format -- for instance, a data point might be a tuple:
   (timestamp, heart_rate, palm_temp, gsr_level, quality_flags). These
   are written to a CSV or database such that each timestamp has a
   complete set of info from all
@@ -1349,7 +1349,7 @@ parallel tasks where possible. Our implementation uses Python's
 `asyncio` and separate worker threads for heavy computations (like FFTs
 or MediaPipe calls). Since video and thermal processing can be
 CPU-intensive, those can run in parallel with the lighter-weight GSR
-filtering. We also took care to use optimized libraries: numpy for
+filtering. We also took care to use optimised libraries: numpy for
 numerical processing of signals, OpenCV for image operations (which uses
 C++ under the hood), etc. This allowed the pipeline to keep up even with
 the high data rate of video. In tests, the processing pipeline running
@@ -1388,7 +1388,7 @@ while maintaining synchronisation across them. It acts as the "digital
 signal processing" core of the system, turning raw measurements into
 interpretable signals and metrics on the fly. This design directly
 supports the research objective of enabling contactless measurements to
-be monitored and analyzed in real time, not just after the fact, thus
+be monitored and analysed in real time, not just after the fact, thus
 demonstrating the system's capability to function as a sophisticated
 physiological measurement platform, not merely a recording device.
 
@@ -1500,7 +1500,7 @@ order.
 In summary, the Synchronisation Engine Design ensures that the temporal
 dimension of our multi-sensor data is rigorously controlled. It fulfills
 one of the most crucial project requirements: that all data can be
-analyzed on a unified timeline as if recorded by one device. Without
+analysed on a unified timeline as if recorded by one device. Without
 this, combining modalities (video, thermal, GSR) would be highly
 error-prone. With it, we have confidence that any observed physiological
 responses across sensors are truly simultaneous to within a tiny
@@ -1519,9 +1519,9 @@ Research environments handling sensitive physiological data require complete sec
 
 The security implementation follows established security engineering principles adapted for research computing:
 
-**Defense in Depth:** Multiple security layers protect research data across application, network, system, and physical levels.
+**Defence in Depth:** Multiple security layers protect research data across application, network, system, and physical levels.
 
-**Research Data Protection:** Specialized controls prevent inadvertent exposure of sensitive physiological measurements through local-first storage, disabled cloud backup, and session-based data isolation.
+**Research Data Protection:** Specialised controls prevent inadvertent exposure of sensitive physiological measurements through local-first storage, disabled cloud backup, and session-based data isolation.
 
 **Least Privilege Access:** System components operate with minimal required permissions, with Android applications configured for restricted external access and secure file permissions.
 
@@ -1561,7 +1561,7 @@ class ResearchSecurityMonitor:
                                'network_security', 'privacy_protection']
 ---
     async def perform_security_assessment(self) -> SecurityReport:
-        """Execute complete security scan optimized for research environments"""
+        """Execute complete security scan optimised for research environments"""
         results = await self._scan_all_categories()
         return SecurityReport(
             total_issues=results.total_count,
@@ -1608,7 +1608,7 @@ libraries available in Python but not on Android or vice versa.
 **Solution:** We implemented a **Platform Abstraction Layer** within the
 system to mediate interactions and encapsulate platform-specific
 details[\[55\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=,python_handlers%20%3D%20PythonMessageHandlers)[\[56\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=translation.,translate_to_android%28response%29%20else%3A%20translated_message).
-On the communication front, this took the form of standardized data
+On the communication front, this took the form of standardised data
 formats and helper functions so that, for instance, constructing a
 message or parsing a timestamp string is done in one consistent way. We
 defined data structures in a language-agnostic manner (JSON schemas for
@@ -1655,7 +1655,7 @@ Android and thereby reduces platform-specific complexity.
 Finally, the use of **common design patterns** on both sides eased
 cognitive load. Both applications use dependency injection (Hilt on
 Android, a simple service container on Python) to manage components, and
-both use a clean MVC/MVVM-like separation for UI vs. logic with specialized controllers. This meant that
+both use a clean MVC/MVVM-like separation for UI vs. logic with specialised controllers. This meant that
 conceptually the code structures mirrored each other where it made
 sense, making it easier for developers to implement features in both
 places without confusion. For example, error handling is done via
@@ -1725,7 +1725,7 @@ duration, and indeed if connectivity returns, the next successful sync
 will correct any slight drift incurred meanwhile. This tolerance is
 important in real networks where a single packet might drop. It's a form
 of **graceful degradation**: the system continues operating in a
-synchronized fashion as best as possible, and tightens it back up when
+synchronised fashion as best as possible, and tightens it back up when
 conditions improve.
 
 Additionally, we incorporate a **hierarchical time sync** if multiple
@@ -1815,7 +1815,7 @@ and send a notice to the user or slow down processing. This is
 essentially **thermal throttling at application level** to avoid the OS
 stepping in with its own throttling which could be more disruptive.
 
-On the desktop side, we applied optimizations such as using efficient
+On the desktop side, we applied optimisations such as using efficient
 data structures (numpy arrays for numerical data instead of Python
 lists, which improved performance significantly), and parallelizing
 certain tasks in the pipeline using multiprocessing or multithreading.
@@ -1847,7 +1847,7 @@ saved a lot of GPU and battery, so the phone app by default runs with
 screen mostly static or off during a session.
 
 We tested the system's resource usage extensively after these
-optimizations. On a typical high-end phone, CPU usage hovered around 70%
+optimisations. On a typical high-end phone, CPU usage hovered around 70%
 across big cores, and the device could record for an hour without
 thermal shutdown (it did get warm, around 40°C battery temperature, but
 stable). Battery drain was high (roughly 15-20% per hour on a phone,
@@ -1904,7 +1904,7 @@ hardware encoder.
 - **Material 3**: Latest Material Design implementation with dynamic theming
 - **Navigation Compose 2.8.5**: Type-safe navigation with state preservation
 - **Hilt Navigation Compose 1.2.0**: Seamless dependency injection integration
-- **Kotlin Compose Compiler 2.0.20**: Optimized compilation for performance
+- **Kotlin Compose Compiler 2.0.20**: Optimised compilation for performance
 
 The Compose migration brings significant benefits for research applications:
 efficient recomposition reduces CPU overhead during real-time sensor updates,
@@ -1936,7 +1936,7 @@ For the thermal camera, we integrated the **Topdon TC001 SDK**, which
 provided the necessary APIs to read thermal frames from the device. We
 also utilized Android's USB host libraries to communicate with the
 camera. This was essentially the only viable route since the camera is a
-specialized hardware.
+specialised hardware.
 
 Bluetooth communication with the Shimmer sensor was implemented using
 Android's **Bluetooth Low Energy (BLE) API**. We employed the Shimmer's
@@ -1956,7 +1956,7 @@ appropriate and performant.
 
 The Android UI was kept minimal but followed **Material Design 3**
 guidelines for consistency (using standard components for any dialogues or
-buttons). We employed a clean MVVM architecture with `MainViewModelRefactored` coordinating specialized controllers:
+buttons). We employed a clean MVVM architecture with `MainViewModelRefactored` coordinating specialised controllers:
 and **LiveData/StateFlow** to ensure that UI components reactively
 updated to changes in sensor state (e.g., showing "Recording" status).
 This decoupling of UI from logic made it easier to maintain the app and
@@ -1989,11 +1989,11 @@ that by leveraging libraries written in C/C++ for heavy tasks: for
 example, **OpenCV** (cv2 in Python) was used for image processing and
 computer vision
 tasks[\[65\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=complete%20widget%20support%20and%20cross,compatibility).
-OpenCV is highly optimized and can use SIMD and multithreading
+OpenCV is highly optimised and can use SIMD and multithreading
 internally, meaning operations like resizing images or running Haar
 cascades run as fast as they would in C. We also used **NumPy**
 everywhere for numerical array processing to ensure computations are
-done in optimized C code rather than slow Python loops.
+done in optimised C code rather than slow Python loops.
 
 For concurrency, Python's **asyncio** library was chosen for network and
 some scheduling
@@ -2043,7 +2043,7 @@ control and monitoring capabilities. The enhanced GUI framework includes:
   guided user workflows ensuring optimal measurement precision
 - `PythonApp/gui/device_panel.py` - Real-time device status visualisation with complete health monitoring and
   connectivity management for multi-device coordination
-- `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronized display and quality assessment
+- `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronised display and quality assessment
   enabling real-time monitoring during recording sessions
 - `PythonApp/web_ui/` - Complete web-based interface system enabling remote monitoring and control through standard
   browsers with full functional parity to desktop interface
@@ -2158,7 +2158,7 @@ In summary, the communication protocol selection was driven by our needs
 for **low-latency bi-directional control** and **efficient data
 streaming**. WebSocket provided the former elegantly, while TCP/UDP
 allowed the latter in a flexible way. The result is a custom protocol
-stack optimized for our use case, instead of forcing the system into a
+stack optimised for our use case, instead of forcing the system into a
 pattern like request-response or pub-sub that didn't naturally fit the
 real-time coordination requirement.
 
@@ -2210,7 +2210,7 @@ local storage on the phone is the primary store during recording, with
 PC acting as a backup/monitor.
 
 We also paid attention to data formats: for example, GSR data is stored
-with timestamps so it can be re-synchronized in analysis. Video has
+with timestamps so it can be re-synchronised in analysis. Video has
 inherent timestamps in MP4 files. Thermal data we store frame-by-frame
 with time codes in either a CSV alongside binary frames or embedding
 time in frame filenames.
@@ -2351,7 +2351,7 @@ The Android application required systematic replacement of over 590 broad except
 
 - **Core Recording Components** (RecordingService, CameraRecorder, ThermalRecorder, ShimmerRecorder): Fixed 45+ exception handlers
 - **Network Operations** (NetworkController, CommandProcessor, JsonSocketClient): Enhanced 25+ communication error handlers  
-- **UI Components** (MainActivity, MainViewModelRefactored, Specialized Controllers, Fragments): Improved 15+ user interface exception handlers
+- **UI Components** (MainActivity, MainViewModelRefactored, Specialised Controllers, Fragments): Improved 15+ user interface exception handlers
 - **Device Management** (ConnectionManager, DeviceStatusTracker): Enhanced 20+ device communication handlers
 
 **Critical Pattern Applied:**

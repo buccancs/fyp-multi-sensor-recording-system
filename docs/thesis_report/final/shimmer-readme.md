@@ -55,7 +55,7 @@ supported[\[10\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfecc
 but the API abstracts these details. Overall, the scope of the SDK is to
 provide a** reliable, real-time link\*\* between Shimmer3 hardware and
 Android software, enabling researchers to integrate GSR/EDA signals into
-mobile apps for data logging, biofeedback, or synchronized multimodal
+mobile apps for data logging, biofeedback, or synchronised multimodal
 experiments.
 
 ## Installation
@@ -329,7 +329,7 @@ post-processing.
 Each `ObjectCluster` also contains a timestamp. Typically, you can
 retrieve the device's timestamp with
 `cluster.getData(Configuration.Shimmer3.ObjectClusterSensorName.TIMESTAMP)`
-(or it might be labeled "Time Stamp"). This represents the Shimmer's
+(or it might be labelled "Time Stamp"). This represents the Shimmer's
 internal clock for the
 sample[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[24\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L415-L424).
 If synchronising with other data (like phone sensors or multiple
@@ -376,8 +376,8 @@ calibrated form is the skin resistance in kΩ as discussed. When using
 the SDK's high-level methods (like `ObjectCluster.getData("GSR")`), you
 are typically getting the calibrated resistance. If needed, you can also
 retrieve **raw GSR** by using the key `"GSR Raw"` or by looking for the
-format labeled "RAW". The Shimmer device also computes an intermediate
-value called **GSR Resistance** (sometimes labeled `"GSR Res"` in older
+format labelled "RAW". The Shimmer device also computes an intermediate
+value called **GSR Resistance** (sometimes labelled `"GSR Res"` in older
 APIs) which may be the same as the calibrated GSR in most contexts. The
 **GSR range setting** affects the analogue front-end gain: if you manually
 choose a range (0--3), the raw values will have different scaling. In
@@ -625,7 +625,7 @@ data).
 
 This modular integration allows the `bucika_gsr` app to treat Shimmer
 GSR data as a plug-and-play input, similarly to how it treats the camera
-feeds, resulting in a cohesive synchronized data collection system.
+feeds, resulting in a cohesive synchronised data collection system.
 
 ## Troubleshooting & Tips
 
@@ -672,7 +672,7 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
   instability: try lowering sample rate (e.g., 51.2 Hz instead of 128
   Hz) or disabling unnecessary channels. Interference in the 2.4 GHz
   band (Wi-Fi) can also occasionally cause Bluetooth packet loss -- keep
-  the phone close to the Shimmer (within a few meters ideally) and away
+  the phone close to the Shimmer (within a few metres ideally) and away
   from heavy Wi-Fi routers if possible during recording. The Shimmer API
   can report packet loss events via a message
   (`MESSAGE_PACKET_LOSS_DETECTED`), and you can monitor

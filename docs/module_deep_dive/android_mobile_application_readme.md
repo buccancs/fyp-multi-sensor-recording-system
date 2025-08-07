@@ -6,7 +6,7 @@ The Android Mobile Application serves as a sophisticated mobile data collection 
 
 ### Research Context
 
-Built using Kotlin and Jetpack Compose, this application provides real-time multi-modal sensor data acquisition, high-resolution camera recording capabilities, and seamless communication with the Python Desktop Controller through a standardized JSON-based networking protocol. The architecture enables synchronized data collection across multiple physiological and environmental sensors, supporting contactless GSR prediction research methodologies [Posada-Quintero2020].
+Built using Kotlin and Jetpack Compose, this application provides real-time multi-modal sensor data acquisition, high-resolution camera recording capabilities, and seamless communication with the Python Desktop Controller through a standardised JSON-based networking protocol. The architecture enables synchronised data collection across multiple physiological and environmental sensors, supporting contactless GSR prediction research methodologies [Posada-Quintero2020].
 
 ### Component Role in System Architecture
 
@@ -14,15 +14,15 @@ The Android application functions as a distributed sensor node within the establ
 
 ## System Architecture
 
-### Clean MVVM Architecture with Specialized Controllers
+### Clean MVVM Architecture with Specialised Controllers
 
-The Android application implements a complete refactored architecture following established clean architecture principles [Martin2017] and Model-View-ViewModel (MVVM) patterns with strict adherence to the single responsibility principle [Martin2008]. The original monolithic MainViewModel (2035 lines) underwent systematic refactoring into specialized controllers, achieving a **78% code size reduction** while dramatically improving maintainability, testability, and architectural clarity.
+The Android application implements a complete refactored architecture following established clean architecture principles [Martin2017] and Model-View-ViewModel (MVVM) patterns with strict adherence to the single responsibility principle [Martin2008]. The original monolithic MainViewModel (2035 lines) underwent systematic refactoring into specialised controllers, achieving a **78% code size reduction** while dramatically improving maintainability, testability, and architectural clarity.
 
-**Architectural Decision Rationale**: This refactoring addresses common anti-patterns in mobile development where monolithic view models become difficult to test and maintain [Fowler2018]. The specialized controller approach enables independent testing, clear separation of concerns, and improved code comprehension for research software development.
+**Architectural Decision Rationale**: This refactoring addresses common anti-patterns in mobile development where monolithic view models become difficult to test and maintain [Fowler2018]. The specialised controller approach enables independent testing, clear separation of concerns, and improved code comprehension for research software development.
 
 ### Core Components
 
-The refactored architecture follows a hierarchical component organization that aligns with the established PC master-controller distributed architecture:
+The refactored architecture follows a hierarchical component organisation that aligns with the established PC master-controller distributed architecture:
 
 ```
 Android Application (Refactored Architecture)
@@ -50,7 +50,7 @@ Android Application (Refactored Architecture)
 
 **Architectural Rationale**: This layered approach ensures clear separation between presentation logic, business rules, and data persistence, following established software engineering principles for maintainable research software [Wilson2014].
 
-### Specialized Controllers Architecture
+### Specialised Controllers Architecture
 
 #### RecordingSessionController (218 lines)
 

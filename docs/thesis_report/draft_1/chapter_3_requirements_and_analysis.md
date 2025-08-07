@@ -116,7 +116,7 @@ naturalistic research.
 
 Given the above context, there is a clear research gap: **no existing
 system provides high-precision, multi-modal physiological data
-collection in a completely contactless, synchronized manner**. The
+collection in a completely contactless, synchronised manner**. The
 opportunity is to develop a system that fills this gap by leveraging
 modern technology to maintain research-grade data quality without the
 drawbacks of contact sensors. Specifically, this project targets a
@@ -140,7 +140,7 @@ providing **redundancy and cross-verification** -- if all modalities
 concur, confidence in the measurement is high.
 
 Moreover, the opportunity extends to enabling experiments previously
-infeasible. A contactless, synchronized system could allow
+infeasible. A contactless, synchronised system could allow
 **multi-participant experiments** where, for example, a group
 interaction is recorded with each person's physiological responses
 captured via cameras and sensors, all time-aligned. It could facilitate
@@ -313,7 +313,7 @@ synchronisation, **(b)** sensor integration and data acquisition,
 **(c)** real-time data processing and analysis, and **(d)** session
 management and user interface features. Each group is discussed below,
 along with representative examples of how these requirements are
-realized in the system (with references to the codebase as evidence).
+realised in the system (with references to the codebase as evidence).
 
 ### 3.3.1 Multi-Device Coordination and Synchronisation Requirements
 
@@ -322,7 +322,7 @@ devices (smartphones, sensors, and a PC) in one recording session. The
 system must treat several distributed components as part of one unified
 recorder. The requirements in this category ensure that **multiple
 devices can connect and operate together under centralized control**,
-and that their activities are tightly synchronized in time.
+and that their activities are tightly synchronised in time.
 
 **Device Coordination:** At minimum, the system is required to handle
 **4 devices simultaneously**, with a stretch goal of up to 8 devices as
@@ -523,7 +523,7 @@ To verify these requirements, various tests were conducted: checking
 video file integrity (no frames dropped), checking that thermal data is
 recorded for the entire session, and that GSR data matches known
 calibration signals. The system's ability to integrate all these sensors
-and produce synchronized outputs is a key outcome of the requirements
+and produce synchronised outputs is a key outcome of the requirements
 analysis, as these were explicitly identified needs for achieving the
 project's goals.
 
@@ -629,12 +629,12 @@ recording on all devices with one action. The system then should
 automatically organise all data from that session (videos, sensor logs,
 etc.) in a structured way. Upon stopping the session, the system should
 finalise files, possibly create summary logs, and reset the devices to
-an idle state ready for the next session. In the code, this is realized
+an idle state ready for the next session. In the code, this is realised
 by components like the `SessionManager` on
 Android[\[20\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L22-L30)
 and analogous logic on the Python controller. The `SessionManager`
 handles creating directories for each session, naming files in a
-standardized way (e.g., session timestamp), and keeping track of the
+standardised way (e.g., session timestamp), and keeping track of the
 session status
 (active/completed)[\[21\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L52-L61)[\[22\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L70-L79).
 It also works with a `SessionStateDao` (database access object) to save
@@ -824,7 +824,7 @@ requirement was that this data rate be sustained with no frame drops or
 buffer overflows. The code sets parameters like a 10 Mbps video bitrate
 for 4K
 recording[\[28\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L105-L113),
-indicating that it's optimized for that throughput. Actual tests
+indicating that it's optimised for that throughput. Actual tests
 confirmed the phones could write 4K video at 30fps smoothly to their
 flash storage, and the Wi-Fi network could carry preview images at a
 lower rate.
@@ -1022,7 +1022,7 @@ a research setting. They are as follows:
   from one or more participants simultaneously. The use case steps
   include: starting the desktop controller, powering on the Android
   devices and connecting sensors, verifying all devices are detected and
-  synchronized, and then initiating a recording for the desired
+  synchronised, and then initiating a recording for the desired
   duration. During the session, the researcher might monitor live feeds.
   After the session, the system automatically saves all data. This use
   case covers the end-to-end normal operation and directly exercises
@@ -1373,7 +1373,7 @@ a threshold to prevent midway failure).
   These are tiny (kilobytes), but important for interpreting the data.
   The requirement is to include all necessary context in these files
   (such as which device had which role, calibration values, etc.) to
-  ensure later that the data can be analyzed correctly.
+  ensure later that the data can be analysed correctly.
 
 Given these volumes, the requirement was that the system should handle
 at least a **one-hour continuous recording session** without running out
@@ -1424,7 +1424,7 @@ by timestamp, they truly represent the same moment within the sync
 precision. This was validated by experiments with a shared event as
 mentioned before.
 
-**Storage requirements** pertain to how data is stored and organized: -
+**Storage requirements** pertain to how data is stored and organised: -
 The requirement is to have a **clear directory structure** for sessions.
 We defined that each session gets its own folder (named with a timestamp
 for uniqueness and
@@ -1436,7 +1436,7 @@ If multiple devices produce the same type of file (say two RGB videos
 from two phones), we either differentiate by device name or store in
 subfolders (the implementation took the approach of subfolders per
 device, or alternatively, file names contain the device ID). This
-organization is required for scalability so that data from many sessions
+organisation is required for scalability so that data from many sessions
 doesn't mix, and a researcher can easily find all files for one
 session. - Another requirement was to **preserve raw data** whenever
 possible. That is, avoid any in-place processing that might alter the
@@ -1473,7 +1473,7 @@ created at start (even if some remain empty if a sensor is not used, for
 consistency).
 
 Overall, the data requirements guarantee that the system's output is not
-just large in quantity, but high in quality and well-organized, so that
+just large in quantity, but high in quality and well-organised, so that
 the research goals (like developing a predictive model) can be achieved
 using this data. They complement the functional requirements by focusing
 on the end product of the system -- the recorded dataset -- which is
@@ -1484,7 +1484,7 @@ ultimately what the value of the system is measured by.
 In this chapter, we outlined the requirements and analysis that define
 what the Multi-Sensor Recording System must achieve and how it is
 structured to do so. To summarise, the system is required to provide a
-**contactless, synchronized, multi-modal recording solution** that
+**contactless, synchronised, multi-modal recording solution** that
 addresses the key shortcomings of traditional physiological measurement
 methods. We identified the problem context of intrusive sensors and
 limited multi-participant capabilities, and seized the opportunity to

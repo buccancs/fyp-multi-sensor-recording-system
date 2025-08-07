@@ -57,7 +57,7 @@ providing detailed examination of:
 Systematic justification for sensor platform choices based on:
 
 - **Research-grade measurement capabilities** balanced with practical deployment considerations
-- **Multi-modal integration requirements** for synchronized data collection
+- **Multi-modal integration requirements** for synchronised data collection
 - **Community adoption and long-term sustainability** factors
 
 ### Machine Learning Integration Hypothesis
@@ -165,7 +165,7 @@ foundations for the Multi-Sensor Recording System.
 - 3.1. [Android Development Platform and Libraries](#android-development-platform-and-libraries)
 - 3.1.1. [Core Android Framework Components](#core-android-framework-components)
 - 3.1.2. [Essential Third-Party Libraries](#essential-third-party-libraries)
-- 3.1.3. [Specialized Hardware Integration Libraries](#specialized-hardware-integration-libraries)
+- 3.1.3. [Specialised Hardware Integration Libraries](#specialised-hardware-integration-libraries)
 - 3.2. [Python Desktop Application Framework and Libraries](#python-desktop-application-framework-and-libraries)
 - 3.2.1. [Core Python Framework](#core-python-framework)
 - 3.2.2. [GUI Framework and User Interface Libraries](#gui-framework-and-user-interface-libraries)
@@ -235,7 +235,7 @@ principles [Gamma1994; Martin2008; Fowler2002]. The distributed coordination app
 `PythonApp/session/session_manager.py` following established patterns from distributed systems
 research [Lamport1978; Chandy1985; Birman2007].
 
-**Chapter Organization and Academic Contributions:**
+**Chapter Organisation and Academic Contributions:**
 
 The chapter systematically progresses from theoretical foundations through practical implementation considerations,
 providing full coverage of the multidisciplinary knowledge base required for advanced multi-sensor research
@@ -279,7 +279,7 @@ responses being studied, restrict experimental designs to controlled laboratory 
 discomfort that introduces measurement artifacts.
 
 The development of contactless measurement approaches represents a paradigm shift toward naturalistic observation
-methodologies that preserve measurement accuracy while eliminating the behavioral artifacts associated with traditional
+methodologies that preserve measurement accuracy while eliminating the behavioural artifacts associated with traditional
 instrumentation. Advanced research in remote photoplethysmographic detection using digital cameras has demonstrated the
 feasibility of precise cardiovascular monitoring without physical contact, establishing the scientific foundation for
 contactless physiological measurement. The Multi-Sensor Recording System addresses these challenges through
@@ -292,12 +292,12 @@ The fundamental research problem addressed by this thesis centres on the challen
 scalable, and accessible research instrumentation that maintains scientific rigor while democratising access to advanced
 physiological measurement capabilities. Extensive research in photoplethysmography applications has established the
 theoretical foundations for contactless physiological measurement, while traditional research instrumentation requires
-substantial financial investment, specialized technical expertise, and dedicated laboratory spaces that limit research
+substantial financial investment, specialised technical expertise, and dedicated laboratory spaces that limit research
 accessibility and constrain experimental designs to controlled environments that may not reflect naturalistic behaviour
 patterns.
 
 The research significance extends beyond immediate technical achievements to encompass methodological contributions that
-enable new research paradigms in human-computer interaction, social psychology, and behavioral science. The emerging
+enable new research paradigms in human-computer interaction, social psychology, and behavioural science. The emerging
 field of affective computing has identified the critical need for unobtrusive physiological measurement that preserves
 natural behaviour patterns, while the system enables research applications previously constrained by measurement
 methodology limitations, including large-scale social interaction studies, naturalistic emotion recognition research,
@@ -365,14 +365,14 @@ responses in naturalistic environments. Studies by Wilhelm and Grossman (2010) h
 physiological monitoring for understanding emotional dynamics in daily life, revealing patterns that are not observable
 in laboratory settings.
 
-### Social and Behavioral Research Applications
+### Social and Behavioural Research Applications
 
 Social psychology research has increasingly adopted physiological measurement to study interpersonal dynamics, group
 behaviour, and social stress responses. Research by Mendes (2009) has shown that physiological synchrony between
 individuals can indicate social bonding and interpersonal connection, while studies of social stress have revealed
 distinct physiological signatures associated with different types of social threat.
 
-The application of physiological measurement in behavioral economics and decision-making research has provided insights
+The application of physiological measurement in behavioural economics and decision-making research has provided insights
 into the emotional components of cognitive processes. Studies by Loewenstein and Lerner (2003) have demonstrated how
 physiological arousal influences decision-making under uncertainty, revealing the interplay between emotional and
 rational decision processes.
@@ -399,7 +399,7 @@ movement and comfort are essential.
 ### Advantages of Contactless Approaches
 
 Contactless physiological measurement offers significant advantages in ecological validity by allowing researchers to
-study emotional responses without the awareness and behavioral constraints associated with attached sensors. Research by
+study emotional responses without the awareness and behavioural constraints associated with attached sensors. Research by
 Poh et al. (2010) has demonstrated that camera-based heart rate measurement can achieve accuracy comparable to
 contact-based approaches while maintaining participant comfort and natural behaviour.
 
@@ -444,7 +444,7 @@ can objectively quantify stress exposure and its biological consequences.
 
 The neurobiological understanding of stress involves multiple interconnected systems, primarily the
 hypothalamic-pituitary-adrenal (HPA) axis and the sympathetic nervous system. Research by Lupien et al. (2009) has
-characterized the temporal dynamics of these systems, showing that sympathetic activation occurs within seconds of
+characterised the temporal dynamics of these systems, showing that sympathetic activation occurs within seconds of
 stress exposure, while HPA axis activation develops over minutes to hours.
 
 The sympathetic nervous system response involves the rapid release of catecholamines (epinephrine and norepinephrine)
@@ -461,7 +461,7 @@ definitions and lived experience has important implications for research design 
 
 Operational definitions of stress in research contexts typically focus on specific, measurable aspects of the stress
 response. These may include physiological indicators (elevated cortisol, increased heart rate, enhanced skin
-conductance), behavioral measures (performance decrements, avoidance behaviours), or subjective reports (perceived stress
+conductance), behavioural measures (performance decrements, avoidance behaviours), or subjective reports (perceived stress
 scales, mood ratings). The choice of operational definition significantly influences research findings and their
 interpretation.
 
@@ -472,7 +472,7 @@ response to specific stressors, and chronic stress, which involves prolonged or 
 Research by Miller et al. (2007) has shown that acute and chronic stress can have different physiological signatures and
 health implications, requiring different measurement approaches and temporal scales.
 
-Acute stress responses are characterized by rapid onset and relatively short duration, making them suitable for
+Acute stress responses are characterised by rapid onset and relatively short duration, making them suitable for
 laboratory study and real-time measurement. Chronic stress involves longer-term physiological adaptations that may
 require longitudinal measurement approaches and consideration of cumulative effects over time (Cohen et al., 2007).
 
@@ -515,7 +515,7 @@ which reflects HPA axis activation, GSR provides a direct measure of sympathetic
 temporal resolution that allows real-time monitoring of autonomic arousal.
 
 The physiological basis of GSR involves the eccrine sweat glands, which are innervated exclusively by sympathetic
-cholinergic fibers. When sympathetic arousal occurs, these sweat glands increase their activity even below the threshold
+cholinergic fibres. When sympathetic arousal occurs, these sweat glands increase their activity even below the threshold
 for visible perspiration, leading to increased skin conductance that can be detected through electrical measurement (
 Boucsein, 2012).
 
@@ -587,7 +587,7 @@ change resistance based on the degree of filling and the ionic concentration of 
 occurs, increased sweat production reduces skin resistance and increases measurable conductance.
 
 The spatial distribution of sweat glands and their varying sensitivity to sympathetic stimulation creates complex
-patterns of electrical activity across the skin surface. Research by Venables and Christie (1980) has characterized
+patterns of electrical activity across the skin surface. Research by Venables and Christie (1980) has characterised
 these spatial patterns and their implications for electrode placement and signal interpretation in research
 applications.
 
@@ -619,7 +619,7 @@ impedance changes can introduce signal distortions that may be misinterpreted as
 
 The technical aspects of GSR measurement present additional limitations that affect data quality and interpretation.
 Electrode placement, gel application, and skin preparation procedures can significantly influence signal quality and
-measurement reliability. Research by Lykken and Venables (1971) established standardized procedures for GSR measurement,
+measurement reliability. Research by Lykken and Venables (1971) established standardised procedures for GSR measurement,
 but adherence to these protocols requires technical expertise and careful attention to detail.
 
 Signal processing and analysis of GSR data also present challenges, particularly in separating meaningful physiological
@@ -636,7 +636,7 @@ cardiovascular regulation, and thermoregulatory mechanisms. Stress-induced chang
 detectable temperature variations that can be measured using thermal imaging technology, providing a non-invasive
 approach to physiological monitoring that complements traditional contact-based methods.
 
-Research by Ring and Ammer (2012) has characterized the primary thermal responses to stress, including periorbital
+Research by Ring and Ammer (2012) has characterised the primary thermal responses to stress, including periorbital
 temperature decreases, nasal tip cooling, and changes in facial blood flow patterns. These responses reflect sympathetic
 vasoconstriction that redirects blood flow from peripheral regions to core organs as part of the stress response
 preparation for potential physical action.
@@ -653,7 +653,7 @@ nervous system activation and local vascular control mechanisms. Sympathetic act
 peripheral blood vessels through alpha-adrenergic receptors, reducing blood flow to skin surfaces and causing measurable
 temperature decreases.
 
-Research by Drummond (1997) has characterized the specific vascular responses involved in facial thermal changes during
+Research by Drummond (1997) has characterised the specific vascular responses involved in facial thermal changes during
 stress, showing that different facial regions exhibit distinct patterns of thermal response related to their underlying
 vascular anatomy and sympathetic innervation patterns. The periorbital region shows particularly consistent thermal
 responses due to its rich vascular supply and sensitive sympathetic control.
@@ -663,7 +663,7 @@ responses due to its rich vascular supply and sensitive sympathetic control.
 Different body regions show distinct thermal response patterns to stress, providing opportunities for multi-region
 analysis that can improve stress detection accuracy and reduce false positives from environmental factors. Research by
 Pavlidis et al. (2002) has identified the periorbital region as particularly sensitive to stress-induced thermal
-changes, while other studies have characterized responses in the nasal region, cheeks, and forehead.
+changes, while other studies have characterised responses in the nasal region, cheeks, and forehead.
 
 The development of pattern recognition approaches has enabled automated detection of stress-related thermal signatures
 that are more robust than single-region temperature measurements. Studies by Hernández et al. (2018) have shown that
@@ -675,7 +675,7 @@ regions simultaneously.
 The application of thermal imaging to stress and emotion research has expanded significantly with advances in thermal
 camera technology and image analysis algorithms. Early research by Levine and Pavlidis (2007) demonstrated the potential
 for thermal imaging to detect deception and emotional arousal in laboratory settings, establishing the foundation for
-more sophisticated applications in psychological and behavioral research.
+more sophisticated applications in psychological and behavioural research.
 
 Modern thermal imaging systems provide high spatial and temporal resolution that enables detailed analysis of thermal
 response patterns and their relationship to emotional states. Research by Kosonogov et al. (2017) has shown that thermal
@@ -841,7 +841,7 @@ vision approaches.
 
 Integration software provided by Topdon includes complete APIs and software development kits that enable custom
 applications and integration with research systems. The availability of detailed documentation and technical support
-facilitates the development of specialized research applications that extend beyond standard thermal imaging uses.
+facilitates the development of specialised research applications that extend beyond standard thermal imaging uses.
 
 ### 2.8.3 Integration and Compatibility Considerations
 
@@ -1002,7 +1002,7 @@ maintaining compatibility with devices manufactured within the last 8 years, ens
 research teams with diverse hardware resources.
 
 **Camera2 API Framework**: The Camera2 API provides low-level camera control essential for research applications
-requiring precise exposure control, manual focus adjustment, and synchronized capture across multiple devices. The
+requiring precise exposure control, manual focus adjustment, and synchronised capture across multiple devices. The
 Camera2 API enables manual control of ISO sensitivity, exposure time, and focus distance while providing access to RAW
 image capture capabilities essential for calibration and quality assessment procedures. The API supports simultaneous
 video recording and still image capture, enabling the dual capture modes required for research applications.
@@ -1060,7 +1060,7 @@ network conditions. The OkHttp configuration includes complete security settings
 1.3 support that ensure secure communication in research environments where data privacy and security are essential
 considerations.
 
-#### Specialized Hardware Integration Libraries
+#### Specialised Hardware Integration Libraries
 
 **Shimmer Android SDK (com.shimmerresearch.android 1.0.0)**: The Shimmer Android SDK provides complete integration
 with Shimmer3 GSR+ physiological sensors, offering validated algorithms for data collection, calibration, and quality
@@ -1070,7 +1070,7 @@ providing complete configuration options for diverse research protocols and part
 The Shimmer3 GSR+ device integration represents a sophisticated wearable sensor platform that enables high-precision
 galvanic skin response measurements alongside complementary physiological signals including photoplethysmography (PPG),
 accelerometry, and other biometric parameters. The device specifications include sampling rates from 1 Hz to 1000 Hz
-with configurable GSR measurement ranges from 10kΩ to 4.7MΩ across five distinct ranges optimized for different skin
+with configurable GSR measurement ranges from 10kΩ to 4.7MΩ across five distinct ranges optimised for different skin
 conductance conditions.
 
 The SDK architecture supports both direct Bluetooth connections and advanced multi-device coordination through
@@ -1096,10 +1096,10 @@ precise temperature measurement across the thermal imaging frame while providing
 analysis and calibration procedures.
 
 The Topdon TC001 and TC001 Plus thermal cameras represent advanced uncooled microbolometer technology with sophisticated
-technical specifications optimized for research applications. The TC001 provides 256×192 pixel resolution with
+technical specifications optimised for research applications. The TC001 provides 256×192 pixel resolution with
 temperature ranges from -20°C to +550°C and measurement accuracy of ±2°C or ±2%, while the enhanced TC001 Plus extends
 the temperature range to +650°C with improved accuracy of ±1.5°C or ±1.5%. Both devices operate at frame rates up to 25
-Hz with 8-14 μm spectral range optimized for long-wave infrared (LWIR) detection.
+Hz with 8-14 μm spectral range optimised for long-wave infrared (LWIR) detection.
 
 The SDK architecture provides complete integration through Android's USB On-The-Go (OTG) interface, enabling direct
 communication with thermal imaging hardware through USB-C connections. The implementation includes sophisticated device
@@ -1129,7 +1129,7 @@ technical capability and long-term maintainability for research software applica
 #### Core Python Framework
 
 **Python 3.9+ Runtime Environment**: The Python 3.9+ requirement ensures access to modern language features including
-improved type hinting, enhanced error messages, and performance optimizations while maintaining compatibility with the
+improved type hinting, enhanced error messages, and performance optimisations while maintaining compatibility with the
 extensive scientific computing ecosystem. The Python version selection balances modern language capabilities with broad
 compatibility across research computing environments including Windows, macOS, and Linux platforms.
 
@@ -1183,7 +1183,7 @@ software quality standards. The PyQt5 selection provides mature, stable GUI capa
 support and complete documentation while maintaining compatibility across Windows, macOS, and Linux platforms
 essential for diverse research environments.
 
-The PyQt5 implementation includes custom widget development for specialized research controls including real-time sensor
+The PyQt5 implementation includes custom widget development for specialised research controls including real-time sensor
 displays, calibration interfaces, and session management tools. The framework provides complete event handling,
 layout management, and styling capabilities that enable professional user interface design while maintaining the
 functional requirements essential for research operations. The PyQt5 threading model integrates effectively with Python
@@ -1195,7 +1195,7 @@ prototyping and iteration of user interface designs while maintaining separation
 logic that supports maintainable code architecture.
 
 The visual design approach enables non-technical researchers to provide feedback on user interface design and workflow
-organization while maintaining technical implementation flexibility. The QtDesigner integration includes support for
+organisation while maintaining technical implementation flexibility. The QtDesigner integration includes support for
 custom widgets and advanced layout management that accommodate the complex display requirements of multi-sensor research
 applications.
 
@@ -1212,11 +1212,11 @@ interest selection. The library provides both real-time processing capabilities 
 high-precision algorithms for post-session analysis and calibration validation.
 
 **NumPy (numpy 1.24.3)**: NumPy provides the fundamental numerical computing foundation for all data processing
-operations, offering optimized array operations, mathematical functions, and scientific computing capabilities. The
+operations, offering optimised array operations, mathematical functions, and scientific computing capabilities. The
 NumPy implementation enables efficient processing of large sensor datasets while providing the mathematical foundations
 for signal processing, statistical analysis, and quality assessment algorithms.
 
-The numerical computing capabilities include efficient handling of multi-dimensional sensor data arrays, optimized
+The numerical computing capabilities include efficient handling of multi-dimensional sensor data arrays, optimised
 mathematical operations for real-time processing, and complete statistical functions for quality assessment and
 validation. The NumPy integration supports both real-time processing requirements and batch analysis capabilities
 essential for complete research data processing pipelines.
@@ -1235,7 +1235,7 @@ computational efficiency essential for real-time research applications.
 
 **WebSockets (websockets 11.0.3)**: The WebSockets library provides real-time bidirectional communication capabilities
 for coordinating Android devices with low latency and complete error handling. The WebSockets implementation
-enables efficient command and control communication while supporting real-time data streaming and synchronized
+enables efficient command and control communication while supporting real-time data streaming and synchronised
 coordination across multiple devices.
 
 The WebSocket protocol selection provides both reliability and efficiency for research applications requiring precise
@@ -1340,7 +1340,7 @@ The pytest implementation includes systematic unit testing, integration testing,
 ensure software reliability while supporting test-driven development practices essential for research software quality.
 
 The testing framework includes thorough test coverage requirements with automated coverage reporting, systematic
-performance testing with benchmarking capabilities, and specialized testing for scientific accuracy including
+performance testing with benchmarking capabilities, and specialised testing for scientific accuracy including
 statistical validation of measurement algorithms. The pytest integration supports both automated continuous integration
 testing and manual testing procedures essential for research software validation.
 
@@ -1350,7 +1350,7 @@ testing. The JUnit implementation includes systematic testing of sensor integrat
 interface components while providing thorough test reporting and coverage analysis.
 
 The Android testing framework includes device-specific testing across multiple Android versions, complete
-performance testing under diverse hardware configurations, and specialized testing for sensor accuracy and timing
+performance testing under diverse hardware configurations, and specialised testing for sensor accuracy and timing
 precision. The JUnit integration supports both automated continuous integration testing and manual device testing
 procedures essential for mobile research application validation.
 
@@ -1398,7 +1398,7 @@ development costs and complexity.
 The research community analysis reveals significantly higher Android adoption in research applications due to lower
 barriers to entry, broader hardware compatibility, and flexible development approaches that accommodate the experimental
 nature of research software development. The Android ecosystem provides extensive third-party library support for
-research applications including specialized sensor integration libraries, scientific computing tools, and
+research applications including specialised sensor integration libraries, scientific computing tools, and
 research-specific frameworks that accelerate development while ensuring scientific validity.
 
 **Kotlin vs. Java Development Language**: The selection of Kotlin as the primary Android development language reflects
@@ -1677,7 +1677,7 @@ limitations and environmental challenges.
 extensive theoretical foundations for temporal coordination but limited practical implementation guidance for research
 applications requiring microsecond-level precision across consumer-grade wireless networks with variable latency and
 reliability characteristics. Existing synchronisation approaches typically assume dedicated network infrastructure or
-specialized hardware that may not be available in research environments.
+specialised hardware that may not be available in research environments.
 
 The Multi-Sensor Recording System addresses this gap through adaptive synchronisation algorithms that achieve
 research-grade temporal precision despite wireless network variability while providing complete quality metrics and
@@ -1713,12 +1713,12 @@ complete analytics platforms that support large-scale collaborative research ini
 **Community Development and Open Science Initiatives**: The open-source architecture and complete documentation
 provide foundation capabilities for community development initiatives that could accelerate research software
 development while ensuring scientific rigor and reproducibility. Community development opportunities include
-collaborative validation studies, shared calibration databases, and standardized protocols that could enhance research
+collaborative validation studies, shared calibration databases, and standardised protocols that could enhance research
 quality while reducing development overhead for individual research teams.
 
 The complete documentation standards and modular architecture design enable systematic community contribution while
 maintaining code quality and scientific validity standards essential for research applications. Future community
-initiatives could include collaborative testing frameworks, shared hardware characterisation databases, and standardized
+initiatives could include collaborative testing frameworks, shared hardware characterisation databases, and standardised
 validation protocols that support scientific reproducibility and technology transfer across research institutions.
 ---
 ## Chapter Summary and Academic Foundation

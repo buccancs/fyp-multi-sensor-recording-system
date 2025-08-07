@@ -8,7 +8,7 @@ The Multi-Sensor Recording System implements a distributed star-mesh topology wi
 
 ### Distributed Systems Architecture
 - **Star-mesh topology**: PC controller coordinates multiple Android recording devices
-- **Offline-first recording**: Local data storage with synchronized timestamps
+- **Offline-first recording**: Local data storage with synchronised timestamps
 - **JSON protocol communication**: WebSocket-based real-time communication
 - **Multi-modal synchronisation**: <1ms precision across all data streams
 
@@ -89,7 +89,7 @@ The Android application underwent complete architectural refactoring implementin
 └─────────────────────────────────────────┘
 ```
 
-#### Specialized Controllers
+#### Specialised Controllers
 
 **RecordingSessionController** (218 lines)
 - Pure recording operation management
@@ -313,7 +313,7 @@ PC 1       PC 2       PC N
 #### Memory Management
 - **Streaming Processing**: Minimis\1 memory footprint
 - **Buffer Management**: Adaptive buffer sizing
-- **Garbage Collection**: Optimized for real-time processing
+- **Garbage Collection**: Optimised for real-time processing
 - **Resource Pools**: Reusable resource management
 
 #### CPU Optimisation
@@ -338,7 +338,7 @@ PC 1       PC 2       PC N
 
 ### Documentation Maintenance
 - **Architecture Decision Records**: Document major decisions
-- **API Documentation**: Keep API docs synchronized
+- **API Documentation**: Keep API docs synchronised
 - **Research Documentation**: Academic-grade documentation
 - **User Guides**: Practical usage documentation
 

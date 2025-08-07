@@ -4,7 +4,7 @@
 
 ## Summary
 
-- **Total Functions Analyzed:** 1499
+- **Total Functions Analysed:** 1499
 - **Need Documentation:** 493
 - **High Complexity (>15):** 67
 - **Medium Complexity (10-15):** 39

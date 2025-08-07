@@ -141,10 +141,10 @@ The system implements a hierarchical master-slave synchronisation model:
 
 #### Event Coordination Protocol
 
-1. **Session Initialisation**: Distributed session creation with synchronized parameters
+1. **Session Initialisation**: Distributed session creation with synchronised parameters
 2. **Recording Start**: Coordinated start commands with precise timing alignment
 3. **Data Collection**: Continuous temporal validation during recording sessions
-4. **Session Completion**: Synchronized stop commands with data integrity verification
+4. **Session Completion**: Synchronised stop commands with data integrity verification
 
 ## Protocol Specification
 
@@ -193,7 +193,7 @@ graph TB
 
 #### Message Structure
 
-All synchronisation messages follow a standardized JSON format:
+All synchronisation messages follow a standardised JSON format:
 
 ```json
 {
@@ -579,7 +579,7 @@ class SessionSynchronizer:
         self.device_connections = {}
 
     def create_synchronized_session(self, session_config: SessionConfig) -> SessionInfo:
-        """Create new session with synchronized parameters across devices"""
+        """Create new session with synchronised parameters across devices"""
         session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
         # Synchronise all devices before session creation
@@ -591,7 +591,7 @@ class SessionSynchronizer:
             if not sync_result.success:
                 raise SynchronizationError(f"Failed to sync device {device_id}")
 
-        # Create session with synchronized timing
+        # Create session with synchronised timing
         session_info = SessionInfo(
             session_id=session_id,
             devices=session_config.devices,
@@ -610,7 +610,7 @@ class SessionSynchronizer:
 
         session = self.active_sessions[session_id]
 
-        # Calculate synchronized start time
+        # Calculate synchronised start time
         start_time = time.time_ns() + (countdown * 1_000_000_000)  # Convert to nanoseconds
 
         # Send start commands to all devices
@@ -768,7 +768,7 @@ class SynchronizationClient {
 
 ### Recording Session Coordination
 
-#### Synchronized Recording Workflow
+#### Synchronised Recording Workflow
 
 1. **Pre-Recording Synchronisation**:
    ```python
@@ -781,7 +781,7 @@ class SynchronizationClient {
 2. **Coordinated Session Start**:
     - PC controller sends countdown commands to all devices
     - Devices acknowledge readiness and synchronisation status
-    - Synchronized recording begins at precise master timestamp
+    - Synchronised recording begins at precise master timestamp
     - Real-time quality monitoring during recording
 
 3. **Recording Monitoring**:
@@ -862,7 +862,7 @@ class SessionSynchronizer:
     """Coordinate recording sessions across multiple devices"""
 
     def create_synchronized_session(self, config: SessionConfig) -> SessionInfo:
-        """Create new session with synchronized timing parameters"""
+        """Create new session with synchronised timing parameters"""
 
     def start_coordinated_recording(self, session_id: str, countdown: int) -> bool:
         """Start recording across all devices with precise coordination"""
@@ -1015,7 +1015,7 @@ class MultiDeviceTest:
             precision_requirement="millisecond"
         )
 
-        # Create synchronized session
+        # Create synchronised session
         session = session_synchronizer.create_synchronized_session(session_config)
         assert session.session_id is not None
 

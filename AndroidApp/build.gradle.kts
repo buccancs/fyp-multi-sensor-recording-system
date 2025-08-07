@@ -187,6 +187,9 @@ dependencies {
 
     implementation(libs.bundles.networking)
     
+    // Charting library for real-time data visualization
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    
     // Security dependencies - Updated from alpha to stable versions
     // Addresses Low Priority recommendation: "Evaluate alpha/beta dependency risk"
     implementation("androidx.security:security-crypto:1.1.0-alpha06")  // Restored higher version for MasterKey support
@@ -297,31 +300,49 @@ jacoco {
 tasks.register<JacocoReport>("jacocoTestReport") {
     group = "Reporting"
     description = "Generates Jacoco coverage reports for all variants."
-    dependsOn(tasks.matching { it.name.startsWith("test") && it.name.endsWith("UnitTest") })
+    dependsOn("testDevDebugUnitTest")
+    
     reports {
         xml.required.set(true)
         html.required.set(true)
+        csv.required.set(false)
     }
+    
     val fileFilter = listOf(
         "**/R.class", "**/R$*.class", "**/BuildConfig.*",
         "**/*_Factory.*", "**/*_MembersInjector.*", "**/*Module*.*",
-        "**/databinding/*", "**/generated/**/*.*"
+        "**/databinding/*", "**/generated/**/*.*",
+        "**/Hilt_*.*", "**/DaggerHilt*.*", "**/*_HiltModules*.*",
+        "**/di/**/*.*"
     )
-    val javaClasses =
-        fileTree("${layout.buildDirectory.get().asFile}/intermediates/javac/debug/classes") { exclude(fileFilter) }
-    val kotlinClasses =
-        fileTree("${layout.buildDirectory.get().asFile}/tmp/kotlin-classes/debug") { exclude(fileFilter) }
-    classDirectories.setFrom(files(javaClasses, kotlinClasses))
-    sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+    
+    val kotlinClasses = fileTree("${layout.buildDirectory.get().asFile}/tmp/kotlin-classes/devDebug") {
+        exclude(fileFilter)
+    }
+    val javaClasses = fileTree("${layout.buildDirectory.get().asFile}/intermediates/javac/devDebug/classes") {
+        exclude(fileFilter)
+    }
+    
+    classDirectories.setFrom(files(listOf(kotlinClasses, javaClasses)))
+    sourceDirectories.setFrom(files(listOf("$projectDir/src/main/java", "$projectDir/src/main/kotlin")))
+    
     executionData.setFrom(fileTree(layout.buildDirectory.get().asFile) {
-        include(
-            "jacoco/**/*.exec",
-            "outputs/code_coverage/**/*.ec"
-        )
+        include(listOf(
+            "outputs/unit_test_code_coverage/devDebugUnitTest/*.exec",
+            "jacoco/testDevDebugUnitTest.exec"
+        ))
     })
+    
     doFirst {
         executionData.setFrom(files(executionData.files.filter { it.exists() }))
     }
+}
+
+// Task to run tests and generate coverage report in one command
+tasks.register("testWithCoverage") {
+    group = "verification"
+    description = "Runs tests and generates coverage report"
+    dependsOn("testDevDebugUnitTest", "jacocoTestReport")
 }
 
 tasks.register<JavaExec>("formatKotlin") {

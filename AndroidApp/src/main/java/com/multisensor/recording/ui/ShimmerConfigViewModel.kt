@@ -405,4 +405,190 @@ class ShimmerConfigViewModel @Inject constructor(
     }
 
     fun getAvailablePresets(): List<String> = listOf("Default", "High Performance", "Low Power", "Custom")
+    
+    fun connectToSpecificDevice(macAddress: String, deviceName: String) {
+        viewModelScope.launch {
+            try {
+                _uiState.update {
+                    it.copy(
+                        isLoadingConnection = true,
+                        connectionStatus = "Connecting...",
+                        errorMessage = null
+                    )
+                }
+                
+                logger.info("Connecting to specific device: $deviceName ($macAddress)")
+                val connected = shimmerRecorder.connectSingleDevice(
+                    macAddress, 
+                    deviceName,
+                    com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
+                )
+                
+                if (connected) {
+                    // Get device information after connection
+                    val deviceInfo = shimmerRecorder.getDeviceInformation(macAddress)
+                    
+                    _uiState.update {
+                        it.copy(
+                            isLoadingConnection = false,
+                            isDeviceConnected = true,
+                            deviceName = deviceName,
+                            deviceMacAddress = macAddress,
+                            connectionStatus = "Connected",
+                            firmwareVersion = deviceInfo?.firmwareVersion ?: "",
+                            hardwareVersion = deviceInfo?.hardwareVersion ?: "",
+                            batteryLevel = deviceInfo?.batteryLevel ?: -1,
+                            showConfigurationPanel = true,
+                            showRecordingControls = true
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            isLoadingConnection = false,
+                            connectionStatus = "Connection Failed",
+                            errorMessage = "Failed to connect to $deviceName",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error connecting to specific device", e)
+                _uiState.update {
+                    it.copy(
+                        isLoadingConnection = false,
+                        connectionStatus = "Error",
+                        errorMessage = "Connection error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            }
+        }
+    }
+    
+    fun updateCrcConfiguration(crcMode: Int) {
+        viewModelScope.launch {
+            try {
+                _uiState.update {
+                    it.copy(crcMode = crcMode, isConfiguring = true)
+                }
+                
+                val device = _uiState.value.selectedDevice
+                if (device != null) {
+                    logger.info("Updating CRC configuration for device ${device.macAddress}: mode $crcMode")
+                    
+                    // Here we would call the actual shimmer SDK method to set CRC mode
+                    // For now, just simulate the configuration
+                    delay(500)
+                    
+                    _uiState.update {
+                        it.copy(isConfiguring = false)
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            isConfiguring = false,
+                            errorMessage = "No device selected for CRC configuration",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error updating CRC configuration", e)
+                _uiState.update {
+                    it.copy(
+                        isConfiguring = false,
+                        errorMessage = "CRC configuration error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            }
+        }
+    }
+    
+    fun updateGsrRange(rangeIndex: Int) {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isConfiguring = true) }
+                
+                val device = _uiState.value.selectedDevice
+                if (device != null) {
+                    logger.info("Updating GSR range for device ${device.macAddress}: range $rangeIndex")
+                    
+                    val success = shimmerRecorder.setGSRRange(device.macAddress, rangeIndex)
+                    if (success) {
+                        logger.info("GSR range updated successfully")
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = "Failed to update GSR range",
+                                showErrorDialog = true
+                            )
+                        }
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            errorMessage = "No device selected for GSR range configuration",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error updating GSR range", e)
+                _uiState.update {
+                    it.copy(
+                        errorMessage = "GSR range configuration error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            } finally {
+                _uiState.update { it.copy(isConfiguring = false) }
+            }
+        }
+    }
+    
+    fun updateAccelRange(rangeG: Int) {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isConfiguring = true) }
+                
+                val device = _uiState.value.selectedDevice
+                if (device != null) {
+                    logger.info("Updating Accelerometer range for device ${device.macAddress}: ±${rangeG}g")
+                    
+                    val success = shimmerRecorder.setAccelRange(device.macAddress, rangeG)
+                    if (success) {
+                        logger.info("Accelerometer range updated successfully")
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = "Failed to update accelerometer range",
+                                showErrorDialog = true
+                            )
+                        }
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            errorMessage = "No device selected for accelerometer range configuration",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error updating accelerometer range", e)
+                _uiState.update {
+                    it.copy(
+                        errorMessage = "Accelerometer range configuration error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            } finally {
+                _uiState.update { it.copy(isConfiguring = false) }
+            }
+        }
+    }
+
+
 }

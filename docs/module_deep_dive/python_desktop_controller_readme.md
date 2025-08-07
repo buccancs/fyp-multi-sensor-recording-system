@@ -27,7 +27,7 @@ The Python Desktop Controller encompasses complete orchestration capabilities de
 
 **Primary Functions:**
 
-- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment through standardized protocols
+- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment through standardised protocols
 - **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status, data quality, synchronisation precision, and system performance metrics
 - **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with automated device configuration and temporal coordination
 - **Data Integration and Analysis**: complete data collection coordination with post-session analysis capabilities supporting research workflows
@@ -177,10 +177,10 @@ phases:
 
 #### Component-Based Architecture
 
-- **ModernButton**: Standardized button styling with hover effects and semantic colour coding
+- **ModernButton**: Standardised button styling with hover effects and semantic colour coding
 - **StatusIndicator**: Consistent status communication across device types and operational states
 - **ProgressIndicator**: Unified progress visualisation for operations and procedures
-- **ConnectionManager**: Device connections with standardized controls and status reporting
+- **ConnectionManager**: Device connections with standardised controls and status reporting
 
 ## Protocol Specification
 
@@ -204,7 +204,7 @@ sockets.
 
 #### Message Structure
 
-All communication messages follow a standardized JSON format:
+All communication messages follow a standardised JSON format:
 
 ```json
 {
@@ -671,7 +671,7 @@ The application provides a tabbed interface with four main sections:
 - **Session Browser**: Navigate recorded sessions
 - **Data Export**: Export tools for various formats
 - **Logging Viewer**: System logs and diagnostics
-- **Storage Management**: Disk space and file organization
+- **Storage Management**: Disk space and file organisation
 
 ### Recording Session Workflow
 
@@ -761,7 +761,7 @@ The application provides a tabbed interface with four main sections:
 
 1. Select "Stereo Calibration" mode
 2. Configure both RGB and thermal cameras
-3. Capture synchronized calibration images
+3. Capture synchronised calibration images
 4. Process stereo calibration parameters
 5. Validate alignment accuracy
 6. Save stereo parameters for session use
@@ -1150,7 +1150,7 @@ class SessionTest:
 2. Lower video resolution or frame rate
 3. Close unnecessary applications
 4. Monitor resource usage: `python -c "import psutil; print(psutil.virtual_memory())"`
-5. Enable performance optimizations in application settings
+5. Enable performance optimisations in application settings
 
 **Problem**: Network latency or connection drops
 **Solutions**:

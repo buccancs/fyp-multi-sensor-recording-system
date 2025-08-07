@@ -48,7 +48,7 @@ The system builds upon established psychophysiology and physiological computing 
 #### Multi-Modal Integration
 
 - **Temporal Synchronisation**: Sub-millisecond alignment with visual and thermal data
-- **Data Fusion**: Coordinated analysis across multiple physiological and behavioral measures
+- **Data Fusion**: Coordinated analysis across multiple physiological and behavioural measures
 - **Session Management**: Integrated recording sessions with complete metadata
 - **Quality Assurance**: Continuous signal quality monitoring and validation
 

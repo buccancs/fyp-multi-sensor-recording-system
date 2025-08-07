@@ -87,7 +87,7 @@ temporal precision, data integrity, long-term reliability, and
 scientific reproducibility, which often have requirements far exceeding
 typical software quality
 standards[\[5\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115).
-These stringent attributes necessitate specialized testing
+These stringent attributes necessitate specialised testing
 methodologies, precise measurement techniques, and statistical
 validation methods that provide confidence intervals, uncertainty
 estimates, and significance testing for critical performance metrics
@@ -148,7 +148,7 @@ distinct layers of validation, each with clear scope and objectives:
   functional requirements are satisfied in unison. These tests simulate
   actual research sessions, including multiple participants and devices,
   to ensure the system behaves correctly in a realistic context.
-- **Specialized Testing:** Additional categories target specific quality
+- **Specialised Testing:** Additional categories target specific quality
   attributes: **Performance testing** stresses the system under load to
   evaluate response times, throughput, and resource usage; **Reliability
   testing** subjects the system to extended operation and adverse
@@ -241,7 +241,7 @@ on another. System testing replicates actual study protocols to ensure
 that the entire pipeline from data collection to output would hold up in
 a real experiment.
 
-**Specialized Testing for Research Needs:** Additional layers address
+**Specialised Testing for Research Needs:** Additional layers address
 quality attributes critical to research applications but not covered by
 standard
 tests[\[12\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L453-L461).
@@ -254,7 +254,7 @@ recorded). Usability is also considered from a researcher's perspective:
 tests ensure that the user interface can be operated reliably in a live
 experiment (for instance, that starting or stopping a session is quick
 and unambiguous and doesn't burden the researcher with technical
-issues). These specialized tests often employ advanced tools: for
+issues). These specialised tests often employ advanced tools: for
 example, a **stress test** might artificially load the system's memory
 to ensure the recording continues without interruption; a **security
 test** might scan for open ports or vulnerabilities in the data
@@ -262,7 +262,7 @@ transmission; a **usability test** might involve user walkthroughs or
 heuristic evaluations of the UI flow.
 
 Overall, the testing methodology is **holistic** -- covering unit,
-integration, system, and specialized aspects -- and **research-driven**,
+integration, system, and specialised aspects -- and **research-driven**,
 emphasizing metrics and scenarios that directly relate to the system's
 scientific purpose of emotion data collection. Each requirement
 identified in Chapter 3 (both functional and non-functional) is mapped
@@ -335,7 +335,7 @@ quality or system stability is thoroughly tested.
 characteristics that directly impact research validity and
 reproducibility[\[14\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L482-L490).
 This includes measurement accuracy (e.g., how close are sensor readings
-to true values), temporal precision (e.g., how well synchronized are
+to true values), temporal precision (e.g., how well synchronised are
 data streams), data integrity (no data loss or corruption), and system
 availability (uptime). Instantaneous metrics (like immediate response
 times or one-session accuracy) are measured, as well as trends and
@@ -372,7 +372,7 @@ platform functionality and cross-platform integration, and to aggregate
 results comprehensively.
 
 The architecture was informed by analysis of existing approaches for
-distributed system testing, combined with the specialized requirements
+distributed system testing, combined with the specialised requirements
 of physiological measurement validation and research software quality
 assurance. The design prioritizes **reproducibility**, **scalability**,
 and **automation**, while remaining flexible to accommodate diverse
@@ -384,7 +384,7 @@ lifecycle.
 The multi-platform testing architecture addresses the fundamental
 challenge of coordinating test execution across Android mobile devices,
 Python desktop applications, and embedded sensor hardware, all while
-maintaining tightly synchronized timing and centralized result
+maintaining tightly synchronised timing and centralized result
 collection. The architecture implements a sophisticated orchestration
 system to manage test execution, data collection, and result analysis
 across the entire system
@@ -545,7 +545,7 @@ node (Android or
 PC)[\[24\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L538-L546).
 A **Log Aggregator** gathers logs from all devices (for example, Android
 logcat outputs, Python debug logs) so that the entire system's activity
-during a test can be analyzed in one place. An **Analysis Engine** then
+during a test can be analysed in one place. An **Analysis Engine** then
 processes this data to compute statistics (e.g., average response times,
 distribution of synchronisation error) and to detect any trends or
 anomalies across runs. Finally, a **Validation Framework** automatically
@@ -572,7 +572,7 @@ Overall, this architecture was vital in managing the complexity of
 testing a system that spans different platforms and devices. It allowed
 the entire test suite -- unit tests, integration tests, system tests --
 to be executed with a single command (via the Test Coordinator), with
-all results automatically collected and analyzed in a unified manner.
+all results automatically collected and analysed in a unified manner.
 This level of automation and coordination is crucial for a project of
 this scope to maintain **reproducibility** and **confidence** in the
 results: any other developer or researcher can run the test suite in the
@@ -607,7 +607,7 @@ resolution limits of a real camera. Importantly, this generator can
 maintain **temporal correlations** -- meaning if a stress event is
 simulated at time T, the synthetic GSR and thermal data both reflect
 responses after time T, imitating how real multimodal responses might
-correlate over time. The data generation is parameterized, so tests can
+correlate over time. The data generation is parameterised, so tests can
 cover a range of scenarios: different participant characteristics (e.g.,
 someone who naturally has higher or lower baseline GSR), different
 environmental conditions (e.g., overall temperature drift to mimic a
@@ -770,7 +770,7 @@ others did not cause performance metrics to skew.
             PSYSTEM[System Tests<br/>End-to-End Validation]
         end
 
-        subgraph "Specialized Testing Tools"
+        subgraph "Specialised Testing Tools"
             NETWORK[Network Simulation<br/>Latency & Packet Loss]
             LOAD[Load Testing<br/>Device Scaling]
             MONITOR[Resource Monitoring<br/>Performance Metrics]
@@ -798,7 +798,7 @@ categories orchestration.)*
 In this simplified schematic, the **Scheduler** works with the **Result
 Reporter** and **Analyzer** as part of the base orchestrator. Android
 tests (unit, integration/UI, and on-device instrumented tests), Python
-tests (unit, integration, and full system tests), and specialized tools
+tests (unit, integration, and full system tests), and specialised tools
 (network simulation, load generation, resource monitors) are all under
 the coordinator's purview. Notably, system tests (PSYSTEM) are connected
 to tools like NETWORK, LOAD, and MONITOR -- indicating that when we run
@@ -1302,7 +1302,7 @@ required precision.
             # Assert
             assert sync_results.success  # overall sync can still succeed
             assert "device_0" in sync_results.warnings  # a warning or note about the timed-out device
-            # The other devices should have been synchronized (e.g., check their offsets are set, not shown here)
+            # The other devices should have been synchronised (e.g., check their offsets are set, not shown here)
 
 In these tests: - We create mock device objects that have an async
 method `send_sync_request`, which represents asking the device to
@@ -1369,7 +1369,7 @@ came from devices.
 
 Key integration test scenarios included: 1. **Device Discovery
 Protocol:** When the desktop app searches for available devices on the
-network, do all Android devices respond and get recognized? An
+network, do all Android devices respond and get recognised? An
 integration test starts the desktop discovery service and multiple
 Android app instances (or simulators), then asserts that all devices
 appear on the PC's list with correct metadata (device name, sensor
@@ -1436,7 +1436,7 @@ might look like:
         # Validate results
         data = pc.get_collected_data()
         assert len(data["A1"]) > 0 and len(data["A2"]) > 0
-        # Check that last timestamps of A1 and A2 differ by <5ms (synchronized)
+        # Check that last timestamps of A1 and A2 differ by <5ms (synchronised)
         assert abs(data["A1"][-1].timestamp - data["A2"][-1].timestamp) < 0.005
         # Check no data integrity issues
         assert pc.log.contains("data corruption") is False
@@ -1506,7 +1506,7 @@ system remained running in our longest integration test (which was a
 10-minute simulated recording with multiple reconnects) and correctly
 terminated at the end.
 
-Given these results, we proceeded with confidence to more specialized
+Given these results, we proceeded with confidence to more specialised
 testing like performance and long-duration reliability testing, knowing
 that the functional integration was sound.
 
@@ -1841,7 +1841,7 @@ worst-case network simulations (very high packet loss), up to \~6.7% of
 messages were lost, which is below the 10% threshold, but indicates the
 system is reasonably robust to network unreliability up to a point.
 
-We also visualized performance over time to catch any trends like
+We also visualised performance over time to catch any trends like
 degradation. For example, **Figure 5.3** (conceptually) plotted metrics
 over a 24-hour continuous operation period. We observed mostly stable
 performance, with slight downward trends in some metrics (likely due to
@@ -1884,7 +1884,7 @@ some packets, which did not affect success rate but did reduce sync
 quality slightly --- still within our 5ms drift on average). We flagged
 that beyond 4 devices, careful attention would be needed; the table
 notes that higher device counts were not yet tested and would be part of
-future validation, possibly requiring optimizations like multicasting
+future validation, possibly requiring optimisations like multicasting
 data or further protocol tuning to handle more devices concurrently.
 
 Stress testing under varying network conditions (Table 5.4) demonstrated
@@ -2019,7 +2019,7 @@ the system reacts to errors: - Unplugging the thermal camera mid-session
 (simulate hardware failure): The system logged the event, the session
 continued with remaining data (and marked thermal data missing for that
 period). It didn't crash, and if the camera was reconnected, it was
-recognized for the next session. - Simulated sensor malfunction (feeding
+recognised for the next session. - Simulated sensor malfunction (feeding
 invalid data): The processing pipeline detected out-of-range values and
 flagged them (e.g., a GSR value out of plausible range was not plotted
 as a real response, avoiding skewing results). - Application crash
@@ -2132,7 +2132,7 @@ reading had a consistent 0.2°C bias vs a reference -- not critical but
 something noted for future calibration improvement).
 
 Overall, about **240+** distinct test methods were executed (if we count
-parameterizations and internal checks, the number is larger as shown in
+parameterisations and internal checks, the number is larger as shown in
 table). The combined **pass rate was \~99.5%**, meaning the system is
 nearly error-free across all tested aspects. No critical defects
 remained open by the end of the testing phase.
@@ -2310,7 +2310,7 @@ frames) is highly accurate, improving the quality of any emotion
 analysis.
 
 Overall, all non-functional criteria were met, most with comfortable
-margins. The only one labeled \"Nearly Perfect\" was data integrity at
+margins. The only one labelled \"Nearly Perfect\" was data integrity at
 99.98% vs 100% target -- but this difference is theoretical, as no
 actual corrupted data was found; it's only not 100% because of slight
 loss in worst-case network conditions, which we consider acceptable. We
@@ -2380,7 +2380,7 @@ categorise them here for completeness:
   work to background threads), handling of edge-case calibration
   patterns (improved with additional user guidance if detection fails),
   a slight delay on network reconnection
-  (optimized)[\[44\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107),
+  (optimised)[\[44\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107),
   and file format compatibility with third-party tools (addressed by
   offering alternative export formats).
 - Two minor issues remain tracked:

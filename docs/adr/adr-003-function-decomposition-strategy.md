@@ -45,7 +45,7 @@ We will systematically decompose long functions using the Extract Method refacto
 ### Risk Mitigation
 - **IDE Navigation**: Use modern IDEs with robust "Go to Definition" capabilities
 - **Documentation**: Maintain complete function-level documentation
-- **Testing Strategy**: Ensure extracted functions maintain original behavioral contracts
+- **Testing Strategy**: Ensure extracted functions maintain original behavioural contracts
 - **Performance Monitoring**: Verify decomposition doesn't impact performance-critical paths
 
 ## References

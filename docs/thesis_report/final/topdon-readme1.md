@@ -17,7 +17,7 @@ contours in the thermal
 image[\[4\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Dual%20Lens%20to%20Unveil%20the,Unseen)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyse%20details%20of%20the%20targets).
 Both cameras support a wide temperature detection range from about
 **-20 °C to 550 °C** (≈ -4 °F to
-1022 °F)[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimized%20Temperature%20Range%20%26%20Accuracy)[\[6\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=%E2%80%A2%20With%20a%20temperature%20range,1%C2%B0C),
+1022 °F)[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimised%20Temperature%20Range%20%26%20Accuracy)[\[6\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=%E2%80%A2%20With%20a%20temperature%20range,1%C2%B0C),
 making them suitable for various applications -- from industrial
 inspections to biomedical and physiological sensing.
 
@@ -280,7 +280,7 @@ frame capture process in Java:
         }
         @Override 
         public void onCancel(UsbDevice device) {
-            // Permission dialogue canceled
+            // Permission dialogue cancelled
         }
     });
 
@@ -404,7 +404,7 @@ grayscale, etc.), approximately 10 palettes including "white hot",
 "black hot", "medical" and
 others[\[28\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=1).
 By selecting a palette (e.g., `CommonParams.PseudoColorType`), you can
-have the conversion routine apply that coloring to the image, enhancing
+have the conversion routine apply that colouring to the image, enhancing
 contrast for visualisation.
 
 **Temperature Data:** The temperature values for each pixel are provided
@@ -473,7 +473,7 @@ images[\[36\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=Thermal%20imaging
 
 **Thermal Range and Units:** As mentioned, the device can measure
 roughly -20 °C to 550 °C in two gain
-modes[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimized%20Temperature%20Range%20%26%20Accuracy).
+modes[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimised%20Temperature%20Range%20%26%20Accuracy).
 The camera will automatically switch between **high gain** (for lower
 temperatures, finer resolution) and **low gain** (for higher
 temperatures, extended range). The SDK provides callbacks
@@ -527,7 +527,7 @@ For example, when a recording session starts, the app would:
   same clock or reference as the GSR data timestamps). Given GSR is
   often sampled at, say, 10--100 Hz and the thermal camera at up to
   25 Hz, you might down-sample or interpolate as needed. The sample
-  research system described by Gioia *et al.* synchronized 5 Hz RGB
+  research system described by Gioia *et al.* synchronised 5 Hz RGB
   frames with 25 Hz thermal frames for
   analysis[\[37\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=We%20used%20thermal%20imaging%20to,e),
   so a similar strategy can be applied: for instance, record thermal
@@ -605,7 +605,7 @@ provide a **thermal imaging stream** that complements the GSR data. The
 integration involves technical steps (initialising the camera via the
 SDK, managing data flow) and conceptual steps (deciding which thermal
 features to extract and log). Once implemented, the app can record
-synchronized thermal and GSR data for each session, offering a more
+synchronised thermal and GSR data for each session, offering a more
 complete view of the user's physiological responses than either
 modality alone.
 
@@ -752,7 +752,7 @@ PDF is provided in the SDK package) and the community forums. The
 **Topdon community** site has Q&As -- for example, guidance for using
 the camera in custom
 apps[\[44\]](https://community.topdon.com/detail?id=352&type=1#:~:text=Developing%20a%20Flutter%20App%20with,resources%20that%20would%20help)
--- and the official FAQ addresses issues like "camera not recognized by
+-- and the official FAQ addresses issues like "camera not recognised by
 phone" (often solved by ensuring the phone has OTG support or using the
 correct
 app)[\[45\]](https://github.com/leswright1977/PyThermalCamera/issues/16#:~:text=Topdon%20TC001%20Camera%20Special%20Commands,app%20use%20just%20the).
@@ -764,7 +764,7 @@ high-quality thermal data for your thesis work.
 
 - Topdon TC001 Product Page -- *Thermal Imaging Camera for Android
   Devices, 256×192 Resolution, -4 °F to 1022 °F
-  range*[\[1\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=%E2%80%A2%20Equipped%20with%20an%20ultra,circuit%20boards%20and%20other%20electronics)[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimized%20Temperature%20Range%20%26%20Accuracy).
+  range*[\[1\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=%E2%80%A2%20Equipped%20with%20an%20ultra,circuit%20boards%20and%20other%20electronics)[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimised%20Temperature%20Range%20%26%20Accuracy).
 - Topdon TC001 Plus Specifications -- *Dual-Lens 256×192 IR Camera,
   25 Hz frame rate, image fusion, ±2 °C
   accuracy*[\[46\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=256x192)[\[47\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=0).
@@ -783,7 +783,7 @@ high-quality thermal data for your thesis work.
   the camera in custom applications.
 ---
 [\[1\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=%E2%80%A2%20Equipped%20with%20an%20ultra,circuit%20boards%20and%20other%20electronics)
-[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimized%20Temperature%20Range%20%26%20Accuracy)
+[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimised%20Temperature%20Range%20%26%20Accuracy)
 TC001 (Android Devices) -- TOPDON USA
 
 <https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU>
