@@ -83,7 +83,7 @@ accomplishments and technical contributions of this project include:
   increases researchers' confidence in the recordings and reduces the
   risk of unnoticed data corruption.
 
-- **Advanced Calibration Procedures:** A complete **calibration
+- **Calibration Procedures:** A **calibration
   module** was developed to support the accurate fusion of data from
   different sensors. Using established computer vision techniques, the
   system performs **intrinsic camera calibration** and **RGB--thermal
@@ -473,7 +473,7 @@ efforts could be directed:
   process more robust, the system will become easier to set up and more
   resilient in different network conditions.
 
-- **Full Integration of Hand Segmentation and Advanced Analytics:**
+- **Full Integration of Hand Segmentation and Analytics:**
   Integrating the **hand segmentation module** into the live data
   pipeline is a clear next step. Future work can tie the MediaPipe hand
   landmark detection into the recording sessions so that the system can

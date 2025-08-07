@@ -1,10 +1,10 @@
 # Chapter 5: Evaluation and Testing
 
-This complete chapter presents the systematic testing and
+This chapter presents the systematic testing and
 validation framework employed to ensure the Multi-Sensor Recording
 System meets the rigorous quality standards required for scientific
 research applications. The testing methodology represents a
-sophisticated synthesis of software engineering testing principles,
+synthesis of software engineering testing principles,
 scientific experimental design, and research-specific validation
 requirements that ensure both technical correctness and scientific
 validity. In particular, given this system's focus on capturing
@@ -55,7 +55,7 @@ introducing novel approaches designed to meet the unique challenges of
 validating research-grade distributed systems that coordinate consumer
 hardware for scientific applications.
 
-### complete Testing Philosophy and Methodological Foundations
+### Testing Philosophy and Methodological Foundations
 
 The testing philosophy emerges from the recognition that traditional
 software testing approaches, while valuable, are insufficient for
@@ -96,12 +96,12 @@ beyond functional correctness to encompass validation of scientific
 methodology, experimental design principles, and reproducibility
 requirements that enable independent verification of research
 results[\[6\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120).
-The framework implements sophisticated statistical validation such as
+The framework implements statistical validation such as
 hypothesis testing and confidence interval analysis, ensuring that the
 system's performance is not only qualitatively acceptable but also
 quantitatively proven to meet scientific standards.
 
-### Sophisticated Multi-Layered Testing Hierarchy with complete Coverage
+### Multi-Layered Testing Hierarchy with Coverage
 
 The thorough testing hierarchy implements a systematic and
 methodologically rigorous approach that validates system functionality
@@ -367,7 +367,7 @@ approach to validation that accommodates the challenges of testing a
 distributed system with heterogeneous components, while maintaining
 consistency and reliability across diverse testing scenarios. The
 framework design recognises that multi-platform testing requires
-sophisticated coordination mechanisms to validate both individual
+coordination mechanisms to validate both individual
 platform functionality and cross-platform integration, and to aggregate
 results comprehensively.
 
@@ -379,13 +379,13 @@ and **automation**, while remaining flexible to accommodate diverse
 research use cases and evolving requirements over the project's
 lifecycle.
 
-### complete Multi-Platform Testing Architecture
+### Multi-Platform Testing Architecture
 
 The multi-platform testing architecture addresses the fundamental
 challenge of coordinating test execution across Android mobile devices,
 Python desktop applications, and embedded sensor hardware, all while
 maintaining tightly synchronised timing and centralised result
-collection. The architecture implements a sophisticated orchestration
+collection. The architecture implements an orchestration
 system to manage test execution, data collection, and result analysis
 across the entire system
 topology[\[16\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L510-L519)[\[17\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L522-L529).
@@ -579,7 +579,7 @@ results: any other developer or researcher can run the test suite in the
 defined environment and expect the same outcomes, which is a cornerstone
 of scientific software development.
 
-### Advanced Test Data Management
+### Test Data Management
 
 The testing framework includes complete capabilities for
 generating, managing, and validating test data across diverse scenarios,
@@ -1634,7 +1634,7 @@ this succeeds and that the output files are indeed created and contain
 valid data (data_integrity_verified could involve checksums or just
 confirming file sizes and basic format).
 
-This complete system test touches on every major aspect of the
+This system test touches on every major aspect of the
 system in one sweep. It's essentially a dry run of an experiment. By
 automating this, we caught issues such as: - A race condition where not
 all devices would start recording if the start signals were sent too

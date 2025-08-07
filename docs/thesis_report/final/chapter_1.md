@@ -46,7 +46,7 @@ Facial infrared imaging has shown promise as a complementary measure in
 emotion research, capitalizing on the fact that stress and
 thermoregulation are linked (e.g. perspiration causes evaporative
 cooling)[\[9\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=compliments%20the%20traditional%20measures%20is,results%20in%20affective%20research%2031%E2%80%939).
-Similarly, high-resolution RGB cameras with advanced computer vision
+Similarly, high-resolution RGB cameras with computer vision
 algorithms can non-invasively capture other physiological signals --
 prior work has demonstrated heart rate and breathing can be measured
 from video of a person's face or
