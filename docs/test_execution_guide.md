@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides complete instructions for executing the Multi-Sensor Recording System's test suite.
+This guide provides instructions for executing the Multi-Sensor Recording System's test suite.
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ pip install -e ".[dev,shimmer,calibration,android]"
 
 ### Quick Start Testing
 ```bash
-# Run complete evaluation suite
+# Run evaluation suite
 python run_evaluation_suite.py
 
 # Quick validation during development
@@ -43,7 +43,7 @@ python run_evaluation_suite.py --category pc_foundation
 python run_evaluation_suite.py --category integration_tests
 ```
 
-### Advanced Options
+### Options
 ```bash
 # Parallel execution for faster results
 python run_evaluation_suite.py --parallel
@@ -58,8 +58,8 @@ python run_evaluation_suite.py --report
 ## Test Categories
 
 ### Foundation Tests
-- **Android Foundation**: 5 complete tests validating core Android components
-- **PC Foundation**: 6 complete tests validating PC controller components
+- **Android Foundation**: 5 tests validating core Android components
+- **PC Foundation**: 6 tests validating PC controller components
 
 ### Integration Tests
 - **Multi-Device Coordination**: Cross-component communication and synchronisation
@@ -75,14 +75,14 @@ python run_evaluation_suite.py --report
 - **Performance**: Sub-second execution for quick tests
 
 ### Latest Test Results
-**✅ Enhanced Testing Infrastructure** with comprehensive coverage
-- **Android Foundation**: Complete unit testing with SessionManager, ViewModel recording states, UI interactions ✅
+**✅ Enhanced Testing Infrastructure** with improved coverage
+- **Android Foundation**: Unit testing with SessionManager, ViewModel recording states, UI interactions ✅
 - **PC Foundation**: Full system component validation with improved error handling ✅  
 - **Integration Tests**: Cross-component testing including edge cases and stress scenarios ✅
 - **New Test Categories**: Added SessionManagerTest, MainViewModelRecordingStateEnhancedTest, EdgeCaseAndStressTest, MainActivityUITest ✅
 
 **Recent Testing Enhancements (commit 6b4291b):**
-- **Session Management Testing**: Complete lifecycle validation (creation, finalisation, state transitions)
+- **Session Management Testing**: Lifecycle validation (creation, finalisation, state transitions)
 - **Recording State Testing**: ViewModel isRecording flags, status text updates, state transitions  
 - **UI/Instrumentation Testing**: Espresso tests for navigation, permissions, button functionality
 - **Edge Case Testing**: Bluetooth connection drops, network interruptions, memory pressure scenarios
@@ -116,7 +116,7 @@ python run_evaluation_suite.py --test specific_test_name
    python run_evaluation_suite.py --category integration
    ```
 
-3. **Complete Evaluation**: Full system validation before releases
+3. **System Evaluation**: Full system validation before releases
    ```bash
    python run_evaluation_suite.py --parallel
    ```

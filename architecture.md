@@ -3,7 +3,7 @@
 
 ## Overview
 
-The Multi-Sensor Recording System implements a sophisticated distributed architecture designed for contactless Galvanic Skin Response (GSR) prediction research. This document consolidates all architectural components, design decisions, and system interactions into a unified reference following established distributed systems principles [Tanenbarayanan2006] and research data management best practices [Wilkinson2016].
+The Multi-Sensor Recording System implements a distributed architecture designed for contactless Galvanic Skin Response (GSR) prediction research. This document consolidates the architectural components, design decisions, and system interactions into a unified reference following established distributed systems principles [Tanenbarayanan2006] and research data management best practices [Wilkinson2016].
 
 ### System Mission and Research Context
 
@@ -13,11 +13,11 @@ This system addresses fundamental challenges in physiological computing research
 
 The system follows a **distributed star-mesh topology** with PC master-controller coordination, implementing an **offline-first recording** approach that ensures data collection reliability in diverse research environments. Communication between components utilises a standardised **JSON socket protocol** designed for real-time coordination while maintaining flexibility for heterogeneous device integration.
 
-## Complete System Architecture
+## System Architecture
 
 ```mermaid
 graph TB
-    subgraph "Complete Multi-Sensor Recording System Architecture"
+    subgraph "Multi-Sensor Recording System Architecture"
         subgraph "PC Master Controller (Python)"
             direction TB
             SM[Session Manager<br/>Lifecycle Coordination]
@@ -152,7 +152,7 @@ The PC Master Controller serves as the central command and coordination hub, imp
 #### Primary Components
 
 **Session Manager** (`PythonApp/session/`)
-- **Responsibility**: Complete recording session lifecycle management
+- **Responsibility**: Recording session lifecycle management
 - **Features**: Multi-device coordination, session state management, data organisation
 - **Integration**: Coordinates with all system components through centralised state management
 - **Academic Foundation**: Implements established session management patterns [Wilson2014]
@@ -189,7 +189,7 @@ The PC Master Controller serves as the central command and coordination hub, imp
 
 ### 2. Android Recording Application (Kotlin Mobile Platform)
 
-The Android application implements sophisticated sensor data collection with clean MVVM architecture, following modern Android development patterns and research data collection requirements.
+The Android application implements sensor data collection with clean MVVM architecture, following modern Android development patterns and research data collection requirements.
 
 #### Refactored Architecture Overview
 
@@ -484,7 +484,7 @@ graph TB
 
 ### 7. Testing and Quality Assurance System
 
-The system includes comprehensive testing infrastructure ensuring research-grade reliability and validation with enhanced coverage from recent testing improvements.
+The system includes testing infrastructure ensuring research-grade reliability and validation with enhanced coverage from recent testing improvements.
 
 #### Test Framework Architecture
 
@@ -493,12 +493,12 @@ graph TB
     subgraph "Enhanced Testing Framework"
         subgraph "Foundation Tests (Real Components)"
             ANDROID[Android Foundation Tests<br/>Enhanced Unit Testing]
-            PC[PC Foundation Tests<br/>6 Complete Tests]
+            PC[PC Foundation Tests<br/>6 Tests]
             REAL[Real Component Validation<br/>Zero-Mock Testing]
         end
         
         subgraph "Enhanced Android Testing (commit 6b4291b)"
-            SESSION[SessionManager Testing<br/>Complete Lifecycle Validation]
+            SESSION[SessionManager Testing<br/>Lifecycle Validation]
             VIEWMODEL[ViewModel Recording State<br/>isRecording Flags & Status Updates]
             UI[UI/Instrumentation Testing<br/>Espresso Navigation & Permissions]
             EDGE[Edge Case & Stress Testing<br/>Bluetooth Drops & Network Issues]
@@ -508,7 +508,7 @@ graph TB
             MULTI[Multi-Device Coordination<br/>Device Discovery & Session Management]
             NETWORK[Network Performance<br/>WebSocket Protocols & Resilience]
             SYNC[Synchronisation Precision<br/>Sub-millisecond Temporal Accuracy]
-            E2E[End-to-End Workflows<br/>Complete Recording Lifecycle]
+            E2E[End-to-End Workflows<br/>Recording Lifecycle]
         end
         
         subgraph "Performance Tests (System Validation)"
@@ -518,7 +518,7 @@ graph TB
         end
         
         subgraph "Quality Metrics (Research Standards)"
-            SUCCESS[Enhanced Success Rate<br/>Comprehensive Test Coverage]
+            SUCCESS[Enhanced Success Rate<br/>Improved Test Coverage]
             PRECISION[Temporal Precision<br/><1ms Synchronisation Accuracy]
             RELIABILITY[System Reliability<br/>98.4% Under Diverse Conditions]
         end
@@ -539,7 +539,7 @@ graph TB
 
 #### Quality Assurance Metrics
 
-**Enhanced Test Results** (Latest Execution with Comprehensive Testing Infrastructure):
+**Enhanced Test Results** (Latest Execution with Improved Testing Infrastructure):
 - **Android Foundation**: Enhanced unit testing with SessionManager, ViewModel recording states, UI testing ✅
 - **PC Foundation**: 6/6 tests passed (100.0%) ✅
 - **Integration Tests**: Cross-component testing including edge cases and stress scenarios ✅
@@ -548,7 +548,7 @@ graph TB
 - **Research Deployment**: Ready ✅
 
 **Enhanced Testing Infrastructure (commit 6b4291b)**:
-- **Session Management Testing**: Complete lifecycle validation (creation, finalisation, state transitions)
+- **Session Management Testing**: Lifecycle validation (creation, finalisation, state transitions)
 - **Recording State Testing**: ViewModel isRecording flags, status text updates, state transitions  
 - **UI/Instrumentation Testing**: Espresso tests for navigation, permissions, button functionality
 - **Edge Case Testing**: Bluetooth connection drops, network interruptions, memory pressure scenarios
@@ -578,7 +578,7 @@ graph TB
         subgraph "Research Workflow Support"
             TEMPLATES[Session Templates<br/>Predefined Research Protocols]
             EXPORT[Data Export<br/>Research Format Compatibility]
-            METADATA[Metadata Management<br/>Complete Documentation]
+            METADATA[Metadata Management<br/>Documentation]
             ANALYSIS[Analysis Integration<br/>Research Tool Compatibility]
         end
         
@@ -621,7 +621,7 @@ graph TB
 - **Consequences**: Improved maintainability and predictable state behaviour
 
 ### ADR-002: Strict Type Safety
-- **Decision**: Enforce complete type safety across all system components
+- **Decision**: Enforce type safety across all system components
 - **Rationale**: Reduces runtime errors and improves code reliability
 - **Consequences**: Enhanced development experience and reduced debugging time
 
@@ -714,7 +714,7 @@ graph LR
 
 ### Documentation Maintenance
 - **Architecture Decision Records**: Systematic documentation of major architectural decisions
-- **API Documentation**: Complete API reference with automated synchronisation
+- **API Documentation**: API reference with automated synchronisation
 - **Research Documentation**: Academic-grade documentation following established standards
 - **User Guides**: Practical usage documentation with step-by-step procedures
 
@@ -749,4 +749,4 @@ graph LR
 
 ---
 
-**Multi-Sensor Recording System** - Complete architecture enabling advanced physiological research through synchronised multi-modal data collection with research-grade reliability and academic rigor.
+**Multi-Sensor Recording System** - Architecture enabling physiological research through synchronised multi-modal data collection with research-grade reliability and academic rigor.
