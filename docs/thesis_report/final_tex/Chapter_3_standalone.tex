@@ -122,9 +122,9 @@ research workflow.
 
 \textbf{Table 3.1 --- Functional Requirements}
 
-  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% Table formatting line removed for compilation compatibility
   ID                      Functional Requirement Description                                                                                                                                                                                                                                                                                                                                                 Priority
-  ---------------------------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------------------------------
+% Table formatting line removed for compilation compatibility
   FR-01                   \textbf{Centralized Multi-Device Coordination:} The system shall provide a PC-based master controller application that can connect to and manage multiple remote recording devices (Android smartphones). This enables one operator to initiate and control recording sessions across all devices from a single interface.                                                              H
 
   FR-02                   \textbf{User Interface for Session Control:} The PC master controller shall offer an intuitive graphical user interface (GUI) for configuring sessions, displaying device status, and controlling recordings (start/stop). The GUI should show connected device indicators and allow the user to easily monitor the recording process in real time.                                     H
@@ -168,7 +168,7 @@ research workflow.
   FR-13                   \textbf{Post-Session Data Processing:} The system shall support optional \textbf{post-processing steps} on the recorded data to enrich the dataset. For example, after a session, a \textit{hand segmentation} algorithm can be run on the recorded video frames to identify and crop the participant's hand region (since GSR is often measured on the hand). If enabled, the PC controller will   M
                           automatically invoke the hand segmentation module on the session's video files and save the results (segmented images or masks) in the session folder\cite{WHOStressDefinition}. This automates part of the data analysis preparation (e.g. extracting relevant 
                           features) and is configurable by the user.                                                                                                                                                                                                                                                                                                                                         
-  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% Table formatting line removed for compilation compatibility
 
 \textbf{Discussion:} The above functional requirements cover the core
 capabilities of the system. Together, they ensure that the
@@ -191,7 +191,7 @@ the quality and utility of the collected data (these are considered
 "Medium" priority since the system can run without them, but they are
 valuable for achieving research-grade results). Many of these
 requirements are explicitly supported by the implementation --- for
-instance, the \textbf{ShimmerManager} class in the code confirms the
+instance, the ShimmerManager class in the code confirms the
 multi-sensor integration and error-handling for GSR
 sensors\cite{AppleHealthWatch2019}\cite{Boucsein2012},
 and the session management logic creates metadata files and directory
@@ -214,9 +214,9 @@ mobile or field environments, with human participants involved).
 
 \textbf{Table 3.2 --- Non-Functional Requirements}
 
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% Table formatting line removed for compilation compatibility
   ID                      Non-Functional Requirement Description                                                                                                                                                                                                                                                                Priority
-  ---------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------------------------------
+% Table formatting line removed for compilation compatibility
   NFR-01                  \textbf{Real-Time Performance:} The system shall operate in real time, handling data streams without undue delay. All components must be efficient enough to \textbf{capture video at full frame rate and sensor data at full sampling rate} without buffering issues or frame drops. For example, the Android  High
                           app should sustain 30 FPS video recording and \~50 Hz GSR sampling simultaneously. The end-to-end latency from capturing a sensor sample/frame to logging it with a timestamp should be minimal (well below 100 ms), ensuring a responsive system.                                                    
 
@@ -235,7 +235,7 @@ mobile or field environments, with human participants involved).
   NFR-05                  \textbf{Scalability (Multi-Device Support):} The architecture should scale to \textbf{multiple recording devices} operating concurrently. Adding more Android devices (or additional Shimmer sensors) to a session should have a linear or manageable impact on performance. The network and PC controller must Medium
                           handle the bandwidth of multiple video streams and sensor feeds. At minimum, the system is expected to support a scenario of \textit{at least two Android devices} plus one or two Shimmer sensors recording together. The design (threaded server, asynchronous I/O, etc.) allows scaling up the number of  
                           devices with minimal                                                                                                                                                                                                                                                                                  
-                          modification\cite{DeviceServer}\cite{GSRPPGMachineLearning2024}.   
+                          modification\cite{GSRPPGMachineLearning2024}.   
 
   NFR-06                  \textbf{Usability and Accessibility:} The system's user interface and workflow shall be designed for \textbf{ease of use} by researchers who may not be software experts. This means the PC application should be straightforward to install and run, and the process to start a session is simple (e.g.,       High
                           devices auto-discover the PC, one-click to start recording). Visual feedback (FR-10) is provided to reduce user uncertainty. The Android app should require minimal user interaction --- ideally launching and automatically connecting to the PC. Clear notifications or dialogs guide the user if    
@@ -256,7 +256,7 @@ mobile or field environments, with human participants involved).
                           correct handshake/hello message with expected format) are allowed to connect to the PC controller, reducing the risk of unauthorized interception. Additionally, participant data (video and physiological signals) are sensitive, so the system should provide options to encrypt stored data or     
                           otherwise protect data at rest, according to institutional data handling guidelines. (For example, the recorded files can be stored on encrypted drives or be anonymized by not embedding personal identifiers.) Although full encryption of live streams is not implemented in the current version,  
                           this requirement is noted for completeness to ensure ethical research data management.                                                                                                                                                                                                                
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% Table formatting line removed for compilation compatibility
 
 \textbf{Discussion:} These non-functional requirements underline the system's
 quality attributes that make it suitable for research use. Performance
@@ -333,7 +333,7 @@ involving physiological monitoring. The steps are as follows:
     on the PC (optionally setting a session name or notes) and clicks
     "Start Session". The PC controller then broadcasts a \textbf{start
     recording command} to all connected
-    devices\cite{DeviceServer}\cite{ElectrodermalActivityWiki}.
+    devices\cite{ElectrodermalActivityWiki}.
     Each Android device receives the command and begins recording its
     sensors: the cameras start capturing video frames and writing to
     local MP4 files, and if a device has a paired Shimmer, it starts
@@ -447,7 +447,7 @@ aligned to collect high-quality data.
     This is done through a configuration interface (the PC or Android
     app exposes options if the sensor is connected). The chosen
     configuration is saved so that the device will use those settings in
-    the upcoming session --- the ShimmerManager, for instance, stores a
+    the upcoming session --- the ShimmerManager class, for instance, stores a
     profile for the device with its MAC address and the enabled channels
     and sampling
     rate\cite{ContactlessStressThermal2022}.
@@ -637,7 +637,7 @@ The \textbf{Shimmer GSR Sensors} integration is architected flexibly. The
 system supports three modes (as mentioned in FR-06): \textbf{Direct PC
 Connection}, \textbf{Android-Mediated Connection}, or \textbf{Simulation Mode}
 (for testing). In direct mode, the PC runs a Shimmer Bluetooth driver
-(via the PyShimmer library) in the Python app --- the \texttt{ShimmerManager} on
+(via the PyShimmer library) in the Python app --- the ShimmerManager class on
 PC opens a Bluetooth COM port to the Shimmer and reads data packets in a
 background
 thread\cite{GSRPPGMachineLearning2024}\cite{TopdonTC001}.
@@ -645,7 +645,7 @@ In Android-mediated mode, an Android phone pairs with the Shimmer (using
 the Shimmer Android API) and that phone's app becomes responsible for
 reading the GSR data; the phone then sends those sensor readings to the
 PC over the network (using JSON messages of type
-"sensor\_data")\cite{DeviceServer}.
+"sensor\_data").
 The PC doesn't directly talk to the Shimmer in that case; it receives
 the data already parsed from the phone. The architecture allows both
 modes to operate simultaneously if needed (for example, two Shimmers
@@ -660,7 +660,7 @@ instance, the Android app relies heavily on \textbf{dependency injection}
 (using Dagger/Hilt): components like the Camera Recorder, Thermal
 Recorder, and Shimmer Recorder are provided to the Main ViewModel, so
 they can be easily replaced or mocked for
-testing\cite{MainViewModel}\cite{MainViewModel}.
+testing.
 This makes it possible to extend support to new sensor types by adding
 new modules without altering the core logic. On the PC side, the
 networking is abstracted behind a \texttt{JsonSocketServer} class with
@@ -689,27 +689,27 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     PC's JsonSocketServer sends a
     \texttt{\{"type": "command", "command": "start\_recording", ...\}} (for
     example) to each connected Android
-    device\cite{DeviceServer}\cite{DeviceServer}.
+    device.
     These messages are small JSON payloads, prefixed with a length
     header (to ensure the receiver knows how many bytes to
-    read)\cite{DeviceServer}.
+    read).
     When an Android device receives the start command, it immediately
     responds (if needed) with an acknowledgment
-    (\texttt{\{"type": "ack", "cmd": "start\_recording", "status": "ok"\}})\cite{DeviceServer}
+    (\texttt{\{"type": "ack", "cmd": "start\_recording", "status": "ok"\}})
     and then begins its recording process. This command flow is
     one-to-many (one PC to multiple clients) and happens almost
     simultaneously to all devices (the PC either sends commands in a
     quick loop or uses a broadcast helper function to send to
-    all\cite{DeviceServer}).
+    all).
 
 2.  \textbf{Sensor Data Capture (Local Flow on Devices):} Once recording,
     each device is capturing data from sensors:
 
 3.  The \textbf{camera data} (visual and thermal) flows from the camera
     hardware through Android's Camera2 API into either a file or a
-    buffer. On Android, the CameraRecorder sets up a MediaRecorder that
+    buffer. On Android, the CameraRecorder class sets up a MediaRecorder that
     encodes video frames directly to an MP4 file on the device's file
-    system\cite{WebcamCapture}\cite{WebcamCapture}.
+    system.
     Simultaneously, for thermal, if a separate stream exists, it might
     use a similar approach or raw frames saved as images (depending on
     implementation). The key is that frames are timestamped by the
@@ -719,15 +719,15 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     to Base64 strings to send to PC).
 
 4.  The \textbf{GSR sensor data} flow varies by mode: in direct PC mode, the
-    PC's ShimmerManager receives Bluetooth packets, decodes them to
+    PC's ShimmerManager class receives Bluetooth packets, decodes them to
     numeric values (like GSR microSiemens) and immediately writes them
     to a CSV file or stores them in memory
-    queues\cite{ShimmerManager}\cite{CortisolStressIndicator2020}.
+    queues\cite{CortisolStressIndicator2020}.
     In Android-mediated mode, the Shimmer Android API delivers sensor
     samples to the phone app, which then either writes to a local CSV on
     the phone or streams the values as JSON messages to the PC (the code
     supports a streaming socket for live
-    data\cite{ShimmerRecorder}\cite{ShimmerRecorder}).
+    data).
     In both cases, each sensor sample is augmented with timing info:
     e.g., the code records the sample's device timestamp and the system
     time it arrived on the
@@ -739,7 +739,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     from the Android devices back to the PC. Each device periodically
     sends a \texttt{status} message with its current recording status (every
     few
-    seconds)\cite{DeviceServer}\cite{DeviceServer}.
+    seconds).
     This includes data like battery % and free storage, as well as a
     \texttt{timestamp} (which can be used by PC to gauge device clock vs PC
     clock). These status packets help update the UI and also carry
@@ -754,7 +754,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     full-frame, to avoid bogging down the network). Meanwhile, if the
     Shimmer is streaming live via Android, those readings might also be
     sent continuously in \texttt{sensor\_data}
-    messages\cite{DeviceServer};
+    messages;
     however, in practice the PC may choose not to plot every point to
     avoid overload --- it could sample or aggregate before display.
 
@@ -775,7 +775,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
 
 8.  Device sends a \texttt{file\_info} message indicating it is about to send a
     file, including file name and
-    size\cite{DeviceServer}\cite{DeviceServer}.
+    size.
     For example, \texttt{"name": "rgb\_video.mp4", "size": 50012345}.
 
 9.  PC prepares to receive by creating a new file in the session folder
@@ -784,23 +784,23 @@ final data aggregation \[Placeholder\].} Here is the sequence:
 
 10. Device then sends a series of \texttt{file\_chunk} messages, each containing
     a segment of the file encoded (typically in
-    Base64)\cite{DeviceServer}.
+    Base64).
     The PC decodes each chunk and writes to the file
-    handle\cite{DeviceServer}.
+    handle.
     This continues until the whole file is sent (chunks are often a few
     KB each). The PC's networking layer tracks how many bytes have been
     received and can log
-    progress\cite{DeviceServer}.
+    progress.
 
 11. When the device finishes sending, it sends \texttt{file\_end} message with
     the file
-    name\cite{DeviceServer}.
+    name.
     PC then closes the file and compares the received byte count to the
     expected
-    size\cite{DeviceServer}.
+    size.
     If they match, PC logs success and sends back a confirmation
     (\texttt{file\_received} message with status
-    ok)\cite{DeviceServer}.
+    ok).
     If there's a mismatch, PC logs an error and could request a retry
     (in our code, it at least reports the error; a full retry mechanism
     could be initiated if needed).
@@ -810,15 +810,15 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     The PC can pipeline requests or handle one device at a time. In the
     current implementation, it likely sequentially requests each
     expected file from each
-    device\cite{DeviceServer}
+    device
     to avoid network congestion (with a short delay between as
-    indicated\cite{DeviceServer}).
+    indicated).
 
 13. Throughout this, the Session Manager on PC is aware of incoming
     files and uses
     \texttt{add\_file\_to\_session(device\_id, file\_type, path, size)} to update
     the session
-    metadata\cite{SessionManager}\cite{SessionManager}.
+    metadata.
     This means the session's JSON metadata will list, for each device,
     the files that were collected (with file paths and sizes),
     confirming that they are now on the PC.
@@ -833,7 +833,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     local on the PC --- using OpenCV or other libraries on the saved
     files. The results are logged (the \texttt{post\_processing} field in
     session metadata is updated to true with a
-    timestamp\cite{SessionManager}\cite{SessionManager}).
+    timestamp).
 
 15. \textbf{Data Storage and Access:} At the end of the data flow, all data
     resides in an organized manner on the PC. The \textbf{session folder}
@@ -843,19 +843,19 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     subfolders. For example, one might see:
 
 \begin{itemize}
-\item recordings/session_20250806_101530/
+\item recordings/session\_20250806\_101530/
         session\_metadata.json
         DeviceA\_rgb\_video.mp4
         DeviceA\_thermal\_video.mp4
         DeviceB\_rgb\_video.mp4
         DeviceB\_sensors.csv
-        stimulus_events.csv
+        stimulus\_events.csv
         calibration/ (folder with calibration images)
         processed/ (folder with segmented hand images)
 
   This structure was defined by the requirements and is implemented in
   code (the Android app creates similar filenames on its
-  side\cite{SessionManagerKt},
+  side,
   and the PC adds the device prefix upon receipt). Because each data
   file is timestamped or accompanied by timestamps internally, a
   researcher can load, for instance, the \texttt{DeviceB\_sensors.csv} and the
@@ -874,7 +874,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     file transfer part is the heaviest data flow; the system mitigates
     issues by writing chunks to disk as they arrive and using a binary
     encoding to avoid JSON overhead for large
-    data\cite{DeviceServer}.
+    data.
     Also, to maintain performance, intensive tasks like video encoding
     are done on the devices (leveraging phone hardware encoders), and
     the PC mainly handles control and file aggregation --- this
@@ -921,20 +921,20 @@ sequence of images if the device captures frame-by-frame --- in this
 implementation it was designed to be an MP4 for consistency (FR-05).
 Typical video resolution for RGB might be 1920×1080 at 30 fps (if the
 phone supports it, possibly even 4K as configured in
-code\cite{CameraRecorder}\cite{CameraRecorder}),
+code),
 whereas thermal cameras usually have lower resolution (for example
 320×240 or 160×120 at a lower frame rate like 8---30 fps). Regardless,
 the system handles these as just "video files" --- the exact resolution
 and frame rate used in a session are recorded in the session
 configuration
-file\cite{SessionManagerKt}\cite{DriverStressThermal2020}
+file\cite{DriverStressThermal2020}
 for reference. - \textbf{Sensor data:} The Shimmer GSR (and associated
 sensors) produce time-series data. This data is recorded in \textbf{CSV
 (Comma-Separated Values)} format for human readability and easy import
 into analysis tools. Each row in the CSV represents a sensor sample. For
-example, a row might contain: \textit{Timestamp, SystemTime, GSR_Conductance,
-PPG, Accel_X, Accel_Y, Accel_Z,
-BatteryLevel}\cite{ShimmerRecorder}.
+example, a row might contain: \textit{Timestamp, SystemTime, GSR\_Conductance,
+PPG, Accel\_X, Accel\_Y, Accel\_Z,
+BatteryLevel}.
 The \texttt{Timestamp} is the device's relative time or sample count, and
 \texttt{SystemTime} could be an absolute UNIX timestamp (to tie it to PC
 clock). Using CSV ensures that researchers can open the file in Python,
@@ -948,10 +948,10 @@ generates JSON and text files for metadata. The \textbf{session metadata}
 start/end times, list of devices, files names, and possibly environment
 info (like app versions). For instance, \texttt{session\_metadata.json} might
 have an entry listing each device by ID and the files it
-produced\cite{SessionManager}\cite{SessionManager}.
-Additionally, a human-readable \textbf{session_info.txt} is generated on the
+produced.
+Additionally, a human-readable \textbf{session\_info.txt} is generated on the
 Android side listing the folder contents and
-status\cite{SessionManagerKt}\cite{Fowles1981}.
+status\cite{Fowles1981}.
 This redundancy is intentional for clarity --- researchers can quickly
 read the text summary or use the JSON for programmatic processing. The
 PC and devices also maintain \textbf{log files} (e.g., \texttt{session\_log.txt})
@@ -979,7 +979,7 @@ could generate multiple gigabytes of data (mostly video), so the
 system's data requirement is that devices have \textbf{sufficient storage}
 available. The Android app checks available free space on the device
 storage before and during
-recording\cite{SessionManagerKt}
+recording
 and can warn the PC if space is low. The data management plan recommends
 using high-capacity SD cards or internal memory on phones, and the PC of
 course typically has ample disk space.
@@ -989,20 +989,20 @@ directory (both on the device during capture and on the PC after
 aggregation). This not only organizes the data but makes it easier to
 move or archive entire sessions. If a user needs to free space, they can
 archive older session folders to an external drive. The naming
-convention with session timestamps (e.g., \texttt{session_YYYYMMDD_HHMMSS})
+convention with session timestamps (e.g., \texttt{session\_YYYYMMDD\_HHMMSS})
 ensures uniqueness and chronological order. The inclusion of the session
 name (if the researcher provided one) in the folder or file names helps
 in identifying the context of the data (for example,
-\texttt{session_20250806_101530_stressTest} if "stressTest" was given as a
+\texttt{session\_20250806\_101530\_stressTest} if "stressTest" was given as a
 name).
 
 \textbf{Data Integrity and Verification:} As outlined in NFR-04, the system
 has built-in measures to verify data integrity. During file transfer,
 checksums or at least byte counts are
-compared\cite{DeviceServer}.
+compared.
 After a session, the Session Manager on PC logs a \textbf{session summary}
 that includes whether each expected file is present and its
-size\cite{SessionManagerKt}.
+size.
 For example, the PC log might say "RGB Video: OK (50012345 bytes),
 Thermal Video: OK (12345678 bytes), Shimmer Data: OK (N bytes)" confirming
 successful captures. In case a file is missing or incomplete, that is

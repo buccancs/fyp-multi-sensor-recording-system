@@ -235,7 +235,7 @@ temporal alignment (ensuring data from different devices are time-synced
 when comparing) and environmental factors that could affect readings. In
 practice, this means if the system measures a temperature change or GSR
 fluctuation, those measurements have been verified to reflect true
-values with known accuracy (e.g., thermal data accurate to within 0.1°C
+values with known accuracy (e.g., thermal data accurate to within 0.1\textdegree C
 and GSR data loss below 0.1% as specified in requirements).
 
 \textbf{Reproducibility and Replicability Testing:} The methodology includes
@@ -321,7 +321,7 @@ targets that the system needed to meet or exceed during testing:
 \hline
 \textbf{Testing Category} & \textbf{Coverage Target} & \textbf{Quality Metric} & \textbf{Acceptance Criteria} & \textbf{Validation Method} \\
 \hline
-\textbf{Unit Testing} & ≥95\% line coverage & Defect density & $<$0.05 defects per KLOC & Automated test execution with coverage analysis \\
+\textbf{Unit Testing} & $\geq$95\% line coverage & Defect density & $<$0.05 defects per KLOC & Automated test execution with coverage analysis \\
 \hline
 \textbf{Integration Testing} & 100\% interface coverage & Interface compliance & 100\% API contract adherence & Protocol conformance and compatibility testing \\
 \hline
@@ -334,15 +334,15 @@ targets that the system needed to meet or exceed during testing:
 \label{tab:testing-metrics}
 \end{table}
 
-  \textbf{Reliability   Extended       System         ≥99.5% uptime  Long-duration
-  Testing}       operation      availability   during testing continuous
-                                                               stress testing
-
-  \textbf{Accuracy      All            Measurement    ≤5 ms time     Comparative
-  Testing}       measurement    precision      sync error,    analysis with
-                  modalities                    ≤0.1 °C        reference
-                                                thermal        standards
-                                                accuracy       
+%   \textbf{Reliability   Extended       System         \$\geq\$99.5% uptime  Long-duration
+%   Testing}       operation      availability   during testing continuous
+%                                                                stress testing
+% 
+%   \textbf{Accuracy      All            Measurement    \$\leq\$5 ms time     Comparative
+%   Testing}       measurement    precision      sync error,    analysis with
+%                   modalities                    \$\leq\$0.1 \textdegree C        reference
+%                                                 thermal        standards
+%                                                 accuracy       
   ------------------------------------------------------------------------------------------------------------------
 
 \textbf{Coverage Target Justification:} These coverage targets reflect the
@@ -361,7 +361,7 @@ quality or system stability is thoroughly tested.
 
 \textbf{Quality Metric Selection:} The selected metrics emphasize
 characteristics that directly impact research validity and
-reproducibility\cite{DeviceServer}.
+reproducibility.
 This includes measurement accuracy (e.g., how close are sensor readings
 to true values), temporal precision (e.g., how well synchronized are
 data streams), data integrity (no data loss or corruption), and system
@@ -377,7 +377,7 @@ at least 99.5% over long runs).
 minimum thresholds derived from the system requirements and comparisons
 to similar research systems in
 literature\cite{GSRPPGMachineLearning2024}.
-They include absolute thresholds (like "\< 0.1°C difference from
+They include absolute thresholds (like "\< 0.1\textdegree C difference from
 reference" for thermal accuracy) and relative or statistical criteria
 (like the 95th percentile of response time under load). During testing,
 results are continuously checked against these criteria; if any metric
@@ -675,7 +675,7 @@ data streams, it validates that their timestamp sequences are aligned
 and there are no unexpected gaps (temporal synchronization in test
 data). Outlier detection might be employed to ensure the synthetic
 generator didn't produce any impossible values (like negative
-resistance in GSR, or a human temperature of 60°C). By validating test
+resistance in GSR, or a human temperature of 60\textdegree C). By validating test
 data upfront, we prevent the tests from giving misleading results due to
 flawed test inputs.
 
@@ -847,7 +847,7 @@ the logic of setting up and tearing down these environments
 programmatically.
 
     class TestEnvironmentManager:
-        def _\_init__(self):
+        def \_\_init\_\_(self):
             self.environments = {
                 'unit': UnitTestEnvironment(),
                 'integration': IntegrationTestEnvironment(),
@@ -932,7 +932,7 @@ UI, except where using Espresso for small integration tests as needed.
 
 One crucial component is the Android camera recorder, responsible for
 capturing video (and thermal data via an external camera) on the mobile
-device. We wrote unit tests to validate the CameraRecorder's behavior,
+device. We wrote unit tests to validate the CameraRecorder class behavior,
 especially configuration management and error handling. Below is an
 example of such a test class:
 
@@ -1032,7 +1032,7 @@ the user or logged.
 \subsubsection{Shimmer Integration Tests}
 
 Another critical part of the Android app is integration with the
-\textbf{Shimmer GSR sensor} over Bluetooth. We developed a \texttt{ShimmerRecorder}
+\textbf{Shimmer GSR sensor} over Bluetooth. We developed a ShimmerRecorder class
 class that manages discovery and connection of Shimmer devices and
 starts the GSR data streaming. Unit tests for this component focused on
 ensuring proper use of the Bluetooth API and correct configuration of
@@ -1105,7 +1105,7 @@ In these tests: - We simulate the Bluetooth environment:
 fake callback for discovery which immediately "finds" two mock devices
 and finishes, to see that our \texttt{discoverDevices()} method correctly
 returns a list of found devices. - We test connecting to a device: using
-a \texttt{ShimmerManager} factory to get a \texttt{Shimmer} device instance, we
+a ShimmerManager factory to get a Shimmer device instance, we
 simulate a successful connection and configuration. We then verify that
 the GSR sensor and any required additional sensors (like an
 accelerometer for motion data) are included in the configuration passed
@@ -1186,7 +1186,7 @@ cases.
         def test\_calibration\_with\_insufficient\_images(self, calibration\_manager):
             """Test calibration failure when providing too few images."""
             # Arrange
-            insufficient\_images = [np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8) for _ in range(3)]
+            insufficient\_images = [np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8) for \_ in range(3)]
             pattern\_config = PatternConfig(
                 pattern\_type=PatternType.CHESSBOARD,
                 pattern\_size=(9, 6),
@@ -1283,7 +1283,7 @@ required precision.
             devices = []
             for i in range(4):
                 device = Mock()
-                device.id = f"device_{i}"
+                device.id = f"device\_{i}"
                 device.send\_sync\_request = AsyncMock()
                 devices.append(device)
             return devices
@@ -1653,10 +1653,10 @@ was below limits throughout the session. 4. \textbf{Data Validation:} After
 stopping the session, we invoke validation checks on the collected
 dataset. Temporal consistency means across the 5-minute session, all
 data streams share a common timeline (no drift beyond a few
-milliseconds). Data completeness ≥ 99% means essentially no significant
+milliseconds). Data completeness \$\geq\$ 99% means essentially no significant
 data loss (if we expected 5 min × 60 FPS from each camera, each should
 have \~18000 frames; completeness 99% means at most 180 frames dropped,
-which is acceptable). Signal quality ≥ required means, for example, the
+which is acceptable). Signal quality \$\geq\$ required means, for example, the
 GSR SNR was above 20 dB on average (so minimal noise/artifact). 5.
 \textbf{Export Verification:} Finally, the test simulates the user exporting
 the recorded data (e.g., saving to files or a database). It asserts that
@@ -1679,7 +1679,7 @@ data\_completeness: in one early run, data\_completeness was \~0.95 (5%
 data loss) which was too low; analysis revealed a buffer overflow in the
 network when all devices sent data at once at full rate. We addressed
 this by throttling slightly and increasing buffer sizes, and subsequent
-tests showed ≥99% completeness.
+tests showed \$\geq\$99% completeness.
 
 The end-to-end tests were run for various configurations: different
 numbers of devices (1, 2, 4), different data combinations (just GSR, or
@@ -1761,7 +1761,7 @@ Similarly, for the thermal camera data, we had a
 \texttt{ThermalQualityAnalyzer}:
 
     thermal\_quality = ThermalQualityAnalyzer().analyze(recorded\_thermal\_frames)
-    assert thermal\_quality.temperature\_accuracy < 0.1  # within 0.1°C of reference
+    assert thermal\_quality.temperature\_accuracy < 0.1  # within 0.1\textdegree C of reference
     assert thermal\_quality.spatial\_resolution >= 160   # at least 160x120 effective resolution
     assert thermal\_quality.temporal\_stability > 0.9    # minimal fluctuation when scene is static
 
@@ -1825,7 +1825,7 @@ their target values:
   Performance      Target Value   Measured Value Achievement    Statistical
   Metric                                         Rate           Confidence
   ------------------------ --------------------- --------------------- --------------------- ---------------------
-  **End-to-End     ≥ 90% runs     71.4% ± 5.2%   *Needs         Based on 7
+  **End-to-End     \$\geq\$ 90% runs     71.4% ± 5.2%   *Needs         Based on 7
   Test Success**   succeed                       Improvement*   suite runs
                                                  (79% of        (variability
                                                  target)        observed)
@@ -1835,7 +1835,7 @@ their target values:
   Tolerance}                                    to 500 ms)     resilience
                                                                 testing
 
-  \textbf{Device         ≥ 4 devices    4 devices      100% (meets    Multi-device
+  \textbf{Device         \$\geq\$ 4 devices    4 devices      100% (meets    Multi-device
   Coordination}                  (tested)       target)        coordination
                                                                 validated (max
                                                                 tested = 4)
@@ -1849,7 +1849,7 @@ their target values:
   Duration}       tests)                        faster)        interval over
                                                                 runs
 
-  \textbf{Connection     ≥ 95% success  100% success   105% (exceeded Simulated
+  \textbf{Connection     \$\geq\$ 95% success  100% success   105% (exceeded Simulated
   Recovery}                                     target)        dropout
                                                                 scenarios
 
@@ -1978,19 +1978,19 @@ run test and other long-run scenarios:
   Reliability    Target         Measured Value Test Duration  Statistical
   Metric                                                      Significance
   --------------------- --------------------- --------------------- --------------------- ---------------------
-  }System       ≥ 99.5%        **99.73% ±     168 hours (7   \textit{p} \< 0.001
+  }System       \$\geq\$ 99.5%        **99.73% ±     168 hours (7   \textit{p} \< 0.001
   Uptime\textbf{                      0.12%}        days)          (highly
                                                               significant)
 
-  \textbf{Data         ≥ 99%          }99.84% ±     720 sessions   99.9%
+  \textbf{Data         \$\geq\$ 99%          }99.84% ±     720 sessions   99.9%
   Collection                    0.08%\textbf{        (simulated)    confidence
   Success Rate}                                              
 
-  \textbf{Network      ≥ 98%          }99.21% ±     10,000         \textit{p} \< 0.01
+  \textbf{Network      \$\geq\$ 98%          }99.21% ±     10,000         \textit{p} \< 0.01
   Connection                    0.15%\textbf{        connection     
   Stability}                                  events         
 
-  \textbf{Automatic    ≥ 95%          }98.7% ±      156 failure    95% confidence
+  \textbf{Automatic    \$\geq\$ 95%          }98.7% ±      156 failure    95% confidence
   Recovery                      1.2%\textbf{         scenarios      
   Success}                                                   
   ---------------------------------------------------------------------------------------------------------------
@@ -2047,7 +2047,7 @@ overheated or throttled. They did warm up, and the internal thermal
 management on phones did throttle CPU a bit, but our app handled it by
 slightly reducing frame rate to keep up, which is acceptable. No device
 shut down due to thermal overload during our stress test (which ran \~1
-hour in \~30°C ambient, pushing devices hard). On the PC side, we
+hour in \~30\textdegree C ambient, pushing devices hard). On the PC side, we
 stressed with multiple simultaneous video decoding tasks and ensured the
 application remained responsive (it did, using \~70% CPU on a quad-core
 machine, under our 80% target).
@@ -2168,7 +2168,7 @@ intuitive --- not failures, but opportunities to improve user
 experience). - \textbf{Research validation tests} (those comparing data to
 references, checking accuracy) were at 97% pass. A couple of tests
 flagged minor discrepancies (for instance, one device's temperature
-reading had a consistent 0.2°C bias vs a reference --- not critical but
+reading had a consistent 0.2\textdegree C bias vs a reference --- not critical but
 something noted for future calibration improvement).
 
 Overall, about \textbf{240+} distinct test methods were executed (if we count
@@ -2226,7 +2226,7 @@ Acquisition)}: validated by unit tests (camera tests), integration
 tests (data streaming), and actual sessions measuring frame rates
 (achieved 4K@60fps on supported hardware, with 99.7% frame capture rate
 as noted). - \textbf{FR-003 (Thermal Imaging Integration)}: validated through
-device integration tests and accuracy tests (achieved 0.1°C accuracy at
+device integration tests and accuracy tests (achieved 0.1\textdegree C accuracy at
 25 fps, meeting the spec). - \textbf{FR-004 (Reference GSR Measurement)}:
 validated as we could capture GSR at 512 Hz with negligible data loss
 (\<0.1%), confirmed by comparing with reference device data streams. -
@@ -2247,20 +2247,20 @@ which is acceptable. Stopping sessions was faster (\~0.87 s avg). -
 We measured network throughput when all sensors are active. The system
 handled \~45.2 Mbps on average and peaks \~78 Mbps without issue, within
 the 100 Mbps theoretical Wi-Fi
-budget\cite{DeviceServer}.
+budget.
 This shows we can comfortably stream multiple video feeds and sensor
 data concurrently on a standard network. - \textbf{Resource Utilization:} CPU
 usage on the PC averaged \~67% during heavy recording (peak \~79%),
 under our 80%
-target\cite{MainViewModel}.
+target.
 Memory usage averaged \~2.1 GB (peak \~3.4 GB) out of a 4 GB
-budget\cite{MainViewModel},
+budget,
 which is fine (the PC used had 16 GB RAM, so plenty of headroom). On
 Android devices, CPU stayed under \~70% and no out-of-memory issues were
 observed. - \textbf{Storage Rate:} Data was written to disk at \~3.2 GB/hour
 on average (with video + thermal + GSR from multiple devices) and peaked
 at \~7.8 GB/hour when using highest
-settings\cite{MainViewModel}.
+settings.
 This is manageable --- a typical experiment of 1 hour can produce a few
 GB of data, which is expected for high-res video; the system's storage
 management (like splitting files) worked properly.
@@ -2289,7 +2289,7 @@ their status:
   with 99.7% frame capture rate.} (The slight frame drops were within
   tolerance and mostly due to device thermal throttling after long
   durations.)
-\item \textbf{FR-003 Thermal Imaging Integration}: ✅ \textit{Confirmed ±0.1°C accuracy
+\item \textbf{FR-003 Thermal Imaging Integration}: ✅ \textit{Confirmed ±0.1\textdegree C accuracy
   at 25 fps for thermal camera data.} (The calibration and data quality
   tests showed the thermal sensor meets the accuracy specification after
   proper calibration.)
@@ -2298,7 +2298,7 @@ their status:
   delivered essentially continuous data; any tiny gaps were negligible.
   Cross-correlation with a reference GSR instrument gave r ≈ 0.89, p \<
   0.001, indicating strong
-  agreement\cite{MainViewModel}.)
+  agreement.)
 \item \textbf{FR-005 Session Management}: ✅ \textit{Complete lifecycle management
   validated.} (Including session creation, configuration, start, stop,
   pause, resume, and data export --- all tested in sequence and
@@ -2369,19 +2369,19 @@ Our test suite provides comprehensive coverage across different
 dimensions: - \textbf{Functional coverage:} All core features (100%) were
 tested; most edge cases (\~87%) and error handling paths (\~92%) were
 tested, as estimated by our coverage analysis
-script\cite{DeviceServer}.
+script.
 Some minor edge scenarios remain (e.g., extremely unlikely error
 combinations) but those are tracked. - \textbf{Code coverage:} As noted, we
 attained \~93% statement coverage overall, \~89% branch coverage, \~95%
 function
-coverage\cite{DeviceServer}.
+coverage.
 These high numbers mean very little of the implementation is untested.
 The few untested lines are typically defensive code or platform-specific
 fallbacks that are hard to trigger but also low risk. - \textbf{Platform
 coverage:} We tested on multiple Android versions (7.0 through 12.0)
 and multiple OS for the desktop (Windows 10 \& 11, Ubuntu 20.04 LTS, and
 macOS
-12)\cite{DeviceServer}.
+12).
 All tested platforms ran the system successfully, with only minor
 platform-specific issues (like a macOS virtual camera permission quirk,
 which was documented). This broad platform coverage is important for
@@ -2392,7 +2392,7 @@ conditions) and stress conditions (long runs, many sessions
 back-to-back). We also tested under resource constraints (running the PC
 app on a lower-end laptop to see if it still meets timing --- it did,
 albeit using more CPU). We covered \~95% of intended load
-scenarios\cite{WebcamCapture};
+scenarios;
 a couple of extreme scenarios (like \>8 devices or 48-hour continuous
 with \>4 devices) were not tested due to practical limits, but those can
 be extrapolated from current results or tested in future if needed.
@@ -2414,20 +2414,20 @@ categorize them here for completeness:
   example, an early critical defect was a memory overflow when recording
   very long videos --- this was resolved by implementing streaming writes
   to disk. By test completion, no known critical bugs existed in the
-  system\cite{WebcamCapture}.
+  system.
 \item \textbf{Major Defects:} \textit{2 resolved.} These were significant issues but
   with workarounds; e.g.,
 \item A memory leak in extended sessions (fixed by better resource
-  cleanup)\cite{ShimmerManager}.
+  cleanup).
 \item A synchronization drift over long periods (fixed by periodic re-sync
   and clock correction
-  algorithms)\cite{ShimmerManager}.
+  algorithms).
 \item \textbf{Minor Defects:} \textit{5 resolved, 2 tracked.} Minor issues were things
   like UI responsiveness under high CPU load (improved by moving some
   work to background threads), handling of edge-case calibration
   patterns (improved with additional user guidance if detection fails),
   a slight delay on network reconnection
-  (optimized)\cite{ShimmerRecorder},
+  (optimized),
   and file format compatibility with third-party tools (addressed by
   offering alternative export formats).
 \item Two minor issues remain tracked:
@@ -2435,11 +2435,11 @@ categorize them here for completeness:
     limited, the real-time video preview can lag or drop quality; we
     plan an enhancement for adaptive quality scaling (not critical to
     data recording, only to the live view, so it's
-    acceptable)\cite{ShimmerRecorder}.
+    acceptable).
   - Another is \textbf{calibration pattern detection in exotic scenarios} ---
     very complex patterns or reflections might still pose difficulty; we
     consider this an improvement opportunity, but standard use is
-    fine\cite{ShimmerRecorder}.
+    fine.
 \item \textbf{Tracked Issues (Non-critical):} These are essentially the to-do
   enhancements mentioned above and any other nice-to-have improvements
   that weren't essential for meeting thesis objectives. None of them
@@ -2449,7 +2449,7 @@ categorize them here for completeness:
 \end{itemize}
 The defect resolution rate was \~94.3% (i.e., that percentage of all
 identified issues have been
-resolved)\cite{DeviceServer}.
+resolved).
 Importantly, \textbf{no known defect compromises the system's core
 requirements or scientific use}. The remaining tracked items are either
 cosmetic or enhancements to be addressed in future versions.
@@ -2461,7 +2461,7 @@ multi-layered methodology caught issues at appropriate stages (many bugs
 were fixed during unit tests or integration tests before ever doing a
 full system run). Early defect detection (we estimate \~89% of defects
 were found and fixed before system testing) improved development
-speed\cite{DeviceServer}.
+speed.
 The realistic end-to-end tests gave us confidence in real usage. And by
 quantifying everything (timings, success rates), we have concrete
 evidence rather than just anecdotal assurance. - \textbf{Areas for
@@ -2471,7 +2471,7 @@ one-click test of everything is still being finalized (mostly due to
 needing certain hardware or environment setups). We could invest in
 better CI/CD integration to run all tests in a controlled lab
 environment
-regularly\cite{DeviceServer}.
+regularly.
 Also, expanding cross-platform testing to more device models and
 conditions (we tested the main ones, but perhaps adding Android 13, or
 testing on different phone brands for camera differences, etc.). Lastly,
@@ -2479,7 +2479,7 @@ extending long-term reliability tests even further (e.g., a month-long
 test) could be done, though 1 week already gave a solid indication. -
 \textbf{Testing ROI:} We estimate about 35% of the total development effort
 was spent on testing and test
-automation\cite{DeviceServer}.
+automation.
 This investment is justified by the outcome: a robust system with very
 few issues in deployment. The payoff is that likely \<0.1% of defects
 have escaped into the "field" (if any --- so far none observed in pilot
@@ -2487,7 +2487,7 @@ usage), meaning near-zero troubleshooting during actual experiments.
 Also, a small user acceptance test (pilot study with a couple of
 researchers using the system) yielded a 94% satisfaction rate --- much of
 that due to the system's reliability which comes from thorough
-testing\cite{DeviceServer}.
+testing.
 
 One aspect not yet directly tested is the \textbf{end-user's ability to use
 the system easily} in terms of workflow. While we did usability tests
