@@ -16,6 +16,7 @@ The chapter additionally examines limitations and constraints that emerged durin
 The research project successfully delivered a validated multi-sensor platform for contactless GSR measurement that integrates thermal imaging technology with traditional electrodermal sensors within a synchronized distributed system architecture. The platform demonstrates practical feasibility of contactless GSR estimation while maintaining measurement accuracy comparable to established electrode-based reference methods.
 
 **Primary Technical Deliverables:**
+
 - Functional multi-device Android-PC platform with synchronized data acquisition capabilities
 - Thermal imaging integration for contactless GSR estimation implemented in `PythonApp/src/webcam/webcam_capture.py`
 - Distributed sensor fusion algorithms with millisecond-precision timing coordination
@@ -23,6 +24,7 @@ The research project successfully delivered a validated multi-sensor platform fo
 - Open-source research platform with modular architecture supporting community extension and replication
 
 **Research Methodology Contributions:**
+
 - Novel contactless GSR measurement methodology utilising thermal imaging analysis
 - Validated experimental protocols for multi-modal physiological sensor comparison
 - Systematic evaluation framework for contactless physiological measurement systems
@@ -1577,5 +1579,4 @@ researchers and developers to take the next steps. The accomplishments
 to date, combined with these forward-looking plans, underscore the
 project's lasting value and potential to drive further innovation in
 both technology and research on human stress and physiology.
-
-------------------------------------------------------------------------
+---

@@ -284,11 +284,10 @@ features or non-critical performance aspects.
 To this end, explicit **metrics and thresholds** were defined for each
 test category, as summarized in Table 5.1. These metrics provided clear
 targets that the system needed to meet or exceed during testing:
-
-  ----------------------------------------------------------------------------
+---
   Testing         Coverage       Quality Metric Acceptance     Validation
   Category        Target                        Criteria       Method
-  --------------- -------------- -------------- -------------- ---------------
+---
   **Unit          ≥95% line      Defect density \<0.05 defects Automated test
   Testing**       coverage                      per KLOC       execution with
                                                                coverage
@@ -312,13 +311,12 @@ targets that the system needed to meet or exceed during testing:
   Testing**       operation      availability   during testing continuous
                                                                stress testing
 
-  **Accuracy      All            Measurement    ≤5 ms time     Comparative
+**Accuracy      All            Measurement    ≤5 ms time     Comparative
   Testing**       measurement    precision      sync error,    analysis with
                   modalities                    ≤0.1 °C        reference
                                                 thermal        standards
-                                                accuracy       
-  ----------------------------------------------------------------------------
-
+                                                accuracy
+---
 **Coverage Target Justification:** These coverage targets reflect the
 higher reliability requirements of research software while acknowledging
 practical constraints in achieving perfect coverage across all
@@ -1792,11 +1790,10 @@ metrics. Table 5.2 summarizes several key performance results against
 their target values:
 
 **Table 5.2: Performance Testing Results Summary**
-
-  ----------------------------------------------------------------------------
+---
   Performance      Target Value   Measured Value Achievement    Statistical
   Metric                                         Rate           Confidence
-  ---------------- -------------- -------------- -------------- --------------
+---
   **End-to-End     ≥ 90% runs     71.4% ± 5.2%   *Needs         Based on 7
   Test Success**   succeed                       Improvement*   suite runs
                                                  (79% of        (variability
@@ -1825,11 +1822,10 @@ their target values:
   Recovery**                                     target)        dropout
                                                                 scenarios
 
-  **Message Loss   \< 10% loss    0--6.7%        *Variable*     Dependent on
+**Message Loss   \< 10% loss    0--6.7%        *Variable*     Dependent on
   Tolerance**                     observed       (within target severity of
                                                  range)         network issues
-  ----------------------------------------------------------------------------
-
+---
 *Interpretation:* Most metrics met or exceeded targets. One area
 highlighted for improvement was overall end-to-end test success
 stability: our automated test suite had a success rate around 71% for
@@ -1858,12 +1854,11 @@ up to 4 (and an extrapolation for higher counts where actual testing was
 not performed due to hardware limits):
 
 **Table 5.3: Scalability Testing Results**
-
-  ----------------------------------------------------------------------------------------
+---
   Device      Network      Message    Connection   Sync Quality Overall    Notes
-  Count       Latency      Loss       Success                   Success    
-              (avg)                                                        
-  ----------- ------------ ---------- ------------ ------------ ---------- ---------------
+  Count       Latency      Loss       Success                   Success
+              (avg)
+---
   **1         \~1.0 ms     0%         100%         Excellent    100%       Baseline
   Device**                                         (baseline)              performance
                                                                            (single device)
@@ -1873,14 +1868,13 @@ not performed due to hardware limits):
 
   **4         46--198 ms   0--6.7%    100%         Good (slight 100%       Max tested
   Devices**   (peak                                drift)                  configuration
-              ranges)                                                      
+              ranges)
 
-  **8+        *Not tested* N/A        N/A          N/A          N/A        Future work
+**8+        *Not tested* N/A        N/A          N/A          N/A        Future work
   Devices**                                                                (expected need
                                                                            for
                                                                            optimisation)
-  ----------------------------------------------------------------------------------------
-
+---
 Up to 4 devices, the system scaled well: all connections successful,
 synchronisation remained good (though we noticed a slight increase in
 sync deviation at 4 devices, still within requirements), and network
@@ -1897,11 +1891,10 @@ Stress testing under varying network conditions (Table 5.4) demonstrated
 the system's robustness:
 
 **Table 5.4: Stress Testing Results Under Network Conditions**
-
-  ----------------------------------------------------------------------------------
+---
   Network        Duration    Network           System        Message     Data
   Scenario                   Characteristics   Response      Success     Integrity
-  -------------- ----------- ----------------- ------------- ----------- -----------
+---
   **Ideal        20 s        1 ms latency, 0%  Optimal       100%        100%
   Network**                  loss (wired)      performance               preserved
 
@@ -1910,16 +1903,15 @@ the system's robustness:
 
   **Packet Loss  20.8 s      50 ms latency, 5% Error         \~98%       100%
   Burst**                    loss bursts       recovery                  preserved
-                                               active                    
+                                               active
 
   **Limited      21.6 s      100 ms latency,   Adaptive data \~98%       100%
   Bandwidth**                1% loss, 1 Mbps   throttling                preserved
 
-  **Unstable     20.8 s      200 ms latency,   Connection    \~93%       100%
+**Unstable     20.8 s      200 ms latency,   Connection    \~93%       100%
   Connection**               3% loss, varying  recovery                  preserved
-                             BW                                          
-  ----------------------------------------------------------------------------------
-
+                             BW
+---
 In each scenario, the system maintained data integrity (thanks to
 checksum and re-transmission strategies, no corrupt data made it
 through) and a high message success rate. Under extreme conditions like
@@ -1945,28 +1937,26 @@ Table 5.5 shows metrics from an extended 168-hour (1 week) continuous
 run test and other long-run scenarios:
 
 **Table 5.5: Extended Operation Reliability Metrics**
-
-  --------------------------------------------------------------------------
+---
   Reliability    Target         Measured Value Test Duration  Statistical
   Metric                                                      Significance
-  -------------- -------------- -------------- -------------- --------------
+---
   **System       ≥ 99.5%        **99.73% ±     168 hours (7   *p* \< 0.001
   Uptime**                      0.12%**        days)          (highly
                                                               significant)
 
   **Data         ≥ 99%          **99.84% ±     720 sessions   99.9%
   Collection                    0.08%**        (simulated)    confidence
-  Success Rate**                                              
+  Success Rate**
 
   **Network      ≥ 98%          **99.21% ±     10,000         *p* \< 0.01
-  Connection                    0.15%**        connection     
-  Stability**                                  events         
+  Connection                    0.15%**        connection
+  Stability**                                  events
 
-  **Automatic    ≥ 95%          **98.7% ±      156 failure    95% confidence
-  Recovery                      1.2%**         scenarios      
-  Success**                                                   
-  --------------------------------------------------------------------------
-
+**Automatic    ≥ 95%          **98.7% ±      156 failure    95% confidence
+  Recovery                      1.2%**         scenarios
+  Success**
+---
 These results were extremely positive: - Uptime of 99.73% over a week
 means the system was only down for 0.27% of the time (\~45 minutes in
 total over 7 days, which included planned maintenance or restarts).
@@ -2067,46 +2057,44 @@ level is given in Table 5.1 below, which consolidates the pass rates and
 issues for each category:
 
 **Table 5.1: complete Testing Results Summary**
-
-  --------------------------------------------------------------------------------------------------
+---
   Testing Level   Coverage Scope    Test Cases   Pass Rate   Critical   Resolution      Confidence
                                     (executed)               Issues     Status          Level
-  --------------- ----------------- ------------ ----------- ---------- --------------- ------------
+---
   **Unit          Individual        1,247 tests  98.7%       3 critical ✅ Resolved     99.9%
-  Testing**       functions &                                                           
-                  methods                                                               
+  Testing**       functions &
+                  methods
 
   **Component     Modules and       342 tests    99.1%       1 critical ✅ Resolved     99.8%
-  Testing**       classes                                                               
+  Testing**       classes
 
   **Integration   Inter-component   156 tests    97.4%       2 critical ✅ Resolved     99.5%
-  Testing**       communication                                                         
+  Testing**       communication
 
   **System        End-to-end        89 tests     96.6%       1 critical ✅ Resolved     99.2%
-  Testing**       workflows                                                             
+  Testing**       workflows
 
   **Performance   Load & stress     45 tests     94.4%       0 critical N/A (none)      98.7%
-  Testing**       scenarios                                                             
+  Testing**       scenarios
 
   **Reliability   Extended          12 tests     100%        0 critical N/A (none)      99.9%
-  Testing**       operation                                                             
-                  scenarios                                                             
+  Testing**       operation
+                  scenarios
 
   **Security      Data protection & 23 tests     100%        0 critical N/A (none)      99.9%
-  Testing**       access control                                                        
+  Testing**       access control
 
   **Usability     User experience & 34 tests     91.2%       0 critical N/A             95.8%
-  Testing**       workflow                                              (improvements   
-                                                                        ongoing)        
+  Testing**       workflow                                              (improvements
+                                                                        ongoing)
 
   **Research      Scientific        67 tests     97.0%       0 critical N/A (none)      99.3%
-  Validation**    accuracy &                                                            
-                  precision                                                             
+  Validation**    accuracy &
+                  precision
 
-  **Overall       complete     618 tests\*  *Pending*   Env.       🔧 In progress  Config.
+**Overall       complete     618 tests\*  *Pending*   Env.       🔧 In progress  Config.
   System**        system validation                          issues                     required
-  --------------------------------------------------------------------------------------------------
-
+---
 *Note:* The test infrastructure currently includes 618 Python test
 methods. Full automated execution of the entire suite requires resolving
 certain dependency issues (e.g., running GUI tests headlessly with PyQt5
@@ -2154,26 +2142,24 @@ remained open by the end of the testing phase.
 To ensure we tested everything important, we measured code coverage and
 requirement coverage. On the code side, the aggregate coverage metrics
 were:
-
-  -----------------------------------------------------------------------
+---
   Component         Unit Test         Integration       System Coverage
-                    Coverage          Coverage          
-  ----------------- ----------------- ----------------- -----------------
+                    Coverage          Coverage
+---
   **Android App**   92.3%             88.7%             94.1%
 
   **Python          94.7%             91.2%             96.3%
-  Controller**                                          
+  Controller**
 
   **Communication   89.4%             93.8%             91.7%
-  Layer**                                               
+  Layer**
 
   **Calibration     96.1%             87.3%             89.2%
-  System**                                              
+  System**
 
-  **Overall         93.1%             90.3%             92.8%
-  System**                                              
-  -----------------------------------------------------------------------
-
+**Overall         93.1%             90.3%             92.8%
+  System**
+---
 "Unit Test Coverage" refers to line coverage by unit tests on that
 component's code. "Integration Coverage" refers to portion of code
 executed during integration tests (which often covers different paths
@@ -2283,12 +2269,11 @@ functionalities from data export to user interface controls.)*
 
 The non-functional requirements (NFRs) --- covering performance,
 reliability, usability, etc. --- were likewise assessed:
-
-  ---------------------------------------------------------------------------
+---
   Requirement        Target            Achieved             Status
-  ------------------ ----------------- -------------------- -----------------
+---
   **System           4+ devices        8 devices            ✅ Exceeded
-  Throughput**                         (supported/tested)   
+  Throughput**                         (supported/tested)
 
   **Response Time**  \< 2 s (start)    1.23 s avg           ✅ Met
 
@@ -2297,11 +2282,10 @@ reliability, usability, etc. --- were likewise assessed:
   **Availability**   99.5% uptime      99.7% measured       ✅ Exceeded
 
   **Data Integrity** 100% no           99.98% (no           ✅ Nearly Perfect
-                     loss/corrupt      corruption)          
+                     loss/corrupt      corruption)
 
-  **Sync Precision** ±5 ms             ±3.2 ms achieved     ✅ Exceeded
-  ---------------------------------------------------------------------------
-
+**Sync Precision** ±5 ms             ±3.2 ms achieved     ✅ Exceeded
+---
 To elaborate: - Throughput for at least 4 devices was required; we
 demonstrated effective support for 4 and even configured up to 8 (though
 8 weren't physically tested concurrently, the system can handle them in
@@ -2647,9 +2631,7 @@ capture platform.
 validated for scientific deployment, and all evidence indicates it will
 perform robustly in practice, enabling high-quality physiological data
 collection for advanced emotion analysis studies.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)
 [\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94)
 [\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100)

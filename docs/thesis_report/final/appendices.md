@@ -543,9 +543,7 @@ reflecting the production-ready, well-documented nature of the
 implementation. The full source files include further comments and
 structure, which are referenced in earlier appendices for those seeking
 more in-depth understanding of the codebase.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L68)
 [\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119)
 [\[8\]](docs/thesis_report/Chapter_7_Appendices.md#L30-L38)
