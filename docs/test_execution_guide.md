@@ -62,8 +62,8 @@ python run_evaluation_suite.py --report
 - **PC Foundation**: 6 complete tests validating PC controller components
 
 ### Integration Tests
-- **Multi-Device Coordination**: Cross-component communication and synchronization
-- **Network Performance**: WebSocket protocols and bandwidth optimization
+- **Multi-Device Coordination**: Cross-component communication and synchronisation
+- **Network Performance**: WebSocket protocols and bandwidth optimisation
 - **Error Handling**: Connection failures and recovery mechanisms
 
 ## Expected Results
@@ -71,7 +71,7 @@ python run_evaluation_suite.py --report
 ### Success Criteria
 - **Success Rate**: >95% for all test categories
 - **Build Status**: All compilation errors resolved
-- **Synchronization**: <1ms temporal accuracy
+- **Synchronisation**: <1ms temporal accuracy
 - **Performance**: Sub-second execution for quick tests
 
 ### Latest Test Results
@@ -125,4 +125,4 @@ The test framework ensures research-grade reliability:
 - **98.4% system reliability** under diverse failure conditions
 - **99.3% error recovery success rate** for handled exceptions
 - **97.8% data integrity preservation** during failure scenarios
-- **Research-grade timing precision** (<1ms synchronization)
+- **Research-grade timing precision** (<1ms synchronisation)

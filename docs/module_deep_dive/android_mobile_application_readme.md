@@ -10,7 +10,7 @@ Built using Kotlin and Jetpack Compose, this application provides real-time mult
 
 ### Component Role in System Architecture
 
-The Android application functions as a distributed sensor node within the established PC master-controller, offline-first local recording architecture. It maintains temporal synchronization through the JSON socket protocol while ensuring robust local data persistence for research-grade data collection reliability.
+The Android application functions as a distributed sensor node within the established PC master-controller, offline-first local recording architecture. It maintains temporal synchronisation through the JSON socket protocol while ensuring robust local data persistence for research-grade data collection reliability.
 
 ## System Architecture
 
@@ -69,26 +69,26 @@ Android Application (Refactored Architecture)
 **Design Pattern**: Device connectivity orchestration implementing the Observer pattern [Gamma1994]
 
 **Responsibilities**:
-- Manages device discovery and initialization procedures following network service discovery protocols [Cheshire2013]
+- Manages device discovery and initialisation procedures following network service discovery protocols [Cheshire2013]
 - Handles connection state management and continuous monitoring with automatic health assessment
 - Implements automatic reconnection and fault tolerance using exponential backoff strategies [Stevens1994]
-- Coordinates multi-device synchronization protocols as defined in the JSON socket protocol specification
+- Coordinates multi-device synchronisation protocols as defined in the JSON socket protocol specification
 
-**Implementation Rationale**: Centralized connection management ensures consistent network behavior and simplifies debugging of distributed system interactions [Tanenbaum2006].
+**Implementation Rationale**: Centralized connection management ensures consistent network behaviour and simplifies debugging of distributed system interactions [Tanenbaum2006].
 
 #### FileTransferManager (448 lines)
 **Data transfer and file operations**
 - Manages file transfer operations to PC controller
 - Handles data export and session management
 - Implements progress tracking and error recovery
-- Coordinates storage optimization and cleanup procedures
+- Coordinates storage optimisation and cleanup procedures
 
 #### CalibrationManager (441 lines)
 **Calibration process coordination**
 - Manages camera and sensor calibration workflows
 - Handles calibration data validation and storage
 - Implements automated calibration quality assessment
-- Coordinates multi-device calibration synchronization
+- Coordinates multi-device calibration synchronisation
 
 #### MainViewModelRefactored (451 lines)
 **Pure UI state coordination through reactive composition**
@@ -399,7 +399,7 @@ class SensorManager @Inject constructor(
    adb install AndroidApp/build/outputs/apk/dev/debug/AndroidApp-dev-debug.apk
    ```
    
-   > **Build Status**: All critical compilation errors have been resolved. The Android application now builds successfully without MainViewModel import errors, duplicate method conflicts, or NavController initialization issues.
+   > **Build Status**: All critical compilation errors have been resolved. The Android application now builds successfully without MainViewModel import errors, duplicate method conflicts, or NavController initialisation issues.
 
 3. **Initial Configuration**
     - Launch the application
@@ -734,7 +734,7 @@ Error: java.net.ConnectException: Connection refused
 
 **2. Camera Recording Failures**
 
-*Issue*: Camera initialization fails
+*Issue*: Camera initialisation fails
 
 ```
 Error: CameraAccessException: Camera device is in use
@@ -799,7 +799,7 @@ adb shell df -h /data/data/com.multisensor.recording
 adb shell dumpsys sensorservice
 ```
 
-### Performance Optimization
+### Performance Optimisation
 
 **Memory Management**
 
@@ -808,14 +808,14 @@ adb shell dumpsys sensorservice
 - Clear unused resources promptly
 - Monitor memory usage with profiler
 
-**Battery Optimization**
+**Battery Optimisation**
 
 - Implement adaptive sampling rates
 - Use background processing efficiently
-- Optimize network communication
+- Optimise network communication
 - Implement power-aware scheduling
 
-**Storage Optimization**
+**Storage Optimisation**
 
 - Compress recorded data
 - Implement automatic cleanup
@@ -898,7 +898,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile("proguard-android-optimise.txt"),
                 "proguard-rules.pro"
             )
         }

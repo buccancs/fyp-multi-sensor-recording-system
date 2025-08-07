@@ -10,11 +10,11 @@ Modern multi-modal physiological research requires systematic session management
 
 ### System Role and Responsibilities
 
-The Session Management System serves as the central coordinator for all recording activities within the established offline-first local recording architecture, managing the complete lifecycle from session initialization through data finalization and export.
+The Session Management System serves as the central coordinator for all recording activities within the established offline-first local recording architecture, managing the complete lifecycle from session initialisation through data finalisation and export.
 
 **Primary Functions:**
 
-- **Session Lifecycle Management**: Coordinated creation, execution, and finalization of recording sessions with atomic state transitions
+- **Session Lifecycle Management**: Coordinated creation, execution, and finalisation of recording sessions with atomic state transitions
 - **Multi-Device Coordination**: Synchronized control across all connected devices ensuring temporal coherence and data consistency
 - **Data Organization**: Structured storage and complete metadata management following research data standards [DataCite2019]
 - **Quality Assurance**: Real-time monitoring and validation with automated quality control mechanisms
@@ -129,7 +129,7 @@ sessions/
         }
       }
     ],
-    "synchronization": {
+    "synchronisation": {
       "precision_requirement": "millisecond",
       "quality_threshold": 0.9,
       "master_clock": "pc_controller"
@@ -206,7 +206,7 @@ class SessionManager:
         # Create session directory structure
         session_path = self.data_manager.create_session_storage(session_id)
         
-        # Initialize session info
+        # Initialise session info
         session_info = SessionInfo(
             session_id=session_id,
             config=config,
@@ -233,10 +233,10 @@ class SessionManager:
                 logger.error(f"Session not ready: {readiness_check.issues}")
                 return False
             
-            # Synchronize all devices
+            # Synchronise all devices
             sync_result = self._synchronize_devices(session)
             if not sync_result.success:
-                logger.error(f"Device synchronization failed: {sync_result.error}")
+                logger.error(f"Device synchronisation failed: {sync_result.error}")
                 return False
             
             # Start recording on all devices
@@ -272,7 +272,7 @@ class SessionManager:
             return False
     
     def stop_recording(self, session_id: str) -> bool:
-        """Stop recording and finalize session data"""
+        """Stop recording and finalise session data"""
         if session_id not in self.active_sessions:
             logger.error(f"Session {session_id} not found")
             return False
@@ -286,7 +286,7 @@ class SessionManager:
                 result = self.device_manager.stop_device_recording(device_config.device_id)
                 stop_results.append(result)
             
-            # Wait for data finalization
+            # Wait for data finalisation
             finalization_results = self._wait_for_data_finalization(session, timeout=60)
             
             # Update session state
@@ -341,7 +341,7 @@ class DataManager:
     
     def organize_device_data(self, session_id: str, device_id: str, 
                            data_files: List[Path]) -> Dict[str, Path]:
-        """Organize data files from device into structured storage"""
+        """Organise data files from device into structured storage"""
         session_path = self.base_storage_path / session_id
         device_path = session_path / "devices" / device_id
         
@@ -409,7 +409,7 @@ class DataManager:
     - Select recording devices
     - Configure recording parameters
     - Verify device connectivity
-    - Test synchronization
+    - Test synchronisation
 
 3. **Quality Settings**:
     - Set quality thresholds
@@ -419,7 +419,7 @@ class DataManager:
 
 #### Advanced Configuration
 
-1. **Synchronization Settings**:
+1. **Synchronisation Settings**:
     - Precision requirements
     - Master clock selection
     - Compensation algorithms
@@ -436,7 +436,7 @@ class DataManager:
 #### Pre-Recording Checklist
 
 - [ ] All devices connected and configured
-- [ ] Synchronization validated
+- [ ] Synchronisation validated
 - [ ] Storage space available
 - [ ] Quality thresholds met
 - [ ] Participant prepared
@@ -446,20 +446,20 @@ class DataManager:
 1. **Real-time Monitoring**:
     - Device status indicators
     - Data quality metrics
-    - Storage utilization
-    - Synchronization quality
+    - Storage utilisation
+    - Synchronisation quality
 
 2. **Quality Management**:
     - Address quality warnings
     - Monitor artifact levels
-    - Check synchronization drift
+    - Check synchronisation drift
     - Validate data integrity
 
 #### Post-Recording
 
 1. **Data Validation**:
     - Verify data completeness
-    - Check synchronization accuracy
+    - Check synchronisation accuracy
     - Validate file integrity
     - Review quality metrics
 
@@ -484,7 +484,7 @@ class SessionManager:
         """Start coordinated recording"""
     
     def stop_recording(self, session_id: str) -> bool:
-        """Stop recording and finalize data"""
+        """Stop recording and finalise data"""
     
     def get_session_status(self, session_id: str) -> SessionStatus:
         """Get current session status"""
@@ -499,7 +499,7 @@ class DataManager:
     
     def organize_device_data(self, session_id: str, device_id: str, 
                            data_files: List[Path]) -> Dict[str, Path]:
-        """Organize data files into structured storage"""
+        """Organise data files into structured storage"""
     
     def save_session_metadata(self, session_info: SessionInfo):
         """Save complete session metadata"""
@@ -530,7 +530,7 @@ class SessionConfig:
     session_name: str
     duration: int
     devices: List[DeviceConfig]
-    synchronization: SyncConfig
+    synchronisation: SyncConfig
     data_management: DataConfig
     quality_settings: QualityConfig
 ```
@@ -579,7 +579,7 @@ class SessionManagementTest:
 
 #### Recording Start Problems
 
-- Check device synchronization
+- Check device synchronisation
 - Verify quality thresholds
 - Test network connectivity
 
@@ -591,7 +591,7 @@ class SessionManagementTest:
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Networking Protocol](networking_protocol_readme.md) documentation.*
+*For related modules, see [Multi-Device Synchronisation](multi_device_synchronization_readme.md) and [Networking Protocol](networking_protocol_readme.md) documentation.*
 
 ## References
 

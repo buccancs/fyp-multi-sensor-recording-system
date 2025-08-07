@@ -69,7 +69,7 @@ class CameraRecorder {
 }
 
 class ThermalRecorder {
-    fun initialize(config: ThermalConfig): Boolean
+    fun initialise(config: ThermalConfig): Boolean
     fun startCapture(): Boolean
     fun stopCapture(): Boolean
 }
@@ -165,7 +165,7 @@ class ThermalRecorder {
 
 ### Python Desktop Controller
 ```python
-# Initialize system components
+# Initialise system components
 calibration_manager = CalibrationManager()
 session_manager = SessionManager()
 pc_server = PCServer()
@@ -183,7 +183,7 @@ session_manager.start_recording(session_id)
 
 ### Android Application
 ```kotlin
-// Initialize recording components
+// Initialise recording components
 val networkClient = NetworkClient()
 val cameraRecorder = CameraRecorder()
 val thermalRecorder = ThermalRecorder()

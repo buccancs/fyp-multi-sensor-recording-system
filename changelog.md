@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Inline Documentation for Complex Logic**: Added complete docstrings to high-complexity components
   - **ShimmerManager Class**: Enhanced with detailed documentation explaining multi-device coordination,
-    connection protocols, error handling strategies, and synchronization mechanisms (complexity: 152)
+    connection protocols, error handling strategies, and synchronisation mechanisms (complexity: 152)
   - **connect_devices Method**: Added complete documentation covering connection protocols,
     retry logic, error scenarios, and cross-platform compatibility (complexity: 16)
   - **Documentation Standards**: Established patterns for documenting complex algorithms, protocol handling,
@@ -77,7 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - **Math Functions Import**: Added missing kotlin.math.* and kotlin.random.Random imports to FileViewActivity.kt 
     - **Test Infrastructure**: Fixed missing imports in MainViewModelTest.kt for proper unit test execution
     - **Navigation System Overhaul**: 
-        - Fixed NavController initialization crash by implementing proper NavHostFragment handling
+        - Fixed NavController initialisation crash by implementing proper NavHostFragment handling
         - Added complete error handling and logging for navigation setup issues
         - Improved navigation graph configuration with proper android:id attributes
         - Enhanced bottom navigation functionality with immediate Toast feedback

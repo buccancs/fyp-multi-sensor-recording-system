@@ -20,7 +20,7 @@ Current physiological monitoring methodologies predominantly rely on contact-bas
 ![Figure 3.2: Hardware Integration Architecture](../diagrams/figure_3_5_hardware_integration_architecture.png)
 *Figure 3.2: Current hardware integration challenges showing the constraints imposed by traditional contact-based measurement systems and the proposed contactless alternatives.*
 
-Contact-based GSR measurement requires participants to wear electrodes that physically contact the skin surface, typically with conductive gel application for optimal signal quality. Wire connections tether participants to recording equipment, restricting natural movement patterns and potentially causing physical discomfort during extended measurement sessions. These experimental constraints can directly influence participant behavior, creating measurement artifacts that confound the emotional and stress responses being investigated (Boucsein, 2012).
+Contact-based GSR measurement requires participants to wear electrodes that physically contact the skin surface, typically with conductive gel application for optimal signal quality. Wire connections tether participants to recording equipment, restricting natural movement patterns and potentially causing physical discomfort during extended measurement sessions. These experimental constraints can directly influence participant behaviour, creating measurement artifacts that confound the emotional and stress responses being investigated (Boucsein, 2012).
 
 Additionally, traditional single-modality approaches focus exclusively on electrical GSR signals, failing to leverage complementary physiological indicators that multi-modal measurement systems could provide. This limitation restricts the complete understanding of physiological responses that contemporary affective computing research requires.
 
@@ -47,7 +47,7 @@ blood volume pulse signals from a person's face or
 hands[\[3\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L299-L305).
 Thermal cameras can detect temperature variations associated with blood
 flow or stress-induced perspiration. These innovations represent a move
-from direct contact data acquisition to analyzing optical or thermal
+from direct contact data acquisition to analysing optical or thermal
 signatures of physiological processes.
 
 Despite these advances, the **adoption of contactless methods** in
@@ -94,13 +94,13 @@ note that preparing a participant for GSR measurement (attachment,
 calibration) and post-session cleanup can extend an experiment session
 by **30--50%** of its
 duration[\[3\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L299-L305).
-These temporal and labor costs reduce throughput and make
+These temporal and labour costs reduce throughput and make
 high-participant-count experiments impractical in many cases.
 
 There are also **technical constraints** in existing systems. Many are
-not designed for synchronizing multiple data streams (e.g., video and
+not designed for synchronising multiple data streams (e.g., video and
 biosignals) with high precision. If a researcher wants to correlate GSR
-peaks with video-recorded behavior, manual synchronization is often
+peaks with video-recorded behaviour, manual synchronisation is often
 needed, which can be imprecise. Additionally, conventional GSR devices
 may suffer from noise (movement artifacts, environmental interference)
 and require careful handling to ensure data quality.
@@ -130,7 +130,7 @@ measurement, integrating multiple sensor modalities to capture
 physiological responses in unison. By doing so, it aims to preserve or
 improve the quality of data compared to contact-based methods, while
 removing constraints that hinder research. For example, using an RGB
-camera to derive pulse or skin color changes and a thermal camera to
+camera to derive pulse or skin colour changes and a thermal camera to
 monitor heat and perspiration allows detection of stress or arousal
 indicators without electrodes. These are complemented by a reference GSR
 sensor (Shimmer GSR device) not as a required input for the research
@@ -182,7 +182,7 @@ were conducted, including **interviews and questionnaires** with domain
 experts and potential users. Domain experts (e.g., professors in
 psychophysiology and experienced lab technicians) provided insight into
 the critical features and common problems with existing systems. Their
-feedback emphasized the importance of synchronization and data integrity
+feedback emphasized the importance of synchronisation and data integrity
 for multi-modal experiments. End-users, such as researchers who might
 use the system, highlighted practical needs like an intuitive interface
 and the ability to monitor data in real-time during an experiment.
@@ -193,7 +193,7 @@ established requirements for similar systems and gaps that need
 addressing[\[1\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L87-L95).
 This academic input ensured that the system's requirements align with
 state-of-the-art knowledge. For example, literature on distributed
-sensing emphasized network time synchronization as a key challenge,
+sensing emphasized network time synchronisation as a key challenge,
 which became a core requirement for our system.
 
 The project followed an **iterative elicitation** process. Preliminary
@@ -224,17 +224,17 @@ inputs and research objectives, providing a solid basis for design.
 Table 3.1 (not shown here) maps major stakeholder needs to specific
 requirements to demonstrate this traceability. For example, **researcher
 need: high temporal precision** maps to **Requirement FR-002: Advanced
-Temporal Synchronization**, and **participant need: comfort** maps to
+Temporal Synchronisation**, and **participant need: comfort** maps to
 the overall goal of contactless operation, which appears in several
 requirements.
 
 ### 3.2.2 System Requirements Analysis Framework
 
-To organize and analyze the gathered requirements, a structured
+To organise and analyse the gathered requirements, a structured
 framework was used. Given the dual nature of this project (as both a
 software system and a research instrument), requirements were
 categorized into groups and given identifiers for clarity. The project
-adopts a hierarchical labeling scheme for requirements: **Functional
+adopts a hierarchical labelling scheme for requirements: **Functional
 Requirements (FR)** and **Non-Functional Requirements (NFR)**, further
 broken into sub-groups. This mirrors best practices in requirements
 engineering where grouping by feature area or quality attribute makes
@@ -245,7 +245,7 @@ The framework defined the following major categories:
 
 - **Core Functional Requirements** -- covering fundamental capabilities
   of the system (e.g., device coordination, data capture,
-  synchronization, session control).
+  synchronisation, session control).
 - **Data Processing Requirements** -- covering real-time analysis and
   processing needs (e.g., signal processing, feature extraction, machine
   learning predictions).
@@ -263,8 +263,8 @@ The framework defined the following major categories:
 
 Each requirement in the list was documented with a **short name, a
 unique identifier, a description, and acceptance criteria**. For
-example, *FR-002: Temporal Synchronization Precision* -- *Description:*
-The system shall synchronize all device clocks and data streams with a
+example, *FR-002: Temporal Synchronisation Precision* -- *Description:*
+The system shall synchronise all device clocks and data streams with a
 maximum divergence of 5 milliseconds between any two data timestamps.
 *Acceptance Criteria:* In test sessions, timestamps from different
 devices for a known simultaneous event (like an external trigger) differ
@@ -274,7 +274,7 @@ stakeholder or literature input led to it).
 
 The requirements analysis framework also ensured **traceability**. Using
 the identifiers, we can trace forward from each requirement to design
-and implementation elements that realize it, and backward to the
+and implementation elements that realise it, and backward to the
 original motivation. For instance, requirement FR-001 (Multi-Device
 Coordination) traces to design components like the
 *MasterClockSynchronizer* class on the PC side and coordination logic in
@@ -309,13 +309,13 @@ deliver.
 features and capabilities it must provide. Based on the analysis, the
 functional requirements for the Multi-Sensor Recording System can be
 grouped into four main areas: **(a)** multi-device coordination and
-synchronization, **(b)** sensor integration and data acquisition,
+synchronisation, **(b)** sensor integration and data acquisition,
 **(c)** real-time data processing and analysis, and **(d)** session
 management and user interface features. Each group is discussed below,
 along with representative examples of how these requirements are
 realized in the system (with references to the codebase as evidence).
 
-### 3.3.1 Multi-Device Coordination and Synchronization Requirements
+### 3.3.1 Multi-Device Coordination and Synchronisation Requirements
 
 A cornerstone of this project is the ability to coordinate multiple
 devices (smartphones, sensors, and a PC) in one recording session. The
@@ -343,9 +343,9 @@ This design fulfills the requirement of unified multi-device control
 (FR-001). The code snippet below highlights this role:
 
     # Excerpt from MasterClockSynchronizer (PC side)
-    """ Master Clock Synchronization Manager for Multi-Device Recording
-    This module implements a centralized synchronization system where the PC acts as the 
-    master clock for all connected devices... ensuring frame-level synchronization across 
+    """ Master Clock Synchronisation Manager for Multi-Device Recording
+    This module implements a centralized synchronisation system where the PC acts as the 
+    master clock for all connected devices... ensuring frame-level synchronisation across 
     all recording devices. """【30†L1-L9】
 
 As shown, the system uses the PC as the master clock, broadcasting
@@ -353,15 +353,15 @@ timing to Android devices and even to attached USB webcams. By doing so,
 it guarantees that events on different devices can be aligned post-hoc
 or even in real-time.
 
-**Temporal Synchronization:** Alongside coordination is the stringent
-requirement for time synchronization (FR-002). All data streams -- video
+**Temporal Synchronisation:** Alongside coordination is the stringent
+requirement for time synchronisation (FR-002). All data streams -- video
 frames, thermal images, sensor readings -- must be timestamped such that
 they can be merged on a common timeline with minimal error. We set a
-requirement of **sub-millisecond precision** in synchronization between
+requirement of **sub-millisecond precision** in synchronisation between
 devices. Practically, this means the system must compensate for network
 latency and individual device clock drift. The implementation uses a
 combination of the Network Time Protocol (NTP) and custom
-synchronization messages. The *MasterClockSynchronizer* runs an NTP
+synchronisation messages. The *MasterClockSynchronizer* runs an NTP
 server on the PC, and each Android device regularly syncs its clock to
 this server. Additionally, before starting a recording, a sync signal is
 sent (with a precise timestamp) to all devices to cue them to start
@@ -369,7 +369,7 @@ nearly simultaneously. In the code, for instance, the
 `MasterClockSynchronizer.start()` method launches the NTP server and a
 JSON command server for
 coordination[\[11\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L129-L140).
-It then uses a background thread to continually monitor synchronization
+It then uses a background thread to continually monitor synchronisation
 status of connected devices (maintaining a tolerance, e.g., 50 ms by
 default, though in practice the system achieved far better precision).
 The **acceptance criteria** for this requirement was demonstrated by
@@ -378,12 +378,12 @@ visible to all cameras) and confirming that the timestamps recorded
 differ by only a few milliseconds at most.
 
 The repository's internal documentation confirms the importance of this
-feature, noting that the synchronization system achieves
+feature, noting that the synchronisation system achieves
 *"sub-millisecond temporal alignment across diverse sensor
 modalities"*[\[12\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/Multi_Device_Synchronization_System.md#L50-L58).
 Achieving this level of precision is critical for the research
-objectives, since analyzing cause-effect between physiological signals
-and observed behavior (e.g., facial expressions on video) demands tight
+objectives, since analysing cause-effect between physiological signals
+and observed behaviour (e.g., facial expressions on video) demands tight
 timing correlation.
 
 **Example Evidence -- Coordination in Code:** The coordination
@@ -420,7 +420,7 @@ multi-sensor data acquisition platform.
 FR-010) is that the Android application must capture high-quality **RGB
 video** of the participant. The requirement specifies at least **1080p
 resolution at 30 fps**, but the system is designed to target **4K video
-at 30 fps** to maximize data quality (for detailed facial or hand
+at 30 fps** to maximise data quality (for detailed facial or hand
 analysis). This involves using the phone's camera in a continuous
 recording mode and saving the video stream with minimal compression (to
 preserve details) or at a high bitrate. The implementation uses
@@ -550,11 +550,11 @@ In the implementation, the Android app and PC controller incorporate
 some real-time analysis components. The Android app, for efficiency,
 primarily focuses on data capture, but it has integration points for
 processing -- for example, a **HandSegmentationManager** is included in
-the `CameraRecorder` to analyze video frames for hand
+the `CameraRecorder` to analyse video frames for hand
 regions[\[19\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L60-L63).
 Meanwhile, the PC side can offload heavier processing. The Python
 desktop application includes modules for computer vision and
-synchronization analysis (since the PC typically has more processing
+synchronisation analysis (since the PC typically has more processing
 power). For example, the codebase contains a `hand_segmentation` package
 (with models and utilities) to process frames and segment out the hand
 region in thermal or RGB images, indicating where on the image the
@@ -626,9 +626,9 @@ treat a recording session as an entity with a start, stop, and
 associated metadata. The user (researcher) should be able to initiate a
 new session, perhaps providing an identifier or notes, and then start
 recording on all devices with one action. The system then should
-automatically organize all data from that session (videos, sensor logs,
+automatically organise all data from that session (videos, sensor logs,
 etc.) in a structured way. Upon stopping the session, the system should
-finalize files, possibly create summary logs, and reset the devices to
+finalise files, possibly create summary logs, and reset the devices to
 an idle state ready for the next session. In the code, this is realized
 by components like the `SessionManager` on
 Android[\[20\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L22-L30)
@@ -657,7 +657,7 @@ controls and feedback. The project delivers two main UIs: the **Android
 app UI** (on each device, though primarily used for configuration since
 once the session starts the devices operate headlessly) and the
 **Desktop Controller UI**. The Desktop UI is particularly important as
-it's the central command center. Requirements for it include: the
+it's the central command centre. Requirements for it include: the
 ability to view live previews of video streams, indicators of device
 status (connected, recording, error), and controls to start/stop
 recording and perhaps to add timestamped annotations or calibration
@@ -703,7 +703,7 @@ done where someone unfamiliar with the system was asked to set up and
 run a recording following a simple written guide. The criteria for
 success: they could complete a session without developer intervention,
 and they reported the interface as reasonably clear. Minor improvements
-(like labeling and instructions) were incorporated based on this.
+(like labelling and instructions) were incorporated based on this.
 
 Finally, it's worth noting that session management also includes
 **post-session tasks** -- after a session, the researcher might want to
@@ -735,25 +735,25 @@ that enable remote access, monitoring, and control of recording sessions through
 full security and performance parity with native desktop interfaces.
 
 **Technical Implementation**: The web interface is implemented through `PythonApp/enhanced_main_with_web.py` and the
-complete `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualization,
-and remote control capabilities that maintain synchronization precision with the native desktop application.
+complete `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualisation,
+and remote control capabilities that maintain synchronisation precision with the native desktop application.
 
 **Validation Criteria**: Web interface accessibility from multiple browsers simultaneously, real-time status updates
 with <1 second latency, and complete functional parity with desktop interface for all core recording operations.
 
-#### FR-035: Advanced Performance Optimization Framework
+#### FR-035: Advanced Performance Optimisation Framework
 
-**Requirement Statement**: The system shall implement complete performance optimization capabilities that dynamically
-adapt resource utilization, frame rates, and processing load based on real-time system performance metrics and
+**Requirement Statement**: The system shall implement complete performance optimisation capabilities that dynamically
+adapt resource utilisation, frame rates, and processing load based on real-time system performance metrics and
 available computational resources across all connected devices.
 
-**Technical Implementation**: Performance optimization is achieved through `PythonApp/performance_optimizer.py` for
+**Technical Implementation**: Performance optimisation is achieved through `PythonApp/performance_optimizer.py` for
 desktop coordination and `AndroidApp/src/main/java/com/multisensor/recording/performance/` module system including
 `NetworkOptimizer.kt`, `PowerManager.kt`, and adaptive frame rate control through
 `AdaptiveFrameRateController.kt`.
 
 **Validation Criteria**: Automatic frame rate adaptation maintaining recording quality under varying computational load,
-power consumption optimization extending mobile device recording sessions by >30%, and network traffic optimization
+power consumption optimisation extending mobile device recording sessions by >30%, and network traffic optimisation
 reducing bandwidth usage by >25% without quality degradation.
 
 #### FR-036: Enterprise-Grade Dependency Injection Architecture
@@ -783,18 +783,18 @@ providing automated quality metrics, drift detection, and precision validation a
 within 30 seconds of occurrence, and automated recalibration recommendations that maintain measurement precision
 throughout 4+ hour recording sessions.
 
-#### FR-038: Master Clock Synchronization with Precision Timing
+#### FR-038: Master Clock Synchronisation with Precision Timing
 
-**Requirement Statement**: The system shall implement high-precision master clock synchronization that maintains
+**Requirement Statement**: The system shall implement high-precision master clock synchronisation that maintains
 temporal alignment across all connected devices with sub-millisecond accuracy while providing automatic drift
-correction and synchronization quality monitoring throughout extended recording sessions.
+correction and synchronisation quality monitoring throughout extended recording sessions.
 
 **Technical Implementation**: Precision timing system implemented through `PythonApp/master_clock_synchronizer.py`
 and coordinated with `AndroidApp/src/main/java/com/multisensor/recording/calibration/SyncClockManager.kt` providing
-NTP-based time synchronization, automatic drift compensation, and real-time synchronization quality assessment.
+NTP-based time synchronisation, automatic drift compensation, and real-time synchronisation quality assessment.
 
-**Validation Criteria**: Synchronization precision <1 millisecond across all devices, automatic drift correction
-maintaining precision over 8+ hour sessions, and complete synchronization quality metrics with real-time
+**Validation Criteria**: Synchronisation precision <1 millisecond across all devices, automatic drift correction
+maintaining precision over 8+ hour sessions, and complete synchronisation quality metrics with real-time
 monitoring and alerting capabilities.
 
 ## 3.4 Non-Functional Requirements
@@ -914,7 +914,7 @@ incrementally (so what's on disk is safe even if a crash occurs later).
 The Android app also has a
 `CrashRecoveryManager`[\[35\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L32-L35)
 that, upon restart, can detect if there was an active session that
-didn't finalize and attempt to reconcile it (for example, by closing any
+didn't finalise and attempt to reconcile it (for example, by closing any
 open files, or marking the session as failed but still available for
 analysis). This ensures that in worst-case scenarios, partial data can
 still be recovered rather than being unusable.
@@ -957,7 +957,7 @@ complexity.
 can be used in different environments and by people with varying levels
 of tech expertise. We didn't have specific requirements like supporting
 screen readers (since it's not a public-facing software), but we did
-ensure that, say, the font sizes and color choices in the UI are clear
+ensure that, say, the font sizes and colour choices in the UI are clear
 (the preview labels have high contrast text on black
 background[\[37\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/gui/preview_panel.py#L64-L72)[\[38\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/gui/preview_panel.py#L73-L81)
 for visibility). Also, the system was tested on different screen sizes
@@ -1061,7 +1061,7 @@ complete all steps without error and the user's goal was met (data
 recorded, calibration done, etc.). During testing, these scenarios were
 simulated. For example, for UC-001, multiple devices were actually run
 together to mimic a multi-participant setup, and data was later checked
-for synchronization as expected.
+for synchronisation as expected.
 
 ### 3.5.2 Secondary Use Cases (Maintenance and Extensions)
 
@@ -1130,7 +1130,7 @@ a holistic test of the system's requirements fulfillment.
 
 ## 3.6 System Analysis
 
-With the requirements established, we analyze how the system will meet
+With the requirements established, we analyse how the system will meet
 them by examining data flows, component interactions, and scalability
 considerations. This section bridges between requirements and the design
 (which is detailed in Chapter 4), ensuring that we understand the system
@@ -1138,7 +1138,7 @@ dynamics needed to satisfy the requirements.
 
 ### 3.6.1 Data Flow Analysis
 
-Analyzing data flow involves mapping out how data moves through the
+Analysing data flow involves mapping out how data moves through the
 system from sources (sensors and devices) to destinations (storage, user
 interface, network). This is crucial to validate that the design can
 handle the volume and timing of data as required (referencing the
@@ -1165,9 +1165,9 @@ we want live plots.
 
 This analysis helped in identifying potential **bottlenecks or points of
 failure**. For instance, the network link between devices is a critical
-conduit for synchronization messages and preview frames. We determined
+conduit for synchronisation messages and preview frames. We determined
 that even if the network bandwidth is limited, the system should
-prioritize control and sync messages (very small) over preview frames.
+prioritise control and sync messages (very small) over preview frames.
 Therefore, the data flow design gives higher priority (or uses a
 separate channel) for control vs. bulk data. This satisfies the
 requirement that sync must be maintained even if previews drop frames
@@ -1228,19 +1228,19 @@ exclude that device. Assuming all respond, the session is officially
 "started" and time is ticking. During recording, the components interact
 periodically: e.g., Android devices might send a heartbeat or status
 update to PC (like "still recording, at timestamp X"). The PC might send
-synchronization pulses (though with NTP running, that's more continuous
+synchronisation pulses (though with NTP running, that's more continuous
 at a lower level). If the user hits "Stop", the PC sends a stop command
-to all Androids, they finalize files and reply when done, and the PC
+to all Androids, they finalise files and reply when done, and the PC
 then marks the session complete.
 
 This interaction analysis verifies requirements such as
-**synchronization and coordination** -- we see that the design allows
+**synchronisation and coordination** -- we see that the design allows
 all nodes to act together. It also covers error cases: if an Android
 doesn't ack the start, the PC UI can alert the user and perhaps let them
 retry or drop that node. This fulfills the reliability requirement that
 the system is aware of each component's state.
 
-Another important interaction is for **synchronization algorithm**: The
+Another important interaction is for **synchronisation algorithm**: The
 MasterClockSynchronizer not only sends commands but also may adjust
 timing. For example, it may tell an Android "your clock is 5 ms behind,
 adjust it" if it detects drift via NTP queries. This is a closed-loop
@@ -1262,7 +1262,7 @@ the PC crashes, each Android still has its SessionManager keeping the
 data safe, which goes back to reliability.
 
 In summary, the component interaction analysis confirmed that the
-**system architecture can realize the functional requirements**. It
+**system architecture can realise the functional requirements**. It
 showed that every requirement (like start/stop sync, data collection,
 error recovery) is backed by a clear interaction between responsible
 components. The next chapter will further detail this in terms of actual
@@ -1314,7 +1314,7 @@ scope, but we mention it to show we thought about boundaries.
 In conclusion, the system analysis of data flow, interactions, and
 scalability provided confidence that the defined requirements are not
 only theoretically achievable but practically addressed by the design.
-It helped refine some requirements as well -- for instance, realizing
+It helped refine some requirements as well -- for instance, realising
 the need for dynamic adjustment of preview quality when many devices
 connect could be turned into a requirement for adaptive performance
 management (which we included implicitly under performance
@@ -1389,7 +1389,7 @@ and battery last.
 **Data quality** requirements cover the fidelity and accuracy of the
 captured data. For video, quality relates to resolution and compression.
 We required that **video be high resolution and minimally compressed**
-to preserve detail that algorithms might need (like subtle skin color
+to preserve detail that algorithms might need (like subtle skin colour
 changes). The 10 Mbps bitrate for 4K video is a balance -- it is high
 enough for good quality, though some quality is sacrificed vs. raw for
 the sake of storage. In any case, the researcher can configure a higher
@@ -1413,7 +1413,7 @@ just take its data as is (in microsiemens). We include in metadata if
 any filtering was applied (generally not at record time).
 
 An important data quality requirement is **temporal accuracy** of the
-timestamps in the data files. This ties back to synchronization: each
+timestamps in the data files. This ties back to synchronisation: each
 piece of data (each video frame, each sensor reading) has a timestamp in
 a common reference (the PC master clock). The system must ensure those
 timestamps are applied correctly. We achieve this by, for example,
@@ -1483,7 +1483,7 @@ ultimately what the value of the system is measured by.
 
 In this chapter, we outlined the requirements and analysis that define
 what the Multi-Sensor Recording System must achieve and how it is
-structured to do so. To summarize, the system is required to provide a
+structured to do so. To summarise, the system is required to provide a
 **contactless, synchronized, multi-modal recording solution** that
 addresses the key shortcomings of traditional physiological measurement
 methods. We identified the problem context of intrusive sensors and
@@ -1494,7 +1494,7 @@ computing techniques to enable non-intrusive measurements.
 Through a rigorous requirements engineering process, involving
 stakeholders and literature, we derived both **functional requirements**
 -- such as multi-device coordination (FR-001), precise temporal
-synchronization (FR-002), integrated video/thermal/GSR capture
+synchronisation (FR-002), integrated video/thermal/GSR capture
 (FR-010/011/012), real-time processing (FR-020/021), and complete
 session management (FR-003) -- and **non-functional requirements** --
 including high performance (NFR-001 series with support for many devices
@@ -1511,7 +1511,7 @@ enabling **contactless GSR measurement** is met by the functional
 requirements around camera and thermal sensor integration -- the system
 can record the necessary signals without electrodes, fulfilling the aim
 of non-contact measurement. The objective of maintaining
-**research-grade accuracy** is supported by the synchronization and data
+**research-grade accuracy** is supported by the synchronisation and data
 quality requirements -- by ensuring all devices are within milliseconds
 alignment and capturing high-resolution data, the system can produce
 data as reliable as traditional
@@ -1527,18 +1527,18 @@ community** is reflected in the usability and documentation requirements
 -- making the system easy to operate and reproducible, which ties into
 the academic contribution of this work as a platform others can adopt.
 
-By systematically analyzing use cases, we ensured the requirements cover
+By systematically analysing use cases, we ensured the requirements cover
 complete workflows a researcher will engage in, and by conducting system
 analysis, we confirmed that these requirements are implementable within
 the chosen architecture. In the next chapter, we will see how these
 requirements were translated into a concrete design -- for instance, how
-the requirement for synchronization led to the specific choice of a
+the requirement for synchronisation led to the specific choice of a
 master-clock architecture using NTP and how the requirement for sensor
 integration determined certain architectural patterns on Android and PC.
 Moreover, Chapter 5 (Evaluation) will revisit these requirements to
 verify to what extent each was satisfied in the final system. For a
 brief forward-look: preliminary results have shown the system
-coordinating 4 devices with synchronization error within \~3 ms and
+coordinating 4 devices with synchronisation error within \~3 ms and
 achieving over 99% data capture reliability, which indicates the
 implementation is indeed meeting the critical
 requirements[\[47\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L90-L94)[\[48\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L363-L371).
@@ -1550,7 +1550,7 @@ real research problems and objectives. This lays the groundwork for
 design and implementation to proceed in a focused way, and sets
 measurable criteria (through the requirements) by which the success of
 the project can later be evaluated. The meticulous alignment of
-requirements with project goals is intended to maximize the impact of
+requirements with project goals is intended to maximise the impact of
 the developed system and to demonstrate, in a traceable manner, that the
 engineering effort has been directed towards fulfilling the research
 aims of enabling advanced, contactless physiological data collection for

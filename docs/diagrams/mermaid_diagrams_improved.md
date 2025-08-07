@@ -83,7 +83,7 @@ graph TB
         subgraph NETWORK ["Network Infrastructure"]
             direction LR
             ROUTER["WiFi Router<br/>• 802.11ac/ax Standard<br/>• 5GHz Band Priority<br/>• QoS Management"]
-            SWITCH["Gigabit Switch<br/>• Low Latency Switching<br/>• Managed Configuration<br/>• Traffic Optimization"]
+            SWITCH["Gigabit Switch<br/>• Low Latency Switching<br/>• Managed Configuration<br/>• Traffic Optimisation"]
             ROUTER ===|Ethernet<br/>Gigabit| SWITCH
         end
 
@@ -96,7 +96,7 @@ graph TB
 
         subgraph ENV ["Environmental Controls"]
             direction LR
-            LIGHTING["Controlled Lighting<br/>• Consistent Illumination<br/>• Adjustable Intensity<br/>• Color Temperature Control"]
+            LIGHTING["Controlled Lighting<br/>• Consistent Illumination<br/>• Adjustable Intensity<br/>• Colour Temperature Control"]
             TEMP["Temperature Control<br/>• 20-25°C Optimal Range<br/>• Humidity Management<br/>• Thermal Stability"]
             ACOUSTIC["Acoustic Isolation<br/>• Minimal Interference<br/>• Sound Dampening<br/>• Quiet Operation"]
         end
@@ -152,7 +152,7 @@ graph TB
                 UC["UIController<br/>• Component Validation<br/>• Dynamic UI Updates<br/>• Theme Management"]
                 NU[" NavigationUtils<br/>• Fragment Navigation<br/>• Deep Linking<br/>• Back Stack Management"]
                 UU[" UIUtils<br/>• Helper Functions<br/>• UI Animations<br/>• Resource Management"]
-                MAC["MainActivityCoordinator<br/>• Activity Coordination<br/>• Event Distribution<br/>• State Synchronization"]
+                MAC["MainActivityCoordinator<br/>• Activity Coordination<br/>• Event Distribution<br/>• State Synchronisation"]
             end
         end
 
@@ -168,7 +168,7 @@ graph TB
             subgraph SESSION ["Session Management"]
                 SM["SessionManager<br/>• Recording Session Logic<br/>• Lifecycle Coordination<br/>• State Persistence"]
                 SI[" SessionInfo<br/>• Session Metadata<br/>• Status Tracking<br/>• Configuration Storage"]
-                SS[" SensorSample<br/>• Data Point Abstraction<br/>• Timestamp Synchronization<br/>• Format Standardization"]
+                SS[" SensorSample<br/>• Data Point Abstraction<br/>• Timestamp Synchronisation<br/>• Format Standardisation"]
             end
 
             subgraph COMMUNICATION ["Communication Layer"]
@@ -189,7 +189,7 @@ graph TB
 
             subgraph STORAGE ["Storage and Persistence"]
                 FS["FileSystemManager<br/>• Local Storage Management<br/>• Session Organization<br/>• File Hierarchy"]
-                MS["MetadataSerializer<br/>• JSON Serialization<br/>• Session Persistence<br/>• Data Integrity"]
+                MS["MetadataSerializer<br/>• JSON Serialisation<br/>• Session Persistence<br/>• Data Integrity"]
                 CS["ConfigurationStore<br/>• Settings Persistence<br/>• Shared Preferences<br/>• Configuration Management"]
             end
         end
@@ -206,7 +206,7 @@ graph TB
             subgraph HARDWARE ["Hardware Abstraction"]
                 HAL["Hardware Abstraction Layer<br/>• Device-specific Adaptations<br/>• Platform Compatibility<br/>• Driver Integration"]
                 PERM["Permission Manager<br/>• Runtime Permissions<br/>• Security Enforcement<br/>• Access Control"]
-                LIFE["♻️ Lifecycle Manager<br/>• Component Lifecycle<br/>• Resource Management<br/>• Memory Optimization"]
+                LIFE["♻️ Lifecycle Manager<br/>• Component Lifecycle<br/>• Resource Management<br/>• Memory Optimisation"]
             end
         end
     end
@@ -309,14 +309,14 @@ graph TB
 
             subgraph STORAGE ["Storage Services"]
                 FileHandler["FileHandler<br/>• File I/O Operations<br/>• Directory Management<br/>• Metadata Storage<br/>• Version Control"]
-                DatabaseManager["🗃️ DatabaseManager<br/>• SQLite Integration<br/>• Session Metadata<br/>• Query Optimization<br/>• Data Integrity"]
+                DatabaseManager["🗃️ DatabaseManager<br/>• SQLite Integration<br/>• Session Metadata<br/>• Query Optimisation<br/>• Data Integrity"]
                 ConfigManager["ConfigManager<br/>• Configuration Storage<br/>• Settings Persistence<br/>• Default Management<br/>• Validation"]
             end
 
             subgraph SENSORS ["Sensor Integration"]
                 CameraHandler["CameraHandler<br/>• USB Camera Integration<br/>• OpenCV Processing<br/>• Frame Capture<br/>• Quality Control"]
-                DataCollector["DataCollector<br/>• Multi-source Data Collection<br/>• Timestamp Synchronization<br/>• Format Standardization<br/>• Quality Assurance"]
-                SyncManager["SyncManager<br/>• Clock Synchronization<br/>• Multi-device Timing<br/>• Latency Compensation<br/>• Drift Correction"]
+                DataCollector["DataCollector<br/>• Multi-source Data Collection<br/>• Timestamp Synchronisation<br/>• Format Standardisation<br/>• Quality Assurance"]
+                SyncManager["SyncManager<br/>• Clock Synchronisation<br/>• Multi-device Timing<br/>• Latency Compensation<br/>• Drift Correction"]
             end
         end
 
@@ -326,7 +326,7 @@ graph TB
             subgraph FRAMEWORKS ["Framework Dependencies"]
                 PyQt5["🖼️ PyQt5 Framework<br/>• GUI Framework<br/>• Event System<br/>• Widget Library<br/>• Platform Abstraction"]
                 OpenCV["👁️ OpenCV Library<br/>• Computer Vision<br/>• Image Processing<br/>• Video Capture<br/>• Real-time Processing"]
-                NumPy["🔢 NumPy Library<br/>• Numerical Computing<br/>• Array Operations<br/>• Mathematical Functions<br/>• Performance Optimization"]
+                NumPy["🔢 NumPy Library<br/>• Numerical Computing<br/>• Array Operations<br/>• Mathematical Functions<br/>• Performance Optimisation"]
             end
 
             subgraph SYSTEM ["System Integration"]
@@ -364,7 +364,7 @@ graph TB
 %% Sensor Integration
     RC ==>|Camera Control<br/>Video Capture| CameraHandler
     DataStreamer ==>|Data Collection<br/>Multi - source Integration| DataCollector
-    DataCollector ==>|Synchronization<br/>Timing Control| SyncManager
+    DataCollector ==>|Synchronisation<br/>Timing Control| SyncManager
 %% External Dependencies
     MW ==>|GUI Framework<br/>Widget Management| PyQt5
     PW ==>|GUI Framework<br/>Custom Widgets| PyQt5
@@ -423,16 +423,16 @@ graph TD
             end
 
             subgraph MASTER_CTRL ["Master Controller Hub"]
-                PC_CTRL["PC Master Controller<br/>• Multi-stream Coordination<br/>• Real-time Synchronization<br/>• Quality Assurance<br/>• Command Distribution<br/>• Data Aggregation"]
+                PC_CTRL["PC Master Controller<br/>• Multi-stream Coordination<br/>• Real-time Synchronisation<br/>• Quality Assurance<br/>• Command Distribution<br/>• Data Aggregation"]
             end
         end
 
         subgraph PROCESSING ["Real-time Processing Pipeline"]
             direction TB
 
-            subgraph SYNC_LAYER ["Synchronization Layer"]
+            subgraph SYNC_LAYER ["Synchronisation Layer"]
                 MASTER_CLOCK["Master Clock Synchronizer<br/>• Global Time Reference<br/>• Drift Compensation<br/>• Latency Calculation<br/>• Precision Timing"]
-                SYNC_ENGINE["Synchronization Engine<br/>• Multi-stream Alignment<br/>• Timestamp Correction<br/>• Buffer Management<br/>• Quality Monitoring"]
+                SYNC_ENGINE["Synchronisation Engine<br/>• Multi-stream Alignment<br/>• Timestamp Correction<br/>• Buffer Management<br/>• Quality Monitoring"]
             end
 
             subgraph QUALITY_CTRL ["Quality Control Layer"]
@@ -446,7 +446,7 @@ graph TD
 
             subgraph LOCAL_STORAGE ["Local Storage Tier"]
                 MOBILE_STORAGE["Mobile Local Storage<br/>• Device-specific Storage<br/>• Session Organization<br/>• Temporary Buffering<br/>• Quick Access"]
-                PC_STORAGE["PC Primary Storage<br/>• High-speed NVMe SSD<br/>• Master Data Repository<br/>• Real-time Writing<br/>• Performance Optimization"]
+                PC_STORAGE["PC Primary Storage<br/>• High-speed NVMe SSD<br/>• Master Data Repository<br/>• Real-time Writing<br/>• Performance Optimisation"]
             end
 
             subgraph BACKUP_TIER ["Backup and Archive Tier"]
@@ -457,7 +457,7 @@ graph TD
 
         subgraph EXPORT ["Data Export and Analysis Pipeline"]
             direction LR
-            EXPORT_ENGINE["Export Engine<br/>• Multi-format Export<br/>• Quality Assurance<br/>• Compression Optimization<br/>• Delivery Management"]
+            EXPORT_ENGINE["Export Engine<br/>• Multi-format Export<br/>• Quality Assurance<br/>• Compression Optimisation<br/>• Delivery Management"]
             ANALYSIS_PREP["Analysis Preparation<br/>• Data Preprocessing<br/>• Format Conversion<br/>• Annotation Integration<br/>• Research Ready Output"]
         end
     end
@@ -475,10 +475,10 @@ graph TD
 %% Mobile to Master Controller Communication
     ANDROID1 ==>|Processed Data<br/>JSON Protocol<br/>WiFi 5GHz| PC_CTRL
     ANDROID2 ==>|Processed Data<br/>JSON Protocol<br/>WiFi 5GHz| PC_CTRL
-%% Master Controller to Synchronization
+%% Master Controller to Synchronisation
     PC_CTRL ==>|Multi - stream Data<br/>Real - time Coordination<br/>Command Distribution| MASTER_CLOCK
     MASTER_CLOCK ==>|Synchronized Timing<br/>Global Time Reference<br/>Precision Control| SYNC_ENGINE
-%% Synchronization to Quality Control
+%% Synchronisation to Quality Control
     SYNC_ENGINE ==>|Aligned Data Streams<br/>Timestamp Corrected<br/>Buffer Managed| QC_ENGINE
     QC_ENGINE ==>|Validated Data<br/>Quality Assured<br/>Error Corrected| REDUNDANCY
 %% Processing to Storage
@@ -515,12 +515,12 @@ graph TB
             
             subgraph WIRED ["Wired Infrastructure"]
                 ETHERNET["Gigabit Ethernet<br/>• 1000BASE-T Standard<br/>• Cat6 Cabling<br/>• Low Latency<br/>• Reliable Connection"]
-                SWITCH["Managed Switch<br/>• QoS Configuration<br/>• VLAN Support<br/>• Traffic Prioritization<br/>• Performance Monitoring"]
+                SWITCH["Managed Switch<br/>• QoS Configuration<br/>• VLAN Support<br/>• Traffic Prioritisation<br/>• Performance Monitoring"]
             end
             
             subgraph WIRELESS ["Wireless Infrastructure"]
                 WIFI_ROUTER["WiFi 6 Router<br/>• 802.11ax Standard<br/>• 5GHz Band Priority<br/>• MIMO Technology<br/>• Advanced QoS"]
-                ACCESS_POINT["Access Point<br/>• High Density Support<br/>• Band Steering<br/>• Load Balancing<br/>• Coverage Optimization"]
+                ACCESS_POINT["Access Point<br/>• High Density Support<br/>• Band Steering<br/>• Load Balancing<br/>• Coverage Optimisation"]
             end
         end
         
@@ -571,11 +571,11 @@ graph TB
             
             subgraph PERFORMANCE [" Performance Monitoring"]
                 LATENCY_MONITOR["⏱️ Latency Monitor<br/>• Round-trip Time<br/>• Jitter Measurement<br/>• Packet Loss Detection<br/>• Performance Metrics"]
-                BANDWIDTH_MONITOR["Bandwidth Monitor<br/>• Throughput Measurement<br/>• Utilization Tracking<br/>• Capacity Planning<br/>• Traffic Analysis"]
+                BANDWIDTH_MONITOR["Bandwidth Monitor<br/>• Throughput Measurement<br/>• Utilisation Tracking<br/>• Capacity Planning<br/>• Traffic Analysis"]
             end
             
             subgraph RELIABILITY ["Reliability and Recovery"]
-                CONNECTION_POOL["Connection Pool Manager<br/>• Connection Reuse<br/>• Pool Size Management<br/>• Health Checking<br/>• Resource Optimization"]
+                CONNECTION_POOL["Connection Pool Manager<br/>• Connection Reuse<br/>• Pool Size Management<br/>• Health Checking<br/>• Resource Optimisation"]
                 FAILOVER_MGMT["Failover Management<br/>• Automatic Recovery<br/>• Redundant Paths<br/>• Service Continuity<br/>• Graceful Degradation"]
             end
         end
@@ -584,7 +584,7 @@ graph TB
     %% Physical Layer Connections
     ETHERNET ===|Gigabit Connection<br/>Low Latency| SWITCH
     SWITCH ===|Managed Switching<br/>QoS Enabled| WIFI_ROUTER
-    WIFI_ROUTER ===|Wireless Extension<br/>Coverage Optimization| ACCESS_POINT
+    WIFI_ROUTER ===|Wireless Extension<br/>Coverage Optimisation| ACCESS_POINT
     
     %% Network Stack Flow
     ETHERNET ==>|Physical Transport<br/>Gigabit Speed| IP_ROUTING
@@ -611,11 +611,11 @@ graph TB
     %% Monitoring Integration
     QOS_MGMT ==>|Performance Data<br/>Quality Metrics| LATENCY_MONITOR
     TCP_MGMT ==>|Connection Metrics<br/>Throughput Data| BANDWIDTH_MONITOR
-    JSON_SOCKET ==>|Connection Management<br/>Pool Optimization| CONNECTION_POOL
+    JSON_SOCKET ==>|Connection Management<br/>Pool Optimisation| CONNECTION_POOL
     AUTH_LAYER ==>|Service Management<br/>Recovery Control| FAILOVER_MGMT
     
     %% Feedback Loops
-    LATENCY_MONITOR -.->|Performance Feedback<br/>Optimization Data| QOS_MGMT
+    LATENCY_MONITOR -.->|Performance Feedback<br/>Optimisation Data| QOS_MGMT
     BANDWIDTH_MONITOR -.->|Capacity Information<br/>Traffic Patterns| IP_ROUTING
     CONNECTION_POOL -.->|Pool Status<br/>Resource Metrics| TCP_MGMT
     FAILOVER_MGMT -.->|Recovery Status<br/>Health Information| AUTH_LAYER
@@ -632,12 +632,12 @@ graph TB
 ```mermaid
 flowchart TD
     %% Start of the data collection process
-    START([Data Collection Process Start]) --> INIT_CHECK{🔍 System Initialization Check}
+    START([Data Collection Process Start]) --> INIT_CHECK{🔍 System Initialisation Check}
     
-    %% Initialization and Setup Phase
+    %% Initialisation and Setup Phase
     INIT_CHECK -->|System Ready| DEVICE_DISCOVERY[Device Discovery and Connection]
-    INIT_CHECK -->|❌ System Not Ready| ERROR_INIT[❌ Initialization Error]
-    ERROR_INIT --> RETRY_INIT{Retry Initialization?}
+    INIT_CHECK -->|❌ System Not Ready| ERROR_INIT[❌ Initialisation Error]
+    ERROR_INIT --> RETRY_INIT{Retry Initialisation?}
     RETRY_INIT -->|Yes| INIT_CHECK
     RETRY_INIT -->|No| ABORT[🛑 Process Aborted]
     
@@ -657,7 +657,7 @@ flowchart TD
     
     %% Calibration and Configuration Phase
     DEVICE_CHECK -->|All Connected| CALIBRATION[Sensor Calibration and Configuration]
-    CALIBRATION --> SYNC_SETUP[Clock Synchronization Setup]
+    CALIBRATION --> SYNC_SETUP[Clock Synchronisation Setup]
     SYNC_SETUP --> QUALITY_CHECK[Quality Assurance Check]
     QUALITY_CHECK --> CALIB_VALID{Calibration Valid?}
     
@@ -683,7 +683,7 @@ flowchart TD
     
     %% Real-time Monitoring and Quality Control
     MONITORING --> QUALITY_MONITOR[Quality Monitoring]
-    QUALITY_MONITOR --> SYNC_MONITOR[Synchronization Monitoring]
+    QUALITY_MONITOR --> SYNC_MONITOR[Synchronisation Monitoring]
     SYNC_MONITOR --> ERROR_DETECT{❌ Errors Detected?}
     
     ERROR_DETECT -->|No Errors| CONTINUE_REC{⏳ Continue Recording?}
@@ -707,7 +707,7 @@ flowchart TD
     CONTINUE_REC -->|No| STOP_RECORDING[🛑 Stop Recording Command]
     
     %% Post-Recording Phase
-    STOP_RECORDING --> FINALIZE_DATA[Finalize Data Collection]
+    STOP_RECORDING --> FINALIZE_DATA[Finalise Data Collection]
     FINALIZE_DATA --> DATA_VALIDATION[Data Validation]
     DATA_VALIDATION --> METADATA_COMPLETE[Complete Metadata]
     METADATA_COMPLETE --> FILE_ORGANIZATION[File Organization]
@@ -754,7 +754,7 @@ flowchart TD
     %% Session Lifecycle Start
     START([Session Management Lifecycle]) --> SESSION_REQ[Session Creation Request]
     
-    %% Session Initialization
+    %% Session Initialisation
     SESSION_REQ --> VALIDATE_REQ{Validate Request Parameters?}
     VALIDATE_REQ -->|❌ Invalid| REQ_ERROR[❌ Request Validation Error]
     REQ_ERROR --> ERROR_RESPONSE[📨 Error Response and Logging]
@@ -762,12 +762,12 @@ flowchart TD
     
     VALIDATE_REQ -->|Valid| GEN_SESSION_ID[🆔 Generate Unique Session ID]
     GEN_SESSION_ID --> CREATE_METADATA[Create Session Metadata]
-    CREATE_METADATA --> INIT_STORAGE[Initialize Storage Structure]
+    CREATE_METADATA --> INIT_STORAGE[Initialise Storage Structure]
     
     %% Pre-Recording Setup
     INIT_STORAGE --> DEVICE_PREP[Prepare Connected Devices]
     DEVICE_PREP --> CONFIG_SENSORS[Configure Sensor Parameters]
-    CONFIG_SENSORS --> SYNC_PREP[Prepare Synchronization]
+    CONFIG_SENSORS --> SYNC_PREP[Prepare Synchronisation]
     SYNC_PREP --> QUALITY_PREP[Quality Assurance Setup]
     
     %% Session State Management
@@ -805,12 +805,12 @@ flowchart TD
     RECOVERY_CHECK -->|No| EMERGENCY_STOP
     
     %% Session Termination
-    STOP_RECORDING --> FINALIZE_SESSION[Finalize Session Data]
+    STOP_RECORDING --> FINALIZE_SESSION[Finalise Session Data]
     EMERGENCY_STOP --> EMERGENCY_SAVE[Emergency Data Preservation]
     CANCEL_SESSION --> CLEANUP_CANCELLED[🧹 Cleanup Cancelled Session]
     TIMEOUT_HANDLE --> TIMEOUT_SAVE[Save Timeout Session Data]
     
-    %% Data Finalization
+    %% Data Finalisation
     FINALIZE_SESSION --> PROCESS_DATA[Process Collected Data]
     EMERGENCY_SAVE --> PROCESS_DATA
     TIMEOUT_SAVE --> PROCESS_DATA
@@ -943,7 +943,7 @@ graph TB
             
             METADATA_DIR --> SESSION_CONFIG["session_config.json<br/>• Session Parameters<br/>• Device Configuration<br/>• Recording Settings<br/>• Quality Parameters"]
             METADATA_DIR --> DEVICE_INFO["device_info.json<br/>• Hardware Specifications<br/>• Firmware Versions<br/>• Calibration Status<br/>• Health Metrics"]
-            METADATA_DIR --> SYNC_DATA["synchronization.json<br/>• Timing Information<br/>• Clock Offsets<br/>• Latency Data<br/>• Sync Quality Metrics"]
+            METADATA_DIR --> SYNC_DATA["synchronisation.json<br/>• Timing Information<br/>• Clock Offsets<br/>• Latency Data<br/>• Sync Quality Metrics"]
             METADATA_DIR --> QUALITY_REPORT["quality_report.json<br/>• Data Quality Assessment<br/>• Validation Results<br/>• Error Analysis<br/>• Recommendations"]
         end
         
@@ -955,8 +955,8 @@ graph TB
             BACKUP --> ARCHIVE_BACKUP["Archive Backup<br/>• Long-term Storage<br/>• Compressed Format<br/>• Research Database<br/>• Historical Preservation"]
             
             LOCAL_BACKUP --> INCREMENTAL["Incremental Backup<br/>• Changed Files Only<br/>• Efficient Storage<br/>• Fast Recovery<br/>• Version History"]
-            NETWORK_BACKUP --> CLOUD_SYNC["Cloud Synchronization<br/>• Automatic Upload<br/>• Global Access<br/>• Collaboration Support<br/>• Security Encryption"]
-            ARCHIVE_BACKUP --> COMPRESSION["Data Compression<br/>• Space Optimization<br/>• Format Preservation<br/>• Integrity Checking<br/>• Quality Retention"]
+            NETWORK_BACKUP --> CLOUD_SYNC["Cloud Synchronisation<br/>• Automatic Upload<br/>• Global Access<br/>• Collaboration Support<br/>• Security Encryption"]
+            ARCHIVE_BACKUP --> COMPRESSION["Data Compression<br/>• Space Optimisation<br/>• Format Preservation<br/>• Integrity Checking<br/>• Quality Retention"]
         end
         
         subgraph ACCESS_CONTROL ["Access Control and Security"]
@@ -1016,14 +1016,14 @@ flowchart TD
     
     subgraph "Data Validation and Integrity"
         INTEGRITY_CHECK[Integrity Verification<br/>File Completeness<br/>Checksum Validation<br/>Corruption Detection]
-        SYNC_VALIDATE[Synchronization Validation<br/>Timestamp Consistency<br/>Alignment Quality<br/>Precision Metrics]
+        SYNC_VALIDATE[Synchronisation Validation<br/>Timestamp Consistency<br/>Alignment Quality<br/>Precision Metrics]
         QUALITY_ASSESS[Quality Assessment<br/>Signal Quality<br/>Calibration Accuracy<br/>Completeness Score]
     end
     
     subgraph "Pre-processing Pipeline"
         DATA_CLEAN[Data Cleaning<br/>Outlier Detection<br/>Noise Reduction<br/>Artifact Removal]
-        SYNC_PROCESS[Synchronization Processing<br/>Final Alignment<br/>Cross-correlation<br/>Precision Optimization]
-        CALIB_APPLY[Calibration Application<br/>Geometric Correction<br/>Thermal Calibration<br/>Color Correction]
+        SYNC_PROCESS[Synchronisation Processing<br/>Final Alignment<br/>Cross-correlation<br/>Precision Optimisation]
+        CALIB_APPLY[Calibration Application<br/>Geometric Correction<br/>Thermal Calibration<br/>Colour Correction]
     end
     
     subgraph "Data Organization"
@@ -1035,25 +1035,25 @@ flowchart TD
     subgraph "Format-Specific Processing"
         subgraph "Video Export"
             VID_PROCESS[Video Processing<br/>Format Conversion<br/>Compression Settings<br/>Codec Selection]
-            VID_SYNC[Video Synchronization<br/>Frame Alignment<br/>Temporal Matching<br/>Multi-stream Sync]
+            VID_SYNC[Video Synchronisation<br/>Frame Alignment<br/>Temporal Matching<br/>Multi-stream Sync]
             VID_PACKAGE[Video Packaging<br/>Container Format<br/>Metadata Embedding<br/>Multi-track Support]
         end
         
         subgraph "Sensor Data Export"
-            SENSOR_CONV[Sensor Data Conversion<br/>Format Standardization<br/>Timestamp Alignment<br/>Unit Conversion]
+            SENSOR_CONV[Sensor Data Conversion<br/>Format Standardisation<br/>Timestamp Alignment<br/>Unit Conversion]
             SENSOR_FILTER[Sensor Data Filtering<br/>Quality-based Selection<br/>Feature Extraction<br/>Statistical Summary]
             SENSOR_PACKAGE[Sensor Data Packaging<br/>CSV/JSON Export<br/>Metadata Inclusion<br/>Schema Validation]
         end
         
         subgraph "Thermal Data Export"
-            THERMAL_PROC[Thermal Processing<br/>Temperature Conversion<br/>Visualization Generation<br/>Statistical Analysis]
-            THERMAL_FORMAT[Thermal Formatting<br/>Multiple Formats<br/>Color Map Export<br/>Raw Data Preservation]
+            THERMAL_PROC[Thermal Processing<br/>Temperature Conversion<br/>Visualisation Generation<br/>Statistical Analysis]
+            THERMAL_FORMAT[Thermal Formatting<br/>Multiple Formats<br/>Colour Map Export<br/>Raw Data Preservation]
             THERMAL_VALID[Thermal Validation<br/>Calibration Check<br/>Accuracy Assessment<br/>Range Validation]
         end
     end
     
     subgraph "Archive Creation"
-        COMPRESS[Data Compression<br/>Archive Creation<br/>Compression Algorithms<br/>Size Optimization]
+        COMPRESS[Data Compression<br/>Archive Creation<br/>Compression Algorithms<br/>Size Optimisation]
         ENCRYPT[Data Encryption<br/>Security Application<br/>Key Management<br/>Access Control]
         BUNDLE[Bundle Creation<br/>Complete Package<br/>Manifest Generation<br/>Integrity Sealing]
     end
@@ -1140,7 +1140,7 @@ graph TB
             subgraph "User Interface Applications"
                 ANDROID_UI[Android Mobile App<br/>🎬 Recording Interface<br/>👁️ Preview Display<br/>Configuration Controls]
                 PC_UI[PC Desktop Controller<br/>🖥️ PyQt5 Interface<br/>Multi-device Monitoring<br/>🎛️ Central Control Panel]
-                WEB_UI[🌐 Web Interface<br/>Browser-based Control<br/>Real-time Dashboard<br/>Analytics Visualization]
+                WEB_UI[🌐 Web Interface<br/>Browser-based Control<br/>Real-time Dashboard<br/>Analytics Visualisation]
             end
             
             subgraph "Application Services"
@@ -1152,7 +1152,7 @@ graph TB
         
         subgraph "Business Logic Layer"
             subgraph "Core Business Services"
-                RECORD_SERV[🎬 Recording Service<br/>📹 Multi-stream Coordination<br/>Synchronization Logic<br/>Quality Monitoring]
+                RECORD_SERV[🎬 Recording Service<br/>📹 Multi-stream Coordination<br/>Synchronisation Logic<br/>Quality Monitoring]
                 DEVICE_SERV[Device Management Service<br/>Connection Management<br/>Status Monitoring<br/>Configuration Service]
                 DATA_SERV[Data Processing Service<br/>Stream Processing<br/>Real-time Analysis<br/>Storage Coordination]
             end
@@ -1168,7 +1168,7 @@ graph TB
             subgraph "Communication Services"
                 SOCKET_SERV[🔌 Socket Service<br/>📡 TCP/UDP Communication<br/>Connection Management<br/>Protocol Handling]
                 STREAM_SERV[📡 Streaming Service<br/>Video Streaming<br/>Data Streaming<br/>Real-time Delivery]
-                SYNC_SERV[Synchronization Service<br/>Clock Management<br/>Offset Calculation<br/>Precision Control]
+                SYNC_SERV[Synchronisation Service<br/>Clock Management<br/>Offset Calculation<br/>Precision Control]
             end
             
             subgraph "Data Services"
@@ -1179,7 +1179,7 @@ graph TB
             
             subgraph "Processing Services"
                 IMAGE_SERV[🖼️ Image Processing Service<br/>Format Conversion<br/>Enhancement Algorithms<br/>Geometric Operations]
-                VIDEO_SERV[Video Processing Service<br/>Encoding/Decoding<br/>Quality Control<br/>Frame Synchronization]
+                VIDEO_SERV[Video Processing Service<br/>Encoding/Decoding<br/>Quality Control<br/>Frame Synchronisation]
                 SIGNAL_SERV[Signal Processing Service<br/>Filtering Algorithms<br/>Feature Extraction<br/>Statistical Analysis]
             end
         end
@@ -1193,7 +1193,7 @@ graph TB
             
             subgraph "File System Abstraction"
                 LOCAL_FS[Local File System<br/>Direct File Access<br/>Performance Optimized<br/>Security Controlled]
-                NETWORK_FS[🌐 Network File System<br/>📡 Remote Access<br/>Synchronization<br/>Distributed Storage]
+                NETWORK_FS[🌐 Network File System<br/>📡 Remote Access<br/>Synchronisation<br/>Distributed Storage]
                 CLOUD_FS[Cloud File System<br/>🌐 Cloud Integration<br/>Scalable Storage<br/>Encrypted Access]
             end
             
@@ -1214,7 +1214,7 @@ graph TB
             subgraph "Operating System Interface"
                 ANDROID_OS[Android OS Interface<br/>Permission Management<br/>Resource Management<br/>System Services]
                 WINDOWS_OS[Windows OS Interface<br/>Driver Management<br/>Performance Monitoring<br/>Security Services]
-                LINUX_OS[🐧 Linux OS Interface<br/>Real-time Support<br/>Process Management<br/>System Optimization]
+                LINUX_OS[🐧 Linux OS Interface<br/>Real-time Support<br/>Process Management<br/>System Optimisation]
             end
             
             subgraph "Network Infrastructure"
@@ -1426,7 +1426,7 @@ graph TB
             
             subgraph "Configuration and Settings"
                 CONFIG_MGR[Configuration Manager<br/>Settings Hierarchy<br/>Validation Rules<br/>Dynamic Updates]
-                THEME_MGR[Theme Manager<br/>🌙 Dark/Light Mode<br/>Color Schemes<br/>♿ Accessibility Themes]
+                THEME_MGR[Theme Manager<br/>🌙 Dark/Light Mode<br/>Colour Schemes<br/>♿ Accessibility Themes]
                 LOCALE_MGR[🌍 Localization Manager<br/>Multi-language Support<br/>🌐 Regional Settings<br/>Resource Management]
             end
         end
@@ -1505,7 +1505,7 @@ graph TB
 
 ## Software Architecture of PC App
 
-Component-based architecture visualization for the Python desktop controller application.
+Component-based architecture visualisation for the Python desktop controller application.
 
 ```mermaid
 graph TB
@@ -1534,7 +1534,7 @@ graph TB
             
             subgraph "Common UI Components"
                 MOD_BTN[🔘 ModernButton<br/>Styled Buttons<br/>Hover Effects<br/>Action Handlers]
-                STATUS_IND[🚥 StatusIndicator<br/>Visual Status<br/>Color Coding<br/>Real-time Updates]
+                STATUS_IND[🚥 StatusIndicator<br/>Visual Status<br/>Colour Coding<br/>Real-time Updates]
                 PROGRESS_IND[ProgressIndicator<br/>Progress Bars<br/>Time Estimates<br/>Completion Status]
                 CONN_MGR_UI[ConnectionManagerUI<br/>Device Controls<br/>Status Display<br/>Settings Panel]
             end
@@ -1555,7 +1555,7 @@ graph TB
             
             subgraph "Processing Components"
                 IMG_PROC[🖼️ ImageProcessor<br/>Format Conversion<br/>Enhancement Algorithms<br/>Geometric Operations]
-                VID_PROC[VideoProcessor<br/>Encoding/Decoding<br/>Quality Control<br/>Synchronization]
+                VID_PROC[VideoProcessor<br/>Encoding/Decoding<br/>Quality Control<br/>Synchronisation]
                 SIG_PROC[SignalProcessor<br/>Filtering<br/>Feature Extraction<br/>Statistical Analysis]
             end
         end
@@ -1594,8 +1594,8 @@ graph TB
             end
             
             subgraph "External Interfaces"
-                JSON_ADAPTER[JSONAdapter<br/>Serialization<br/>Schema Validation<br/>Format Conversion]
-                CSV_ADAPTER[CSVAdapter<br/>Data Export<br/>Column Mapping<br/>Format Optimization]
+                JSON_ADAPTER[JSONAdapter<br/>Serialisation<br/>Schema Validation<br/>Format Conversion]
+                CSV_ADAPTER[CSVAdapter<br/>Data Export<br/>Column Mapping<br/>Format Optimisation]
                 BINARY_ADAPTER[BinaryAdapter<br/>Binary Data<br/>Format Detection<br/>Compression Handling]
             end
         end
@@ -1614,7 +1614,7 @@ graph TB
             end
             
             subgraph "Resource Management"
-                MEM_MGR[MemoryManager<br/>Memory Monitoring<br/>Garbage Collection<br/>Optimization]
+                MEM_MGR[MemoryManager<br/>Memory Monitoring<br/>Garbage Collection<br/>Optimisation]
                 RESOURCE_MGR[ResourceManager<br/>Resource Tracking<br/>Lock Management<br/>Cleanup Coordination]
                 PERF_MON[PerformanceMonitor<br/>Metrics Collection<br/>Real-time Monitoring<br/>Reporting]
             end
@@ -1737,7 +1737,7 @@ GIT_SETUP[Git Configuration<br/>Git Installation<br/>Credential Setup<br/>Reposi
 end
 
 subgraph "Project Setup"
-REPO_CLONE[Repository Clone<br/>Source Code Download<br/>Submodule Initialization<br/>Branch Selection]
+REPO_CLONE[Repository Clone<br/>Source Code Download<br/>Submodule Initialisation<br/>Branch Selection]
 ENV_CREATE[🐍 Environment Creation<br/>Conda Environment<br/>Dependencies Install<br/>Package Versions]
 GRADLE_SETUP[Gradle Configuration<br/>Wrapper Download<br/>Build Settings<br/>Module Configuration]
 end
@@ -1769,7 +1769,7 @@ end
 subgraph "Network Configuration"
 WIFI_CONFIG[📶 WiFi Configuration<br/>🌐 Network Setup<br/>Security Settings<br/>Quality Testing]
 FIREWALL_CONFIG[Firewall Configuration<br/>🚫 Port Rules<br/>Exception Setup<br/>Security Policy]
-QOS_CONFIG[QoS Configuration<br/>Traffic Prioritization<br/>Bandwidth Allocation<br/>Performance Optimization]
+QOS_CONFIG[QoS Configuration<br/>Traffic Prioritisation<br/>Bandwidth Allocation<br/>Performance Optimisation]
 end
 
 subgraph "Testing and Validation"

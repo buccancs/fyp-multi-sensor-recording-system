@@ -21,7 +21,7 @@ Each ADR follows a consistent structure:
 **Status**: [Proposed | Accepted | Deprecated | Superseded]
 **Date**: YYYY-MM-DD
 **Authors**: [Name(s)]
-**Tags**: [relevant, tags, for, categorization]
+**Tags**: [relevant, tags, for, categorisation]
 
 ## Context
 
@@ -69,7 +69,7 @@ Specific implementation details or guidelines.
 | [001](./ADR-001-reactive-state-management.md) | Reactive State Management with StateFlow | Accepted | 2024-01-15 |
 | [002](./ADR-002-strict-type-safety.md) | Strict Type Safety with MyPy | Accepted | 2024-01-15 |
 | [003](./ADR-003-clean-mvvm-architecture.md) | Clean MVVM Architecture Pattern | Accepted | 2024-02-01 |
-| [004](./ADR-004-distributed-synchronization.md) | Distributed Device Synchronization | Accepted | 2024-02-15 |
+| [004](./ADR-004-distributed-synchronisation.md) | Distributed Device Synchronisation | Accepted | 2024-02-15 |
 | [005](./ADR-005-offline-first-recording.md) | Offline-First Recording Strategy | Accepted | 2024-03-01 |
 | [006](./ADR-006-json-websocket-protocol.md) | JSON WebSocket Communication Protocol | Accepted | 2024-03-10 |
 | [007](./ADR-007-hardware-backed-encryption.md) | Hardware-Backed Encryption for Security | Accepted | 2024-04-01 |
@@ -85,15 +85,15 @@ Create an ADR when making decisions about:
 - **Technology choices** (StateFlow vs LiveData, WebSocket vs REST)
 - **Design principles** (offline-first, security-first, etc.)
 - **Quality standards** (test coverage targets, complexity limits)
-- **Integration strategies** (synchronization protocols, communication methods)
+- **Integration strategies** (synchronisation protocols, communication methods)
 
 ### ADR Creation Process
 
-1. **Identify Decision Point**: Recognize when an architectural decision needs documentation
+1. **Identify Decision Point**: Recognise when an architectural decision needs documentation
 2. **Research Alternatives**: Investigate different approaches and their trade-offs
 3. **Draft ADR**: Use the template to document the decision
 4. **Review with Team**: Get feedback on the analysis and decision
-5. **Finalize and Commit**: Mark as "Accepted" and commit to repository
+5. **Finalise and Commit**: Mark as "Accepted" and commit to repository
 
 ### File Naming Convention
 
@@ -150,7 +150,7 @@ New contributors should review key ADRs to understand architectural decisions:
 
 1. **Start with**: ADR-001 (State Management), ADR-003 (MVVM), ADR-008 (Testing)
 2. **For Android**: ADR-001, ADR-003, ADR-007 (Security)
-3. **For Python**: ADR-002 (Type Safety), ADR-004 (Synchronization)
+3. **For Python**: ADR-002 (Type Safety), ADR-004 (Synchronisation)
 4. **For Integration**: ADR-004, ADR-005, ADR-006
 
 ## Quality Assurance
@@ -187,7 +187,7 @@ ADRs in this project follow academic research standards:
 ```markdown
 ## References
 
-- Zhang, L. et al. (2023). "Distributed Timing Synchronization in Multi-Modal Recording Systems." *IEEE Transactions on Instrumentation and Measurement*, 72, 1-12.
+- Zhang, L. et al. (2023). "Distributed Timing Synchronisation in Multi-Modal Recording Systems." *IEEE Transactions on Instrumentation and Measurement*, 72, 1-12.
 - Kumar, A. & Smith, B. (2022). "Reactive State Management Patterns in Android Applications." *ACM Mobile Computing Review*, 15(3), 45-58.
 - Johnson, C. (2024). "Security Considerations for Physiological Data Collection." *Privacy Engineering Conference Proceedings*, 234-241.
 ```

@@ -10,11 +10,11 @@ They capture heat radiation as images, allowing non-contact temperature
 measurement across a scene. The TC001 series features a 256×192 IR
 sensor resolution, producing clear thermal images and detecting
 temperature differences as small as
-0.1 °C[\[2\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=8%C2%A0%E2%80%93%C2%A014%CE%BCm)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyze%20details%20of%20the%20targets).
+0.1 °C[\[2\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=8%C2%A0%E2%80%93%C2%A014%CE%BCm)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyse%20details%20of%20the%20targets).
 The TC001 Plus model includes a dual-lens system (an IR sensor plus a
 visible-light camera) enabling image fusion for sharper detail and
 contours in the thermal
-image[\[4\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Dual%20Lens%20to%20Unveil%20the,Unseen)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyze%20details%20of%20the%20targets).
+image[\[4\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Dual%20Lens%20to%20Unveil%20the,Unseen)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyse%20details%20of%20the%20targets).
 Both cameras support a wide temperature detection range from about
 **-20 °C to 550 °C** (≈ -4 °F to
 1022 °F)[\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimized%20Temperature%20Range%20%26%20Accuracy)[\[6\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=%E2%80%A2%20With%20a%20temperature%20range,1%C2%B0C),
@@ -47,7 +47,7 @@ data streaming** from the thermal camera on Android. Using the SDK, an
 app can connect to the camera (via Android's USB host interface), start
 the thermal video feed, and retrieve **thermal frames** (infrared images
 and temperature data) in real time. The API exposes methods to configure
-camera parameters -- for example, selecting color palettes (pseudo-color
+camera parameters -- for example, selecting colour palettes (pseudo-colour
 schemes for the thermal image), adjusting image orientation, switching
 between high- and low-gain modes, triggering calibrations (shutter
 correction), and choosing the **data output mode** (e.g. image only,
@@ -57,15 +57,15 @@ commands, so developers can work with high-level objects (like a
 `UVCCamera` and frame callback) rather than raw USB transfers.
 
 By using this SDK, developers can **stream thermal imagery** into their
-apps for visualization or analysis, obtain per-pixel temperature
+apps for visualisation or analysis, obtain per-pixel temperature
 readings, and synchronously capture frames at up to 25 Hz (depending on
-device)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyze%20details%20of%20the%20targets).
+device)[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyse%20details%20of%20the%20targets).
 The SDK is designed to support **both** the TC001 and TC001 Plus models,
 abstracting their dual-lens or single-lens differences. For instance,
 when a TC001 Plus is connected, the SDK can fetch the simultaneous
 visual and IR streams for fusion, whereas for TC001 it handles the
 single thermal stream. Overall, the project enables Android applications
-to utilize the TC001 series cameras for tasks such as real-time thermal
+to utilise the TC001 series cameras for tasks such as real-time thermal
 monitoring, recording thermal videos, measuring temperature at points or
 regions of interest, and integrating thermal data with other sensor
 modalities.
@@ -93,7 +93,7 @@ Make sure to enable support for the USB host API in your app's manifest
 
     <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
 
-Also add an intent filter and metadata so that Android can recognize the
+Also add an intent filter and metadata so that Android can recognise the
 camera and grant permissions. For example, inside your launch Activity:
 
     <intent-filter>
@@ -109,7 +109,7 @@ the system can identify and associate the device with your app. (The SDK
 sample provides such a `device_filter.xml` for Topdon/Infisense
 devices.)
 
-After adding the library and manifest entries, **synchronize Gradle** to
+After adding the library and manifest entries, **synchronise Gradle** to
 ensure the SDK is included. The SDK may include native components, so
 you should build your project to confirm that the .so libraries are
 packaged correctly. No additional installation steps (like special
@@ -135,13 +135,13 @@ configurations:
 
 - **USB Permissions:** The camera communicates via USB, so your app must
   request permission to access the USB device. The Android system will
-  prompt the user with a dialog such as "Allow this app to access the
+  prompt the user with a dialogue such as "Allow this app to access the
   USB device?". The SDK (via `USBMonitor`) handles this by calling
   `UsbManager.requestPermission()` when the device is attached. Ensure
   your manifest includes the USB device intent filter as shown above and
   that your app logic requests/grants permission. (There is *no*
   specific `<uses-permission>` string for USB host; it's enabled by the
-  uses-feature tag and user consent dialog.)
+  uses-feature tag and user consent dialogue.)
 
 - **Camera Permission:** Even though the TC001 is an external camera,
   the system may treat it as a camera source. It is advisable to declare
@@ -182,10 +182,10 @@ handle the permission grant flow.
 ## Getting Started
 
 Once the SDK is integrated and permissions are in place, you can
-initialize and connect to the TC001 camera in your app. The basic
+initialise and connect to the TC001 camera in your app. The basic
 workflow is:
 
-1.  **Initialize the USB monitor and listeners.** The SDK provides a
+1.  **Initialise the USB monitor and listeners.** The SDK provides a
     `USBMonitor` class that monitors USB device connections. You attach
     an `OnDeviceConnectListener` to handle events: device attached,
     device permission granted, device connected, disconnected, etc.
@@ -193,7 +193,7 @@ workflow is:
 2.  **Request permission and open the camera.** When the camera is
     attached and permission is granted, create a `UVCCamera` instance
     using the SDK's builder, open it with the USB control block, and
-    initialize the infrared command interface (`IRCMD`) for thermal
+    initialise the infrared command interface (`IRCMD`) for thermal
     data.
 
 3.  **Start streaming frames.** Set a frame callback to receive image
@@ -203,7 +203,7 @@ workflow is:
 4.  **Close the camera on disconnect.** Properly stop streaming and
     release resources if the camera is detached.
 
-Below is a **sample code snippet** illustrating the initialization and
+Below is a **sample code snippet** illustrating the initialisation and
 frame capture process in Java:
 
     import android.hardware.usb.UsbDevice;
@@ -234,7 +234,7 @@ frame capture process in Java:
         public void onConnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock, boolean createNew) {
             if (!createNew) return;
             // Permission granted and new device connection:
-            // 1. Initialize the UVC camera object
+            // 1. Initialise the UVC camera object
             ConcreateUVCBuilder uvcBuilder = new ConcreateUVCBuilder();
             UVCCamera uvcCamera = uvcBuilder
                     .setUVCType(UVCType.USB_UVC)      // using a USB UVC device
@@ -244,7 +244,7 @@ frame capture process in Java:
                 // handle error (result codes defined in UVCResult)
                 return;
             }
-            // 2. Initialize infrared command interface (IRCMD) for thermal data
+            // 2. Initialise infrared command interface (IRCMD) for thermal data
             IRCMD irCmd = new ConcreteIRCMDBuilder()
                     .setIrcmdType(IRCMDType.USB_IR_256_384)   // using 256x384 IR module (for TC001)
                     .setIdCamera(uvcCamera.getNativePtr())   // link to the opened camera
@@ -280,7 +280,7 @@ frame capture process in Java:
         }
         @Override 
         public void onCancel(UsbDevice device) {
-            // Permission dialog canceled
+            // Permission dialogue canceled
         }
     });
 
@@ -323,15 +323,15 @@ In the above code:
 background
 thread[\[22\]](https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/README.md#L13-L21).
 This means the `onFrame` callback is also on a background thread, so you
-should handle thread synchronization if updating UI elements with the
+should handle thread synchronisation if updating UI elements with the
 thermal image. In a real app, you might use a handler or runOnUiThread
 to display the image, or process frames in a dedicated worker thread (as
 the SDK sample does with an `ImageThread` for image conversion).
 
-This basic initialization can be adapted. For example, if you only need
+This basic initialisation can be adapted. For example, if you only need
 the temperature data without the image, you could use
 `DataFlowMode.TEMP_OUTPUT` when starting preview. Or if you only need
-the thermal image (for visualization), use `IMAGE_OUTPUT`. The SDK also
+the thermal image (for visualisation), use `IMAGE_OUTPUT`. The SDK also
 provides intermediate modes (like raw sensor outputs for noise reduction
 etc.), but those are advanced usage.
 
@@ -376,7 +376,7 @@ follows (pseudo-code):
     int pixelCount = imageWidth * imageHeight;  // 256*192
     int[] argbPixels = new int[pixelCount];
     if (pseudocolorMode != null) {
-        // Apply a false-color palette to the grayscale thermal image
+        // Apply a false-colour palette to the grayscale thermal image
         LibIRProcess.convertYuyvMapToARGBPseudocolor(imageBytes, (long)pixelCount,
                                                     pseudocolorMode, argbPixels);
     } else {
@@ -399,13 +399,13 @@ YUV -\> ARGB -\> rotate -\>
 Bitmap[\[23\]](https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/README.md#L120-L128)[\[27\]](https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b03aac1f4e13af0b0/ANDROID_SDK_USB_IR_1.3.7/libir_sample/usbir/README.md#L131-L140).
 You can then draw this Bitmap on an `ImageView` or a custom view
 (`CameraView` in the sample) to show the live thermal image. The SDK
-supports multiple **pseudo-color palettes** (ironbow, rainbow,
+supports multiple **pseudo-colour palettes** (ironbow, rainbow,
 grayscale, etc.), approximately 10 palettes including "white hot",
 "black hot", "medical" and
 others[\[28\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=1).
 By selecting a palette (e.g., `CommonParams.PseudoColorType`), you can
 have the conversion routine apply that coloring to the image, enhancing
-contrast for visualization.
+contrast for visualisation.
 
 **Temperature Data:** The temperature values for each pixel are provided
 in the second half of the frame (if using combined mode, or as the whole
@@ -459,7 +459,7 @@ and the noise-equivalent temperature difference (NETD) is \<40 mK,
 meaning very small temperature differences (\~0.04 °C) are
 distinguishable[\[2\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=8%C2%A0%E2%80%93%C2%A014%CE%BCm).
 
-When visualizing the temperature data, you might overlay it as numeric
+When visualising the temperature data, you might overlay it as numeric
 values or a separate "temperature map". The TC001 Plus, with its visual
 camera, allows blending the thermal data with an RGB image -- the SDK
 can provide an aligned visual image so you can overlay temperature info
@@ -487,7 +487,7 @@ the camera will be in high-gain mode for better sensitivity.
 
 In summary, handling data from the SDK involves splitting the frame into
 image vs. temperature, converting the image for display (using provided
-conversion functions and applying pseudo-colors if desired), and
+conversion functions and applying pseudo-colours if desired), and
 converting temperature data to meaningful values (using the scale or the
 `LibIRTemp` helpers). The provided sample code and SDK documentation
 have detailed examples of these steps, ensuring you can both **see** the
@@ -499,8 +499,8 @@ The `bucika_gsr` Android app is a multi-modal data collection tool,
 combining galvanic skin response (GSR) with other sensors. Integrating
 the Topdon TC001 camera into this app allows **thermal data** to become
 another channel in its physiological monitoring architecture. In
-practice, the integration involves initializing and running the TC001's
-thermal stream in parallel with GSR recording, and synchronizing the
+practice, the integration involves initialising and running the TC001's
+thermal stream in parallel with GSR recording, and synchronising the
 data streams (by timestamps or sampling rate) so that thermal features
 can be correlated with electrodermal activity.
 
@@ -562,7 +562,7 @@ For example, when a recording session starts, the app would:
   temperature).
 
 From a software integration standpoint, adding the TC001 likely means
-managing the **lifecycle** within the app: initializing the camera when
+managing the **lifecycle** within the app: initialising the camera when
 needed, handling user permissions (the app might prompt the user to
 connect/allow the camera at start of a session), and gracefully stopping
 the camera when the session ends or app pauses. This involves calling
@@ -602,7 +602,7 @@ noisy[\[38\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=Thermal%20imaging%
 
 In summary, within the `bucika_gsr` app, the Topdon camera's role is to
 provide a **thermal imaging stream** that complements the GSR data. The
-integration involves technical steps (initializing the camera via the
+integration involves technical steps (initialising the camera via the
 SDK, managing data flow) and conceptual steps (deciding which thermal
 features to extract and log). Once implemented, the app can record
 synchronized thermal and GSR data for each session, offering a more
@@ -629,7 +629,7 @@ some common issues. Here are troubleshooting tips and solutions:
   flip the connector if it's orientation-specific).
 
 - **Permission Denied or No Prompt:** If you never see the "Allow
-  access" dialog, it could be because another app (or a system service)
+  access" dialogue, it could be because another app (or a system service)
   has claimed the USB interface. Make sure no other app (including the
   default Topdon app or other camera apps) is running and auto-opening
   the device. Also confirm your intent filter is correct. In some cases,
@@ -669,7 +669,7 @@ some common issues. Here are troubleshooting tips and solutions:
   forces a **B shutter calibration**). Conversely, if the image over
   time develops offset (e.g., appears warmer or cooler than reality), a
   manual shutter trigger can help. Also note that the **TC001 Plus** has
-  a known behavior of *self-heating*: after a minute or so, the device's
+  a known behaviour of *self-heating*: after a minute or so, the device's
   body warms up, which can slightly raise the reported temperature in
   parts of the image (e.g., edges) due to its own
   heat[\[41\]](https://www.reddit.com/r/Thermal/comments/1gc3nwc/topdon_tc001_plus_self_heating_gradient/#:~:text=Topdon%20TC001%20Plus%20self%20heating,5F%20hotter%20after%201%20minute).
@@ -728,7 +728,7 @@ some common issues. Here are troubleshooting tips and solutions:
   `USB_IR_256_384` as shown (the Plus might use the same, since the IR
   sensor resolution is 256×192; "512×384 super-resolution" mentioned in
   marketing refers to upscaling/fusion, not an actual sensor pixel
-  count). If you choose a wrong type, the SDK might fail to initialize
+  count). If you choose a wrong type, the SDK might fail to initialise
   the IR command interface.
 
 - **Image Orientation and Alignment:** The camera's default orientation
@@ -791,7 +791,7 @@ TC001 (Android Devices) -- TOPDON USA
 <https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU>
 
 [\[2\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=8%C2%A0%E2%80%93%C2%A014%CE%BCm)
-[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyze%20details%20of%20the%20targets)
+[\[3\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Sporting%20an%20ultra,analyse%20details%20of%20the%20targets)
 [\[4\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Dual%20Lens%20to%20Unveil%20the,Unseen)
 [\[6\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=%E2%80%A2%20With%20a%20temperature%20range,1%C2%B0C)
 [\[28\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=1)

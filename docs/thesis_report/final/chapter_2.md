@@ -26,7 +26,7 @@ fields:
   impact can be objectively measured via GSR. Marketers track GSR to see
   which advertisements evoke arousal and engagement, identifying moments
   that resonate or fall
-  flat[\[4\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Consumer%C2%A0Neuroscience%20%26%C2%A0Marketing%20Evaluating%20consumer%20preferences,identify%20target%20audiences%20and%20personas)[\[5\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Media%20%26%20Ad%C2%A0Testing%20In%20media,utilizing%20GSR%20for%20evaluation%20purposes).
+  flat[\[4\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Consumer%C2%A0Neuroscience%20%26%C2%A0Marketing%20Evaluating%20consumer%20preferences,identify%20target%20audiences%20and%20personas)[\[5\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Media%20%26%20Ad%C2%A0Testing%20In%20media,utilising%20GSR%20for%20evaluation%20purposes).
   Similarly, media producers test audience responses to scenes in films
   or games; spikes in GSR can reveal excitement or stress at key
   moments, informing creative decisions.
@@ -42,7 +42,7 @@ fields:
 
 These application areas underscore the importance of reliable emotional
 state detection. They motivate the creation of robust data collection
-platforms to fuel machine learning models that can recognize stress or
+platforms to fuel machine learning models that can recognise stress or
 emotion. A multi-modal approach -- combining **physiological signals**
 (like GSR) with **behavioral cues** (like facial expressions or thermal
 signatures) -- promises richer data for these applications. The ultimate
@@ -57,7 +57,7 @@ affective computing systems.
 Traditional emotion detection often relies on wearable sensors (for
 heart rate, skin conductance, etc.) attached to the user. While
 effective, these contact-based methods can be obtrusive and may alter
-the user's behavior or comfort. There is a strong rationale for
+the user's behaviour or comfort. There is a strong rationale for
 **contactless physiological measurement** techniques in stress and
 emotion research. A contactless approach allows data to be gathered
 without encumbering the subject, enabling more natural interactions and
@@ -214,7 +214,7 @@ load[\[16\]](https://www.sciencedirect.com/science/article/pii/S136984782500244X
 In our context of building a prediction platform, we primarily use GSR
 as the **ground-truth stress signal** due to its high temporal
 resolution and directness. The near-instantaneous changes in GSR allow
-synchronization with other modalities (like video frames or thermal
+synchronisation with other modalities (like video frames or thermal
 readings) on a fine timescale. Cortisol, while not practical for
 real-time data collection (given the need for sampling bodily fluids and
 the latency of response), provides valuable scientific validation.
@@ -295,7 +295,7 @@ challenges[\[18\]](https://en.wikipedia.org/wiki/Electrodermal_activity#:~:text=
   signal[\[19\]](https://en.wikipedia.org/wiki/Electrodermal_activity#:~:text=measured%20in%20different%20places%20on,38).
   This delay, due to physiological and electrochemical processes in the
   skin, complicates precise alignment with fast events. It requires any
-  data collection platform to synchronize stimulus/event timestamps with
+  data collection platform to synchronise stimulus/event timestamps with
   GSR data while accounting for this latency. Finally, obtaining
   high-quality GSR data can depend on the **skill of the
   operator**[\[22\]](https://en.wikipedia.org/wiki/Electrodermal_activity#:~:text=Lastly%2C%20electrodermal%20responses%20are%20delayed,38)
@@ -311,8 +311,8 @@ platform, careful attention is given to data quality: we use high-grade
 GSR sensors (for stable readings), ensure consistent placement (finger
 straps on the same hand for all sessions), and log environmental
 conditions if necessary. We also design the data acquisition with
-synchronization and timing in mind, so the known GSR lag can be
-corrected in analysis. Recognizing GSR's limitations allows us to design
+synchronisation and timing in mind, so the known GSR lag can be
+corrected in analysis. Recognising GSR's limitations allows us to design
 a collection system -- and later, predictive models -- that are more
 robust and interpretable. GSR will serve as a core ground truth for
 "stress" in the dataset, but it will be interpreted in context with the
@@ -400,7 +400,7 @@ In designing a multimodal platform for stress data, we consider both
 **visible spectrum (RGB) imaging** and **thermal infrared imaging** as
 complementary modalities. Each type of camera offers unique information:
 an RGB camera (like a standard smartphone camera) captures fine details
-of facial expression, skin color changes, and movements, while a thermal
+of facial expression, skin colour changes, and movements, while a thermal
 camera captures the invisible heat patterns related to blood flow and
 sweat. A central hypothesis for future **machine learning** models is
 that combining RGB and thermal data will yield more accurate and robust
@@ -436,7 +436,7 @@ a telltale anxious fidget or change in complexion).
 From a machine learning perspective, RGB and thermal images together
 provide a multi-channel input that can enable more robust feature
 extraction. **RGB video** frames can be processed to extract heart rate
-(via subtle color changes in the face), breathing rate (via chest
+(via subtle colour changes in the face), breathing rate (via chest
 movements), and facial action units (muscle movements indicating
 emotion). **Thermal video** frames can be processed to extract
 temperature-based features like the nose-facial temperature gradient,
@@ -469,11 +469,11 @@ machine learning experiments using the collected dataset.
 
 ## 2.8 Sensor Device Selection Rationale (Shimmer GSR Sensor and Topdon Thermal Camera)
 
-To realize the above goals, we carefully chose the hardware components
+To realise the above goals, we carefully chose the hardware components
 for our multimodal data collection platform. The selection of sensors
 was based on their signal quality, compatibility, and ability to provide
 **synchronized, high-resolution data**. The platform's current
-configuration centers on two primary devices: the **Shimmer 3 GSR+
+configuration centres on two primary devices: the **Shimmer 3 GSR+
 sensor** for electrodermal activity and the **Topdon TC001 thermal
 camera** for infrared imaging. We detail the rationale for each:
 
@@ -486,7 +486,7 @@ camera** for infrared imaging. We detail the rationale for each:
   Hz)[\[31\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=Shimmer%20device%2C%20attached%20to%20the,time%20via%20Bluetooth%20to%20a),
   far exceeding the 4--10 Hz sampling typical of wristband trackers.
   This high sampling rate means we capture the fast phasic changes in
-  GSR without aliasing, which is crucial for precise synchronization
+  GSR without aliasing, which is crucial for precise synchronisation
   with video frames. Moreover, Shimmer's reliability has been
   demonstrated in comparative evaluations -- studies comparing the
   Shimmer GSR sensor to popular devices (e.g., Empatica E4 wristband or
@@ -495,10 +495,10 @@ camera** for infrared imaging. We detail the rationale for each:
   research[\[32\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=future%20research,world%20applications).
   The sensor uses Ag/AgCl electrodes attached to the fingers, providing
   a low-noise conductance measurement and it interfaces via Bluetooth,
-  streaming data in real-time for synchronization. The Shimmer was also
+  streaming data in real-time for synchronisation. The Shimmer was also
   chosen for its **extensibility**: it includes additional channels
   (like a photoplethysmograph/PPG and accelerometer), which we can
-  utilize to collect heart rate or motion data in the future without
+  utilise to collect heart rate or motion data in the future without
   adding another
   device[\[33\]](https://www.mdpi.com/2076-3417/14/24/11997#:~:text=Measurements%20were%20performed%20using%20Shimmer,to%20assess%20the%20galvanic%20skin).
   The decision to use Shimmer ensures that our "ground truth" GSR signal
@@ -539,15 +539,15 @@ camera** for infrared imaging. We detail the rationale for each:
   thermal channel is rich enough for detailed analysis of stress
   patterns (like those discussed in Section 2.6).
 
-**Synchronization and Integration:** A critical aspect of using these
+**Synchronisation and Integration:** A critical aspect of using these
 devices together is achieving precise time alignment. The Shimmer GSR
 sensor provides timestamps for each data point and the Android device
 hosting the thermal camera can timestamp each frame; we implemented a
-synchronization mechanism (a master clock in the recording app) to align
+synchronisation mechanism (a master clock in the recording app) to align
 the streams. This way, we can correlate each GSR peak with the exact
 thermal image frames (and any RGB frames, if using the phone camera)
-around that moment. The importance of synchronization cannot be
-overstated -- misaligned data could lead to incorrect labeling (e.g.,
+around that moment. The importance of synchronisation cannot be
+overstated -- misaligned data could lead to incorrect labelling (e.g.,
 attributing a GSR surge to the wrong facial expression). Our platform
 uses a **common time base** and logging system to ensure all modalities
 (GSR, thermal, and any others) are recorded in lockstep. Early
@@ -569,7 +569,7 @@ Android platform's connectivity mean the **multi-modal platform can
 grow** to incorporate new physiological signals or environmental sensors
 with minimal changes. This extensibility supports our central
 motivation: to create a **synchronized, high-quality multimodal
-dataset** that is *future-proof* for various machine learning modeling
+dataset** that is *future-proof* for various machine learning modelling
 efforts. Whether the goal is to predict GSR from thermal images, to
 classify stress vs. no-stress from all modalities, or to explore new
 physiological correlations, the platform provides a flexible foundation.
@@ -578,7 +578,7 @@ In conclusion, the combination of the Shimmer GSR sensor and the Topdon
 thermal camera was deliberate to ensure we capture **ground-truth stress
 signals (GSR) alongside rich, contactless indicators (thermal
 imagery)**. By using research-grade and high-resolution devices, we
-maximize data quality. By focusing on synchronization and extensibility,
+maximise data quality. By focusing on synchronisation and extensibility,
 we ensure the data is **machine-learning ready** -- correctly aligned
 and scalable. Every section in this chapter has underscored that our aim
 is not real-time inference for its own sake, but rather the **collection
@@ -587,7 +587,7 @@ each component choice is ultimately to serve that aim, yielding a
 platform capable of underpinning advanced GSR prediction models in the
 future. The next steps will involve deploying this platform in
 experimental settings, collecting a complete dataset, and then
-utilizing it to train and evaluate the machine learning models that
+utilising it to train and evaluate the machine learning models that
 motivated its creation.
 
 ------------------------------------------------------------------------
@@ -596,7 +596,7 @@ motivated its creation.
 [\[2\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Psychological%20Research%20Psychological%20studies%20utilize,with%20dogs%20in%20later%20life)
 [\[3\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Clinical%20Research%C2%A0%26%20Psychotherapy%20Clinical%20populations,success%20of%20the%20therapeutic%20intervention)
 [\[4\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Consumer%C2%A0Neuroscience%20%26%C2%A0Marketing%20Evaluating%20consumer%20preferences,identify%20target%20audiences%20and%20personas)
-[\[5\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Media%20%26%20Ad%C2%A0Testing%20In%20media,utilizing%20GSR%20for%20evaluation%20purposes)
+[\[5\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Media%20%26%20Ad%C2%A0Testing%20In%20media,utilising%20GSR%20for%20evaluation%20purposes)
 [\[6\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Usability%20Testing%C2%A0%26%20UX%20Design%20Using,in%20stereotypic%20GSR%20activation%20patterns)
 [\[17\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Logic%20Behind%20GSR%20Sensors)
 Galvanic Skin Response (GSR): The Complete Pocket Guide - iMotions

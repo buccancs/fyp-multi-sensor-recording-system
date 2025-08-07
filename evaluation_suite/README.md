@@ -57,13 +57,13 @@ The evaluation suite follows a **four-layer testing approach** that ensures full
 
 ### 1. Foundation Testing Layer
 - **Android Component Testing**: Camera recording, thermal camera integration, Shimmer GSR sensor validation
-- **PC Component Testing**: Calibration system, synchronization engine, GUI components
+- **PC Component Testing**: Calibration system, synchronisation engine, GUI components
 - **Algorithm Validation**: Signal processing accuracy, mathematical precision, performance benchmarks
 
 ### 2. Integration Testing Layer  
 - **Multi-Device Coordination**: Device discovery, session management, coordinated recording
-- **Network Performance**: Communication protocols, resilience testing, bandwidth utilization
-- **Synchronization Precision**: Temporal accuracy, cross-platform timing, drift compensation
+- **Network Performance**: Communication protocols, resilience testing, bandwidth utilisation
+- **Synchronisation Precision**: Temporal accuracy, cross-platform timing, drift compensation
 
 ### 3. System Testing Layer
 - **End-to-End Workflows**: Complete research session lifecycle validation
@@ -82,7 +82,7 @@ Central coordinator for test execution with:
 - **Multi-layer test orchestration** following the hierarchical validation strategy
 - **Real-time performance monitoring** with complete metrics collection
 - **Quality validation** against research-grade standards
-- **Parallel execution support** for independent test optimization
+- **Parallel execution support** for independent test optimisation
 - **complete reporting** with statistical analysis and recommendations
 
 ### QualityValidator
@@ -94,8 +94,8 @@ Automated quality assessment implementing:
 
 ### Performance Monitoring
 Real-time metrics collection including:
-- **System resource utilization** (CPU, memory, disk, network)
-- **Research-specific metrics** (synchronization precision, data quality, measurement accuracy)
+- **System resource utilisation** (CPU, memory, disk, network)
+- **Research-specific metrics** (synchronisation precision, data quality, measurement accuracy)
 - **Scalability characteristics** with predictable degradation analysis
 - **Long-term stability measurements** over extended operation periods
 
@@ -133,7 +133,7 @@ Options:
 
 ### Configuration
 
-Create a configuration file to customize quality thresholds and test parameters:
+Create a configuration file to customis\1 quality thresholds and test parameters:
 
 ```json
 {
@@ -168,22 +168,22 @@ Create a configuration file to customize quality thresholds and test parameters:
   - **Network Server**: Tests PCServer implementation, device management, WebSocket handling, and protocol implementation
   - **Shimmer Manager**: Tests real ShimmerManager device communication, data handling, and Bluetooth integration
   - **Session Coordination**: Tests session management, multi-device coordination, session persistence, and resource management
-  - **Synchronization Engine**: Tests clock synchronization, NTP server implementation, time coordination, and precision timing capabilities
+  - **Synchronisation Engine**: Tests clock synchronisation, NTP server implementation, time coordination, and precision timing capabilities
 
 ### Integration Tests (Cross-Component)
 - **Multi-Device Coordination**:
   - Device discovery and connection management with 95%+ success rates
   - Session coordination across multiple Android devices
   - Scalability testing with up to 8 concurrent devices
-  - Coordinated recording start/stop with <50ms synchronization jitter
+  - Coordinated recording start/stop with <50ms synchronisation jitter
 - **Network Performance**:
   - WebSocket communication protocol validation with 98%+ connection success
   - Network resilience under adverse conditions (high latency, packet loss)
-  - Bandwidth utilization efficiency testing (<85% utilization)
-  - Message serialization/deserialization accuracy (>98% success)
-- **Synchronization Precision**:
+  - Bandwidth utilisation efficiency testing (<85% utilisation)
+  - Message serialisation/deserialization accuracy (>98% success)
+- **Synchronisation Precision**:
   - Temporal accuracy validation (<1ms precision, <0.5ms RMS)
-  - Cross-platform timing synchronization (PC-Android <50ms max offset)
+  - Cross-platform timing synchronisation (PC-Android <50ms max offset)
   - Long-term stability testing (24-hour drift <0.5ms)
   - Clock drift compensation (>90% effectiveness)
 - **End-to-End Recording Workflows**:
@@ -197,7 +197,7 @@ Create a configuration file to customize quality thresholds and test parameters:
   - Device failure detection and graceful degradation
   - Network interruption automatic reconnection
   - Session corruption detection and recovery
-  - Resource exhaustion monitoring and optimization
+  - Resource exhaustion monitoring and optimisation
 - **Performance Under Stress**:
   - High device count performance (up to 16 devices)
   - High data rate throughput testing (up to 100 MB/s)
@@ -228,9 +228,9 @@ The evaluation suite enforces research-grade quality standards:
 - **Performance Tests**: >85% success rate (stress testing and resource limitations)
 
 ### Performance Benchmarks
-- **Synchronization Precision**: <1ms temporal accuracy, <0.5ms RMS deviation
+- **Synchronisation Precision**: <1ms temporal accuracy, <0.5ms RMS deviation
 - **Memory Usage**: <1GB peak usage during testing, adaptive scaling with device count
-- **CPU Utilization**: <60% average during test execution, <85% under stress conditions
+- **CPU Utilisation**: <60% average during test execution, <85% under stress conditions
 - **Network Latency**: <100ms average in test environment, <50ms cross-platform sync
 - **Data Throughput**: >10 MB/s per device, up to 100 MB/s aggregate
 - **Error Recovery**: >80% automatic recovery rate, <5 seconds mean recovery time
@@ -240,7 +240,7 @@ The evaluation suite enforces research-grade quality standards:
 - **Measurement Accuracy**: >95% for all sensor modalities (Shimmer GSR, thermal, camera)
 - **Data Quality Score**: >0.8 for all collected data streams with integrity validation
 - **Temporal Stability**: <1ms/hour drift over extended operation, automatic compensation
-- **Cross-Platform Consistency**: <50ms synchronization variance between PC and Android
+- **Cross-Platform Consistency**: <50ms synchronisation variance between PC and Android
 - **Real Implementation Testing**: 100% tests validate actual source code and functionality
 - **Multi-Modal Coordination**: <50ms jitter for synchronized multi-sensor recording start/stop
 
@@ -251,7 +251,7 @@ The evaluation suite generates detailed reports including:
 
 1. **Execution Summary** (`comprehensive_evaluation_report.json`)
    - Test execution statistics and timing
-   - Performance metrics and resource utilization
+   - Performance metrics and resource utilisation
    - Quality assessment and compliance validation
    - Detailed results for each test and suite
 

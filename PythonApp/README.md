@@ -40,7 +40,7 @@ A complete Python desktop application that serves as the central orchestrator fo
 
 ## Overview
 
-The Multi-Sensor Desktop Controller implements a distributed coordination system that orchestrates synchronized data collection from multiple sensor nodes. The application follows distributed systems principles [Lamport1978, Cristian1989] to achieve microsecond-precision temporal synchronization across all connected sensors while providing an intuitive interface for research applications.
+The Multi-Sensor Desktop Controller implements a distributed coordination system that orchestrates synchronized data collection from multiple sensor nodes. The application follows distributed systems principles [Lamport1978, Cristian1989] to achieve microsecond-precision temporal synchronisation across all connected sensors while providing an intuitive interface for research applications.
 
 ### Key Capabilities
 
@@ -51,14 +51,14 @@ The Multi-Sensor Desktop Controller implements a distributed coordination system
 - **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
 - **Shimmer3 Integration**: Direct Bluetooth connectivity with physiological sensors
 - **Stimulus Presentation**: Integrated experimental stimulus controller for research applications
-- **Data Synchronization**: Temporal alignment of multi-modal data streams with microsecond precision
+- **Data Synchronisation**: Temporal alignment of multi-modal data streams with microsecond precision
 - **Export and Analysis Tools**: Automated data processing and export for analysis workflows
 
 ### Research Applications
 
 The desktop controller is designed for advanced research scenarios requiring precise multi-modal data coordination:
 
-- **Physiological Computing**: Synchronized physiological and behavioral data collection [Picard1997]
+- **Physiological Computing**: Synchronized physiological and behavioural data collection [Picard1997]
 - **Human-Computer Interaction**: Multi-perspective analysis with temporal precision [Shneiderman2016]
 - **Computer Vision Research**: RGB-thermal-depth data fusion for algorithm development
 - **Clinical Research**: Non-invasive monitoring with research-grade accuracy [Wilhelm2010]
@@ -94,7 +94,7 @@ graph TB
         
         subgraph "Infrastructure Layer"
             LOG[Logging System<br/>complete Tracking]
-            SYNC[Synchronization Engine<br/>Temporal Coordination]
+            SYNC[Synchronisation Engine<br/>Temporal Coordination]
             PERF[Performance Monitor<br/>Resource Tracking]
             ERR[Error Handler<br/>Recovery Management]
         end
@@ -140,7 +140,7 @@ graph LR
         
         subgraph "Processing Pipeline"
             DP[Data Processor<br/>⚙️ Stream Processing]
-            SE[Synchronization Engine<br/>⏱️ Temporal Alignment]
+            SE[Synchronisation Engine<br/>⏱️ Temporal Alignment]
             CM[Calibration Manager<br/>📐 OpenCV Integration]
             QA[Quality Assurance<br/>✅ Validation]
         end
@@ -169,12 +169,12 @@ sequenceDiagram
     participant SHIMMER as Shimmer Sensors
     
     USER->>GUI: Configure Experiment
-    GUI->>NET: Initialize Socket Server
+    GUI->>NET: Initialise Socket Server
     NET->>ANDROID: Accept Connections
     
     USER->>GUI: Start Recording Session
     GUI->>NET: Broadcast Start Command
-    GUI->>WEBCAM: Initialize USB Capture
+    GUI->>WEBCAM: Initialise USB Capture
     GUI->>SHIMMER: Connect Bluetooth
     
     par Android Recording
@@ -197,7 +197,7 @@ sequenceDiagram
     
     USER->>GUI: Stop Recording
     GUI->>NET: Broadcast Stop Command
-    GUI->>WEBCAM: Finalize Capture
+    GUI->>WEBCAM: Finalise Capture
     GUI->>SHIMMER: Close Connections
     GUI->>GUI: Generate Session Report
 ```
@@ -384,7 +384,7 @@ graph LR
         DESIGN[Stimulus Design<br/>📝 Experiment Setup]
         TIMING[Timing Control<br/>⏰ Precise Scheduling]
         PRESENT[Presentation<br/>🎭 Display Management]
-        SYNC[Synchronization<br/>🔄 Recording Alignment]
+        SYNC[Synchronisation<br/>🔄 Recording Alignment]
         LOG[Event Logging<br/>📊 Metadata Capture]
         
         DESIGN --> TIMING
@@ -442,7 +442,7 @@ complete session lifecycle management:
 ```mermaid
 graph TB
     subgraph "Session Lifecycle"
-        INIT[Session Initialize<br/>📋 Configuration]
+        INIT[Session Initialise<br/>📋 Configuration]
         PREP[Preparation<br/>🔧 Device Setup]
         REC[Recording<br/>🎬 Data Collection]
         MON[Monitoring<br/>📊 Real-time Status]
@@ -546,7 +546,7 @@ pyshimmer>=1.0.0           # Direct Shimmer sensor support
 bluetooth>=1.0.0           # Bluetooth connectivity
 pybluez>=0.23              # Alternative Bluetooth library
 psutil>=5.9.0              # System performance monitoring
-matplotlib>=3.7.0          # Advanced plotting and visualization
+matplotlib>=3.7.0          # Advanced plotting and visualisation
 scipy>=1.10.0              # Scientific computing extensions
 ```
 
@@ -813,9 +813,9 @@ graph TB
    shimmer_manager.add_sensor("shimmer_001", "00:06:66:66:64:7A")
    ```
 
-2. **Synchronization Setup**:
+2. **Synchronisation Setup**:
    ```python
-   # Configure temporal synchronization
+   # Configure temporal synchronisation
    sync_config = SynchronizationConfig(
        master_clock="system",
        sync_interval=1.0,  # seconds
@@ -969,7 +969,7 @@ class SessionManager:
         """
         
     async def stop_recording(self, session_id: str) -> SessionSummary:
-        """Stop recording and finalize session.
+        """Stop recording and finalise session.
         
         Args:
             session_id: Unique session identifier
@@ -982,7 +982,7 @@ class SessionManager:
         """Get current status of specified session.
         
         Returns real-time status including recording state, device health,
-        data quality metrics, and resource utilization.
+        data quality metrics, and resource utilisation.
         """
 ```
 
@@ -1033,7 +1033,7 @@ class CalibrationAPI:
     """complete camera calibration with quality assessment."""
     
     def start_calibration_session(self, config: CalibrationConfig) -> CalibrationSession:
-        """Initialize new calibration session.
+        """Initialise new calibration session.
         
         Args:
             config: Calibration configuration including pattern type,
@@ -1177,7 +1177,7 @@ The desktop controller implements a sophisticated JSON-based protocol for device
 graph TB
     subgraph "Communication Protocol Stack"
         APP[Application Layer<br/>JSON Messages]
-        PRES[Presentation Layer<br/>Serialization/Compression]
+        PRES[Presentation Layer<br/>Serialisation/Compression]
         SESS[Session Layer<br/>Connection Management]
         TRANS[Transport Layer<br/>WebSocket/TCP]
         NET[Network Layer<br/>IP/Ethernet]
@@ -1235,13 +1235,13 @@ class NetworkProtocol:
             self.logger.warning(f"No handler for message type: {message_type}")
 ```
 
-### Data Synchronization
+### Data Synchronisation
 
-#### Temporal Synchronization Engine
+#### Temporal Synchronisation Engine
 
 ```python
 class SynchronizationEngine:
-    """Microsecond-precision temporal synchronization across devices."""
+    """Microsecond-precision temporal synchronisation across devices."""
     
     def __init__(self):
         self.master_clock = MasterClock()
@@ -1249,7 +1249,7 @@ class SynchronizationEngine:
         self.sync_accuracy = 0.001  # 1ms target accuracy
         
     async def synchronize_device(self, device_id: str) -> SyncResult:
-        """Perform clock synchronization with specific device."""
+        """Perform clock synchronisation with specific device."""
         # Cristian's algorithm implementation
         sync_samples = []
         
@@ -1267,7 +1267,7 @@ class SynchronizationEngine:
                 'accuracy': round_trip_time / 2
             })
         
-        # Select best synchronization sample
+        # Select best synchronisation sample
         best_sample = min(sync_samples, key=lambda x: x['round_trip_time'])
         
         self.device_clocks[device_id] = DeviceClock(
@@ -1292,14 +1292,14 @@ graph TB
     subgraph "Data Management Architecture"
         INGEST[Data Ingestion<br/>Multi-source Collection]
         VALIDATE[Validation<br/>Integrity Checking]
-        ORGANIZE[Organization<br/>Session Structure]
-        COMPRESS[Compression<br/>Storage Optimization]
+        ORGANIS\1[Organization<br/>Session Structure]
+        COMPRESS[Compression<br/>Storage Optimisation]
         INDEX[Indexing<br/>Metadata Database]
         EXPORT[Export<br/>Analysis Formats]
         
         INGEST --> VALIDATE
-        VALIDATE --> ORGANIZE
-        ORGANIZE --> COMPRESS
+        VALIDATE --> ORGANIS\1
+        ORGANIS\1 --> COMPRESS
         COMPRESS --> INDEX
         INDEX --> EXPORT
         
@@ -1311,7 +1311,7 @@ graph TB
             META[metadata/<br/>session_info.json]
         end
         
-        ORGANIZE --> SESSIONS
+        ORGANIS\1 --> SESSIONS
         SESSIONS --> VIDEO
         SESSIONS --> THERMAL
         SESSIONS --> GSR
@@ -1321,9 +1321,9 @@ graph TB
 
 ## Performance
 
-### System Performance Optimization
+### System Performance Optimisation
 
-The desktop controller implements complete performance optimization strategies:
+The desktop controller implements complete performance optimisation strategies:
 
 #### Memory Management
 
@@ -1350,11 +1350,11 @@ class MemoryManager:
             self._schedule_proactive_cleanup()
 ```
 
-#### CPU Optimization
+#### CPU Optimisation
 
 ```python
 class PerformanceOptimizer:
-    """CPU and GPU optimization for real-time processing."""
+    """CPU and GPU optimisation for real-time processing."""
     
     def __init__(self):
         self.thread_pool = ThreadPoolExecutor(max_workers=cpu_count())
@@ -1369,11 +1369,11 @@ class PerformanceOptimizer:
             return await self._process_frame_cpu(frame)
 ```
 
-#### Network Optimization
+#### Network Optimisation
 
 ```mermaid
 graph LR
-    subgraph "Network Performance Optimization"
+    subgraph "Network Performance Optimisation"
         COMPRESS[Data Compression<br/>LZ4/GZIP]
         BATCH[Batch Processing<br/>Reduce Overhead]
         PRIORITY[Quality of Service<br/>Priority Queues]
@@ -1404,13 +1404,13 @@ graph LR
 **Recording Performance:**
 - **4K Video Processing**: 30 fps sustained with < 1% frame drops
 - **Multi-device Coordination**: Up to 8 devices simultaneously
-- **Synchronization Accuracy**: < 1ms temporal precision
+- **Synchronisation Accuracy**: < 1ms temporal precision
 - **Data Throughput**: > 500 MB/s sustained write performance
 
-**System Resource Utilization:**
+**System Resource Utilisation:**
 - **Memory Usage**: < 4GB during normal operation
 - **CPU Usage**: < 50% average during recording
-- **Disk I/O**: < 80% utilization for sustained recording
+- **Disk I/O**: < 80% utilisation for sustained recording
 - **Network Bandwidth**: Adaptive based on available bandwidth
 
 #### Real-time Monitoring
@@ -1493,7 +1493,7 @@ class PerformanceTestSuite:
         assert performance_metrics.memory_usage < 4096  # MB
     
     def test_stress_conditions(self):
-        """Test system behavior under stress conditions."""
+        """Test system behaviour under stress conditions."""
         stress_config = StressTestConfig(
             device_count=8,
             recording_duration=1800,  # 30 minutes
@@ -1608,7 +1608,7 @@ Error: Memory usage exceeds 8GB
 Solutions:
 1. Enable automatic garbage collection
 2. Reduce number of simultaneous devices
-3. Optimize video compression settings
+3. Optimise video compression settings
 4. Close background applications
 5. Increase system RAM if possible
 ```
@@ -1836,7 +1836,7 @@ class RobustErrorHandling:
 
 [Bradski2008] Bradski, G., & Kaehler, A. (2008). Learning OpenCV: Computer vision with the OpenCV library. O'Reilly Media.
 
-[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronization. Distributed Computing, 3(3), 146-158.
+[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronisation. Distributed Computing, 3(3), 146-158.
 
 [Fowler2018] Fowler, M. (2018). Refactoring: Improving the Design of Existing Code. Addison-Wesley Professional.
 
@@ -1846,7 +1846,7 @@ class RobustErrorHandling:
 
 [Healey2005] Healey, J. A., & Picard, R. W. (2005). Detecting stress during real-world driving tasks using physiological sensors. IEEE Transactions on Intelligent Transportation Systems, 6(2), 156-166.
 
-[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
+[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronisation Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
 
 [Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565.
 
@@ -1854,7 +1854,7 @@ class RobustErrorHandling:
 
 [McDuff2014] McDuff, D., Gontarek, S., & Picard, R. W. (2014). Remote detection of photoplethysmographic systolic and diastolic peaks using a digital camera. IEEE Transactions on Biomedical Engineering, 61(12), 2948-2954.
 
-[Mills1991] Mills, D. L. (1991). Internet time synchronization: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
+[Mills1991] Mills, D. L. (1991). Internet time synchronisation: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
 
 [NumPy2023] Harris, C. R., et al. (2020). Array programming with NumPy. Nature, 585(7825), 357-362.
 
@@ -1870,7 +1870,7 @@ class RobustErrorHandling:
 
 [Shneiderman2016] Shneiderman, B., Plaisant, C., Cohen, M., Jacobs, S., Elmqvist, N., & Diakopoulos, N. (2016). Designing the User Interface: Strategies for Effective Human-Computer Interaction. Pearson.
 
-[Wilhelm2010] Wilhelm, F. H., Pfaltz, M. C., & Grossman, P. (2010). Continuous electronic data capture of physiology, behavior and environment in ambulatory subjects. Behavior Research Methods, 38(1), 157-165.
+[Wilhelm2010] Wilhelm, F. H., Pfaltz, M. C., & Grossman, P. (2010). Continuous electronic data capture of physiology, behaviour and environment in ambulatory subjects. Behaviour Research Methods, 38(1), 157-165.
 
 ---
 
@@ -1880,6 +1880,6 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 
 ## Acknowledgments
 
-This Python Desktop Controller is part of the Multi-Sensor Recording System developed for advanced research applications requiring precise temporal synchronization across diverse sensor modalities. The implementation leverages modern Python development practices and scientific computing libraries to provide a robust platform for multi-modal data collection in experimental research environments.
+This Python Desktop Controller is part of the Multi-Sensor Recording System developed for advanced research applications requiring precise temporal synchronisation across diverse sensor modalities. The implementation leverages modern Python development practices and scientific computing libraries to provide a robust platform for multi-modal data collection in experimental research environments.
 
 For complete system documentation, see the [main project README](../README.md) and the [Android Application README](../AndroidApp/README.md).

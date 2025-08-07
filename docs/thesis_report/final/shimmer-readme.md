@@ -159,7 +159,7 @@ needs to declare and request the appropriate permissions:
   phone's Bluetooth is off. Before connecting, check
   `BluetoothAdapter.getDefaultAdapter().isEnabled()`. If it's off,
   prompt the user to enable it. Typically, you can use an
-  `ACTION_REQUEST_ENABLE` intent to bring up the system dialog to turn
+  `ACTION_REQUEST_ENABLE` intent to bring up the system dialogue to turn
   on
   Bluetooth[\[14\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L111-L119).
   This isn't a "permission" per se, but a necessary user action.
@@ -187,7 +187,7 @@ return no results).
 With the SDK integrated and permissions in place, you can now connect to
 a Shimmer3 GSR+ and begin streaming data. The general workflow is:
 
-**1. Initialize the Shimmer object or manager:** The SDK provides a
+**1. Initialise the Shimmer object or manager:** The SDK provides a
 `Shimmer` class (representing a device connection) and a higher-level
 `ShimmerBluetoothManagerAndroid` for multi-device management. For a
 single device, you can directly use `Shimmer`. Typically you instantiate
@@ -256,7 +256,7 @@ use (the Shimmer API supports an alternative "gerdavax" library for
 certain older devices; for Shimmer3, `"default"` is
 appropriate)[\[16\]](https://github.com/jhallard/BioSig-for-Android/blob/f803f22e485d453516b671cd3692c79a6c898858/src/com/shimmerresearch/driver/Shimmer.java#L44-L52)[\[17\]](https://github.com/jhallard/BioSig-for-Android/blob/f803f22e485d453516b671cd3692c79a6c898858/src/com/shimmerresearch/driver/Shimmer.java#L48-L56).
 This will initiate a Bluetooth SPP connection in the background. The
-Shimmer's internal firmware will perform a handshake and initialization
+Shimmer's internal firmware will perform a handshake and initialisation
 sequence once the link is established. The `shimmerHandler` we provided
 will get a `MESSAGE_STATE_CHANGE` message when the connection state
 updates. Specifically, when fully connected and initialized, the state
@@ -267,7 +267,7 @@ streaming.
 
 **Note:** If your Shimmer device is not yet **paired** with the Android
 device, the connection attempt may fail. It's often best to pair via
-Android Settings or a scan dialog first (see *Troubleshooting* below for
+Android Settings or a scan dialogue first (see *Troubleshooting* below for
 pairing instructions). The Shimmer3 uses a default PIN code **1234** for
 pairing[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122)
 -- the SDK can initiate pairing if needed (it will prompt for the PIN).
@@ -332,9 +332,9 @@ retrieve the device's timestamp with
 (or it might be labeled "Time Stamp"). This represents the Shimmer's
 internal clock for the
 sample[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[24\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L415-L424).
-If synchronizing with other data (like phone sensors or multiple
+If synchronising with other data (like phone sensors or multiple
 Shimmers), you may use this along with system time -- see *Timestamping*
-below or Shimmer's guidance on synchronization.
+below or Shimmer's guidance on synchronisation.
 
 **5. Stopping and cleanup:** To stop streaming, call
 `shimmerDevice.stopStreaming()`. You might do this when the user ends a
@@ -367,7 +367,7 @@ The **Shimmer API does support multi-streaming** (e.g., two Shimmer GSR+
 units at once) provided the Android device can handle the Bluetooth
 throughput[\[26\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L167-L176)[\[27\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L204-L210).
 
-## Data Handling (GSR Data Format and Visualization)
+## Data Handling (GSR Data Format and Visualisation)
 
 **Data Format:** GSR data from the Shimmer3 GSR+ can be obtained in raw
 or calibrated form. The raw signal is essentially the ADC reading from a
@@ -379,7 +379,7 @@ retrieve **raw GSR** by using the key `"GSR Raw"` or by looking for the
 format labeled "RAW". The Shimmer device also computes an intermediate
 value called **GSR Resistance** (sometimes labeled `"GSR Res"` in older
 APIs) which may be the same as the calibrated GSR in most contexts. The
-**GSR range setting** affects the analog front-end gain: if you manually
+**GSR range setting** affects the analogue front-end gain: if you manually
 choose a range (0--3), the raw values will have different scaling. In
 auto-range mode, the Shimmer's firmware will dynamically switch ranges
 and apply the correct calibration to always output a consistent
@@ -428,7 +428,7 @@ wise to avoid I/O overhead. Also consider the data volume: GSR is just
 one number per sample, so 128 Hz \~ 128 samples/sec is quite low (easily
 under 10 KB/s). Even with PPG and accel, it remains manageable.
 
-**Visualization:** To visualize GSR in real time, you can update a UI
+**Visualisation:** To visualise GSR in real time, you can update a UI
 element (like a graph view) each time a new sample comes in. However,
 updating on every single sample at 128 Hz can be too fast for smooth UI
 drawing. A common approach is to buffer a few samples or downsample for
@@ -461,7 +461,7 @@ value. You could process it to compute heart rate or use the Shimmer's
 EXG module for HR if available. Ensure to label and log each channel
 accordingly so data columns don't get mixed up.
 
-Finally, if you wish to visualize data after the fact, the CSV logs can
+Finally, if you wish to visualise data after the fact, the CSV logs can
 be imported into tools like Excel, MATLAB, or Python for plotting. The
 **Shimmer Consensys** software is another option for live viewing, but
 since you're integrating into your own app, your app takes over that
@@ -487,7 +487,7 @@ this:
   continuously even if the user navigates away from the UI. In
   `bucika_gsr`, for example, one could implement a `GsrCaptureService`
   that starts when a recording session begins. This service would
-  initialize the Shimmer (as shown above), handle the connection, and
+  initialise the Shimmer (as shown above), handle the connection, and
   start streaming. The service could then broadcast the incoming data or
   use a callback interface to pass GSR readings to other app components
   (such as a UI fragment that displays the values, or a logger that
@@ -525,12 +525,12 @@ and data. It might spin up threads or use coroutines to handle the
 incoming data stream, and it provides callbacks or LiveData updates with
 the latest GSR values. By isolating the Shimmer logic in this module,
 the rest of the app can remain agnostic to Bluetooth specifics -- they
-just receive GSR data updates (for instance, the Synchronization manager
+just receive GSR data updates (for instance, the Synchronisation manager
 in `bucika_gsr` can then timestamp these alongside camera frames).
 
 **Placement in Architecture:** In the `bucika_gsr` app (which features
 multiple modalities), the Shimmer GSR module runs in parallel with the
-camera modules. All are coordinated by a central **Synchronization
+camera modules. All are coordinated by a central **Synchronisation
 Manager** that ensures data from different threads are timestamped and
 aligned[\[10\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfeccbb9f5dc0b582255f8b67c8e0ec6/docs/android_research.tex#L26-L34).
 Concretely, the GSR module (service) receives each Shimmer sample,
@@ -579,7 +579,7 @@ connect & stream at the same time as it starts the camera recordings, so
 that all data aligns from the start
 signal[\[36\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfeccbb9f5dc0b582255f8b67c8e0ec6/docs/android_research.tex#L30-L38)[\[37\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfeccbb9f5dc0b582255f8b67c8e0ec6/docs/android_research.tex#L40-L48).
 The GSR service thread continuously buffers GSR samples with timestamps,
-and the Synchronization Manager takes those along with video frame
+and the Synchronisation Manager takes those along with video frame
 timestamps to ensure they can be merged later. At the end of a session,
 a stop signal stops the camera capture and calls
 `shimmerDevice.stopStreaming()`. We also implemented fail-safes: if the
@@ -588,12 +588,12 @@ the app logs an error and can attempt to reconnect or at least notify
 the user.
 
 One helpful feature of the Shimmer SDK for integration is the
-**ShimmerBluetoothDialog** -- a built-in UI dialog that lists paired
+**ShimmerBluetoothDialog** -- a built-in UI dialogue that lists paired
 Shimmer devices and can scan for new
 ones[\[38\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L124-L132).
 We used this during setup: the user can press "Add GSR Device" which
 launches the ShimmerBluetoothDialog, selects the Shimmer3 from the list,
-and the dialog returns the MAC address to our
+and the dialogue returns the MAC address to our
 app[\[39\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L130-L138).
 We then store that MAC (maybe in SharedPreferences or in the Session
 config) and use it for connecting. This simplifies device selection UX.
@@ -615,7 +615,7 @@ Shimmer API to connect and stream, as illustrated earlier. - In
 architecture, it means encapsulating that logic such that other parts of
 the app don't worry about Bluetooth details -- they just get GSR data
 (for example, the UI gets a stream of GSR values to display, and the
-data logger gets time-stamped values to write to file). - By utilizing
+data logger gets time-stamped values to write to file). - By utilising
 DI patterns, we ensure the Shimmer connection persists across
 configuration changes and is easily accessible wherever needed (e.g.,
 injection into both a Service and a ViewModel). By using a Service under
@@ -642,7 +642,7 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
   The device's LED will usually indicate pairing (consult Shimmer
   documentation for LED codes). If you try to connect in-app to an
   unpaired Shimmer, newer Android versions might block it or require
-  pairing on the fly. The Shimmer SDK's scan dialog can handle pairing
+  pairing on the fly. The Shimmer SDK's scan dialogue can handle pairing
   (it will invoke the system PIN prompt), but if you see connection
   failures, always double-check pairing status. On some phones, you may
   need to remove ("Forget") a previously paired Shimmer and re-pair if
@@ -704,7 +704,7 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
 
 - **Android Version Quirks:** On Android 11 and above, scanning for
   classic Bluetooth devices (using `BluetoothAdapter.startDiscovery()`)
-  also requires location permission. If you use the Shimmer's dialog or
+  also requires location permission. If you use the Shimmer's dialogue or
   your own scan code and nothing shows up on Android 11, this is likely
   why. Also, Android 13 tightened some Bluetooth permissions; make sure
   your `targetSdkVersion` and permission requests are aligned with the
@@ -813,7 +813,7 @@ development.
 - **Android Integration Design (Multimodal):** *Android-Based Multimodal
   Data Acquisition System* -- Research paper (IEEE conference)
   describing an Android app integrating Shimmer3 GSR, thermal camera,
-  etc., with synchronization
+  etc., with synchronisation
   methods[\[51\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfeccbb9f5dc0b582255f8b67c8e0ec6/docs/android_research.tex#L14-L22)[\[35\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfeccbb9f5dc0b582255f8b67c8e0ec6/docs/android_research.tex#L46-L49).
   Provides context on using the Shimmer API in a complex system.
 - **Shimmer FAQ -- Bluetooth Details:** *Shimmer Wireless Sensor

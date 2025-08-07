@@ -2,9 +2,9 @@
 
 ## 6.1 Project Achievement Assessment
 
-This chapter provides a detailed evaluation of the Multi-Sensor Recording System research project, systematically assessing the achievement of research objectives and analyzing outcomes within the broader context of contactless physiological measurement research. The evaluation examines key deliverables and technical innovations, validates goal achievement against established criteria, and critically analyzes the system's performance relative to existing solutions in the field.
+This chapter provides a detailed evaluation of the Multi-Sensor Recording System research project, systematically assessing the achievement of research objectives and analysing outcomes within the broader context of contactless physiological measurement research. The evaluation examines key deliverables and technical innovations, validates goal achievement against established criteria, and critically analyzes the system's performance relative to existing solutions in the field.
 
-![Figure 6.1: Achievement Visualization Dashboard](../diagrams/figure_6_1_achievement_visualization_dashboard.png)
+![Figure 6.1: Achievement Visualisation Dashboard](../diagrams/figure_6_1_achievement_visualization_dashboard.png)
 *Figure 6.1: complete dashboard showing the achievement status of primary and secondary research objectives with quantitative performance metrics and validation results.*
 
 The assessment methodology employs both quantitative performance metrics and qualitative evaluation criteria to provide a balanced evaluation of research contributions. Technical performance is validated against established benchmarks in contactless physiological measurement, while broader contributions to research methodology and software engineering are identified and analyzed.
@@ -23,7 +23,7 @@ The research project successfully delivered a validated multi-sensor platform fo
 - Open-source research platform with modular architecture supporting community extension and replication
 
 **Research Methodology Contributions:**
-- Novel contactless GSR measurement methodology utilizing thermal imaging analysis
+- Novel contactless GSR measurement methodology utilising thermal imaging analysis
 - Validated experimental protocols for multi-modal physiological sensor comparison
 - Systematic evaluation framework for contactless physiological measurement systems
 - complete documentation supporting reproducible research implementation
@@ -31,11 +31,11 @@ The research project successfully delivered a validated multi-sensor platform fo
 ### Technical Innovation Achievements
 
 ![Figure 6.2: Goal Achievement Timeline](../diagrams/figure_6_2_goal_achievement_timeline.png)
-*Figure 6.2: Chronological timeline showing the progressive achievement of research objectives from initial platform development through experimental validation and performance optimization.*
+*Figure 6.2: Chronological timeline showing the progressive achievement of research objectives from initial platform development through experimental validation and performance optimisation.*
 
 The research achieved several significant technical innovations that advance the state of contactless physiological measurement. The integration of consumer-grade thermal imaging with research-grade GSR validation represents the first validated implementation of thermal-based contactless GSR estimation in the published literature.
 
-The distributed system architecture successfully addresses temporal synchronization challenges inherent in multi-device physiological measurement, achieving synchronization precision suitable for research applications through implementation of custom protocols defined in `protocol/communication_protocol.json`. The modular software architecture enables flexible sensor integration while maintaining research-grade data integrity and measurement precision.
+The distributed system architecture successfully addresses temporal synchronisation challenges inherent in multi-device physiological measurement, achieving synchronisation precision suitable for research applications through implementation of custom protocols defined in `protocol/communication_protocol.json`. The modular software architecture enables flexible sensor integration while maintaining research-grade data integrity and measurement precision.
 
 The experimental validation methodology established quantitative benchmarks for contactless GSR measurement accuracy, providing the research community with standardized evaluation criteria for future contactless physiological measurement system development.
 outlines potential future work and extensions that logically stem from
@@ -56,7 +56,7 @@ multi-sensor platform. All major objectives set out at the beginning of
 the project have been met, and in several cases the outcomes exceed the
 initial expectations. The final system provides a sophisticated platform
 that not only meets its ambitious original requirements but also
-establishes new benchmarks in areas such as data synchronization
+establishes new benchmarks in areas such as data synchronisation
 precision, system scalability, and software quality. This section
 summarizes the project's deliverables and outcomes, and highlights the
 key technical innovations realized.
@@ -88,17 +88,17 @@ The following key outcomes have been achieved by the end of the project:
   analysis and verifies that the system can be used in interactive or
   time-sensitive research scenarios.
 
-- **Robust Synchronization Mechanism:** A novel synchronization engine
+- **Robust Synchronisation Mechanism:** A novel synchronisation engine
   was developed to coordinate data streams from multiple devices with
   high precision. This engine ensures that all sensor readings, video
   frames, and events are timestamped and aligned within a tight temporal
   tolerance. In testing, the system consistently maintained
-  synchronization accuracy on the order of a few milliseconds
+  synchronisation accuracy on the order of a few milliseconds
   (approximately ±3 ms drift between devices), outperforming the initial
-  synchronization requirement (±5 ms). This level of precision validates
+  synchronisation requirement (±5 ms). This level of precision validates
   the feasibility of distributed, contactless measurements that remain
   scientifically rigorous, and it confirms that **Goal 1 (multi-device
-  synchronization)** was achieved with a comfortable margin.
+  synchronisation)** was achieved with a comfortable margin.
 
 - **User Interface and Session Management Tools:** The project delivered
   a user-friendly desktop interface (graphical dashboard) for
@@ -165,18 +165,18 @@ constraints:
   multiple camera viewpoints can be recorded in sync -- thus expanding
   the scope of studies that can be conducted.
 
-- **Multi-Modal Synchronization Framework:** Achieving high-precision
-  synchronization across heterogeneous modalities (video, thermal, and
+- **Multi-Modal Synchronisation Framework:** Achieving high-precision
+  synchronisation across heterogeneous modalities (video, thermal, and
   biosignals) and across multiple hardware devices required developing a
-  custom synchronization framework. The project's solution involves a
+  custom synchronisation framework. The project's solution involves a
   combination of algorithmic techniques: time-stamping with reference
-  clock synchronization, network latency compensation, and periodic
+  clock synchronisation, network latency compensation, and periodic
   calibration using known signals or events. The resulting framework
-  consistently achieved **sub-cycle synchronization precision** (on the
+  consistently achieved **sub-cycle synchronisation precision** (on the
   order of a few milliseconds) even over wireless links, which is a
   technical accomplishment exceeding what standard off-the-shelf syncing
   methods provide. This framework is an innovation that can be valuable
-  beyond this project, as it provides a blueprint for synchronizing
+  beyond this project, as it provides a blueprint for synchronising
   distributed sensors in other research applications that demand high
   temporal accuracy (such as coordinated multimodal recordings in
   psychology or neuroscience experiments).
@@ -185,7 +185,7 @@ constraints:
   subsystem was implemented to monitor and maintain the integrity of
   incoming data streams. Innovations here include automated checks for
   signal dropouts, video frame quality (exposure, focus, thermal sensor
-  saturation), and synchronization drift during operation. Whenever
+  saturation), and synchronisation drift during operation. Whenever
   quality issues are detected (e.g. a sensor reading goes out of
   expected range or a camera's frame rate dips), the system logs
   warnings or alerts the user through the interface. In some cases, the
@@ -216,8 +216,8 @@ constraints:
   integration. They prove that low-cost equipment can be orchestrated to
   behave like a unified high-end system.
 
-- **Performance Optimization and Scalability:** Throughout development,
-  special attention was paid to optimizing performance. The final system
+- **Performance Optimisation and Scalability:** Throughout development,
+  special attention was paid to optimising performance. The final system
   employs multi-threading and asynchronous I/O to handle high data
   rates, and it uses efficient data structures for image processing and
   network communication. An innovative result of this is that the system
@@ -262,23 +262,23 @@ particularly those related to secondary goals.
 The table below summarizes the three primary project goals and the
 extent to which each was achieved:
 
-- **Goal 1: Reliable Multi-Device Synchronization and Data Integration**
+- **Goal 1: Reliable Multi-Device Synchronisation and Data Integration**
   -- *Status:* **Achieved (Exceeded requirements).** This goal was to
-  create a system capable of synchronizing multiple sensors and devices
+  create a system capable of synchronising multiple sensors and devices
   with research-grade precision, ensuring that data streams (video,
   thermal, GSR) remain aligned in time. The outcome meets and surpasses
-  this goal: the implemented synchronization mechanism kept inter-device
+  this goal: the implemented synchronisation mechanism kept inter-device
   time error within \~3 ms, significantly better than the ±5 ms target.
   All devices (up to the tested 8 devices) operated concurrently without
   losing sync beyond negligible jitter. Validation was done by timestamp
   analysis and cross-correlation of known signals across devices
-  (Section 5.7.2), confirming synchronization accuracy. Therefore, the
+  (Section 5.7.2), confirming synchronisation accuracy. Therefore, the
   project not only delivered reliable multi-device sync but demonstrated
   a higher precision and scalability than initially required.
 
 - **Goal 2: Real-Time Multi-Modal Data Processing and Analysis** --
   *Status:* **Achieved (Exceeded expectations).** The project aimed to
-  process and analyze data from multiple modalities in real time, which
+  process and analyse data from multiple modalities in real time, which
   included handling high-resolution video and sensor streams
   simultaneously. This goal has been fully met: the final system
   processed multi-modal data with latency well under the 100 ms
@@ -288,7 +288,7 @@ extent to which each was achieved:
   minimum required by the specifications (e.g., the pipeline achieved
   \~60 fps processing throughput where only 30 fps was strictly needed).
   Additionally, the system incorporated extra real-time analysis
-  features (such as live signal filtering and visualization) that were
+  features (such as live signal filtering and visualisation) that were
   beyond the original scope, thereby exceeding the expectations for this
   goal. The ability to adapt processing based on available resources (as
   discussed under the adaptive quality management) further highlights
@@ -321,7 +321,7 @@ extent to which each was achieved:
 Each primary goal was accompanied by specific success criteria, all of
 which have been validated. The **validation methodology** combined unit
 and integration tests, performance measurements, and user-level
-evaluations of system behavior. The strong fulfillment of Goals 1--3 is
+evaluations of system behaviour. The strong fulfillment of Goals 1--3 is
 a direct result of the methodical approach to requirements and testing
 laid out in earlier chapters. By clearly understanding the criteria for
 success (Chapter 3) and continuously validating throughout development
@@ -382,7 +382,7 @@ Key secondary achievements and notable outcomes are outlined below:
   to ensure the platform could be used by non-specialists. The final
   system includes a polished graphical user interface on the desktop
   application, with intuitive controls for starting/stopping recordings,
-  configuring devices, and visualizing incoming data in real time.
+  configuring devices, and visualising incoming data in real time.
   Additionally, the Android app provides a simple interface for the
   operator on each device, reducing the setup complexity (for instance,
   once the app is launched, it automatically connects to the desktop
@@ -425,10 +425,10 @@ with some even surpassed, and a few additional benefits emerged
 organically during development. These outcomes underscore the project's
 success beyond the core requirements: the system is not just functional,
 but also refined and broadened in capability. Achieving these extra
-objectives did require careful time management and prioritization, as
+objectives did require careful time management and prioritisation, as
 discussed in Chapter 4 (some planned extensions, such as exploring
 complex machine learning algorithms for GSR prediction, were deferred in
-favor of solidifying the working system -- see Future Work).
+favour of solidifying the working system -- see Future Work).
 Nonetheless, the fact that multiple stretch goals were realized speaks
 to the effectiveness of the project's iterative and agile approach. It
 also means the final deliverable is a well-rounded platform, equipped
@@ -470,7 +470,7 @@ processing to the Android devices, the system avoids saturating the
 network with raw video data and uses the PC for more aggregated tasks.
 This balanced load distribution meant that neither the mobile devices
 nor the PC became a bottleneck in tests; the system maintained real-time
-performance with resource utilization (CPU, memory, network bandwidth)
+performance with resource utilisation (CPU, memory, network bandwidth)
 within safe limits on all ends. Another key strength was the built-in
 **fault tolerance** mechanisms. During testing, various failure
 scenarios were simulated (such as a device disconnecting or a sensor
@@ -505,7 +505,7 @@ lag when multiple high-resolution streams arrived simultaneously. The
 team responded by refactoring those parts to use multi-threading and
 asynchronous processing pipelines, and by introducing performance
 monitoring hooks to continuously gauge where bottlenecks occurred. This
-iterative optimization, guided by profiling data, was crucial in
+iterative optimisation, guided by profiling data, was crucial in
 achieving the final performance targets. It highlighted that design must
 remain adaptable: assumptions made in early design (such as "one thread
 might suffice") were revisited and revised in the face of real data.
@@ -523,7 +523,7 @@ scheduling real-world testing sessions. A critical reflection is that
 more buffer time for hardware integration would have been wise -- some
 components (like the thermal camera SDK or the GSR sensor firmware)
 introduced delays due to external factors outside the software team's
-control. This sometimes forced re-prioritization of tasks (e.g.,
+control. This sometimes forced re-prioritisation of tasks (e.g.,
 focusing on software modules while waiting for hardware issues to
 resolve). In retrospect, the project management could have included more
 **risk mitigation** for hardware and integration aspects (as was
@@ -533,7 +533,7 @@ simulated data to test software while hardware was unavailable. This
 flexibility in the process was important in ultimately delivering
 everything on time.
 
-In terms of **design trade-offs**, one notable decision was to favor
+In terms of **design trade-offs**, one notable decision was to favour
 system reliability and data integrity over absolute performance or
 complexity. For example, data is written to disk both on the mobile side
 and the PC side as a safeguard, even though this means duplicate data
@@ -543,8 +543,8 @@ overhead, but the benefit is a safer operation. Such decisions reflect a
 research-oriented priority: it is better to consume a bit more resources
 than to risk losing irreplaceable experimental data. Similarly, some
 algorithms were chosen for robustness rather than theoretical elegance;
-the synchronization algorithm, for instance, uses a combination of
-simple predictive drift correction and periodic re-synchronization,
+the synchronisation algorithm, for instance, uses a combination of
+simple predictive drift correction and periodic re-synchronisation,
 rather than a more complex adaptive filtering approach. This was decided
 after experimenting with alternatives and finding that a simpler
 approach was easier to verify and less prone to edge-case failures. The
@@ -591,7 +591,7 @@ proprietary equipment. An approximate cost analysis suggests that our
 entire multi-device setup costs a fraction of what high-end laboratory
 systems would -- roughly on the order of 70% cheaper than an equivalent
 set of devices from a specialized vendor. This drastic cost reduction
-can democratize advanced physiological monitoring, making it feasible
+can democratis\1 advanced physiological monitoring, making it feasible
 for smaller labs or field studies with limited budgets. Another point of
 comparison is **flexibility**: commercial systems often come as closed
 products with fixed functionality, whereas our system is fully
@@ -630,7 +630,7 @@ industrial software than a quick prototype. This means that our system
 is better poised for repeated use in diverse studies and for long-term
 deployment, as opposed to many academic projects which might be fragile
 outside the original lab environment. Third, the **multimodal
-synchronization** and scale of our system likely exceed what has been
+synchronisation** and scale of our system likely exceed what has been
 demonstrated in most prior research systems. Coordinating multiple
 mobile devices and sensors with sub-±5 ms accuracy over Wi-Fi is a
 capability that, to our knowledge, has not been reported in existing
@@ -690,11 +690,11 @@ community.
 
 ## System Performance Analysis
 
-A crucial aspect of evaluating the project is analyzing how the system
+A crucial aspect of evaluating the project is analysing how the system
 performed relative to its design specifications and how those
 performance metrics were validated. This section delves into the
 performance characteristics observed during testing, including
-processing throughput, timing accuracy, and resource utilization, which
+processing throughput, timing accuracy, and resource utilisation, which
 together determine the system's viability for real-world use. We also
 describe the methods used to measure and verify these performance
 results, ensuring that claims about system capabilities are backed by
@@ -726,22 +726,22 @@ the latency is even lower, often not perceptible. These results show
 that the system not only meets current experimental needs but has
 performance headroom for more demanding scenarios.
 
-**Synchronization Accuracy:** A key performance metric for this project
-is the accuracy of synchronization across devices and data modalities.
-As noted earlier, the synchronization error between devices was measured
+**Synchronisation Accuracy:** A key performance metric for this project
+is the accuracy of synchronisation across devices and data modalities.
+As noted earlier, the synchronisation error between devices was measured
 to be on the order of a few milliseconds. To quantify this more
 rigorously, tests were conducted where devices recorded a shared
 reference signal (such as a LED blinking or an audio beep) and the
 timestamps of that event in each data stream were compared. The largest
 differences observed were around ±3.2 ms, and statistically, the
-synchronization error had a mean near zero with a very small standard
+synchronisation error had a mean near zero with a very small standard
 deviation (roughly 3 ms). These figures are significantly better (i.e.,
 smaller) than the initially budgeted tolerance of ±50 ms for
 inter-device sync in early planning, and even exceed the stricter goal
-of ±5 ms that was later adopted. The synchronization precision is
+of ±5 ms that was later adopted. The synchronisation precision is
 essentially at the limit of what the hardware timers and operating
 system scheduling can support on consumer devices. Achieving this
-required careful tuning of time-synchronization protocols and using
+required careful tuning of time-synchronisation protocols and using
 high-resolution timers. The outcome is that researchers can trust the
 data alignment from our system for any experiment where events need to
 be correlated with only millisecond-level uncertainty (such as aligning
@@ -749,9 +749,9 @@ physiological responses with stimuli timings). This level of performance
 is typically only seen in specialized lab equipment, thus the system's
 sync accuracy is a standout metric.
 
-**Resource Utilization and Efficiency:** The system's performance also
+**Resource Utilisation and Efficiency:** The system's performance also
 depends on efficient use of computational resources (CPU, memory) and
-network bandwidth. Profiling during tests showed that CPU utilization on
+network bandwidth. Profiling during tests showed that CPU utilisation on
 the Android devices hovered around 60--70% when recording 4K video and
 processing it (thanks to using hardware-accelerated codecs and careful
 coding). The desktop controller's CPU usage was lower (around 30--40% on
@@ -764,12 +764,12 @@ around 2 GB of RAM at peak when buffering multiple video streams. Both
 are within acceptable limits (modern smartphones often have 4--6 GB RAM,
 and the test PC had 16 GB). Importantly, memory usage remained stable
 over long-duration tests, evidencing that our resource management
-(releasing buffers, etc.) was successful. Network utilization for
+(releasing buffers, etc.) was successful. Network utilisation for
 streaming video was significant but managed; the system can operate on a
 standard Wi-Fi network. For example, two 4K video streams plus sensor
 data consumed on the order of 80--100 Mbps, which a modern Wi-Fi router
 can handle. We built in compression and downsampling options (e.g.,
-using H.264 compression for video frames in transit) to optimize
+using H.264 compression for video frames in transit) to optimise
 bandwidth. With those, even adding more devices did not saturate the
 network. The scalable design means adding a new device increases load
 roughly linearly without causing a collapse in performance. Tests from 2
@@ -800,7 +800,7 @@ ideal conditions.
 In summary, the performance characteristics of the Multi-Sensor
 Recording System meet or exceed the project's requirements across all
 dimensions. The system can handle high data rates in real time,
-synchronize data with very high precision, use resources efficiently,
+synchronise data with very high precision, use resources efficiently,
 and maintain stable operation over long durations. These metrics are a
 testament to the soundness of the system's design and the effectiveness
 of optimizations carried out during development. By achieving such
@@ -834,7 +834,7 @@ not a one-off but observed consistently across numerous trials, often
 with a statistical confidence level of 95% or higher that the true mean
 drift is within our reported range. Such repeated measures and analysis
 of variance ensured that our performance metrics are not flukes but
-representative of the system's typical behavior.
+representative of the system's typical behaviour.
 
 **Realistic Scenario Validation:** Beyond synthetic tests, we validated
 performance in more realistic use-case scenarios. For example, we
@@ -856,13 +856,13 @@ realistic conditions and that its fault tolerance mechanisms work in
 practice.
 
 **Statistical Analysis of Timing Data:** For the crucial aspect of
-synchronization and timing, the validation was done with rigorous
+synchronisation and timing, the validation was done with rigorous
 statistical techniques. Time stamp logs from devices were collected and
 compared using cross-correlation analysis to assess alignment. We also
 utilized an external high-precision time source (an atomic clock
 synchronized timestamping on each device via an NTP server) as a
 baseline to verify our internal sync. The results were analyzed to
-compute confidence intervals for the synchronization error. For example,
+compute confidence intervals for the synchronisation error. For example,
 with a sample size of 10,000 timestamp comparisons, we found the mean
 offset \~0 ms with standard deviation \~3 ms; a 95% confidence interval
 for the mean offset included zero and was within ±0.1 ms, indicating no
@@ -870,7 +870,7 @@ systematic bias, and for the distribution of offsets, 99% of errors were
 within ±10 ms with the worst-case outliers around ±20 ms. These detailed
 analyses, which are included in the appendix of test results (Appendix
 D.2 Statistical Validation Results), firmly establish that the system
-meets its synchronization performance targets. By applying statistical
+meets its synchronisation performance targets. By applying statistical
 validation, we ensure that our claims (e.g., "±3 ms accuracy") are
 backed by evidence and not just anecdotal observation.
 
@@ -889,7 +889,7 @@ reliable measure.
 **Peer Review of Results:** Although not formal, we also sought peer
 feedback on our performance evaluation methods. For instance, a
 colleague with expertise in real-time systems was consulted to review
-our synchronization testing approach. They confirmed that the methods
+our synchronisation testing approach. They confirmed that the methods
 (like using a common stimulus event and high-speed camera to verify
 device sync) were sound. Such informal peer review adds an extra layer
 of confidence that our validation was done correctly and that we did not
@@ -929,9 +929,9 @@ project opens up possibilities for research studies that were previously
 difficult or impossible to conduct. By providing a means to measure
 stress and related physiological responses *without wires and with
 minimal intrusion*, the project contributes a concrete example of how
-researchers can study naturalistic human behavior. For example, social
+researchers can study naturalistic human behaviour. For example, social
 stress experiments often suffered from participants being tethered to
-instruments (which can influence behavior); with our contactless setup,
+instruments (which can influence behaviour); with our contactless setup,
 multiple participants could be recorded in a more free-moving
 environment (such as a mock meeting or classroom) to study group
 dynamics and stress contagion, something not feasible with traditional
@@ -945,8 +945,8 @@ stimuli. This is a contribution to research methodology in fields like
 psychology and human factors, showing a path to more ecologically valid
 experiments through technology.
 
-**Standardization and Reproducibility in Data Collection:** Another
-important contribution is the emphasis on data standardization and
+**Standardisation and Reproducibility in Data Collection:** Another
+important contribution is the emphasis on data standardisation and
 thorough documentation for reproducibility. In research, especially
 involving physiological signals, reproducibility is a known challenge --
 small differences in equipment or procedure can lead to inconsistent
@@ -978,7 +978,7 @@ of treating the research apparatus with the same scrutiny as one would
 treat an experimental hypothesis. This approach can be considered a
 methodological contribution: it encourages future projects to
 incorporate systematic internal validation. We documented our testing
-methods and rationale (for instance, how to test synchronization or how
+methods and rationale (for instance, how to test synchronisation or how
 to simulate experimental conditions for software testing). These can
 guide other researchers in evaluating their own tools. As research
 becomes more data- and technology-driven, this project's practices
@@ -1005,12 +1005,12 @@ approach we hope others will emulate.
 
 In summary, the project's contributions to research methodology include
 expanding what is experimentally possible, promoting reproducibility and
-standardization, exemplifying rigorous validation of research tools, and
+standardisation, exemplifying rigorous validation of research tools, and
 integrating ethical best practices. These contributions extend beyond
 the immediate results of this project; they are about influencing how
 future research is conducted. By sharing not just the system but also
 the processes and principles behind it, this work serves as a case study
-in modernizing and strengthening research methodologies with the help of
+in modernising and strengthening research methodologies with the help of
 technology.
 
 ### Software Engineering Contributions
@@ -1030,7 +1030,7 @@ in a way that others can follow to create their own multi-component
 systems. Often, research software suffers from being ad-hoc or
 monolithic; this project provides an example of a clean separation of
 concerns (UI vs. processing vs. device control) and demonstrates how to
-manage a distributed architecture (with synchronization and fault
+manage a distributed architecture (with synchronisation and fault
 tolerance) systematically. It's a contribution to the software
 engineering body of knowledge especially for the niche of **real-time
 distributed data acquisition systems**. Future projects -- say, someone
@@ -1099,12 +1099,12 @@ contribution: not just code, but quality code that is meant to live on.
 
 **Innovation in Specific Technical Components:** Within the project,
 certain technical components push the envelope of what's been done in
-similar software. For example, the synchronization algorithm (as
+similar software. For example, the synchronisation algorithm (as
 described earlier) and the adaptive quality control logic could be
 viewed as mini-contributions to the field of real-time systems and
 signal processing software. These algorithms were implemented and proven
 in our context, but they might be useful in other applications (e.g.,
-synchronizing IoT sensors, or managing quality in any streaming data
+synchronising IoT sensors, or managing quality in any streaming data
 system). We plan to write a technical report or paper describing these
 components in detail, which would formally share these innovations with
 the community. Even without that, the code itself is available for
@@ -1132,7 +1132,7 @@ the system's applicability and guides future improvements. The
 limitations discussed here fall into two broad categories: **technical
 limitations** inherent to the current implementation or the chosen
 hardware/software, and **practical/operational constraints** that affect
-how the system can be used in real scenarios. Recognizing these factors
+how the system can be used in real scenarios. Recognising these factors
 is part of a critical evaluation and ensures that conclusions drawn from
 this project remain valid within the proper context.
 
@@ -1357,7 +1357,7 @@ robustness:
   (since it can record ground truth GSR alongside video). As a first
   approach, a supervised learning model could be trained on the existing
   dataset from our pilot sessions to map thermal ROI signals and perhaps
-  visible cues (like skin color changes) to the measured GSR. By
+  visible cues (like skin colour changes) to the measured GSR. By
   deploying this model in real time, the system would then not only
   record data but also give live estimates of stress level. In the short
   term, this can be done as a software update, because the
@@ -1429,7 +1429,7 @@ robustness:
 
 - **Minor Software Tweaks and Quality Improvements:** There are a number
   of smaller-scale improvements that can be tackled: for instance,
-  further optimizing the network protocol (maybe implementing a more
+  further optimising the network protocol (maybe implementing a more
   efficient binary format instead of JSON for large data messages),
   adding encryption to the data stream for security (currently the
   WebSocket communication is on a closed network but not encrypted --
@@ -1437,9 +1437,9 @@ robustness:
   improving error handling messaging so that any device or network
   issues are clearly reported to the user. Another tweak could be adding
   an offline data analysis mode to the desktop app -- so researchers can
-  load a recorded session file and analyze or export it in various ways
+  load a recorded session file and analyse or export it in various ways
   after the fact (some of this exists, but it could be expanded with
-  visualization tools). All these enhancements would polish the system
+  visualisation tools). All these enhancements would polish the system
   and can be done incrementally.
 
 ### Long-Term Research Directions
@@ -1528,7 +1528,7 @@ foundation laid:
   headset or environment to study stress responses in immersive
   scenarios (for instance, presenting stressful VR situations and
   measuring responses contactlessly). This would require new interfaces
-  (maybe reading data from VR hardware, or synchronizing with stimuli
+  (maybe reading data from VR hardware, or synchronising with stimuli
   events in VR). Long-term research could explore the efficacy of such
   setups in both research and therapeutic contexts. Another extension is
   combining this system with cognitive or performance measures -- e.g.,
@@ -1557,7 +1557,7 @@ foundation laid:
   by contributions, making the system better over time. In essence, the
   long-term vision is that the Multi-Sensor Recording System becomes a
   **standard platform in the research community** for multimodal stress
-  and emotion data collection -- an outcome that would truly maximize
+  and emotion data collection -- an outcome that would truly maximise
   the impact of this project.
 
 In conclusion, the future work and extensions proposed span a wide

@@ -2,34 +2,34 @@
 
 ## 5.1 Testing and Validation Framework
 
-The validation methodology for the Multi-Sensor Recording System employs a systematic, multi-layered testing framework specifically designed to ensure research-grade reliability and precision for physiological data acquisition. Unlike conventional software applications, this system requires coordinated multi-device data capture with stringent accuracy requirements including precise temporal synchronization, zero data loss tolerance, and validated measurement precision—critical factors where any failure could compromise experimental validity.
+The validation methodology for the Multi-Sensor Recording System employs a systematic, multi-layered testing framework specifically designed to ensure research-grade reliability and precision for physiological data acquisition. Unlike conventional software applications, this system requires coordinated multi-device data capture with stringent accuracy requirements including precise temporal synchronisation, zero data loss tolerance, and validated measurement precision—critical factors where any failure could compromise experimental validity.
 
 ![Figure 5.1: Multi-Layered Testing Architecture](../diagrams/figure_5_1_multi_layered_testing_architecture.png)
 *Figure 5.1: complete testing framework showing the hierarchical validation approach from unit testing through system integration to experimental validation.*
 
-The testing philosophy integrates established software engineering practices with specialized validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritizing critical system components and behaviors that directly impact research outcomes.
+The testing philosophy integrates established software engineering practices with specialized validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritising critical system components and behaviours that directly impact research outcomes.
 
 ### Multi-Level Testing Hierarchy
 
 The implementation employs a multi-level testing hierarchy that systematically verifies system functionality at progressively increasing levels of integration complexity. At the foundational level, unit tests target individual software modules in isolation (implemented in `AndroidApp/src/test/` and `PythonApp/tests/`), ensuring each component behaves according to specification before integration.
 
-Integration testing validates interactions between system components, including verification of communication protocols between Android applications and desktop controllers, sensor interface coordination, and data synchronization mechanisms. The testing framework, documented in `scripts/integration_tests.py`, specifically validates the JSON socket communication protocol defined in `protocol/communication_protocol.json`.
+Integration testing validates interactions between system components, including verification of communication protocols between Android applications and desktop controllers, sensor interface coordination, and data synchronisation mechanisms. The testing framework, documented in `scripts/integration_tests.py`, specifically validates the JSON socket communication protocol defined in `protocol/communication_protocol.json`.
 
 System-level testing exercises the complete multi-sensor platform in end-to-end scenarios that replicate realistic usage conditions, ensuring that all functional requirements are satisfied during integrated operation. This hierarchical approach ensures early detection of implementation issues while providing thorough validation of the final system under realistic operational conditions.
 
 ### Research-Specific Validation Metrics
 
-Standard software testing methodologies require augmentation to address research-specific requirements including temporal synchronization accuracy, sensor data quality validation, and long-term system reliability—considerations not typically addressed in conventional software applications.
+Standard software testing methodologies require augmentation to address research-specific requirements including temporal synchronisation accuracy, sensor data quality validation, and long-term system reliability—considerations not typically addressed in conventional software applications.
 
 ![Figure 5.2: Test Coverage Heatmap](../diagrams/figure_5_2_test_coverage_heatmap.png)
-*Figure 5.2: complete test coverage analysis showing validation density across system components, with particular emphasis on critical data acquisition and synchronization pathways.*
+*Figure 5.2: complete test coverage analysis showing validation density across system components, with particular emphasis on critical data acquisition and synchronisation pathways.*
 
-**Temporal Synchronization Validation:** Custom validation procedures assess timestamp alignment accuracy across distributed sensor nodes, with target specifications requiring synchronization precision within 5 milliseconds. Testing protocols verify synchronization maintenance under various network conditions and device configurations.
+**Temporal Synchronisation Validation:** Custom validation procedures assess timestamp alignment accuracy across distributed sensor nodes, with target specifications requiring synchronisation precision within 5 milliseconds. Testing protocols verify synchronisation maintenance under various network conditions and device configurations.
 
 **Sensor Data Quality Assessment:** Specialized validation metrics evaluate GSR signal fidelity, thermal imaging quality, and camera data integrity. Quality assessment includes signal-to-noise ratio analysis, correlation validation with reference sensors, and statistical validation of measurement precision.
 
-**Long-term Reliability Characterization:** Extended testing protocols assess system performance during prolonged operation, including evaluation of synchronization drift, data loss rates, and hardware stability under continuous operation conditions.
-example, one key metric is **synchronization precision** between devices
+**Long-term Reliability Characterisation:** Extended testing protocols assess system performance during prolonged operation, including evaluation of synchronisation drift, data loss rates, and hardware stability under continuous operation conditions.
+example, one key metric is **synchronisation precision** between devices
 (measured in microseconds or milliseconds): the system should timestamp
 data such that signals from the video, thermal, and GSR sensors are
 aligned in time within an acceptable tolerance (target was \<1 ms
@@ -55,7 +55,7 @@ example, incorporating principles of equivalence partitioning and
 boundary testing for input
 parameters[\[3\]](https://www.ifsq.org/work-basili-1987.html#:~:text=,of%20this%20study%20are%20the)[\[4\]](https://www.ifsq.org/work-basili-1987.html#:~:text=following,effort%20in%20detection%20depended%20on),
 but also using statistical analysis techniques to evaluate data output
-(e.g. computing mean and max synchronization error over many trials).
+(e.g. computing mean and max synchronisation error over many trials).
 Overall, the strategy was driven by the project's requirements (from
 Chapter 3): every functional requirement and non-functional requirement
 was mapped to one or more tests to confirm it is satisfied. In summary,
@@ -106,7 +106,7 @@ infrastructure. On the Android side, we used **AndroidJUnitRunner** for
 unit tests and small integration tests on the device. We also utilized
 **Espresso** for UI tests to simulate user interactions in the Android
 app's
-interface[\[5\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,double%20creation%20and%20behavior%20verification).
+interface[\[5\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,double%20creation%20and%20behaviour%20verification).
 On the desktop side, tests were run using Pytest, and certain tests
 launched a headless instance of the desktop controller or used simulated
 inputs. The test framework allowed these to work in concert. For
@@ -131,7 +131,7 @@ The simulation can mimic network latency, device response times, and
 even produce dummy sensor readings. This approach was inspired by
 testing techniques in distributed systems, where real-time coordination
 is validated via virtual nodes. By doing this, we achieved automated
-tests for multi-device synchronization logic and error handling (e.g. a
+tests for multi-device synchronisation logic and error handling (e.g. a
 simulated sensor that "drops out" to test recovery code), which would
 have been hard to consistently reproduce with real hardware every time.
 
@@ -234,7 +234,7 @@ expect one call to succeed and the other to fail. The test confirms this
 by waiting for both calls and then checking that exactly one result was
 success and one was
 failure[\[15\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=%2F%2F%20Assert%20val%20successCount%20%3D,it.isFailure).
-This validates internal locking or synchronization logic in the camera
+This validates internal locking or synchronisation logic in the camera
 recorder -- a critical functional detail to prevent race conditions if a
 user double-taps the record button.
 
@@ -278,7 +278,7 @@ behaves as intended in isolation.
 On the desktop Python side, we implemented unit tests using **Pytest**.
 We leveraged Python's `unittest.mock` library to isolate components. The
 desktop controller has modules such as session management, network
-communication, data calibration, and synchronization logic, all of which
+communication, data calibration, and synchronisation logic, all of which
 were unit tested.
 
 We wrote basic tests to ensure the **execution environment** is correct
@@ -325,15 +325,15 @@ These tests ensure the core application can start up and manage
 sessions, which is fundamental to meeting requirements (like FR-003:
 Session Management).
 
-For the **calibration and synchronization modules**, we wrote tests to
-validate algorithmic behavior. For example, there is a calibration
+For the **calibration and synchronisation modules**, we wrote tests to
+validate algorithmic behaviour. For example, there is a calibration
 utility that loads a schema or configuration for devices -- a test
 checks that this loader function can be called (or if not yet
 implemented, the test is marked expected to fail or
 skip)[\[27\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_unit_core.py#L64-L72).
-The synchronization logic (Master Clock Synchronizer) is more complex to
+The synchronisation logic (Master Clock Synchronizer) is more complex to
 test directly; rather than unit-testing internal timing (which is
-tricky), we tested higher-level behavior via integration tests
+tricky), we tested higher-level behaviour via integration tests
 (discussed later). However, certain helper functions (like converting
 timestamps or ordering events) were unit tested with known inputs and
 outputs.
@@ -375,13 +375,13 @@ moving on to integration testing.
 Integration testing focused on the interactions between components --
 notably the coordination between the Android device and the desktop
 controller, as well as network communication and multi-device
-synchronization. These tests answer the question: "Do the parts work
+synchronisation. These tests answer the question: "Do the parts work
 together as intended?" We approached integration testing by constructing
 realistic test scenarios that involve multiple parts of the system, and
 by using both actual devices in manual tests and simulated devices in
 automated tests.
 
-### 5.4.1 Multi-Device Integration Testing (Android--PC Synchronization)
+### 5.4.1 Multi-Device Integration Testing (Android--PC Synchronisation)
 
 A primary integration concern was ensuring the **Android application and
 desktop application stay in sync** during recording sessions. To
@@ -399,7 +399,7 @@ each device reports "recording started" -- and we measure the
 differences. In a typical run, the maximum difference between any two
 devices' start times was on the order of 1--2 milliseconds, which
 effectively demonstrates **synchronous start**. This satisfies the
-synchronization requirement (FR-002) for starting recordings together.
+synchronisation requirement (FR-002) for starting recordings together.
 
 In a live integration test with real hardware, we conducted a session
 where the PC and phone were connected over Wi-Fi. The PC logged an event
@@ -407,7 +407,7 @@ when it sent the "start" command at time T0. The phone, upon receiving
 this over the network, started its camera and sensor and logged its own
 start time. By comparing logs, we observed the phone began recording
 within \~50 ms of the command (largely due to network and camera
-initialization latency). However, the more important factor is that
+initialisation latency). However, the more important factor is that
 **the data streams were aligned**: the phone's video frames and sensor
 readings were timestamped using the master clock from the PC, so even if
 there was a slight delay in starting, all data shared the same timeline.
@@ -417,17 +417,17 @@ according to the PC's clock. Later, we checked the recorded video frame
 where the LED lights up and the sensor data around that time; they all
 corresponded to the correct timestamp (within a few milliseconds of each
 other). This gave empirical evidence that the cross-device **timestamp
-synchronization** is working correctly.
+synchronisation** is working correctly.
 
-Integration testing also covered **ongoing synchronization** during
+Integration testing also covered **ongoing synchronisation** during
 recording. We tested that the clocks do not drift apart significantly.
 For instance, in a 10-minute dual-recording test (phone + webcam), we
 inserted timestamp markers every minute (the system can log sync
 beacons). Comparing these markers, we found no accumulation of drift --
 the difference between device timestamps stayed under 1 ms throughout,
-courtesy of the periodic resynchronization mechanism in the system.
+courtesy of the periodic resynchronisation mechanism in the system.
 Initially, we had observed a slight drift (\~5--10 ms over 10 min) in a
-prototype; that was rectified by refining the synchronization algorithm
+prototype; that was rectified by refining the synchronisation algorithm
 (discussed in Chapter 4). The integration tests after that change
 consistently showed drift below the measurable threshold (a successful
 outcome for FR-002 advanced temporal sync).
@@ -438,7 +438,7 @@ as: the user starts a session, then after some time, stops it via the
 PC; expected outcome is that the Android app stops recording and saves
 files, the PC stops its processes, and the session is marked complete on
 all sides. Our automated test simulation verified the message sequence
-(PC sends "stop", devices acknowledge and finalize data, PC gathers
+(PC sends "stop", devices acknowledge and finalise data, PC gathers
 final status). In a manual test, we physically observed that stopping a
 session through the desktop GUI caused the phone to stop recording
 within about a second and that all data was indeed finalized (video file
@@ -451,7 +451,7 @@ Importantly, integration tests were used to test **failure handling in a
 multi-device context**. We simulated failures like a device going
 offline mid-session. In one automated test, we programmed the simulated
 Shimmer sensor to "drop out" (disconnect) half-way through recording.
-The system's behavior (as per design) is to log the event, attempt a
+The system's behaviour (as per design) is to log the event, attempt a
 reconnection in the background, and continue the session with other
 devices unaffected. The test verified that the overall session did not
 crash -- the other streams continued recording -- and when the sensor
@@ -466,9 +466,9 @@ integrated system can handle it without total session failure, which is
 critical for reliability.
 
 Overall, the multi-device integration tests demonstrated that the
-**PC--Android synchronization and coordination architecture works
+**PC--Android synchronisation and coordination architecture works
 correctly** under normal conditions and degrades gracefully under
-abnormal conditions. The successful synchronization of start/stop
+abnormal conditions. The successful synchronisation of start/stop
 commands and data timestamps confirms that the core promise of the
 system -- synchronized multi-modal data capture -- is fulfilled by the
 integration of its parts.
@@ -479,7 +479,7 @@ Because our system relies on wireless communication between the desktop
 and the Android device (and potentially other sensors via Bluetooth or
 Wi-Fi), we carried out dedicated network communication tests. These
 tests, some of which overlapped with integration scenarios, specifically
-examined the system's behavior under various network conditions -- from
+examined the system's behaviour under various network conditions -- from
 ideal to adverse. We used the network simulation tools in our test
 framework to inject latency and packet loss and observed how the system
 coped.
@@ -545,7 +545,7 @@ different, but that's outside our requirements (we record video
 on-device).
 
 Finally, we simulated an **unstable connection** scenario where the
-network would drop entirely for brief moments. The system's behavior
+network would drop entirely for brief moments. The system's behaviour
 here relies on timeouts and reconnection attempts. In our test, we
 induced a drop after everything was recording, causing the PC to lose
 contact with the Android for a short period. The Android, however, keeps
@@ -564,7 +564,7 @@ In summary, network communication tests showed that our system is
 to a reasonable point (latency in hundreds of ms, packet loss around a
 few percent, brief disconnections), the system continues to function. We
 did find the upper limits: e.g., if packet loss were extremely high
-(\>15--20%), the system might struggle to synchronize start/stop without
+(\>15--20%), the system might struggle to synchronise start/stop without
 manual intervention, and very long disconnections could cause devices to
 stop due to timeouts. Those extreme cases are outside normal operation,
 but knowing them helps in setting expectations. These tests gave us
@@ -597,7 +597,7 @@ connect the devices, calibrate if needed, and then start recording a
 session for, say, 5 minutes while the participant performs some simple
 tasks (to generate data).
 
-During this test, we carefully noted the system's behavior: - The
+During this test, we carefully noted the system's behaviour: - The
 **desktop UI** showed the device status (connected, ready) before start.
 When "Start Session" was clicked, the UI updated to "Recording" state
 almost immediately (within a second), and the Android app's screen also
@@ -639,7 +639,7 @@ together to achieve the goal of recording multi-modal data. Essentially,
 it was a demonstration that requirements FR-001 through FR-005 (as
 listed in Chapter 3's functional requirements) were met in practice.
 FR-001 (coordination) was seen by the fact that one button press
-coordinated three devices. FR-002 (synchronization) was evidenced by
+coordinated three devices. FR-002 (synchronisation) was evidenced by
 aligned timestamps as discussed. FR-003 (session management) was shown
 by the ability to start/stop and get outputs labeled by session, with
 the system handling the state transitions correctly. FR-004 (GSR
@@ -690,7 +690,7 @@ research-focused system). Several tests and analyses were performed on
 the collected data to evaluate quality metrics like completeness,
 accuracy, and fidelity.
 
-One important aspect is the **synchronization accuracy** of the data
+One important aspect is the **synchronisation accuracy** of the data
 streams, which we have touched on earlier. To validate this with actual
 collected data, we conducted a test where a known signal was introduced
 to all sensors at a specific time. For instance, we used a simple event:
@@ -698,7 +698,7 @@ toggling a LED that is visible in the RGB and thermal video and
 simultaneously asking the participant to press a finger sensor that
 causes a spike in GSR (or simply startling them to induce a GSR
 response, though that's less precise). This event's timing was recorded
-by an external stopwatch as well. When analyzing the recorded data, we
+by an external stopwatch as well. When analysing the recorded data, we
 found that the timestamp of the LED flash in the video and thermal
 frames and the timestamp of the GSR spike all matched within a small
 tolerance (roughly on the order of the video frame interval, e.g. ±33 ms
@@ -774,12 +774,12 @@ recorded (likely in milliseconds or microseconds). The system uses the
 PC's master clock to tag events -- this clock is a high-resolution
 timer. In our logs, we saw timestamps with microsecond precision (e.g.,
 `2025-08-01 12:00:00.123456` format). The precision of logging is one
-thing, but the accuracy of synchronization we already discussed. We
+thing, but the accuracy of synchronisation we already discussed. We
 found the system's **timestamp resolution and consistency** to be more
 than adequate; if anything, our analysis code might round to the nearest
 millisecond for convenience, but the raw data is precise.
 
-To summarize the data quality evaluation: the system produces **complete
+To summarise the data quality evaluation: the system produces **complete
 and synchronized datasets** of multi-modal recordings, with error rates
 (frame drops, data loss) well below thresholds that would pose problems.
 There were no instances of critical data corruption or misalignment.
@@ -919,12 +919,12 @@ near the breaking point we tested, which is a good position to be in.
 
 For completeness, we also conducted some formal benchmarking to quantify
 performance metrics of the system. Many of these overlap with results
-already discussed, but we summarize them in a more quantitative fashion
+already discussed, but we summarise them in a more quantitative fashion
 here, highlighting how they compare to the requirements or initial
 targets set for the project:
 
-- **Temporal Synchronization Precision:** *Requirement:* Achieve
-  sub-millisecond synchronization between devices. *Benchmark result:*
+- **Temporal Synchronisation Precision:** *Requirement:* Achieve
+  sub-millisecond synchronisation between devices. *Benchmark result:*
   The average inter-device timestamp offset was \~200 μs (0.2 ms) with a
   maximum observed offset of \~800 μs in stress conditions (when CPU was
   heavily loaded) -- thus always under 1 ms. This comfortably meets the
@@ -955,7 +955,7 @@ targets set for the project:
   found the phone could handle even 120 FPS at 720p if needed, which
   might be useful for some specialized analysis. So performance-wise,
   the video recording capability is excellent.
-- **Resource Utilization:** On the Android device, CPU usage during
+- **Resource Utilisation:** On the Android device, CPU usage during
   recording \~45% (one big core mostly) and memory \~250 MB; on Desktop,
   CPU \~5% or less, memory \~150 MB. Both are well within the host
   devices' capacities (a typical modern phone has 4-8 cores and 4+ GB
@@ -1000,7 +1000,7 @@ from our evaluation:
   Memory usage      No critical leak         No leak observed (stable)                                                                                                                                                       ✔ Yes
   growth                                                                                                                                                                                                                     
 
-  CPU utilization   Within capacity          \~50% device, \~5% PC                                                                                                                                                           ✔ Yes
+  CPU utilisation   Within capacity          \~50% device, \~5% PC                                                                                                                                                           ✔ Yes
   (device/PC)                                                                                                                                                                                                                
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1025,7 +1025,7 @@ instill confidence for its use in demanding research studies.
 
 ## 5.7 Results Analysis and Evaluation
 
-In this section, we reflect on the overall testing outcomes, analyze how
+In this section, we reflect on the overall testing outcomes, analyse how
 well the results satisfy the project requirements, and discuss any
 defects or limitations discovered. The goal is to ensure that the
 testing not only was thorough, but that it provides clear evidence of
@@ -1036,7 +1036,7 @@ of strengths and areas for improvement.
 ### 5.7.1 Summary of Test Results
 
 The thorough testing program produced a wealth of data about the
-system's behavior. In summary, the tests confirm that the system is
+system's behaviour. In summary, the tests confirm that the system is
 **functionally correct, performant, and robust**. All unit tests
 (several hundred across Android and Python) passed, indicating that each
 module meets its specification in isolation. Integration tests covering
@@ -1050,14 +1050,14 @@ rates and loads without failing.
 
 To highlight a few key results: - **Coverage**: Every feature listed in
 the requirements was exercised by one or more tests. For instance,
-features like "multi-device start/stop", "data synchronization", "error
+features like "multi-device start/stop", "data synchronisation", "error
 recovery", "data export" etc., all have corresponding tests that passed.
 This gives a high confidence level that there are no untested major
 functionalities lingering with bugs. - **Reliability**: The system did
 not crash or deadlock in any of our tests. Even under stress, it
 maintained at least core functionality. This is a critical point for a
 system that might run unattended during experiments. - **Precision**:
-The tight timing and synchronization performance met the design goals,
+The tight timing and synchronisation performance met the design goals,
 meaning the system's scientific integrity is upheld (this was arguably
 one of the most important criteria given the research context). - **User
 perspective**: The testing also indicates that the system is usable. The
@@ -1071,7 +1071,7 @@ do not impede functionality.
 We can conclude from the test results that the system is **ready for
 deployment** in its intended environment. It has been verified against
 its specifications and validated in conditions similar to real use. The
-rigorous testing means we can be confident in its behavior. Table 5.2
+rigorous testing means we can be confident in its behaviour. Table 5.2
 provides an overview mapping the main requirements to the tests and
 outcomes (a condensed view of the full traceability matrix we maintained
 during the project):
@@ -1232,7 +1232,7 @@ quality).
 
 Throughout the testing process, we maintained a log of **defects** (bugs
 or issues) that were discovered, along with their severity and
-resolution status. Analyzing these defects provides insight into the
+resolution status. Analysing these defects provides insight into the
 system's quality and the development process. By the end of the project,
 we had resolved all critical and major defects and most minor ones. No
 known critical defect remains that would compromise core functionality
@@ -1248,11 +1248,11 @@ resources after each session and improving our use of Android's media
 APIs. After the fix, extended sessions showed constant memory usage,
 confirming the leak was
 resolved[\[52\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,functionality%20or%20data%20integrity%20remain). -
-**Synchronization Drift Over Time:** Initially, a slight clock drift was
+**Synchronisation Drift Over Time:** Initially, a slight clock drift was
 noticed over long recordings (as mentioned, a few milliseconds over
-several minutes). This was traced to the synchronization algorithm not
+several minutes). This was traced to the synchronisation algorithm not
 updating often enough and cumulative floating-point error. We improved
-the master clock sync by applying periodic NTP re-synchronization and
+the master clock sync by applying periodic NTP re-synchronisation and
 higher precision math for time calculations. Subsequent tests (both
 unit-level in the sync module and system-level) showed no measurable
 drift, thereby closing this
@@ -1263,7 +1263,7 @@ a bit laggy (e.g., button press feedback was delayed). This was
 identified as a minor defect -- not breaking functionality, but
 affecting user experience. We addressed it by moving some work off the
 main UI thread (for example, writing to disk was moved to a background
-thread). After this optimization, the UI remained responsive even when
+thread). After this optimisation, the UI remained responsive even when
 recording at high load, as confirmed by repeating the
 scenario[\[54\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,error%20detection%20and%20user%20guidance). -
 **Bluetooth Reconnection Delay:** When testing sensor reconnect, we
@@ -1279,10 +1279,10 @@ software would throw an error. We added checks to prevent entering
 calibration mode unless all required devices are present, and guide the
 user accordingly. This prevents a potential user error scenario and was
 marked as
-resolved[\[55\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=optimization%20,error%20detection%20and%20user%20guidance). -
+resolved[\[55\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=optimisation%20,error%20detection%20and%20user%20guidance). -
 **File Export Format Consistency:** During data export tests, we noticed
 that if a session name had certain characters, the exported filenames
-could get messy. We cleaned the file-naming function to sanitize names.
+could get messy. We cleaned the file-naming function to sanitise names.
 Also, we ensured all exported CSVs have consistent headers and units.
 These were minor polish fixes to improve the professionalism of output
 data. - **Documentation and Warnings:** Some "defects" were simply
@@ -1354,7 +1354,7 @@ Comparing The Effectiveness of Software Testing Strategies
 
 <https://www.ifsq.org/work-basili-1987.html>
 
-[\[5\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,double%20creation%20and%20behavior%20verification)
+[\[5\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,double%20creation%20and%20behaviour%20verification)
 [\[8\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=system%20addresses%20the%20unique%20challenges,characteristics%20of%20human%20physiological%20responses)
 [\[9\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=Synthetic%20data%20generation%20includes%20temporal,environmental%20conditions%2C%20and%20experimental%20scenarios)
 [\[10\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,CameraDevice.StateCallback%3E%281)
@@ -1371,7 +1371,7 @@ Comparing The Effectiveness of Software Testing Strategies
 [\[52\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,functionality%20or%20data%20integrity%20remain)
 [\[53\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,Resolved%20with%20enhanced%20clock%20correction)
 [\[54\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,error%20detection%20and%20user%20guidance)
-[\[55\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=optimization%20,error%20detection%20and%20user%20guidance)
+[\[55\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=optimisation%20,error%20detection%20and%20user%20guidance)
 [\[56\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,Resolved%20with%20enhanced%20clock%20correction)
 [\[57\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=match%20at%20L2566%20,error%20detection%20and%20user%20guidance)
 [\[58\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=%23%20Tracked%20Issues%20%28Non,Planned%20enhancement%20for%20adaptive%20quality)
@@ -1454,7 +1454,7 @@ The Android application demonstrates unprecedented systematic improvement across
 | Core Recording Systems | 156 handlers | CancellationException preservation | 99.7% coroutine integrity | 2.3ms avg response time |
 | Network Communications | 89 handlers | IOException, SecurityException | 97.8% connection stability | 15% error recovery speed |
 | Device Management | 125 handlers | IllegalStateException specificity | 98.9% state consistency | 40% debugging efficiency |
-| UI and Service Layers | 142 handlers | RuntimeException categorization | 99.2% user experience stability | 60% error diagnosis speed |
+| UI and Service Layers | 142 handlers | RuntimeException categorisation | 99.2% user experience stability | 60% error diagnosis speed |
 | Sensor Integration | 78 handlers | Device-specific error handling | 96.4% sensor reliability | 25% calibration efficiency |
 | **Total Achievement** | **590 handlers** | **84% completion rate** | **98.4% average improvement** | **35% overall performance gain** |
 
@@ -1468,7 +1468,7 @@ complete stress testing validation demonstrates exceptional system robustness un
 |-----------------|----------------------|---------------|----------------|------------------|
 | Network Disconnection | 99.7% automatic recovery | 3.2s average | 100% data preserved | Full operational continuity |
 | Device Power Loss | 97.8% graceful handling | 8.7s reconnection | 99.8% data recovery | Seamless reintegration |
-| Memory Pressure | 96.4% resource management | 12.1s optimization | 99.2% data consistency | Automatic performance tuning |
+| Memory Pressure | 96.4% resource management | 12.1s optimisation | 99.2% data consistency | Automatic performance tuning |
 | Storage Exhaustion | 98.9% cleanup procedures | 15.6s space recovery | 100% critical data preserved | Intelligent space management |
 | Protocol Errors | 99.1% error correction | 2.8s protocol reset | 99.9% message integrity | Automatic protocol negotiation |
 | **Average Performance** | **98.4% reliability** | **8.5s recovery time** | **99.78% data protection** | **complete stability** |
