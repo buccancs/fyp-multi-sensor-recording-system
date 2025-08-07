@@ -4,7 +4,7 @@
 [![Test Coverage](https://img.shields.io/badge/test%20coverage-%3E95%25-brightgreen)](./evaluation_suite/)
 [![Research Ready](https://img.shields.io/badge/research%20ready-yes-success)](./docs/test_execution_guide.md)
 
-A complete multi-sensor recording system designed for contactless GSR (Galvanic Skin Response) prediction research. This system integrates multiple data streams including thermal imaging, traditional cameras, and Shimmer GSR sensors to create synchronized multi-modal datasets for advanced physiological research.
+A complete multi-sensor recording system designed for contactless GSR (Galvanic Skin Response) prediction research. This system integrates multiple data streams including thermal imaging, traditional cameras, and Shimmer GSR sensors to create synchronised multi-modal datasets for advanced physiological research.
 
 ## 🏗️ System Architecture
 
@@ -13,19 +13,19 @@ The system implements a **distributed star-mesh topology** with PC master-contro
 - **PC Master Controller**: Python desktop application managing session coordination, device synchronisation, and data aggregation
 - **Android Recording Devices**: Mobile applications handling multi-sensor data collection (camera, thermal, Shimmer GSR)
 - **JSON Protocol Communication**: WebSocket-based real-time communication between PC and Android devices
-- **Offline-First Recording**: Local data storage with synchronized timestamps for reliable data collection
+- **Offline-First Recording**: Local data storage with synchronised timestamps for reliable data collection
 
 ## 🔬 Research Applications
 
 ### Target Use Cases
 - **Contactless GSR Prediction**: Development of computer vision models for stress detection
-- **Multi-Modal Physiological Research**: Synchronized collection of thermal, visual, and traditional GSR data
+- **Multi-Modal Physiological Research**: Synchronised collection of thermal, visual, and traditional GSR data
 - **Human-Computer Interaction Studies**: Real-time physiological monitoring during interactive sessions
 - **Stress Response Analysis**: Longitudinal studies of physiological responses to stimuli
 
 ### Data Collection Capabilities
 - **High-Resolution Thermal Imaging**: Contactless skin temperature monitoring
-- **Synchronized Video Recording**: Visual context for physiological responses  
+- **Synchronised Video Recording**: Visual context for physiological responses  
 - **Shimmer GSR Sensors**: Gold-standard physiological measurements
 - **Precision Timestamps**: <1ms synchronisation accuracy across all data streams
 
@@ -78,7 +78,7 @@ pip install -e ".[shimmer]"
 pip install -e ".[calibration]"
 ```
 **Includes**: opencv-contrib-python (extended OpenCV features)
-**Use when**: Using advanced computer vision features, specialized calibration algorithms
+**Use when**: Using advanced computer vision features, specialised calibration algorithms
 
 ##### 📱 Android Integration (`android`)
 ```bash
@@ -121,7 +121,7 @@ pip install -e .
 
 3. **Start Recording Session**
    - Configure session parameters (duration, recording modes)
-   - Initiate synchronized recording across all devices
+   - Initiate synchronised recording across all devices
    - Monitor real-time status and data quality
 
 ## 🔧 Build Status & Recent Improvements
@@ -213,7 +213,7 @@ python run_evaluation_suite.py --category integration_tests
 bucika_gsr/
 ├── AndroidApp/                 # Android recording application
 │   ├── src/main/java/com/multisensor/recording/
-│   │   ├── controllers/        # Specialized business logic controllers
+│   │   ├── controllers/        # Specialised business logic controllers
 │   │   ├── managers/           # Device and system managers
 │   │   ├── recording/          # Core recording components
 │   │   ├── calibration/        # Camera calibration
@@ -244,7 +244,7 @@ bucika_gsr/
 - **Calibration Manager**: OpenCV-based camera calibration for precise measurements
 - **Session Coordinator**: Multi-device session management and synchronisation
 - **Network Server**: WebSocket-based device communication and control
-- **Data Aggregator**: Synchronized data collection and storage
+- **Data Aggregator**: Synchronised data collection and storage
 - **Real-time Monitor**: Live status monitoring and quality assessment
 
 ### Android Recording Application (Kotlin)
@@ -257,9 +257,9 @@ bucika_gsr/
 #### Clean MVVM Architecture
 
 **Refactored Architecture Achievement:**
-The Android application underwent complete architectural refactoring to implement clean MVVM patterns following single responsibility principle. The original monolithic MainViewModel (2035 lines) was refactored into specialized controllers, achieving a **78% size reduction** (2035 → 451 lines) while dramatically improving maintainability and testability.
+The Android application underwent complete architectural refactoring to implement clean MVVM patterns following single responsibility principle. The original monolithic MainViewModel (2035 lines) was refactored into specialised controllers, achieving a **78% size reduction** (2035 → 451 lines) while dramatically improving maintainability and testability.
 
-**Specialized Controllers:**
+**Specialised Controllers:**
 - **RecordingSessionController** (218 lines): Pure recording operation management with reactive StateFlow patterns
 - **DeviceConnectionManager** (389 lines): Device connectivity orchestration and initialisation procedures  
 - **FileTransferManager** (448 lines): Data transfer operations and session management
@@ -315,7 +315,7 @@ class PrivacyManager(context: Context, logger: Logger) {
 ## 🔬 Research Features
 
 ### Multi-Modal Data Collection
-- **Synchronized Timestamps**: <1ms accuracy across all data streams
+- **Synchronised Timestamps**: <1ms accuracy across all data streams
 - **Flexible Session Configuration**: Customizable recording parameters
 - **Real-time Quality Monitoring**: Live assessment of data quality
 - **Automated Calibration**: Camera calibration with validation
@@ -414,9 +414,9 @@ The Multi-Sensor Recording System maintains exceptional code quality through sys
 - **Performance**: Research-grade timing precision (<1ms synchronisation)
 - **Quality Assurance**: Multi-dimensional reliability assessment at 97% confidence
 
-## 📄 License
+## 📄 Licence
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licenced under the MIT Licence - see the [LICENCE](LICENCE) file for details.
 
 ## 🔬 Research Citation
 
@@ -448,7 +448,7 @@ If you use this system in your research, please cite:
 
 ---
 
-**Multi-Sensor Recording System** - Enabling advanced physiological research through synchronized multi-modal data collection.
+**Multi-Sensor Recording System** - Enabling advanced physiological research through synchronised multi-modal data collection.
 
 - [x] **Easy-to-install**, stand-alone binaries: Unlike other tools, Vale doesn't require you to install and configure a particular programming language and its related tooling (such as Python/pip or Node.js/npm).
 
@@ -460,7 +460,7 @@ See the [documentation](https://vale.sh) for more information.
 
 ### Functionality
 
-| Tool       | Extensible           | Checks          | Supports Markup                                                         | Built With | License      |
+| Tool       | Extensible           | Checks          | Supports Markup                                                         | Built With | Licence      |
 |------------|----------------------|-----------------|-------------------------------------------------------------------------|------------|--------------|
 | Vale       | Yes (via YAML)       | spelling, style | Yes (Markdown, AsciiDoc, reStructuredText, HTML, XML, Org)              | Go         | MIT          |
 | textlint   | Yes (via JavaScript) | spelling, style | Yes (Markdown, AsciiDoc, reStructuredText, HTML, Re:VIEW)               | JavaScript | MIT          |
@@ -527,6 +527,6 @@ The corpus IDs in the above plots&mdash;`gitlab` and `ydkjs`&mdash;correspond to
 
 - A [chapter](https://raw.githubusercontent.com/getify/You-Dont-Know-JS/1st-ed/es6%20%26%20beyond/ch2.md) from the open-source book *You Don't Know JS*.
 
-## :page_facing_up: License
+## :page_facing_up: Licence
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B21090%2Fgithub.com%2Ferrata-ai%2Fvale.svg?type=large)](https://app.fossa.com/projects/custom%2B21090%2Fgithub.com%2Ferrata-ai%2Fvale?ref=badge_large)

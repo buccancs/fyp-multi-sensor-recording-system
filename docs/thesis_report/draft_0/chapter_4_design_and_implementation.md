@@ -60,14 +60,14 @@ computer science principles translate into practical research capabilities [Broo
 ## 4.1 System Architecture Overview (PC–Android System Design)
 
 The Multi-Sensor Recording System architecture represents a sophisticated distributed computing solution specifically
-engineered to address the complex technical challenges inherent in synchronized multi-modal data collection while
+engineered to address the complex technical challenges inherent in synchronised multi-modal data collection while
 maintaining the scientific rigor and operational reliability essential for conducting high-quality physiological
 measurement research [Healey2005, Boucsein2012]. The architectural design demonstrates a systematic balance between
 technical requirements for precise coordination across heterogeneous devices [Lamport1978] and practical considerations
 for system reliability, scalability, and long-term maintainability in diverse research environments [Avizienis2004].
 
 The system architecture draws upon established distributed systems patterns [Buschmann1996] while introducing
-specialized adaptations required for physiological measurement applications that must coordinate consumer-grade mobile
+specialised adaptations required for physiological measurement applications that must coordinate consumer-grade mobile
 devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance [Gray1993], data
 integrity [Date2003], and temporal precision [Mills1991] as fundamental requirements that cannot be compromised for
 convenience or performance optimisation, implemented through sophisticated algorithms in
@@ -96,7 +96,7 @@ for each major component:
   - See Android Mobile Application and thermal camera integration
   - Technical documentation: `../thermal_camera_integration_readme.md`
 
-- **Session Management**: Research workflow coordination and data organization
+- **Session Management**: Research workflow coordination and data organisation
   - Technical documentation: `../session_management_readme.md`
   - Quick start guide: `../QUICK_START.md`
 
@@ -139,7 +139,7 @@ physiological measurement systems, complete study of distributed systems princip
 of the specific requirements and constraints inherent in contactless measurement
 research [CITE - Lamport, L. (2001). Paxos made simple. ACM SIGACT News, 32(4), 18-25]. The design recognizes that
 research applications have fundamentally different characteristics from typical consumer or enterprise software
-applications, requiring specialized approaches that prioritise data quality, temporal precision, measurement accuracy,
+applications, requiring specialised approaches that prioritise data quality, temporal precision, measurement accuracy,
 and operational reliability over factors such as user interface sophistication, feature richness, or commercial market
 appeal.
 
@@ -170,7 +170,7 @@ systems enable precise post-session temporal alignment when real-time coordinati
 boundaries and clear separation of concerns that enable independent development, thorough testing, and systematic
 maintenance of different system components while ensuring overall system coherence and integration
 quality [CITE - Parnas, D.L. (1972). On the criteria to be used in decomposing systems into modules. Communications of the ACM, 15(12), 1053-1058].
-Each architectural component has well-defined responsibilities, standardized interfaces, and clearly specified contracts
+Each architectural component has well-defined responsibilities, standardised interfaces, and clearly specified contracts
 that facilitate parallel development by multiple team members while ensuring system coherence, integration quality, and
 long-term maintainability.
 
@@ -236,7 +236,7 @@ The network architecture employs multiple protocols to optimise different types 
 
 - **Control Channel (WebSocket)**: Bidirectional command and status communication between PC controller and mobile
   devices. Provides reliable message delivery with automatic reconnection.
-- **Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimized for
+- **Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimised for
   low latency with adaptive compression.
 - **Synchronisation Channel (UDP)**: Time-critical synchronisation messages with minimal overhead. Used for clock
   synchronisation and recording triggers.
@@ -257,7 +257,7 @@ graph TB
     subgraph "Central Coordination Hub"
         PC[PC Controller<br/>Python Desktop Application]
         SYNC[MasterClockSynchronizer<br/>Network Time Protocol]
-        STORE[Data Storage Manager<br/>Structured File Organization]
+        STORE[Data Storage Manager<br/>Structured File Organisation]
         CAL[Camera Calibration System<br/>Multi-Device Coordination]
         ML[Machine Learning Pipeline<br/>Real-Time Inference]
     end
@@ -477,14 +477,14 @@ graph TD
 
 **Core Application Components:**
 
-**Clean MVVM Architecture with Specialized Controllers**: The Android application follows a refactored MVVM architecture with `MainViewModelRefactored` (451 lines) coordinating four specialized components: `RecordingSessionController` (218 lines), `DeviceConnectionManager` (389 lines), `FileTransferManager` (448 lines), and `CalibrationManager` (441 lines). This represents a 78% reduction from the original monolithic `MainViewModel` (2035 lines), achieving clean separation of concerns and single responsibility principle adherence.
+**Clean MVVM Architecture with Specialised Controllers**: The Android application follows a refactored MVVM architecture with `MainViewModelRefactored` (451 lines) coordinating four specialised components: `RecordingSessionController` (218 lines), `DeviceConnectionManager` (389 lines), `FileTransferManager` (448 lines), and `CalibrationManager` (441 lines). This represents a 78% reduction from the original monolithic `MainViewModel` (2035 lines), achieving clean separation of concerns and single responsibility principle adherence.
 
 **Jetpack Compose Declarative UI Framework**: Modern declarative UI architecture built with Jetpack Compose (BOM 2024.12.01) and Material 3 design system, featuring complete screen implementations with sophisticated state management:
 
 - **RecordingScreen**: Recording controls with start/stop functionality, real-time device status indicators (Camera, Thermal, GSR, PC), camera preview integration, and session duration tracking with Material 3 Card components
 - **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features complete status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
 - **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
-- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualisation
+- **FilesScreen**: Advanced file management system with session browsing, file organisation by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualisation
 - **OnboardingActivity**: Modern multi-page onboarding flow with Material 3 design, featuring welcome screens, feature showcase, complete permission management, and setup completion guide with horizontal pager navigation
 - **MainNavigation**: Compose Navigation implementation with bottom navigation bar, proper state preservation, and deep link support
 
@@ -564,7 +564,7 @@ Advanced Calibration Features:
 
 **Advanced File Management System (FilesScreen):**
 
-The FilesScreen implements a complete file management interface designed specifically for research data organization and analysis:
+The FilesScreen implements a complete file management interface designed specifically for research data organisation and analysis:
 
 ```kotlin
 @Composable
@@ -597,7 +597,7 @@ fun FilesScreen(viewModel: FileViewViewModel = hiltViewModel()) {
 
 Research-Oriented File Management Features:
 
-- **Session-Based Organization**: Hierarchical organization by recording sessions with metadata preservation
+- **Session-Based Organisation**: Hierarchical organisation by recording sessions with metadata preservation
 - **Advanced Search Functionality**: Real-time search across session IDs, device types, and file metadata
 - **Storage Monitoring**: Visual storage usage indicators with warning thresholds and cleanup recommendations
 - **complete Export Options**: Multiple export formats with metadata preservation for research analysis
@@ -643,7 +643,7 @@ The UI implementation leverages sophisticated state management patterns that ens
 fun RecordingScreen(viewModel: MainViewModelRefactored = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 ---
-    // Optimized recomposition with stable composition
+    // Optimised recomposition with stable composition
     remember(uiState.isRecording) {
         // Update only recording-specific UI components
     }
@@ -657,7 +657,7 @@ fun RecordingScreen(viewModel: MainViewModelRefactored = hiltViewModel()) {
 Performance Optimisation Features:
 
 - **Selective Recomposition**: Minimal UI updates through strategic state partitioning and stable composition
-- **Memory Efficiency**: Optimized component lifecycle management with automatic resource cleanup
+- **Memory Efficiency**: Optimised component lifecycle management with automatic resource cleanup
 - **Background Thread Integration**: Seamless integration with background sensor data processing without UI blocking
 - **Accessibility Compliance**: Built-in accessibility support with screen reader compatibility and dynamic text sizing**Multi-Sensor Coordination Engine**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors
 with real-time processing, providing coordinated data collection with precise temporal synchronisation across all sensor
@@ -838,7 +838,7 @@ fun RecordingScreen(
 - **Declarative State Management**: Direct integration with `StateFlow` and `LiveData` eliminates complex UI update coordination, improving responsiveness during high-frequency sensor data processing
 - **Memory Efficiency**: Elimination of View inflation and XML parsing reduces memory footprint, particularly beneficial during intensive multi-sensor recording sessions
 - **Reduced Thread Switching**: Compose's integration with Kotlin Coroutines minimizes context switching between UI and background threads during sensor data visualisation
-- **Material 3 Optimisation**: Built-in performance optimizations in Material 3 components, including efficient ripple effects and dynamic colour calculations
+- **Material 3 Optimisation**: Built-in performance optimisations in Material 3 components, including efficient ripple effects and dynamic colour calculations
 
 **Architectural Advantages for Research Applications:**
 
@@ -946,7 +946,7 @@ class CameraRecorder @Inject constructor(
 - **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic device detection and
   performance optimisation
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding and quality validation
-- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices with automatic calibration
+- **Synchronised Capture**: Microsecond-level synchronisation across multiple camera devices with automatic calibration
   integration
 
 The camera recording system provides complete error handling, quality validation, and performance monitoring to
@@ -1010,7 +1010,7 @@ class PowerManager @Inject constructor(
 ---
     enum class PowerSaveMode {
         NORMAL,
-        OPTIMIZED,
+        OPTIMISED,
         AGGRESSIVE
     }
 ---
@@ -1028,7 +1028,7 @@ class PowerManager @Inject constructor(
     private suspend fun optimizePowerSettings() {
         when {
             currentBatteryLevel < 20 -> setPowerSaveMode(PowerSaveMode.AGGRESSIVE)
-            currentBatteryLevel < 50 && !isCharging -> setPowerSaveMode(PowerSaveMode.OPTIMIZED)
+            currentBatteryLevel < 50 && !isCharging -> setPowerSaveMode(PowerSaveMode.OPTIMISED)
             else -> setPowerSaveMode(PowerSaveMode.NORMAL)
         }
     }
@@ -1137,12 +1137,12 @@ class SecurityUtils @Inject constructor() {
 
 The Android application implements sophisticated sensor integration capabilities that provide research-grade measurement
 capabilities through advanced hardware coordination and signal processing algorithms. The sensor integration
-architecture supports both integrated mobile device sensors and external specialized measurement equipment through
-standardized interfaces and communication protocols.
+architecture supports both integrated mobile device sensors and external specialised measurement equipment through
+standardised interfaces and communication protocols.
 
 ### 4.3.1 Thermal Camera Integration (Topdon)
 
-The TopDon thermal camera integration provides sophisticated thermal imaging capabilities optimized for physiological
+The TopDon thermal camera integration provides sophisticated thermal imaging capabilities optimised for physiological
 research applications. The TC001 and TC001 Plus models feature uncooled microbolometer technology with research-grade
 temperature measurement accuracy and real-time processing capabilities.
 
@@ -1151,7 +1151,7 @@ temperature measurement accuracy and real-time processing capabilities.
 - **Resolution**: 256×192 pixel thermal sensor with high-precision temperature measurement
 - **Temperature Range**: -20°C to +650°C (TC001 Plus) with measurement accuracy of ±1.5°C or ±1.5%
 - **Frame Rate**: Up to 25 Hz with real-time thermal data processing and export capabilities
-- **Spectral Range**: 8-14 μm long-wave infrared (LWIR) optimized for human physiological monitoring
+- **Spectral Range**: 8-14 μm long-wave infrared (LWIR) optimised for human physiological monitoring
 - **USB-C OTG Integration**: Direct Android device connection with sophisticated device detection and communication
   management
 
@@ -1362,7 +1362,7 @@ The web dashboard provides complete remote access to all system functions throug
 
 - **Real-time Device Monitoring**: Live status updates for all connected devices with WebSocket-based communication
 - **Session Management Interface**: Complete recording session control with start/stop functionality and configuration management
-- **Data Visualisation Dashboard**: Real-time sensor data plotting with synchronized multi-device viewing capabilities
+- **Data Visualisation Dashboard**: Real-time sensor data plotting with synchronised multi-device viewing capabilities
 - **File Management System**: complete file browser with download, preview, and batch operation capabilities
 - **System Performance Monitoring**: Live CPU, memory, and network utilisation tracking with optimisation controls
 
@@ -1567,7 +1567,7 @@ graph TB
 
 The topology design accommodates horizontal scaling through the simple addition of mobile devices without requiring
 architectural modifications or complex reconfiguration procedures. Each mobile device integrates into the coordination
-network through standardized protocols and interfaces, while the central coordination hub dynamically adapts to
+network through standardised protocols and interfaces, while the central coordination hub dynamically adapts to
 accommodate varying device counts and configurations.
 
 **Centralized Coordination Hub Architecture**: The central coordination hub represents the system's brain, responsible
@@ -1576,7 +1576,7 @@ implements a layered design that separates coordination concerns from data proce
 optimisation and scaling of different functional areas.
 
 The synchronisation engine maintains precise timing coordination across all devices through sophisticated network time
-protocol implementation and latency compensation algorithms. The data storage manager provides structured organization
+protocol implementation and latency compensation algorithms. The data storage manager provides structured organisation
 of multi-modal data streams with complete metadata generation and validation. The processing pipeline enables
 real-time analysis and quality assessment, while the health monitor ensures continuous system status tracking and
 proactive issue detection.
@@ -1591,7 +1591,7 @@ storage, and network communication. The devices maintain operational independenc
 measurement sessions, providing resilience against individual device failures and network connectivity issues.
 
 **Sensor Hardware Ecosystem Integration**: The sensor hardware ecosystem encompasses both integrated mobile device
-sensors and external specialized measurement equipment. The integration architecture provides unified interfaces for
+sensors and external specialised measurement equipment. The integration architecture provides unified interfaces for
 diverse hardware types while accommodating the specific communication and control requirements of each sensor category.
 
 The ecosystem design enables flexible sensor configuration for different research applications while maintaining
@@ -1604,7 +1604,7 @@ errors.
 The complete distributed system design represents the sophisticated architectural core that enables precise
 coordination of multiple independent computing platforms while maintaining the rigorous temporal synchronisation, data
 integrity, and operational reliability required for scientific applications of the highest
-caliber [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565].
+calibre [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565].
 The design systematically addresses fundamental challenges in distributed computing theory and practice while adapting
 proven solutions to the specific and often unique requirements of physiological measurement research that demand
 unprecedented precision and reliability from consumer-grade hardware
@@ -1632,7 +1632,7 @@ The design systematically adapts established distributed systems patterns, algor
 while introducing novel mechanisms, protocols, and coordination strategies specifically tailored for real-time
 multi-modal data collection in research
 environments [CITE - Birman, K. (2005). Reliable distributed systems: technologies, web services, and applications. Springer Science & Business Media].
-The resulting system must achieve millisecond-level timing precision across wireless networks characterized by variable
+The resulting system must achieve millisecond-level timing precision across wireless networks characterised by variable
 latency and intermittent connectivity while maintaining reliable operation despite the inherent unreliability, resource
 constraints, and performance variability typical of mobile devices and consumer networking equipment.
 
@@ -1711,7 +1711,7 @@ connectivity characteristics, and battery constraints.
 The pattern design incorporates lessons learned from distributed database systems and real-time embedded systems while
 adapting these concepts to the specific requirements of research
 instrumentation [CITE - Distributed system design patterns]. The implementation ensures that coordination overhead
-remains minimal while providing the precise control necessary for synchronized data collection.
+remains minimal while providing the precise control necessary for synchronised data collection.
 
 ```mermaid
 graph TD
@@ -1771,7 +1771,7 @@ graph TD
 **Central Master Controller Responsibilities**: The master controller serves as the authoritative decision-making entity
 responsible for session lifecycle management, synchronisation coordination, and system-wide resource allocation. The
 controller implements sophisticated state management that tracks the operational status of all system components while
-coordinating complex multi-phase operations such as session initialisation, synchronized recording start/stop, and
+coordinating complex multi-phase operations such as session initialisation, synchronised recording start/stop, and
 graceful session termination.
 
 The master controller's design emphasizes reliability and fault tolerance, implementing complete error handling and
@@ -1781,7 +1781,7 @@ logging for research documentation and system troubleshooting.
 
 **Mobile Agent Architecture**: Each mobile device implements a sophisticated agent architecture that balances autonomous
 operation with coordinated behaviour. The agent design enables independent data collection and local processing while
-participating in coordinated measurement sessions through standardized communication protocols. The architecture
+participating in coordinated measurement sessions through standardised communication protocols. The architecture
 provides resilience against network connectivity issues while maintaining the real-time responsiveness required for
 physiological measurement applications.
 
@@ -1868,7 +1868,7 @@ The communication design employs multiple protocols to optimise different types 
 **Control Channel (WebSocket)**: Bidirectional command and status communication between PC controller and mobile
 devices. Provides reliable message delivery with automatic reconnection.
 
-**Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimized for
+**Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimised for
 low latency with adaptive compression.
 
 **Synchronisation Channel (UDP)**: Time-critical synchronisation messages with minimal overhead. Used for clock
@@ -2409,7 +2409,7 @@ class CalibrationManager:
 
 ### Protocol Architecture
 
-The communication system implements a multi-layered protocol stack optimized for different types of data exchange:
+The communication system implements a multi-layered protocol stack optimised for different types of data exchange:
 
 ```mermaid
 graph TD
@@ -2583,7 +2583,7 @@ The Multi-Sensor Recording System implements a complete security framework desig
 
 The Multi-Sensor Recording System implements a complete security framework designed specifically for research environments handling sensitive physiological data [Anderson2020]. The security architecture follows established security engineering principles while addressing the unique requirements of multi-sensor research platforms [Denning2016].
 
-#### Defense in Depth
+#### Defence in Depth
 
 Multiple layers of security controls protect research data throughout the entire data lifecycle:
 
@@ -2651,7 +2651,7 @@ private fun validateAuthToken(token: String): Boolean {
 
 #### Research Data Protection
 
-Specialized controls for sensitive physiological data:
+Specialised controls for sensitive physiological data:
 
 - Hardware-backed AES-GCM encryption for all stored research data
 - Cryptographic file wiping ensuring secure deletion
@@ -3394,14 +3394,14 @@ def _check_for_secrets(self, line: str, file_path: Path) -> bool:
 flexible component replacement, now enhanced with Navigation Compose integration for ViewModel scoping.
 
 **Coroutines for Concurrency**: Kotlin coroutines provide structured concurrency that simplifies complex asynchronous
-operations while maintaining readable code, optimized for Compose's recomposition system.
+operations while maintaining readable code, optimised for Compose's recomposition system.
 
 ### Python Technology Choices
 
 **PyQt5 for GUI**: Selected for mature desktop application capabilities with complete widget support and
 cross-platform compatibility.
 
-**OpenCV for Computer Vision**: Industry-standard computer vision library with optimized algorithms and extensive
+**OpenCV for Computer Vision**: Industry-standard computer vision library with optimised algorithms and extensive
 documentation.
 
 **AsyncIO for Concurrency**: Python's asyncio provides efficient handling of concurrent network connections and I/O
@@ -3463,7 +3463,7 @@ recording [CITE - Google Android Developers. (2024). Camera2 API Reference]:
 - **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic device detection and
   performance optimisation
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding and quality validation
-- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices with automatic calibration
+- **Synchronised Capture**: Microsecond-level synchronisation across multiple camera devices with automatic calibration
   integration
 
 **Real-Time Preview and Quality Assessment:**
@@ -3632,10 +3632,10 @@ class ShimmerGSRController {
 }
 ```
 
-### Advanced Session Management and Data Organization
+### Advanced Session Management and Data Organisation
 
 The session management system implements complete research session lifecycle management with sophisticated data
-organization, metadata tracking, and quality assurance procedures specifically designed for multi-modal research
+organisation, metadata tracking, and quality assurance procedures specifically designed for multi-modal research
 applications [CITE - Wilson, G., et al. (2014). Best practices for scientific computing]:
 
 #### complete Session Lifecycle Management
@@ -3704,11 +3704,11 @@ class SessionManager {
 }
 ```
 
-#### Advanced Data Organization and Storage
+#### Advanced Data Organisation and Storage
 
 **Hierarchical Data Structure:**
 
-- **Session-Based Organization**: Systematic organization with session-level metadata, participant information, and
+- **Session-Based Organisation**: Systematic organisation with session-level metadata, participant information, and
   experimental protocol documentation
 - **Multi-Modal Data Integration**: Coordinated storage of video, thermal, physiological, and metadata with temporal
   alignment and cross-reference capabilities
@@ -3717,10 +3717,10 @@ class SessionManager {
 - **Data Integrity Validation**: complete checksum calculation, data validation procedures, and corruption
   detection for all stored data
 
-**File Organization and Naming Standards:**
+**File Organisation and Naming Standards:**
 
-- **Standardized Naming Convention**: Systematic file naming with timestamp, participant ID, session type, and device
-  identifier for organized data management
+- **Standardised Naming Convention**: Systematic file naming with timestamp, participant ID, session type, and device
+  identifier for organised data management
 - **Metadata Preservation**: complete metadata embedding in all data files with calibration parameters, device
   configuration, and quality assessment results
 - **Export Format Optimisation**: Multiple export formats including research-standard formats for integration with
@@ -3817,7 +3817,7 @@ monitoring [CITE - Google Material Design. (2024). Material Design Guidelines]:
 
 **Advanced Controller Architecture:**
 
-- **Modular Controller Design**: Specialized controllers for calibration, device management, networking, and user
+- **Modular Controller Design**: Specialised controllers for calibration, device management, networking, and user
   interface coordination with clear separation of concerns
 - **Permission Management**: complete Android permission handling with user education and graceful degradation for
   restricted permissions
@@ -3826,7 +3826,7 @@ monitoring [CITE - Google Material Design. (2024). Material Design Guidelines]:
 - **Accessibility Integration**: WCAG 2.1 AA compliance with screen reader support, keyboard navigation, and visual
   accessibility enhancements
 
-The user interface architecture implements sophisticated interaction patterns optimized for research operations:
+The user interface architecture implements sophisticated interaction patterns optimised for research operations:
 
 ```kotlin
 class UIController {
@@ -3891,7 +3891,7 @@ components [CITE - Martin, R.C. (2008). Clean code: a handbook of agile software
 **Cross-Platform Service Architecture:**
 
 - **Platform Abstraction**: Operating system abstraction layer supporting Windows, macOS, and Linux with
-  platform-specific optimizations
+  platform-specific optimisations
 - **Resource Management**: Intelligent resource allocation with memory management, CPU optimisation, and storage
   coordination
 - **Plugin Architecture**: Extensible plugin system enabling custom sensors, analysis algorithms, and export formats
@@ -3949,7 +3949,7 @@ features [CITE - Riverbank Computing. (2024). PyQt5 Documentation]:
   health monitoring
 - **Calibration Control Tab**: Advanced calibration procedures with automated validation, accuracy assessment, and
   quality reporting
-- **File Management Tab**: Sophisticated data organization with search capabilities, metadata browsing, and export
+- **File Management Tab**: Sophisticated data organisation with search capabilities, metadata browsing, and export
   management
 
 **Modern Visual Design Framework:**
@@ -3957,13 +3957,13 @@ features [CITE - Riverbank Computing. (2024). PyQt5 Documentation]:
 - **PsychoPy-Inspired Interface**: Professional research software aesthetics with consistent visual hierarchy and
   scientific colour schemes
 - **Responsive Layout Management**: Dynamic layout adaptation with multi-monitor support and flexible workspace
-  organization
+  organisation
 - **Real-Time Status Monitoring**: complete status displays with visual indicators, progress tracking, and alert
   management
 - **Accessibility Compliance**: WCAG 2.1 AA compliance with screen reader support, keyboard navigation, and visual
   accessibility features
 
-The GUI framework implements sophisticated interaction patterns optimized for research workflows:
+The GUI framework implements sophisticated interaction patterns optimised for research workflows:
 
 ```python
 class EnhancedMainWindow(QMainWindow):
@@ -4078,7 +4078,7 @@ assessment [CITE - Bradski, G. (2000). The OpenCV Library]:
 
 - **Automatic Device Detection**: complete USB camera enumeration with vendor identification and capability
   assessment
-- **Multi-Camera Coordination**: Simultaneous management of multiple USB cameras with synchronized capture and frame
+- **Multi-Camera Coordination**: Simultaneous management of multiple USB cameras with synchronised capture and frame
   alignment
 - **Resolution and Format Optimisation**: Automatic format selection with quality optimisation and bandwidth management
 - **Advanced Camera Controls**: Manual exposure control, focus adjustment, and white balance optimisation for
@@ -4216,7 +4216,7 @@ complete experimental protocol support [CITE - Peirce, J.W. (2007). PsychoPy—p
 
 - **Precise Timing Control**: Microsecond-level timing accuracy with hardware-accelerated presentation and complete
   timing validation
-- **Multi-Modal Stimulus Support**: Audio, visual, and tactile stimulus presentation with synchronized coordination and
+- **Multi-Modal Stimulus Support**: Audio, visual, and tactile stimulus presentation with synchronised coordination and
   quality assessment
 - **Experimental Protocol Engine**: Flexible protocol definition with conditional branching, randomization, and adaptive
   procedures
@@ -4225,7 +4225,7 @@ complete experimental protocol support [CITE - Peirce, J.W. (2007). PsychoPy—p
 
 **Data Collection Coordination:**
 
-- **Synchronized Data Collection**: Precise coordination of stimulus presentation with data collection across all sensor
+- **Synchronised Data Collection**: Precise coordination of stimulus presentation with data collection across all sensor
   modalities
 - **Event Marking**: complete event marking with high-precision timestamps and metadata documentation
 - **Quality Assurance**: Real-time validation of data collection quality with automatic alerts and corrective procedures
@@ -4375,7 +4375,7 @@ ensuring scientific rigor.
 
 ### complete Testing Strategy Implementation
 
-The testing framework implements systematic validation across multiple testing levels with specialized approaches for
+The testing framework implements systematic validation across multiple testing levels with specialised approaches for
 research software quality
 assurance [CITE - Myers, G.J., Sandler, C., & Badgett, T. (2011). The art of software testing]:
 
@@ -4383,7 +4383,7 @@ assurance [CITE - Myers, G.J., Sandler, C., & Badgett, T. (2011). The art of sof
 
 **Unit Testing Framework (95% Coverage Achievement):**
 
-- **Component Isolation Testing**: complete testing of individual components with mock dependencies and behavioral
+- **Component Isolation Testing**: complete testing of individual components with mock dependencies and behavioural
   validation
 - **Algorithm Validation**: Statistical validation of signal processing algorithms with known reference datasets and
   accuracy assessment
@@ -4582,10 +4582,10 @@ class MultiDeviceSynchronizationSystem:
             return SynchronizationResult.error(f"Synchronisation failed: {e}")
 ```
 ---
-## Advanced Session Management and Data Organization
+## Advanced Session Management and Data Organisation
 
 The session management system implements complete research session lifecycle management with sophisticated data
-organization, metadata tracking, and quality assurance
+organisation, metadata tracking, and quality assurance
 procedures [CITE - Montgomery, D.C. (2017). Design and analysis of experiments]:
 
 ### complete Session Architecture
@@ -4617,11 +4617,11 @@ assurance [CITE - Joint Committee for Guides in Metrology. (2008). Evaluation of
 - **Error Detection and Recovery**: Advanced error detection with automatic recovery procedures and complete
   logging
 
-#### Advanced Data Organization Framework
+#### Advanced Data Organisation Framework
 
 **Hierarchical Data Structure:**
 
-- **Session-Based Data Organization**: Systematic organization with complete metadata and cross-referencing
+- **Session-Based Data Organisation**: Systematic organisation with complete metadata and cross-referencing
   capabilities
 - **Multi-Modal Data Integration**: Coordinated storage of diverse data types with temporal alignment and quality
   preservation
@@ -4630,9 +4630,9 @@ assurance [CITE - Joint Committee for Guides in Metrology. (2008). Evaluation of
 
 **Research-Grade File Management:**
 
-- **Standardized Naming Conventions**: Systematic file naming with complete metadata embedding and organizational
+- **Standardised Naming Conventions**: Systematic file naming with complete metadata embedding and organizational
   structure
-- **Export Format Optimisation**: Multiple export formats optimized for research analysis tools and statistical software
+- **Export Format Optimisation**: Multiple export formats optimised for research analysis tools and statistical software
 - **Backup and Recovery Systems**: Automated backup procedures with data redundancy and recovery capabilities
 - **Archive Management**: Long-term data archival with compression optimisation and retrieval capabilities
 ---
@@ -4735,7 +4735,7 @@ alignment with project objectives.
 
 ## Code Implementation References
 
-The design and implementation concepts detailed in this chapter are realized through the following complete source
+The design and implementation concepts detailed in this chapter are realised through the following complete source
 code architecture. Each file implements specific design patterns and architectural decisions discussed in this chapter,
 with detailed code snippets provided in **Appendix F**.
 
@@ -4799,7 +4799,7 @@ with detailed code snippets provided in **Appendix F**.
   guided user workflows (See Appendix F.87.4)
 - `PythonApp/gui/device_panel.py` - Real-time device status visualisation with complete health monitoring and
   connectivity management (See Appendix F.87.5)
-- `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronized display and quality assessment (See
+- `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronised display and quality assessment (See
   Appendix F.87.6)
 - `PythonApp/web_ui/` - Complete web-based interface system enabling remote monitoring and control through standard
   browsers (See Appendix F.87.7)
@@ -5045,7 +5045,7 @@ maintainability:
 
 **Maintainability Enhancements:**
 
-- **Consistent Error Handling Patterns**: Standardized approaches across the codebase
+- **Consistent Error Handling Patterns**: Standardised approaches across the codebase
 - **Enhanced Code Readability**: Clear error handling logic improves code comprehension
 - **Simplified Debugging**: Structured logging reduces time to identify and resolve issues
 - **Professional Code Quality**: Industry-standard exception handling practices

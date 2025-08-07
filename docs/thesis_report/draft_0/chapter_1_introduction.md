@@ -24,7 +24,7 @@
 
 1.3. [Thesis Outline](#13-thesis-outline)
 
-- complete Thesis Organization
+- complete Thesis Organisation
 - Research Scope and Boundaries
 - Academic Contributions and Innovation Framework
 - Methodology and Validation Approach
@@ -45,7 +45,7 @@ in realistic environments [McDuff2016; Poh2010], as implemented through the coor
 
 The historical progression of physiological measurement technologies reveals a consistent trajectory toward less
 invasive, more accurate, and increasingly accessible measurement approaches [Boucsein2012; Fowles1981]. Early research
-in galvanic skin response (GSR) and stress measurement required specialized laboratory equipment [Biopac2018], trained
+in galvanic skin response (GSR) and stress measurement required specialised laboratory equipment [Biopac2018], trained
 technicians, and controlled environments that severely limited the ecological validity of research
 findings [Brewer2000; Campbell1957]. Participants were typically constrained to stationary positions with multiple
 electrodes attached to their skin, creating an artificial research environment that could itself influence the
@@ -70,9 +70,9 @@ addressed in this system through the contactless integration approach implemente
   movement and behaviour
 - **Laboratory Environment Dependencies**: Accurate measurement traditionally required controlled environments that
   limit ecological validity
-- **Participant Discomfort and Behavioral Artifacts**: Physical sensors create awareness of monitoring that can alter
+- **Participant Discomfort and Behavioural Artifacts**: Physical sensors create awareness of monitoring that can alter
   the phenomena being studied
-- **Technical Expertise Requirements**: Traditional systems require specialized training for operation and maintenance
+- **Technical Expertise Requirements**: Traditional systems require specialised training for operation and maintenance
 - **Single-Participant Focus**: Most traditional systems are designed for individual measurement, limiting group
   dynamics research
 - **High Equipment Costs**: Commercial research-grade systems often cost tens of thousands of dollars, limiting
@@ -89,7 +89,7 @@ Contactless physiological measurement represents a fundamental paradigm shift th
 traditional measurement approaches while opening new possibilities for research design and data collection. The
 theoretical foundation for contactless measurement rests on the understanding that physiological responses to stress and
 emotional stimuli produce observable changes in multiple modalities including skin temperature, micro-movements, colour
-variations, and behavioral patterns that can be detected through sophisticated analysis of video and thermal imaging
+variations, and behavioural patterns that can be detected through sophisticated analysis of video and thermal imaging
 data.
 
 The contactless measurement paradigm enables several critical research capabilities that were previously impractical or
@@ -124,7 +124,7 @@ systematic integration of RGB cameras, thermal imaging, and reference physiologi
 coordination framework.
 
 **RGB Camera Systems**: High-resolution RGB cameras provide the foundation for contactless measurement through analysis
-of subtle colour variations, micro-movements, and behavioral patterns that correlate with physiological responses. The
+of subtle colour variations, micro-movements, and behavioural patterns that correlate with physiological responses. The
 system employs 4K resolution cameras to ensure sufficient detail for accurate analysis while maintaining real-time
 processing capabilities.
 
@@ -159,18 +159,18 @@ The system implements several sophisticated components working in concert:
   device coordination protocols
 - **SessionSynchronizer**: Sophisticated session management system that coordinates recording initialisation and
   termination across all devices with microsecond precision
-- **NTPTimeServer**: Custom Network Time Protocol implementation optimized for local network precision and mobile device
+- **NTPTimeServer**: Custom Network Time Protocol implementation optimised for local network precision and mobile device
   coordination
 - **Clock Drift Compensation**: Advanced algorithms that monitor and compensate for device-specific timing variations
   during extended recording sessions
 
 **Network Communication Protocol:**
 
-The synchronisation framework employs a sophisticated JSON-based communication protocol optimized for scientific
+The synchronisation framework employs a sophisticated JSON-based communication protocol optimised for scientific
 applications:
 
 - **StartRecordCommand**: Precisely coordinated recording initiation with timestamp validation
-- **StopRecordCommand**: Synchronized recording termination with data integrity verification
+- **StopRecordCommand**: Synchronised recording termination with data integrity verification
 - **SyncTimeCommand**: Continuous time synchronisation with latency compensation
 - **HelloMessage**: Device discovery and capability negotiation
 - **StatusMessage**: Real-time operational status and quality monitoring
@@ -193,7 +193,7 @@ several persistent challenges that existing commercial and research solutions fa
 beyond the reach of many research groups, particularly those in developing countries or smaller institutions. This cost
 barrier significantly limits the democratisation of advanced physiological measurement research.
 
-**Technical Complexity and Training Requirements**: Existing systems often require specialized technical expertise for
+**Technical Complexity and Training Requirements**: Existing systems often require specialised technical expertise for
 operation, maintenance, and data analysis, creating barriers for research groups without dedicated technical support
 staff.
 
@@ -259,14 +259,14 @@ scientific validity and research quality standards.
 
 #### Current Limitations in Physiological Measurement Systems
 
-The contemporary landscape of physiological measurement research is characterized by persistent methodological
+The contemporary landscape of physiological measurement research is characterised by persistent methodological
 limitations that constrain research design, compromise data quality, and limit the ecological validity of research
 findings. These limitations have remained largely unaddressed despite decades of technological advancement in related
 fields, creating a significant opportunity for innovation that can fundamentally improve research capabilities across
 multiple disciplines.
 
-**Invasive Contact Requirements and Behavioral Artifacts**: Traditional galvanic skin response (GSR) measurement
-requires physical electrode placement that creates multiple sources of measurement error and behavioral
+**Invasive Contact Requirements and Behavioural Artifacts**: Traditional galvanic skin response (GSR) measurement
+requires physical electrode placement that creates multiple sources of measurement error and behavioural
 artifact [Boucsein2012, Fowles1981]. Electrodes must be attached to specific skin locations, typically fingers or palms,
 requiring participants to maintain relatively stationary positions to prevent signal artifacts from electrode
 movement [Cacioppo2007]. This physical constraint fundamentally alters the experimental environment and participant
@@ -282,8 +282,8 @@ can significantly alter the phenomena under investigation [Healey2005].
 
 **Scalability and Multi-Participant Limitations**: Traditional physiological measurement systems are designed primarily
 for single-participant applications, creating significant constraints for research into group dynamics, social
-physiological responses, and large-scale behavioral studies [Picard1997]. Coordinating multiple traditional GSR systems
-requires complex technical setup, extensive calibration procedures, and specialized technical expertise that makes
+physiological responses, and large-scale behavioural studies [Picard1997]. Coordinating multiple traditional GSR systems
+requires complex technical setup, extensive calibration procedures, and specialised technical expertise that makes
 multi-participant research impractical for many research groups [ShimmerUseCase2018].
 
 The cost structure of traditional systems compounds scalability limitations, with each additional participant requiring
@@ -306,7 +306,7 @@ contactless measurement capabilities implemented in
 `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt`.
 
 **Technical Complexity and Accessibility Barriers**: Traditional research-grade physiological measurement systems
-require specialized technical expertise for operation, calibration, and maintenance that places them beyond the
+require specialised technical expertise for operation, calibration, and maintenance that places them beyond the
 practical reach of many research groups [DataTranslation2018, MCC2019]. This technical complexity creates barriers to
 entry that limit the democratisation of physiological measurement research and concentrate advanced capabilities within
 well-funded institutions with dedicated technical support staff.
@@ -541,7 +541,7 @@ by measurement methodology limitations. This enablement must support:
 ---
 ## 1.3 Thesis Outline
 
-### complete Thesis Organization
+### complete Thesis Organisation
 
 This Master's thesis presents a systematic academic treatment of the Multi-Sensor Recording System project through six
 complete chapters that provide complete coverage of all aspects from initial requirements analysis through final
@@ -594,7 +594,7 @@ evidence of system capability and reliability.
 The evaluation framework includes multi-layered testing strategy, performance benchmarking, reliability assessment, and
 statistical validation that provides objective assessment of system achievement while identifying limitations and
 opportunities for improvement. The chapter demonstrates that rigorous software engineering practices can be successfully
-applied to research software development while accounting for the specialized requirements of scientific applications.
+applied to research software development while accounting for the specialised requirements of scientific applications.
 
 **Chapter 6: Conclusions and Evaluation** provides critical evaluation of project achievements, systematic assessment of
 technical contributions, and detailed analysis of system limitations while outlining future development directions
@@ -720,7 +720,7 @@ theoretical understanding while providing immediate practical benefits for the r
 
 The thesis employs systematic research methodology that demonstrates rigorous approaches to research software
 development while contributing new knowledge to both computer science and research methodology domains. The methodology
-combines established software engineering practices with specialized approaches developed specifically for scientific
+combines established software engineering practices with specialised approaches developed specifically for scientific
 instrumentation requirements.
 
 **Requirements Engineering Methodology:**
@@ -735,12 +735,12 @@ feasibility.
 
 The development methodology demonstrates systematic approaches to iterative development that maintain scientific rigor
 while accommodating the flexibility needed for research applications. The approach combines agile development practices
-with specialized validation techniques that ensure scientific measurement quality throughout the development lifecycle.
+with specialised validation techniques that ensure scientific measurement quality throughout the development lifecycle.
 
 **complete Testing and Validation Framework:**
 
 The validation approach includes multi-layered testing strategy covering unit testing (targeting 95% coverage),
-integration testing (100% interface coverage), system testing (all use cases), and specialized testing for performance,
+integration testing (100% interface coverage), system testing (all use cases), and specialised testing for performance,
 reliability, security, and usability. The framework includes research-specific validation methodologies ensuring
 measurement accuracy, temporal precision, and data integrity meet scientific standards.
 
@@ -773,7 +773,7 @@ flexibility.
 **Chapter**: 1 of 7  
 **Research Area**: Multi-Sensor Recording System for Contactless GSR Prediction
 
-**Chapter Focus**: Introduction, background, motivation, research objectives, and thesis organization  
+**Chapter Focus**: Introduction, background, motivation, research objectives, and thesis organisation  
 **Length**: Approximately 25 pages  
 **Format**: Markdown with integrated technical analysis
 
@@ -789,7 +789,7 @@ chapter establishes:
 
 - Clear motivation for the research based on identified limitations in current approaches
 - Specific technical and research objectives with measurable outcomes
-- Systematic thesis organization enabling effective academic evaluation
+- Systematic thesis organisation enabling effective academic evaluation
 - Research scope and boundaries appropriate for Master's thesis level research
 
 ### For Technical Implementation

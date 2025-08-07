@@ -64,7 +64,7 @@ challenges. A key *research gap* is the lack of an integrated platform
 to collect and synchronise these diverse data streams. Most prior
 studies have tackled contactless GSR estimation in isolation or under
 highly controlled conditions, often using separate devices that are not
-synchronized in real
+synchronised in real
 time[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)[\[14\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34).
 For instance, thermal cameras and wearable GSR sensors have typically
 been used independently, with any fusion of their data done post hoc.
@@ -73,23 +73,23 @@ models, which require well-aligned datasets of inputs (e.g.
 video/thermal data) and ground truth outputs (measured GSR). There is a
 clear need for a **multi-modal data collection platform** that can
 simultaneously record GSR signals alongside other sensor modalities in a
-*synchronized* manner. Such a platform would enable researchers to
+*synchronised* manner. Such a platform would enable researchers to
 gather rich, time-aligned datasets -- for example, thermal video of a
 participant's face recorded in lockstep with their GSR signal -- thereby
 laying the groundwork for training and validating predictive models that
 infer GSR from alternative sensors. **The primary contribution of this
 thesis is the development of precisely such a platform:** a modular,
-multi-sensor system for synchronized physiological data acquisition
+multi-sensor system for synchronised physiological data acquisition
 geared toward future GSR prediction research. In summary, the motivation
 behind this work stems from recent trends in physiological computing and
-multimodal sensing, and the recognized need for robust, synchronized
+multimodal sensing, and the recognised need for robust, synchronised
 datasets to advance *contactless* GSR measurement.
 
 ## 1.2 Research Problem and Objectives
 
 Given the above context, the **research problem** can be stated as
 follows: *there is currently no readily available system that enables
-synchronized collection of GSR signals together with complementary data
+synchronised collection of GSR signals together with complementary data
 streams (such as thermal and visual data) in naturalistic settings,
 which hinders the development of machine learning models for contactless
 GSR prediction*. While traditional GSR sensors provide reliable
@@ -100,13 +100,13 @@ To bridge this gap, researchers require a platform that can record
 **multiple modalities simultaneously** -- for example, capturing a
 person's skin conductance with a wearable sensor while concurrently
 recording thermal camera footage and standard video. Crucially, all data
-must be time-synchronized with high precision to allow meaningful
+must be time-synchronised with high precision to allow meaningful
 correlation and learning. The absence of such an integrated system forms
 the core problem that this thesis addresses.
 
 The *objective* of this research, therefore, is to design and implement
 a **multi-modal physiological data collection platform** that enables
-the creation of a synchronized dataset for future GSR prediction models.
+the creation of a synchronised dataset for future GSR prediction models.
 Unlike end-user applications or final predictive systems, the focus here
 is on the data acquisition infrastructure -- in other words, building
 the *foundation* upon which real-time GSR inference algorithms can later
@@ -117,7 +117,7 @@ ground-truth GSR and candidate predictor signals in unison. The
 following specific objectives have been defined to achieve this aim:
 
 - **Objective 1: Multi-Modal Platform Development.** *Design and develop
-  a modular data acquisition system capable of recording synchronized
+  a modular data acquisition system capable of recording synchronised
   physiological and imaging data.* This involves integrating a
   **wearable GSR sensor** and **camera-based sensors** into one
   platform. In practice, the system will use a research-grade Shimmer3
@@ -133,19 +133,19 @@ following specific objectives have been defined to achieve this aim:
   that all modalities can be recorded **simultaneously** with
   millisecond-level timestamp alignment.
 
-- **Objective 2: Synchronized Data Acquisition and Management.**
+- **Objective 2: Synchronised Data Acquisition and Management.**
   *Implement methods for precise time synchronisation and data handling
   across devices.* A custom **control and synchronisation layer**
   (developed in Python) will coordinate the sensor node(s) and ensure
   that GSR readings, thermal frames, and RGB frames are logged with
-  synchronized timestamps. This objective includes establishing a
+  synchronised timestamps. This objective includes establishing a
   reliable communication protocol between the smartphone and the PC
   controller to transmit control commands and streaming
   data[\[16\]](AndroidApp/README.md#L2-L5).
   It also involves data management aspects: storing the multi-modal data
   with appropriate formats and metadata so that they can be easily
   combined for analysis. By the end, the platform should produce a
-  well-synchronized dataset (e.g. timestamps of physiological samples
+  well-synchronised dataset (e.g. timestamps of physiological samples
   aligned with video frame times) that can serve as a training corpus
   for machine learning.
 
@@ -163,7 +163,7 @@ following specific objectives have been defined to achieve this aim:
   will analyse the collected data to ensure that the GSR signals and the
   corresponding thermal/RGB data show the expected correlations or
   time-locked changes. Successful validation will demonstrate that the
-  platform can reliably capture synchronized multi-modal data suitable
+  platform can reliably capture synchronised multi-modal data suitable
   for subsequent machine learning analysis. (Developing the predictive
   model itself is left for future work; here we concentrate on
   validating the *data pipeline* that would feed such a model.)
@@ -179,11 +179,11 @@ project (GSR sensor and thermal/RGB cameras) but can be extended to
 additional modalities in the future. Ultimately, this work lays the
 groundwork for future studies to train and test machine learning
 algorithms that estimate GSR from camera data, by first solving the
-critical challenge of *acquiring synchronized ground-truth data*.
+critical challenge of *acquiring synchronised ground-truth data*.
 
 ## 1.3 Thesis Outline
 
-This thesis is organized into six chapters, following a logical
+This thesis is organised into six chapters, following a logical
 progression from background concepts through system development to
 evaluation:
 
@@ -200,7 +200,7 @@ evaluation:
 
 - **Chapter 3 -- Requirements Analysis:** In this chapter, the specific
   requirements for the data collection platform are defined. The
-  research problem is analyzed in detail to derive both **functional
+  research problem is analysed in detail to derive both **functional
   requirements** (such as the ability to record multiple streams
   concurrently, synchronisation accuracy, user interface needs for the
   recording system) and **non-functional requirements** (such as system
@@ -242,7 +242,7 @@ evaluation:
   discusses any challenges encountered during testing -- for instance,
   connectivity issues or drift in clocks -- and how they were resolved
   or mitigated. We interpret the results to confirm that the system can
-  reliably produce synchronized multi-modal datasets. This validation
+  reliably produce synchronised multi-modal datasets. This validation
   demonstrates the platform's capability to serve as a data collection
   tool for future GSR prediction research. Any limitations observed
   (such as minor synchronisation offsets or sensor noise issues) are
@@ -271,7 +271,7 @@ identifying the motivation and research problem, and the subsequent
 chapters proceed to address that problem through systematic development
 and evaluation of the multi-modal GSR data collection platform.
 Together, these chapters document the journey from concept to
-realisation of a synchronized sensing system that will enable advanced
+realisation of a synchronised sensing system that will enable advanced
 research into predicting GSR from multiple sensor modalities. The
 outcome is a valuable tool and dataset for the community, marking a step
 toward more ubiquitous and contact-free physiological monitoring in the

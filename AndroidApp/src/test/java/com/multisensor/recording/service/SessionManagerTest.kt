@@ -18,7 +18,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@Ignore("Disabled due to Windows Robolectric compatibility issues - functionality validated on hardware")
 @RunWith(RobolectricTestRunner::class)
 class SessionManagerTest {
     private lateinit var context: Context

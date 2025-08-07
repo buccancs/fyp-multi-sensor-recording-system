@@ -137,7 +137,7 @@ graph TB
 #### Pattern-Based Calibration Pipeline
 
 1. **Pattern Presentation**: Automated or manual calibration pattern display
-2. **Image Acquisition**: Synchronized image capture across multiple cameras
+2. **Image Acquisition**: Synchronised image capture across multiple cameras
 3. **Feature Detection**: Robust corner or circle detection with quality filtering
 4. **Parameter Estimation**: Non-linear optimisation using detected features
 5. **Quality Assessment**: complete validation and coverage analysis
@@ -208,7 +208,7 @@ graph TB
     "square_size": {
       "type": "number",
       "minimum": 0.001,
-      "description": "Physical size of pattern squares in meters"
+      "description": "Physical size of pattern squares in metres"
     },
     "status": {
       "type": "string",
@@ -407,7 +407,7 @@ class CalibrationManager:
         """Perform stereo calibration between two cameras"""
         session = self.create_calibration_session(config)
         
-        # Capture synchronized calibration images
+        # Capture synchronised calibration images
         image_pairs = self._capture_stereo_calibration_images(camera_pair, config)
         
         # Process stereo calibration
@@ -781,14 +781,14 @@ bucika_gsr/calibration/
 
 1. **Setup Requirements**:
     - Both cameras must see calibration pattern simultaneously
-    - Synchronized image capture capability
+    - Synchronised image capture capability
     - Overlap region of at least 60% between camera views
     - Consistent lighting for both visible and thermal imaging
 
 2. **Calibration Procedure**:
     - Configure stereo calibration mode
     - Verify temporal synchronisation between cameras
-    - Capture synchronized image pairs (15-20 pairs recommended)
+    - Capture synchronised image pairs (15-20 pairs recommended)
     - Process stereo calibration parameters
     - Validate epipolar geometry
 
@@ -813,7 +813,7 @@ bucika_gsr/calibration/
 
 ### Calibration Data Management
 
-#### Session Organization
+#### Session Organisation
 
 ```
 calibration_data/
@@ -1157,7 +1157,7 @@ class CalibrationIntegrationTest:
    # Test temporal alignment
    sync_quality = test_camera_synchronisation(camera1, camera2)
    if sync_quality.offset > 1.0:  # 1ms threshold
-       print("Cameras may not be properly synchronized")
+       print("Cameras may not be properly synchronised")
    ```
 
 2. **Baseline Optimisation**:

@@ -14,6 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.multisensor.recording.ui.DevicesUiState
+import com.multisensor.recording.ui.DevicesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

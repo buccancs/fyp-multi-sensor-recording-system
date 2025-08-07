@@ -49,6 +49,11 @@
     <color name="recordingInactive">#9E9E9E</color>
     <color name="buttonDanger">@color/md_theme_error</color>
     <color name="textColorSecondary">@color/md_theme_on_surface_variant</color>
+    
+    <!-- Status indicator colors for enhanced UI -->
+    <color name="success_color">#4CAF50</color>
+    <color name="warning_color">#FF9800</color>
+    <color name="error_color">#F44336</color>
 
     <color name="preview_placeholder">#EEEEEE</color>
 </resources>

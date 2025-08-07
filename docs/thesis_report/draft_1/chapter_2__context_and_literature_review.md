@@ -9,15 +9,15 @@ Emotion analysis, often referred to as affective computing (Picard, 1997), has e
 
 In healthcare applications, emotion recognition technology enables remote patient monitoring and therapeutic intervention, allowing healthcare providers to assess patients' emotional states in real-time outside traditional clinical environments (Healey & Picard, 2005). Educational technology systems utilise emotional awareness to adapt tutoring algorithms and learning platform feedback based on students' frustration or engagement levels, demonstrating improved learning outcomes through affective-responsive interfaces. Automotive safety systems employ driver monitoring technologies to detect stress, fatigue, or cognitive overload as preventive measures against traffic accidents, while marketing research increasingly employs physiological sensors and computer vision analysis to measure consumers' unconscious emotional responses to advertisements and product interfaces.
 
-Recent advances in machine learning algorithms and multimodal sensing technologies have significantly enhanced the accuracy and practical applicability of emotion recognition systems. Traditional methodologies relied primarily on subjective self-report measures or behavioral observation, but contemporary approaches leverage objective physiological signals including facial expressions, vocal patterns, postural changes, and autonomic nervous system indicators such as heart rate variability and skin conductance (Goodfellow et al., 2016).
+Recent advances in machine learning algorithms and multimodal sensing technologies have significantly enhanced the accuracy and practical applicability of emotion recognition systems. Traditional methodologies relied primarily on subjective self-report measures or behavioural observation, but contemporary approaches leverage objective physiological signals including facial expressions, vocal patterns, postural changes, and autonomic nervous system indicators such as heart rate variability and skin conductance (Goodfellow et al., 2016).
 
 This multimodal integration strategy addresses inherent limitations of single-modality approaches and enables more robust emotion detection capabilities even in naturalistic, uncontrolled environments. Recent systematic reviews highlight a clear technological trend: emotion recognition research is transitioning from controlled laboratory settings toward real-world deployment through integration of multiple sensor modalities and intelligent devices for continuous affective monitoring (LeCun et al., 2015).
 
-The convergence of computer vision technologies, wearable biosensor systems, and advanced artificial intelligence has substantially expanded the practical impact of emotion analysis across clinical, commercial, and social application domains. Contemporary emotion recognition represents a mature technological capability driving innovation in human-centered technologies rather than merely a theoretical research pursuit.
+The convergence of computer vision technologies, wearable biosensor systems, and advanced artificial intelligence has substantially expanded the practical impact of emotion analysis across clinical, commercial, and social application domains. Contemporary emotion recognition represents a mature technological capability driving innovation in human-centred technologies rather than merely a theoretical research pursuit.
 
 ## 2.2 Contactless Physiological Measurement: Rationale and Technological Approaches
 
-Traditional physiological measurement methodologies for emotional and stress response assessment have historically relied on contact-based sensor systems, including electrodes for galvanic skin response measurement, chest straps for cardiac monitoring, and invasive sampling for hormonal analysis. While these approaches provide accurate physiological data, they introduce significant methodological limitations including participant discomfort, behavioral interference, and reduced ecological validity (Boucsein, 2012).
+Traditional physiological measurement methodologies for emotional and stress response assessment have historically relied on contact-based sensor systems, including electrodes for galvanic skin response measurement, chest straps for cardiac monitoring, and invasive sampling for hormonal analysis. While these approaches provide accurate physiological data, they introduce significant methodological limitations including participant discomfort, behavioural interference, and reduced ecological validity (Boucsein, 2012).
 
 ![Figure 2.2: Research Impact vs Implementation Complexity Matrix](../diagrams/figure_3_3_research_impact_complexity_matrix.png)
 *Figure 2.2: Comparative analysis of contactless versus traditional physiological measurement approaches showing the trade-offs between research impact potential and implementation complexity.*
@@ -38,7 +38,7 @@ Alternative computer vision approaches focus on facial expression and muscle act
 
 Thermal imaging technology offers a particularly promising approach for contactless physiological measurement through infrared detection of heat patterns associated with blood flow and perspiration responses. Thermal cameras can visualise autonomic nervous system responses accompanying stress, including changes in peripheral circulation and subtle perspiration patterns that produce measurable thermal signatures on facial and skin surfaces.
 
-High-resolution infrared imaging can capture stress-induced temperature variations, such as temperature decreases at the nasal tip caused by sympathetic vasoconstriction during autonomic stress responses. These thermal signatures provide contactless indicators that can be monitored continuously without participant awareness or behavioral interference.
+High-resolution infrared imaging can capture stress-induced temperature variations, such as temperature decreases at the nasal tip caused by sympathetic vasoconstriction during autonomic stress responses. These thermal signatures provide contactless indicators that can be monitored continuously without participant awareness or behavioural interference.
 
 Research by Cho et al. has demonstrated mobile thermal imaging applications for stress assessment, showing that nasal skin temperature typically decreases under mental stress conditions, often by approximately 0.5°C on average during acute stress episodes. Thermal imaging systems can additionally detect increased heat signatures around perspiration-active regions, providing complementary physiological indicators for complete stress assessment.
 periorbital region (above the eyes) associated with blushing or
@@ -51,7 +51,7 @@ signals and facial expressions, while thermal methods directly sense
 autonomic changes like blood flow and temperature that are invisible to
 RGB cameras.
 
-By combining these approaches, researchers aim to achieve unobtrusive yet accurate emotion and stress monitoring. The multi-modal integration of optical (RGB) and thermal data, often synchronized with ambient sensors, has become a leading-edge methodology in affective computing. The clear rationale is to maintain research-grade precision without the burden on participants: eliminating electrodes, wires, and measurement awareness that could bias emotional responses.
+By combining these approaches, researchers aim to achieve unobtrusive yet accurate emotion and stress monitoring. The multi-modal integration of optical (RGB) and thermal data, often synchronised with ambient sensors, has become a leading-edge methodology in affective computing. The clear rationale is to maintain research-grade precision without the burden on participants: eliminating electrodes, wires, and measurement awareness that could bias emotional responses.
 
 This section has outlined how contactless measurement techniques operate and their foundational role in modern affect detection systems. The following sections examine specific physiological measurement modalities, particularly galvanic skin response as a primary stress indicator, and establish the theoretical framework for contactless GSR measurement development.
 
@@ -99,7 +99,7 @@ The development of multi-sensor physiological monitoring systems requires robust
 
 Physiological research requires precise temporal coordination between sensor modalities to enable meaningful signal correlation and analysis. The challenge intensifies when integrating sensors with different sampling rates, data formats, and processing latencies across distributed computing platforms (Lamport, 1978).
 
-Modern distributed sensor systems employ various synchronisation strategies including Network Time Protocol (NTP) for coarse synchronisation and specialized timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
+Modern distributed sensor systems employ various synchronisation strategies including Network Time Protocol (NTP) for coarse synchronisation and specialised timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
 
 ### Multi-Modal Data Fusion Architectures  
 
@@ -224,7 +224,7 @@ acute stressors typically provoke a cortisol surge about 15--30 minutes
 after the onset of the stressor, and chronic stress is linked to altered
 patterns of cortisol release over the daily cycle. In fact, industry
 research notes that *"cortisol is the most accurate measure of stress"*
-available[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score)[\[26\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Emotional%20stress%20is%20characterized%20by,induced%20cortisol).
+available[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score)[\[26\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Emotional%20stress%20is%20characterized%20by,induced%20cortisol).
 It is considered a direct readout of HPA axis activation, which is a
 hallmark of the stress response.
 
@@ -236,7 +236,7 @@ common method in stress research (as it reflects free cortisol levels
 non-invasively), but even saliva sampling requires active cooperation
 and typically yields a reading for distinct moments rather than a
 continuous
-stream[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels).
+stream[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels).
 Another issue is the **time delay**: cortisol does not spike instantly
 at the moment of stress; instead, it follows a cascade taking several
 minutes. After a stress event, saliva cortisol peaks roughly 20 minutes
@@ -253,7 +253,7 @@ strongly indicates an HPA-axis activation, whereas a rise in heart rate
 could be due to exercise, excitement, or other arousal. In summary,
 cortisol is a powerful but logistically cumbersome stress biomarker: it
 provides specificity and accuracy for stress
-assessment[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score),
+assessment[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score),
 but lacks immediacy and ease of measurement in everyday settings.
 
 ### 2.4.2 Galvanic Skin Response (Electrodermal Activity)
@@ -267,7 +267,7 @@ sweating, even in minute amounts imperceptible to the person. By placing
 two electrodes on the skin (commonly on the fingers or palm) and
 measuring conductance, researchers capture this signal of sympathetic
 activation. GSR has been used in psychophysiology for well over a
-century; indeed, it was recognized as a reliable indicator of emotional
+century; indeed, it was recognised as a reliable indicator of emotional
 arousal as early as the
 1880s[\[28\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/SHIMMER3_GSR_PLUS_COMPREHENSIVE_GUIDE.md#L2-L5).
 During stress, the sympathetic nervous system is highly active, and GSR
@@ -303,7 +303,7 @@ A comparative analysis is as follows:
 
 - **Physiological System**: Cortisol reflects *HPA axis activation*,
   capturing endocrine aspects of stress (hormonal
-  release)[\[26\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Emotional%20stress%20is%20characterized%20by,induced%20cortisol).
+  release)[\[26\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Emotional%20stress%20is%20characterized%20by,induced%20cortisol).
   GSR reflects *sympathetic nervous system activation*, capturing
   autonomic nerve effects (sweat gland
   activity)[\[28\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/SHIMMER3_GSR_PLUS_COMPREHENSIVE_GUIDE.md#L2-L5).
@@ -318,7 +318,7 @@ A comparative analysis is as follows:
   within a second or two of a sudden stressor, a spike in skin
   conductance can occur. Cortisol changes are *delayed*, typically
   peaking 20--30 minutes after a
-  stressor[\[31\]](https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full#:~:text=The%20convolution%20formula%20also%20allows,variation%20contributed%20by%20the%20stressors)[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels).
+  stressor[\[31\]](https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full#:~:text=The%20convolution%20formula%20also%20allows,variation%20contributed%20by%20the%20stressors)[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels).
   Thus, GSR is suited to tracking momentary or acute stress responses,
   while cortisol indicates the overall magnitude of stress exposure and
   can reveal sustained stress responses that might be missed by
@@ -341,7 +341,7 @@ A comparative analysis is as follows:
   wearable or handheld sensors and provides immediate data. Cortisol
   measurement requires collecting samples (saliva or blood) and
   laboratory analysis, making it impractical for continuous
-  monitoring[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels).
+  monitoring[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels).
   Cortisol assays provide discrete data points (often one sample per
   stress event or per half-hour interval), whereas GSR can yield a
   continuous waveform of the person's arousal level second-by-second.
@@ -349,13 +349,13 @@ A comparative analysis is as follows:
   devices, while cortisol is often reserved for lab studies or
   validation. Recent innovations are attempting to bridge this gap, such
   as algorithms to estimate cortisol release from skin conductance
-  patterns[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score)[\[33\]](https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full#:~:text=As%20argued%20in%20the%20Introduction,with%20the%20cortisol%20response%20curve),
+  patterns[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score)[\[33\]](https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full#:~:text=As%20argued%20in%20the%20Introduction,with%20the%20cortisol%20response%20curve),
   but these are still experimental.
 
 In summary, cortisol and GSR serve complementary roles. Cortisol offers
 a **robust biochemical confirmation** of stress and is valuable for
 validating that a condition truly elicited a stress response (especially
-in clinical or endocrine studies). GSR offers a **real-time behavioral
+in clinical or endocrine studies). GSR offers a **real-time behavioural
 signal** of autonomic arousal that is invaluable for monitoring and
 interactive systems. Many studies use both: for example, measuring
 salivary cortisol at intervals to anchor the stress level, while
@@ -556,7 +556,7 @@ can non-invasively map the temperature across the face and body,
 revealing patterns linked to different emotional states. In stress
 research, thermal imaging has been used both in controlled lab studies
 and in real-world scenarios. A seminal application is in detecting
-stress during standardized stress tests like public speaking or the
+stress during standardised stress tests like public speaking or the
 Trier Social Stress Test: thermal cameras pointed at a participant's
 face have recorded the progressive cooling of the nose and sometimes the
 chin during the stress
@@ -580,7 +580,7 @@ disorder) found that a sudden fear trigger led to a noticeable
 temperature drop across the face, with the nose showing the largest
 decrease[\[18\]](https://arxiv.org/pdf/1908.10307#:~:text=match%20at%20L1265%20fear%20in,Studies%20on%20facial%20temperatures%20of).
 **Empathy and social emotions** have even been studied: in one
-experiment, mothers and their infants had synchronized thermal patterns
+experiment, mothers and their infants had synchronised thermal patterns
 on their faces during stressful interactions, suggesting a contagious or
 shared autonomic
 response[\[47\]](https://arxiv.org/pdf/1908.10307#:~:text=match%20at%20L1298%20in%20relation,child).
@@ -657,14 +657,14 @@ from a webcam, they could classify students' stress levels during
 academic activities with accuracy comparable to using contact heart rate
 sensors[\[11\]](https://www.mdpi.com/1424-8220/22/10/3780#:~:text=match%20at%20L776%20This%20research,works%2C%20which%20used%20contact%20techniques).
 Another vital sign accessible via video is respiratory rate -- subtle
-movements of the chest or shoulders in video can be analyzed to detect
+movements of the chest or shoulders in video can be analysed to detect
 faster breathing, which is another stress indicator. Machine learning
 models that input these remotely captured vital signs (heart rate,
 respiration rate) have shown good performance in distinguishing stress
 versus rest conditions.
 
 Beyond vital signs, RGB video allows analysis of *facial expressions and
-behaviour*. Under stress, people often show behavioral cues: frowning,
+behaviour*. Under stress, people often show behavioural cues: frowning,
 furrowed brows, lip compression, jaw clenching, blinking rate changes,
 or looking away. While none of these is a foolproof sign of stress,
 computer vision algorithms can quantify facial muscle movements using
@@ -682,7 +682,7 @@ via video.
 
 The **advantages** of RGB video for stress detection include the
 ubiquity of cameras (every smartphone and laptop has one) and the rich
-variety of features (physiological and behavioral) that can be
+variety of features (physiological and behavioural) that can be
 extracted. However, there are challenges as well. Visible light cameras
 depend on good lighting conditions; variations in illumination or skin
 tone can affect the accuracy of rPPG and facial analysis. Furthermore,
@@ -807,7 +807,7 @@ it's a strong indicator of stress.
 We hypothesise that an RGB+Thermal system could leverage at least the
 following feature combinations: (1) **Physiological cross-check** --
 thermal vasoconstriction features alongside rPPG heart rate features, to
-detect consistent arousal patterns; (2) **Behavioral context** --
+detect consistent arousal patterns; (2) **Behavioural context** --
 thermal stress cues alongside facial expression cues, to distinguish
 stress from other high-arousal emotions. For instance, a high GSR and
 thermal nose cooling might indicate arousal, but if RGB facial analysis
@@ -1019,7 +1019,7 @@ detect stress-related thermal cues, as evidenced by its specifications
 and by prior use cases, and it could be readily integrated both in terms
 of hardware and software. Together with the Shimmer3 GSR+, it forms the
 backbone of our sensor suite, enabling the project to capture a rich set
-of synchronized physiological and behavioral data for context and
+of synchronised physiological and behavioural data for context and
 literature-aligned stress analysis. The careful selection of these
 devices was guided by the aim to meet distinction-level project
 objectives: leveraging state-of-the-art yet realistic tools to push the
@@ -1114,12 +1114,12 @@ Life Event, Stress and Illness - PMC - PubMed Central
 
 <https://pmc.ncbi.nlm.nih.gov/articles/PMC3341916/>
 
-[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score)
-[\[26\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Emotional%20stress%20is%20characterized%20by,induced%20cortisol)
-[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels)
+[\[25\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Philips%20has%20found%20a%20unique,displayed%20in%20the%20StressLevel%20score)
+[\[26\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Emotional%20stress%20is%20characterized%20by,induced%20cortisol)
+[\[27\]](https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html#:~:text=Cortisol%20is%20typically%20measured%20using,accurate%20measurement%20of%20stress%20levels)
 Biosensing by EDA Stress Management Technology
 
-<https://www.philips.com/a-w/about/innovation/ips/ip-licensing/programs/biosensing-by-eda.html>
+<https://www.philips.com/a-w/about/innovation/ips/ip-licencing/programs/biosensing-by-eda.html>
 
 [\[28\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/SHIMMER3_GSR_PLUS_COMPREHENSIVE_GUIDE.md#L2-L5)
 [\[55\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/SHIMMER3_GSR_PLUS_COMPREHENSIVE_GUIDE.md#L65-L72)
