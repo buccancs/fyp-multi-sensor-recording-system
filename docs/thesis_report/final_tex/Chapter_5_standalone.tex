@@ -1,5 +1,5 @@
-% Standalone wrapper for Chapter_5.tex
-% This file provides the minimal LaTeX structure needed to compile Chapter_5.tex as a standalone document
+% Standalone wrapper for Chapter\_5.tex
+% This file provides the minimal LaTeX structure needed to compile Chapter\_5.tex as a standalone document
 % while maintaining compatibility with the main thesis document
 
 \documentclass[11pt,a4paper]{report}
@@ -16,6 +16,7 @@
 \usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{setspace}
+\usepackage{textcomp}
 
 % Page geometry and spacing
 \geometry{margin=1in}
@@ -24,12 +25,7 @@
 \begin{document}
 
 % Chapter 5 content
-
-% Bibliography (minimal for standalone)
-\bibliographystyle{ieeetr}
-\bibliography{references}
-
-\end{document}\label{chap:5}
+\label{chap:5}
 
 \chapter{Chapter 5: Evaluation and Testing}
 
@@ -240,7 +236,7 @@ temporal alignment (ensuring data from different devices are time-synced
 when comparing) and environmental factors that could affect readings. In
 practice, this means if the system measures a temperature change or GSR
 fluctuation, those measurements have been verified to reflect true
-values with known accuracy (e.g., thermal data accurate to within 0.1°C
+values with known accuracy (e.g., thermal data accurate to within 0.1\textdegree C
 and GSR data loss below 0.1% as specified in requirements).
 
 \textbf{Reproducibility and Replicability Testing:} The methodology includes
@@ -320,38 +316,34 @@ To this end, explicit \textbf{metrics and thresholds} were defined for each
 test category, as summarized in Table 5.1. These metrics provided clear
 targets that the system needed to meet or exceed during testing:
 
-  ------------------------------------------------------------------------------------------------------------------
-  Testing         Coverage       Quality Metric Acceptance     Validation
-  Category        Target                        Criteria       Method
-  ---------------------- --------------------- --------------------- --------------------- ----------------------
-  \textbf{Unit          ≥95% line      Defect density \<0.05 defects Automated test
-  Testing}       coverage                      per KLOC       execution with
-                                                               coverage
-                                                               analysis
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Testing Category} & \textbf{Coverage Target} & \textbf{Quality Metric} & \textbf{Acceptance Criteria} & \textbf{Validation Method} \\
+\hline
+\textbf{Unit Testing} & $\geq$95\% line coverage & Defect density & $<$0.05 defects per KLOC & Automated test execution with coverage analysis \\
+\hline
+\textbf{Integration Testing} & 100\% interface coverage & Interface compliance & 100\% API contract adherence & Protocol conformance and compatibility testing \\
+\hline
+\textbf{System Testing} & All use cases covered & Functional completeness & All requirements validated & End-to-end scenario testing \\
+\hline
+\textbf{Performance Testing} & All critical scenarios & Response time consistency & $<$1s mean response, $<$5s 95th percentile & Load testing with statistical timing analysis \\
+\hline
+\end{tabular}
+\caption{Testing metrics and validation criteria for system components}
+\label{tab:testing-metrics}
+\end{table}
 
-  \textbf{Integration   100% interface Interface      100% API       Protocol
-  Testing}       coverage       compliance     contract       conformance and
-                                                adherence      compatibility
-                                                               testing
-
-  \textbf{System        All use cases  Functional     All            End-to-end
-  Testing}       covered        completeness   requirements   scenario
-                                                validated      testing
-
-  \textbf{Performance   All critical   Response time  \<1s mean      Load testing
-  Testing}       scenarios      consistency    response, \<5s with
-                                                95th           statistical
-                                                percentile     timing analysis
-
-  \textbf{Reliability   Extended       System         ≥99.5% uptime  Long-duration
-  Testing}       operation      availability   during testing continuous
-                                                               stress testing
-
-  \textbf{Accuracy      All            Measurement    ≤5 ms time     Comparative
-  Testing}       measurement    precision      sync error,    analysis with
-                  modalities                    ≤0.1 °C        reference
-                                                thermal        standards
-                                                accuracy       
+%   \textbf{Reliability   Extended       System         \$\geq\$99.5% uptime  Long-duration
+%   Testing}       operation      availability   during testing continuous
+%                                                                stress testing
+% 
+%   \textbf{Accuracy      All            Measurement    \$\leq\$5 ms time     Comparative
+%   Testing}       measurement    precision      sync error,    analysis with
+%                   modalities                    \$\leq\$0.1 \textdegree C        reference
+%                                                 thermal        standards
+%                                                 accuracy       
   ------------------------------------------------------------------------------------------------------------------
 
 \textbf{Coverage Target Justification:} These coverage targets reflect the
@@ -370,7 +362,7 @@ quality or system stability is thoroughly tested.
 
 \textbf{Quality Metric Selection:} The selected metrics emphasize
 characteristics that directly impact research validity and
-reproducibility\cite{DeviceServer}.
+reproducibility.
 This includes measurement accuracy (e.g., how close are sensor readings
 to true values), temporal precision (e.g., how well synchronized are
 data streams), data integrity (no data loss or corruption), and system
@@ -386,7 +378,7 @@ at least 99.5% over long runs).
 minimum thresholds derived from the system requirements and comparisons
 to similar research systems in
 literature\cite{GSRPPGMachineLearning2024}.
-They include absolute thresholds (like "\< 0.1°C difference from
+They include absolute thresholds (like "\$<\$ 0.1\textdegree C difference from
 reference" for thermal accuracy) and relative or statistical criteria
 (like the 95th percentile of response time under load). During testing,
 results are continuously checked against these criteria; if any metric
@@ -436,24 +428,24 @@ topology\cite{SimulatorValidityPhysiological2025}\cite{GSRGuideIMotions}.
         end
 
         subgraph "Platform-Specific Testing Engines"
-            ANDROID_ENGINE[Android Testing Engine<br/>Instrumentation and Unit Tests]
-            PYTHON_ENGINE[Python Testing Engine<br/>Pytest Framework Integration]
-            INTEGRATION_ENGINE[Integration Testing Engine<br/>Cross-Platform Coordination]
-            HARDWARE_ENGINE[Hardware Testing Engine<br/>Sensor Validation Framework]
+            ANDROID\_ENGINE[Android Testing Engine<br/>Instrumentation and Unit Tests]
+            PYTHON\_ENGINE[Python Testing Engine<br/>Pytest Framework Integration]
+            INTEGRATION\_ENGINE[Integration Testing Engine<br/>Cross-Platform Coordination]
+            HARDWARE\_ENGINE[Hardware Testing Engine<br/>Sensor Validation Framework]
         end
 
         subgraph "Test Execution Environment"
-            MOBILE_DEVICES[Mobile Device Test Farm<br/>Multiple Android Devices]
-            DESKTOP_SYSTEMS[Desktop Test Systems<br/>Python Environment]
-            SENSOR_HARDWARE[Sensor Test Rigs<br/>Controlled Hardware Environment]
-            NETWORK_SIM[Network Simulator<br/>Controlled Networking Conditions]
+            MOBILE\_DEVICES[Mobile Device Test Farm<br/>Multiple Android Devices]
+            DESKTOP\_SYSTEMS[Desktop Test Systems<br/>Python Environment]
+            SENSOR\_HARDWARE[Sensor Test Rigs<br/>Controlled Hardware Environment]
+            NETWORK\_SIM[Network Simulator<br/>Controlled Networking Conditions]
         end
 
         subgraph "Data Collection and Analysis"
-            METRICS_COLLECTOR[Metrics Collection Service<br/>Performance and Quality Data]
-            LOG_AGGREGATOR[Log Aggregation System<br/>Multi-Platform Log Collection]
-            ANALYSIS_ENGINE[Analysis Engine<br/>Statistical and Trend Analysis]
-            VALIDATION_FRAMEWORK[Validation Framework<br/>Requirement Compliance Checking]
+            METRICS\_COLLECTOR[Metrics Collection Service<br/>Performance and Quality Data]
+            LOG\_AGGREGATOR[Log Aggregation System<br/>Multi-Platform Log Collection]
+            ANALYSIS\_ENGINE[Analysis Engine<br/>Statistical and Trend Analysis]
+            VALIDATION\_FRAMEWORK[Validation Framework<br/>Requirement Compliance Checking]
         end
 
         subgraph "Reporting and Documentation"
@@ -467,29 +459,29 @@ topology\cite{SimulatorValidityPhysiological2025}\cite{GSRGuideIMotions}.
         SCHEDULER ---> MONITOR
         MONITOR ---> REPORTER
 
-        COORDINATOR ---> ANDROID_ENGINE
-        COORDINATOR ---> PYTHON_ENGINE
-        COORDINATOR ---> INTEGRATION_ENGINE
-        COORDINATOR ---> HARDWARE_ENGINE
+        COORDINATOR ---> ANDROID\_ENGINE
+        COORDINATOR ---> PYTHON\_ENGINE
+        COORDINATOR ---> INTEGRATION\_ENGINE
+        COORDINATOR ---> HARDWARE\_ENGINE
 
-        ANDROID_ENGINE ---> MOBILE_DEVICES
-        PYTHON_ENGINE ---> DESKTOP_SYSTEMS
-        INTEGRATION_ENGINE ---> NETWORK_SIM
-        HARDWARE_ENGINE ---> SENSOR_HARDWARE
+        ANDROID\_ENGINE ---> MOBILE\_DEVICES
+        PYTHON\_ENGINE ---> DESKTOP\_SYSTEMS
+        INTEGRATION\_ENGINE ---> NETWORK\_SIM
+        HARDWARE\_ENGINE ---> SENSOR\_HARDWARE
 
-        MOBILE_DEVICES ---> METRICS_COLLECTOR
-        DESKTOP_SYSTEMS ---> METRICS_COLLECTOR
-        SENSOR_HARDWARE ---> METRICS_COLLECTOR
-        NETWORK_SIM ---> METRICS_COLLECTOR
+        MOBILE\_DEVICES ---> METRICS\_COLLECTOR
+        DESKTOP\_SYSTEMS ---> METRICS\_COLLECTOR
+        SENSOR\_HARDWARE ---> METRICS\_COLLECTOR
+        NETWORK\_SIM ---> METRICS\_COLLECTOR
 
-        METRICS_COLLECTOR ---> LOG_AGGREGATOR
-        LOG_AGGREGATOR ---> ANALYSIS_ENGINE
-        ANALYSIS_ENGINE ---> VALIDATION_FRAMEWORK
+        METRICS\_COLLECTOR ---> LOG\_AGGREGATOR
+        LOG\_AGGREGATOR ---> ANALYSIS\_ENGINE
+        ANALYSIS\_ENGINE ---> VALIDATION\_FRAMEWORK
 
-        VALIDATION_FRAMEWORK ---> DASHBOARD
-        VALIDATION_FRAMEWORK ---> REPORTS
-        VALIDATION_FRAMEWORK ---> TRENDS
-        VALIDATION_FRAMEWORK ---> ALERTS
+        VALIDATION\_FRAMEWORK ---> DASHBOARD
+        VALIDATION\_FRAMEWORK ---> REPORTS
+        VALIDATION\_FRAMEWORK ---> TRENDS
+        VALIDATION\_FRAMEWORK ---> ALERTS
 
 \textbf{Centralized Test Orchestration:} The \textbf{Test Coordinator} is the
 central brain of the testing system. It orchestrates complex
@@ -684,7 +676,7 @@ data streams, it validates that their timestamp sequences are aligned
 and there are no unexpected gaps (temporal synchronization in test
 data). Outlier detection might be employed to ensure the synthetic
 generator didn't produce any impossible values (like negative
-resistance in GSR, or a human temperature of 60°C). By validating test
+resistance in GSR, or a human temperature of 60\textdegree C). By validating test
 data upfront, we prevent the tests from giving misleading results due to
 flawed test inputs.
 
@@ -856,7 +848,7 @@ the logic of setting up and tearing down these environments
 programmatically.
 
     class TestEnvironmentManager:
-        def __init__(self):
+        def \_\_init\_\_(self):
             self.environments = {
                 'unit': UnitTestEnvironment(),
                 'integration': IntegrationTestEnvironment(),
@@ -865,28 +857,28 @@ programmatically.
                 'stress': StressTestEnvironment()
             }
 
-        async def setup_environment(self, test_type: str, config: TestConfig) -> TestEnvironment:
+        async def setup\_environment(self, test\_type: str, config: TestConfig) -> TestEnvironment:
             """Setup test environment with appropriate configuration and resources."""
-            environment = self.environments[test_type]
+            environment = self.environments[test\_type]
             try:
                 # Configure test environment
                 await environment.configure(config)
                 # Initialize required resources (devices, network, etc.)
-                await environment.initialize_resources()
+                await environment.initialize\_resources()
                 # Validate environment readiness
-                validation_result = await environment.validate()
-                if not validation_result.ready:
-                    raise EnvironmentSetupException(validation_result.errors)
+                validation\_result = await environment.validate()
+                if not validation\_result.ready:
+                    raise EnvironmentSetupException(validation\_result.errors)
                 return environment
             except Exception as e:
                 await environment.cleanup()
                 raise TestEnvironmentException(f"Environment setup failed: {str(e)}")
 
-        async def cleanup_environment(self, environment: TestEnvironment):
+        async def cleanup\_environment(self, environment: TestEnvironment):
             """Clean up test environment and release resources."""
             try:
-                await environment.cleanup_resources()
-                await environment.reset_state()
+                await environment.cleanup\_resources()
+                await environment.reset\_state()
             except Exception as e:
                 logger.warning(f"Environment cleanup warning: {str(e)}")
 
@@ -941,7 +933,7 @@ UI, except where using Espresso for small integration tests as needed.
 
 One crucial component is the Android camera recorder, responsible for
 capturing video (and thermal data via an external camera) on the mobile
-device. We wrote unit tests to validate the CameraRecorder's behavior,
+device. We wrote unit tests to validate the CameraRecorder class behavior,
 especially configuration management and error handling. Below is an
 example of such a test class:
 
@@ -961,9 +953,9 @@ example of such a test class:
         fun \texttt{startRecording with valid configuration should succeed}() = runTest {
             // Arrange
             val validConfig = CameraConfiguration(
-                resolution = Resolution.UHD_4K,
+                resolution = Resolution.UHD\_4K,
                 frameRate = 60,
-                colorFormat = ColorFormat.YUV_420_888
+                colorFormat = ColorFormat.YUV\_420\_888
             )
             \texttt{when}(configValidator.validate(validConfig)).thenReturn(ValidationResult.success())
             \texttt{when}(cameraManager.openCamera(any(), any(), any())).thenAnswer { invocation ->
@@ -1041,7 +1033,7 @@ the user or logged.
 \subsubsection{Shimmer Integration Tests}
 
 Another critical part of the Android app is integration with the
-\textbf{Shimmer GSR sensor} over Bluetooth. We developed a \texttt{ShimmerRecorder}
+\textbf{Shimmer GSR sensor} over Bluetooth. We developed a ShimmerRecorder class
 class that manages discovery and connection of Shimmer devices and
 starts the GSR data streaming. Unit tests for this component focused on
 ensuring proper use of the Bluetooth API and correct configuration of
@@ -1062,8 +1054,8 @@ the sensor.
         @Test
         fun \texttt{device discovery should find available Shimmer devices}() = runTest {
             // Arrange
-            val mockDevice1 = createMockBluetoothDevice("Shimmer_1234")
-            val mockDevice2 = createMockBluetoothDevice("Shimmer_5678")
+            val mockDevice1 = createMockBluetoothDevice("Shimmer\_1234")
+            val mockDevice2 = createMockBluetoothDevice("Shimmer\_5678")
             val discoveredDevices = listOf(mockDevice1, mockDevice2)
 
             \texttt{when}(bluetoothAdapter.isEnabled).thenReturn(true)
@@ -1089,7 +1081,7 @@ the sensor.
         @Test
         fun \texttt{connection to Shimmer device should configure sensors correctly}() = runTest {
             // Arrange
-            val mockDevice = createMockBluetoothDevice("Shimmer_1234")
+            val mockDevice = createMockBluetoothDevice("Shimmer\_1234")
             val mockShimmer = mock<Shimmer>()
 
             \texttt{when}(shimmerManager.createShimmer(mockDevice)).thenReturn(mockShimmer)
@@ -1114,7 +1106,7 @@ In these tests: - We simulate the Bluetooth environment:
 fake callback for discovery which immediately "finds" two mock devices
 and finishes, to see that our \texttt{discoverDevices()} method correctly
 returns a list of found devices. - We test connecting to a device: using
-a \texttt{ShimmerManager} factory to get a \texttt{Shimmer} device instance, we
+a ShimmerManager factory to get a Shimmer device instance, we
 simulate a successful connection and configuration. We then verify that
 the GSR sensor and any required additional sensors (like an
 accelerometer for motion data) are included in the configuration passed
@@ -1150,101 +1142,101 @@ cases.
     import pytest
     import numpy as np
     from unittest.mock import Mock, patch, AsyncMock
-    from src.calibration.calibration_manager import CalibrationManager
-    from src.calibration.calibration_processor import CalibrationProcessor
+    from src.calibration.calibration\_manager import CalibrationManager
+    from src.calibration.calibration\_processor import CalibrationProcessor
 
     class TestCalibrationManager:
 
         @pytest.fixture
-        def calibration_manager(self):
+        def calibration\_manager(self):
             return CalibrationManager()
 
         @pytest.fixture
-        def sample_calibration_images(self):
+        def sample\_calibration\_images(self):
             """Generate synthetic calibration images for testing."""
             images = []
             for i in range(15):  # Minimum required images
                 image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
                 # Add synthetic chessboard pattern to the image (simplified for test)
-                image = self._add_chessboard_pattern(image)
+                image = self.\_add\_chessboard\_pattern(image)
                 images.append(image)
             return images
 
-        def test_camera_calibration_with_sufficient_images(self, calibration_manager, sample_calibration_images):
+        def test\_camera\_calibration\_with\_sufficient\_images(self, calibration\_manager, sample\_calibration\_images):
             """Test successful calibration with sufficient number of images."""
             # Arrange
-            pattern_config = PatternConfig(
-                pattern_type=PatternType.CHESSBOARD,
-                pattern_size=(9, 6),
-                square_size=25.0
+            pattern\_config = PatternConfig(
+                pattern\_type=PatternType.CHESSBOARD,
+                pattern\_size=(9, 6),
+                square\_size=25.0
             )
 
             # Act
-            result = calibration_manager.perform_camera_calibration(
-                sample_calibration_images, 
-                pattern_config
+            result = calibration\_manager.perform\_camera\_calibration(
+                sample\_calibration\_images, 
+                pattern\_config
             )
 
             # Assert
             assert result.success
-            assert result.intrinsic_matrix is not None
-            assert result.distortion_coefficients is not None
-            assert result.reprojection_error < 1.0  # Sub-pixel accuracy threshold
-            assert len(result.quality_metrics) > 0   # Some quality metrics (e.g., per-view error) should be reported
+            assert result.intrinsic\_matrix is not None
+            assert result.distortion\_coefficients is not None
+            assert result.reprojection\_error < 1.0  # Sub-pixel accuracy threshold
+            assert len(result.quality\_metrics) > 0   # Some quality metrics (e.g., per-view error) should be reported
 
-        def test_calibration_with_insufficient_images(self, calibration_manager):
+        def test\_calibration\_with\_insufficient\_images(self, calibration\_manager):
             """Test calibration failure when providing too few images."""
             # Arrange
-            insufficient_images = [np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8) for _ in range(3)]
-            pattern_config = PatternConfig(
-                pattern_type=PatternType.CHESSBOARD,
-                pattern_size=(9, 6),
-                square_size=25.0
+            insufficient\_images = [np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8) for \_ in range(3)]
+            pattern\_config = PatternConfig(
+                pattern\_type=PatternType.CHESSBOARD,
+                pattern\_size=(9, 6),
+                square\_size=25.0
             )
 
             # Act
-            result = calibration_manager.perform_camera_calibration(
-                insufficient_images, 
-                pattern_config
+            result = calibration\_manager.perform\_camera\_calibration(
+                insufficient\_images, 
+                pattern\_config
             )
 
             # Assert
             assert not result.success
-            assert "insufficient" in result.error_message.lower()
+            assert "insufficient" in result.error\_message.lower()
 
-        @patch('src.calibration.calibration_processor.cv2.findChessboardCorners')
-        def test_pattern_detection_failure_handling(self, mock_find_corners, calibration_manager, sample_calibration_images):
+        @patch('src.calibration.calibration\_processor.cv2.findChessboardCorners')
+        def test\_pattern\_detection\_failure\_handling(self, mock\_find\_corners, calibration\_manager, sample\_calibration\_images):
             """Test handling of pattern detection failures."""
             # Arrange
-            mock_find_corners.return_value = (False, None)  # Simulate OpenCV failing to find pattern
-            pattern_config = PatternConfig(
-                pattern_type=PatternType.CHESSBOARD,
-                pattern_size=(9, 6),
-                square_size=25.0
+            mock\_find\_corners.return\_value = (False, None)  # Simulate OpenCV failing to find pattern
+            pattern\_config = PatternConfig(
+                pattern\_type=PatternType.CHESSBOARD,
+                pattern\_size=(9, 6),
+                square\_size=25.0
             )
 
             # Act
-            result = calibration_manager.perform_camera_calibration(
-                sample_calibration_images, 
-                pattern_config
+            result = calibration\_manager.perform\_camera\_calibration(
+                sample\_calibration\_images, 
+                pattern\_config
             )
 
             # Assert
             assert not result.success
-            assert "pattern detection" in result.error_message.lower()
+            assert "pattern detection" in result.error\_message.lower()
 
-        def _add_chessboard_pattern(self, image: np.ndarray) -> np.ndarray:
+        def \_add\_chessboard\_pattern(self, image: np.ndarray) -> np.ndarray:
             """Overlay a synthetic chessboard pattern on the image for testing."""
             # (Implementation detail omitted – could draw a checkerboard on the image)
             return image
 
 Key points in these tests: - Using a pytest fixture to generate
-\texttt{sample_calibration_images}: we create an array of synthetic images with
+\texttt{sample\_calibration\_images}: we create an array of synthetic images with
 random noise and then overlay a chessboard pattern on them. This
 simulates the input that would come from a real camera during
 calibration. We ensure we generate at least the minimum number of images
 required (15 in this case) to test the successful path. - \textbf{Successful
-calibration test:} We call \texttt{perform_camera_calibration} with sufficient
+calibration test:} We call \texttt{perform\_camera\_calibration} with sufficient
 images and a correct pattern config. We expect a success result with an
 intrinsic matrix and distortion coefficients computed. We also assert
 the reprojection error is below 1.0 pixels, meaning the calibration
@@ -1283,68 +1275,68 @@ required precision.
     class TestSynchronizationEngine:
 
         @pytest.fixture
-        def sync_engine(self):
+        def sync\_engine(self):
             return SynchronizationEngine()
 
         @pytest.fixture
-        def mock_devices(self):
+        def mock\_devices(self):
             """Create mock devices for synchronization testing."""
             devices = []
             for i in range(4):
                 device = Mock()
-                device.id = f"device_{i}"
-                device.send_sync_request = AsyncMock()
+                device.id = f"device\_{i}"
+                device.send\_sync\_request = AsyncMock()
                 devices.append(device)
             return devices
 
         @pytest.mark.asyncio
-        async def test_device_synchronization_success(self, sync_engine, mock_devices):
+        async def test\_device\_synchronization\_success(self, sync\_engine, mock\_devices):
             """Test successful multi-device synchronization within precision requirements."""
             # Arrange
-            reference_time = time.time()
-            # Simulate each device responding with a timestamp close to reference_time
-            for device in mock_devices:
+            reference\_time = time.time()
+            # Simulate each device responding with a timestamp close to reference\_time
+            for device in mock\_devices:
                 # The device's own timestamp plus some small network delay
-                device.send_sync_request.return_value = SyncResponse(
-                    device_timestamp=reference_time + random.uniform(-0.001, 0.001),  # within 1ms of reference
-                    response_time=time.time() + 0.01  # simulate ~10ms round-trip
+                device.send\_sync\_request.return\_value = SyncResponse(
+                    device\_timestamp=reference\_time + random.uniform(-0.001, 0.001),  # within 1ms of reference
+                    response\_time=time.time() + 0.01  # simulate ~10ms round-trip
                 )
-            sync_engine.devices = mock_devices
+            sync\_engine.devices = mock\_devices
 
             # Act
-            sync_results = await sync_engine.synchronize_all()
+            sync\_results = await sync\_engine.synchronize\_all()
 
             // Assert
-            assert sync_results.max_deviation < 0.005  # max deviation less than 5ms
-            assert sync_results.mean_deviation < 0.002  # mean deviation less than 2ms
-            assert sync_results.std_deviation < 0.001  # very low jitter
+            assert sync\_results.max\_deviation < 0.005  # max deviation less than 5ms
+            assert sync\_results.mean\_deviation < 0.002  # mean deviation less than 2ms
+            assert sync\_results.std\_deviation < 0.001  # very low jitter
 
             # Check that each device's sync method was called exactly once
-            for device in mock_devices:
-                device.send_sync_request.assert_awaited()
+            for device in mock\_devices:
+                device.send\_sync\_request.assert\_awaited()
 
         @pytest.mark.asyncio
-        async def test_sync_handles_device_timeouts(self, sync_engine, mock_devices):
+        async def test\_sync\_handles\_device\_timeouts(self, sync\_engine, mock\_devices):
             """Test that synchronization continues even if a device fails to respond."""
             # Arrange
-            # Let one device timeout (send_sync_request never returns)
-            mock_devices[0].send_sync_request = AsyncMock(side_effect=asyncio.TimeoutError)
-            for device in mock_devices[1:]:
-                device.send_sync_request.return_value = SyncResponse(
-                    device_timestamp=time.time(), response_time=time.time() + 0.01
+            # Let one device timeout (send\_sync\_request never returns)
+            mock\_devices[0].send\_sync\_request = AsyncMock(side\_effect=asyncio.TimeoutError)
+            for device in mock\_devices[1:]:
+                device.send\_sync\_request.return\_value = SyncResponse(
+                    device\_timestamp=time.time(), response\_time=time.time() + 0.01
                 )
-            sync_engine.devices = mock_devices
+            sync\_engine.devices = mock\_devices
 
             # Act
-            sync_results = await sync_engine.synchronize_all()
+            sync\_results = await sync\_engine.synchronize\_all()
 
             # Assert
-            assert sync_results.success  # overall sync can still succeed
-            assert "device_0" in sync_results.warnings  # a warning or note about the timed-out device
+            assert sync\_results.success  # overall sync can still succeed
+            assert "device\_0" in sync\_results.warnings  # a warning or note about the timed-out device
             # The other devices should have been synchronized (e.g., check their offsets are set, not shown here)
 
 In these tests: - We create mock device objects that have an async
-method \texttt{send_sync_request}, which represents asking the device to
+method \texttt{send\_sync\_request}, which represents asking the device to
 participate in sync (perhaps by sending back its current time). - In the
 success test, we simulate each device returning a timestamp within ±1ms
 of a reference time (which is simulating that all devices were roughly
@@ -1446,34 +1438,34 @@ t', the difference \|t - t'\| is consistently below 5 ms across the
 test duration).
 
 Much of this was supported by our \textbf{integration test framework}
-(\texttt{evaluation_suite/integration}) which automated multi-device scenarios.
+(\texttt{evaluation\_suite/integration}) which automated multi-device scenarios.
 For example, one integration test in code (simplified for illustration)
 might look like:
 
-    async def test_multi_device_session_end_to_end():
+    async def test\_multi\_device\_session\_end\_to\_end():
         # Setup: launch one PC server and two Android client simulators
-        pc = launch_pc_controller_test_instance()
-        device1 = launch_android_app_simulator(device_id="A1")
-        device2 = launch_android_app_simulator(device_id="A2")
-        await wait_for_discovery(pc, [device1, device2])
+        pc = launch\_pc\_controller\_test\_instance()
+        device1 = launch\_android\_app\_simulator(device\_id="A1")
+        device2 = launch\_android\_app\_simulator(device\_id="A2")
+        await wait\_for\_discovery(pc, [device1, device2])
         # All devices discovered by PC
 
         # Start session from PC
-        session_config = {...}
-        start_ok = await pc.send_start_session(session_config)
-        assert start_ok
+        session\_config = {...}
+        start\_ok = await pc.send\_start\_session(session\_config)
+        assert start\_ok
 
         # Simulate devices sending data
-        await simulate_data_stream(device1, data_rate=50)  # 50 packets/sec
-        await simulate_data_stream(device2, data_rate=50)
+        await simulate\_data\_stream(device1, data\_rate=50)  # 50 packets/sec
+        await simulate\_data\_stream(device2, data\_rate=50)
         await asyncio.sleep(5)  # run session for 5 seconds
 
         # Stop session from PC
-        stop_ok = await pc.send_stop_session()
-        assert stop_ok
+        stop\_ok = await pc.send\_stop\_session()
+        assert stop\_ok
 
         # Validate results
-        data = pc.get_collected_data()
+        data = pc.get\_collected\_data()
         assert len(data["A1"]) > 0 and len(data["A2"]) > 0
         # Check that last timestamps of A1 and A2 differ by <5ms (synchronized)
         assert abs(data["A1"][-1].timestamp - data["A2"][-1].timestamp) < 0.005
@@ -1579,61 +1571,61 @@ For example, one full system test scenario we executed was a
     class TestCompleteSystemWorkflow:
 
         @pytest.fixture
-        async def full_system_setup(self):
+        async def full\_system\_setup(self):
             system = SystemTestHarness()
             # Initialize PC controller (headless mode)
-            await system.start_pc_controller()
+            await system.start\_pc\_controller()
             # Set up 4 simulated Android devices
-            await system.setup_android_simulators(count=4)
+            await system.setup\_android\_simulators(count=4)
             # Configure a controlled network environment (latency, bandwidth)
-            await system.configure_network(bandwidth=100_000_000, latency=10, packet_loss=0.1)
+            await system.configure\_network(bandwidth=100\_000\_000, latency=10, packet\_loss=0.1)
             yield system
             # Cleanup after test
             await system.cleanup()
 
         @pytest.mark.asyncio
-        async def test_multi_participant_research_session(self, full_system_setup):
-            system = full_system_setup
+        async def test\_multi\_participant\_research\_session(self, full\_system\_setup):
+            system = full\_system\_setup
             # Phase 1: System Preparation
-            research_config = ResearchSessionConfig(
-                participant_count=4,
-                session_duration=300,  # 5 minutes
-                data_collection_modes=[
-                    DataMode.RGB_VIDEO,
-                    DataMode.THERMAL_IMAGING,
-                    DataMode.GSR_MEASUREMENT
+            research\_config = ResearchSessionConfig(
+                participant\_count=4,
+                session\_duration=300,  # 5 minutes
+                data\_collection\_modes=[
+                    DataMode.RGB\_VIDEO,
+                    DataMode.THERMAL\_IMAGING,
+                    DataMode.GSR\_MEASUREMENT
                 ],
-                quality_requirements=QualityRequirements(
-                    min_frame_rate=30,
-                    max_sync_deviation=0.005,  # 5ms max deviation
-                    min_signal_quality=20      # minimum SNR for GSR in dB
+                quality\_requirements=QualityRequirements(
+                    min\_frame\_rate=30,
+                    max\_sync\_deviation=0.005,  # 5ms max deviation
+                    min\_signal\_quality=20      # minimum SNR for GSR in dB
                 )
             )
-            prep_result = await system.prepare_research_session(research_config)
-            assert prep_result.success
-            assert len(prep_result.ready_devices) == 4
+            prep\_result = await system.prepare\_research\_session(research\_config)
+            assert prep\_result.success
+            assert len(prep\_result.ready\_devices) == 4
 
             # Phase 2: Calibration Verification (e.g., check all devices calibrated their thermal camera)
-            calibration_status = await system.verify_calibration_status()
-            assert calibration_status.all_devices_calibrated
-            assert calibration_status.calibration_quality >= 0.8  # e.g., all calibrations at least 80% quality score
+            calibration\_status = await system.verify\_calibration\_status()
+            assert calibration\_status.all\_devices\_calibrated
+            assert calibration\_status.calibration\_quality >= 0.8  # e.g., all calibrations at least 80% quality score
 
             # Phase 3: Session Execution
-            session_result = await system.execute_research_session(research_config)
-            assert session_result.success
-            assert session_result.data_quality.overall_score >= 0.85
+            session\_result = await system.execute\_research\_session(research\_config)
+            assert session\_result.success
+            assert session\_result.data\_quality.overall\_score >= 0.85
 
             # Phase 4: Data Validation
-            validation_result = await system.validate_collected_data()
-            assert validation_result.temporal_consistency  # timestamps aligned
-            assert validation_result.data_completeness >= 0.99  # at least 99% of expected data present
-            assert validation_result.signal_quality >= research_config.quality_requirements.min_signal_quality
+            validation\_result = await system.validate\_collected\_data()
+            assert validation\_result.temporal\_consistency  # timestamps aligned
+            assert validation\_result.data\_completeness >= 0.99  # at least 99% of expected data present
+            assert validation\_result.signal\_quality >= research\_config.quality\_requirements.min\_signal\_quality
 
             # Phase 5: Export Verification
-            export_result = await system.export_session_data()
-            assert export_result.success
-            assert len(export_result.exported_files) > 0
-            assert export_result.data_integrity_verified
+            export\_result = await system.export\_session\_data()
+            assert export\_result.success
+            assert len(export\_result.exported\_files) > 0
+            assert export\_result.data\_integrity\_verified
 
 This end-to-end test goes through multiple \textbf{phases}: 1.
 \textbf{Preparation:} Equivalent to a researcher setting up a new session
@@ -1662,15 +1654,15 @@ was below limits throughout the session. 4. \textbf{Data Validation:} After
 stopping the session, we invoke validation checks on the collected
 dataset. Temporal consistency means across the 5-minute session, all
 data streams share a common timeline (no drift beyond a few
-milliseconds). Data completeness ≥ 99% means essentially no significant
+milliseconds). Data completeness \$\geq\$ 99% means essentially no significant
 data loss (if we expected 5 min × 60 FPS from each camera, each should
-have \~18000 frames; completeness 99% means at most 180 frames dropped,
-which is acceptable). Signal quality ≥ required means, for example, the
+have \$\sim\$18000 frames; completeness 99% means at most 180 frames dropped,
+which is acceptable). Signal quality \$\geq\$ required means, for example, the
 GSR SNR was above 20 dB on average (so minimal noise/artifact). 5.
 \textbf{Export Verification:} Finally, the test simulates the user exporting
 the recorded data (e.g., saving to files or a database). It asserts that
 this succeeds and that the output files are indeed created and contain
-valid data (data_integrity_verified could involve checksums or just
+valid data (data\_integrity\_verified could involve checksums or just
 confirming file sizes and basic format).
 
 This comprehensive system test touches on every major aspect of the
@@ -1678,17 +1670,17 @@ system in one sweep. It's essentially a dry run of an experiment. By
 automating this, we caught issues such as: - A race condition where not
 all devices would start recording if the start signals were sent too
 quickly; we solved it by implementing a short synchronization delay and
-the test confirmed the fix (previously, \texttt{len(prep_result.ready_devices)}
+the test confirmed the fix (previously, \texttt{len(prep\_result.ready\_devices)}
 might be less than 4 occasionally --- after the fix it was always 4). -
-Ensuring calibration was done: initially, our \texttt{prepare_research_session}
+Ensuring calibration was done: initially, our \texttt{prepare\_research\_session}
 didn't enforce a re-check of calibration, but the test failed the
-calibration_status assert, which led us to integrate an automatic
+calibration\_status assert, which led us to integrate an automatic
 calibration check step into session start if needed. - Ensuring
-data_completeness: in one early run, data_completeness was \~0.95 (5%
+data\_completeness: in one early run, data\_completeness was \$\sim\$0.95 (5%
 data loss) which was too low; analysis revealed a buffer overflow in the
 network when all devices sent data at once at full rate. We addressed
 this by throttling slightly and increasing buffer sizes, and subsequent
-tests showed ≥99% completeness.
+tests showed \$\geq\$99% completeness.
 
 The end-to-end tests were run for various configurations: different
 numbers of devices (1, 2, 4), different data combinations (just GSR, or
@@ -1709,29 +1701,29 @@ across all data sources:
     class TestDataQualityValidation:
 
         @pytest.mark.asyncio
-        async def test_temporal_synchronization_accuracy(self):
+        async def test\_temporal\_synchronization\_accuracy(self):
             """Test temporal synchronization accuracy across all data sources."""
             session = TestSession()
-            await session.start_recording(duration=60)  # record for 60 seconds with, say, 2 devices
+            await session.start\_recording(duration=60)  # record for 60 seconds with, say, 2 devices
             # Collect temporal logs from all sources
-            temporal_data = await session.extract_temporal_data()
+            temporal\_data = await session.extract\_temporal\_data()
 
             # Analyze synchronization
-            sync_analysis = TemporalSynchronizationAnalyzer()
-            sync_results = sync_analysis.analyze(temporal_data)
+            sync\_analysis = TemporalSynchronizationAnalyzer()
+            sync\_results = sync\_analysis.analyze(temporal\_data)
 
-            assert sync_results.max_deviation < 0.005  # max deviation < 5ms
-            assert sync_results.mean_deviation < 0.002  # mean deviation < 2ms
-            assert sync_results.std_deviation < 0.001  # low jitter
+            assert sync\_results.max\_deviation < 0.005  # max deviation < 5ms
+            assert sync\_results.mean\_deviation < 0.002  # mean deviation < 2ms
+            assert sync\_results.std\_deviation < 0.001  # low jitter
 
             # Validate timestamp monotonicity
-            for source in temporal_data.sources:
-                timestamps = temporal_data.get_timestamps(source)
-                gaps = self._calculate_timestamp_gaps(timestamps)
+            for source in temporal\_data.sources:
+                timestamps = temporal\_data.get\_timestamps(source)
+                gaps = self.\_calculate\_timestamp\_gaps(timestamps)
                 assert all(gap > 0 for gap in gaps), "No non-positive timestamp gaps (monotonic increase)"
 
         # helper for gaps
-        def _calculate_timestamp_gaps(self, timestamps):
+        def \_calculate\_timestamp\_gaps(self, timestamps):
             return [timestamps[i+1] - timestamps[i] for i in range(len(timestamps)-1)]
 
 This test essentially re-checks that the synchronization mechanism kept
@@ -1751,17 +1743,17 @@ and stability criteria. For example, after a test session, we run a GSR
 quality analyzer:
 
     # Analyze GSR signal quality
-    gsr_quality = GSRQualityAnalyzer().analyze(recorded_gsr_samples)
-    assert gsr_quality.signal_to_noise_ratio > 20  # >20 dB SNR required
-    assert gsr_quality.sampling_rate_consistency > 0.99  # >99% of samples at correct rate
-    assert gsr_quality.baseline_stability > 0.8  # baseline drift within acceptable range
+    gsr\_quality = GSRQualityAnalyzer().analyze(recorded\_gsr\_samples)
+    assert gsr\_quality.signal\_to\_noise\_ratio > 20  # >20 dB SNR required
+    assert gsr\_quality.sampling\_rate\_consistency > 0.99  # >99% of samples at correct rate
+    assert gsr\_quality.baseline\_stability > 0.8  # baseline drift within acceptable range
 
 This ensures that our GSR data collection process (hardware + software)
 is delivering a clean signal: an SNR above 20 dB means the physiological
 changes stand clearly above any sensor/electrical noise;
-sampling_rate_consistency 0.99 means very few or no samples were dropped
+sampling\_rate\_consistency 0.99 means very few or no samples were dropped
 or irregular (the Shimmer should sample at 512 Hz reliably, and our
-logging thread kept up); baseline_stability \> 0.8 might mean the GSR
+logging thread kept up); baseline\_stability \> 0.8 might mean the GSR
 baseline didn't wander excessively due to, say, temperature or sweat
 accumulation over time (this might be measured by seeing that the
 low-frequency trend is mostly flat).
@@ -1769,10 +1761,10 @@ low-frequency trend is mostly flat).
 Similarly, for the thermal camera data, we had a
 \texttt{ThermalQualityAnalyzer}:
 
-    thermal_quality = ThermalQualityAnalyzer().analyze(recorded_thermal_frames)
-    assert thermal_quality.temperature_accuracy < 0.1  # within 0.1°C of reference
-    assert thermal_quality.spatial_resolution >= 160   # at least 160x120 effective resolution
-    assert thermal_quality.temporal_stability > 0.9    # minimal fluctuation when scene is static
+    thermal\_quality = ThermalQualityAnalyzer().analyze(recorded\_thermal\_frames)
+    assert thermal\_quality.temperature\_accuracy < 0.1  # within 0.1\textdegree C of reference
+    assert thermal\_quality.spatial\_resolution >= 160   # at least 160x120 effective resolution
+    assert thermal\_quality.temporal\_stability > 0.9    # minimal fluctuation when scene is static
 
 This would require having some reference or known target for the thermal
 data. In practice, we might have recorded a static scene of a known
@@ -1797,7 +1789,7 @@ Investigating, we found that the thread capturing thermal data had an
 unpredictable slight delay. We modified the synchronization algorithm to
 correct for that by timestamping at the source (device) and trusting
 those stamps more, and the next test run showed thermal vs video
-alignment within \~3ms, thus passing the \<5ms criterion. This
+alignment within \$\sim\$3ms, thus passing the \$<\$5ms criterion. This
 demonstrates how these tests directly led to improvements in the
 system's research applicability.
 
@@ -1834,35 +1826,35 @@ their target values:
   Performance      Target Value   Measured Value Achievement    Statistical
   Metric                                         Rate           Confidence
   ------------------------ --------------------- --------------------- --------------------- ---------------------
-  **End-to-End     ≥ 90% runs     71.4% ± 5.2%   *Needs         Based on 7
-  Test Success**   succeed                       Improvement*   suite runs
-                                                 (79% of        (variability
+  End-to-End     $\geq$ 90\% runs     71.4\% ± 5.2\%   Needs         Based on 7
+  Test Success   succeed                       Improvement   suite runs
+                                                 (79\% of        (variability
                                                  target)        observed)
 
-  \textbf{Network        \< 100 ms      1---500 ms      Variable       Extensive
+  Network        $<$ 100 ms      1---500 ms      Variable       Extensive
   Latency          added delay    (adaptive)     (acceptable up network
-  Tolerance}                                    to 500 ms)     resilience
+  Tolerance                                    to 500 ms)     resilience
                                                                 testing
 
-  \textbf{Device         ≥ 4 devices    4 devices      100% (meets    Multi-device
-  Coordination}                  (tested)       target)        coordination
+  Device         $\geq$ 4 devices    4 devices      100\% (meets    Multi-device
+  Coordination                  (tested)       target)        coordination
                                                                 validated (max
                                                                 tested = 4)
 
-  \textbf{Data           100% no        100%           100% (target   Verified via
-  Integrity}      corruption                    met)           checksums on
+  Data           100\% no        100\%           100\% (target   Verified via
+  Integrity      corruption                    met)           checksums on
                                                                 all data
                                                                 packets
 
-  \textbf{Test Suite     \< 300 s (all  272 s ± 15 s   109% (9%       95% confidence
-  Duration}       tests)                        faster)        interval over
+  Test Suite     $<$ 300 s (all  272 s ± 15 s   109\% (9\%       95\% confidence
+  Duration       tests)                        faster)        interval over
                                                                 runs
 
-  \textbf{Connection     ≥ 95% success  100% success   105% (exceeded Simulated
-  Recovery}                                     target)        dropout
+  Connection     $\geq$ 95\% success  100\% success   105\% (exceeded Simulated
+  Recovery                                     target)        dropout
                                                                 scenarios
 
-  **Message Loss   \< 10% loss    0---6.7%        \textit{Variable}     Dependent on
+  Message Loss   $<$ 10\% loss    0---6.7\%        \textit{Variable}     Dependent on
   Tolerance**                     observed       (within target severity of
                                                  range)         network issues
   ------------------------------------------------------------------------------------------------------------------
@@ -1878,7 +1870,7 @@ checks in protocol), test suite speed (running the whole test suite took
 about 4.5 minutes, which is within the 5 minute target), and automatic
 connection recovery (devices recovering from induced failures every time
 in testing) were all excellent. Message loss tolerance varied; in
-worst-case network simulations (very high packet loss), up to \~6.7% of
+worst-case network simulations (very high packet loss), up to \$\sim\$6.7% of
 messages were lost, which is below the 10% threshold, but indicates the
 system is reasonably robust to network unreliability up to a point.
 
@@ -1901,19 +1893,19 @@ not performed due to hardware limits):
   Count       Latency      Loss       Success                   Success    
               (avg)                                                        
   ---------------- ------------------ --------------- ------------------ ------------------ --------------- ----------------------
-  \textbf{1         \~1.0 ms     0%         100%         Excellent    100%       Baseline
-  Device}                                         (baseline)              performance
+  1         $\sim$1.0 ms     0\%         100\%         Excellent    100\%       Baseline
+  Device                                      (baseline)              performance
                                                                            (single device)
 
-  \textbf{2         \~1.2 ms     0%         100%         Excellent    100%       Linear scaling
-  Devices}                                                                so far
+  2         $\sim$1.2 ms     0\%         100\%         Excellent    100\%       Linear scaling
+  Devices                                                             so far
 
-  \textbf{4         46---198 ms   0---6.7%    100%         Good (slight 100%       Max tested
-  Devices}   (peak                                drift)                  configuration
+  4         46---198 ms   0---6.7\%    100\%         Good (slight 100\%       Max tested
+  Devices   (peak                                drift)                  configuration
               ranges)                                                      
 
-  **8+        \textit{Not tested} N/A        N/A          N/A          N/A        Future work
-  Devices\textbf{                                                                (expected need
+  8+        \textit{Not tested} N/A        N/A          N/A          N/A        Future work
+  Devices                                                                (expected need
                                                                            for
                                                                            optimization)
   ------------------------------------------------------------------------------------------------------------------------------------
@@ -1922,7 +1914,7 @@ Up to 4 devices, the system scaled well: all connections successful,
 synchronization remained good (though we noticed a slight increase in
 sync deviation at 4 devices, still within requirements), and network
 latency per device remained low on average (though with 4 devices
-saturating Wi-Fi, we saw occasional spikes up to \~0.2 s latency for
+saturating Wi-Fi, we saw occasional spikes up to \$\sim\$0.2 s latency for
 some packets, which did not affect success rate but did reduce sync
 quality slightly ---- still within our 5ms drift on average). We flagged
 that beyond 4 devices, careful attention would be needed; the table
@@ -1933,28 +1925,28 @@ data or further protocol tuning to handle more devices concurrently.
 Stress testing under varying network conditions (Table 5.4) demonstrated
 the system's robustness:
 
-}Table 5.4: Stress Testing Results Under Network Conditions\textbf{
+Table 5.4: Stress Testing Results Under Network Conditions
 
   ---------------------------------------------------------------------------------------------------------------------------
   Network        Duration    Network           System        Message     Data
   Scenario                   Characteristics   Response      Success     Integrity
   --------------------- ---------------- ------------------------- ------------------- ---------------- ----------------
-  }Ideal        20 s        1 ms latency, 0%  Optimal       100%        100%
-  Network\textbf{                  loss (wired)      performance               preserved
+  Ideal            20 s        1 ms latency, 0\%  Optimal       100\%        100\%
+  Network                        loss (wired)      performance               preserved
 
-  }High         21.5 s      500 ms latency,   Graceful      100%        100%
-  Latency\textbf{                  0% loss           adaptation                preserved
+  High             21.5 s      500 ms latency,   Graceful      100\%        100\%
+  Latency                        0\% loss           adaptation                preserved
 
-  }Packet Loss  20.8 s      50 ms latency, 5% Error         \~98%       100%
-  Burst\textbf{                    loss bursts       recovery                  preserved
-                                               active                    
+  Packet Loss      20.8 s      50 ms latency, 5\% Error         $\sim$98\%       100\%
+  Burst                          loss bursts       recovery                  preserved
+                                                   active
 
-  }Limited      21.6 s      100 ms latency,   Adaptive data \~98%       100%
-  Bandwidth\textbf{                1% loss, 1 Mbps   throttling                preserved
+  Limited          21.6 s      100 ms latency,   Adaptive data $\sim$98\%       100\%
+  Bandwidth                      1\% loss, 1 Mbps   throttling                preserved
 
-  }Unstable     20.8 s      200 ms latency,   Connection    \~93%       100%
-  Connection\textbf{               3% loss, varying  recovery                  preserved
-                             BW                                          
+  Unstable         20.8 s      200 ms latency,   Connection    $\sim$93\%       100\%
+  Connection                     3\% loss, varying  recovery                  preserved
+                                 BW
   ---------------------------------------------------------------------------------------------------------------------------
 
 In each scenario, the system maintained data integrity (thanks to
@@ -1963,17 +1955,17 @@ through) and a high message success rate. Under extreme conditions like
 an unstable connection (combining latency and loss and bandwidth drops),
 about 7% of messages were dropped. However, the system's design ensures
 that critical messages (like session control commands) have
-acknowledgment and retry, so they were not lost. The \~93% overall
+acknowledgment and retry, so they were not lost. The \$\sim\$93% overall
 success in that worst scenario refers mainly to non-critical data
 packets; even then, missing 7% of data in a very poor network is
 acceptable for short periods, and the system logs these incidents. More
-importantly, it }recovers\textbf{ automatically when the network improves (in
+importantly, it recovers automatically when the network improves (in
 tests, after conditions normalized, devices seamlessly resumed full data
 rate).
 
 \subsection{Reliability and Long-Duration Testing}
 
-To validate reliability, we conducted }endurance tests\textbf{ where the
+To validate reliability, we conducted endurance tests where the
 system runs continuously for extended periods (several hours to days).
 These tests are crucial for research usage because experiments can be
 long, and the system must not degrade or crash over time.
@@ -1981,31 +1973,31 @@ long, and the system must not degrade or crash over time.
 Table 5.5 shows metrics from an extended 168-hour (1 week) continuous
 run test and other long-run scenarios:
 
-}Table 5.5: Extended Operation Reliability Metrics\textbf{
+Table 5.5: Extended Operation Reliability Metrics
 
   ---------------------------------------------------------------------------------------------------------------
   Reliability    Target         Measured Value Test Duration  Statistical
   Metric                                                      Significance
   --------------------- --------------------- --------------------- --------------------- ---------------------
-  }System       ≥ 99.5%        **99.73% ±     168 hours (7   \textit{p} \< 0.001
-  Uptime\textbf{                      0.12%}        days)          (highly
+  System       $\geq$ 99.5\%        99.73\% ±     168 hours (7   \textit{p} $<$ 0.001
+  Uptime                      0.12\%        days)          (highly
                                                               significant)
 
-  \textbf{Data         ≥ 99%          }99.84% ±     720 sessions   99.9%
-  Collection                    0.08%\textbf{        (simulated)    confidence
-  Success Rate}                                              
+  Data         $\geq$ 99\%          99.84\% ±     720 sessions   99.9\%
+  Collection                    0.08\%        (simulated)    confidence
+  Success Rate
 
-  \textbf{Network      ≥ 98%          }99.21% ±     10,000         \textit{p} \< 0.01
-  Connection                    0.15%\textbf{        connection     
-  Stability}                                  events         
+  Network      $\geq$ 98\%          99.21\% ±     10,000         \textit{p} $<$ 0.01
+  Connection                    0.15\%        connection
+  Stability                                  events
 
-  \textbf{Automatic    ≥ 95%          }98.7% ±      156 failure    95% confidence
-  Recovery                      1.2%\textbf{         scenarios      
-  Success}                                                   
+  Automatic    $\geq$ 95\%          98.7\% ±      156 failure    95\% confidence
+  Recovery                      1.2\%         scenarios
+  Success
   ---------------------------------------------------------------------------------------------------------------
 
 These results were extremely positive: - Uptime of 99.73% over a week
-means the system was only down for 0.27% of the time (\~45 minutes in
+means the system was only down for 0.27% of the time (\$\sim\$45 minutes in
 total over 7 days, which included planned maintenance or restarts).
 Essentially, no crashes occurred; any downtime was likely due to
 external factors (like Windows updates forcing a reboot on the PC, which
@@ -2017,8 +2009,8 @@ sessions where a device battery died prematurely or similar minor
 issues. - Network connection stability 99.21% across 10,000
 connect/disconnect events (simulated by repeatedly
 connecting/disconnecting devices) demonstrates that reconnection logic
-works consistently with only \<1% of cases requiring manual
-intervention. That \<1% might correspond to situations like a device
+works consistently with only \$<\$1% of cases requiring manual
+intervention. That \$<\$1% might correspond to situations like a device
 completely powering off and not returning until a manual restart ---
 things outside typical operation or beyond what software alone can
 solve. - Automatic recovery success 98.7% means that in about 98.7% of
@@ -2029,7 +2021,7 @@ exceeded the 95% target, showing strong resilience.
 
 Statistical analysis (p-values, confidence intervals) indicates these
 are reliable metrics, not flukes: for instance, uptime significantly
-above 99.5% target (p\<0.001 means the chance that the true uptime is
+above 99.5% target (p\$<\$0.001 means the chance that the true uptime is
 below target is negligible given observed data). The high confidence in
 data success rate similarly indicates the system reliably collects data
 across sessions.
@@ -2055,10 +2047,10 @@ with screen on brightest) in a warm environment to see if they
 overheated or throttled. They did warm up, and the internal thermal
 management on phones did throttle CPU a bit, but our app handled it by
 slightly reducing frame rate to keep up, which is acceptable. No device
-shut down due to thermal overload during our stress test (which ran \~1
-hour in \~30°C ambient, pushing devices hard). On the PC side, we
+shut down due to thermal overload during our stress test (which ran \$\sim\$1
+hour in \$\sim\$30\textdegree C ambient, pushing devices hard). On the PC side, we
 stressed with multiple simultaneous video decoding tasks and ensured the
-application remained responsive (it did, using \~70% CPU on a quad-core
+application remained responsive (it did, using \$\sim\$70% CPU on a quad-core
 machine, under our 80% target).
 
 \textbf{Error Recovery Testing:} A subset of reliability tests focused on how
@@ -2109,17 +2101,17 @@ issues for each category:
   Testing Level   Coverage Scope    Test Cases   Pass Rate   Critical   Resolution      Confidence
                                     (executed)               Issues     Status          Level
   ---------------------- ------------------------- ------------------ ---------------- --------------- ---------------------- ------------------
-  \textbf{Unit          Individual        1,247 tests  98.7\%       3 critical ✅ Resolved     99.9\%
+  \textbf{Unit          Individual        1,247 tests  98.7\%       3 critical \checkmark Resolved     99.9\%
   Testing}       functions \&                                                           
                   methods                                                               
 
-  \textbf{Component     Modules and       342 tests    99.1\%       1 critical ✅ Resolved     99.8\%
+  \textbf{Component     Modules and       342 tests    99.1\%       1 critical \checkmark Resolved     99.8\%
   Testing}       classes                                                               
 
-  \textbf{Integration   Inter-component   156 tests    97.4\%       2 critical ✅ Resolved     99.5\%
+  \textbf{Integration   Inter-component   156 tests    97.4\%       2 critical \checkmark Resolved     99.5\%
   Testing}       communication                                                         
 
-  \textbf{System        End-to-end        89 tests     96.6\%       1 critical ✅ Resolved     99.2\%
+  \textbf{System        End-to-end        89 tests     96.6\%       1 critical \checkmark Resolved     99.2\%
   Testing}       workflows                                                             
 
   \textbf{Performance   Load \& stress     45 tests     94.4\%       0 critical N/A (none)      98.7\%
@@ -2140,7 +2132,7 @@ issues for each category:
   Validation}    accuracy \&                                                            
                   precision                                                             
 
-  **Overall       Comprehensive     618 tests\\textit{  }Pending*   Env.       🔧 In progress  Config.
+  **Overall       Comprehensive     618 tests\\textit{  }Pending*   Env.       In progress In progress  Config.
   System**        system validation                          issues                     required
   ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2177,12 +2169,12 @@ intuitive --- not failures, but opportunities to improve user
 experience). - \textbf{Research validation tests} (those comparing data to
 references, checking accuracy) were at 97% pass. A couple of tests
 flagged minor discrepancies (for instance, one device's temperature
-reading had a consistent 0.2°C bias vs a reference --- not critical but
+reading had a consistent 0.2\textdegree C bias vs a reference --- not critical but
 something noted for future calibration improvement).
 
 Overall, about \textbf{240+} distinct test methods were executed (if we count
 parameterizations and internal checks, the number is larger as shown in
-table). The combined \textbf{pass rate was \~99.5%}, meaning the system is
+table). The combined \textbf{pass rate was} $\sim$99.5\%, meaning the system is
 nearly error-free across all tested aspects. No critical defects
 remained open by the end of the testing phase.
 
@@ -2235,10 +2227,10 @@ Acquisition)}: validated by unit tests (camera tests), integration
 tests (data streaming), and actual sessions measuring frame rates
 (achieved 4K@60fps on supported hardware, with 99.7% frame capture rate
 as noted). - \textbf{FR-003 (Thermal Imaging Integration)}: validated through
-device integration tests and accuracy tests (achieved 0.1°C accuracy at
+device integration tests and accuracy tests (achieved 0.1\textdegree C accuracy at
 25 fps, meeting the spec). - \textbf{FR-004 (Reference GSR Measurement)}:
 validated as we could capture GSR at 512 Hz with negligible data loss
-(\<0.1%), confirmed by comparing with reference device data streams. -
+(\$<\$0.1%), confirmed by comparing with reference device data streams. -
 \textbf{FR-005 (Session Management)}: validated through system tests that
 covered start/stop and lifecycle with all edge cases (pauses, resumes,
 multiple sessions sequentially).
@@ -2246,30 +2238,30 @@ multiple sessions sequentially).
 \subsubsection{Performance Benchmarks}
 
 We have already discussed many performance results. In summary: -
-\textbf{Response Times:} The average session start time on the PC was \~1.23
+\textbf{Response Times:} The average session start time on the PC was \$\sim\$1.23
 s (with four devices), well under our 2 s target, and even the max
-observed (p95) was \~2.45
+observed (p95) was \$\sim\$2.45
 s\cite{TopdonTC001},
-which is acceptable. Stopping sessions was faster (\~0.87 s avg). -
-\textbf{Device Sync Response:} Each sync cycle on average took \~0.34 s, max
-\~0.67 s, target was \<1.0 s --- so syncing is quick. - \textbf{Throughput:}
+which is acceptable. Stopping sessions was faster (\$\sim\$0.87 s avg). -
+\textbf{Device Sync Response:} Each sync cycle on average took \$\sim\$0.34 s, max
+\$\sim\$0.67 s, target was \$<\$1.0 s --- so syncing is quick. - \textbf{Throughput:}
 We measured network throughput when all sensors are active. The system
-handled \~45.2 Mbps on average and peaks \~78 Mbps without issue, within
+handled \$\sim\$45.2 Mbps on average and peaks \$\sim\$78 Mbps without issue, within
 the 100 Mbps theoretical Wi-Fi
-budget\cite{DeviceServer}.
+budget.
 This shows we can comfortably stream multiple video feeds and sensor
 data concurrently on a standard network. - \textbf{Resource Utilization:} CPU
-usage on the PC averaged \~67% during heavy recording (peak \~79%),
+usage on the PC averaged \$\sim\$67% during heavy recording (peak \$\sim\$79%),
 under our 80%
-target\cite{MainViewModel}.
-Memory usage averaged \~2.1 GB (peak \~3.4 GB) out of a 4 GB
-budget\cite{MainViewModel},
+target.
+Memory usage averaged \$\sim\$2.1 GB (peak \$\sim\$3.4 GB) out of a 4 GB
+budget,
 which is fine (the PC used had 16 GB RAM, so plenty of headroom). On
-Android devices, CPU stayed under \~70% and no out-of-memory issues were
-observed. - \textbf{Storage Rate:} Data was written to disk at \~3.2 GB/hour
+Android devices, CPU stayed under \$\sim\$70% and no out-of-memory issues were
+observed. - \textbf{Storage Rate:} Data was written to disk at \$\sim\$3.2 GB/hour
 on average (with video + thermal + GSR from multiple devices) and peaked
-at \~7.8 GB/hour when using highest
-settings\cite{MainViewModel}.
+at \$\sim\$7.8 GB/hour when using highest
+settings.
 This is manageable --- a typical experiment of 1 hour can produce a few
 GB of data, which is expected for high-res video; the system's storage
 management (like splitting files) worked properly.
@@ -2283,32 +2275,24 @@ experiments, even with some margin for expansion or additional sensors.
 Having tested all aspects, we revisit the project's requirements to
 ensure each is fulfilled:
 
-##### Functional Requirements Validation
+\subsubsection{Functional Requirements Validation}
 
 All critical functional requirements were successfully validated through
 tests. For reference, here are a few key functional requirements and
 their status:
 
 \begin{itemize}
-\item \textbf{FR-001 Multi-Device Coordination}: ✅ \textit{Validated with up to 8
+\item \textbf{FR-001 Multi-Device Coordination}: \checkmark \textit{Validated with up to 8
   simultaneous devices.} (Tested with 4 physical devices; simulated
   scenario for 8 suggests readiness. The system architecture supports
   adding more with minor configuration.)
-\item \textbf{FR-002 Video Data Acquisition}: ✅ \textit{Achieved 4K @ 60fps recording
-  with 99.7% frame capture rate.} (The slight frame drops were within
-  tolerance and mostly due to device thermal throttling after long
-  durations.)
-\item \textbf{FR-003 Thermal Imaging Integration}: ✅ \textit{Confirmed ±0.1°C accuracy
+\item \textbf{FR-002 Video Data Acquisition}: \checkmark \textit{Achieved 4K @ 60fps recording with 99.7\% frame capture rate.} (The slight frame drops were within tolerance and mostly due to device thermal throttling after long durations.)
+\item \textbf{FR-003 Thermal Imaging Integration}: \checkmark \textit{Confirmed ±0.1\textdegree C accuracy
   at 25 fps for thermal camera data.} (The calibration and data quality
   tests showed the thermal sensor meets the accuracy specification after
   proper calibration.)
-\item \textbf{FR-004 Reference GSR Measurement}: ✅ \textit{Validated 512 Hz GSR
-  sampling with \< 0.1% data loss.} (The Shimmer sensor integration
-  delivered essentially continuous data; any tiny gaps were negligible.
-  Cross-correlation with a reference GSR instrument gave r ≈ 0.89, p \<
-  0.001, indicating strong
-  agreement\cite{MainViewModel}.)
-\item \textbf{FR-005 Session Management}: ✅ \textit{Complete lifecycle management
+\item \textbf{FR-004 Reference GSR Measurement}: \checkmark \textit{Validated 512 Hz GSR sampling with $<$ 0.1\% data loss.} (The Shimmer sensor integration delivered essentially continuous data; any tiny gaps were negligible. Cross-correlation with a reference GSR instrument gave r $\approx$ 0.89, p $<$ 0.001, indicating strong agreement.)
+\item \textbf{FR-005 Session Management}: \checkmark \textit{Complete lifecycle management
   validated.} (Including session creation, configuration, start, stop,
   pause, resume, and data export --- all tested in sequence and
   independently.)
@@ -2318,7 +2302,7 @@ their status:
 statements can be made for each, with test cases covering all
 functionalities from data export to user interface controls.)}
 
-##### Non-Functional Requirements Assessment
+\subsubsection{# Non-Functional Requirements Assessment}
 
 The non-functional requirements (NFRs) ---- covering performance,
 reliability, usability, etc. ---- were likewise assessed:
@@ -2326,19 +2310,19 @@ reliability, usability, etc. ---- were likewise assessed:
   ----------------------------------------------------------------------------------------------------------------
   Requirement        Target            Achieved             Status
   --------------------------- ------------------------- ------------------------------ -------------------------
-  \textbf{System           4+ devices        8 devices            ✅ Exceeded
+  \textbf{System           4+ devices        8 devices            \checkmark Exceeded
   Throughput}                         (supported/tested)   
 
-  \textbf{Response Time}  \< 2 s (start)    1.23 s avg           ✅ Met
+  \textbf{Response Time}  \$<\$ 2 s (start)    1.23 s avg           \checkmark Met
 
-  \textbf{Resource Usage} \< 80% CPU usage  \~67.3% avg          ✅ Met
+  \textbf{Resource Usage} \$<\$ 80% CPU usage  \$\sim\$67.3% avg          \checkmark Met
 
-  \textbf{Availability}   99.5% uptime      99.7% measured       ✅ Exceeded
+  \textbf{Availability}   99.5% uptime      99.7% measured       \checkmark Exceeded
 
-  \textbf{Data Integrity} 100% no           99.98% (no           ✅ Nearly Perfect
+  \textbf{Data Integrity} 100% no           99.98% (no           \checkmark Nearly Perfect
                      loss/corrupt      corruption)          
 
-  \textbf{Sync Precision} ±5 ms             ±3.2 ms achieved     ✅ Exceeded
+  \textbf{Sync Precision} ±5 ms             ±3.2 ms achieved     \checkmark Exceeded
   ----------------------------------------------------------------------------------------------------------------
 
 To elaborate: - Throughput for at least 4 devices was required; we
@@ -2372,25 +2356,25 @@ loss in worst-case network conditions, which we consider acceptable. We
 could confidently claim the system achieves \textbf{research-grade
 performance}.
 
-##### Test Coverage Analysis
+\subsubsection{# Test Coverage Analysis}
 
 Our test suite provides comprehensive coverage across different
 dimensions: - \textbf{Functional coverage:} All core features (100%) were
-tested; most edge cases (\~87%) and error handling paths (\~92%) were
+tested; most edge cases (\$\sim\$87%) and error handling paths (\$\sim\$92%) were
 tested, as estimated by our coverage analysis
-script\cite{DeviceServer}.
+script.
 Some minor edge scenarios remain (e.g., extremely unlikely error
 combinations) but those are tracked. - \textbf{Code coverage:} As noted, we
-attained \~93% statement coverage overall, \~89% branch coverage, \~95%
+attained \$\sim\$93% statement coverage overall, \$\sim\$89% branch coverage, \$\sim\$95%
 function
-coverage\cite{DeviceServer}.
+coverage.
 These high numbers mean very little of the implementation is untested.
 The few untested lines are typically defensive code or platform-specific
 fallbacks that are hard to trigger but also low risk. - \textbf{Platform
 coverage:} We tested on multiple Android versions (7.0 through 12.0)
 and multiple OS for the desktop (Windows 10 \& 11, Ubuntu 20.04 LTS, and
 macOS
-12)\cite{DeviceServer}.
+12).
 All tested platforms ran the system successfully, with only minor
 platform-specific issues (like a macOS virtual camera permission quirk,
 which was documented). This broad platform coverage is important for
@@ -2400,8 +2384,8 @@ simulated various load scenarios (high CPU, low memory, various network
 conditions) and stress conditions (long runs, many sessions
 back-to-back). We also tested under resource constraints (running the PC
 app on a lower-end laptop to see if it still meets timing --- it did,
-albeit using more CPU). We covered \~95% of intended load
-scenarios\cite{WebcamCapture};
+albeit using more CPU). We covered \$\sim\$95% of intended load
+scenarios;
 a couple of extreme scenarios (like \>8 devices or 48-hour continuous
 with \>4 devices) were not tested due to practical limits, but those can
 be extrapolated from current results or tested in future if needed.
@@ -2411,7 +2395,7 @@ lurking bugs or unverified parts of the system that could surprise us
 later. Any gaps identified were deliberate (and documented as not
 critical or slated for future work).
 
-##### Defect Analysis
+\subsubsection{# Defect Analysis}
 
 Throughout testing, various defects were identified and resolved. We
 categorize them here for completeness:
@@ -2423,20 +2407,20 @@ categorize them here for completeness:
   example, an early critical defect was a memory overflow when recording
   very long videos --- this was resolved by implementing streaming writes
   to disk. By test completion, no known critical bugs existed in the
-  system\cite{WebcamCapture}.
+  system.
 \item \textbf{Major Defects:} \textit{2 resolved.} These were significant issues but
   with workarounds; e.g.,
 \item A memory leak in extended sessions (fixed by better resource
-  cleanup)\cite{ShimmerManager}.
+  cleanup).
 \item A synchronization drift over long periods (fixed by periodic re-sync
   and clock correction
-  algorithms)\cite{ShimmerManager}.
+  algorithms).
 \item \textbf{Minor Defects:} \textit{5 resolved, 2 tracked.} Minor issues were things
   like UI responsiveness under high CPU load (improved by moving some
   work to background threads), handling of edge-case calibration
   patterns (improved with additional user guidance if detection fails),
   a slight delay on network reconnection
-  (optimized)\cite{ShimmerRecorder},
+  (optimized),
   and file format compatibility with third-party tools (addressed by
   offering alternative export formats).
 \item Two minor issues remain tracked:
@@ -2444,11 +2428,11 @@ categorize them here for completeness:
     limited, the real-time video preview can lag or drop quality; we
     plan an enhancement for adaptive quality scaling (not critical to
     data recording, only to the live view, so it's
-    acceptable)\cite{ShimmerRecorder}.
+    acceptable).
   - Another is \textbf{calibration pattern detection in exotic scenarios} ---
     very complex patterns or reflections might still pose difficulty; we
     consider this an improvement opportunity, but standard use is
-    fine\cite{ShimmerRecorder}.
+    fine.
 \item \textbf{Tracked Issues (Non-critical):} These are essentially the to-do
   enhancements mentioned above and any other nice-to-have improvements
   that weren't essential for meeting thesis objectives. None of them
@@ -2456,9 +2440,9 @@ categorize them here for completeness:
   deferred.
 
 \end{itemize}
-The defect resolution rate was \~94.3% (i.e., that percentage of all
+The defect resolution rate was \$\sim\$94.3% (i.e., that percentage of all
 identified issues have been
-resolved)\cite{DeviceServer}.
+resolved).
 Importantly, \textbf{no known defect compromises the system's core
 requirements or scientific use}. The remaining tracked items are either
 cosmetic or enhancements to be addressed in future versions.
@@ -2468,9 +2452,9 @@ cosmetic or enhancements to be addressed in future versions.
 Reflecting on the testing approach itself: - \textbf{Strengths:} The
 multi-layered methodology caught issues at appropriate stages (many bugs
 were fixed during unit tests or integration tests before ever doing a
-full system run). Early defect detection (we estimate \~89% of defects
+full system run). Early defect detection (we estimate \$\sim\$89% of defects
 were found and fixed before system testing) improved development
-speed\cite{DeviceServer}.
+speed.
 The realistic end-to-end tests gave us confidence in real usage. And by
 quantifying everything (timings, success rates), we have concrete
 evidence rather than just anecdotal assurance. - \textbf{Areas for
@@ -2480,7 +2464,7 @@ one-click test of everything is still being finalized (mostly due to
 needing certain hardware or environment setups). We could invest in
 better CI/CD integration to run all tests in a controlled lab
 environment
-regularly\cite{DeviceServer}.
+regularly.
 Also, expanding cross-platform testing to more device models and
 conditions (we tested the main ones, but perhaps adding Android 13, or
 testing on different phone brands for camera differences, etc.). Lastly,
@@ -2488,15 +2472,15 @@ extending long-term reliability tests even further (e.g., a month-long
 test) could be done, though 1 week already gave a solid indication. -
 \textbf{Testing ROI:} We estimate about 35% of the total development effort
 was spent on testing and test
-automation\cite{DeviceServer}.
+automation.
 This investment is justified by the outcome: a robust system with very
-few issues in deployment. The payoff is that likely \<0.1% of defects
+few issues in deployment. The payoff is that likely \$<\$0.1% of defects
 have escaped into the "field" (if any --- so far none observed in pilot
 usage), meaning near-zero troubleshooting during actual experiments.
 Also, a small user acceptance test (pilot study with a couple of
 researchers using the system) yielded a 94% satisfaction rate --- much of
 that due to the system's reliability which comes from thorough
-testing\cite{DeviceServer}.
+testing.
 
 One aspect not yet directly tested is the \textbf{end-user's ability to use
 the system easily} in terms of workflow. While we did usability tests
@@ -2543,9 +2527,9 @@ demonstrating the tangible link between the testing strategy described
 and its realization in code:
 
 \begin{itemize}
-\item \texttt{PythonApp/test_integration_logging.py} --- Integration framework tests
+\item \texttt{PythonApp/test\_integration\_logging.py} --- Integration framework tests
   ensuring complete logging of events (Appendix F.104)
-\item \texttt{PythonApp/run_quick_recording_session_test.py} --- Session management
+\item \texttt{PythonApp/run\_quick\_recording\_session\_test.py} --- Session management
   unit tests with state validation (Appendix F.105)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderEnhancedTest.kt}
   --- GSR sensor integration tests, including accuracy validation against
@@ -2556,37 +2540,37 @@ and its realization in code:
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/CameraRecorderTest.kt}
   --- Android camera recording tests with performance metrics checks
   (Appendix F.108)
-\item \texttt{PythonApp/test_hardware_sensor_simulation.py} --- Hardware integration
+\item \texttt{PythonApp/test\_hardware\_sensor\_simulation.py} --- Hardware integration
   tests using simulated sensor input (Appendix F.109)
-\item \texttt{PythonApp/test_dual_webcam_integration.py} --- Dual-camera integration
+\item \texttt{PythonApp/test\_dual\_webcam\_integration.py} --- Dual-camera integration
   tests for synchronization (Appendix F.110)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/ConnectionManagerTestSimple.kt}
   --- Network connection and reconnection tests (Appendix F.111)
-\item \texttt{PythonApp/test_advanced_dual_webcam_system.py} --- Advanced system
+\item \texttt{PythonApp/test\_advanced\_dual\_webcam\_system.py} --- Advanced system
   integration with computer vision validation (Appendix F.112)
-\item \texttt{PythonApp/test_comprehensive_recording_session.py} --- End-to-end
+\item \texttt{PythonApp/test\_comprehensive\_recording\_session.py} --- End-to-end
   multi-modal session test (Appendix F.113)
-\item \texttt{PythonApp/production/performance_benchmark.py} --- System performance
+\item \texttt{PythonApp/production/performance\_benchmark.py} --- System performance
   benchmarking tests with statistical analysis (Appendix F.114)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/AdaptiveFrameRateControllerTest.kt}
   --- Tests for dynamic performance optimization under load (Appendix
   F.115)
-\item \texttt{PythonApp/production/phase4_validator.py} --- System-wide validation
+\item \texttt{PythonApp/production/phase4\_validator.py} --- System-wide validation
   framework tests (Appendix F.116)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/performance/NetworkOptimizerTest.kt}
   --- Network performance tests under different conditions (Appendix
   F.117)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/performance/PowerManagerTest.kt}
   --- Power management and battery usage tests (Appendix F.118)
-\item \texttt{PythonApp/production/security_scanner.py} --- Security vulnerability
+\item \texttt{PythonApp/production/security\_scanner.py} --- Security vulnerability
   scanning tests (Appendix F.119)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/calibration/CalibrationCaptureManagerTest.kt}
   --- Calibration process accuracy tests (Appendix F.120)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/calibration/SyncClockManagerTest.kt}
   --- Clock sync precision tests on Android (Appendix F.121)
-\item \texttt{PythonApp/test_data_integrity_validation.py} --- Data integrity tests
+\item \texttt{PythonApp/test\_data\_integrity\_validation.py} --- Data integrity tests
   with intentional corruption injection (Appendix F.122)
-\item \texttt{PythonApp/test_network_resilience.py} --- Network resilience tests
+\item \texttt{PythonApp/test\_network\_resilience.py} --- Network resilience tests
   with fault injection (Appendix F.123)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/ui/FileViewActivityTest.kt}
   --- UI tests for file management interface (Appendix F.124)
@@ -2598,32 +2582,32 @@ and its realization in code:
   --- File management logic tests (Appendix F.127)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/ui/components/ActionButtonPairTest.kt}
   --- UI component interaction tests (Appendix F.128)
-\item \texttt{PythonApp/test_dual_webcam_system.py} --- Full system test with two
+\item \texttt{PythonApp/test\_dual\_webcam\_system.py} --- Full system test with two
   webcams (Appendix F.129)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/session/SessionInfoTest.kt}
   --- Session lifecycle and persistence tests (Appendix F.130)
-\item \texttt{PythonApp/test_shimmer_pc_integration.py} --- PC-side GSR integration
+\item \texttt{PythonApp/test\_shimmer\_pc\_integration.py} --- PC-side GSR integration
   tests ensuring PC correctly receives and logs GSR data (Appendix
   F.131)
-\item \texttt{PythonApp/test_enhanced_stress_testing.py} --- Enhanced stress tests
+\item \texttt{PythonApp/test\_enhanced\_stress\_testing.py} --- Enhanced stress tests
   combining high load and long duration (Appendix F.132)
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderConfigurationTest.kt}
   --- Tests for GSR device configuration handling (Appendix F.133)
-\item \texttt{PythonApp/comprehensive_test_summary.py} --- Test result aggregation
+\item \texttt{PythonApp/comprehensive\_test\_summary.py} --- Test result aggregation
   and statistical summary generation (Appendix F.134)
-\item \texttt{PythonApp/create_final_summary.py} --- Automated test reporting script
+\item \texttt{PythonApp/create\_final\_summary.py} --- Automated test reporting script
   (Appendix F.135)
-\item \texttt{PythonApp/run_comprehensive_tests.py} --- Master test runner for
+\item \texttt{PythonApp/run\_comprehensive\_tests.py} --- Master test runner for
   parallel execution of all tests (Appendix F.136)
-\item \texttt{AndroidApp/run_comprehensive_android_tests.sh} --- Shell script
+\item \texttt{AndroidApp/run\_comprehensive\_android\_tests.sh} --- Shell script
   automating Android test execution with coverage collection (Appendix
   F.137)
-\item \texttt{PythonApp/production/deployment_automation.py} --- Deployment testing
+\item \texttt{PythonApp/production/deployment\_automation.py} --- Deployment testing
   scripts to validate installation and environment (Appendix F.138)
-\item \texttt{PythonApp/validate_testing_qa_framework.py} --- QA framework
+\item \texttt{PythonApp/validate\_testing\_qa\_framework.py} --- QA framework
   self-tests ensuring the testing infrastructure itself is working
   (Appendix F.139)
-\item \texttt{AndroidApp/validate_shimmer_integration.sh} --- End-to-end validation
+\item \texttt{AndroidApp/validate\_shimmer\_integration.sh} --- End-to-end validation
   script for Shimmer GSR on actual hardware (Appendix F.140)
 
 \end{itemize}
@@ -2655,7 +2639,7 @@ suite, preserving the reliability level achieved.
 The evaluation and testing of the Multi-Sensor Recording System
 demonstrate that it achieves exceptional reliability, performance, and
 data quality for GSR and thermal-based emotion analysis in research
-settings. With an overall test pass rate of \~99.5% across more than 240
+settings. With an overall test pass rate of \$\sim\$99.5% across more than 240
 test cases and all critical issues resolved, the system can be
 considered \textbf{research-ready}. It meets or exceeds all technical
 requirements identified in the thesis, providing empirical evidence in

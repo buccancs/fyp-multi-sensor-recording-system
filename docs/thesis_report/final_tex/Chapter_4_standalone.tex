@@ -1,5 +1,5 @@
-% Standalone wrapper for Chapter_4.tex
-% This file provides the minimal LaTeX structure needed to compile Chapter_4.tex as a standalone document
+% Standalone wrapper for Chapter\_4.tex
+% This file provides the minimal LaTeX structure needed to compile Chapter\_4.tex as a standalone document
 % while maintaining compatibility with the main thesis document
 
 \documentclass[11pt,a4paper]{report}
@@ -24,12 +24,7 @@
 \begin{document}
 
 % Chapter 4 content
-
-% Bibliography (minimal for standalone)
-\bibliographystyle{ieeetr}
-\bibliography{references}
-
-\end{document}\label{chap:4}
+\label{chap:4}
 
 \chapter{Chapter 4: Design and Implementation}
 
@@ -90,14 +85,14 @@ logic layer} of managers and controllers, which in turn utilize
 lower-level sensor interfacing components. This design maximizes
 modularity and maintainability, allowing each sensor modality to be
 managed independently while ensuring all subsystems remain synchronized.
-Key architectural components include a \texttt{SessionManager} for coordinating
+Key architectural components include a SessionManager class for coordinating
 recording sessions, a \texttt{DeviceManager} for handling attached sensor
 devices, and a \texttt{ConnectionManager} for managing the network link to the
 PC
 controller\cite{Fowles1981}.
 The data acquisition layer comprises specialized recorder classes for
-each modality --- e.g. a \texttt{CameraRecorder} for the phone's RGB camera, a
-\texttt{ThermalRecorder} for the USB thermal camera, and a \texttt{ShimmerRecorder}
+each modality --- e.g. a CameraRecorder class for the phone's RGB camera, a
+ThermalRecorder class for the USB thermal camera, and a ShimmerRecorder class
 for the GSR sensor --- each encapsulating the details of interfacing with
 that sensor
 hardware\cite{Healey2005}.
@@ -190,7 +185,7 @@ frames) from the raw data for quick preview or user feedback. The
 it converts incoming thermal frames to a viewable image (applying a
 colormap and scaling) and streams these preview frames over the network
 to the desktop
-controller\cite{ElectrodermalActivityWiki}\cite{DeviceServer}.
+controller\cite{ElectrodermalActivityWiki}.
 This gives the researcher immediate visual feedback of the thermal
 camera's view, which is invaluable for ensuring the sensor is aimed
 correctly and functioning during a session.
@@ -235,7 +230,7 @@ sensor} --- specifically, a Shimmer3 GSR+ device --- to record galvanic
 skin response (electrodermal activity), and optionally other signals
 like photoplethysmogram (PPG) and motion from the Shimmer's on-board
 sensors. The Shimmer3 GSR+ is a research-grade wearable sensor that
-connects via Bluetooth. The Android application's \texttt{ShimmerRecorder}
+connects via Bluetooth. The Android application's ShimmerRecorder class
 module manages the \textbf{Bluetooth communication} and data logging for this
 device. On application startup or when the user chooses to connect a
 Shimmer sensor, the app scans for available Bluetooth devices and pairs
@@ -259,7 +254,7 @@ needed.
 
 Data from the Shimmer sensor arrives as a stream of packets, each
 containing a set of measurements (GSR, PPG, etc.) with a timestamp from
-the Shimmer's internal clock. The \texttt{ShimmerRecorder} runs a dedicated
+the Shimmer's internal clock. The ShimmerRecorder class runs a dedicated
 handler thread that listens for incoming data packets via the Shimmer
 SDK's callback
 system\cite{ElectrodermalActivityWiki}\cite{ElectrodermalActivityWiki}.
@@ -273,15 +268,15 @@ redundancy), the GSR conductance value (in microsiemens), PPG readings
 (raw or processed), acceleration values, and the sensor's battery
 level\cite{ElectrodermalActivityWiki}.
 For example, the header used in the CSV clearly enumerates these fields:
-\textit{Timestamp_ms, DeviceTime_ms, SystemTime_ms, GSR_Conductance_uS,
-PPG_A13, Accel_X_g, ... Battery_Percentage},
+\textit{Timestamp\_ms, DeviceTime\_ms, SystemTime\_ms, GSR\_Conductance\_uS,
+PPG\_A13, Accel\_X\_g, ... Battery\_Percentage},
 etc.\cite{ElectrodermalActivityWiki}.
 By storing both the device-reported time and the system time on
 reception, the system can later assess any clock drift or transmission
 delay and correct for it in analysis.
 
 Similar to the thermal module, the Shimmer integration includes a \textbf{live
-data streaming} capability for monitoring. The \texttt{ShimmerRecorder} can
+data streaming} capability for monitoring. The ShimmerRecorder class can
 forward sampled data (e.g., the latest GSR value) over the network
 socket to the desktop in real-time (the code maintains an optional
 socket connection for sensor streaming on a specified
@@ -305,7 +300,7 @@ compatibility across a range of Android OS versions.
 
 Overall, the \textbf{Shimmer GSR integration} extends the Android app with
 the capability to capture high-quality physiological signals in sync
-with video and thermal data. The modular design of the \texttt{ShimmerRecorder}
+with video and thermal data. The modular design of the ShimmerRecorder class
 means this component can start and stop recording in tandem with other
 sensors under the control of the central session manager. When a session
 begins, the app (upon receiving the command from PC) will initialize the
@@ -386,7 +381,7 @@ directly connecting to Shimmer sensors via a Bluetooth dongle if needed
 (for example, in a lab setting where the PC is in range of the Shimmer,
 the researcher might choose to let the PC record GSR data directly). The
 design thus provides \textbf{multi-path integration} for sensors to improve
-robustness; the \texttt{ShimmerManager} on the PC can accept data from either
+robustness; the ShimmerManager class on the PC can accept data from either
 direct Bluetooth or through the Android (which relays it). This
 multi-library support with fallback ensures that even if one pipeline
 has an issue, the data can still be collected via the
@@ -496,25 +491,25 @@ connection to the PC's IP and port. A simple handshake is performed in
 which the Android sends an identifying message containing its device ID
 (a unique name or serial) and a list of its capabilities (e.g.,
 indicating if it has a thermal camera, GSR sensor,
-etc.)\cite{DeviceServer}\cite{MainViewModel}.
+etc.).
 The PC acknowledges and registers the device. All messages between PC
 and Android are formatted as JSON objects, with a length-prefixed
 framing (the first 4 bytes of each message indicate message size) to
 ensure the stream is parsed
-correctly\cite{MainViewModel}\cite{DeviceServer}.
+correctly.
 This design avoids reliance on newline or other delimiters that could be
 unreliable for binary data; instead, it robustly handles message
 boundaries, allowing binary payloads (like images) to be transmitted if
 needed by encoding them (often images are base64-encoded within
-JSON)\cite{DeviceServer}\cite{DeviceServer}.
+JSON).
 The protocol defines several message types, including: \textit{control
-commands} (e.g., \texttt{start_recording}, \texttt{stop_recording}), \textit{status updates}
+commands} (e.g., \texttt{start\_recording}, \texttt{stop\_recording}), \textit{status updates}
 (e.g., the Android periodically sends a \texttt{status} message with battery
 level, free storage, current recording status, etc.), \textit{sensor data
-messages} for streaming (such as \texttt{preview_frame} for a JPEG preview
-image, or \texttt{gsr_sample} for a live GSR data point), and \textit{acknowledgments}
+messages} for streaming (such as \texttt{preview\_frame} for a JPEG preview
+image, or \texttt{gsr\_sample} for a live GSR data point), and \textit{acknowledgments}
 (the devices reply to key commands with an ACK/NACK to confirm
-receipt)\cite{WebcamCapture}.
+receipt).
 The PC's network service is multi-threaded and non-blocking --- it can
 handle multiple device connections simultaneously and route messages to
 the appropriate handlers, emitting Qt signals that update the UI or
@@ -552,7 +547,7 @@ primary roles: it distributes the current master time to clients
 (devices) and coordinates simultaneous actions based on that time.
 Concretely, the PC launches a lightweight \textbf{NTP (Network Time Protocol)
 server} on a UDP port (default 8889) to which devices can query for
-time\cite{WebcamCapture}.
+time.
 The Android app, upon connecting, performs an initial clock sync
 handshake --- this can be a custom sync message or an NTP query --- to
 measure the offset between its local clock and the PC clock. Given the
@@ -561,10 +556,10 @@ milliseconds), this offset can be estimated with high precision using
 techniques akin to Cristian's algorithm or NTP's exchange (the system
 may send a timestamped sync message and get a response to calculate
 round-trip delay and clock
-offset)\cite{ShimmerManager}.
+offset).
 The \texttt{SynchronizationEngine} on the PC possibly refines this by periodic
 pings (e.g., every 5 seconds) to adjust for any drift during a long
-session\cite{ShimmerRecorder}\cite{ShimmerRecorder}.
+session.
 In practice, the Android device will apply any calculated offset to its
 own timestamps for data labeling, meaning if its clock was 5 ms ahead of
 the PC, it will subtract 5 ms from all timestamps to align with the
@@ -574,10 +569,10 @@ When a recording session is initiated, the PC doesn't just send a blind
 "start" command --- it issues a \textbf{coordinated start time}. For example,
 the PC might determine "start recording at time T = 1622541600.000 (Unix
 epoch seconds)" a few hundred milliseconds in the future, and send a
-message to each device: \textit{"start_recording at T with session_id X"}. Each
+message to each device: \textit{"start\_recording at T with session\_id X"}. Each
 Android device receives this and waits until its local clock
 (synchronized to master) hits T to begin capturing
-data\cite{DeviceServer}\cite{DeviceServer}.
+data.
 Because all devices are sync'd to the master within a few milliseconds
 accuracy, this effectively aligns the start of recording across devices
 to a very tight margin (usually well below 50 ms difference, often
@@ -594,12 +589,12 @@ later correction. The synchronization engine might incorporate simple
 drift compensation --- for instance, if one phone tends to run its clock
 slightly faster, the system can predict and adjust timing gradually
 (rather than waiting for a large error to
-accumulate)\cite{DeviceServer}\cite{DeviceServer}.
+accumulate).
 In this implementation, because the recording durations might be on the
 order of minutes to an hour, and modern devices have reasonably stable
 clocks, straightforward NTP-based periodic correction is sufficient to
 maintain sub-millisecond
-alignment\cite{DeviceServer}.
+alignment.
 
 Finally, the communication protocol assists synchronization by carrying
 timing info in every message. The JSON messages often include
@@ -607,7 +602,7 @@ timestamps. For example, when an Android sends a preview frame to the
 PC, it tags it with the timestamp of frame capture; the PC can compare
 that with its own reception time and the known offset to estimate
 network delay and clock skew in
-real-time\cite{DeviceServer}\cite{MainViewModel}.
+real-time.
 Similarly, the PC's commands can carry the master timestamp. This
 pervasive inclusion of timestamps means that even if absolute clock sync
 had a small error, each piece of data can be re-aligned precisely in
@@ -620,7 +615,7 @@ devices operate on a unified timeline. Together, these allow the system
 to achieve a high degree of temporal precision: tests have shown the
 system tolerates network latency variations from \~1 ms up to hundreds
 of milliseconds without losing
-synchronization\cite{DeviceServer}.
+synchronization.
 This is accomplished by designing for asynchronous, non-blocking
 communication and by decoupling the \textit{command} from the \textit{execution} time
 (i.e., schedule actions in the future on a shared clock). The result is
@@ -692,14 +687,14 @@ enough, which is far smaller).
 All data on the Android is saved in a \textbf{structured file system
 hierarchy} (often organized by session). For each recording session,
 the app creates a session folder containing the various files: e.g.,
-\texttt{session_001_metadata.json} (with high-level info like session ID, start
-time, participant ID), \texttt{session_001_camera.mp4} (phone RGB video),
-\texttt{session_001_thermal.raw} (thermal binary file),
-\texttt{session_001_shimmer.csv} (physio data), etc. This local organization is
+\texttt{session\_001\_metadata.json} (with high-level info like session ID, start
+time, participant ID), \texttt{session\_001\_camera.mp4} (phone RGB video),
+\texttt{session\_001\_thermal.raw} (thermal binary file),
+\texttt{session\_001\_shimmer.csv} (physio data), etc. This local organization is
 part of the pipeline because it enforces consistent naming and indexing
 for later merging. The Persistence layer on Android ensures writes are
 flushed and files are closed safely at the end of sessions to avoid
-corruption\cite{DeviceServer}.
+corruption.
 
 Moving to the \textbf{desktop side}, during an active session, the desktop
 controller is receiving live previews and status, but it usually does
@@ -723,7 +718,7 @@ The desktop's \textbf{Data Processing components} then take over. A
 knowledge of the format --- for example, it knows how to read the thermal
 .raw file and extract frames and timestamps, or read the Shimmer CSV)
 and then perform multi-modal synchronization
-verification\cite{DeviceServer}.
+verification.
 Because all data streams were independently recorded, the system
 double-checks that the timelines align: it may, for instance, compare
 the timestamp of the first frame of the phone video with the master
@@ -742,7 +737,7 @@ time).
 Following synchronization, the pipeline can branch into different \textbf{data
 export and analysis preparation} tasks. A \texttt{DataExporter} component
 handles converting the data into formats needed for
-analysis\cite{DeviceServer}.
+analysis.
 Commonly, researchers might want all sensor data in a single file or
 database, or in a form that can be loaded into Python or MATLAB for
 analysis. The system might generate a unified CSV or HDF5 file that
@@ -760,7 +755,7 @@ when needed.
 Another aspect of the pipeline is \textbf{quality assurance (QA)}. The system
 includes a \texttt{DataSchemaValidator} and possibly a \texttt{QualityMonitor} that
 verifies the data collected meets certain integrity
-criteria\cite{DeviceServer}.
+criteria.
 For instance, after recording, the software can check if the number of
 video frames roughly matches the expected frame rate and duration, or if
 there are gaps in the GSR timestamp sequence. It flags any anomalies
@@ -824,7 +819,7 @@ adopted to address them:
   Android phone and a PC (and possibly other devices) agree on time
   within a few milliseconds is non-trivial, given differences in
   operating system scheduling and clock
-  stability\cite{DeviceServer}.
+  stability.
   Our solution was to implement a \textbf{hybrid software NTP approach}. We
   ran a local NTP server on the PC and had the Android periodically sync
   to it, coupled with timestamped command protocols. By sending
@@ -866,7 +861,7 @@ adopted to address them:
   of the Shimmer GSR sensor introduced challenges like connection drops,
   signal interference, and the need to pair/manage Bluetooth in
   Android's constrained environment. The solution involved implementing
-  robust \textbf{reconnection logic and buffering}. The \texttt{ShimmerRecorder} was
+  robust \textbf{reconnection logic and buffering}. The ShimmerRecorder class was
   built to automatically detect a disconnect and retry connecting up to
   a few times before giving
   up\cite{ContactlessStressThermal2022}.
@@ -926,7 +921,7 @@ adopted to address them:
   software encoding). On the monitoring side, we built a \textbf{Performance
   Monitoring layer} in the app that tracks memory usage, CPU load, and
   frame processing
-  time\cite{DeviceServer}.
+  time.
   If any metric exceeded a threshold (for example, if frame processing
   was taking too long and queue lengths were growing), the system would
   log it and could adjust behavior (like dropping preview frames to

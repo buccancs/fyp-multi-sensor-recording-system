@@ -166,9 +166,9 @@ The data is buffered and written to a CSV text file in real-time, which serves a
 
 A single line in this CSV file might include: a timestamp (in milliseconds) from the phone's perspective, the original device timestamp from the Shimmer (for reference or redundancy), the GSR conductance value (in microsiemens), PPG readings (raw or processed), acceleration values, and the sensor's battery level.
 
-For example, the header used in the CSV clearly enumerates these fields: \textit{Timestamp_ms, DeviceTime_ms, SystemTime_ms, GSR_Conductance_uS, PPG_A13, Accel_X_g, ...
+For example, the header used in the CSV clearly enumerates these fields: \textit{Timestamp\_ms, DeviceTime\_ms, SystemTime\_ms, GSR\_Conductance\_uS, PPG\_A13, Accel\_X\_g, ...
 
-Battery_Percentage}, etc..
+Battery\_Percentage}, etc..
 
 By storing both the device-reported time and the system time on reception, the system can later assess any clock drift or transmission delay and correct for it in analysis.
 
@@ -338,7 +338,7 @@ All messages between PC and Android are formatted as JSON objects, with a length
 
 This design avoids reliance on newline or other delimiters that could be unreliable for binary data; instead, it robustly handles message boundaries, allowing binary payloads (like images) to be transmitted if needed by encoding them (often images are base64-encoded within JSON; see implementation details in Appendix~F; see implementation details in Appendix~F).
 
-The protocol defines several message types, including: \textit{control commands} (e.g., \texttt{start_recording}, \texttt{stop_recording}), \textit{status updates} (e.g., the Android periodically sends a \texttt{status} message with battery level, free storage, current recording status, etc.), \textit{sensor data messages} for streaming (such as \texttt{preview_frame} for a JPEG preview image, or \texttt{gsr_sample} for a live GSR data point), and \textit{acknowledgments} (the devices reply to key commands with an ACK/NACK to confirm receipt; as detailed in the camera capture module).
+The protocol defines several message types, including: \textit{control commands} (e.g., \texttt{start\_recording}, \texttt{stop\_recording}), \textit{status updates} (e.g., the Android periodically sends a \texttt{status} message with battery level, free storage, current recording status, etc.), \textit{sensor data messages} for streaming (such as \texttt{preview\_frame} for a JPEG preview image, or \texttt{gsr\_sample} for a live GSR data point), and \textit{acknowledgments} (the devices reply to key commands with an ACK/NACK to confirm receipt; as detailed in the camera capture module).
 
 The PC's network service is multi-threaded and non-blocking --- it can handle multiple device connections simultaneously and route messages to the appropriate handlers, emitting Qt signals that update the UI or trigger internal logic.
 
@@ -383,7 +383,7 @@ In practice, the Android device will apply any calculated offset to its own time
 When a recording session is initiated, the PC doesn't just send a blind "start" command --- it issues a \textbf{coordinated start time}
 .
 
-For example, the PC might determine "start recording at time T = 1622541600.000 (Unix epoch seconds)" a few hundred milliseconds in the future, and send a message to each device: \textit{"start_recording at T with session_id X"}.
+For example, the PC might determine "start recording at time T = 1622541600.000 (Unix epoch seconds)" a few hundred milliseconds in the future, and send a message to each device: \textit{"start\_recording at T with session\_id X"}.
 
 Each Android device receives this and waits until its local clock (synchronized to master) hits T to begin capturing data(see implementation details in Appendix~F; see implementation details in Appendix~F).
 
@@ -474,7 +474,7 @@ By performing this on-device, the system reduces the amount of data that needs t
 All data on the Android is saved in a \textbf{structured file system hierarchy}
  (often organized by session).
 
-For each recording session, the app creates a session folder containing the various files: e.g., \texttt{session_001_metadata.json} (with high-level info like session ID, start time, participant ID), \texttt{session_001_camera.mp4} (phone RGB video), \texttt{session_001_thermal.raw} (thermal binary file), \texttt{session_001_shimmer.csv} (physio data), etc.
+For each recording session, the app creates a session folder containing the various files: e.g., \texttt{session\_001\_metadata.json} (with high-level info like session ID, start time, participant ID), \texttt{session\_001\_camera.mp4} (phone RGB video), \texttt{session\_001\_thermal.raw} (thermal binary file), \texttt{session\_001\_shimmer.csv} (physio data), etc.
 
 This local organization is part of the pipeline because it enforces consistent naming and indexing for later merging.
 
