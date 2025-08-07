@@ -83,7 +83,7 @@ flowchart TD
     E2E[End-to-End Tests]
     
     COLLECT[Results Collection]
-    ANALYZE[Analysis and Reporting]
+    ANALYS\1[Analysis and Reporting]
     CLEANUP[Environment Cleanup]
     
     END([Test Execution Complete])
@@ -94,8 +94,8 @@ flowchart TD
     INTEGRATION --> PERFORMANCE
     PERFORMANCE --> E2E
     E2E --> COLLECT
-    COLLECT --> ANALYZE
-    ANALYZE --> CLEANUP
+    COLLECT --> ANALYS\1
+    ANALYS\1 --> CLEANUP
     CLEANUP --> END
 ```
 
@@ -138,7 +138,7 @@ class CalibrationTest:
 #### System Integration
 
 - **PC-Android Communication**: Network protocol validation
-- **Device Synchronization**: Temporal alignment testing
+- **Device Synchronisation**: Temporal alignment testing
 - **Data Flow**: Multi-modal data integration
 - **Error Handling**: Fault tolerance validation
 
@@ -169,7 +169,7 @@ class SystemIntegrationTest:
 
 - **Concurrent Device Management**: Multiple device handling
 - **Network Throughput**: Data streaming performance
-- **Memory Usage**: Resource utilization monitoring
+- **Memory Usage**: Resource utilisation monitoring
 - **CPU Performance**: Processing efficiency testing
 
 #### Example Performance Test
@@ -225,9 +225,9 @@ class PerformanceTest:
 class EndToEndTest:
     def test_complete_recording_session(self):
         """Test complete recording session workflow"""
-        # Initialize system
+        # Initialise system
         system = MultiSensorRecordingSystem()
-        system.initialize()
+        system.initialise()
         
         # Create session configuration
         session_config = SessionConfig(
@@ -579,12 +579,12 @@ jobs:
 
 - **Test Execution Time**: <30 minutes for complete suite
 - **Memory Usage**: <1GB peak usage during testing
-- **CPU Utilization**: <60% average during test execution
+- **CPU Utilisation**: <60% average during test execution
 - **Network Latency**: <10ms average in test environment
 
 ---
 
-*For related modules, see [Session Management](session_management_readme.md) and [Multi-Device Synchronization](multi_device_synchronization_readme.md) documentation.*
+*For related modules, see [Session Management](session_management_readme.md) and [Multi-Device Synchronisation](multi_device_synchronization_readme.md) documentation.*
 
 ## References
 

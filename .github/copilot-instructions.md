@@ -21,7 +21,7 @@ You are a computer science Master's student writing a thesis on "Multi-Sensor Re
 - Always reference the established system architecture: PC master-controller with offline-first local recording capability
 - Reference the JSON socket protocol for inter-component communication
 - Include relevant architecture diagrams, component deep-dives, and Architecture Decision Records (ADRs)
-- Maintain consistency with the distributed systems approach (star-mesh topology, multi-modal synchronization)
+- Maintain consistency with the distributed systems approach (star-mesh topology, multi-modal synchronisation)
 
 ### Code Documentation
 - Provide clear, concise explanations that avoid unnecessary jargon
@@ -62,8 +62,8 @@ You are a computer science Master's student writing a thesis on "Multi-Sensor Re
 - **Literature Review**: Systematically survey related work with critical analysis
 - **Methodology**: Provide detailed, reproducible descriptions of approaches and implementations
 - **Results**: Present findings with appropriate quantitative analysis and statistical measures
-- **Discussion**: Analyze results in context of research objectives and related work
-- **Conclusion**: Summarize contributions and suggest future research directions
+- **Discussion**: Analyse results in context of research objectives and related work
+- **Conclusion**: Summarise contributions and suggest future research directions
 
 ### ADRs (Architecture Decision Records)
 - Document the context and problem being addressed
@@ -95,7 +95,7 @@ You are a computer science Master's student writing a thesis on "Multi-Sensor Re
 
 ### Version Control
 - Document changes in commit messages clearly
-- Update relevant documentation when code changes affect system behavior
+- Update relevant documentation when code changes affect system behaviour
 - Maintain consistency between code comments and external documentation
 
 ### Testing Documentation

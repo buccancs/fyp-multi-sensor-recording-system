@@ -24,7 +24,7 @@ Within the established PC master-controller, offline-first recording architectur
 - **High-Precision GSR Monitoring**: Research-grade physiological signal acquisition with configurable sampling rates supporting diverse research protocols
 - **Dual Integration Architecture**: Support for both direct PC Bluetooth connections and Android-mediated communication ensuring flexible deployment scenarios
 - **Real-Time Signal Processing**: Advanced artifact detection, quality assessment, and adaptive filtering maintaining research data quality standards
-- **Multi-Modal Synchronization**: Precise temporal coordination with visual and thermal sensor modalities through the JSON socket protocol
+- **Multi-Modal Synchronisation**: Precise temporal coordination with visual and thermal sensor modalities through the JSON socket protocol
 - **Research-Grade Calibration**: complete calibration protocols ensuring measurement accuracy and inter-device consistency
 
 ### Research Foundation
@@ -47,7 +47,7 @@ The system builds upon established psychophysiology and physiological computing 
 
 #### Multi-Modal Integration
 
-- **Temporal Synchronization**: Sub-millisecond alignment with visual and thermal data
+- **Temporal Synchronisation**: Sub-millisecond alignment with visual and thermal data
 - **Data Fusion**: Coordinated analysis across multiple physiological and behavioral measures
 - **Session Management**: Integrated recording sessions with complete metadata
 - **Quality Assurance**: Continuous signal quality monitoring and validation
@@ -91,7 +91,7 @@ graph TB
         end
         
         subgraph "Integration Layer"
-            SYNC[Synchronization Manager<br/>Temporal Alignment]
+            SYNC[Synchronisation Manager<br/>Temporal Alignment]
             MM[Multi-Modal Coordinator<br/>Cross-Sensor Integration]
             QM[Quality Monitor<br/>Performance Assessment]
         end
@@ -153,7 +153,7 @@ graph TB
 2. **Artifact Detection**: Motion and electrical interference identification
 3. **Quality Assessment**: Real-time signal quality scoring
 4. **Adaptive Filtering**: Dynamic filter adjustment based on signal characteristics
-5. **Temporal Alignment**: Synchronization with master clock system
+5. **Temporal Alignment**: Synchronisation with master clock system
 6. **Data Storage**: Structured storage with metadata and quality metrics
 
 #### Advanced Processing Features
@@ -189,8 +189,8 @@ class ShimmerCommand:
         self.parameters = parameters
         self.timestamp = time.time()
     
-    def serialize(self) -> bytes:
-        """Serialize command for transmission"""
+    def serialise(self) -> bytes:
+        """Serialise command for transmission"""
         pass
 ```
 
@@ -356,7 +356,7 @@ class ShimmerManager:
             if connection_manager.connect():
                 self.connection_managers[device_id] = connection_manager
 
-                # Initialize device configuration
+                # Initialise device configuration
                 device = ShimmerDevice(device_id, connection_manager)
                 self.devices[device_id] = device
 
@@ -525,7 +525,7 @@ class SignalProcessor:
         # Calculate phasic component
         phasic_component = np.array(signal_data) - tonic_component
         
-        # Analyze components
+        # Analyse components
         tonic_stats = self._analyze_tonic_component(tonic_component)
         phasic_stats = self._analyze_phasic_component(phasic_component, sampling_rate)
         
@@ -657,7 +657,7 @@ bucika_gsr/
     - Ensure good electrical contact without excessive pressure
 
 3. **Environmental Considerations**:
-    - Minimize electromagnetic interference sources
+    - Minimis\1 electromagnetic interference sources
     - Maintain stable temperature conditions
     - Avoid excessive humidity or moisture
     - Position devices away from WiFi routers and other wireless equipment
@@ -742,9 +742,9 @@ bucika_gsr/
     - Monitor signal stability
     - Document baseline conditions
 
-3. **Synchronization Validation**:
+3. **Synchronisation Validation**:
     - Verify temporal alignment with other sensors
-    - Check master clock synchronization
+    - Check master clock synchronisation
     - Test coordinated recording start/stop
     - Validate data timestamp consistency
 
@@ -775,11 +775,11 @@ bucika_gsr/
 1. **Data Validation**:
     - Review session quality report
     - Check for data gaps or corruption
-    - Validate temporal synchronization
+    - Validate temporal synchronisation
     - Verify data export completeness
 
 2. **Quality Assessment**:
-    - Analyze overall session quality metrics
+    - Analyse overall session quality metrics
     - Review artifact detection and filtering results
     - Assess electrode contact stability
     - Generate quality assurance report
@@ -789,7 +789,7 @@ bucika_gsr/
 #### Real-Time Analysis Features
 
 1. **Live Signal Display**:
-    - Real-time GSR conductance visualization
+    - Real-time GSR conductance visualisation
     - Quality score indicators
     - Artifact detection markers
     - Statistical summary display
@@ -837,7 +837,7 @@ class ShimmerManager:
         """Start real-time data streaming from device"""
 
     def stop_data_streaming(self, device_id: str) -> bool:
-        """Stop data streaming and finalize data"""
+        """Stop data streaming and finalise data"""
 
     def get_device_status(self, device_id: str) -> DeviceStatus:
         """Get current device status and health metrics"""
@@ -1070,7 +1070,7 @@ class QualityAssessmentTest:
 
 **Solutions**:
 
-1. **Environment Optimization**:
+1. **Environment Optimisation**:
     - Move away from WiFi routers and other 2.4GHz devices
     - Reduce distance between Shimmer and PC/Android device
     - Ensure line-of-sight communication when possible
@@ -1094,7 +1094,7 @@ class QualityAssessmentTest:
 
 **Solutions**:
 
-1. **Electrode Optimization**:
+1. **Electrode Optimisation**:
     - Clean skin with alcohol wipe and allow to dry
     - Apply electrodes with moderate pressure
     - Use conductive gel if appropriate
@@ -1119,7 +1119,7 @@ class QualityAssessmentTest:
 **Solutions**:
 
 1. **Motion Artifact Reduction**:
-    - Minimize participant movement during recording
+    - Minimis\1 participant movement during recording
     - Secure electrode cables to prevent tugging
     - Use wrist restraints if appropriate
     - Consider alternative electrode placement
@@ -1142,7 +1142,7 @@ def diagnose_signal_quality(session_data: List[ProcessedGSRSample]):
     conductance_values = [sample.conductance for sample in session_data]
     quality_scores = [sample.quality_score for sample in session_data]
     
-    # Analyze signal characteristics
+    # Analyse signal characteristics
     signal_mean = np.mean(conductance_values)
     signal_std = np.std(conductance_values)
     quality_mean = np.mean(quality_scores)
@@ -1165,7 +1165,7 @@ def diagnose_signal_quality(session_data: List[ProcessedGSRSample]):
     
     if signal_std > 5.0:
         diagnostics["quality_issues"].append("High signal variability - possible artifacts")
-        diagnostics["recommendations"].append("Minimize movement and electrical interference")
+        diagnostics["recommendations"].append("Minimis\1 movement and electrical interference")
     
     if quality_mean < 0.7:
         diagnostics["quality_issues"].append("Low overall quality")
@@ -1180,10 +1180,10 @@ def diagnose_signal_quality(session_data: List[ProcessedGSRSample]):
 # Monitor system performance during Shimmer operation
 python shimmer_performance_monitor.py --duration 300 --log-level DEBUG
 
-# Test Bluetooth bandwidth utilization
+# Test Bluetooth bandwidth utilisation
 python bluetooth_bandwidth_test.py --device-count 2 --sampling-rate 512
 
-# Validate temporal synchronization accuracy
+# Validate temporal synchronisation accuracy
 python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 ```
 
@@ -1191,7 +1191,7 @@ python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 
 **Technical Documentation**:
 
-- [Multi-Device Synchronization](../multi-device-synchronization/README.md)
+- [Multi-Device Synchronisation](../multi-device-synchronisation/README.md)
 - [Android Integration](../android-mobile-application/README.md)
 - [Signal Processing Fundamentals](../session-management/README.md)
 
@@ -1210,7 +1210,7 @@ python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 
 ---
 
-*This complete documentation consolidates all Shimmer Integration information into a single authoritative reference. For related modules, see the [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
+*This complete documentation consolidates all Shimmer Integration information into a single authoritative reference. For related modules, see the [Multi-Device Synchronisation](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
 
 ## References
 

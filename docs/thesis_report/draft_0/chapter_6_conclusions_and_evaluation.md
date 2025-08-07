@@ -43,7 +43,7 @@ practical impacts for the scientific community.
 The Multi-Sensor Recording System project has achieved significant technical and scientific breakthroughs that advance
 the state of research instrumentation and establish new paradigms for contactless physiological measurement. These
 achievements represent substantial contributions across multiple domains including distributed systems design, real-time
-synchronization, and research methodology innovation.
+synchronisation, and research methodology innovation.
 
 ### 6.1.1 Technical Innovation and Advancement
 
@@ -57,32 +57,32 @@ design for research applications. This architecture successfully combines the op
 coordination with the resilience and scalability advantages of distributed processing, achieving:
 
 - **99.7% system availability** exceeding the 99.5% requirement through complete fault tolerance mechanisms
-- **±3.2ms synchronization precision** across wireless networks, representing a 36% improvement over the ±5ms target
+- **±3.2ms synchronisation precision** across wireless networks, representing a 36% improvement over the ±5ms target
   specification
 - **Scalable device coordination** supporting up to 8 simultaneous devices with linear performance scaling
   characteristics
 - **Network resilience** with latency tolerance from 1ms to 500ms across diverse infrastructure conditions
 
-#### Advanced Multi-Modal Synchronization Framework
+#### Advanced Multi-Modal Synchronisation Framework
 
-The synchronization framework achievement represents significant advancement in real-time distributed coordination
+The synchronisation framework achievement represents significant advancement in real-time distributed coordination
 algorithms that achieve microsecond-level precision across heterogeneous wireless devices:
 
 - **Temporal precision achievement** of ±18.7ms ± 3.2ms representing 267% improvement over the target specification of
   ±50ms
-- **Network latency compensation algorithms** with predictive modeling and statistical analysis for dynamic adaptation
+- **Network latency compensation algorithms** with predictive modelling and statistical analysis for dynamic adaptation
 - **Clock drift correction** using machine learning techniques and real-time calibration procedures
-- **Cross-platform synchronization** maintaining precision across Android and Python platforms with different timing
+- **Cross-platform synchronisation** maintaining precision across Android and Python platforms with different timing
   characteristics
 
 #### Real-Time Processing Pipeline Innovation
 
 The real-time processing system demonstrates exceptional technical innovation in computational efficiency and algorithm
-optimization:
+optimisation:
 
 - **MediaPipe hand detection** achieving sub-100ms processing latency with >95% detection accuracy
 - **4K video processing** at 60fps with simultaneous multi-device coordination and real-time analysis
-- **Adaptive quality management** providing real-time assessment and optimization across multiple sensor modalities
+- **Adaptive quality management** providing real-time assessment and optimisation across multiple sensor modalities
 - **Intelligent compression** achieving 67% bandwidth reduction while maintaining research-grade data quality
 
 #### complete Security Architecture and Privacy Framework
@@ -103,7 +103,7 @@ The implementation of end-to-end security features transforms the system from a 
 
 **GDPR Article 25 Compliance Achievement:**
 - **Privacy-by-design architecture** implementing complete consent management and data anonymization
-- **99.8% PII detection accuracy** across thorough test datasets with automatic sanitization
+- **99.8% PII detection accuracy** across thorough test datasets with automatic sanitisation
 - **100% data subject rights implementation** including access, rectification, erasure, and portability
 - **Cryptographic file deletion** with multi-pass overwriting ensuring secure data destruction
 
@@ -164,7 +164,7 @@ contribution and collaborative research:
 
 ### 6.1.3 Practical Impact and Applications
 
-The system delivers immediate practical benefits that democratize access to advanced research capabilities while
+The system delivers immediate practical benefits that democratis\1 access to advanced research capabilities while
 enabling new research paradigms.
 
 #### Cost-Effective Research Instrumentation
@@ -173,13 +173,13 @@ The system achieves research-grade capabilities while maintaining cost-effective
 accessible:
 
 - **75% cost reduction** compared to equivalent commercial research instrumentation while providing superior flexibility
-- **Consumer hardware utilization** demonstrating that research-grade capabilities can be achieved using accessible
+- **Consumer hardware utilisation** demonstrating that research-grade capabilities can be achieved using accessible
   technology
 - **Resource efficiency** operating within modest computational and network requirements compatible with typical
   research environments
 - **Maintenance simplification** through automated health monitoring and complete error recovery mechanisms
 
-#### Research Capability Democratization
+#### Research Capability Democratisation
 
 The platform enables advanced research capabilities for resource-limited environments while maintaining scientific
 validity:
@@ -238,7 +238,7 @@ collection.
 **Achievement Evidence**:
 
 - **Device coordination capability** supporting up to 8 simultaneous devices (100% beyond minimum 4-device requirement)
-- **Temporal synchronization precision** of ±3.2ms (36% better than ±5ms specification)
+- **Temporal synchronisation precision** of ±3.2ms (36% better than ±5ms specification)
 - **Network resilience validation** across latency conditions from 1ms to 500ms with maintained functionality
 - **Fault tolerance demonstration** with 99.7% availability during extended operation testing
 
@@ -274,13 +274,13 @@ characteristics, with statistical validation providing objective assessment of c
 The response time achievement provides operational margin for future enhancements while ensuring optimal user experience
 during research operations.
 
-#### Temporal Synchronization Precision
+#### Temporal Synchronisation Precision
 
-**Target Specification**: ±50ms maximum synchronization accuracy
+**Target Specification**: ±50ms maximum synchronisation accuracy
 **Achieved Performance**: ±18.7ms achieved (267% better than requirement)
-**Validation Method**: Statistical precision measurement across 100,000 synchronization events
+**Validation Method**: Statistical precision measurement across 100,000 synchronisation events
 
-The synchronization precision represents research-grade timing accuracy comparable to dedicated laboratory equipment
+The synchronisation precision represents research-grade timing accuracy comparable to dedicated laboratory equipment
 while maintaining wireless operation flexibility.
 
 #### System Availability and Reliability
@@ -317,7 +317,7 @@ The project demonstrates exceptional validation success through thorough test in
 - 151 test methods with 99.3% success rate (150/151 tests passed)
 - 7 thorough test modules covering all major system components
 - Graceful dependency handling with appropriate test skipping
-- Real component testing ensuring authentic system behavior validation
+- Real component testing ensuring authentic system behaviour validation
 
 *Android Mobile Application Testing*:
 - Core Android functionality implemented with complete sensor integration
@@ -328,7 +328,7 @@ The project demonstrates exceptional validation success through thorough test in
 *Integration Testing Excellence*:
 - 17 integration tests with 100% success rate (17/17 tests passed)
 - Sub-second execution time (1.6 seconds) demonstrating efficient validation
-- Multi-device coordination, network performance, and synchronization precision validated
+- Multi-device coordination, network performance, and synchronisation precision validated
 - End-to-end workflow validation confirming system integration success
 
 **Quality Assessment Evidence**:
@@ -368,7 +368,7 @@ instrumentation:
 
 #### Academic Research Enablement
 
-The system enables new research paradigms while democratizing access to advanced measurement capabilities:
+The system enables new research paradigms while democratising access to advanced measurement capabilities:
 
 - **Multi-participant studies** supporting large-scale behavioral research previously constrained by measurement
   limitations
@@ -422,14 +422,14 @@ adaptation to alternative hardware configurations with minimal system modificati
 #### Network Infrastructure Dependencies
 
 **Wi-Fi Network Requirements**: The system requires reliable Wi-Fi infrastructure with sufficient bandwidth (minimum 10
-Mbps per device) for optimal operation. Network latency variations affect synchronization accuracy and system
+Mbps per device) for optimal operation. Network latency variations affect synchronisation accuracy and system
 performance, while firewall and security configurations may require specific network setup procedures.
 
 **Scalability Constraints**: Maximum practical device count is limited by network bandwidth and coordinator processing
 capacity. Large-scale deployments require careful network capacity planning, while geographic distribution is
 constrained by network infrastructure requirements.
 
-**Mitigation Approaches**: The system implements adaptive quality management and bandwidth optimization to reduce
+**Mitigation Approaches**: The system implements adaptive quality management and bandwidth optimisation to reduce
 network requirements, while complete documentation provides guidance for network configuration in institutional
 environments.
 
@@ -473,7 +473,7 @@ reference measurements, indicating room for improvement through advanced machine
 provides foundation capabilities that require further development for complete contactless measurement replacement.
 
 **Multi-Sensor Integration Complexity**: Coordinating multiple sensor types increases system complexity and requires
-specialized knowledge for troubleshooting and optimization. The integration approach balances functionality with
+specialized knowledge for troubleshooting and optimisation. The integration approach balances functionality with
 usability but may require technical expertise for advanced applications.
 
 #### Research Protocol Constraints
@@ -515,8 +515,8 @@ require familiarity with computer vision and signal processing concepts.
 multi-platform development. Troubleshooting complex issues may require specialized knowledge spanning Android
 development, Python programming, and research methodology.
 
-**Training Requirements**: Research teams require training for optimal system utilization, including calibration
-procedures, quality assessment interpretation, and experimental protocol optimization. The learning curve may be
+**Training Requirements**: Research teams require training for optimal system utilisation, including calibration
+procedures, quality assessment interpretation, and experimental protocol optimisation. The learning curve may be
 significant for teams without prior experience with similar systems.
 
 #### Integration and Interoperability Limitations
@@ -559,7 +559,7 @@ analysis, gaze tracking, and micro-expression detection capabilities. These addi
 physiological and behavioral measurement capabilities while maintaining the contactless measurement paradigm.
 
 **Adaptive Quality Management Enhancement**: Develop AI-powered quality assessment systems that provide intelligent
-recommendations for system optimization. Machine learning models could predict optimal system configurations based on
+recommendations for system optimisation. Machine learning models could predict optimal system configurations based on
 environmental conditions and participant characteristics, reducing manual intervention requirements.
 
 #### Advanced Sensor Integration and Hardware Support
@@ -576,13 +576,13 @@ increase system accessibility and deployment flexibility.
 capabilities, and edge computing support. These enhancements would improve system performance while enabling deployment
 in challenging network environments.
 
-#### Performance and Scalability Optimization
+#### Performance and Scalability Optimisation
 
 **Cloud-Native Architecture Development**: Develop cloud-based coordination capabilities that enable distributed
 research collaboration while maintaining data privacy and security requirements. Cloud integration would support
 large-scale multi-site research studies and reduce local infrastructure requirements.
 
-**Real-Time Processing Enhancement**: Optimize computer vision algorithms for improved performance on mobile devices
+**Real-Time Processing Enhancement**: Optimise computer vision algorithms for improved performance on mobile devices
 while implementing GPU acceleration for complex analysis tasks. These improvements would enable more sophisticated
 real-time analysis while maintaining battery life and thermal constraints.
 
@@ -626,13 +626,13 @@ laboratory exercises, and assessment frameworks that support adoption by educati
 
 **Human-Computer Interaction Research**: Adapt the system for HCI research applications including usability testing,
 user experience assessment, and interaction design validation. The contactless measurement capabilities provide
-significant advantages for natural behavior observation.
+significant advantages for natural behaviour observation.
 
 **Workplace Wellness and Safety**: Develop applications for occupational health research, stress monitoring, and
 workplace safety assessment where contactless measurement enables continuous monitoring without workflow disruption.
 
 **Consumer Research Applications**: Create specialized configurations for market research, product testing, and consumer
-behavior analysis where physiological responses provide valuable insights into user preferences and product
+behaviour analysis where physiological responses provide valuable insights into user preferences and product
 effectiveness.
 
 ### 6.4.3 Research Advancement Opportunities
@@ -718,12 +718,12 @@ while ensuring broad research community access.
 #### Global Research Community Impact
 
 **International Collaboration Support**: Create frameworks for international research collaboration including
-multi-language support, cultural adaptation, and diverse regulatory compliance. Global accessibility would maximize
+multi-language support, cultural adaptation, and diverse regulatory compliance. Global accessibility would maximise
 research impact while supporting diverse research communities.
 
 **Developing World Research Support**: Establish programs specifically designed to support research in resource-limited
 environments including reduced hardware requirements, offline capabilities, and complete training resources. These
-initiatives would democratize access to advanced research capabilities globally.
+initiatives would democratis\1 access to advanced research capabilities globally.
 
 **Research Impact Measurement**: Develop complete frameworks for measuring and documenting research impact
 including publication tracking, adoption metrics, and community contribution assessment. Impact measurement would
@@ -748,11 +748,11 @@ objectives but has exceeded them in multiple critical areas.
 The project's primary achievements span three fundamental areas:
 
 1. **Technical Excellence**: The system achieves exceptional performance metrics including 99.7% availability, ±3.2ms
-   synchronization precision, and 99.5% thorough test success rate across 240+ test methods, demonstrating that research-grade reliability can be achieved
+   synchronisation precision, and 99.5% thorough test success rate across 240+ test methods, demonstrating that research-grade reliability can be achieved
    using consumer hardware when supported by sophisticated software algorithms.
 
 2. **Research Innovation**: The contactless measurement paradigm enables new forms of scientific investigation while
-   reducing barriers to advanced research through cost-effective approaches that democratize access to sophisticated
+   reducing barriers to advanced research through cost-effective approaches that democratis\1 access to sophisticated
    measurement capabilities.
 
 3. **Community Impact**: The open-source architecture, complete documentation, and educational resources establish
@@ -766,7 +766,7 @@ applicable to broader research software development. The system demonstrates tha
 practices can be successfully adapted for research applications while maintaining the flexibility and extensibility
 required for diverse scientific investigations.
 
-The technical innovations, particularly the hybrid coordination architecture and advanced synchronization framework,
+The technical innovations, particularly the hybrid coordination architecture and advanced synchronisation framework,
 contribute to computer science knowledge while providing practical solutions for distributed research system challenges.
 These contributions establish new benchmarks for research software quality while providing templates for future
 development projects.
@@ -801,14 +801,14 @@ frameworks and system benchmarking modules.
 
 - complete performance measurement and statistical validation demonstrating system capabilities
 - System-wide capability validation with quantitative assessment of functional requirements
-- Network performance optimization demonstrating efficiency achievements
+- Network performance optimisation demonstrating efficiency achievements
 - Statistical analysis of system performance with confidence intervals and achievement metrics
 
 **Research Capability Evidence:**
 
 - Multi-device coordination achievements with complex state management and distributed control
 - Advanced calibration capabilities with quality assessment and research-grade validation
-- Temporal synchronization innovations with microsecond precision and drift correction
+- Temporal synchronisation innovations with microsecond precision and drift correction
 - Research-grade physiological measurement with validation and quality control
 
 **Quality and Innovation Validation:**
@@ -816,16 +816,16 @@ frameworks and system benchmarking modules.
 - Quality assurance validation with thorough testing framework and statistical confidence
 - Security achievement validation with vulnerability assessment and compliance checking
 - Computer vision innovation with contactless analysis and advanced algorithm implementation
-- Adaptive control innovation with machine learning optimization and real-time adaptation
+- Adaptive control innovation with machine learning optimisation and real-time adaptation
 
 ## Missing Items
 
 ### Missing Figures
 
-- **Figure 6.1**: Achievement Visualization Dashboard
+- **Figure 6.1**: Achievement Visualisation Dashboard
 - **Figure 6.2**: Goal Achievement Progress Timeline
 - **Figure 6.3**: Technical Architecture Innovation Map
-- **Figure 6.4**: Performance Excellence Metrics Visualization
+- **Figure 6.4**: Performance Excellence Metrics Visualisation
 
 ### Missing Tables
 

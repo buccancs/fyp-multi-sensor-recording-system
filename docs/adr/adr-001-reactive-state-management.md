@@ -9,11 +9,11 @@
 
 The Android application requires robust state management for complex multi-device coordination and real-time data streaming. The system must handle:
 
-- **Multi-device state synchronization** across Android recording devices
+- **Multi-device state synchronisation** across Android recording devices
 - **Real-time updates** from sensors (camera, thermal, Shimmer GSR)
 - **Complex UI states** during recording, calibration, and device management
 - **Error handling** with proper state recovery
-- **Lifecycle-aware behavior** to prevent memory leaks and crashes
+- **Lifecycle-aware behaviour** to prevent memory leaks and crashes
 
 Traditional imperative state management approaches were insufficient for the complexity of our multi-modal recording system. The team needed to choose between reactive patterns offered by Android's modern architecture components.
 
@@ -34,7 +34,7 @@ Adopt **StateFlow** as the primary reactive state management solution for all An
   - No support for Kotlin coroutines flow operators
   - Cannot handle backpressure effectively
   - Difficult to compose multiple data streams
-- **Why not chosen**: Insufficient for complex multi-device synchronization requiring coroutine-based asynchronous operations
+- **Why not chosen**: Insufficient for complex multi-device synchronisation requiring coroutine-based asynchronous operations
 
 ### Alternative 2: RxJava/RxAndroid
 - **Description**: Reactive extensions with Observable patterns

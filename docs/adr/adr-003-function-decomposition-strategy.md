@@ -16,12 +16,12 @@ We will systematically decompose long functions using the Extract Method refacto
 2. **Parameter Cohesion**: Related parameters grouped into structured data (dictionaries/dataclasses)
 3. **Naming Conventions**: Extracted functions use `_verb_noun` pattern (e.g., `_validate_input_parameters`)
 4. **Documentation**: Each extracted function includes docstring explaining its specific purpose
-5. **Error Handling**: Preserve original error handling behavior while improving error context
+5. **Error Handling**: Preserve original error handling behaviour while improving error context
 
 ### Implementation Strategy
 - **Phase 1**: Target functions >80 lines (highest impact)
 - **Phase 2**: Address functions 60-80 lines
-- **Phase 3**: Optimize functions 40-60 lines for edge cases
+- **Phase 3**: Optimise functions 40-60 lines for edge cases
 
 ### Quality Metrics Integration
 - Automated monitoring via `scripts/tech_debt_audit.py`

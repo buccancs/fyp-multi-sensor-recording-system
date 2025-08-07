@@ -38,7 +38,7 @@ driven by advances in consumer electronics [Apple2019; Samsung2020], computer vi
 algorithms [Goodfellow2016; LeCun2015], and distributed computing architectures [Lamport1978; Dean2008]. Traditional
 approaches to physiological measurement, particularly in the domain of stress and emotional response research, have
 relied heavily on invasive contact-based sensors that impose significant constraints on experimental design, participant
-behavior, and data quality [Boucsein2012; Healey2005]. The Multi-Sensor Recording System emerges from the recognition
+behaviour, and data quality [Boucsein2012; Healey2005]. The Multi-Sensor Recording System emerges from the recognition
 that these traditional constraints fundamentally limit our ability to understand natural human physiological responses
 in realistic environments [McDuff2016; Poh2010], as implemented through the coordinated architecture in
 `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt` and `PythonApp/main.py`.
@@ -60,7 +60,7 @@ constraints [Shimmer2015; EmpaticaE4], enabling researchers to conduct studies o
 settings [Picard2001; Healey2005]. However, these advances still required physical contact between sensors and
 participants, maintaining fundamental limitations around participant comfort, measurement artifacts from sensor
 movement, and the psychological impact of being explicitly monitored [Boucsein2012]. Research consistently demonstrates
-that the awareness of physiological monitoring can significantly alter participant behavior and
+that the awareness of physiological monitoring can significantly alter participant behaviour and
 responses [Hawthorne1939; Observer2010], creating a measurement observer effect that compromises data validity,
 addressed in this system through the contactless integration approach implemented in
 `AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt` and
@@ -69,7 +69,7 @@ addressed in this system through the contactless integration approach implemente
 **Key Historical Limitations:**
 
 - **Physical Constraint Requirements**: Traditional GSR measurement requires electrode placement that restricts natural
-  movement and behavior
+  movement and behaviour
 - **Laboratory Environment Dependencies**: Accurate measurement traditionally required controlled environments that
   limit ecological validity
 - **Participant Discomfort and Behavioral Artifacts**: Physical sensors create awareness of monitoring that can alter
@@ -90,14 +90,14 @@ complexity that prevented widespread adoption in research applications.
 Contactless physiological measurement represents a fundamental paradigm shift that addresses core limitations of
 traditional measurement approaches while opening new possibilities for research design and data collection. The
 theoretical foundation for contactless measurement rests on the understanding that physiological responses to stress and
-emotional stimuli produce observable changes in multiple modalities including skin temperature, micro-movements, color
+emotional stimuli produce observable changes in multiple modalities including skin temperature, micro-movements, colour
 variations, and behavioral patterns that can be detected through sophisticated analysis of video and thermal imaging
 data.
 
 The contactless measurement paradigm enables several critical research capabilities that were previously impractical or
 impossible:
 
-**Natural Behavior Preservation**: Participants can behave naturally without awareness of monitoring, enabling study of
+**Natural Behaviour Preservation**: Participants can behave naturally without awareness of monitoring, enabling study of
 genuine physiological responses rather than responses influenced by measurement awareness.
 
 **Group Dynamics Research**: Multiple participants can be monitored simultaneously without physical sensor constraints,
@@ -114,7 +114,7 @@ costs and technical support requirements.
 
 However, the transition to contactless measurement introduces new technical challenges that must be systematically
 addressed to maintain research-grade accuracy and reliability. These challenges include environmental sensitivity,
-computational complexity, calibration requirements, and the need for sophisticated synchronization across multiple data
+computational complexity, calibration requirements, and the need for sophisticated synchronisation across multiple data
 modalities.
 
 ### Multi-Modal Sensor Integration Requirements
@@ -126,7 +126,7 @@ systematic integration of RGB cameras, thermal imaging, and reference physiologi
 coordination framework.
 
 **RGB Camera Systems**: High-resolution RGB cameras provide the foundation for contactless measurement through analysis
-of subtle color variations, micro-movements, and behavioral patterns that correlate with physiological responses. The
+of subtle colour variations, micro-movements, and behavioral patterns that correlate with physiological responses. The
 system employs 4K resolution cameras to ensure sufficient detail for accurate analysis while maintaining real-time
 processing capabilities.
 
@@ -139,27 +139,27 @@ validation of contactless approaches while supporting hybrid measurement scenari
 remains necessary.
 
 The technical challenge lies not simply in collecting data from multiple sensors, but in achieving precise temporal
-synchronization across heterogeneous devices with different sampling rates, processing delays, and communication
+synchronisation across heterogeneous devices with different sampling rates, processing delays, and communication
 characteristics. The system must coordinate data collection from Android mobile devices, thermal cameras, physiological
 sensors, and desktop computers while maintaining microsecond-level timing precision essential for physiological
 analysis.
 
-#### Advanced Multi-Device Synchronization Architecture
+#### Advanced Multi-Device Synchronisation Architecture
 
-The Multi-Device Synchronization System serves as the temporal orchestrator for the entire research ecosystem,
+The Multi-Device Synchronisation System serves as the temporal orchestrator for the entire research ecosystem,
 functioning analogously to a conductor directing a complex musical ensemble. Every device in the recording ecosystem
 must begin and cease data collection at precisely coordinated moments, with timing precision measured in sub-millisecond
 intervals. Research in psychophysiology has demonstrated that even minimal timing errors can fundamentally alter the
-interpretation of stimulus-response relationships, making precise synchronization not merely beneficial but essential
+interpretation of stimulus-response relationships, making precise synchronisation not merely beneficial but essential
 for valid scientific conclusions.
 
-**Core Synchronization Components:**
+**Core Synchronisation Components:**
 
 The system implements several sophisticated components working in concert:
 
 - **MasterClockSynchronizer**: Central coordination component that maintains authoritative time reference and manages
   device coordination protocols
-- **SessionSynchronizer**: Sophisticated session management system that coordinates recording initialization and
+- **SessionSynchronizer**: Sophisticated session management system that coordinates recording initialisation and
   termination across all devices with microsecond precision
 - **NTPTimeServer**: Custom Network Time Protocol implementation optimized for local network precision and mobile device
   coordination
@@ -168,23 +168,23 @@ The system implements several sophisticated components working in concert:
 
 **Network Communication Protocol:**
 
-The synchronization framework employs a sophisticated JSON-based communication protocol optimized for scientific
+The synchronisation framework employs a sophisticated JSON-based communication protocol optimized for scientific
 applications:
 
 - **StartRecordCommand**: Precisely coordinated recording initiation with timestamp validation
 - **StopRecordCommand**: Synchronized recording termination with data integrity verification
-- **SyncTimeCommand**: Continuous time synchronization with latency compensation
+- **SyncTimeCommand**: Continuous time synchronisation with latency compensation
 - **HelloMessage**: Device discovery and capability negotiation
 - **StatusMessage**: Real-time operational status and quality monitoring
 
 **Performance Achievements:**
 
-The synchronization system achieves exceptional performance metrics essential for research applications:
+The synchronisation system achieves exceptional performance metrics essential for research applications:
 
-- **Temporal Precision**: ±3.2ms synchronization accuracy across all connected devices
+- **Temporal Precision**: ±3.2ms synchronisation accuracy across all connected devices
 - **Network Latency Tolerance**: Maintains accuracy across network conditions from 1ms to 500ms latency
 - **Extended Session Reliability**: Clock drift correction maintains accuracy over multi-hour recording sessions
-- **Fault Recovery**: Automatic synchronization recovery following network interruptions or device disconnections
+- **Fault Recovery**: Automatic synchronisation recovery following network interruptions or device disconnections
 
 ### Research Community Needs and Technological Gaps
 
@@ -193,7 +193,7 @@ several persistent challenges that existing commercial and research solutions fa
 
 **Accessibility and Cost Barriers**: Commercial research-grade systems typically cost $50,000-$200,000, placing them
 beyond the reach of many research groups, particularly those in developing countries or smaller institutions. This cost
-barrier significantly limits the democratization of advanced physiological measurement research.
+barrier significantly limits the democratisation of advanced physiological measurement research.
 
 **Technical Complexity and Training Requirements**: Existing systems often require specialized technical expertise for
 operation, maintenance, and data analysis, creating barriers for research groups without dedicated technical support
@@ -210,7 +210,7 @@ contribution, collaborative development, and educational applications that could
 
 The Multi-Sensor Recording System addresses these community needs through:
 
-- **Cost-Effective Architecture**: Utilizing consumer-grade hardware with research-grade software to achieve
+- **Cost-Effective Architecture**: Utilising consumer-grade hardware with research-grade software to achieve
   commercial-quality results at fraction of traditional costs
 - **Open Source Development**: Enabling community contribution and collaborative development while supporting
   educational applications
@@ -233,7 +233,7 @@ operational simplicity of centralized coordination with the resilience and scala
 processing. This architectural innovation addresses the fundamental challenge of coordinating consumer-grade devices for
 scientific applications while maintaining the precision required for research use.
 
-**Advanced Synchronization Framework**: The synchronization algorithms achieve microsecond-level precision across
+**Advanced Synchronisation Framework**: The synchronisation algorithms achieve microsecond-level precision across
 wireless networks with inherent latency and jitter characteristics. This represents significant advancement in
 distributed coordination algorithms that has applications beyond physiological measurement to other real-time
 distributed systems.
@@ -242,7 +242,7 @@ distributed systems.
 Python development while maintaining code quality and development productivity. This methodology provides templates for
 future research software projects requiring coordination across diverse technology platforms.
 
-**Adaptive Quality Management**: The system implements real-time quality assessment and optimization across multiple
+**Adaptive Quality Management**: The system implements real-time quality assessment and optimisation across multiple
 sensor modalities while maintaining research-grade data quality standards. This approach enables the system to maintain
 optimal performance across diverse research environments and participant populations.
 
@@ -252,7 +252,7 @@ validating scientific measurement quality.
 
 These technical innovations demonstrate that research-grade reliability and accuracy can be achieved using
 consumer-grade hardware when supported by sophisticated software algorithms and validation procedures. This
-demonstration opens new possibilities for democratizing access to advanced research capabilities while maintaining
+demonstration opens new possibilities for democratising access to advanced research capabilities while maintaining
 scientific validity and research quality standards.
 
 ---
@@ -274,7 +274,7 @@ requires physical electrode placement that creates multiple sources of measureme
 artifact [Boucsein2012, Fowles1981]. Electrodes must be attached to specific skin locations, typically fingers or palms,
 requiring participants to maintain relatively stationary positions to prevent signal artifacts from electrode
 movement [Cacioppo2007]. This physical constraint fundamentally alters the experimental environment and participant
-behavior, potentially invalidating the very physiological responses being measured, as demonstrated in psychological
+behaviour, potentially invalidating the very physiological responses being measured, as demonstrated in psychological
 reactivity studies [Wilhelm2010].
 
 The psychological impact of wearing physiological sensors creates an "observer effect" where participant awareness of
@@ -297,7 +297,7 @@ system through cost-effective mobile device integration via `AndroidApp/src/main
 architecture.
 
 **Environmental Constraints and Ecological Validity**: Traditional physiological measurement requires controlled
-laboratory environments to minimize electrical interference, temperature variations, and movement artifacts that can
+laboratory environments to minimis\1 electrical interference, temperature variations, and movement artifacts that can
 compromise measurement accuracy [Boucsein2012]. These environmental constraints severely limit the ecological validity
 of research findings by preventing measurement in natural settings where physiological responses may differ
 significantly from laboratory conditions [Wilhelm2010, Gravina2017].
@@ -312,10 +312,10 @@ contactless measurement capabilities implemented in
 **Technical Complexity and Accessibility Barriers**: Traditional research-grade physiological measurement systems
 require specialized technical expertise for operation, calibration, and maintenance that places them beyond the
 practical reach of many research groups [DataTranslation2018, MCC2019]. This technical complexity creates barriers to
-entry that limit the democratization of physiological measurement research and concentrate advanced capabilities within
+entry that limit the democratisation of physiological measurement research and concentrate advanced capabilities within
 well-funded institutions with dedicated technical support staff.
 
-The proprietary nature of most commercial systems prevents customization for novel research applications and limits
+The proprietary nature of most commercial systems prevents customisation for novel research applications and limits
 educational applications that could train the next generation of researchers in advanced physiological measurement
 techniques [NI2019]. This system addresses accessibility through automated setup and user-friendly interfaces
 implemented in `PythonApp/main.py` and complete documentation following software engineering best
@@ -328,7 +328,7 @@ technical challenges related to distributed system coordination, real-time data 
 integration. These challenges represent significant computer science research problems with applications extending
 beyond physiological measurement to other distributed real-time systems.
 
-**Temporal Synchronization Across Heterogeneous Devices**: Achieving research-grade temporal precision across wireless
+**Temporal Synchronisation Across Heterogeneous Devices**: Achieving research-grade temporal precision across wireless
 networks with diverse device characteristics, processing delays, and communication protocols represents a fundamental
 distributed systems challenge. Physiological analysis requires microsecond-level timing precision to correlate events
 across different sensor modalities, but consumer-grade devices and wireless networks introduce millisecond-level latency
@@ -336,7 +336,7 @@ and jitter that must be systematically compensated.
 
 The challenge is compounded by the heterogeneous nature of the device ecosystem, where Android mobile devices, thermal
 cameras, physiological sensors, and desktop computers each have different timing characteristics, clock precision, and
-communication capabilities. Developing synchronization algorithms that achieve research-grade precision across this
+communication capabilities. Developing synchronisation algorithms that achieve research-grade precision across this
 diverse ecosystem while maintaining reliability and scalability represents a significant technical innovation
 opportunity.
 
@@ -356,7 +356,7 @@ data, and physiological sensor data in real-time while maintaining analysis qual
 computational challenge. The system must balance processing thoroughness with real-time performance requirements while
 providing adaptive quality management that responds to changing computational load and environmental conditions.
 
-The quality management challenge extends beyond simple computational optimization to include real-time assessment of
+The quality management challenge extends beyond simple computational optimisation to include real-time assessment of
 data quality, automatic adjustment of processing parameters, and intelligent resource allocation across multiple
 concurrent analysis pipelines. This requires sophisticated algorithms that can assess data quality in real-time and make
 automatic adjustments to maintain optimal performance.
@@ -378,14 +378,14 @@ prevent investigation of important scientific questions and limit the practical 
 methodological constraints represent opportunities for innovation that could fundamentally expand research capabilities
 and improve understanding of human physiological responses.
 
-**Natural Behavior Investigation Limitations**: The inability to measure physiological responses during natural behavior
+**Natural Behaviour Investigation Limitations**: The inability to measure physiological responses during natural behaviour
 prevents research into authentic stress responses, emotional patterns, and social physiological interactions that occur
 in real-world environments. Traditional laboratory-based measurement may provide highly controlled conditions but fails
 to capture the complexity and authenticity of physiological responses that occur in natural settings.
 
 This limitation is particularly problematic for research into workplace stress, social anxiety, group dynamics, and
 other phenomena where the artificial laboratory environment may fundamentally alter the responses being studied.
-Developing contactless measurement capabilities that enable natural behavior investigation could revolutionize
+Developing contactless measurement capabilities that enable natural behaviour investigation could revolutionise
 understanding of human physiological responses and their practical applications.
 
 **Longitudinal Studies and Pattern Analysis**: Traditional measurement approaches make longitudinal physiological
@@ -421,15 +421,15 @@ interconnectedness of human physiological responses.
 
 The primary aim of this research is to develop, implement, and validate a complete Multi-Sensor Recording System
 that enables contactless physiological measurement while maintaining research-grade accuracy, reliability, and temporal
-precision comparable to traditional contact-based approaches. This system aims to democratize access to advanced
+precision comparable to traditional contact-based approaches. This system aims to democratis\1 access to advanced
 physiological measurement capabilities while expanding research possibilities through innovative coordination of
 multiple sensor modalities and distributed computing architectures.
 
 The research addresses fundamental limitations of traditional physiological measurement approaches by developing a
 system that:
 
-- **Enables Natural Behavior Investigation**: Eliminates physical constraints and measurement awareness that alter
-  participant behavior, enabling research into authentic physiological responses in natural environments
+- **Enables Natural Behaviour Investigation**: Eliminates physical constraints and measurement awareness that alter
+  participant behaviour, enabling research into authentic physiological responses in natural environments
 - **Supports Multi-Participant and Group Dynamics Research**: Coordinates measurement across multiple participants
   simultaneously, enabling investigation of social physiological responses and group dynamics
 - **Provides Cost-Effective Research-Grade Capabilities**: Achieves commercial-quality results using consumer-grade
@@ -445,13 +445,13 @@ Develop and validate a hybrid coordination architecture that combines centralize
 processing resilience, enabling reliable coordination of heterogeneous consumer-grade devices for scientific
 applications. This architecture must achieve:
 
-- **Microsecond-Level Temporal Synchronization**: Implement sophisticated synchronization algorithms that achieve
+- **Microsecond-Level Temporal Synchronisation**: Implement sophisticated synchronisation algorithms that achieve
   research-grade timing precision across wireless networks with inherent latency and jitter characteristics
 - **Cross-Platform Integration Excellence**: Establish systematic methodologies for coordinating Android, Python, and
   embedded sensor platforms while maintaining code quality and development productivity
 - **Fault Tolerance and Recovery Capabilities**: Implement complete fault tolerance mechanisms that prevent data
   loss while enabling rapid recovery from device failures and network interruptions
-- **Scalability and Performance Optimization**: Design architecture that supports coordination of up to 8 simultaneous
+- **Scalability and Performance Optimisation**: Design architecture that supports coordination of up to 8 simultaneous
   devices while maintaining real-time performance and resource efficiency
 
 **Objective 2: Multi-Modal Sensor Integration and Data Processing**
@@ -461,9 +461,9 @@ sensors within a unified data processing pipeline. This framework must achieve:
 
 - **Real-Time Multi-Modal Data Processing**: Process multiple high-resolution video streams, thermal imaging data, and
   physiological sensor data in real-time while maintaining analysis quality
-- **Adaptive Quality Management**: Implement intelligent quality assessment and optimization algorithms that maintain
+- **Adaptive Quality Management**: Implement intelligent quality assessment and optimisation algorithms that maintain
   research-grade data quality across varying environmental conditions and participant characteristics
-- **Advanced Synchronization Engine**: Develop sophisticated algorithms for temporal alignment of multi-modal data with
+- **Advanced Synchronisation Engine**: Develop sophisticated algorithms for temporal alignment of multi-modal data with
   different sampling rates and processing delays
 - **complete Data Validation**: Establish systematic validation procedures that ensure data integrity and research
   compliance throughout the collection and processing pipeline
@@ -515,7 +515,7 @@ educational applications. This framework must achieve:
 
 #### Community Impact and Accessibility Objectives
 
-**Objective 6: Democratization of Research Capabilities**
+**Objective 6: Democratisation of Research Capabilities**
 
 Demonstrate that research-grade physiological measurement capabilities can be achieved using cost-effective
 consumer-grade hardware when supported by sophisticated software algorithms. This demonstration must:
@@ -632,7 +632,7 @@ innovations to computer science and research methodology.
 - **Multi-Modal Sensor Integration**: complete integration of RGB cameras, thermal imaging, and physiological
   sensors within unified processing framework
 - **Real-Time Data Processing**: Implementation of sophisticated algorithms for real-time analysis, quality assessment,
-  and temporal synchronization
+  and temporal synchronisation
 - **Research-Grade Validation**: complete testing and validation framework specifically designed for research
   software applications
 - **Open Source Development**: Complete system implementation with complete documentation supporting community
@@ -654,8 +654,8 @@ The application focus includes:
 **Technical Scope Boundaries:**
 
 - **Hardware Development**: The research focuses on software architecture and integration rather than novel hardware
-  development, utilizing existing consumer-grade devices and sensors
-- **Algorithm Development**: While the system implements sophisticated synchronization and coordination algorithms, it
+  development, utilising existing consumer-grade devices and sensors
+- **Algorithm Development**: While the system implements sophisticated synchronisation and coordination algorithms, it
   does not focus on developing novel computer vision or machine learning algorithms for physiological analysis
 - **Clinical Validation**: The research focuses on technical system validation rather than clinical or medical
   validation of measurement accuracy
@@ -680,9 +680,9 @@ theoretical understanding while providing immediate practical benefits for the r
 
 - Novel hybrid star-mesh topology that combines centralized coordination simplicity with distributed processing
   resilience
-- Advanced synchronization algorithms achieving microsecond precision across heterogeneous wireless devices
+- Advanced synchronisation algorithms achieving microsecond precision across heterogeneous wireless devices
 - Fault tolerance mechanisms specifically designed for research applications where data loss is unacceptable
-- Scalability optimization supporting coordination of up to 8 simultaneous devices with real-time performance
+- Scalability optimisation supporting coordination of up to 8 simultaneous devices with real-time performance
 
 **2. Cross-Platform Integration Methodology**
 
@@ -704,7 +704,7 @@ theoretical understanding while providing immediate practical benefits for the r
 - Real-time coordination algorithms for diverse sensor modalities with different timing characteristics
 - Adaptive quality management enabling optimal performance across varying environmental conditions
 - Data validation and integrity procedures ensuring research compliance throughout collection and processing
-- Synchronization engine achieving research-grade temporal precision across multiple data streams
+- Synchronisation engine achieving research-grade temporal precision across multiple data streams
 
 **Secondary Academic Contributions:**
 
@@ -840,7 +840,7 @@ information is available in the complete thesis structure:
 
 **Supporting Technical Documentation:**
 Available in docs/ directory with component-specific documentation for
-all system components including Android Mobile Application, Python Desktop Controller, Multi-Device Synchronization,
+all system components including Android Mobile Application, Python Desktop Controller, Multi-Device Synchronisation,
 Camera Recording System, Session Management, Hardware Integration, Testing Framework, and Networking Protocol
 components.
 
@@ -860,11 +860,11 @@ referenced in **Appendix F** with detailed code snippets demonstrating the imple
 - `AndroidApp/src/main/java/com/multisensor/recording/MultiSensorApplication.kt` - Application class with dependency
   injection using Dagger Hilt (See Appendix F.4)
 
-**Multi-Device Synchronization System:**
+**Multi-Device Synchronisation System:**
 
 - `PythonApp/session/session_manager.py` - Central session coordination with distributed device management (See
   Appendix F.5)
-- `PythonApp/session/session_synchronizer.py` - Advanced temporal synchronization algorithms with drift correction (
+- `PythonApp/session/session_synchronizer.py` - Advanced temporal synchronisation algorithms with drift correction (
   See Appendix F.6)
 - `PythonApp/master_clock_synchronizer.py` - High-precision master clock coordination using NTP and custom
   protocols (See Appendix F.7)
@@ -908,7 +908,7 @@ referenced in **Appendix F** with detailed code snippets demonstrating the imple
 - `AndroidApp/src/test/` - Android unit and integration testing with performance benchmarks (See Appendix F.23)
 
 These implementation references provide concrete evidence supporting the motivations and technical foundations presented
-in this introduction, demonstrating the practical realization of academic concepts discussed throughout this chapter.
+in this introduction, demonstrating the practical realisation of academic concepts discussed throughout this chapter.
 
 ## Missing Items
 
