@@ -8,7 +8,7 @@ The Multi-Sensor Recording System implements a distributed star-mesh topology wi
 
 ### Distributed Systems Architecture
 - **Star-mesh topology**: PC controller coordinates multiple Android recording devices
-- **Offline-first recording**: Local data storage with synchronized timestamps
+- **Offline-first recording**: Local data storage with synchronised timestamps
 - **JSON protocol communication**: WebSocket-based real-time communication
 - **Multi-modal synchronisation**: <1ms precision across all data streams
 
@@ -89,7 +89,7 @@ The Android application underwent complete architectural refactoring implementin
 └─────────────────────────────────────────┘
 ```
 
-#### Specialized Controllers
+#### Specialised Controllers
 
 **RecordingSessionController** (218 lines)
 - Pure recording operation management
@@ -297,7 +297,7 @@ PC 1       PC 2       PC N
 ### Data Protection
 - **TLS Encryption**: All network communication encrypted
 - **Local Encryption**: AES-GCM for local data storage
-- **Access Control**: Device authentication and authorization
+- **Access Control**: Device authentication and authorisation
 - **Privacy Compliance**: GDPR-compliant data handling
 
 ### Network Security
@@ -312,15 +312,15 @@ PC 1       PC 2       PC N
 
 #### Memory Management
 - **Streaming Processing**: Minimis\1 memory footprint
-- **Buffer Management**: Adaptive buffer sizing
-- **Garbage Collection**: Optimized for real-time processing
+- **Buffer Management**: Adaptive buffer sising
+- **Garbage Collection**: Optimised for real-time processing
 - **Resource Pools**: Reusable resource management
 
 #### CPU Optimisation
 - **Multi-threading**: Parallel processing where possible
 - **Async Processing**: Non-blocking I/O operations
 - **Load Balancing**: Distribute processing across cores
-- **Priority Scheduling**: Critical tasks prioritized
+- **Priority Scheduling**: Critical tasks prioritised
 
 #### Storage Optimisation
 - **Compression**: Lossless compression for non-critical data
@@ -332,13 +332,13 @@ PC 1       PC 2       PC N
 
 ### Code Quality Maintenance
 - **Automated Testing**: 100% success rate across test categories
-- **Static Analysis**: Continuous code quality monitoring
+- **Static analysis**: Continuous code quality monitoring
 - **Dependency Management**: Regular security updates
 - **Performance Monitoring**: Continuous performance tracking
 
 ### Documentation Maintenance
 - **Architecture Decision Records**: Document major decisions
-- **API Documentation**: Keep API docs synchronized
+- **API Documentation**: Keep API docs synchronised
 - **Research Documentation**: Academic-grade documentation
 - **User Guides**: Practical usage documentation
 

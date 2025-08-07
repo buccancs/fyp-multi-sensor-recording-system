@@ -121,7 +121,7 @@ The system implements a hierarchical master-slave synchronisation model:
 
 - **Primary Time Source**: Windows PC with stable crystal oscillator
 - **NTP Server**: Local network time distribution at microsecond precision
-- **Command Coordination**: Centralized session management and device control
+- **Command Coordination**: Centralised session management and device control
 - **Quality Assessment**: Continuous monitoring of synchronisation precision
 
 #### Slave Level (Connected Devices)
@@ -135,16 +135,16 @@ The system implements a hierarchical master-slave synchronisation model:
 #### Clock Synchronisation Protocol
 
 1. **Initial Synchronisation**: Network Time Protocol handshake with round-trip delay measurement
-2. **Periodic Resynchronization**: Adaptive interval based on measured drift characteristics
+2. **Periodic Resynchronisation**: Adaptive interval based on measured drift characteristics
 3. **Drift Compensation**: Machine learning algorithms predicting individual device behaviour
 4. **Quality Monitoring**: Continuous assessment of synchronisation precision and network quality
 
 #### Event Coordination Protocol
 
-1. **Session Initialisation**: Distributed session creation with synchronized parameters
+1. **Session Initialisation**: Distributed session creation with synchronised parameters
 2. **Recording Start**: Coordinated start commands with precise timing alignment
 3. **Data Collection**: Continuous temporal validation during recording sessions
-4. **Session Completion**: Synchronized stop commands with data integrity verification
+4. **Session Completion**: Synchronised stop commands with data integrity verification
 
 ## Protocol Specification
 
@@ -193,7 +193,7 @@ graph TB
 
 #### Message Structure
 
-All synchronisation messages follow a standardized JSON format:
+All synchronisation messages follow a standardised JSON format:
 
 ```json
 {
@@ -579,7 +579,7 @@ class SessionSynchronizer:
         self.device_connections = {}
 
     def create_synchronized_session(self, session_config: SessionConfig) -> SessionInfo:
-        """Create new session with synchronized parameters across devices"""
+        """Create new session with synchronised parameters across devices"""
         session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
         # Synchronise all devices before session creation
@@ -591,7 +591,7 @@ class SessionSynchronizer:
             if not sync_result.success:
                 raise SynchronizationError(f"Failed to sync device {device_id}")
 
-        # Create session with synchronized timing
+        # Create session with synchronised timing
         session_info = SessionInfo(
             session_id=session_id,
             devices=session_config.devices,
@@ -610,7 +610,7 @@ class SessionSynchronizer:
 
         session = self.active_sessions[session_id]
 
-        # Calculate synchronized start time
+        # Calculate synchronised start time
         start_time = time.time_ns() + (countdown * 1_000_000_000)  # Convert to nanoseconds
 
         # Send start commands to all devices
@@ -751,7 +751,7 @@ class SynchronizationClient {
 
 #### Synchronisation Quality Assessment
 
-**Pre-Recording Synchronisation Check**:
+**Pre-Recording Synchronisation check**:
 
 1. Navigate to Calibration tab in PC controller
 2. Select "System Synchronisation" option
@@ -768,7 +768,7 @@ class SynchronizationClient {
 
 ### Recording Session Coordination
 
-#### Synchronized Recording Workflow
+#### Synchronised Recording Workflow
 
 1. **Pre-Recording Synchronisation**:
    ```python
@@ -781,7 +781,7 @@ class SynchronizationClient {
 2. **Coordinated Session Start**:
     - PC controller sends countdown commands to all devices
     - Devices acknowledge readiness and synchronisation status
-    - Synchronized recording begins at precise master timestamp
+    - Synchronised recording begins at precise master timestamp
     - Real-time quality monitoring during recording
 
 3. **Recording Monitoring**:
@@ -804,7 +804,7 @@ class SynchronizationClient {
 1. Use built-in network diagnostic tools
 2. Test round-trip latency to each device
 3. Verify NTP server accessibility from mobile devices
-4. Check for network interference or congestion
+4. check for network interference or congestion
 
 ### Quality Monitoring and Optimisation
 
@@ -862,7 +862,7 @@ class SessionSynchronizer:
     """Coordinate recording sessions across multiple devices"""
 
     def create_synchronized_session(self, config: SessionConfig) -> SessionInfo:
-        """Create new session with synchronized timing parameters"""
+        """Create new session with synchronised timing parameters"""
 
     def start_coordinated_recording(self, session_id: str, countdown: int) -> bool:
         """Start recording across all devices with precise coordination"""
@@ -1015,7 +1015,7 @@ class MultiDeviceTest:
             precision_requirement="millisecond"
         )
 
-        # Create synchronized session
+        # Create synchronised session
         session = session_synchronizer.create_synchronized_session(session_config)
         assert session.session_id is not None
 
@@ -1055,7 +1055,7 @@ class MultiDeviceTest:
 **Symptoms**: High offset variance, precision warnings
 **Diagnosis**:
 
-1. Check network latency and stability
+1. check network latency and stability
 2. Verify NTP server accessibility
 3. Monitor device CPU load and power management
 4. Review drift compensation effectiveness
@@ -1067,7 +1067,7 @@ class MultiDeviceTest:
    # Test network latency
    ping -c 100 192.168.1.100
    
-   # Check for packet loss
+   # check for packet loss
    python network_diagnostics.py --test-packet-loss
    ```
 
@@ -1082,7 +1082,7 @@ class MultiDeviceTest:
 **Diagnosis**:
 
 1. Verify network connectivity
-2. Check firewall settings
+2. check firewall settings
 3. Validate NTP server operation
 4. Review device registration status
 
@@ -1109,7 +1109,7 @@ class MultiDeviceTest:
 **Diagnosis**:
 
 1. Monitor drift rates and compensation effectiveness
-2. Check environmental conditions (temperature, power)
+2. check environmental conditions (temperature, power)
 3. Verify oscillator characteristics
 4. Review drift model accuracy
 
@@ -1126,7 +1126,7 @@ class MultiDeviceTest:
 
 ### Advanced Diagnostics
 
-#### Synchronisation Quality Analysis
+#### Synchronisation Quality analysis
 
 ```python
 def analyze_sync_quality(session_id: str):
@@ -1181,7 +1181,7 @@ python sync_network_test.py \
 
 **Community Support**:
 
-- GitHub Issues: [Synchronisation Issues](https://github.com/buccancs/bucika_gsr/issues?q=label%3Asynchronization)
+- GitHub Issues: [Synchronisation Issues](https://github.com/buccancs/bucika_gsr/issues?q=label%3Asynchronisation)
 - Discussion Forum: [Synchronisation Discussion](https://github.com/buccancs/bucika_gsr/discussions)
 
 ---

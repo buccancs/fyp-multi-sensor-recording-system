@@ -55,7 +55,7 @@ supported[\[10\]](https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfecc
 but the API abstracts these details. Overall, the scope of the SDK is to
 provide a** reliable, real-time link\*\* between Shimmer3 hardware and
 Android software, enabling researchers to integrate GSR/EDA signals into
-mobile apps for data logging, biofeedback, or synchronized multimodal
+mobile apps for data logging, biofeedback, or synchronised multimodal
 experiments.
 
 ## Installation
@@ -259,8 +259,8 @@ This will initiate a Bluetooth SPP connection in the background. The
 Shimmer's internal firmware will perform a handshake and initialisation
 sequence once the link is established. The `shimmerHandler` we provided
 will get a `MESSAGE_STATE_CHANGE` message when the connection state
-updates. Specifically, when fully connected and initialized, the state
-will change to `Shimmer.MSG_STATE_FULLY_INITIALIZED` (value
+updates. Specifically, when fully connected and initialised, the state
+will change to `Shimmer.MSG_STATE_FULLY_INITIALised` (value
 3)[\[18\]](https://github.com/jhallard/BioSig-for-Android/blob/f803f22e485d453516b671cd3692c79a6c898858/src/com/shimmerresearch/driver/Shimmer.java#L18-L26)[\[19\]](https://github.com/jhallard/BioSig-for-Android/blob/f803f22e485d453516b671cd3692c79a6c898858/src/com/shimmerresearch/driver/Shimmer.java#L20-L28).
 You might wait for this state before allowing the user to start
 streaming.
@@ -272,7 +272,7 @@ pairing instructions). The Shimmer3 uses a default PIN code **1234** for
 pairing[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122)
 -- the SDK can initiate pairing if needed (it will prompt for the PIN).
 
-**3. Start streaming data:** Once connected (i.e., in an initialized
+**3. Start streaming data:** Once connected (i.e., in an initialised
 state), you can instruct the Shimmer to begin streaming sensor data.
 This is done by calling:
 
@@ -329,7 +329,7 @@ post-processing.
 Each `ObjectCluster` also contains a timestamp. Typically, you can
 retrieve the device's timestamp with
 `cluster.getData(Configuration.Shimmer3.ObjectClusterSensorName.TIMESTAMP)`
-(or it might be labeled "Time Stamp"). This represents the Shimmer's
+(or it might be labelled "Time Stamp"). This represents the Shimmer's
 internal clock for the
 sample[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[24\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L415-L424).
 If synchronising with other data (like phone sensors or multiple
@@ -349,7 +349,7 @@ when disconnected.
 
     Shimmer shimmer = new Shimmer(ctx, handler, ...config...);
     shimmer.connect(macAddress, "default");
-    // wait for MSG_STATE_FULLY_INITIALIZED (in handler)
+    // wait for MSG_STATE_FULLY_INITIALised (in handler)
     shimmer.startStreaming();
     // ... receive data in handler ...
     shimmer.stopStreaming();
@@ -376,8 +376,8 @@ calibrated form is the skin resistance in kΩ as discussed. When using
 the SDK's high-level methods (like `ObjectCluster.getData("GSR")`), you
 are typically getting the calibrated resistance. If needed, you can also
 retrieve **raw GSR** by using the key `"GSR Raw"` or by looking for the
-format labeled "RAW". The Shimmer device also computes an intermediate
-value called **GSR Resistance** (sometimes labeled `"GSR Res"` in older
+format labelled "RAW". The Shimmer device also computes an intermediate
+value called **GSR Resistance** (sometimes labelled `"GSR Res"` in older
 APIs) which may be the same as the calibrated GSR in most contexts. The
 **GSR range setting** affects the analogue front-end gain: if you manually
 choose a range (0--3), the raw values will have different scaling. In
@@ -625,7 +625,7 @@ data).
 
 This modular integration allows the `bucika_gsr` app to treat Shimmer
 GSR data as a plug-and-play input, similarly to how it treats the camera
-feeds, resulting in a cohesive synchronized data collection system.
+feeds, resulting in a cohesive synchronised data collection system.
 
 ## Troubleshooting & Tips
 

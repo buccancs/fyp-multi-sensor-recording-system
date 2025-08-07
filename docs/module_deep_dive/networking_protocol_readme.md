@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Networking Protocol System defines the communication framework that enables coordinated operation across all devices in the Multi-Sensor Recording System for contactless GSR prediction research. This component implements a standardized message exchange protocol providing reliable communication, temporal synchronisation, and data streaming capabilities between PC master controllers and distributed mobile sensor nodes.
+The Networking Protocol System defines the communication framework that enables coordinated operation across all devices in the Multi-Sensor Recording System for contactless GSR prediction research. This component implements a standardised message exchange protocol providing reliable communication, temporal synchronisation, and data streaming capabilities between PC master controllers and distributed mobile sensor nodes.
 
 ### Theoretical Foundation and Design Rationale
 
@@ -15,7 +15,7 @@ The Networking Protocol System provides the communication backbone for the distr
 **Primary Functions:**
 
 - **Reliable Message Exchange**: JSON-based command and status communication with guaranteed delivery semantics
-- **Device Discovery and Registration**: Automatic detection and registration of network devices using standardized protocols
+- **Device Discovery and Registration**: Automatic detection and registration of network devices using standardised protocols
 - **Session Coordination**: Distributed session management with temporal synchronisation across heterogeneous sensors
 - **Quality Monitoring and Adaptation**: Network performance assessment and adaptive quality control mechanisms
 - **Security Framework**: Secure communication protocols with authentication and data integrity validation
@@ -239,7 +239,7 @@ class NetworkManager:
 
 ```python
 class NetworkMessage:
-    """Standardized network message with serialisation"""
+    """Standardised network message with serialisation"""
     
     def __init__(self, message_type: str, source_device: str, 
                  target_device: str, payload: Dict):
@@ -500,8 +500,8 @@ class NetworkQualityMonitor:
 
 ```python
 class NetworkProtocolTest:
-    def test_message_serialization(self):
-        """Test message serialisation/deserialization"""
+    def test_message_serialisation(self):
+        """Test message serialisation/deserialisation"""
         original_message = NetworkMessage(
             message_type="test",
             source_device="test_source",
@@ -509,11 +509,11 @@ class NetworkProtocolTest:
             payload={"test_data": "test_value"}
         )
 
-        serialized = original_message.serialise()
-        deserialized = NetworkMessage.deserialise(serialized)
+        serialised = original_message.serialise()
+        deserialised = NetworkMessage.deserialise(serialised)
 
-        assert original_message.message_type == deserialized.message_type
-        assert original_message.payload == deserialized.payload
+        assert original_message.message_type == deserialised.message_type
+        assert original_message.payload == deserialised.payload
 
     def test_network_quality_assessment(self):
         """Test network quality monitoring"""
@@ -536,7 +536,7 @@ class NetworkProtocolTest:
 **Symptoms**: Cannot connect devices, discovery fails
 **Solutions**:
 
-1. Check network connectivity
+1. check network connectivity
 2. Verify firewall settings
 3. Test port accessibility
 4. Restart network services
@@ -546,7 +546,7 @@ class NetworkProtocolTest:
 **Symptoms**: High latency, packet loss
 **Solutions**:
 
-1. Check network congestion
+1. check network congestion
 2. Optimise WiFi settings
 3. Use wired connections when possible
 4. Adjust quality thresholds

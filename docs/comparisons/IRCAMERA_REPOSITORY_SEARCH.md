@@ -1,4 +1,4 @@
-# IRCamera Repository Search and Analysis
+# IRCamera Repository Search and analysis
 
 ## Search Results Summary
 
@@ -19,8 +19,8 @@ Conducted comprehensive search for @buccancs/IRCamera repository using multiple 
 - **Language**: HTML
 - **Created**: 2025-06-30
 - **Last Updated**: 2025-07-04
-- **Size**: 130,173 KB
-- **License**: MIT
+- **Sise**: 130,173 KB
+- **licence**: MIT
 
 ### Search Conclusion
 The specific `@buccancs/IRCamera` repository mentioned in the task could not be located. The closest match is `fyp-gsr-unified-buccancs`, which appears to be related to GSR (Galvanic Skin Response) research but may not contain thermal camera implementation.
@@ -35,17 +35,17 @@ The repository might exist under a different name:
 
 ### 2. Repository Visibility
 - Private repository (not accessible via public search)
-- Organization repository under different owner
+- Organisation repository under different owner
 - Repository archived or deleted
 
 ### 3. Repository Location
-- Different GitHub organization or user account
+- Different GitHub organisation or user account
 - Alternative code hosting platform (GitLab, Bitbucket, etc.)
 - Internal or enterprise repository
 
-## Alternative Analysis Approaches
+## Alternative analysis Approaches
 
-### 1. Analyze Found Repository
+### 1. analyse Found Repository
 Examine `fyp-gsr-unified-buccancs` to determine if it contains thermal camera implementation:
 
 ```bash
@@ -54,7 +54,7 @@ Examine `fyp-gsr-unified-buccancs` to determine if it contains thermal camera im
 - Name: fyp-gsr-unified-buccancs  
 - Description: fyp-gsr-unified-buccancs
 - Language: HTML (may contain embedded code)
-- Size: 130MB (substantial codebase)
+- Sise: 130MB (substantial codebase)
 ```
 
 ### 2. Search Strategy Expansion
@@ -62,7 +62,7 @@ Examine `fyp-gsr-unified-buccancs` to determine if it contains thermal camera im
 - Look for Topdon SDK integrations across GitHub
 - Examine related research projects and academic repositories
 
-### 3. Context Analysis
+### 3. Context analysis
 Review the original request context to identify:
 - Specific features mentioned for comparison
 - Timeline or context clues about the repository
@@ -84,11 +84,11 @@ Evaluate our implementation against:
 - Multi-sensor integration patterns
 - Research-grade software quality standards
 
-### 3. Technology Stack Analysis
+### 3. Technology Stack analysis
 Compare our technical choices against:
 - Alternative thermal camera SDKs
 - Different architectural patterns
-- Performance optimization strategies
+- Performance optimisation strategies
 
 ## Repository Investigation: fyp-gsr-unified-buccancs
 
@@ -96,15 +96,15 @@ Compare our technical choices against:
 The found repository `fyp-gsr-unified-buccancs` may be relevant because:
 - **GSR Connection**: Both projects involve GSR (Galvanic Skin Response) research
 - **Academic Context**: "fyp" likely refers to Final Year Project
-- **Size Indicator**: 130MB suggests substantial codebase
+- **Sise Indicator**: 130MB suggests substantial codebase
 - **Timeline**: Recent creation (June 2025) indicates active development
 
 ### Investigation Needed
 To determine if this repository contains thermal camera implementation:
 1. Examine repository contents and structure
 2. Look for thermal camera or Topdon-related code
-3. Check for Android application components
-4. Analyze documentation and README files
+3. check for Android application components
+4. analyse documentation and README files
 
 ## Recommendations
 
@@ -113,7 +113,7 @@ To determine if this repository contains thermal camera implementation:
 - [ ] Search for alternative spellings or variations of IRCamera
 - [ ] Contact repository owner for clarification if needed
 
-### 2. Fallback Analysis
+### 2. Fallback analysis
 - [ ] Proceed with general best practices comparison
 - [ ] Document our implementation strengths and areas for improvement
 - [ ] Create comparison framework applicable to any thermal camera implementation
@@ -125,9 +125,9 @@ To determine if this repository contains thermal camera implementation:
 
 ## Next Steps
 
-### 1. Repository Content Analysis
+### 1. Repository Content analysis
 If `fyp-gsr-unified-buccancs` contains relevant thermal camera implementation:
-- Download and analyze the codebase
+- Download and analyse the codebase
 - Apply our comparison framework
 - Identify similarities and differences
 - Document findings and recommendations
@@ -135,7 +135,7 @@ If `fyp-gsr-unified-buccancs` contains relevant thermal camera implementation:
 ### 2. Alternative Comparison Sources
 If no specific repository is found:
 - Compare against open-source thermal imaging projects
-- Analyze academic thermal camera implementations
+- analyse academic thermal camera implementations
 - Reference industry standard practices and documentation
 
 ### 3. Stakeholder Communication

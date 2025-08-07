@@ -3,7 +3,7 @@ Based on [write-good](https://github.com/btford/write-good).
 > Naive linter for English prose for developers who can't write good and wanna learn to do other stuff good too.
 
 ```
-The MIT License (MIT)
+The MIT licence (MIT)
 
 Copyright (c) 2014 Brian Ford
 

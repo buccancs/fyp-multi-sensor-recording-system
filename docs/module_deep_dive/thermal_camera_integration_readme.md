@@ -2,11 +2,11 @@
 
 ## Overview
 
-The Thermal Camera Integration System provides complete thermal imaging capabilities through TopDon TC001 thermal cameras, enabling synchronized thermal data collection with precise temporal alignment across the Multi-Sensor Recording System for contactless GSR prediction research. This component addresses critical requirements for thermal physiological monitoring in psychophysiological research applications [Ring2012].
+The Thermal Camera Integration System provides complete thermal imaging capabilities through TopDon TC001 thermal cameras, enabling synchronised thermal data collection with precise temporal alignment across the Multi-Sensor Recording System for contactless GSR prediction research. This component addresses critical requirements for thermal physiological monitoring in psychophysiological research applications [Ring2012].
 
 ### Research Context and Theoretical Foundation
 
-The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001 cameras connected via USB-C OTG to Android devices, providing synchronized thermal data streams essential for contactless physiological monitoring research [Perpetuini2021]. 
+The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001 cameras connected via USB-C OTG to Android devices, providing synchronised thermal data streams essential for contactless physiological monitoring research [Perpetuini2021]. 
 
 The system implementation addresses established principles in thermal physiology and computer vision:
 
@@ -24,7 +24,7 @@ Within the established PC master-controller, offline-first recording architectur
 - **Thermal Image Acquisition**: High-resolution thermal imaging with configurable frame rates supporting diverse research protocols
 - **Temperature Measurement**: Accurate temperature readings with calibrated sensors ensuring research-grade measurement precision
 - **USB-C OTG Integration**: Direct hardware interface through Android USB connectivity enabling seamless mobile thermal sensing
-- **Synchronized Recording**: Temporal alignment with RGB cameras and physiological sensors through the JSON socket protocol
+- **Synchronised Recording**: Temporal alignment with RGB cameras and physiological sensors through the JSON socket protocol
 - **Data Processing**: Real-time thermal image processing and analysis supporting research data quality requirements
 
 ### Technology Foundation
@@ -47,7 +47,7 @@ graph TB
         subgraph "Integration Layer"
             SYNC[Synchronisation<br/>Temporal Alignment]
             CAL[Calibration<br/>RGB-Thermal Alignment]
-            PROC[Processing<br/>Image Analysis]
+            PROC[Processing<br/>Image analysis]
         end
     end
     
@@ -374,7 +374,7 @@ class ThermalSynchronizer {
     private val frameTimestamps = mutableListOf<Long>()
     
     fun synchronizeFrame(frame: ThermalFrame): ThermalFrame {
-        // Get synchronized timestamp
+        // Get synchronised timestamp
         val syncTimestamp = masterClock.getSynchronizedTimestamp()
         
         // Apply temporal alignment
@@ -398,7 +398,7 @@ class ThermalSynchronizer {
     }
     
     private fun calculateSyncQuality(): Float {
-        if (frameTimestamps.size < 10) return 1.0f
+        if (frameTimestamps.sise < 10) return 1.0f
         
         // Calculate timestamp consistency
         val recentTimestamps = frameTimestamps.takeLast(10)
@@ -431,7 +431,7 @@ class ThermalSynchronizer {
     - Launch Multi-Sensor Recording app
 
 3. **Verification Steps**:
-    - Check thermal camera detection in app
+    - check thermal camera detection in app
     - Verify USB OTG permission granted
     - Test thermal imaging functionality
     - Validate temperature readings
@@ -466,7 +466,7 @@ class ThermalSynchronizer {
     - Allow thermal camera warmup time (2-3 minutes)
 
 2. **Quality Verification**:
-    - Check thermal image clarity
+    - check thermal image clarity
     - Verify temperature measurement accuracy
     - Test synchronisation with RGB camera
     - Validate frame rate stability
@@ -477,19 +477,19 @@ class ThermalSynchronizer {
     - Initialise thermal recording from PC controller
     - Monitor real-time thermal display
     - Verify synchronisation indicators
-    - Check data quality metrics
+    - check data quality metrics
 
 2. **During Recording**:
     - Monitor thermal uniformity
-    - Check for thermal artifacts
+    - check for thermal artifacts
     - Verify subject tracking
     - Watch storage space indicators
 
-#### Post-Recording Analysis
+#### Post-Recording analysis
 
 1. **Data Validation**:
     - Verify thermal data completeness
-    - Check temperature range validity
+    - check temperature range validity
     - Validate synchronisation accuracy
     - Review quality metrics
 
@@ -497,7 +497,7 @@ class ThermalSynchronizer {
     - Raw thermal data (binary format)
     - Processed temperature matrices (CSV)
     - Visual thermal images (PNG/JPEG)
-    - Analysis-ready datasets (HDF5)
+    - analysis-ready datasets (HDF5)
 
 ## API Reference
 
@@ -582,7 +582,7 @@ class ThermalCameraTest {
 #### Synchronisation Test
 
 ```python
-def test_thermal_rgb_synchronization():
+def test_thermal_rgb_synchronisation():
     """Test synchronisation between thermal and RGB cameras"""
     thermal_timestamps = load_thermal_timestamps()
     rgb_timestamps = load_rgb_timestamps()
@@ -593,7 +593,7 @@ def test_thermal_rgb_synchronization():
     # Verify synchronisation quality
     assert abs(sync_offset) < 5.0  # Less than 5ms offset
     
-    # Check temporal consistency
+    # check temporal consistency
     thermal_intervals = calculate_frame_intervals(thermal_timestamps)
     rgb_intervals = calculate_frame_intervals(rgb_timestamps)
     
@@ -610,7 +610,7 @@ def test_thermal_rgb_synchronization():
 **Symptoms**: Thermal camera not detected
 **Solutions**:
 
-1. Check USB-C OTG adapter compatibility
+1. check USB-C OTG adapter compatibility
 2. Verify USB permissions granted
 3. Test with different USB-C cable
 4. Restart Android application
@@ -620,7 +620,7 @@ def test_thermal_rgb_synchronization():
 **Symptoms**: Inaccurate temperature readings
 **Solutions**:
 
-1. Check emissivity settings for target material
+1. check emissivity settings for target material
 2. Verify ambient temperature compensation
 3. Allow sufficient camera warmup time
 4. Calibrate against known temperature reference
@@ -631,7 +631,7 @@ def test_thermal_rgb_synchronization():
 **Solutions**:
 
 1. Verify synchronisation timestamp accuracy
-2. Check network latency compensation
+2. check network latency compensation
 3. Validate master clock synchronisation
 4. Review frame rate consistency
 

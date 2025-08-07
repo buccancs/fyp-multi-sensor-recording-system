@@ -12,14 +12,14 @@ This roadmap provides practical, actionable steps to upgrade the bucika_gsr Andr
 ```kotlin
 // New: Enhanced theme and design tokens
 object BucikaThermalTheme {
-    // Color palette inspired by IRCamera excellence
-    val PrimaryThermal = Color(0xFF2196F3)      // Professional blue
-    val SecondaryThermal = Color(0xFF03DAC6)    // Accent teal
-    val BackgroundPrimary = Color(0xFF121212)   // Dark background
-    val SurfaceElevated = Color(0xFF1E1E1E)     // Elevated surfaces
+    // colour palette inspired by IRCamera excellence
+    val PrimaryThermal = colour(0xFF2196F3)      // Professional blue
+    val SecondaryThermal = colour(0xFF03DAC6)    // Accent teal
+    val BackgroundPrimary = colour(0xFF121212)   // Dark background
+    val SurfaceElevated = colour(0xFF1E1E1E)     // Elevated surfaces
     val ThermalGradient = listOf(               // Beautiful thermal colors
-        Color(0xFF000080), Color(0xFF0000FF), Color(0xFF00FFFF),
-        Color(0xFF00FF00), Color(0xFFFFFF00), Color(0xFFFF0000)
+        colour(0xFF000080), colour(0xFF0000FF), colour(0xFF00FFFF),
+        colour(0xFF00FF00), colour(0xFFFFFF00), colour(0xFFFF0000)
     )
 }
 ```
@@ -31,19 +31,19 @@ val BucikaThermalTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
+        fontSise = 32.sp,
         letterSpacing = 0.sp
     ),
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
+        fontSise = 22.sp,
         letterSpacing = 0.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSise = 16.sp,
         letterSpacing = 0.5.sp
     )
 )
@@ -79,7 +79,7 @@ fun EnhancedThermalPreview(
                     bitmap = bitmap.asImageBitmap(),
                     contentDescription = "Thermal Preview",
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSise()
                         .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop
                 )
@@ -119,7 +119,7 @@ fun ThermalPreviewControls(
         modifier = modifier.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Color palette selector
+        // colour palette selector
         item {
             ColorPaletteSelector(
                 currentPalette = colorPalette,
@@ -157,7 +157,7 @@ fun EnhancedFileBrowser(
     onDirectoryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSise()) {
         // Beautiful navigation header
         FileBrowserHeader(
             currentPath = currentDirectory,
@@ -167,7 +167,7 @@ fun EnhancedFileBrowser(
         
         // Elegant file grid with previews
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 180.dp),
+            columns = GridCells.Adaptive(minSise = 180.dp),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -213,7 +213,7 @@ fun ThermalFileCard(
                     Image(
                         bitmap = thumbnail.asImageBitmap(),
                         contentDescription = "File preview",
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSise(),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -238,12 +238,12 @@ fun ThermalFileCard(
                 Text(
                     text = file.formattedDate,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = file.formattedSize,
+                    text = file.formattedSise,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -264,7 +264,7 @@ fun EnhancedSettingsScreen(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSise(),
         contentPadding = PaddingValues(vertical = 16.dp)
     ) {
         // Thermal Camera Settings Section
@@ -336,7 +336,7 @@ fun SettingsSection(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    colour = MaterialTheme.colorScheme.primary
                 )
             }
             content()
@@ -353,8 +353,8 @@ fun ThermalColorPaletteSetting(
     onPaletteChange: (ThermalColorPalette) -> Unit
 ) {
     SettingItem(
-        title = "Color Palette",
-        description = "Choose thermal visualization colors"
+        title = "colour Palette",
+        description = "Choose thermal visualisation colors"
     ) {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -445,15 +445,15 @@ fun AnimatedRecordingButton(
         animationSpec = BucikaThermalAnimations.smoothTransition
     )
     
-    val color by animateColorAsState(
-        targetValue = if (isRecording) Color.Red else MaterialTheme.colorScheme.primary,
+    val colour by animateColorAsState(
+        targetValue = if (isRecording) colour.Red else MaterialTheme.colorScheme.primary,
         animationSpec = BucikaThermalAnimations.smoothTransition
     )
     
     FloatingActionButton(
         onClick = onClick,
         modifier = modifier.scale(scale),
-        containerColor = color
+        containerColor = colour
     ) {
         AnimatedContent(
             targetState = isRecording,
@@ -503,7 +503,7 @@ fun EnhancedMainScreen(
     ) { paddingValues ->
         Column(
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxSise()
                 .padding(paddingValues)
         ) {
             // Beautiful status indicator
@@ -577,8 +577,8 @@ class EnhancedThermalRenderer @Inject constructor(
     private suspend fun processFrameForDisplay(
         frame: ThermalFrame
     ): Bitmap = withContext(Dispatchers.Default) {
-        // Apply color palette and temperature mapping
-        // Optimize for smooth 30fps display
+        // Apply colour palette and temperature mapping
+        // Optimise for smooth 30fps display
         frame.toBitmap(
             colorPalette = currentColorPalette,
             temperatureRange = currentTemperatureRange,
@@ -688,7 +688,7 @@ class UIPerformanceMonitor @Inject constructor() {
 
 ### High Priority (Immediate Impact)
 1. **Enhanced Thermal Preview** - Most visible improvement
-2. **Beautiful Color Palette** - Immediate visual enhancement  
+2. **Beautiful colour Palette** - Immediate visual enhancement  
 3. **Smooth Recording Button** - Core interaction improvement
 4. **Basic File Browser** - Essential functionality upgrade
 
@@ -701,7 +701,7 @@ class UIPerformanceMonitor @Inject constructor() {
 ### Low Priority (Nice to Have)
 1. **Advanced Animations** - Extra polish
 2. **Gesture Controls** - Advanced interactions
-3. **Themes Support** - Customization options
+3. **Themes Support** - Customisation options
 4. **Accessibility Features** - Inclusive design
 
 ## Success Metrics
@@ -747,7 +747,7 @@ class UIPerformanceMonitor @Inject constructor() {
 
 ### Week 5-6: Polish
 - Advanced animations
-- Performance optimization
+- Performance optimisation
 - Testing and refinement
 
 ### Week 7-8: Deployment

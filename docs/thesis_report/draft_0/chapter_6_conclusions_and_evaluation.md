@@ -51,7 +51,7 @@ contribute to computer science knowledge and distributed systems research.
 #### Hybrid Star-Mesh Coordination Architecture
 
 The development of a novel hybrid coordination architecture represents a fundamental advancement in distributed system
-design for research applications. This architecture successfully combines the operational simplicity of centralized
+design for research applications. This architecture successfully combines the operational simplicity of centralised
 coordination with the resilience and scalability advantages of distributed processing, achieving:
 
 - **99.7% system availability** exceeding the 99.5% requirement through complete fault tolerance mechanisms
@@ -103,7 +103,7 @@ The implementation of end-to-end security features transforms the system from a 
 
 **GDPR Article 25 Compliance Achievement:**
 
-- **Privacy-by-design architecture** implementing complete consent management and data anonymization
+- **Privacy-by-design architecture** implementing complete consent management and data anonymisation
 - **99.8% PII detection accuracy** across thorough test datasets with automatic sanitisation
 - **100% data subject rights implementation** including access, rectification, erasure, and portability
 - **Cryptographic file deletion** with multi-pass overwriting ensuring secure data destruction
@@ -191,7 +191,7 @@ validity:
 - **Contactless measurement paradigm** eliminating participant discomfort and measurement artifacts associated with
   traditional approaches
 - **Flexible experimental design** supporting diverse research protocols and adaptation for various research domains
-- **International collaboration** through standardized platforms and interoperable data formats
+- **International collaboration** through standardised platforms and interoperable data formats
 
 #### Educational and Training Applications
 
@@ -235,7 +235,7 @@ eliminating behavioral artifacts and participant discomfort.
 
 #### Multi-Device Coordination Platform - COMPREHENSIVELY ACHIEVED
 
-**Objective**: Create a distributed system capable of coordinating multiple heterogeneous devices for synchronized data
+**Objective**: Create a distributed system capable of coordinating multiple heterogeneous devices for synchronised data
 collection.
 
 **Achievement Evidence**:
@@ -383,7 +383,7 @@ The system enables new research paradigms while democratising access to advanced
   limitations
 - **Contactless measurement paradigm** eliminating artifacts associated with traditional electrode-based approaches
 - **Cost-effective instrumentation** providing 75% cost reduction compared to commercial alternatives
-- **International collaboration** through open-source architecture and standardized data formats
+- **International collaboration** through open-source architecture and standardised data formats
 
 #### Community Impact and Adoption
 
@@ -425,7 +425,7 @@ support, constraining hardware configuration options. Bluetooth sensor reliabili
 device compatibility, potentially affecting measurement consistency in challenging research environments.
 
 **Impact Assessment**: Hardware dependencies limit deployment flexibility in some research environments, particularly
-those with standardized institutional hardware or budget constraints. However, the modular architecture enables
+those with standardised institutional hardware or budget constraints. However, the modular architecture enables
 adaptation to alternative hardware configurations with minimal system modifications.
 
 #### Network Infrastructure Dependencies
@@ -467,7 +467,7 @@ during study planning and protocol development.
 occlusion and rapid movements potentially affecting tracking reliability. Algorithm performance varies with participant
 demographics and hand characteristics, requiring calibration for diverse populations.
 
-**Environmental Dependencies**: System performance is optimized for controlled laboratory environments rather than
+**Environmental Dependencies**: System performance is optimised for controlled laboratory environments rather than
 naturalistic settings. Environmental factors including lighting, temperature, and network conditions significantly
 affect measurement quality and system reliability.
 
@@ -477,12 +477,12 @@ conditions, while automated quality assessment may not capture all relevant qual
 
 #### Data Processing Capabilities
 
-**Analysis Algorithm Limitations**: Current contactless GSR prediction algorithms achieve 87.3% correlation with
+**analysis Algorithm Limitations**: Current contactless GSR prediction algorithms achieve 87.3% correlation with
 reference measurements, indicating room for improvement through advanced machine learning approaches. The system
 provides foundation capabilities that require further development for complete contactless measurement replacement.
 
 **Multi-Sensor Integration Complexity**: Coordinating multiple sensor types increases system complexity and requires
-specialized knowledge for troubleshooting and optimisation. The integration approach balances functionality with
+specialised knowledge for troubleshooting and optimisation. The integration approach balances functionality with
 usability but may require technical expertise for advanced applications.
 
 #### Research Protocol Constraints
@@ -502,7 +502,7 @@ development for broader research applications.
 
 #### Application Domain Constraints
 
-**Research Environment Requirements**: The system is optimized for laboratory research environments with controlled
+**Research Environment Requirements**: The system is optimised for laboratory research environments with controlled
 conditions and technical support availability. Field research applications may be limited by infrastructure requirements
 and setup complexity.
 
@@ -521,7 +521,7 @@ device management, potentially limiting adoption in environments without dedicat
 require familiarity with computer vision and signal processing concepts.
 
 **Maintenance and Troubleshooting**: System maintenance requires understanding of distributed system concepts and
-multi-platform development. Troubleshooting complex issues may require specialized knowledge spanning Android
+multi-platform development. Troubleshooting complex issues may require specialised knowledge spanning Android
 development, Python programming, and research methodology.
 
 **Training Requirements**: Research teams require training for optimal system utilisation, including calibration
@@ -532,9 +532,9 @@ significant for teams without prior experience with similar systems.
 
 **Infrastructure Integration**: Integration with existing laboratory infrastructure may require custom development or
 adaptation. Compatibility with institutional IT policies and security requirements may necessitate system modifications
-or specialized deployment approaches.
+or specialised deployment approaches.
 
-**Data Format Compatibility**: While the system provides standard export formats, integration with specialized analysis
+**Data Format Compatibility**: While the system provides standard export formats, integration with specialised analysis
 software may require custom data conversion or processing pipelines. Long-term data archival and management may require
 additional infrastructure development.
 
@@ -578,7 +578,7 @@ measurement, EEG for neurological assessment, and environmental sensors for comp
 expansion would create a complete multi-modal research platform supporting diverse research applications.
 
 **Enhanced Hardware Compatibility**: Expand device compatibility beyond current Android and Samsung device focus to
-include iOS devices, alternative thermal cameras, and specialized research hardware. Cross-platform mobile support would
+include iOS devices, alternative thermal cameras, and specialised research hardware. Cross-platform mobile support would
 increase system accessibility and deployment flexibility.
 
 **Improved Network Resilience**: Implement advanced networking protocols including 5G integration, mesh networking
@@ -640,7 +640,7 @@ significant advantages for natural behaviour observation.
 **Workplace Wellness and Safety**: Develop applications for occupational health research, stress monitoring, and
 workplace safety assessment where contactless measurement enables continuous monitoring without workflow disruption.
 
-**Consumer Research Applications**: Create specialized configurations for market research, product testing, and consumer
+**Consumer Research Applications**: Create specialised configurations for market research, product testing, and consumer
 behaviour analysis where physiological responses provide valuable insights into user preferences and product
 effectiveness.
 
@@ -656,10 +656,10 @@ tracking, data management, and temporal analysis capabilities. These enhancement
 studies and population-level analysis.
 
 **Multi-Site Research Coordination**: Create distributed research network capabilities that enable collaboration between
-institutions while maintaining data privacy and research ethics requirements. Standardized protocols and data sharing
+institutions while maintaining data privacy and research ethics requirements. Standardised protocols and data sharing
 frameworks would facilitate large-scale collaborative research.
 
-**Advanced Statistical Analysis Integration**: Implement integrated statistical analysis capabilities including
+**Advanced Statistical analysis Integration**: Implement integrated statistical analysis capabilities including
 real-time data analysis, automated quality assessment, and complete reporting frameworks. These tools would reduce
 the technical expertise required for advanced research while maintaining scientific rigor.
 
@@ -680,7 +680,7 @@ environmental context monitoring and complete behavioral research.
 #### Scientific Community Collaboration
 
 **Research Data Sharing Platforms**: Develop secure, privacy-preserving data sharing capabilities that enable research
-collaboration while maintaining participant privacy and institutional requirements. Standardized data formats and
+collaboration while maintaining participant privacy and institutional requirements. Standardised data formats and
 metadata frameworks would facilitate cross-institutional research.
 
 **Federated Learning Capabilities**: Implement federated learning frameworks that enable collaborative model development
@@ -688,7 +688,7 @@ without requiring data sharing. This approach would enable large-scale research 
 and institutional constraints.
 
 **Research Reproducibility Framework**: Create complete reproducibility support including automated experiment
-replication, standardized analysis pipelines, and result validation frameworks. These capabilities would address
+replication, standardised analysis pipelines, and result validation frameworks. These capabilities would address
 reproducibility challenges in computational research.
 
 ### 6.4.4 Open Source and Community Development
@@ -703,7 +703,7 @@ mentorship frameworks, contribution guidelines, and skill development resources.
 community capacity while ensuring code quality and project continuity.
 
 **Research Consortium Formation**: Create formal research consortium structures that coordinate development priorities,
-funding resources, and research collaboration. Consortium organization would provide sustainable governance and
+funding resources, and research collaboration. Consortium organisation would provide sustainable governance and
 development coordination across multiple institutions.
 
 **Educational Institution Partnerships**: Develop partnerships with educational institutions to integrate the platform
@@ -739,7 +739,7 @@ including publication tracking, adoption metrics, and community contribution ass
 demonstrate project value while identifying areas for continued improvement and development.
 
 These future work directions provide a complete roadmap for continued system development while addressing current
-limitations and expanding capabilities for broader research applications. The prioritized development approach ensures
+limitations and expanding capabilities for broader research applications. The prioritised development approach ensures
 sustainable progress while maintaining focus on core research objectives and community benefit.
 ---
 ## Summary and Final Remarks
@@ -865,7 +865,7 @@ Professional, 2013.
 
 [Glass2002] Glass, R. L. "Facts and Fallacies of Software Engineering." Addison-Wesley Professional, 2002.
 
-[Jones2008] Jones, C. "Applied Software Measurement: Global Analysis of Productivity and Quality, 3rd Edition."
+[Jones2008] Jones, C. "Applied Software Measurement: Global analysis of Productivity and Quality, 3rd Edition."
 McGraw-Hill Osborne Media, 2008.
 
 [Kan2002] Kan, S. H. "Metrics and Models in Software Quality Engineering, 2nd Edition." Addison-Wesley Professional,

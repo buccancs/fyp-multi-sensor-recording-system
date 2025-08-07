@@ -25,7 +25,7 @@ graph LR
         CONT_SUBJECT["Research Subject<br/>Natural Behaviour"]
         CONT_CAMERAS["Camera Systems<br/>• Thermal Imaging<br/>• RGB Video<br/>• Remote Sensing"]
         CONT_WIRELESS["Wireless Sensors<br/>• Minimal Contact GSR<br/>• Bluetooth LE<br/>• Real-time Data"]
-        CONT_MOBILE["Mobile Platform<br/>• Android Controllers<br/>• Edge Processing<br/>• Synchronized Recording"]
+        CONT_MOBILE["Mobile Platform<br/>• Android Controllers<br/>• Edge Processing<br/>• Synchronised Recording"]
         
         CONT_SUBJECT -.->|Non-Invasive| CONT_CAMERAS
         CONT_SUBJECT -.->|Minimal Contact| CONT_WIRELESS
@@ -93,7 +93,7 @@ timeline
         2020-Present : Multi-Modal Systems
                     : Contactless Sensing
                     : Edge Computing
-                    : AI-Driven Analysis
+                    : AI-Driven analysis
 ```
 
 ### Figure 3.3: Research Impact Potential vs. Technical Complexity Matrix
@@ -242,7 +242,7 @@ graph TB
         end
         
         subgraph NODE2 ["Secondary Android Node"]
-            S22_SECONDARY["Samsung Galaxy S22<br/>• Secondary Controller<br/>• Synchronized Recording<br/>• Backup Data"]
+            S22_SECONDARY["Samsung Galaxy S22<br/>• Secondary Controller<br/>• Synchronised Recording<br/>• Backup Data"]
             THERMAL_SECONDARY["TopDon TC001<br/>• Secondary Thermal<br/>• USB-C OTG<br/>• Coordinated Capture"]
         end
     end
@@ -259,7 +259,7 @@ graph TB
     
     subgraph DATA_FLOW ["Data Integration Flow"]
         SYNC_ENGINE["Synchronisation Engine<br/>• Temporal Alignment<br/>• Clock Coordination<br/>• Drift Compensation"]
-        DATA_PROCESSOR["Data Processing Pipeline<br/>• Real-time Analysis<br/>• Quality Validation<br/>• Format Conversion"]
+        DATA_PROCESSOR["Data Processing Pipeline<br/>• Real-time analysis<br/>• Quality Validation<br/>• Format Conversion"]
     end
     
     %% Hardware connections
@@ -305,7 +305,7 @@ graph TB
         direction TB
         
         subgraph USER_LAYER ["User Interaction Layer"]
-            RESEARCHER["Research Operator<br/>• Session Configuration<br/>• Real-time Monitoring<br/>• Data Analysis"]
+            RESEARCHER["Research Operator<br/>• Session Configuration<br/>• Real-time Monitoring<br/>• Data analysis"]
             SUBJECT["Research Subject<br/>• Natural Behaviour<br/>• Minimal Interference<br/>• Contactless Measurement"]
         end
         
@@ -329,14 +329,14 @@ graph TB
             subgraph MOBILE_PLATFORM_2 ["Mobile Platform 2"]
                 ANDROID_APP_2["Android Controller<br/>• Secondary Node<br/>• Coordinated Recording<br/>• Backup Data"]
                 THERMAL_CAM_2["Thermal Camera<br/>TopDon TC001<br/>• Coordinated Capture<br/>• USB-C Interface"]
-                VIDEO_CAM_2["RGB Camera<br/>• 4K Recording<br/>• Synchronized Capture<br/>• Multi-angle View"]
+                VIDEO_CAM_2["RGB Camera<br/>• 4K Recording<br/>• Synchronised Capture<br/>• Multi-angle View"]
             end
         end
         
         subgraph DATA_LAYER ["Data Processing and Storage Layer"]
-            REAL_TIME_PROC["Real-time Processing<br/>• Stream Analysis<br/>• Quality Monitoring<br/>• Event Detection"]
+            REAL_TIME_PROC["Real-time Processing<br/>• Stream analysis<br/>• Quality Monitoring<br/>• Event Detection"]
             LOCAL_STORAGE["Local Storage<br/>• Session Data<br/>• Raw Recordings<br/>• Processed Results"]
-            EXPORT_SYSTEM["Export System<br/>• Data Formatting<br/>• File Organization<br/>• Research Integration"]
+            EXPORT_SYSTEM["Export System<br/>• Data Formatting<br/>• File Organisation<br/>• Research Integration"]
         end
         
         subgraph NETWORK_LAYER ["Network Communication Layer"]
@@ -426,7 +426,7 @@ graph TB
         subgraph PERFORMANCE_TESTS ["Performance Testing Layer"]
             LOAD_TESTS["Load Testing<br/>• High Data Throughput<br/>• Multiple Devices<br/>• Extended Sessions"]
             STRESS_TESTS["Stress Testing<br/>• Resource Limits<br/>• Error Conditions<br/>• Recovery Testing"]
-            TIMING_TESTS["Timing Validation<br/>• Synchronisation Accuracy<br/>• Latency Measurement<br/>• Clock Drift Analysis"]
+            TIMING_TESTS["Timing Validation<br/>• Synchronisation Accuracy<br/>• Latency Measurement<br/>• Clock Drift analysis"]
         end
         
         subgraph VALIDATION_TESTS ["Validation Testing Layer"]
@@ -439,7 +439,7 @@ graph TB
     subgraph TEST_INFRASTRUCTURE ["Testing Infrastructure"]
         CI_CD["Continuous Integration<br/>• Automated Testing<br/>• Build Validation<br/>• Deployment Pipeline"]
         TEST_DATA["Test Data Management<br/>• Mock Sensor Data<br/>• Test Scenarios<br/>• Reference Datasets"]
-        REPORTING["Test Reporting<br/>• Coverage Analysis<br/>• Performance Metrics<br/>• Quality Dashboard"]
+        REPORTING["Test Reporting<br/>• Coverage analysis<br/>• Performance Metrics<br/>• Quality Dashboard"]
     end
     
     %% Testing flow relationships
@@ -481,7 +481,7 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph COVERAGE_MATRIX ["Test Coverage Analysis Heatmap"]
+    subgraph COVERAGE_MATRIX ["Test Coverage analysis Heatmap"]
         direction TB
         
         subgraph ANDROID_COVERAGE ["Android Application Coverage"]
@@ -573,14 +573,14 @@ graph TB
             
             BASELINE_THROUGHPUT["Initial Throughput<br/>📈 Week 1-2<br/>Rate: 8.2 MB/s<br/>Peak: 11.5 MB/s<br/>Drops: 12%"]
             
-            BUFFER_OPTIMIZATION["Buffer Optimisation<br/>📈 Week 3-4<br/>Rate: 14.7 MB/s<br/>Peak: 18.3 MB/s<br/>Drops: 6%"]
+            BUFFER_OPTIMisation["Buffer Optimisation<br/>📈 Week 3-4<br/>Rate: 14.7 MB/s<br/>Peak: 18.3 MB/s<br/>Drops: 6%"]
             
             NETWORK_TUNING["Network Tuning<br/>📈 Week 5-6<br/>Rate: 19.8 MB/s<br/>Peak: 24.1 MB/s<br/>Drops: 3%"]
             
             FINAL_THROUGHPUT["Final Throughput<br/>📈 Week 7-8<br/>Rate: 23.7 MB/s<br/>Peak: 28.4 MB/s<br/>Drops: 1%"]
             
-            BASELINE_THROUGHPUT --> BUFFER_OPTIMIZATION
-            BUFFER_OPTIMIZATION --> NETWORK_TUNING
+            BASELINE_THROUGHPUT --> BUFFER_OPTIMisation
+            BUFFER_OPTIMisation --> NETWORK_TUNING
             NETWORK_TUNING --> FINAL_THROUGHPUT
         end
         
@@ -600,18 +600,18 @@ graph TB
             FAULT_TOLERANCE --> FINAL_RELIABILITY
         end
         
-        subgraph RESOURCE_UTILIZATION ["Resource Utilisation Performance Evolution"]
+        subgraph RESOURCE_UTILisation ["Resource Utilisation Performance Evolution"]
             direction TB
             
             INITIAL_RESOURCES["Initial Resource Usage<br/>💾 CPU: 45% avg<br/>💾 Memory: 2.8 GB<br/>💾 Network: 65% util<br/>💾 Storage: 12 GB/hr"]
             
-            OPTIMIZED_RESOURCES["Optimized Resource Usage<br/>💾 CPU: 28% avg<br/>💾 Memory: 1.9 GB<br/>💾 Network: 42% util<br/>💾 Storage: 8.3 GB/hr"]
+            OPTIMIZED_RESOURCES["Optimised Resource Usage<br/>💾 CPU: 28% avg<br/>💾 Memory: 1.9 GB<br/>💾 Network: 42% util<br/>💾 Storage: 8.3 GB/hr"]
             
             INITIAL_RESOURCES --> OPTIMIZED_RESOURCES
         end
     end
     
-    subgraph BENCHMARK_ANALYSIS ["Performance Analysis Summary"]
+    subgraph BENCHMARK_ANALYSIS ["Performance analysis Summary"]
         direction LR
         
         IMPROVEMENT_METRICS["Overall Improvements<br/>📊 Synchronisation: 260% better<br/>📊 Throughput: 289% increase<br/>📊 Reliability: 113% improvement<br/>📊 Resource efficiency: 37% reduction"]
@@ -623,23 +623,23 @@ graph TB
     
     classDef baseline fill:#ffcdd2,stroke:#f44336,stroke-width:2px
     classDef intermediate fill:#fff9c4,stroke:#ffc107,stroke-width:2px
-    classDef optimized fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
+    classDef optimised fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
     classDef analysis fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px
     
     class BASELINE_SYNC_PERF,BASELINE_THROUGHPUT,BASELINE_RELIABILITY,INITIAL_RESOURCES baseline
-    class OPTIMIZATION_PHASE_1,OPTIMIZATION_PHASE_2,BUFFER_OPTIMIZATION,NETWORK_TUNING,ERROR_HANDLING,FAULT_TOLERANCE intermediate
-    class FINAL_PERFORMANCE,FINAL_THROUGHPUT,FINAL_RELIABILITY,OPTIMIZED_RESOURCES optimized
+    class OPTIMIZATION_PHASE_1,OPTIMIZATION_PHASE_2,BUFFER_OPTIMisation,NETWORK_TUNING,ERROR_HANDLING,FAULT_TOLERANCE intermediate
+    class FINAL_PERFORMANCE,FINAL_THROUGHPUT,FINAL_RELIABILITY,OPTIMIZED_RESOURCES optimised
     class IMPROVEMENT_METRICS,PERFORMANCE_TARGETS,SCALABILITY_VALIDATION analysis
 ```
 
-### Figure 5.4: Scalability Performance Analysis
+### Figure 5.4: Scalability Performance analysis
 
 ```mermaid
 graph TB
-    subgraph SCALABILITY_ANALYSIS ["Scalability Performance Analysis"]
+    subgraph SCALABILITY_ANALYSIS ["Scalability Performance analysis"]
         direction TB
         
-        subgraph DEVICE_SCALING ["Device Count Scaling Analysis"]
+        subgraph DEVICE_SCALING ["Device Count Scaling analysis"]
             direction LR
             
             SINGLE_DEVICE["Single Device Setup<br/>📱 1 Android + 1 PC<br/>📊 Throughput: 8.2 MB/s<br/>📊 Latency: 12ms<br/>📊 CPU Usage: 18%"]
@@ -655,7 +655,7 @@ graph TB
             TRIPLE_DEVICE --> QUAD_DEVICE
         end
         
-        subgraph SESSION_SCALING ["Session Duration Scaling Analysis"]
+        subgraph SESSION_SCALING ["Session Duration Scaling analysis"]
             direction LR
             
             SHORT_SESSION["Short Sessions<br/>⏱️ 0-15 minutes<br/>📈 Performance: Optimal<br/>📈 Memory: Stable<br/>📈 Quality: 99.8%"]
@@ -671,7 +671,7 @@ graph TB
             LONG_SESSION --> EXTENDED_SESSION
         end
         
-        subgraph DATA_VOLUME_SCALING ["Data Volume Scaling Analysis"]
+        subgraph DATA_VOLUME_SCALING ["Data Volume Scaling analysis"]
             direction TB
             
             LOW_VOLUME["Low Data Volume<br/>💾 <1 GB/session<br/>🔄 Processing: Real-time<br/>🔄 Storage: Fast<br/>🔄 Export: <30 seconds"]
@@ -684,7 +684,7 @@ graph TB
             MEDIUM_VOLUME --> HIGH_VOLUME
         end
         
-        subgraph PERFORMANCE_LIMITS ["Performance Limitation Analysis"]
+        subgraph PERFORMANCE_LIMITS ["Performance Limitation analysis"]
             direction LR
             
             NETWORK_LIMITS["Network Bottlenecks<br/>🌐 WiFi bandwidth: 100 Mbps<br/>🌐 TCP overhead: 8-12%<br/>🌐 Concurrent connections: 8 max<br/>🌐 Packet loss threshold: <0.1%"]
@@ -771,7 +771,7 @@ graph TB
             subgraph METHODOLOGICAL_INNOVATION ["Methodological Innovation"]
                 MULTI_MODAL_SYNC["Multi-Modal Synchronisation<br/>🔬 Temporal alignment<br/>🔬 Cross-sensor correlation<br/>🔬 Unified data streams"]
                 QUALITY_FRAMEWORK["Quality Assurance Framework<br/>🔬 Real-time validation<br/>🔬 Automated quality checks<br/>🔬 Error detection and recovery"]
-                RESEARCH_WORKFLOW["Research Workflow Integration<br/>🔬 Seamless data export<br/>🔬 Analysis tool compatibility<br/>🔬 Standardized formats"]
+                RESEARCH_WORKFLOW["Research Workflow Integration<br/>🔬 Seamless data export<br/>🔬 analysis tool compatibility<br/>🔬 Standardised formats"]
             end
         end
         
@@ -816,7 +816,7 @@ graph TB
         
         subgraph PHASE_1 ["Phase 1: Foundation Development (Months 1-3)"]
             direction LR
-            MONTH_1["Month 1<br/>🎯 Requirements Analysis<br/>🎯 System Architecture Design<br/>🎯 Technology Stack Selection<br/>✅ Completed"]
+            MONTH_1["Month 1<br/>🎯 Requirements analysis<br/>🎯 System Architecture Design<br/>🎯 Technology Stack Selection<br/>✅ Completed"]
             MONTH_2["Month 2<br/>🔧 Hardware Integration Setup<br/>🔧 Initial Android Prototype<br/>🔧 PC Controller Framework<br/>✅ Completed"]
             MONTH_3["Month 3<br/>📡 Multi-Device Communication<br/>📡 Network Protocol Implementation<br/>📡 First End-to-End Test<br/>✅ Completed"]
         end
@@ -891,7 +891,7 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph CALIBRATION_VALIDATION ["Calibration Validation Results Analysis"]
+    subgraph CALIBRATION_VALIDATION ["Calibration Validation Results analysis"]
         direction TB
         
         subgraph TEMPORAL_CALIBRATION ["Temporal Synchronisation Calibration"]
@@ -902,7 +902,7 @@ graph TB
                 
                 CALIBRATED_SYNC["Post-Calibration Results<br/>📊 Final accuracy: ±3.2ms<br/>📊 Improvement: 260%<br/>📊 Target exceeded: 213%"]
                 
-                SYNC_STABILITY["Stability Analysis<br/>📊 Standard deviation: ±0.8ms<br/>📊 Maximum drift: ±1.2ms<br/>📊 Consistency: 97.3%"]
+                SYNC_STABILITY["Stability analysis<br/>📊 Standard deviation: ±0.8ms<br/>📊 Maximum drift: ±1.2ms<br/>📊 Consistency: 97.3%"]
             end
             
             BASELINE_SYNC --> CALIBRATED_SYNC
@@ -915,17 +915,17 @@ graph TB
             subgraph THERMAL_CALIBRATION ["Thermal Camera Calibration"]
                 THERMAL_BASELINE["Thermal Baseline<br/>📈 Temperature accuracy: ±0.5°C<br/>📈 Spatial resolution: 256x192<br/>📈 Frame rate: 25 FPS"]
                 
-                THERMAL_OPTIMIZED["Optimized Performance<br/>📈 Temperature accuracy: ±0.2°C<br/>📈 Temporal alignment: ±2.1ms<br/>📈 Synchronized capture: 100%"]
+                THERMAL_OPTIMised["Optimised Performance<br/>📈 Temperature accuracy: ±0.2°C<br/>📈 Temporal alignment: ±2.1ms<br/>📈 Synchronised capture: 100%"]
             end
             
             subgraph GSR_CALIBRATION ["GSR Sensor Calibration"]
                 GSR_BASELINE["GSR Baseline<br/>📉 Sampling rate: 128 Hz<br/>📉 Signal quality: Good<br/>📉 Bluetooth latency: ±15ms"]
                 
-                GSR_OPTIMIZED["Optimized Performance<br/>📉 Sampling consistency: 99.8%<br/>📉 Signal integrity: Excellent<br/>📉 Bluetooth latency: ±4.2ms"]
+                GSR_OPTIMised["Optimised Performance<br/>📉 Sampling consistency: 99.8%<br/>📉 Signal integrity: Excellent<br/>📉 Bluetooth latency: ±4.2ms"]
             end
             
-            THERMAL_BASELINE --> THERMAL_OPTIMIZED
-            GSR_BASELINE --> GSR_OPTIMIZED
+            THERMAL_BASELINE --> THERMAL_OPTIMised
+            GSR_BASELINE --> GSR_OPTIMised
         end
         
         subgraph CROSS_VALIDATION ["Cross-Sensor Validation"]
@@ -961,26 +961,26 @@ graph TB
     end
     
     classDef baseline fill:#ffcdd2,stroke:#f44336,stroke-width:2px
-    classDef optimized fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
+    classDef optimised fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
     classDef validation fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px
     classDef process fill:#fff9c4,stroke:#ffc107,stroke-width:2px
     classDef outcome fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
     
     class BASELINE_SYNC,THERMAL_BASELINE,GSR_BASELINE baseline
-    class CALIBRATED_SYNC,SYNC_STABILITY,THERMAL_OPTIMIZED,GSR_OPTIMIZED optimized
+    class CALIBRATED_SYNC,SYNC_STABILITY,THERMAL_OPTIMised,GSR_OPTIMised optimised
     class CORRELATION_ANALYSIS,VALIDATION_METRICS,VERIFICATION_TESTS validation
     class REFERENCE_STANDARDS,CALIBRATION_PROCESS process
     class SUCCESS_METRICS,IMPROVEMENT_SUMMARY,RESEARCH_READINESS outcome
 ```
 
-### Figure E.1: User Satisfaction Analysis
+### Figure E.1: User Satisfaction analysis
 
 ```mermaid
 graph TB
-    subgraph USER_SATISFACTION ["User Satisfaction Analysis"]
+    subgraph USER_SATISFACTION ["User Satisfaction analysis"]
         direction TB
         
-        subgraph USER_CATEGORIES ["User Category Analysis"]
+        subgraph USER_CATEGORIES ["User Category analysis"]
             direction LR
             
             subgraph RESEARCHERS ["Research Scientists"]
@@ -1005,8 +1005,8 @@ graph TB
         subgraph USABILITY_METRICS ["Usability Assessment Metrics"]
             direction LR
             
-            subgraph EASE_OF_USE ["Ease of Use Analysis"]
-                SETUP_TIME["Setup Time Analysis<br/>⏱️ Average setup: 4.2 minutes<br/>⏱️ Target: 5 minutes<br/>⏱️ 84% under target<br/>✅ Goal achieved"]
+            subgraph EASE_OF_USE ["Ease of Use analysis"]
+                SETUP_TIME["Setup Time analysis<br/>⏱️ Average setup: 4.2 minutes<br/>⏱️ Target: 5 minutes<br/>⏱️ 84% under target<br/>✅ Goal achieved"]
                 
                 LEARNING_CURVE["Learning Curve<br/>📈 Proficiency time: 2.3 hours<br/>📈 Documentation usage: 89%<br/>📈 Support requests: 12%<br/>✅ Acceptable learning curve"]
                 
@@ -1030,7 +1030,7 @@ graph TB
                 
                 SOFTWARE_INTERFACE["Software Interface<br/>⭐⭐⭐⭐ 4.5/5.0<br/>'Clean and intuitive'<br/>'Could use more automation'"]
                 
-                DATA_MANAGEMENT["Data Management<br/>⭐⭐⭐⭐⭐ 4.7/5.0<br/>'Excellent export options'<br/>'Good file organization'"]
+                DATA_MANAGEMENT["Data Management<br/>⭐⭐⭐⭐⭐ 4.7/5.0<br/>'Excellent export options'<br/>'Good file organisation'"]
             end
             
             subgraph PERFORMANCE_SATISFACTION ["Performance Satisfaction"]
@@ -1083,7 +1083,7 @@ graph TD
         
         METRICS["📊 Reliability Metrics<br/>Data Synchronisation: 99.8% → 98.8%<br/>Camera System: 99.5% → 97.6%<br/>GSR Sensors: 99.9% → 98.9%<br/>Network Communication: 99.2% → 97.2%<br/>Overall System: 99.1% → 97.1%"]
         
-        TIMEPERIODS["📅 Time Period Analysis<br/>Week 1-2: Excellent (>99%)<br/>Week 3-4: Very Good (>98%)<br/>Week 5-6: Good (>97%)<br/>Week 7-10: Acceptable (>96%)"]
+        TIMEPERIODS["📅 Time Period analysis<br/>Week 1-2: Excellent (>99%)<br/>Week 3-4: Very Good (>98%)<br/>Week 5-6: Good (>97%)<br/>Week 7-10: Acceptable (>96%)"]
         
         DEGRADATION["📉 Degradation Factors<br/>• Component aging<br/>• Network instability<br/>• Sensor drift<br/>• Battery wear<br/>• Environmental conditions"]
         
@@ -1110,11 +1110,11 @@ graph TD
     class RECOMMENDATION recommendation
 ```
 
-### Figure 5.6: Temporal Synchronisation Distribution Analysis
+### Figure 5.6: Temporal Synchronisation Distribution analysis
 
 ```mermaid
 graph TD
-    subgraph SYNC_ANALYSIS ["Temporal Synchronisation Distribution Analysis"]
+    subgraph SYNC_ANALYSIS ["Temporal Synchronisation Distribution analysis"]
         direction TB
         
         LATENCY_DIST["📊 Synchronisation Latency Distribution<br/>Camera-GSR Sync:<br/>• <1ms: 42% (Excellent)<br/>• 1-2ms: 28% (Very Good)<br/>• 2-3ms: 15% (Good)<br/>• 3-4ms: 8% (Acceptable)<br/>• 4-5ms: 4% (Fair)<br/>• >5ms: 3% (Poor)"]
@@ -1153,7 +1153,7 @@ graph TD
         
         MULTIMODAL["📹 Multi-Modal Integration<br/>• Thermal + RGB Fusion<br/>• Real-time Processing<br/>• Edge Computing<br/>• Sensor Fusion Algorithms"]
         
-        CONTACTLESS["📡 Contactless Sensing Innovation<br/>• Remote GSR Prediction<br/>• Non-invasive Monitoring<br/>• Behavioral Analysis<br/>• Physiological Modelling"]
+        CONTACTLESS["📡 Contactless Sensing Innovation<br/>• Remote GSR Prediction<br/>• Non-invasive Monitoring<br/>• Behavioral analysis<br/>• Physiological Modelling"]
         
         DISTRIBUTED["🌐 Distributed Systems Architecture<br/>• Star-Mesh Topology<br/>• Fault Tolerance<br/>• Scalable Architecture<br/>• Data Consistency"]
         
@@ -1208,7 +1208,7 @@ graph TD
         
         EFFICIENCY_METRICS["⚡ Resource Efficiency: 88%<br/>• CPU usage: 65% average<br/>• Memory: 2.1GB average<br/>• Battery life: 8.5 hours<br/>• Network bandwidth: 85% utilisation<br/>• Storage efficiency: 92%"]
         
-        SCALABILITY_METRICS["📈 Scalability: 85%<br/>• Max devices: 12 (target: 10)<br/>• Linear scaling: Up to 8 devices<br/>• Performance degradation: <5% per device<br/>• Load balancing: Automatic<br/>• Resource sharing: Optimized"]
+        SCALABILITY_METRICS["📈 Scalability: 85%<br/>• Max devices: 12 (target: 10)<br/>• Linear scaling: Up to 8 devices<br/>• Performance degradation: <5% per device<br/>• Load balancing: Automatic<br/>• Resource sharing: Optimised"]
         
         UX_METRICS["👤 User Experience: 90%<br/>• Setup time: <5 minutes<br/>• Interface responsiveness: <100ms<br/>• Learning curve: Minimal<br/>• Error recovery: Intuitive<br/>• Satisfaction score: 4.5/5"]
         
@@ -1263,7 +1263,7 @@ graph TB
         end
         
         subgraph DATA_MANAGEMENT ["Data Management Interface"]
-            DATA_OVERVIEW["📁 Data Management<br/>📊 Sessions Recorded: 15<br/>💾 Total Data Size: 2.3 GB<br/>💿 Available Storage: 12.7 GB<br/>🔄 Last Sync: 5 min ago<br/>☁️ Cloud Backup: Enabled<br/>🗓️ Last Export: Today 14:30"]
+            DATA_OVERVIEW["📁 Data Management<br/>📊 Sessions Recorded: 15<br/>💾 Total Data Sise: 2.3 GB<br/>💿 Available Storage: 12.7 GB<br/>🔄 Last Sync: 5 min ago<br/>☁️ Cloud Backup: Enabled<br/>🗓️ Last Export: Today 14:30"]
             
             EXPORT_INTERFACE["📤 Export Interface<br/>📋 Format: [JSON + CSV] ✓<br/>📊 Include Metadata: ✅<br/>🗜️ Compress Data: ✅<br/>☁️ Upload to Cloud: ⬜<br/>📧 Email Results: ⬜<br/>[📤 Start Export] [📋 Schedule]"]
             

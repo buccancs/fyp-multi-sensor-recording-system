@@ -119,7 +119,7 @@ plugins {
 ⚪ **Phase 3 Planned**: Enhanced screen functionality
 ⚪ **Phase 4 Planned**: complete testing and validation
 
-The application now successfully builds and runs with Jetpack Compose while maintaining all existing functionality. The UI has been modernized with Material 3 design patterns and proper Compose architectural patterns.
+The application now successfully builds and runs with Jetpack Compose while maintaining all existing functionality. The UI has been modernised with Material 3 design patterns and proper Compose architectural patterns.
 
 ## Next Steps
 

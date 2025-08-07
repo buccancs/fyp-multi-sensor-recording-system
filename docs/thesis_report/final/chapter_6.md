@@ -6,7 +6,7 @@ technical contributions, evaluating how well the outcomes meet the
 initial objectives, discussing limitations encountered, and outlining
 potential future work and extensions. The project set out to create a
 **contactless Galvanic Skin Response (GSR) recording platform** using
-multiple synchronized sensors, and the final implementation demonstrates
+multiple synchronised sensors, and the final implementation demonstrates
 substantial success in this endeavor. All core system components were
 delivered and validated through testing, and the platform establishes a
 strong foundation for future research in non-intrusive physiological
@@ -16,7 +16,7 @@ remaining limitations, and suggest directions for continued development.
 
 ## Achievements and Technical Contributions
 
-The **Multi-Sensor Recording System** realized a number of significant
+The **Multi-Sensor Recording System** realised a number of significant
 achievements, advancing both the practical technology for physiological
 data collection and the underlying engineering methodologies. Key
 accomplishments and technical contributions of this project include:
@@ -24,7 +24,7 @@ accomplishments and technical contributions of this project include:
 - **Integrated Multi-Modal Sensing Platform:** The project delivered a
   fully functional platform consisting of an **Android mobile
   application** and a **Python-based desktop controller** operating in
-  unison. This cross-platform system supports synchronized recording of
+  unison. This cross-platform system supports synchronised recording of
   **high-resolution RGB video**, **thermal infrared imagery**, and
   **physiological GSR signals** from a Shimmer3 GSR+ device. The
   heterogeneous sensors are operated concurrently in real time, enabling
@@ -39,10 +39,10 @@ accomplishments and technical contributions of this project include:
   controller orchestrates the recording session (star topology) while
   each mobile device performs local data capture and preliminary
   processing (mesh of semi-autonomous nodes). This distributed
-  architecture balances centralized control with on-device computation,
+  architecture balances centralised control with on-device computation,
   providing both coordination and scalability. It is an innovative
   approach in the context of physiological monitoring systems, which
-  traditionally rely on either a single device or purely centralized
+  traditionally rely on either a single device or purely centralised
   data loggers. The project demonstrated that such a distributed
   approach can maintain strict synchronisation and reliability across
   devices, effectively expanding the scope of experiments (for example,
@@ -108,11 +108,11 @@ accomplishments and technical contributions of this project include:
   recording signals to all devices), time synchronisation broadcasts,
   and data streaming to the central controller. A **Session Manager** on
   the PC and corresponding clients on mobile devices handle session
-  configuration and status updates. This networking layer was optimized
+  configuration and status updates. This networking layer was optimised
   for reliability and low latency: it includes features like connection
   retry and error-handling to tolerate brief network interruptions
   without losing data. The outcome is a robust distributed system where
-  multiple mobile nodes join and operate in a synchronized session with
+  multiple mobile nodes join and operate in a synchronised session with
   the controller. The reliable communication and device management
   framework is a key technical contribution, as it enables *scalable
   multi-device recordings* with minimal manual intervention.
@@ -126,10 +126,10 @@ accomplishments and technical contributions of this project include:
   side, a simplified Android UI guides the operator in setting up the
   phone (camera preview, device connection status, etc.) without needing
   to directly manipulate technical settings. The system also implements
-  session management tools that automate file organization and metadata
+  session management tools that automate file organisation and metadata
   generation for each recording session, saving researchers time in
   post-processing. This focus on user experience means the final
-  platform can be utilized by non-specialist users with relatively
+  platform can be utilised by non-specialist users with relatively
   minimal training. Informal evaluations and internal testing showed
   that new users were able to set up and run recording sessions
   successfully, indicating that the design meets its usability goals.
@@ -145,10 +145,10 @@ accomplishments and technical contributions of this project include:
   (TLS/SSL)** to protect sensitive data in transit. The Android
   application leverages hardware-backed cryptography (Android Keystore)
   for storing keys, and the system includes authentication steps during
-  device handshaking to prevent unauthorized access. Additionally, the
+  device handshaking to prevent unauthorised access. Additionally, the
   data management adheres to privacy-by-design principles (for example,
   personal identifying information is kept out of transmitted data or
-  anonymized where appropriate), helping the system comply with data
+  anonymised where appropriate), helping the system comply with data
   protection standards relevant to human subject research. By building
   these security and privacy features into the platform, the project
   ensures that the collected physiological data can be safely handled,
@@ -181,7 +181,7 @@ platform establishes new benchmarks for **non-intrusive physiological
 data acquisition**. Notably, the system illustrates that low-cost,
 off-the-shelf components (smartphone cameras, a compact thermal camera,
 and a Bluetooth GSR sensor) can be integrated to perform at a level
-approaching specialized laboratory equipment. This achievement has
+approaching specialised laboratory equipment. This achievement has
 important implications: it lowers the barrier to conducting advanced
 psychophysiological experiments by reducing cost (the custom system is
 roughly on the order of 75% less expensive than equivalent proprietary
@@ -194,7 +194,7 @@ recording systems.
 
 At the start of this project, a set of clear objectives was defined to
 guide the development and measure success. The major objectives
-included: (1) developing a synchronized multi-device recording system
+included: (1) developing a synchronised multi-device recording system
 capable of integrating camera-based and wearable sensors; (2) achieving
 temporal precision and data reliability comparable to gold-standard
 wired systems; (3) ensuring the solution is user-friendly and suitable
@@ -209,11 +209,11 @@ light of the project outcomes:
   specifications: it successfully combines an Android-based sensor node
   (with RGB camera, thermal camera, and GSR sensor input) with a
   coordinating PC application, and it records all streams in a
-  synchronized fashion. The integration of contactless modalities (video
+  synchronised fashion. The integration of contactless modalities (video
   and thermal imaging) with a traditional GSR sensor provides the means
   to compare and eventually predict GSR without physical electrodes. All
   core functional requirements stemming from this goal -- such as
-  concurrent video and physiological signal capture, time-synchronized
+  concurrent video and physiological signal capture, time-synchronised
   data logging, and multi-device coordination -- have been implemented
   and demonstrated. The existence of a fully implemented platform ready
   to collect experimental data represents a concrete fulfillment of the
@@ -237,7 +237,7 @@ light of the project outcomes:
   discontinuities were observed in the recorded signals. Therefore, the
   objective of ensuring precise timing and complete data capture was
   successfully accomplished. The outcome gives confidence that analyses
-  performed on the synchronized multi-modal data (for example, comparing
+  performed on the synchronised multi-modal data (for example, comparing
   thermal signals with GSR peaks) will be valid and not confounded by
   timing errors or missing data.
 
@@ -260,8 +260,8 @@ light of the project outcomes:
   3). These include occasional instability in the user interface and
   less-than-perfect automatic device discovery. Despite those issues,
   the core design proves that the system is practical for real-world
-  use: researchers can utilise it to collect synchronized data from
-  sensors without needing specialized technical support. The scalability
+  use: researchers can utilise it to collect synchronised data from
+  sensors without needing specialised technical support. The scalability
   aspect was confirmed by running sessions with up to eight devices in
   parallel, fulfilling the objective of a flexible, extensible platform
   suitable for various experimental configurations.
@@ -304,7 +304,7 @@ expectations -- for example, the timing precision and the breadth of
 features (such as security and adaptive quality control) go beyond what
 was initially envisioned in the project scope. The only notable unmet
 goal is the *practical demonstration in a pilot study*, which, while not
-realized within the project timeframe, does not detract from the
+realised within the project timeframe, does not detract from the
 system's proven capabilities but rather represents an outstanding task
 for the future. Overall, the outcomes of this project validate the
 feasibility of the proposed approach to contactless GSR recording and
@@ -319,7 +319,7 @@ Notwithstanding its successes, this project has several **limitations
 and unresolved issues** that must be acknowledged. These limitations
 arise from the practical challenges encountered during development and
 areas where the implementation did not fully meet the ideal targets. The
-most significant known issues at the end of the study are summarized
+most significant known issues at the end of the study are summarised
 below:
 
 - **Unstable User Interface:** The system's user interface is still
@@ -370,7 +370,7 @@ below:
   time constraints and the need for further testing to ensure the hand
   tracking is robust. Thus, the potential benefits of hand segmentation
   (such as improving the focus on relevant thermal regions or enabling
-  gesture-based metadata) remain unrealized in the present system. Its
+  gesture-based metadata) remain unrealised in the present system. Its
   absence does not affect the core functionality, but it is a limitation
   in terms of extending the analysis capabilities that the platform
   could offer.
@@ -383,7 +383,7 @@ below:
   multifold, and they highlight practical limitations of the project:
 
 - *Ongoing system instability:* The development team determined that the
-  system needed further stabilization (especially regarding the UI and
+  system needed further stabilisation (especially regarding the UI and
   networking issues above) before being used with real participants.
   Deploying an unstable system in a live experiment could risk data loss
   or require frequent restarts, undermining the pilot's value. This
@@ -402,7 +402,7 @@ below:
   the thermal camera device) arrived later than expected, compressing
   the integration and testing period. These delays left less buffer to
   organise a pilot. Additionally, some contingency plans (like testing
-  alternative sensors) could not be realized in time, further reducing
+  alternative sensors) could not be realised in time, further reducing
   the opportunity to conduct a meaningful pilot experiment.
 
 Because no pilot data was collected, an important limitation is that
@@ -467,7 +467,7 @@ efforts could be directed:
   for example, by using more fault-tolerant libraries or peer-to-peer
   connection methods -- could reduce reliance on a perfect network
   environment. In the longer term, one might explore a more
-  decentralized or mesh-based synchronisation approach that does not
+  decentralised or mesh-based synchronisation approach that does not
   rely as heavily on a single PC controller, thereby removing any single
   point of failure in coordinating devices. By making the device linking
   process more robust, the system will become easier to set up and more
@@ -482,7 +482,7 @@ efforts could be directed:
   integration could enable new features, such as focusing thermal
   analysis on the palm area (where GSR-related sweat activity might be
   most visible) or even filtering the video to only the hand region to
-  reduce data size. Moreover, once integrated, the hand segmentation
+  reduce data sise. Moreover, once integrated, the hand segmentation
   data could feed into real-time analytics -- for example, detecting if
   a participant wipes their hands or moves out of frame, which could be
   logged as events. Beyond hand segmentation, the platform could be
@@ -499,7 +499,7 @@ efforts could be directed:
 - **Conducting Pilot Studies and Empirical Validation:** A top priority
   for future work is to **use the system in an actual pilot study** or
   series of experiments. This would involve recruiting participants and
-  collecting synchronized thermal video and GSR data in realistic
+  collecting synchronised thermal video and GSR data in realistic
   scenarios (for example, inducing stress or emotional responses while
   recording). The pilot study would serve multiple purposes: it would
   validate the system's end-to-end functionality with real users,
@@ -582,7 +582,7 @@ efforts could be directed:
   interactive settings (e.g. adaptive environments or user interfaces
   that respond to a person's stress level without contact sensors). To
   support such applications, future improvements might involve reducing
-  system latency even further and perhaps miniaturizing the setup (for
+  system latency even further and perhaps miniaturising the setup (for
   instance, eventually eliminating the need for a PC by allowing one
   Android device to act as a host or by using edge computing devices).
   Additionally, integrating cloud storage or analysis could make the
@@ -605,7 +605,7 @@ evolve into an even more powerful and versatile research tool. With
 continued development along these lines, this system could accelerate
 advancements in fields ranging from psychology and human-computer
 interaction to biomedical engineering, by providing a practical and
-scalable means to capture high-quality synchronized data from multiple
+scalable means to capture high-quality synchronised data from multiple
 modalities in a non-intrusive manner. The work completed in this thesis
 is therefore both an endpoint -- delivering a functioning system -- and
 a starting point for ongoing innovation and research using that system.
